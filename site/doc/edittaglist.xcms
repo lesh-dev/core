@@ -1,0 +1,18 @@
+<# cms/init #>
+<# auth/ root#>
+<?
+	$tag = @$_GET["tag"];
+	if(!$tag) {echo "<font class=\"error\">No tag.</font>";die();}
+	$file = "data/taglist/$tag";
+	if(!file_exists($file)){echo "<font class=\"error\">No tag.</font>";die();}
+	if(@$_POST["del"])
+	{
+		unlink($file);
+	}
+	if(!file_exists($file)){echo "<font class=\"error\">No tag.</font>";die();}
+	$editfile = $file;
+	echo "<h1>Edit tag: $tag</h1>";
+	include(translate("<! edit/file -h !>"));
+	echo "<h1>or remove:</h1>";
+	echo '<form method="POST"><input type="submit" name="del" value="Удалить"></form>';	
+?>

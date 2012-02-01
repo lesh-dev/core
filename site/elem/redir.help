@@ -1,0 +1,11 @@
+redir
+=====
+
+This one provides a redirection to selected site page.
+
+USAGE
+* redir adress seconds
+   redirects (using meta tag) to [adress] page is [seconds] seconds
+
+EXAMPLE
+  <!--! redir index !!-->

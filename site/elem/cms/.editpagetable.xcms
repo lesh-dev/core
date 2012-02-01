@@ -1,0 +1,2 @@
+<# if //$type=='content'//cms/content/edit #>
+<# if //$type=='news'//cms/news/edit #>

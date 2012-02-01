@@ -1,0 +1,12 @@
+<?php
+  if(@$_GET["vtype"]=="")
+  {
+    $commfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/comments";
+    include(translate("<! var editfile {$SETTINGS["datadir"]}cms/pages/$pageid/content !><! edit/file xz -h !>"));
+    if(@$_POST["clcomments"])
+    {
+    	@unlink($commfile);
+    }
+    echo '<form method="post"> <input type="submit" name="clcomments" value="Очистить комментарии"> </form>';
+  }
+?>

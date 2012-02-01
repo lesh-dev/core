@@ -1,0 +1,18 @@
+<?
+  include_once("{$SETTINGS["elementsdir"]}cms/menu/.func.php");
+  
+  if(!@$_GET["ref"])$_GET["ref"] = "index";  
+  $options = "";
+  if(@$keys["forcetree"]) $options = $options."+forcetree";
+  if(@$keys["displayall"]) $options = $options."+displayall";
+  $s=0;$e=999;
+  if(@$param["start"])$s=$param["start"];
+  if(@$param["end"])$e=$param["end"];
+  
+  cms_menu_make(
+    "{$SETTINGS["datadir"]}cms/pages",
+    file("{$SETTINGS["datadir"]}cms/menulinks.dat"),
+    0,
+    "ref={$_GET["ref"]}",
+    $options,$s,$e);
+?>

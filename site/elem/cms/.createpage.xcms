@@ -1,0 +1,46 @@
+<? 
+  $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
+  if(!$INFO) $pageid = "";
+?>
+<!# auth/ {$INFO['edit']} #!>
+
+<?
+  if(@$_POST["create-name"])
+  {
+    $dir =  "{$SETTINGS["datadir"]}cms/pages/$pageid/{$_POST["create-name"]}";
+    mkdir($dir);
+    @$LIST["owner"] = $login;
+    @$LIST["type"] = @$_POST["create-pagetype"];
+    @$LIST["view"] = "$login";
+    @$LIST["header"] = $_POST["create-name"];
+    @$LIST["subheader"] = "";
+    if(@$_POST["viewForAll"]) $LIST["view"] = $LIST["view"]. " " . "#all"; 
+    @$LIST["edit"] = "$login";
+    if(@$_POST["delegateGroup"]) $LIST["edit"] = $LIST["edit"]. " " . "#$login";
+    saveList($LIST,"$dir/info");
+  }
+?>
+
+<h3>Создание глобального раздела</h3>
+<form method="post">
+<table>
+<tr><td>Название страницы<td><input name="create-name" value="<? echo $login.'-'.mktime(); ?>">
+<?
+  $list = glob("{$SETTINGS["elementsdir"]}cms/*.pagetype");
+  echo "<tr><td>Тип содержания<td><SELECT name=\"create-pagetype\">";
+  foreach ($list as $key=>$value) 
+  {
+    $value = str_replace("{$SETTINGS["elementsdir"]}cms/","",$value);
+    $value = str_replace(".pagetype","",$value);
+  	echo "<OPTION name=\"$value\" value=\"$value\">$value</OPTION>";
+  }
+  echo "<tr><td>Право редактирования для #$login<td><input type=\"checkbox\" name=\"delegateGroup\">";
+  echo "<tr><td>Право просмотра для #all<td><input type=\"checkbox\" name=\"viewForAll\" checked>";
+?>
+</table>
+<input type="submit" value="Создать...">
+</form>
+
+<?
+  @saveList($INFO,"{$SETTINGS["datadir"]}cms/pages/$pageid/info");
+?>

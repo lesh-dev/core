@@ -1,0 +1,23 @@
+<? 
+	if(@$_POST["taglist-new"])
+	{
+		$f = fopen("data/taglist/".@$_POST["taglist-source"],"w");
+		fputs($f,"");
+		fclose($f);
+	}
+	$tagfiles = glob("data/taglist/*");
+	foreach($tagfiles as $value) 
+	{
+		$v = $value;
+		$v = str_replace("data/taglist/","",$v);
+		$content = getTagList($value);
+		$content = @implode(",",$content);
+		echo "<br><b><a href=\"?ref=edittaglist&tag=$v\">$v</a></b><br><code>$content</code>";
+	}
+?>
+
+<h3>Новый список</h3>
+<form method="POST">
+<input name="taglist-source">
+<input type="submit" name="taglist-new" value="Новый">
+</form>

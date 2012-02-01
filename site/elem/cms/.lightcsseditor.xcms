@@ -1,0 +1,45 @@
+<# auth/ #root #admin #>
+
+<link rel="stylesheet" type="text/css" href=".util/tabsheet/tabsheets.css" />
+<script type="text/javascript" src=".util/tabsheet/tabsheets.js"></script>
+
+<div>
+
+    <dl class="tabsheets">
+    <?php
+      $list = glob("{$SETTINGS["datadir"]}cms/css/*.css");
+      echo "Стилевые таблицы: ";
+      foreach ($list as $key=>$value) 
+      {
+      	$v = str_replace("{$SETTINGS["datadir"]}cms/css/","",$value);
+      	if($v == @$_GET["css"])
+        	echo "[<u><b>$v</b></u>] ";
+      	else
+        	echo '[<a href="?page='.$pageid.'&act=css&ref=ladmin&css='.$v.'">'.$v.'</a>] ';
+      }
+      echo "<br>Шаблоны: ";
+        echo '[<a href="?page='.$pageid.'&act=css&ref=ladmin&tmpl='."{$SETTINGS["datadir"]}cms/menulinks.dat".'">menulinks.dat</a>] ';
+        echo '[<a href="?page='.$pageid.'&act=css&ref=ladmin&tmpl='."{$SETTINGS["datadir"]}cms/newstemplate".'">news template</a>] ';
+        echo '[<a href="?page='.$pageid.'&act=css&ref=ladmin&tmpl='."doc/index.xcms".'">index.xcms</a>] ';
+      
+      foreach ($list as $key=>$value) 
+      {
+        $editfile = $value;
+      	$v = str_replace("{$SETTINGS["datadir"]}cms/css/","",$value);
+      	if($v == @$_GET["css"])
+      	{
+      		echo "<h3>$v</h3>";
+      		include(translate("<! edit/file -h !>"));
+      	}
+      }
+      if(file_exists(@$_GET["tmpl"]))
+      {
+      	$editfile = @$_GET["tmpl"];
+      	echo "<h3>$editfile</h3>";
+      	include(translate("<! edit/file -h cols=120 !>"));
+      }
+    ?>
+    </dl>
+</div>
+
+

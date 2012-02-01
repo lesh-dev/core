@@ -1,0 +1,14 @@
+<?
+	$dbid = @$INFO["dbid"];
+
+	if(@$INFO['dbvmode'] == "addelem") 
+	{
+		include(translate("<! auth/ {$INFO['edit']}!>"));
+		include(translate("<! cms/database/addelem !>"));
+	}
+	if(@$INFO['dbvmode'] == "view") include(translate("<! cms/database_vpage/dbview !>"));
+	else 
+	{
+		echo "<center>Page must be set up before continue. View documentation, please.</center>";
+	}
+?>

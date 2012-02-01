@@ -1,0 +1,5 @@
+<# auth/ #all #>
+<?php 
+	$editfile = "data/auth/usr/$login.usr";
+	include(translate("<! edit/tag `date`,`login`,`passwd`,`group` `-newkey`!>"));	
+?>

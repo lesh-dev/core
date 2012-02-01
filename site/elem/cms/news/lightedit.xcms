@@ -1,0 +1,34 @@
+<?php
+  if(@$_GET["vtype"]=="")
+  {
+    echo '<h3>Добавить новость</h3>';
+    $fname = "{$SETTINGS["datadir"]}cms/pages/$pageid/".mktime().".news";
+    $text = @file_get_contents("{$SETTINGS["datadir"]}cms/newstemplate");
+    $text = str_replace("<DATE>",date("d.m.y",mktime()),$text);
+    $text = str_replace("<LOGIN>",$login,$text);
+    include(translate("<! var editfile $fname !><! edit/file xz -h rows=10 !>"));
+
+
+    if(@$_POST["deleteNews"])
+    {
+      @unlink(@$_POST["delname"]);
+    }
+
+    $list = glob("{$SETTINGS["datadir"]}cms/pages/$pageid/*.news");
+    $n = count($list);
+    $count=0;
+    for ($i=$n-1 ; $i>=0; $i--) 
+    {
+      include($list[$i]);
+    echo '<form method="post">';
+    echo 'Операции: ';
+    echo '<input name="deleteNews" value="Удалить" type="submit">';
+    echo "<input type=\"hidden\" name=\"delname\" value=\"{$list[$i]}\">";
+    echo "</form>";
+    echo "<hr>";
+      $count++;
+      if($count>=$INFO["maxNews"]) break;	
+    }
+
+  }
+?>

@@ -1,0 +1,53 @@
+              <form method="post">
+              <table><tr><td><b>Чтение</b><td><b>Запись</b>
+              <tr><td valign="top">
+              <?
+                if(@$_POST["change-acsess"])
+                {
+                  $nview = "";
+                  $nedit = "";
+                  foreach ($_POST as $key=>$value) 
+                  {
+                    if(substr($key,0,5)=="edit-")
+                    {
+                      $nedit = substr($key,5)." ".$nedit;
+                    }	
+                    if(substr($key,0,5)=="view-")
+                    {
+                      $nview = substr($key,5)." ".$nview;
+                    }                    	
+                  }
+                  if(@$_POST["add-edit"])
+                    $nedit = $_POST["add-edit"]." ".$nedit;
+                  if(@$_POST["add-view"])
+                    $nview = $_POST["add-view"]." ".$nview;
+                  
+                  $INFO["view"] = $nview;
+                  $INFO["edit"] = $nedit;
+                  $dir =  "{$SETTINGS["datadir"]}cms/pages/$pageid";
+                  saveList($INFO,"$dir/info");                                    
+                }
+                
+                $view = explode(" ",trim($INFO["view"]));
+                foreach ($view as $key=>$value) {
+                	if($value)
+                  {
+                    echo "<input type=\"checkbox\" name=\"view-$value\" checked>$value<br />";
+                  }
+                }
+                echo "Добавить: <input name=\"add-view\">";
+                
+                echo "<td width=\"5\"><td valign=\"top\">";
+                
+                $view = explode(" ",trim($INFO["edit"]));
+                foreach ($view as $key=>$value) {
+                	if($value)
+                  {
+                    echo "<input type=\"checkbox\" name=\"edit-$value\" checked>$value<br />";
+                  }
+                }
+                echo "Добавить: <input name=\"add-edit\">";
+              ?>
+              </table>
+              <input type="submit" name="change-acsess" value="Изменить">
+              </form>

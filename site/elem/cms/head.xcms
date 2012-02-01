@@ -1,0 +1,8 @@
+<meta name="author" content="<# include _authors recurce #>">
+<meta name="keywords" content="<# include _keywords recurce #>">
+<meta name="description" content="<# include _description recurce #>">
+<title>
+<? 
+  echo $INFO["header"];
+  if($INFO["subheader"]) echo " - {$INFO["subheader"]}"; 
+?></title>

@@ -1,0 +1,36 @@
+<? 
+  $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
+  $type = $INFO["type"];
+?>
+<# cms/init #>
+
+<table WIDTH="100%">
+  <TR>  
+  <td><h3><# cms/SectionName #></h3>
+  <td>
+
+  <tr><td valign="top" width="150" class="menu" >
+
+    <table cellspacing=0 cellpadding=0 width="100%">
+    <# var forceSn 1 #>
+    <# cms/menu/display displayall forcetree start=1 end=9 #></table>
+    <hr>
+    <a class="menulink" href="?ref=admin&adm=cpassw">Сменить пароль</a><br>
+    <a class="menulink" href="?ref=admin&adm=users">пользователи...</a><br>
+    <a class="menulink" href="?ref=admin&adm=logout">выход из системы...</a><br>
+    <a class="menulink" href="?ref=admin&adm=css">css...</a><br>
+    <a class="menulink" href="?ref=admin&adm=aforizma">афоризмы...</a><br>
+    <a class="menulink" href="?ref=admin&adm=cleanprec">Очистить кэш...</a><br>
+  <td width="20">&nbsp;
+  <td valign="top">
+    <? $preface="ref=admin&adm=users"; ?>    
+    <# if //@$_GET['adm']=="cpassw"//auth/chpassw// #>
+    <# if //@$_GET['adm']=="users"//auth/admin// #>
+    <# if //@$_GET['adm']=="logout"//auth/logout// #>
+    <# if //@$_GET['adm']=="css"//cms/csseditor// #>
+    <# if //@$_GET['adm']=="aforizma"//cms/aforizma-edit// #>
+    <# if //@$_GET['adm']=="cleanprec"//cleanprec// #>
+    <# if //@$_GET['page']&&!@$_GET['adm']&&$INFO//cms/.editor #>
+    <# if //@$_GET['page']&&!@$_GET['adm']&&!$INFO//cms/.createpage #>
+    <hr>
+</table>

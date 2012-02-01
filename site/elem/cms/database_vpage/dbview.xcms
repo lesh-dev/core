@@ -1,0 +1,180 @@
+<?
+	$startshow = @$_GET["show"];
+	if(@$_POST["spt"])
+	{
+		$spt = @$_POST["spt"];
+		$startshow=0;
+	}
+	else $spt = @$_GET["spt"];
+	$spt = str_replace("+","",$spt);
+	$spt = str_replace("-","",$spt);
+	$spt = str_replace("*","",$spt);
+	$spt = str_replace("/","",$spt);
+	$spt = str_replace(".","",$spt);
+	$spt = translit($spt);
+	
+  if(!$dbid) {echo "<b>Can't connect to database. </b> ";die();}
+  
+	
+  if(file_exists("data/cms/pages/$pageid/filter"))
+  {
+    
+    $dbfilter = file("data/cms/pages/$pageid/filter");
+    
+    foreach($dbfilter as $value)
+    {
+      $value = str_replace("\n","",$value);
+      $value = str_replace("\r","",$value);
+      $arr = explode(":",$value);
+      $action = $arr[0];
+      $field = $arr[1];
+      $filter = $arr[2];
+      
+      if($action == "search")
+      {
+        $tl = array();
+        $l = array();
+        $pl = glob("data/cms/pages/$dbid/i_$field/*$filter*.ln");
+        echo $field;
+        foreach($pl as $lfile)
+        {
+          $lnl = file($lfile);
+          foreach($lnl as $string)
+          {
+            $string = str_replace("\n","",$string);
+            $string = str_replace("\r","",$string);
+            if(@$tl[$string]!=15)
+	            $l[] = "data/cms/pages/$dbid/data/".$string;
+            $tl[$string]=15;
+            echo $string.'*';
+          }
+          //foreach($tl as $v) $l[]=$v;
+        }
+      }
+      if($action == "primary")
+      {
+        $filter = $field;        
+        $l = glob("data/cms/pages/$dbid/data/*$filter*.el");
+      }
+      if(($action == "filter")||($action == "search"))
+      {
+        $conf = file("data/cms/pages/$dbid/config.dbs");
+        $ELEMS = array();
+        foreach($conf as $no=>$line)
+        {
+          $arr = explode(":",$line);
+          $ELEMS[$arr[0]] = $no;
+        }
+        $num = $ELEMS[$field];
+        foreach($l as $lno=>$eln)
+        {
+          $elf = file($eln);
+          $elfn = $elf[$num];
+          $elfn = str_replace("\n","",$elfn);
+          $elfn = str_replace("\r","",$elfn);
+          if(!eregi($filter, $elfn)) unset($l[$lno]);
+        }
+      }
+      if($action == "allowsearch")
+      {
+        foreach($l as $key=>$value)
+        {
+          $value = str_replace("data/cms/pages/$dbid/data/","",$value);        
+          $value = str_replace(".el","",$value);   
+          if($spt) if(strstr($value,$spt)===FALSE) unset($l[$key]);
+        }
+      }
+    }    
+  }
+  else
+  {
+	$l = glob("data/cms/pages/$dbid/data/*$spt*.el");
+	sort($l);
+  }
+	$n_elems = count($l);
+	
+	
+	$maxnum = $INFO["maxnum"];
+	$top = database_replacer(@file_get_contents("data/cms/pages/$pageid/tmp-top"),array(),"");
+	echo $top;
+	if($maxnum == 0) $maxnum = 25;
+	//echo "*".$POST;
+	if($_GET["elem"] && !@$_POST["spt"])
+	{	
+		$elname = @$_GET["elem"];		
+		$config = file("data/cms/pages/$dbid/config.dbs");
+		$ELEMS = array();
+		foreach($config as $key=> $value)
+		{
+			$value = str_replace("\n","",$value);
+			$value = str_replace("\r","",$value);
+			$arr = explode(":",$value);
+			$ELEMS[$key]=$arr[0];
+			$TYPES[$arr[0]]=$arr[1];
+		}
+		$thtml = file_get_contents("data/cms/pages/$pageid/tmp-i");
+		$list = "data/cms/pages/$dbid/data/$elname.el";
+			$prm = $list;
+			$prm = str_replace("data/cms/pages/$dbid/data/","",$prm);
+			$prm = str_replace(".el","",$prm);
+			$ELEM = array();
+			$dataelem = file($list);
+			$primary  = @file_get_contents("data/cms/pages/$dbid/primary");
+			foreach($dataelem as $key=>$value)
+			{
+				$value = str_replace("\n","",$value);
+				$value = str_replace("\r","",$value);
+				$ELEM[$ELEMS[$key]]=$value;
+			}
+			if(@$_GET["mode"]=="admin")
+			{
+				include(translate("<! auth/ {$INFO['edit']} !>"));
+				$force_change = $ELEM[$primary];
+				//echo "primary lock: $force_change";
+				include(translate("<! cms/database/addelem !>"));
+			}
+			else 
+			{
+				$txt = database_replacer($thtml,$ELEM,$prm);
+				echo $txt;
+			}
+			if($n>$maxnum) {break;}
+		
+	}
+	else if(false) {}
+	else
+	{
+		$config = file("data/cms/pages/$dbid/config.dbs");
+		$ELEMS = array();
+		foreach($config as $key=>$value)
+		{
+			$value = str_replace("\n","",$value);
+			$value = str_replace("\r","",$value);
+			$arr = explode(":",$value);
+			$ELEMS[$key]=$arr[0];
+		}	
+		$thtml = file_get_contents("data/cms/pages/$pageid/tmp-t");		
+		$tbegin = database_replacer(file_get_contents("data/cms/pages/$pageid/tmp-tb"),array(),"");
+		$tend = database_replacer(file_get_contents("data/cms/pages/$pageid/tmp-te"),array(),"");
+		echo $tbegin;
+		foreach($l as $n=>$list)
+		{
+			if($n<$startshow) continue;
+			if($n>$startshow+$maxnum-1) break;
+			$prm = $list;
+			$prm = str_replace("data/cms/pages/$dbid/data/","",$prm);
+			$prm = str_replace(".el","",$prm);
+			$ELEM = array();
+			$dataelem = file($list);
+			foreach($dataelem as $key=>$value)
+			{				
+        $value = str_replace("\n","",$value);
+				$value = str_replace("\r","",$value);
+				$ELEM[$ELEMS[$key]]=$value;
+			}
+			$txt = database_replacer($thtml,$ELEM,$prm);
+			echo $txt;
+		}
+		echo $tend;
+	}
+?>

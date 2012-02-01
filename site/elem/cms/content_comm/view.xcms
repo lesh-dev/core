@@ -1,0 +1,69 @@
+<?
+  //include_once("{$SETTINGS["elementsdir"]}cms/common.php");
+  //include_once("{$SETTINGS["elementsdir"]}cms/content/common.php");
+  
+  $commfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/comments";
+  
+  if(@$_POST["create-comment"])
+  {
+    $auth_noaccess = 'Вы можете добавлять комментарии, только зарегистрировавшись.';
+    include(translate('<! auth/ #registered !>'));
+  	$f = fopen($commfile,"a");
+  	$date = mktime();
+  	$name = @$_POST["commentator"];
+  	$html = @$_POST["comment"];
+  	$html = stripslashes($html);
+  	include(translate("<! bbcode b,i,u !>"));
+  	$name = str_replace(" ","_",$name);
+  	fputs($f,"\n$date $name $html");
+  	fclose($f);
+  	echo "<h3>Успешно</h3>Комментарий добавлен. Подождите.";
+  	echo "<meta http-equiv=\"Refresh\" content=\"0; URL=?page=$pageid\">";
+  }
+  else
+  {
+	if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
+	{
+	echo "<h1>Раздел не заполнен.</h1>";
+	echo "<h3><a href=\"?ref=ladmin&page=$pageid\">Вы можете это исправить!</a></h3>";
+	}
+	else 
+	{
+	//include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
+	$source = "{$SETTINGS["datadir"]}cms/pages/$pageid/content";
+	include(translate("<! cms/readfile source !>"));
+	
+	if(file_exists($commfile))
+	{
+		echo '<h3>Комментарии</h3>';
+		$comments = file($commfile);
+		foreach($comments as $value)
+		{
+			$value = str_replace("\n","",$value);
+			$value = str_replace("\r","",$value);
+			$arr = explode(" ",$value,3); 
+			if(!@$arr[2]) continue;
+			echo '
+			<table width="100%">
+			<tr><td class="comment-name">'.$arr[1].
+			'<td class="comment-date">'.date("d-m-y, H:i",$arr[0]).
+			'<tr><td colspan="2" class="comment-text">'.$arr[2].
+			'</table>';
+			
+		}
+	}
+	
+	echo '<h3> Оставить комментарий';
+	echo '
+		<form method="post">
+		<textarea cols="80" rows="5" name="comment"></textarea>
+		<br> 
+		<input name="commentator" value="Ваше имя">
+		<input name="create-comment" value="Оставить" type="submit">
+		
+		</form>
+	';
+    }
+    //include(translate("<! cms/reareadfiledfile {$SETTINGS["datadir"]}cms/pages/$pageid/content !>"));
+  }
+?>

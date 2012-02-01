@@ -1,0 +1,20 @@
+<?
+	// replaces $html [bbcode] => <html>
+	$html = str_replace("<", "&lt;",$html);
+	$html = str_replace(">", "&gt;",$html);
+	if(strstr($argv[1],"b")) 
+	{
+		$html = str_replace("[b]","<b>",$html);
+		$html = str_replace("[/b]","</b>",$html);
+	}
+	if(strstr($argv[1],"i")) 
+	{
+		$html = str_replace("[i]","<i>",$html);
+		$html = str_replace("[/i]","</i>",$html);
+	}
+	if(strstr($argv[1],"u")) 
+	{
+		$html = str_replace("[u]","<u>",$html);
+		$html = str_replace("[/u]","</u>",$html);
+	}
+?>
