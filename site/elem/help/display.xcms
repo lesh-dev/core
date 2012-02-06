@@ -1,0 +1,18 @@
+<?
+  $INPUT = @$_GET;
+  ksort($INPUT);
+  $rez = "";
+  foreach ($INPUT as $key=>$value) 
+  {
+    if($key=="page") continue;
+    $rez = $rez."&$key=$value";	
+  }
+  $rez = md5($rez);
+  $text = @file_get_contents("data/help/".$rez);
+  if($login == "root") $href = "?ref=edithelp&md=$rez";
+  else $href = "javascript:void(0);";
+  if(!$text)  $text = "Справка по этой теме отсутствует";
+?>
+<? 
+  echo "<a href=\"$href\"  onMouseOver=\"return overlib('$text',  STICKY, CAPTION, 'HELP',MOUSEOFF);\" onMouseOut=\"return nd();\"> ";
+?>

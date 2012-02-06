@@ -1,0 +1,10 @@
+<meta name="author" content="<# include _authors #>">
+<meta name="keywords" content="<# include _keywords #>">
+<meta name="description" content="<# include _description #>">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<title>
+<? 
+  echo "Физическое Отделение ЛЭШ";
+  if($INFO["header"]) echo " - {$INFO["header"]}";
+  //if($INFO["subheader"]) echo " - {$INFO["subheader"]}"; 
+?></title>

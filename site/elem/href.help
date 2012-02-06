@@ -1,0 +1,11 @@
+href
+====
+
+This one provides a valid path to a page with name %1.
+
+USAGE
+* href name
+   outputs path to "name" page (ex ?ref=name)
+
+EXAPMLE
+ <a href="<!--! href name!!-->">link to name</a>

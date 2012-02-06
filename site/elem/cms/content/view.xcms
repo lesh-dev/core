@@ -1,0 +1,28 @@
+<?
+  //include_once("{$SETTINGS["elementsdir"]}cms/common.php");
+  //include_once("{$SETTINGS["elementsdir"]}cms/content/common.php");
+  
+  if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
+  {
+    echo "<h1>Раздел не заполнен.</h1>";
+    echo "<h3><a href=\"?ref=admin&page=$pageid\">Вы можете это исправить!</a></h3>";
+  }
+  else
+  {
+    //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
+    include(translate("<! cms/readfile {$SETTINGS["datadir"]}cms/pages/$pageid/content !>"));
+    if ($pageid == "index")
+    {
+      $info_bak = $INFO;
+      $pageid_bak = $pageid;
+      $pageid = "z01News";
+      $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
+      $override_max_news = 3;
+      echo "<h2>Последние новости</h2>";
+      include(translate("<! cms/news/view !>"));
+      $INFO = $info_bak;
+      $pageid = $pageid_bak;
+      echo "<p><a href=\"?page=z01News&ref=index\">Все новости &gt;&gt;&gt;</a></p>";
+    }
+  }
+?>

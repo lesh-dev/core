@@ -1,0 +1,11 @@
+<?php
+  $list = glob("{$SETTINGS["datadir"]}cms/css/*.css");
+  
+  foreach ($list as $key=>$value) 
+  {
+    if(str_replace("{$SETTINGS["datadir"]}cms/css/","",$value)!="default.css")
+    {
+      echo "<link rel=\"stylesheet\" href=\"$value\" type=\"text/css\">";
+    }
+  }    
+?>

@@ -1,0 +1,9 @@
+<# var preface page={$_GET['page']}#>
+<# var pageid {$_GET['page']} #>
+<? 
+  $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
+  $type = $INFO["type"];
+  $view = @$INFO["view"]
+?>
+<? include(translate("<! auth/ $view !>")); ?>
+

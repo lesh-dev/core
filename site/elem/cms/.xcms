@@ -1,0 +1,2 @@
+
+<? include(translate("<! cms/$type/view !>")); ?>

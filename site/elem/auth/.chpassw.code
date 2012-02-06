@@ -1,0 +1,34 @@
+<?php
+  $changed = false; 
+  if(@$_POST["changePassword"])
+  {
+    if($USER["passwd"]==md5(@$_POST["oldpassw"]))
+    {
+      if(@$_POST["newpassw"] == @$_POST["newpassw1"])
+      {
+        $USER["passwd"] = md5(@$_POST["newpassw"]);
+        $changed = true;
+      }
+      else
+      { 
+        $changed = false; 
+        echo "<h4>Ошибка: введенные пароли не совпадают</h4>";
+      }
+    }
+    else
+    {
+      $changed = false; 
+      echo "<h4>Ошибка: старый пароль неверен</h4>";
+    }
+  }  
+  if(!$changed)
+    echo '
+    <FORM method="post">
+    <table>
+    <tr><td>Старый пароль<td><input type="password" name="oldpassw">
+    <tr><td>Новый пароль<td><input  type="password" name="newpassw">
+    <tr><td>Новый пароль (еще раз)<td><input name="newpassw1" type="password">
+    </table>
+    <input type="submit" value="Изменить" name="changePassword">
+    </FORM>';
+?>

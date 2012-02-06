@@ -1,0 +1,25 @@
+<?
+/*
+  This reads file, replacing ${шьџ:sectionName} or ${sectionName}  
+*/
+
+$source = $argv[1];
+$compiled = ".prec/cms_readfile_".md5($source).".dat";
+
+$need = false;
+if(!file_exists($compiled))$need = true;
+if(@filemtime($source)>@filemtime($compiled))$need = true;
+
+if($need)
+{
+  $text = file_get_contents($source);
+  $text = ereg_replace('\${([A-Za-z0-9/\-]{1,50})}', "<a href=\"?page=\\1\">link</a>", $text);
+  $text = ereg_replace('\${([a-z0-9р-џР-п,.A-Z ]{1,50}):([A-Za-z0-9/\-]{1,50})}', "<a href=\"?page=\\2\">\\1</a>", $text);
+    
+  $f = fopen($compiled,"w");
+  fputs($f,$text);
+  fclose($f);
+}
+
+include($compiled);
+?>

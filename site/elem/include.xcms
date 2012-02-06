@@ -1,0 +1,3 @@
+<?
+  @include($SETTINGS["datadir"]."cms/pages/".@$pageid."/".@$argv[1]);
+?>

@@ -1,0 +1,7 @@
+_defend<###><?php die(); ?>
+owner<###>root
+type<###>content
+view<###>root #all
+header<###>ФизЛЭШ
+subheader<###>Физическое отделение ЛЭШ
+edit<###>root

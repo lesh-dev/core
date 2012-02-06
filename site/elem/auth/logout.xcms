@@ -1,0 +1,3 @@
+<# auth/.logout#>
+<# auth/.logoutmsg #>
+<? die(); ?>

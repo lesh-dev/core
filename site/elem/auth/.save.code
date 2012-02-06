@@ -1,0 +1,7 @@
+<?php
+  if($login!="anonimous")
+  {
+    $profileFile = "{$SETTINGS["datadir"]}auth/usr/$login.usr";
+    saveList($USER,$profileFile);
+  }
+?>

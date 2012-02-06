@@ -1,0 +1,97 @@
+<# auth/ #admin #>
+<?
+  $DEFAULT_USER["passwd"] = md5(" ");
+  $DEFAULT_USER["group"] = "#user";
+  
+  
+  if(@$_GET['username']&&@$_GET['username']!="_CREATE")
+  {
+
+    $list = getList($_GET['username']);
+    saveList($list,"{$SETTINGS["datadir"]}auth/usr/{$list["login"]}.usr");
+    if("{$SETTINGS["datadir"]}auth/usr/{$list["login"]}.usr"!=$_GET['username'])
+    {
+      unlink($_GET['username']);
+      //echo '<meta http-equiv="refresh" content="0;'.$href.'">';
+      $_GET['username'] = "{$SETTINGS["datadir"]}auth/usr/{$list["login"]}.usr";      
+    }
+
+    if(@$_POST["resetPwd"])
+    {    
+      $list = getList($_GET['username']);
+      $list["passwd"] = md5(" ");
+      saveList($list,$_GET['username']);
+    }
+    if(@$_POST["delUser"])
+    {
+      @unlink($_GET['username']);
+      $_GET['username'] = "";
+    }
+  }
+  if(@$_GET['username']=="_CREATE")
+  {
+    if(@$_POST["newlogin"])
+    {
+      $nl = $_POST["newlogin"];
+      $DEFAULT_USER["login"] = $nl;
+      saveList($DEFAULT_USER, "{$SETTINGS["datadir"]}auth/usr/$nl.usr");
+    }
+  }
+?>
+<link rel="stylesheet" href="<?echo "{$SETTINGS["datadir"]}auth/style.css";?>" type="text/css">
+
+<? $href = "?".$preface; ?>
+<TABLE width="100%" border="1"> 
+<tr><td width="75">Список пользователей<td>Операции
+<TR>
+
+<TD width="75" align="left" valign="top">
+
+
+<?php
+  $userlist = glob("{$SETTINGS["datadir"]}auth/usr/*.usr");
+  foreach ($userlist as $key=>$value) {
+    $uname = $value;
+    $uname = str_replace("{$SETTINGS["datadir"]}auth/usr/","",$uname); 
+    $uname = str_replace(".usr","",$uname); 
+  	echo "<a href=\"$href&username=$value\">$uname</a><br>";  	
+  }  
+ 	echo "<hr><a href=\"$href&username=_CREATE\">Создать...</a>";  	
+?>
+<td align="left" valign="top">
+<?php 
+  if(@$_GET['username']&&@$_GET['username']!="_CREATE")
+  {
+    $href = "$href&username={$_GET["username"]}";
+    $uname = "{$_GET["username"]}";
+    $uname = str_replace("{$SETTINGS["datadir"]}auth/usr/","",$uname); 
+    $uname = str_replace(".usr","",$uname); 
+    echo "<h3>Редактирование профиля: $uname</h3>";
+  }
+  
+  if(@$_GET['username']=="_CREATE")
+  {
+    $href = "$href&username={$_GET["username"]}";
+    echo '<h3>Создать профиль</h3>
+    <form method="post" action="'.$href.'">
+      login: <input name="newlogin">
+      <input type="submit" value="Создать"> 
+    </form>';
+    
+  }
+?>
+<?if(@$_GET['username']&&@$_GET['username']!="_CREATE")
+{
+  echo '<FORM method="post">
+    <input type="submit" name="delUser" value="Удалить пользователя">
+    <input type="submit" name="resetPwd" value="Обнулить пароль">
+  </FORM>';
+  
+}?>
+
+<?if(!@$_GET["username"])$_GET["username"]="";?>
+<# var editfile {$_GET['username']} #>
+<# if //(@$_GET['username']&&@$_GET['username']!="_CREATE")//edit/tag//NULL//$href #>
+
+
+</TABLE>

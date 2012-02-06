@@ -1,0 +1,4 @@
+<# e-auth/logout #>
+<h1>До свидания!</h1>
+<# redir index 1 file=15&file2=16 #>
+

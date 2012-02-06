@@ -1,0 +1,5 @@
+<!--div align="center"-->
+<h1>Физическое Отделение ЛЭШ</h1>
+<!--br-->
+<!--font class="subheader"--><!--? echo @$INFO["subheader"];?--><!--/font-->
+<!--/div-->

@@ -1,0 +1,19 @@
+<?
+  //include_once("{$SETTINGS["elementsdir"]}cms/common.php");
+  //include_once("{$SETTINGS["elementsdir"]}cms/content/common.php");
+  
+  //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
+
+  $list = glob("{$SETTINGS["datadir"]}cms/pages/$pageid/*.news");
+  $n = count($list);
+  $count=0;
+  $maxnews = $INFO["maxNews"];
+  if (! empty($override_max_news))
+    $maxnews = $override_max_news;
+  for ($i=$n-1 ; $i>=0; $i--) 
+  {
+    include($list[$i]);
+    $count++;
+    if($count>=$maxnews) break;	
+  }
+?>

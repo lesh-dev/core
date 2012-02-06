@@ -1,0 +1,13 @@
+<# auth/ #all #>
+<?php 
+  
+  $voc["fullname"] = "Настоящее имя";
+    
+  echo '<form method="post"><table>';
+  foreach ($voc as $key=>$value) {
+  	echo "<tr><td>$value<td><input name=\"$key\" value=\"{$USER["$key"]}\">";
+  }
+  echo '<tr><td colspan="2"><input type="submit" value="изменить" value="change-myprofile">';  
+  echo '</table></form>';
+  
+?>

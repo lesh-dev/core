@@ -1,0 +1,3 @@
+<# auth/ #admin #selfeditor #>
+<# var editfile data/auth/usr/$login.usr#>
+<# edit/tag #>

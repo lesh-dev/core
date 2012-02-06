@@ -1,0 +1,11 @@
+<?
+  if(@$_POST["lightrenamesession"])
+  {
+    rename("data/cms/pages/$pageid","data/cms/pages/{$_POST["lightrenamesession"]}");
+  }
+?>
+
+<form method="post">
+<input name="lightrenamesession">
+<input type="submit">
+</form>
