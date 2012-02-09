@@ -1,5 +1,3 @@
-
-<? 
-  //include(translate("<! if //$type=='content'//cms/content/lightedit !><! if //$type=='news'//cms/news/lightedit !>"));
-  include(translate("<! cms/$type/lightedit !>"));
-?>
+<# if //$type=='content'//cms/content/lightedit #>
+<# if //$type=='news'//cms/news/lightedit #>
+<# if //$type=='album'//cms/album/lightedit #>

@@ -1,8 +1,16 @@
-<? if(!@$_GET["page"])$_GET["page"]="index";?>
-<?    if(  @$_GET["act"] == "logout" && $login != "anonymous" ) 
-      {
-        include(translate("<! auth/logout !>"));
-      }
+<?
+	//FROM statisics
+	if(@$_GET["from"])
+	{
+		$f = @fopen("from-stat/{$_SERVER["REMOTE_ADDR"]}","a");
+		fputs($f,"\n".date("d-m-y H:I",mktime()));
+		fclose($f);
+	}
+    if(!@$_GET["page"])$_GET["page"]="index";
+    if(  @$_GET["act"] == "logout" && $login != "anonymous" ) 
+    {
+      include(translate("<! auth/logout !>"));
+    }
 ?>
 <# cms/linit #>
 <# auth/ #all #>
@@ -11,59 +19,68 @@
 <!-- headers sent -->
 <# cms/init #>
 <# locale #>
+ <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <# cms/head #>
+  <# cms/css #>
   <body>
-    <TABLE border="0" height="100%" width="100%">
-      <tr>
-        <td class="menu"><img src="http://img524.imageshack.us/img524/2382/logoleshus7.gif">
-        <td colspan="2" valign="center">
+<table border=0 cellspacing=0 cellpadding=0 width="100%" id="fullheight"> <!--id="fullheight"--><!-- height="100%"-->
+<tr><!--id="zeroheight"--><!-- height="0%"--><td>
+  <table width="100%" border=0 cellspacing=0 cellpadding=0 class="toptable">
+    <tr>
+ <!--td class="menu"><img src="pic/emblem-mid-i.gif"  width="150" /-->
+      <td class="logocell menuwidth">
+        <img src="pic/e50gt.gif" height="72px" alt="" style="border: 0px">
+      </td>
+      <td align="center">
         <# cms/header #>
+      </td>
+    </tr>
+    <tr>
+      <td class="grassdivider" colspan="2"></td>
+    </tr>
+  </table>
+</td></tr><tr><td valign="top" id="td_fullheight"> <!--id="fullheight"--><!--height="100%"-->
+    <TABLE border=0 cellspacing=0 cellpadding=0 width="100%" class="bottomtable">
       <TR>
-        <TD  height="100%" valign="top" width="150" class="menu">
-    <p><p><table cellspacing=0 cellpadding=0 width="100%"><# var forceSn 1 #><# cms/menu/display start=1 end=5 #></table>
+        <TD class="menubg menuwidth" vAlign="top">
+    <table width="100%" cellspacing=0 cellpadding=0 border=0>
+    <# var forceSn 1 #>
+    <# cms/menu/display start=1 end=5 #>
+    <tr><td><a class="menu menu_level1 menu_inactive menu_inactive_level1" href="forum">Форум</a></td>
+    </table>
       <?php
-      if($login != "anonymous")
+
+      if($_COOKIE["auth-login"])
       {
-        if($group["#admin"])include(translate('<br><font class="menuLinkA"><a href="?page='."$pageid&ref=ladmin".'" class="menulink">Админка</a></font>'));      
-        include(translate('<br><font class="menuLinkA"><a href="?act=profile&page='."$pageid&ref=index".'" class="menulink">Профиль</a></font>'));      
-        
-        include(translate('<br><font class="menuLinkA"><a href="?act=logout&page='."$pageid&ref=index".'" class="menulink">Выход</a></font>'));      
+        include(translate('<br><font class="menuLink2"><a href="?page='."$pageid&amp;ref=ladmin".'" class="menulink">Админка</a></font>'));      
+        include(translate('<br><font class="menuLink2"><a href="?act=logout&page='."$pageid&amp;ref=ladmin".'" class="menulink">Выход</a></font>'));      
+	echo '<br><HR><iframe id="orphus" src="/orphus/orphus.htm#!rtuoes&#64;vaydnxer.u" width="125" height="115" frameborder="0" scrolling="no"></iframe>';
+
       }
       else
       {
-        include(translate('<br><font class="menuLinkA"><a href="?act=login&page='."$pageid&ref=index".'" class="menulink">Вход</a></font>'));      
+        include(translate('<br><a class="stealth_link" href="?page='."$pageid&amp;ref=ladmin".'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a><br>'));      
       }
-      include(translate('<br><font class="menuLinkA"><a href="?act=reg&page='."$pageid&ref=index".'" class="menulink">Регистрация</a></font>'));      
-      
       ?>
+        <!--a href="http://validator.w3.org/check?uri=referer"><img
+        src="misc/valid-html401-green.gif"
+        alt="Valid HTML 4.01 Transitional" height="31" width="88"></a-->
         </TD>
 	      
-        <td width="10">
-           <TD valign="top">
-              <table width="100%">
-              <tr><td>
-		<? 
-      if(  @$_GET["act"] == "login" && $login == "anonymous" ) 
-      {
-        include(translate("<! auth/form !>"));
-      }
-      else if(  @$_GET["act"] == "profile"  )
-      {
-      	include(translate("<! auth/myprofile !>"));
-      }
-      else if(  @$_GET["act"] == "reg"  ) 
-      {
-        include(translate("<! auth/register !>"));
-      }
-      else include(translate("<! cms/ !>")); 
-    ?>
-              </table>
+        <!-- td width="10"-->
+           <TD valign="top" class="mainfield">
+       <!--table width="100%">
+              <tr><td align="center"-->
+            <h2><? echo @$INFO["header"];?></h2>
+							      <# if //!@$_GET["usr"]//cms/ #> 
+
+              <!--/table-->
         </TD>
       </TR>
-      <TR><TD height="100%"></TD></TR>
+      <!--TR><TD class="menubg">PREVED</TD><TD class="mainfield">MEDVED</TD></TR-->
     </TABLE>
-    
+</td></tr></table>
   </body>
 </html>
 <!-- bgcolor="#FFFA9F"  -->

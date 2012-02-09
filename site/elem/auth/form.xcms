@@ -1,6 +1,6 @@
 <h4>¬ход в систему</h4>
 
-<FORM method="post">
+<FORM method="post" action="?ref=ladmin">
 <table>
 <tr><td>Ћогин:<td><input name="auth-login">
 <tr><td>ѕароль:<td><input type="password" name="auth-passw">

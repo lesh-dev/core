@@ -42,7 +42,7 @@
                 
                 $piclist = glob("$dir/*.pic");
                 //echo '<table>';
-                foreach ($piclist as $key=>$value) 
+                if (! empty($piclist))foreach ($piclist as $key=>$value) 
                 {
                   $lst = getList($value);
                 	echo "

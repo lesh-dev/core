@@ -3,7 +3,7 @@
   {
     echo '<h3>Добавить новость</h3>';
     $fname = "{$SETTINGS["datadir"]}cms/pages/$pageid/".mktime().".news";
-    $text = @file_get_contents("{$SETTINGS["datadir"]}cms/newstemplate");
+    $text = @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/template");
     $text = str_replace("<DATE>",date("d.m.y",mktime()),$text);
     $text = str_replace("<LOGIN>",$login,$text);
     include(translate("<! var editfile $fname !><! edit/file xz -h rows=10 !>"));

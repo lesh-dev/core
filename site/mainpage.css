@@ -1,0 +1,114 @@
+/*.example { font: italic bold 12pt/14pt Times, serif }*/
+
+.header 
+{ 
+  font: normal normal 30pt/55pt "Times New Roman", serif;
+  font-variant: small-caps; 
+  color: rgb(10,50,30); 
+  text-align:center;
+}
+.annot
+{ 
+  
+  font: normal normal 14pt/14pt "Times New Roman", serif; 
+   font-variant: small-caps; 
+  color:rgb(10,50,30); 
+  text-align:center;
+}
+.menu
+{
+  background: rgb(10,50,30); 
+}
+body
+{
+  background: rgb(234,253,189) ;  
+  background-image: url(pic/bgcol.jpg) ;
+  font: normal normal 12pt/12pt "Verdana"; color:#000000; 
+}
+
+a.menu0  
+{
+   font: bold normal 15pt/30pt serif; 
+   font-variant: small-caps; 
+   color:#FFFFFF;
+   text-decoration: none;
+}
+a.menu0S  
+{
+   font: bold normal 15pt/22pt serif; 
+   font-variant: small-caps; 
+   color:#FFFFFF;
+}
+
+.menu1  { margin-left: 2ex; font: normal normal 13pt/12pt  serif; text-decoration: none;}
+.menu1S { margin-left: 2ex; font: normal normal 13pt/12pt  serif; }
+
+.menu0  { color:#FFFFFF;}
+.menu0S { color:#FFFFFF;}
+.menu1  { color:#FFFFFF;}
+.menu1S { color:#FFFFFF;}
+.menu2S { color:#FFFFFF;}
+.menu2  { color:#FFFFFF;}
+
+a{color: #000000;}
+
+h1 { font: normal normal 16pt/16pt sans-serif; color:#000020; text-align:left;}
+h2 { font: normal normal 15pt/15pt sans-serif; color:#000020; text-align:left;
+font-style: italic;
+}
+h3 { font: normal normal 14pt/14pt sans-serif; color:#000020; text-align:left;}
+
+  /*
+h1 { font: normal bold 15pt/13pt sans-serif; color:#501010; text-align:left;}
+h2 { font: normal normal 14pt/12pt sans-serif; color:#501010; text-align:left;}
+h3 { font: italic normal 12pt/12pt sans-serif; color:#501010; text-align:left;}
+.stit { font: normal normal 12pt/12pt sans-serif; color:#501010; text-align:left;}
+
+.menu0  { font: normal normal 12pt/14pt  Arial; color:#000000;}
+.menu0S { font: normal bold 12pt/14pt  Arial; color:#000000;}
+.menu1  { font: normal normal 10pt/12pt  Arial; color:#000000;}
+.menu1S { font: normal bold 10pt/12pt  Arial; color:#000000;}
+.menu2S { font: normal normal 10pt/12pt  Arial; color:#000000;}
+.menu2  { font: normal bold 10pt/12pt  Arial; color:#000000;}
+
+
+a          { color:#000000;}
+a:visited  { color:#000000;}
+a:hover {color:#A04040}
+a:active{color:#000000}
+
+a.menu  { color:#906060;}
+a.menu:visited  { color:#808080;}
+a.menu:hover {color:#202020}
+a.menu:active{color:#A04040}
+
+a.menu0  {color: #906060;margin-left: 0ex;}
+a.menu0:visited  { color:#808080;}
+a.menu0:hover {color:#202020}
+a.menu0:active{color:#A04040}
+a.menu0S  {color: #000000;margin-left: 0ex;}
+a.menu0S:visited  { color:#000000;}
+a.menu0S:hover {color:#000000}
+a.menu0S:active{color:#000000}
+
+a.menu1  { color:#906060;margin-left: 2ex;}
+a.menu:visited1  { color:#808080;}
+a.menu:hover1 {color:#202020}
+a.menu:active1{color:#A04040}
+a.menu1S  { color:#000000;margin-left: 2ex;}
+a.menu:visited1S  { color:#000000;}
+a.menu:hover1S {color:#000000}
+a.menu:active1S{color:#000000}
+
+a.menu2  { color:#906060;margin-left: 3ex;}
+a.menu:visited2  { color:#808080;}
+a.menu:hover2 {color:#202020}
+a.menu:active2{color:#A04040}
+a.menu2S  { color:#000000;margin-left: 3ex;}
+a.menu:visited2S  { color:#000000;}
+a.menu:hover2S {color:#000000}
+a.menu:active2S{color:#000000}
+
+p.code { font-family: monospace; font-size: 10pt;}
+p.code1 { font-family: monospace;margin-left: 2ex;font-size: 10pt;}
+*/

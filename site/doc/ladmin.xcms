@@ -1,18 +1,16 @@
 <? $extime = microtime();?>
 <# if //@$_GET['act']=='logout'//auth/logout//#>
 <? if(!@$_GET["page"])$_GET["page"]="index";?>
-<# auth/ #admin #>
 <# cms/init #>
-<# auth/ {$INFO['edit']} #>
+<# cms/css #>
 <# locale #>
 <?
                 $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
-?>
-<? 
- include(translate("<! auth/ #cmseditor #admin root {$INFO["edit"]} !>"));
+ 				include(translate("<! auth/ #cmseditor #admin root {$INFO["edit"]} !>"));
 ?> 
 <# cms/.lightcreatepage-before #>
 <?
+
                 if(@$_POST["delete-section"])
                 {
                   $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
@@ -29,10 +27,10 @@
                       unlink($value);
                     }
                     rmdir($dir); 
-                    //echo '<script>alert("Удалено");</script>';
-                    //translate("<! redir ladmin 0!>");
+                    echo '<script>alert("Удалено");</script>';
+                    translate("<! redir ladmin 0!>");
                     //die();
-                    //$pageid="index";
+                    $pageid="index";
                     for($i=strlen($pageid)-1;$i>=0; $i--)
                     {
                       if($pageid[i]=='/'){$pageid[i]=substr($pageid,0,$i-1); break;}
@@ -94,12 +92,14 @@
             )
           );
       include(translate('            <hr>
+<<<<<<< HEAD
             <font class="menuLinkA"><a href="?act=myprofile&page='."$pageid&ref=ladmin".'" class="menulink">Мой профиль</a></font>
             <br /><font class="menuLinkA"><a href="?act=cpasswd&page='."$pageid&ref=ladmin".'" class="menulink">Сменить пароль</a></font>
             <br /><font class="menuLinkA"><a href="?page='."$pageid&ref=index".'" class="menulink">Просмотр сайта</a></font>
             <br /><font class="menuLinkA"><a href="?act=logout&page='."$pageid&ref=$ref".'" class="menulink">Выход из системы</a></font>
 
             <br /><hr><font class="menuLinkA"><a href="?act=cChapter&page='."$pageid&ref=ladmin".'" class="menulink">Создать подраздел</a></font>
+            <br /><font class="menuLink3"><a href="?act=rename_section&page='."$pageid&ref=ladmin".'" class="menulink">Переименовать раздел</a></font>
             <br /><font class="menuLinkA"><a href="?act=delete&page='."$pageid&ref=ladmin".'" class="menulink">Удалить раздел</a></font>
             
             <br /><hr><font class="menuLinkA"><a href="?act=cleanprec&page='."$pageid&ref=ladmin".'" class="menulink">Очистить кэш</a></font>
@@ -107,26 +107,16 @@
             <br /><font class="menuLinkA"><a href="?act=css&page='."$pageid&ref=ladmin".'" class="menulink">CSS . . .</a></font>
             <br /><font class="menuLinkA"><a href="?act=taglist&page='."$pageid&ref=ladmin".'" class="menulink">Автодополнение</a></font>
             
+            <br /><font class="menuLink3"><a href="?act=logout&page='."$pageid&ref=admin".'" class="menulink">Старая админка</a></font>
 <hr>
 '));      
+    if($type!="album")include(translate("<! cms/.lightimageeditor !>"));
       ?>
-                                                     
-      
-                                  
-                                  
-                                  
-                                  </td>
-                                  
-                                  
-                                  </tr>
-                            
-                            </table>
-                            
-                            </td>
-                          
-                            <td width="5"> </td>
-                            
-                            
+</td></tr>
+</table>
+</td>
+                            <td width="5">&nbsp;</td>
+                       
                             
                             
                             
@@ -158,6 +148,10 @@
                                         <td valign="top"  height="100%">
 						 <table width="">
 <?
+  if(@$_GET["mode"] == "")
+    @$_GET["mode"] = @$_GET["act"];
+  if(@$_GET["act"] == "")
+    @$_GET["act"] = @$_GET["mode"];
   if(@$_GET["act"]=="cpasswd")
   {
     include(translate('<! auth/chpassw !>'));
@@ -176,14 +170,14 @@
     ';
     
   }
-  else if(@$_GET["mode"]=="meta")
+  else if(@$_GET["mode"]=="meta" || @$_GET["act"]=="meta")
   {
     include(translate("<! cms/.lighteditmenu !>"));
     include(translate("<! cms/.lighteditrename !>"));
     include(translate("<! cms/editmetatags !>"));
     include(translate("<! cms/.lighticoneditor !>"));
   }
-  else if(@$_GET["mode"]=="configuration")
+  else if(@$_GET["mode"]=="configuration" || @$_GET["act"]=="configuration")
   {
     $editfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/info";    
     include(translate('<! edit/tag `edit`,`view`,`installed` !>'));  
@@ -219,6 +213,10 @@
   else if(@$_GET["mode"]=="acsess")
   {
     include(translate("<! cms/.lightacsesseditor !>"));
+  }
+  else if(@$_GET["act"]=="rename_section")
+  {
+    include(translate("<! cms/.lightrenamesection !>"));
   }
   else if(@$_GET["act"]=="userlist")
   {

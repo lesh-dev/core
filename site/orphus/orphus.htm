@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- 
+// An original idea of Orphus system belongs to Dmitry Koterov.
+// If you want to modify this script, please contact 
+// the author first: http://forum.dklab.ru/other/orphus/
+// You may use this script "as is" with no restrictions.
+// Please do not remove these comments.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" id="html">
+<head>
+ <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+ <title>Orphus</title>
+</head>
+<body background="orphus.gif" style="padding:0px; margin:0px; background-attachment:fixed; background-color:inherit">
+<div>
+ &nbsp;
+ <form id="form" action="#dynamic" method="post" target="orphusNullFrame"><div>
+  <input type="hidden" name="version" />
+  <input type="hidden" name="email" />
+  <input type="hidden" name="subject" />
+  <input type="hidden" name="charset" />
+  <input type="hidden" name="to" />
+  <input type="hidden" name="ref" />
+  <input type="hidden" name="c_pre" />
+  <input type="hidden" name="c_sel" />
+  <input type="hidden" name="c_suf" />
+  <input type="hidden" name="c_pos" />
+  <input type="hidden" name="c_tag1" />
+  <input type="hidden" name="c_tag2" />
+</div></form>
+<iframe width="1" height="1" name="orphusNullFrame" style="position:absolute; top:-1000px"></iframe>
+</div>
+
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+document.body.style.cursor="help";
+(document.getElementsByTagName("html")||[])[0].style.cursor="help";
+var orphus={version:"4.01",email:"",hq:"http://orphus.ru/ru/",seltag1:"<!!!>",seltag2:"<!!!>",contlen:60,maxlen:"256",lng:{// Russian (\u0420\u0443\u0441\u0441\u043A\u0438\u0439)
+alt:        "\u0412\u044B\u0434\u0435\u043B\u0438\u0442\u0435 \u043E\u0440\u0444\u043E\u0433\u0440\u0430\u0444\u0438\u0447\u0435\u0441\u043A\u0443\u044E \u043E\u0448\u0438\u0431\u043A\u0443 \u043C\u044B\u0448\u044C\u044E \u0438 \u043D\u0430\u0436\u043C\u0438\u0442\u0435 Ctrl+Enter. \u0421\u0434\u0435\u043B\u0430\u0435\u043C \u044F\u0437\u044B\u043A \u0447\u0438\u0449\u0435!",
+badbrowser: "\u0412\u0430\u0448 \u0431\u0440\u0430\u0443\u0437\u0435\u0440 \u043D\u0435 \u043F\u043E\u0434\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u0435\u0442 \u0432\u043E\u0437\u043C\u043E\u0436\u043D\u043E\u0441\u0442\u044C \u043F\u0435\u0440\u0435\u0445\u0432\u0430\u0442\u0430 \u0432\u044B\u0434\u0435\u043B\u0435\u043D\u043D\u043E\u0433\u043E \u0442\u0435\u043A\u0441\u0442\u0430 \u0438\u043B\u0438 IFRAME. \u0412\u043E\u0437\u043C\u043E\u0436\u043D\u043E, \u0441\u043B\u0438\u0448\u043A\u043E\u043C \u0441\u0442\u0430\u0440\u0430\u044F \u0432\u0435\u0440\u0441\u0438\u044F, \u0430 \u0432\u043E\u0437\u043C\u043E\u0436\u043D\u043E, \u0435\u0449\u0435 \u043A\u0430\u043A\u0430\u044F-\u043D\u0438\u0431\u0443\u0434\u044C \u043E\u0448\u0438\u0431\u043A\u0430.",
+toobig:     "\u0412\u044B \u0432\u044B\u0431\u0440\u0430\u043B\u0438 \u0441\u043B\u0438\u0448\u043A\u043E\u043C \u0431\u043E\u043B\u044C\u0448\u043E\u0439 \u043E\u0431\u044A\u0435\u043C \u0442\u0435\u043A\u0441\u0442\u0430!",
+thanks:     "\u0421\u043F\u0430\u0441\u0438\u0431\u043E \u0437\u0430 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u0447\u0435\u0441\u0442\u0432\u043E!",
+subject:    "\u041E\u0440\u0444\u043E\u0433\u0440\u0430\u0444\u0438\u0447\u0435\u0441\u043A\u0430\u044F \u043E\u0448\u0438\u0431\u043A\u0430",
+docmsg:     "\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442:",
+intextmsg:  "\u041E\u0440\u0444\u043E\u0433\u0440\u0430\u0444\u0438\u0447\u0435\u0441\u043A\u0430\u044F \u043E\u0448\u0438\u0431\u043A\u0430 \u0432 \u0442\u0435\u043A\u0441\u0442\u0435:",
+ifsendmsg:  "\u041F\u043E\u0441\u043B\u0430\u0442\u044C \u0441\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u0435 \u043E\u0431 \u043E\u0448\u0438\u0431\u043A\u0435 \u0430\u0432\u0442\u043E\u0440\u0443?\n\u0412\u0430\u0448 \u0431\u0440\u0430\u0443\u0437\u0435\u0440 \u043E\u0441\u0442\u0430\u043D\u0435\u0442\u0441\u044F \u043D\u0430 \u0442\u043E\u0439 \u0436\u0435 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0435.",
+gohome:     "\u041F\u0435\u0440\u0435\u0439\u0442\u0438 \u043D\u0430 \u0434\u043E\u043C\u0430\u0448\u043D\u044E\u044E \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0443 \u0441\u0438\u0441\u0442\u0435\u043C\u044B Orphus?",
+newwin:     "\u0421\u0442\u0440\u0430\u043D\u0438\u0446\u0430 \u043E\u0442\u043A\u0440\u043E\u0435\u0442\u0441\u044F \u0432 \u043D\u043E\u0432\u043E\u043C \u043E\u043A\u043D\u0435.",
+name:       "\u0421\u0438\u0441\u0442\u0435\u043C\u0430 Orphus", 
+author:     "\u0410\u0432\u0442\u043E\u0440: \u0414\u043C\u0438\u0442\u0440\u0438\u0439 \u041A\u043E\u0442\u0435\u0440\u043E\u0432.",
+to:         "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C Orphus"
+// Dmitry Koterov
+
+},init:function(){with(this){var th=this;
+if(email==""){var d=parent.document,e=null,_4=null;
+if(d.all&&d.all.orphus&&(_4=d.all.orphus.src)){}else{if(d.getElementById&&(e=d.getElementById("orphus"))&&(_4=e.src)){}else{if(location){_4=location.hash;
+}}}if(_4){email=_4.replace(/^.*#/,"");
+}}if(email.substr(0,1)=="!"){email=email.substr(1).replace(/(.)(.)/g,"$2$1");
+}document.body.title=lng.alt;
+document.onclick=function(){th.imgclick(this);
+return false;
+};
+if(parent!=window){lng.gohome+=" "+lng.newwin;
+}document.forms.form.action=hq;
+parent.document.onkeypress=function(e){return th.onkeypress(e);
+};
+}},imgclick:function(a){with(this.lng){if(confirm(name+" v"+this.version+".\n"+author+"\n\n"+alt+"\n\n"+gohome)){window.open(this.hq,parent==window?"_self":"_blank");
+}return false;
+}},thanks:function(){var n=0;
+var _8=this.lng.thanks;
+var _9=function(){if(n>20){return;
+}window.status=(n%5)?_8:" ";
+setTimeout(_9,100);
+};
+_9();
+},send:function(_a,_b){with(this){var d=document,f=d.forms.form;
+if(!f){return;
+}f.version.value=version;
+f.email.value=email;
+f.to.value=lng.to;
+f.subject.value=lng.subject;
+f.ref.value=_a;
+f.c_pre.value=_b[0];
+f.c_sel.value=_b[1];
+f.c_suf.value=_b[2];
+f.c_pos.value=_b[3];
+f.c_tag1.value=seltag1;
+f.c_tag2.value=seltag2;
+f.charset.value=d.charset||d.characterSet||"";
+f.submit();
+}},stripSlashn:function(_e){return (""+_e).replace(/[\r\n]+/g," ").replace(/^\s+|\s+$/g,"");
+},doSend:function(_f){with(this){var _10=null;
+if(!email||navigator.appName.indexOf("Netscape")!=-1&&eval(navigator.appVersion.substring(0,1))<5){alert(lng.badbrowser);
+return;
+}var w=parent;
+var _12=null;
+if(w.getSelection){_12=w.getSelection();
+}else{if(w.document.getSelection){_12=w.document.getSelection();
+}else{_12=w.document.selection;
+}}var _13=null;
+if(_12!=null){var pre="",_10=null,suf="",pos=-1;
+if(_12.getRangeAt){var r=_12.getRangeAt(0);
+_10=r.toString();
+var _18=w.document.createRange();
+_18.setStartBefore(r.startContainer.ownerDocument.body);
+_18.setEnd(r.startContainer,r.startOffset);
+pre=_18.toString();
+var _19=r.cloneRange();
+_19.setStart(r.endContainer,r.endOffset);
+_19.setEndAfter(r.endContainer.ownerDocument.body);
+suf=_19.toString();
+}else{if(_12.createRange){var r=_12.createRange();
+_10=r.text;
+var _18=_12.createRange();
+_18.moveStart("character",-contlen);
+_18.moveEnd("character",-_10.length);
+pre=_18.text;
+var _19=_12.createRange();
+_19.moveEnd("character",contlen);
+_19.moveStart("character",_10.length);
+suf=_19.text;
+}else{_10=""+_12;
+}}var p;
+var s=(p=_10.match(/^(\s*)/))&&p[0].length;
+var e=(p=_10.match(/(\s*)$/))&&p[0].length;
+pre=pre+_10.substring(0,s);
+suf=_10.substring(_10.length-e,_10.length)+suf;
+_10=_10.substring(s,_10.length-e);
+}else{alert(lng.badbrowser);
+return;
+}if(_10==""){return;
+}_13=[pre.substring(pre.length-contlen,pre.length).replace(/^\S{1,10}\s+/,""),_10,suf.substring(0,contlen).replace(/\s+\S{1,10}$/,""),pos];
+var _1d=stripSlashn(_13[0]+seltag1+_13[1]+seltag2+_13[2]);
+if(_1d.length>maxlen){alert(lng.toobig);
+return;
+}var url=w.document.location.href;
+var ts=new Date().getTime();
+var _20=confirm(lng.docmsg+"\n   "+url+"\n"+lng.intextmsg+"\n   \""+_1d+"\"\n\n"+lng.ifsendmsg);
+var dt=new Date().getTime()-ts;
+if(_20){this.send(url,_13);
+this.thanks();
+}else{if(!_f&&dt<50){var th=this;
+var sv=parent.document.onkeyup;
+parent.document.onkeyup=function(e){with(th){if(!e){e=parent.event;
+}if(e.keyCode==17){parent.document.onkeyup=sv;
+doSend(true);
+}}};
+}}}},onkeypress:function(e){with(this){var _26=0;
+var we=(window.event&&window.event)||(parent&&parent.event);
+if(we){_26=we.keyCode==10||(we.keyCode==13&&we.ctrlKey);
+}else{if(e){_26=(e.which==10&&e.modifiers==2)||(e.keyCode==0&&e.charCode==106&&e.ctrlKey)||(e.keyCode==13&&e.ctrlKey);
+}}if(_26){this.doSend();
+return false;
+}}}};
+orphus.init();
+//--><!]]></script>
+</body>
+</html>

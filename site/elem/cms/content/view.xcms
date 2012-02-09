@@ -14,5 +14,18 @@
     $source = "{$SETTINGS["datadir"]}cms/pages/$pageid/content";
     include(translate("<! cms/readfile source !>"));
     //include(translate("<! cms/readfile {$SETTINGS["datadir"]}cms/pages/$pageid/content !>"));
+    if ($pageid == "index")
+    {
+      $info_bak = $INFO;
+      $pageid_bak = $pageid;
+      $pageid = "z01News";
+      $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
+      $override_max_news = 3;
+      echo "<h2>Последние новости</h2>";
+      include(translate("<! cms/news/view !>"));
+      $INFO = $info_bak;
+      $pageid = $pageid_bak;
+      echo "<p><a href=\"?page=z01News&ref=index\">Все новости &gt;&gt;&gt;</a></p>";
+    }
   }
 ?>

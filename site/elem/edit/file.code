@@ -28,7 +28,9 @@
       $f = fopen($ename,"w");
       fputs($f,stripcslashes(@$_POST["edit-text"]));
       fclose($f);
-    }
+      include_once("{$SETTINGS["elementsdir"]}cms/addrssfeed.php");
+      addrssfeed("Изменения в разделе", "сабж","","");
+}
     
     if(file_exists($ename))
     {
@@ -39,8 +41,7 @@
     $text = stripcslashes($text);
   
   if(!@$keys["-h"]) echo "<$tag>edit: $ename</$tag>";
-  if(@$USER["mce"]=="Yes") $ty = "hidden";
-  else $ty = "submit";
+  $ty = "submit";
   //echo $multiId;
   echo '
 <form method="post" enctype="multipart/form-data">

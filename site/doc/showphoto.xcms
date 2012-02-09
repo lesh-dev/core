@@ -1,0 +1,24 @@
+<# cms/init #>
+<html>
+<head>
+<# cms/css-nbg  #>
+</head>
+<body>
+<center>
+<?
+  //$pageid = "data/cms/pages/{$_GET["page"]}";
+  $img = "data/cms/pages/".$pageid."/".$_GET["img"];
+  if(!file_exists("$img.pic")) {echo "No such photo.";}
+  else
+  {
+    $pic = getList("$img.pic");
+    $pic["views"]++;
+    saveList($pic,"$img.pic");
+    echo "<div class=\"photo-name\">".$pic["name"]."</div><br>";
+    echo "<img src=\"$img.jpeg\">";
+    echo "<div class=\"photo-comment\">".$pic["comment"]."</div><br>";
+  }
+?>
+</center>
+</body>
+</html>

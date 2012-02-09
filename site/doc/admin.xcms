@@ -2,6 +2,7 @@
 <# auth/ #cmseditor #admin root #>
 <# var preface page={$_GET['page']}#>
 <# var pageid {$_GET['page']} #>
+<# cms/css #>
 <# cms/admin #>
 <# locale #>
 

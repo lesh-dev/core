@@ -1,4 +1,4 @@
-<# auth/ #root #>
+<# auth/ #root #admin #>
 <?
   $DEFAULT_USER["passwd"] = md5(" ");
   $DEFAULT_USER["group"] = "#user";
