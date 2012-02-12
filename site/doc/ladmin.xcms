@@ -92,7 +92,6 @@
             )
           );
       include(translate('            <hr>
-<<<<<<< HEAD
             <font class="menuLinkA"><a href="?act=myprofile&page='."$pageid&ref=ladmin".'" class="menulink">Мой профиль</a></font>
             <br /><font class="menuLinkA"><a href="?act=cpasswd&page='."$pageid&ref=ladmin".'" class="menulink">Сменить пароль</a></font>
             <br /><font class="menuLinkA"><a href="?page='."$pageid&ref=index".'" class="menulink">Просмотр сайта</a></font>

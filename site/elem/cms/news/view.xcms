@@ -7,17 +7,17 @@
   $list = glob("{$SETTINGS["datadir"]}cms/pages/$pageid/*.news");
   $n = count($list);
   $count=0;
-  $maxnews = $INFO["maxNews"];
-  if (! empty($override_max_news))
+  //var_dump($INFO);
+  //var_dump($LIST);
+  $maxnews = @$INFO["maxNews"];
+  if (!$maxnews) $maxnews = 10;
+  if (! empty($override_max_news) )
     $maxnews = $override_max_news;
   for ($i=$n-1 ; $i>=0; $i--) 
   {
-    //echo "<h3>{$list[$i]}</h3>";
-    //include($list[$i]);
     $source = $list[$i];
     include(translate("<! cms/readfile source !>"));
     $count++;
-    if($count>=$INFO["maxnews"]) break;	
-	if($count>=$INFO["maxNews"]) break;	
+	if($count>=@$INFO["maxNews"]) break;	
   }
 ?>

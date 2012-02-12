@@ -28,8 +28,9 @@
       $f = fopen($ename,"w");
       fputs($f,stripcslashes(@$_POST["edit-text"]));
       fclose($f);
-      include_once("{$SETTINGS["elementsdir"]}cms/addrssfeed.php");
-      addrssfeed("Изменения в разделе", "сабж","","");
+      // FIXME: this should be deleted at all.
+      // include_once("{$SETTINGS["elementsdir"]}cms/addrssfeed.php");
+      // addrssfeed("Изменения в разделе", "сабж","","");
 }
     
     if(file_exists($ename))

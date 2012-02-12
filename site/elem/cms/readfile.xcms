@@ -38,7 +38,7 @@ if($need)
   /* ================ */
   $len=250;
   if($argv[3]) $len = $argv[3];
-  if($keys["short"] && strlen($text) > $len)
+  if(@$keys["short"] && strlen($text) > $len)
   {    
     //echo $argv[3];
     $text = substr($text,0,$len);
