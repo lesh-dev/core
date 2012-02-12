@@ -3,7 +3,6 @@
   //echo @$addparams;  
   $pathv = @$argv[1];
   if(!$pathv) $pathv = "edit-file";
-  
   $ename = $editfile;
   if(!$ename) $ename = @$_POST[$pathv];
   if(!$ename) $ename = @$_GET[$pathv];
@@ -11,5 +10,5 @@
   {
     echo "<h4>Illegal filename.</h4>";    
   }
-  else editlist_form($ename,"",$argv[1],$argv[2]);
+  else editlist_form($ename,"",@$argv[1],@$argv[2]);
 ?>

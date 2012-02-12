@@ -118,6 +118,10 @@
       $string = str_replace("!>","#>",$string);
       parceString($string,$f);
       fclose($f);
+      $btname = $fname . ".backtrace";
+      $f = fopen($btname, "w");
+      fputs($f, $string);
+      fclose($f);
     }
     return($fname);
   }

@@ -51,7 +51,7 @@
     </table>
       <?php
 
-      if($_COOKIE["auth-login"])
+      if(@$_COOKIE["auth-login"])
       {
         include(translate('<br><font class="menuLink2"><a href="?page='."$pageid&amp;ref=ladmin".'" class="menulink">Админка</a></font>'));      
         include(translate('<br><font class="menuLink2"><a href="?act=logout&page='."$pageid&amp;ref=ladmin".'" class="menulink">Выход</a></font>'));      
