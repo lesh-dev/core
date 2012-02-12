@@ -1,1 +1,0 @@
-<?php setcookie("e-auth-login","");setcookie("e-auth-passw","");?>

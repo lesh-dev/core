@@ -1,6 +1,0 @@
-<? 
-  $pageid=@$_GET['page'];
-  $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
-  $type = $INFO["type"];
-  $view = @$INFO["view"];
-?>

@@ -1,5 +1,0 @@
-
-<? 
-  //include(translate("<! if //$type=='content'//cms/content/lightedit !><! if //$type=='news'//cms/news/lightedit !>"));
-  include(translate("<! cms/$type/lightedit !>"));
-?>

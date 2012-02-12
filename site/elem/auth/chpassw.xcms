@@ -1,4 +1,0 @@
-<# auth/.chpassw #>
-<# auth/.save #>
-
-<# if //$changed//auth/.logoutmsg#>

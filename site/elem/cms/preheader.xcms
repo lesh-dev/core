@@ -1,6 +1,0 @@
-<?php
-	if(file_exists("elem/cms/$type/preheader.xcms"))
-	{
-		include(translate("<! cms/$type/preheader !>"));
-	}
-?>

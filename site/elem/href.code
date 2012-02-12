@@ -1,1 +1,0 @@
-<?php echo "?ref={$argv[1]}"; ?>
