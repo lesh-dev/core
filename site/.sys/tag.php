@@ -99,8 +99,10 @@
         if($value == "__FORGET") {unset($list[substr($key, "5")]); continue;}
       	if(strstr($key,"edtg_"))
         {
-          if($list[substr($key, "5")])
-           $list[substr($key, "5")] = stripslashes($value);
+          //if($list[substr($key, "5")])
+          {
+            $list[substr($key, "5")] = stripslashes($value);
+          }
         }
       }
       if(@$_POST["newkey"])
@@ -152,7 +154,7 @@
     
     echo "</table>";    
     //echo $addparams;
-    echo '<input type="submit" name="editTag" value="Изменить">';    
+    echo '<input type="submit" name="editTag" value="Save">';    
     echo '</form>';
   }
   

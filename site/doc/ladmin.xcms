@@ -47,8 +47,12 @@
   </head>
   
   <body>
-    <b>xcms admin: </b> <? echo $pageid; ?> 
+    <b>xcms admin: </b> <? echo $pageid; ?> (<# cms/header #>)
     <hr>
+    <h3>Website menu</h3>
+    <div class="menu">
+      <! cms/menu/display displayall start=1 end=5 !>
+    </div>
   </body>
 </html>
 
