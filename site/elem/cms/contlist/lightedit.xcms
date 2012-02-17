@@ -14,7 +14,7 @@
     fclose($f);
     $npid = str_replace("data/cms/pages/","",$dir);
     echo '<meta http-equiv="refresh" content="2;URL=?page='.$npid.'&ref=ladmin">';
-    echo "<h3>Подождите . . .</h3>";       
+    echo "<h3>РџРѕРґРѕР¶РґРёС‚Рµ . . .</h3>";       
   }
   else        if(@$_POST["delete-section-nax"])
                 {
@@ -22,7 +22,7 @@
                   $list = glob("$dir/*",GLOB_ONLYDIR);
                   if($list) 
                   {
-                    echo '<script>alert("Не могу удалить! Сначала удалите все подразделы!");</script>';
+                    echo '<script>alert("РќРµ РјРѕРіСѓ СѓРґР°Р»РёС‚СЊ! РЎРЅР°С‡Р°Р»Р° СѓРґР°Р»РёС‚Рµ РІСЃРµ РїРѕРґСЂР°Р·РґРµР»С‹!");</script>';
                   }     
                   else 
                   {
@@ -37,34 +37,34 @@
   else if(@$_GET["vtype"]=="")
   {
     
-    echo '<h3>Добавить раздел содержания.</h3><form method="post">';
+    echo '<h3>Р”РѕР±Р°РІРёС‚СЊ СЂР°Р·РґРµР» СЃРѕРґРµСЂР¶Р°РЅРёСЏ.</h3><form method="post">';
     echo '<input type="hidden" name="create-name" value="'.mktime().'">';
 
     echo '<table>
-    <tr><td>Заголовок<br><font size="-1">То есть тот текст, который (может быть) появится где-нибудь на странице.</font><td><input name="subheader">
+    <tr><td>Р—Р°РіРѕР»РѕРІРѕРє<br><font size="-1">РўРѕ РµСЃС‚СЊ С‚РѕС‚ С‚РµРєСЃС‚, РєРѕС‚РѕСЂС‹Р№ (РјРѕР¶РµС‚ Р±С‹С‚СЊ) РїРѕСЏРІРёС‚СЃСЏ РіРґРµ-РЅРёР±СѓРґСЊ РЅР° СЃС‚СЂР°РЅРёС†Рµ.</font><td><input name="subheader">
     ';    
       $list = glob("{$SETTINGS["elementsdir"]}cms/*.pagetype");
-      echo "<tr><td>Тип содержания<td><SELECT name=\"create-pagetype\">";
+      echo "<tr><td>РўРёРї СЃРѕРґРµСЂР¶Р°РЅРёСЏ<td><SELECT name=\"create-pagetype\">";
       foreach ($list as $key=>$value) 
       {
         $value = str_replace("{$SETTINGS["elementsdir"]}cms/","",$value);
         $value = str_replace(".pagetype","",$value);
       	echo "<OPTION name=\"$value\" value=\"$value\">$value</OPTION>";
       }
-      echo "<tr><td>Право редактирования для #$login<td><input type=\"checkbox\" name=\"delegateGroup\">";
+      echo "<tr><td>РџСЂР°РІРѕ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ РґР»СЏ #$login<td><input type=\"checkbox\" name=\"delegateGroup\">";
       foreach($group as $g)
       {
         $ch = "checked";
         if($g == "#all") $ch = "";
         if($g == "#registered") $ch = "";
-        echo "<tr><td>Право редактирования для $g<td><input type=\"checkbox\" name=\"edit_$g\" $ch>";        
+        echo "<tr><td>РџСЂР°РІРѕ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ РґР»СЏ $g<td><input type=\"checkbox\" name=\"edit_$g\" $ch>";        
       }
-      echo "<tr><td>Право просмотра для #all<td><input type=\"checkbox\" name=\"viewForAll\" checked>";
+      echo "<tr><td>РџСЂР°РІРѕ РїСЂРѕСЃРјРѕС‚СЂР° РґР»СЏ #all<td><input type=\"checkbox\" name=\"viewForAll\" checked>";
     echo '  
     </table>
     <input type="hidden" name="header" value="'.$INFO["header"].'">
     <input type="hidden" name="contlist_created" value="1">
-    <input type="submit" value="Добавить...">
+    <input type="submit" value="Р”РѕР±Р°РІРёС‚СЊ...">
     <input type="hidden" name="menuname" value="'.mktime().'">
     </form>
     ';

@@ -1,5 +1,5 @@
 <?php
-  header("content-type: text/html; charset=cp1251");
+  header("content-type: text/html; charset=utf-8");
 
   include (".sys/settings.php");
   include (".sys/tag.php");

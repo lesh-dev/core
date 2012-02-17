@@ -7,8 +7,8 @@
   @$cols = $param["cols"]; if(!@$cols) @$cols = 80;
   @$rows = $param["rows"]; if(!@$rows) @$rows = 25;
   @$tag = $param["tag"]; if(!@$tag) @$tag = "h3";
-  @$submitVal = $param["submitVal"]; if(!@$submitVal) @$submitVal = "Èçìåíèòü!";
-  @$resetVal = $param["resetVal"]; if(!@$resetVal) @$resetVal = "Îòìåíà";
+  @$submitVal = $param["submitVal"]; if(!@$submitVal) @$submitVal = "Ğ˜Ğ·Ğ¼ĞµĞ½Ğ¸Ñ‚ÑŒ!";
+  @$resetVal = $param["resetVal"]; if(!@$resetVal) @$resetVal = "ĞÑ‚Ğ¼ĞµĞ½Ğ°";
   
   $pathv = @$argv[1];
   if(!$pathv) $pathv = "edit-file";

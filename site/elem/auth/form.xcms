@@ -1,9 +1,9 @@
-<h4>Вход в систему</h4>
+<h4>Р’С…РѕРґ РІ СЃРёСЃС‚РµРјСѓ</h4>
 
 <FORM method="post" action="?ref=ladmin">
 <table>
-<tr><td>Логин:<td><input name="auth-login">
-<tr><td>Пароль:<td><input type="password" name="auth-passw">
+<tr><td>Р›РѕРіРёРЅ:<td><input name="auth-login">
+<tr><td>РџР°СЂРѕР»СЊ:<td><input type="password" name="auth-passw">
 </table>
 <input type="submit">
 </FORM>

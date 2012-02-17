@@ -12,7 +12,7 @@ function Make_Tabsheet(){
 	var aeDl = document.getElementsByTagName( "DL" )
 
 	for( i = 0 ; i < aeDl.length ; i++ ){
-		if( aeDl[i].className == "tabsheets"  ){ // если у нас отработал CSS, то меняем высоту у tabsheet-ов
+		if( aeDl[i].className == "tabsheets"  ){ // РµСЃР»Рё Сѓ РЅР°СЃ РѕС‚СЂР°Р±РѕС‚Р°Р» CSS, С‚Рѕ РјРµРЅСЏРµРј РІС‹СЃРѕС‚Сѓ Сѓ tabsheet-РѕРІ
 			aeDL_child = aeDl[i].childNodes
 			iMax_height = 0
 			for( j = 0 ; j < aeDL_child.length ; j++ ){

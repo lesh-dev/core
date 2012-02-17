@@ -7,7 +7,7 @@
   {
   	$source = "$value/content";
   	$pg = str_replace("data/cms/pages/","",$value);
-  	include(translate("<! cms/readfile source short 220 index.php?page=$pg [подробнее...] !>"));
+  	include(translate("<! cms/readfile source short 220 index.php?page=$pg [РїРѕРґСЂРѕР±РЅРµРµ...] !>"));
   }
 
 

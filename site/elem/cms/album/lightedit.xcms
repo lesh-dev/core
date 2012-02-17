@@ -62,8 +62,8 @@
                 }
                 
                 $catlist = glob("$dir/*.cat");
-                echo "<h3>Категории</h3><form method=\"post\">";
-                echo "<font size=\"-2\">* Для удаления категории введите имя \"__FORGET\"</font>";
+                echo "<h3>РљР°С‚РµРіРѕСЂРёРё</h3><form method=\"post\">";
+                echo "<font size=\"-2\">* Р”Р»СЏ СѓРґР°Р»РµРЅРёСЏ РєР°С‚РµРіРѕСЂРёРё РІРІРµРґРёС‚Рµ РёРјСЏ \"__FORGET\"</font>";
                 echo "<table cellspacing=0 cellpadding=0>";
                 foreach($catlist as $value)
                 {
@@ -72,9 +72,9 @@
                   $cat = str_replace("$dir/","",$cat);
                   echo "<tr><td>$cat<td><input name=\"album-chcat-$cat\" value=\"$caption\">";                  
                 }
-                echo "</table><input name=\"album-cat\" type=\"submit\" value=\"Изменить\"></form>";
+                echo "</table><input name=\"album-cat\" type=\"submit\" value=\"РР·РјРµРЅРёС‚СЊ\"></form>";
                 $piclist = glob("$dir/*.pic");
-                echo '<h3>Фотографии</h3><table>';
+                echo '<h3>Р¤РѕС‚РѕРіСЂР°С„РёРё</h3><table>';
                 foreach ($piclist as $key=>$value) 
                 {
                   $lst = getList($value);
@@ -90,30 +90,30 @@
                     <td>
                       <form method=\"post\">
                         <input type=\"hidden\" name=\"name\" value=\"$value\">
-                        <input type=\"submit\" name=\"Album-Delete-image\" value=\"Удалить\">
+                        <input type=\"submit\" name=\"Album-Delete-image\" value=\"РЈРґР°Р»РёС‚СЊ\">
                       </form>
                   ";
                 }
                 echo '</table>';
               ?>
-              <h4>Добавить картинку</h4>
+              <h4>Р”РѕР±Р°РІРёС‚СЊ РєР°СЂС‚РёРЅРєСѓ</h4>
               <form enctype="multipart/form-data" method="post">
                <table>
-                <tr><td>Имя<td><input name="image-name">
-                <tr><td>Комментарий<td><input name="image-comment">
-                <tr><td>Категория<td><input name="image-cat">
-                <tr><td>Файл<td><input type="file" accept="image/*" name="image">
+                <tr><td>РРјСЏ<td><input name="image-name">
+                <tr><td>РљРѕРјРјРµРЅС‚Р°СЂРёР№<td><input name="image-comment">
+                <tr><td>РљР°С‚РµРіРѕСЂРёСЏ<td><input name="image-cat">
+                <tr><td>Р¤Р°Р№Р»<td><input type="file" accept="image/*" name="image">
                </table>
-                <input type="submit" name="Album-Upload-image" value="Загрузить">
+                <input type="submit" name="Album-Upload-image" value="Р—Р°РіСЂСѓР·РёС‚СЊ">
               </form>
-	      Если Вы не доверяете автоматической пережимке - укажите preview самостоятельно
+	      Р•СЃР»Рё Р’С‹ РЅРµ РґРѕРІРµСЂСЏРµС‚Рµ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕР№ РїРµСЂРµР¶РёРјРєРµ - СѓРєР°Р¶РёС‚Рµ preview СЃР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅРѕ
               <form enctype="multipart/form-data" method="post">
                <table>
-                <tr><td>Имя<td><input name="image-name">
-                <tr><td>Комментарий<td><input name="image-comment">
-                <tr><td>Категория<td><input name="image-cat">
-                <tr><td>Картинка<td><input type="file" accept="image/*" name="big-image">
-                <tr><td>Маленькая картинка<td><input type="file" accept="image/*" name="small-image">
+                <tr><td>РРјСЏ<td><input name="image-name">
+                <tr><td>РљРѕРјРјРµРЅС‚Р°СЂРёР№<td><input name="image-comment">
+                <tr><td>РљР°С‚РµРіРѕСЂРёСЏ<td><input name="image-cat">
+                <tr><td>РљР°СЂС‚РёРЅРєР°<td><input type="file" accept="image/*" name="big-image">
+                <tr><td>РњР°Р»РµРЅСЊРєР°СЏ РєР°СЂС‚РёРЅРєР°<td><input type="file" accept="image/*" name="small-image">
                </table>
-                <input type="submit" name="Album-S-Upload-image" value="Загрузить">
+                <input type="submit" name="Album-S-Upload-image" value="Р—Р°РіСЂСѓР·РёС‚СЊ">
               </form>

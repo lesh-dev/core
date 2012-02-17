@@ -7,7 +7,7 @@
                   $list = glob("$dir/*",GLOB_ONLYDIR);
                   if($list) 
                   {
-                    echo '<script>alert("Не могу удалить! Сначала удалите все подразделы!");</script>';
+                    echo '<script>alert("РќРµ РјРѕРіСѓ СѓРґР°Р»РёС‚СЊ! РЎРЅР°С‡Р°Р»Р° СѓРґР°Р»РёС‚Рµ РІСЃРµ РїРѕРґСЂР°Р·РґРµР»С‹!");</script>';
                   }     
                   else 
                   {
@@ -17,7 +17,7 @@
                       unlink($value);          	
                     }
                     rmdir($dir); 
-                    echo '<script>alert("Удалено");</script>';
+                    echo '<script>alert("РЈРґР°Р»РµРЅРѕ");</script>';
                     die();
                                      
                   }             
@@ -64,7 +64,7 @@
 	});
 
 	function fileBrowserCallBack(field_name, url, type, win) {
-		alert("Не работает :(");
+		alert("РќРµ СЂР°Р±РѕС‚Р°РµС‚ :(");
 
 	}
 </script>
@@ -76,7 +76,7 @@
 <!-- /TinyMCE -->
 
               
-<h3>Редактирование раздела: 
+<h3>Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ СЂР°Р·РґРµР»Р°: 
 <?php 
   echo $pageid;
 ?></h3>                          
@@ -84,7 +84,7 @@
     <dl class="tabsheets">
         <# /cms/.editpagetable #>
 
-        <dt>Картинки</dt>
+        <dt>РљР°СЂС‚РёРЅРєРё</dt>
         <dd>
             <div class="reducer">
               <?php
@@ -143,40 +143,40 @@
                     <br>
                       <form method=\"post\">
                         <input type=\"hidden\" name=\"name\" value=\"$value\">
-                        <input type=\"submit\" name=\"Delete-image\" value=\"Удалить\">
+                        <input type=\"submit\" name=\"Delete-image\" value=\"РЈРґР°Р»РёС‚СЊ\">
                       </form>
                   ";
                 }
                 echo '</table>';
               ?>
-              <h4>Добавить картинку</h4>
+              <h4>Р”РѕР±Р°РІРёС‚СЊ РєР°СЂС‚РёРЅРєСѓ</h4>
               <form enctype="multipart/form-data" method="post">
                <table>
-                <tr><td>Имя<td><input name="image-name">
-                <tr><td>Комментарий<td><input name="image-comment">
-                <tr><td>Файл<td><input type="file" accept="image/*" name="image">
+                <tr><td>РРјСЏ<td><input name="image-name">
+                <tr><td>РљРѕРјРјРµРЅС‚Р°СЂРёР№<td><input name="image-comment">
+                <tr><td>Р¤Р°Р№Р»<td><input type="file" accept="image/*" name="image">
                </table>
-                <input type="submit" name="Upload-image" value="Загрузить">
+                <input type="submit" name="Upload-image" value="Р—Р°РіСЂСѓР·РёС‚СЊ">
               </form>
-	      Если Вы не доверяете автоматической пережимке - укажите preview самостоятельно
+	      Р•СЃР»Рё Р’С‹ РЅРµ РґРѕРІРµСЂСЏРµС‚Рµ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕР№ РїРµСЂРµР¶РёРјРєРµ - СѓРєР°Р¶РёС‚Рµ preview СЃР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅРѕ
               <form enctype="multipart/form-data" method="post">
                <table>
-                <tr><td>Имя<td><input name="image-name">
-                <tr><td>Комментарий<td><input name="image-comment">
-                <tr><td>Картинка<td><input type="file" accept="image/*" name="big-image">
-                <tr><td>Маленькая картинка<td><input type="file" accept="image/*" name="small-image">
+                <tr><td>РРјСЏ<td><input name="image-name">
+                <tr><td>РљРѕРјРјРµРЅС‚Р°СЂРёР№<td><input name="image-comment">
+                <tr><td>РљР°СЂС‚РёРЅРєР°<td><input type="file" accept="image/*" name="big-image">
+                <tr><td>РњР°Р»РµРЅСЊРєР°СЏ РєР°СЂС‚РёРЅРєР°<td><input type="file" accept="image/*" name="small-image">
                </table>
-                <input type="submit" name="S-Upload-image" value="Загрузить">
+                <input type="submit" name="S-Upload-image" value="Р—Р°РіСЂСѓР·РёС‚СЊ">
               </form>
 
             </div>
         </dd>
         
-        <dt>Доступ</dt>
+        <dt>Р”РѕСЃС‚СѓРї</dt>
         <dd>
             <div class="reducer">
               <form method="post">
-              <table><tr><td><b>Чтение</b><td><b>Запись</b>
+              <table><tr><td><b>Р§С‚РµРЅРёРµ</b><td><b>Р—Р°РїРёСЃСЊ</b>
               <tr><td>
               <?
                 if(@$_POST["change-acsess"])
@@ -209,7 +209,7 @@
                     echo "<input type=\"checkbox\" name=\"view-$value\" checked>$value<br />";
                   }
                 }
-                echo "Добавить: <input name=\"add-view\">";
+                echo "Р”РѕР±Р°РІРёС‚СЊ: <input name=\"add-view\">";
                 
                 echo "<td width=\"5\"><td>";
                 
@@ -220,23 +220,23 @@
                     echo "<input type=\"checkbox\" name=\"edit-$value\" checked>$value<br />";
                   }
                 }
-                echo "Добавить: <input name=\"add-edit\">";
+                echo "Р”РѕР±Р°РІРёС‚СЊ: <input name=\"add-edit\">";
               ?>
               </table>
-              <input type="submit" name="change-acsess" value="Изменить">
+              <input type="submit" name="change-acsess" value="РР·РјРµРЅРёС‚СЊ">
               </form>
             </div>
         </dd>        
 
-        <dt>Конфигурация</dt>
+        <dt>РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ</dt>
         <dd>
             <div class="reducer">
               <table><tr><td valign="top" >
-              <h4>Конфигурация раздела</h4>
+              <h4>РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ СЂР°Р·РґРµР»Р°</h4>
               <# var editfile {$SETTINGS["datadir"]}cms/pages/$pageid/info #>
               <# edit/tag #>
               <td valign="top">
-              <h4>Дополнительные параметры</h4>
+              <h4>Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹</h4>
                 <?
                   if(@$_POST["ApplyToMenu"]) 
                   {
@@ -249,7 +249,7 @@
                 <form method="post">
                 <input name="menu-text" value="<? echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu"); ?>">
                 <?php $isInMenu = file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu")?"checked":"";?>
-                <input onClick="this.form.submit();" name="ApplyToMenu" type="checkbox" <?php echo @$isInMenu;?> > Включить в меню
+                <input onClick="this.form.submit();" name="ApplyToMenu" type="checkbox" <?php echo @$isInMenu;?> > Р’РєР»СЋС‡РёС‚СЊ РІ РјРµРЅСЋ
                 <input type="hidden" name="NoApplyToMenu" value="1">                            
                 </form>
                 
@@ -264,12 +264,12 @@
                     }
                   }
                 ?>
-                <h4>Иконки</h4>
+                <h4>РРєРѕРЅРєРё</h4>
                 <form method="post" enctype="multipart/form-data">
                   <table>
-                  <tr><td>Меню:<td><input type="file" name="menuicon.gif">
+                  <tr><td>РњРµРЅСЋ:<td><input type="file" name="menuicon.gif">
                   </table>
-                  <input type="submit" name="uploadIcons" value="Загрузить">
+                  <input type="submit" name="uploadIcons" value="Р—Р°РіСЂСѓР·РёС‚СЊ">
                 </form>
                 
                 <?
@@ -288,25 +288,25 @@
                   }
                 ?>
                 
-                <h4>META конфигурация</h4>
+                <h4>META РєРѕРЅС„РёРіСѓСЂР°С†РёСЏ</h4>
                 <form method="post">
                   <table>
-                    <tr><td>Описание<td><input name="_description" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_description");?>">
-                    <tr><td>Ключевые слова<td><input name="_keywords" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_keywords");?>">
-                    <tr><td>Автор<td><input name="_authors" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_authors");?>">
+                    <tr><td>РћРїРёСЃР°РЅРёРµ<td><input name="_description" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_description");?>">
+                    <tr><td>РљР»СЋС‡РµРІС‹Рµ СЃР»РѕРІР°<td><input name="_keywords" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_keywords");?>">
+                    <tr><td>РђРІС‚РѕСЂ<td><input name="_authors" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_authors");?>">
                   </table>
-                  <input type="submit" name="cms-edit-meta" value="Изменить">
+                  <input type="submit" name="cms-edit-meta" value="РР·РјРµРЅРёС‚СЊ">
                 </form>
               </table>
             </div>
         </dd>        
         
-        <dt>Подразделы</dt>
+        <dt>РџРѕРґСЂР°Р·РґРµР»С‹</dt>
         <dd>
             <div class="reducer">
-            <h4>Создать ...</h4>              
+            <h4>РЎРѕР·РґР°С‚СЊ ...</h4>              
               <# cms/.createpage #>
-            <h4>Переход ...</h4>
+            <h4>РџРµСЂРµС…РѕРґ ...</h4>
               
               <?
                 $valuee = $pageid;
@@ -317,7 +317,7 @@
                 }
                 
                 $valuee = substr($valuee,0,$i);
-                echo "<a href=\"?ref={$_GET["ref"]}&page=$valuee\">[наверх]: $valuee</a><br />";
+                echo "<a href=\"?ref={$_GET["ref"]}&page=$valuee\">[РЅР°РІРµСЂС…]: $valuee</a><br />";
                             
                 $list = glob("{$SETTINGS["datadir"]}cms/pages/$pageid/*",GLOB_ONLYDIR);
                 foreach ($list as $key=>$value) 
@@ -327,12 +327,12 @@
                 	echo "<a href=\"?ref={$_GET["ref"]}&page=$valuee\">$valuee</a><br />";
                 }                               
               ?>
-            <h4>Удалить ... <h4>
+            <h4>РЈРґР°Р»РёС‚СЊ ... <h4>
               <form method="post">
-                <input name="delete--section" value="удалить раздел" type="button" name="delete-section" onClick="
-                    name=window.prompt('Напечатайте ОК чтобы удалить раздел','не удаляй меня!');
+                <input name="delete--section" value="СѓРґР°Р»РёС‚СЊ СЂР°Р·РґРµР»" type="button" name="delete-section" onClick="
+                    name=window.prompt('РќР°РїРµС‡Р°С‚Р°Р№С‚Рµ РћРљ С‡С‚РѕР±С‹ СѓРґР°Р»РёС‚СЊ СЂР°Р·РґРµР»','РЅРµ СѓРґР°Р»СЏР№ РјРµРЅСЏ!');
                     if(name=='OK') this.form.submit();
-                    else alert('Да! Да! Да! Я буду жить!');
+                    else alert('Р”Р°! Р”Р°! Р”Р°! РЇ Р±СѓРґСѓ Р¶РёС‚СЊ!');
                 ">
                 <input type="hidden" name="delete-section" value="true">
               </form>

@@ -1,4 +1,4 @@
 <# auth/.logout #>
 <? @header("Location: index.php");?>
-<h1>До свидания!</h1>
+<h1>Р”Рѕ СЃРІРёРґР°РЅРёСЏ!</h1>
 <# redir index 0#>

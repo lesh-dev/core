@@ -6,33 +6,33 @@
 		
 		$editfile = "data/cms/pages/$pageid/tmp-top";		
 		$text = "";
-		echo "<tr><td valign=\"top\"><h3>Общая шапка</h3><td>";
+		echo "<tr><td valign=\"top\"><h3>РћР±С‰Р°СЏ С€Р°РїРєР°</h3><td>";
 		include(translate("<! edit/file -h rows=1 cols=60 !>"));
 	
 		$editfile = "data/cms/pages/$pageid/tmp-tb";		
 		$text = "";
-		echo "<tr><td valign=\"top\"><h3>Шапка списка</h3><td>";
+		echo "<tr><td valign=\"top\"><h3>РЁР°РїРєР° СЃРїРёСЃРєР°</h3><td>";
 		include(translate("<! edit/file -h rows=1 cols=60 !>"));
 	
 		
 		$editfile = "data/cms/pages/$pageid/tmp-te";
 		$text = "";
-		echo "<tr><td valign=\"top\"><h3>Конец списка</h3><td>";
+		echo "<tr><td valign=\"top\"><h3>РљРѕРЅРµС† СЃРїРёСЃРєР°</h3><td>";
 		include(translate("<! edit/file -h rows=1 cols=60 !>"));
 		
 		$editfile = "data/cms/pages/$pageid/tmp-t";
 		$text = "";
-		echo "<tr><td valign=\"top\"><h3>Элемент списка</h3><td>";
+		echo "<tr><td valign=\"top\"><h3>Р­Р»РµРјРµРЅС‚ СЃРїРёСЃРєР°</h3><td>";
 		include(translate("<! edit/file -h rows=1 cols=60 !>"));	
 		
 		$editfile = "data/cms/pages/$pageid/tmp-i";
 		$text = "";
-		echo "<tr><td valign=\"top\"><h3>Одиночный элемент</h3><td>";
+		echo "<tr><td valign=\"top\"><h3>РћРґРёРЅРѕС‡РЅС‹Р№ СЌР»РµРјРµРЅС‚</h3><td>";
 		include(translate("<! edit/file -h rows=4 cols=60 !>"));
 
 		echo "</table>";
 		
-		echo "<td valign=\"top\"><h3>Теги:</h3>";
+		echo "<td valign=\"top\"><h3>РўРµРіРё:</h3>";
 		echo "
         {{href}}    <font size=\"-1\">(&lt;a {{href}}&gt;text&lt;/a&gt;)</font>
     <br>{{thref}}    <font size=\"-1\">(&lt;a href=\"{{thref}}\"&gt;text&lt;/a&gt;)</font>

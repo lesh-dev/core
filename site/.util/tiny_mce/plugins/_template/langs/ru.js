@@ -3,6 +3,6 @@
 /* Remember to namespace the language parameters lang_<your plugin>_<some name> */
 
 tinyMCE.addToLang('',{
-template_title : 'Это шаблон для popup',
-template_desc : 'Это шаблон для кнопки'
+template_title : 'Р­С‚Рѕ С€Р°Р±Р»РѕРЅ РґР»СЏ popup',
+template_desc : 'Р­С‚Рѕ С€Р°Р±Р»РѕРЅ РґР»СЏ РєРЅРѕРїРєРё'
 });

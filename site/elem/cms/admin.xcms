@@ -15,12 +15,12 @@
     <# var forceSn 1 #>
     <# cms/menu/display displayall forcetree start=1 end=9 #></table>
     <hr>
-    <a class="menulink" href="?ref=admin&adm=cpassw">Сменить пароль</a><br>
-    <a class="menulink" href="?ref=admin&adm=users">пользователи...</a><br>
-    <a class="menulink" href="?ref=admin&adm=logout">выход из системы...</a><br>
+    <a class="menulink" href="?ref=admin&adm=cpassw">РЎРјРµРЅРёС‚СЊ РїР°СЂРѕР»СЊ</a><br>
+    <a class="menulink" href="?ref=admin&adm=users">РїРѕР»СЊР·РѕРІР°С‚РµР»Рё...</a><br>
+    <a class="menulink" href="?ref=admin&adm=logout">РІС‹С…РѕРґ РёР· СЃРёСЃС‚РµРјС‹...</a><br>
     <a class="menulink" href="?ref=admin&adm=css">css...</a><br>
-    <a class="menulink" href="?ref=admin&adm=aforizma">афоризмы...</a><br>
-    <a class="menulink" href="?ref=admin&adm=cleanprec">Очистить кэш...</a><br>
+    <a class="menulink" href="?ref=admin&adm=aforizma">Р°С„РѕСЂРёР·РјС‹...</a><br>
+    <a class="menulink" href="?ref=admin&adm=cleanprec">РћС‡РёСЃС‚РёС‚СЊ РєСЌС€...</a><br>
   <td width="20">&nbsp;
   <td valign="top">
     <? $preface="ref=admin&adm=users"; ?>    

@@ -9,11 +9,11 @@
                     }
                   }
                 ?>
-                <h4>Иконка меню</h4>
+                <h4>РРєРѕРЅРєР° РјРµРЅСЋ</h4>
                 <form method="post" enctype="multipart/form-data">
                   <table>
                   <tr><td><img src="<? echo "{$SETTINGS["datadir"]}cms/pages/$pageid/menuicon.gif"; ?>"><td><input type="file" name="menuicon.gif">
                   </table>
                   
-                  <input type="submit" name="uploadIcons" value="Загрузить">
+                  <input type="submit" name="uploadIcons" value="Р—Р°РіСЂСѓР·РёС‚СЊ">
                 </form>

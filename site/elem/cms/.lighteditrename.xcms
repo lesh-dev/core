@@ -1,4 +1,4 @@
-<h3>Служебное имя</h3>
+<h3>РЎР»СѓР¶РµР±РЅРѕРµ РёРјСЏ</h3>
 <?
 	if(@$_POST["rename-current-section"])
 	{
@@ -17,9 +17,9 @@
 	}
 ?>
 <form method="post">
-<font size="-1">Если Вы не знаете, что это такое -- во имя Милосердия, не меняйте тут ничего!!</font>
-<br>Задать служебное имя: <input name="rename-current-section" value=<? echo $pageid;?>> 
+<font size="-1">Р•СЃР»Рё Р’С‹ РЅРµ Р·РЅР°РµС‚Рµ, С‡С‚Рѕ СЌС‚Рѕ С‚Р°РєРѕРµ -- РІРѕ РёРјСЏ РњРёР»РѕСЃРµСЂРґРёСЏ, РЅРµ РјРµРЅСЏР№С‚Рµ С‚СѓС‚ РЅРёС‡РµРіРѕ!!</font>
+<br>Р—Р°РґР°С‚СЊ СЃР»СѓР¶РµР±РЅРѕРµ РёРјСЏ: <input name="rename-current-section" value=<? echo $pageid;?>> 
 
-<br>Задать тег: <input name="create-section-tag" value="<? echo @file_get_contents("data/cms/pages/$pageid/currtag");?>"> <input type="submit" value="OK">
+<br>Р—Р°РґР°С‚СЊ С‚РµРі: <input name="create-section-tag" value="<? echo @file_get_contents("data/cms/pages/$pageid/currtag");?>"> <input type="submit" value="OK">
 
 </form>

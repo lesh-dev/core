@@ -7,8 +7,8 @@
   @$cols = $param["cols"]; if(!@$cols) @$cols = 80;
   @$rows = $param["rows"]; if(!@$rows) @$rows = 25;
   @$tag = $param["tag"]; if(!@$tag) @$tag = "h3";
-  @$submitVal = $param["submitVal"]; if(!@$submitVal) @$submitVal = "Изменить!";
-  @$resetVal = $param["resetVal"]; if(!@$resetVal) @$resetVal = "Отмена";
+  @$submitVal = $param["submitVal"]; if(!@$submitVal) @$submitVal = "РР·РјРµРЅРёС‚СЊ!";
+  @$resetVal = $param["resetVal"]; if(!@$resetVal) @$resetVal = "РћС‚РјРµРЅР°";
   
   $pathv = @$argv[1];
   if(!$pathv) $pathv = "edit-file";
@@ -30,7 +30,7 @@
       fclose($f);
       // FIXME: this should be deleted at all.
       // include_once("{$SETTINGS["elementsdir"]}cms/addrssfeed.php");
-      // addrssfeed("Изменения в разделе", "сабж","","");
+      // addrssfeed("РР·РјРµРЅРµРЅРёСЏ РІ СЂР°Р·РґРµР»Рµ", "СЃР°Р±Р¶","","");
 }
     
     if(file_exists($ename))

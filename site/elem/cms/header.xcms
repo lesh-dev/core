@@ -1,10 +1,4 @@
 <? 
   $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
+  echo @$INFO["header"];
 ?>
-<div align="center">
-<font class="header">   <? echo @$INFO["header"];?></font>
-<br>
-<font class="subheader"><? echo @$INFO["subheader"];?></font>
-</div>
-
-

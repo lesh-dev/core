@@ -15,14 +15,14 @@
                 ?>
                 
                 <h4>
-<a href="javascript:void(0);"  onMouseOver="return overlib('<b>Настройка конфигурации страницы для поисковых роботов.</b><p> Вы должны заполнить все три поля максимально точно и внимательно, чтобы страницу можно было легко найти в интернет.<p><b>Описание</b>. Краткая аннотация содержания документа. Используется поисковыми системами для описания документа. Длина текста до 100 символов.<p><b>Ключевые слова</b>. Список слов, описывающих страницу. Длина списка до 200-300 символов. Не допускается использование одного слова более 7 раз. Слова вводить через запятую.<p><b>Автор</b>. Имя автора, в произвольном формате.',  STICKY, CAPTION, 'HELP',MOUSEOFF);" onMouseOut="return nd();">                
-                META конфигурация</a></h4>
+<a href="javascript:void(0);"  onMouseOver="return overlib('<b>РќР°СЃС‚СЂРѕР№РєР° РєРѕРЅС„РёРіСѓСЂР°С†РёРё СЃС‚СЂР°РЅРёС†С‹ РґР»СЏ РїРѕРёСЃРєРѕРІС‹С… СЂРѕР±РѕС‚РѕРІ.</b><p> Р’С‹ РґРѕР»Р¶РЅС‹ Р·Р°РїРѕР»РЅРёС‚СЊ РІСЃРµ С‚СЂРё РїРѕР»СЏ РјР°РєСЃРёРјР°Р»СЊРЅРѕ С‚РѕС‡РЅРѕ Рё РІРЅРёРјР°С‚РµР»СЊРЅРѕ, С‡С‚РѕР±С‹ СЃС‚СЂР°РЅРёС†Сѓ РјРѕР¶РЅРѕ Р±С‹Р»Рѕ Р»РµРіРєРѕ РЅР°Р№С‚Рё РІ РёРЅС‚РµСЂРЅРµС‚.<p><b>РћРїРёСЃР°РЅРёРµ</b>. РљСЂР°С‚РєР°СЏ Р°РЅРЅРѕС‚Р°С†РёСЏ СЃРѕРґРµСЂР¶Р°РЅРёСЏ РґРѕРєСѓРјРµРЅС‚Р°. РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РїРѕРёСЃРєРѕРІС‹РјРё СЃРёСЃС‚РµРјР°РјРё РґР»СЏ РѕРїРёСЃР°РЅРёСЏ РґРѕРєСѓРјРµРЅС‚Р°. Р”Р»РёРЅР° С‚РµРєСЃС‚Р° РґРѕ 100 СЃРёРјРІРѕР»РѕРІ.<p><b>РљР»СЋС‡РµРІС‹Рµ СЃР»РѕРІР°</b>. РЎРїРёСЃРѕРє СЃР»РѕРІ, РѕРїРёСЃС‹РІР°СЋС‰РёС… СЃС‚СЂР°РЅРёС†Сѓ. Р”Р»РёРЅР° СЃРїРёСЃРєР° РґРѕ 200-300 СЃРёРјРІРѕР»РѕРІ. РќРµ РґРѕРїСѓСЃРєР°РµС‚СЃСЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ РѕРґРЅРѕРіРѕ СЃР»РѕРІР° Р±РѕР»РµРµ 7 СЂР°Р·. РЎР»РѕРІР° РІРІРѕРґРёС‚СЊ С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ.<p><b>РђРІС‚РѕСЂ</b>. РРјСЏ Р°РІС‚РѕСЂР°, РІ РїСЂРѕРёР·РІРѕР»СЊРЅРѕРј С„РѕСЂРјР°С‚Рµ.',  STICKY, CAPTION, 'HELP',MOUSEOFF);" onMouseOut="return nd();">                
+                META РєРѕРЅС„РёРіСѓСЂР°С†РёСЏ</a></h4>
                 <form method="post">
                   <table>
-                    <tr><td>Описание<td><input name="_description" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_description");?>">
-                    <tr><td>Ключевые слова<td><input name="_keywords" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_keywords");?>">
-                    <tr><td>Автор<td><input name="_authors" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_authors");?>">
+                    <tr><td>РћРїРёСЃР°РЅРёРµ<td><input name="_description" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_description");?>">
+                    <tr><td>РљР»СЋС‡РµРІС‹Рµ СЃР»РѕРІР°<td><input name="_keywords" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_keywords");?>">
+                    <tr><td>РђРІС‚РѕСЂ<td><input name="_authors" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_authors");?>">
                   </table>
-                  <input type="submit" name="cms-edit-meta" value="Изменить">
-                  <input type="submit" name="cms-clr-meta" value="Как в предыдущем">
+                  <input type="submit" name="cms-edit-meta" value="РР·РјРµРЅРёС‚СЊ">
+                  <input type="submit" name="cms-clr-meta" value="РљР°Рє РІ РїСЂРµРґС‹РґСѓС‰РµРј">
                 </form>

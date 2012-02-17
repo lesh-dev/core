@@ -51,7 +51,7 @@
       <# if //@$_GET["usr"]=="reg"//auth/register #>
   <tr>
     <td valign="bottom">
-      <!-- a href="?usr=reg">регистрацияр</a -->
+      <!-- a href="?usr=reg">СЂРµРіРёСЃС‚СЂР°С†РёСЏСЂ</a -->
 </table>
 
 

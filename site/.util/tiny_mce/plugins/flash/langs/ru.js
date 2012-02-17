@@ -1,11 +1,11 @@
 // RU lang variables cp1251
 
 tinyMCE.addToLang('flash',{
-title : 'Вставить / Редактировать Flash ролик',
-desc : 'Вставить / Редактировать Flash ролик',
-file : 'Flash-Файл (.swf)',
-size : 'Размер',
-list : 'Flash файлы',
-props : 'Свойства Flash',
-general : 'Основное'
+title : 'Р’СЃС‚Р°РІРёС‚СЊ / Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ Flash СЂРѕР»РёРє',
+desc : 'Р’СЃС‚Р°РІРёС‚СЊ / Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ Flash СЂРѕР»РёРє',
+file : 'Flash-Р¤Р°Р№Р» (.swf)',
+size : 'Р Р°Р·РјРµСЂ',
+list : 'Flash С„Р°Р№Р»С‹',
+props : 'РЎРІРѕР№СЃС‚РІР° Flash',
+general : 'РћСЃРЅРѕРІРЅРѕРµ'
 });

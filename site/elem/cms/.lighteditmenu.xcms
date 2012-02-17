@@ -4,40 +4,40 @@
                     $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu","w");
                     fputs($f, @$_POST["menu-text"]);
                     fclose($f);
-                    echo '<meta http-equiv="refresh" content="0;"><h3>Подождите . . .</h3>';
+                    echo '<meta http-equiv="refresh" content="0;"><h3>РџРѕРґРѕР¶РґРёС‚Рµ . . .</h3>';
                   }
                   else if(@$_POST["NoApplyToMenu"]) 
                   {
                     @unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu");
-                    echo '<meta http-equiv="refresh" content="0;"><h3>Подождите . . .</h3>';
+                    echo '<meta http-equiv="refresh" content="0;"><h3>РџРѕРґРѕР¶РґРёС‚Рµ . . .</h3>';
                   }
                   else if(@$_POST["LockMenu"]) 
                   {
                     $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu","w");
                     fputs($f, " ");
                     fclose($f);
-                    //echo '<meta http-equiv="refresh" content="0;"><h3>Подождите . . .</h3>';
+                    //echo '<meta http-equiv="refresh" content="0;"><h3>РџРѕРґРѕР¶РґРёС‚Рµ . . .</h3>';
                   }
                   else if(@$_POST["UnLockMenu"]) 
                   {
                     @unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu");
-                    //echo '<meta http-equiv="refresh" content="0;"><h3>Подождите . . .</h3>';
+                    //echo '<meta http-equiv="refresh" content="0;"><h3>РџРѕРґРѕР¶РґРёС‚Рµ . . .</h3>';
                   }
                 ?>
 
 <form method="post">
-<h3>Имя раздела</h3>
+<h3>РРјСЏ СЂР°Р·РґРµР»Р°</h3>
 <input name="menu-text" value="<? echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu"); ?>">
-<input name="ApplyToMenu" type="submit" value="Задать имя"> 
-<input name="NoApplyToMenu" type="submit" value="Стереть имя"> 
+<input name="ApplyToMenu" type="submit" value="Р—Р°РґР°С‚СЊ РёРјСЏ"> 
+<input name="NoApplyToMenu" type="submit" value="РЎС‚РµСЂРµС‚СЊ РёРјСЏ"> 
 <?
   if(file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu"))
   {
-  	echo '<input name="UnLockMenu" type="submit" value="Показать меню">';
+  	echo '<input name="UnLockMenu" type="submit" value="РџРѕРєР°Р·Р°С‚СЊ РјРµРЅСЋ">';
   }
   else
   {
-  	echo '<input name="LockMenu" type="submit" value="Скрыть меню">';  
+  	echo '<input name="LockMenu" type="submit" value="РЎРєСЂС‹С‚СЊ РјРµРЅСЋ">';  
   }
 ?>
 

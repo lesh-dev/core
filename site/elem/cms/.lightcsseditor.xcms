@@ -8,7 +8,7 @@
     <dl class="tabsheets">
     <?php
       $list = glob("{$SETTINGS["datadir"]}cms/css/*.css");
-      echo "Стилевые таблицы: ";
+      echo "РЎС‚РёР»РµРІС‹Рµ С‚Р°Р±Р»РёС†С‹: ";
       foreach ($list as $key=>$value) 
       {
       	$v = str_replace("{$SETTINGS["datadir"]}cms/css/","",$value);
@@ -17,7 +17,7 @@
       	else
         	echo '[<a href="?page='.$pageid.'&act=css&ref=ladmin&css='.$v.'">'.$v.'</a>] ';
       }
-      echo "<br>Шаблоны: ";
+      echo "<br>РЁР°Р±Р»РѕРЅС‹: ";
         echo '[<a href="?page='.$pageid.'&act=css&ref=ladmin&tmpl='."{$SETTINGS["datadir"]}cms/menulinks.dat".'">menulinks.dat</a>] ';
         echo '[<a href="?page='.$pageid.'&act=css&ref=ladmin&tmpl='."{$SETTINGS["datadir"]}cms/newstemplate".'">news template</a>] ';
         echo '[<a href="?page='.$pageid.'&act=css&ref=ladmin&tmpl='."doc/index.xcms".'">index.xcms</a>] ';

@@ -32,8 +32,8 @@
   $plus = $photono-1;
   if($photono!=0) echo "<a href=\"?{$qs}photono=s$plus\"><==</a>";    
   //echo "<td>";
-  //echo "<table><td><p class=\"text\">Категории: <a href=\"?{$qs}\">Все</a></p>";
-  echo "<p class=\"extern_link\">Категории: <a href=\"?{$qs}\">Все</a>";
+  //echo "<table><td><p class=\"text\">РљР°С‚РµРіРѕСЂРёРё: <a href=\"?{$qs}\">Р’СЃРµ</a></p>";
+  echo "<p class=\"extern_link\">РљР°С‚РµРіРѕСЂРёРё: <a href=\"?{$qs}\">Р’СЃРµ</a>";
   foreach($catlist as $key=>$value)
   {
     $catname = file_get_contents($value);
@@ -82,7 +82,7 @@
       $title = $list["name"];
       $views = $list["views"];
       if(!$views)$views=0;
-      echo "<td align=\"center\" valign=\"top\">&nbsp;<br><a  target=\"_blank\" class=\"photolink\" href=\"?{$qsm}img=$value\"><img border=\"0\" src=\"$pre\" alt=\" \"><br>$title<br><font size=\"-2\">$views просмотров</font></a>";
+      echo "<td align=\"center\" valign=\"top\">&nbsp;<br><a  target=\"_blank\" class=\"photolink\" href=\"?{$qsm}img=$value\"><img border=\"0\" src=\"$pre\" alt=\" \"><br>$title<br><font size=\"-2\">$views РїСЂРѕСЃРјРѕС‚СЂРѕРІ</font></a>";
       $i++;
     }
     echo "</table>";

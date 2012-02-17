@@ -1,6 +1,6 @@
 <# auth/ #user anonymous #>
-<h2>Регистрация</h2>
-Право на регистрацию предоставил: <?php echo $login;?><br>
+<h2>Р РµРіРёСЃС‚СЂР°С†РёСЏ</h2>
+РџСЂР°РІРѕ РЅР° СЂРµРіРёСЃС‚СЂР°С†РёСЋ РїСЂРµРґРѕСЃС‚Р°РІРёР»: <?php echo $login;?><br>
 <?
   $DEFREGUSER["date"] = mktime();
   $DEFREGUSER["group"] = "#registered";
@@ -21,33 +21,33 @@
     if(@$_POST["allowgroup"]) $DEFREGUSER["group"] = $DEFREGUSER["group"]." #$login";
     else if(file_exists("{$SETTINGS["datadir"]}auth/usr/{$DEFREGUSER["login"]}.usr"))
     {
-      echo "<h4>Ошибка. Такой пользователь уже есть.</h4>";      
+      echo "<h4>РћС€РёР±РєР°. РўР°РєРѕР№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СѓР¶Рµ РµСЃС‚СЊ.</h4>";      
     }
     if(strlen($_POST["reg_psw1"])<4)
     {
-      echo "<h4>Ошибка. Пароль слишком короткий</h4>";
+      echo "<h4>РћС€РёР±РєР°. РџР°СЂРѕР»СЊ СЃР»РёС€РєРѕРј РєРѕСЂРѕС‚РєРёР№</h4>";
     }
     else if($_POST["reg_psw1"]!=$_POST["reg_psw2"])
     {
-      echo "<h4>Ошибка. Пароли не совпадают.</h4>";
+      echo "<h4>РћС€РёР±РєР°. РџР°СЂРѕР»Рё РЅРµ СЃРѕРІРїР°РґР°СЋС‚.</h4>";
     }
     else
     {
       $DEFREGUSER["passwd"] = md5($_POST["reg_psw1"]);
       saveList($DEFREGUSER,"{$SETTINGS["datadir"]}auth/usr/{$DEFREGUSER["login"]}.usr");
-      echo "Профиль {$DEFREGUSER["login"]} создан.";    
+      echo "РџСЂРѕС„РёР»СЊ {$DEFREGUSER["login"]} СЃРѕР·РґР°РЅ.";    
       $created = true;
     } 
   }
   if(!$created)
   {
-    $REGUSER["reg_login"] = "Логин";
-    $REGUSER["reg_psw1"] = "Пароль";
-    $REGUSER["reg_psw2"] = "Пароль (подтверждение)";
-    $REGUSER["reg_realname"] = "Полное имя";
-    $REGUSER["reg_question"] = "Секретный вопрос";
-    $REGUSER["reg_answer"] = "Секретный ответ";
-    $REGUSER["reg_mail"] = "Электронный адрес";
+    $REGUSER["reg_login"] = "Р›РѕРіРёРЅ";
+    $REGUSER["reg_psw1"] = "РџР°СЂРѕР»СЊ";
+    $REGUSER["reg_psw2"] = "РџР°СЂРѕР»СЊ (РїРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ)";
+    $REGUSER["reg_realname"] = "РџРѕР»РЅРѕРµ РёРјСЏ";
+    $REGUSER["reg_question"] = "РЎРµРєСЂРµС‚РЅС‹Р№ РІРѕРїСЂРѕСЃ";
+    $REGUSER["reg_answer"] = "РЎРµРєСЂРµС‚РЅС‹Р№ РѕС‚РІРµС‚";
+    $REGUSER["reg_mail"] = "Р­Р»РµРєС‚СЂРѕРЅРЅС‹Р№ Р°РґСЂРµСЃ";
     echo '  
 
 
@@ -61,9 +61,9 @@
     }
     echo '
       </table>
-      <input type=checkbox name="delegate"> Передать права доступа '.$login.'<br>
-      <input type=checkbox name="allowgroup" checked> Включить в группу #'.$login.'<br>
-      <input type="submit" name="createUser" value="Зарегистрироваться">
+      <input type=checkbox name="delegate"> РџРµСЂРµРґР°С‚СЊ РїСЂР°РІР° РґРѕСЃС‚СѓРїР° '.$login.'<br>
+      <input type=checkbox name="allowgroup" checked> Р’РєР»СЋС‡РёС‚СЊ РІ РіСЂСѓРїРїСѓ #'.$login.'<br>
+      <input type="submit" name="createUser" value="Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊСЃСЏ">
       </form>
       ';
   }

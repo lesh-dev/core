@@ -1,5 +1,5 @@
               <form method="post">
-              <table><tr><td><b>Чтение</b><td><b>Запись</b>
+              <table><tr><td><b>Р§С‚РµРЅРёРµ</b><td><b>Р—Р°РїРёСЃСЊ</b>
               <tr><td valign="top">
               <?
                 if(@$_POST["change-acsess"])
@@ -35,7 +35,7 @@
                     echo "<input type=\"checkbox\" name=\"view-$value\" checked>$value<br />";
                   }
                 }
-                echo "Добавить: <input name=\"add-view\">";
+                echo "Р”РѕР±Р°РІРёС‚СЊ: <input name=\"add-view\">";
                 
                 echo "<td width=\"5\"><td valign=\"top\">";
                 
@@ -46,8 +46,8 @@
                     echo "<input type=\"checkbox\" name=\"edit-$value\" checked>$value<br />";
                   }
                 }
-                echo "Добавить: <input name=\"add-edit\">";
+                echo "Р”РѕР±Р°РІРёС‚СЊ: <input name=\"add-edit\">";
               ?>
               </table>
-              <input type="submit" name="change-acsess" value="Изменить">
+              <input type="submit" name="change-acsess" value="РР·РјРµРЅРёС‚СЊ">
               </form>

@@ -11,7 +11,7 @@
   $text = @file_get_contents("data/help/".$rez);
   if($login == "root") $href = "?ref=edithelp&md=$rez";
   else $href = "javascript:void(0);";
-  if(!$text)  $text = "Ñïðàâêà ïî ýòîé òåìå îòñóòñòâóåò";
+  if(!$text)  $text = "Ð¡Ð¿Ñ€Ð°Ð²ÐºÐ° Ð¿Ð¾ ÑÑ‚Ð¾Ð¹ Ñ‚ÐµÐ¼Ðµ Ð¾Ñ‚ÑÑƒÑ‚ÑÑ‚Ð²ÑƒÐµÑ‚";
 ?>
 <? 
   echo "<a href=\"$href\"  onMouseOver=\"return overlib('$text',  STICKY, CAPTION, 'HELP',MOUSEOFF);\" onMouseOut=\"return nd();\"> ";

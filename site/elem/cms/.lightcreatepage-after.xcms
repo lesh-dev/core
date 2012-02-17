@@ -6,12 +6,12 @@
 
 <form method="post">
 <table>
-<tr><td>Служебное имя <br><font size="=-1">Если Вы не знаете, что это такое - оставьте без изменений.</font><td><input name="create-name" value="<? echo $login.'-'.mktime(); ?>">
-<tr><td>Глобальный<br><font size="=-1">Считать этот раздел основным, а не подразделом текущего раздела</font><td><input type="checkbox" name="global">
+<tr><td>РЎР»СѓР¶РµР±РЅРѕРµ РёРјСЏ <br><font size="=-1">Р•СЃР»Рё Р’С‹ РЅРµ Р·РЅР°РµС‚Рµ, С‡С‚Рѕ СЌС‚Рѕ С‚Р°РєРѕРµ - РѕСЃС‚Р°РІСЊС‚Рµ Р±РµР· РёР·РјРµРЅРµРЅРёР№.</font><td><input name="create-name" value="<? echo $login.'-'.mktime(); ?>">
+<tr><td>Р“Р»РѕР±Р°Р»СЊРЅС‹Р№<br><font size="=-1">РЎС‡РёС‚Р°С‚СЊ СЌС‚РѕС‚ СЂР°Р·РґРµР» РѕСЃРЅРѕРІРЅС‹Рј, Р° РЅРµ РїРѕРґСЂР°Р·РґРµР»РѕРј С‚РµРєСѓС‰РµРіРѕ СЂР°Р·РґРµР»Р°</font><td><input type="checkbox" name="global">
 
 <?
   $list = getTagList("data/taglist/type");
-  echo "<tr><td>Тип содержания<td><SELECT name=\"create-pagetype\">";
+  echo "<tr><td>РўРёРї СЃРѕРґРµСЂР¶Р°РЅРёСЏ<td><SELECT name=\"create-pagetype\">";
   foreach ($list as $key=>$value) 
   {
     if($key == "_NAME") continue;
@@ -19,23 +19,23 @@
     //$value = str_replace(".pagetype","",$value);
   	echo "<OPTION name=\"$value\" value=\"$value\">$key</OPTION>";
   }
-  echo "<tr><td>Право редактирования для #$login<td><input type=\"checkbox\" name=\"delegateGroup\">";
+  echo "<tr><td>РџСЂР°РІРѕ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ РґР»СЏ #$login<td><input type=\"checkbox\" name=\"delegateGroup\">";
   foreach($group as $g)
   {
     $ch = "checked";
     if($g == "#all") $ch = "";
     if($g == "#registered") $ch = "";
-    echo "<tr><td>Право редактирования для $g<td><input type=\"checkbox\" name=\"edit_$g\" $ch>";        
+    echo "<tr><td>РџСЂР°РІРѕ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ РґР»СЏ $g<td><input type=\"checkbox\" name=\"edit_$g\" $ch>";        
   }
-  echo "<tr><td>Право просмотра для #all<td><input type=\"checkbox\" name=\"viewForAll\" checked>";
+  echo "<tr><td>РџСЂР°РІРѕ РїСЂРѕСЃРјРѕС‚СЂР° РґР»СЏ #all<td><input type=\"checkbox\" name=\"viewForAll\" checked>";
     
-  echo "<tr><td>Скрытый раздел<td><input type=\"checkbox\" name=\"hideChapter\" checked>";
+  echo "<tr><td>РЎРєСЂС‹С‚С‹Р№ СЂР°Р·РґРµР»<td><input type=\"checkbox\" name=\"hideChapter\" checked>";
 ?>
-<tr><td>Имя<br><font size="-1">То есть тот текст, что появится в меню.</font><td><input name="menuname">
-<tr><td>Заголовок<br><font size="-1">То есть тот текст, что появится в окне браузера.</font><td><input name="header">
-<tr><td>Подзаголовок<br><font size="-1">То есть тот текст, который (может быть) появится где-нибудь на странице.</font><td><input name="subheader">
+<tr><td>РРјСЏ<br><font size="-1">РўРѕ РµСЃС‚СЊ С‚РѕС‚ С‚РµРєСЃС‚, С‡С‚Рѕ РїРѕСЏРІРёС‚СЃСЏ РІ РјРµРЅСЋ.</font><td><input name="menuname">
+<tr><td>Р—Р°РіРѕР»РѕРІРѕРє<br><font size="-1">РўРѕ РµСЃС‚СЊ С‚РѕС‚ С‚РµРєСЃС‚, С‡С‚Рѕ РїРѕСЏРІРёС‚СЃСЏ РІ РѕРєРЅРµ Р±СЂР°СѓР·РµСЂР°.</font><td><input name="header">
+<tr><td>РџРѕРґР·Р°РіРѕР»РѕРІРѕРє<br><font size="-1">РўРѕ РµСЃС‚СЊ С‚РѕС‚ С‚РµРєСЃС‚, РєРѕС‚РѕСЂС‹Р№ (РјРѕР¶РµС‚ Р±С‹С‚СЊ) РїРѕСЏРІРёС‚СЃСЏ РіРґРµ-РЅРёР±СѓРґСЊ РЅР° СЃС‚СЂР°РЅРёС†Рµ.</font><td><input name="subheader">
 </table>
-<input type="submit" value="Создать...">
+<input type="submit" value="РЎРѕР·РґР°С‚СЊ...">
 </form>
 
 <?

@@ -47,14 +47,14 @@
     <table width="100%" cellspacing=0 cellpadding=0 border=0>
     <# var forceSn 1 #>
     <# cms/menu/display start=1 end=5 #>
-    <tr><td><a class="menu menu_level1 menu_inactive menu_inactive_level1" href="forum">Форум</a></td>
+    <tr><td><a class="menu menu_level1 menu_inactive menu_inactive_level1" href="forum">Р¤РѕСЂСѓРј</a></td>
     </table>
       <?php
 
       if(@$_COOKIE["auth-login"])
       {
-        include(translate('<br><font class="menuLink2"><a href="?page='."$pageid&amp;ref=ladmin".'" class="menulink">Админка</a></font>'));      
-        include(translate('<br><font class="menuLink2"><a href="?act=logout&page='."$pageid&amp;ref=ladmin".'" class="menulink">Выход</a></font>'));      
+        include(translate('<br><font class="menuLink2"><a href="?page='."$pageid&amp;ref=ladmin".'" class="menulink">РђРґРјРёРЅРєР°</a></font>'));      
+        include(translate('<br><font class="menuLink2"><a href="?act=logout&page='."$pageid&amp;ref=ladmin".'" class="menulink">Р’С‹С…РѕРґ</a></font>'));      
 	echo '<br><HR><iframe id="orphus" src="/orphus/orphus.htm#!rtuoes&#64;vaydnxer.u" width="125" height="115" frameborder="0" scrolling="no"></iframe>';
 
       }

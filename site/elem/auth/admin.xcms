@@ -42,7 +42,7 @@
 
 <? $href = "?".$preface; ?>
 <TABLE width="100%" border="1"> 
-<tr><td width="75">Список пользователей<td>Операции
+<tr><td width="75">РЎРїРёСЃРѕРє РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№<td>РћРїРµСЂР°С†РёРё
 <TR>
 
 <TD width="75" align="left" valign="top">
@@ -56,7 +56,7 @@
     $uname = str_replace(".usr","",$uname); 
   	echo "<a href=\"$href&username=$value\">$uname</a><br>";  	
   }  
- 	echo "<hr><a href=\"$href&username=_CREATE\">Создать...</a>";  	
+ 	echo "<hr><a href=\"$href&username=_CREATE\">РЎРѕР·РґР°С‚СЊ...</a>";  	
 ?>
 <td align="left" valign="top">
 <?php 
@@ -66,16 +66,16 @@
     $uname = "{$_GET["username"]}";
     $uname = str_replace("{$SETTINGS["datadir"]}auth/usr/","",$uname); 
     $uname = str_replace(".usr","",$uname); 
-    echo "<h3>Редактирование профиля: $uname</h3>";
+    echo "<h3>Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РїСЂРѕС„РёР»СЏ: $uname</h3>";
   }
   
   if(@$_GET['username']=="_CREATE")
   {
     $href = "$href&username={$_GET["username"]}";
-    echo '<h3>Создать профиль</h3>
+    echo '<h3>РЎРѕР·РґР°С‚СЊ РїСЂРѕС„РёР»СЊ</h3>
     <form method="post" action="'.$href.'">
       login: <input name="newlogin">
-      <input type="submit" value="Создать"> 
+      <input type="submit" value="РЎРѕР·РґР°С‚СЊ"> 
     </form>';
     
   }
@@ -83,8 +83,8 @@
 <?if(@$_GET['username']&&@$_GET['username']!="_CREATE")
 {
   echo '<FORM method="post">
-    <input type="submit" name="delUser" value="Удалить пользователя">
-    <input type="submit" name="resetPwd" value="Обнулить пароль">
+    <input type="submit" name="delUser" value="РЈРґР°Р»РёС‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ">
+    <input type="submit" name="resetPwd" value="РћР±РЅСѓР»РёС‚СЊ РїР°СЂРѕР»СЊ">
   </FORM>';
   
 }?>

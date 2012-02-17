@@ -56,7 +56,7 @@
                     </table>
                       <form method=\"post\">
                         <input type=\"hidden\" name=\"name\" value=\"$value\">
-                        <input type=\"submit\" name=\"Delete-image\" value=\"Удалить\">
+                        <input type=\"submit\" name=\"Delete-image\" value=\"РЈРґР°Р»РёС‚СЊ\">
                       </form>
                   ";
                 }
@@ -66,11 +66,11 @@
               if(function_exists("imagecreate"))
               {
                echo '<table>
-                <tr><td>Имя<tr><td><input name="image-name" size="4">
-                <tr><td>Комментарий<tr><td><input name="image-comment" size="4">
-                <tr><td>Файл<tr><td><input type="file" accept="image/*" name="image" size="4">
+                <tr><td>РРјСЏ<tr><td><input name="image-name" size="4">
+                <tr><td>РљРѕРјРјРµРЅС‚Р°СЂРёР№<tr><td><input name="image-comment" size="4">
+                <tr><td>Р¤Р°Р№Р»<tr><td><input type="file" accept="image/*" name="image" size="4">
                </table>
-                <input type="submit" name="Upload-image" value="Добавить">
+                <input type="submit" name="Upload-image" value="Р”РѕР±Р°РІРёС‚СЊ">
               </form>';              
               }
               else
@@ -78,10 +78,10 @@
                echo '<table>
                 <input name="image-name" value="auto-uploaded" type="hidden">
                 <input name="image-comment" value="" type="hidden">
-                <tr><td>Картинка<tr><td><input type="file" size="4" accept="image/*" name="big-image">
-                <tr><td>Маленькая картинка<tr><td><input size="4" type="file" accept="image/*" name="small-image">
+                <tr><td>РљР°СЂС‚РёРЅРєР°<tr><td><input type="file" size="4" accept="image/*" name="big-image">
+                <tr><td>РњР°Р»РµРЅСЊРєР°СЏ РєР°СЂС‚РёРЅРєР°<tr><td><input size="4" type="file" accept="image/*" name="small-image">
                </table>
-                <input type="submit" name="S-Upload-image" value="Добавить">
+                <input type="submit" name="S-Upload-image" value="Р”РѕР±Р°РІРёС‚СЊ">
               </form>
 ';
               }

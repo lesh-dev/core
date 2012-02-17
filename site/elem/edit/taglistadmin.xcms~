@@ -16,8 +16,8 @@
 	}
 ?>
 
-<h3>Новый список</h3>
+<h3>РќРѕРІС‹Р№ СЃРїРёСЃРѕРє</h3>
 <form method="POST">
 <input name="taglist-source">
-<input type="submit" name="taglist-new" value="Новый">
+<input type="submit" name="taglist-new" value="РќРѕРІС‹Р№">
 </form>

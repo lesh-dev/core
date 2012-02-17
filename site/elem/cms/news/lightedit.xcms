@@ -1,7 +1,7 @@
 <?php
   if(@$_GET["vtype"]=="")
   {
-    echo '<h3>Добавить новость</h3>';
+    echo '<h3>Р”РѕР±Р°РІРёС‚СЊ РЅРѕРІРѕСЃС‚СЊ</h3>';
     $fname = "{$SETTINGS["datadir"]}cms/pages/$pageid/".mktime().".news";
     $text = @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/template");
     $text = str_replace("<DATE>",date("d.m.y",mktime()),$text);
@@ -21,8 +21,8 @@
     {
       include($list[$i]);
     echo '<form method="post">';
-    echo 'Операции: ';
-    echo '<input name="deleteNews" value="Удалить" type="submit">';
+    echo 'РћРїРµСЂР°С†РёРё: ';
+    echo '<input name="deleteNews" value="РЈРґР°Р»РёС‚СЊ" type="submit">';
     echo "<input type=\"hidden\" name=\"delname\" value=\"{$list[$i]}\">";
     echo "</form>";
     echo "<hr>";

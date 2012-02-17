@@ -7,6 +7,6 @@
     {
     	@unlink($commfile);
     }
-    echo '<form method="post"> <input type="submit" name="clcomments" value="Î÷èñòèòü êîììåíòàðèè"> </form>';
+    echo '<form method="post"> <input type="submit" name="clcomments" value="ÐžÑ‡Ð¸ÑÑ‚Ð¸Ñ‚ÑŒ ÐºÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸Ð¸"> </form>';
   }
 ?>

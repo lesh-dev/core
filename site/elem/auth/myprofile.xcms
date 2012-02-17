@@ -1,5 +1,5 @@
 <# auth/ #all #>
-<h3>Профиль <? echo $login; ?></h3>
+<h3>РџСЂРѕС„РёР»СЊ <? echo $login; ?></h3>
 <?php 
 	$editfile = "data/auth/usr/$login.usr";
 	include(translate("<! edit/tag `date`,`login`,`passwd`,`group` `-newkey`!>"));	

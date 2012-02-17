@@ -70,7 +70,7 @@
 				            
           if($_FILES["dbf-$tfield"]["error"])
           {
-            echo "<font class=\"error\">Предупреждение. Картинка не загрузилась.</font>";
+            echo "<font class=\"error\">РџСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ. РљР°СЂС‚РёРЅРєР° РЅРµ Р·Р°РіСЂСѓР·РёР»Р°СЃСЊ.</font>";
           }          
           else @copy(@$_FILES["dbf-$tfield"]["tmp_name"],$imgname.".jpeg");
 				  $f = fopen($imgname.".type","w");
@@ -111,14 +111,14 @@
 			fputs($f,$rezelem);
 			//echo "OUTPUT: $rezelem ** data/cms/pages/$dbid/data/$priname";
 			fclose($f);
-			if(!$force_change) echo "<h3>Запись добавлена.</h3>";
+			if(!$force_change) echo "<h3>Р—Р°РїРёСЃСЊ РґРѕР±Р°РІР»РµРЅР°.</h3>";
 			}
 		}
 		{
 			$editfile = "data/cms/pages/$dbid/config.dbs";
 			$config = file($editfile);
-			if($force_change) echo '<h3>Редактировать запись.</h3>'; 
-			else echo '<h3>Добавить запись</h3>';
+			if($force_change) echo '<h3>Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ Р·Р°РїРёСЃСЊ.</h3>'; 
+			else echo '<h3>Р”РѕР±Р°РІРёС‚СЊ Р·Р°РїРёСЃСЊ</h3>';
 			echo '<form method="post" enctype="multipart/form-data">
 			<table>';
 			
@@ -182,7 +182,7 @@
 				}
 				else echo "<tr><td colspan=\"2\"> [element with unknown type: \"$type\"]";
 			}
-			$tmp001 = $force_change?"Изменить":"Добавить";
+			$tmp001 = $force_change?"РР·РјРµРЅРёС‚СЊ":"Р”РѕР±Р°РІРёС‚СЊ";
 			echo "<br></table><input value=\"$tmp001\" type=\"submit\" name=\"db-add\"></form>";
 		}
 ?>

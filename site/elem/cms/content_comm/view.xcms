@@ -6,7 +6,7 @@
   
   if(@$_POST["create-comment"])
   {
-    $auth_noaccess = 'Вы можете добавлять комментарии, только зарегистрировавшись.';
+    $auth_noaccess = 'Р’С‹ РјРѕР¶РµС‚Рµ РґРѕР±Р°РІР»СЏС‚СЊ РєРѕРјРјРµРЅС‚Р°СЂРёРё, С‚РѕР»СЊРєРѕ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РІС€РёСЃСЊ.';
     include(translate('<! auth/ #registered !>'));
   	$f = fopen($commfile,"a");
   	$date = mktime();
@@ -17,15 +17,15 @@
   	$name = str_replace(" ","_",$name);
   	fputs($f,"\n$date $name $html");
   	fclose($f);
-  	echo "<h3>Успешно</h3>Комментарий добавлен. Подождите.";
+  	echo "<h3>РЈСЃРїРµС€РЅРѕ</h3>РљРѕРјРјРµРЅС‚Р°СЂРёР№ РґРѕР±Р°РІР»РµРЅ. РџРѕРґРѕР¶РґРёС‚Рµ.";
   	echo "<meta http-equiv=\"Refresh\" content=\"0; URL=?page=$pageid\">";
   }
   else
   {
 	if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
 	{
-	echo "<h1>Раздел не заполнен.</h1>";
-	echo "<h3><a href=\"?ref=ladmin&page=$pageid\">Вы можете это исправить!</a></h3>";
+	echo "<h1>Р Р°Р·РґРµР» РЅРµ Р·Р°РїРѕР»РЅРµРЅ.</h1>";
+	echo "<h3><a href=\"?ref=ladmin&page=$pageid\">Р’С‹ РјРѕР¶РµС‚Рµ СЌС‚Рѕ РёСЃРїСЂР°РІРёС‚СЊ!</a></h3>";
 	}
 	else 
 	{
@@ -35,7 +35,7 @@
 	
 	if(file_exists($commfile))
 	{
-		echo '<h3>Комментарии</h3>';
+		echo '<h3>РљРѕРјРјРµРЅС‚Р°СЂРёРё</h3>';
 		$comments = file($commfile);
 		foreach($comments as $value)
 		{
@@ -53,13 +53,13 @@
 		}
 	}
 	
-	echo '<h3> Оставить комментарий';
+	echo '<h3> РћСЃС‚Р°РІРёС‚СЊ РєРѕРјРјРµРЅС‚Р°СЂРёР№';
 	echo '
 		<form method="post">
 		<textarea cols="80" rows="5" name="comment"></textarea>
 		<br> 
-		<input name="commentator" value="Ваше имя">
-		<input name="create-comment" value="Оставить" type="submit">
+		<input name="commentator" value="Р’Р°С€Рµ РёРјСЏ">
+		<input name="create-comment" value="РћСЃС‚Р°РІРёС‚СЊ" type="submit">
 		
 		</form>
 	';

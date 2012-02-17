@@ -1,5 +1,5 @@
 
-        <dt>Добавить...</dt>
+        <dt>Р”РѕР±Р°РІРёС‚СЊ...</dt>
         <dd>
             <div class="reducer">
               <?php
@@ -12,7 +12,7 @@
               <# edit/file xz -h #>
             </div>
         </dd>        
-        <dt>Шаблон</dt>
+        <dt>РЁР°Р±Р»РѕРЅ</dt>
         <dd>
             <div class="reducer">
               <?php
@@ -23,7 +23,7 @@
               <# edit/file xz -h #>
             </div>
         </dd>        
-        <dt>Управление</dt>
+        <dt>РЈРїСЂР°РІР»РµРЅРёРµ</dt>
         <dd>
             <div class="reducer">
               <?php
@@ -43,8 +43,8 @@
                   {
                     include($list[$i]);	
                     echo '<form method="post">';
-                    echo '<input name="deleteNews" value="Удалить" type="submit">';
-                    echo '<input name="editNews" value="Изменить" type="submit">';
+                    echo '<input name="deleteNews" value="РЈРґР°Р»РёС‚СЊ" type="submit">';
+                    echo '<input name="editNews" value="РР·РјРµРЅРёС‚СЊ" type="submit">';
                     echo "<input type=\"hidden\" name=\"delname\" value=\"{$list[$i]}\">";
                     echo "</form>";
                     echo "<hr>";

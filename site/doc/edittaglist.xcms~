@@ -14,5 +14,5 @@
 	echo "<h1>Edit tag: $tag</h1>";
 	include(translate("<! edit/file -h !>"));
 	echo "<h1>or remove:</h1>";
-	echo '<form method="POST"><input type="submit" name="del" value="Óäàëèòü"></form>';	
+	echo '<form method="POST"><input type="submit" name="del" value="Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ"></form>';	
 ?>

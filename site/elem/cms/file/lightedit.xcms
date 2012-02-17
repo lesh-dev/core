@@ -6,7 +6,7 @@
 		//echo @$_FILES["upload"]["error"];
 		if(@$_FILES["upload"]["error"])
 		{
-			echo "<h3>Загрузка не удалась.</h3>";
+			echo "<h3>Р—Р°РіСЂСѓР·РєР° РЅРµ СѓРґР°Р»Р°СЃСЊ.</h3>";
 			@unlink("data/cms/pages/$pageid/ftype");
 			@unlink("data/cms/pages/$pageid/fname");
 			@unlink("data/cms/pages/$pageid/stream");
@@ -39,25 +39,25 @@
 	{
 		echo "<h3>".@file_get_contents("data/cms/pages/$pageid/fname")."</h3>";
 		$sz = filesize("data/cms/pages/$pageid/stream");
-		echo "Размер: $sz<br>";
+		echo "Р Р°Р·РјРµСЂ: $sz<br>";
 		echo "";
 		
 	}
 	
 
 ?>
-<h3>Загрузка</h3>
+<h3>Р—Р°РіСЂСѓР·РєР°</h3>
 <form method="POST" enctype="multipart/form-data">
 <table>
-<tr><td>Немедленная загрузка <td><input type="checkbox" name="immidiate-file">
-<tr><td>Показывать в меню<td><input type="checkbox" name="mlock-section">
+<tr><td>РќРµРјРµРґР»РµРЅРЅР°СЏ Р·Р°РіСЂСѓР·РєР° <td><input type="checkbox" name="immidiate-file">
+<tr><td>РџРѕРєР°Р·С‹РІР°С‚СЊ РІ РјРµРЅСЋ<td><input type="checkbox" name="mlock-section">
 </table>
 <br>
 <input type="file" name="upload">
 <input type="submit">
 
 </form>
-<h3>Описание</h3>
+<h3>РћРїРёСЃР°РЅРёРµ</h3>
 <?
 	include(translate("<! var editfile {$SETTINGS["datadir"]}cms/pages/$pageid/content !><! edit/file rows=8 xz -h !>"));
 ?>

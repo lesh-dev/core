@@ -1,4 +1,4 @@
-<? 
+<# var preface page={$_GET['page']}#><? 
   $pageid=@$_GET['page'];
   $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
   $type = $INFO["type"];

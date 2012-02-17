@@ -12,23 +12,23 @@
       else
       { 
         $changed = false; 
-        echo "<h4>Ошибка: введенные пароли не совпадают</h4>";
+        echo "<h4>РћС€РёР±РєР°: РІРІРµРґРµРЅРЅС‹Рµ РїР°СЂРѕР»Рё РЅРµ СЃРѕРІРїР°РґР°СЋС‚</h4>";
       }
     }
     else
     {
       $changed = false; 
-      echo "<h4>Ошибка: старый пароль неверен</h4>";
+      echo "<h4>РћС€РёР±РєР°: СЃС‚Р°СЂС‹Р№ РїР°СЂРѕР»СЊ РЅРµРІРµСЂРµРЅ</h4>";
     }
   }  
   if(!$changed)
     echo '
     <FORM method="post">
     <table>
-    <tr><td>Старый пароль<td><input type="password" name="oldpassw">
-    <tr><td>Новый пароль<td><input  type="password" name="newpassw">
-    <tr><td>Новый пароль (еще раз)<td><input name="newpassw1" type="password">
+    <tr><td>РЎС‚Р°СЂС‹Р№ РїР°СЂРѕР»СЊ<td><input type="password" name="oldpassw">
+    <tr><td>РќРѕРІС‹Р№ РїР°СЂРѕР»СЊ<td><input  type="password" name="newpassw">
+    <tr><td>РќРѕРІС‹Р№ РїР°СЂРѕР»СЊ (РµС‰Рµ СЂР°Р·)<td><input name="newpassw1" type="password">
     </table>
-    <input type="submit" value="Изменить" name="changePassword">
+    <input type="submit" value="РР·РјРµРЅРёС‚СЊ" name="changePassword">
     </FORM>';
 ?>

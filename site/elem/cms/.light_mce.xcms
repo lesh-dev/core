@@ -30,7 +30,7 @@
 	});
 
 	function fileBrowserCallBack(field_name, url, type, win) {
-		alert("Не работает :(");
+		alert("РќРµ СЂР°Р±РѕС‚Р°РµС‚ :(");
 
 	}
 </script>

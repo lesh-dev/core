@@ -1,5 +1,5 @@
 // RU cp1251 lang variables
 
 tinyMCE.addToLang('',{
-zoom_prefix : 'масштаб'
+zoom_prefix : 'РјР°СЃС€С‚Р°Р±'
 });

@@ -82,7 +82,7 @@
 			include(translate("<! edit/file -h cols=40 rows=8 !>"));
 			echo '<form method="POST">';
 			echo '<form>';
-			echo '<input type="submit" name="build-db" value="Собрать дазу банных">';
+			echo '<input type="submit" name="build-db" value="РЎРѕР±СЂР°С‚СЊ РґР°Р·Сѓ Р±Р°РЅРЅС‹С…">';
 			echo '</form>';
 
       echo '
@@ -111,10 +111,10 @@
 				@unlink("$value/.ln");
 				rmdir($value);
 			}
-			echo "<br>Удалено. Можете удалять раздел.";
+			echo "<br>РЈРґР°Р»РµРЅРѕ. РњРѕР¶РµС‚Рµ СѓРґР°Р»СЏС‚СЊ СЂР°Р·РґРµР».";
 		}
 		else
-			echo '<br><form method="post"><input name="really-rmdb" type="submit" value="Да, я действительно хочу полностью удалить эту базу данных"></form>';
+			echo '<br><form method="post"><input name="really-rmdb" type="submit" value="Р”Р°, СЏ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‡Сѓ РїРѕР»РЅРѕСЃС‚СЊСЋ СѓРґР°Р»РёС‚СЊ СЌС‚Сѓ Р±Р°Р·Сѓ РґР°РЅРЅС‹С…"></form>';
 	}
 	if(@$_GET["vtype"]=="add")
 	{

@@ -4,9 +4,9 @@
   
   if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
   {
-    echo "<h1>Раздел не заполнен.</h1>";
+    echo "<h1>Р Р°Р·РґРµР» РЅРµ Р·Р°РїРѕР»РЅРµРЅ.</h1>";
     if($login != "anonymous")
-      echo "<h3><a href=\"?ref=ladmin&page=$pageid\">Вы можете это исправить!</a></h3>";
+      echo "<h3><a href=\"?ref=ladmin&page=$pageid\">Р’С‹ РјРѕР¶РµС‚Рµ СЌС‚Рѕ РёСЃРїСЂР°РІРёС‚СЊ!</a></h3>";
   }
   else 
   {
@@ -21,11 +21,11 @@
       $pageid = "z01News";
       $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
       $override_max_news = 3;
-      echo "<h2>Последние новости</h2>";
+      echo "<h2>РџРѕСЃР»РµРґРЅРёРµ РЅРѕРІРѕСЃС‚Рё</h2>";
       include(translate("<! cms/news/view !>"));
       $INFO = $info_bak;
       $pageid = $pageid_bak;
-      echo "<p><a href=\"?page=z01News&ref=index\">Все новости &gt;&gt;&gt;</a></p>";
+      echo "<p><a href=\"?page=z01News&ref=index\">Р’СЃРµ РЅРѕРІРѕСЃС‚Рё &gt;&gt;&gt;</a></p>";
     }
   }
 ?>

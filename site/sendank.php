@@ -5,7 +5,7 @@
  $f = fopen("ank/$filename","w");
  fputs($f,"Date: ".date("r")."\n");
  fputs($f,"<table>");
- $name = "Школьнег";
+ $name = "РЁРєРѕР»СЊРЅРµРі";
  foreach (@$_POST as $key=>$value) 
  {
 	if ($key == "Familiya")
@@ -21,11 +21,11 @@
  //fputs($f,date("r"));
  //fclose(f);
  include_once("elem/cms/addrssfeed.php");
- addrssfeed("Пришла новая анкета", $rssfeed, "http://fizlesh.ru/ank/$filename", $name);
+ addrssfeed("РџСЂРёС€Р»Р° РЅРѕРІР°СЏ Р°РЅРєРµС‚Р°", $rssfeed, "http://fizlesh.ru/ank/$filename", $name);
 
  mail("serge19746@yandex.ru","anketko",$mailmsg);
  mail("demarin@mail.ru","anketko",$mailmsg);
 ?>
-<h1>Спасибо! Ваша анкета принята!</h1>
-Подождите...
+<h1>РЎРїР°СЃРёР±Рѕ! Р’Р°С€Р° Р°РЅРєРµС‚Р° РїСЂРёРЅСЏС‚Р°!</h1>
+РџРѕРґРѕР¶РґРёС‚Рµ...
 <meta http-equiv="refresh" content="2;URL=index.php">

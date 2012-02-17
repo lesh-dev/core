@@ -5,6 +5,6 @@
   $INFO["maxNews"] = 10;
   saveList($INFO,"{$SETTINGS["datadir"]}cms/pages/$pageid/info");
   //saveList($LIST,"{$SETTINGS["datadir"]}cms/pages/$pageid/info");
-  //echo '<script>alert("раздел новостей '.$pageid.' создан и инициализирован.");</script>';
+  //echo '<script>alert("СЂР°Р·РґРµР» РЅРѕРІРѕСЃС‚РµР№ '.$pageid.' СЃРѕР·РґР°РЅ Рё РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ.");</script>';
   
 ?>

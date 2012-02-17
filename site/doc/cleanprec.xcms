@@ -1,6 +1,6 @@
 <# auth/ #admin #>
 <head>
-<title>Очистка кэша
+<title>Clean cache
 </title>
 </head>
 <# cleanprec repeat #>

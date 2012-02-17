@@ -21,24 +21,24 @@
   }
 ?>
 
-<h3>Создание глобального раздела</h3>
+<h3>РЎРѕР·РґР°РЅРёРµ РіР»РѕР±Р°Р»СЊРЅРѕРіРѕ СЂР°Р·РґРµР»Р°</h3>
 <form method="post">
 <table>
-<tr><td>Название страницы<td><input name="create-name" value="<? echo $login.'-'.mktime(); ?>">
+<tr><td>РќР°Р·РІР°РЅРёРµ СЃС‚СЂР°РЅРёС†С‹<td><input name="create-name" value="<? echo $login.'-'.mktime(); ?>">
 <?
   $list = glob("{$SETTINGS["elementsdir"]}cms/*.pagetype");
-  echo "<tr><td>Тип содержания<td><SELECT name=\"create-pagetype\">";
+  echo "<tr><td>РўРёРї СЃРѕРґРµСЂР¶Р°РЅРёСЏ<td><SELECT name=\"create-pagetype\">";
   foreach ($list as $key=>$value) 
   {
     $value = str_replace("{$SETTINGS["elementsdir"]}cms/","",$value);
     $value = str_replace(".pagetype","",$value);
   	echo "<OPTION name=\"$value\" value=\"$value\">$value</OPTION>";
   }
-  echo "<tr><td>Право редактирования для #$login<td><input type=\"checkbox\" name=\"delegateGroup\">";
-  echo "<tr><td>Право просмотра для #all<td><input type=\"checkbox\" name=\"viewForAll\" checked>";
+  echo "<tr><td>РџСЂР°РІРѕ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ РґР»СЏ #$login<td><input type=\"checkbox\" name=\"delegateGroup\">";
+  echo "<tr><td>РџСЂР°РІРѕ РїСЂРѕСЃРјРѕС‚СЂР° РґР»СЏ #all<td><input type=\"checkbox\" name=\"viewForAll\" checked>";
 ?>
 </table>
-<input type="submit" value="Создать...">
+<input type="submit" value="РЎРѕР·РґР°С‚СЊ...">
 </form>
 
 <?

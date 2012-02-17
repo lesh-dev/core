@@ -25,14 +25,14 @@
       <?php
       if($login != "anonymous")
       {
-        if($group["#admin"])include(translate('<br><font class="menuLinkA"><a href="?page='."$pageid&ref=ladmin".'" class="menulink">Админка</a></font>'));      
-        include(translate('<br><font class="menuLinkA"><a href="?act=logout&page='."$pageid&ref=index".'" class="menulink">Выход</a></font>'));      
+        if($group["#admin"])include(translate('<br><font class="menuLinkA"><a href="?page='."$pageid&ref=ladmin".'" class="menulink">РђРґРјРёРЅРєР°</a></font>'));      
+        include(translate('<br><font class="menuLinkA"><a href="?act=logout&page='."$pageid&ref=index".'" class="menulink">Р’С‹С…РѕРґ</a></font>'));      
       }
       else
       {
-        include(translate('<br><font class="menuLinkA"><a href="?act=login&page='."$pageid&ref=index".'" class="menulink">Вход</a></font>'));      
+        include(translate('<br><font class="menuLinkA"><a href="?act=login&page='."$pageid&ref=index".'" class="menulink">Р’С…РѕРґ</a></font>'));      
       }
-      include(translate('<br><font class="menuLinkA"><a href="?act=reg&page='."$pageid&ref=index".'" class="menulink">Регистрация</a></font>'));      
+      include(translate('<br><font class="menuLinkA"><a href="?act=reg&page='."$pageid&ref=index".'" class="menulink">Р РµРіРёСЃС‚СЂР°С†РёСЏ</a></font>'));      
       
       ?>
         </TD>

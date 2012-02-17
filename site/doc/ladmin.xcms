@@ -1,12 +1,11 @@
 <? $extime = microtime();?>
 <# if //@$_GET['act']=='logout'//auth/logout//#>
 <? if(!@$_GET["page"])$_GET["page"]="index";?>
-<# cms/init #>
-<# cms/css #>
+<# cms/linit #>
 <# locale #>
 <?
                 $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
- 				include(translate("<! auth/ #cmseditor #admin root {$INFO["edit"]} !>"));
+ 		include(translate("<! auth/ #cmseditor #admin root {$INFO["edit"]} !>"));
 ?> 
 <# cms/.lightcreatepage-before #>
 <?
@@ -17,7 +16,7 @@
                   $list = glob("$dir/*",GLOB_ONLYDIR);
                   if($list) 
                   {
-                    echo '<script>alert("Не могу удалить! Сначала удалите все подразделы!");</script>';
+                    echo '<script>alert("РќРµ РјРѕРіСѓ СѓРґР°Р»РёС‚СЊ! РЎРЅР°С‡Р°Р»Р° СѓРґР°Р»РёС‚Рµ РІСЃРµ РїРѕРґСЂР°Р·РґРµР»С‹!");</script>';
                   }     
                   else 
                   {
@@ -27,7 +26,7 @@
                       unlink($value);
                     }
                     rmdir($dir); 
-                    echo '<script>alert("Удалено");</script>';
+                    echo '<script>alert("РЈРґР°Р»РµРЅРѕ");</script>';
                     translate("<! redir ladmin 0!>");
                     //die();
                     $pageid="index";
@@ -42,6 +41,18 @@
                 }
 
 ?>
+
+<html>
+  <head>
+  </head>
+  
+  <body>
+    <b>xcms admin: </b> <? echo $pageid; ?> 
+    <hr>
+  </body>
+</html>
+
+
 <html>
   <# cms/head #>
   <# cms/.light_mce #>
@@ -92,21 +103,21 @@
             )
           );
       include(translate('            <hr>
-            <font class="menuLinkA"><a href="?act=myprofile&page='."$pageid&ref=ladmin".'" class="menulink">Мой профиль</a></font>
-            <br /><font class="menuLinkA"><a href="?act=cpasswd&page='."$pageid&ref=ladmin".'" class="menulink">Сменить пароль</a></font>
-            <br /><font class="menuLinkA"><a href="?page='."$pageid&ref=index".'" class="menulink">Просмотр сайта</a></font>
-            <br /><font class="menuLinkA"><a href="?act=logout&page='."$pageid&ref=$ref".'" class="menulink">Выход из системы</a></font>
+            <font class="menuLinkA"><a href="?act=myprofile&page='."$pageid&ref=ladmin".'" class="menulink">РњРѕР№ РїСЂРѕС„РёР»СЊ</a></font>
+            <br /><font class="menuLinkA"><a href="?act=cpasswd&page='."$pageid&ref=ladmin".'" class="menulink">РЎРјРµРЅРёС‚СЊ РїР°СЂРѕР»СЊ</a></font>
+            <br /><font class="menuLinkA"><a href="?page='."$pageid&ref=index".'" class="menulink">РџСЂРѕСЃРјРѕС‚СЂ СЃР°Р№С‚Р°</a></font>
+            <br /><font class="menuLinkA"><a href="?act=logout&page='."$pageid&ref=$ref".'" class="menulink">Р’С‹С…РѕРґ РёР· СЃРёСЃС‚РµРјС‹</a></font>
 
-            <br /><hr><font class="menuLinkA"><a href="?act=cChapter&page='."$pageid&ref=ladmin".'" class="menulink">Создать подраздел</a></font>
-            <br /><font class="menuLink3"><a href="?act=rename_section&page='."$pageid&ref=ladmin".'" class="menulink">Переименовать раздел</a></font>
-            <br /><font class="menuLinkA"><a href="?act=delete&page='."$pageid&ref=ladmin".'" class="menulink">Удалить раздел</a></font>
+            <br /><hr><font class="menuLinkA"><a href="?act=cChapter&page='."$pageid&ref=ladmin".'" class="menulink">РЎРѕР·РґР°С‚СЊ РїРѕРґСЂР°Р·РґРµР»</a></font>
+            <br /><font class="menuLink3"><a href="?act=rename_section&page='."$pageid&ref=ladmin".'" class="menulink">РџРµСЂРµРёРјРµРЅРѕРІР°С‚СЊ СЂР°Р·РґРµР»</a></font>
+            <br /><font class="menuLinkA"><a href="?act=delete&page='."$pageid&ref=ladmin".'" class="menulink">РЈРґР°Р»РёС‚СЊ СЂР°Р·РґРµР»</a></font>
             
-            <br /><hr><font class="menuLinkA"><a href="?act=cleanprec&page='."$pageid&ref=ladmin".'" class="menulink">Очистить кэш</a></font>
-            <br /><font class="menuLinkA"><a href="?act=userlist&page='."$pageid&ref=ladmin".'" class="menulink">Пользователи</a></font>
+            <br /><hr><font class="menuLinkA"><a href="?act=cleanprec&page='."$pageid&ref=ladmin".'" class="menulink">РћС‡РёСЃС‚РёС‚СЊ РєСЌС€</a></font>
+            <br /><font class="menuLinkA"><a href="?act=userlist&page='."$pageid&ref=ladmin".'" class="menulink">РџРѕР»СЊР·РѕРІР°С‚РµР»Рё</a></font>
             <br /><font class="menuLinkA"><a href="?act=css&page='."$pageid&ref=ladmin".'" class="menulink">CSS . . .</a></font>
-            <br /><font class="menuLinkA"><a href="?act=taglist&page='."$pageid&ref=ladmin".'" class="menulink">Автодополнение</a></font>
+            <br /><font class="menuLinkA"><a href="?act=taglist&page='."$pageid&ref=ladmin".'" class="menulink">РђРІС‚РѕРґРѕРїРѕР»РЅРµРЅРёРµ</a></font>
             
-            <br /><font class="menuLink3"><a href="?act=logout&page='."$pageid&ref=admin".'" class="menulink">Старая админка</a></font>
+            <br /><font class="menuLink3"><a href="?act=logout&page='."$pageid&ref=admin".'" class="menulink">РЎС‚Р°СЂР°СЏ Р°РґРјРёРЅРєР°</a></font>
 <hr>
 '));      
     if($type!="album")include(translate("<! cms/.lightimageeditor !>"));
@@ -133,11 +144,11 @@
                                     <tr height="1">
                                     <? if(!@$_GET["act"])echo
                                     '<td bgcolor="#FFFFFF" > 
-                                    <a class="menulinkA" href="?ref=ladmin&page='.$pageid.'">[Редактирование]</a>
-                                    <a class="menulinkA" href="?mode=meta&ref=ladmin&page='.$pageid.'">[Описание]</a>
-                                    <a class="menulinkA" href="?mode=acsess&ref=ladmin&page='.$pageid.'">[Доступ]</a>
-                                    <a class="menulinkA" href="?mode=configuration&ref=ladmin&page='.$pageid.'">[Конфигурация]</a>
-                                    <a class="menulinkA" href="?mode=documentation&ref=ladmin&page='.$pageid.'">[Документация]</a>
+                                    <a class="menulinkA" href="?ref=ladmin&page='.$pageid.'">[Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ]</a>
+                                    <a class="menulinkA" href="?mode=meta&ref=ladmin&page='.$pageid.'">[РћРїРёСЃР°РЅРёРµ]</a>
+                                    <a class="menulinkA" href="?mode=acsess&ref=ladmin&page='.$pageid.'">[Р”РѕСЃС‚СѓРї]</a>
+                                    <a class="menulinkA" href="?mode=configuration&ref=ladmin&page='.$pageid.'">[РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ]</a>
+                                    <a class="menulinkA" href="?mode=documentation&ref=ladmin&page='.$pageid.'">[Р”РѕРєСѓРјРµРЅС‚Р°С†РёСЏ]</a>
                                     </td> '; ?>
                                     
                                     <tr>
@@ -159,12 +170,12 @@
   else if(@$_GET["act"]=="delete")
   {
     echo '
-      <h3><font color="red">Предупреждение.</font></h3>
-      Вы хотите удалить текущий раздел <b>'.@file_get_contents("data/cms/pages/$pageid/applymenu").'</b>.
-      <br>Вы <b>точно</b> уверены, что хотите это сделать?
+      <h3><font color="red">РџСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ.</font></h3>
+      Р’С‹ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ С‚РµРєСѓС‰РёР№ СЂР°Р·РґРµР» <b>'.@file_get_contents("data/cms/pages/$pageid/applymenu").'</b>.
+      <br>Р’С‹ <b>С‚РѕС‡РЅРѕ</b> СѓРІРµСЂРµРЅС‹, С‡С‚Рѕ С…РѕС‚РёС‚Рµ СЌС‚Рѕ СЃРґРµР»Р°С‚СЊ?
       
       <form method="post"><input type="hidden" name="delete-section" value="true">
-      <input type="submit" value="Да, я точно уверен, что следует удалить раздел '.@file_get_contents("data/cms/pages/$pageid/applymenu").'">
+      <input type="submit" value="Р”Р°, СЏ С‚РѕС‡РЅРѕ СѓРІРµСЂРµРЅ, С‡С‚Рѕ СЃР»РµРґСѓРµС‚ СѓРґР°Р»РёС‚СЊ СЂР°Р·РґРµР» '.@file_get_contents("data/cms/pages/$pageid/applymenu").'">
       </form>
     ';
     
@@ -184,20 +195,20 @@
   else if(@$_GET["mode"]=="documentation")
   {
     $editfile = "help/pagetype_$type.html";
-    $text = "Справки нет. Напишите что-нибудь...";
+    $text = "РЎРїСЂР°РІРєРё РЅРµС‚. РќР°РїРёС€РёС‚Рµ С‡С‚Рѕ-РЅРёР±СѓРґСЊ...";
     if(
     	(@$_POST['change-help'] || !file_exists($editfile) || @$_POST["edit-submit"])
     	&& ($login == "root") )
     {
     	include(translate('<! edit/file !>'));
-	echo '<form method="POST"><input type="submit" value="Закончить." name="change-help-end"></form>';
+	echo '<form method="POST"><input type="submit" value="Р—Р°РєРѕРЅС‡РёС‚СЊ." name="change-help-end"></form>';
     }
     else 
     {
     	$source = $editfile;
     	include(translate("<! cms/readfile source !>"));
 	if($login == "root") 
-		echo '<p><form method="POST"><input type="submit" value="Изменить!" name="change-help"></form>';    
+		echo '<p><form method="POST"><input type="submit" value="РР·РјРµРЅРёС‚СЊ!" name="change-help"></form>';    
     }
     
   }
@@ -230,11 +241,11 @@
   else if(@$_GET["act"]=="cChapter")
   {
 /*    echo '
-      <h3>Создание подраздела в разделе '.$pageid.'</h3>
+      <h3>РЎРѕР·РґР°РЅРёРµ РїРѕРґСЂР°Р·РґРµР»Р° РІ СЂР°Р·РґРµР»Рµ '.$pageid.'</h3>
       <form>
         <table>
           <tr>
-            <td>Служебное имя <br> <font size="-1">Если Вы не знаете, что это такое - оставьте без изменений.</font>
+            <td>РЎР»СѓР¶РµР±РЅРѕРµ РёРјСЏ <br> <font size="-1">Р•СЃР»Рё Р’С‹ РЅРµ Р·РЅР°РµС‚Рµ, С‡С‚Рѕ СЌС‚Рѕ С‚Р°РєРѕРµ - РѕСЃС‚Р°РІСЊС‚Рµ Р±РµР· РёР·РјРµРЅРµРЅРёР№.</font>
             <td><input name="chapname">
         </table>
       </form>

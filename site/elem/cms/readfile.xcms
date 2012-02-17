@@ -1,6 +1,6 @@
 <?
 /*
-  This reads file, replacing ${ËÏˇ:sectionName} or ${sectionName}  
+  This reads file, replacing ${–∏–º—è:sectionName} or ${sectionName}  
   syntax: <# readfile /path/file #>
           OR
           $source = "file";
@@ -31,7 +31,7 @@ if($need)
   }
   
   $text = ereg_replace('\${([A-Za-z0-9/\-]{1,50})}', "<a href=\"?ref={$_GET['ref']}&page=\\1\">link</a>", $text);
-  $text = ereg_replace('\${([a-z0-9‡-ˇ¿-ﬂ,.A-Z \-]{1,50}):([A-Za-z0-9_\/\-]{1,50})}', "<a href=\"?ref={$_GET['ref']}&page=\\2\">\\1</a>", $text);
+  $text = ereg_replace('\${([a-z0-9–∞-—è–ê-–Ø,.A-Z \-]{1,50}):([A-Za-z0-9_\/\-]{1,50})}', "<a href=\"?ref={$_GET['ref']}&page=\\2\">\\1</a>", $text);
   /* strange features */
   $text = str_replace("<code>",'<div style="margin-left:7pt;border-left:solid;border-color:green;"><div style="font-family:monospace;margin-left:10pt;">',$text);
   $text = str_replace("</code>","</div></div>",$text);
