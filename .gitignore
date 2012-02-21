@@ -1,2 +1,4 @@
-site/.prec/*
+site/.prec/*.php
+site/.prec/*.php.backtrace
+site/.prec/*.dat
 site/data/cms/pages/index
