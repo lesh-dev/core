@@ -54,8 +54,8 @@ def CheckPage(conn, page):
 #		print "debug war = ", warns
 
 		for warn in warns:
-			print "Position: ", err["pos"]
-			print "Warning: ", err["msg"]
+			print "Position: ", warn["pos"]
+			print "Warning: ", warn["msg"]
 
 	return valid, errors, warns
 
