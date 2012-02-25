@@ -2,8 +2,8 @@
 
 import httplib, urllib, re, os, sys
 
-verboseMode = False
-quietMode = False
+GVerboseMode = False
+GQuietMode = False
 
 def ReadPage(conn, url):
 	request={
@@ -16,18 +16,24 @@ def ReadPage(conn, url):
 	params = urllib.urlencode(request)
 	#print params
 
-	conn.request("GET", "/check?" + params)
+	try:
+		conn.request("GET", "/check?" + params)
 
-	# http://validator.w3.org/check?uri=http%3A%2F%2Ffizlesh.ru%2Fproduction-test&charset=%28detect+automatically%29&doctype=Inline&group=0
-	r = conn.getresponse()
-	#print r.status, r.reason
-	if r.status != 200:
-		raise RuntimeError("Cannot read page " + request["uri"])
+		# http://validator.w3.org/check?uri=http%3A%2F%2Ffizlesh.ru%2Fproduction-test&charset=%28detect+automatically%29&doctype=Inline&group=0
+		r = conn.getresponse()
+		#print r.status, r.reason
+		if r.status != 200:
+			raise RuntimeError("Cannot read page " + url)
+	except IOError:
+		raise RuntimeError("Connection to validator.w3.org timed out. ")
 
 	return r.read()
 	#print data
 
 def GetOutput(valid, errors, warns):
+	if errors is None: errors = []
+	if warns is None: warns = []
+
 	text = str(len(errors)) + " error(s), " + str(len(warns)) + " warning(s)"
 	if valid is None:
 		text = "[ERROR] " + text
@@ -39,25 +45,31 @@ def GetOutput(valid, errors, warns):
 		text = "[FAIL] " + text
 	return text
 
-def CheckPage(conn, page):	
-	result = ReadPage(conn, page)
-	valid, errors, warns = Validate(result)
-	if not quietMode:
+def DisplayErrors(page, valid, errors = None, warns = None):
+	if errors is None: errors = []
+	if warns is None: warns = []
+	if not GQuietMode:
 		print page + " " + GetOutput(valid, errors, warns)
-	if verboseMode:
-#		print "debug err = ",  errors
-	
+	if GVerboseMode:
 		for err in errors:
 			print "Position: ", err["pos"]
 			print "Error: ", err["msg"]
-
-#		print "debug war = ", warns
-
 		for warn in warns:
 			print "Position: ", warn["pos"]
 			print "Warning: ", warn["msg"]
-
 	return valid, errors, warns
+
+def CheckPage(conn, page):	
+	try:
+		result = ReadPage(conn, page)
+		valid, errors, warns = Validate(result)
+		DisplayErrors(page, valid, errors, warns)
+		return valid, errors, warns
+	except IOError as (errno, errmsg):
+		return DisplayErrors(page, None, [{"pos": None, "msg": "Validation failed: " + errmsg}])
+	except RuntimeError as e:
+		return DisplayErrors(page, None, [{"pos": None, "msg": "Validation failed: " + str(e)}])
+
 
 def CleanImage(text):
 	return re.sub('<span class="err_type">(.+?)</span>', '', text)
@@ -100,15 +112,15 @@ def Validate(result):
 args = sys.argv[:]
 
 if "-v" in args or "--verbose" in args:
-	verboseMode = True
+	GVerboseMode = True
 	args = filter(lambda x: x != "-v" and x != "--verbose", args)
 
 # quiet overrides verbosity.
 
 if "-q" in args or "--quiet" in args:
 	args = filter(lambda x: x != "-q" and x != "--quiet", args)
-	quietMode = True
-	verboseMode = False
+	GQuietMode = True
+	GVerboseMode = False
 
 if len(args) < 2:
 	print "Syntax: " + args[0] + "[-v|--verbose] [-q|--quiet] <url>";
