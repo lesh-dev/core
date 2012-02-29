@@ -19,23 +19,38 @@
   if(!$ename) 
   {
     echo "<h4>Illegal filename.</h4>";
-    
   }
   else 
   {
-    if(@$_POST["edit-submit"]&&@$_POST["multi-id"]==@$multiId)
+    if(@$_POST["clear_versions"]&&@$_POST["multi-id"]==@$multiId)
     {
+      foreach(glob("$ename-version-*") as $k=>$v )
+        unlink($v);
+      
+      $current_version = "";
+    }
+    else if(@$_POST["edit-submit"]&&@$_POST["multi-id"]==@$multiId)
+    {
+      $time = time();
+      $target_name=$ename."-version-".$time;
+      $diff_name=$ename."-diff-".$time;
+      rename($ename,$target_name);
       $f = fopen($ename,"w");
       fputs($f,stripcslashes(@$_POST["edit-text"]));
       fclose($f);
+      chmod($ename,0777);
+      $current_version = "";
       // FIXME: this should be deleted at all.
       // include_once("{$SETTINGS["elementsdir"]}cms/addrssfeed.php");
       // addrssfeed("Изменения в разделе", "сабж","","");
-}
-    
+      system("diff $target_name $ename > $diff_name");
+      include ".sys/mailer.php";
+      send_notify_mail("developers","[Lesh CMS notification] Page changed", file_get_contents($diff_name));
+   }
+    else $current_version = @$_POST["versions"];
     if(file_exists($ename))
     {
-      $text = file_get_contents($ename);
+      $text = file_get_contents($ename.$current_version);
     }
     else if (@$text) {}    
     else $text = "$dtext";
@@ -44,6 +59,16 @@
   if(!@$keys["-h"]) echo "<$tag>edit: $ename</$tag>";
   $ty = "submit";
   //echo $multiId;
+  
+  $vlist = "<option value=\"\">HEAD</option>";
+  foreach(glob("$ename-version-*") as $k=>$v )
+  {
+    $version_time = date("d.m.y H:i",str_replace("$ename-version-","",$v));
+    $version_suffix = str_replace("$ename","",$v);
+    $selected = "";
+    if($version_suffix == $current_version) $selected="selected";
+    $vlist .= "<option $selected value=\"$version_suffix\">$version_time</option>";
+  }
   echo '
 <form method="post" enctype="multipart/form-data">
 <textarea rows='.$rows.' cols='.$cols.' name="edit-text">'.$text.'</textarea>
@@ -51,6 +76,10 @@
 <input type="hidden" name="'.$pathv.'" value="'.$ename.'">
 <input type="hidden" name="multi-id" value="'.$multiId.'">
 <input type="'.$ty.'" name="edit-submit" value="'.$submitVal.'">
+Версия: <select name="versions">
+  '.$vlist.'
+</select> <input type="submit" name="set_version" value="Смотреть версию"/>
+<input type="submit" name="clear_versions" value="Очистить версии"/>
 <!-- input type="reset" value="'.$resetVal.'" -->
 </form>';  
 }

@@ -4,6 +4,7 @@
   if(!@$_GET["ref"])$_GET["ref"] = "index";  
   $options = "";
   if(@$keys["forcetree"]) $options = $options."+forcetree";
+  if(@$keys["devel"]) $options = $options."+devel";
   if(@$keys["displayall"]) $options = $options."+displayall";
   $s=0;$e=999;
   if(@$param["start"])$s=$param["start"];

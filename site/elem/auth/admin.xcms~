@@ -1,4 +1,4 @@
-<# auth/ #root #>
+<# auth/ #root #admin #>
 <?
   $DEFAULT_USER["passwd"] = md5(" ");
   $DEFAULT_USER["group"] = "#user";
@@ -56,7 +56,7 @@
     $uname = str_replace(".usr","",$uname); 
   	echo "<a href=\"$href&username=$value\">$uname</a><br>";  	
   }  
- 	echo "<hr><a href=\"$href&username=_CREATE\">Создать...</a>";  	
+ 	echo "<hr><a href=\"$preface&mode=register_form\">Создать...</a>";  	
 ?>
 <td align="left" valign="top">
 <?php 
@@ -93,7 +93,7 @@
 <? $editfile= @$_GET['username']; ?>
 <? if (@$_GET['username']&&@$_GET['username']!="_CREATE")
 {
-	include(translate("<! edit/tag `login` !>"));
+	include(translate("<! edit/tag `login`,`passwd` !>"));
 }
 ?>
 

@@ -1,10 +1,31 @@
-<# auth/ #user anonymous #>
+<# auth/ #root #admin #>
 <h2>Регистрация</h2>
 Право на регистрацию предоставил: <?php echo $login;?><br>
 <?
   $DEFREGUSER["date"] = mktime();
   $DEFREGUSER["group"] = "#registered";
+  $DEFREGUSER["mce"] = "Yes";
   $created = false;
+  
+  foreach(@$_POST as $key=>$value)
+  {
+  	$value = str_replace("\n","",$value);
+  	$value = str_replace(".","",$value);
+  	$value = str_replace("/","",$value);
+  	$value = str_replace(",","",$value);
+  	$value = str_replace("\\","",$value);
+  	$value = str_replace("^","",$value);
+  	$value = str_replace("&","",$value);
+  	$value = str_replace("(","",$value);
+  	$value = str_replace(")","",$value);
+  	//$value = str_replace(" ","",$value);
+  	$value = str_replace("!","",$value);
+  	$value = str_replace("~","",$value);
+  	$value = str_replace("#","",$value);
+  	$value = str_replace("<","",$value);
+  	$value = str_replace(">","",$value);
+  	@$_POST[$key] = $value;
+  }
   
   if(@$_POST["createUser"]&&@$_POST["reg_login"])
   {
@@ -45,6 +66,7 @@
     $REGUSER["reg_psw1"] = "Пароль";
     $REGUSER["reg_psw2"] = "Пароль (подтверждение)";
     $REGUSER["reg_realname"] = "Полное имя";
+      $REGVALUE["reg_realname"] = "Василий Пупкин";
     $REGUSER["reg_question"] = "Секретный вопрос";
     $REGUSER["reg_answer"] = "Секретный ответ";
     $REGUSER["reg_mail"] = "Электронный адрес";
@@ -57,7 +79,8 @@
     {
       if(strstr($key,"psw")) {$add = 'type="password"';}
       else $add="";
-      echo "<tr><td>$value<td><input $add name=\"$key\">";
+      $field_value = @$REGVALUE[$key];
+      echo "<tr><td>$value<td><input $add name=\"$key\" value=\"$field_value\">";
     }
     echo '
       </table>

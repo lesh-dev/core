@@ -1,18 +1,15 @@
 <? $extime = microtime();?>
 <# if //@$_GET['act']=='logout'//auth/logout//#>
 <? if(!@$_GET["page"])$_GET["page"]="index";?>
-<# auth/ #admin #>
-<# cms/init #>
-<# auth/ {$INFO['edit']} #>
+<# cms/linit #>
 <# locale #>
 <?
                 $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
-?>
-<? 
- include(translate("<! auth/ #cmseditor #admin root {$INFO["edit"]} !>"));
+ 		include(translate("<! auth/ #cmseditor #admin root {$INFO["edit"]} !>"));
 ?> 
 <# cms/.lightcreatepage-before #>
 <?
+
                 if(@$_POST["delete-section"])
                 {
                   $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
@@ -29,10 +26,10 @@
                       unlink($value);
                     }
                     rmdir($dir); 
-                    //echo '<script>alert("Удалено");</script>';
-                    //translate("<! redir ladmin 0!>");
+                    echo '<script>alert("Удалено");</script>';
+                    translate("<! redir ladmin 0!>");
                     //die();
-                    //$pageid="index";
+                    $pageid="index";
                     for($i=strlen($pageid)-1;$i>=0; $i--)
                     {
                       if($pageid[i]=='/'){$pageid[i]=substr($pageid,0,$i-1); break;}
@@ -44,120 +41,64 @@
                 }
 
 ?>
+
 <html>
   <# cms/head #>
   <# cms/.light_mce #>
-  <body BGColor="A1C2D4">
+  
+  <body>
+    <b>xcms admin: </b> <? echo $pageid; ?> (<# cms/header #>)
+    <?
+      include(translate('
+            [ <a href="?act=cChapter&page='."$pageid&ref=ladmin".'" class="menulink">subpage</a>
+	    &nbsp;|&nbsp;<a href="?act=rename_section&page='."$pageid&ref=ladmin".'" class="menulink">rename </a>
+            &nbsp;|&nbsp;<a href="?act=delete&page='."$pageid&ref=ladmin".'" class="menulink">delete</a> ]
 
-            <table height="100%"  width = "100%" border = "0" cellpadding = "0" cellspacing = "0">
-                      <tr>
-                            <td width="160" valign="top">
-                            <table height="100%"  width = "100%" border = "0" cellpadding = "0" cellspacing = "0">
-                            
-                            
-                            
-                            
-                                  <tr height="150">
-                                  <td><# help/display #><img border="0" SRC="pic/emblem-mid-i.gif" width="150"></a></td>
-                                  
-                                  
-                                  </tr>
-                            
-                            
-                            
-                                  <tr height="5"><td align="center">
-                                    <a class="menulink"><? echo '{'.@file_get_contents("data/cms/pages/$pageid/applymenu")."}"; ?></a>
-                                    <br>
-                                    <a class="menulink"><font style="font-size:5pt;"><? echo '{'.$pageid."}"; ?></font></a>
-                                    </td></tr>
-                            
-                            
-                            
-                            
-                                  <tr height="100%">
-                                  
-                                  
-                                  <td valign="top">
-                                  
-                                  
-                                  
-                                                        
-      <?php
+	    <br />[<a href="?act=myprofile&page='."$pageid&ref=ladmin".'" class="menulink"><b>profile</b></a>
+            &nbsp;|&nbsp;<a href="?act=cpasswd&page='."$pageid&ref=ladmin".'" class="menulink">passwd</a>
+            &nbsp;|&nbsp;<a href="?page='."$pageid&ref=index".'" class="menulink">user_mode</a>
+            &nbsp;|&nbsp;<a href="?act=logout&page='."$pageid&ref=$ref".'" class="menulink">logout</a>]
 
-        include(
-          translate(
-            //'<h2><! cms/SectionName !></h2>'.
-            '<p><p><table cellspacing=0 cellpadding=0 width="100%"><! var forceSn 1 !><! cms/menu/display displayall start=1 end=5 !>
-            </table>
             
-            '
-            )
-          );
-      include(translate('            <hr>
-            <font class="menuLinkA"><a href="?act=myprofile&page='."$pageid&ref=ladmin".'" class="menulink">Мой профиль</a></font>
-            <br /><font class="menuLinkA"><a href="?act=cpasswd&page='."$pageid&ref=ladmin".'" class="menulink">Сменить пароль</a></font>
-            <br /><font class="menuLinkA"><a href="?page='."$pageid&ref=index".'" class="menulink">Просмотр сайта</a></font>
-            <br /><font class="menuLinkA"><a href="?act=logout&page='."$pageid&ref=$ref".'" class="menulink">Выход из системы</a></font>
-
-            <br /><hr><font class="menuLinkA"><a href="?act=cChapter&page='."$pageid&ref=ladmin".'" class="menulink">Создать подраздел</a></font>
-            <br /><font class="menuLinkA"><a href="?act=delete&page='."$pageid&ref=ladmin".'" class="menulink">Удалить раздел</a></font>
+            [ <a href="?act=cleanprec&page='."$pageid&ref=ladmin".'" class="menulink">clear cache</a>
+            <a href="?act=userlist&page='."$pageid&ref=ladmin".'" class="menulink">users</a>
+            <a href="?act=userlist&page='."$pageid&ref=ladmin".'" class="menulink">notifications</a>
+            &nbsp;|&nbsp;<a href="?act=css&page='."$pageid&ref=ladmin".'" class="menulink">template</a>]
             
-            <br /><hr><font class="menuLinkA"><a href="?act=cleanprec&page='."$pageid&ref=ladmin".'" class="menulink">Очистить кэш</a></font>
-            <br /><font class="menuLinkA"><a href="?act=userlist&page='."$pageid&ref=ladmin".'" class="menulink">Пользователи</a></font>
-            <br /><font class="menuLinkA"><a href="?act=css&page='."$pageid&ref=ladmin".'" class="menulink">CSS . . .</a></font>
-            <br /><font class="menuLinkA"><a href="?act=taglist&page='."$pageid&ref=ladmin".'" class="menulink">Автодополнение</a></font>
-            
-<hr>
-'));      
-      ?>
-                                                     
+      '));
+    
       
-                                  
-                                  
-                                  
-                                  </td>
-                                  
-                                  
-                                  </tr>
-                            
-                            </table>
-                            
-                            </td>
-                          
-                            <td width="5"> </td>
-                            
-                            
-                            
-                            
-                            
-                            
-                            <td>
-                            
-                                         <table height="100%"  width="100%" border = "0" cellpadding = "0" cellspacing = "0">
-                            
-                                                <tr height="30">
-                                                <td> <p align="center"><# cms/header #></p> </td>
-                                                </tr>
-                                    
-                                    
-                                    
-                                    <tr height="1">
+      
+      
+    ?>
+    <hr>
+    
+    <div id="container">
+        <div style="float:left; width: 100%;  margin-right:300px; ">
+           <div style="position:absolute; width:300px;">
+              <div class="menu" style="font-family: monospace; 
+			     font-size: 12pt; ">
+                 <b> Menu </b>
+                 <# cms/menu/display displayall devel start=1 end=5 #>
+
+              </div>
+           </div>
+           <div style="position:absolute; width: 100%;  margin-left:300px; ">
                                     <? if(!@$_GET["act"])echo
-                                    '<td bgcolor="#FFFFFF" > 
-                                    <a class="menulinkA" href="?ref=ladmin&page='.$pageid.'">[Редактирование]</a>
-                                    <a class="menulinkA" href="?mode=meta&ref=ladmin&page='.$pageid.'">[Описание]</a>
-                                    <a class="menulinkA" href="?mode=acsess&ref=ladmin&page='.$pageid.'">[Доступ]</a>
-                                    <a class="menulinkA" href="?mode=configuration&ref=ladmin&page='.$pageid.'">[Конфигурация]</a>
-                                    <a class="menulinkA" href="?mode=documentation&ref=ladmin&page='.$pageid.'">[Документация]</a>
-                                    </td> '; ?>
-                                    
-                                    <tr>
-                                    
-                                    
-                                    <tr>
-                                        <td valign="top"  height="100%">
-						 <table width="">
+                                    ' <td bgcolor="#FFFFFF" > 
+                                      <a class="menulinkA" href="?ref=ladmin&page='.$pageid.'">[Контент]</a>
+
+                                      <a class="menulinkA" href="?mode=meta&ref=ladmin&page='.$pageid.'">[Настройки]</a>
+                                      <a class="menulinkA" href="?mode=lightimageeditor&ref=ladmin&page='.$pageid.'">[Картинки]</a>
+                                      <a class="menulinkA" href="?mode=acsess&ref=ladmin&page='.$pageid.'">[Доступ]</a>
+                                    </td> '; 
+				    ?>
+
 <?
+  if(@$_GET["mode"] == "")
+    @$_GET["mode"] = @$_GET["act"];
+  if(@$_GET["act"] == "")
+    @$_GET["act"] = @$_GET["mode"];
   if(@$_GET["act"]=="cpasswd")
   {
     include(translate('<! auth/chpassw !>'));
@@ -176,17 +117,26 @@
     ';
     
   }
-  else if(@$_GET["mode"]=="meta")
+  else if(@$_GET["mode"]=="meta" || @$_GET["act"]=="meta")
   {
     include(translate("<! cms/.lighteditmenu !>"));
     include(translate("<! cms/.lighteditrename !>"));
     include(translate("<! cms/editmetatags !>"));
     include(translate("<! cms/.lighticoneditor !>"));
   }
-  else if(@$_GET["mode"]=="configuration")
+  else if(@$_GET["mode"]=="lightimageeditor" )
+  {
+    include(translate("<! cms/.lightimageeditor !>"));
+  }
+  else if(@$_GET["mode"]=="configuration" || @$_GET["act"]=="configuration")
   {
     $editfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/info";    
-    include(translate('<! edit/tag `edit`,`view`,`installed` 	!>'));  
+    include(translate('<! edit/tag `edit`,`view`,`installed` !>'));  
+  }
+  else if(@$_GET["mode"]=="mailer" )
+  {
+    $editfile = "{$SETTINGS["datadir"]}cms/mailer.conf";    
+    include(translate('<! edit/tag `edit`,`view`,`installed` !>'));  
   }
   else if(@$_GET["mode"]=="documentation")
   {
@@ -220,6 +170,14 @@
   {
     include(translate("<! cms/.lightacsesseditor !>"));
   }
+  else if(@$_GET["mode"]=="register_form")
+  {
+    include(translate('<! auth/ #root root !><! auth/register !>'));
+  }
+  else if(@$_GET["act"]=="rename_section")
+  {
+    include(translate("<! cms/.lightrenamesection !>"));
+  }
   else if(@$_GET["act"]=="userlist")
   {
     $preface = "ref=ladmin&act=userlist&page=$pageid";
@@ -250,27 +208,18 @@
 <? $extime = microtime()-$extime;?>
 <CENTER><font size="-2">Script execution time: <? echo ((int)($extime*10000))/10; ?> msec</font></CENTER>
                                                       </div></td>
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        </td>
-                                    </tr>
-                            
-                            
-                            </table>
-                            
-                            </td> 
-                      
-                      </tr>
-                      
-                     
-            
-            
-            </table>
-            
-            
-            
+    
+
+           </div> 
+        </div>
+    </div>
+<br />
+
+    
   </body>
 </html>
+
+                             
+                                    
+                                        
+                                

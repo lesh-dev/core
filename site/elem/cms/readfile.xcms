@@ -37,7 +37,7 @@ if($need)
   $text = str_replace("</code>","</div></div>",$text);
   /* ================ */
   $len=250;
-  if($argv[3]) $len = $argv[3];
+  if(@$argv[3]) $len = @$argv[3];
   if(@$keys["short"] && strlen($text) > $len)
   {    
     //echo $argv[3];

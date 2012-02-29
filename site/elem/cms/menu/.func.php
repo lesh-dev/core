@@ -20,7 +20,7 @@ usort($html_array,"sort_by_mtime");
   {
     global $SETTINGS,$forceSn,$pageid,$login,$group;    
     $pageiid = str_replace("{$SETTINGS["datadir"]}cms/pages/","",$initPath);
-    
+    $flags="";
     if(!file_exists("$initPath/applymenu")) 
     {
       if(strstr($options,"+displayall"))
@@ -28,10 +28,14 @@ usort($html_array,"sort_by_mtime");
       else
         return;
     }
+    
     else if(file_exists("$initPath/lockmenu"))
     {
       if(strstr($options,"+displayall"))
+      {
+        $flags.="H ";
         $text = file_get_contents("$initPath/applymenu");
+      }
       else
         return;
     }
@@ -54,6 +58,11 @@ usort($html_array,"sort_by_mtime");
     //echo "<br>*".$pageid."#<br>";
     
     $html = $MENUTEMPLATES[$menuLevel];
+    if(strstr($options,"+devel"))
+    {
+      $margin = $menuLevel*10;
+      $html = "<br><a style=\"margin-left: {$margin}pt;\" href=\"<HREF>\">[$flags<TEXT>]</a>";
+    }
     $html = str_replace("<HREF>","?page=$pageiid&$addhrefparams",$html);
     $html = str_replace("<TEXT>",$text,$html);
     
@@ -75,8 +84,7 @@ usort($html_array,"sort_by_mtime");
     if(!strstr($options,"+hault"))
       if(@$array) foreach ($array as $key=>$value) 
       {
-        if(strstr($pageid,str_replace("data/cms/pages/","",$value)))
-        //echo "<br>$pageid ^^ $value<br>";
+        if(strstr($options,"+devel") || strstr($pageid,str_replace("data/cms/pages/","",$value)))
           cms_menu_make($value,$MENUTEMPLATES,$menuLevel+1,$addhrefparams,$options,$startLevel,$endLevel);
         else
           cms_menu_make($value,$MENUTEMPLATES,$menuLevel+1,$addhrefparams,$options."+hault",$startLevel,$endLevel);

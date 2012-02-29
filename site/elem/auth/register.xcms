@@ -18,7 +18,7 @@
   	$value = str_replace("&","",$value);
   	$value = str_replace("(","",$value);
   	$value = str_replace(")","",$value);
-  	$value = str_replace(" ","",$value);
+  	//$value = str_replace(" ","",$value);
   	$value = str_replace("!","",$value);
   	$value = str_replace("~","",$value);
   	$value = str_replace("#","",$value);
@@ -56,7 +56,11 @@
     {
       $DEFREGUSER["passwd"] = md5($_POST["reg_psw1"]);
       saveList($DEFREGUSER,"{$SETTINGS["datadir"]}auth/usr/{$DEFREGUSER["login"]}.usr");
-      echo "Профиль {$DEFREGUSER["login"]} создан.";    
+      echo "Профиль {$DEFREGUSER["login"]} создан.";   
+
+      include ".sys/mailer.php";
+      send_notify_mail("developers","[Lesh CMS notification] User created", "User name: {$DEFREGUSER["login"]} was created." );
+       
       $created = true;
     } 
   }
@@ -66,6 +70,7 @@
     $REGUSER["reg_psw1"] = "Пароль";
     $REGUSER["reg_psw2"] = "Пароль (подтверждение)";
     $REGUSER["reg_realname"] = "Полное имя";
+      $REGVALUE["reg_realname"] = "Василий Пупкин";
     $REGUSER["reg_question"] = "Секретный вопрос";
     $REGUSER["reg_answer"] = "Секретный ответ";
     $REGUSER["reg_mail"] = "Электронный адрес";
@@ -78,7 +83,8 @@
     {
       if(strstr($key,"psw")) {$add = 'type="password"';}
       else $add="";
-      echo "<tr><td>$value<td><input $add name=\"$key\">";
+      $field_value = @$REGVALUE[$key];
+      echo "<tr><td>$value<td><input $add name=\"$key\" value=\"$field_value\">";
     }
     echo '
       </table>
