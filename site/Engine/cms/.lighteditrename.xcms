@@ -1,0 +1,25 @@
+<h3>Служебное имя</h3>
+<?
+	if(@$_POST["rename-current-section"])
+	{
+		rename("{$SETTINGS["datadir"]}cms/pages/$pageid","{$SETTINGS["datadir"]}cms/pages/{$_POST["rename-current-section"]}");
+		//include(translate("<! redir ladmin !>"));
+		//$pageid = "{$_POST["rename-current-section"]}";
+	}
+	if(@$_POST["create-section-tag"])
+	{
+		$f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/currtag","w");
+		fputs($f,$_POST["create-section-tag"]);
+		fclose($f);
+		$f = fopen("{$SETTINGS["datadir"]}tags/{$_POST["create-section-tag"]}","w");
+		fputs($f,"$pageid");
+		fclose($f);
+	}
+?>
+<form method="post">
+<font size="-1">Если Вы не знаете, что это такое -- во имя Милосердия, не меняйте тут ничего!!</font>
+<br>Задать служебное имя: <input name="rename-current-section" value=<? echo $pageid;?>> 
+
+<br>Задать тег: <input name="create-section-tag" value="<? echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/currtag");?>"> <input type="submit" value="OK">
+
+</form>

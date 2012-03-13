@@ -1,0 +1,25 @@
+<HREF> <TEXT> <ACT>
+<HREF> <TEXT> <ACTIVE>
+<LINK> <TEXT>
+<LINK> <TEXT>
+
+
+
+
+
+
+
+
+
+
+
+
+
+####################
+
+This file contains templates for menu hyperlinks.
+Each line represents a one link level (0 is top level, others are lower levels)
+You can (and should) use these templates:
+<HREF> -- full weblink this one leading to
+<TEXT> -- menu label
+<ACTIVE> -- expands into 'menu_active' or 'menu_passive' string if menu selected or not

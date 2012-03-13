@@ -1,3 +1,0 @@
-<# if //$type=='content'//cms/content/lightedit #>
-<# if //$type=='news'//cms/news/lightedit #>
-<# if //$type=='album'//cms/album/lightedit #>

@@ -1,3 +1,0 @@
-<# auth/ root#>
-<? $editfile = "data/help/{$_GET["md"]}";?>
-<# edit/file #>

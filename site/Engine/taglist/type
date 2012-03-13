@@ -1,0 +1,11 @@
+<?
+  global $SETTINGS;
+  $taglistt = glob("{$SETTINGS["elementsdir"]}cms/*.pagetype");
+  foreach($taglistt as $key=>$value)
+  {
+    $v = str_replace("{$SETTINGS["elementsdir"]}cms/","",$value);
+    $v = str_replace(".pagetype","",$v);
+    $taglist[file_get_contents($value)]=$v;
+  }
+  $tagname = "Тип раздела";
+?>

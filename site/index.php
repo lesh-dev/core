@@ -1,10 +1,10 @@
 <?php
   header("content-type: text/html; charset=utf-8");
 
-  include (".sys/settings.php");
-  include (".sys/tag.php");
-  include (".sys/ui.php");
-  include (".sys/resample.php"); 
+  include ("Engine/.sys/settings.php");
+  include ("Engine/.sys/tag.php");
+  include ("Engine/.sys/ui.php");
+  include ("Engine/.sys/resample.php"); 
   /*if(@!$_GET["page"])
     $_GET["page"] = $SETTINGS["defaultpage"]; 
   if(!file_exists($_GET["page"].".xcms"))
