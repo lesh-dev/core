@@ -1,6 +1,17 @@
-<# var preface page={$_GET['page']}#><? 
+<?
   $pageid=@$_GET['page'];
+  if (!strlen($pageid)) 
+  {
+    $pageid = "index";
+    @$_GET["page"] = "index";
+  }
+  $preface = $pageid;
   $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
   $type = $INFO["type"];
   $view = @$INFO["view"];
+  if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/info"))
+  {
+    include(translate('<# 404 #>'));
+    die();
+  }
 ?>

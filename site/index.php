@@ -76,6 +76,10 @@
       {
         fputs($outputStream,file_get_contents("{$SETTINGS["elementsdir"]}$name.code"));
       }
+      else if(file_exists("{$SETTINGS["designdir"]}$name.template"))
+      {
+        fputs($outputStream,file_get_contents("{$SETTINGS["designdir"]}$name.template"));
+      }
       else fputs($outputStream,file_get_contents("{$SETTINGS["elementsdir"]}{$SETTINGS["nopagecode"]}.code"));
     }    
     ParceString($close,$outputStream);
@@ -91,7 +95,7 @@
     $toCompile = false;
     if(!file_exists($filename))
     {
-      echo "<br><b>Compiler fatal error:</b> can't find source file $filename";
+      echo "<br><b>Compiler fatal error:</b> can_t find source file $filename";
     }
     if(!file_exists($destination))$toCompile = true;
     else if(filemtime($filename)>filemtime($destination))

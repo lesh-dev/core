@@ -3,6 +3,8 @@
 <meta name="description" content="<# include _description recurce #>">
 <title>
 <? 
-  echo $INFO["header"];
-  if($INFO["subheader"]) echo " - {$INFO["subheader"]}"; 
+  echo @$INFO["subheader"];
+  if(@strlen($INFO["subheader"]) && @strlen($INFO["header"]))
+    echo " - ";
+  echo @$INFO["header"];
 ?></title>

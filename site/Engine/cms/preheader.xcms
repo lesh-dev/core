@@ -1,6 +1,8 @@
 <?php
-	if(file_exists("{$SETTINGS["elementsdir"]}cms/$type/preheader.xcms"))
+
+	if(@strlen($type) && file_exists("{$SETTINGS["elementsdir"]}cms/$type/preheader.xcms"))
 	{
+	    
 		include(translate("<! cms/$type/preheader !>"));
 	}
 ?>

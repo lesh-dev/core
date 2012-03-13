@@ -13,3 +13,4 @@
     echo "<link rel=\"stylesheet\" href=\"$value\" type=\"text/css\">"; 	
   }  
 ?>
+<# locale #>

@@ -1,86 +1,43 @@
-<?
-	//FROM statisics
-	if(@$_GET["from"])
-	{
-		$f = @fopen("from-stat/{$_SERVER["REMOTE_ADDR"]}","a");
-		fputs($f,"\n".date("d-m-y H:I",mktime()));
-		fclose($f);
-	}
-    if(!@$_GET["page"])$_GET["page"]="index";
-    if(  @$_GET["act"] == "logout" && $login != "anonymous" ) 
-    {
-      include(translate("<! auth/logout !>"));
-    }
-?>
 <# cms/linit #>
 <# auth/ #all #>
 <# auth/ {$INFO['view']} #>
 <# cms/preheader #>
 <!-- headers sent -->
+<!-- 
+    Добро пожаловать в интерактивный учебник по дизайну шаблонов для xcms! 
+    Как Вы, конечно, заметили, шаблон представляет собой "почти обычную" html страницу, в которую вставляются мета-теги вида:
+      <# тег #>
+    или даже
+      <# тег с параметрами #>
+    
+    Ниже по каждому тегу будут даны небольшие комментарии.
+-->
+
+<!-- 
+    Инициализация. Задание переменных и прочая муть. Обязательно включать после <# cms/preheader #>
+-->
 <# cms/init #>
-<# locale #>
- <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
+  <!-- Включает метатеги для данной страницы, задающиеся в админке. Также включает заголовок. -->
   <# cms/head #>
-  <# cms/css #>
-  <body>
-<table border=0 cellspacing=0 cellpadding=0 width="100%" id="fullheight"> <!--id="fullheight"--><!-- height="100%"-->
-<tr><!--id="zeroheight"--><!-- height="0%"--><td>
-  <table width="100%" border=0 cellspacing=0 cellpadding=0 class="toptable">
-    <tr>
- <!--td class="menu"><img src="pic/emblem-mid-i.gif"  width="150" /-->
-      <td class="logocell menuwidth">
-        <img src="pic/e50gt.gif" height="72px" alt="" style="border: 0px">
-      </td>
-      <td align="center">
-        <# cms/header #>
-      </td>
-    </tr>
-    <tr>
-      <td class="grassdivider" colspan="2"></td>
-    </tr>
-  </table>
-</td></tr><tr><td valign="top" id="td_fullheight"> <!--id="fullheight"--><!--height="100%"-->
-    <TABLE border=0 cellspacing=0 cellpadding=0 width="100%" class="bottomtable">
-      <TR>
-        <TD class="menubg menuwidth" vAlign="top">
-    <table width="100%" cellspacing=0 cellpadding=0 border=0>
-    <# var forceSn 1 #>
+<body>
+<!-- Этот тег возвращает заголовок страницы -- plaintext-ом. Оборачивать в заголовок нужно самому -->
+<h1><# cms/header #></h1>
+<h3>Меню сайта</h3>
+    <!-- 
+      Команда cms/menu/display показывает меню. Параметры следующие:
+        start=<n> -- уровень, с которого начинать показ
+        end=<n> -- уровень, которым заканчивать показ
+        displayall -- указывает, что нужно отображать ВСЁ меню (а не только все разделы верхнего уровня + все подразделы текущего)
+        devel -- отображает меню в режиме разработчика (зайдите в админку, чтобы посмотреть)
+    -->
     <# cms/menu/display start=1 end=5 #>
-    <tr><td><a class="menu menu_level1 menu_inactive menu_inactive_level1" href="forum">Форум</a></td>
-    </table>
-      <?php
-
-      if(@$_COOKIE["auth-login"])
-      {
-        include(translate('<br><font class="menuLink2"><a href="?page='."$pageid&amp;ref=ladmin".'" class="menulink">Админка</a></font>'));      
-        include(translate('<br><font class="menuLink2"><a href="?act=logout&page='."$pageid&amp;ref=ladmin".'" class="menulink">Выход</a></font>'));      
-	echo '<br><HR><iframe id="orphus" src="/orphus/orphus.htm#!rtuoes&#64;vaydnxer.u" width="125" height="115" frameborder="0" scrolling="no"></iframe>';
-
-      }
-      else
-      {
-        include(translate('<br><a class="stealth_link" href="?page='."$pageid&amp;ref=ladmin".'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a><br>'));      
-      }
-      ?>
-        <!--a href="http://validator.w3.org/check?uri=referer"><img
-        src="misc/valid-html401-green.gif"
-        alt="Valid HTML 4.01 Transitional" height="31" width="88"></a-->
-        </TD>
-	      
-        <!-- td width="10"-->
-           <TD valign="top" class="mainfield">
-       <!--table width="100%">
-              <tr><td align="center"-->
-            <h2><? echo @$INFO["header"];?></h2>
-							      <# if //!@$_GET["usr"]//cms/ #> 
-
-              <!--/table-->
-        </TD>
-      </TR>
-      <!--TR><TD class="menubg">PREVED</TD><TD class="mainfield">MEDVED</TD></TR-->
-    </TABLE>
-</td></tr></table>
+<h3>Контент сайта</h3>
+    <!--
+    А эта команда включает собственно CMS-ку
+    -->
+    <# cms/ #>
   </body>
 </html>
-<!-- bgcolor="#FFFA9F"  -->
+
