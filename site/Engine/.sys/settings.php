@@ -5,9 +5,9 @@
   $SETTINGS["openbracket"]  = "<# ";
   $SETTINGS["closebracket"] = "#>";
   $SETTINGS["elementsdir"]  = "Engine/";
-  $SETTINGS["documentsdir"]  = "Design/";
-  $SETTINGS["designdir"]  = "Design/";
-  $SETTINGS["datadir"]  = "Content/";
+  $SETTINGS["documentsdir"]  = $design_dir;
+  $SETTINGS["designdir"]  = $design_dir;
+  $SETTINGS["datadir"]  = $content_dir;
   $SETTINGS["precdir"]  = ".prec/";
   $SETTINGS["code_begin"]  = "<"."?php unset(\$argv);unset(\$keys);unset(\$param);";
   $SETTINGS["code_end"]  = "?".">";

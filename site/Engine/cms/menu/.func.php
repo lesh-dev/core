@@ -74,9 +74,9 @@ usort($html_array,"sort_by_mtime");
     $html = str_replace("<TEXT>",$text,$html);
     
     if(strstr($pageid,str_replace("{$SETTINGS["datadir"]}cms/pages/","",$initPath)))
-      $html = str_replace("<ACTIVE>","menu_active",$html);
+      $html = str_replace("<ACTIVE>","active",$html);
     else
-      $html = str_replace("<ACTIVE>","menu_passive",$html);
+      $html = str_replace("<ACTIVE>","passive",$html);
       
     if(file_exists("$initPath/menuicon.gif"))
     {

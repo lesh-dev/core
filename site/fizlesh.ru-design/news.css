@@ -1,0 +1,14 @@
+.newstitle {
+  font-family: sans-serif;
+  font-size: 11pt;
+  font-weight: bolder;
+  text-indent: 5mm;
+  margin-top: 10pt;
+  margin-bottom: 3pt;
+}
+.signature {
+  font-size: 10pt;
+  font-style: italic;
+  text-align: right;
+  margin-right: 20px;
+}
