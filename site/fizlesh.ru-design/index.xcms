@@ -7,7 +7,7 @@
   <# cms/head #>
   <link rel="stylesheet" type="text/css" href="/<# web_prefix #>fizlesh.ru-design/menu.css" />
   <link rel="stylesheet" type="text/css" href="/<# web_prefix #>fizlesh.ru-design/default.css" />
-  <link rel="stylesheet" type="text/css" href="fizlesh.ru-design/news.css" />
+  <link rel="stylesheet" type="text/css" href="/<# web_prefix #>fizlesh.ru-design/news.css" />
 </head>
 <body>
   <div id="fullHeight">

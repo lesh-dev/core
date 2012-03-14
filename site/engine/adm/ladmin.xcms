@@ -4,7 +4,7 @@
 <# cms/linit #>
 <# locale #>
 <?
-                $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
+        $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
  		include(translate("<! auth/ #cmseditor #admin root {$INFO["edit"]} !>"));
 ?> 
 <# cms/.lightcreatepage-before #>
@@ -43,9 +43,22 @@
 ?>
 
 <html>
+  <head>
   <# cms/head #>
+  <script language="javascript" type="text/javascript" src="<? echo "/$web_prefix/$engine_pub/js/jquery-1.7.1.min.js"?>"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('div.view').hide();
+      $('div.slide').click(function() {
+        $('div.view').slideToggle(400);
+        return false;
+      });
+    });
+  </script>
+  </head>
   
   <body>
+   
     <b>xcms admin: </b> <? echo $pageid; ?> (<# cms/header #>)
     <?
       include(translate('
