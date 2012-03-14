@@ -10,10 +10,15 @@
   if(@$param["start"])$s=$param["start"];
   if(@$param["end"])$e=$param["end"];
   
+  if(@$_GET["ref"] != "index")
+    $ahp = "ref={$_GET["ref"]}";
+  else
+    $ahp = "";
+  $web_prefix = file_get_contents("{$SETTINGS["datadir"]}web_prefix");
   cms_menu_make(
     "{$SETTINGS["datadir"]}cms/pages",
     file("{$SETTINGS["designdir"]}menulinks.dat"),
     0,
-    "ref={$_GET["ref"]}",
+    $ahp,
     $options,$s,$e);
 ?>

@@ -16,7 +16,7 @@
   for ($i=$n-1 ; $i>=0; $i--) 
   {
     $source = $list[$i];
-    include(translate("<! cms/readfile source !>"));
+    include(translate("<! cms/readtext --markdown !>"));
     $count++;
 	if($count>=@$INFO["maxNews"]) break;	
   }

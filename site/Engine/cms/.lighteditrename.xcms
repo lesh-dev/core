@@ -8,12 +8,29 @@
 	}
 	if(@$_POST["create-section-tag"])
 	{
-		$f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/currtag","w");
-		fputs($f,$_POST["create-section-tag"]);
-		fclose($f);
-		$f = fopen("{$SETTINGS["datadir"]}tags/{$_POST["create-section-tag"]}","w");
-		fputs($f,"$pageid");
-		fclose($f);
+		$old_tag = @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/currtag");
+		$new_tag = @$_POST["create-section-tag"];
+		$tags = @unserialize(@file_get_contents("{$SETTINGS["datadir"]}tags/list"));
+		if(@strlen(@$tags[@$new_tag]))
+		{
+		    echo "<font color=\"red\"><b>Error: this tag already exists!</b></font>";
+		}
+		else
+		{
+		    $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/currtag","w");
+		    fputs($f,$new_tag);
+		    fclose($f);
+		    foreach($tags as $tag=>$value)
+		    {
+			if($value == $pageid)
+			    unset($tags[$tag]);
+		    }
+		    $tags[$new_tag] = $pageid;
+		    $f = fopen("{$SETTINGS["datadir"]}tags/list","w");
+		    fputs($f,serialize($tags));
+		    fclose($f);
+		}
+		include(translate('<! cms/build_rewrite !>'));
 	}
 ?>
 <form method="post">

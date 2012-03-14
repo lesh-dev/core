@@ -12,7 +12,6 @@
   {
     //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
     $source = "{$SETTINGS["datadir"]}cms/pages/$pageid/content";
-    include(translate("<! cms/readfile source !>"));
-    //include(translate("<! cms/readfile {$SETTINGS["datadir"]}cms/pages/$pageid/content !>"));
+    include(translate("<! cms/readtext --markdown !>"));
   }
 ?>

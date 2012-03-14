@@ -1,0 +1,22 @@
+<?
+    $rewrite_text = "RewriteEngine on";
+    $rewrite_list = unserialize(file_get_contents("{$SETTINGS["datadir"]}tags/list"));
+    foreach($rewrite_list as $tag=>$path)
+    {
+	@$listing[@substr_count($tag,"/")] .= "\nRewriteRule ^$tag$ index.php?page=$path";
+	@$listing[@substr_count($tag,"/")] .= "\nRewriteRule ^$tag/(.*)$ index.php?page=$path&aparam=$1";
+    }
+    $rewrite_text .= @$listing[9];
+    $rewrite_text .= @$listing[8];
+    $rewrite_text .= @$listing[7];
+    $rewrite_text .= @$listing[6];
+    $rewrite_text .= @$listing[5];
+    $rewrite_text .= @$listing[4];
+    $rewrite_text .= @$listing[3];
+    $rewrite_text .= @$listing[2];
+    $rewrite_text .= @$listing[1];
+    $rewrite_text .= @$listing[0];
+    $f = fopen(".htaccess","w");
+    fputs($f, $rewrite_text);
+    fclose($f);
+?>

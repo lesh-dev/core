@@ -18,7 +18,7 @@ usort($html_array,"sort_by_mtime");
 <?
   function cms_menu_make($initPath,$MENUTEMPLATES,$menuLevel,$addhrefparams,$options,$startLevel,$endLevel)
   {
-    global $SETTINGS,$forceSn,$pageid,$login,$group;    
+    global $SETTINGS,$forceSn,$pageid,$login,$group,$web_prefix;    
     $pageiid = str_replace("{$SETTINGS["datadir"]}cms/pages/","",$initPath);
     $flags="";
     if(!file_exists("$initPath/applymenu")) 
@@ -63,7 +63,13 @@ usort($html_array,"sort_by_mtime");
       $margin = $menuLevel*10;
       $html = "<br><a style=\"margin-left: {$margin}pt;\" href=\"<HREF>\">[$flags<TEXT>]</a>";
     }
-    $html = str_replace("<HREF>","?page=$pageiid&$addhrefparams",$html);
+    if(file_exists("$initPath/currtag"))
+    {
+	$tag = file_get_contents("$initPath/currtag");
+	$html = str_replace("<HREF>","/$web_prefix$tag/$addhrefparams",$html);
+    }
+    else
+	$html = str_replace("<HREF>","?page=$pageiid&$addhrefparams",$html);
     $html = str_replace("<TEXT>",$text,$html);
     
     if(strstr($pageid,str_replace("{$SETTINGS["datadir"]}cms/pages/","",$initPath)))

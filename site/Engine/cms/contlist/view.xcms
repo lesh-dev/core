@@ -7,19 +7,8 @@
   {
   	$source = "$value/content";
   	$pg = str_replace("{$SETTINGS["datadir"]}/cms/pages/","",$value);
-  	include(translate("<! cms/readfile source short 220 index.php?page=$pg [подробнее...] !>"));
+  	include(translate("<! cms/readtext --markdown --limit=220 --next-link=index.php?page=$pg --next-text=[подробнее...] !>"));
   }
 
-
-/*  if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
-  {
-  	
-  }
-  else 
-  {
-    //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
-    //$source = "{$SETTINGS["datadir"]}cms/pages/$pageid/content";
-    //include(translate("<! cms/readfile source !>"));
-  }*/
 ?>
 

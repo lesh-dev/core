@@ -1,0 +1,82 @@
+<?
+/*
+    ReadText -- a new readfile implementation
+    Syntax:
+    <# readtext  [--markdown] [--limit=number] [--next-link=url] [--next-text=text] [--file=file_name] #>
+	--file -- имя файла, которое нужно зачитать. Если опущено -- читается из переменной $source
+	--markdown -- указыавет на то, что текст нужно интерпретировать markdown-ом
+	--limit -- ограничение на число знаков
+	--next-link-url -- указывает гиперссылку на полный текст
+	--next-link-text -- указывает текст ссылки, ведущий на полный текст
+*/
+$ARG = implode(",",$argv);
+$compiled = ".prec/cms_readfile_".md5($ARG).md5($source).".dat";
+
+
+$need = false;
+if(!file_exists($compiled))$need = true;
+if(@filemtime($source)>@filemtime($compiled))$need = true;
+$need = true;
+if($need)
+{
+  $markdown = false;
+  $limit = -1;
+  $nextlink = "whereiam";
+  $nexttext = "[more]";
+  foreach($argv as $arg)
+  {
+    if($arg == "--markdown")
+	$markdown = true;
+    else if(strpos($arg,"="))
+    {
+	$arr = explode($arg,"=",1);
+	if($arr[0] == "--limit")
+	    $limit = $arr[1];
+	if($arr[0] == "--next-link")
+	    $nextlink = $arr[1];
+	if($arr[0] == "--next-text")
+	    $nexttext = $arr[1];
+	if($arr[0] == "--file")
+	    $source = $arr[1];
+    }
+  }
+  $text = file_get_contents($source);
+  $web_prefix = file_get_contents("${SETTINGS["datadir"]}web_prefix");
+  //// Обработка синтаксиса: ${Текст ссылки:pageid}
+  $text = ereg_replace('\${([A-Za-z0-9/\-]{1,50})}', "<a href=\"/$web_prefix?ref={$_GET['ref']}&page=\\1\">link</a>", $text);
+  $text = ereg_replace('\${([a-z0-9а-яА-Я,.()&;A-Z \-]{1,50}):([A-Za-z0-9_\/\-]{1,50})}', "<a href=\"/$web_prefix?ref={$_GET['ref']}&page=\\2\">\\1</a>", $text);
+  //// Замена всех ссылок на страницы на их тег-версии
+  $tags = @unserialize(@file_get_contents("${SETTINGS["datadir"]}tags/list"));
+  if($tags)foreach($tags as $tag=>$page)
+  {
+    echo "<li>$page=>$tag";
+    $text = str_replace("?ref=index&page=$page\"","$tag\"",$text);
+    $text = str_replace("?page=$page&ref=index\"","$tag\"",$text);
+    $text = str_replace("?page=$page\"","$tag\"",$text);
+  }  
+  //// Обработка синтаксиса: <code>Моноширинный текст</code>
+  $text = str_replace("<code>",'<div style="margin-left:7pt;border-left:solid;border-color:green;"><div style="font-family:monospace;margin-left:10pt;">',$text);
+  $text = str_replace("</code>","</div></div>",$text);
+
+  //// Обработка сокращенного наименования
+  if($limit > 0 && strlen($text) > $limit)
+  {    
+    $text = substr($text,0,$limit);
+    $n = strlen($text);
+    for($i=$n-1;$i>=0;$i--) 
+    {
+      if
+      (
+        ($text[$i]==' ')
+      ) 
+      {$text = substr($text,0,$i); break;}      
+    }
+    $text = $text."<a href=\"$nextlink\">$nexttext</a>";
+  }
+  $f = fopen($compiled,"w");
+  fputs($f,$text);
+  fclose($f);
+}
+
+include($compiled);
+?>
