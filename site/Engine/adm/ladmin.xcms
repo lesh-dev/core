@@ -44,7 +44,6 @@
 
 <html>
   <# cms/head #>
-  <# cms/.light_mce #>
   
   <body>
     <b>xcms admin: </b> <? echo $pageid; ?> (<# cms/header #>)

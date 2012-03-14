@@ -1,5 +1,6 @@
 <?
                 $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
+                $prex = "${SETTINGS["datadir"]}cms/pages/$pageid";
                 if(@$_POST["Upload-image"])
                 {
                   $name = $login."-".mktime();
@@ -8,12 +9,12 @@
                   $spic = "$dir/$name-preview.jpeg";
                   @make640($_FILES["image"]["tmp_name"],$bpic);
                   @preview($_FILES["image"]["tmp_name"],$spic);
-                  @$LIST["picname"] = $bpic;                  
-                  $LIST["prename"] = $spic;
-                  $LIST["name"] = @$_POST["image-name"];                
+                  @$LIST["picname"] = "$name.jpeg";
+                  $LIST["prename"] = "$name-preview.jpeg";
+                  $LIST["name"] = @$_POST["image-name"];
                   $LIST["comment"] = @$_POST["image-comment"];
                   $LIST["owner"] = $login;
-                  saveList($LIST,$lpic);                                  
+                  saveList($LIST,$lpic);
                 }
                 if(@$_POST["S-Upload-image"])
                 {
@@ -23,9 +24,9 @@
                   $spic = "$dir/$name-preview.jpeg";
                   copy($_FILES["big-image"]["tmp_name"],$bpic);
                   copy($_FILES["small-image"]["tmp_name"],$spic);
-                  
-		  @$LIST["picname"] = $bpic;                  
-                  $LIST["prename"] = $spic;
+
+		  @$LIST["picname"] = "$name.jpeg";
+                  $LIST["prename"] = "$name-preview.jpeg";
                   $LIST["name"] = @$_POST["image-name"];                
                   $LIST["comment"] = @$_POST["image-comment"];
                   $LIST["owner"] = $login;
@@ -36,8 +37,8 @@
                   $name = @$_POST["name"];
                   $dlst = getList($name);
                   @unlink($name);
-                  @unlink($dlst["picname"]);
-                  @unlink($dlst["prename"]);
+                  @unlink("$prex/".$dlst["picname"]);
+                  @unlink("$prex/".$dlst["prename"]);
                 }
                 
                 $piclist = glob("$dir/*.pic");
@@ -49,9 +50,9 @@
                 	  <table  cellpadding=\"0\" cellspacing=\"0\">
                     <tr>
                       <td rowspan=\"2\">
-                        <a href=\"{$lst["picname"]}\"><img width=\"90\" src=\"{$lst["prename"]}\"></a>                                                          
-                    <td>Pic: <input value=\"{$lst["picname"]}\" size=\"60\">
-                    <tr><td>Prv: <input value=\"{$lst["prename"]}\" size=\"60\">
+                        <a href=\"$prex/{$lst["picname"]}\"><img width=\"90\" src=\"$prex/{$lst["prename"]}\"></a>                                                          
+                    <td>Pic: <input value=\"\${prefix}/{$lst["picname"]}\" size=\"60\">
+                    <tr><td>Prv: <input value=\"\${prefix}/{$lst["prename"]}\" size=\"60\">
                     
                     </table>
                       <form method=\"post\">

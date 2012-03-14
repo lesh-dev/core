@@ -41,9 +41,12 @@ if($need)
   }
   $text = file_get_contents($source);
   $web_prefix = file_get_contents("${SETTINGS["datadir"]}web_prefix");
-  //// Обработка синтаксиса: ${Текст ссылки:pageid}
-  $text = ereg_replace('\${([A-Za-z0-9/\-]{1,50})}', "<a href=\"/$web_prefix?ref={$_GET['ref']}&page=\\1\">link</a>", $text);
-  $text = ereg_replace('\${([a-z0-9а-яА-Я,.()&;A-Z \-]{1,50}):([A-Za-z0-9_\/\-]{1,50})}', "<a href=\"/$web_prefix?ref={$_GET['ref']}&page=\\2\">\\1</a>", $text);
+  //// Обработка синтаксиса: ${prefix} раскрывается в путь до текущего $pageid
+  $text = str_replace("\${prefix}","${SETTINGS["datadir"]}cms/pages/$pageid",$text);
+  //// Обработка синтаксиса: [[Текст ссылки:pageid]]
+  //$text = preg_replace('x', "<a href=\"/$web_prefix?ref={$_GET['ref']}&page=\\1\">link</a>", $text);
+  $text = preg_replace('/\[\[([a-zA-Z]*)\]\]/Ui', "<a href=\"/$web_prefix?ref={$_GET['ref']}&page=\\1\">link</a>", $text);
+  $text = preg_replace('/\[\[(.*):([A-Za-z0-9_\/\-]*)\]\]/Ui', "<a href=\"/$web_prefix?ref={$_GET['ref']}&page=\\2\">\\1</a>", $text);
   //// Замена всех ссылок на страницы на их тег-версии
   $tags = @unserialize(@file_get_contents("${SETTINGS["datadir"]}tags/list"));
   if($tags)foreach($tags as $tag=>$page)
