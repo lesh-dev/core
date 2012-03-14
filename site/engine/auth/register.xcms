@@ -58,8 +58,14 @@
       saveList($DEFREGUSER,"{$SETTINGS["datadir"]}auth/usr/{$DEFREGUSER["login"]}.usr");
       echo "Профиль {$DEFREGUSER["login"]} создан.";   
 
-      include "${SETTINGS["elementsdir"]}/.sys/mailer.php";
-      send_notify_mail("developers","[Lesh CMS notification] User created", "User name: {$DEFREGUSER["login"]} was created." );
+      $mail = " === Создан новый пользователь: ${DEFREGUSER["login"]}\r\n";
+      foreach($DEFREGUSER as $k=>$v)
+      {
+        $mail .= "\t$k :\t$v\r\n";
+      }
+      send_notify_mail("developers","Пользователь создан: {$DEFREGUSER["login"]}", 
+        $mail
+        );
        
       $created = true;
     } 

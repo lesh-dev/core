@@ -4,6 +4,7 @@
   include ("$engine_dir/.sys/settings.php");
   include ("$engine_dir/.sys/tag.php");
   include ("$engine_dir/.sys/ui.php");
+  include ("$engine_dir/.sys/mailer.php");
   include ("$engine_dir/.sys/resample.php"); 
   /*if(@!$_GET["page"])
     $_GET["page"] = $SETTINGS["defaultpage"]; 
