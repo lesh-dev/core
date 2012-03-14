@@ -14,7 +14,6 @@
     $ahp = "ref={$_GET["ref"]}";
   else
     $ahp = "";
-  $web_prefix = file_get_contents("{$SETTINGS["datadir"]}web_prefix");
   cms_menu_make(
     "{$SETTINGS["datadir"]}cms/pages",
     file("{$SETTINGS["designdir"]}menulinks.dat"),

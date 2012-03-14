@@ -69,6 +69,7 @@
     if($version_suffix == $current_version) $selected="selected";
     $vlist .= "<option $selected value=\"$version_suffix\">$version_time</option>";
   }
+  $text = htmlspecialchars($text);
   echo '
 <form method="post" enctype="multipart/form-data">
 <textarea rows='.$rows.' cols='.$cols.' name="edit-text">'.$text.'</textarea>

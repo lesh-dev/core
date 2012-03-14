@@ -40,11 +40,12 @@ if($need)
     }
   }
   $text = file_get_contents($source);
-  $web_prefix = file_get_contents("${SETTINGS["datadir"]}web_prefix");
   //// Обработка синтаксиса: ${prefix} раскрывается в путь до текущего $pageid
-  $text = str_replace("\${prefix}","${SETTINGS["datadir"]}cms/pages/$pageid",$text);
+  $text = str_replace("\${prefix}","/${SETTINGS["datadir"]}cms/pages/$pageid",$text);
   //// Обработка синтаксиса: [[Текст ссылки:pageid]]
   //$text = preg_replace('x', "<a href=\"/$web_prefix?ref={$_GET['ref']}&page=\\1\">link</a>", $text);
+  $text = preg_replace('/\[\[\/([a-zA-Z]*)\]\]/Ui', "<a href=\"/$web_prefix\\1\">link</a>", $text);
+  $text = preg_replace('/\[\[(.*):\/([A-Za-z0-9_\/\-]*)\]\]/Ui', "<a href=\"/$web_prefix\\2\">\\1</a>", $text);
   $text = preg_replace('/\[\[([a-zA-Z]*)\]\]/Ui', "<a href=\"/$web_prefix?ref={$_GET['ref']}&page=\\1\">link</a>", $text);
   $text = preg_replace('/\[\[(.*):([A-Za-z0-9_\/\-]*)\]\]/Ui', "<a href=\"/$web_prefix?ref={$_GET['ref']}&page=\\2\">\\1</a>", $text);
   //// Замена всех ссылок на страницы на их тег-версии
