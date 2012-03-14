@@ -16,7 +16,6 @@ $compiled = ".prec/cms_readfile_".md5($ARG).md5($source).".dat";
 $need = false;
 if(!file_exists($compiled))$need = true;
 if(@filemtime($source)>@filemtime($compiled))$need = true;
-$need = true;
 if($need)
 {
   $markdown = false;
@@ -49,7 +48,6 @@ if($need)
   $tags = @unserialize(@file_get_contents("${SETTINGS["datadir"]}tags/list"));
   if($tags)foreach($tags as $tag=>$page)
   {
-    echo "<li>$page=>$tag";
     $text = str_replace("?ref=index&page=$page\"","$tag\"",$text);
     $text = str_replace("?page=$page&ref=index\"","$tag\"",$text);
     $text = str_replace("?page=$page\"","$tag\"",$text);
