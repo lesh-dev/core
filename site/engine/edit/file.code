@@ -44,7 +44,7 @@
       // include_once("{$SETTINGS["elementsdir"]}cms/addrssfeed.php");
       // addrssfeed("Изменения в разделе", "сабж","","");
       system("diff $target_name $ename > $diff_name");
-      include "Engine/.sys/mailer.php";
+      include "${SETTINGS["elementsdir"]}/.sys/mailer.php";
       send_notify_mail("developers","[Lesh CMS notification] Page changed", file_get_contents($diff_name));
    }
     else $current_version = @$_POST["versions"];

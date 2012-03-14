@@ -4,7 +4,7 @@
   $SETTINGS["nopagecode"]  = "error.404";
   $SETTINGS["openbracket"]  = "<# ";
   $SETTINGS["closebracket"] = "#>";
-  $SETTINGS["elementsdir"]  = "Engine/";
+  $SETTINGS["elementsdir"]  = $engine_dir;
   $SETTINGS["documentsdir"]  = $design_dir;
   $SETTINGS["designdir"]  = $design_dir;
   $SETTINGS["datadir"]  = $content_dir;
