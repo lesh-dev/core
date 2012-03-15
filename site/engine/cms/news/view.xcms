@@ -22,7 +22,9 @@
     for ($i=$n-1 ; $i>=0; $i--) 
     {
       $source = $list[$i];
-      include(translate("<! cms/readtext --markdown !>"));
+      $text = file_get_contents($list[i]);
+      $text = "lalala";
+      include(translate("<! cms/readtext --markdown --text !>"));
       $count++;
  	  if($count>=@$INFO["maxNews"]) break;	
     }

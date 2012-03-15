@@ -8,6 +8,7 @@
 	--limit -- ограничение на число знаков
 	--next-link-url -- указывает гиперссылку на полный текст
 	--next-link-text -- указывает текст ссылки, ведущий на полный текст
+	--text -- указыавет на то, что переменная $text уже зачитана и нужно отобразить текст, что в ней находится. Переменная $source (имя файла) по-прежнему имеет значение (в смысле кэширования)
 */
 $ARG = implode(",",$argv);
 $compiled = ".prec/cms_readfile_".md5($ARG).md5($source).".dat";
@@ -19,6 +20,7 @@ if(@filemtime($source)>@filemtime($compiled))$need = true;
 if($need)
 {
   $markdown = false;
+  $text_defined = false;
   $limit = -1;
   $nextlink = "whereiam";
   $nexttext = "[more]";
@@ -26,6 +28,8 @@ if($need)
   {
     if($arg == "--markdown")
 	$markdown = true;
+    if($arg == "--text")
+	$text_defined = true;
     else if(strpos($arg,"="))
     {
 	$arr = explode($arg,"=",1);
@@ -39,7 +43,8 @@ if($need)
 	    $source = $arr[1];
     }
   }
-  $text = file_get_contents($source);
+  if(!$text_defined)
+    $text = file_get_contents($source);
   //// Обработка синтаксиса: ${prefix} раскрывается в путь до текущего $pageid
   $text = str_replace("\${prefix}","/${SETTINGS["datadir"]}cms/pages/$pageid",$text);
   //// Обработка синтаксиса: [[Текст ссылки:pageid]]
