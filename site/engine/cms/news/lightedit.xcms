@@ -2,10 +2,12 @@
   if(@$_GET["vtype"]=="")
   {
     echo '<h3>Добавить новость</h3>';
-    $fname = "{$SETTINGS["datadir"]}cms/pages/$pageid/".mktime().".news";
+    $id = mktime();
+    $fname = "{$SETTINGS["datadir"]}cms/pages/$pageid/".$id.".news";
     $text = @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/template");
     $text = str_replace("<DATE>",date("d.m.y",mktime()),$text);
     $text = str_replace("<LOGIN>",$login,$text);
+    $text = str_replace("<STAMP>",$id,$text);
     include(translate("<! var editfile $fname !><! edit/file xz -h rows=10 !>"));
 
 
@@ -17,10 +19,25 @@
     $list = glob("{$SETTINGS["datadir"]}cms/pages/$pageid/*.news");
     $n = count($list);
     $count=0;
-    for ($i=$n-1 ; $i>=0; $i--) 
+    $cc=0;
+    $offset = @$_GET["offset"];
+    for ($i=$n-1-$offset ; $i>=0; $i--) 
     {
+      $cc++;
+      if($cc>10) break;
       include($list[$i]);
-      echo '<div class="slide" style="cursor: pointer;">Редактировать новость...</div> <div class="view">';
+      echo "
+      <script type=\"text/javascript\">
+        $(document).ready(function() {
+        $('div.view-$i').hide();
+        $('div.slide-$i').click(function() {
+          $('div.view-$i').slideToggle(400);
+          return false;
+        });
+        });
+     </script>";
+                                              
+      echo "<div class=\"slide-$i\" style=\"cursor: pointer;\"><a href=\"#\">Редактировать новость...</a></div> <div class=\"view-$i\">";
       include(translate("<! var editfile {$list[$i]} !><! edit/file xz -h rows=10 !>"));
       echo ' </div>';
       
@@ -33,6 +50,11 @@
     echo "</form>";
     echo "<hr>";
       $count++;
+    }
+    if($i != 0)
+    {
+      @$offset += 10;
+      echo "<a href=\"?page=$pageid&ref=ladmin&offset=$offset\">&le;&le; Предыдущие 10 новостей</a>";
     }
 
   }

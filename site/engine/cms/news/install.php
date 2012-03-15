@@ -4,7 +4,7 @@
   $INFO["installed"] = "ok";
   $INFO["maxNews"] = 10;
   saveList($INFO,"{$SETTINGS["datadir"]}cms/pages/$pageid/info");
-  $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/template");
+  $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/template","w");
   fputs($f,
 '
   <div class="newstitle"><a href="<STAMP>"><DATE>. Header</a></div>

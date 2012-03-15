@@ -31,10 +31,11 @@
     }
     else if(@$_POST["edit-submit"]&&@$_POST["multi-id"]==@$multiId)
     {
+      echo "<li>$ename";
       $time = time();
       $target_name=$ename."-version-".$time;
       $diff_name=$ename."-diff-".$time;
-      rename($ename,$target_name);
+      @rename($ename,$target_name);
       $f = fopen($ename,"w");
       fputs($f,stripcslashes(@$_POST["edit-text"]));
       fclose($f);

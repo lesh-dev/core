@@ -3,21 +3,28 @@
   //include_once("{$SETTINGS["elementsdir"]}cms/content/common.php");
   
   //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
-
-  $list = glob("{$SETTINGS["datadir"]}cms/pages/$pageid/*.news");
-  $n = count($list);
-  $count=0;
-  //var_dump($INFO);
-  //var_dump($LIST);
-  $maxnews = @$INFO["maxNews"];
-  if (!$maxnews) $maxnews = 10;
-  if (! empty($override_max_news) )
-    $maxnews = $override_max_news;
-  for ($i=$n-1 ; $i>=0; $i--) 
+  $nnname = "{$SETTINGS["datadir"]}cms/pages/$pageid/{$_GET["aparam"]}.news";
+  echo $nnname;
+  if(strlen(@$_GET["aparam"]) && file_exists($nnname))
   {
-    $source = $list[$i];
+    $source = $nnname;
     include(translate("<! cms/readtext --markdown !>"));
-    $count++;
-	if($count>=@$INFO["maxNews"]) break;	
+  }
+  else
+  {
+    $list = glob("{$SETTINGS["datadir"]}cms/pages/$pageid/*.news");
+    $n = count($list);
+    $count=0;
+    $maxnews = @$INFO["maxNews"];
+    if (!$maxnews) $maxnews = 10;
+    if (! empty($override_max_news) )
+      $maxnews = $override_max_news;
+    for ($i=$n-1 ; $i>=0; $i--) 
+    {
+      $source = $list[$i];
+      include(translate("<! cms/readtext --markdown !>"));
+      $count++;
+ 	  if($count>=@$INFO["maxNews"]) break;	
+    }
   }
 ?>
