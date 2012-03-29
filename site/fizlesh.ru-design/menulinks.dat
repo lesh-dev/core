@@ -1,0 +1,4 @@
+<a class="menu menu_level0 menu_<ACTIVE> menu_<ACTIVE>_level0" href="<HREF>"><TEXT></a>
+<a class="menu menu_level1 menu_<ACTIVE> menu_<ACTIVE>_level1" href="<HREF>"><TEXT></a>
+<a class="menu menu_level2 menu_<ACTIVE> menu_<ACTIVE>_level2" href="<HREF>"><TEXT></a>
+<a class="menu menu_level3 menu_<ACTIVE> menu_<ACTIVE>_level3" href="<HREF>"><TEXT></a>

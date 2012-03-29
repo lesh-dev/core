@@ -1,0 +1,60 @@
+<?php
+  if(@$_GET["vtype"]=="")
+  {
+    echo '<h3>Добавить новость</h3>';
+    $id = mktime();
+    $fname = "{$SETTINGS["datadir"]}cms/pages/$pageid/".$id.".news";
+    $text = @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/template");
+    $text = str_replace("<DATE>",date("d.m.y",mktime()),$text);
+    $text = str_replace("<LOGIN>",$login,$text);
+    include(translate("<! var editfile $fname !><! edit/file xz -h rows=10 !>"));
+
+
+    if(@$_POST["deleteNews"])
+    {
+      @unlink(@$_POST["delname"]);
+    }
+
+    $list = glob("{$SETTINGS["datadir"]}cms/pages/$pageid/*.news");
+    $n = count($list);
+    $count=0;
+    $cc=0;
+    $offset = @$_GET["offset"];
+    for ($i=$n-1-$offset ; $i>=0; $i--) 
+    {
+      $cc++;
+      if($cc>10) break;
+      include($list[$i]);
+      echo "
+      <script type=\"text/javascript\">
+        $(document).ready(function() {
+        $('div.view-$i').hide();
+        $('div.slide-$i').click(function() {
+          $('div.view-$i').slideToggle(400);
+          return false;
+        });
+        });
+     </script>";
+                                              
+      echo "<div class=\"slide-$i\" style=\"cursor: pointer;\"><a href=\"#\">Редактировать новость...</a></div> <div class=\"view-$i\">";
+      include(translate("<! var editfile {$list[$i]} !><! edit/file xz -h rows=10 !>"));
+      echo ' </div>';
+      
+      
+
+    echo '<form method="post">';
+    echo 'Операции: ';
+    echo '<input name="deleteNews" value="Удалить" type="submit">';
+    echo "<input type=\"hidden\" name=\"delname\" value=\"{$list[$i]}\">";
+    echo "</form>";
+    echo "<hr>";
+      $count++;
+    }
+    if($i != 0)
+    {
+      @$offset += 10;
+      echo "<a href=\"?page=$pageid&ref=ladmin&offset=$offset\">&le;&le; Предыдущие 10 новостей</a>";
+    }
+
+  }
+?>

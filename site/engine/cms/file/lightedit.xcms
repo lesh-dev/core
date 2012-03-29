@@ -1,0 +1,63 @@
+<?
+	if(@$_FILES)
+	{
+		//echo @$_FILES["upload"]["tmp_name"];
+		//echo @$_FILES["upload"]["type"];
+		//echo @$_FILES["upload"]["error"];
+		if(@$_FILES["upload"]["error"])
+		{
+			echo "<h3>Загрузка не удалась.</h3>";
+			@unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/ftype");
+			@unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/fname");
+			@unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/stream");
+		}
+		else 
+		{
+			$f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/ftype","w");
+			fputs($f,@$_FILES["upload"]["type"]);
+			fclose($f);
+			$f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/fname","w");
+			fputs($f,@$_FILES["upload"]["name"]);
+			fclose($f);
+			copy(@$_FILES["upload"]["tmp_name"],"{$SETTINGS["datadir"]}cms/pages/$pageid/stream");
+			if(@$_POST["mlock-section"]) 
+			@unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu");
+			else 
+			{
+				$f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu","w");
+				fputs($f," ");
+				fclose($f);
+			}
+			if(@$_POST["immidiate-file"])
+				$INFO["immidiate"] = "true";
+			else
+				$INFO["immidiate"] = "false";			
+			saveList($INFO,"{$SETTINGS["datadir"]}cms/pages/$pageid/info");
+		}
+	}
+	if(file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/fname"))
+	{
+		echo "<h3>".@file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/fname")."</h3>";
+		$sz = filesize("{$SETTINGS["datadir"]}cms/pages/$pageid/stream");
+		echo "Размер: $sz<br>";
+		echo "";
+		
+	}
+	
+
+?>
+<h3>Загрузка</h3>
+<form method="POST" enctype="multipart/form-data">
+<table>
+<tr><td>Немедленная загрузка <td><input type="checkbox" name="immidiate-file">
+<tr><td>Показывать в меню<td><input type="checkbox" name="mlock-section">
+</table>
+<br>
+<input type="file" name="upload">
+<input type="submit">
+
+</form>
+<h3>Описание</h3>
+<?
+	include(translate("<! var editfile {$SETTINGS["datadir"]}cms/pages/$pageid/content !><! edit/file rows=8 xz -h !>"));
+?>

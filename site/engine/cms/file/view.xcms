@@ -1,0 +1,19 @@
+<?
+  //include_once("{$SETTINGS["elementsdir"]}cms/common.php");
+  //include_once("{$SETTINGS["elementsdir"]}cms/content/common.php");
+  
+  if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
+  {
+    echo "<h1>Раздел не заполнен.</h1>";
+    if($login != "anonymous")
+      echo "<h3><a href=\"?ref=ladmin&page=$pageid\">Вы можете это исправить!</a></h3>";
+  }
+  else 
+  {
+    $source = "{$SETTINGS["datadir"]}cms/pages/$pageid/content";
+    include(translate("<! cms/readtext --markdown !>"));
+  }
+?>
+<form method="post">
+<input type="submit" name="download-file" value="Download...">
+</form>

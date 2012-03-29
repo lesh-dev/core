@@ -1,0 +1,42 @@
+<h3>Служебное имя</h3>
+<?
+	if(@$_POST["rename-current-section"])
+	{
+		rename("{$SETTINGS["datadir"]}cms/pages/$pageid","{$SETTINGS["datadir"]}cms/pages/{$_POST["rename-current-section"]}");
+		//include(translate("<! redir ladmin !>"));
+		//$pageid = "{$_POST["rename-current-section"]}";
+	}
+	if(@$_POST["create-section-tag"])
+	{
+		$old_tag = @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/currtag");
+		$new_tag = @$_POST["create-section-tag"];
+		$tags = @unserialize(@file_get_contents("{$SETTINGS["datadir"]}tags/list"));
+		if(@strlen(@$tags[@$new_tag]))
+		{
+		    echo "<font color=\"red\"><b>Error: this tag already exists!</b></font>";
+		}
+		else
+		{
+		    $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/currtag","w");
+		    fputs($f,$new_tag);
+		    fclose($f);
+		    foreach($tags as $tag=>$value)
+		    {
+			if($value == $pageid)
+			    unset($tags[$tag]);
+		    }
+		    $tags[$new_tag] = $pageid;
+		    $f = fopen("{$SETTINGS["datadir"]}tags/list","w");
+		    fputs($f,serialize($tags));
+		    fclose($f);
+		}
+		include(translate('<! cms/build_rewrite !>'));
+	}
+?>
+<form method="post">
+<font size="-1">Если Вы не знаете, что это такое -- во имя Милосердия, не меняйте тут ничего!!</font>
+<br>Задать служебное имя: <input name="rename-current-section" value=<? echo $pageid;?>> 
+
+<br>Задать тег: <input name="create-section-tag" value="<? echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/currtag");?>"> <input type="submit" value="OK">
+
+</form>

@@ -1,0 +1,14 @@
+<?
+	$list = glob(".prec/*");
+	foreach ($list as $i) unlink($i);
+	if($argv[1] == "repeat")
+	{
+		echo 'Кэш очищается...';
+		include(translate('<! redir cleanprec 5 !>'));
+	}
+	else
+	{
+  		echo "<h3>КЭШ очищен и будет пересоздан после следующего обращения к странице</h3><a target=\"_blank\" href=\"?ref=cleanprec\">Зациклить</a>";
+	
+	}
+?>

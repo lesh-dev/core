@@ -1,0 +1,3 @@
+<# auth/ #admin #selfeditor #>
+<? $editfile = $SETTINGS["datadir"]/auth/usr/$login.usr ?>
+<# edit/tag #>

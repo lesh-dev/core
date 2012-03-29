@@ -1,0 +1,10 @@
+<meta name="author" content="<# include _authors recurce #>">
+<meta name="keywords" content="<# include _keywords recurce #>">
+<meta name="description" content="<# include _description recurce #>">
+<title>
+<? 
+  echo @$INFO["subheader"];
+  if(@strlen($INFO["subheader"]) && @strlen($INFO["header"]))
+    echo " - ";
+  echo @$INFO["header"];
+?></title>

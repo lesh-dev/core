@@ -1,0 +1,6 @@
+<# auth/ #admin #>
+<head>
+<title>Clean cache
+</title>
+</head>
+<# cleanprec repeat #>

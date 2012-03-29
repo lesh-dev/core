@@ -1,0 +1,178 @@
+html {
+  height: 100%;
+}
+
+body {
+  background-color: #c0d2ab;
+  background-image: url("pic/cells.png");
+  font-family: Tahoma, Verdana, Arial, sans-serif;
+}
+
+/* very common and simple rule */
+/* all exceptions should be handled separately */
+a img {
+  border: 0px;
+}
+
+.roundBorders {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.topTable {
+  background-image: url("pic/grass-formulas.jpg");
+  height: 100px;
+  width: 100%;
+  margin-bottom: 3px;
+}
+
+.bottomTable {
+  width: 100%;
+}
+
+.logoCell {
+  text-align: center;
+  vertical-align: top;
+  padding-top: 20px;
+}
+
+.mainField {
+  background-color: #9ec78b;
+  vertical-align: top;
+  padding: 20px;
+}
+
+#fullHeight {
+  padding-bottom: 6px;
+  border: none;
+  text-align: center;
+}
+
+p {
+  font-size: 10pt;
+  text-align: justify;
+  padding: 0px 0px 0px 0px;
+  text-decoration: none;
+  text-indent: 5mm;
+  margin-top: 3pt;
+  margin-bottom: 0px;
+}
+p.text_line {
+  text-indent: 5mm;
+}
+li {
+  font-size: 10pt;
+  text-align: justify;
+  padding: 0px 0px 0px 0px;
+  text-decoration: none;
+}
+h1 {
+  font-size: 26pt;
+  font-weight: normal;
+  text-indent: 0mm;
+}
+h2 {
+  font-size: 15pt;
+  font-weight: bold;
+  text-indent: 5mm;
+  margin-top: 10pt;
+  margin-bottom: 3pt;
+}
+h3 {
+  font: normal normal 12pt/12pt sans-serif;
+  color: #000020;
+  font-weight: bold;
+  text-indent: 5mm;
+  margin-top: 10pt;
+  margin-bottom: 3pt;
+}
+h4 {
+  font: normal normal 12pt/12pt sans-serif;
+  color:#000020;
+  text-indent: 5mm;
+  margin-top: 10pt;
+  margin-bottom: 3pt;
+}
+
+/* TODO: eliminate, used in photoalbum only */
+.extern_link {
+  font: normal normal 12pt/12pt sans-serif;
+  color:#000020;
+  text-indent: 5mm;
+  margin-top: 3pt;
+  margin-bottom: 0pt;
+}
+
+a, a:link {
+  color: #cf5612;
+}
+a:visited {
+  color: #854310;
+}
+a:hover {
+  color: #d47f18;
+}
+a:active {
+  color: #d47f18;
+}
+
+a.stealthLink {
+  color: #b5c9a1;
+}
+a.stealthLink:hover {
+  color: #a24f0c;
+}
+
+.photo-name {
+  font-family: sans-serif;
+  font-size: 12pt;
+  font-weight: bolder;
+  margin-left: 2ex;
+}
+
+textarea, input {
+  border: 1px solid #003f00;
+  background-color: #eeffee;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+input[type='submit'] {
+  border: 2px solid #003f00;
+  background-color: #8ea76b;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* email alignment */
+img.email {
+  vertical-align: -4px;
+}
+
+input[name='menu-text'] {
+  width: 300px;
+}
+
+span.ankLabel {
+  font-size: 10pt;
+  font-weight: bold;
+  display: inline-block;
+  width: 400px;
+}
+
+div.ankRow {
+  white-space: nowrap;
+}
+
+div.ankExample {
+  font-size: 8pt;
+  padding-left: 410px;
+  padding-bottom: 3pt;
+}
+
+a.leshLogoTitle {
+  position: absolute;
+  right: 7px;
+  bottom: 5px;
+}

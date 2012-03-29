@@ -1,0 +1,12 @@
+<# auth/ {$INFO['view']} #>
+<?php 
+	if(@$_POST["download-file"] || $INFO["immidiate"]=="true")
+	{
+		header("content-type: ".file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/ftype"));
+		
+		header("attachment: ".file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/fname"));
+		
+		echo file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/stream");
+		die();
+	}
+?>

@@ -1,0 +1,23 @@
+<?
+  $acsess = false;
+  
+  foreach ($argv as $key=>$value) 
+  {
+    if(!$key) continue;
+    if(strstr($value," "))
+    {
+      $arr = explode(" ",$value);
+      foreach ($arr as $k=>$v) {
+        if($v)
+      	 $keys[$v] = true;
+      }
+    }	
+  }
+  if(@$keys[$login]) $acsess = true;
+  
+  foreach ($group as $key=>$value) 
+  {
+    	if(@$keys[$value]) $acsess = true;
+  }
+  if($login=="root") $acsess = true;
+?>

@@ -1,0 +1,51 @@
+<?
+/*
+  This reads file, replacing ${имя:sectionName} or ${sectionName}  
+  syntax: <# readfile /path/file #>
+          OR
+          $source = "file";
+          <# readfile source #>
+*/
+
+if($argv[1]!="source") $source = $argv[1];
+$ARG = implode(",",$argv);
+$compiled = ".prec/cms_readfile_".md5($ARG).md5($source).".dat";
+
+$need = false;
+if(!file_exists($compiled))$need = true;
+if(@filemtime($source)>@filemtime($compiled))$need = true;
+
+if($need)
+{
+  $text = file_get_contents($source);
+  
+  $text = ereg_replace('\${([A-Za-z0-9/\-]{1,50})}', "<a href=\"?ref={$_GET['ref']}&page=\\1\">link</a>", $text);
+  $text = ereg_replace('\${([a-z0-9а-яА-Я,.()&;A-Z \-]{1,50}):([A-Za-z0-9_\/\-]{1,50})}', "<a href=\"?ref={$_GET['ref']}&page=\\2\">\\1</a>", $text);
+  /* strange features */
+  $text = str_replace("<code>",'<div style="margin-left:7pt;border-left:solid;border-color:green;"><div style="font-family:monospace;margin-left:10pt;">',$text);
+  $text = str_replace("</code>","</div></div>",$text);
+  /* ================ */
+  $len=250;
+  if(@$argv[3]) $len = @$argv[3];
+  if(@$keys["short"] && strlen($text) > $len)
+  {    
+    //echo $argv[3];
+    $text = substr($text,0,$len);
+    $n = strlen($text);
+    for($i=$n-1;$i>=0;$i--) 
+    {
+      if
+      (
+        ($text[$i]==' ')
+      ) 
+      {$text = substr($text,0,$i); break;}      
+    }
+    $text = $text."<a href=\"{$argv[4]}\">{$argv[5]}</a>";
+  }
+  $f = fopen($compiled,"w");
+  fputs($f,$text);
+  fclose($f);
+}
+
+include($compiled);
+?>

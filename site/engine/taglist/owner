@@ -1,0 +1,11 @@
+<?
+  global $SETTINGS;
+  $taglistt = glob("{$SETTINGS["datadir"]}auth/usr/*.usr");
+  foreach($taglistt as $key=>$value)
+  {
+    $value = str_replace("{$SETTINGS["datadir"]}auth/usr/","",$value);
+    $value = str_replace(".usr","",$value);
+    $taglist[$value]=$value;
+  }
+  $tagname = "Владелец раздела";
+?>
