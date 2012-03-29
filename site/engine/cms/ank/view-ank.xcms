@@ -1,0 +1,174 @@
+<# cms/ank/style #>
+<# auth/ root #root #ank #>
+<form method="post">
+  <input type="submit" name="show-all" value="Показать все анкеты">
+</form>
+<?php
+
+  function cf($us) {
+    return @iconv("utf-8", "windows-1251", $us);
+  }
+  
+  function DoFormatting($sHTML) {
+    // detect UNIX or DOS line-endings
+    if (strpos($sHTML, "\n") !== false) {
+      // Unix or DOS, so \n -> <br />, '\r' -> void
+      $sHTML = str_replace("\n", "<br />", $sHTML);
+      $sHTML = str_replace("\r", "", $sHTML);
+    } elseif (strpos($sHTML, "\r") !== false) {
+      // MacOS, \r only
+      $sHTML = str_replace("\r", "<br />", $sHTML);
+    }
+    return $sHTML;
+  }
+  
+  function WrapIfMultiline($sHTML) {
+    if (strpos($sHTML, "<br />")) $sHTML = "<br />$sHTML";
+    return $sHTML;
+  }
+
+  /**
+    * @param nCount how many anketas will be printed, zero means all
+    **/
+  function printAnk($nCount = 0)
+  {
+    global $content_dir, $design_dir, $web_prefix;
+    $aAnk = glob("$content_dir/ank/*.xml");
+    if ($aAnk === false) return;
+    sort($aAnk);
+    $aAnk = array_reverse($aAnk);
+    $i = 0;
+    if ($nCount > 0) {?>
+      <p>Показано <b><?php echo $nCount; ?></b> последних анкет (анкеты, помеченные, как <span style="color: #ff0000; font-weight: bold">спам</span>, не показаны)</p><?php
+    } else {?>
+      <p>Показаны все анкеты, включая помеченные, как спам</p><?php
+    }
+    ?>
+    
+    <table summary="Список анкет" class="ankList">
+    <?php
+    foreach ($aAnk as $sAnkFileName) {
+      $xa = @simplexml_load_file($sAnkFileName);
+      // print anketa
+      if (!$xa) {?>
+        <tr><td class="ankListRowDiv">&nbsp;</td></tr>
+        <tr><td class="ankListField">Ошибка</td><td class="ankListValue">Файл повреждён</td></tr><?php
+        continue; // some shit happens
+      }
+      
+      $oAnk = get_object_vars($xa);
+      if ($nCount > 0 && @$oAnk["Status"] == "spam") continue; // don't show spam anketas in compact mode
+      ?>
+      <tr><td class="ankListRowDiv">&nbsp;</td></tr>
+      <?php
+
+      $sName = htmlspecialchars(cf($oAnk["Name"])); // assume always exists
+      $sBirthDate = htmlspecialchars(cf($oAnk["BirthDate"]));
+      $sSchool = htmlspecialchars(cf($oAnk["School"]));
+      $sSchoolLocation = htmlspecialchars(cf(@$oAnk["SchoolLocation"]));
+      $sClass = htmlspecialchars(cf($oAnk["Class"]));
+      $sCellular = htmlspecialchars(cf($oAnk["Cellular"]));
+      $sPhone = htmlspecialchars(cf($oAnk["Phone"]));
+      $sEMail = htmlspecialchars(cf($oAnk["EMail"]));
+      
+      $sProfile = cf($oAnk["Profile"]);
+      // make it valid URL if it was it form vk.com/name
+      if (!empty($sProfile) && substr($sProfile, 0, 7) != 'http://') $sProfile = "http://$sProfile";
+      $sProfile = htmlspecialchars($sProfile);
+
+      $sSkype = htmlspecialchars(cf($oAnk["Skype"]));
+      $sFavourites = DoFormatting(htmlspecialchars(cf($oAnk["Favourites"])));
+      $sAchivements = DoFormatting(htmlspecialchars(cf($oAnk["Achivements"])));
+      $sHobby = DoFormatting(htmlspecialchars(cf($oAnk["Hobby"])));
+
+      $sUserAgent = htmlspecialchars(cf(@$oAnk["UserAgent"]));
+      $sFileName = htmlspecialchars(cf(@$oAnk["FileName"]));
+      $sHRCreated = htmlspecialchars(cf(@$oAnk["HRCreated"]));
+      $sHRModified = htmlspecialchars(cf(@$oAnk["HRModified"]));
+      $sStatus = htmlspecialchars(cf(@$oAnk["Status"]));
+      
+      $aStatuses = array(
+        "new"=>"Новая",
+        "progress"=>"В обработке",
+        "processed"=>"Обработана",
+        "declined"=>"Отклонена",
+        "spam"=>"Спам");
+      if (array_key_exists($sStatus, $aStatuses)) $sHRStatus = $aStatuses[$sStatus];
+      else $sHRStatus = $aStatuses["new"];
+
+      ?>
+      <tr>
+        <td class="ankListRowTitle">
+          <?php echo $sName; ?>
+          <span style="float: right">
+            <a style="margin-right: 10px" href="xml&amp;<?php echo "file=$sAnkFileName"; ?>">XML</a>
+            <a style="margin-right: 10px" href="txt&amp;<?php echo "file=$sAnkFileName"; ?>">TXT</a>
+            <a style="margin-right: 10px" href="edit&amp;<?php echo "file=$sAnkFileName"; ?>">Редактировать</a>
+            <img src="<? echo "/$web_prefix/$design_dir"; ?>/pic/mozillafirefox.png" style="vertical-align: middle;" title="<?php echo "$sUserAgent"; ?>" />
+            <span style="margin-left: 10px;" class="ankListField">Статус</span>: <?php echo $sHRStatus; ?>
+            <span style="margin-left: 10px;" class="ankListField">Создана</span>: <?php echo $sHRCreated; ?>
+            <?php if (!empty($sHRModified)) {?>
+              <span style="margin-left: 10px;" class="ankListField">Отредактирована</span>: <?php echo $sHRModified; ?>
+            <?php } ?>
+          </span>
+        </td>
+      </tr>
+      <tr><td class="ankList"><span class="ankListField">Дата рождения</span>: <?php echo $sBirthDate; ?></td></tr>
+      <tr><td class="ankList"><span class="ankListField">Образование</span>: <?php echo $sSchool; ?>
+        <?php echo $sSchoolLocation; ?>, <span class="ankListField">класс</span>: <?php echo $sClass; ?></td></tr>
+      <!-- phones -->
+      <? if (!empty($sCellular) && !empty($sPhone)) {?>
+      <tr><td class="ankList"><span class="ankListField">Телефоны</span>:
+        <?php
+        if ($sCellular) {?>
+          <span class="ankListField">мобильный</span> <?php echo $sCellular;
+        }
+        if ($sPhone) {
+          if (!empty($sCellular)) echo ', ';
+          ?><span class="ankListField">домашний</span> <?php echo $sPhone;
+        }?>
+      </td></tr>
+      <?php } ?>
+      <!-- email, profile and skype -->
+      <?php if (!empty($sEMail) || !empty($sProfile) || !empty($sSkype)) { ?>
+      <tr><td class="ankList"><?php if (!empty($sEMail)) {
+        ?><span class="ankListField">E-Mail</span>: <a href="mailto:<?php echo $sEMail; ?>" ><?php echo $sEMail; ?></a><?php
+        }
+        if (!empty($sProfile)) {
+          if (!empty($sEMail)) echo ', '; ?>
+          <span class="ankListField">Профиль</span>: <a href="<?php echo $sProfile; ?>"><?php echo $sProfile; ?></a><?php
+        }
+        if (!empty($sSkype)) {
+          if (!empty($sEMail) || !empty($sProfile)) echo ', '; ?>
+          <span class="ankListField">Skype</span>: <?php echo $sSkype; ?>
+        <?php
+        }?>
+      </td></tr>
+      <?php } ?>
+      <!--  other stuff -->
+      <?php if (!empty($sFavourites)) { ?>
+      <tr><td class="ankList"><span class="ankListField">Любимые предметы</span>: <?php echo WrapIfMultiline($sFavourites); ?></td></tr>
+      <?php } ?>
+      <?php if (!empty($sAchivements)) { ?>
+      <tr><td class="ankList"><span class="ankListField">Достижения</span>: <?php echo wrapIfMultiline($sAchivements); ?></td></tr>
+      <?php } ?>
+      <?php if (!empty($sHobby)) { ?>
+      <tr><td class="ankList"><span class="ankListField">Хобби</span>: <?php echo WrapIfMultiline($sHobby); ?></td></tr>
+      <?php } ?>
+      <?php
+      ++$i;
+      if ($nCount > 0 && $i > $nCount) break;
+    }
+    ?>
+    </table>
+    <?php
+  }
+  
+  if(@$_POST["show-all"])
+  {
+    printAnk();
+  }
+  else {
+    printAnk(20);
+  }
+?>

@@ -1,0 +1,14 @@
+<?
+  else if(@$_GET["act"]=="downloadAnk")
+  {
+    $preface = "ref=ladmin&amp;act=downloadAnk&amp;page=$pageid";
+    include(translate("<! cms/download-ank !>"));
+  }
+  else if(@$_GET["act"]=="editAnk")
+  {
+    $preface = "ref=ladmin&amp;act=editAnk&amp;page=$pageid";
+    include(translate("<! cms/edit-ank !>"));
+  }
+  include(translate("<! cms/view-ank !>"));
+
+?>

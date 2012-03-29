@@ -1,0 +1,148 @@
+<# cms/ank/style #>
+<# auth/ root #root #ank #>
+</form>
+<?php
+
+  function cf($us) {
+    return @iconv("utf-8", "windows-1251", $us);
+  }
+
+  $aFields = array(
+    "Status"=>"Статус анкеты",
+    "Name"=>"ФИО",
+    "BirthDate"=>"Дата рождения",
+    "School"=>"Школа",
+    "SchoolLocation"=>"Адрес школы",
+    "Class"=>"Класс",
+    "Phone"=>"Телефон",
+    "Cellular"=>"Мобильный телефон",
+    "EMail"=>"E-Mail",
+    "Skype"=>"Skype",
+    "Profile"=>"Профиль",
+    "Favourites"=>"Любимые предметы",
+    "Achivements"=>"Достижения",
+    "Hobby"=>"Хобби",
+    "UserAgent"=>"UserAgent",
+    "Created"=>"Время создания (UNIX)",
+    "HRCreated"=>"Время создания",
+    "Modified"=>"Последняя модификация (UNIX)",
+    "HRModified"=>"Последняя модификация",
+    "FileName"=>"Имя файла"
+  );
+  
+  function MakeSelector($sSK) {
+    $aStatuses = array(
+      "new"=>"Новая",
+      "progress"=>"В обработке",
+      "processed"=>"Обработана",
+      "declined"=>"Отклонена",
+      "spam"=>"Спам");
+    $sHTML = '<select name="Status">';
+    foreach ($aStatuses as $sKey => $sTitle)
+    {
+      $sSel = ($sKey == $sSK) ? ' selected="selected" ' : '';
+      $sHTML .= "<option$sSel value=\"$sKey\">$sTitle</option>";
+    }
+    $sHTML .= "</select>";
+    return $sHTML;
+  }
+  
+  function editAnk()
+  {
+    global $aFields;
+    
+    $sAnkFileName = $_GET["file"];
+    
+    $aFieldTypes = array(
+      "Favourites"=>"textarea",
+      "Achivements"=>"textarea",
+      "Hobby"=>"textarea"
+    );
+    
+    ?>
+    <form method="post" action="?ref=ladmin&amp;act=editAnk">
+      <input type="hidden" name="file" value="<?php echo $sAnkFileName; ?>" />
+      <table summary="Анкета" class="ankEdit">
+    <?php
+      $xa = @simplexml_load_file($sAnkFileName);
+      // print anketa
+      if (!$xa)
+      {
+        echo '<tr><td class="ankListField">Ошибка</td><td class="ankListValue">Файл повреждён</td></tr>'."\r\n";
+        return;
+      }
+
+      $oAnk = get_object_vars($xa);
+
+      ?>
+      <tr>
+        <td class="ankListRowTitle">
+          Анкета
+        </td>
+      </tr>
+        <tr><td class="ankList"><span class="ankEditField">Статус анкеты</span>
+          <?php echo MakeSelector(@$oAnk["Status"]); ?></td></tr>
+      <?php
+        foreach ($aFields as $sKey=>$sFieldTitle)
+        {
+          $sValue = @$oAnk[$sKey];
+          $sAttr = "";
+          if ($sKey == "Status") continue; // handled above the loop
+          // handle readonly fields
+          if ($sKey == "FileName" ||
+              $sKey == "UserAgent" ||
+              $sKey == "Created" || $sKey == "HRCreated" ||
+              $sKey == "Modified" || $sKey == "HRModified") $sAttr = ' readonly="readonly"'?>
+          <tr><td class="ankList"><span class="ankEditField"><?php echo $aFields[$sKey]; ?></span>
+            <?php
+              if (array_key_exists($sKey, $aFieldTypes)) {?>
+                <textarea class="ankEdit" name="<?php echo $sKey; ?>"><?php echo htmlspecialchars(cf($sValue)); ?></textarea/><?php
+              } else {?>
+                <input type="text" class="ankEdit" value="<?php echo htmlspecialchars(cf($sValue)); ?>" name="<?php echo $sKey; ?>" <?php echo $sAttr; ?> /><?php
+              } ?>
+          </td></tr>
+        <?php
+        }
+      ?>
+      </table>
+      <input type="submit" name="update-ank" value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
+    </form>
+    <?php
+  }
+
+
+  if (@$_POST["update-ank"])
+  {
+    // True programmers use UTF-8 only :)
+    $xml = simplexml_load_string('<?xml version="1.0" encoding="utf-8"?><Anketa/>');
+    $unixTime = mktime();
+    $hrTimestamp = date("Y.m.d H:i:s", $unixTime);
+    $_POST["Modified"] = $unixTime;
+    $_POST["HRModified"] = $hrTimestamp;
+    
+    foreach (@$_POST as $key=>$value) 
+    {
+      if (!array_key_exists($key, $aFields)) {
+        continue; // skip invalid keys
+      }
+      $xml->addChild($key, iconv('windows-1251', 'utf-8', $value));
+    }
+    $sAnkFileName = @$_POST["file"];
+    if (empty($sAnkFileName)) {?>
+      <p>Не задано имя файла анкеты. <a href="?">Вернуться к просмотру</a></p><?php
+      return;
+    }
+    if (file_exists($sAnkFileName)) chmod($sAnkFileName, 0666);
+    if ($xml->asXML($sAnkFileName) === false) {?>
+      <p>Не удалось сохранить анкету. <a href="?">Вернуться к просмотру</a></p><?php
+      return;
+    }
+    ?>
+    <p>Анкета сохранена успешно. <a href="?">Вернуться к просмотру</a></p>
+    <?php
+  }
+  else
+  {
+    editAnk();
+  }
+?>

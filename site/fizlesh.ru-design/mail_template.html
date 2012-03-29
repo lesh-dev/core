@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+  </head>
+  <body>
+    <style>
+      body {
+        font-family: Arial, Sans-Serif;
+      }
+      table {
+        border: 1px solid #7f7f7f;
+        border-collapse: collapse;
+        table-layout: fixed;
+        width: 100%;
+      }
+      td {
+        border: 1px solid #7f7f7f;
+        padding: 3px;
+      }
+      td.header {
+        font-weight: bold;
+      }
+      td.left {
+        background-color: #cccccc;
+        width: 25%;
+      }
+    </style>
+    <table cellspacing="0" padding="0">
+      <tr>
+        <td colspan="2" class="header">Анкета от @@DATE@</td>
+      </tr>
+      <!-- row template
+      <tr>
+        <td class="left">Name</td>
+        <td>Школьник Алексей Учитель</td>
+      </tr>
+      -->
+      @@TABLE-CONTENT@
+    </table>
+  </body>
+</html>
