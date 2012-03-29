@@ -72,7 +72,7 @@
   $vlist = "<option value=\"\">HEAD</option>";
   foreach(glob("$ename-version-*") as $k=>$v )
   {
-    $version_time = date("d.m.y H:i",str_replace("$ename-version-","",$v));
+    $version_time = date("d.m.Y H:i",str_replace("$ename-version-","",$v));
     $version_suffix = str_replace("$ename","",$v);
     $selected = "";
     if($version_suffix == $current_version) $selected="selected";

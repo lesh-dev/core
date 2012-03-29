@@ -138,14 +138,23 @@
   //1. Choosing filename.
   $ref = @$_GET["ref"];
   if(!$ref) $ref = $SETTINGS["defaultpage"];
-  if(!file_exists("{$SETTINGS["documentsdir"]}$ref.xcms"))
+  if(file_exists("$design_dir/$ref.xcms"))
   {
-    $ref = "{$SETTINGS["nopage"]}";
+    $rfile = "$design_dir/$ref.xcms";
+  }
+  else if(file_exists("$engine_dir/global/$ref.xcms"))
+  {
+    $rfile = "$engine_dir/global/$ref.xcms";
+  }
+  else
+  {
+    $ref = "nopage.xcms";
+    $rfile = "$design_dir/nopage.xcms";
   }
   
   //2. Finding prec file.
 
-  compile("{$SETTINGS["documentsdir"]}$ref.xcms","{$SETTINGS["precdir"]}$ref.php");
+  compile("$rfile","{$SETTINGS["precdir"]}$ref.php");
   
 /*  $toCompile = false;
   if(!file_exists("{$SETTINGS["precdir"]}$ref.php"))$toCompile = true;
@@ -166,5 +175,4 @@
 
   include("{$SETTINGS["precdir"]}$ref.php");
 ?>
-
 

@@ -63,10 +63,10 @@
     <?
       include(translate('
             [ <a href="?act=cChapter&page='."$pageid&ref=ladmin".'" class="menulink">subpage</a>
-	    &nbsp;|&nbsp;<a href="?act=rename_section&page='."$pageid&ref=ladmin".'" class="menulink">rename </a>
             &nbsp;|&nbsp;<a href="?act=delete&page='."$pageid&ref=ladmin".'" class="menulink">delete</a> ]
 
-	    <br />[<a href="?act=myprofile&page='."$pageid&ref=ladmin".'" class="menulink"><b>profile</b></a>
+	    <br />[<a href="?act=myprofile&page='."$pageid&ref=ladmin".'" class="menulink"><b>'.$login.'</b></a>
+            &nbsp;|&nbsp;<a href="?ref=logout" class="menulink">logout</a>
             &nbsp;|&nbsp;<a href="?act=cpasswd&page='."$pageid&ref=ladmin".'" class="menulink">passwd</a>
             &nbsp;|&nbsp;<a href="?page='."$pageid&ref=index".'" class="menulink">user_mode</a>
             &nbsp;|&nbsp;<a href="?act=logout&page='."$pageid&ref=$ref".'" class="menulink">logout</a>]
@@ -201,20 +201,7 @@
     include(translate("<! auth/myprofile !>"));
   }
   else if(@$_GET["act"]=="cChapter")
-  {
-/*    echo '
-      <h3>Создание подраздела в разделе '.$pageid.'</h3>
-      <form>
-        <table>
-          <tr>
-            <td>Служебное имя <br> <font size="-1">Если Вы не знаете, что это такое - оставьте без изменений.</font>
-            <td><input name="chapname">
-        </table>
-      </form>
-    ';
-  */
     include(translate("<! cms/.lightcreatepage-after !>"));
-  }
   else include(translate('<! cms/.lightedittable !>'));
 ?>
 <? $extime = microtime()-$extime;?>

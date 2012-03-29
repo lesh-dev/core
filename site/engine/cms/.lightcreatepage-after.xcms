@@ -7,7 +7,7 @@
 <form method="post">
 <table>
 <tr><td>Служебное имя <br><font size="=-1">Если Вы не знаете, что это такое - оставьте без изменений.</font><td><input name="create-name" value="<? echo $login.'-'.mktime(); ?>">
-<tr><td>Глобальный<br><font size="=-1">Считать этот раздел основным, а не подразделом текущего раздела</font><td><input type="checkbox" name="global">
+<!-- <tr><td>Глобальный<br><font size="=-1">Считать этот раздел основным, а не подразделом текущего раздела</font><td><input type="checkbox" name="global"> -->
 
 <?
   $list = getTagList("{$SETTINGS["elementsdir"]}taglist/type");
@@ -17,7 +17,9 @@
     if($key == "_NAME") continue;
     //$value = str_replace("{$SETTINGS["elementsdir"]}cms/","",$value);
     //$value = str_replace(".pagetype","",$value);
-  	echo "<OPTION name=\"$value\" value=\"$value\">$key</OPTION>";
+    if($value == "content" || $key == "content") $s = "selected checked ";
+    else $s = "";
+    echo "<OPTION name=\"$value\" $s value=\"$value\">$key</OPTION>";
   }
   echo "<tr><td>Право редактирования для #$login<td><input type=\"checkbox\" name=\"delegateGroup\">";
   foreach($group as $g)
