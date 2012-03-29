@@ -1,4 +1,8 @@
 <?php
+  if(file_exists("install.php"))
+  {
+    header("Location: install.php");
+  }
   header("content-type: text/html; charset=utf-8");
 include ("settings.php");
   include ("$engine_dir/.sys/settings.php");

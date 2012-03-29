@@ -3,5 +3,5 @@
     $design_dir = "fizlesh.ru-design/";
     $engine_dir = "engine/";
     $engine_pub = "engine_public/";
-    $web_prefix="testing/site/";
+    $web_prefix="xlesh/site/";
 ?>

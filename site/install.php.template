@@ -1,0 +1,33 @@
+<? $pageid = @$_POST["pageid"]; if (!$pageid) $pageid=1; ?>
+<h1>XCMS installation: page <? echo $pageid; ?>/5 </h1>
+
+<form method="post">
+
+<? if ($pageid == 1) { ////////////////////////////////////// STEP ONE /////////////////////////////////////////////  ?>
+<h3>Welcome to xcms! Here are Your permissions: </h3>
+<?
+    @mkdir(".prec",0777);
+    if($f = @fopen(".prec/.htaccess","w"))
+    {
+	fputs($f,"deny from all");
+	$PERM["prec"] = true;
+	fclose($f);
+    }
+    else $PERM["prec"] = false;
+    
+    if($f = @fopen(".htaccess","a"))
+    {
+	$PERM["htaccess"] = true;
+	fclose($f);
+    }
+    else $PERM["htaccess"] = false;
+    
+    
+    var_dump ($PERM);
+?>
+
+<? } ?>
+
+    <input type="hidden" name="pageid" value="<? echo $pageid+1;?>" />
+    <input type="submit" value="next >>" />
+</form>
