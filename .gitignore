@@ -1,6 +1,4 @@
-site/.prec/*.php
-site/.prec/*.php.backtrace
-site/.prec/*.dat
+site/.prec
 site/Content/cms/pages/*
 site/Content/tags/*
 site/.htaccess
