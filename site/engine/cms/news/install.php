@@ -1,4 +1,4 @@
-<?
+<?php
   $LIST["installed"] = "ok";
   $LIST["maxNews"] = 10;
   $INFO["installed"] = "ok";

@@ -1,7 +1,7 @@
 <# auth/ #root #admin #>
 <h2>Регистрация</h2>
 Право на регистрацию предоставил: <?php echo $login;?><br>
-<?
+<?php
   $DEFREGUSER["date"] = mktime();
   $DEFREGUSER["group"] = "#registered";
   $DEFREGUSER["mce"] = "Yes";

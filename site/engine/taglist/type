@@ -1,4 +1,4 @@
-<?
+<?php
   global $SETTINGS;
   $taglistt = glob("{$SETTINGS["elementsdir"]}cms/*.pagetype");
   foreach($taglistt as $key=>$value)

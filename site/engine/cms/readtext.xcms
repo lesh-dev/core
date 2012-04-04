@@ -1,4 +1,4 @@
-<?
+<?php
 /*
     ReadText -- a new readfile implementation
     Syntax:
@@ -45,6 +45,7 @@ if($need)
   }
   if(!$text_defined)
     $text = file_get_contents($source);
+  //// Обработка синтаксиса: ${include:pageid} -- раскрывается в _содержимое_ целого раздела
   //// Обработка синтаксиса: ${prefix} раскрывается в путь до текущего $pageid
   $text = str_replace("\${prefix}","/${SETTINGS["datadir"]}cms/pages/$pageid",$text);
   //// Обработка синтаксиса: [[Текст ссылки:pageid]]

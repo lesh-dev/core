@@ -1,4 +1,4 @@
-<? 
+<?php 
   $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
 
                 if(@$_POST["delete-section"])
@@ -131,7 +131,7 @@
               <form method="post">
               <table><tr><td><b>Чтение</b><td><b>Запись</b>
               <tr><td>
-              <?
+              <?php
                 if(@$_POST["change-acsess"])
                 {
                   $nview = "";
@@ -190,7 +190,7 @@
               <# edit/tag #>
               <td valign="top">
               <h4>Дополнительные параметры</h4>
-                <?
+                <?php
                   if(@$_POST["ApplyToMenu"]) 
                   {
                     $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu","w");
@@ -200,13 +200,13 @@
                   else if(@$_POST["NoApplyToMenu"]) @unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu");
                 ?>
                 <form method="post">
-                <input name="menu-text" value="<? echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu"); ?>">
+                <input name="menu-text" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu"); ?>">
                 <?php $isInMenu = file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu")?"checked":"";?>
                 <input onClick="this.form.submit();" name="ApplyToMenu" type="checkbox" <?php echo @$isInMenu;?> > Включить в меню
                 <input type="hidden" name="NoApplyToMenu" value="1">                            
                 </form>
                 
-                <? 
+                <?php 
                   if(@$_POST["uploadIcons"])
                   {
                     foreach ($_FILES as $key=>$value) 
@@ -225,7 +225,7 @@
                   <input type="submit" name="uploadIcons" value="Загрузить">
                 </form>
                 
-                <?
+                <?php
                   if(@$_POST["cms-edit-meta"])
                   {
                     foreach (@$_POST as $key=>$value) 
@@ -261,7 +261,7 @@
               <# cms/.createpage #>
             <h4>Переход ...</h4>
               
-              <?
+              <?php
                 $valuee = $pageid;
                 for($i=strlen($valuee)-1; $i>=0; $i--)
                 {
@@ -303,6 +303,6 @@
 
 
 
-<?
+<?php
   saveList($INFO,"{$SETTINGS["datadir"]}cms/pages/$pageid/info");
 ?>

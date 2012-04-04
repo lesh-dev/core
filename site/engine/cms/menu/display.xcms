@@ -1,4 +1,4 @@
-<?
+<?php
   include_once("{$SETTINGS["elementsdir"]}cms/menu/.func.php");
   
   if(!@$_GET["ref"])$_GET["ref"] = "index";  

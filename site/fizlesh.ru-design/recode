@@ -1,4 +1,4 @@
-<?
+<?php
   //FROM statisics
   if(@$_GET["from"])
   {
@@ -6,7 +6,7 @@
     fputs($f,"\n".date("d-m-y H:I",mktime()));
     fclose($f);
   }
-?><? if(!@$_GET["page"])$_GET["page"]="index";?>
+?><?php if(!@$_GET["page"])$_GET["page"]="index";?>
 <# cms/init #>
 <# locale #>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -51,7 +51,7 @@
         </td>
         
         <td class="mainField roundBorders">
-          <h2><? echo @$INFO["header"];?></h2>
+          <h2><?php echo @$INFO["header"];?></h2>
           <# if //!@$_GET["usr"]//cms/ #>
           <hr />
           

@@ -1,1 +1,1 @@
-<? echo $web_prefix; ?>
+<?php echo $web_prefix; ?>

@@ -1,1 +1,1 @@
-<? include ( translate('<! cms/'.$type.'/lightedit !>') ); ?>
+<?php include ( translate('<! cms/'.$type.'/lightedit !>') ); ?>

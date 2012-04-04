@@ -1,4 +1,4 @@
-<?
+<?php
   if(!@$counter) $counter = 0;
   $counter ++;
   

@@ -15,7 +15,7 @@ usort($html_array,"sort_by_mtime");
 */
 ?>
 
-<?
+<?php
   function cms_menu_make($initPath,$MENUTEMPLATES,$menuLevel,$addhrefparams,$options,$startLevel,$endLevel)
   {
     global $SETTINGS,$forceSn,$pageid,$login,$group,$web_prefix;    

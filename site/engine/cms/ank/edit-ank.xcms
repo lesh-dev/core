@@ -4,7 +4,7 @@
 <?php
 
   function cf($us) {
-    return @iconv("utf-8", "windows-1251", $us);
+    return $us;
   }
 
   $aFields = array(
@@ -125,7 +125,7 @@
       if (!array_key_exists($key, $aFields)) {
         continue; // skip invalid keys
       }
-      $xml->addChild($key, iconv('windows-1251', 'utf-8', $value));
+      $xml->addChild($key, $value);
     }
     $sAnkFileName = @$_POST["file"];
     if (empty($sAnkFileName)) {?>

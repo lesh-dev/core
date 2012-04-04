@@ -1,6 +1,6 @@
 <!# auth/ {$INFO['edit']} #!>
 
-<?
+<?php
   if(@$_POST["create-name"])
   {
     $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");

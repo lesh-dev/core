@@ -1,4 +1,4 @@
-<?
+<?php
 	$list = glob(".prec/*");
 	foreach ($list as $i) unlink($i);
 	if($argv[1] == "repeat")

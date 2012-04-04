@@ -1,4 +1,4 @@
-<? 
+<?php
   $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
   echo @$INFO["header"];
 ?>

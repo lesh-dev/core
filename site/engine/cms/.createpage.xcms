@@ -1,10 +1,10 @@
-<? 
+<?php 
   $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
   if(!$INFO) $pageid = "";
 ?>
 <!# auth/ {$INFO['edit']} #!>
 
-<?
+<?php
   if(@$_POST["create-name"])
   {
     $dir =  "{$SETTINGS["datadir"]}cms/pages/$pageid/{$_POST["create-name"]}";
@@ -24,8 +24,8 @@
 <h3>Создание глобального раздела</h3>
 <form method="post">
 <table>
-<tr><td>Название страницы<td><input name="create-name" value="<? echo $login.'-'.mktime(); ?>">
-<?
+<tr><td>Название страницы<td><input name="create-name" value="<?php echo $login.'-'.mktime(); ?>">
+<?php
   $list = glob("{$SETTINGS["elementsdir"]}cms/*.pagetype");
   echo "<tr><td>Тип содержания<td><SELECT name=\"create-pagetype\">";
   foreach ($list as $key=>$value) 
@@ -41,6 +41,6 @@
 <input type="submit" value="Создать...">
 </form>
 
-<?
+<?php
   @saveList($INFO,"{$SETTINGS["datadir"]}cms/pages/$pageid/info");
 ?>

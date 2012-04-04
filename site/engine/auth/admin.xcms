@@ -1,5 +1,5 @@
 <# auth/ #root #admin #>
-<?
+<?php
   $DEFAULT_USER["passwd"] = md5(" ");
   $DEFAULT_USER["group"] = "#user";
   
@@ -39,9 +39,9 @@
     }
   }
 ?>
-<link rel="stylesheet" href="<?echo "{$SETTINGS["datadir"]}auth/style.css";?>" type="text/css">
+<link rel="stylesheet" href="<?php echo "{$SETTINGS["datadir"]}auth/style.css";?>" type="text/css">
 
-<? $href = "?".$preface; ?>
+<?php $href = "?".$preface; ?>
 <TABLE width="100%" border="1"> 
 <tr><td width="75">Список пользователей<td>Операции
 <TR>
@@ -81,7 +81,7 @@
     
   }
 ?>
-<?if(@$_GET['username']&&@$_GET['username']!="_CREATE")
+<?php if(@$_GET['username']&&@$_GET['username']!="_CREATE")
 {
   echo '<FORM method="post">
     <input type="submit" name="delUser" value="Удалить пользователя">
@@ -90,9 +90,9 @@
   
 }?>
 
-<?if(!@$_GET["username"])$_GET["username"]="";?>
-<? $editfile= @$_GET['username']; ?>
-<? if (@$_GET['username']&&@$_GET['username']!="_CREATE")
+<?php if(!@$_GET["username"])$_GET["username"]="";?>
+<?php $editfile= @$_GET['username']; ?>
+<?php if (@$_GET['username']&&@$_GET['username']!="_CREATE")
 {
 	include(translate("<! edit/tag `login`,`passwd` !>"));
 }

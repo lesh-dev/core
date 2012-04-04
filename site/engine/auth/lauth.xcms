@@ -1,4 +1,4 @@
-<?
+<?php
   $acsess = false;
   
   foreach ($argv as $key=>$value) 

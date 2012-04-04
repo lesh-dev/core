@@ -1,4 +1,4 @@
-<?
+<?php
   //@$addparams = $param["addparams"]; if(!@$addparams) @$addparams = "";
   //echo @$addparams;  
   $pathv = @$argv[1];
@@ -10,5 +10,5 @@
   {
     echo "<h4>Illegal filename.</h4>";    
   }
-  else editlist_form($ename,"",@$argv[1],@$argv[2]);
+  else @editlist_form($ename,"",@$argv[1],@$argv[2]);
 ?>

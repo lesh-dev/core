@@ -6,7 +6,7 @@
 <?php
 
   function cf($us) {
-    return @iconv("utf-8", "windows-1251", $us);
+    return $us;
   }
   
   function DoFormatting($sHTML) {
@@ -101,10 +101,10 @@
         <td class="ankListRowTitle">
           <?php echo $sName; ?>
           <span style="float: right">
-            <a style="margin-right: 10px" href="xml&amp;<?php echo "file=$sAnkFileName"; ?>">XML</a>
-            <a style="margin-right: 10px" href="txt&amp;<?php echo "file=$sAnkFileName"; ?>">TXT</a>
+            <a style="margin-right: 10px" href="/<# web_prefix#>?ref=get_ank&mode=xml&amp;<?php echo "file=$sAnkFileName"; ?>">XML</a>
+            <a style="margin-right: 10px" href="/<# web_prefix#>?ref=get_ank&mode=txt&amp;<?php echo "file=$sAnkFileName"; ?>">TXT</a>
             <a style="margin-right: 10px" href="edit&amp;<?php echo "file=$sAnkFileName"; ?>">Редактировать</a>
-            <img src="<? echo "/$web_prefix/$design_dir"; ?>/pic/mozillafirefox.png" style="vertical-align: middle;" title="<?php echo "$sUserAgent"; ?>" />
+            <img src="<?php echo "/$web_prefix/$design_dir"; ?>/pic/mozillafirefox.png" style="vertical-align: middle;" title="<?php echo "$sUserAgent"; ?>" />
             <span style="margin-left: 10px;" class="ankListField">Статус</span>: <?php echo $sHRStatus; ?>
             <span style="margin-left: 10px;" class="ankListField">Создана</span>: <?php echo $sHRCreated; ?>
             <?php if (!empty($sHRModified)) {?>
@@ -117,7 +117,7 @@
       <tr><td class="ankList"><span class="ankListField">Образование</span>: <?php echo $sSchool; ?>
         <?php echo $sSchoolLocation; ?>, <span class="ankListField">класс</span>: <?php echo $sClass; ?></td></tr>
       <!-- phones -->
-      <? if (!empty($sCellular) && !empty($sPhone)) {?>
+      <?php if (!empty($sCellular) && !empty($sPhone)) {?>
       <tr><td class="ankList"><span class="ankListField">Телефоны</span>:
         <?php
         if ($sCellular) {?>

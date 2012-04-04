@@ -1,4 +1,4 @@
-<? 
+<?php 
   $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
   $type = $INFO["type"];
 ?>
@@ -23,7 +23,7 @@
     <a class="menulink" href="?ref=admin&adm=cleanprec">Очистить кэш...</a><br>
   <td width="20">&nbsp;
   <td valign="top">
-    <? $preface="ref=admin&adm=users"; ?>    
+    <?php $preface="ref=admin&adm=users"; ?>    
     <# if //@$_GET['adm']=="cpassw"//auth/chpassw// #>
     <# if //@$_GET['adm']=="users"//auth/admin// #>
     <# if //@$_GET['adm']=="logout"//auth/logout// #>

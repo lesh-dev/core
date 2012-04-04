@@ -1,4 +1,4 @@
-<?
+<?php
   //include_once("{$SETTINGS["elementsdir"]}cms/common.php");
   //include_once("{$SETTINGS["elementsdir"]}cms/content/common.php");
   
@@ -58,7 +58,7 @@
 	foreach (@$_POST as $key=>$value) 
 	{
 	  if ($key == "Name") $studentName = $value;
-	  $xml->addChild($key, iconv('windows-1251', 'utf-8', $value));
+	  $xml->addChild($key, $value);
 	  $keyTitle = $key;
 	  if (array_key_exists($key, $aFields)) $keyTitle = $aFields[$key];
 	  $mailMsg .= "$keyTitle: $value\r\n\r\n";

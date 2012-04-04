@@ -1,4 +1,4 @@
-<?
+<?php
   $pageid=@$_GET['page'];
   if (!strlen($pageid)) 
   {

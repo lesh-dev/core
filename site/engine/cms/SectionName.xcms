@@ -1,4 +1,4 @@
-<?
+<?php
   $p_id = $pageid;
   $n = strlen($p_id);
   $count=0;

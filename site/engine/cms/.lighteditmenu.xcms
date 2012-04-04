@@ -1,4 +1,4 @@
-                <?
+                <?php
                   if(@$_POST["ApplyToMenu"]) 
                   {
                     $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu","w");
@@ -27,7 +27,7 @@
 
 <table><tr><td valign="top">
 <h3>Общая информация</h3>
-<?
+<?php
     $editfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/info";    
     include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
 ?>
@@ -35,12 +35,12 @@
 <h3>Имя меню</h3>
 <form method="post">
 
-<input name="menu-text" value="<? echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu"); ?>">
+<input name="menu-text" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu"); ?>">
 <br />
 <input name="ApplyToMenu" type="submit" value="Задать имя"> 
 <input name="NoApplyToMenu" type="submit" value="Стереть имя"> 
 <h3>Наличие в меню</h3>
-<?
+<?php
   if(file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu"))
   {
   	echo '<input name="UnLockMenu" type="submit" value="Показать меню">';

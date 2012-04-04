@@ -1,5 +1,5 @@
 <# auth/ root #>
-<? 
+<?php
 	if(@$_POST["taglist-new"])
 	{
 		$f = fopen("{$SETTINGS["elementsdir"]}taglist/".@$_POST["taglist-source"],"w");

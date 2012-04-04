@@ -1,4 +1,4 @@
-                <? 
+                <?php 
                   if(@$_POST["uploadIcons"])
                   {
                     foreach ($_FILES as $key=>$value) 
@@ -12,7 +12,7 @@
                 <h4>Иконка меню</h4>
                 <form method="post" enctype="multipart/form-data">
                   <table>
-                  <tr><td><img src="<? echo "{$SETTINGS["datadir"]}cms/pages/$pageid/menuicon.gif"; ?>"><td><input type="file" name="menuicon.gif">
+                  <tr><td><img src="<?php echo "{$SETTINGS["datadir"]}cms/pages/$pageid/menuicon.gif"; ?>"><td><input type="file" name="menuicon.gif">
                   </table>
                   
                   <input type="submit" name="uploadIcons" value="Загрузить">

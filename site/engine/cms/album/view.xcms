@@ -1,4 +1,4 @@
-<?
+<?php
   //include_once("{$SETTINGS["elementsdir"]}cms/common.php");
   //include_once("{$SETTINGS["elementsdir"]}cms/content/common.php");
   $datadir = "{$SETTINGS["datadir"]}cms/pages/$pageid";

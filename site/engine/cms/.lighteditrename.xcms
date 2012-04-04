@@ -1,5 +1,5 @@
 <h3>Служебное имя</h3>
-<?
+<?php
 	if(@$_POST["rename-current-section"])
 	{
 		rename("{$SETTINGS["datadir"]}cms/pages/$pageid","{$SETTINGS["datadir"]}cms/pages/{$_POST["rename-current-section"]}");
@@ -35,8 +35,8 @@
 ?>
 <form method="post">
 <font size="-1">Если Вы не знаете, что это такое -- во имя Милосердия, не меняйте тут ничего!!</font>
-<br>Задать служебное имя: <input name="rename-current-section" value=<? echo $pageid;?>> 
+<br>Задать служебное имя: <input name="rename-current-section" value=<?php echo $pageid;?>> 
 
-<br>Задать тег: <input name="create-section-tag" value="<? echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/currtag");?>"> <input type="submit" value="OK">
+<br>Задать тег: <input name="create-section-tag" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/currtag");?>"> <input type="submit" value="OK">
 
 </form>

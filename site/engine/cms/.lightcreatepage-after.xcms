@@ -1,4 +1,4 @@
-<? 
+<?php 
   $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
   if(!$INFO) $pageid = "";
 ?>
@@ -6,10 +6,10 @@
 
 <form method="post">
 <table>
-<tr><td>Служебное имя <br><font size="=-1">Если Вы не знаете, что это такое - оставьте без изменений.</font><td><input name="create-name" value="<? echo $login.'-'.mktime(); ?>">
+<tr><td>Служебное имя <br><font size="=-1">Если Вы не знаете, что это такое - оставьте без изменений.</font><td><input name="create-name" value="<?php echo $login.'-'.mktime(); ?>">
 <!-- <tr><td>Глобальный<br><font size="=-1">Считать этот раздел основным, а не подразделом текущего раздела</font><td><input type="checkbox" name="global"> -->
 
-<?
+<?php
   $list = getTagList("{$SETTINGS["elementsdir"]}taglist/type");
   echo "<tr><td>Тип содержания<td><SELECT name=\"create-pagetype\">";
   foreach ($list as $key=>$value) 
@@ -40,6 +40,6 @@
 <input type="submit" value="Создать...">
 </form>
 
-<?
+<?php
   @saveList($INFO,"{$SETTINGS["datadir"]}cms/pages/$pageid/info");
 ?>

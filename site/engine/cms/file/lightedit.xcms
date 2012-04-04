@@ -1,4 +1,4 @@
-<?
+<?php
 	if(@$_FILES)
 	{
 		//echo @$_FILES["upload"]["tmp_name"];
@@ -58,6 +58,6 @@
 
 </form>
 <h3>Описание</h3>
-<?
+<?php
 	include(translate("<! var editfile {$SETTINGS["datadir"]}cms/pages/$pageid/content !><! edit/file rows=8 xz -h !>"));
 ?>

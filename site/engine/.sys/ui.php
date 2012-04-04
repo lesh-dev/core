@@ -1,4 +1,4 @@
-<?
+<?php
 	function translit($rustring)
 	{
 		$rez = $rustring;

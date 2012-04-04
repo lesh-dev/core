@@ -2,7 +2,7 @@
 <meta name="keywords" content="<# include _keywords recurce #>">
 <meta name="description" content="<# include _description recurce #>">
 <title>
-<? 
+<?php 
   echo @$INFO["subheader"];
   if(@strlen($INFO["subheader"]) && @strlen($INFO["header"]))
     echo " - ";

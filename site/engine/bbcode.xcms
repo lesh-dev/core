@@ -1,4 +1,4 @@
-<?
+<?php
 	// replaces $html [bbcode] => <html>
 	$html = str_replace("<", "&lt;",$html);
 	$html = str_replace(">", "&gt;",$html);

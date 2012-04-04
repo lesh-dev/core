@@ -1,4 +1,4 @@
-<?
+<?php
   else if(@$_GET["act"]=="downloadAnk")
   {
     $preface = "ref=ladmin&amp;act=downloadAnk&amp;page=$pageid";

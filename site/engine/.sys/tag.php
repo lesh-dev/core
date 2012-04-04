@@ -1,4 +1,4 @@
-<? 
+<?php
 /* version 1.3   added taglist system. Afraid, this makes tags depending of xcms.*/  
 /* version 1.2.1. editlist_form list of skipping fields added*/  
 /* version 1.2. function editlist_form - a gui editor for lists.*/  

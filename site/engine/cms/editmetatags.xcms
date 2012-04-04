@@ -1,4 +1,4 @@
-                <?
+                <?php
                   if(@$_POST["cms-edit-meta"])
                   {
                     foreach (@$_POST as $key=>$value) 

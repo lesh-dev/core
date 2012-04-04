@@ -1,4 +1,4 @@
-<?
+<?php
   global $SETTINGS;
   $taglistt = glob("{$SETTINGS["datadir"]}auth/usr/*.usr");
   foreach($taglistt as $key=>$value)

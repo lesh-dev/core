@@ -1,4 +1,4 @@
-<?
+<?php
                 $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
                 $prex = "${SETTINGS["datadir"]}cms/pages/$pageid";
                 if(@$_POST["Upload-image"])

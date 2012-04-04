@@ -1,4 +1,4 @@
-<?
+<?php
   function send_notify_mail($target_list,$subject,$mail_text)
   {
     global $SETTINGS,$login;
@@ -18,6 +18,6 @@
         'Content-Type: text/plain; charset=utf-8'."\r\n".
         "Content-Transfer-Encoding: 8bit\r\n"
     ))
-      echo "<li>SENDMAIL FAILED: <li>forTarget: $ml <li>withSubject: $subject <li>withText: <pre>$message</pre>";
+      echo "<li>SENDMAIL FAILED.";
   }
 ?>

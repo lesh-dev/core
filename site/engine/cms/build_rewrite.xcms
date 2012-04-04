@@ -1,4 +1,4 @@
-<?
+<?php
     $rewrite_text = "RewriteEngine on";
     $rewrite_list = unserialize(file_get_contents("{$SETTINGS["datadir"]}tags/list"));
     foreach($rewrite_list as $tag=>$path)

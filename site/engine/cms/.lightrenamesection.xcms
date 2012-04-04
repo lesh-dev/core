@@ -1,4 +1,4 @@
-<?
+<?php
   if(@$_POST["lightrenamesession"])
   {
     rename("{$SETTINGS["datadir"]}cms/pages/$pageid","{$SETTINGS["datadir"]}cms/pages/{$_POST["lightrenamesession"]}");

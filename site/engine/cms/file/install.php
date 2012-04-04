@@ -1,4 +1,4 @@
-<?
+<?php
   $LIST["installed"] = "ok";
   $LIST["immidiate"] = "false";
   

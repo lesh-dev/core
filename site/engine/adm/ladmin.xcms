@@ -1,14 +1,13 @@
-<? $extime = microtime();?>
 <# if //@$_GET['act']=='logout'//auth/logout//#>
-<? if(!@$_GET["page"])$_GET["page"]="index";?>
+<?php if(!@$_GET["page"])$_GET["page"]="index";?>
 <# cms/linit #>
 <# locale #>
-<?
+<?php
         $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
  		include(translate("<! auth/ #cmseditor #admin root {$INFO["edit"]} !>"));
 ?> 
 <# cms/.lightcreatepage-before #>
-<?
+<?php
 
                 if(@$_POST["delete-section"])
                 {
@@ -45,7 +44,7 @@
 <html>
   <head>
   <# cms/head #>
-  <script language="javascript" type="text/javascript" src="<? echo "/$web_prefix/$engine_pub/js/jquery-1.7.1.min.js"?>"></script>
+  <script language="javascript" type="text/javascript" src="<?php echo "/$web_prefix/$engine_pub/js/jquery-1.7.1.min.js"?>"></script>
   <script type="text/javascript">
     $(document).ready(function() {
       $('div.view').hide();
@@ -59,8 +58,8 @@
   
   <body>
    
-    <b>xcms admin: </b> <? echo $pageid; ?> (<# cms/header #>)
-    <?
+    <b>xcms admin: </b> <?php echo $pageid; ?> (<# cms/header #>)
+    <?php
       include(translate('
             [ <a href="?act=cChapter&page='."$pageid&ref=ladmin".'" class="menulink">subpage</a>
             &nbsp;|&nbsp;<a href="?act=delete&page='."$pageid&ref=ladmin".'" class="menulink">delete</a> ]
@@ -96,7 +95,7 @@
               </div>
            </div>
            <div style="position:absolute; width: 100%;  margin-left:300px; ">
-                                    <? if(!@$_GET["act"])echo
+                                    <?php if(!@$_GET["act"])echo
                                     ' <td bgcolor="#FFFFFF" > 
                                       <a class="menulinkA" href="?ref=ladmin&page='.$pageid.'">[Контент]</a>
 
@@ -106,7 +105,7 @@
                                     </td> '; 
 				    ?>
 
-<?
+<?php
   if(@$_GET["mode"] == "")
     @$_GET["mode"] = @$_GET["act"];
   if(@$_GET["act"] == "")
@@ -164,7 +163,7 @@
     else 
     {
     	$source = $editfile;
-    	include(translate("<! cms/readfile source !>"));
+    	include(translate("<! cms/readtext !>"));
 	if($login == "root") 
 		echo '<p><form method="POST"><input type="submit" value="Изменить!" name="change-help"></form>';    
     }
@@ -204,8 +203,8 @@
     include(translate("<! cms/.lightcreatepage-after !>"));
   else include(translate('<! cms/.lightedittable !>'));
 ?>
-<? $extime = microtime()-$extime;?>
-<CENTER><font size="-2">Script execution time: <? echo ((int)($extime*10000))/10; ?> msec</font></CENTER>
+<?php $extime = microtime()-$extime;?>
+<CENTER><font size="-2">Script execution time: <?php echo ((int)($extime*10000))/10; ?> msec</font></CENTER>
                                                       </div></td>
     
 

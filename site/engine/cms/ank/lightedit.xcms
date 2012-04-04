@@ -4,3 +4,11 @@
     include(translate("<! var editfile {$SETTINGS["datadir"]}cms/pages/$pageid/content !><! edit/file xz -h !>"));
   }
 ?>
+<!-- <h3>Список полей</h3>
+  Значение поля -- это его представление в формах. Используйте <input type=...> для того, чтобы переписать значение по умолчанию. -->
+<?php
+  $editfile = "$content_dir/cms/pages/$pageid/tags";
+  //include(translate("<! edit/tag !>"));
+?>
+
+
