@@ -19,7 +19,7 @@
     if(@$_POST["resetPwd"])
     {    
       $list = getList($_GET['username']);
-      $list["passwd"] = md5(" ");
+      $list["passwd"] = md5(@$_POST["new_password"]);
       saveList($list,$_GET['username']);
     }
     if(@$_POST["delUser"])
@@ -81,21 +81,30 @@
     
   }
 ?>
-<?php if(@$_GET['username']&&@$_GET['username']!="_CREATE")
-{
-  echo '<FORM method="post">
-    <input type="submit" name="delUser" value="Удалить пользователя">
-    <input type="submit" name="resetPwd" value="Обнулить пароль">
-  </FORM>';
-  
-}?>
 
 <?php if(!@$_GET["username"])$_GET["username"]="";?>
 <?php $editfile= @$_GET['username']; ?>
 <?php if (@$_GET['username']&&@$_GET['username']!="_CREATE")
 {
+    echo '<h3>Редактирование профиля</h3>';
 	include(translate("<! edit/tag `login`,`passwd` !>"));
 }
+
+if(@$_GET['username']&&@$_GET['username']!="_CREATE")
+{
+  if($_GET['username'] != str_replace("//","/","$content_dir/auth/usr/$login.usr"))
+  echo '<FORM method="post">
+    <h3>Удаление пользователя</h3>
+    <input type="submit" name="delUser" value="Удалить пользователя"></form>
+    ';
+  echo '<form method="post"> <h3>Смена пароля</h3>
+    <input type="submit" name="resetPwd" value="Задать парль:">
+    <input name="new_password" />
+  </FORM>';
+  
+}
+
+
 ?>
 
 </TABLE>

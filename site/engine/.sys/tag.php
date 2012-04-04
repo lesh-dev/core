@@ -151,7 +151,7 @@
     }
     if(strstr($securityflags,"-newkey")){}
     else
-    	echo "<tr><td><input name=\"newkey\"><td><input name=\"newvalue\">";	
+    	echo "<tr><td><input name=\"newkey\" placeholder=\"Новое поле\"><td><input name=\"newvalue\" placeholder=\"Новое значение\">";	
     
     echo "</table>";    
     //echo $addparams;
