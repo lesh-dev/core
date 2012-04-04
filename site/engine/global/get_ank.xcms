@@ -1,0 +1,42 @@
+<?php
+  if(!@$_GET["page"]) $_GET["page"]="index";
+  if(!@$_COOKIE["auth-login"]) {
+    echo "Authentication required";
+    return;
+  }
+  if (@$_GET["mode"]=="txt") {
+    header("Content-Type: text/plain; charset=utf-8");
+    $xa = @simplexml_load_file($_GET["file"]);
+    // print anketa
+    if (!$xa) return;
+    $oAnk = get_object_vars($xa);
+    $aFields = array(
+      "Name"=>"ФИО",
+      "BirthDate"=>"Дата рождения",
+      "School"=>"Школа",
+      "SchoolLocation"=>"Адрес школы",
+      "Class"=>"Класс",
+      "Phone"=>"Телефон",
+      "Cellular"=>"Мобильный телефон",
+      "EMail"=>"E-Mail",
+      "Skype"=>"Skype",
+      "Profile"=>"Профиль",
+      "Favourites"=>"Любимые предметы",
+      "Achivements"=>"Достижения",
+      "Hobby"=>"Хобби",
+      "Status"=>"Статус анкеты",
+      "HRCreated"=>"Создана",
+      "HRModified"=>"Отредактирована",
+      "UserAgent"=>"UserAgent"
+    );
+    foreach ($oAnk as $sKey => $sValue) {
+      if (!array_key_exists($sKey, $aFields)) continue;
+      echo $aFields[$sKey].": $sValue\r\n";
+    }
+  }
+  else
+  {
+    header("Content-Type: text/xml");
+    echo file_get_contents($_GET["file"]);
+  }
+?>
