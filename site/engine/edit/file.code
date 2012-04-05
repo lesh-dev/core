@@ -31,15 +31,15 @@
     }
     else if(@$_POST["edit-submit"]&&@$_POST["multi-id"]==@$multiId)
     {
-      echo "<li>$ename";
       $time = time();
       $target_name=$ename."-version-".$time;
       $diff_name=$ename."-diff-".$time;
+      if (file_exists($ename)) @chmod($ename, 0666); // see bug #64 
       @rename($ename,$target_name);
       $f = fopen($ename,"w");
       fputs($f,stripcslashes(@$_POST["edit-text"]));
       fclose($f);
-      chmod($ename,0777);
+      chmod($ename,0666);
       $current_version = "";
       // FIXME: this should be deleted at all.
       // include_once("{$SETTINGS["elementsdir"]}cms/addrssfeed.php");
@@ -55,11 +55,20 @@
       file_get_contents($ename)."\n\r".
       "=======================================\n\r"
       );
+      unlink($diff_name);
+      system("gzip $target_name");
    }
     else $current_version = @$_POST["versions"];
     if(file_exists($ename))
     {
-      $text = file_get_contents($ename.$current_version);
+      
+      if(strpos($current_version,".gz") )
+      {
+        $f = gzopen($ename.$current_version,"r");
+        $text = gzread($f,10000000);
+        fclose($f);
+      }
+      else $text = file_get_contents($ename.$current_version);
     }
     else if (@$text) {}    
     else $text = "$dtext";
@@ -72,7 +81,7 @@
   $vlist = "<option value=\"\">HEAD</option>";
   foreach(glob("$ename-version-*") as $k=>$v )
   {
-    $version_time = date("d.m.Y H:i",str_replace("$ename-version-","",$v));
+    $version_time = date("d.m.Y H:i",str_replace(".gz","",str_replace("$ename-version-","",$v))  );
     $version_suffix = str_replace("$ename","",$v);
     $selected = "";
     if($version_suffix == $current_version) $selected="selected";
