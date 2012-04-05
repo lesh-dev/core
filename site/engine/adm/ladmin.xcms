@@ -4,7 +4,7 @@
 <# locale #>
 <?php
         $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
- 		include(translate("<! auth/ #cmseditor #admin root {$INFO["edit"]} !>"));
+ 		include(translate("<! auth/ #editor #admin {$INFO["edit"]} !>"));
 ?> 
 <# cms/.lightcreatepage-before #>
 <?php
@@ -73,6 +73,7 @@
             
             [ <a href="?act=cleanprec&page='."$pageid&ref=ladmin".'" >clear cache</a>
             <a href="?act=userlist&page='."$pageid&ref=ladmin".'" >users</a>
+            <a href="?act=groupadmin&page='."$pageid&ref=ladmin".'" >groups</a>
             <a href="?mode=mailer&page='."$pageid&ref=ladmin".'" >notifications</a>
             &nbsp;|&nbsp;<a href="?act=css&page='."$pageid&ref=ladmin".'" class="menulink">template</a>]
             
@@ -181,9 +182,14 @@
   {
     include(translate("<! cms/.lightacsesseditor !>"));
   }
+  else if(@$_GET["act"]=="groupadmin")
+  {
+    $editfile = "{$SETTINGS["datadir"]}groups";    
+    include(translate("<! edit/tag !>"));
+  }
   else if(@$_GET["mode"]=="register_form")
   {
-    include(translate('<! auth/ #root root !><! auth/register !>'));
+    include(translate('<! auth/ #admin !><! auth/register !>'));
   }
   else if(@$_GET["act"]=="rename_section")
   {

@@ -1,4 +1,4 @@
-<# auth/ #root #admin #>
+<# auth/ #admin #>
 <h2>Регистрация</h2>
 Право на регистрацию предоставил: <?php echo $login;?><br>
 <?php

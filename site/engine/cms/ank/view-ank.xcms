@@ -1,5 +1,5 @@
 <# cms/ank/style #>
-<# auth/ root #root #ank #>
+<# auth/ #admin #ank #>
 <form method="post">
   <input type="submit" name="show-all" value="Показать все анкеты">
 </form>

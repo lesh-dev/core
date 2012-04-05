@@ -1,9 +1,24 @@
-<# auth/ #root #admin #>
+<# auth/ #admin #>
 <?php
   $DEFAULT_USER["passwd"] = md5(" ");
   $DEFAULT_USER["group"] = "#user";
   
-  
+  if(@$_POST["set_groups"])
+  {
+    $list = getList($_GET['username']);
+    include_once("$engine_dir/.sys/groups.php");
+    $all_groups = all_groups();
+    $group = array();
+    foreach($all_groups as $k=>$v)
+    {
+        if(@$_POST[$k] || @$_POST["new_group"] == $k)
+        {
+            $group[] = $k;
+        }
+    }
+    $list['group'] = implode(" ",$group);
+    saveList($list,"{$SETTINGS["datadir"]}auth/usr/{$list["login"]}.usr");
+  }
   if(@$_GET['username']&&@$_GET['username']!="_CREATE")
   {
 
@@ -84,14 +99,29 @@
 
 <?php if(!@$_GET["username"])$_GET["username"]="";?>
 <?php $editfile= @$_GET['username']; ?>
-<?php if (@$_GET['username']&&@$_GET['username']!="_CREATE")
-{
-    echo '<h3>Редактирование профиля</h3>';
-	include(translate("<! edit/tag `login`,`passwd` !>"));
-}
-
+<?php 
 if(@$_GET['username']&&@$_GET['username']!="_CREATE")
 {
+	include(translate("<! edit/tag `group`,`login`,`passwd` !>"));
+  echo '<h3>Права доступа</h3>';
+  include_once("$engine_dir/.sys/groups.php");
+  $all_groups = all_groups();
+  $user_groups = explode(" ",$list['group']);
+  echo "<form method=\"post\">";
+  foreach($user_groups as $v)
+  {
+    echo "<input type=\"checkbox\" name=\"$v\" checked /> ".@$all_groups[$v]." ($v)<br>";
+  }
+  echo "Добавить: <select name=\"new_group\">";
+  echo "<option value=\"\">(не добавлять)</option>";
+  foreach(all_groups() as $k=>$v)
+  {
+    if(!strlen($v)) continue;
+    echo "<option value=\"$k\">$v</option>";
+  }
+  echo "</select>";
+                                                                                                                           
+  echo "<p><input type=\"submit\" name=\"set_groups\" value=\"Задать права\"></form>";
   if($_GET['username'] != str_replace("//","/","$content_dir/auth/usr/$login.usr"))
   echo '<FORM method="post">
     <h3>Удаление пользователя</h3>

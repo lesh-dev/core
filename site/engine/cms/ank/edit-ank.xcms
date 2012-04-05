@@ -1,5 +1,5 @@
 <# cms/ank/style #>
-<# auth/ root #root #ank #>
+<# auth/ #admin #ank #>
 </form>
 <?php
 

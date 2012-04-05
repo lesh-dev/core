@@ -1,4 +1,4 @@
-<# auth/ root #>
+<# auth/ #admin #>
 <?php
 	if(@$_POST["taglist-new"])
 	{

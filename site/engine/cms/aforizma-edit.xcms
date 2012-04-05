@@ -1,3 +1,0 @@
-<# auth/ root #root #admin #>
-<# var editfile {$SETTINGS['datadir']}cms/aforizma #>
-<# edit/file #>

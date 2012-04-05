@@ -2,6 +2,7 @@
               <table><tr><td><b>Чтение</b><td><b>Запись</b>
               <tr><td valign="top">
               <?php
+                include_once("$engine_dir/.sys/groups.php");
                 if(@$_POST["change-acsess"])
                 {
                   $nview = "";
@@ -27,15 +28,23 @@
                   $dir =  "{$SETTINGS["datadir"]}cms/pages/$pageid";
                   saveList($INFO,"$dir/info");                                    
                 }
-                
+                $ag = all_groups();
                 $view = explode(" ",trim($INFO["view"]));
                 foreach ($view as $key=>$value) {
                 	if($value)
                   {
-                    echo "<input type=\"checkbox\" name=\"view-$value\" checked>$value<br />";
+                    $t = @$ag[$value];
+                    echo "<input type=\"checkbox\" name=\"view-$value\" checked>$t ($value)<br />";
                   }
                 }
-                echo "Добавить: <input name=\"add-view\">";
+                echo "Добавить: <select name=\"add-view\" >";
+                echo "<option value=\"\">(не добавлять)</option>";
+                foreach(all_groups() as $k=>$v)
+                {
+            	    if(!strlen($v)) continue;
+                    echo "<option value=\"$k\">$v</option>";
+                }
+                echo "</select>";
                 
                 echo "<td width=\"5\"><td valign=\"top\">";
                 
@@ -43,10 +52,18 @@
                 foreach ($view as $key=>$value) {
                 	if($value)
                   {
-                    echo "<input type=\"checkbox\" name=\"edit-$value\" checked>$value<br />";
+                    $t = @$ag[$value];
+                    echo "<input type=\"checkbox\" name=\"edit-$value\" checked>$t ($value)<br />";
                   }
                 }
-                echo "Добавить: <input name=\"add-edit\">";
+                echo "Добавить: <select name=\"add-edit\" >";
+                echo "<option value=\"\">(не добавлять)</option>";
+                foreach(all_groups() as $k=>$v)
+                {
+            	    if(!strlen($v)) continue;
+                    echo "<option value=\"$k\">$v</option>";
+                }
+                echo "</select>";
               ?>
               </table>
               <input type="submit" name="change-acsess" value="Изменить">

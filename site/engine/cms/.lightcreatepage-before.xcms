@@ -20,11 +20,17 @@
     if(@$_POST["viewForAll"]) $LIST["view"] = $LIST["view"]. " " . "#all"; 
     @$LIST["edit"] = "$login";
     if(@$_POST["delegateGroup"]) $LIST["edit"] = $LIST["edit"]. " " . "#$login";
+    @$LIST["edit"] = "";
+    @$LIST["view"] = "";
     foreach($_POST as $key=>$value)
     {
       if(substr($key,0,5)=="edit_")
       {
         $LIST["edit"] = $LIST["edit"]. " " . substr($key,5);
+      }
+      if(substr($key,0,5)=="view_")
+      {
+        $LIST["view"] = $LIST["view"]. " " . substr($key,5);
       }
     }
     

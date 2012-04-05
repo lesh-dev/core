@@ -1,4 +1,4 @@
-<# auth/ #root #admin #>
+<# auth/ #admin #>
 
 <link rel="stylesheet" type="text/css" href=".util/tabsheet/tabsheets.css" />
 <script type="text/javascript" src=".util/tabsheet/tabsheets.js"></script>
