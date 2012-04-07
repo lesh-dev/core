@@ -76,16 +76,16 @@ a.menu_active:active {
 
 }
 
-a.menu_inactive:link {
+a.menu_passive:link {
   color: #000000;
 }
-a.menu_inactive:visited {
+a.menu_passive:visited {
   color: #000000;
 }
-a.menu_inactive:hover {
+a.menu_passive:hover {
   color: #000000;
   background-color: #a7ce1e;
 }
-a.menu_inactive:active {
+a.menu_passive:active {
   color: #000000;
 }

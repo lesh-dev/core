@@ -25,7 +25,7 @@
       <tr>
         <td class="menuField menuWidth roundBorders">
           <# cms/menu/display start=1 end=5 #>
-          <a class="menu menu_level1 menu_inactive menu_inactive_level1" href="forum">Форум</a>
+          <a class="menu menu_level1 menu_passive menu_passive_level1" href="/forum">Форум</a>
  
       <?php
       if(@$_COOKIE["auth-login"])

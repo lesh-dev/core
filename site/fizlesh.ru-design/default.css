@@ -136,6 +136,7 @@ textarea, input {
   background-color: #eeffee;
   padding-left: 2px;
   padding-right: 2px;
+  margin: 1px;
 }
 
 input[type='submit'] {
@@ -143,6 +144,16 @@ input[type='submit'] {
   background-color: #8ea76b;
   padding-left: 10px;
   padding-right: 10px;
+  margin-left: 0px;
+  margin-bottom: 3px;
+  margin-top: 3px;
+  margin-right: 0px;
+}
+
+select {
+  border: 1px solid #8faf6f;
+  background-color: #eeffee;
+  margin-left: 0px;
 }
 
 /* email alignment */
@@ -158,7 +169,21 @@ span.ankLabel {
   font-size: 10pt;
   font-weight: bold;
   display: inline-block;
-  width: 400px;
+  width: 370px;
+}
+
+div.ankLegend {
+  float: right;
+  display: inline-block;
+  width: 30%;
+  border: 1px solid #003f00;
+  background-color: #aed79b;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  padding: 5px;
+  font-size: 10pt;
+  margin-left: 20px;
 }
 
 div.ankRow {
@@ -167,12 +192,60 @@ div.ankRow {
 
 div.ankExample {
   font-size: 8pt;
-  padding-left: 410px;
+  padding-left: 380px;
   padding-bottom: 3pt;
+}
+
+span.ankAst {
+  color: #ff0000;
+  font-weight: bold;
+  font-size: 10pt;
+}
+
+span.ankAst {
+  font-weight: bold;
+  font-size: 10pt;
+  vertical-align: middle;
+}
+span.ankAst.Req {
+  color: #ff000;
+}
+span.ankAst.Gr {
+  color: #cf7f00;
+}
+span.ankAst.Rec {
+  color: #e0f2dd;
 }
 
 a.leshLogoTitle {
   position: absolute;
   right: 7px;
   bottom: 5px;
+}
+
+div.ankError {
+  color: #9f0000;
+  font-size: 9pt;
+  padding: 3px;
+}
+
+div.ankWarning {
+  color: #003f00;
+  font-size: 9pt;
+  padding: 3px;
+}
+
+div.ankMessageFrame {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px solid #003f00;
+  background-color: #aed79b;
+  display: none;
+}
+
+ul.ankList {
+  margin-left: 3px;
+  margin-bottom: 0px;
+  margin-top: 0px;
 }

@@ -209,8 +209,6 @@
     include(translate("<! cms/.lightcreatepage-after !>"));
   else include(translate('<! cms/.lightedittable !>'));
 ?>
-<?php $extime = microtime()-$extime;?>
-<CENTER><font size="-2">Script execution time: <?php echo ((int)($extime*10000))/10; ?> msec</font></CENTER>
                                                       </div></td>
     
 
