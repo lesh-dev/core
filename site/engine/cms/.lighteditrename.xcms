@@ -13,7 +13,7 @@
 		$tags = @unserialize(@file_get_contents("{$SETTINGS["datadir"]}tags/list"));
 		if(@strlen(@$tags[@$new_tag]))
 		{
-		    echo "<font color=\"red\"><b>Error: this tag already exists!</b></font>";
+		    echo "<font color=\"red\"><b>Error: this tag already exists in page ".@$tags[@$new_tag]."</b></font>";
 		}
 		else
 		{
