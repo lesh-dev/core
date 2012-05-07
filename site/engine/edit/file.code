@@ -4,8 +4,8 @@
   
   @$dtext = $param["dtext"]; if(!@$dtext) @$dtext = "no file here.";
   @$multiId = $param["id"]; if(!@$multiId) @$multiId = $counter;
-  @$cols = $param["cols"]; if(!@$cols) @$cols = 80;
-  @$rows = $param["rows"]; if(!@$rows) @$rows = 25;
+  @$cols = $param["cols"]; if(!@$cols) @$cols = 120;
+  @$rows = $param["rows"]; if(!@$rows) @$rows = 40;
   @$tag = $param["tag"]; if(!@$tag) @$tag = "h3";
   @$submitVal = $param["submitVal"]; if(!@$submitVal) @$submitVal = "Изменить!";
   @$resetVal = $param["resetVal"]; if(!@$resetVal) @$resetVal = "Отмена";

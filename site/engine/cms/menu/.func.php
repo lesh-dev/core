@@ -61,7 +61,8 @@ usort($html_array,"sort_by_mtime");
     if(strstr($options,"+devel"))
     {
       $margin = $menuLevel*10;
-      $html = "<br><a style=\"margin-left: {$margin}pt;\" href=\"<HREF>\">[$flags<TEXT>]</a>";
+      // br was here
+      $html = "<div style=\"margin-left: ${margin}pt;\">[<a href=\"<HREF>\">$flags<TEXT></a>]</div>";
       $html = str_replace("<HREF>","/$web_prefix?page=$pageiid&$addhrefparams",$html);
     }
     else if(file_exists("$initPath/currtag"))

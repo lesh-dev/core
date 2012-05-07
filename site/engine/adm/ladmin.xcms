@@ -44,6 +44,7 @@
 <html>
   <head>
   <# cms/head #>
+  <link rel="stylesheet" type="text/css" href="<?php echo "/$web_prefix/$engine_pub/css/admin.css"; ?>" />
   <script language="javascript" type="text/javascript" src="<?php echo "/$web_prefix/$engine_pub/js/jquery-1.7.1.min.js"?>"></script>
   <script type="text/javascript">
     $(document).ready(function() {
@@ -60,28 +61,23 @@
    
     <b>xcms admin: </b> <?php echo $pageid; ?> (<# cms/header #>)
     <?php
+      $urlAdm = "&amp;page=$pageid&amp;ref=ladmin";
+      $urlIdx = "&amp;page=$pageid&amp;ref=index";
       include(translate('
-            [ <a href="?act=cChapter&page='."$pageid&ref=ladmin".'" class="menulink">subpage</a>
-            &nbsp;|&nbsp;<a href="?act=delete&page='."$pageid&ref=ladmin".'" class="menulink">delete</a> ]
-
-	    <br />[<a href="?act=myprofile&page='."$pageid&ref=ladmin".'" class="menulink"><b>'.$login.'</b></a>
-            &nbsp;|&nbsp;<a href="?ref=logout" class="menulink">logout</a>
-            &nbsp;|&nbsp;<a href="?act=cpasswd&page='."$pageid&ref=ladmin".'" class="menulink">passwd</a>
-            &nbsp;|&nbsp;<a href="?page='."$pageid&ref=index".'" class="menulink">user_mode</a>
-            &nbsp;|&nbsp;<a href="?act=logout&page='."$pageid&ref=$ref".'" class="menulink">logout</a>]
-
-            
-            [ <a href="?act=cleanprec&page='."$pageid&ref=ladmin".'" >clear cache</a>
-            <a href="?act=userlist&page='."$pageid&ref=ladmin".'" >users</a>
-            <a href="?act=groupadmin&page='."$pageid&ref=ladmin".'" >groups</a>
-            <a href="?mode=mailer&page='."$pageid&ref=ladmin".'" >notifications</a>
-            &nbsp;|&nbsp;<a href="?act=css&page='."$pageid&ref=ladmin".'" class="menulink">template</a>]
-            
+        <a href="?act=cChapter'.$urlAdm.'" class="h-menu-link">Subpage</a>
+        <a href="?act=delete'.$urlAdm.'" class="h-menu-link">Delete</a>
+        <a href="?'.$urlIdx.'" class="h-menu-link">User Mode</a>
+        <a href="?act=cleanprec'.$urlAdm.'" class="h-menu-link">Clear Cache</a>
+	    |
+        <a href="?act=myprofile'.$urlAdm.'" class="h-menu-link"><b>'.$login.'</b></a>
+        <a href="?act=cpasswd'.$urlAdm.'" class="h-menu-link">Change Password</a>
+        <a href="?act=logout&amp;page='."$pageid&ref=$ref".'" class="h-menu-link">Logout</a>
+        |
+        <a href="?act=userlist'.$urlAdm.'" class="h-menu-link">Users</a>
+        <a href="?act=groupadmin'.$urlAdm.'" class="h-menu-link">Groups</a>
+        <a href="?mode=mailer'.$urlAdm.'" class="h-menu-link">Notifications</a>
+        <a href="?act=css'.$urlAdm.'" class="h-menu-link">Template</a>
       '));
-    
-      
-      
-      
     ?>
     <hr>
     
