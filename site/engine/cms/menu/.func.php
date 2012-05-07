@@ -18,18 +18,17 @@ usort($html_array,"sort_by_mtime");
 <?php
   function cms_menu_make($initPath,$MENUTEMPLATES,$menuLevel,$addhrefparams,$options,$startLevel,$endLevel)
   {
-    global $SETTINGS,$forceSn,$pageid,$login,$group,$web_prefix;    
+    global $SETTINGS,$forceSn,$pageid,$login,$group,$web_prefix;
     $pageiid = str_replace("{$SETTINGS["datadir"]}cms/pages/","",$initPath);
     $flags="";
-    if(!file_exists("$initPath/applymenu")) 
+    if(!file_exists("$initPath/applymenu"))
     {
       if(strstr($options,"+displayall"))
         $text = "{unnamed}";
       else
         return;
     }
-    
-    else if(file_exists("$initPath/lockmenu"))
+    elseif(file_exists("$initPath/lockmenu"))
     {
       if(strstr($options,"+displayall"))
       {
@@ -39,24 +38,24 @@ usort($html_array,"sort_by_mtime");
       else
         return;
     }
-    else if(file_exists("$initPath/hidemenu"))
-    {      
+    elseif(file_exists("$initPath/hidemenu"))
+    {
       if(strstr($options,"+displayall"))
         $text = file_get_contents("$initPath/applymenu");
       else
       {
         $INFO = @getList("$initPath/info");
-        include(translate("<! auth/lauth {$INFO['view']} !>"));        
+        include(translate("<! auth/lauth {$INFO['view']} !>"));
         if($acsess)
           $text = file_get_contents("$initPath/applymenu");
         else return;
       }
     }
-    else 
+    else
       $text = file_get_contents("$initPath/applymenu");
-    
+
     //echo "<br>*".$pageid."#<br>";
-    
+
     $html = $MENUTEMPLATES[$menuLevel];
     if(strstr($options,"+devel"))
     {
@@ -73,12 +72,12 @@ usort($html_array,"sort_by_mtime");
     else
 	$html = str_replace("<HREF>","/$web_prefix?page=$pageiid&$addhrefparams",$html);
     $html = str_replace("<TEXT>",$text,$html);
-    
+
     if(strstr($pageid,str_replace("{$SETTINGS["datadir"]}cms/pages/","",$initPath)))
       $html = str_replace("<ACTIVE>","active",$html);
     else
       $html = str_replace("<ACTIVE>","passive",$html);
-      
+
     if(file_exists("$initPath/menuicon.gif"))
     {
       $html = str_replace("<!-- PIC -->","<img border=\"0\" src=\"$initPath/menuicon.gif\"><br>",$html);
@@ -90,7 +89,7 @@ usort($html_array,"sort_by_mtime");
     }
     $array = glob("$initPath/*",GLOB_ONLYDIR);
     if(!strstr($options,"+hault"))
-      if(@$array) foreach ($array as $key=>$value) 
+      if(@$array) foreach ($array as $key=>$value)
       {
         if(strstr($options,"+devel") || strstr($pageid,str_replace("{$SETTINGS["datadir"]}cms/pages/","",$value)))
           cms_menu_make($value,$MENUTEMPLATES,$menuLevel+1,$addhrefparams,$options,$startLevel,$endLevel);

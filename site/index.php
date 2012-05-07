@@ -9,9 +9,9 @@
   include ("$engine_dir/.sys/tag.php");
   include ("$engine_dir/.sys/ui.php");
   include ("$engine_dir/.sys/mailer.php");
-  include ("$engine_dir/.sys/resample.php"); 
+  include ("$engine_dir/.sys/resample.php");
   /*if(@!$_GET["page"])
-    $_GET["page"] = $SETTINGS["defaultpage"]; 
+    $_GET["page"] = $SETTINGS["defaultpage"];
   if(!file_exists($_GET["page"].".xcms"))
   {
     $_GET["page"] = $SETTINGS["nopage"];
@@ -24,7 +24,7 @@
       global $SETTINGS;
       $argv = explode(" ",$code);
       fputs($outputStream, $SETTINGS["code_begin"]);
-      foreach ($argv as $key=>$value) 
+      foreach ($argv as $key=>$value)
       {
         fputs($outputStream,"\$code=\"$code\";");
         fputs($outputStream,"@\$argv[] = \"$value\";");
@@ -39,27 +39,26 @@
       }
       fputs($outputStream, $SETTINGS["code_end"]);
   }
-  
+
   function ParceString($s,$outputStream)
   {
-    global $SETTINGS; 
+    global $SETTINGS;
     $open = stristr($s,$SETTINGS["openbracket"]);
     if(!$open) {fputs($outputStream,$s); return;}
     $close = stristr($s,$SETTINGS["closebracket"]);
     $close = substr($close,strlen($SETTINGS["closebracket"]));
     $before = substr($s, 0, strlen($s) - strlen($open));
-    
+
     fputs($outputStream,$before);
 
 
     $code = substr($open,strlen($SETTINGS["openbracket"])  );
     $code = substr($code,0,strlen($code)-strlen($close)-strlen($SETTINGS["closebracket"]));
-    
-    
+
     $code = trim($code);
     $argv = explode(" ",$code);
 
-    $name = $argv[0];    
+    $name = $argv[0];
     if(file_exists("{$SETTINGS["elementsdir"]}$name.php"))
     {
       include("{$SETTINGS["elementsdir"]}$name.php");
@@ -70,9 +69,9 @@
       if(file_exists("{$SETTINGS["elementsdir"]}$name.xcms"))
       {
         $newS = file_get_contents("{$SETTINGS["elementsdir"]}$name.xcms");
-        foreach ($argv as $key=>$value) 
+        foreach ($argv as $key=>$value)
         {
-          $newS = str_replace("%$key",$value,$newS);	
+          $newS = str_replace("%$key",$value,$newS);
         }
         $newS = str_replace("%*",$code,$newS);
         ParceString($newS,$outputStream);
@@ -86,15 +85,15 @@
         fputs($outputStream,file_get_contents("{$SETTINGS["designdir"]}$name.template"));
       }
       else fputs($outputStream,file_get_contents("{$SETTINGS["elementsdir"]}{$SETTINGS["nopagecode"]}.code"));
-    }    
+    }
     ParceString($close,$outputStream);
   }
-  
+
   /*$f = fopen("outp.dat","w");
   ParceString ('BEFORE<!--! test !!-->AFTER',$f);
   fclose($f);
   echo file_get_contents("outp.dat");*/
-  
+
   function compile($filename,$destination)
   {
     $toCompile = false;
@@ -115,12 +114,12 @@
       fclose($f);
     }
   }
-  
+
   function translate($string)
   {
     global $SETTINGS;
     $fname = "{$SETTINGS["precdir"]}transl-".md5($string).".php";
-    if(!file_exists($fname)) 
+    if(!file_exists($fname))
     {
       $f = fopen($fname,"w");
       $string = str_replace("<!","<#",$string);
@@ -134,7 +133,7 @@
     }
     return($fname);
   }
-  
+
   //1. Choosing filename.
   $ref = @$_GET["ref"];
   if(!$ref) $ref = $SETTINGS["defaultpage"];
@@ -151,11 +150,11 @@
     $ref = "nopage.xcms";
     $rfile = "$design_dir/nopage.xcms";
   }
-  
+
   //2. Finding prec file.
 
   compile("$rfile","{$SETTINGS["precdir"]}$ref.php");
-  
+
 /*  $toCompile = false;
   if(!file_exists("{$SETTINGS["precdir"]}$ref.php"))$toCompile = true;
   else if(filemtime("{$SETTINGS["documentsdir"]}$ref.xcms")>filemtime("{$SETTINGS["precdir"]}$ref.php"))

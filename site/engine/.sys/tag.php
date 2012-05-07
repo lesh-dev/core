@@ -1,11 +1,11 @@
 <?php
-/* version 1.3   added taglist system. Afraid, this makes tags depending of xcms.*/  
-/* version 1.2.1. editlist_form list of skipping fields added*/  
-/* version 1.2. function editlist_form - a gui editor for lists.*/  
+/* version 1.3   added taglist system. Afraid, this makes tags depending of xcms.*/
+/* version 1.2.1. editlist_form list of skipping fields added*/
+/* version 1.2. function editlist_form - a gui editor for lists.*/
 /* version 1.1. _defend tag in the beginning added.
-   Now, if file is handled as php script, user will 
-   not read it. */  
-/* version 1.0. Library created */  
+   Now, if file is handled as php script, user will
+   not read it. */
+/* version 1.0. Library created */
 
 /********************************/
 /*          SETTINGS            */
@@ -16,7 +16,7 @@
   	global $getTagList_output;
 	$filec = file_get_contents($file);
 	$filec = str_replace("\r","",$filec);
-	if(substr($filec,0,2) != "<?") 
+	if(substr($filec,0,2) != "<?")
 	{
 		$rez = explode("\n",$filec);
 		foreach($rez as $key=>$value)
@@ -43,46 +43,46 @@
   function applyTag($str,$list,$prefix="<",$suffix=">")
   {
     $s = $str;
-    foreach ($list as $key=>$value) 
+    foreach ($list as $key=>$value)
     {
-      $s = str_replace($prefix.$key.$suffix,$value,$s);	
-    }  
-    return $s;  
+      $s = str_replace($prefix.$key.$suffix,$value,$s);
+    }
+    return $s;
   }
-  
+
   function saveList($list,$filename)
   {
     global $tag_php_delim;
     $f = fopen($filename,"w");
-    
+
     $rez = "_defend".$tag_php_delim."<?php die(); ?".'>'."\n";
     fputs($f,$rez);
-    
-    foreach ($list as $key=>$value) 
+
+    foreach ($list as $key=>$value)
     {
       if($key=="") continue;
       if($key[0]=='_') continue;
       $rez = $key.$tag_php_delim.$value."\n";
       fputs($f,$rez);
     }
-    fclose($f);  
+    fclose($f);
   }
-  
+
   function getList($filename)
   {
     global $tag_php_delim;
     $s = file($filename);
-    foreach ($s as $key=>$value) 
+    foreach ($s as $key=>$value)
     {
       $v = str_replace("\n","",$value);
       $v = str_replace("\r","",$v);
       $k = explode($tag_php_delim, $v, 2);
       if($k[0] == "_defend") continue;
-      @$rez[$k[0]] = @$k[1];	
+      @$rez[$k[0]] = @$k[1];
     }
     return $rez;
   }
-  
+
   function editlist_form($file, $addparams,$skipparams="",$securityflags="")
   /**
    * secyrityflags:
@@ -113,13 +113,12 @@
       }
       saveList($list,$file);
       $list = getList($file);
-      
     }
 
     echo '<form action="'.$addparams.'" method="post"><table>';
-    foreach ($list as $key=>$value) 
+    foreach ($list as $key=>$value)
     {
-      if(!strstr($skipparams,$key)) 
+      if(!strstr($skipparams,$key))
       {
       	if(file_exists("{$SETTINGS["elementsdir"]}taglist/$key"))
       	{
@@ -140,23 +139,23 @@
 			echo "</SELECT>";
 		}
 		else
-			echo "<input name=\"edtg_$key\" value=\"$value\">";	
+			echo "<input name=\"edtg_$key\" value=\"$value\">";
       	}
-        else 
+        else
         {
 	      	echo "<tr><td>$key<td>";
-        	echo "<input name=\"edtg_$key\" value=\"$value\">";	
+        	echo "<input name=\"edtg_$key\" value=\"$value\">";
         }
       }
     }
     if(strstr($securityflags,"-newkey")){}
     else
-    	echo "<tr><td><input name=\"newkey\" placeholder=\"Новое поле\"><td><input name=\"newvalue\" placeholder=\"Новое значение\">";	
-    
-    echo "</table>";    
+    	echo "<tr><td><input name=\"newkey\" placeholder=\"Новое поле\"><td><input name=\"newvalue\" placeholder=\"Новое значение\">";
+
+    echo "</table>";
     //echo $addparams;
-    echo '<input type="submit" name="editTag" value="Save">';    
+    echo '<input type="submit" name="editTag" value="Save">';
     echo '</form>';
   }
-  
+
 ?>
