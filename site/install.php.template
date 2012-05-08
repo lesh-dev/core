@@ -1,174 +1,165 @@
-<? $pageid = @$_POST["pageid"]; if (!$pageid) $pageid=1; ?>
+<?php $pageid = @$_POST["pageid"]; if (!$pageid) $pageid=1; ?>
+<html>
+    <head>
+        <title>XCMS Installer</title>
+    </head>
+    <body>
+        <h1>XCMS installation</h1>
+        <form method="post">
+<?php
+    function throw_error($error)
+    {
+        global $pageid;
+        echo "<font color=\"red\"><h3>Error</h3></font>";
+        echo "<p>$error";
+        $pageid = $pageid-1;
+    }
 
-
-<h1>XCMS installation</h1>
-
-<form method="post">
-
-<?
-      function throw_error($error)
-      {
-	global $pageid;
-	echo "<font color=\"red\"><h3>Error</h3></font>";
-	echo "<p>$error";
-	$pageid = $pageid-1;
-      }
-      if(@$_POST["pageid"] == "2")
-      {
+    if (@$_POST["pageid"] == "2")
+    {
         $keys = array("content_dir","design_dir","engine_dir","engine_pub", "web_prefix");
-        
+
         if(!is_dir(@$_POST["engine_dir"]))
-	  throw_error("engine_dir variable is not a directory.");
-        else if(!is_dir(@$_POST["engine_pub"]))
-	  throw_error("engine_pub variable is not a directory.");
-        else if(!is_dir(@$_POST["design_dir"]))
-	  throw_error("design_dir variable is not a directory.");
-        else if(!is_dir(@$_POST["content_dir"]))
-	  throw_error("content_dir variable is not a directory.");
-	$f = fopen("settings.php","w");
-	fputs($f,"<?\n");
-	foreach($keys as $k)
-	{
-	  fputs($f,"  \$$k = \"{$_POST["$k"]}\"; \n");
-	}
-	fputs($f,"\n?>");
-	include("settings.php");
-	include("$engine_dir/.sys/settings.php");
-	include("$engine_dir/cms/build_rewrite.xcms");
-	unlink("install.php");
-      }
+            throw_error("engine_dir variable is not a directory.");
+        elseif(!is_dir(@$_POST["engine_pub"]))
+            throw_error("engine_pub variable is not a directory.");
+        elseif(!is_dir(@$_POST["design_dir"]))
+            throw_error("design_dir variable is not a directory.");
+        elseif(!is_dir(@$_POST["content_dir"]))
+            throw_error("content_dir variable is not a directory.");
+        $f = fopen("settings.php", "w");
+        fputs($f,"<?php\n");
+        foreach($keys as $k)
+        {
+            fputs($f,"    \$$k = \"{$_POST["$k"]}\";\n");
+        }
+        fputs($f,"\n?>");
+        include("settings.php");
+        include("$engine_dir/.sys/settings.php");
+        include("$engine_dir/cms/build_rewrite.xcms");
+        unlink("install.php");
+    }
 ?>
 
-
-
-<? if ($pageid == 1) { ////////////////////////////////////// STEP ONE /////////////////////////////////////////////  ?>
-<?
-
-
-
-    @mkdir(".prec",0777);
+<?php if ($pageid == 1) { ////////////////////////////////////// STEP ONE /////////////////////////////////////////////
+    @mkdir(".prec", 0777);
     if($f = @fopen(".prec/.htaccess","w"))
     {
-	fputs($f,"deny from all");
-	$PERM["prec"] = true;
-	fclose($f);
+        fputs($f,"deny from all");
+        $PERM["prec"] = true;
+        fclose($f);
     }
     else $PERM["prec"] = false;
-    
+
     if($f = @fopen(".htaccess","a"))
     {
-	$PERM["htaccess"] = true;
-	fclose($f);
+        $PERM["htaccess"] = true;
+        fclose($f);
     }
     else $PERM["htaccess"] = false;
 
     if($f = @fopen("install.php","a"))
     {
-	$PERM["install"] = true;
-	fclose($f);
+        $PERM["install"] = true;
+        fclose($f);
     }
     else $PERM["install"] = false;
 
     if($f = @fopen("settings.php","a"))
     {
-	$PERM["settings"] = true;
-	fclose($f);
+        $PERM["settings"] = true;
+        fclose($f);
     }
     else $PERM["settings"] = false;
-    
+
     if(!$PERM["htaccess"])
     {
-	?>
-	<font color="red"><h3>Error</h3></font>
-	<p>Script can't write to root folder. You should do one of these things:
-	<li>Change rights to root folder to make it writeable
-	<br> OR
-	<li>Create folder .prec (writeable) and empty writeable .htaccess file.
-	
-	<p> Refresh this page to retry.
-	<?
-	die();
+        ?>
+        <font color="red"><h3>Error</h3></font>
+        <p>Script can't write to root folder. You should do either</p>
+        <ul>
+            <li>Change rights to root folder to make it writeable</li>
+            <li>create (writeable) folder .prec and empty writeable .htaccess file</li>
+        </ul>
+        <p>Refresh this page to retry.</p>
+        <?php
+
+        die();
     }
     if(!$PERM["prec"])
     {
-	?>
-	<font color="red"><h3>Error</h3></font>
-	<p>Folder .prec/ is not writeable. Please, change this.
-	
-	<p> Refresh this page to retry.
-	
-	<?
-	die();
+        ?>
+        <font color="red"><h3>Error</h3></font>
+        <p>Folder .prec/ is not writeable. Please fix this problem.</p>
+
+        <p>Refresh this page to retry.</p>
+        <?php
+        die();
     }
 
     if(!$PERM["install"])
     {
-	?>
-	<font color="red"><h3>Error</h3></font>
-	<p>install.php is not writeable. Please, change this.
-	
-	<p> Refresh this page to retry.
-	
-	<?
-	die();
+        ?>
+        <font color="red"><h3>Error</h3></font>
+        <p>File ./install.php is not writeable. Please fix this problem.</p>
+        <p>Refresh this page to retry.
+        <?php
+        die();
     }
 
     if(!$PERM["settings"])
     {
-	?>
-	<font color="red"><h3>Error</h3></font>
-	<p>settings.php is not writeable. Please, change this.
+        ?>
+        <font color="red"><h3>Error</h3></font>
+        <p>File ./settings.php is not writeable. Please fix this problem.</p>
+        <p> Refresh this page to retry.
 	
-	<p> Refresh this page to retry.
-	
-	<?
-	die();
+        <?php
+        die();
     }
-?>
+    ?>
     <h3>Welcome to xcms engine!</h3>
     <p> It seems, You've all nesessary permissions. Now, let's check out system variables.
-    <?
-      
-      $designlist = glob("*design*",GLOB_ONLYDIR);
-      if(count($designlist))
-	$design = $designlist[0];
-      else $design = "design";
+    <?php
+        $designlist = glob("*design*",GLOB_ONLYDIR);
+        if(count($designlist))
+            $design = $designlist[0];
+        else $design = "design";
 
-      $contentlist = glob("*content*",GLOB_ONLYDIR);
-      if(count($contentlist))
-	$content = $contentlist[0];
-      else $content = "content";
+        $contentlist = glob("*content*",GLOB_ONLYDIR);
+        if(count($contentlist))
+            $content = $contentlist[0];
+        else $content = "content";
 
-      $SETTINGS["content_dir"] = "$content/";
-      $SETTINGS["design_dir"]  = "$design/";
-      $SETTINGS["engine_dir"]  = "engine/";
-      $SETTINGS["engine_pub"]  = "engine_public/";
-      $SETTINGS["web_prefix"]  = substr(str_replace("install.php","",$_SERVER["REQUEST_URI"]),1);
-      
-      foreach($SETTINGS as $k=>$v)
-      {
-	if(@$_POST[$k])
-	  $SETTINGS[$k] = @$_POST[$k];
-      }
-      
-      echo "<table>";
-      foreach($SETTINGS as $k=>$v)
-      {
-	 echo "<tr><td>$k<td><input name=\"$k\" value=\"$v\" />";
-      }
-      echo "</table>";
-?>
+        $SETTINGS["content_dir"] = "$content/";
+        $SETTINGS["design_dir"]  = "$design/";
+        $SETTINGS["engine_dir"]  = "engine/";
+        $SETTINGS["engine_pub"]  = "engine_public/";
+        $SETTINGS["web_prefix"]  = substr(str_replace("install.php","",$_SERVER["REQUEST_URI"]),1);
 
-<? } ?>
-<? if ($pageid == 2) { ////////////////////////////////////// STEP ONE /////////////////////////////////////////////  ?>
-<h3>Installation complete!</h3>
-<a href="index.php">Proceed to site.</a>
-<? die() ?>
-<? } ?>
+        foreach($SETTINGS as $k=>$v)
+        {
+            if(@$_POST[$k])
+            $SETTINGS[$k] = @$_POST[$k];
+        }
 
-    <? 
+        echo "<table>";
+        foreach($SETTINGS as $k=>$v)
+        {
+            echo "<tr><td>$k<td><input name=\"$k\" value=\"$v\" />";
+        }
+        echo "</table>";
+    }
+    if ($pageid == 2) { ////////////////////////////////////// STEP ONE /////////////////////////////////////////////  ?>
+        <h3>Installation complete!</h3>
+        <a href="index.php">Proceed to site.</a>
+        <?php
+        die();
+    } 
 	$titles[1] = "Install >>";
     ?>
-    <input type="hidden" name="pageid" value="<? echo $pageid+1;?>" />
-    <input type="submit" value="<? echo $titles[$pageid]; ?>" />
+    <input type="hidden" name="pageid" value="<?php echo $pageid+1; ?>" />
+    <input type="submit" value="<?php echo $titles[$pageid]; ?>" />
 </form>
+</body>
+</html>
