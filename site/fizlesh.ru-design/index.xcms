@@ -14,10 +14,16 @@
     <table cellspacing="0" cellpadding="0" class="topTable roundBorders" summary="Page Top">
       <tr>
         <td class="logoCell menuWidth">
-          <a href="index.php" title="ФизЛЭШ"><img src="/<# web_prefix #>fizlesh.ru-design/pic/fizlesh-logo-small.png" height="72" alt="Логотип ФизЛЭШ" /></a>
+          <a href="index.php" title="ФизЛЭШ"><img
+            src="/<# web_prefix #>fizlesh.ru-design/pic/fizlesh-logo-small.png" height="72" alt="Логотип ФизЛЭШ" /></a>
         </td>
         <td class="logoCell">
-          <# cms/header #>
+          <div style="position: relative; width: 100%; height: 80px;">
+            <img src="/<# web_prefix #>fizlesh.ru-design/pic/fizlesh-title.png" alt="Физическое отделение ЛЭШ"/>
+            <a class="leshLogoTitle" href="http://lesh.org.ru"><img
+                src="/<# web_prefix #>fizlesh.ru-design/pic/lesh-subheader-wood.png" alt="Летняя Экологическая Школа"/></a>
+          </div>
+          <!--<# cms/header #>-->
         </td>
       </tr>
     </table>
