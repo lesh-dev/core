@@ -5,5 +5,5 @@
     $engine_pub = "engine_public/";
     $web_prefix = "site/";
 
-    $mailerEnabled = true;
+    $mailerEnabled = false;
 ?>
