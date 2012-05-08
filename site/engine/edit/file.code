@@ -1,105 +1,105 @@
 <?php
-  if(!@$counter) $counter = 0;
-  $counter ++;
-  
-  @$dtext = $param["dtext"]; if(!@$dtext) @$dtext = "no file here.";
-  @$multiId = $param["id"]; if(!@$multiId) @$multiId = $counter;
-  @$cols = $param["cols"]; if(!@$cols) @$cols = 120;
-  @$rows = $param["rows"]; if(!@$rows) @$rows = 40;
-  @$tag = $param["tag"]; if(!@$tag) @$tag = "h3";
-  @$submitVal = $param["submitVal"]; if(!@$submitVal) @$submitVal = "Изменить!";
-  @$resetVal = $param["resetVal"]; if(!@$resetVal) @$resetVal = "Отмена";
-  
-  $pathv = @$argv[1];
-  if(!$pathv) $pathv = "edit-file";
-  
-  $ename = $editfile;
-  if(!$ename) $ename = @$_POST[$pathv];
-  if(!$ename) $ename = @$_GET[$pathv];
-  if(!$ename) 
-  {
-    echo "<h4>Illegal filename.</h4>";
-  }
-  else 
-  {
-    if(@$_POST["clear_versions"]&&@$_POST["multi-id"]==@$multiId)
+    if(!@$counter) $counter = 0;
+    $counter ++;
+
+    @$dtext = $param["dtext"]; if(!@$dtext) @$dtext = "no file here.";
+    @$multiId = $param["id"]; if(!@$multiId) @$multiId = $counter;
+    @$cols = $param["cols"]; if(!@$cols) @$cols = 120;
+    @$rows = $param["rows"]; if(!@$rows) @$rows = 40;
+    @$tag = $param["tag"]; if(!@$tag) @$tag = "h3";
+    @$submitVal = $param["submitVal"]; if(!@$submitVal) @$submitVal = "Сохранить";
+    @$resetVal = $param["resetVal"]; if(!@$resetVal) @$resetVal = "Отмена";
+
+    $pathv = @$argv[1];
+    if(!$pathv) $pathv = "edit-file";
+
+    $ename = $editfile;
+    if(!$ename) $ename = @$_POST[$pathv];
+    if(!$ename) $ename = @$_GET[$pathv];
+    if(!$ename)
     {
-      foreach(glob("$ename-version-*") as $k=>$v )
-        unlink($v);
-      
-      $current_version = "";
+        echo "<h4>Illegal filename.</h4>";
     }
-    else if(@$_POST["edit-submit"]&&@$_POST["multi-id"]==@$multiId)
+    else 
     {
-      $time = time();
-      $target_name=$ename."-version-".$time;
-      $diff_name=$ename."-diff-".$time;
-      if (file_exists($ename)) @chmod($ename, 0666); // see bug #64 
-      @rename($ename,$target_name);
-      $f = fopen($ename,"w");
-      fputs($f,stripcslashes(@$_POST["edit-text"]));
-      fclose($f);
-      chmod($ename,0666);
-      $current_version = "";
-      // FIXME: this should be deleted at all.
-      // include_once("{$SETTINGS["elementsdir"]}cms/addrssfeed.php");
-      // addrssfeed("Изменения в разделе", "сабж","","");
-      system("diff $target_name $ename > $diff_name");
-      send_notify_mail("developers","[Lesh CMS notification] Изменена страница: $pageid",
-      "Была произведена правка страницы. Дифф:\n\r".
-      "=======================================\n\r".
-      file_get_contents($diff_name)."\n\r".
-      "=======================================\n\r".
-      "Теперь содердание страницы -- следующее:\n\r".
-      "=======================================\n\r".
-      file_get_contents($ename)."\n\r".
-      "=======================================\n\r"
-      );
-      unlink($diff_name);
-      system("gzip $target_name");
-   }
-    else $current_version = @$_POST["versions"];
-    if(file_exists($ename))
-    {
-      
-      if(strpos($current_version,".gz") )
-      {
-        $f = gzopen($ename.$current_version,"r");
-        $text = gzread($f,10000000);
-        fclose($f);
-      }
-      else $text = file_get_contents($ename.$current_version);
-    }
-    else if (@$text) {}    
-    else $text = "$dtext";
-    $text = stripcslashes($text);
-  
-  if(!@$keys["-h"]) echo "<$tag>edit: $ename</$tag>";
-  $ty = "submit";
-  //echo $multiId;
-  
-  $vlist = "<option value=\"\">HEAD</option>";
-  foreach(glob("$ename-version-*") as $k=>$v )
-  {
-    $version_time = date("d.m.Y H:i",str_replace(".gz","",str_replace("$ename-version-","",$v))  );
-    $version_suffix = str_replace("$ename","",$v);
-    $selected = "";
-    if($version_suffix == $current_version) $selected="selected";
-    $vlist .= "<option $selected value=\"$version_suffix\">$version_time</option>";
-  }
-  $text = htmlspecialchars($text);
-  echo '
+        if(@$_POST["clear_versions"]&&@$_POST["multi-id"]==@$multiId)
+        {
+            foreach(glob("$ename-version-*") as $k=>$v)
+                unlink($v);
+
+            $current_version = "";
+        }
+        elseif(@$_POST["edit-submit"]&&@$_POST["multi-id"]==@$multiId)
+        {
+            $time = time();
+            $target_name=$ename."-version-".$time;
+            $diff_name=$ename."-diff-".$time;
+            if (file_exists($ename)) @chmod($ename, 0666); // see bug #64
+            @rename($ename,$target_name);
+            $f = fopen($ename,"w");
+            fputs($f, @$_POST["edit-text"]);
+            fclose($f);
+            chmod($ename,0666);
+            $current_version = "";
+            // FIXME: this should be deleted at all.
+            // include_once("{$SETTINGS["elementsdir"]}cms/addrssfeed.php");
+            // addrssfeed("Изменения в разделе", "сабж","","");
+            system("diff $target_name $ename > $diff_name");
+            send_notify_mail("developers","[Lesh CMS notification] Изменена страница: $pageid",
+                "Была произведена правка страницы. Дифф:\n\r".
+                "=======================================\n\r".
+                file_get_contents($diff_name)."\n\r".
+                "=======================================\n\r".
+                "Теперь содержание страницы -- следующее:\n\r".
+                "=======================================\n\r".
+                file_get_contents($ename)."\n\r".
+                "=======================================\n\r"
+            );
+            unlink($diff_name);
+            system("gzip $target_name");
+        }
+        else $current_version = @$_POST["versions"];
+
+        if(file_exists($ename))
+        {
+            if(strpos($current_version,".gz") )
+            {
+                $f = gzopen($ename.$current_version,"r");
+                $text = gzread($f,10000000);
+                fclose($f);
+            }
+            else $text = file_get_contents($ename.$current_version);
+        }
+        elseif (@$text) {}
+        else $text = "$dtext";
+
+        if(!@$keys["-h"]) echo "<$tag>edit: $ename</$tag>";
+        $ty = "submit";
+        //echo $multiId;
+
+        $vlist = "<option value=\"\">HEAD</option>";
+        foreach(glob("$ename-version-*") as $k=>$v )
+        {
+            $version_time = date("d.m.Y H:i", str_replace(".gz","",str_replace("$ename-version-","",$v)) );
+            $version_suffix = str_replace("$ename","",$v);
+            $selected = "";
+            if($version_suffix == $current_version) $selected = "selected";
+            $vlist .= "<option $selected value=\"$version_suffix\">$version_time</option>";
+        }
+        $text = htmlspecialchars($text);
+        ?>
 <form method="post" enctype="multipart/form-data">
-<textarea rows='.$rows.' cols='.$cols.' name="edit-text">'.$text.'</textarea>
-<br>
-<input type="hidden" name="'.$pathv.'" value="'.$ename.'">
-<input type="hidden" name="multi-id" value="'.$multiId.'">
-<input type="'.$ty.'" name="edit-submit" value="'.$submitVal.'">
-Версия: <select name="versions">
-  '.$vlist.'
-</select> <input type="submit" name="set_version" value="Смотреть версию"/>
-<input type="submit" name="clear_versions" value="Очистить версии"/>
-<!-- input type="reset" value="'.$resetVal.'" -->
-</form>';  
+    <textarea rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
+        name="edit-text"><?php echo $text; ?></textarea>
+    <br />
+    <input type="hidden" name="<?php echo $pathv; ?>" value="<?php echo $ename;?>">
+    <input type="hidden" name="multi-id" value="<?php echo $multiId; ?>">
+    <input type="<?php echo $ty; ?>" name="edit-submit" value="<?php echo $submitVal; ?>">
+    Версия:
+    <select name="versions"><?php echo $vlist; ?></select>
+    <input type="submit" name="set_version" value="Смотреть версию"/>
+    <input type="submit" name="clear_versions" value="Очистить версии"/>
+</form>
+<?php
 }
 ?>

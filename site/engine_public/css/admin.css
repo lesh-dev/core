@@ -1,5 +1,7 @@
 body {
     background-color: #eefebe;
+    font-family: Arial, Verdana, Helvetica, Sans-Serif;
+    font-size: 12px;
 }
 
 a {
@@ -8,20 +10,21 @@ a {
 }
 
 a:link {
-    color: #9f0000;
+    color: #8f0000;
 }
 
 a:visited {
-    color: #7f0000;
+    color: #6f0000;
 }
 
 a:hover {
-    color: #af0000;
-    text-decoration: dotted;
+    color: #ef0000;
+    /*text-decoration: underline;*/
+    /*border-bottom: 1px dotted #ef0000;*/
 }
 
 a:active {
-    color: #af0000;
+    color: #ef0000;
 }
 
 a.h-menu-link {
@@ -35,6 +38,20 @@ a.h-menu-link {
     margin-right: 2px;
     font-family: sans-serif;
     font-size: 9pt;
+}
+
+div.container {
+    
+}
+
+div.menu {
+    float: left;
+    font-family: monospace;
+    font-size: 11pt;
+}
+
+div.content {
+    margin-left: 320px;
 }
 
 /* default padding is too small */

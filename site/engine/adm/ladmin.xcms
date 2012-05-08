@@ -3,104 +3,99 @@
 <# cms/linit #>
 <# locale #>
 <?php
-        $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
- 		include(translate("<! auth/ #editor #admin {$INFO["edit"]} !>"));
-?> 
+    $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
+    include(translate("<! auth/ #editor #admin {$INFO["edit"]} !>"));
+?>
 <# cms/.lightcreatepage-before #>
 <?php
-
-                if(@$_POST["delete-section"])
+    if(@$_POST["delete-section"])
+    {
+        $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
+        $list = glob("$dir/*",GLOB_ONLYDIR);
+        if($list)
+        {
+            echo '<script>alert("Не могу удалить! Сначала удалите все подразделы!");</script>';
+        }
+        else
+        {
+            $list = glob("$dir/*");
+            if($list) foreach ($list as $key=>$value)
+            {
+                unlink($value);
+            }
+            rmdir($dir);
+            echo '<script>alert("Удалено");</script>';
+            translate("<! redir ladmin 0!>");
+            //die();
+            $pageid="index";
+            for($i=strlen($pageid)-1;$i>=0; $i--)
+            {
+                if($pageid[i]=='/')
                 {
-                  $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
-                  $list = glob("$dir/*",GLOB_ONLYDIR);
-                  if($list) 
-                  {
-                    echo '<script>alert("Не могу удалить! Сначала удалите все подразделы!");</script>';
-                  }     
-                  else 
-                  {
-                    $list = glob("$dir/*");
-                    if($list) foreach ($list as $key=>$value) 
-                    {
-                      unlink($value);
-                    }
-                    rmdir($dir); 
-                    echo '<script>alert("Удалено");</script>';
-                    translate("<! redir ladmin 0!>");
-                    //die();
-                    $pageid="index";
-                    for($i=strlen($pageid)-1;$i>=0; $i--)
-                    {
-                      if($pageid[i]=='/'){$pageid[i]=substr($pageid,0,$i-1); break;}
-                    }
-                    
-                    $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
-                    @$_GET["act"]="";
-                  }             
+                    $pageid[i]=substr($pageid,0,$i-1);
+                    break;
                 }
+            }
 
+            $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
+            @$_GET["act"]="";
+        }
+    }
 ?>
-
 <html>
-  <head>
-  <# cms/head #>
-  <link rel="stylesheet" type="text/css" href="<?php echo "/$web_prefix/$engine_pub/css/admin.css"; ?>" />
-  <script language="javascript" type="text/javascript" src="<?php echo "/$web_prefix/$engine_pub/js/jquery-1.7.1.min.js"?>"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $('div.view').hide();
-      $('div.slide').click(function() {
-        $('div.view').slideToggle(400);
-        return false;
-      });
-    });
-  </script>
-  </head>
-  
-  <body>
-   
-    <b>xcms admin: </b> <?php echo $pageid; ?> (<# cms/header #>)
-    <?php
-      $urlAdm = "&amp;page=$pageid&amp;ref=ladmin";
-      $urlIdx = "&amp;page=$pageid&amp;ref=index";
-      include(translate('
-        <a href="?act=cChapter'.$urlAdm.'" class="h-menu-link">Subpage</a>
-        <a href="?act=delete'.$urlAdm.'" class="h-menu-link">Delete</a>
-        <a href="?'.$urlIdx.'" class="h-menu-link">User Mode</a>
-        <a href="?act=cleanprec'.$urlAdm.'" class="h-menu-link">Clear Cache</a>
-	    |
-        <a href="?act=myprofile'.$urlAdm.'" class="h-menu-link"><b>'.$login.'</b></a>
-        <a href="?act=cpasswd'.$urlAdm.'" class="h-menu-link">Change Password</a>
-        <a href="?act=logout&amp;page='."$pageid&ref=$ref".'" class="h-menu-link">Logout</a>
-        |
-        <a href="?act=userlist'.$urlAdm.'" class="h-menu-link">Users</a>
-        <a href="?act=groupadmin'.$urlAdm.'" class="h-menu-link">Groups</a>
-        <a href="?mode=mailer'.$urlAdm.'" class="h-menu-link">Notifications</a>
-        <a href="?act=css'.$urlAdm.'" class="h-menu-link">Template</a>
-      '));
-    ?>
-    <hr>
-    
-    <div id="container">
-        <div style="float:left; width: 100%;  margin-right:300px; ">
-           <div style="position:absolute; width:300px;">
-              <div class="menu" style="font-family: monospace; 
-			     font-size: 12pt; ">
-                 <b> Menu </b>
-                 <# cms/menu/display displayall devel start=1 end=5 #>
+    <head>
+        <# cms/head #>
+        <link rel="stylesheet" type="text/css" href="<?php echo "/$web_prefix/$engine_pub/css/admin.css"; ?>" />
+        <script language="javascript" type="text/javascript" src="<?php echo "/$web_prefix/$engine_pub/js/jquery-1.7.1.min.js"?>"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('div.view').hide();
+                $('div.slide').click(function() {
+                    $('div.view').slideToggle(400);
+                    return false;
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div style="padding: 2px"><b>Страница:</b> <tt><?php echo $pageid; ?></tt> (<# cms/header #>)</div>
+        <div>
+        <?php
+            $urlAdm = "&amp;page=$pageid&amp;ref=ladmin";
+            $urlIdx = "&amp;page=$pageid&amp;ref=index";
+            include(translate('
+                <a href="?act=cChapter'.$urlAdm.'" class="h-menu-link">Подстраница</a>
+                <a href="?act=delete'.$urlAdm.'" class="h-menu-link">Удалить</a>
+                <a href="?'.$urlIdx.'" class="h-menu-link">Предпросмотр</a>
+                <a href="?act=cleanprec'.$urlAdm.'" class="h-menu-link">Очистить кэш</a>
+                |
+                <a href="?act=myprofile'.$urlAdm.'" class="h-menu-link"><b>'.$login.'</b></a>
+                <a href="?act=cpasswd'.$urlAdm.'" class="h-menu-link">Сменить пароль</a>
+                <a href="?act=logout&amp;page='."$pageid&ref=$ref".'" class="h-menu-link">Выйти</a>
+                |
+                <a href="?act=userlist'.$urlAdm.'" class="h-menu-link">Пользователи</a>
+                <a href="?act=groupadmin'.$urlAdm.'" class="h-menu-link">Группы</a>
+                <a href="?mode=mailer'.$urlAdm.'" class="h-menu-link">Уведомления</a>
+                <a href="?act=css'.$urlAdm.'" class="h-menu-link">Стиль</a>
+            '));
+        ?>
+        </div>
+        <hr>
+        <div class="container">
+            <div class="menu">
+                <b>Menu</b>
+                <# cms/menu/display displayall devel start=1 end=5 #>
+            </div>
+            <div class="content">
+            <?php if(!@$_GET["act"])echo
+                ' <td>
+                    <a class="menulinkA" href="?ref=ladmin&page='.$pageid.'">[Контент]</a>
 
-              </div>
-           </div>
-           <div style="position:absolute; width: 100%;  margin-left:300px; ">
-                                    <?php if(!@$_GET["act"])echo
-                                    ' <td bgcolor="#FFFFFF" > 
-                                      <a class="menulinkA" href="?ref=ladmin&page='.$pageid.'">[Контент]</a>
-
-                                      <a class="menulinkA" href="?mode=meta&ref=ladmin&page='.$pageid.'">[Настройки]</a>
-                                      <a class="menulinkA" href="?mode=lightimageeditor&ref=ladmin&page='.$pageid.'">[Картинки]</a>
-                                      <a class="menulinkA" href="?mode=acsess&ref=ladmin&page='.$pageid.'">[Доступ]</a>
-                                    </td> '; 
-				    ?>
+                    <a class="menulinkA" href="?mode=meta&ref=ladmin&page='.$pageid.'">[Настройки]</a>
+                    <a class="menulinkA" href="?mode=lightimageeditor&ref=ladmin&page='.$pageid.'">[Картинки]</a>
+                    <a class="menulinkA" href="?mode=acsess&ref=ladmin&page='.$pageid.'">[Доступ]</a>
+                </td> ';
+            ?>
 
 <?php
   if(@$_GET["mode"] == "")
@@ -210,7 +205,7 @@
 
            </div> 
         </div>
-    </div>
+    </div><!-- containter -->
 <br />
 
     
