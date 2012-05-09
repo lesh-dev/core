@@ -63,7 +63,7 @@ if($need)
     $text = str_replace("?page=$page\"","$tag\"",$text);
   }  
   //// Обработка синтаксиса: <code>Моноширинный текст</code>
-  $text = str_replace("<code>",'<div style="margin-left:7pt;border-left:solid;border-color:green;"><div style="font-family:monospace;margin-left:10pt;">',$text);
+  $text = str_replace("<code>",'<div class="monospace-outer"><div class="monospace-inner">',$text);
   $text = str_replace("</code>","</div></div>",$text);
 
   //// Обработка сокращенного наименования
