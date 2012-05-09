@@ -13,6 +13,10 @@ sudo rm -rf "$dest/.prec/"*
 sudo rm -rf "$dest/admin_doc/.prec/"*
 sudo mkdir -p "$dest/.prec/"
 sudo mkdir -p "$dest/admin_doc/.prec/"
-sudo touch "$dest/"{.htaccess,install.php,settings.php}
-sudo chown -R apache:apache "$dest/"{.prec,fizlesh.ru-content,.htaccess,install.php,settings.php}
+sudo touch "$dest/"{.htaccess,settings.php}
+if [ "$1" = "-f" ] ; then
+    sudo touch "$dest/install.php"
+    sudo chown -R apache:apache "$dest/install.php"
+fi
+sudo chown -R apache:apache "$dest/"{.prec,fizlesh.ru-content,.htaccess,settings.php}
 sudo chown -R apache:apache "$dest/admin_doc/"{.prec,.htaccess,settings.php}
