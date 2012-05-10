@@ -155,7 +155,7 @@
         <a href="index.php">Proceed to site.</a>
         <?php
         die();
-    } 
+    }
 	$titles[1] = "Install >>";
     ?>
     <input type="hidden" name="pageid" value="<?php echo $pageid+1; ?>" />
