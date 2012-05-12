@@ -13,7 +13,7 @@
             имеет значение (в смысле кэширования)
 */
 $ARG = implode(",",$argv);
-$compiled = ".prec/cms_readfile_".md5($ARG).md5($source).".dat";
+$compiled = ".prec/cms_readfile_".md5($ARG).md5(@$source).md5(@$text).".dat";
 
 $need = false;
 if(!file_exists($compiled))$need = true;
@@ -46,9 +46,38 @@ if($need)
     }
     if(!$text_defined)
         $text = file_get_contents($source);
-    //// Обработка синтаксиса: ${include:pageid} -- раскрывается в _содержимое_ целого раздела
     //// Обработка синтаксиса: ${prefix} раскрывается в путь до текущего $pageid
     $text = str_replace("\${prefix}","/$web_prefix${SETTINGS["datadir"]}cms/pages/$pageid",$text);
+    //// Обработка синтаксиса: ${include:pageid} -- раскрывается в _содержимое_ целого раздела
+    //// Обработка произвольных dollar notation
+    $dir = "$engine_dir"."plugins/dollar/";
+    foreach(glob("$dir*.php") as $notation)
+    {
+      $name = $notation;
+      $name = str_replace("$dir","",$name);
+      $name = str_replace(".php","",$name);
+      while(1)
+      {   
+	  $p = strpos($text,"\${"."$name");
+	  if($p === FALSE) 
+	    break;
+	  $l = strpos($text,"}",$p);
+	  $target = substr($text,$p,$l-$p);
+	  $target = substr($target,strlen($name)+3);
+	  if(strlen($target))
+	    $uargs = explode(":",$target);
+	  else 
+	    $uargs = array();
+	  //var_dump($args);
+	  //$text = str_replace("$name","WAAAGH",$text);
+	  $idata = "";
+	  foreach($uargs as $k=>$v)
+	  {
+	     $idata .= "\$_$k = \"$v\";";
+	  }
+	  $text = substr($text,0,$p) . "<? $idata ; include(\"$engine_dir/plugins/dollar/$name.php\"); ?>". substr($text,$l+1);
+      }
+    }
     //// Обработка синтаксиса: [[Текст ссылки:pageid]]
     //$text = preg_replace('x', "<a href=\"/$web_prefix?ref={$_GET['ref']}&page=\\1\">link</a>", $text);
     $text = preg_replace('/\[\[\/([a-zA-Z]*)\]\]/Ui', "<a href=\"/$web_prefix\\1\">link</a>", $text);
