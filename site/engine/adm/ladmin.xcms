@@ -2,6 +2,7 @@
 <?php if(!@$_GET["page"])$_GET["page"]="index";?>
 <# cms/linit #>
 <# locale #>
+<# url #>
 <?php
     $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
     include(translate("<! auth/ #editor #admin {$INFO["edit"]} !>"));
@@ -61,158 +62,141 @@
         <div style="padding: 2px"><b>Страница:</b> <tt><?php echo $pageid; ?></tt> (<# cms/header #>)</div>
         <div>
         <?php
-            $urlAdm = "&amp;page=$pageid&amp;ref=ladmin";
-            $urlIdx = "&amp;page=$pageid&amp;ref=index";
             include(translate('
-                <a href="?act=cChapter'.$urlAdm.'" class="h-menu-link">Подстраница</a>
-                <a href="?act=delete'.$urlAdm.'" class="h-menu-link">Удалить</a>
-                <a href="?'.$urlIdx.'" class="h-menu-link">Предпросмотр</a>
-                <a href="?act=cleanprec'.$urlAdm.'" class="h-menu-link">Очистить кэш</a>
+                <a'.xcms_href(array('act'=>'cChapter', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Подстраница</a>
+                <a'.xcms_href(array('act'=>'delete', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Удалить</a>
+                <a'.xcms_href(array('page'=>$pageid, 'ref'=>'index')).'class="h-menu-link">Предпросмотр</a>
+                <a'.xcms_href(array('act'=>'cleanprec', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Очистить кэш</a>
                 |
-                <a href="?act=myprofile'.$urlAdm.'" class="h-menu-link"><b>'.$login.'</b></a>
-                <a href="?act=cpasswd'.$urlAdm.'" class="h-menu-link">Сменить пароль</a>
-                <a href="?act=logout&amp;page='."$pageid&ref=$ref".'" class="h-menu-link">Выйти</a>
+                <a'.xcms_href(array('act'=>'myprofile', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link"><b>'.$login.'</b></a>
+                <a'.xcms_href(array('act'=>'cpasswd', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Сменить пароль</a>
+                <a'.xcms_href(array('act'=>'logout', 'page'=>$pageid, 'ref'=>$ref)).'class="h-menu-link">Выйти</a>
                 |
-                <a href="?act=userlist'.$urlAdm.'" class="h-menu-link">Пользователи</a>
-                <a href="?act=groupadmin'.$urlAdm.'" class="h-menu-link">Группы</a>
-                <a href="?mode=mailer'.$urlAdm.'" class="h-menu-link">Уведомления</a>
-                <a href="?act=css'.$urlAdm.'" class="h-menu-link">Стиль</a>
+                <a'.xcms_href(array('act'=>'userlist', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Пользователи</a>
+                <a'.xcms_href(array('act'=>'groupadmin', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Группы</a>
+                <a'.xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Уведомления</a>
+                <a'.xcms_href(array('act'=>'css', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Стиль</a>
             '));
         ?>
         </div>
-        <hr>
+        <hr />
         <div class="container">
             <div class="menu">
                 <b>Menu</b>
                 <# cms/menu/display displayall devel start=1 end=5 #>
             </div>
             <div class="content">
-            <?php if(!@$_GET["act"])echo
-                ' <td>
-                    <a class="menulinkA" href="?ref=ladmin&page='.$pageid.'">[Контент]</a>
-
-                    <a class="menulinkA" href="?mode=meta&ref=ladmin&page='.$pageid.'">[Настройки]</a>
-                    <a class="menulinkA" href="?mode=lightimageeditor&ref=ladmin&page='.$pageid.'">[Картинки]</a>
-                    <a class="menulinkA" href="?mode=acsess&ref=ladmin&page='.$pageid.'">[Доступ]</a>
-                </td> ';
+            <?php if(!@$_GET["act"])
+                echo '
+                    <a'.xcms_href(array('page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Контент</a>
+                    <a'.xcms_href(array('mode'=>'meta', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Настройки</a>
+                    <a'.xcms_href(array('mode'=>'lightimageeditor', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Картинки</a>
+                    <a'.xcms_href(array('mode'=>'acsess', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Доступ</a>';
             ?>
-
 <?php
-  if(@$_GET["mode"] == "")
-    @$_GET["mode"] = @$_GET["act"];
-  if(@$_GET["act"] == "")
-    @$_GET["act"] = @$_GET["mode"];
-  if(@$_GET["act"]=="cpasswd")
-  {
-    include(translate('<! auth/chpassw !>'));
-  }
-  else if(@$_GET["act"]=="cleanprec") include(translate("<! cleanprec !>"));
-  else if(@$_GET["act"]=="delete")
-  {
-    echo '
-      <h3><font color="red">Предупреждение.</font></h3>
-      Вы хотите удалить текущий раздел <b>'.@file_get_contents("data/cms/pages/$pageid/applymenu").'</b>.
-      <br>Вы <b>точно</b> уверены, что хотите это сделать?
-      
-      <form method="post"><input type="hidden" name="delete-section" value="true">
-      <input type="submit" value="Да, я точно уверен, что следует удалить раздел '.@file_get_contents("data/cms/pages/$pageid/applymenu").'">
-      </form>
-    ';
-    
-  }
-  else if(@$_GET["mode"]=="meta" || @$_GET["act"]=="meta")
-  {
-    include(translate("<! cms/.lighteditmenu !>"));
-    include(translate("<! cms/.lighteditrename !>"));
-    include(translate("<! cms/editmetatags !>"));
-    include(translate("<! cms/.lighticoneditor !>"));
-  }
-  else if(@$_GET["mode"]=="lightimageeditor" )
-  {
-    include(translate("<! cms/.lightimageeditor !>"));
-  }
-  else if(@$_GET["mode"]=="configuration" || @$_GET["act"]=="configuration")
-  {
-    $editfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/info";    
-    include(translate('<! edit/tag `edit`,`view`,`installed` !>'));  
-  }
-  else if(@$_GET["mode"]=="mailer" )
-  {
-    $editfile = "{$SETTINGS["datadir"]}cms/mailer.conf";    
-    include(translate('<! edit/tag `edit`,`view`,`installed` !>'));  
-  }
-  else if(@$_GET["mode"]=="documentation")
-  {
-    $editfile = "help/pagetype_$type.html";
-    $text = "Справки нет. Напишите что-нибудь...";
-    if(
-    	(@$_POST['change-help'] || !file_exists($editfile) || @$_POST["edit-submit"])
-    	&& ($login == "root") )
+    if(@$_GET["mode"] == "")
+        @$_GET["mode"] = @$_GET["act"];
+    if(@$_GET["act"] == "")
+        @$_GET["act"] = @$_GET["mode"];
+    if(@$_GET["act"]=="cpasswd")
     {
-    	include(translate('<! edit/file !>'));
-	echo '<form method="POST"><input type="submit" value="Закончить." name="change-help-end"></form>';
+        include(translate('<! auth/chpassw !>'));
     }
-    else 
+    else if(@$_GET["act"]=="cleanprec") include(translate("<! cleanprec !>"));
+    else if(@$_GET["act"]=="delete")
     {
-    	$source = $editfile;
-    	include(translate("<! cms/readtext !>"));
-	if($login == "root") 
-		echo '<p><form method="POST"><input type="submit" value="Изменить!" name="change-help"></form>';    
+        echo '
+            <h3><font color="red">Предупреждение.</font></h3>
+            Вы хотите удалить текущий раздел <b>'.
+            @file_get_contents("data/cms/pages/$pageid/applymenu").'</b>.
+            <br />Вы <b>точно</b> уверены, что хотите это сделать?
+            <form method="post"><input type="hidden" name="delete-section" value="true">
+            <input type="submit" value="Да, я точно уверен, что следует удалить раздел '.
+            @file_get_contents("data/cms/pages/$pageid/applymenu").'">
+            </form>
+            ';
+
     }
-    
-  }
-  else if(@$_GET["act"]=="css")
-  {
-    include(translate('<! cms/.lightcsseditor !>'));  
-  }
-  else if(@$_GET["act"]=="taglist")
-  {
-    include(translate('<! edit/taglistadmin !>'));  
-  }
-  else if(@$_GET["mode"]=="acsess")
-  {
-    include(translate("<! cms/.lightacsesseditor !>"));
-  }
-  else if(@$_GET["act"]=="groupadmin")
-  {
-    $editfile = "{$SETTINGS["datadir"]}groups";    
-    include(translate("<! edit/tag !>"));
-  }
-  else if(@$_GET["mode"]=="register_form")
-  {
-    include(translate('<! auth/ #admin !><! auth/register !>'));
-  }
-  else if(@$_GET["act"]=="rename_section")
-  {
-    include(translate("<! cms/.lightrenamesection !>"));
-  }
-  else if(@$_GET["act"]=="userlist")
-  {
-    $preface = "ref=ladmin&act=userlist&page=$pageid";
-    include(translate("<! auth/admin !>"));
-  }
-  else if(@$_GET["act"]=="myprofile")
-  {
-    $preface = "ref=ladmin&act=userlist&page=$pageid";
-    include(translate("<! auth/myprofile !>"));
-  }
-  else if(@$_GET["act"]=="cChapter")
-    include(translate("<! cms/.lightcreatepage-after !>"));
-  else include(translate('<! cms/.lightedittable !>'));
+    else if(@$_GET["mode"]=="meta" || @$_GET["act"]=="meta")
+    {
+        include(translate("<! cms/.lighteditmenu !>"));
+        include(translate("<! cms/.lighteditrename !>"));
+        include(translate("<! cms/editmetatags !>"));
+        include(translate("<! cms/.lighticoneditor !>"));
+    }
+    else if(@$_GET["mode"]=="lightimageeditor" )
+    {
+        include(translate("<! cms/.lightimageeditor !>"));
+    }
+    else if(@$_GET["mode"]=="configuration" || @$_GET["act"]=="configuration")
+    {
+        $editfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/info";
+        include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
+    }
+    else if(@$_GET["mode"]=="mailer" )
+    {
+        $editfile = "{$SETTINGS["datadir"]}cms/mailer.conf";
+        include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
+    }
+    else if(@$_GET["mode"]=="documentation")
+    {
+        $editfile = "help/pagetype_$type.html";
+        $text = "Справки нет. Напишите что-нибудь...";
+        if (
+            (@$_POST['change-help'] || !file_exists($editfile) || @$_POST["edit-submit"])
+            && ($login == "root") )
+        {
+            include(translate('<! edit/file !>'));
+            echo '<form method="POST"><input type="submit" value="Закончить." name="change-help-end"></form>';
+        }
+        else
+        {
+            $source = $editfile;
+            include(translate("<! cms/readtext !>"));
+            if($login == "root")
+            echo '<p><form method="POST"><input type="submit" value="Изменить!" name="change-help"></form>';
+        }
+    }
+    else if(@$_GET["act"]=="css")
+    {
+        include(translate('<! cms/.lightcsseditor !>'));
+    }
+    elseif(@$_GET["act"]=="taglist")
+    {
+        include(translate('<! edit/taglistadmin !>'));
+    }
+    elseif(@$_GET["mode"]=="acsess")
+    {
+        include(translate("<! cms/.lightacsesseditor !>"));
+    }
+        elseif(@$_GET["act"]=="groupadmin")
+    {
+        $editfile = "{$SETTINGS["datadir"]}groups";
+        include(translate("<! edit/tag !>"));
+    }
+    elseif(@$_GET["mode"]=="register_form")
+    {
+        include(translate('<! auth/ #admin !><! auth/register !>'));
+    }
+    elseif(@$_GET["act"]=="rename_section")
+    {
+        include(translate("<! cms/.lightrenamesection !>"));
+    }
+    elseif(@$_GET["act"]=="userlist")
+    {
+        $preface = "ref=ladmin&amp;act=userlist&amp;page=$pageid";
+        include(translate("<! auth/admin !>"));
+    }
+    elseif(@$_GET["act"]=="myprofile")
+    {
+        $preface = "ref=ladmin&amp;act=userlist&amp;page=$pageid";
+        include(translate("<! auth/myprofile !>"));
+    }
+    elseif(@$_GET["act"]=="cChapter")
+        include(translate("<! cms/.lightcreatepage-after !>"));
+    else include(translate('<! cms/.lightedittable !>'));
 ?>
-                                                      </div></td>
-    
-
-           </div> 
-        </div>
+        </div><!-- content -->
     </div><!-- containter -->
-<br />
-
-    
   </body>
 </html>
-
-                             
-                                    
-                                        
-                                

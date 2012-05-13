@@ -1,0 +1,24 @@
+<?php
+	/*
+	Transforms an key-value-array to properly encoded URI part:
+
+	array('param'=>'value1 value2', 'super'=>'puper') -->
+	&amp;param=value1%20value2&amp;super=puper
+	*/
+    function xcms_url($aArgs) {
+        $sRes = '';
+        foreach ($aArgs as $sK => $sV)
+        {
+        	$sRes = "$sRes&amp;$sK=".rawurlencode($sV);
+        }
+        return $sRes;
+    }
+
+	/*
+	Same as xcms_url, but makes complete href="..." attribute
+	containing given parameters
+	*/
+    function xcms_href($aArgs) {
+    	return ' href="?'.xcms_url($aArgs).'" ';
+    }
+?>

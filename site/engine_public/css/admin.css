@@ -36,8 +36,22 @@ a.h-menu-link {
     padding-right: 5px;
     margin-left: 2px;
     margin-right: 2px;
-    font-family: sans-serif;
     font-size: 9pt;
+}
+
+a.h-menu-tab {
+    background: #bfbfbf;
+    border-radius: 2px;
+    border: 1px solid #7f0000;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-bottom: 10px;
+    margin-top: 3px;
+    font-size: 10pt;
 }
 
 div.container {
@@ -56,7 +70,24 @@ div.content {
 
 /* default padding is too small */
 textarea {
-    padding: 5px;
+    padding: 4px;
+    border: 1px solid #7f7f7f;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+input {
+    border: 1px solid #7f7f7f;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+input[type="submit"] {
+    border: 2px solid #7f7f7f;
+    border-radius: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    min-width: 70px;
 }
 
 a.menu-active {
