@@ -32,7 +32,7 @@ def ProcessColor(color):
 	
 if len(sys.argv) < 2:
 	print "Syntax:   email-to-image.py <email> [ --back #RGB-back-color ] [ --text #RGB-text-color ] [ --size font-size ] [ --border border-width ] " 
-	print "Example:  email-to-image.py dmvn@mccme.ru ---back 9EC78B --text 000000 --size 12 --border 2"
+	print "Example:  email-to-image.py dmvn@mccme.ru --back 9EC78B --text 000000 --size 12 --border 2"
 	print "Default colors are white (FFFFFF) for background and black (000000) for text."
 	print "Default font size is 12, border width is 2. " 
 	sys.exit(1)
