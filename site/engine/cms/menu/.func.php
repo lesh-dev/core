@@ -91,6 +91,7 @@ usort($html_array,"sort_by_mtime");
     if(!strstr($options,"+hault"))
       if(@$array) foreach ($array as $key=>$value)
       {
+	if(!file_exists("$value/info")) continue;
         if(strstr($options,"+devel") || strstr($pageid,str_replace("{$SETTINGS["datadir"]}cms/pages/","",$value)))
           cms_menu_make($value,$MENUTEMPLATES,$menuLevel+1,$addhrefparams,$options,$startLevel,$endLevel);
         else

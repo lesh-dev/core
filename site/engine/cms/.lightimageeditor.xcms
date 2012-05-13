@@ -1,7 +1,7 @@
 <?php
                 $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
                 $prex = "${SETTINGS["datadir"]}cms/pages/$pageid";
-                if(@$_POST["Upload-image"])
+                /*if(@$_POST["Upload-image"])
                 {
                   $name = $login."-".mktime();
                   $lpic = "$dir/$name.pic";
@@ -15,10 +15,16 @@
                   $LIST["comment"] = @$_POST["image-comment"];
                   $LIST["owner"] = $login;
                   saveList($LIST,$lpic);
-                }
+                }*/
                 if(@$_POST["S-Upload-image"])
                 {
-                  $name = $login."-".mktime();
+                  //$name = $login."-".mktime();
+                  $name = @$_POST["image-target"];
+		  if(!strlen($name))
+		  {
+		    echo "<h3>Wrong or empty image name</h3>";
+		    return ;
+		  }
                   $lpic = "$dir/$name.pic";
                   $bpic = "$dir/$name.jpeg";
                   $spic = "$dir/$name-preview.jpeg";
@@ -64,7 +70,7 @@
                 //echo '</table>';
               
                 echo '              <form enctype="multipart/form-data" method="post">';
-              if(function_exists("imagecreate"))
+              /*if(function_exists("imagecreate"))
               {
                echo '<table>
                 <tr><td>Имя<tr><td><input name="image-name" size="4">
@@ -74,13 +80,14 @@
                 <input type="submit" name="Upload-image" value="Добавить">
               </form>';              
               }
-              else
+              else*/
               {
-               echo '<table>
+               echo '<h3>Добавить картинку</h3><table>
                 <input name="image-name" value="auto-uploaded" type="hidden">
                 <input name="image-comment" value="" type="hidden">
-                <tr><td>Картинка<tr><td><input type="file" size="60" accept="image/*" name="big-image">
-                <tr><td>Маленькая картинка<tr><td><input size="60" type="file" accept="image/*" name="small-image">
+                <tr><td>Наименование<br/><font size="-1">Выберите имя файла -- английское, без пробелов</font><td><input name="image-target" />
+                <tr><td>Картинка<td><input type="file" size="60" accept="image/*" name="big-image">
+                <tr><td>Маленькая картинка<td><input size="60" type="file" accept="image/*" name="small-image">
                </table>
                 <input type="submit" name="S-Upload-image" value="Добавить">
               </form>

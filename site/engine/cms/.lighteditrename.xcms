@@ -13,7 +13,10 @@
 		$tags = @unserialize(@file_get_contents("{$SETTINGS["datadir"]}tags/list"));
 		if(@strlen(@$tags[@$new_tag]))
 		{
-		    echo "<font color=\"red\"><b>Error: this tag already exists in page ".@$tags[@$new_tag]."</b></font>";
+		    if($old_tag != $new_tag)
+		      echo "<font color=\"red\"><b>Error: this tag already exists in page ".@$tags[@$new_tag]."</b></font>";
+		    else
+		      echo "<font color=\"green\"><b>Notice. Tag list regenerated, but You've made no changes.</b></font>";
 		}
 		else
 		{
@@ -29,6 +32,7 @@
 		    $f = fopen("{$SETTINGS["datadir"]}tags/list","w");
 		    fputs($f,serialize($tags));
 		    fclose($f);
+		    echo "<font color=\"green\"><b>Notice. Tag list regenerated.</b></font>";
 		}
 		include(translate('<! cms/build_rewrite !>'));
 	}

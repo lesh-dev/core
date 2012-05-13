@@ -91,6 +91,12 @@
             $vlist .= "<option $selected value=\"$version_suffix\">$version_time</option>";
         }
         $text = htmlspecialchars($text);
+	
+	  if(@$_POST["edit-preview"])
+	  {
+	    $text = @$_POST["edit-text"];
+	  }
+	
         ?>
 <form method="post" enctype="multipart/form-data">
     <textarea rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
@@ -99,11 +105,18 @@
     <input type="hidden" name="<?php echo $pathv; ?>" value="<?php echo $ename;?>">
     <input type="hidden" name="multi-id" value="<?php echo $multiId; ?>">
     <input type="<?php echo $ty; ?>" name="edit-submit" value="<?php echo $submitVal; ?>">
+    <input type="submit" name="edit-preview" value="Предпросмотр" />
     Версия:
     <select name="versions"><?php echo $vlist; ?></select>
     <input type="submit" name="set-version" value="Смотреть версию"/>
     <!--<input type="submit" name="clear-versions" value="Очистить версии"/>-->
 </form>
+<?php
+  if(@$_POST["edit-preview"])
+  {
+    include(translate("<! cms/readtext --markdown --text !>"));
+  }
+?>
 <?php
 }
 ?>

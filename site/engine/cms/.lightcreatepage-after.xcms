@@ -7,7 +7,7 @@
 <form method="post">
 <table>
 <tr><td><h3>Настройки</h3>
-<tr><td>Служебное имя <br><font size="=-1">Если Вы не знаете, что это такое - оставьте без изменений.</font><td><input name="create-name" value="<?php echo $login.'-'.mktime(); ?>">
+<tr><td>Служебное имя <br><font size="=-1">Выберите красивое, удобочитаемое, английское имя без пробелов.</font><td><input name="create-name" value="">
 <!-- <tr><td>Глобальный<br><font size="=-1">Считать этот раздел основным, а не подразделом текущего раздела</font><td><input type="checkbox" name="global"> -->
 
 <?php
