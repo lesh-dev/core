@@ -121,7 +121,7 @@ if($need)
     //// Обработка тире и неразрывных пробелов
     $text = str_replace("---", "&#8212;", $text);
     // avoid HTML comments replacing here
-    $text = preg_replace('/([^<])--([^>])/', '\1&#8211;\2', $text);
+    $text = preg_replace('/([^!])--([^>])/', '\1&#8211;\2', $text);
     $text = str_replace("~","&nbsp;", $text);
 
     //// Обработка сокращенного наименования
