@@ -55,6 +55,9 @@ if($need)
     $text = preg_replace('/\[\[(.*):\/([A-Za-z0-9_\/\-]*)\]\]/Ui', "<a href=\"/$web_prefix\\2\">\\1</a>", $text);
     $text = preg_replace('/\[\[([a-zA-Z]*)\]\]/Ui', "<a href=\"/$web_prefix?ref={$_GET['ref']}&page=\\1\">link</a>", $text);
     $text = preg_replace('/\[\[(.*):([A-Za-z0-9_\/\-]*)\]\]/Ui', "<a href=\"/$web_prefix?ref={$_GET['ref']}&page=\\2\">\\1</a>", $text);
+    // TODO (#204): это костыли, надо их выкинуть или написать нормально. Не должно быть на странице
+    // никаких ссылок, кроме как через теги. В любом случае искать в урлах последовательность
+    // вида ref=index&page=... это очень странно 
     //// Замена всех ссылок на страницы на их тег-версии
     $tags = @unserialize(@file_get_contents("${SETTINGS["datadir"]}tags/list"));
     if($tags)foreach($tags as $tag=>$page)
