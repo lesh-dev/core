@@ -105,17 +105,15 @@
     else if(@$_GET["act"]=="cleanprec") include(translate("<! cleanprec !>"));
     else if(@$_GET["act"]=="delete")
     {
-        echo '
-            <h3><font color="red">Предупреждение.</font></h3>
-            Вы хотите удалить текущий раздел <b>'.
-            @file_get_contents("data/cms/pages/$pageid/applymenu").'</b>.
-            <br />Вы <b>точно</b> уверены, что хотите это сделать?
-            <form method="post"><input type="hidden" name="delete-section" value="true">
-            <input type="submit" value="Да, я точно уверен, что следует удалить раздел '.
-            @file_get_contents("data/cms/pages/$pageid/applymenu").'">
-            </form>
-            ';
-
+        $sec_name = @file_get_contents("data/cms/pages/$pageid/applymenu");?>
+        <h3 style="color: red;">Предупреждение</h3>
+        Вы хотите удалить текущий раздел <b><?php echo $sec_name; ?></b>.<br />
+        Вы <b>точно</b> уверены, что хотите это сделать?
+        <form method="post">
+            <input type="hidden" name="delete-section" value="true">
+            <input type="submit" value="Да, я точно уверен, что следует
+                удалить раздел <?php echo $sec_name; ?>">
+        </form><?php
     }
     else if(@$_GET["mode"]=="meta" || @$_GET["act"]=="meta")
     {
@@ -184,12 +182,12 @@
     }
     elseif(@$_GET["act"]=="userlist")
     {
-        $preface = "ref=ladmin&amp;act=userlist&amp;page=$pageid";
+        $preface = xcms_url(array('ref'=>'ladmin', 'act'=>'userlist', 'page'=>$pageid));
         include(translate("<! auth/admin !>"));
     }
     elseif(@$_GET["act"]=="myprofile")
     {
-        $preface = "ref=ladmin&amp;act=userlist&amp;page=$pageid";
+        $preface = xcms_url(array('ref'=>'ladmin', 'act'=>'myprofile', 'page'=>$pageid));
         include(translate("<! auth/myprofile !>"));
     }
     elseif(@$_GET["act"]=="cChapter")
