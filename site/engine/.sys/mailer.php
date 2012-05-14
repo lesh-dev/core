@@ -2,7 +2,7 @@
     function send_notify_mail($targetList, $subject, $mailText)
     {
         global $SETTINGS, $login;
-        if (array_key_exists("mailerEnabled", $SETTINGS) && $SETTINGS["mailerEnabled"] === false) return;
+        if (array_key_exists("mailer_enabled", $SETTINGS) && $SETTINGS["mailer_enabled"] === false) return;
         $message = $mailText;
         $message = wordwrap($message, 160);
         $list = getList("{$SETTINGS["datadir"]}cms/mailer.conf");
