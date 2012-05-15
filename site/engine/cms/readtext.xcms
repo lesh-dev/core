@@ -48,6 +48,7 @@ if($need)
         $text = file_get_contents($source);
     //// Обработка синтаксиса: ${prefix} раскрывается в путь до текущего $pageid
     $text = str_replace("\${prefix}","/$web_prefix${SETTINGS["datadir"]}cms/pages/$pageid",$text);
+    $text = str_replace("\${web_prefix}","/$web_prefix${SETTINGS["datadir"]}",$text);
     //// Обработка синтаксиса: ${include:pageid} -- раскрывается в _содержимое_ целого раздела
     //// Обработка произвольных dollar notation
     $dir = "$engine_dir"."plugins/dollar/";
