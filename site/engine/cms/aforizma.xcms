@@ -1,5 +1,0 @@
-<?php
-  $list = file("{$SETTINGS["datadir"]}cms/aforizma");
-  $i = rand(0,count($list));
-  echo $list[$i];
-?>

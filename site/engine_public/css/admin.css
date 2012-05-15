@@ -54,10 +54,6 @@ a.h-menu-tab {
     font-size: 10pt;
 }
 
-div.container {
-    
-}
-
 div.menu {
     float: left;
     font-family: monospace;
@@ -95,3 +91,24 @@ a.menu-active {
     font-weight: bold;
 }
 
+table.user-list {
+    width: 100%;
+    border: none;
+    border-collapse: collapse;
+}
+
+td.user-names {
+    width: 150px;
+    text-align: left;
+    vertical-align: top;
+    border-right: 1px solid #7f7f7f;
+    padding: 2px;
+}
+
+td.user-ops {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 10px;
+    text-align: left;
+    vertical-align: top;
+}
