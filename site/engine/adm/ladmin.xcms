@@ -31,9 +31,9 @@
             $pageid="index";
             for($i=strlen($pageid)-1;$i>=0; $i--)
             {
-                if($pageid[i]=='/')
+                if($pageid[$i]=='/')
                 {
-                    $pageid[i]=substr($pageid,0,$i-1);
+                    $pageid[$i]=substr($pageid, 0, $i-1);
                     break;
                 }
             }
