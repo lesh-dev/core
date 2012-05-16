@@ -5,7 +5,7 @@ set -xe
 
 check_files()
 {
-    if find . -type f -name $1 | xargs grep $'\t' ; then
+    if find ../../site -type f -name $1 | xargs grep $'\t' ; then
         echo "Code style check failed for xcms files, see files above. "
         exit 1
     fi
