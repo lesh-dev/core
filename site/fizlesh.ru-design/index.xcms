@@ -48,14 +48,12 @@
         <!--a href="http://validator.w3.org/check?uri=referer"><img src="/<# web_prefix #>fizlesh.ru-design/pic/valid-html401-green.gif"
         alt="Valid HTML 4.01 Transitional" height="31" width="88"></a-->
         </td>
-        
         <td class="mainField roundBorders">
           <h2><?php echo @$INFO["header"];?></h2>
           <# if //!@$_GET["usr"]//cms/ #>
           <hr />
-          
           <div style="font-size: 8pt; text-align: center; height: 15px;">
-            <span style="">&copy; ФизЛЭШ, 2005&nbsp;&#8212;&nbsp;2012&nbsp;</span>
+            <span style="">&copy; ФизЛЭШ, 2005&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
             <a href="http://www.liveinternet.ru/click" style="vertical-align: middle" target="_blank"><img src="/<# web_prefix #>fizlesh.ru-design/pic/li.gif"
               id="counterImage" alt="" title="LiveInternet: number of visitors for today is shown"
               border="0" width="88" height="15"/></a>
