@@ -3,9 +3,14 @@ html {
 }
 
 body {
-  background-color: #c0d2ab;
-  background-image: url("pic/cells.png");
-  font-family: Tahoma, Verdana, Arial, sans-serif;
+    background-color: #c0d2ab;
+    background-image: url("pic/cells.png");
+    font-family: Tahoma, Verdana, Arial, sans-serif;
+    font-size: 10pt;
+}
+
+table {
+    font-size: 10pt;
 }
 
 div.monospace-outer {
