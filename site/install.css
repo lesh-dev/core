@@ -1,0 +1,56 @@
+body {
+    background-color: #eefebe;
+    font-family: Arial, Verdana, Helvetica, Sans-Serif;
+    font-size: 12px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:link {
+    color: #8f0000;
+}
+
+a:visited {
+    color: #6f0000;
+}
+
+a:hover {
+    color: #ef0000;
+}
+
+a:active {
+    color: #ef0000;
+}
+
+textarea {
+    padding: 4px;
+    border: 1px solid #7f7f7f;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+input {
+    border: 1px solid #7f7f7f;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+input[type="submit"] {
+    border: 2px solid #7f7f7f;
+    border-radius: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    min-width: 70px;
+}
+
+td {
+    font-family: Monospace;
+}
+td.key {
+    width: 200px;
+}
+
+td.value {
+}
