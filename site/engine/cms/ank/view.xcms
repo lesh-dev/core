@@ -1,7 +1,12 @@
 <?php
+  // Посылатор анкет (нужно проверять, что он вообще работает, пока
+  // в этом никакой уверенности нет
+  // TODO: Название у этого шаблона в высшей степени странное,
+  // надо его переименовать
+
   //include_once("{$SETTINGS["elementsdir"]}cms/common.php");
   //include_once("{$SETTINGS["elementsdir"]}cms/content/common.php");
-  
+
   if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
   {
     echo "<h1>Раздел не заполнен.</h1>";
@@ -15,9 +20,9 @@
 	$unixTime = mktime();
 	$hrTimestamp = date("Y.m.d H:i:s", $unixTime);
 	$fileName = date("Y.m.d-H.i.s", $unixTime).".xml";
-	
+
 	$studentName = "Школьнег";
-	
+
 	$aFields = array(
 	  "Name"=>"ФИО",
 	  "BirthDate"=>"Дата рождения",
@@ -39,7 +44,7 @@
 	    // someone hacked the js validator
 	    die("Invalid anketa data. ");
 	}
-	
+
 	// True programmers use UTF-8 only :)
 	$xml = simplexml_load_string('<?xml version="1.0" encoding="utf-8"?><Anketa/>');
 	$htmlContent = ""; // @@TABLE-CONTENT@
@@ -54,8 +59,8 @@
 	$_POST["HRModified"] = "";
 	// status
 	$_POST["Status"] = "new";
-	
-	foreach (@$_POST as $key=>$value) 
+
+	foreach (@$_POST as $key=>$value)
 	{
 	  if ($key == "Name") $studentName = $value;
 	  $xml->addChild($key, $value);
@@ -85,13 +90,13 @@
 	  $aPlainList[] = "Dimchik <demarin@mail.ru>";
 	  $aPlainList[] = "Mikhail Veltishchev <dichlofos.mv@gmail.com>";
 	  $aPlainList[] = "Dmitry Veltishchev <vdm-photo@ya.ru>";
-	  
+
 	  $aHTMLList[] = "Dara <dara-dara-dara@yandex.ru>";
 	  $aHTMLList[] = "Alena Zhigulina <zhigulinalena@yandex.ru>";
 	  $aHTMLList[] = "Fill <fillsv@mail.ru>";
 	  $aHTMLList[] = "Mikhail Veltishchev <dichlofos-mv@yandex.ru>";
 	}
-	
+
 	$addrHTMLList = join(", ", $aHTMLList);
 	$addrPlainList = join(", ", $aPlainList);
 
@@ -119,7 +124,7 @@
 	  "Content-Transfer-Encoding: 8bit\r\n"
 	);
 	$bSuccess = $bSuccessHTML || $bSuccessText;
-	
+
 	$message = 'Спасибо, Ваша анкета принята! Сейчас Вы будете перенаправлены на главную страницу. Если этого не произошло, нажмите <a href="index.php">сюда</a>.';
 	$meta = '<meta http-equiv="refresh" content="3;URL=index.php" />';
 
@@ -134,7 +139,7 @@
 	}
 	echo $meta;
 	echo $message;
-    
+
   }
   else if(@$_GET["aparam"] == "edit")
       include(translate('<! cms/ank/edit-ank !>'));
@@ -142,7 +147,7 @@
       include(translate('<! cms/ank/view-ank !>'));
   else if(@$_GET["aparam"] == "download")
       include(translate('<! cms/ank/download-ank !>'));
-  else 
+  else
   {
     if(@$group["#root"] || @$group["root"] || @$group["ank"])
     {
