@@ -1,6 +1,5 @@
 <# cms/ank/style #>
 <# auth/ #admin #ank #>
-</form>
 <?php
 
   function cf($us) {
@@ -22,6 +21,7 @@
     "Favourites"=>"Любимые предметы",
     "Achivements"=>"Достижения",
     "Hobby"=>"Хобби",
+    "Notes"=>"Заметки",
     "UserAgent"=>"UserAgent",
     "Created"=>"Время создания (UNIX)",
     "HRCreated"=>"Время создания",
@@ -29,13 +29,15 @@
     "HRModified"=>"Последняя модификация",
     "FileName"=>"Имя файла"
   );
-  
+
   function MakeSelector($sSK) {
     $aStatuses = array(
       "new"=>"Новая",
       "progress"=>"В обработке",
       "processed"=>"Обработана",
       "declined"=>"Отклонена",
+      "cont"=>"Продолжающий школьник",
+      "old"=>"Старый школьник (не едет)",
       "spam"=>"Спам");
     $sHTML = '<select name="Status">';
     foreach ($aStatuses as $sKey => $sTitle)
@@ -46,19 +48,20 @@
     $sHTML .= "</select>";
     return $sHTML;
   }
-  
+
   function editAnk()
   {
     global $aFields;
-    
+
     $sAnkFileName = $_GET["file"];
-    
+
     $aFieldTypes = array(
       "Favourites"=>"textarea",
       "Achivements"=>"textarea",
-      "Hobby"=>"textarea"
+      "Hobby"=>"textarea",
+      "Notes"=>"textarea"
     );
-    
+
     ?>
     <form method="post" action="?ref=ladmin&amp;act=editAnk">
       <input type="hidden" name="file" value="<?php echo $sAnkFileName; ?>" />
@@ -105,22 +108,23 @@
         }
       ?>
       </table>
-      <input type="submit" name="update-ank" value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
+      <div style="white-space: nowrap"><input type="submit" name="update-ank" value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
+        <a class="linkButton" href="?ref=ladmin&amp;act=viewAnk" style="height: 20px; line-height: 20px; vertical-align: bottom;">Вернуться к списку анкет</a></div>
     </form>
+
     <?php
   }
 
 
   if (@$_POST["update-ank"])
   {
-    // True programmers use UTF-8 only :)
     $xml = simplexml_load_string('<?xml version="1.0" encoding="utf-8"?><Anketa/>');
     $unixTime = mktime();
     $hrTimestamp = date("Y.m.d H:i:s", $unixTime);
     $_POST["Modified"] = $unixTime;
     $_POST["HRModified"] = $hrTimestamp;
-    
-    foreach (@$_POST as $key=>$value) 
+
+    foreach (@$_POST as $key=>$value)
     {
       if (!array_key_exists($key, $aFields)) {
         continue; // skip invalid keys
@@ -128,17 +132,19 @@
       $xml->addChild($key, $value);
     }
     $sAnkFileName = @$_POST["file"];
+    // TODO: непонятно, как тут должны выглядеть ссылки
     if (empty($sAnkFileName)) {?>
-      <p>Не задано имя файла анкеты. <a href="?">Вернуться к просмотру</a></p><?php
+      <p>Не задано имя файла анкеты. <a href="?ref=ladmin&amp;act=viewAnk">Вернуться к просмотру</a></p><?php
       return;
     }
-    if (file_exists($sAnkFileName)) chmod($sAnkFileName, 0666);
-    if ($xml->asXML($sAnkFileName) === false) {?>
-      <p>Не удалось сохранить анкету. <a href="?">Вернуться к просмотру</a></p><?php
+    if (file_exists($sAnkFileName)) @chmod($sAnkFileName, 0666);
+    if (@$xml->asXML($sAnkFileName) === false) {?>
+      <p>Не удалось сохранить анкету (нужно зайти по FTP и сделать chmod 666).
+        <a href="?ref=ladmin&amp;act=viewAnk">Вернуться к просмотру</a></p><?php
       return;
     }
     ?>
-    <p>Анкета сохранена успешно. <a href="?">Вернуться к просмотру</a></p>
+    <p>Анкета сохранена успешно. <a href="?ref=ladmin&amp;act=viewAnk">Вернуться к просмотру</a></p>
     <?php
   }
   else
