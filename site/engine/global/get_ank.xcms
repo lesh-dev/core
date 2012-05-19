@@ -1,10 +1,8 @@
-<?php
-  if(!@$_GET["page"]) $_GET["page"]="index";
-  if(!@$_COOKIE["auth-login"]) {
-    echo "Authentication required";
-    return;
-  }
-  if (@$_GET["mode"]=="txt") {
+<# auth/ #admin #ank #><?php
+  // TODO: check that auth works indeed
+  //if(!@$_GET["page"]) $_GET["page"]="index";
+  if (@$_GET["mode"]=="txt")
+  {
     header("Content-Type: text/plain; charset=utf-8");
     $xa = @simplexml_load_file($_GET["file"]);
     // print anketa
@@ -29,7 +27,8 @@
       "HRModified"=>"Отредактирована",
       "UserAgent"=>"UserAgent"
     );
-    foreach ($oAnk as $sKey => $sValue) {
+    foreach ($oAnk as $sKey => $sValue)
+    {
       if (!array_key_exists($sKey, $aFields)) continue;
       echo $aFields[$sKey].": $sValue\r\n";
     }
