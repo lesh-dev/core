@@ -7,11 +7,6 @@
   <input type="submit" value="Показать">
 </form>
 <?php
-  // TODO: Remove this spike (encoding converter)
-  function cf($us) {
-    return $us;
-  }
-
   function DoFormatting($sHTML) {
     // detect UNIX or DOS line-endings
     if (strpos($sHTML, "\n") !== false) {
@@ -101,34 +96,34 @@
       <tr><td class="ankListRowDiv">&nbsp;</td></tr>
       <?php
 
-      $sName = htmlspecialchars(cf($oAnk["Name"])); // assume always exists
-      $sBirthDate = htmlspecialchars(cf($oAnk["BirthDate"]));
-      $sSchool = htmlspecialchars(cf($oAnk["School"]));
-      $sSchoolLocation = htmlspecialchars(cf(@$oAnk["SchoolLocation"]));
-      $sClass = htmlspecialchars(cf($oAnk["Class"]));
-      $sCellular = htmlspecialchars(cf($oAnk["Cellular"]));
-      $sPhone = htmlspecialchars(cf($oAnk["Phone"]));
-      $sEMail = htmlspecialchars(cf($oAnk["EMail"]));
+      $sName = htmlspecialchars($oAnk["Name"]); // assume always exists
+      $sBirthDate = htmlspecialchars($oAnk["BirthDate"]);
+      $sSchool = htmlspecialchars($oAnk["School"]);
+      $sSchoolLocation = htmlspecialchars(@$oAnk["SchoolLocation"]);
+      $sClass = htmlspecialchars($oAnk["Class"]);
+      $sCellular = htmlspecialchars($oAnk["Cellular"]);
+      $sPhone = htmlspecialchars($oAnk["Phone"]);
+      $sEMail = htmlspecialchars($oAnk["EMail"]);
 
-      $sProfile = cf($oAnk["Profile"]);
+      $sProfile = $oAnk["Profile"];
       // make it valid URL if it was it form vk.com/name
       if (!empty($sProfile) && substr($sProfile, 0, 7) != 'http://') $sProfile = "http://$sProfile";
       $sProfile = htmlspecialchars($sProfile);
 
-      $sSkype = htmlspecialchars(cf($oAnk["Skype"]));
-      $sFavourites = DoFormatting(htmlspecialchars(cf($oAnk["Favourites"])));
-      $sAchivements = DoFormatting(htmlspecialchars(cf($oAnk["Achivements"])));
-      $sHobby = DoFormatting(htmlspecialchars(cf($oAnk["Hobby"])));
-      $sNotes = DoFormatting(htmlspecialchars(cf(@$oAnk["Notes"])));
+      $sSkype = htmlspecialchars($oAnk["Skype"]);
+      $sFavourites = DoFormatting(htmlspecialchars($oAnk["Favourites"]));
+      $sAchivements = DoFormatting(htmlspecialchars($oAnk["Achivements"]));
+      $sHobby = DoFormatting(htmlspecialchars($oAnk["Hobby"]));
+      $sNotes = DoFormatting(htmlspecialchars(@$oAnk["Notes"]));
 
-      $sUserAgent = htmlspecialchars(cf(@$oAnk["UserAgent"]));
-      $sFileName = htmlspecialchars(cf(@$oAnk["FileName"]));
-      $sHRCreated = htmlspecialchars(cf(@$oAnk["HRCreated"]));
+      $sUserAgent = htmlspecialchars(@$oAnk["UserAgent"]);
+      $sFileName = htmlspecialchars(@$oAnk["FileName"]);
+      $sHRCreated = htmlspecialchars(@$oAnk["HRCreated"]);
       if (empty($sHRCreated)) {
         $sHRCreated = substr($sAnkFileName, 4, 10); // cut 'ank/' and extract 'YYYY.MM.DD'
       }
-      $sHRModified = htmlspecialchars(cf(@$oAnk["HRModified"]));
-      $sStatus = htmlspecialchars(cf(@$oAnk["Status"]));
+      $sHRModified = htmlspecialchars(@$oAnk["HRModified"]);
+      $sStatus = htmlspecialchars(@$oAnk["Status"]);
 
       $aStatuses = array(
         "new"=>"Новая",
@@ -148,7 +143,7 @@
           <span style="float: right">
             <a style="margin-right: 10px" href="/<# web_prefix#>?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sAnkFileName; ?>">XML</a>
             <a style="margin-right: 10px" href="/<# web_prefix#>?ref=get_ank&amp;mode=txt&amp;file=<?php echo $sAnkFileName; ?>">TXT</a>
-            <a style="margin-right: 10px" href="edit&amp;file=<?php echo $sAnkFileName; ?>">Редактировать</a>
+            <a style="margin-right: 10px" href="/<# web_prefix#>?ref=ladmin&amp;mode=ank&amp;act=editAnk&amp;file=<?php echo $sAnkFileName; ?>">Редактировать</a>
             <img src="<?php echo "/$web_prefix/$design_dir"; ?>/pic/mozillafirefox.png" style="vertical-align: middle;" title="<?php echo "$sUserAgent"; ?>" />
             <span style="margin-left: 10px;" class="ankListField">Статус</span>: <span class="ankStatus <?php echo $sStatus; ?>"><?php echo $sHRStatus; ?></span>
             <span style="margin-left: 10px;" class="ankListField">Создана</span>: <?php echo $sHRCreated; ?>

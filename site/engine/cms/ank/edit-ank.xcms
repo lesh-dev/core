@@ -2,10 +2,6 @@
 <# auth/ #admin #ank #>
 <?php
 
-  function cf($us) {
-    return $us;
-  }
-
   $aFields = array(
     "Status"=>"Статус анкеты",
     "Name"=>"ФИО",
@@ -30,7 +26,7 @@
     "FileName"=>"Имя файла"
   );
 
-  function MakeSelector($sSK) {
+  function EMakeSelector($sSK) {
     $aStatuses = array(
       "new"=>"Новая",
       "progress"=>"В обработке",
@@ -84,7 +80,7 @@
         </td>
       </tr>
         <tr><td class="ankList"><span class="ankEditField">Статус анкеты</span>
-          <?php echo MakeSelector(@$oAnk["Status"]); ?></td></tr>
+          <?php echo EMakeSelector(@$oAnk["Status"]); ?></td></tr>
       <?php
         foreach ($aFields as $sKey=>$sFieldTitle)
         {
@@ -99,9 +95,9 @@
           <tr><td class="ankList"><span class="ankEditField"><?php echo $aFields[$sKey]; ?></span>
             <?php
               if (array_key_exists($sKey, $aFieldTypes)) {?>
-                <textarea class="ankEdit" name="<?php echo $sKey; ?>"><?php echo htmlspecialchars(cf($sValue)); ?></textarea/><?php
+                <textarea class="ankEdit" name="<?php echo $sKey; ?>"><?php echo htmlspecialchars($sValue); ?></textarea/><?php
               } else {?>
-                <input type="text" class="ankEdit" value="<?php echo htmlspecialchars(cf($sValue)); ?>" name="<?php echo $sKey; ?>" <?php echo $sAttr; ?> /><?php
+                <input type="text" class="ankEdit" value="<?php echo htmlspecialchars($sValue); ?>" name="<?php echo $sKey; ?>" <?php echo $sAttr; ?> /><?php
               } ?>
           </td></tr>
         <?php
