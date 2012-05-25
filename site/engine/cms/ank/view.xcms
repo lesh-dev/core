@@ -4,9 +4,6 @@
   // TODO: Название у этого шаблона в высшей степени странное,
   // надо его переименовать
 
-  //include_once("{$SETTINGS["elementsdir"]}cms/common.php");
-  //include_once("{$SETTINGS["elementsdir"]}cms/content/common.php");
-
   if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
   {
     echo "<h1>Раздел не заполнен.</h1>";
@@ -93,7 +90,7 @@
 
 	  $aHTMLList[] = "Dara <dara-dara-dara@yandex.ru>";
 	  $aHTMLList[] = "Alena Zhigulina <zhigulinalena@yandex.ru>";
-	  $aHTMLList[] = "Fill <fillsv@mail.ru>";
+	  //$aHTMLList[] = "Fill <fillsv@mail.ru>";
 	  $aHTMLList[] = "Mikhail Veltishchev <dichlofos-mv@yandex.ru>";
 	}
 
@@ -105,14 +102,14 @@
 	  $mailMsg."\r\n".
 	  // html content with boundary marker
 	  "--==boundary-1\r\n".
-	  "Content-Type: text/html; charset=windows-1251\r\n".
+	  "Content-Type: text/html; charset=utf-8\r\n".
 	  "Content-Transfer-Encoding: 8bit\r\n".
 	  "\r\n".
 	  $mailMsgHTML.
 	  "\r\n--==boundary-1\r\n",
 	  // aux headers
 	  "From: fizlesh.ru <noreply@fizlesh.ru>\r\n".
-	  'Content-Type: multipart/related; boundary="==boundary-1"; type="text/html"; charset=windows-1251'."\r\n".
+	  'Content-Type: multipart/related; boundary="==boundary-1"; type="text/html"; charset=utf-8'."\r\n".
 	  "Content-Transfer-Encoding: 8bit\r\n"
 	);
 	$bSuccessText = @mail($addrPlainList, "New anketa from fizlesh.ru",
@@ -120,7 +117,7 @@
 	  $mailMsg."\r\n",
 	  // aux headers
 	  "From: fizlesh.ru <noreply@fizlesh.ru>\r\n".
-	  'Content-Type: text/plain; charset=windows-1251'."\r\n".
+	  'Content-Type: text/plain; charset=utf-8'."\r\n".
 	  "Content-Transfer-Encoding: 8bit\r\n"
 	);
 	$bSuccess = $bSuccessHTML || $bSuccessText;
@@ -149,10 +146,14 @@
       include(translate('<! global/get_ank !>'));
   else
   {
-    if(@$group["#root"] || @$group["root"] || @$group["ank"])
+    if (@$group["#root"] || @$group["root"] || @$group["#ank"])
     {
-      echo "<center><a href=\"view\">manage</a></center><hr>";
+      // TODO: костыль не работает, что-то с группами не так по умолчанию
+      // и с относительными путями тоже что-то странное (#222)
+      echo "<center><a href=\"register/view\">manage</a></center><hr />";
     }
+    //print_r($group);
+
     //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
     $text = file_get_contents( "{$SETTINGS["datadir"]}cms/pages/$pageid/content" );
     $text = str_replace("\${csrf_token}","<input type=\"hidden\" name=\"csrf_token\" value=\"ank_$pageid\" >",$text);
