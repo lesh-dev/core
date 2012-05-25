@@ -46,15 +46,28 @@ if($need)
     }
     if(!$text_defined)
         $text = file_get_contents($source);
-    //// Обработка синтаксиса: ${prefix} раскрывается в путь до текущего $pageid
-    $text = str_replace("\${prefix}","/$web_prefix${SETTINGS["datadir"]}cms/pages/$pageid",$text);
+    //// Обработка синтаксиса
+    //// ${prefix} раскрывается в путь до текущего $pageid
+    $text = str_replace(
+        '${prefix}',
+        "/$web_prefix${SETTINGS["datadir"]}cms/pages/$pageid",
+        $text);
+    //// ${web_prefix} раскрывается в путь до корня сайта
     $wpx = "/$web_prefix";
-    $wpx = preg_replace("#/$#i","",$wpx);
-    $text = str_replace("\${web_prefix}",$wpx,$text);
+    $wpx = preg_replace('#/$#i', "", $wpx);
+    $text = str_replace('${web_prefix}', $wpx, $text);
+    //// ${content_prefix} раскрывается в путь до контента сайта
     $cpx = "/$web_prefix${SETTINGS["datadir"]}";
-    $cpx = preg_replace("#/$#i","",$cpx);
-    $text = str_replace("\${content_prefix}","$cpx",$text);
-    //// Обработка синтаксиса: ${include:pageid} -- раскрывается в _содержимое_ целого раздела
+    $cpx = preg_replace('#/$#i', "", $cpx);
+    $text = str_replace('${content_prefix}', $cpx, $text);
+    global $engine_pub;
+    echo $engine_pub;
+    //// ${engine_pub} раскрывается в путь до системного каталога с общим web-содержимым
+    $epx = "$wpx/$engine_pub";
+    $epx = preg_replace('#/$#i', "", $epx);
+    $text = str_replace('${engine_pub}', $epx, $text);
+
+    //// ${include:pageid} -- раскрывается в _содержимое_ целого раздела
     //// Обработка произвольных dollar notation
     $dir = "$engine_dir"."plugins/dollar/";
     foreach(glob("$dir*.php") as $notation)
