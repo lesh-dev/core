@@ -48,9 +48,12 @@ if($need)
         $text = file_get_contents($source);
     //// Обработка синтаксиса: ${prefix} раскрывается в путь до текущего $pageid
     $text = str_replace("\${prefix}","/$web_prefix${SETTINGS["datadir"]}cms/pages/$pageid",$text);
-    $wpx = "/$web_prefix${SETTINGS["datadir"]}";
+    $wpx = "/$web_prefix";
     $wpx = preg_replace("#/$#i","",$wpx);
     $text = str_replace("\${web_prefix}",$wpx,$text);
+    $cpx = "/$web_prefix${SETTINGS["datadir"]}";
+    $cpx = preg_replace("#/$#i","",$cpx);
+    $text = str_replace("\${content_prefix}","$cpx",$text);
     //// Обработка синтаксиса: ${include:pageid} -- раскрывается в _содержимое_ целого раздела
     //// Обработка произвольных dollar notation
     $dir = "$engine_dir"."plugins/dollar/";
