@@ -1,6 +1,0 @@
-
-<!# if //$type=='content'//cms/content/view #!>
-<!# if //$type=='news'//cms/news/view #!>
-<?php
-  include(translate("<! cms/$type/view !>"));
-?>

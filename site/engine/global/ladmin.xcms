@@ -1,1 +1,10 @@
-<# adm/ladmin #>
+<?php
+/*
+Owner:     mvel
+Actuality: 2.0
+
+This is a global redirector to ladmin template. It allows us to
+write ref=ladmin without any paths (since global/* is accessible without
+paths).
+*/
+?><# adm/ladmin #>
