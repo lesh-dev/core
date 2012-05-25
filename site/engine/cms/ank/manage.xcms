@@ -1,14 +1,10 @@
 <?php
-  if(@$_GET["act"]=="downloadAnk")
-  {
-    $preface = "ref=ladmin&amp;act=downloadAnk&amp;page=$pageid";
-    include(translate("<! global/get_ank !>"));
-  }
-  else if(@$_GET["act"]=="editAnk")
-  {
-    $preface = "ref=ladmin&amp;act=editAnk&amp;page=$pageid";
-    include(translate("<! cms/ank/edit-ank !>"));
-  }
-  include(translate("<! cms/ank/view-ank !>"));
-
+    if (@$_GET["act"]=="editAnk")
+    {
+        $preface = "ref=ladmin&amp;act=editAnk&amp;page=$pageid";
+        include(translate("<! cms/ank/edit-ank !>"));
+    }
+    // TODO: мы уверены, что надо показывать список анкет
+    // под редактором анкеты? Пока выглядит как фича
+    include(translate("<! cms/ank/view-ank !>"));
 ?>

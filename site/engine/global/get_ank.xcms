@@ -1,10 +1,17 @@
 <# auth/ #admin #ank #><?php
-  // TODO: check that auth works indeed
-  //if(!@$_GET["page"]) $_GET["page"]="index";
+  // TODO: remove this spike
+  if (!array_key_exists("file", $_GET))
+    die("Application error. Please report the link you encountered to bla@fizlesh.ru");
+
+
+  $sBaseAnkFileName = $_GET["file"];
+  // here should be filename only, without any slashes or other symbols
+  $sBaseAnkFileName = preg_replace('/[^A-Za-z.0-9_-]/', '', $sBaseAnkFileName);
+  $sAnkFileName = "$content_dir/ank/$sBaseAnkFileName";
   if (@$_GET["mode"]=="txt")
   {
     header("Content-Type: text/plain; charset=utf-8");
-    $xa = @simplexml_load_file($_GET["file"]);
+    $xa = @simplexml_load_file($sAnkFileName);
     // print anketa
     if (!$xa) return;
     $oAnk = get_object_vars($xa);
@@ -36,6 +43,6 @@
   else
   {
     header("Content-Type: text/xml");
-    echo file_get_contents($_GET["file"]);
+    echo file_get_contents($sAnkFileName);
   }
 ?>

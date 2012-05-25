@@ -95,6 +95,7 @@
       ?>
       <tr><td class="ankListRowDiv">&nbsp;</td></tr>
       <?php
+      $sBaseAnkFileName = basename($sAnkFileName);
 
       $sName = htmlspecialchars($oAnk["Name"]); // assume always exists
       $sBirthDate = htmlspecialchars($oAnk["BirthDate"]);
@@ -120,7 +121,7 @@
       $sFileName = htmlspecialchars(@$oAnk["FileName"]);
       $sHRCreated = htmlspecialchars(@$oAnk["HRCreated"]);
       if (empty($sHRCreated)) {
-        $sHRCreated = substr($sAnkFileName, 4, 10); // cut 'ank/' and extract 'YYYY.MM.DD'
+        $sHRCreated = substr($sBaseAnkFileName, 4, 10); // cut 'ank/' and extract 'YYYY.MM.DD'
       }
       $sHRModified = htmlspecialchars(@$oAnk["HRModified"]);
       $sStatus = htmlspecialchars(@$oAnk["Status"]);
@@ -141,9 +142,16 @@
         <td class="ankListRowTitle">
           <?php echo $sName; ?>
           <span style="float: right">
-            <a style="margin-right: 10px" href="/<# web_prefix#>?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sAnkFileName; ?>">XML</a>
-            <a style="margin-right: 10px" href="/<# web_prefix#>?ref=get_ank&amp;mode=txt&amp;file=<?php echo $sAnkFileName; ?>">TXT</a>
-            <a style="margin-right: 10px" href="/<# web_prefix#>?ref=ladmin&amp;mode=ank&amp;act=editAnk&amp;file=<?php echo $sAnkFileName; ?>">Редактировать</a>
+            <!-- TODO: this won't work: ank download broken, 'Headers are already send...' -->
+            <a style="margin-right: 10px" href="download&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
+            <!-- this works -->
+            <a style="margin-right: 10px" href="/site/?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
+            <!-- and this one does not work too -->
+            <a style="margin-right: 10px" href="download&amp;mode=txt&amp;file=<?php echo $sBaseAnkFileName; ?>">TXT</a>
+            <!-- experimental complete link -->
+            <a style="margin-right: 10px" href="/site/register/edit&amp;file=<?php echo $sBaseAnkFileName; ?>">Редактировать</a>
+            <!-- imcomplete link: still works, but why? -->
+            <a style="margin-right: 10px" href="edit&amp;file=<?php echo $sBaseAnkFileName; ?>">Редактировать</a>
             <img src="<?php echo "/$web_prefix/$design_dir"; ?>/pic/mozillafirefox.png" style="vertical-align: middle;" title="<?php echo "$sUserAgent"; ?>" />
             <span style="margin-left: 10px;" class="ankListField">Статус</span>: <span class="ankStatus <?php echo $sStatus; ?>"><?php echo $sHRStatus; ?></span>
             <span style="margin-left: 10px;" class="ankListField">Создана</span>: <?php echo $sHRCreated; ?>

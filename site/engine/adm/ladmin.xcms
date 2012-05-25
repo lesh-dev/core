@@ -76,7 +76,7 @@
                 <a'.xcms_href(array('act'=>'groupadmin', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Группы</a>
                 <a'.xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Уведомления</a>
                 <a'.xcms_href(array('act'=>'css', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Стиль</a>
-                <a'.xcms_href(array('mode'=>'ank', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Анкеты</a>
+                <a href="/'.$web_prefix.'register/view" class="h-menu-link">Анкеты</a>
             '));
         ?>
         </div>

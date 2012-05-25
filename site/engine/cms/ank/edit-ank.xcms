@@ -48,8 +48,10 @@
   function editAnk()
   {
     global $aFields;
+    global $content_dir;
 
-    $sAnkFileName = $_GET["file"];
+    $sBaseAnkFileName = $_GET["file"];
+    $sAnkFileName = "$content_dir/ank/$sBaseAnkFileName";
 
     $aFieldTypes = array(
       "Favourites"=>"textarea",
@@ -59,8 +61,8 @@
     );
 
     ?>
-    <form method="post" action="?ref=ladmin&amp;act=editAnk">
-      <input type="hidden" name="file" value="<?php echo $sAnkFileName; ?>" />
+    <form method="post" action="edit">
+      <input type="hidden" name="file" value="<?php echo $sBaseAnkFileName; ?>" />
       <table summary="Анкета" class="ankEdit">
     <?php
       $xa = @simplexml_load_file($sAnkFileName);
@@ -127,20 +129,23 @@
       }
       $xml->addChild($key, $value);
     }
-    $sAnkFileName = @$_POST["file"];
-    // TODO: непонятно, как тут должны выглядеть ссылки
-    if (empty($sAnkFileName)) {?>
-      <p>Не задано имя файла анкеты. <a href="?ref=ladmin&amp;act=viewAnk">Вернуться к просмотру</a></p><?php
+    $sBaseAnkFileName = @$_POST["file"];
+    $sAnkFileName = "$content_dir/ank/$sBaseAnkFileName";
+    if (empty($sBaseAnkFileName)) {?>
+      <p>Не задано имя файла анкеты.
+        <a href="view&amp;file=<?php echo $sBaseAnkFileName; ?>">Вернуться
+          к просмотру</a></p><?php
       return;
     }
     if (file_exists($sAnkFileName)) @chmod($sAnkFileName, 0666);
+    // TODO: тут тоже неправильная ссылка
     if (@$xml->asXML($sAnkFileName) === false) {?>
       <p>Не удалось сохранить анкету (нужно зайти по FTP и сделать chmod 666).
-        <a href="?ref=ladmin&amp;act=viewAnk">Вернуться к просмотру</a></p><?php
+        <a href="view&amp;file=<?php echo $sBaseAnkFileName; ?>">Вернуться к просмотру</a></p><?php
       return;
     }
     ?>
-    <p>Анкета сохранена успешно. <a href="?ref=ladmin&amp;act=viewAnk">Вернуться к просмотру</a></p>
+    <p>Анкета сохранена успешно. <a href="view&amp;file=<?php echo $sBaseAnkFileName; ?>">Вернуться к просмотру</a></p>
     <?php
   }
   else

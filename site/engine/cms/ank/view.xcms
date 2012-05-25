@@ -146,7 +146,7 @@
   else if(@$_GET["aparam"] == "view")
       include(translate('<! cms/ank/view-ank !>'));
   else if(@$_GET["aparam"] == "download")
-      include(translate('<! cms/ank/download-ank !>'));
+      include(translate('<! global/get_ank !>'));
   else
   {
     if(@$group["#root"] || @$group["root"] || @$group["ank"])
