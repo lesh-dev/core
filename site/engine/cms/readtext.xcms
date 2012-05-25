@@ -60,8 +60,6 @@ if($need)
     $cpx = "/$web_prefix${SETTINGS["datadir"]}";
     $cpx = preg_replace('#/$#i', "", $cpx);
     $text = str_replace('${content_prefix}', $cpx, $text);
-    global $engine_pub;
-    echo $engine_pub;
     //// ${engine_pub} раскрывается в путь до системного каталога с общим web-содержимым
     $epx = "$wpx/$engine_pub";
     $epx = preg_replace('#/$#i', "", $epx);
