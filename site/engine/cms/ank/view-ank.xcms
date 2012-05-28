@@ -58,7 +58,7 @@
   {
     global $content_dir, $design_dir, $web_prefix;
     $aShowStatuses = GetShowStatuses();
-    $nCount = 30;
+    $nCount = 50;
     if (!array_key_exists($sShowStatus, $aShowStatuses)) $sShowStatus = "notspam";
     if ($sShowStatus == "all") $nCount = 0; // show all
 
