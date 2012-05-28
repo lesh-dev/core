@@ -1,0 +1,120 @@
+/* CSS for anketa manager: view/edit */
+
+a.linkButton {
+  font-size: 12pt;
+  line-height: 16pt;
+  text-decoration: none;
+  display: inline-block;
+  margin: 1px 0px 3px 1px;
+  border: 1px solid #003f00;
+  padding-left: 7px;
+  padding-right: 7px;
+  background-color: #8ea76b;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+table.ankList {
+  width: 100%;
+  border-spacing: 0px;
+  padding: 0px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border: 0px solid #8faf6f;
+  font-size: 9pt;
+}
+
+td.ankListRowDiv {
+  height: 8px;
+}
+
+td.ankListRowTitle {
+  vertical-align: middle;
+  background-color: #9fdf8f;
+  border: 1px solid #8faf6f;
+  padding: 3px;
+}
+
+td.ankList {
+  border: 1px solid #8faf6f;
+  padding: 3px;
+}
+
+td.ankList.notes {
+  background-color: #85cf6f;
+}
+
+span.ankListField {
+  font-weight: bold;
+}
+
+span.ankEditField {
+  font-weight: bold;
+  display: inline-block;
+  width: 20%;
+}
+
+input.ankEdit {
+  width: 75%;
+}
+
+textarea.ankEdit {
+  width: 75%;
+  height: 72px;
+}
+
+input[readonly='readonly'] {
+  background-color: #ddeedd;
+}
+
+table.ankEdit {
+  width: 100%;
+  border-spacing: 0px;
+  padding: 0px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border: 0px solid #8faf6f;
+  font-size: 9pt;
+}
+
+span.ankStatus.new {
+  color: #ffff00;
+  font-weight: bold;
+}
+
+span.ankStatus.progress {
+  color: #9f7f00;
+  font-weight: bold;
+}
+
+span.ankStatus.processed {
+  font-weight: bold;
+  color: #008f00;
+}
+
+span.ankStatus.declined {
+  color: #7f7f7f;
+  font-weight: bold;
+}
+
+span.ankStatus.cont {
+  color: #006f00;
+  font-weight: bold;
+}
+
+span.ankStatus.old {
+  color: #3f3faf;
+  font-weight: bold;
+}
+
+span.ankStatus.spam {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+ul.ankList {
+  margin-left: 3px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}

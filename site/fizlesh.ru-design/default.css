@@ -74,9 +74,6 @@ p {
   margin-top: 3pt;
   margin-bottom: 0px;
 }
-p.text_line {
-  text-indent: 5mm;
-}
 li {
   font-size: 10pt;
   text-align: justify;
@@ -109,15 +106,6 @@ h4 {
   text-indent: 5mm;
   margin-top: 10pt;
   margin-bottom: 3pt;
-}
-
-/* TODO: eliminate, used in photoalbum only */
-.extern_link {
-  font: normal normal 12pt/12pt sans-serif;
-  color:#000020;
-  text-indent: 5mm;
-  margin-top: 3pt;
-  margin-bottom: 0pt;
 }
 
 a, a:link {
@@ -181,87 +169,8 @@ input[name='menu-text'] {
   width: 300px;
 }
 
-span.ankLabel {
-  font-size: 10pt;
-  font-weight: bold;
-  display: inline-block;
-  width: 370px;
-}
-
-div.ankLegend {
-  float: right;
-  display: inline-block;
-  width: 30%;
-  border: 1px solid #003f00;
-  background-color: #aed79b;
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  padding: 5px;
-  font-size: 10pt;
-  margin-left: 20px;
-}
-
-div.ankRow {
-  white-space: nowrap;
-}
-
-div.ankExample {
-  font-size: 8pt;
-  padding-left: 380px;
-  padding-bottom: 3pt;
-}
-
-span.ankAst {
-  color: #ff0000;
-  font-weight: bold;
-  font-size: 10pt;
-}
-
-span.ankAst {
-  font-weight: bold;
-  font-size: 10pt;
-  vertical-align: middle;
-}
-span.ankAst.Req {
-  color: #ff000;
-}
-span.ankAst.Gr {
-  color: #cf7f00;
-}
-span.ankAst.Rec {
-  color: #e0f2dd;
-}
-
 a.leshLogoTitle {
   position: absolute;
   right: 7px;
   bottom: 5px;
-}
-
-div.ankError {
-  color: #9f0000;
-  font-size: 9pt;
-  padding: 3px;
-}
-
-div.ankWarning {
-  color: #003f00;
-  font-size: 9pt;
-  padding: 3px;
-}
-
-div.ankMessageFrame {
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  border: 1px solid #003f00;
-  background-color: #aed79b;
-  display: none;
-}
-
-ul.ankList {
-  margin-left: 3px;
-  margin-bottom: 0px;
-  margin-top: 0px;
 }

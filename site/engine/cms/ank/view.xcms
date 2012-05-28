@@ -1,14 +1,9 @@
 <?php
-  // Посылатор анкет (нужно проверять, что он вообще работает, пока
-  // в этом никакой уверенности нет
-  // TODO: Название у этого шаблона в высшей степени странное,
-  // надо его переименовать
-
   if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
   {
     echo "<h1>Раздел не заполнен.</h1>";
     if($login != "anonymous")
-      echo "<h3><a href=\"?ref=ladmin&page=$pageid\">Вы можете это исправить!</a></h3>";
+      echo "<h3><a href=\"?ref=ladmin&amp;page=$pageid\">Вы можете это исправить!</a></h3>";
   }
   if(@$_POST["csrf_token"] == "ank_$pageid")
   {
@@ -154,8 +149,6 @@
       // и с относительными путями тоже что-то странное (#222)
       echo "<center><a href=\"register/view\">manage</a></center><hr />";
     }
-    //print_r($group);
-
     //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
     $text = file_get_contents( "{$SETTINGS["datadir"]}cms/pages/$pageid/content" );
     $text = str_replace("\${csrf_token}","<input type=\"hidden\" name=\"csrf_token\" value=\"ank_$pageid\" >",$text);

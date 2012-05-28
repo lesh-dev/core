@@ -146,9 +146,6 @@
             <!--<a style="margin-right: 10px" href="download&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>-->
             <a style="margin-right: 10px" href="/<?php echo $web_prefix; ?>?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
             <a style="margin-right: 10px" href="/<?php echo $web_prefix; ?>?ref=get_ank&amp;mode=txt&amp;file=<?php echo $sBaseAnkFileName; ?>">TXT</a>
-            <!-- experimental complete link -->
-            <a style="margin-right: 10px" href="/site/register/edit&amp;file=<?php echo $sBaseAnkFileName; ?>">Редактировать</a>
-            <!-- imcomplete link: still works, but why? -->
             <a style="margin-right: 10px" href="edit&amp;file=<?php echo $sBaseAnkFileName; ?>">Редактировать</a>
             <img src="<?php echo "/$web_prefix/$design_dir"; ?>/pic/mozillafirefox.png" style="vertical-align: middle;" title="<?php echo "$sUserAgent"; ?>" />
             <span style="margin-left: 10px;" class="ankListField">Статус</span>: <span class="ankStatus <?php echo $sStatus; ?>"><?php echo $sHRStatus; ?></span>
