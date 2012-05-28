@@ -143,6 +143,8 @@
   else if(@$_GET["aparam"] == "view")
       include(translate('<! cms/ank/view-ank !>'));
   else if(@$_GET["aparam"] == "download")
+  	  // this won't work due to header problem
+  	  // TODO: issue a bug for this problem
       include(translate('<! global/get_ank !>'));
   else
   {

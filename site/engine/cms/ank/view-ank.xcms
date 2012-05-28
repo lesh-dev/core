@@ -143,11 +143,9 @@
           <?php echo $sName; ?>
           <span style="float: right">
             <!-- TODO: this won't work: ank download broken, 'Headers are already send...' -->
-            <a style="margin-right: 10px" href="download&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
-            <!-- this works -->
-            <a style="margin-right: 10px" href="/site/?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
-            <!-- and this one does not work too -->
-            <a style="margin-right: 10px" href="download&amp;mode=txt&amp;file=<?php echo $sBaseAnkFileName; ?>">TXT</a>
+            <!--<a style="margin-right: 10px" href="download&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>-->
+            <a style="margin-right: 10px" href="/<?php echo $web_prefix; ?>?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
+            <a style="margin-right: 10px" href="/<?php echo $web_prefix; ?>?ref=get_ank&amp;mode=txt&amp;file=<?php echo $sBaseAnkFileName; ?>">TXT</a>
             <!-- experimental complete link -->
             <a style="margin-right: 10px" href="/site/register/edit&amp;file=<?php echo $sBaseAnkFileName; ?>">Редактировать</a>
             <!-- imcomplete link: still works, but why? -->
