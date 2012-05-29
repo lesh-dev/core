@@ -138,16 +138,13 @@
   else if(@$_GET["aparam"] == "view")
       include(translate('<! cms/ank/view-ank !>'));
   else if(@$_GET["aparam"] == "download")
-  	  // this won't work due to header problem
-  	  // TODO: issue a bug for this problem
+      // TODO: #232: this won't work due to header problem
       include(translate('<! global/get_ank !>'));
   else
   {
-    if (@$group["#root"] || @$group["root"] || @$group["#ank"])
-    {
-      // TODO: костыль не работает, что-то с группами не так по умолчанию
-      // и с относительными путями тоже что-то странное (#222)
-      echo "<center><a href=\"register/view\">manage</a></center><hr />";
+    if (@$group["#admin"] || @$group["#ank"])
+    {?>
+		<div style=""><a class="linkButton" href="register/view">Manage</a></div><?php
     }
     //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
     $text = file_get_contents( "{$SETTINGS["datadir"]}cms/pages/$pageid/content" );

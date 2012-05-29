@@ -1,20 +1,5 @@
 /* CSS for anketa manager: view/edit */
 
-a.linkButton {
-  font-size: 12pt;
-  line-height: 16pt;
-  text-decoration: none;
-  display: inline-block;
-  margin: 1px 0px 3px 1px;
-  border: 1px solid #003f00;
-  padding-left: 7px;
-  padding-right: 7px;
-  background-color: #8ea76b;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-}
-
 table.ankList {
   width: 100%;
   border-spacing: 0px;
