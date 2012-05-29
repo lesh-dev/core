@@ -129,7 +129,7 @@
       if (!array_key_exists($key, $aFields)) {
         continue; // skip invalid keys
       }
-      $xml->addChild($key, $value);
+      $xml->addChild($key, htmlspecialchars($value));
     }
     $sBaseAnkFileName = @$_POST["file"];
     $sAnkFileName = "$content_dir/ank/$sBaseAnkFileName";

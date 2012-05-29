@@ -55,7 +55,7 @@
 	foreach (@$_POST as $key=>$value)
 	{
 	  if ($key == "Name") $studentName = $value;
-	  $xml->addChild($key, $value);
+	  $xml->addChild($key, htmlspecialchars($value));
 	  $keyTitle = $key;
 	  if (array_key_exists($key, $aFields)) $keyTitle = $aFields[$key];
 	  $mailMsg .= "$keyTitle: $value\r\n\r\n";
