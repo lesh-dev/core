@@ -1,155 +1,160 @@
 <?php
-  if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
-  {
-    echo "<h1>Раздел не заполнен.</h1>";
-    if($login != "anonymous")
-      echo "<h3><a href=\"?ref=ladmin&amp;page=$pageid\">Вы можете это исправить!</a></h3>";
-  }
-  if(@$_POST["csrf_token"] == "ank_$pageid")
-  {
-	$mailMsg = "Анкета:\n";
-	$mailMsgHTML = file_get_contents("$design_dir/mail_template.html");
-	$unixTime = mktime();
-	$hrTimestamp = date("Y.m.d H:i:s", $unixTime);
-	$fileName = date("Y.m.d-H.i.s", $unixTime).".xml";
-
-	$studentName = "Школьнег";
-
-	$aFields = array(
-	  "Name"=>"ФИО",
-	  "BirthDate"=>"Дата рождения",
-	  "School"=>"Школа",
-	  "SchoolLocation"=>"Адрес школы",
-	  "Class"=>"Класс",
-	  "Phone"=>"Телефон",
-	  "Cellular"=>"Мобильный телефон",
-	  "EMail"=>"E-Mail",
-	  "Skype"=>"Skype",
-	  "Profile"=>"Профиль",
-	  "Favourites"=>"Любимые предметы",
-	  "Achivements"=>"Достижения",
-	  "Hobby"=>"Хобби"
-	);
-	if (@empty($_POST["Name"]) ||
-	    @empty($_POST["Class"]) ||
-	    @empty($_POST["Phone"]) && @empty($_POST["Cellular"])) {
-	    // someone hacked the js validator
-	    die("Invalid anketa data. ");
-	}
-
-	// True programmers use UTF-8 only :)
-	$xml = simplexml_load_string('<?xml version="1.0" encoding="utf-8"?><Anketa/>');
-	$htmlContent = ""; // @@TABLE-CONTENT@
-	// add some more fields
-	$_POST["UserAgent"] = $_SERVER["HTTP_USER_AGENT"];
-	$_POST["FileName"] = $fileName;
-	// creation/modification times
-	$_POST["Created"] = $unixTime;
-	$_POST["HRCreated"] = $hrTimestamp;
-	// initialy empty
-	$_POST["Modified"] = "";
-	$_POST["HRModified"] = "";
-	// status
-	$_POST["Status"] = "new";
-
-	foreach (@$_POST as $key=>$value)
-	{
-	  if ($key == "Name") $studentName = $value;
-	  $xml->addChild($key, htmlspecialchars($value));
-	  $keyTitle = $key;
-	  if (array_key_exists($key, $aFields)) $keyTitle = $aFields[$key];
-	  $mailMsg .= "$keyTitle: $value\r\n\r\n";
-	  $htmlContent .= "<tr><td class=\"left\">$keyTitle</td><td>".htmlspecialchars($value)."</td></tr>\n";
-	}
-	@mkdir("$content_dir/ank",0777);
-	$xml->asXML("$content_dir/ank/$fileName");
-	$mailMsgHTML = str_replace("@@TABLE-CONTENT@", $htmlContent, $mailMsgHTML);
-	$mailMsgHTML = str_replace("@@DATE@", date("Y.m.d H:i:s", $unixTime), $mailMsgHTML);
-
-	$aHTMLList = array();
-	$aPlainList = array();
-	$bDebugMode = false;
-	if (substr($studentName, 0, 4) == "TEST") // see bug #111
-	{
-	  $bDebugMode = true;
-	  $aHTMLList[] = "Mikhail Veltishchev <dichlofos-mv@yandex.ru>";
-	  $aPlainList[] = "Mikhail Veltishchev <dichlofos-mv@yandex.ru>";
-	}
-	else
-	{
-	  // plain-text mails
-	  $aPlainList[] = "Serge <serge19746@yandex.ru>";
-	  $aPlainList[] = "Dimchik <demarin@mail.ru>";
-	  $aPlainList[] = "Mikhail Veltishchev <dichlofos.mv@gmail.com>";
-	  $aPlainList[] = "Dmitry Veltishchev <vdm-photo@ya.ru>";
-
-	  $aHTMLList[] = "Dara <dara-dara-dara@yandex.ru>";
-	  $aHTMLList[] = "Alena Zhigulina <zhigulinalena@yandex.ru>";
-	  //$aHTMLList[] = "Fill <fillsv@mail.ru>";
-	  $aHTMLList[] = "Mikhail Veltishchev <dichlofos-mv@yandex.ru>";
-	}
-
-	$addrHTMLList = join(", ", $aHTMLList);
-	$addrPlainList = join(", ", $aPlainList);
-
-	$bSuccessHTML = @mail($addrHTMLList, "New anketa from fizlesh.ru",
-	  // text content
-	  $mailMsg."\r\n".
-	  // html content with boundary marker
-	  "--==boundary-1\r\n".
-	  "Content-Type: text/html; charset=utf-8\r\n".
-	  "Content-Transfer-Encoding: 8bit\r\n".
-	  "\r\n".
-	  $mailMsgHTML.
-	  "\r\n--==boundary-1\r\n",
-	  // aux headers
-	  "From: fizlesh.ru <noreply@fizlesh.ru>\r\n".
-	  'Content-Type: multipart/related; boundary="==boundary-1"; type="text/html"; charset=utf-8'."\r\n".
-	  "Content-Transfer-Encoding: 8bit\r\n"
-	);
-	$bSuccessText = @mail($addrPlainList, "New anketa from fizlesh.ru",
-	  // text content
-	  $mailMsg."\r\n",
-	  // aux headers
-	  "From: fizlesh.ru <noreply@fizlesh.ru>\r\n".
-	  'Content-Type: text/plain; charset=utf-8'."\r\n".
-	  "Content-Transfer-Encoding: 8bit\r\n"
-	);
-	$bSuccess = $bSuccessHTML || $bSuccessText;
-
-	$message = 'Спасибо, Ваша анкета принята! Сейчас Вы будете перенаправлены на главную страницу. Если этого не произошло, нажмите <a href="index.php">сюда</a>.';
-	$meta = '<meta http-equiv="refresh" content="3;URL=index.php" />';
-
-	$phpName = '';
-	if (!$bSuccess) {
-	  $message = "По техническим причинам письмо не было отправлено.";
-	  $meta = '';
-	  $phpName = "doc/mail-error.php";
-	  $fE = fopen("$content_dir/ank/errors.log", "a+");
-	  fputs($fE, "$fileName\n");
-	  fclose($fE);
-	}
-	echo $meta;
-	echo $message;
-
-  }
-  else if(@$_GET["aparam"] == "edit")
-      include(translate('<! cms/ank/edit-ank !>'));
-  else if(@$_GET["aparam"] == "view")
-      include(translate('<! cms/ank/view-ank !>'));
-  else if(@$_GET["aparam"] == "download")
-      // TODO: #232: this won't work due to header problem
-      include(translate('<! global/get_ank !>'));
-  else
-  {
-    if (@$group["#admin"] || @$group["#ank"])
-    {?>
-		<div style=""><a class="linkButton" href="register/view">Manage</a></div><?php
+    if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
+    {
+        echo "<h1>Раздел не заполнен.</h1>";
+        if($login != "anonymous")
+            echo "<h3><a href=\"?ref=ladmin&amp;page=$pageid\">Вы можете это исправить!</a></h3>";
     }
-    //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
-    $text = file_get_contents( "{$SETTINGS["datadir"]}cms/pages/$pageid/content" );
-    $text = str_replace("\${csrf_token}","<input type=\"hidden\" name=\"csrf_token\" value=\"ank_$pageid\" >",$text);
-    $source  = "";
-    include(translate("<! cms/readtext --markdown --text !>"));
-  }
+    if(@$_POST["csrf_token"] == "ank_$pageid")
+    {
+        $mailMsg = "Анкета:\n";
+        $mailMsgHTML = file_get_contents("$design_dir/mail_template.html");
+        $unixTime = mktime();
+        $hrTimestamp = date("Y.m.d H:i:s", $unixTime);
+        $fileName = date("Y.m.d-H.i.s", $unixTime).".xml";
+
+        $studentName = "Школьнег";
+
+        $aFields = array(
+            "Name"=>"ФИО",
+            "BirthDate"=>"Дата рождения",
+            "School"=>"Школа",
+            "SchoolLocation"=>"Адрес школы",
+            "Class"=>"Класс",
+            "Phone"=>"Телефон",
+            "Cellular"=>"Мобильный телефон",
+            "EMail"=>"E-Mail",
+            "Skype"=>"Skype",
+            "Profile"=>"Профиль",
+            "Favourites"=>"Любимые предметы",
+            "Achivements"=>"Достижения",
+            "Hobby"=>"Хобби"
+        );
+        if (@empty($_POST["Name"]) ||
+            @empty($_POST["Class"]) ||
+            @empty($_POST["Phone"]) && @empty($_POST["Cellular"])) {
+            // someone hacked the js validator
+            die("Invalid anketa data. ");
+        }
+
+        // True programmers use UTF-8 only :)
+        $xml = simplexml_load_string('<?xml version="1.0" encoding="utf-8"?><Anketa/>');
+        $htmlContent = ""; // @@TABLE-CONTENT@
+        // add some more fields
+        $_POST["UserAgent"] = $_SERVER["HTTP_USER_AGENT"];
+        $_POST["FileName"] = $fileName;
+        // creation/modification times
+        $_POST["Created"] = $unixTime;
+        $_POST["HRCreated"] = $hrTimestamp;
+        // initialy empty
+        $_POST["Modified"] = "";
+        $_POST["HRModified"] = "";
+        // status
+        $_POST["Status"] = "new";
+
+        foreach (@$_POST as $key=>$value)
+        {
+            if ($key == "Name") $studentName = $value;
+            if ($key == "csrf_token") continue; // ignore this trash
+            $xml->addChild($key, htmlspecialchars($value));
+            $keyTitle = $key;
+            if (array_key_exists($key, $aFields)) $keyTitle = $aFields[$key];
+            $mailMsg .= "$keyTitle: $value\r\n\r\n";
+            $htmlContent .= "<tr><td class=\"left\">$keyTitle</td><td>".htmlspecialchars($value)."</td></tr>\n";
+        }
+        @mkdir("$content_dir/ank",0777);
+        $xml->asXML("$content_dir/ank/$fileName");
+        $mailMsgHTML = str_replace("@@TABLE-CONTENT@", $htmlContent, $mailMsgHTML);
+        $mailMsgHTML = str_replace("@@DATE@", date("Y.m.d H:i:s", $unixTime), $mailMsgHTML);
+
+        $aHTMLList = array();
+        $aPlainList = array();
+        $bDebugMode = false;
+        if (substr($studentName, 0, 4) == "TEST") // see bug #111
+        {
+            $bDebugMode = true;
+            $aHTMLList[] = "Mikhail Veltishchev <dichlofos-mv@yandex.ru>";
+            $aPlainList[] = "Mikhail Veltishchev <dichlofos-mv@yandex.ru>";
+        }
+        else
+        {
+            // plain-text mails
+            $aPlainList[] = "Serge <serge19746@yandex.ru>";
+            $aPlainList[] = "Dimchik <demarin@mail.ru>";
+            $aPlainList[] = "Mikhail Veltishchev <dichlofos.mv@gmail.com>";
+            $aPlainList[] = "Dmitry Veltishchev <vdm-photo@ya.ru>";
+
+            $aHTMLList[] = "Dara <dara-dara-dara@yandex.ru>";
+            $aHTMLList[] = "Alena Zhigulina <zhigulinalena@yandex.ru>";
+            //$aHTMLList[] = "Fill <fillsv@mail.ru>";
+            $aHTMLList[] = "Mikhail Veltishchev <dichlofos-mv@yandex.ru>";
+        }
+
+        $addrHTMLList = join(", ", $aHTMLList);
+        $addrPlainList = join(", ", $aPlainList);
+
+        $bSuccessHTML = @mail($addrHTMLList, "New anketa from fizlesh.ru",
+            // text content
+            $mailMsg."\r\n".
+            // html content with boundary marker
+            "--==boundary-1\r\n".
+            "Content-Type: text/html; charset=utf-8\r\n".
+            "Content-Transfer-Encoding: 8bit\r\n".
+            "\r\n".
+            $mailMsgHTML.
+            "\r\n--==boundary-1\r\n",
+            // aux headers
+            "From: fizlesh.ru <noreply@fizlesh.ru>\r\n".
+            'Content-Type: multipart/related; boundary="==boundary-1"; type="text/html"; charset=utf-8'."\r\n".
+            "Content-Transfer-Encoding: 8bit\r\n"
+        );
+        $bSuccessText = @mail($addrPlainList, "New anketa from fizlesh.ru",
+            // text content
+            $mailMsg."\r\n",
+            // aux headers
+            "From: fizlesh.ru <noreply@fizlesh.ru>\r\n".
+            'Content-Type: text/plain; charset=utf-8'."\r\n".
+            "Content-Transfer-Encoding: 8bit\r\n"
+        );
+        $bSuccess = $bSuccessHTML || $bSuccessText;
+
+        $message = 'Спасибо, Ваша анкета принята! Сейчас Вы будете перенаправлены '
+            .'на главную страницу. Если этого не произошло, '.
+            .'нажмите <a href="/'.$web_prefix.'">сюда</a>.';
+        $meta = '<meta http-equiv="refresh" content="3;URL=index.php" />';
+
+        if (!$bSuccess) {
+            $message = 'По техническим причинам письмо не было отправлено '.
+                .'Пожалуйста, воспользуйтесь <a href="/'.$web_prefix.'/join">альтернативными способами</a> '
+                .'(например, напишите нам по электронной почте или просто позвоните).';
+            // В этом случае анкета всё равно сохранится у нас, и на самом деле мы всё узнаем про человека,
+            // но чтобы не ждать три дня, пусть уж лучше нас пнут извне
+            $meta = '';
+            $fE = fopen("$content_dir/ank/errors.log", "a+");
+            fputs($fE, "$fileName\n");
+            fclose($fE);
+        }
+        echo $meta;
+        echo $message;
+
+    }
+    else if(@$_GET["aparam"] == "edit")
+        include(translate('<! cms/ank/edit-ank !>'));
+    else if(@$_GET["aparam"] == "view")
+        include(translate('<! cms/ank/view-ank !>'));
+    else if(@$_GET["aparam"] == "download")
+        // TODO: #232: this won't work due to header problem
+        include(translate('<! global/get_ank !>'));
+    else
+    {
+        if (@$group["#admin"] || @$group["#ank"])
+        {?>
+            <div style=""><a class="linkButton" href="register/view">Manage</a></div><?php
+        }
+        //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
+        $text = file_get_contents( "{$SETTINGS["datadir"]}cms/pages/$pageid/content" );
+        $text = str_replace("\${csrf_token}","<input type=\"hidden\" name=\"csrf_token\" value=\"ank_$pageid\" />",$text);
+        $source  = "";
+        include(translate("<! cms/readtext --markdown --text !>"));
+    }
 ?>
