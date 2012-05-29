@@ -106,8 +106,10 @@
         }
       ?>
       </table>
-      <div style="white-space: nowrap"><input type="submit" name="update-ank" value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
-        <a class="linkButton" href="?ref=ladmin&amp;act=viewAnk" style="height: 20px; line-height: 20px; vertical-align: bottom;">Вернуться к списку анкет</a></div>
+      <div style="white-space: nowrap"><input type="submit" name="update-ank"
+          value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
+        <a class="linkButton" href="view#<?php echo $sBaseAnkFileName; ?>"
+          style="height: 20px; line-height: 20px; vertical-align: bottom;">Вернуться к списку анкет</a></div>
     </form>
 
     <?php
@@ -133,19 +135,17 @@
     $sAnkFileName = "$content_dir/ank/$sBaseAnkFileName";
     if (empty($sBaseAnkFileName)) {?>
       <p>Не задано имя файла анкеты.
-        <a href="view&amp;file=<?php echo $sBaseAnkFileName; ?>">Вернуться
-          к просмотру</a></p><?php
+        <a href="view">Вернуться к просмотру</a></p><?php
       return;
     }
     if (file_exists($sAnkFileName)) @chmod($sAnkFileName, 0666);
-    // TODO: тут тоже неправильная ссылка
     if (@$xml->asXML($sAnkFileName) === false) {?>
       <p>Не удалось сохранить анкету (нужно зайти по FTP и сделать chmod 666).
-        <a href="view&amp;file=<?php echo $sBaseAnkFileName; ?>">Вернуться к просмотру</a></p><?php
+        <a href="view#<?php echo $sBaseAnkFileName; ?>">Вернуться к просмотру</a></p><?php
       return;
     }
     ?>
-    <p>Анкета сохранена успешно. <a href="view&amp;file=<?php echo $sBaseAnkFileName; ?>">Вернуться к просмотру</a></p>
+    <p>Анкета сохранена успешно. <a href="view#<?php echo $sBaseAnkFileName; ?>">Вернуться к просмотру</a></p>
     <?php
   }
   else

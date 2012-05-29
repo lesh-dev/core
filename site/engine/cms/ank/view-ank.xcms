@@ -140,7 +140,7 @@
       ?>
       <tr>
         <td class="ankListRowTitle">
-          <?php echo $sName; ?>
+          <?php echo $sName; ?><a name="<?php echo $sBaseAnkFileName; ?>"></a>
           <span style="float: right">
             <!-- TODO: #232: this won't work: ank download broken, 'Headers are already send...' -->
             <!--<a style="margin-right: 10px" href="download&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>-->
