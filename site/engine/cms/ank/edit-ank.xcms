@@ -1,5 +1,6 @@
-<# cms/ank/style #>
 <# auth/ #admin #ank #>
+<# cms/ank/func #>
+<# cms/ank/style #>
 <?php
 
   $aFields = array(
@@ -25,25 +26,6 @@
     "HRModified"=>"Последняя модификация",
     "FileName"=>"Имя файла"
   );
-
-  function EMakeSelector($sSK) {
-    $aStatuses = array(
-      "new"=>"Новая",
-      "progress"=>"В обработке",
-      "processed"=>"Обработана",
-      "declined"=>"Отклонена",
-      "cont"=>"Продолжающий школьник",
-      "old"=>"Старый школьник (не едет)",
-      "spam"=>"Спам");
-    $sHTML = '<select name="Status">';
-    foreach ($aStatuses as $sKey => $sTitle)
-    {
-      $sSel = ($sKey == $sSK) ? ' selected="selected" ' : '';
-      $sHTML .= "<option$sSel value=\"$sKey\">$sTitle</option>";
-    }
-    $sHTML .= "</select>";
-    return $sHTML;
-  }
 
   function editAnk()
   {
@@ -82,7 +64,7 @@
         </td>
       </tr>
         <tr><td class="ankList"><span class="ankEditField">Статус анкеты</span>
-          <?php echo EMakeSelector(@$oAnk["Status"]); ?></td></tr>
+          <?php echo xcms_ank_make_selector(@$oAnk["Status"], "Edit"); ?></td></tr>
       <?php
         foreach ($aFields as $sKey=>$sFieldTitle)
         {

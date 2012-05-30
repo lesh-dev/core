@@ -1,8 +1,9 @@
-<# cms/ank/style #>
 <# auth/ #admin #ank #>
+<# cms/ank/func #>
+<# cms/ank/style #>
 <form method="post" style="margin-bottom: 2px">
   <?php
-    echo MakeSelector(@$_POST["ShowStatus"]);
+    echo xcms_ank_make_selector(@$_POST["ShowStatus"], "Show");
   ?>
   <input type="submit" value="Показать">
 </form>
@@ -20,32 +21,6 @@
     return $sHTML;
   }
 
-  function GetShowStatuses()
-  {
-    return array(
-      "notspam"=>"Все, кроме спама",
-      "new"=>"Новые",
-      "progress"=>"В обработке",
-      "processed"=>"Обработанные",
-      "declined"=>"Отклонённые",
-      "cont"=>"Продолжающие школьники",
-      "old"=>"Старые школьники (не едут)",
-      "all"=>"Все");
-  }
-
-  function MakeSelector($sSK) {
-    $aStatuses = GetShowStatuses();
-
-    $sHTML = '<select name="ShowStatus">';
-    foreach ($aStatuses as $sKey => $sTitle)
-    {
-      $sSel = ($sKey == $sSK) ? ' selected="selected" ' : '';
-      $sHTML .= "<option$sSel value=\"$sKey\">$sTitle</option>";
-    }
-    $sHTML .= "</select>";
-    return $sHTML;
-  }
-
   function WrapIfMultiline($sHTML) {
     if (strpos($sHTML, "<br />")) $sHTML = "<br />$sHTML";
     return $sHTML;
@@ -57,7 +32,7 @@
   function PrintAnk($sShowStatus)
   {
     global $content_dir, $design_dir, $web_prefix;
-    $aShowStatuses = GetShowStatuses();
+    $aShowStatuses = xcms_ank_get_show_status_list();
     $nCount = 50;
     if (!array_key_exists($sShowStatus, $aShowStatuses)) $sShowStatus = "notspam";
     if ($sShowStatus == "all") $nCount = 0; // show all
@@ -126,14 +101,7 @@
       $sHRModified = htmlspecialchars(@$oAnk["HRModified"]);
       $sStatus = htmlspecialchars(@$oAnk["Status"]);
 
-      $aStatuses = array(
-        "new"=>"Новая",
-        "progress"=>"В обработке",
-        "processed"=>"Обработана",
-        "declined"=>"Отклонена",
-        "cont"=>"Продолжающий",
-        "old"=>"Старый (не едет)",
-        "spam"=>"Спам");
+      $aStatuses = xcms_ank_get_status_list();
       if (!array_key_exists($sStatus, $aStatuses)) $sStatus = "new"; // default
       $sHRStatus = $aStatuses[$sStatus];
 

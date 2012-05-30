@@ -1,0 +1,50 @@
+<?php
+    /* Complete list of valid anketa statuses */
+    function xcms_ank_get_status_list()
+    {
+        return array(
+            "new"=>"Новая",
+            "progress"=>"В обработке",
+            "processed"=>"Обработана",
+            "declined"=>"Отклонена",
+            "cont"=>"Продолжающий",
+            "old"=>"Старый (не едет)",
+            "duplicate"=>"Дубликат",
+            "spam"=>"Спам");
+    }
+
+    /* Anketa status selector for viewer */
+    function xcms_ank_get_show_status_list()
+    {
+        return array(
+          "notspam"=>"Все, кроме спама и дублей",
+          // TODO: implement 'notdecl'
+          //"notdecl"=>"Все, кроме спама, дублей и отклонённых",
+          "new"=>"Новые",
+          "progress"=>"В обработке",
+          "processed"=>"Обработанные",
+          "declined"=>"Отклонённые",
+          "cont"=>"Продолжающие школьники",
+          "old"=>"Старые школьники (не едут)",
+          "all"=>"Все");
+    }
+
+    function xcms_ank_make_selector($sSK, $mode)
+    {
+        $name = ($mode == "Show") ? "ShowStatus" : "Status";
+
+        $aStatuses = ($mode == "Show") ?
+            xcms_ank_get_show_status_list() :
+            xcms_ank_get_status_list();
+
+        $sHTML = "<select name=\"$name\">";
+        foreach ($aStatuses as $sKey => $sTitle)
+        {
+            $sSel = ($sKey == $sSK) ? ' selected="selected" ' : '';
+            $sHTML .= "<option$sSel value=\"$sKey\">$sTitle</option>";
+        }
+        $sHTML .= "</select>";
+        return $sHTML;
+    }
+
+?>
