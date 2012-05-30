@@ -16,7 +16,7 @@
   	global $getTagList_output;
 	$filec = file_get_contents($file);
 	$filec = str_replace("\r","",$filec);
-	if(substr($filec,0,2) != "<?")
+	if(substr($filec,0,5) != "<?php")
 	{
 		$rez = explode("\n",$filec);
 		foreach($rez as $key=>$value)

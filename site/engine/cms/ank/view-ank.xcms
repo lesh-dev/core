@@ -160,7 +160,7 @@
       <tr><td class="ankList"><span class="ankListField">Образование</span>: <?php echo $sSchool; ?>
         <?php echo $sSchoolLocation; ?>, <span class="ankListField">класс</span>: <?php echo $sClass; ?></td></tr>
       <!-- phones -->
-      <? if (!empty($sCellular) || !empty($sPhone)) {?>
+      <?php if (!empty($sCellular) || !empty($sPhone)) {?>
       <tr><td class="ankList"><span class="ankListField">Телефоны</span>:
         <?php
         if ($sCellular) {?>

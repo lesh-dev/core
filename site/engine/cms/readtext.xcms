@@ -93,7 +93,7 @@ if($need)
                 $idata .= "\$_$k = \"$v\";";
             }
             $text = substr($text,0,$p).
-                "<? $idata ; include(\"$engine_dir/plugins/dollar/$name.php\"); ?>".
+                "<?php $idata ; include(\"$engine_dir/plugins/dollar/$name.php\"); ?>".
                 substr($text,$l+1);
         }
     }
