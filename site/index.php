@@ -21,6 +21,14 @@
 
     $f = fopen();*/
 
+
+    function xcms_log($log_level, $message)
+    {
+        $f = fopen("engine.log", "a+");
+        fwrite($f, "[".date('Y.m.d H:i:s')."]: $message.\n");
+        fclose($f);
+    }
+
     function setArgs($code,$outputStream)
     {
         global $SETTINGS;
@@ -86,7 +94,11 @@
             {
                 fputs($outputStream,file_get_contents("{$SETTINGS["designdir"]}$name.template"));
             }
-            else fputs($outputStream,file_get_contents("{$SETTINGS["elementsdir"]}{$SETTINGS["nopagecode"]}.code"));
+            else
+            {
+                xcms_log(0, "name is '$name', nopagecode: ".$SETTINGS["nopagecode"]);
+                fputs($outputStream,file_get_contents("{$SETTINGS["elementsdir"]}{$SETTINGS["nopagecode"]}.code"));
+            }
         }
         ParseString($close,$outputStream);
     }
@@ -101,7 +113,7 @@
         $toCompile = false;
         if(!file_exists($filename))
         {
-            echo "<br><b>Compiler fatal error:</b> can_t find source file $filename";
+            xcms_log(0, "Compiler fatal error: can't find source file '$filename'");
         }
         if(!file_exists($destination))$toCompile = true;
         else if(filemtime($filename)>filemtime($destination))
@@ -110,8 +122,12 @@
         }
         if($toCompile)
         {
-            //echo "Compile!";
-            $f = fopen($destination,"w");
+            xcms_log(1, "Compiling '$filename'");
+            $f = fopen($destination, "w");
+            if (!file_exists($filename)) {
+                xcms_log(0, "Compile error: cannot find file '$filename'");
+                return;
+            }
             ParseString(file_get_contents($filename),$f);
             fclose($f);
         }
@@ -154,7 +170,7 @@
     }
 
     // Find prec file
-    compile("$rfile","{$SETTINGS["precdir"]}$ref.php");
+    compile($rfile, "{$SETTINGS["precdir"]}$ref.php");
 
     /*
     $toCompile = false;
