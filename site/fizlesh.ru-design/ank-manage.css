@@ -63,39 +63,40 @@ table.ankEdit {
   font-size: 9pt;
 }
 
+span.ankStatus {
+  font-weight: bold;
+}
+
 span.ankStatus.new {
   color: #ffff00;
-  font-weight: bold;
 }
 
 span.ankStatus.progress {
   color: #9f7f00;
-  font-weight: bold;
 }
 
 span.ankStatus.processed {
-  font-weight: bold;
   color: #008f00;
 }
 
 span.ankStatus.declined {
   color: #7f7f7f;
-  font-weight: bold;
 }
 
 span.ankStatus.cont {
   color: #006f00;
-  font-weight: bold;
 }
 
 span.ankStatus.old {
   color: #3f3faf;
-  font-weight: bold;
+}
+
+span.ankStatus.duplicate {
+  color: #ff7f50;
 }
 
 span.ankStatus.spam {
   color: #ff0000;
-  font-weight: bold;
 }
 
 ul.ankList {

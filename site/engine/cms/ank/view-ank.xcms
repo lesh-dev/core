@@ -60,6 +60,11 @@
       if (empty($sCurStatus)) $sCurStatus = "new"; // default value
       if ($sShowStatus == "notspam") {
         if ($sCurStatus == "spam") continue;
+        if ($sCurStatus == "duplicate") continue;
+      } elseif ($sShowStatus == "notdecl") {
+        if ($sCurStatus == "spam") continue;
+        if ($sCurStatus == "duplicate") continue;
+        if ($sCurStatus == "declined") continue;
       } elseif ($sShowStatus == "all") {
         // show all anketas
       } else {
