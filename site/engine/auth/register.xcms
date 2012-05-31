@@ -63,9 +63,10 @@
       {
         $mail .= "\t$k :\t$v\r\n";
       }
-      send_notify_mail("developers","Пользователь создан: {$DEFREGUSER["login"]}", 
+      xcms_send_notification("developers",
+        "Пользователь создан: {$DEFREGUSER["login"]}",
         $mail
-        );
+      );
        
       $created = true;
     } 

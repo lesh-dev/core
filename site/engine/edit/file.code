@@ -49,15 +49,17 @@
             // include_once("{$SETTINGS["elementsdir"]}cms/addrssfeed.php");
             // addrssfeed("Изменения в разделе", "сабж","","");
             system("diff $target_name $ename > $diff_name");
-            send_notify_mail("developers","[Lesh CMS notification] Изменена страница: $pageid",
-                "Была произведена правка страницы. Дифф:\n\r".
-                "=======================================\n\r".
-                file_get_contents($diff_name)."\n\r".
-                "=======================================\n\r".
-                "Теперь содержание страницы -- следующее:\n\r".
-                "=======================================\n\r".
-                file_get_contents($ename)."\n\r".
-                "=======================================\n\r"
+            $lf = "\r\n";
+            xcms_send_notification("developers",
+                "[Lesh CMS notification] Изменена страница: $pageid",
+                "Была произведена правка страницы. Дифф:$lf".
+                "=======================================$lf".
+                file_get_contents($diff_name).$lf.
+                "=======================================$lf".
+                "Теперь содержание страницы -- следующее:$lf".
+                "=======================================$lf".
+                file_get_contents($ename).$lf.
+                "=======================================$lf"
             );
             unlink($diff_name);
             system("gzip $target_name");

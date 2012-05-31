@@ -1,5 +1,5 @@
 <?php
-    function send_notify_mail($targetList, $subject, $mailText)
+    function xcms_send_notification($targetList, $subject, $mailText)
     {
         global $SETTINGS, $login;
         if (array_key_exists("mailer_enabled", $SETTINGS) && $SETTINGS["mailer_enabled"] === false) return;
@@ -20,7 +20,6 @@
             'Content-Type: text/plain; charset=utf-8'."\r\n".
             "Content-Transfer-Encoding: 8bit\r\n"
         );
-
-        if (!$ok) echo "<li>SENDMAIL FAILED.";
+        return $ok;
     }
 ?>
