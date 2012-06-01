@@ -1,4 +1,4 @@
-<# auth/logout #>
-<?php @header("Location: index.php");?>
+<# auth/logout_func #>
+<?php @header("Location: /$web_prefix"); ?>
 <h1>До свидания!</h1>
 <# redir index 0#>

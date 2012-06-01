@@ -1,0 +1,4 @@
+<?php
+    @setcookie("auth-login","");
+    @setcookie("auth-passw","");
+?>
