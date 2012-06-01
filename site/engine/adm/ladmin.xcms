@@ -118,8 +118,8 @@
     }
     else if(@$_GET["mode"]=="meta" || @$_GET["act"]=="meta")
     {
-        include(translate("<! cms/.lighteditmenu !>"));
-        include(translate("<! cms/.lighteditrename !>"));
+        include(translate("<! cms/light_edit_menu !>"));
+        include(translate("<! cms/light_edit_rename !>"));
         include(translate("<! cms/editmetatags !>"));
         include(translate("<! cms/.lighticoneditor !>"));
     }
