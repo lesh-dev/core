@@ -30,7 +30,7 @@
 <tr><td>Подзаголовок<br><font size="-1">То есть тот текст, который (может быть) появится где-нибудь на странице.</font><td><input name="subheader">
 <?php
   echo '<tr><td colspan="2"><h3>Матрица доступа</h3><table><tr><td>Группа<td>Может смотреть<td>Может изменять';
-  include_once("$engine_dir/.sys/groups.php");
+  include_once("$engine_dir/sys/groups.php");
   foreach(all_groups() as $g=>$translation)
   {
     if(!strlen($translation)) continue;

@@ -6,7 +6,7 @@
     if(@$_POST["set_groups"])
     {
         $list = getList($_GET['username']);
-        include_once("$engine_dir/.sys/groups.php");
+        include_once("$engine_dir/sys/groups.php");
         $all_groups = all_groups();
         $group = array();
         foreach($all_groups as $k=>$v)
@@ -104,7 +104,7 @@
     {
         include(translate("<! edit/tag `group`,`login`,`passwd` !>"));
         echo '<h3>Права доступа</h3>';
-        include_once("$engine_dir/.sys/groups.php");
+        include_once("$engine_dir/sys/groups.php");
         $all_groups = all_groups();
         $user_groups = explode(" ",$list['group']);
         echo "<form method=\"post\">";

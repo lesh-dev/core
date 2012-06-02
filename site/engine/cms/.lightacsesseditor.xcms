@@ -2,7 +2,7 @@
               <table><tr><td><b>Чтение</b><td><b>Запись</b>
               <tr><td valign="top">
               <?php
-                include_once("$engine_dir/.sys/groups.php");
+                include_once("$engine_dir/sys/groups.php");
                 if(@$_POST["change-acsess"])
                 {
                   $nview = "";

@@ -51,7 +51,7 @@
 
         fputs($f,"\n?>");
         include("settings.php");
-        include("$engine_dir/.sys/settings.php");
+        include("$engine_dir/sys/settings.php");
         include("$engine_dir/cms/build_rewrite.xcms");
         unlink("install.php");
     }
