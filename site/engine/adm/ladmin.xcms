@@ -7,7 +7,7 @@
     $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
     include(translate("<! auth/ #editor #admin {$INFO["edit"]} !>"));
 ?>
-<# cms/.lightcreatepage-before #>
+<# cms/light_create_page_before #>
 <?php
     if(@$_POST["delete-section"])
     {
@@ -196,7 +196,7 @@
         include(translate("<! auth/myprofile !>"));
     }
     elseif(@$_GET["act"]=="cChapter")
-        include(translate("<! cms/.lightcreatepage-after !>"));
+        include(translate("<! cms/light_create_page_after !>"));
     else include(translate('<! cms/light_edit_table !>'));
 ?>
         </div><!-- content -->
