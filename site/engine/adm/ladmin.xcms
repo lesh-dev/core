@@ -91,7 +91,7 @@
                 echo '
                     <a'.xcms_href(array('page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Контент</a>
                     <a'.xcms_href(array('mode'=>'meta', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Настройки</a>
-                    <a'.xcms_href(array('mode'=>'lightimageeditor', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Картинки</a>
+                    <a'.xcms_href(array('mode'=>'imgedit', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Картинки</a>
                     <a'.xcms_href(array('mode'=>'acsess', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Доступ</a>';
             ?>
 <?php
@@ -123,9 +123,9 @@
         include(translate("<! cms/editmetatags !>"));
         include(translate("<! cms/.lighticoneditor !>"));
     }
-    else if(@$_GET["mode"]=="lightimageeditor" )
+    else if(@$_GET["mode"]=="imgedit" )
     {
-        include(translate("<! cms/.lightimageeditor !>"));
+        include(translate("<! cms/light_image_editor !>"));
     }
     else if(@$_GET["mode"]=="configuration" || @$_GET["act"]=="configuration")
     {
