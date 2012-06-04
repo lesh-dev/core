@@ -181,10 +181,6 @@
     {
         include(translate('<! auth/ #admin !><! auth/register !>'));
     }
-    elseif(@$_GET["act"]=="rename_section")
-    {
-        include(translate("<! cms/.lightrenamesection !>"));
-    }
     elseif(@$_GET["act"]=="userlist")
     {
         $preface = xcms_url(array('ref'=>'ladmin', 'act'=>'userlist', 'page'=>$pageid));
