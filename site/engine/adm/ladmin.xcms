@@ -197,7 +197,7 @@
     }
     elseif(@$_GET["act"]=="cChapter")
         include(translate("<! cms/.lightcreatepage-after !>"));
-    else include(translate('<! cms/.lightedittable !>'));
+    else include(translate('<! cms/light_edit_table !>'));
 ?>
         </div><!-- content -->
     </div><!-- containter -->
