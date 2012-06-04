@@ -162,7 +162,7 @@
     }
     else if(@$_GET["act"]=="css")
     {
-        include(translate('<! cms/.lightcsseditor !>'));
+        include(translate('<! cms/light_css_editor !>'));
     }
     elseif(@$_GET["act"]=="taglist")
     {
