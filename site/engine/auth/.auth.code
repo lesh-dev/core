@@ -1,5 +1,5 @@
 <?php
-  $acsess = false;
+  $access = false;
   foreach ($argv as $key=>$value) 
   {
     if(!$key) continue;
@@ -12,14 +12,14 @@
       }
     }	
   }
-  if(@$keys[$login]) $acsess = true;
+  if(@$keys[$login]) $access = true;
   foreach ($group as $key=>$value) 
   {
-    	if(@$keys[$value]) $acsess = true;
+    	if(@$keys[$value]) $access = true;
   }
   
-  if($login=="root") $acsess = true;
-  if(!$acsess){
-        include("{$SETTINGS["datadir"]}auth/errors/noacsess.php");
+  if($login=="root") $access = true;
+  if(!$access){
+        include("{$SETTINGS["datadir"]}auth/errors/noaccess.php");
         die();}
 ?>

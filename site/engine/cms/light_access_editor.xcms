@@ -3,7 +3,7 @@
               <tr><td valign="top">
               <?php
                 include_once("$engine_dir/sys/groups.php");
-                if(@$_POST["change-acsess"])
+                if(@$_POST["change-access"])
                 {
                   $nview = "";
                   $nedit = "";
@@ -66,5 +66,5 @@
                 echo "</select>";
               ?>
               </table>
-              <input type="submit" name="change-acsess" value="Изменить">
+              <input type="submit" name="change-access" value="Изменить">
               </form>

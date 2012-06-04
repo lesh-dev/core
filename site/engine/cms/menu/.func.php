@@ -46,7 +46,7 @@ usort($html_array,"sort_by_mtime");
       {
         $INFO = @getList("$initPath/info");
         include(translate("<! auth/lauth {$INFO['view']} !>"));
-        if($acsess)
+        if($access)
           $text = file_get_contents("$initPath/applymenu");
         else return;
       }

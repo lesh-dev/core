@@ -1,5 +1,5 @@
 <?php
-  $acsess = false;
+  $access = false;
   
   foreach ($argv as $key=>$value) 
   {
@@ -13,11 +13,11 @@
       }
     }	
   }
-  if(@$keys[$login]) $acsess = true;
+  if(@$keys[$login]) $access = true;
   
   foreach ($group as $key=>$value) 
   {
-    	if(@$keys[$value]) $acsess = true;
+    	if(@$keys[$value]) $access = true;
   }
-  if($login=="root") $acsess = true;
+  if($login=="root") $access = true;
 ?>

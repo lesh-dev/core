@@ -92,7 +92,7 @@
                     <a'.xcms_href(array('page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Контент</a>
                     <a'.xcms_href(array('mode'=>'meta', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Настройки</a>
                     <a'.xcms_href(array('mode'=>'imgedit', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Картинки</a>
-                    <a'.xcms_href(array('mode'=>'acsess', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Доступ</a>';
+                    <a'.xcms_href(array('mode'=>'access', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Доступ</a>';
             ?>
 <?php
     if(@$_GET["mode"] == "")
@@ -168,7 +168,7 @@
     {
         include(translate('<! edit/taglistadmin !>'));
     }
-    elseif(@$_GET["mode"]=="acsess")
+    elseif(@$_GET["mode"]=="access")
     {
         include(translate("<! cms/light_access_editor !>"));
     }
