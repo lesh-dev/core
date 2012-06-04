@@ -170,7 +170,7 @@
     }
     elseif(@$_GET["mode"]=="acsess")
     {
-        include(translate("<! cms/.lightacsesseditor !>"));
+        include(translate("<! cms/light_access_editor !>"));
     }
         elseif(@$_GET["act"]=="groupadmin")
     {
