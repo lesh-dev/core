@@ -141,6 +141,8 @@
     {
         include(translate('<! cms/ank/manage !>'));
     }
+    /*
+    // Here is a dead code (mode is unreferenced in interface)
     else if(@$_GET["mode"]=="documentation")
     {
         $editfile = "help/pagetype_$type.html";
@@ -160,6 +162,7 @@
             echo '<p><form method="POST"><input type="submit" value="Изменить!" name="change-help"></form>';
         }
     }
+    */
     else if(@$_GET["act"]=="css")
     {
         include(translate('<! cms/light_css_editor !>'));

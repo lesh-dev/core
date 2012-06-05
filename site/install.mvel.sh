@@ -14,7 +14,7 @@ sudo rm -rf "$dest/.prec/"*
 sudo rm -rf "$dest/admin_doc/.prec/"*
 sudo mkdir -p "$dest/.prec/"
 sudo mkdir -p "$dest/admin_doc/.prec/"
-sudo touch "$dest/"{.htaccess,settings.php}
+sudo touch "$dest/"{.htaccess,settings.php,engine.log}
 if [ "$1" = "-f" ] ; then
     sudo touch "$dest/install.php"
     sudo chown -R apache:apache "$dest/install.php"
