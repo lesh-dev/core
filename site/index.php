@@ -25,7 +25,7 @@
     function xcms_log($log_level, $message)
     {
         $f = fopen("engine.log", "a+");
-        fwrite($f, "[".date('Y.m.d H:i:s')."]: $message.\n");
+        fwrite($f, "[".date('Y.m.d H:i:s')."]: $message\n");
         fclose($f);
     }
 
@@ -54,7 +54,11 @@
     {
         global $SETTINGS;
         $open = stristr($s,$SETTINGS["openbracket"]);
-        if(!$open) {fputs($outputStream,$s); return;}
+        if(!$open)
+        {
+            fputs($outputStream,$s);
+            return;
+        }
         $close = stristr($s,$SETTINGS["closebracket"]);
         $close = substr($close,strlen($SETTINGS["closebracket"]));
         $before = substr($s, 0, strlen($s) - strlen($open));
@@ -66,19 +70,25 @@
         $code = substr($code,0,strlen($code)-strlen($close)-strlen($SETTINGS["closebracket"]));
 
         $code = trim($code);
-        $argv = explode(" ",$code);
+        $argv = explode(' ', $code);
 
         $name = $argv[0];
-        if(file_exists("{$SETTINGS["elementsdir"]}$name.php"))
+        $elem_full_name = $SETTINGS["elementsdir"].$name;
+        $template_full_name = $SETTINGS["designdir"]."$name.template";
+
+        if(file_exists("$elem_full_name.php"))
         {
-            include("{$SETTINGS["elementsdir"]}$name.php");
+            include("$elem_full_name.php");
         }
         else
         {
-            setArgs($code,$outputStream);
-            if(file_exists("{$SETTINGS["elementsdir"]}$name.xcms"))
+            setArgs($code, $outputStream);
+            $full_name = "$elem_full_name.xcms";
+            if (!file_exists($full_name))
+                $full_name = "${elem_full_name}default.xcms";
+            if (file_exists($full_name))
             {
-                $newS = file_get_contents("{$SETTINGS["elementsdir"]}$name.xcms");
+                $newS = file_get_contents($full_name);
                 foreach ($argv as $key=>$value)
                 {
                     $newS = str_replace("%$key",$value,$newS);
@@ -86,13 +96,13 @@
                 $newS = str_replace("%*",$code,$newS);
                 ParseString($newS,$outputStream);
             }
-            elseif(file_exists("{$SETTINGS["elementsdir"]}$name.code"))
+            elseif(file_exists("$elem_full_name.code"))
             {
-                fputs($outputStream,file_get_contents("{$SETTINGS["elementsdir"]}$name.code"));
+                fputs($outputStream, file_get_contents("$elem_full_name.code"));
             }
-            elseif(file_exists("{$SETTINGS["designdir"]}$name.template"))
+            elseif(file_exists($template_full_name))
             {
-                fputs($outputStream,file_get_contents("{$SETTINGS["designdir"]}$name.template"));
+                fputs($outputStream,file_get_contents($template_full_name));
             }
             else
             {
@@ -171,7 +181,6 @@
 
     // Find prec file
     compile($rfile, "{$SETTINGS["precdir"]}$ref.php");
-
     /*
     $toCompile = false;
     if(!file_exists("{$SETTINGS["precdir"]}$ref.php"))$toCompile = true;

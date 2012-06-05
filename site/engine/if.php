@@ -1,25 +1,35 @@
 <?php
-  $input = explode("//",$code);
-  foreach ($input as $key=>$value) {
-  	$input[$key] = str_replace("//","",$value);
-  }
+    $input = explode("//", $code);
+    foreach ($input as $key=>$value)
+    {
+        $input[$key] = str_replace("//", "", $value);
+    }
 
-  @$source1 = "{$SETTINGS["elementsdir"]}{$input[2]}.xcms";
-  @$source2 = "{$SETTINGS["elementsdir"]}{$input[3]}.xcms";
-  if(!file_exists(@$source1)) @$source1 = "{$SETTINGS["elementsdir"]}{$input[2]}.code";
-  if(!file_exists(@$source2)) @$source2 = "{$SETTINGS["elementsdir"]}{$input[3]}.code";
-  @$dest1 = $SETTINGS["precdir"].str_replace("/","_",$source1).".php";
-  @$dest2 = $SETTINGS["precdir"].str_replace("/","_",$source2).".php";
+    $cond = $input[1];
+    $then = $input[2];
+    @$else = $input[3];
 
-  compile($source1,$dest1);
-  if(@$input[3]) if(@$input[3]!="NULL") compile($source2,$dest2);
+    @$elem_dir = $SETTINGS["elementsdir"];
+    @$then_source = "$elem_dir$then.xcms";
+    @$else_source = "$elem_dir$else.xcms";
+    if(!file_exists(@$then_source)) @$then_source = "$elem_dir${then}default.xcms";
+    if(!file_exists(@$else_source)) @$else_source = "$elem_dir${else}default.xcms";
+    // damn, nothing suits
+    if(!file_exists(@$then_source)) @$then_source = "$elem_dir$then.code";
+    if(!file_exists(@$else_source)) @$else_source = "$elem_dir$else.code";
 
-  setArgs(@$input[4],$outputStream);
-  fputs($outputStream,
-  "<"."?php ".
-  "if({$input[1]}){include('$dest1');} ");
+    @$then_dest = $SETTINGS["precdir"].str_replace('/', '_', $then_source).".php";
+    @$else_dest = $SETTINGS["precdir"].str_replace('/', '_', $else_source).".php";
 
-  if(@$input[3]) if(@$input[3]!="NULL") fputs($outputStream,"else {include('$dest2');}");
+    compile($then_source, $then_dest);
+    if (@$else && $else != "NULL") compile($else_source, $else_dest);
 
-  fputs($outputStream,"?".">");
+    setArgs(@$input[4], $outputStream);
+    fputs($outputStream,
+        '<'.'?php '.
+        "if($cond) { include('$then_dest'); } ");
+    if (@$else && $else !="NULL")
+        fputs($outputStream, "else { include('$else_dest'); }");
+
+    fputs($outputStream, '?'.'>');
 ?>

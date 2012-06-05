@@ -19,5 +19,5 @@ if [ "$1" = "-f" ] ; then
     sudo touch "$dest/install.php"
     sudo chown -R apache:apache "$dest/install.php"
 fi
-sudo chown -R apache:apache "$dest/"{.prec,fizlesh.ru-content,.htaccess,settings.php}
+sudo chown -R apache:apache "$dest/"{.prec,fizlesh.ru-content,.htaccess,settings.php,engine.log}
 sudo chown -R apache:apache "$dest/admin_doc/"{.prec,content,.htaccess,settings.php}
