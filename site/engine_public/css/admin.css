@@ -112,3 +112,34 @@ td.user-ops {
     text-align: left;
     vertical-align: top;
 }
+
+form {
+    margin: 0px;
+}
+
+div.admin-widget {
+    border: 1px solid #7f7f7f;
+    border-radius: 3px;
+    margin: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+}
+
+div.admin-widget h3 {
+    font-size: 12pt;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+div.admin-widget div.error {
+    color: #ff0000;
+}
+
+div.admin-widget div.warn {
+    color: #9f0000;
+}
+
+div.admin-widget div.notice {
+    color: #006f00;
+}

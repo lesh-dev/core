@@ -1,0 +1,16 @@
+<?php
+    if(@$_POST["rename-current-section"])
+    {
+        // TODO: check file path injection here
+        rename("{$SETTINGS["datadir"]}cms/pages/$pageid","{$SETTINGS["datadir"]}cms/pages/{$_POST["rename-current-section"]}");
+        ?>Путь успешно изменён!<?php
+    }
+?>
+<div class="admin-widget">
+<h3>Физический путь</h3>
+<div class="warn"><b>ВНИМАНИЕ:</b> Изменение физического пути страницы обычно нужно очень редко!</div>
+<form method="post">
+    Физический путь: <input name="rename-current-section" value="<?php echo $pageid;?>" />
+    <input type="submit" value="Изменить">
+</form>
+</div>

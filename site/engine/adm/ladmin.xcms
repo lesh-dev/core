@@ -119,8 +119,9 @@
     else if(@$_GET["mode"]=="meta" || @$_GET["act"]=="meta")
     {
         include(translate("<! cms/light_edit_menu !>"));
-        include(translate("<! cms/light_edit_rename !>"));
-        include(translate("<! cms/editmetatags !>"));
+        include(translate("<! cms/page_rename !>"));
+        include(translate("<! cms/page_alias !>"));
+        include(translate("<! cms/edit_meta_tags !>"));
         include(translate("<! cms/light_icon_editor !>"));
     }
     else if(@$_GET["mode"]=="imgedit" )

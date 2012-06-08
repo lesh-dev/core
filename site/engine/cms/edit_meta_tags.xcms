@@ -1,0 +1,43 @@
+<div class="admin-widget">
+    <h3>META-информация</h3>
+    <form method="post">
+<?php
+    if (@$_POST["edit-meta"])
+    {
+        foreach (@$_POST as $key=>$value)
+        {
+            // complete bullshit (TODO: rewrite on serialized info)
+            if ($key[0]=='_')
+            {
+                // TODO: wrapper for complete file writer/getter
+                $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/$key","w");
+                fputs($f, $value);
+                fclose($f);
+            }
+        }
+        ?>
+        <div class="notice">Мета-информация обновлена</div>
+        <?php
+    }
+?>
+    <table>
+        <!-- TODO: replace table -->
+        <tr><td>Описание</td>
+            <td><textarea cols="80" rows="3" name="_description"><?php
+                echo htmlspecialchars(@file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_description"));
+                ?></textarea></td>
+        </tr>
+        <tr><td>Ключевые слова</td>
+            <td><textarea cols="80" rows="2" name="_keywords"><?php
+                echo htmlspecialchars(@file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_keywords"));
+                ?></textarea>
+        </tr>
+        <tr><td>Автор</td>
+            <td><input size="80" name="_authors" value="<?php
+                echo htmlspecialchars(@file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_authors"));
+                ?>" />
+        </tr>
+    </table>
+    <input type="submit" name="edit-meta" value="Изменить" />
+    </form>
+</div>

@@ -7,7 +7,7 @@
 		fclose($f);
 	}
 	$tagfiles = glob("{$SETTINGS["elementsdir"]}taglist/*");
-	foreach($tagfiles as $value) 
+	foreach($tagfiles as $value)
 	{
 		$v = $value;
 		$v = str_replace("{$SETTINGS["elementsdir"]}taglist/","",$v);
