@@ -14,7 +14,7 @@ check_tabs()
 
 check_shorttag()
 {
-    if grep -RI '<?[^px]' ../../site ; then
+    if grep -RI '<[?][^px]' ../../site || grep -RI '<[?]$' ../../site ; then
         echo "shorttag check failed, please fix"
         exit 1
     fi
