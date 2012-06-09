@@ -1,4 +1,6 @@
 <?php
+/* version 1.4. rewritten from scratch [mvel@] */
+
 /* version 1.3   added taglist system. Afraid, this makes tags depending of xcms.*/
 /* version 1.2.1. editlist_form list of skipping fields added*/
 /* version 1.2. function editlist_form - a gui editor for lists.*/
@@ -6,6 +8,92 @@
    Now, if file is handled as php script, user will
    not read it. */
 /* version 1.0. Library created */
+
+
+/**
+  * Retrieve current page content location
+  * Assumes @name pageid and @name SETTINGS are defined
+  * TODO: Should be placed in the proper file (cms-related)
+  **/
+function xcms_get_info_file_name()
+{
+    global $SETTINGS;
+    global $pageid;
+    return "{$SETTINGS["datadir"]}cms/pages/$pageid/newinf";
+}
+
+/**
+  * Retrieves key-value-stored list from file
+  * @param file file name to read from
+  * @return key-value array with values (or empty array
+  * in case of errors)
+  **/
+function xcms_get_list($file)
+{
+    $keys = array();
+    if (!file_exists($file))
+    {
+        xcms_log(0, "List file '$file' cannot be found");
+        return $keys;
+    }
+    $cont = file($file);
+    foreach ($cont as $line)
+    {
+        $line = trim($line);
+        $p = strpos($line, ':');
+        if ($p === false)
+        {
+            xcms_log(1, "Invalid line in file '$file': '$line'");
+            continue;
+        }
+        $key = substr($line, 0, $p);
+        $value = substr($line, $p + 1);
+        // TODO: key regexp filtering
+        $keys[$key] = $value;
+    }
+    return $keys;
+}
+
+// TODO: document doxygen code style
+/**
+  *  Writes key-value array to file
+  *  @param file file name
+  *  @return true on success write, false otherwise
+  **/
+function xcms_save_list($file, $keys)
+{
+    $f = @fopen($file, "w");
+    if (!$f)
+    {
+        xcms_log(0, "Cannot open list file '$file' for writing");
+        return false;
+    }
+    foreach ($keys as $key => $value)
+    {
+        $value = trim($value);
+        $value = str_replace("\r", " ", $value);
+        $value = str_replace("\n", " ", $value);
+        $value = str_replace("  ", " ", $value);
+
+        // TODO: write error handling
+        fwrite($f, "$key:$value\n");
+    }
+    fclose($f);
+    return true;
+}
+
+/**
+  * This function typically should not be used. Instead,
+  * you should read all the keys and use them if possible
+  * to prevent duplicated disk access.
+  **/
+function xcms_get_key($file, $key)
+{
+    $keys = xcms_get_list($file);
+    if (array_key_exists($key, $keys))
+        return $keys[$key];
+    return NULL;
+}
 
 /********************************/
 /*          SETTINGS            */
@@ -40,6 +128,7 @@
 		return $taglist;
 	}
   }
+/*
   function applyTag($str,$list,$prefix="<",$suffix=">")
   {
     $s = $str;
@@ -49,7 +138,7 @@
     }
     return $s;
   }
-
+*/
   function saveList($list,$filename)
   {
     global $tag_php_delim;

@@ -4,37 +4,37 @@
 <?php
     if (@$_POST["edit-meta"])
     {
-        foreach (@$_POST as $key=>$value)
-        {
-            // complete bullshit (TODO: rewrite on serialized info)
-            if ($key[0]=='_')
-            {
-                // TODO: wrapper for complete file writer/getter
-                $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/$key","w");
-                fputs($f, $value);
-                fclose($f);
-            }
-        }
+        $description = @$_POST["description"];
+        $author = @$_POST["author"];
+        $keywords = @$_POST["keywords"];
+        $ifn = xcms_get_info_file_name();
+        $list = xcms_get_list($ifn);
+        // all necessary filtering is performed internally
+        $list["meta-author"] = $author;
+        $list["meta-description"] = $description;
+        $list["meta-keywords"] = $keywords;
+        xcms_save_list($ifn, $list);
         ?>
-        <div class="notice">Мета-информация обновлена</div>
+        <div class="notice">Мета-информация успешно обновлена</div>
         <?php
     }
+    $list = xcms_get_list(xcms_get_info_file_name());
 ?>
     <table>
         <!-- TODO: replace table -->
         <tr><td>Описание</td>
-            <td><textarea cols="80" rows="3" name="_description"><?php
-                echo htmlspecialchars(@file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_description"));
+            <td><textarea cols="80" rows="3" name="description"><?php
+                echo htmlspecialchars(@$list["meta-description"]);
                 ?></textarea></td>
         </tr>
         <tr><td>Ключевые слова</td>
-            <td><textarea cols="80" rows="2" name="_keywords"><?php
-                echo htmlspecialchars(@file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_keywords"));
+            <td><textarea cols="80" rows="2" name="keywords"><?php
+                echo htmlspecialchars(@$list["meta-keywords"]);
                 ?></textarea>
         </tr>
         <tr><td>Автор</td>
-            <td><input size="80" name="_authors" value="<?php
-                echo htmlspecialchars(@file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/_authors"));
+            <td><input size="80" name="author" value="<?php
+                echo htmlspecialchars(@$list["meta-author"]);
                 ?>" />
         </tr>
     </table>

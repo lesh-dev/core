@@ -4,6 +4,9 @@
   $ename = $editfile;
   if(!$ename) $ename = @$_POST[$pathv];
   if(!$ename) $ename = @$_GET[$pathv];
+  xcms_log(0, "SHIT");
+  xcms_log(0, $argv[1]);
+  xcms_log(0, $argv[2]);
   if(!$ename)
   {
     echo "<h4>Illegal filename.</h4>";
