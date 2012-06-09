@@ -1,15 +1,13 @@
 <?php
-  $pathv = @$argv[1];
-  if(!$pathv) $pathv = "edit-file";
-  $ename = $editfile;
-  if(!$ename) $ename = @$_POST[$pathv];
-  if(!$ename) $ename = @$_GET[$pathv];
-  xcms_log(0, "SHIT");
-  xcms_log(0, $argv[1]);
-  xcms_log(0, $argv[2]);
-  if(!$ename)
-  {
-    echo "<h4>Illegal filename.</h4>";
-  }
-  else @editlist_form($ename,"",@$argv[1],@$argv[2]);
+    // Seems to be rewritten soon (or thrown away as deprecated) [mvel@]
+    $pathv = @$argv[1];
+    if(!$pathv) $pathv = "edit-file";
+    $ename = $editfile;
+    if(!$ename) $ename = @$_POST[$pathv];
+    if(!$ename) $ename = @$_GET[$pathv];
+    if(!$ename)
+    {
+        echo "<h4>Illegal filename.</h4>";
+    }
+    else @editlist_form($ename, "", @$argv[1], @$argv[2]);
 ?>
