@@ -1,10 +1,20 @@
-<meta name="author" content="<# include _authors recurce #>">
-<meta name="keywords" content="<# include _keywords recurce #>">
-<meta name="description" content="<# include _description recurce #>">
-<title>
-<?php 
-  echo @$INFO["subheader"];
-  if(@strlen($INFO["subheader"]) && @strlen($INFO["header"]))
-    echo " - ";
-  echo @$INFO["header"];
+<?php
+    $list = xcms_get_list(xcms_get_info_file_name());
+    $author = @$list["meta-author"];
+    $description = @$list["meta-description"];
+    $keywords = @$list["meta-keywords"];
+?>
+<meta name="author" content="<?php echo htmlspecialchars($author); ?>" />
+<meta name="keywords" content="<?php echo htmlspecialchars($keywords); ?>" />
+<meta name="description" content="<?php echo htmlspecialchars($description); ?>" />
+<title><?php
+    // TODO: now we take these from INFO array, but all metainfo using another mechanism
+    // they will be merged so $INFO will contain all proper information
+    $subheader = @$INFO["subheader"];
+    $header = @$INFO["header"];
+    $title = $subheader;
+    if (strlen($title)) $title .= " :: ";
+    $title .= $header;
+    if (strlen($title)) $title .= " :: ФизЛЭШ"; // TODO: убрать костыль
+    echo htmlspecialchars($title);
 ?></title>
