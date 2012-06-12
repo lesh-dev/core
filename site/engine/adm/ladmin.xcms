@@ -75,6 +75,7 @@
                 <a'.xcms_href(array('act'=>'userlist', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Пользователи</a>
                 <a'.xcms_href(array('act'=>'groupadmin', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Группы</a>
                 <a'.xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Уведомления</a>
+                <a'.xcms_href(array('act'=>'__convert', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Convert</a>
                 <a'.xcms_href(array('act'=>'css', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Стиль</a>
                 <a href="/'.$web_prefix.'register/view" class="h-menu-link">Анкеты</a>
             '));
@@ -167,6 +168,31 @@
     else if(@$_GET["act"]=="css")
     {
         include(translate('<! cms/light_css_editor !>'));
+    }
+    else if(@$_GET["act"]=="__convert")
+    {
+        $fl = file('ifiles');
+        foreach ($fl as $fn) {
+            $fn = trim($fn);
+            echo dirname($fn).'<br/>';
+            $dn = dirname($fn);
+            $nfn = "$dn/newinf";
+            $list = getList($fn);
+            print_r($list);
+            echo "<br />";
+            $description = @file_get_contents("$dn/_description");
+            $author = @file_get_contents("$dn/_authors");
+            $keywords = @file_get_contents("$dn/_keywords");
+            $alias = @file_get_contents("$dn/currtag");
+            $menuTitle = @file_get_contents("$dn/applymenu");
+            $list["meta-description"] = $description;
+            $list["meta-author"] = $author;
+            $list["meta-keywords"] = $keywords;
+            $list["alias"] = $alias;
+            $list["menu-title"] = $menuTitle;
+            xcms_save_list($nfn, $list);
+        }
+        die();
     }
     elseif(@$_GET["act"]=="taglist")
     {

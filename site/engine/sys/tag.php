@@ -161,6 +161,7 @@ function xcms_get_key($file, $key)
   {
     global $tag_php_delim;
     $s = file($filename);
+    $rez = array();
     foreach ($s as $key=>$value)
     {
       $v = str_replace("\n","",$value);
