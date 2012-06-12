@@ -44,7 +44,7 @@ usort($html_array,"sort_by_mtime");
         $text = file_get_contents("$initPath/applymenu");
       else
       {
-        $INFO = @getList("$initPath/info");
+        $INFO = xcms_get_list("$initPath/info");
         include(translate("<! auth/lauth {$INFO['view']} !>"));
         if($access)
           $text = file_get_contents("$initPath/applymenu");

@@ -1,19 +1,22 @@
 <?php
-  $LIST["installed"] = "ok";
-  $LIST["maxNews"] = 10;
-  $INFO["installed"] = "ok";
-  $INFO["maxNews"] = 10;
-  saveList($INFO,"{$SETTINGS["datadir"]}cms/pages/$pageid/info");
-  $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/template","w");
-  fputs($f,
-'
-  <div class="newstitle"><a href="<STAMP>"><DATE>. Header</a></div>
-    <p class="text">text</p>
-  <div class="signature"><LOGIN></div>
-'
-  );
-  fclose($f);
-  //saveList($LIST,"{$SETTINGS["datadir"]}cms/pages/$pageid/info");
-  //echo '<script>alert("раздел новостей '.$pageid.' создан и инициализирован.");</script>';
+    $LIST["installed"] = "ok";
+    $LIST["maxNews"] = 10;
+    $INFO["installed"] = "ok";
+    $INFO["maxNews"] = 10;
 
+    xcms_save_list(xcms_get_info_file_name(), $INFO);
+    $template_name = "{$SETTINGS["datadir"]}cms/pages/$pageid/template";
+    $f = fopen($template_name, "w");
+    if ($f)
+    {
+        fputs($f,
+            '<div class="newstitle"><a href="<STAMP>"><DATE>. Header</a></div>'."\n".
+            '<p class="text">text</p>'."\n".
+            '<div class="signature"><LOGIN></div>');
+        fclose($f);
+    }
+    else
+    {
+        xcms_log(0, "[NEWS INSTALLER]: Cannot find template file '$template_name'");
+    }
 ?>

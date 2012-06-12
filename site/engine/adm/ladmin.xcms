@@ -4,7 +4,7 @@
 <# locale #>
 <# url #>
 <?php
-    $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
+    $INFO = xcms_get_list(xcms_get_info_file_name());
     include(translate("<! auth/ #editor #admin {$INFO["edit"]} !>"));
 ?>
 <# cms/light_create_page_before #>
@@ -38,7 +38,7 @@
                 }
             }
 
-            $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
+            $INFO = xcms_get_list(xcms_get_info_file_name());
             @$_GET["act"]="";
         }
     }

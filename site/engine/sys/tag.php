@@ -19,7 +19,7 @@ function xcms_get_info_file_name()
 {
     global $SETTINGS;
     global $pageid;
-    return "{$SETTINGS["datadir"]}cms/pages/$pageid/newinf";
+    return "{$SETTINGS["datadir"]}cms/pages/$pageid/info";
 }
 
 /**
@@ -173,14 +173,14 @@ function xcms_get_key($file, $key)
     return $rez;
   }
 
-  function editlist_form($file, $addparams,$skipparams="",$securityflags="")
+  function editlist_form($file, $addparams, $skipparams="",$securityflags="")
   /**
    * secyrityflags:
    *   -newkey - disable newkey option
   **/
   {
     global $SETTINGS;
-    $list = getList($file);
+    $list = xcms_get_list($file);
     if(!$list) echo "bad filename!";
 
     if(@$_POST["editTag"])

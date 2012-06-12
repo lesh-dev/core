@@ -1,17 +1,20 @@
 <?php
-  $pageid=@$_GET['page'];
-  if (!strlen($pageid)) 
-  {
-    $pageid = "index";
-    @$_GET["page"] = "index";
-  }
-  $preface = $pageid;
-  $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
-  $type = $INFO["type"];
-  $view = @$INFO["view"];
-  if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/info"))
-  {
-    include(translate('<# 404 #>'));
-    die();
-  }
+    $pageid=@$_GET['page'];
+    if (!strlen($pageid))
+    {
+        $pageid = "index";
+        @$_GET["page"] = "index";
+    }
+    $preface = $pageid;
+    $page_info = xcms_get_info_file_name();
+    xcms_log(0, $page_info);
+    if(!file_exists($page_info))
+    {
+        xcms_log(0, "Page info '$page_info' not found");
+        include(translate('<# 404 #>'));
+        die();
+    }
+    $INFO = @xcms_get_list($page_info);
+    $type = $INFO["type"];
+    $view = @$INFO["view"];
 ?>

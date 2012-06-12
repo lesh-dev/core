@@ -1,70 +1,73 @@
-              <form method="post">
-              <table><tr><td><b>Чтение</b><td><b>Запись</b>
-              <tr><td valign="top">
-              <?php
-                include_once("$engine_dir/sys/groups.php");
-                if(@$_POST["change-access"])
-                {
-                  $nview = "";
-                  $nedit = "";
-                  foreach ($_POST as $key=>$value) 
-                  {
-                    if(substr($key,0,5)=="edit-")
-                    {
-                      $nedit = substr($key,5)." ".$nedit;
-                    }	
-                    if(substr($key,0,5)=="view-")
-                    {
-                      $nview = substr($key,5)." ".$nview;
-                    }                    	
-                  }
-                  if(@$_POST["add-edit"])
-                    $nedit = $_POST["add-edit"]." ".$nedit;
-                  if(@$_POST["add-view"])
-                    $nview = $_POST["add-view"]." ".$nview;
-                  
-                  $INFO["view"] = $nview;
-                  $INFO["edit"] = $nedit;
-                  $dir =  "{$SETTINGS["datadir"]}cms/pages/$pageid";
-                  saveList($INFO,"$dir/info");                                    
-                }
-                $ag = all_groups();
-                $view = explode(" ",trim($INFO["view"]));
-                foreach ($view as $key=>$value) {
-                	if($value)
-                  {
-                    $t = @$ag[$value];
-                    echo "<input type=\"checkbox\" name=\"view-$value\" checked>$t ($value)<br />";
-                  }
-                }
-                echo "Добавить: <select name=\"add-view\" >";
-                echo "<option value=\"\">(не добавлять)</option>";
-                foreach(all_groups() as $k=>$v)
-                {
-            	    if(!strlen($v)) continue;
-                    echo "<option value=\"$k\">$v</option>";
-                }
-                echo "</select>";
-                
-                echo "<td width=\"5\"><td valign=\"top\">";
-                
-                $view = explode(" ",trim($INFO["edit"]));
-                foreach ($view as $key=>$value) {
-                	if($value)
-                  {
-                    $t = @$ag[$value];
-                    echo "<input type=\"checkbox\" name=\"edit-$value\" checked>$t ($value)<br />";
-                  }
-                }
-                echo "Добавить: <select name=\"add-edit\" >";
-                echo "<option value=\"\">(не добавлять)</option>";
-                foreach(all_groups() as $k=>$v)
-                {
-            	    if(!strlen($v)) continue;
-                    echo "<option value=\"$k\">$v</option>";
-                }
-                echo "</select>";
-              ?>
-              </table>
-              <input type="submit" name="change-access" value="Изменить">
-              </form>
+<form method="post">
+<table>
+    <tr><td><b>Чтение</b></td><td><b>Запись</b></td></tr>
+    <tr><td valign="top">
+<?php
+    include_once("$engine_dir/sys/groups.php");
+    if(@$_POST["change-access"])
+    {
+        $nview = "";
+        $nedit = "";
+        foreach ($_POST as $key=>$value)
+        {
+            if(substr($key,0,5)=="edit-")
+            {
+                $nedit = substr($key,5)." ".$nedit;
+            }
+            if(substr($key,0,5)=="view-")
+            {
+                $nview = substr($key,5)." ".$nview;
+            }
+        }
+        if(@$_POST["add-edit"])
+            $nedit = $_POST["add-edit"]." ".$nedit;
+        if(@$_POST["add-view"])
+            $nview = $_POST["add-view"]." ".$nview;
+
+        $INFO["view"] = $nview;
+        $INFO["edit"] = $nedit;
+        $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
+        xcms_save_list("$dir/info", $INFO);
+    }
+    $ag = all_groups();
+    $view = explode(" ",trim($INFO["view"]));
+    foreach ($view as $key=>$value)
+    {
+        if($value)
+        {
+            $t = @$ag[$value];
+            echo "<input type=\"checkbox\" name=\"view-$value\" checked>$t ($value)<br />";
+        }
+    }
+    echo "Добавить: <select name=\"add-view\" >";
+    echo "<option value=\"\">(не добавлять)</option>";
+    foreach(all_groups() as $k=>$v)
+    {
+        if(!strlen($v)) continue;
+        echo "<option value=\"$k\">$v</option>";
+    }
+    echo "</select>";
+
+    echo "<td width=\"5\"><td valign=\"top\">";
+    $view = explode(" ",trim($INFO["edit"]));
+    foreach ($view as $key=>$value)
+    {
+        if ($value)
+        {
+            $t = @$ag[$value];
+            echo "<input type=\"checkbox\" name=\"edit-$value\" checked>$t ($value)<br />";
+        }
+    }
+    echo "Добавить: <select name=\"add-edit\" >";
+    echo "<option value=\"\">(не добавлять)</option>";
+    foreach(all_groups() as $k=>$v)
+    {
+        if(!strlen($v)) continue;
+        echo "<option value=\"$k\">$v</option>";
+    }
+    echo "</select>";
+?>
+</tr>
+</table>
+<input type="submit" name="change-access" value="Изменить">
+</form>
