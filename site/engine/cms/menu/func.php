@@ -53,8 +53,7 @@ usort($html_array,"sort_by_mtime");
     }
     else
       $text = file_get_contents("$initPath/applymenu");
-
-    //echo "<br>*".$pageid."#<br>";
+    $INFO = xcms_get_list("$initPath/info");
 
     $html = $MENUTEMPLATES[$menuLevel];
     if(strstr($options,"+devel"))
@@ -64,13 +63,13 @@ usort($html_array,"sort_by_mtime");
       $html = "<div style=\"margin-left: ${margin}pt;\">[<a href=\"<HREF>\">$flags<TEXT></a>]</div>";
       $html = str_replace("<HREF>","/$web_prefix?page=$pageiid&$addhrefparams",$html);
     }
-    else if(file_exists("$initPath/currtag"))
+    elseif (@$INFO["alias"])
     {
-	$tag = file_get_contents("$initPath/currtag");
-	$html = str_replace("<HREF>","/$web_prefix$tag/$addhrefparams",$html);
+      $alias = $INFO["alias"];
+      $html = str_replace("<HREF>","/$web_prefix$alias/$addhrefparams",$html);
     }
     else
-	$html = str_replace("<HREF>","/$web_prefix?page=$pageiid&$addhrefparams",$html);
+      $html = str_replace("<HREF>","/$web_prefix?page=$pageiid&$addhrefparams",$html);
     $html = str_replace("<TEXT>",$text,$html);
 
     if(strstr($pageid,str_replace("{$SETTINGS["datadir"]}cms/pages/","",$initPath)))
@@ -91,7 +90,7 @@ usort($html_array,"sort_by_mtime");
     if(!strstr($options,"+hault"))
       if(@$array) foreach ($array as $key=>$value)
       {
-	if(!file_exists("$value/info")) continue;
+        if(!file_exists("$value/info")) continue;
         if(strstr($options,"+devel") || strstr($pageid,str_replace("{$SETTINGS["datadir"]}cms/pages/","",$value)))
           cms_menu_make($value,$MENUTEMPLATES,$menuLevel+1,$addhrefparams,$options,$startLevel,$endLevel);
         else

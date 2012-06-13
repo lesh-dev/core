@@ -1,6 +1,7 @@
 <?php
   $prefix = "{$SETTINGS["datadir"]}cms/pages/$pageid";
-  $tag = @file_get_contents("$prefix/currtag");
+  //$page_info = xcms_get_list("$prefix/info");
+  $alias = $INFO["alias"];
   $nnname = @"$prefix/{$_GET["aparam"]}.news";
   if(strlen(@$_GET["aparam"]) && file_exists($nnname))
   {
@@ -24,7 +25,7 @@
       $stamp = str_replace("{$SETTINGS["datadir"]}cms/pages/$pageid/","",$stamp);
       $stamp = str_replace(".news","",$stamp);
       $text = file_get_contents($list[$i]);
-      $text = str_replace("<STAMP>","/$web_prefix$tag/$stamp",$text);
+      $text = str_replace("<STAMP>","/$web_prefix$alias/$stamp",$text);
       include(translate("<! cms/readtext --markdown --text !>"));
       $count++;
  	  if($count>=$maxnews) break;

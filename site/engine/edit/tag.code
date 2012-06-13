@@ -7,7 +7,7 @@
     if(!$ename) $ename = @$_GET[$pathv];
     if(!$ename)
     {
-        echo "<h4>Illegal filename.</h4>";
+        echo "<h4>List editor: illegal filename given</h4>";
     }
     else @editlist_form($ename, "", @$argv[1], @$argv[2]);
 ?>
