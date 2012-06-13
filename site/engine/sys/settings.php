@@ -9,7 +9,8 @@
     $SETTINGS["designdir"] = $design_dir;
     $SETTINGS["datadir"] = $content_dir;
     $SETTINGS["precdir"] = ".prec/";
-    $SETTINGS["code_begin"] = "<"."?php unset(\$argv);unset(\$keys);unset(\$param);";
-    $SETTINGS["code_end"] = "?".">";
+    $SETTINGS["code_begin"] = '<?php unset($argv);unset($keys);unset($param);';
+    $SETTINGS["code_end"] = '?>';
     $SETTINGS["mailer_enabled"] = $mailer_enabled;
+    $SETTINGS["session_time"] = 7*24*3600;
 ?>

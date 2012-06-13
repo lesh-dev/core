@@ -1,21 +1,31 @@
 <?php
-  $login = $argv[1];
+    $login = $argv[1];
     $glogin = @$_POST["e-auth-login"];
-    if(!$glogin) $glogin = @$_COOKIE["e-auth-login"];  
+    if(!$glogin) $glogin = @$_COOKIE["e-auth-login"];
     $gpass = @$_POST["e-auth-passw"];
-    if(!$gpass) $gpass = @$_COOKIE["e-auth-passw"];    
+    if(!$gpass) $gpass = @$_COOKIE["e-auth-passw"];
     if(($glogin == $login) && (md5($gpass) == $argv[2]))
     {
-      setcookie("e-auth-login",$glogin,time()+3600);
-      setcookie("e-auth-passw",$gpass,time()+3600);
+        setcookie("e-auth-login", $glogin,time() + $SETTINGS["session_time"]);
+        setcookie("e-auth-passw", $gpass,time() + $SETTINGS["session_time"]);
     }
     else
-    {
-      echo '<h1>Acsess denied!</h1>
-      <form method="post"><table><tr><td>login<td>
-      <input name="e-auth-login"><tr><td>password<td><input name="e-auth-passw" type="password">
-      </table><input type="submit"></form>';
-      //echo "<br>*$login*$glogin*";
-      die();
-  }  
+    {?>
+        <h1>Для этого действия необходима авторизация</h1>
+        <form method="post">
+        <table>
+            <tr>
+                <td>Login</td>
+                <td><input type="text" name="e-auth-login" /></td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td><input type="password" name="e-auth-passw" /></td>
+            </tr>
+        </table>
+        <input type="submit" value="Войти" />
+        </form>
+    <?php
+        die();
+    }
 ?>
