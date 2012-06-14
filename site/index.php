@@ -7,27 +7,11 @@
     date_default_timezone_set('Europe/Moscow');
     include ("settings.php");
     include ("$engine_dir/sys/settings.php");
+    include ("$engine_dir/sys/logger.php");
     include ("$engine_dir/sys/tag.php");
     include ("$engine_dir/sys/ui.php");
     include ("$engine_dir/sys/mailer.php");
     include ("$engine_dir/sys/resample.php");
-    /*if(@!$_GET["page"])
-        $_GET["page"] = $SETTINGS["defaultpage"];
-    if(!file_exists($_GET["page"].".xcms"))
-    {
-        $_GET["page"] = $SETTINGS["nopage"];
-    }
-    $tocompile = false;
-
-    $f = fopen();*/
-
-
-    function xcms_log($log_level, $message)
-    {
-        $f = fopen("engine.log", "a+");
-        fwrite($f, "[".date('Y.m.d H:i:s')."]: $message\n");
-        fclose($f);
-    }
 
     function setArgs($code,$outputStream)
     {
@@ -162,42 +146,37 @@
         return($fname);
     }
 
-    // Choose filename
-    $ref = @$_GET["ref"];
-    if(!$ref) $ref = $SETTINGS["defaultpage"];
-    if(file_exists("$design_dir/$ref.xcms"))
+    function xcms_main()
     {
-        $rfile = "$design_dir/$ref.xcms";
-    }
-    elseif(file_exists("$engine_dir/global/$ref.xcms"))
-    {
-        $rfile = "$engine_dir/global/$ref.xcms";
-    }
-    else
-    {
-        $ref = "nopage.xcms";
-        $rfile = "$design_dir/nopage.xcms";
+        global $SETTINGS, $engine_dir, $design_dir;
+        global $main_ref_file;
+        global $main_ref_name;
+        global $ref;
+
+        // Choose filename
+        $ref = @$_GET["ref"];
+        if (!$ref) $ref = $SETTINGS["defaultpage"];
+        if (file_exists("$design_dir/$ref.xcms"))
+        {
+            $main_ref_file = "$design_dir/$ref.xcms";
+        }
+        elseif(file_exists("$engine_dir/global/$ref.xcms"))
+        {
+            $main_ref_file = "$engine_dir/global/$ref.xcms";
+        }
+        else
+        {
+            $ref = "nopage.xcms";
+            $main_ref_file = "$design_dir/nopage.xcms";
+        }
+
+        // Find prec file
+        $main_ref_name = "{$SETTINGS["precdir"]}$ref.php";
     }
 
-    // Find prec file
-    compile($rfile, "{$SETTINGS["precdir"]}$ref.php");
-    /*
-    $toCompile = false;
-    if(!file_exists("{$SETTINGS["precdir"]}$ref.php"))$toCompile = true;
-    else if(filemtime("{$SETTINGS["documentsdir"]}$ref.xcms")>filemtime("{$SETTINGS["precdir"]}$ref.php"))
-    {
-        $toCompile = true;
-    }
-    //echo "*".filemtime("{$SETTINGS["documentsdir"]}$ref.xcms")."*<br>"."*".filemtime("{$SETTINGS["precdir"]}$ref.php")."*<br>";
-    if($toCompile)
-    {
-        //echo  "Compile!";
-        $f = fopen("{$SETTINGS["precdir"]}$ref.php","w");
-        ParseString(file_get_contents("{$SETTINGS["documentsdir"]}$ref.xcms"),$f);
-        fclose($f);
-    }
-    */
-
-    include("{$SETTINGS["precdir"]}$ref.php");
+    $main_ref_file = "";
+    $main_ref_name = "";
+    xcms_main();
+    compile($main_ref_file, $main_ref_name);
+    include($main_ref_name);
 ?>
-
