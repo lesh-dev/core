@@ -84,6 +84,14 @@
         <hr />
         <div class="container">
             <div class="menu">
+                <?php
+            	    if (file_exists("INFO"))
+            	    {
+            	        echo "<pre>";
+            	        echo file_get_contents("INFO");
+            	        echo "</pre>";
+            	    }
+                ?>
                 <b>Menu</b>
                 <# cms/menu/display displayall devel start=1 end=5 #>
             </div>
