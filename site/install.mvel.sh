@@ -8,6 +8,7 @@ if [ -z "$dest" ] ; then
     exit 1
 fi
 
+sudo mkdir -p "$dest"
 sudo rm -rf /var/www/html/site/*
 sudo cp -a * "$dest/"
 sudo rm -rf "$dest/.prec/"*
