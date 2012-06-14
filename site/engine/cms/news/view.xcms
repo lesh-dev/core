@@ -1,6 +1,5 @@
 <?php
   $prefix = "{$SETTINGS["datadir"]}cms/pages/$pageid";
-  //$page_info = xcms_get_list("$prefix/info");
   $alias = $INFO["alias"];
   $nnname = @"$prefix/{$_GET["aparam"]}.news";
   if(strlen(@$_GET["aparam"]) && file_exists($nnname))

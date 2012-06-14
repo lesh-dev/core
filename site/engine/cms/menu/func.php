@@ -1,100 +1,88 @@
 <?php
-/*  $html_array = glob("*.html");
+    function xcms_menu($initPath, $MENUTEMPLATES, $menuLevel, $addhrefparams, $options, $startLevel, $endLevel)
+    {
+        global $SETTINGS, $pageid, $web_prefix;
 
-  function sort_by_mtime($file1,$file2) {
-     $time1 = filemtime($file1);
-     $time2 = filemtime($file2);
-     if ($time1 == $time2) {
-         return 0;
-     }
-     return ($time1 < $time2) ? 1 : -1;
-     }
-
-usort($html_array,"sort_by_mtime");
-//$html_array is now ordered by the time it was last modified
-*/
-?>
-
-<?php
-  function cms_menu_make($initPath,$MENUTEMPLATES,$menuLevel,$addhrefparams,$options,$startLevel,$endLevel)
-  {
-    global $SETTINGS,$forceSn,$pageid,$login,$group,$web_prefix;
-    $pageiid = str_replace("{$SETTINGS["datadir"]}cms/pages/","",$initPath);
-    $flags="";
-    if(!file_exists("$initPath/applymenu"))
-    {
-      if(strstr($options,"+displayall"))
-        $text = "{unnamed}";
-      else
-        return;
-    }
-    elseif(file_exists("$initPath/lockmenu"))
-    {
-      if(strstr($options,"+displayall"))
-      {
-        $flags.="H ";
-        $text = file_get_contents("$initPath/applymenu");
-      }
-      else
-        return;
-    }
-    elseif(file_exists("$initPath/hidemenu"))
-    {
-      if(strstr($options,"+displayall"))
-        $text = file_get_contents("$initPath/applymenu");
-      else
-      {
-        $INFO = xcms_get_list("$initPath/info");
-        include(translate("<! auth/lauth {$INFO['view']} !>"));
-        if($access)
-          $text = file_get_contents("$initPath/applymenu");
-        else return;
-      }
-    }
-    else
-      $text = file_get_contents("$initPath/applymenu");
-    $INFO = xcms_get_list("$initPath/info");
-
-    $html = $MENUTEMPLATES[$menuLevel];
-    if(strstr($options,"+devel"))
-    {
-      $margin = $menuLevel*10;
-      // br was here
-      $html = "<div style=\"margin-left: ${margin}pt;\">[<a href=\"<HREF>\">$flags<TEXT></a>]</div>";
-      $html = str_replace("<HREF>","/$web_prefix?page=$pageiid&$addhrefparams",$html);
-    }
-    elseif (@$INFO["alias"])
-    {
-      $alias = $INFO["alias"];
-      $html = str_replace("<HREF>","/$web_prefix$alias/$addhrefparams",$html);
-    }
-    else
-      $html = str_replace("<HREF>","/$web_prefix?page=$pageiid&$addhrefparams",$html);
-    $html = str_replace("<TEXT>",$text,$html);
-
-    if(strstr($pageid,str_replace("{$SETTINGS["datadir"]}cms/pages/","",$initPath)))
-      $html = str_replace("<ACTIVE>","active",$html);
-    else
-      $html = str_replace("<ACTIVE>","passive",$html);
-
-    if(file_exists("$initPath/menuicon.gif"))
-    {
-      $html = str_replace("<!-- PIC -->","<img border=\"0\" src=\"$initPath/menuicon.gif\"><br>",$html);
-    }
-    if($forceSn) $html = "<tr>".$html;
-    if($menuLevel>=$startLevel && $menuLevel<=$endLevel)
-    {
-      echo $html;
-    }
-    $array = glob("$initPath/*",GLOB_ONLYDIR);
-    if(!strstr($options,"+hault"))
-      if(@$array) foreach ($array as $key=>$value)
-      {
-        if(!file_exists("$value/info")) continue;
-        if(strstr($options,"+devel") || strstr($pageid,str_replace("{$SETTINGS["datadir"]}cms/pages/","",$value)))
-          cms_menu_make($value,$MENUTEMPLATES,$menuLevel+1,$addhrefparams,$options,$startLevel,$endLevel);
+        $page_prefix = "{$SETTINGS["datadir"]}cms/pages/";
+        $pageiid = str_replace($page_prefix, "", $initPath);
+        $flags = "";
+        $page_info = "$initPath/info";
+        $text = "";
+        if (!file_exists($page_info)) return;
+        $INFO = xcms_get_list($page_info);
+        if (strstr($options, "+displayall"))
+        {
+            $text = "{unnamed}";
+            if (array_key_exists("menu-title", $INFO))
+            {
+                if (strlen($INFO["menu-title"]))
+                    $text = $INFO["menu-title"];
+            }
+            if (array_key_exists("menu-locked", $INFO))
+                $flags .= "H ";
+        }
         else
-          cms_menu_make($value,$MENUTEMPLATES,$menuLevel+1,$addhrefparams,$options."+hault",$startLevel,$endLevel);
-      }
-  }
+        {
+            $text = @$INFO["menu-title"];
+            // don't show unnamed items
+            if (!array_key_exists("menu-title", $INFO)) // no title
+                return;
+            // don't show locked items
+            if (array_key_exists("menu-locked", $INFO))
+                return;
+            // don't show inaccessible menu items
+            if (array_key_exists("menu-auth-only", $INFO))
+            {
+                include(translate("<! auth/lauth {$INFO['view']} !>"));
+                // TODO: OMFG global var reading...
+                if (!$access)
+                    return;
+            }
+        }
+        // render menu item
+        $html = $MENUTEMPLATES[$menuLevel];
+        if (strstr($options, "+devel"))
+        {
+            $margin = $menuLevel*10;
+            $html = "<div style=\"margin-left: ${margin}pt;\">[<a href=\"<HREF>\">$flags<TEXT></a>]</div>";
+            $html = str_replace("<HREF>","/$web_prefix?page=$pageiid&amp;$addhrefparams", $html);
+        }
+        elseif (@$INFO["alias"])
+        {
+            $alias = $INFO["alias"];
+            $html = str_replace("<HREF>","/$web_prefix$alias/$addhrefparams", $html);
+        }
+        else
+            $html = str_replace("<HREF>","/$web_prefix?page=$pageiid&amp;$addhrefparams", $html);
+        $html = str_replace("<TEXT>", htmlspecialchars($text), $html);
+
+        if (strstr($pageid, $pageiid))
+            $html = str_replace("<ACTIVE>", "active", $html);
+        else
+            $html = str_replace("<ACTIVE>", "passive", $html);
+
+        // add icon
+        if (file_exists("$initPath/menuicon.gif"))
+            $html = str_replace("<!-- PIC -->", "<img src=\"$initPath/menuicon.gif\" />", $html);
+
+        // render current level
+        if ($menuLevel >= $startLevel && $menuLevel <= $endLevel)
+            echo $html;
+
+        // render menu subtree
+        $array = glob("$initPath/*", GLOB_ONLYDIR);
+        if (strstr($options, "+hault"))
+            return;
+        if (!@$array)
+            return;
+
+        foreach ($array as $key=>$value)
+        {
+            if (!file_exists("$value/info")) continue;
+            if (strstr($options,"+devel") || strstr($pageid, str_replace($page_prefix, "", $value)))
+                xcms_menu($value, $MENUTEMPLATES, $menuLevel+1, $addhrefparams, $options, $startLevel, $endLevel);
+            else
+                xcms_menu($value, $MENUTEMPLATES, $menuLevel+1, $addhrefparams, "$options+hault", $startLevel, $endLevel);
+        }
+    }
 ?>

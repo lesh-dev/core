@@ -16,7 +16,7 @@
     else
         $ahp = "";
 
-    cms_menu_make(
+    xcms_menu(
         "{$SETTINGS["datadir"]}cms/pages",
         file("{$SETTINGS["designdir"]}menulinks.dat"),
         0,
