@@ -1,0 +1,26 @@
+#!/bin/bash
+source $(dirname $0)/publish.conf
+for i in $CLONE_DIR/production.*; do
+  if [ $i == "$CLONE_DIR/production.last" ]; then
+    continue;
+  fi
+  if [ $(readlink $CLONE_DIR/production) == $i ]; then
+    echo "Skipping real production: $i"
+    continue
+  fi
+  if [ $(readlink $CLONE_DIR/production.last) == $i ]; then
+    echo "Skipping 'last chance': $i"
+    continue
+  fi
+  tar czf $i.tgz $i
+  rm -rf $i
+done
+
+for i in $CLONE_DIR/preprod.*; do
+  if [ $(readlink $CLONE_DIR/preprod) == $i ]; then
+    echo "Skipping preprod: $i"
+    continue
+  fi
+  tar czf $i.tgz $i
+  rm -rf $i
+done
