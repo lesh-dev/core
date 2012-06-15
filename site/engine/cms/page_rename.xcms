@@ -10,7 +10,8 @@
 <h3>Физический путь</h3>
 <div class="warn"><b>ВНИМАНИЕ:</b> Изменение физического пути страницы обычно нужно очень редко!</div>
 <form method="post">
-    Физический путь: <input name="rename-current-section" value="<?php echo $pageid;?>" />
+    Физический путь:
+    <input type="text" name="rename-current-section" value="<?php echo $pageid;?>" />
     <input type="submit" value="Изменить">
 </form>
 </div>

@@ -31,6 +31,7 @@
             if (array_key_exists("menu-locked", $INFO))
                 return;
             // don't show inaccessible menu items
+            // TODO: это называлось hidemenu, для удобства пользования
             if (array_key_exists("menu-auth-only", $INFO))
             {
                 include(translate("<! auth/lauth {$INFO['view']} !>"));

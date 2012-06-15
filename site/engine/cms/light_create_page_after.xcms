@@ -1,51 +1,60 @@
 <?php
-  $INFO = xcms_get_list(xcms_get_info_file_name());
-  if(!$INFO) $pageid = "";
+    $INFO = xcms_get_list(xcms_get_info_file_name());
+    if(!$INFO) $pageid = "";
 ?>
 <!# auth/ {$INFO['edit']} #!>
-
 <form method="post">
 <table>
 <tr><td><h3>Настройки</h3>
 <tr><td>Служебное имя <br><font size="=-1">Выберите красивое, удобочитаемое, английское имя без пробелов.</font><td><input name="create-name" value="">
-<!-- <tr><td>Глобальный<br><font size="=-1">Считать этот раздел основным, а не подразделом текущего раздела</font><td><input type="checkbox" name="global"> -->
-
 <?php
-  $list = getTagList("{$SETTINGS["elementsdir"]}taglist/type");
-  echo "<tr><td>Тип содержания<td><SELECT name=\"create-pagetype\">";
-  foreach ($list as $key=>$value)
-  {
-    if($key == "_NAME") continue;
-    //$value = str_replace("{$SETTINGS["elementsdir"]}cms/","",$value);
-    //$value = str_replace(".pagetype","",$value);
-    if($value == "content" || $key == "content") $s = "selected checked ";
-    else $s = "";
-    echo "<OPTION name=\"$value\" $s value=\"$value\">$key</OPTION>";
-  }
-
-  echo "<tr><td>Скрытый раздел<td><input type=\"checkbox\" name=\"hideChapter\" checked>";
+    $list = getTagList("{$SETTINGS["elementsdir"]}taglist/type");
+    echo "<tr><td>Тип содержания<td><SELECT name=\"create-pagetype\">";
+    foreach ($list as $key=>$value)
+    {
+        if($key == "_NAME") continue;
+        //$value = str_replace("{$SETTINGS["elementsdir"]}cms/","",$value);
+        //$value = str_replace(".pagetype","",$value);
+        if($value == "content" || $key == "content") $s = "selected checked ";
+        else $s = "";
+        echo "<OPTION name=\"$value\" $s value=\"$value\">$key</OPTION>";
+    }
+    $chk_hidden = xcms_checkbox_attr("no");
 ?>
-<tr><td>Имя<br><font size="-1">То есть тот текст, что появится в меню.</font><td><input name="menuname">
-<tr><td>Заголовок<br><font size="-1">То есть тот текст, что появится в окне браузера.</font><td><input name="header">
-<tr><td>Подзаголовок<br><font size="-1">То есть тот текст, который (может быть) появится где-нибудь на странице.</font><td><input name="subheader">
+<tr>
+    <td>Скрытый раздел</td>
+    <td><input type="checkbox" <?php echo $chk_hidden; ?> name="menu-hidden"/>
+<tr>
+    <td>Имя в меню<br><font size="-1">То есть тот текст, что появится в меню.</font></td>
+    <td><input type="text" name="menu-title" /><td>
+</tr>
+<tr>
+    <td>Заголовок<br><font size="-1">То есть тот текст, что появится в окне браузера.</font>
+    <td><input type="text" name="header" />
+</tr>
+<tr>
+    <td>Подзаголовок<br><font size="-1">То есть тот текст, который (может быть)
+        появится где-нибудь на странице.</font></td>
+    <td><input type="text" name="subheader" /></td>
+</tr>
 <?php
-  echo '<tr><td colspan="2"><h3>Матрица доступа</h3><table><tr><td>Группа<td>Может смотреть<td>Может изменять';
-  include_once("$engine_dir/sys/groups.php");
-  foreach(all_groups() as $g=>$translation)
-  {
-    if(!strlen($translation)) continue;
-    $chv = "";
-    $che = "";
-    if($g == "#all") { $chv = "checked"; }
-    if($g == "#editor") { $che = "checked"; }
-    if($g == "#admin") { $che = "checked"; }
-    echo "<tr><td>$translation<td><input type=\"checkbox\" name=\"view_$g\" $chv><td><input type=\"checkbox\" name=\"edit_$g\" $che>";
-  }
-  echo '</table>';
-
+    echo '<tr><td colspan="2"><h3>Матрица доступа</h3><table><tr><td>Группа<td>Может смотреть<td>Может изменять';
+    include_once("$engine_dir/sys/groups.php");
+    foreach(all_groups() as $g=>$translation)
+    {
+        if(!strlen($translation)) continue;
+        $chv = "";
+        $che = "";
+        if($g == "#all") { $chv = "checked"; }
+        if($g == "#editor") { $che = "checked"; }
+        if($g == "#admin") { $che = "checked"; }
+        echo "<tr><td>$translation<td><input type=\"checkbox\" name=\"view_$g\" ".
+            "$chv><td><input type=\"checkbox\" name=\"edit_$g\" $che>";
+    }
+    echo '</table>';
 ?>
 </table>
-<input type="submit" value="Создать..." />
+<input type="submit" value="Создать раздел" />
 </form>
 <?php
     xcms_save_list(xcms_get_info_file_name(), $INFO);

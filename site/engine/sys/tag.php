@@ -23,6 +23,17 @@ function xcms_get_info_file_name()
 }
 
 /**
+  * Makes checkbox checked attribute with proper generic value
+  **/
+function xcms_checkbox_attr($val)
+{
+    $attr = ' value="yes" ';
+    if ($val == "yes")
+        $attr .= ' checked="checked" ';
+    return $attr;
+}
+
+/**
   * Retrieves key-value-stored list from file
   * @param file file name to read from
   * @return key-value array with values (or empty array

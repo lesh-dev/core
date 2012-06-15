@@ -1,54 +1,46 @@
-                <?php
-                  if(@$_POST["ApplyToMenu"]) 
-                  {
-                    $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu","w");
-                    fputs($f, @$_POST["menu-text"]);
-                    fclose($f);
-                    echo '<meta http-equiv="refresh" content="0;"><h3>Подождите . . .</h3>';
-                  }
-                  else if(@$_POST["NoApplyToMenu"]) 
-                  {
-                    @unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu");
-                    echo '<meta http-equiv="refresh" content="0;"><h3>Подождите . . .</h3>';
-                  }
-                  else if(@$_POST["LockMenu"]) 
-                  {
-                    $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu","w");
-                    fputs($f, " ");
-                    fclose($f);
-                    //echo '<meta http-equiv="refresh" content="0;"><h3>Подождите . . .</h3>';
-                  }
-                  else if(@$_POST["UnLockMenu"]) 
-                  {
-                    @unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu");
-                    //echo '<meta http-equiv="refresh" content="0;"><h3>Подождите . . .</h3>';
-                  }
-                ?>
-
-<table><tr><td valign="top">
-<h3>Общая информация</h3>
+<div class="admin-widget">
+    <h3>Меню</h3>
 <?php
-    $editfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/info";    
+    $list_name = xcms_get_info_file_name();
+    $INFO = xcms_get_list($list_name);
+    $updated = false;
+    //echo '<meta http-equiv="refresh" content="0;"><h3>Подождите . . .</h3>';
+    if(@$_POST["menu-save"])
+    {
+        $INFO["menu-title"] = @$_POST["menu-title"];
+        $INFO["menu-hidden"] = @$_POST["menu-hidden"];
+        $INFO["menu-auth-only"] = @$_POST["menu-auth-only"];
+        xcms_save_list($list_name, $INFO);
+        ?>
+        <div class="notice">Информация о меню успешно обновлена</div>
+        <?php
+    }
+
+    $chk_hidden = xcms_checkbox_attr(@$INFO["menu-hidden"]);
+    $chk_auth_only = xcms_checkbox_attr(@$INFO["menu-auth-only"]);
+
+?>
+<!-- TODO эту матрицу надо отсюда выпилить
+<?php
+    $editfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/info";
     include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
-?>
-<td valign="top">
-<h3>Имя меню</h3>
-<form method="post">
-
-<input name="menu-text" value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/applymenu"); ?>">
-<br />
-<input name="ApplyToMenu" type="submit" value="Задать имя"> 
-<input name="NoApplyToMenu" type="submit" value="Стереть имя"> 
-<h3>Наличие в меню</h3>
-<?php
-  if(file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu"))
-  {
-  	echo '<input name="UnLockMenu" type="submit" value="Показать меню">';
-  }
-  else
-  {
-  	echo '<input name="LockMenu" type="submit" value="Скрыть меню">';  
-  }
-?>
-</table>
-</form>
+?>-->
+    <form method="post">
+        <table>
+        <tr>
+            <td>Заголовок</td>
+            <td><input name="menu-title"
+                value="<?php echo htmlspecialchars($INFO["menu-title"]); ?>"></td>
+        </tr>
+        <tr>
+            <td>Скрытый элемент</td>
+            <td><input type="checkbox" <?php echo $chk_hidden; ?> name="menu-hidden" /></td>
+        </tr>
+        <tr>
+            <td>Доступен только авторизованным</td>
+            <td><input type="checkbox" <?php echo $chk_auth_only; ?> name="menu-auth-only" /></td>
+        </tr>
+        </table>
+        <input type="submit" name="menu-save" value="Сохранить" />
+    </form>
+</div>
