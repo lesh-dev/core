@@ -59,7 +59,12 @@
         </script>
     </head>
     <body>
-        <div style="padding: 2px"><b>Страница:</b> <tt><?php echo $pageid; ?></tt> (<# cms/header #>)</div>
+        <div style="padding: 2px">
+            <b title="Page Alias">ALI</b> <tt><?php echo @$INFO["alias"]; ?></tt>|
+            <b>HDR</b> <# cms/header #>|
+            <b>SUB</b> <?php echo @$INFO["alias"]; ?>|
+            <b>DIR</b> <tt><?php echo $pageid; ?></tt>
+        </div>
         <div>
         <?php
             include(translate('
