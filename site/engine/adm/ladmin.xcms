@@ -115,14 +115,16 @@
     else if(@$_GET["act"]=="cleanprec") include(translate("<! cleanprec !>"));
     else if(@$_GET["act"]=="delete")
     {
-        $sec_name = @file_get_contents("data/cms/pages/$pageid/applymenu");?>
+        $sec_name = htmlspecialchars(@$INFO["header"]);
+        $menu_title = htmlspecialchars(@$INFO["menu-title"]);
+        ?>
         <h3 style="color: red;">Предупреждение</h3>
-        Вы хотите удалить текущий раздел <b><?php echo $sec_name; ?></b>.<br />
+        Вы хотите удалить текущий раздел <b><?php echo "[$menu_title] $sec_name"; ?></b>.<br />
         Вы <b>точно</b> уверены, что хотите это сделать?
         <form method="post">
             <input type="hidden" name="delete-section" value="true">
             <input type="submit" value="Да, я точно уверен, что следует
-                удалить раздел <?php echo $sec_name; ?>">
+                удалить раздел <?php echo "[$menu_title] $sec_name"; ?>">
         </form><?php
     }
     else if(@$_GET["mode"]=="meta" || @$_GET["act"]=="meta")
