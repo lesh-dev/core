@@ -1,78 +1,75 @@
-
 <?php
-  if(@$_POST["contlist_created"])
-  {
-    $dir =  "{$SETTINGS["datadir"]}cms/pages/$pageid/{$_POST["create-name"]}";
-    $f = fopen("$dir/applymenu","w");
-    fputs($f,@$_POST["subheader"]);
-    fclose($f);
-    $f = fopen("$dir/content","w");
-    fputs($f,"<h3>".@$_POST["subheader"]."</h3>");
-    fclose($f);
-    $f = fopen("$dir/lockmenu","w");
-    fputs($f," ");
-    fclose($f);
-    $npid = str_replace("{$SETTINGS["datadir"]}/cms/pages/","",$dir);
-    echo '<meta http-equiv="refresh" content="2;URL=?page='.$npid.'&ref=ladmin">';
-    echo "<h3>Подождите . . .</h3>";       
-  }
-  else        if(@$_POST["delete-section-nax"])
-                {
-                  $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid/{$_POST["delete-section-nax"]}";
-                  $list = glob("$dir/*",GLOB_ONLYDIR);
-                  if($list) 
-                  {
-                    echo '<script>alert("Не могу удалить! Сначала удалите все подразделы!");</script>';
-                  }     
-                  else 
-                  {
-                    $list = glob("$dir/*");
-                    if($list) foreach ($list as $key=>$value) 
-                    {
-                      unlink($value);          	
-                    }
-                    rmdir($dir);                                        
-                  }             
-                }
-  else if(@$_GET["vtype"]=="")
-  {
-    
-    echo '<h3>Добавить раздел содержания.</h3><form method="post">';
-    echo '<input type="hidden" name="create-name" value="'.mktime().'">';
+    if(@$_POST["contlist-create"])
+    {
+        $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid/{$_POST["create-name"]}";
+        $list = array();
+        $list["subheader"] = @$_POST["subheader"];
+        $list["menu-title"] = @$_POST["subheader"];
+        xcms_save_list("$dir/info", $list);
+        // зачем писать в lockmenu, я так и не понял
+        // пока что не будем этого делать
 
-    echo '<table>
-    <tr><td>Заголовок<br><font size="-1">То есть тот текст, который (может быть) появится где-нибудь на странице.</font><td><input name="subheader">
-    ';    
-      $list = glob("{$SETTINGS["elementsdir"]}cms/*.pagetype");
-      echo "<tr><td>Тип содержания<td><SELECT name=\"create-pagetype\">";
-      foreach ($list as $key=>$value) 
-      {
-        $value = str_replace("{$SETTINGS["elementsdir"]}cms/","",$value);
-        $value = str_replace(".pagetype","",$value);
-      	echo "<OPTION name=\"$value\" value=\"$value\">$value</OPTION>";
-      }
-      echo "<tr><td>Право редактирования для #$login<td><input type=\"checkbox\" name=\"delegateGroup\">";
-      foreach($group as $g)
-      {
-        $ch = "checked";
-        if($g == "#all") $ch = "";
-        if($g == "#registered") $ch = "";
-        echo "<tr><td>Право редактирования для $g<td><input type=\"checkbox\" name=\"edit_$g\" $ch>";        
-      }
-      echo "<tr><td>Право просмотра для #all<td><input type=\"checkbox\" name=\"viewForAll\" checked>";
-    echo '  
-    </table>
-    <input type="hidden" name="header" value="'.$INFO["header"].'">
-    <input type="hidden" name="contlist_created" value="1">
-    <input type="submit" value="Добавить...">
-    <input type="hidden" name="menuname" value="'.mktime().'">
-    </form>
-    ';
-        
-  }
+        $npid = str_replace("{$SETTINGS["datadir"]}/cms/pages/", "", $dir);
+        ?>
+        <meta http-equiv="refresh" content="2;URL=?page=<?php echo $npid; ?>&amp;ref=ladmin">
+        <h3>Подождите, сейчас произойдёт перенаправление на страницу администрирования...</h3><?php
+    }
+    /* dead code: not referenced in interface. DO NOT DELETE, it's complete section removal code
+    elseif (@$_POST["delete-section-nax"])
+    {
+        $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid/{$_POST["delete-section-nax"]}";
+        $list = glob("$dir/*", GLOB_ONLYDIR);
+        if($list)
+        {
+            echo '<script>alert("Не могу удалить! Сначала удалите все подразделы!");</script>';
+        }
+        else
+        {
+            $list = glob("$dir/*");
+            if ($list)
+            {
+                foreach ($list as $key=>$value)
+                    unlink($value);
+            }
+            rmdir($dir);
+        }
+    } */
+    elseif (@$_GET["vtype"]=="")
+    {?>
+        <h3>Добавить раздел содержания</h3>
+        <form method="post">
+            <!-- мы вроде как договорились, что мы против автогенерённых имён -->
+            <input type="text" name="create-name" value="<?php echo mktime(); ?>">
+
+        <table>
+            <tr>
+                <td>Заголовок<br />
+                    <font size="-1">То есть тот текст, который (может быть) появится где-нибудь на странице.</font></td>
+                <td><input type="text" name="subheader" /></td><?php
+
+        $list = glob("{$SETTINGS["elementsdir"]}cms/*.pagetype");
+        echo "<tr><td>Тип содержания<td><select name=\"create-pagetype\">";
+        foreach ($list as $key=>$value)
+        {
+            $value = str_replace("{$SETTINGS["elementsdir"]}cms/","",$value);
+            $value = str_replace(".pagetype","",$value);
+            echo "<option name=\"$value\" value=\"$value\">$value</option>";
+        }
+        echo "<tr><td>Право редактирования для #$login<td><input type=\"checkbox\" name=\"delegateGroup\">";
+        foreach($group as $g)
+        {
+            $ch = "checked";
+            if($g == "#all") $ch = "";
+            if($g == "#registered") $ch = "";
+            echo "<tr><td>Право редактирования для $g<td><input type=\"checkbox\" name=\"edit_$g\" $ch>";
+        }?>
+        <tr>
+            <td>Право просмотра для #all</td>
+            <td><input type="checkbox" name="viewForAll" checked="checked" /></td>
+        </table>
+        <input type="hidden" name="header" value="<?php echo htmlspecialchars(@$INFO["header"]); ?>" />
+        <input type="submit" name="contlist-create" value="Добавить...">
+        </form>
+        <?php
+    }
 ?>
-
-
-
-
-
