@@ -1,5 +1,6 @@
 <# cms/linit #>
 <# cms/init #>
+<# url #>
 <# locale #>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -36,13 +37,18 @@
       <?php
       if(@$_COOKIE["auth-login"])
       {
-        include(translate('<a href="/<# web_prefix #>?page='."$pageid&amp;ref=ladmin".'" class="menu menuSys">Админка</a>'));
-        include(translate('<a href="?mode=logout&amp;page='."$pageid&amp;ref=ladmin".'" class="menu menuSys">Выход</a>'));
-        //echo '<br /><hr /><iframe id="orphus" src="/orphus/orphus.htm#!rtuoes&#64;vaydnxer.u" width="125" height="115" frameborder="0" scrolling="no"></iframe>';
+        include(translate('<a href="/<# web_prefix #>?'.
+            xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).
+            '" class="menu menuSys">Админка</a>'));
+        include(translate('<a href="/<# web_prefix #>?'.
+            xcms_url(array('page'=>$pageid, 'ref'=>'ladmin', 'mode'=>'logout')).
+            '" class="menu menuSys">Выход</a>'));
       }
       else
       {
-        include(translate('<a class="menu menu_level1 stealthLink" href="/<# web_prefix#>?page='."$pageid&amp;ref=ladmin".'">Авторизация</a>'));
+        include(translate('<a href="/<# web_prefix#>?'.
+            xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).
+            '" class="menu menu_level1 stealthLink">Авторизация</a>'));
       }
       ?>
         <!--a href="http://validator.w3.org/check?uri=referer"><img src="/<# web_prefix #>fizlesh.ru-design/pic/valid-html401-green.gif"
