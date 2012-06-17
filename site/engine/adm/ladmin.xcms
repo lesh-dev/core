@@ -60,7 +60,8 @@
     </head>
     <body>
         <div style="padding: 2px">
-            <b title="Page Alias">ALI</b> <tt><?php echo @$INFO["alias"]; ?></tt> |
+            <a <?php echo xcms_href(array('mode'=>'alias', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+            <b title="Page Alias">ALI</b> <tt><?php echo @$INFO["alias"]; ?></tt></a> |
             <b>HDR</b> <# cms/header #> |
             <b>SUB</b> <?php echo @$INFO["alias"]; ?> |
             <b>DIR</b> <tt><?php echo $pageid; ?></tt>
@@ -128,12 +129,13 @@
                 удалить раздел <?php echo "[$menu_title] $sec_name"; ?>">
         </form><?php
     }
-
+    else if(@$_GET["mode"]=="alias")
+        include(translate("<! cms/page_alias !>"));
     else if(@$_GET["mode"]=="meta")
     {
         include(translate("<! cms/light_edit_menu !>"));
         include(translate("<! cms/page_rename !>"));
-        include(translate("<! cms/page_alias !>"));
+        //include(translate("<! cms/page_alias !>"));
         include(translate("<! cms/edit_meta_tags !>"));
         include(translate("<! cms/light_icon_editor !>"));
     }
