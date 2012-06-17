@@ -32,12 +32,12 @@
         <td class="menuField menuWidth roundBorders">
           <# cms/menu/display start=1 end=5 #>
           <a class="menu menu_level1 menu_passive menu_passive_level1" href="/forum">Форум</a>
- 
+
       <?php
       if(@$_COOKIE["auth-login"])
       {
         include(translate('<a href="/<# web_prefix #>?page='."$pageid&amp;ref=ladmin".'" class="menu menuSys">Админка</a>'));
-        include(translate('<a href="?act=logout&amp;page='."$pageid&amp;ref=ladmin".'" class="menu menuSys">Выход</a>'));
+        include(translate('<a href="?mode=logout&amp;page='."$pageid&amp;ref=ladmin".'" class="menu menuSys">Выход</a>'));
         //echo '<br /><hr /><iframe id="orphus" src="/orphus/orphus.htm#!rtuoes&#64;vaydnxer.u" width="125" height="115" frameborder="0" scrolling="no"></iframe>';
       }
       else

@@ -1,4 +1,4 @@
-<# if //@$_GET['act']=='logout'//auth/logout//#>
+<# if //@$_GET['mode']=='logout'//auth/logout//#>
 <?php if(!@$_GET["page"])$_GET["page"]="index";?>
 <# cms/linit #>
 <# locale #>
@@ -39,7 +39,7 @@
             }
 
             $INFO = xcms_get_list(xcms_get_info_file_name());
-            @$_GET["act"]="";
+            @$_GET["mode"]="";
         }
     }
 ?>
@@ -60,28 +60,28 @@
     </head>
     <body>
         <div style="padding: 2px">
-            <b title="Page Alias">ALI</b> <tt><?php echo @$INFO["alias"]; ?></tt>|
-            <b>HDR</b> <# cms/header #>|
-            <b>SUB</b> <?php echo @$INFO["alias"]; ?>|
+            <b title="Page Alias">ALI</b> <tt><?php echo @$INFO["alias"]; ?></tt> |
+            <b>HDR</b> <# cms/header #> |
+            <b>SUB</b> <?php echo @$INFO["alias"]; ?> |
             <b>DIR</b> <tt><?php echo $pageid; ?></tt>
         </div>
         <div>
         <?php
             include(translate('
-                <a'.xcms_href(array('act'=>'cChapter', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Подстраница</a>
-                <a'.xcms_href(array('act'=>'delete', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Удалить</a>
+                <a'.xcms_href(array('mode'=>'create_page', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Подстраница</a>
+                <a'.xcms_href(array('mode'=>'delete', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Удалить</a>
                 <a'.xcms_href(array('page'=>$pageid, 'ref'=>'index')).'class="h-menu-link">Предпросмотр</a>
-                <a'.xcms_href(array('act'=>'cleanprec', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Очистить кэш</a>
+                <a'.xcms_href(array('mode'=>'cleanprec', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Очистить кэш</a>
                 |
-                <a'.xcms_href(array('act'=>'myprofile', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link"><b>'.$login.'</b></a>
-                <a'.xcms_href(array('act'=>'cpasswd', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Сменить пароль</a>
-                <a'.xcms_href(array('act'=>'logout', 'page'=>$pageid, 'ref'=>$ref)).'class="h-menu-link">Выйти</a>
+                <a'.xcms_href(array('mode'=>'myprofile', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link"><b>'.$login.'</b></a>
+                <a'.xcms_href(array('mode'=>'change_passwd', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Сменить пароль</a>
+                <a'.xcms_href(array('mode'=>'logout', 'page'=>$pageid, 'ref'=>$ref)).'class="h-menu-link">Выйти</a>
                 |
-                <a'.xcms_href(array('act'=>'userlist', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Пользователи</a>
-                <a'.xcms_href(array('act'=>'groupadmin', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Группы</a>
+                <a'.xcms_href(array('mode'=>'userlist', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Пользователи</a>
+                <a'.xcms_href(array('mode'=>'groupadmin', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Группы</a>
                 <a'.xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Уведомления</a>
-                <a'.xcms_href(array('act'=>'__convert', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Convert</a>
-                <a'.xcms_href(array('act'=>'css', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Стиль</a>
+                <a'.xcms_href(array('mode'=>'__convert', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Convert</a>
+                <a'.xcms_href(array('mode'=>'css', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Стиль</a>
                 <a href="/'.$web_prefix.'register/view" class="h-menu-link">Анкеты</a>
             '));
         ?>
@@ -101,24 +101,20 @@
                 <# cms/menu/display displayall devel start=1 end=5 #>
             </div>
             <div class="content">
-            <?php if(!@$_GET["act"])
+            <?php
                 echo '
                     <a'.xcms_href(array('page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Контент</a>
                     <a'.xcms_href(array('mode'=>'meta', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Настройки</a>
-                    <a'.xcms_href(array('mode'=>'imgedit', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Картинки</a>
+                    <a'.xcms_href(array('mode'=>'img_edit', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Картинки</a>
                     <a'.xcms_href(array('mode'=>'access', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Доступ</a>';
             ?>
 <?php
-    if(@$_GET["mode"] == "")
-        @$_GET["mode"] = @$_GET["act"];
-    if(@$_GET["act"] == "")
-        @$_GET["act"] = @$_GET["mode"];
-    if(@$_GET["act"]=="cpasswd")
+    if(@$_GET["mode"]=="change_passwd")
     {
         include(translate('<! auth/chpassw !>'));
     }
-    else if(@$_GET["act"]=="cleanprec") include(translate("<! cleanprec !>"));
-    else if(@$_GET["act"]=="delete")
+    else if(@$_GET["mode"]=="cleanprec") include(translate("<! cleanprec !>"));
+    else if(@$_GET["mode"]=="delete")
     {
         $sec_name = htmlspecialchars(@$INFO["header"]);
         $menu_title = htmlspecialchars(@$INFO["menu-title"]);
@@ -132,7 +128,8 @@
                 удалить раздел <?php echo "[$menu_title] $sec_name"; ?>">
         </form><?php
     }
-    else if(@$_GET["mode"]=="meta" || @$_GET["act"]=="meta")
+
+    else if(@$_GET["mode"]=="meta")
     {
         include(translate("<! cms/light_edit_menu !>"));
         include(translate("<! cms/page_rename !>"));
@@ -140,11 +137,11 @@
         include(translate("<! cms/edit_meta_tags !>"));
         include(translate("<! cms/light_icon_editor !>"));
     }
-    else if(@$_GET["mode"]=="imgedit" )
+    else if(@$_GET["mode"]=="img_edit" )
     {
         include(translate("<! cms/light_image_editor !>"));
     }
-    else if(@$_GET["mode"]=="configuration" || @$_GET["act"]=="configuration")
+    else if(@$_GET["mode"]=="configuration")
     {
         $editfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/info";
         include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
@@ -180,11 +177,11 @@
         }
     }
     */
-    else if(@$_GET["act"]=="css")
+    else if(@$_GET["mode"]=="css")
     {
         include(translate('<! cms/light_css_editor !>'));
     }
-    else if(@$_GET["act"]=="__convert")
+    else if(@$_GET["mode"]=="__convert")
     {
         $fl = file('ifiles');
         foreach ($fl as $fn) {
@@ -209,7 +206,7 @@
         }
         die();
     }
-    elseif(@$_GET["act"]=="taglist")
+    elseif(@$_GET["mode"]=="taglist")
     {
         include(translate('<! edit/taglistadmin !>'));
     }
@@ -217,7 +214,7 @@
     {
         include(translate("<! cms/light_access_editor !>"));
     }
-        elseif(@$_GET["act"]=="groupadmin")
+        elseif(@$_GET["mode"]=="groupadmin")
     {
         $editfile = "{$SETTINGS["datadir"]}groups";
         include(translate("<! edit/tag !>"));
@@ -226,17 +223,17 @@
     {
         include(translate('<! auth/ #admin !><! auth/register !>'));
     }
-    elseif(@$_GET["act"]=="userlist")
+    elseif(@$_GET["mode"]=="userlist")
     {
-        $preface = xcms_url(array('ref'=>'ladmin', 'act'=>'userlist', 'page'=>$pageid));
+        $preface = xcms_url(array('ref'=>'ladmin', 'mode'=>'userlist', 'page'=>$pageid));
         include(translate("<! auth/admin !>"));
     }
-    elseif(@$_GET["act"]=="myprofile")
+    elseif(@$_GET["mode"]=="myprofile")
     {
-        $preface = xcms_url(array('ref'=>'ladmin', 'act'=>'myprofile', 'page'=>$pageid));
+        $preface = xcms_url(array('ref'=>'ladmin', 'mode'=>'myprofile', 'page'=>$pageid));
         include(translate("<! auth/myprofile !>"));
     }
-    elseif(@$_GET["act"]=="cChapter")
+    elseif(@$_GET["mode"]=="create_page")
         include(translate("<! cms/light_create_page_after !>"));
     else include(translate('<! cms/light_edit_table !>'));
 ?>
