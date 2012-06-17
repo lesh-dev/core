@@ -3,9 +3,11 @@
 # Checks that no tabs uses in code
 set -xe
 
+path="."
+
 check_tabs()
 {
-    if find ../../site -type f -name $1 | xargs grep $'\t' ; then
+    if find $path -type f -name $1 | xargs grep $'\t' ; then
         echo "Tabs check failed for xcms files, see files above. "
         exit 1
     fi
@@ -14,7 +16,7 @@ check_tabs()
 
 check_shorttag()
 {
-    if grep -RI '<[?][^px]' ../../site || grep -RI '<[?]$' ../../site ; then
+    if grep -RI '<[?][^px]' $path || grep -RI '<[?]$' ../../site ; then
         echo "shorttag check failed, please fix"
         exit 1
     fi
