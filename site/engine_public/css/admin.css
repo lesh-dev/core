@@ -91,6 +91,10 @@ a.menu-active {
     font-weight: bold;
 }
 
+div.menuitem-hidden a {
+    color: #8f6f6f;
+}
+
 table.user-list {
     width: 100%;
     border: none;
@@ -144,3 +148,14 @@ div.admin-widget div.warn {
 div.admin-widget div.notice {
     color: #006f00;
 }
+
+.menu-level1 {
+  padding-left: 0pt;
+}
+.menu-level2 {
+  padding-left: 10pt;
+}
+.menu-level3 {
+  padding-left: 20pt;
+}
+

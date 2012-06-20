@@ -99,7 +99,7 @@
                     }
                 ?>
                 <b>Menu</b>
-                <# cms/menu/display displayall devel start=1 end=5 #>
+                <# cms/menu/display display_all devel start=1 end=5 #>
             </div>
             <div class="content">
             <?php

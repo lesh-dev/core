@@ -1,38 +1,42 @@
 <?php
-    function xcms_menu($initPath, $MENUTEMPLATES, $menuLevel, $addhrefparams, $options, $startLevel, $endLevel)
+    function xcms_menu($init_path, $MENUTEMPLATES, $menu_level, $add_href_params, $options, $start_level, $end_level)
     {
         global $SETTINGS, $pageid, $web_prefix;
 
         $page_prefix = "{$SETTINGS["datadir"]}cms/pages/";
-        $pageiid = str_replace($page_prefix, "", $initPath);
+        $pageiid = str_replace($page_prefix, "", $init_path);
+        $aux_class = "";
         $flags = "";
-        $page_info = "$initPath/info";
+        $page_info = "$init_path/info";
         $text = "";
         if (!file_exists($page_info)) return;
         $INFO = xcms_get_list($page_info);
-        if (strstr($options, "+displayall"))
+        if (xcms_get_key_or($options, "display_all"))
         {
             $text = "{unnamed}";
-            if (array_key_exists("menu-title", $INFO))
+            if (xcms_get_key_or($INFO, "menu-title"))
             {
-                if (strlen($INFO["menu-title"]))
-                    $text = $INFO["menu-title"];
+                $text = htmlspecialchars($INFO["menu-title"]);
             }
-            if (array_key_exists("menu-locked", $INFO))
-                $flags .= "H ";
+            if (xcms_get_key_or($INFO, "menu-hidden") == "yes")
+            {
+                $aux_class .= "menuitem-hidden ";
+                $flags .= "H";
+            }
+            if ($flags)
+                $text = "<sup>$flags</sup>$text";
         }
         else
         {
-            $text = @$INFO["menu-title"];
+            $text = htmlspecialchars(@$INFO["menu-title"]);
             // don't show unnamed items
-            if (!array_key_exists("menu-title", $INFO)) // no title
+            if (!xcms_get_key_or($INFO, "menu-title")) // no title
                 return;
-            // don't show locked items
-            if (array_key_exists("menu-locked", $INFO))
+            // don't show hidden items
+            if (xcms_get_key_or($INFO, "menu-hidden") == "yes")
                 return;
             // don't show inaccessible menu items
-            // TODO: это называлось hidemenu, для удобства пользования
-            if (array_key_exists("menu-auth-only", $INFO))
+            if (xcms_get_key_or($INFO, "menu-auth-only") == "yes")
             {
                 include(translate("<! auth/lauth {$INFO['view']} !>"));
                 // TODO: OMFG global var reading...
@@ -41,21 +45,21 @@
             }
         }
         // render menu item
-        $html = $MENUTEMPLATES[$menuLevel];
-        if (strstr($options, "+devel"))
+        $html = $MENUTEMPLATES[$menu_level];
+        $html = str_replace('<AUXCLASS>', $aux_class, $html);
+
+        if (xcms_get_key_or($options, "devel") || !@$INFO["alias"])
         {
-            $margin = $menuLevel*10;
-            $html = "<div style=\"margin-left: ${margin}pt;\">[<a href=\"<HREF>\">$flags<TEXT></a>]</div>";
-            $html = str_replace("<HREF>","/$web_prefix?page=$pageiid&amp;$addhrefparams", $html);
-        }
-        elseif (@$INFO["alias"])
-        {
-            $alias = $INFO["alias"];
-            $html = str_replace("<HREF>","/$web_prefix$alias/$addhrefparams", $html);
+            // if alias not set or in devel mode, always show unaliased menu items
+            $html = str_replace("<HREF>","/$web_prefix?page=$pageiid&amp;$add_href_params", $html);
         }
         else
-            $html = str_replace("<HREF>","/$web_prefix?page=$pageiid&amp;$addhrefparams", $html);
-        $html = str_replace("<TEXT>", htmlspecialchars($text), $html);
+        {
+            $alias = $INFO["alias"];
+            $html = str_replace("<HREF>","/$web_prefix$alias/$add_href_params", $html);
+        }
+        // text is already escaped here
+        $html = str_replace("<TEXT>", $text, $html);
 
         if (strstr($pageid, $pageiid))
             $html = str_replace("<ACTIVE>", "active", $html);
@@ -63,16 +67,16 @@
             $html = str_replace("<ACTIVE>", "passive", $html);
 
         // add icon
-        if (file_exists("$initPath/menuicon.gif"))
-            $html = str_replace("<!-- PIC -->", "<img src=\"$initPath/menuicon.gif\" />", $html);
+        if (file_exists("$init_path/menuicon.gif"))
+            $html = str_replace("<!-- PIC -->", "<img src=\"$init_path/menuicon.gif\" />", $html);
 
         // render current level
-        if ($menuLevel >= $startLevel && $menuLevel <= $endLevel)
+        if ($menu_level >= $start_level && $menu_level <= $end_level)
             echo $html;
 
         // render menu subtree
-        $array = glob("$initPath/*", GLOB_ONLYDIR);
-        if (strstr($options, "+hault"))
+        $array = glob("$init_path/*", GLOB_ONLYDIR);
+        if (xcms_get_key_or($options, "stop"))
             return;
         if (!@$array)
             return;
@@ -80,10 +84,15 @@
         foreach ($array as $key=>$value)
         {
             if (!file_exists("$value/info")) continue;
-            if (strstr($options,"+devel") || strstr($pageid, str_replace($page_prefix, "", $value)))
-                xcms_menu($value, $MENUTEMPLATES, $menuLevel+1, $addhrefparams, $options, $startLevel, $endLevel);
+            $without_prefix = str_replace($page_prefix, "", $value);
+            if (xcms_get_key_or($options, "display_all") || strstr($pageid, $without_prefix))
+                xcms_menu($value, $MENUTEMPLATES, $menu_level+1, $add_href_params, $options, $start_level, $end_level);
             else
-                xcms_menu($value, $MENUTEMPLATES, $menuLevel+1, $addhrefparams, "$options+hault", $startLevel, $endLevel);
+            {
+                $new_options = $options;
+                $new_options["stop"] = "yes";
+                xcms_menu($value, $MENUTEMPLATES, $menu_level+1, $add_href_params, $new_options, $start_level, $end_level);
+            }
         }
     }
 ?>

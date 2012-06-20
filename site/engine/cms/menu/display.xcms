@@ -2,24 +2,24 @@
     include_once("{$SETTINGS["elementsdir"]}cms/menu/func.php");
 
     if (!@$_GET["ref"]) $_GET["ref"] = "index";
-    $options = "";
-    if (@$keys["forcetree"]) $options .= "+forcetree";
-    if (@$keys["devel"]) $options .= "+devel";
-    if (@$keys["displayall"]) $options .= "+displayall";
+    // TODO: снивелировать разницу между $keys и $param
+    // default template file
+    $template_file = "{$SETTINGS["designdir"]}menulinks.dat";
+    if (xcms_get_key_or($keys, "devel"))
+        $template_file = "{$SETTINGS["elementsdir"]}/cms/menu/menulinks.dat";
     $s = 0;
-    $e = 999; // TODO: what a magic const?
-    if (@$param["start"]) $s=$param["start"];
-    if (@$param["end"]) $e=$param["end"];
+    $e = 999;
+    if (@$param["start"]) $s = $param["start"];
+    if (@$param["end"]) $e = $param["end"];
 
+    $add_href_params = "";
     if (@$_GET["ref"] != "index")
-        $ahp = "ref={$_GET["ref"]}";
-    else
-        $ahp = "";
+        $add_href_params = "ref={$_GET["ref"]}";
 
     xcms_menu(
         "{$SETTINGS["datadir"]}cms/pages",
-        file("{$SETTINGS["designdir"]}menulinks.dat"),
+        file($template_file),
         0,
-        $ahp,
-        $options, $s, $e);
+        $add_href_params,
+        $keys, $s, $e);
 ?>

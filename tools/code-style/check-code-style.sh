@@ -23,6 +23,8 @@ check_shorttag()
     return 0
 }
 
+# TODO: check cr/lf symbols in code
+
 check_shorttag
 check_tabs '*.xcms'
 check_tabs '*.php'

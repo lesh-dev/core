@@ -1,0 +1,4 @@
+<div class="menu-item menu-level0 <AUXCLASS>">[<a class="menu-<ACTIVE> menu-<ACTIVE>-level0" href="<HREF>"><TEXT></a>]</div>
+<div class="menu-item menu-level1 <AUXCLASS>">[<a class="menu-<ACTIVE> menu-<ACTIVE>-level1" href="<HREF>"><TEXT></a>]</div>
+<div class="menu-item menu-level2 <AUXCLASS>">[<a class="menu-<ACTIVE> menu-<ACTIVE>-level2" href="<HREF>"><TEXT></a>]</div>
+<div class="menu-item menu-level3 <AUXCLASS>">[<a class="menu-<ACTIVE> menu-<ACTIVE>-level3" href="<HREF>"><TEXT></a>]</div>
