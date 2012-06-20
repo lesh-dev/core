@@ -63,7 +63,7 @@
             <a <?php echo xcms_href(array('mode'=>'alias', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
             <b title="Page Alias">ALI</b> <tt><?php echo @$INFO["alias"]; ?></tt></a> |
             <b>HDR</b> <# cms/header #> |
-            <b>SUB</b> <?php echo @$INFO["alias"]; ?> |
+            <b>SUB</b> <?php echo htmlspecialchars(@$INFO["subheader"]); ?> |
             <b>DIR</b> <tt><?php echo $pageid; ?></tt>
         </div>
         <div>
