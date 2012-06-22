@@ -19,7 +19,7 @@
     <div>
         <span class="admin-form-label">Заголовок:</span>
         <input xcms-track-changes="yes" name="header"
-            value="<?php echo htmlspecialchars(@$info["header"]); ?>">
+            value="<?php echo htmlspecialchars(@$info["header"]); ?>" />
     </div>
     <div>
         <span class="admin-form-label">Подзаголовок:</span>

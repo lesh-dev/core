@@ -19,8 +19,6 @@ a:visited {
 
 a:hover {
     color: #ef0000;
-    /*text-decoration: underline;*/
-    /*border-bottom: 1px dotted #ef0000;*/
 }
 
 a:active {
@@ -68,6 +66,10 @@ div.content {
 textarea {
     padding: 4px;
     border: 1px solid #7f7f7f;
+    background-color: #fefef3;
+}
+
+textarea.editor {
     margin-top: 10px;
     margin-bottom: 5px;
 }
@@ -166,12 +168,34 @@ div.admin-widget div.notice {
 
 div.page-info-box {
     margin-bottom: 10px;
-    padding: 5px;
-    border: 1px solid red;
+    border: 1px solid #cfcf7f;
     border-radius: 5px;
+    width: 980px;
+}
+
+div.page-info-box-top {
+    border-bottom: 1px solid #dfdf7f;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 2px;
+}
+
+div.page-info-box-bottom {
+    padding-top: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
 }
 
 span.info-label {
     display: inline-block;
-    width: 100px;
+    font-weight: bold;
+    width: 120px;
+    color: #5f4f00;
+}
+
+span.td2 {
+    width: 49%;
+    display: inline-block;
 }

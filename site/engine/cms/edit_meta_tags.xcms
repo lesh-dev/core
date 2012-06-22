@@ -3,7 +3,7 @@
     <form method="post">
 <?php
     $ifn = xcms_get_info_file_name();
-    $list = xcms_get_list($ifn);
+    $info = xcms_get_list($ifn);
     $redirect = false;
 
     if (@$_POST["change-meta"])
@@ -12,10 +12,10 @@
         $author = @$_POST["author"];
         $keywords = @$_POST["keywords"];
         // all necessary filtering is performed internally
-        $list["meta-author"] = $author;
-        $list["meta-description"] = $description;
-        $list["meta-keywords"] = $keywords;
-        xcms_save_list($ifn, $list);
+        $info["meta-author"] = $author;
+        $info["meta-description"] = $description;
+        $info["meta-keywords"] = $keywords;
+        xcms_save_list($ifn, $info);
         $redirect = true;
 
         ?>
@@ -25,23 +25,21 @@
     if ($redirect)
         include(translate("<! redir_msg ladmin 2 !>"));
 ?>
-    <table>
-        <tr><td>Описание</td>
-            <td><textarea cols="80" rows="3" name="description"><?php
-                echo htmlspecialchars(@$list["meta-description"]);
-                ?></textarea></td>
-        </tr>
-        <tr><td>Ключевые слова</td>
-            <td><textarea cols="80" rows="2" name="keywords"><?php
-                echo htmlspecialchars(@$list["meta-keywords"]);
-                ?></textarea>
-        </tr>
-        <tr><td>Автор</td>
-            <td><input size="80" name="author" value="<?php
-                echo htmlspecialchars(@$list["meta-author"]);
-                ?>" />
-        </tr>
-    </table>
-    <input type="submit" name="change-meta" value="Сохранить" />
+    <div>
+        <span class="admin-form-label">Описание:</span>
+        <textarea cols="80" rows="3" xcms-track-changes="yes" name="description"><?php
+            echo htmlspecialchars(@$info["meta-description"]); ?></textarea>
+    </div>
+    <div>
+        <span class="admin-form-label">Ключевые слова:</span>
+        <textarea cols="80" rows="2"  xcms-track-changes="yes" name="keywords"><?php
+            echo htmlspecialchars(@$info["meta-keywords"]); ?></textarea>
+    </div>
+    <div>
+        <span class="admin-form-label">Автор:</span>
+        <input size="80" xcms-track-changes="yes" name="author"
+            value="<?php echo htmlspecialchars(@$info["author"]); ?>" />
+    </div>
+    <input name="change-meta" type="submit" value="Сохранить" />
     </form>
 </div>

@@ -96,34 +96,44 @@
             </div>
             <div class="content">
                 <div class="page-info-box">
-                    <div><span class="info-label">Alias</span>
-                        <a <?php echo xcms_href(array('mode'=>'edit_alias', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
-                        <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "alias", "<alias не задан>")); ?></tt></a>
-                    </div>
-                    <div><span class="info-label">Имя в меню</span>
-                        <a <?php echo xcms_href(array('mode'=>'edit_menu', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
-                        <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "menu-title", "<menu-title не задан>")); ?></tt></a>
-                    </div>
-                    <div><span class="info-label">Заголовок</span>
-                        <a <?php echo xcms_href(array('mode'=>'edit_header', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
-                        <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "header", "<header не задан>")); ?></tt></a>
-                    </div>
-                    <div><span class="info-label">Подзаголовок</span>
-                        <a <?php echo xcms_href(array('mode'=>'edit_subheader', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
-                        <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "subheader", "<subheader не задан>")); ?></tt></a>
+                    <div class="page-info-box-top">
+                        <span class="td2">
+                            <span class="info-label">Alias</span>
+                            <a <?php echo xcms_href(array('mode'=>'edit_alias', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                            <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "alias", "<alias не задан>")); ?></tt></a>
+                        </span>
+                        <span class="td2">
+                            <span class="info-label">Заголовок</span>
+                            <a <?php echo xcms_href(array('mode'=>'edit_header', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                            <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "header", "<header не задан>")); ?></tt></a>
+                        </span>
+
+                        <span class="td2">
+                            <span class="info-label">Имя в меню</span>
+                            <a <?php echo xcms_href(array('mode'=>'edit_menu', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                            <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "menu-title", "<menu-title не задан>")); ?></tt></a>
+                        </span>
+
+                        <span class="td2">
+                            <span class="info-label">Подзаголовок</span>
+                            <a <?php echo xcms_href(array('mode'=>'edit_header', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                            <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "subheader", "<subheader не задан>")); ?></tt></a>
+                        </span>
                     </div>
 
-                    <div><span class="info-label">Meta-описание</span>
-                        <a <?php echo xcms_href(array('mode'=>'edit_meta', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
-                        <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "meta-description", "<meta-description не задано>")); ?></tt></a>
-                    </div>
-                    <div><span class="info-label">Ключевые слова</span>
-                        <a <?php echo xcms_href(array('mode'=>'edit_meta', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
-                        <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "meta-keywords", "<meta-keywords не заданы>")); ?></tt></a>
-                    </div>
-                    <div><span class="info-label">Физический путь</span>
-                        <a <?php echo xcms_href(array('mode'=>'edit_pageid', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
-                        <tt><?php echo htmlspecialchars($pageid); ?></tt></a>
+                    <div class="page-info-box-bottom">
+                        <div><span class="info-label">Meta-описание</span>
+                            <a <?php echo xcms_href(array('mode'=>'edit_meta', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                            <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "meta-description", "<meta-description не задано>")); ?></tt></a>
+                        </div>
+                        <div><span class="info-label">Ключевые слова</span>
+                            <a <?php echo xcms_href(array('mode'=>'edit_meta', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                            <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "meta-keywords", "<meta-keywords не заданы>")); ?></tt></a>
+                        </div>
+                        <div><span class="info-label">Физический путь</span>
+                            <a <?php echo xcms_href(array('mode'=>'edit_pageid', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                            <tt><?php echo htmlspecialchars($pageid); ?></tt></a>
+                        </div>
                     </div>
                 </div>
 
