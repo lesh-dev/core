@@ -171,7 +171,7 @@
     else if(@$_GET["mode"]=="edit_meta")
         include(translate("<! cms/edit_meta_tags !>"));
     else if(@$_GET["mode"]=="edit_menu")
-        include(translate("<! cms/light_edit_menu !>"));
+        include(translate("<! cms/edit_menu !>"));
     else if(@$_GET["mode"]=="obsolete_settings")
     {
         //include(translate("<! cms/light_edit_menu !>"));
