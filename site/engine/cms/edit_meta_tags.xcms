@@ -2,26 +2,30 @@
     <h3>META-информация</h3>
     <form method="post">
 <?php
-    if (@$_POST["edit-meta"])
+    $ifn = xcms_get_info_file_name();
+    $list = xcms_get_list($ifn);
+    $redirect = false;
+
+    if (@$_POST["change-meta"])
     {
         $description = @$_POST["description"];
         $author = @$_POST["author"];
         $keywords = @$_POST["keywords"];
-        $ifn = xcms_get_info_file_name();
-        $list = xcms_get_list($ifn);
         // all necessary filtering is performed internally
         $list["meta-author"] = $author;
         $list["meta-description"] = $description;
         $list["meta-keywords"] = $keywords;
         xcms_save_list($ifn, $list);
+        $redirect = true;
+
         ?>
         <div class="notice">Мета-информация успешно обновлена</div>
         <?php
     }
-    $list = xcms_get_list(xcms_get_info_file_name());
+    if ($redirect)
+        include(translate("<! redir_msg ladmin 2 !>"));
 ?>
     <table>
-        <!-- TODO: replace table -->
         <tr><td>Описание</td>
             <td><textarea cols="80" rows="3" name="description"><?php
                 echo htmlspecialchars(@$list["meta-description"]);
@@ -38,6 +42,6 @@
                 ?>" />
         </tr>
     </table>
-    <input type="submit" name="edit-meta" value="Изменить" />
+    <input type="submit" name="change-meta" value="Сохранить" />
     </form>
 </div>

@@ -98,9 +98,12 @@ function xcms_save_list($file, $keys)
   **/
 function xcms_get_key_or($list, $key, $def_value = '')
 {
-    if (array_key_exists($key, $list))
-        return $list[$key];
-    return $def_value;
+    if (!array_key_exists($key, $list))
+        return $def_value;
+    $value = $list[$key];
+    if (!strlen($value))
+        return $def_value;
+    return $value;
 }
 
 /********************************/

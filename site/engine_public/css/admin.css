@@ -121,6 +121,11 @@ form {
     margin: 0px;
 }
 
+span.admin-form-label {
+    display: inline-block;
+    width: 150px;
+}
+
 div.admin-widget {
     border: 1px solid #7f7f7f;
     border-radius: 3px;
@@ -159,3 +164,14 @@ div.admin-widget div.notice {
   padding-left: 20pt;
 }
 
+div.page-info-box {
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid red;
+    border-radius: 5px;
+}
+
+span.info-label {
+    display: inline-block;
+    width: 100px;
+}

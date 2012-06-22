@@ -1,20 +1,23 @@
 <div class="admin-widget">
-    <h3>Alias (как это по-русски-то?)</h3>
+    <h3>Alias</h3>
     <form method="post">
     <?php
-    // TODO: избавиться от глобального кода, надо всё распилить на функции
     $info = xcms_get_list(xcms_get_info_file_name());
-    if(@$_POST["create-section-alias"])
+    $redirect = false;
+    if(@$_POST["change-alias"])
     {
         $old_alias = @$info["alias"];
-        $new_alias = @$_POST["create-section-alias"];
+        $new_alias = @$_POST["alias"];
         $aliases = @unserialize(@file_get_contents("{$SETTINGS["datadir"]}tags/list"));
         if(@strlen(@$aliases[@$new_alias]))
         {
             if($old_alias != $new_alias)
                 echo "<div class=\"error\">Такой alias уже существует на странице <tt>".@$aliases[@$new_alias]."</tt></div>";
             else
+            {
                 echo "<div class=\"notice\">Список alias-ов обновлён, но alias текущей страницы не изменился</div>";
+                $redirect = true;
+            }
         }
         else
         {
@@ -30,12 +33,18 @@
             fputs($f,serialize($aliases));
             fclose($f);
             echo "<div class=\"notice\">Список alias-ов обновлён</div>";
+            $redirect = true;
         }
         include(translate('<! cms/build_rewrite !>'));
+        if ($redirect)
+            include(translate("<! redir_msg ladmin 2 !>"));
     }
 ?>
-        Alias: <input xcms-track-changes="yes" name="create-section-alias"
+    <div>
+        <span class="admin-form-label">Alias:</span>
+        <input xcms-track-changes="yes" name="alias"
             value="<?php echo @$info["alias"]; ?>">
-        <input type="submit" value="Изменить" />
+    </div>
+    <input type="submit" name="change-alias" value="Сохранить" />
     </form>
 </div>
