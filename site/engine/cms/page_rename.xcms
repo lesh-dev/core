@@ -1,16 +1,31 @@
+<div class="admin-widget">
+	<h3>Физический путь</h3>
+	<form method="post">
 <?php
+	$redirect = false;
     if(@$_POST["rename-current-section"])
     {
         // TODO: check file path injection here
         rename("{$SETTINGS["datadir"]}cms/pages/$pageid","{$SETTINGS["datadir"]}cms/pages/{$_POST["rename-current-section"]}");
-        ?>Путь успешно изменён!<?php
+        $redirect = true;
+        ?>
+        <div class="notice">Путь успешно изменён!</div>
+        <?php
     }
+    if ($redirect)
+        include(translate("<! redir_msg ladmin 2 !>"));
 ?>
-<div class="admin-widget">
-<h3>Физический путь</h3>
-<div class="warn"><b>ВНИМАНИЕ:</b> Изменение физического пути страницы обычно нужно очень редко!</div>
-<form method="post">
-    Физический путь:
+	<div class="warn"><b>ВНИМАНИЕ:</b> Изменение физического пути страницы обычно нужно очень редко!</div>
+    <div>
+        <span class="admin-form-label">Физический путь</span>
+        <input xcms-track-changes="yes" name=""
+            value="<?php echo @$info["alias"]; ?>" />
+    </div>
+    <input type="submit" name="change-alias" value="Сохранить" />
+
+
+
+    <Физический путь:
     <input type="text" name="rename-current-section" value="<?php echo $pageid;?>" />
     <input type="submit" value="Изменить">
 </form>

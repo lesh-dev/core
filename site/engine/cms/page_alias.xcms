@@ -41,7 +41,7 @@
     }
 ?>
     <div>
-        <span class="admin-form-label">Alias:</span>
+        <span class="admin-form-label">Alias</span>
         <input xcms-track-changes="yes" name="alias"
             value="<?php echo @$info["alias"]; ?>" />
     </div>

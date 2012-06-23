@@ -26,18 +26,18 @@
         include(translate("<! redir_msg ladmin 2 !>"));
 ?>
     <div>
-        <span class="admin-form-label">Описание:</span>
-        <textarea cols="80" rows="3" xcms-track-changes="yes" name="description"><?php
+        <span class="admin-form-label">Описание</span>
+        <textarea cols="80" rows="3" class="admin-long" xcms-track-changes="yes" name="description"><?php
             echo htmlspecialchars(@$info["meta-description"]); ?></textarea>
     </div>
     <div>
-        <span class="admin-form-label">Ключевые слова:</span>
-        <textarea cols="80" rows="2"  xcms-track-changes="yes" name="keywords"><?php
+        <span class="admin-form-label">Ключевые слова</span>
+        <textarea cols="80" rows="2" class="admin-long" xcms-track-changes="yes" name="keywords"><?php
             echo htmlspecialchars(@$info["meta-keywords"]); ?></textarea>
     </div>
     <div>
-        <span class="admin-form-label">Автор:</span>
-        <input size="80" xcms-track-changes="yes" name="author"
+        <span class="admin-form-label">Автор</span>
+        <input size="80" class="admin-long" xcms-track-changes="yes" name="author"
             value="<?php echo htmlspecialchars(@$info["author"]); ?>" />
     </div>
     <input name="change-meta" type="submit" value="Сохранить" />

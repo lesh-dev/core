@@ -60,10 +60,11 @@
             {
                 $newS = file_get_contents($full_name);
                 foreach ($argv as $key=>$value)
-                {
-                    $newS = str_replace("%$key",$value,$newS);
-                }
-                $newS = str_replace("%*",$code,$newS);
+                    $newS = str_replace("%$key", $value, $newS);
+                // replace all unused parameters with empty strings
+                $newS = preg_replace('/%[0-9]/', '', $newS);
+                // replace wildcarded arguments
+                $newS = str_replace("%*", $code, $newS);
                 ParseString($newS,$outputStream);
             }
             elseif(file_exists("$elem_full_name.code"))

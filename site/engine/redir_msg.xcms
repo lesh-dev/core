@@ -1,2 +1,2 @@
 <div class="notice">Подождите, Вы будете перенаправлены через %2 сек</div>
-<meta http-equiv="refresh" content="%2;URL=<# href %1 #>&amp;%3">
+<meta http-equiv="refresh" content="%2;URL=<# href %1 #>&amp;page=<?php echo rawurlencode($pageid); ?>&amp;%3" />

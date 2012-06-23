@@ -17,12 +17,12 @@
         include(translate("<! redir_msg ladmin 2 !>"));
 ?>
     <div>
-        <span class="admin-form-label">Заголовок:</span>
+        <span class="admin-form-label">Заголовок</span>
         <input xcms-track-changes="yes" name="header"
             value="<?php echo htmlspecialchars(@$info["header"]); ?>" />
     </div>
     <div>
-        <span class="admin-form-label">Подзаголовок:</span>
+        <span class="admin-form-label">Подзаголовок</span>
         <input xcms-track-changes="yes" name="subheader"
             value="<?php echo htmlspecialchars(@$info["subheader"]); ?>">
     </div>
