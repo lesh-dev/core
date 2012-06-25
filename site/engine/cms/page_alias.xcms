@@ -42,7 +42,7 @@
 ?>
     <div>
         <span class="admin-form-label">Alias</span>
-        <input xcms-track-changes="yes" name="alias"
+        <input type="text" class="admin-long" xcms-track-changes="yes" name="alias"
             value="<?php echo @$info["alias"]; ?>" />
     </div>
     <input type="submit" name="change-alias" value="Сохранить" />

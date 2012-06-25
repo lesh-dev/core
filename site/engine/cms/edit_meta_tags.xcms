@@ -37,7 +37,7 @@
     </div>
     <div>
         <span class="admin-form-label">Автор</span>
-        <input size="80" class="admin-long" xcms-track-changes="yes" name="author"
+        <input type="text" class="admin-long" xcms-track-changes="yes" name="author"
             value="<?php echo htmlspecialchars(@$info["author"]); ?>" />
     </div>
     <input name="change-meta" type="submit" value="Сохранить" />

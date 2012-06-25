@@ -24,7 +24,7 @@
 ?>
     <div>
         <span class="admin-form-label">Название в меню</span>
-        <input xcms-track-changes="yes" name="menu-title"
+        <input type="text" class="admin-long" xcms-track-changes="yes" name="menu-title"
             value="<?php echo htmlspecialchars(@$INFO["menu-title"]); ?>" />
     </div>
     <div>
