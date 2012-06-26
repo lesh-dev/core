@@ -35,7 +35,7 @@
           <a class="menu-item menu-level1 menu-passive menu-passive-level1" href="/forum">Форум</a>
 
       <?php
-      if(@$_COOKIE["auth-login"])
+      if(strlen(@$_COOKIE["auth-login"]))
       {
         include(translate('<a href="/<# web_prefix #>?'.
             xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).

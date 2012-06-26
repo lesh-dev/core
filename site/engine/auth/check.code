@@ -27,7 +27,7 @@
       $profileFile = "{$SETTINGS["datadir"]}auth/usr/$glogin.usr";
       if(!file_exists($profileFile))
       {
-        include("{$SETTINGS["datadir"]}auth/errors/nologin.php");
+        include("$design_dir/auth/nologin.php");
         die();
       }
       $USER = @getList($profileFile);
@@ -39,7 +39,7 @@
       }
       else
       {
-        include("{$SETTINGS["datadir"]}auth/errors/badpassw.php");
+        include("$design_dir/auth/badpassw.php");
         die();
       }
       $login = $glogin;
