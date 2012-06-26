@@ -15,7 +15,7 @@
     <table cellspacing="0" cellpadding="0" class="topTable roundBorders" summary="Page Top">
       <tr>
         <td class="logoCell menuWidth">
-          <a href="index.php" title="ФизЛЭШ"><img
+          <a href="/<# web_prefix #>" title="ФизЛЭШ"><img
             src="/<# web_prefix #>fizlesh.ru-design/pic/fizlesh-logo-small.png" height="72" alt="Логотип ФизЛЭШ" /></a>
         </td>
         <td class="logoCell">
