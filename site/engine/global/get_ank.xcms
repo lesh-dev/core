@@ -1,8 +1,11 @@
 <# auth/ #admin #ank #><?php
-  // TODO: remove this spike
   if (!array_key_exists("file", $_GET))
-    die("Application error. Please report the link you encountered to bla@fizlesh.ru");
-
+  {
+    // TODO: remove this spike (mail)
+    xcms_log(0, "[ANK] Bogus request: {$_SERVER["QUERY_STRING"]}");
+    die('Application error. Please mail about this incident '.
+      'to <a href="mailto:bug@fizlesh.ru"><tt>bug@fizlesh.ru</tt></a>.');
+  }
 
   $sBaseAnkFileName = $_GET["file"];
   // here should be filename only, without any slashes or other symbols
