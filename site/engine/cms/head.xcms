@@ -4,6 +4,7 @@
     $description = @$list["meta-description"];
     $keywords = @$list["meta-keywords"];
 ?>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="author" content="<?php echo htmlspecialchars($author); ?>" />
 <meta name="keywords" content="<?php echo htmlspecialchars($keywords); ?>" />
 <meta name="description" content="<?php echo htmlspecialchars($description); ?>" />
