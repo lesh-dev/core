@@ -1,22 +1,16 @@
 <?php
     // TODO: wrap into function
-    $rewrite_text = "RewriteEngine on";
+    $rewrite_text = "";
+    $rewrite_text .= "ErrorDocument 404 /$web_prefix{$SETTINGS["designdir"]}404.php\n\n";
+    $rewrite_text .= "RewriteEngine on\n";
     $rewrite_list = unserialize(file_get_contents("{$SETTINGS["datadir"]}tags/list"));
-    foreach($rewrite_list as $tag=>$path)
+    foreach($rewrite_list as $alias=>$path)
     {
-        @$listing[@substr_count($tag,"/")] .= "\nRewriteRule ^$tag$ index.php?page=$path";
-        @$listing[@substr_count($tag,"/")] .= "\nRewriteRule ^$tag/(.*)$ index.php?page=$path&aparam=$1";
+        @$listing[@substr_count($alias, "/")] .= "RewriteRule ^$alias$ index.php?page=$path\n";
+        @$listing[@substr_count($alias, "/")] .= "RewriteRule ^$alias/(.*)$ index.php?page=$path&aparam=$1\n";
     }
-    $rewrite_text .= @$listing[9];
-    $rewrite_text .= @$listing[8];
-    $rewrite_text .= @$listing[7];
-    $rewrite_text .= @$listing[6];
-    $rewrite_text .= @$listing[5];
-    $rewrite_text .= @$listing[4];
-    $rewrite_text .= @$listing[3];
-    $rewrite_text .= @$listing[2];
-    $rewrite_text .= @$listing[1];
-    $rewrite_text .= @$listing[0];
+    for ($i = count($listing) - 1; $i >= 0; --$i)
+        $rewrite_text .= @$listing[$i];
     $f = fopen(".htaccess", "w");
     // TODO: check result and return it
     fputs($f, $rewrite_text);
