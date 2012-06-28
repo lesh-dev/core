@@ -1,41 +1,50 @@
 <div class="admin-widget">
-    <h3>Alias (как это по-русски-то?)</h3>
+    <h3>Alias</h3>
     <form method="post">
     <?php
-    // TODO: избавиться от глобального кода, надо всё распилить на функции
-    if(@$_POST["create-section-alias"])
+    $info = xcms_get_list(xcms_get_info_file_name());
+    $redirect = false;
+    if(@$_POST["change-alias"])
     {
-        $old_alias = @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/currtag");
-        $new_alias = @$_POST["create-section-alias"];
+        $old_alias = @$info["alias"];
+        $new_alias = @$_POST["alias"];
         $aliases = @unserialize(@file_get_contents("{$SETTINGS["datadir"]}tags/list"));
         if(@strlen(@$aliases[@$new_alias]))
         {
             if($old_alias != $new_alias)
                 echo "<div class=\"error\">Такой alias уже существует на странице <tt>".@$aliases[@$new_alias]."</tt></div>";
             else
+            {
                 echo "<div class=\"notice\">Список alias-ов обновлён, но alias текущей страницы не изменился</div>";
+                $redirect = true;
+            }
         }
         else
         {
-            $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/currtag","w");
-            fputs($f, $new_alias);
-            fclose($f);
-            foreach($aliases as $alias=>$value)
+            $info["alias"] = $new_alias;
+            xcms_save_list(xcms_get_info_file_name(), $info);
+            foreach ($aliases as $alias=>$value)
             {
-            if($value == $pageid)
-                unset($aliases[$alias]);
+                if ($value == $pageid)
+                    unset($aliases[$alias]);
             }
             $aliases[$new_alias] = $pageid;
             $f = fopen("{$SETTINGS["datadir"]}tags/list","w");
             fputs($f,serialize($aliases));
             fclose($f);
             echo "<div class=\"notice\">Список alias-ов обновлён</div>";
+            $redirect = true;
         }
         include(translate('<! cms/build_rewrite !>'));
+        if ($redirect)
+            include(translate("<! redir_msg ladmin 2 !>"));
     }
 ?>
-        Alias: <input xcms-track-changes="yes" name="create-section-alias"
-            value="<?php echo @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/currtag");?>">
-        <input type="submit" value="Изменить" />
+    <div>
+        <span class="admin-form-label">Alias</span>
+        <input type="text" class="admin-long" xcms-track-changes="yes" name="alias"
+            value="<?php echo @$info["alias"]; ?>" />
+    </div>
+    <input type="submit" name="change-alias" value="Сохранить" />
     </form>
 </div>

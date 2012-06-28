@@ -8,8 +8,10 @@ if [ -z "$dest" ] ; then
     exit 1
 fi
 
+sudo mkdir -p "$dest"
 sudo rm -rf /var/www/html/site/*
 sudo cp -a * "$dest/"
+sudo cp -a ../junk/fizlesh.ru-content "$dest/"
 sudo rm -rf "$dest/.prec/"*
 sudo rm -rf "$dest/admin_doc/.prec/"*
 sudo mkdir -p "$dest/.prec/"

@@ -1,4 +1,4 @@
 <?php
-  $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
-  echo @$INFO["header"];
+	$INFO = xcms_get_list(xcms_get_info_file_name());
+	echo @$INFO["header"];
 ?>

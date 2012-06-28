@@ -1,0 +1,40 @@
+<div class="admin-widget">
+    <h3>Меню</h3>
+    <form method="post">
+<?php
+    $list_name = xcms_get_info_file_name();
+    $INFO = xcms_get_list($list_name);
+    $redirect = false;
+    if(@$_POST["change-menu"])
+    {
+        $INFO["menu-title"] = @$_POST["menu-title"];
+        $INFO["menu-hidden"] = @$_POST["menu-hidden"];
+        $INFO["menu-auth-only"] = @$_POST["menu-auth-only"];
+        xcms_save_list($list_name, $INFO);
+        $redirect = true;
+        ?>
+        <div class="notice">Информация о меню успешно обновлена</div>
+        <?php
+    }
+    if ($redirect)
+        include(translate("<! redir_msg ladmin 2 !>"));
+
+    $chk_hidden = xcms_checkbox_attr(@$INFO["menu-hidden"]);
+    $chk_auth_only = xcms_checkbox_attr(@$INFO["menu-auth-only"]);
+?>
+    <div>
+        <span class="admin-form-label">Название в меню</span>
+        <input type="text" class="admin-long" xcms-track-changes="yes" name="menu-title"
+            value="<?php echo htmlspecialchars(@$INFO["menu-title"]); ?>" />
+    </div>
+    <div>
+        <span class="admin-form-label">Скрытый элемент</span>
+        <input type="checkbox" <?php echo $chk_hidden; ?> name="menu-hidden" />
+    </div>
+    <div>
+        <span class="admin-form-label">Только авторизованным</span>
+        <input type="checkbox" <?php echo $chk_auth_only; ?> name="menu-auth-only" />
+    </div>
+    <input type="submit" name="change-menu" value="Сохранить" />
+    </form>
+</div>

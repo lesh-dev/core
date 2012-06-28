@@ -1,6 +1,12 @@
 <?php
-  if(file_exists($SETTINGS["datadir"]."cms/pages/".@$pageid."/".@$argv[1]))
-    include($SETTINGS["datadir"]."cms/pages/".@$pageid."/".@$argv[1]);
+    if (file_exists($SETTINGS["datadir"]."cms/pages/".@$pageid."/".@$argv[1]))
+        include($SETTINGS["datadir"]."cms/pages/".@$pageid."/".@$argv[1]);
+  /*
+  // TODO: remove dead code
+  // this option was used only for metainfo.
+  // recursive metainfo should be implemented
+  // in a more intellectual way, it
+  // should not be simply copied (SEO requirement!)
   else if($argv[2]=="recurce")
   {
     $predir = $SETTINGS["datadir"]."cms/pages/".@$pageid."";
@@ -14,4 +20,5 @@
       $predir = "$predir/..";
     }
   }
+  */
 ?>

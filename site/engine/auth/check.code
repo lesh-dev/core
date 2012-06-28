@@ -1,7 +1,7 @@
 <?php
 
   if(!@$login)
-  {  
+  {
     @$_POST["auth-passw"] = str_replace("/","",@$_POST["auth-passw"]);
     @$_POST["auth-passw"] = str_replace("\\","",@$_POST["auth-passw"]);
     @$_POST["auth-passw"] = str_replace("\0","",@$_POST["auth-passw"]);
@@ -13,40 +13,40 @@
     if(!$glogin) $glogin = @$_COOKIE["auth-login"];
     if(!$glogin)
     {
-      $login = "anonymous";   
+      $login = "anonymous";
       $group = array();
       $group["#guests"] = "#guests";
       $group["#all"] = "#all";
-      $USER = array();   
+      $USER = array();
     }
-    else 
+    else
     {
       $gpass = @$_POST["auth-passw"];
-      if(!$gpass) $gpass = @$_COOKIE["auth-passw"];    
-  
+      if(!$gpass) $gpass = @$_COOKIE["auth-passw"];
+
       $profileFile = "{$SETTINGS["datadir"]}auth/usr/$glogin.usr";
       if(!file_exists($profileFile))
       {
-        include("{$SETTINGS["datadir"]}auth/errors/nologin.php");
+        include("$design_dir/auth/nologin.php");
         die();
       }
       $USER = @getList($profileFile);
-      
+
       if(md5($gpass) == $USER["passwd"])
       {
-        setcookie("auth-login",$glogin,time()+3600);
-        setcookie("auth-passw",$gpass,time()+3600);
-      }    
+        setcookie("auth-login", $glogin,time() + $SETTINGS["session_time"]);
+        setcookie("auth-passw", $gpass,time() + $SETTINGS["session_time"]);
+      }
       else
       {
-        include("{$SETTINGS["datadir"]}auth/errors/badpassw.php");
+        include("$design_dir/auth/badpassw.php");
         die();
       }
       $login = $glogin;
       $tgroup = explode(" ",trim(@$USER["group"]));
       foreach($tgroup as $value)
       {
-      	$group[$value] = $value;
+          $group[$value] = $value;
       }
       $group["#all"] = "#all";
       $group["#registered"] = "#registered";

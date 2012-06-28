@@ -1,5 +1,6 @@
 <# cms/linit #>
 <# cms/init #>
+<# url #>
 <# locale #>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -14,7 +15,7 @@
     <table cellspacing="0" cellpadding="0" class="topTable roundBorders" summary="Page Top">
       <tr>
         <td class="logoCell menuWidth">
-          <a href="index.php" title="ФизЛЭШ"><img
+          <a href="/<# web_prefix #>" title="ФизЛЭШ"><img
             src="/<# web_prefix #>fizlesh.ru-design/pic/fizlesh-logo-small.png" height="72" alt="Логотип ФизЛЭШ" /></a>
         </td>
         <td class="logoCell">
@@ -31,18 +32,23 @@
       <tr>
         <td class="menuField menuWidth roundBorders">
           <# cms/menu/display start=1 end=5 #>
-          <a class="menu menu_level1 menu_passive menu_passive_level1" href="/forum">Форум</a>
- 
+          <a class="menu-item menu-level1 menu-passive menu-passive-level1" href="/forum">Форум</a>
+
       <?php
-      if(@$_COOKIE["auth-login"])
+      if(strlen(@$_COOKIE["auth-login"]))
       {
-        include(translate('<a href="/<# web_prefix #>?page='."$pageid&amp;ref=ladmin".'" class="menu menuSys">Админка</a>'));
-        include(translate('<a href="?act=logout&amp;page='."$pageid&amp;ref=ladmin".'" class="menu menuSys">Выход</a>'));
-        //echo '<br /><hr /><iframe id="orphus" src="/orphus/orphus.htm#!rtuoes&#64;vaydnxer.u" width="125" height="115" frameborder="0" scrolling="no"></iframe>';
+        include(translate('<a href="/<# web_prefix #>?'.
+            xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).
+            '" class="menu-item menuSys">Админка</a>'));
+        include(translate('<a href="/<# web_prefix #>?'.
+            xcms_url(array('page'=>$pageid, 'ref'=>'ladmin', 'mode'=>'logout')).
+            '" class="menu-item menuSys">Выход</a>'));
       }
       else
       {
-        include(translate('<a class="menu menu_level1 stealthLink" href="/<# web_prefix#>?page='."$pageid&amp;ref=ladmin".'">Авторизация</a>'));
+        include(translate('<a href="/<# web_prefix#>?'.
+            xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).
+            '" class="menu-item menu-level1 stealthLink">Авторизация</a>'));
       }
       ?>
         <!--a href="http://validator.w3.org/check?uri=referer"><img src="/<# web_prefix #>fizlesh.ru-design/pic/valid-html401-green.gif"

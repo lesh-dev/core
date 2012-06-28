@@ -1,10 +1,6 @@
 <?php
-  //include_once("{$SETTINGS["elementsdir"]}cms/common.php");
-  //include_once("{$SETTINGS["elementsdir"]}cms/content/common.php");
-  
-  //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
   $prefix = "{$SETTINGS["datadir"]}cms/pages/$pageid";
-  $tag = @file_get_contents("$prefix/currtag");
+  $alias = $INFO["alias"];
   $nnname = @"$prefix/{$_GET["aparam"]}.news";
   if(strlen(@$_GET["aparam"]) && file_exists($nnname))
   {
@@ -13,7 +9,7 @@
     $text = preg_replace("/<a.*?<STAMP>.*?>(.*?)<\\/a>/","\\1",$text);
     include(translate("<! cms/readtext --text --markdown !>"));
   }
-  
+
   else
   {
     $list = glob("{$SETTINGS["datadir"]}cms/pages/$pageid/*.news");
@@ -21,17 +17,17 @@
     $count=0;
     if(!@$maxnews) $maxnews = @$INFO["maxNews"];
     if (!$maxnews) $maxnews = 10;
-    for ($i=$n-1 ; $i>=0; $i--) 
+    for ($i=$n-1 ; $i>=0; $i--)
     {
       $source = $list[$i];
       $stamp = $source;
       $stamp = str_replace("{$SETTINGS["datadir"]}cms/pages/$pageid/","",$stamp);
       $stamp = str_replace(".news","",$stamp);
       $text = file_get_contents($list[$i]);
-      $text = str_replace("<STAMP>","/$web_prefix$tag/$stamp",$text);
+      $text = str_replace("<STAMP>","/$web_prefix$alias/$stamp",$text);
       include(translate("<! cms/readtext --markdown --text !>"));
       $count++;
- 	  if($count>=$maxnews) break;	
+ 	  if($count>=$maxnews) break;
     }
   }
 ?>

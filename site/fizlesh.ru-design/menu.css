@@ -6,40 +6,40 @@
   width: 20%;
 }
 
-.menu_passive_level1 {
+.menu-passive-level1 {
   background-color: #85b769;
 }
-.menu_passive_level2 {
+.menu-passive-level2 {
   background-color: #709e5f;
 }
-.menu_passive_level3 {
+.menu-passive-level3 {
   background-color: #5c904e;
 }
 
-.menu_active_level1 {
+.menu-active-level1 {
   background-color: #506f3a;
   font-weight: bold;
 }
-.menu_active_level2 {
+.menu-active-level2 {
   background-color: #305c25;
   font-weight: bold;
 }
-.menu_active_level3 {
+.menu-active-level3 {
   background-color: #1c391e;
   font-weight: bold;
 }
 
-.menu_level1 {
+.menu-level1 {
   padding-left: 3pt;
 }
-.menu_level2 {
+.menu-level2 {
   padding-left: 15pt;
 }
-.menu_level3 {
+.menu-level3 {
   padding-left: 27pt;
 }
 
-a.menu {
+a.menu-item {
   font-size: 12pt;
   line-height: 16pt;
   text-decoration: none;
@@ -61,31 +61,31 @@ a.menuSys {
   border-radius: 5px;
 }
 
-a.menu_active:link {
+a.menu-active:link {
   color: #d0e2bb;
 }
-a.menu_active:visited {
+a.menu-active:visited {
   color: #d0e2bb;
 }
-a.menu_active:hover {
+a.menu-active:hover {
   color: #000000;
   background-color: #a7ce1e;
 }
-a.menu_active:active {
+a.menu-active:active {
   color: #000000;
 
 }
 
-a.menu_passive:link {
+a.menu-passive:link {
   color: #000000;
 }
-a.menu_passive:visited {
+a.menu-passive:visited {
   color: #000000;
 }
-a.menu_passive:hover {
+a.menu-passive:hover {
   color: #000000;
   background-color: #a7ce1e;
 }
-a.menu_passive:active {
+a.menu-passive:active {
   color: #000000;
 }

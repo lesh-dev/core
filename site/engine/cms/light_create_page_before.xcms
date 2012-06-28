@@ -1,63 +1,54 @@
 <!# auth/ {$INFO['edit']} #!>
-
 <?php
-  if(@$_POST["create-name"])
-  {
-    $INFO = @getList("{$SETTINGS["datadir"]}cms/pages/$pageid/info");
-    if(!$INFO) $pageid = "";
+    if(@$_POST["create-name"])
+    {
+        $page_info = xcms_get_info_file_name();
+        if (!file_exists($page_info))
+        {
+            // TODO: и чё тогда тут за путь получится? это бага!
+            $pageid = "";
+        }
 
-    if(@$_POST["global"])
-      $dir =  "{$SETTINGS["datadir"]}cms/pages/{$_POST["create-name"]}";
-    else
-      $dir =  "{$SETTINGS["datadir"]}cms/pages/$pageid/{$_POST["create-name"]}";
-    
-    mkdir($dir);
-    @$LIST["owner"] = $login;
-    @$LIST["type"] = @$_POST["create-pagetype"];
-    @$LIST["view"] = "$login";
-    @$LIST["header"] = $_POST["header"];
-    @$LIST["subheader"] = $_POST["subheader"];
-    if(@$_POST["viewForAll"]) $LIST["view"] = $LIST["view"]. " " . "#all"; 
-    @$LIST["edit"] = "$login";
-    if(@$_POST["delegateGroup"]) $LIST["edit"] = $LIST["edit"]. " " . "#$login";
-    @$LIST["edit"] = "";
-    @$LIST["view"] = "";
-    foreach($_POST as $key=>$value)
-    {
-      if(substr($key,0,5)=="edit_")
-      {
-        $LIST["edit"] = $LIST["edit"]. " " . substr($key,5);
-      }
-      if(substr($key,0,5)=="view_")
-      {
-        $LIST["view"] = $LIST["view"]. " " . substr($key,5);
-      }
-    }
-    
-    if(@$_POST["menuname"])
-    {
-      $f = fopen("$dir/applymenu","w");
-      fputs($f,@$_POST["menuname"]);
-      fclose($f);
-    }
-    if(@$_POST["hideChapter"])
-    {
-      $f = fopen("$dir/hidemenu","w");
-      fputs($f,"0");
-      fclose($f);
-    }
-    if(file_exists("{$SETTINGS["elementsdir"]}cms/{$_POST["create-pagetype"]}/install.php"))
-    {
-        $opageid = $pageid;
-        if(@$_POST["global"])
-          $pageid = "{$_POST["create-name"]}";
+        if (@$_POST["global"])
+            $dir = "{$SETTINGS["datadir"]}cms/pages/{$_POST["create-name"]}";
         else
-          $pageid = "$pageid/{$_POST["create-name"]}";
-        //echo $pageid;
-        include("{$SETTINGS["elementsdir"]}cms/{$_POST["create-pagetype"]}/install.php");
-        $pageid = $opageid;
-    }
-    saveList($LIST,"$dir/info");
+        $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid/{$_POST["create-name"]}";
 
-  }
+        mkdir($dir);
+        @$LIST["owner"] = $login;
+        @$LIST["type"] = @$_POST["create-pagetype"];
+        @$LIST["view"] = "$login";
+        @$LIST["header"] = $_POST["header"];
+        @$LIST["subheader"] = $_POST["subheader"];
+        if(@$_POST["viewForAll"]) $LIST["view"] = $LIST["view"]. " " . "#all";
+        @$LIST["edit"] = "$login";
+        if(@$_POST["delegateGroup"]) $LIST["edit"] = $LIST["edit"]. " " . "#$login";
+        @$LIST["edit"] = "";
+        @$LIST["view"] = "";
+        // ни в коем случае так делать нельзя!!! TODO выкосить цикл по POST-у
+        foreach($_POST as $key=>$value)
+        {
+            if (substr($key,0,5)=="edit_")
+                $LIST["edit"] = $LIST["edit"]. " " . substr($key,5);
+            if(substr($key,0,5)=="view_")
+                $LIST["view"] = $LIST["view"]. " " . substr($key,5);
+        }
+
+        if (@$_POST["menu-title"])
+            $LIST["menu-title"] = $_POST["menu-title"];
+        if (@$_POST["menu-hidden"])
+            $LIST["menu-hidden"] = $_POST["menu-hidden"];
+
+        if (file_exists("{$SETTINGS["elementsdir"]}cms/{$_POST["create-pagetype"]}/install.php"))
+        {
+            $opageid = $pageid;
+            if(@$_POST["global"])
+                $pageid = "{$_POST["create-name"]}";
+            else
+                $pageid = "$pageid/{$_POST["create-name"]}";
+            include("{$SETTINGS["elementsdir"]}cms/{$_POST["create-pagetype"]}/install.php");
+            $pageid = $opageid;
+        }
+        xcms_save_list("$dir/info", $LIST);
+    }
 ?>
