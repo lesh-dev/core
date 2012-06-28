@@ -1,0 +1,5 @@
+#!/bin/bash
+cd /srv/www/clones/content-fizlesh.ru
+git add -A
+git commit -am "robot's commit due: $1"
+git push
