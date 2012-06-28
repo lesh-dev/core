@@ -20,6 +20,7 @@ echo "--- $BRANCH" >> $PREPROD/INFO
 echo "$TIMESTAMP" >> $PREPROD/INFO
 
 cp -rf /tmp/repo/site/* $PREPROD
+rm -rf /tmp/repo
 rm -rf $PREPROD/.prec/*
 chown -R www-data $PREPROD.$TIMESTAMP
 chown -R www-data $PREPROD
