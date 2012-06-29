@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://production.lesh-dev.dtdns.net/" />
+<title>xcms-anketa-fill</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">xcms-anketa-fill</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//a[@href='/join']</td>
+	<td>Поступление</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/join</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//a[@href='/register']</td>
+	<td>Анкета</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/register</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Регистрационная анкета</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Фамилия, имя, отчество</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='i-Name']</td>
+	<td>TEST Пупкин Василий Иванович</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='i-BirthDate']</td>
+	<td>10.11.2012</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='i-School']</td>
+	<td>Экспериментальная Школа им. Selenium-а #100500</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='i-SchoolLocation']</td>
+	<td>Школа находится в /dev/null</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='i-Class']</td>
+	<td>10 Гэ</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='i-Phone']</td>
+	<td>8-100-500-1234</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='i-Cellular']</td>
+	<td>1-800-400-2010</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='i-EMail']</td>
+	<td>vdm-photo@ya.ru</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='i-Skype']</td>
+	<td>vdm-photo</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='i-Profile']</td>
+	<td>http://vk.com/vdm_p</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//textarea[@id='i-Favourites']</td>
+	<td>Тестовый текст для заполнения раздела &quot;Любимые разделы физики&quot;</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//textarea[@id='i-Achivements']</td>
+	<td>Тестовый текст для заполнения раздела &quot;Достижения&quot;</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//textarea[@id='i-Hobby']</td>
+	<td>Тестовый текст для заполнения раздела &quot;Хобби&quot;</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@type='submit' and @id='b-Submit']</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
