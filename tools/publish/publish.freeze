@@ -1,0 +1,63 @@
+#!/bin/bash -e
+echo " === CONTENT FREEZE === "
+echo " You're about to make site content frozen. This means:"
+echo "  1) All site content will become read-only"
+echo "  2) Any user input will be rejected"
+echo "  3) All manual site changes will be re-written during next production procedure"
+echo "  4) All content will be moved into 'frozen' production directory"
+echo " Are You sure You want to freeze website? "
+while [ true ]; do
+  read -p "ARE YOU SURE, THAT ALL IS OK AND WANT TO CONTINUE? (y/n)" answer
+  if [ $answer. == 'y.' ]; then
+    break
+  elif [ $answer. == 'n.' ]; then
+    echo "Cancelled by user. Production site is untouched"
+    exit 1
+  fi
+done
+
+source $(dirname $0)/publish.conf
+FROZEN=$CLONE_DIR/production.frozen-$TIMESTAMP
+# mkdir $FROZEN
+cp -rf $(readlink $PRODUCTION) $FROZEN
+chown -R www-data:www-data $FROZEN
+rm -rf $FROZEN/.prec/*
+cd $FROZEN
+mkdir frost
+cp -rf content/* frost
+rm content
+chmod -R 555 frost
+chown -R root:root frost
+ln -s frost content
+echo "<b><font color='red'>FROST</font></b>" > INFO
+echo "R/O production copy" >> INFO
+echo "All changes will be rejected" >> INFO
+rm $LAST_CHANCE
+ln -s $FROZEN $LAST_CHANCE
+apachectl -k graceful
+
+echo "====================================================="
+echo "              LAST CHANCE TO QUIT!!!"
+echo "====================================================="
+echo "Now, take a brief look to website: "
+echo ""
+echo "      http://last-chance.lesh-dev.dtdns.net"
+echo ""
+echo "This is EXACT copy of site You're going to make production."
+echo ""
+
+
+while [ true ]; do
+  read -p "ARE YOU SURE, THAT ALL IS OK AND WANT TO CONTINUE? (y/n)" answer
+  if [ $answer. == 'y.' ]; then
+    rm $PRODUCTION
+    ln -s $FROZEN $PRODUCTION
+    apachectl -k graceful
+    echo "Production frozen! Site is read only, all changes will be rejected."
+    exit 0
+  elif [ $answer. == 'n.' ]; then
+    echo "Cancelled by user. Production site is untouched"
+    exit 1
+  fi
+done
+
