@@ -5,6 +5,11 @@ if [ "$1" == "--help" ]; then
   exit 2
 fi
 
+if [ "`id -u`" != "0" ]; then
+        echo "Are you root to perform this? Use sudo, man."
+        exit 2
+fi
+
 source $(dirname $0)/publish.conf
 if [ -d $PREPROD.$TIMESTAMP ]; then
   echo "Clone $PREPROD.$TIMESTAMP already exists!"

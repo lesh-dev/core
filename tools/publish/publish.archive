@@ -1,15 +1,15 @@
 #!/bin/bash
 
-if [ "`id -u`" != "0" ]; then
-	echo "Are you root to perform this? Use sudo, man."
-	exit 2
-fi
-
 source $(dirname $0)/publish.conf
 
 if [ "$1" == "--help" ]; then
   echo "This script archives all old unused copies of the site stored in $CLONE_DIR"
   exit 1
+fi
+
+if [ "`id -u`" != "0" ]; then
+        echo "Are you root to perform this? Use sudo, man."
+        exit 2
 fi
 
 echo "Archiving production copies..."
