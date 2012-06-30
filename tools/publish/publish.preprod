@@ -1,4 +1,10 @@
 #!/bin/bash -e
+
+if [ "$1" == "--help" ]; then
+	echo "This script creates new pre-production version from latest XCMS from 'master' branch and production content."
+	exit 2
+fi
+
 source $(dirname $0)/publish.conf
 if [ -d $PREPROD.$TIMESTAMP ]; then
   echo "Clone $PREPROD.$TIMESTAMP already exists!"
@@ -6,8 +12,10 @@ if [ -d $PREPROD.$TIMESTAMP ]; then
 fi
 touch $PREPROD
 rm -rf /tmp/repo
+echo "Cloning repo to temp folder..."
 git clone /srv/git/lesh /tmp/repo
 
+echo "Preparing info page..."
 mkdir -p $PREPROD.$TIMESTAMP
 rm $PREPROD
 ln -sf $PREPROD.$TIMESTAMP $PREPROD
@@ -19,14 +27,17 @@ echo "" >> $PREPROD/INFO
 echo "--- $BRANCH" >> $PREPROD/INFO
 echo "$TIMESTAMP" >> $PREPROD/INFO
 
+echo "Copying content to pre-production directory..."
 cp -rf /tmp/repo/site/* $PREPROD
 rm -rf /tmp/repo
+echo "Cleaning cache..."
 rm -rf $PREPROD/.prec/*
 chown -R www-data $PREPROD.$TIMESTAMP
 chown -R www-data $PREPROD
 chown -R www-data $PREPROD/*
 
 # rm $PREPROD/install.php*
+echo "Preparing XCMS installation..."
 mv $PREPROD/install.php.template $PREPROD/install.php
 # cp $RESOURCE/settings.php $PREPROD
 cp -rf $CONTENT $PREPROD/content
