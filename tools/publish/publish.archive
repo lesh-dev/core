@@ -1,5 +1,14 @@
 #!/bin/bash
+
 source $(dirname $0)/publish.conf
+
+if [ "$1" == "--help" ]; then
+  echo "This script archives all old unused copies of the site stored in $CLONE_DIR"
+  exit 1
+fi
+
+echo "Archiving production copies..."
+
 for i in $CLONE_DIR/production.*; do
   if [ $i == "$CLONE_DIR/production.last" ]; then
     continue;
@@ -12,15 +21,19 @@ for i in $CLONE_DIR/production.*; do
     echo "Skipping 'last chance': $i"
     continue
   fi
+  echo "Archiving $i ..."
   tar czf $i.tgz $i
   rm -rf $i
 done
+
+echo "Archiving pre-production copies..."
 
 for i in $CLONE_DIR/preprod.*; do
   if [ $(readlink $CLONE_DIR/preprod) == $i ]; then
     echo "Skipping preprod: $i"
     continue
   fi
+  echo "Archiving $i ..."
   tar czf $i.tgz $i
   rm -rf $i
 done

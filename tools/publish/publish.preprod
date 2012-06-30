@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
 if [ "$1" == "--help" ]; then
-	echo "This script creates new pre-production version from latest XCMS from 'master' branch and production content."
-	exit 2
+  echo "This script creates new pre-production version from latest XCMS from 'master' branch and production content."
+  exit 2
 fi
 
 source $(dirname $0)/publish.conf
