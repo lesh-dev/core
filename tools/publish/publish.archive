@@ -22,7 +22,9 @@ for i in $CLONE_DIR/production.*; do
     continue
   fi
   echo "Archiving $i ..."
-  tar czf "arc-$i.tgz" "$i"
+  ARC_NAME="`basename $i`"
+  DIR_NAME="`dirname $i`"
+  tar czf "$DIR_NAME/arc-$ARC_NAME.tgz" "$i"
   rm -rf "$i"
 done
 
