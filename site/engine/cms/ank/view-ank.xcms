@@ -56,8 +56,7 @@
       }
 
       $oAnk = get_object_vars($xa);
-      $sCurStatus = @$oAnk["Status"];
-      if (empty($sCurStatus)) $sCurStatus = "new"; // default value
+      $sCurStatus = xcms_get_key_or($oAnk, "Status", "new");
       if ($sShowStatus == "notspam") {
         if ($sCurStatus == "spam") continue;
         if ($sCurStatus == "duplicate") continue;
@@ -80,32 +79,32 @@
       $sName = htmlspecialchars($oAnk["Name"]); // assume always exists
       $sBirthDate = htmlspecialchars($oAnk["BirthDate"]);
       $sSchool = htmlspecialchars($oAnk["School"]);
-      $sSchoolLocation = htmlspecialchars(@$oAnk["SchoolLocation"]);
+      $sSchoolLocation = htmlspecialchars(xcms_get_key_or($oAnk, "SchoolLocation"));
       $sClass = htmlspecialchars($oAnk["Class"]);
-      $sCellular = htmlspecialchars($oAnk["Cellular"]);
+      $sCellular = htmlspecialchars(xcms_get_key_or($oAnk, "Cellular"));
       $sPhone = htmlspecialchars($oAnk["Phone"]);
       $sEMail = htmlspecialchars($oAnk["EMail"]);
 
-      $sProfile = $oAnk["Profile"];
-      // make it valid URL if it was it form vk.com/name
-      if (!empty($sProfile) && substr($sProfile, 0, 7) != 'http://') $sProfile = "http://$sProfile";
+      $sProfile = xcms_get_key_or($oAnk, "Profile");
+      // make it valid URL if it was it form example.com/name
+      if (!empty($sProfile) &&
+        strpos(substr($sProfile, 0, 8), '://') === false) // http/https scheme not matched
+        $sProfile = "http://$sProfile"; // assume http scheme
       $sProfile = htmlspecialchars($sProfile);
 
-      $sSkype = htmlspecialchars($oAnk["Skype"]);
+      $sSkype = htmlspecialchars(xcms_get_key_or($oAnk, "Skype"));
       $sFavourites = DoFormatting(htmlspecialchars($oAnk["Favourites"]));
       $sAchivements = DoFormatting(htmlspecialchars($oAnk["Achivements"]));
       $sHobby = DoFormatting(htmlspecialchars($oAnk["Hobby"]));
-      $sNotes = DoFormatting(htmlspecialchars(@$oAnk["Notes"]));
+      $sNotes = DoFormatting(htmlspecialchars(xcms_get_key_or($oAnk, "Notes")));
 
-      $sUserAgent = htmlspecialchars(@$oAnk["UserAgent"]);
-      $sFileName = htmlspecialchars(@$oAnk["FileName"]);
-      $sHRCreated = htmlspecialchars(@$oAnk["HRCreated"]);
-      if (empty($sHRCreated)) {
-        $sHRCreated = substr($sBaseAnkFileName, 4, 10); // cut 'ank/' and extract 'YYYY.MM.DD'
-      }
-      $sHRModified = htmlspecialchars(@$oAnk["HRModified"]);
-      $sStatus = htmlspecialchars(@$oAnk["Status"]);
-
+      $sUserAgent = htmlspecialchars(xcms_get_key_or($oAnk, "UserAgent"));
+      $sFileName = htmlspecialchars(xcms_get_key_or($oAnk, "FileName"));
+      // default is to cut 'ank/' and extract 'YYYY.MM.DD'
+      $sHRCreated = htmlspecialchars(xcms_get_key_or(
+        $oAnk, "HRCreated", substr($sBaseAnkFileName, 4, 10)));
+      $sHRModified = htmlspecialchars(xcms_get_key_or($oAnk, "HRModified"));
+      $sStatus = htmlspecialchars(xcms_get_key_or($oAnk, "Status", "new"));
       $aStatuses = xcms_ank_get_status_list();
       if (!array_key_exists($sStatus, $aStatuses)) $sStatus = "new"; // default
       $sHRStatus = $aStatuses[$sStatus];
