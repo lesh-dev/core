@@ -127,10 +127,10 @@
             );
         $bSuccess = $bSuccessHTML || $bSuccessText;
 
-        $message = 'Спасибо, Ваша анкета принята! Сейчас Вы будете перенаправлены '
-            .'на главную страницу. Если этого не произошло, '
-            .'нажмите <a href="/'.$web_prefix.'">сюда</a>.';
-        $meta = '<meta http-equiv="refresh" content="3;URL=/'.$web_prefix.'" />';
+        $message = 'Спасибо, Ваша анкета принята! Вы будете перенаправлены '
+            .'на главную страницу через 5 секунд. Нажмите '
+            .'<a href="/'.$web_prefix.'">сюда</a>, если не хотите ждать.';
+        $meta = '<meta http-equiv="refresh" content="5;URL=/'.$web_prefix.'" />';
 
         if (!$bSuccess)
         {
