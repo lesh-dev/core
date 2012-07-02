@@ -66,6 +66,7 @@
                 <a'.xcms_href(array('mode'=>'delete', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Удалить</a>
                 <a'.xcms_href(array('page'=>$pageid, 'ref'=>'index')).'class="h-menu-link">Предпросмотр</a>
                 <a'.xcms_href(array('mode'=>'cleanprec', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Очистить кэш</a>
+                <a'.xcms_href(array('mode'=>'rebuild_alias', 'ref'=>'ladmin')).'class="h-menu-link">Перестроить alias-ы</a>
                 |
                 <a'.xcms_href(array('mode'=>'myprofile', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link"><b>'.$login.'</b></a>
                 <a'.xcms_href(array('mode'=>'change_passwd', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Сменить пароль</a>
@@ -225,6 +226,14 @@
     else if(@$_GET["mode"]=="css")
     {
         include(translate('<! cms/light_css_editor !>'));
+    }
+    else if(@$_GET["mode"]=="rebuild_alias")
+    {
+        include(translate('<! cms/build_rewrite !>'));
+        ?>
+        <div class="admin-widget">
+            <div class="notice">Список alias-ов успешно обновлён</div>
+        </div><?php
     }
     else if(@$_GET["mode"]=="__convert")
     {
