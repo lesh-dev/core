@@ -1,3 +1,4 @@
+<# cms/ank/func #>
 <?php
     if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
     {
@@ -95,7 +96,7 @@
 
         $addrHTMLList = join(", ", $aHTMLList);
         $addrPlainList = join(", ", $aPlainList);
-        $subject = "New anketa from fizlesh.ru";
+        $subject = "New fizlesh.ru anketa: ".xcms_transliterate($studentName);
 
         $bSuccessHTML = true;
         if (count($aHTMLList))
