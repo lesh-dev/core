@@ -1,7 +1,6 @@
 <?php
     include("../settings.php");
-?>
-<html>
+echo '<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Нет такой страницы :: ФизЛЭШ</title>
@@ -50,4 +49,6 @@
         <div class="signature">С уважением, команда ФизЛЭШ</div>
     </div>
 </body>
-</html>
+</html>';
+#header('HTTP/1.0 403 Not Found');
+?>

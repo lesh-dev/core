@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://pre-production.lesh-dev.dtdns.net/" />
-<title>xcms-auth</title>
+<title>xcms-anketa-view-list</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">xcms-auth</td></tr>
+<tr><td rowspan="1" colspan="3">xcms-anketa-view-list</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -55,7 +55,12 @@
 </tr>
 <tr>
 	<td>assertElementPresent</td>
-	<td>//div/form[1]</td>
+	<td>//div/form</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//input[@name='auth-login']</td>
 	<td></td>
 </tr>
 <tr>
@@ -74,13 +79,67 @@
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
+	<td>assertTextPresent</td>
 	<td>Пользователи</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
+	<td>assertTextPresent</td>
 	<td>Очистить кэш</td>
+	<td></td>
+</tr>
+<!--navigate to anketas list button-->
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div/a[@href='/register/view' and @class='h-menu-link']</td>
+	<td>Анкеты</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/register/view</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Регистрационная анкета</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//form/select[@name='ShowStatus']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//form/input[@type='submit' and @value='Показать']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//form/input[@type='submit' and @value='Показать']</td>
+	<td></td>
+</tr>
+<!--test manage button in anketa form-->
+<tr>
+	<td>open</td>
+	<td>/register</td>
+	<td></td>
+</tr>
+<!--in auth mode, here should be button 'Manage'-->
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div/a[@class='linkButton']</td>
+	<td>Manage</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//div/a[@class='linkButton']</td>
+	<td></td>
+</tr>
+<!--we should get into anketa view window-->
+<tr>
+	<td>assertTextPresent</td>
+	<td>Регистрационная анкета</td>
 	<td></td>
 </tr>
 </tbody></table>
