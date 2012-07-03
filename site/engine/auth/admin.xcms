@@ -102,7 +102,7 @@
     $editfile = @$_GET['username'];
     if(@$_GET['username']&&@$_GET['username']!="_CREATE")
     {
-        include(translate("<! edit/tag `group`,`login`,`passwd` !>"));
+        include(translate("<! edit/oldtag `group`,`login`,`passwd` !>"));
         echo '<h3>Права доступа</h3>';
         include_once("$engine_dir/sys/groups.php");
         $all_groups = all_groups();
