@@ -2,99 +2,87 @@
 <h2>Регистрация</h2>
 Право на регистрацию предоставил: <?php echo $login;?><br>
 <?php
-  $DEFREGUSER["date"] = mktime();
-  $DEFREGUSER["group"] = "#registered";
-  $DEFREGUSER["mce"] = "Yes";
-  $created = false;
+    include_once("${engine_dir}sys/string.php");
 
-  foreach(@$_POST as $key=>$value)
-  {
-  	$value = str_replace("\n","",$value);
-  	$value = str_replace(".","",$value);
-  	$value = str_replace("/","",$value);
-  	$value = str_replace(",","",$value);
-  	$value = str_replace("\\","",$value);
-  	$value = str_replace("^","",$value);
-  	$value = str_replace("&","",$value);
-  	$value = str_replace("(","",$value);
-  	$value = str_replace(")","",$value);
-  	//$value = str_replace(" ","",$value);
-  	$value = str_replace("!","",$value);
-  	$value = str_replace("~","",$value);
-  	$value = str_replace("#","",$value);
-  	$value = str_replace("<","",$value);
-  	$value = str_replace(">","",$value);
-  	@$_POST[$key] = $value;
-  }
+    $DEFREGUSER["date"] = mktime();
+    $DEFREGUSER["group"] = "#registered";
+    $DEFREGUSER["mce"] = "Yes";
+    $created = false;
 
-  if(@$_POST["createUser"]&&@$_POST["reg_login"])
-  {
-    foreach (@$_POST as $key=>$value)
-    {
-      if(substr($key,0,4)=="reg_")
-      if(!strstr($key,"psw"))
-      {
-        //echo '*'.substr($key,4).'#';
-        $DEFREGUSER[substr($key,4)] = $value;
-      }
-    }
-    if(file_exists("{$SETTINGS["datadir"]}auth/usr/{$DEFREGUSER["login"]}.usr"))
-    {
-      echo "<h4>Ошибка. Такой пользователь уже есть.</h4>";
-    }
-    if(strlen($_POST["reg_psw1"])<4)
-    {
-      echo "<h4>Ошибка. Пароль слишком короткий</h4>";
-    }
-    else if($_POST["reg_psw1"]!=$_POST["reg_psw2"])
-    {
-      echo "<h4>Ошибка. Пароли не совпадают.</h4>";
-    }
-    else
-    {
-      $DEFREGUSER["passwd"] = md5($_POST["reg_psw1"]);
-      saveList($DEFREGUSER,"{$SETTINGS["datadir"]}auth/usr/{$DEFREGUSER["login"]}.usr");
-      echo "Профиль {$DEFREGUSER["login"]} создан.";
-
-      $mail = " === Создан новый пользователь: ${DEFREGUSER["login"]}\r\n";
-      foreach($DEFREGUSER as $k=>$v)
-      {
-        $mail .= "\t$k :\t$v\r\n";
-      }
-      xcms_send_notification("developers",
-        "Пользователь создан: {$DEFREGUSER["login"]}",
-        $mail
-      );
-
-      $created = true;
-    }
-  }
-  if(!$created)
-  {
-    $REGUSER["reg_login"] = "Логин";
-    $REGUSER["reg_psw1"] = "Пароль";
-    $REGUSER["reg_psw2"] = "Пароль (подтверждение)";
-    $REGUSER["reg_realname"] = "Полное имя";
-    $REGVALUE["reg_realname"] = "Василий Пупкин";
-    $REGUSER["reg_question"] = "Секретный вопрос";
-    $REGUSER["reg_answer"] = "Секретный ответ";
-    $REGUSER["reg_mail"] = "Электронный адрес";
-    echo '
+    // do filtering
+    $reg_login = xcms_filter_user_name(xcms_get_key_or($_POST, "reg-login"));
+    $reg_passwd = xcms_filter_password(xcms_get_key_or($_POST, "reg-passwd"));
+    $_POST["reg-realname"] = xcms_filter_nonchars(xcms_get_key_or($_POST, "reg-realname"));
+    $_POST["reg-mail"] = xcms_filter_nonchars(xcms_get_key_or($_POST, "reg-mail"));
 
 
-      <form method="post">
-      <table>';
-    foreach ($REGUSER as $key=>$value)
+    if (@$_POST["create-user"] && strlen($reg_login))
     {
-      if(strstr($key,"psw")) {$add = 'type="password"';}
-      else $add="";
-      $field_value = @$REGVALUE[$key];
-      echo "<tr><td>$value<td><input $add name=\"$key\" value=\"$field_value\">";
+        foreach (@$_POST as $key=>$value)
+        {
+            if (substr($key,0,4)=="reg-")
+                if(!strstr($key,"passwd")) // skip password fields here
+                    $DEFREGUSER[substr($key,4)] = $value;
+        }
+        $user_file = "{$SETTINGS["datadir"]}auth/usr/$reg_login.usr";
+        if (file_exists($user_file))
+            echo "<h4>Ошибка. Такой пользователь уже есть.</h4>";
+        elseif (strlen($reg_passwd) < 4)
+            echo "<h4>Ошибка. Пароль слишком короткий</h4>";
+        elseif ($reg_passwd != $_POST["reg-passwd-confirm"])
+            echo "<h4>Ошибка. Пароли не совпадают.</h4>";
+        else
+        {
+            // TODO: use salt here
+            $DEFREGUSER["passwd"] = md5($reg_passwd);
+            saveList($DEFREGUSER, $user_file);
+            echo "Профиль '<tt>$reg_login</tt>' создан";
+
+            $mail = " === Создан новый пользователь: $reg_login\r\n";
+            foreach($DEFREGUSER as $k=>$v)
+                $mail .= "\t$k :\t$v\r\n";
+
+            xcms_send_notification("developers",
+                "Пользователь создан: $reg_login",
+                $mail
+            );
+
+            $created = true;
+        }
     }
-    ?>
-    </table>
-    <input type="submit" name="createUser" value="Зарегистрироваться">
-    </form>
-    <?php
-  }
+
+    if(!$created)
+    {
+        $REGUSER["reg-login"] = "Логин";
+        $REGUSER["reg-passwd"] = "Пароль";
+        $REGUSER["reg-passwd-confirm"] = "Подтверждение пароля";
+        $REGUSER["reg-realname"] = "Полное имя";
+        $REGVALUE["reg-realname"] = "Василий Пупкин";
+        // идиотская система, которая только мешает жить
+        // все пароли должны восстанавливаться через почту,
+        // в крайнем случае через SMS-сервис
+
+        //$REGUSER["reg-question"] = "Секретный вопрос";
+        //$REGUSER["reg-answer"] = "Секретный ответ";
+        $REGUSER["reg-mail"] = "Электронная почта";
+        ?>
+        <form method="post">
+        <table>
+        <?php
+        foreach ($REGUSER as $key=>$value)
+        {
+            $type='type="text"';
+            if (strstr($key, "passwd"))
+                $type = 'type="password" autocomplete="off"';
+            if (strstr($key, "login"))
+                $type = 'autocomplete="off"';
+            $field_value = @$REGVALUE[$key];
+            echo "<tr><td>$value</td><td><input  $type name=\"$key\" value=\"$field_value\" /></td></tr>";
+        }
+        ?>
+        </table>
+        <input type="submit" name="create-user" value="Зарегистрироваться" />
+        </form>
+        <?php
+    }
 ?>
