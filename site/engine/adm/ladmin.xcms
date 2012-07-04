@@ -195,7 +195,7 @@
     else if(@$_GET["mode"]=="mailer" )
     {
         $editfile = "{$SETTINGS["datadir"]}cms/mailer.conf";
-        include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
+        include(translate('<! edit/oldtag `edit`,`view`,`installed` !>'));
     }
     else if(@$_GET["mode"]=="ank" )
     {
@@ -271,7 +271,7 @@
         elseif(@$_GET["mode"]=="groupadmin")
     {
         $editfile = "{$SETTINGS["datadir"]}groups";
-        include(translate("<! edit/tag !>"));
+        include(translate("<! edit/oldtag !>"));
     }
     elseif(@$_GET["mode"]=="register_form")
     {

@@ -10,7 +10,6 @@
     include ("$engine_dir/sys/logger.php");
     include ("$engine_dir/sys/compiler.php");
     include ("$engine_dir/sys/tag.php");
-    include ("$engine_dir/sys/ui.php");
     include ("$engine_dir/sys/mailer.php");
     include ("$engine_dir/sys/resample.php");
 

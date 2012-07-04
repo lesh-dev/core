@@ -1,7 +1,7 @@
 <?php
-    /*
-        Seems to be rewritten soon [mvel@]
-        This code invokes editlist_form to use new KV storage
+    /* This template was added to provide backwards compatibility
+    to old key-value storage, that is still used for user management
+    and for some other things
     */
     $pathv = @$argv[1];
     if(!$pathv) $pathv = "edit-file";
@@ -11,5 +11,5 @@
     if(!$ename)
         echo "<h4>List editor: illegal filename given</h4>";
     else
-        @editlist_form($ename, "", @$argv[1], @$argv[2]);
+        @editlist_form($ename, "", @$argv[1], @$argv[2], true);
 ?>

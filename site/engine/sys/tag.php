@@ -178,14 +178,15 @@ function getList($filename)
 }
 
 /**
-  * deprecated!
+  * WARNING: This function contains deprecated code
   * secyrityflags:
   * -newkey - disable newkey option
   **/
-function editlist_form($file, $addparams, $skipparams="",$securityflags="")
+function editlist_form($file, $addparams, $skipparams="",$securityflags="", $old_mode=false)
 {
     global $SETTINGS;
-    $list = xcms_get_list($file);
+    if ($old_mode) $list = getList($file);
+    else $list = xcms_get_list($file);
     if(!$list) echo "bad filename!";
 
     if(@$_POST["editTag"])
@@ -212,8 +213,16 @@ function editlist_form($file, $addparams, $skipparams="",$securityflags="")
             if(!strstr($securityflags,"-newkey"))
                 $list[$_POST["newkey"]] = @$_POST["newvalue"];
         }
-        saveList($list,$file);
-        $list = getList($file);
+        if ($old_mode)
+        {
+            saveList($list, $file);
+            $list = getList($file);
+        }
+        else
+        {
+            xcms_save_list($file, $list);
+            $list = xcms_get_list($file);
+        }
     }
 
     echo '<form action="'.$addparams.'" method="post"><table>';
