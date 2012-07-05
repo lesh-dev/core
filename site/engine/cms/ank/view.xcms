@@ -65,7 +65,7 @@
         }
         $ank_dir = "${content_dir}ank";
         @mkdir($ank_dir, 0777);
-        $xml->asXML("$ank_dir/$fileName");
+        $write_success = (@$xml->asXML("$ank_dir/$fileName") === true);
         $mailMsgHTML = str_replace("@@TABLE-CONTENT@", $htmlContent, $mailMsgHTML);
         $mailMsgHTML = str_replace("@@DATE@", date("Y.m.d H:i:s", $unixTime), $mailMsgHTML);
 
@@ -125,7 +125,7 @@
                 'Content-Type: text/plain; charset=utf-8'."\r\n".
                 "Content-Transfer-Encoding: 8bit\r\n"
             );
-        $bSuccess = $bSuccessHTML || $bSuccessText;
+        $bSuccess = ($bSuccessHTML || $bSuccessText) && $write_success;
 
         $message = 'Спасибо, Ваша анкета принята! Вы будете перенаправлены '
             .'на главную страницу через 5 секунд. Нажмите '
@@ -136,9 +136,8 @@
         {
             // В этом случае анкета всё равно сохранится у нас, и на самом деле мы всё узнаем про человека,
             // но чтобы не ждать три дня, пусть уж лучше нас пнут извне
-            $fE = fopen("$ank_dir/errors.log", "a+");
-            fputs($fE, "$fileName\n");
-            fclose($fE);
+            xcms_log(XLOG_ERROR, "[ANK] Anketa submission failed for $fileName. ".
+                "Statuses: HTML:$bSuccessHTML Plain:$bSuccessText Write:$write_success");
             $meta = '<meta http-equiv="refresh" content="0;URL=/'.$web_prefix.'register/error" />';
             echo $meta;
         }
