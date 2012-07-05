@@ -87,7 +87,7 @@
                 <?php
                     if (file_exists("INFO"))
                     {
-                        echo "<pre><font size="-2">";
+                        echo "<pre><font size=\"-2\">";
                         echo file_get_contents("INFO");
                         echo "</font></pre>";
                     }

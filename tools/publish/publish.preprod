@@ -19,6 +19,7 @@ touch $PREPROD
 rm -rf /tmp/repo
 echo "Cloning repo to temp folder..."
 git clone /srv/git/lesh /tmp/repo
+REVISION=$(publish.revision /tmp/repo)
 
 echo "Preparing info page..."
 mkdir -p $PREPROD.$TIMESTAMP
@@ -31,6 +32,7 @@ echo "will be rejected." >> $PREPROD/INFO
 echo "" >> $PREPROD/INFO
 echo "--- $BRANCH" >> $PREPROD/INFO
 echo "$TIMESTAMP" >> $PREPROD/INFO
+echo "$REVISION" >> $PREPROD/INFO
 
 echo "Copying content to pre-production directory..."
 cp -rf /tmp/repo/site/* $PREPROD
