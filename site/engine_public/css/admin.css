@@ -92,6 +92,11 @@ input[type="submit"] {
     min-width: 70px;
 }
 
+input[type="file"] {
+    border: none;
+    padding: 0px;
+}
+
 input.admin-long {
     width: 700px;
 }
@@ -109,6 +114,7 @@ table.user-list {
     width: 100%;
     border: none;
     border-collapse: collapse;
+    margin-top: 10px;
 }
 
 td.user-names {
