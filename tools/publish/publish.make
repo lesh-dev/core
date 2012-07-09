@@ -92,7 +92,7 @@ changes will be immediately commited to main
 (production) site.
 EOF
 
-while true ; do
+while true; do
     read -p "Are you sure that EVERYTHING IS OK? Press Y to continue (y/n)" answer
     if [ $answer. == 'y.' ]; then
         rm $FINAL
