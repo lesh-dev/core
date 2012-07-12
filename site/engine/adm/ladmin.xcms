@@ -86,10 +86,10 @@
             <div class="menu">
                 <?php
                     if (file_exists("INFO"))
-                    {
-                        echo "<pre><font size=\"-2\">";
-                        echo file_get_contents("INFO");
-                        echo "</font></pre>";
+                    {?>
+                        <pre class="site-info"><?php
+                        echo file_get_contents("INFO"); ?>
+                        </pre><?php
                     }
                 ?>
                 <b>Menu</b>
