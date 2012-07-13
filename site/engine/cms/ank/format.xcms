@@ -1,0 +1,40 @@
+<?php
+    /**
+      * Replace \n by <br /> with respect to various systems line endings
+      **/
+    function xcms_html_wrap_by_crlf($sHTML)
+    {
+        // detect UNIX or DOS line-endings
+        if (strpos($sHTML, "\n") !== false)
+        {
+            // Unix or DOS, so \n -> <br />, '\r' -> void
+            $sHTML = str_replace("\n", "<br />", $sHTML);
+            $sHTML = str_replace("\r", "", $sHTML);
+        }
+        elseif (strpos($sHTML, "\r") !== false)
+        {
+            // MacOS, \r only
+            $sHTML = str_replace("\r", "<br />", $sHTML);
+        }
+        return $sHTML;
+    }
+
+    /**
+      * Prepend one <br /> when HTML code already contains some
+      **/
+    function xcms_html_wrap_ml($sHTML)
+    {
+        if (strpos($sHTML, "<br />")) $sHTML = "<br />$sHTML";
+        return $sHTML;
+    }
+
+    function xsm_prepare_social_profile($social_profile)
+    {
+        // make it valid URL if it was it form example.com/name
+        if (!empty($social_profile) &&
+            strpos(substr($social_profile, 0, 8), '://') === false) // http/https scheme not matched
+            $social_profile = "http://$social_profile"; // assume http scheme
+        $social_profile = htmlspecialchars($social_profile);
+    }
+
+?>

@@ -8,6 +8,8 @@ if [ -z "$dest" ] ; then
     exit 1
 fi
 
+sqlite3 fizlesh.sqlite3 < dbinit.sql
+
 sudo mkdir -p "$dest"
 sudo rm -rf /var/www/html/site/*
 sudo cp -a * "$dest/"

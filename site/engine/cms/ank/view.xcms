@@ -147,9 +147,8 @@
         include(translate('<! cms/ank/edit-ank !>'));
     else if(@$_GET["aparam"] == "view")
         include(translate('<! cms/ank/view-ank !>'));
-    else if(@$_GET["aparam"] == "download")
-        // TODO: #232: this won't work due to header problem
-        include(translate('<! global/get_ank !>'));
+    else if(@$_GET["aparam"] == "view-prep")
+        include(translate('<! cms/ank/view-prep !>'));
     else
     {
         if (@$group["#admin"] || @$group["#ank"])

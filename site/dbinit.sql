@@ -31,7 +31,10 @@ create table person (
     role text,
 
     is_teacher text,
-    is_curator text
+    is_curator text,
+
+    created text, -- utc timestamp
+    modified text -- utc timestamp
 );
 
 create table course (
@@ -67,8 +70,12 @@ create table exam_attempt (
 );
 
 
-insert into person (last_name, first_name, patronymic) values ('Вельтищев', 'Михаил', 'Николаевич');
-insert into person (last_name, first_name, patronymic) values ('Вельтищев', 'Дмитрий', 'Николаевич');
+insert into person (last_name, first_name, patronymic, school, school_city, email, skype, is_teacher, created)
+    values ('Вельтищев', 'Михаил', 'Николаевич', '444', 'Москва', 'dichlofos-mv@yandex.ru', 'dichlofos.mv', 'teacher', '2012.05.07 03:05:01');
+insert into person (last_name, first_name, patronymic, is_teacher, created, modified)
+    values ('Вельтищев', 'Дмитрий', 'Николаевич', 'teacher', '2012.05.07 03:05:01', '2012.06.10 01:02:03');
+insert into person (last_name, first_name, patronymic, is_teacher, created, modified)
+    values ('Школьница', 'Мария', 'Батьковна', 'student', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
 
 insert into course (title, teacher_person_id, target_class, description) values
     ('Хрень какая-то', 1, '10-11', 'Сами прочитайте в книжке');
