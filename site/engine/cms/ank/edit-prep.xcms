@@ -1,0 +1,130 @@
+<# auth/ #admin #ank #>
+<# cms/ank/style #>
+<?php
+
+$fields = array(
+    //"Status"=>"Статус анкеты",
+    "last_name"=>"Фамилия",
+    "first_name"=>"Имя",
+    "patronymic"=>"Отчество",
+    "birth_date"=>"Дата рождения",
+    "school"=>"Школа",
+    "school_city"=>"Адрес школы",
+    //"Class"=>"Класс",
+    "phone"=>"Телефон",
+    "cellular"=>"Мобильный телефон",
+    "email"=>"E-Mail",
+    "skype"=>"Skype",
+    "social_profile"=>"Профиль",
+    //"Favourites"=>"Любимые предметы",
+    //"Achivements"=>"Достижения",
+    //"Hobby"=>"Хобби",
+    //"Notes"=>"Заметки",
+    //"UserAgent"=>"UserAgent",
+    "created"=>"Время создания",
+    "modified"=>"Последняя модификация"
+);
+
+function xsm_edit_prep()
+{
+    global $fields;
+    global $content_dir;
+
+    $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
+    // TODO: escaping/filtering
+    $db = new SQlite3("fizlesh.sqlite3");
+    $preps_sel = $db->query("SELECT * FROM person WHERE person_id = $person_id");
+    if (!($person = $preps_sel->fetchArray(SQLITE3_ASSOC)))
+    {
+        xcms_log(0, "Cannot fetch person with person_id=$person_id.");
+        return;
+    }
+
+    $field_types = array(
+        "Favourites"=>"textarea",
+        "Achivements"=>"textarea",
+        "Hobby"=>"textarea",
+        "skype"=>"textarea",
+        "Notes"=>"textarea"
+    );
+
+    ?>
+    <form method="post" action="edit-prep">
+        <input type="hidden" name="person_id" value="<?php echo $person_id; ?>" />
+        <table summary="Препод" class="ankEdit">
+            <tr>
+                <td class="ankListRowTitle">Анкета</td>
+            </tr>
+            <!-- <tr><td class="ankList"><span class="ankEditField">Статус анкеты</span>
+                <?php echo xcms_ank_make_selector(@$oAnk["Status"], "Edit"); ?></td></tr> -->
+            <?php
+            foreach ($fields as $key=>$field_title)
+            {
+                $value = @$person[$key];
+                $attr = "";
+                if ($key == "Status") continue; // handled above the loop
+                // handle readonly fields
+                if ($key == "UserAgent" ||
+                    $key == "created" ||
+                    $key == "modified") $attr = ' readonly="readonly"'?>
+                <tr><td class="ankList"><span class="ankEditField"><?php echo $fields[$key]; ?></span>
+                <?php
+                if (array_key_exists($key, $field_types)) {?>
+                    <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
+                        echo htmlspecialchars($value); ?></textarea/><?php
+                } else {?>
+                    <input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
+                        name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
+                } ?>
+                </td></tr>
+                <?php
+            }?>
+        </table>
+        <div style="white-space: nowrap"><input type="submit" name="update-prep"
+            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
+        <a class="linkButton" href="view-prep#<?php echo $person_id; ?>"
+            style="height: 20px; line-height: 20px; vertical-align: bottom;">Вернуться к списку преподов</a></div>
+    </form>
+    <?php
+}
+
+function xsm_update_prep()
+{
+    global $fields;
+
+    $unix_time = mktime();
+    $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
+    $_POST["modified"] = $hr_timestamp;
+    $person_id = xcms_get_key_or($_POST, 'person_id', '-1'); // invalid key
+    $query = "UPDATE person SET ";
+
+    $fields_found = false;
+    foreach (@$_POST as $key=>$value)
+    {
+        if (!array_key_exists($key, $fields))
+            continue; // skip invalid keys
+        $query .= "$key = '$value', "; // TODO: escaping
+        // TODO: skip person id?
+        $fields_found = true;
+    }
+    if (!$fields_found)
+    {?>
+        <p>Не будет обновлено ни одного поля записи.
+            <a href="view-prep">Вернуться к просмотру</a></p><?php
+        return;
+    }
+    $query = substr($query, 0, strlen($query) - 2); // cut last ,
+    $query .= " WHERE person_id = '$person_id' ";
+    $db = new SQlite3("fizlesh.sqlite3");
+    $db->exec($query);
+    // TODO: escaping here also
+    ?>
+    <p>Анкета сохранена успешно. <a href="view-prep#<?php echo $person_id; ?>">Вернуться к просмотру</a></p>
+    <?php
+}
+
+if (@$_POST["update-prep"])
+    xsm_update_prep();
+else
+    xsm_edit_prep();
+?>

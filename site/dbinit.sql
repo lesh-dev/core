@@ -70,8 +70,17 @@ create table exam_attempt (
 );
 
 
-insert into person (last_name, first_name, patronymic, school, school_city, email, skype, is_teacher, created)
-    values ('Вельтищев', 'Михаил', 'Николаевич', '444', 'Москва', 'dichlofos-mv@yandex.ru', 'dichlofos.mv', 'teacher', '2012.05.07 03:05:01');
+insert into person (last_name, first_name, patronymic,
+    birth_date,
+    school, school_city,
+    phone, cellular, email, skype,
+    is_teacher, created) values
+    ('Вельтищев', 'Михаил', 'Николаевич',
+    '2012.05.06',
+    '444', 'Москва',
+    '+7 (495) 618 30 21', '+7 (915) 0-686-186', 'dichlofos-mv@yandex.ru', 'dichlofos.mv',
+    'teacher', '2012.05.07 03:05:01');
+
 insert into person (last_name, first_name, patronymic, is_teacher, created, modified)
     values ('Вельтищев', 'Дмитрий', 'Николаевич', 'teacher', '2012.05.07 03:05:01', '2012.06.10 01:02:03');
 insert into person (last_name, first_name, patronymic, is_teacher, created, modified)
