@@ -23,7 +23,7 @@ function xsm_print_prep(/*$sShowStatus*/)
     //if (!array_key_exists($sShowStatus, $aShowStatuses)) $sShowStatus = "notspam";
     //if ($sShowStatus == "all") $nCount = 0; // show all
 
-    $db = new SQlite3("fizlesh.sqlite3");
+    $db = xsm_get_db();
     $preps_sel = $db->query("SELECT * FROM person WHERE is_teacher = 'teacher'");
 
     $nPrepCounter = 0;

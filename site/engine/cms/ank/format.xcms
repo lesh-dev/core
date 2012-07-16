@@ -37,4 +37,10 @@
         $social_profile = htmlspecialchars($social_profile);
     }
 
+    function xsm_get_db()
+    {
+        global $content_dir;
+        return new SQlite3("$content_dir/ank/fizlesh.sqlite3", SQLITE3_OPEN_READWRITE);
+    }
+
 ?>

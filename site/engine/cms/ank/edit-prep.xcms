@@ -1,5 +1,6 @@
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
+<# cms/ank/format #>
 <?php
 
 $fields = array(
@@ -32,13 +33,14 @@ function xsm_edit_prep()
 
     $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
     // TODO: escaping/filtering
-    $db = new SQlite3("fizlesh.sqlite3");
+    $db = xsm_get_db();
     $preps_sel = $db->query("SELECT * FROM person WHERE person_id = $person_id");
     if (!($person = $preps_sel->fetchArray(SQLITE3_ASSOC)))
     {
         xcms_log(0, "Cannot fetch person with person_id=$person_id.");
         return;
     }
+    $db->close();
 
     $field_types = array(
         "Favourites"=>"textarea",
@@ -53,7 +55,7 @@ function xsm_edit_prep()
         <input type="hidden" name="person_id" value="<?php echo $person_id; ?>" />
         <table summary="Препод" class="ankEdit">
             <tr>
-                <td class="ankListRowTitle">Анкета</td>
+                <td class="ankListRowTitle">Препод</td>
             </tr>
             <!-- <tr><td class="ankList"><span class="ankEditField">Статус анкеты</span>
                 <?php echo xcms_ank_make_selector(@$oAnk["Status"], "Edit"); ?></td></tr> -->
@@ -115,8 +117,9 @@ function xsm_update_prep()
     }
     $query = substr($query, 0, strlen($query) - 2); // cut last ,
     $query .= " WHERE person_id = '$person_id' ";
-    $db = new SQlite3("fizlesh.sqlite3");
+    $db = xsm_get_db();
     $db->exec($query);
+    $db->close();
     // TODO: escaping here also
     ?>
     <p>Анкета сохранена успешно. <a href="view-prep#<?php echo $person_id; ?>">Вернуться к просмотру</a></p>

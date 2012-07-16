@@ -151,6 +151,10 @@
         include(translate('<! cms/ank/view-prep !>'));
     else if(@$_GET["aparam"] == "edit-prep")
         include(translate('<! cms/ank/edit-prep !>'));
+    else if(@$_GET["aparam"] == "view-course")
+        include(translate('<! cms/ank/view-course !>'));
+    else if(@$_GET["aparam"] == "edit-course")
+        include(translate('<! cms/ank/edit-course !>'));
     else
     {
         if (@$group["#admin"] || @$group["#ank"])

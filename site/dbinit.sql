@@ -33,18 +33,20 @@ create table person (
     is_teacher text,
     is_curator text,
 
-    created text, -- utc timestamp
+    created text, -- utc timestamp -- rename
     modified text -- utc timestamp
 );
 
 create table course (
     course_id integer primary key autoincrement,
-    title text,
-    teacher_person_id integer not null,
+    course_title text,
+    course_teacher_id integer not null,
     target_class text, -- диапазон классов, на которые рассчитан курс
-    description text,
-    comment text,
-    foreign key(teacher_person_id) references person(person_id)
+    course_desc text,
+    course_comment text,
+    course_created text, -- utc timestamp -- rename
+    course_modified text, -- utc timestamp
+    foreign key(course_teacher_id) references person(person_id)
 );
 
 
@@ -86,12 +88,12 @@ insert into person (last_name, first_name, patronymic, is_teacher, created, modi
 insert into person (last_name, first_name, patronymic, is_teacher, created, modified)
     values ('Школьница', 'Мария', 'Батьковна', 'student', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
 
-insert into course (title, teacher_person_id, target_class, description) values
+insert into course (course_title, course_teacher_id, target_class, course_desc) values
     ('Хрень какая-то', 1, '10-11', 'Сами прочитайте в книжке');
 
-insert into course (title, teacher_person_id, target_class, description) values
+insert into course (course_title, course_teacher_id, target_class, course_desc) values
     ('Дрянь1', 2, '10-11', 'Сами прочитайте в книжке Б');
-insert into course (title, teacher_person_id, target_class, description) values
+insert into course (course_title, course_teacher_id, target_class, course_desc) values
     ('Дрянь2', 2, '8-11', 'Сами прочитайте в книжке А');
 
 select * from person;
