@@ -58,9 +58,9 @@
         foreach ($primary_keys as $key => $value)
             if ($value == "new") $insert = true;
         if ($insert)
-            xdb_insert_ai($table_name, $primary_keys, $values, $allowed_keys);
+            return xdb_insert_ai($table_name, $primary_keys, $values, $allowed_keys);
         else
-            xdb_update($table_name, $primary_keys, $values, $allowed_keys);
+            return xdb_update($table_name, $primary_keys, $values, $allowed_keys);
     }
 
     // single insert into autoincrement table
@@ -79,26 +79,33 @@
         foreach ($keys_values as $key => $value)
         {
             if (!array_key_exists($key, $allowed_keys))
+            {
+                xcms_log(0, "[DB] Key $key is not suitable for $table_name insert");
                 continue; // skip invalid keys
+            }
             if ($key == $pk_name)
                 continue; // skip autoincremented keys
             $keys .= "$key, ";
             $values .= "'".$db->escapeString($value)."', ";
             $fields_found = true;
         }
-        if (!$fields_found) return false;
+        if (!$fields_found)
+        {
+            xcms_log(0, "[DB:ERROR] No fields found");
+            $db->close();
+            return false;
+        }
         $keys = substr($keys, 0, strlen($keys) - 2);
         $values = substr($values, 0, strlen($values) - 2);
 
         $query = "INSERT INTO $table_name ($keys) VALUES ($values)";
-        if (!$db->exec($query))
-        {
+        $result = $db->exec($query);
+        if ($result)
+            xcms_log(0, "[DB] $query");
+        else
             xcms_log(0, "[DB:ERROR] $query");
-            return false;
-        }
-        xcms_log(0, "[DB] $query");
         $db->close();
-        return true;
+        return $result;
     }
 
 
@@ -114,8 +121,10 @@
         foreach ($keys_values as $key => $value)
         {
             if (!array_key_exists($key, $allowed_keys))
+            {
+                xcms_log(0, "[DB] Key $key is not suitable for $table_name update");
                 continue; // skip invalid keys
-
+            }
             if ($key == "${table_name}_created")
                 continue; // never update 'created' field
 
@@ -125,7 +134,12 @@
             $values .= "$key = '".$db->escapeString($value)."', ";
             $fields_found = true;
         }
-        if (!$fields_found) return false;
+        if (!$fields_found)
+        {
+            xcms_log("[DB:ERROR] No fields found");
+            $db->close();
+            return false;
+        }
         $values = substr($values, 0, strlen($values) - 2);
 
         $cond = "";
@@ -135,10 +149,38 @@
         }
         $cond = substr($cond, 0, strlen($cond) - 5);
         $query = "UPDATE $table_name SET $values WHERE $cond";
-        xcms_log(0, "[DB] $query");
-        $db->exec($query);
+        $result = $db->exec($query);
+        if ($result)
+            xcms_log(0, "[DB] $query");
+        else
+            xcms_log(0, "[DB:ERROR] $query");
         $db->close();
-        return true;
+        return $result;
     }
+
+    function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_cond = '')
+    {
+        $db = xdb_get();
+        $query = "SELECT * FROM $table_name";
+        if (strlen($aux_cond))
+            $query .= " WHERE $aux_cond";
+        $sel = $db->query($query);
+        $sHTML = "<select name=\"$name\">";
+        $list_key = "${table_name}_id";
+        while ($object = $sel->fetchArray(SQLITE3_ASSOC))
+        {
+            $title = "";
+            foreach ($title_keys as $key_name)
+                $title .= $object[$key_name].' ';
+            $title = htmlspecialchars(trim($title));
+            $key = $object[$list_key];
+            $selected = ($key == $current_key) ? 'selected="selected"' : '';
+            $sHTML .= "<option $selected value=\"$key\">$title</option>";
+        }
+        $sHTML .= "</select>";
+        $db->close();
+        return $sHTML;
+    }
+
 
 ?>
