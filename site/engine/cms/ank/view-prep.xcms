@@ -29,6 +29,8 @@ function xsm_print_prep(/*$sShowStatus*/)
     $nPrepCounter = 0;
     $bMaxReached = false;
     ?>
+    <a style="margin-right: 10px" href="edit-prep&amp;person_id=new">Добавить</a>
+
     <table summary="Преподаватели" class="ankList">
     <?php
     while ($person = $preps_sel->fetchArray(SQLITE3_ASSOC)) {?>

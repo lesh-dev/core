@@ -17,6 +17,8 @@ $fields = array(
     "email"=>"E-Mail",
     "skype"=>"Skype",
     "social_profile"=>"Профиль",
+    //
+    "is_teacher"=>"Допущен к преподаванию",
     //"Favourites"=>"Любимые предметы",
     //"Achivements"=>"Достижения",
     //"Hobby"=>"Хобби",
@@ -34,13 +36,23 @@ function xsm_edit_prep()
     $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
     // TODO: escaping/filtering
     $db = xdb_get();
-    $preps_sel = $db->query("SELECT * FROM person WHERE person_id = $person_id");
-    if (!($person = $preps_sel->fetchArray(SQLITE3_ASSOC)))
+    if ($person_id != "new")
     {
-        xcms_log(0, "Cannot fetch person with person_id=$person_id.");
-        return;
+        $preps_sel = $db->query("SELECT * FROM person WHERE person_id = $person_id");
+        if (!($person = $preps_sel->fetchArray(SQLITE3_ASSOC)))
+        {
+            xcms_log(0, "Cannot fetch person with person_id=$person_id.");
+            return;
+        }
+        $db->close();
     }
-    $db->close();
+    else
+    {
+        $person = array(
+            "person_id"=>$person_id,
+            "is_teacher"=>"teacher"
+        );
+    }
 
     $field_types = array(
         "Favourites"=>"textarea",
@@ -95,10 +107,15 @@ function xsm_update_prep()
     global $fields;
 
     $person_id = xcms_get_key_or($_POST, 'person_id', 'invalid'); // invalid key
-    xdb_insert_or_update('person', array('person_id'=>$person_id), $_POST, $fields);
-    ?>
-    <p>Анкета сохранена успешно. <a href="view-prep#<?php echo $person_id; ?>">Вернуться к просмотру</a></p>
-    <?php
+    $res = xdb_insert_or_update('person', array('person_id'=>$person_id), $_POST, $fields);
+    if ($res)
+    {?>
+        <p>Анкета сохранена успешно. <a href="view-prep#<?php echo $person_id; ?>">Вернуться к просмотру</a></p>
+    }
+    else
+    {?>
+        <p>Не удалось добавить запись. <a href="view-prep#<?php echo $person_id; ?>">Вернуться к просмотру</a></p><?php
+    }
 }
 
 if (@$_POST["update-prep"])

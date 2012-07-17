@@ -57,7 +57,6 @@
         $insert = false;
         foreach ($primary_keys as $key => $value)
             if ($value == "new") $insert = true;
-
         if ($insert)
             xdb_insert_ai($table_name, $primary_keys, $values, $allowed_keys);
         else
@@ -92,7 +91,11 @@
         $values = substr($values, 0, strlen($values) - 2);
 
         $query = "INSERT INTO $table_name ($keys) VALUES ($values)";
-        $db->exec($query);
+        if (!$db->exec($query))
+        {
+            xcms_log(0, "[DB:ERROR] $query");
+            return false;
+        }
         xcms_log(0, "[DB] $query");
         $db->close();
         return true;
