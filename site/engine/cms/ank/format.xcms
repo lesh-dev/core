@@ -61,7 +61,7 @@
         if ($insert)
             xdb_insert_ai($table_name, $primary_keys, $values, $allowed_keys);
         else
-            xdb_update($table_name, $primary_key, $values, $allowed_keys);
+            xdb_update($table_name, $primary_keys, $values, $allowed_keys);
     }
 
     // single insert into autoincrement table
@@ -84,7 +84,7 @@
             if ($key == $pk_name)
                 continue; // skip autoincremented keys
             $keys .= "$key, ";
-            $values .= "'".$db->escapeSting($value)."', ";
+            $values .= "'".$db->escapeString($value)."', ";
             $fields_found = true;
         }
         if (!$fields_found) return false;
@@ -119,7 +119,7 @@
             if (array_key_exists($key, $primary_keys))
                 continue; // skip primary keys
 
-            $values .= "$key = '".$db->escapeSting($value)."', ";
+            $values .= "$key = '".$db->escapeString($value)."', ";
             $fields_found = true;
         }
         if (!$fields_found) return false;
