@@ -22,8 +22,8 @@ $fields = array(
     //"Hobby"=>"Хобби",
     //"Notes"=>"Заметки",
     //"UserAgent"=>"UserAgent",
-    "created"=>"Время создания",
-    "modified"=>"Последняя модификация"
+    "person_created"=>"Время создания",
+    "person_modified"=>"Последняя модификация"
 );
 
 function xsm_edit_prep()
@@ -33,7 +33,7 @@ function xsm_edit_prep()
 
     $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
     // TODO: escaping/filtering
-    $db = xsm_get_db();
+    $db = xdb_get();
     $preps_sel = $db->query("SELECT * FROM person WHERE person_id = $person_id");
     if (!($person = $preps_sel->fetchArray(SQLITE3_ASSOC)))
     {
@@ -67,8 +67,8 @@ function xsm_edit_prep()
                 if ($key == "Status") continue; // handled above the loop
                 // handle readonly fields
                 if ($key == "UserAgent" ||
-                    $key == "created" ||
-                    $key == "modified") $attr = ' readonly="readonly"'?>
+                    $key == "person_created" ||
+                    $key == "person_modified") $attr = ' readonly="readonly"'?>
                 <tr><td class="ankList"><span class="ankEditField"><?php echo $fields[$key]; ?></span>
                 <?php
                 if (array_key_exists($key, $field_types)) {?>
@@ -94,33 +94,8 @@ function xsm_update_prep()
 {
     global $fields;
 
-    $unix_time = mktime();
-    $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
-    $_POST["modified"] = $hr_timestamp;
-    $person_id = xcms_get_key_or($_POST, 'person_id', '-1'); // invalid key
-    $query = "UPDATE person SET ";
-
-    $fields_found = false;
-    foreach (@$_POST as $key=>$value)
-    {
-        if (!array_key_exists($key, $fields))
-            continue; // skip invalid keys
-        $query .= "$key = '$value', "; // TODO: escaping
-        // TODO: skip person id?
-        $fields_found = true;
-    }
-    if (!$fields_found)
-    {?>
-        <p>Не будет обновлено ни одного поля записи.
-            <a href="view-prep">Вернуться к просмотру</a></p><?php
-        return;
-    }
-    $query = substr($query, 0, strlen($query) - 2); // cut last ,
-    $query .= " WHERE person_id = '$person_id' ";
-    $db = xsm_get_db();
-    $db->exec($query);
-    $db->close();
-    // TODO: escaping here also
+    $person_id = xcms_get_key_or($_POST, 'person_id', 'invalid'); // invalid key
+    xdb_insert_or_update('person', array('person_id'=>$person_id), $_POST, $fields);
     ?>
     <p>Анкета сохранена успешно. <a href="view-prep#<?php echo $person_id; ?>">Вернуться к просмотру</a></p>
     <?php

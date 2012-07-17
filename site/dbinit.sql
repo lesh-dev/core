@@ -33,8 +33,8 @@ create table person (
     is_teacher text,
     is_curator text,
 
-    created text, -- utc timestamp -- rename
-    modified text -- utc timestamp
+    person_created text, -- utc timestamp -- rename
+    person_modified text -- utc timestamp
 );
 
 create table course (
@@ -76,16 +76,16 @@ insert into person (last_name, first_name, patronymic,
     birth_date,
     school, school_city,
     phone, cellular, email, skype,
-    is_teacher, created) values
+    is_teacher, person_created) values
     ('Вельтищев', 'Михаил', 'Николаевич',
     '2012.05.06',
     '444', 'Москва',
     '+7 (495) 618 30 21', '+7 (915) 0-686-186', 'dichlofos-mv@yandex.ru', 'dichlofos.mv',
     'teacher', '2012.05.07 03:05:01');
 
-insert into person (last_name, first_name, patronymic, is_teacher, created, modified)
+insert into person (last_name, first_name, patronymic, is_teacher, person_created, person_modified)
     values ('Вельтищев', 'Дмитрий', 'Николаевич', 'teacher', '2012.05.07 03:05:01', '2012.06.10 01:02:03');
-insert into person (last_name, first_name, patronymic, is_teacher, created, modified)
+insert into person (last_name, first_name, patronymic, is_teacher, person_created, person_modified)
     values ('Школьница', 'Мария', 'Батьковна', 'student', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
 
 insert into course (course_title, course_teacher_id, target_class, course_desc) values

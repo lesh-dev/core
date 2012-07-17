@@ -23,7 +23,7 @@ function xsm_print_prep(/*$sShowStatus*/)
     //if (!array_key_exists($sShowStatus, $aShowStatuses)) $sShowStatus = "notspam";
     //if ($sShowStatus == "all") $nCount = 0; // show all
 
-    $db = xsm_get_db();
+    $db = xdb_get();
     $preps_sel = $db->query("SELECT * FROM person WHERE is_teacher = 'teacher'");
 
     $nPrepCounter = 0;
@@ -49,8 +49,8 @@ function xsm_print_prep(/*$sShowStatus*/)
         $skype = htmlspecialchars($person["skype"]);
 
         $email = htmlspecialchars($person["email"]);
-        $created = htmlspecialchars($person["created"]);
-        $modified = htmlspecialchars($person["modified"]);
+        $person_created = htmlspecialchars($person["person_created"]);
+        $person_modified = htmlspecialchars($person["person_modified"]);
 
         $social_profile = xsm_prepare_social_profile($person["social_profile"]);
 
@@ -82,9 +82,9 @@ function xsm_print_prep(/*$sShowStatus*/)
                     style="vertical-align: middle;" title="<?php echo "$sUserAgent"; ?>" />
                 <span style="margin-left: 10px;" class="ankListField">Статус</span>:
                     <span class="ankStatus <?php echo $sStatus; ?>"><?php echo $sHRStatus; ?></span>
-                <span style="margin-left: 10px;" class="ankListField">Создана</span>: <?php echo $created; ?>
-                <?php if (!empty($modified)) {?>
-                    <span style="margin-left: 10px;" class="ankListField">Отредактирована</span>: <?php echo $modified; ?>
+                <span style="margin-left: 10px;" class="ankListField">Создана</span>: <?php echo $person_created; ?>
+                <?php if (!empty($person_modified)) {?>
+                    <span style="margin-left: 10px;" class="ankListField">Отредактирована</span>: <?php echo $person_modified; ?>
                 <?php } ?>
                 </span>
             </td>

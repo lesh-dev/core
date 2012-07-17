@@ -37,10 +37,105 @@
         $social_profile = htmlspecialchars($social_profile);
     }
 
-    function xsm_get_db()
+    // DATABASE: xdb
+
+    function xdb_get()
+    {
+        global $content_dir;
+        return new SQlite3("$content_dir/ank/fizlesh.sqlite3", SQLITE3_OPEN_READONLY);
+    }
+
+    function xdb_get_write()
     {
         global $content_dir;
         return new SQlite3("$content_dir/ank/fizlesh.sqlite3", SQLITE3_OPEN_READWRITE);
+    }
+
+
+    function xdb_insert_or_update($table_name, $primary_keys, $values, $allowed_keys)
+    {
+        $insert = false;
+        foreach ($primary_keys as $key => $value)
+            if ($value == "new") $insert = true;
+
+        if ($insert)
+            xdb_insert_ai($table_name, $primary_keys, $values, $allowed_keys);
+        else
+            xdb_update($table_name, $primary_key, $values, $allowed_keys);
+    }
+
+    // single insert into autoincrement table
+    function xdb_insert_ai($table_name, $pk_name, $keys_values, $allowed_keys)
+    {
+        $db = xdb_get_write();
+        $keys = "";
+        $values = "";
+
+        // override 'created' and 'modified' field
+        $unix_time = mktime();
+        $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
+        $keys_values["${table_name}_created"] = $hr_timestamp;
+        $keys_values["${table_name}_modified"] = '';
+
+        foreach ($keys_values as $key => $value)
+        {
+            if (!array_key_exists($key, $allowed_keys))
+                continue; // skip invalid keys
+            if ($key == $pk_name)
+                continue; // skip autoincremented keys
+            $keys .= "$key, ";
+            $values .= "'".$db->escapeSting($value)."', ";
+            $fields_found = true;
+        }
+        if (!$fields_found) return false;
+        $keys = substr($keys, 0, strlen($keys) - 2);
+        $values = substr($values, 0, strlen($values) - 2);
+
+        $query = "INSERT INTO $table_name ($keys) VALUES ($values)";
+        $db->exec($query);
+        xcms_log(0, "[DB] $query");
+        $db->close();
+        return true;
+    }
+
+
+    function xdb_update($table_name, $primary_keys, $keys_values, $allowed_keys)
+    {
+        $db = xdb_get_write();
+        $values = "";
+        // update '<table-name>-modified' timestamp
+        $unix_time = mktime();
+        $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
+        $keys_values["${table_name}_modified"] = $hr_timestamp;
+
+        foreach ($keys_values as $key => $value)
+        {
+            if (!array_key_exists($key, $allowed_keys))
+                continue; // skip invalid keys
+
+            if ($key == "${table_name}_created")
+                continue; // never update 'created' field
+
+            if (array_key_exists($key, $primary_keys))
+                continue; // skip primary keys
+
+            $values .= "$key = '".$db->escapeSting($value)."', ";
+            $fields_found = true;
+        }
+        if (!$fields_found) return false;
+        $values = substr($values, 0, strlen($values) - 2);
+
+        $cond = "";
+        foreach ($primary_keys as $key => $value)
+        {
+            $cond .= "($key = '".$db->escapeString($value)."') AND ";
+        }
+        $cond = substr($cond, 0, strlen($cond) - 5);
+        $query = "UPDATE $table_name SET $values WHERE $cond";
+        xcms_log(0, "[DB] $query");
+        $db->exec($query);
+        $db->close();
+        return true;
     }
 
 ?>
