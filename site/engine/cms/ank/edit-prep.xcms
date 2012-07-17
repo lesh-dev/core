@@ -110,7 +110,7 @@ function xsm_update_prep()
     $res = xdb_insert_or_update('person', array('person_id'=>$person_id), $_POST, $fields);
     if ($res)
     {?>
-        <p>Анкета сохранена успешно. <a href="view-prep#<?php echo $person_id; ?>">Вернуться к просмотру</a></p>
+        <p>Препод сохранён успешно. <a href="view-prep#<?php echo $person_id; ?>">Вернуться к просмотру</a></p>
     }
     else
     {?>
