@@ -71,7 +71,7 @@ function template_main_above()
 	<meta name="robots" content="noindex" />', '
 	<meta name="keywords" content="', $customSettings['PageKeywords'], '" />
 	<script language="JavaScript" type="text/javascript" src="', $settings['default_theme_url'], '/script.js?fin11"></script>
-	<script language="JavaScript" type="text/javascript" src="', $settings['default_theme_url'], '/index.js"></script>
+	<script language="JavaScript" type="text/javascript" src="', $settings['default_theme_url'], '/indexpage.js"></script>
 	<script language="JavaScript" type="text/javascript"><!-- // --><![CDATA[
 		var smf_theme_url = "', $settings['theme_url'], '";
 		var smf_images_url = "', $settings['images_url'], '";
