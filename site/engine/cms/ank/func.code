@@ -28,22 +28,22 @@
           "all"=>"Все");
     }
 
-    function xcms_ank_make_selector($sSK, $mode)
+    function xcms_ank_make_selector($selected_key, $mode)
     {
-        $name = ($mode == "Show") ? "ShowStatus" : "Status";
+        $name = ($mode == "show") ? "activity_show_status" : "activity_status";
 
-        $aStatuses = ($mode == "Show") ?
+        $statuses = ($mode == "show") ?
             xcms_ank_get_show_status_list() :
             xcms_ank_get_status_list();
 
-        $sHTML = "<select name=\"$name\">";
-        foreach ($aStatuses as $sKey => $sTitle)
+        $html = "<select name=\"$name\" id=\"status-selector\">";
+        foreach ($statuses as $key => $title)
         {
-            $sSel = ($sKey == $sSK) ? ' selected="selected" ' : '';
-            $sHTML .= "<option$sSel value=\"$sKey\">$sTitle</option>";
+            $sel = ($key == $selected_key) ? ' selected="selected" ' : '';
+            $html .= "<option $sel value=\"$key\">$title</option>";
         }
-        $sHTML .= "</select>";
-        return $sHTML;
+        $html .= "</select>";
+        return $html;
     }
 
     /**

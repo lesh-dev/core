@@ -5,33 +5,37 @@ drop table if exists person;
 
 create table person (
     person_id integer primary key autoincrement,
+
     last_name text,
     first_name text,
     patronymic text,
 
     birth_date text,
-    entrance_class text,
+    passport_data text,
 
     school text,
     school_city text,
+    current_class text,
 
     phone text,
     cellular text,
     email text,
     skype text,
-
-    -- passport data
-
     social_profile text,
 
+    is_teacher text,
+    is_student text,
+    curatorship text,
+
     favourites text,
+    achievements text,
     hobby text,
 
-    acttivity_status text, -- active or former
-    role text,
+    activity_status text, -- former anketa status
+    is_current text, -- присутствует ли на текущем мероприятии
 
-    is_teacher text,
-    is_curator text,
+    person_comment text,
+    user_agent text,
 
     person_created text, -- utc timestamp -- rename
     person_modified text -- utc timestamp
