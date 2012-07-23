@@ -77,18 +77,18 @@ function xsm_edit_prep()
         <input type="hidden" name="person_id" value="<?php echo $person_id; ?>" />
         <table summary="Препод" class="ankEdit">
             <tr>
-                <td class="ankListRowTitle">Препод</td>
+                <td class="ankListRowTitle">Персона</td>
             </tr>
-            <!-- <tr><td class="ankList"><span class="ankEditField">Статус анкеты</span>
-                <?php echo xcms_ank_make_selector(@$oAnk["Status"], "Edit"); ?></td></tr> -->
+            <tr><td class="ankList"><span class="ankEditField">Статус анкеты</span>
+                <?php echo xcms_ank_make_selector($person["activity_status"], "edit"); ?></td></tr>
             <?php
             foreach ($person_fields as $key=>$field_title)
             {
-                $value = @$person[$key];
+                $value = $person[$key];
                 $attr = "";
-                if ($key == "Status") continue; // handled above the loop
+                if ($key == "activity_status") continue; // handled above the loop
                 // handle readonly fields
-                if ($key == "UserAgent" ||
+                if ($key == "user_agent" ||
                     $key == "person_created" ||
                     $key == "person_modified") $attr = ' readonly="readonly"'?>
                 <tr><td class="ankList"><span class="ankEditField"><?php echo $person_fields[$key]; ?></span>
@@ -107,7 +107,7 @@ function xsm_edit_prep()
         <div style="white-space: nowrap"><input type="submit" name="update-prep"
             value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
         <a class="linkButton" href="view-prep#<?php echo $person_id; ?>"
-            style="height: 20px; line-height: 20px; vertical-align: bottom;">Вернуться к списку преподов</a></div>
+            style="height: 20px; line-height: 20px; vertical-align: bottom;">Вернуться к списку людей</a></div>
     </form>
     <?php
 }
