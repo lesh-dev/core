@@ -1,35 +1,20 @@
 <# auth/ #admin #ank #>
+<# cms/ank/format #>
 <# cms/ank/style #>
+
 <form method="post" style="margin-bottom: 2px">
-  <?php
-    echo xcms_ank_make_selector(@$_POST["ShowStatus"], "Show");
-  ?>
-  <input type="submit" value="Показать">
+    <?php
+        echo xcms_ank_make_selector(@$_POST["ShowStatus"], "Show");
+    ?>
+    <input type="submit" value="Показать">
 </form>
 <?php
-  function DoFormatting($sHTML) {
-    // detect UNIX or DOS line-endings
-    if (strpos($sHTML, "\n") !== false) {
-      // Unix or DOS, so \n -> <br />, '\r' -> void
-      $sHTML = str_replace("\n", "<br />", $sHTML);
-      $sHTML = str_replace("\r", "", $sHTML);
-    } elseif (strpos($sHTML, "\r") !== false) {
-      // MacOS, \r only
-      $sHTML = str_replace("\r", "<br />", $sHTML);
-    }
-    return $sHTML;
-  }
 
-  function WrapIfMultiline($sHTML) {
-    if (strpos($sHTML, "<br />")) $sHTML = "<br />$sHTML";
-    return $sHTML;
-  }
-
-  /**
-    * @param nCount how many anketas will be printed, zero means all
-    **/
-  function PrintAnk($sShowStatus)
-  {
+    /**
+      * @param nCount how many anketas will be printed, zero means all
+      **/
+    function PrintAnk($sShowStatus)
+    {
     global $content_dir, $design_dir, $web_prefix;
     $aShowStatuses = xcms_ank_get_show_status_list();
     $nCount = 50;
@@ -92,10 +77,10 @@
       $sProfile = htmlspecialchars($sProfile);
 
       $sSkype = htmlspecialchars(xcms_get_key_or($oAnk, "Skype"));
-      $sFavourites = DoFormatting(htmlspecialchars($oAnk["Favourites"]));
-      $sAchivements = DoFormatting(htmlspecialchars($oAnk["Achivements"]));
-      $sHobby = DoFormatting(htmlspecialchars($oAnk["Hobby"]));
-      $sNotes = DoFormatting(htmlspecialchars(xcms_get_key_or($oAnk, "Notes")));
+      $sFavourites = xcms_html_wrap_by_crlf(htmlspecialchars($oAnk["Favourites"]));
+      $sAchivements = xcms_html_wrap_by_crlf(htmlspecialchars($oAnk["Achivements"]));
+      $sHobby = xcms_html_wrap_by_crlf(htmlspecialchars($oAnk["Hobby"]));
+      $sNotes = xcms_html_wrap_by_crlf(htmlspecialchars(xcms_get_key_or($oAnk, "Notes")));
 
       $sUserAgent = htmlspecialchars(xcms_get_key_or($oAnk, "UserAgent"));
       $sFileName = htmlspecialchars(xcms_get_key_or($oAnk, "FileName"));
@@ -161,16 +146,16 @@
       <?php } ?>
       <!--  other stuff -->
       <?php if (!empty($sFavourites)) { ?>
-      <tr><td class="ankList"><span class="ankListField">Любимые предметы</span>: <?php echo WrapIfMultiline($sFavourites); ?></td></tr>
+      <tr><td class="ankList"><span class="ankListField">Любимые предметы</span>: <?php echo xcms_html_wrap_ml($sFavourites); ?></td></tr>
       <?php } ?>
       <?php if (!empty($sAchivements)) { ?>
-      <tr><td class="ankList"><span class="ankListField">Достижения</span>: <?php echo wrapIfMultiline($sAchivements); ?></td></tr>
+      <tr><td class="ankList"><span class="ankListField">Достижения</span>: <?php echo xcms_html_wrap_ml($sAchivements); ?></td></tr>
       <?php } ?>
       <?php if (!empty($sHobby)) { ?>
-      <tr><td class="ankList"><span class="ankListField">Хобби</span>: <?php echo WrapIfMultiline($sHobby); ?></td></tr>
+      <tr><td class="ankList"><span class="ankListField">Хобби</span>: <?php echo xcms_html_wrap_ml($sHobby); ?></td></tr>
       <?php } ?>
       <?php if (!empty($sNotes)) { ?>
-      <tr><td class="ankList notes"><span class="ankListField">Заметки</span>: <?php echo WrapIfMultiline($sNotes); ?></td></tr>
+      <tr><td class="ankList notes"><span class="ankListField">Заметки</span>: <?php echo xcms_html_wrap_ml($sNotes); ?></td></tr>
       <?php } ?>
       <?php
       ++$nAnkCounter;

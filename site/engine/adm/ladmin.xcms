@@ -77,6 +77,8 @@
                 <a'.xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Уведомления</a>
                 <a'.xcms_href(array('mode'=>'css', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Стиль</a>
                 <a href="/'.$web_prefix.'register/view" class="h-menu-link">Анкеты</a>
+                <a href="/'.$web_prefix.'register/view-prep" class="h-menu-link">Преподы</a>
+                <a href="/'.$web_prefix.'register/view-course" class="h-menu-link">Курсы</a>
                 <a'.xcms_href(array('mode'=>'__convert', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Convert [DoNotPush]</a>
             '));
         ?>
@@ -86,10 +88,10 @@
             <div class="menu">
                 <?php
                     if (file_exists("INFO"))
-                    {
-                        echo "<pre><font size=\"-2\">";
-                        echo file_get_contents("INFO");
-                        echo "</font></pre>";
+                    {?>
+                        <pre class="site-info"><?php
+                        echo file_get_contents("INFO"); ?>
+                        </pre><?php
                     }
                 ?>
                 <b>Menu</b>

@@ -1,0 +1,111 @@
+<# auth/ #admin #ank #>
+<# cms/ank/style #>
+<# cms/ank/format #>
+
+<form method="post" style="margin-bottom: 2px"><?php
+    //echo xcms_ank_make_selector(@$_POST["show-status"], "Show");
+    ?>
+    <input type="submit" value="Показать">
+</form>
+<?php
+
+/**
+  * @param object_limit how many preps will be printed, zero means all
+  **/
+function xsm_print_course(/*$sShowStatus*/)
+{
+    global $content_dir, $design_dir, $web_prefix;
+    global $DB; // TODO: fix it
+    //xcms_db_get();
+
+    //$aShowStatuses = xcms_ank_get_show_status_list();
+    $object_limit = 50;
+    //if (!array_key_exists($sShowStatus, $aShowStatuses)) $sShowStatus = "notspam";
+    //if ($sShowStatus == "all") $object_limit = 0; // show all
+
+    $db = xdb_get();
+    $course_sel = $db->query("SELECT * FROM course, person WHERE course_teacher_id = person_id");
+    $course_counter = 0;
+    $max_reached = false;
+    ?>
+    <table summary="Курсы" class="ankList">
+    <?php
+    while ($course_prep = $course_sel->fetchArray(SQLITE3_ASSOC)) {?>
+        <tr><td class="ankListRowDiv">&nbsp;</td></tr>
+        <?php
+        $course_counter++;
+
+        $course_id = htmlspecialchars($course_prep["course_id"]);
+        $course_title = htmlspecialchars($course_prep["course_title"]);
+        $course_teacher_id = htmlspecialchars($course_prep["course_teacher_id"]);
+        $target_class = htmlspecialchars($course_prep["target_class"]);
+        $course_desc = htmlspecialchars($course_prep["course_desc"]);
+        $course_comment = htmlspecialchars($course_prep["course_comment"]);
+        $course_created = htmlspecialchars($course_prep["course_created"]);
+        $course_modified = htmlspecialchars($course_prep["course_modified"]);
+
+        $first_name = htmlspecialchars($course_prep["first_name"]);
+        $last_name = htmlspecialchars($course_prep["last_name"]);
+
+        /*
+        //$entrance_class = htmlspecialchars($person["entrance_class"]);
+        $school = htmlspecialchars($person["school"]);
+        $school_city = htmlspecialchars($person["school_city"]);
+        $cellular = htmlspecialchars($person["cellular"]);
+        $phone = htmlspecialchars($person["phone"]);
+        $skype = htmlspecialchars($person["skype"]);
+
+        $email = htmlspecialchars($person["email"]);
+
+        $social_profile = xsm_prepare_social_profile($person["social_profile"]);
+
+        /*$sFavourites = xcms_html_wrap_by_crlf(htmlspecialchars($oAnk["Favourites"]));
+        $sAchivements = xcms_html_wrap_by_crlf(htmlspecialchars($oAnk["Achivements"]));
+        $sHobby = xcms_html_wrap_by_crlf(htmlspecialchars($oAnk["Hobby"]));
+        $sNotes = xcms_html_wrap_by_crlf(htmlspecialchars(xcms_get_key_or($oAnk, "Notes")));
+
+        $sUserAgent = htmlspecialchars(xcms_get_key_or($oAnk, "UserAgent"));
+        //$sFileName = htmlspecialchars(xcms_get_key_or($oAnk, "FileName"));
+        // default is to cut 'ank/' and extract 'YYYY.MM.DD'
+
+        $sStatus = htmlspecialchars(xcms_get_key_or($oAnk, "Status", "new"));
+        $aStatuses = xcms_ank_get_status_list();
+        if (!array_key_exists($sStatus, $aStatuses)) $sStatus = "new"; // default*/
+
+        ?>
+        <tr>
+            <td class="ankListRowTitle">
+            <?php echo "[$course_id] $course_title"; ?><a name="<?php echo "course$course_id"; ?>"></a>
+                <span style="float: right">
+                <a style="margin-right: 10px" href="edit-course&amp;course_id=<?php echo $course_id; ?>">Редактировать</a>
+                <span style="margin-left: 10px;" class="ankListField">Создан</span>: <?php echo $course_created; ?>
+                <?php if (!empty($course_modified)) {?>
+                    <span style="margin-left: 10px;" class="ankListField">Отредактирован</span>: <?php echo $course_modified; ?>
+                <?php } ?>
+                </span>
+            </td>
+        </tr>
+        <tr><td class="ankList"><span class="ankListField">Название</span>: <?php echo $course_title; ?></td></tr>
+        <tr><td class="ankList"><span class="ankListField">На какие классы рассчитан</span>:
+            <?php echo $target_class; ?></td></tr>
+        <!-- TODO: make it link -->
+        <tr><td class="ankList"><span class="ankListField">Препод</span>:
+            <?php echo "$first_name $last_name"; ?></td></tr>
+        <tr><td class="ankList"><span class="ankListField">Описание</span>:
+            <?php echo xcms_html_wrap_by_crlf($course_desc); ?></td></tr>
+        <?php
+        }
+    ?>
+    </table>
+    <?php
+    if ($object_limit > 0) {
+        $sMore = ($max_reached ? " (размер списка ограничен <b>$object_limit</b>, возможно, есть ещё) " : ""); ?>
+        <p>Показано <b><?php echo $course_counter; ?></b> курсов, типа
+            <b><?php /*echo $aShowStatuses[$sShowStatus];*/ ?></b><?php echo $sMore; ?></p><?php
+    } else {?>
+        <p>Показаны все курсы (<b><?php echo $course_counter; ?></b> шт.)</p><?php
+    }
+}
+
+xsm_print_course(/*@$_POST["ShowStatus"]*/);
+?>
