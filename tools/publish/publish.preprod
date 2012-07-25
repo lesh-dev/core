@@ -19,13 +19,27 @@ touch $PREPROD
 rm -rf /tmp/repo
 echo "Cloning repo to temp folder..."
 git clone /srv/git/lesh /tmp/repo
+PPD_OLDPWD=$(pwd)
+cd /tmp/repo
+git checkout $BRANCH
+cd $PPD_OLDPWD
 REVISION=$(publish.revision /tmp/repo)
+echo "---- ---- ---- ----"
 
 echo "Preparing info page..."
 mkdir -p $PREPROD.$TIMESTAMP
 rm $PREPROD
 ln -sf $PREPROD.$TIMESTAMP $PREPROD
 
+#<<<<<<< HEAD
+#echo "<b><font color='red'>preproduction</font></b>" > $PREPROD/INFO
+#echo "All content changes" >> $PREPROD/INFO
+#echo "will be rejected." >> $PREPROD/INFO
+#echo "" >> $PREPROD/INFO
+#echo "--- $BRANCH    " >> $PREPROD/INFO
+#echo "$TIMESTAMP     " >> $PREPROD/INFO
+#echo "$REVISION      " >> $PREPROD/INFO
+#=======
 cat > $PREPROD/INFO <<EOF
 <b><font color="red">preproduction</font></b>
 All content changes
@@ -35,6 +49,7 @@ will be rejected.
 $TIMESTAMP
 $REVISION
 EOF
+#>>>>>>> 71020dc014c3f543c0bd18170ad288ca72f44ea5
 
 echo "Copying content to pre-production directory..."
 cp -rf /tmp/repo/site/* $PREPROD
@@ -50,5 +65,5 @@ echo "Preparing XCMS installation..."
 mv $PREPROD/install.php.template $PREPROD/install.php
 # cp $RESOURCE/settings.php $PREPROD
 cp -rf $CONTENT $PREPROD/content
-
+chown -R www-data:www-data $PREPROD/content
 apachectl -k graceful
