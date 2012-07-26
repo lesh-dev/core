@@ -53,7 +53,6 @@ create table course (
     foreign key(course_teacher_id) references person(person_id)
 );
 
-
 create table exam (
     exam_id integer primary key autoincrement, -- not used
     student_person_id integer not null, -- fk
@@ -62,6 +61,8 @@ create table exam (
     deadline_date text,
     is_prac text, -- enum
     comment text,
+    exam_created text,
+    exam_modified text,
     foreign key (student_person_id) references person(person_id),
     foreign key (course_id) references course(course_id)
 );
@@ -91,6 +92,8 @@ insert into person (last_name, first_name, patronymic, is_teacher, person_create
     values ('Вельтищев', 'Дмитрий', 'Николаевич', 'teacher', '2012.05.07 03:05:01', '2012.06.10 01:02:03');
 insert into person (last_name, first_name, patronymic, is_teacher, person_created, person_modified)
     values ('Школьница', 'Мария', 'Батьковна', 'student', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
+insert into person (last_name, first_name, patronymic, is_teacher, person_created, person_modified)
+    values ('Школьница2', 'Мария2', 'Батьковна2', 'student', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
 
 insert into course (course_title, course_teacher_id, target_class, course_desc) values
     ('Хрень какая-то', 1, '10-11', 'Сами прочитайте в книжке');
@@ -99,6 +102,21 @@ insert into course (course_title, course_teacher_id, target_class, course_desc) 
     ('Дрянь1', 2, '10-11', 'Сами прочитайте в книжке Б');
 insert into course (course_title, course_teacher_id, target_class, course_desc) values
     ('Дрянь2', 2, '8-11', 'Сами прочитайте в книжке А');
+insert into course (course_title, course_teacher_id, target_class, course_desc) values
+    ('Дрянь3', 2, '11', 'Сами!');
+
+insert into exam (student_person_id, course_id, exam_status)
+    values (3, 1, 'passed');
+insert into exam (student_person_id, course_id, exam_status)
+    values (3, 2, 'passed');
+
+insert into exam (student_person_id, course_id, exam_status)
+    values (4, 1, 'passed');
+insert into exam (student_person_id, course_id, exam_status)
+    values (4, 2, 'passed');
+insert into exam (student_person_id, course_id, exam_status)
+    values (4, 3, 'passed');
+
 
 select * from person;
 select * from course;
