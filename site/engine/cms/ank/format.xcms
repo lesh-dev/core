@@ -182,5 +182,27 @@
         return $sHTML;
     }
 
+    function xsm_make_enum_selector($name, $value, $items)
+    {
+        $html = "<select name=\"$name\" id=\"$name-selector\">";
+        foreach ($items as $key => $title)
+        {
+            $sel = ($key == $value) ? ' selected="selected" ' : '';
+            $html .= "<option $sel value=\"$key\">$title</option>";
+        }
+        $html .= "</select>";
+        return $html;
+    }
+
+    function xsm_make_checkbox($name, $value, $checked_value)
+    {
+        if (strlen($value)) $checked = 'checked="checked"';
+        else $checked = '';
+        $sHTML = "<input class=\"ankEdit checkbox\" type=\"checkbox\" name=\"$name\" ".
+            "id=\"$name-checkbox\" value=\"$checked_value\" $checked />";
+        return $sHTML;
+    }
+
+
 
 ?>
