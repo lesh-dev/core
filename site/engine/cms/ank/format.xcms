@@ -182,6 +182,32 @@
         return $sHTML;
     }
 
+    // Here entity should be equal to table name, but...
+    function xsm_return_to_view($entity, $table_name, $id, $title)
+    {?>
+        <div style="white-space: nowrap"><input type="submit" name="update-<?php echo $entity; ?>"
+            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
+        <a class="linkButton xsm" href="view-<?php
+            echo $entity."#$table_name$id"; ?>"><?php echo $title; ?></a></div><?php
+    }
+
+    // Here entity should be equal to table name, but...
+    function xsm_edit_delete_info($entity, $table_name, $id, $created, $modified)
+    {
+        global $design_dir, $web_prefix;
+        ?>
+        <a style="margin-right: 10px" href="edit-<?php echo "$entity&amp;${table_name}_id=$id" ?>"><img
+            src="<?php echo "/${web_prefix}$design_dir"; ?>pic/edit.gif" class="edit-icon"
+            title="Редактировать" />Правка</a>
+        <a style="margin-right: 10px" href="delete-<?php echo "$entity&amp;${table_name}_id=$id" ?>"><img
+            src="<?php echo "/${web_prefix}$design_dir"; ?>pic/delete.gif" class="edit-icon"
+            title="Удалить" />Удалить</a>
+        <span style="margin-left: 10px;" class="ankListField">Создан</span>: <?php echo $created;
+        if (!empty($modified)) {?>
+            <span style="margin-left: 10px;" class="ankListField">Отредактирован</span>: <?php echo $modified;
+        }
+    }
+
     function xsm_make_enum_selector($name, $value, $items)
     {
         $html = "<select name=\"$name\" id=\"$name-selector\">";

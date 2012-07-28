@@ -113,3 +113,9 @@ img.edit-icon {
 .ankEdit.checkbox {
   width: 16px;
 }
+
+.linkButton.xsm {
+  height: 20px;
+  line-height: 20px;
+  vertical-align: bottom;
+}

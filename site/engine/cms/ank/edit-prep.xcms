@@ -86,21 +86,19 @@ function xsm_edit_prep()
     );
 
     ?>
-    <form method="post" action="edit-prep">
+    <form method="post" action="edit-prep"><?php
+        xsm_return_to_view('prep', 'person', $person_id, 'Вернуться к списку людей');?>
         <input type="hidden" name="person_id" value="<?php echo $person_id; ?>" />
         <table summary="Участник" class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Участник</td>
             </tr>
-            <!--<tr><td class="ankList"><span class="ankEditField">Статус анкеты</span>
-                <?php echo xcms_ank_make_selector($person["activity_status"], "edit"); ?></td></tr>-->
 
             <?php
             foreach ($person_fields as $key=>$field_title)
             {
                 $value = $person[$key];
                 $attr = "";
-                //if ($key == "activity_status") continue; // handled above the loop
                 // handle readonly fields
                 if ($key == "user_agent" ||
                     $key == "person_created" ||
@@ -128,11 +126,8 @@ function xsm_edit_prep()
                 </td></tr>
                 <?php
             }?>
-        </table>
-        <div style="white-space: nowrap"><input type="submit" name="update-prep"
-            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
-        <a class="linkButton" href="view-prep#<?php echo $person_id; ?>"
-            style="height: 20px; line-height: 20px; vertical-align: bottom;">Вернуться к списку людей</a></div>
+        </table><?php
+        xsm_return_to_view('prep', 'person', $person_id, 'Вернуться к списку людей');?>
     </form>
     <?php
 }

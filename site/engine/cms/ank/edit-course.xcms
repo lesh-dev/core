@@ -56,7 +56,8 @@ function xsm_edit_course()
     );
 
     ?>
-    <form method="post" action="edit-course">
+    <form method="post" action="edit-course"><?php
+        xsm_return_to_view('course', 'course', $course_id, 'Вернуться к списку курсов');?>
         <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" />
         <table summary="Курс" class="ankEdit">
             <tr>
@@ -88,11 +89,8 @@ function xsm_edit_course()
                 </td></tr>
                 <?php
             }?>
-        </table>
-        <div style="white-space: nowrap"><input type="submit" name="update-course"
-            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
-        <a class="linkButton" href="view-course#<?php echo $course_id; ?>"
-            style="height: 20px; line-height: 20px; vertical-align: bottom;">Вернуться к списку курсов</a></div>
+        </table><?php
+        xsm_return_to_view('course', 'course', $course_id, 'Вернуться к списку курсов');?>
     </form>
     <?php
 }
