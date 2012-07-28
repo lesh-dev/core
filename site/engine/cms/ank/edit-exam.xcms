@@ -21,8 +21,8 @@ $exam_fields = array(
     "deadline_date"=>"Дедлайн",
     "is_prac"=>"Прак?",
     "exam_comment"=>"Комментарий к зачёту",
-    "course_created"=>"Время создания",
-    "course_modified"=>"Последняя модификация"
+    "exam_created"=>"Время создания",
+    "exam_modified"=>"Последняя модификация"
 );
 
 function xsm_edit_exam()
@@ -34,6 +34,8 @@ function xsm_edit_exam()
 
     $field_types = array(
         "exam_comment"=>"textarea",
+        "exam_status"=>"enum",
+        "is_prac"=>"checkbox"
     );
 
     ?>
@@ -64,11 +66,8 @@ function xsm_edit_exam()
                     // остатку названия ключа без префикса 'is_'
                     echo xsm_make_checkbox($key, $value, substr($key, 3));
                 } elseif ($ft == "enum") {
-                    /*if ($key == "curatorship")
-                        echo xsm_make_enum_selector($key, $value, xsm_get_curatorship_items());
-                    elseif ($key == "activity_status")
-                        echo xsm_make_enum_selector($key, $value, xcms_ank_get_status_list());
-                    */
+                    if ($key == "exam_status")
+                        echo xsm_make_enum_selector($key, $value, xsm_get_exam_statuses());
                 } elseif ($key == 'student_person_id') {
                     echo xsm_make_selector('person', 'student_person_id', xcms_get_key_or($exam, $key, "-1"),
                         array('first_name', 'last_name'), "is_student = 'student'");

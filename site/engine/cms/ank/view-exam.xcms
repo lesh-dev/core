@@ -55,6 +55,10 @@ function xsm_print_exam()
         $teacher_first_name = htmlspecialchars($exam_data["teacher_first_name"]);
         $teacher_last_name = htmlspecialchars($exam_data["teacher_last_name"]);
 
+        $exam_status_items = xsm_get_exam_statuses();
+        if (!array_key_exists($exam_status, $exam_status_items)) $exam_status = "passed"; // default
+        $hr_exam_status = $exam_status_items[$exam_status];
+
         ?>
         <tr>
             <td class="ankListRowTitle">
@@ -74,7 +78,7 @@ function xsm_print_exam()
                 echo "$teacher_first_name $teacher_last_name"; ?></a></td></tr>
 
         <tr><td class="ankList"><span class="ankListField">Статус зачёта</span>:
-            <?php echo $exam_status; ?></td></tr>
+            <?php echo $hr_exam_status; ?></td></tr>
 
         <tr><td class="ankList"><span class="ankListField">Дедлайн</span>:
             <?php echo $deadline_date; ?></td></tr>

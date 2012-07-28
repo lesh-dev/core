@@ -181,12 +181,12 @@
         if ($res)
         {?>
             <p><?php echo $title; ?> успешно сохранён.
-                <a href="view-<?php echo "$entity#$entity$id;" ?>">Вернуться к просмотру</a></p><?php
+                <a href="view-<?php echo "$entity#$entity$id"; ?>">Вернуться к просмотру</a></p><?php
         }
         else
         {?>
             <p>Не удалось добавить <?php echo $title; ?>.
-                <a href="view-<?php echo "$entity#$entity$id;" ?>">Вернуться к просмотру</a></p><?php
+                <a href="view-<?php echo "$entity#$entity$id"; ?>">Вернуться к просмотру</a></p><?php
         }
     }
 
@@ -204,7 +204,7 @@
         else
         {?>
             <p>Не удалось удалить <?php echo $title; ?> [<?php echo $id; ?>] (возможно, есть связанные объекты).
-                <a href="view-<?php echo "$entity#$entity$id;" ?>">Вернуться к просмотру</a></p><?php
+                <a href="view-<?php echo "$entity#$entity$id" ?>">Вернуться к просмотру</a></p><?php
         }
     }
 

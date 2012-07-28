@@ -56,6 +56,16 @@
         );
     }
 
+    function xsm_get_exam_statuses()
+    {
+        return array(
+            "passed"=>"Сдан",
+            "notpassed"=>"Не сдан",
+            "almost"=>"Почти сдан",
+            "other"=>"Иное",
+        );
+    }
+
     /**
       * Replaces Russian UTF8 symbols to ANSI transliteration
       * @param string string to transliterate
