@@ -13,18 +13,23 @@ function xsm_print_exam()
         "SELECT
         tp.last_name as teacher_last_name, tp.first_name as teacher_first_name,
         c.course_id, c.course_title, c.course_desc, c.course_teacher_id, c.target_class,
-        e.exam_id, e.exam_created, e.exam_modified, e.exam_status
+        e.exam_id, e.exam_status, e.exam_comment, e.deadline_date, e.exam_created, e.exam_modified
         FROM course c, person tp, person sp, exam e WHERE
         (e.course_id = c.course_id) AND
         (e.student_person_id = sp.person_id) AND
         (c.course_teacher_id = tp.person_id) AND
         (e.student_person_id = $student_person_id)"
     );
-    // TODO: get student info
+
+    $student = xdb_get_entity_by_id('prep', 'person', $student_person_id);
+    $student_first_name = $student["first_name"];
+    $student_last_name = $student["last_name"];
+
     ?>
-    <div>Зачёты школьника <?php echo $student_person_id; ?>ПЫЩЬ!!!! ИМЯ
-        <a href="view-prep#person<?php echo $student_person_id; ?>">СТУДЕНТА<?php
-                /*echo "$teacher_first_name $teacher_last_name";*/ ?></a> В СТУДИЮ</div>
+    <div>Зачёты школьника
+        <a href="view-prep#person<?php echo $student_person_id; ?>"><?php
+            echo "$student_first_name $student_last_name"; ?></a>:
+    </div>
     <table summary="Зачёты школьника $student_person_id" class="ankList">
     <?php
     while ($exam_data = $exam_sel->fetchArray(SQLITE3_ASSOC)) {?>
@@ -37,7 +42,13 @@ function xsm_print_exam()
         $course_teacher_id = htmlspecialchars($exam_data["course_teacher_id"]);
         $target_class = htmlspecialchars($exam_data["target_class"]);
         $course_desc = htmlspecialchars($exam_data["course_desc"]);
+
+        // enum
         $exam_status = htmlspecialchars($exam_data["exam_status"]);
+
+        $exam_comment = htmlspecialchars($exam_data["exam_comment"]);
+        $deadline_date = htmlspecialchars($exam_data["deadline_date"]);
+
         $exam_created = htmlspecialchars($exam_data["exam_created"]);
         $exam_modified = htmlspecialchars($exam_data["exam_modified"]);
 
@@ -47,14 +58,14 @@ function xsm_print_exam()
         ?>
         <tr>
             <td class="ankListRowTitle">
-            <?php echo "[$exam_id] Зачёт по курсу $course_title"; ?><a name="<?php echo "exam$exam_id"; ?>"></a>
+            <?php echo "[$exam_id] Зачёт по курсу <i>$course_title</i>"; ?><a name="<?php echo "exam$exam_id"; ?>"></a>
                 <span style="float: right"><?php
                 xsm_edit_delete_info('exam', 'exam', $exam_id, $exam_created, $exam_modified); ?>
                 </span>
             </td>
         </tr>
-        <tr><td class="ankList"><span class="ankListField">Название курса</span>:
-            <?php echo $course_title; ?></td></tr>
+        <!--<tr><td class="ankList"><span class="ankListField">Название курса</span>:
+            <?php echo $course_title; ?></td></tr>-->
         <tr><td class="ankList"><span class="ankListField">На какие классы рассчитан</span>:
             <?php echo $target_class; ?></td></tr>
 
@@ -65,8 +76,13 @@ function xsm_print_exam()
         <tr><td class="ankList"><span class="ankListField">Статус зачёта</span>:
             <?php echo $exam_status; ?></td></tr>
 
+        <tr><td class="ankList"><span class="ankListField">Дедлайн</span>:
+            <?php echo $deadline_date; ?></td></tr>
+
         <tr><td class="ankList"><span class="ankListField">Описание курса</span>:
             <?php echo xcms_html_wrap_by_crlf($course_desc); ?></td></tr>
+        <tr><td class="ankList"><span class="ankListField">Комментарий к зачёту</span>:
+            <?php echo xcms_html_wrap_by_crlf($exam_comment); ?></td></tr>
         <?php
         }
     ?>

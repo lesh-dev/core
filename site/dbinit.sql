@@ -60,7 +60,7 @@ create table exam (
     exam_status text,
     deadline_date text,
     is_prac text, -- enum
-    comment text,
+    exam_comment text,
     exam_created text,
     exam_modified text,
     foreign key (student_person_id) references person(person_id),
