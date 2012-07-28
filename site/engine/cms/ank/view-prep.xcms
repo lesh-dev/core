@@ -24,13 +24,13 @@ function xsm_print_prep($show_status)
     $db = xdb_get();
     $person_sel = $db->query("SELECT * FROM person");
     // WHERE is_teacher = 'teacher'
+    // AND is_current = 'current'
 
     $person_counter = 0;
     $max_reached = false;
+    xsm_view_operations('prep', 'person', 'участника');
     ?>
-    <a style="margin-right: 10px" href="edit-prep&amp;person_id=new">Добавить</a>
-
-    <table summary="Люди" class="ankList">
+    <table summary="Участники" class="ankList">
     <?php
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC)) {?>
         <tr><td class="ankListRowDiv">&nbsp;</td></tr>
@@ -56,6 +56,7 @@ function xsm_print_prep($show_status)
         $skype = htmlspecialchars($person["skype"]);
         $social_profile = xsm_prepare_social_profile($person["social_profile"]);
 
+        $is_current = $person["is_current"];
         $is_teacher = $person["is_teacher"];
         $is_student = $person["is_student"];
         $curatorship = $person["curatorship"];
@@ -75,6 +76,14 @@ function xsm_print_prep($show_status)
         if (!array_key_exists($activity_status, $statuses)) $activity_status = "new"; // default
         $hr_status = $statuses[$activity_status];
 
+        $curatorship_items = xsm_get_curatorship_items();
+        if (!array_key_exists($curatorship, $curatorship_items)) $curatorship = "none"; // default
+        $hr_curatorship = $curatorship_items[$curatorship];
+
+        $hr_teacher = ($is_teacher == "teacher" ? "Да" : "Нет");
+        $hr_student = ($is_student == "student" ? "Да" : "Нет");
+        $hr_current = ($is_current == "current" ? "Да" : "Нет");
+
         ?>
         <tr>
             <td class="ankListRowTitle">
@@ -84,7 +93,7 @@ function xsm_print_prep($show_status)
                     ?>?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
                 <a style="margin-right: 10px" href="/<?php echo $web_prefix;
                     ?>?ref=get_ank&amp;mode=txt&amp;file=<?php echo $sBaseAnkFileName; ?>">TXT</a>-->
-                <a style="margin-right: 10px" href="view-exam&amp;student_person_id=<?php echo $person_id; ?>">Зачёты</a><?php
+                <a style="margin-right: 10px" href="view-exam&amp;student_person_id=<?php echo $person_id; ?>">Зачёты</a>
                 <img src="<?php echo "/${web_prefix}$design_dir"; ?>pic/mozillafirefox.png"
                     style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
                 <span style="margin-left: 10px;" class="ankListField">Статус</span>:
@@ -132,6 +141,11 @@ function xsm_print_prep($show_status)
             }?>
         </td></tr>
         <?php } ?>
+        <tr><td class="ankList">
+            <span class="ankListField">Школьник</span>: <?php echo $hr_student; ?>
+            <span class="ankListField">Препод</span>: <?php echo $hr_teacher; ?>
+            <span class="ankListField">Кураторство</span>: <?php echo $hr_curatorship; ?>
+        </td></tr>
         <!--  other stuff -->
         <?php if (!empty($favourites)) { ?>
             <tr><td class="ankList"><span class="ankListField">Любимые предметы</span>:
@@ -154,6 +168,7 @@ function xsm_print_prep($show_status)
     ?>
     </table>
     <?php
+    xsm_view_operations('prep', 'person', 'участника');
     if ($count > 0) {
         $more = ($max_reached ? " (размер списка ограничен <b>$count</b>, возможно, есть ещё) " : ""); ?>
         <p>Показано <b><?php echo $person_counter; ?></b> преподов, типа

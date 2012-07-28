@@ -8,6 +8,7 @@ table.ankList {
   table-layout: fixed;
   border: 0px solid #8faf6f;
   font-size: 9pt;
+  margin-bottom: 10px;
 }
 
 td.ankListRowDiv {
@@ -38,6 +39,7 @@ span.ankEditField {
   font-weight: bold;
   display: inline-block;
   width: 20%;
+  vertical-align: top;
 }
 
 input.ankEdit {

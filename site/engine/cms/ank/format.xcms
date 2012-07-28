@@ -158,6 +158,91 @@
         return $result;
     }
 
+    function xdb_delete($table_name, $key_value)
+    {
+        $db = xdb_get_write();
+        $cond = "${table_name}_id = '".$db->escapeString($key_value)."'";
+        $query = "DELETE FROM $table_name WHERE $cond";
+        $result = $db->exec($query);
+        if ($result)
+            xcms_log(0, "[DB] $query");
+        else
+            xcms_log(0, "[DB:ERROR] $query");
+        $db->close();
+        return $result;
+    }
+
+
+    function xsm_update_entity($entity, $table_name, $title, $fields)
+    {
+        $key_name = "${table_name}_id";
+        $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+        $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
+        if ($res)
+        {?>
+            <p><?php echo $title; ?> успешно сохранён.
+                <a href="view-<?php echo "$entity#$entity$id;" ?>">Вернуться к просмотру</a></p><?php
+        }
+        else
+        {?>
+            <p>Не удалось добавить <?php echo $title; ?>.
+                <a href="view-<?php echo "$entity#$entity$id;" ?>">Вернуться к просмотру</a></p><?php
+        }
+    }
+
+
+    function xsm_delete_entity($entity, $table_name, $title)
+    {
+        $key_name = "${table_name}_id";
+        $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+        $res = xdb_delete($table_name, $id);
+        if ($res)
+        {?>
+            <p><?php echo $title; ?> [<?php echo $id; ?>] удалён успешно.
+                <a href="view-<?php echo $entity; ?>">Вернуться к просмотру</a></p><?php
+        }
+        else
+        {?>
+            <p>Не удалось удалить <?php echo $title; ?> [<?php echo $id; ?>] (возможно, есть связанные объекты).
+                <a href="view-<?php echo "$entity#$entity$id;" ?>">Вернуться к просмотру</a></p><?php
+        }
+    }
+
+    function xdb_get_entity_by_id($entity, $table_name, $id)
+    {
+        $db = xdb_get();
+        $key_name = "${table_name}_id";
+
+
+        if ($id != "new")
+        {
+            $idf = preg_replace('/[^0-9]/', '', $id);
+            if (strlen($idf) == 0)
+            {
+                xcms_log(0, "Cannot fetch entity from '$table_name' with empty or filtered id '$id'.");
+                return array();
+            }
+            $id = $idf;
+            $query = "SELECT * FROM $table_name WHERE $key_name = $id";
+            $sel = $db->query($query);
+            if (!($ev = $sel->fetchArray(SQLITE3_ASSOC)))
+            {
+                xcms_log(0, "Cannot fetch entity from '$table_name' with id: '$id'. Query: $query.");
+                return array();
+            }
+            $db->close();
+        }
+        else
+        {
+            // new record
+            $ev = array(
+                $key_name=>$id
+            );
+        }
+        return $ev;
+    }
+
+
     function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_cond = '')
     {
         $db = xdb_get();
@@ -183,12 +268,25 @@
     }
 
     // Here entity should be equal to table name, but...
-    function xsm_return_to_view($entity, $table_name, $id, $title)
+    function xsm_edit_operations($entity, $table_name, $id, $title)
     {?>
-        <div style="white-space: nowrap"><input type="submit" name="update-<?php echo $entity; ?>"
-            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
-        <a class="linkButton xsm" href="view-<?php
-            echo $entity."#$table_name$id"; ?>"><?php echo $title; ?></a></div><?php
+        <div style="white-space: nowrap">
+            <input type="submit" name="update-<?php echo $entity; ?>"
+                value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
+            <input type="submit" name="delete-<?php echo $entity; ?>"
+            value="Удалить" style="margin-left: 0px; margin-top: 5px; background-color: #ff3f00;" />
+            <a class="linkButton xsm" href="view-<?php
+                echo $entity."#$table_name$id"; ?>"><?php echo $title; ?></a>
+        </div><?php
+    }
+
+    // Here entity should be equal to table name, but...
+    function xsm_view_operations($entity, $table_name, $title)
+    {?>
+        <div style="white-space: nowrap">
+            <a class="linkButton xsm" href="edit-<?php
+                echo "$entity&amp;${table_name}_id=new"; ?>">Добавить <?php echo $title; ?></a>
+        </div><?php
     }
 
     // Here entity should be equal to table name, but...
@@ -196,13 +294,10 @@
     {
         global $design_dir, $web_prefix;
         ?>
-        <a style="margin-right: 10px" href="edit-<?php echo "$entity&amp;${table_name}_id=$id" ?>"><img
+        <a style="margin-left: 10px" href="edit-<?php echo "$entity&amp;${table_name}_id=$id" ?>"><img
             src="<?php echo "/${web_prefix}$design_dir"; ?>pic/edit.gif" class="edit-icon"
             title="Редактировать" />Правка</a>
-        <a style="margin-right: 10px" href="delete-<?php echo "$entity&amp;${table_name}_id=$id" ?>"><img
-            src="<?php echo "/${web_prefix}$design_dir"; ?>pic/delete.gif" class="edit-icon"
-            title="Удалить" />Удалить</a>
-        <span style="margin-left: 10px;" class="ankListField">Создан</span>: <?php echo $created;
+        <span class="ankListField" style="margin-left: 10px;" >Создан</span>: <?php echo $created;
         if (!empty($modified)) {?>
             <span style="margin-left: 10px;" class="ankListField">Отредактирован</span>: <?php echo $modified;
         }
@@ -228,7 +323,5 @@
             "id=\"$name-checkbox\" value=\"$checked_value\" $checked />";
         return $sHTML;
     }
-
-
 
 ?>

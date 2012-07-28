@@ -42,28 +42,9 @@ $person_fields = array(
 function xsm_edit_prep()
 {
     global $person_fields;
-    global $content_dir;
 
     $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
-    // TODO: escaping/filtering
-    $db = xdb_get();
-    if ($person_id != "new")
-    {
-        $preps_sel = $db->query("SELECT * FROM person WHERE person_id = $person_id");
-        if (!($person = $preps_sel->fetchArray(SQLITE3_ASSOC)))
-        {
-            xcms_log(0, "Cannot fetch person with person_id=$person_id.");
-            return;
-        }
-        $db->close();
-    }
-    else
-    {
-        $person = array(
-            "person_id"=>$person_id
-            //"is_teacher"=>"teacher"
-        );
-    }
+    $person = xdb_get_entity_by_id('prep', 'person', $person_id);
 
     $field_types = array(
         "favourites"=>"textarea",
@@ -79,15 +60,9 @@ function xsm_edit_prep()
         "curatorship"=>"enum"
     );
 
-    $curatorship_items = array(
-        "none"=>"Не куратор",
-        "assist"=>"Помощник куратора",
-        "cur"=>"Куратор"
-    );
-
     ?>
     <form method="post" action="edit-prep"><?php
-        xsm_return_to_view('prep', 'person', $person_id, 'Вернуться к списку людей');?>
+        xsm_edit_operations('prep', 'person', $person_id, 'Вернуться к списку людей');?>
         <input type="hidden" name="person_id" value="<?php echo $person_id; ?>" />
         <table summary="Участник" class="ankEdit">
             <tr>
@@ -97,7 +72,7 @@ function xsm_edit_prep()
             <?php
             foreach ($person_fields as $key=>$field_title)
             {
-                $value = $person[$key];
+                $value = xcms_get_key_or($person, $key);
                 $attr = "";
                 // handle readonly fields
                 if ($key == "user_agent" ||
@@ -116,7 +91,7 @@ function xsm_edit_prep()
                     echo xsm_make_checkbox($key, $value, substr($key, 3));
                 } elseif ($ft == "enum") {
                     if ($key == "curatorship")
-                        echo xsm_make_enum_selector($key, $value, $curatorship_items);
+                        echo xsm_make_enum_selector($key, $value, xsm_get_curatorship_items());
                     elseif ($key == "activity_status")
                         echo xsm_make_enum_selector($key, $value, xcms_ank_get_status_list());
                 } else {?>
@@ -127,29 +102,15 @@ function xsm_edit_prep()
                 <?php
             }?>
         </table><?php
-        xsm_return_to_view('prep', 'person', $person_id, 'Вернуться к списку людей');?>
+        xsm_edit_operations('prep', 'person', $person_id, 'Вернуться к списку людей');?>
     </form>
     <?php
 }
 
-function xsm_update_prep()
-{
-    global $person_fields;
-
-    $person_id = xcms_get_key_or($_POST, 'person_id', 'invalid'); // invalid key
-    $res = xdb_insert_or_update('person', array('person_id'=>$person_id), $_POST, $person_fields);
-    if ($res)
-    {?>
-        <p>Препод сохранён успешно. <a href="view-prep#<?php echo $person_id; ?>">Вернуться к просмотру</a></p><?php
-    }
-    else
-    {?>
-        <p>Не удалось добавить запись. <a href="view-prep#<?php echo $person_id; ?>">Вернуться к просмотру</a></p><?php
-    }
-}
-
 if (@$_POST["update-prep"])
-    xsm_update_prep();
+    xsm_update_entity('prep', 'person', 'Участник', $person_fields);
+elseif (@$_POST["delete-prep"])
+    xsm_delete_entity('prep', 'person', 'Участник');
 else
     xsm_edit_prep();
 ?>

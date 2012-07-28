@@ -28,6 +28,7 @@
           "all"=>"Все");
     }
 
+    // DEPRECATED, use xsm_make_enum instead
     function xcms_ank_make_selector($selected_key, $mode)
     {
         $name = ($mode == "show") ? "activity_show_status" : "activity_status";
@@ -44,6 +45,15 @@
         }
         $html .= "</select>";
         return $html;
+    }
+
+    function xsm_get_curatorship_items()
+    {
+        return array(
+            "none"=>"Не куратор",
+            "assist"=>"Помощник куратора",
+            "cur"=>"Куратор"
+        );
     }
 
     /**

@@ -4,16 +4,11 @@
 
 <?php
 
-/**
-  * @param object_limit how many preps will be printed, zero means all
-  **/
 function xsm_print_course()
 {
-    global $content_dir, $design_dir, $web_prefix;
-
     $db = xdb_get();
     $course_sel = $db->query("SELECT * FROM course, person WHERE course_teacher_id = person_id");
-    $max_reached = false;
+    xsm_view_operations('course', 'course', 'курс');
     ?>
     <table summary="Курсы" class="ankList">
     <?php
@@ -42,7 +37,8 @@ function xsm_print_course()
                 </span>
             </td>
         </tr>
-        <tr><td class="ankList"><span class="ankListField">Название</span>: <?php echo $course_title; ?></td></tr>
+        <tr><td class="ankList"><span class="ankListField">Название</span>:
+            <?php echo $course_title; ?></td></tr>
         <tr><td class="ankList"><span class="ankListField">На какие классы рассчитан</span>:
             <?php echo $target_class; ?></td></tr>
         <tr><td class="ankList"><span class="ankListField">Препод</span>:

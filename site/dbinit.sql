@@ -90,9 +90,11 @@ insert into person (last_name, first_name, patronymic,
 
 insert into person (last_name, first_name, patronymic, is_teacher, person_created, person_modified)
     values ('Вельтищев', 'Дмитрий', 'Николаевич', 'teacher', '2012.05.07 03:05:01', '2012.06.10 01:02:03');
-insert into person (last_name, first_name, patronymic, is_teacher, person_created, person_modified)
+
+insert into person (last_name, first_name, patronymic, is_student, person_created, person_modified)
     values ('Школьница', 'Мария', 'Батьковна', 'student', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
-insert into person (last_name, first_name, patronymic, is_teacher, person_created, person_modified)
+
+insert into person (last_name, first_name, patronymic, is_student, person_created, person_modified)
     values ('Школьница2', 'Мария2', 'Батьковна2', 'student', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
 
 insert into course (course_title, course_teacher_id, target_class, course_desc) values
