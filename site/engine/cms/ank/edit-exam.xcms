@@ -3,17 +3,6 @@
 <# cms/ank/format #>
 <?php
 
-/*
-    student_person_id integer not null, -- fk
-    course_id integer not null, -- fk
-    exam_status text,
-    deadline_date text,
-    is_prac text, -- enum
-    comment text,
-    exam_created text,
-    exam_modified text,
-*/
-
 $exam_fields = array(
     "student_person_id"=>"Школьник",
     "course_id"=>"Курс",
@@ -31,6 +20,7 @@ function xsm_edit_exam()
 
     $exam_id = xcms_get_key_or($_GET, 'exam_id', '-1'); // invalid key
     $exam = xdb_get_entity_by_id('exam', 'exam', $exam_id);
+    $student_person_id = xcms_get_key_or($_GET, 'student_person_id', '-1');
 
     $field_types = array(
         "exam_comment"=>"textarea",
@@ -40,7 +30,8 @@ function xsm_edit_exam()
 
     ?>
     <form method="post" action="edit-exam"><?php
-        xsm_edit_operations('exam', 'exam', $exam_id, 'Вернуться к списку зачётов');?>
+        xsm_edit_operations('exam', 'exam', $exam_id,
+            'Вернуться к списку зачётов', "&amp;student_person_id=$student_person_id");?>
         <input type="hidden" name="exam_id" value="<?php echo $exam_id; ?>" />
         <table summary="Зачёт" class="ankEdit">
             <tr>

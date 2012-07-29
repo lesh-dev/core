@@ -268,24 +268,26 @@
     }
 
     // Here entity should be equal to table name, but...
-    function xsm_edit_operations($entity, $table_name, $id, $title)
-    {?>
+    function xsm_edit_operations($entity, $table_name, $id, $title, $aux_param = '')
+    {
+        $redir = ($id == 'new') ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
+        ?>
         <div style="white-space: nowrap">
             <input type="submit" name="update-<?php echo $entity; ?>"
                 value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
             <input type="submit" name="delete-<?php echo $entity; ?>"
             value="Удалить" style="margin-left: 0px; margin-top: 5px; background-color: #ff3f00;" />
             <a class="linkButton xsm" href="view-<?php
-                echo $entity."#$table_name$id"; ?>"><?php echo $title; ?></a>
+                echo $redir; ?>"><?php echo $title; ?></a>
         </div><?php
     }
 
     // Here entity should be equal to table name, but...
-    function xsm_view_operations($entity, $table_name, $title)
+    function xsm_view_operations($entity, $table_name, $title, $aux_param = '')
     {?>
         <div style="white-space: nowrap">
             <a class="linkButton xsm" href="edit-<?php
-                echo "$entity&amp;${table_name}_id=new"; ?>">Добавить <?php echo $title; ?></a>
+                echo "$entity$aux_param&amp;${table_name}_id=new"; ?>">Добавить <?php echo $title; ?></a>
         </div><?php
     }
 

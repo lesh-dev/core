@@ -53,6 +53,7 @@ function xsm_print_course()
     ?>
     </table>
     <?php
+    xsm_view_operations('course', 'course', 'курс');
 }
 
 xsm_print_course();

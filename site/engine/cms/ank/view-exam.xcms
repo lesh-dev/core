@@ -26,10 +26,12 @@ function xsm_print_exam()
     $student_last_name = $student["last_name"];
 
     ?>
-    <div>Зачёты школьника
+    <h3>Зачёты школьника
         <a href="view-prep#person<?php echo $student_person_id; ?>"><?php
             echo "$student_first_name $student_last_name"; ?></a>:
-    </div>
+    </h3>
+    <?php xsm_view_operations('exam', 'exam', 'зачёт',
+        "&amp;student_person_id=$student_person_id&amp;"); ?>
     <table summary="Зачёты школьника $student_person_id" class="ankList">
     <?php
     while ($exam_data = $exam_sel->fetchArray(SQLITE3_ASSOC)) {?>
@@ -92,6 +94,8 @@ function xsm_print_exam()
     ?>
     </table>
     <?php
+    xsm_view_operations('exam', 'exam', 'зачёт',
+        "&amp;student_person_id=$student_person_id&amp;");
 }
 
 xsm_print_exam();

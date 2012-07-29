@@ -39,6 +39,10 @@
       {
         include(translate('<a href="/<# web_prefix #>register/view'.
             '" class="menu-item menuSys">Анкеты</a>'));
+        include(translate('<a href="/<# web_prefix #>register/view-prep'.
+            '" class="menu-item menuSys">Участники</a>'));
+        include(translate('<a href="/<# web_prefix #>register/view-course'.
+            '" class="menu-item menuSys">Курсы</a>'));
         include(translate('<a href="/<# web_prefix #>?'.
             xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).
             '" class="menu-item menuSys">Админка</a>'));
