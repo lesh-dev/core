@@ -27,12 +27,14 @@ function xsm_edit_exam()
         "exam_status"=>"enum",
         "is_prac"=>"checkbox"
     );
+    $aux_param = "&amp;student_person_id=$student_person_id";
 
     ?>
     <form method="post" action="edit-exam"><?php
         xsm_edit_operations('exam', 'exam', $exam_id,
-            'Вернуться к списку зачётов', "&amp;student_person_id=$student_person_id");?>
+            'Вернуться к списку зачётов', $aux_param);?>
         <input type="hidden" name="exam_id" value="<?php echo $exam_id; ?>" />
+        <input type="hidden" name="student_person_id" value="<?php echo $student_person_id; ?>" />
         <table summary="Зачёт" class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Зачёт</td>
@@ -79,9 +81,17 @@ function xsm_edit_exam()
 }
 
 if (@$_POST["update-exam"])
-    xsm_update_entity('exam', 'exam', 'Зачёт', $exam_fields);
+{
+    $student_person_id = xcms_get_key_or($_POST, 'student_person_id', '-1');
+    $aux_param = "&amp;student_person_id=$student_person_id";
+    xsm_update_entity('exam', 'exam', 'Зачёт', $exam_fields, $aux_param);
+}
 elseif (@$_POST["delete-exam"])
-    xsm_delete_entity('exam', 'exam', 'Зачёт');
+{
+    $student_person_id = xcms_get_key_or($_POST, 'student_person_id', '-1');
+    $aux_param = "&amp;student_person_id=$student_person_id";
+    xsm_delete_entity('exam', 'exam', 'Зачёт', $aux_param);
+}
 else
     xsm_edit_exam();
 ?>
