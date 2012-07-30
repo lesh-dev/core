@@ -4,7 +4,7 @@
 
 <form method="post" style="margin-bottom: 2px">
     <?php
-        echo xcms_ank_make_selector(@$_POST["ShowStatus"], "Show");
+        echo xcms_ank_make_selector(@$_POST["ShowStatus"], "show");
     ?>
     <input type="submit" value="Показать">
 </form>
@@ -15,11 +15,14 @@
       **/
     function PrintAnk($sShowStatus)
     {
+      $sql = fopen("aaa/ank$sShowStatus.sql", "w");
     global $content_dir, $design_dir, $web_prefix;
-    $aShowStatuses = xcms_ank_get_show_status_list();
-    $nCount = 50;
-    if (!array_key_exists($sShowStatus, $aShowStatuses)) $sShowStatus = "notspam";
-    if ($sShowStatus == "all") $nCount = 0; // show all
+    //$aShowStatuses = xcms_ank_get_show_status_list();
+    $nCount = 500;
+    //if (!array_key_exists($sShowStatus, $aShowStatuses)) $sShowStatus = "notspam";
+
+    //if ($sShowStatus == "all") $nCount = 0; // show all
+    $sShowStatus = "all";
 
     $aAnk = glob("$content_dir/ank/*.xml");
     if ($aAnk === false) return;
@@ -27,6 +30,7 @@
     $aAnk = array_reverse($aAnk);
     $nAnkCounter = 0;
     $bMaxReached = false;
+    $db = xdb_get_write();
     ?>
     <table summary="Список анкет" class="ankList">
     <?php
@@ -59,6 +63,66 @@
       <tr><td class="ankListRowDiv">&nbsp;</td></tr>
       <?php
       $sBaseAnkFileName = basename($sAnkFileName);
+      foreach ($oAnk as $key => $value) {
+        if (strpos($value, "'") !== false)
+          $oAnk[$key] = $db->escapeString($value);
+      }
+
+      $afn = explode(' ', $oAnk["Name"]);
+      $last_name = trim($afn[0]);
+      $first_name = trim(@$afn[1]);
+      $patronymic = trim(@$afn[2]);
+      if (count($afn) < 3)
+        echo "<pre>BAD FIO: $last_name $first_name $patronymic</pre>\n";
+      $birth_date = $oAnk["BirthDate"];
+      $school = $oAnk["School"];
+      $school_city = @$oAnk["SchoolLocation"];
+      $current_class = $oAnk["Class"];
+      $phone = $oAnk["Phone"];
+      $cellular = @$oAnk["Cellular"];
+      $email = $oAnk["EMail"];
+      $skype = @$oAnk["Skype"];
+      $social_profile = @$oAnk["Profile"];
+      $is_student = "student";
+      $curatorship = "none"; // default spike!!!
+      $favourites = $oAnk["Favourites"];
+      $achievements = $oAnk["Achivements"];
+      $hobby = $oAnk["Hobby"];
+      $activity_status = xcms_get_key_or($oAnk, "Status", "new");
+      $is_current = '';
+      if ($activity_status == 'cont') $is_current = 'current';
+      $person_comment = @$oAnk["Notes"];
+      $user_agent = $oAnk["UserAgent"];
+      $person_created = xcms_get_key_or(
+        $oAnk, "HRCreated", substr($sBaseAnkFileName, 0, 20));
+      $person_modified = @$oAnk["HRModified"];
+
+      // converter
+      $query = "INSERT INTO person (
+    last_name, first_name, patronymic,
+    birth_date,
+    school, school_city, current_class,
+    phone, cellular,
+    email, skype, social_profile,
+    is_student, curatorship,
+    favourites, achievements, hobby,
+    activity_status, is_current,
+    person_comment, user_agent,
+    person_created, person_modified
+  ) values (
+    '$last_name', '$first_name', '$patronymic',
+    '$birth_date',
+    '$school', '$school_city', '$current_class',
+    '$phone', '$cellular',
+    '$email', '$skype', '$social_profile',
+    '$is_student', '$curatorship',
+    '$favourites', '$achievements', '$hobby',
+    '$activity_status', '$is_current',
+    '$person_comment', '$user_agent',
+    '$person_created', '$person_modified')";
+    fwrite($sql, "$query;\n");
+    if (!$db->exec($query))
+      echo "<pre>$query</pre>\n";
 
       $sName = htmlspecialchars($oAnk["Name"]); // assume always exists
       $sBirthDate = htmlspecialchars($oAnk["BirthDate"]);
@@ -175,6 +239,7 @@
     } else {?>
       <p>Показаны все анкеты (<b><?php echo $nAnkCounter; ?></b> шт.)</p><?php
     }
+    fclose($sql);
   }
 
   PrintAnk(@$_POST["ShowStatus"]);
