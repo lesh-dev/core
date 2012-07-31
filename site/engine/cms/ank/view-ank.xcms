@@ -30,6 +30,9 @@
     $aAnk = array_reverse($aAnk);
     $nAnkCounter = 0;
     $bMaxReached = false;
+    die("Do not use this code, see comments inside");
+    return;
+    // DISABLE THIS CODE FOREVER!!! use view-prep instead
     $db = xdb_get_write();
     ?>
     <table summary="Список анкет" class="ankList">
