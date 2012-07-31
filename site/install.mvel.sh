@@ -8,22 +8,25 @@ if [ -z "$dest" ] ; then
     exit 1
 fi
 
-sqlite3 fizlesh.sqlite3 < dbinit.sql
+db="fizlesh.sqlite3"
+rm -f $db || true
+#sqlite3 $db < dbinit.sql
+#sqlite3 $db < unused-dbinit.sql
+sqlite3 $db < ../junk/fizlesh.ru-content/ank/anketas-2012.07.23.sql
 
 sudo mkdir -p "$dest"
 sudo rm -rf /var/www/html/site/*
 sudo cp -a * "$dest/"
 sudo cp -a ../junk/fizlesh.ru-content "$dest/"
-sudo cp fizlesh.sqlite3 "$dest/fizlesh.ru-content/ank/"
+sudo cp $db "$dest/fizlesh.ru-content/ank/"
 sudo rm -rf "$dest/.prec/"*
 sudo rm -rf "$dest/admin_doc/.prec/"*
 sudo mkdir -p "$dest/.prec/"
-sudo mkdir -p "$dest/aaa/"
 sudo mkdir -p "$dest/admin_doc/.prec/"
 sudo touch "$dest/"{.htaccess,settings.php,engine.log}
 if [ "$1" = "-f" ] ; then
     sudo touch "$dest/install.php"
     sudo chown -R apache:apache "$dest/install.php"
 fi
-sudo chown -R apache:apache "$dest/"{aaa,.prec,fizlesh.ru-content,.htaccess,settings.php,engine.log}
+sudo chown -R apache:apache "$dest/"{.prec,fizlesh.ru-content,.htaccess,settings.php,engine.log}
 sudo chown -R apache:apache "$dest/admin_doc/"{.prec,content,.htaccess,settings.php}

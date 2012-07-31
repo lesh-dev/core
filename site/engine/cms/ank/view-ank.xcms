@@ -15,7 +15,7 @@
       **/
     function PrintAnk($sShowStatus)
     {
-      $sql = fopen("aaa/ank$sShowStatus.sql", "w");
+      //$sql = fopen("aaa/ank$sShowStatus.sql", "w");
     global $content_dir, $design_dir, $web_prefix;
     //$aShowStatuses = xcms_ank_get_show_status_list();
     $nCount = 500;
@@ -89,12 +89,18 @@
       $achievements = $oAnk["Achivements"];
       $hobby = $oAnk["Hobby"];
       $activity_status = xcms_get_key_or($oAnk, "Status", "new");
+
       $is_current = '';
-      if ($activity_status == 'cont') $is_current = 'current';
+      if ($activity_status == 'cont' ||
+        $activity_status == 'progress')
+      {
+        $is_current = 'current';
+      }
+
       $person_comment = @$oAnk["Notes"];
       $user_agent = $oAnk["UserAgent"];
       $person_created = xcms_get_key_or(
-        $oAnk, "HRCreated", substr($sBaseAnkFileName, 0, 20));
+        $oAnk, "HRCreated", substr($sBaseAnkFileName, 0, 10));
       $person_modified = @$oAnk["HRModified"];
 
       // converter
@@ -120,7 +126,7 @@
     '$activity_status', '$is_current',
     '$person_comment', '$user_agent',
     '$person_created', '$person_modified')";
-    fwrite($sql, "$query;\n");
+    //fwrite($sql, "$query;\n");
     if (!$db->exec($query))
       echo "<pre>$query</pre>\n";
 
@@ -239,7 +245,7 @@
     } else {?>
       <p>Показаны все анкеты (<b><?php echo $nAnkCounter; ?></b> шт.)</p><?php
     }
-    fclose($sql);
+    //fclose($sql);
   }
 
   PrintAnk(@$_POST["ShowStatus"]);

@@ -142,8 +142,12 @@ function xsm_print_prep($show_status)
         </td></tr>
         <?php } ?>
         <tr><td class="ankList">
+            <span class="ankListField">Текущий</span>: <?php echo $hr_current; ?>
+            &nbsp;&nbsp;&nbsp;
             <span class="ankListField">Школьник</span>: <?php echo $hr_student; ?>
+            &nbsp;&nbsp;&nbsp;
             <span class="ankListField">Препод</span>: <?php echo $hr_teacher; ?>
+            &nbsp;&nbsp;&nbsp;
             <span class="ankListField">Кураторство</span>: <?php echo $hr_curatorship; ?>
         </td></tr>
         <!--  other stuff -->

@@ -76,10 +76,12 @@
                 <a'.xcms_href(array('mode'=>'groupadmin', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Группы</a>
                 <a'.xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Уведомления</a>
                 <a'.xcms_href(array('mode'=>'css', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Стиль</a>
-                <a href="/'.$web_prefix.'register/view" class="h-menu-link">Анкеты</a>
                 <a href="/'.$web_prefix.'register/view-prep" class="h-menu-link">Люди</a>
                 <a href="/'.$web_prefix.'register/view-course" class="h-menu-link">Курсы</a>
+                <span style="display:none;">
+                <a href="/'.$web_prefix.'register/view" class="h-menu-link">Анкеты</a>
                 <a'.xcms_href(array('mode'=>'__convert', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Convert [DoNotPush]</a>
+                </span>
             '));
         ?>
         </div>
