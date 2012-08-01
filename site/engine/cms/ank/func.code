@@ -1,6 +1,8 @@
 <?php
-    /* Complete list of valid anketa statuses */
-    function xcms_ank_get_status_list()
+    /*
+     * Complete list of valid person activity statuses
+     */
+    function xsm_get_activity_statuses()
     {
         return array(
             "new"=>"Новая",
@@ -13,7 +15,7 @@
             "spam"=>"Спам");
     }
 
-    /* Anketa status selector for viewer */
+    /* DEPRECATED Anketa status selector for viewer */
     function xcms_ank_get_show_status_list()
     {
         return array(
@@ -28,23 +30,17 @@
           "all"=>"Все");
     }
 
-    // DEPRECATED, use xsm_make_enum instead
-    function xcms_ank_make_selector($selected_key, $mode)
+    function xsm_get_person_show_statuses()
     {
-        $name = ($mode == "show") ? "activity_show_status" : "activity_status";
-
-        $statuses = ($mode == "show") ?
-            xcms_ank_get_show_status_list() :
-            xcms_ank_get_status_list();
-
-        $html = "<select name=\"$name\" id=\"status-selector\">";
-        foreach ($statuses as $key => $title)
-        {
-            $sel = ($key == $selected_key) ? ' selected="selected" ' : '';
-            $html .= "<option $sel value=\"$key\">$title</option>";
-        }
-        $html .= "</select>";
-        return $html;
+        return array(
+          "notspam"=>"Все, кроме спама и дублей",
+          "notdecl"=>"Все, кроме спама, дублей и отклонённых",
+          "new"=>"Новые",
+          "progress"=>"В обработке",
+          "processed"=>"Обработанные",
+          "declined"=>"Отклонённые",
+          "cont"=>"Продолжающие школьники",
+          "all"=>"Все");
     }
 
     function xsm_get_curatorship_items()

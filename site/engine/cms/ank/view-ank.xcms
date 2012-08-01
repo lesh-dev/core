@@ -4,7 +4,7 @@
 
 <form method="post" style="margin-bottom: 2px">
     <?php
-        echo xcms_ank_make_selector(@$_POST["ShowStatus"], "show");
+        echo xsm_make_enum_selector("ShowStatus", @$_POST["ShowStatus"], xcms_ank_get_show_status_list());
     ?>
     <input type="submit" value="Показать">
 </form>
@@ -162,7 +162,7 @@
         $oAnk, "HRCreated", substr($sBaseAnkFileName, 4, 10)));
       $sHRModified = htmlspecialchars(xcms_get_key_or($oAnk, "HRModified"));
       $sStatus = htmlspecialchars(xcms_get_key_or($oAnk, "Status", "new"));
-      $aStatuses = xcms_ank_get_status_list();
+      $aStatuses = xsm_get_activity_statuses();
       if (!array_key_exists($sStatus, $aStatuses)) $sStatus = "new"; // default
       $sHRStatus = $aStatuses[$sStatus];
 
