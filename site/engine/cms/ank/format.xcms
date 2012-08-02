@@ -76,24 +76,13 @@
         $keys_values["${table_name}_created"] = $hr_timestamp;
         $keys_values["${table_name}_modified"] = '';
 
-        foreach ($keys_values as $key => $value)
+        foreach ($allowed_keys as $key => $title)
         {
-            if (!array_key_exists($key, $allowed_keys))
-            {
-                xcms_log(0, "[DB] Key $key is not suitable for $table_name insert");
-                continue; // skip invalid keys
-            }
+            $value = xcms_get_key_or($keys_values, $key);
             if ($key == $pk_name)
                 continue; // skip autoincremented keys
             $keys .= "$key, ";
             $values .= "'".$db->escapeString($value)."', ";
-            $fields_found = true;
-        }
-        if (!$fields_found)
-        {
-            xcms_log(0, "[DB:ERROR] No fields found");
-            $db->close();
-            return false;
         }
         $keys = substr($keys, 0, strlen($keys) - 2);
         $values = substr($values, 0, strlen($values) - 2);
@@ -118,13 +107,9 @@
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
         $keys_values["${table_name}_modified"] = $hr_timestamp;
 
-        foreach ($keys_values as $key => $value)
+        foreach ($allowed_keys as $key => $title)
         {
-            if (!array_key_exists($key, $allowed_keys))
-            {
-                xcms_log(0, "[DB] Key $key is not suitable for $table_name update");
-                continue; // skip invalid keys
-            }
+            $value = xcms_get_key_or($keys_values, $key);
             if ($key == "${table_name}_created")
                 continue; // never update 'created' field
 
@@ -132,13 +117,6 @@
                 continue; // skip primary keys
 
             $values .= "$key = '".$db->escapeString($value)."', ";
-            $fields_found = true;
-        }
-        if (!$fields_found)
-        {
-            xcms_log("[DB:ERROR] No fields found");
-            $db->close();
-            return false;
         }
         $values = substr($values, 0, strlen($values) - 2);
 
