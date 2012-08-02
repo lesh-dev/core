@@ -68,7 +68,7 @@ function xsm_print_prep()
     <table summary="Участники" class="ankList">
     <?php
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC)) {
-        if ($person_counter >= $show_count) {
+        if ($show_count > 0 && $person_counter >= $show_count) {
             $max_reached = true;
             break;
         }
@@ -217,7 +217,7 @@ function xsm_print_prep()
         <p>Показано <b><?php echo $person_counter; ?></b> участников, типа
             <b><?php echo $show_statuses[$show_status]; ?></b><?php echo $more; ?></p><?php
     } else {?>
-        <p>Показаны все люди (<b><?php $person_counter; ?></b> шт.)</p><?php
+        <p>Показаны все люди (<b><?php echo $person_counter; ?></b> шт.)</p><?php
     }
 }
 
