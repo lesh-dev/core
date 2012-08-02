@@ -7,13 +7,22 @@
 # Instead, edit <git-repo-root>/tools/backuper/backup.sh and then deploy it
 # to /srv/tools/backup.sh
 
-rm -rf /root/backup
-mkdir -p /root/backup
+backup_folder=/backup
 
-tar cvzf /root/backup/test.tgz		/srv/test
-tar cvzf /root/backup/git.tgz		/srv/git
-tar cvzf /root/backup/trac.tgz		/srv/trac
-tar cvzf /root/backup/etc.tgz		/etc
+rm -rf $backup_folder
+mkdir -p $backup_folder
 
-rsync -avz /root/backup doctor@doctor.dtdns.net:/data/backup/lesh/$(date +%Y-%m-%d)/
+#tar cvzf $backup_folder/test.tgz /srv/test
+tar cvzf $backup_folder/git.tgz  /srv/git
+tar cvzf $backup_folder/trac.tgz /srv/trac
+tar cvzf $backup_folder/etc.tgz  /etc
+
+back_date="`date +%Y-%m-%d`"
+#rsync -avz /root/backup doctor@doctor.dtdns.net:/data/backup/lesh/$back_date/
+chown -R mvel:mvel $backup_folder
+# reverse scp-ying works!
+dest_host=mvel@mvel.dtdns.net
+dest_folder=backup/lesh/$back_date/
+ssh $dest_host mkdir -p $dest_folder
+ssh $dest_host scp fizlesh.ru:$backup_folder/* $dest_folder
 echo "OK" > /tmp/backup-status
