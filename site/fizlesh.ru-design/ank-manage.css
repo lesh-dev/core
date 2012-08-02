@@ -35,6 +35,10 @@ span.ankListField {
   font-weight: bold;
 }
 
+span.ankListField.next {
+    padding-left: 10px;
+}
+
 span.ankEditField {
   font-weight: bold;
   display: inline-block;

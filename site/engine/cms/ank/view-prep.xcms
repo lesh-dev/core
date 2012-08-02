@@ -136,7 +136,7 @@ function xsm_print_prep()
                 <a style="margin-right: 10px" href="view-exam&amp;student_person_id=<?php echo $person_id; ?>">Зачёты</a>
                 <img src="<?php echo "/${web_prefix}$design_dir"; ?>pic/mozillafirefox.png"
                     style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
-                <span style="margin-left: 10px;" class="ankListField">Статус</span>:
+                <span class="ankListField next">Статус</span>:
                     <span class="ankStatus <?php echo $activity_status; ?>"><?php echo $hr_status; ?></span><?php
                 xsm_edit_delete_info('prep', 'person', $person_id, $person_created, $person_modified); ?>
                 </span>
@@ -144,12 +144,14 @@ function xsm_print_prep()
         </tr>
         <tr>
             <td class="ankList"><span class="ankListField">Дата рождения</span>:
-                <?php echo $birth_date; ?>,
-                <span class="ankListField">Паспортные данные</span>:
+                <?php echo $birth_date; ?>
+                <span class="ankListField next">Паспортные данные</span>:
                 <?php echo $passport_data; ?>
             </td></tr>
-        <tr><td class="ankList"><span class="ankListField">Образование</span>: <?php echo $school; ?>
-        <?php echo $school_city; ?></td></tr>
+        <tr><td class="ankList">
+            <span class="ankListField">Школа</span>: <?php echo "$school $school_city"; ?>
+            <span class="ankListField next">Класс</span>: <?php echo "$current_class"; ?>
+        </td></tr>
         <!-- phones -->
         <?php if (!empty($cellular) || !empty($phone)) {?>
             <tr><td class="ankList"><span class="ankListField">Телефоны</span>:
@@ -183,12 +185,9 @@ function xsm_print_prep()
         <?php } ?>
         <tr><td class="ankList">
             <span class="ankListField">Текущий</span>: <?php echo $hr_current; ?>
-            &nbsp;&nbsp;&nbsp;
-            <span class="ankListField">Школьник</span>: <?php echo $hr_student; ?>
-            &nbsp;&nbsp;&nbsp;
-            <span class="ankListField">Препод</span>: <?php echo $hr_teacher; ?>
-            &nbsp;&nbsp;&nbsp;
-            <span class="ankListField">Кураторство</span>: <?php echo $hr_curatorship; ?>
+            <span class="ankListField next">Школьник</span>: <?php echo $hr_student; ?>
+            <span class="ankListField next">Препод</span>: <?php echo $hr_teacher; ?>
+            <span class="ankListField next">Кураторство</span>: <?php echo $hr_curatorship; ?>
         </td></tr>
         <!--  other stuff -->
         <?php if (!empty($favourites)) { ?>

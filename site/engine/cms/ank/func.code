@@ -19,8 +19,8 @@
     function xcms_ank_get_show_status_list()
     {
         return array(
-          "notspam"=>"Все, кроме спама и дублей",
-          "notdecl"=>"Все, кроме спама, дублей и отклонённых",
+          "notspam"=>"Без спама и дублей",
+          "notdecl"=>"Без спама, дублей и отклонённых",
           "new"=>"Новые",
           "progress"=>"В обработке",
           "processed"=>"Обработанные",
@@ -33,8 +33,8 @@
     function xsm_get_person_show_statuses()
     {
         return array(
-          "notspam"=>"Все, кроме спама и дублей",
-          "notdecl"=>"Все, кроме спама, дублей и отклонённых",
+          "notspam"=>"Без спама и дублей",
+          "notdecl"=>"Без спама, дублей и отклонённых",
           "new"=>"Новые",
           "progress"=>"В обработке",
           "processed"=>"Обработанные",
