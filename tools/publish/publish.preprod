@@ -19,7 +19,12 @@ touch $PREPROD
 rm -rf /tmp/repo
 echo "Cloning repo to temp folder..."
 git clone /srv/git/lesh /tmp/repo
+PPD_OLDPWD=$(pwd)
+cd /tmp/repo
+git checkout $BRANCH
+cd $PPD_OLDPWD
 REVISION=$(publish.revision /tmp/repo)
+echo "---- ---- ---- ----"
 
 echo "Preparing info page..."
 mkdir -p $PREPROD.$TIMESTAMP
@@ -50,5 +55,5 @@ echo "Preparing XCMS installation..."
 mv $PREPROD/install.php.template $PREPROD/install.php
 # cp $RESOURCE/settings.php $PREPROD
 cp -rf $CONTENT $PREPROD/content
-
+chown -R www-data:www-data $PREPROD/content
 apachectl -k graceful
