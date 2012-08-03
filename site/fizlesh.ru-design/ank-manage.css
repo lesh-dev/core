@@ -50,6 +50,10 @@ input.ankEdit {
   width: 75%;
 }
 
+input.ankEdit.filter {
+  width: 200px;
+}
+
 textarea.ankEdit {
   width: 75%;
   height: 72px;

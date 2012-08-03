@@ -19,6 +19,10 @@
     echo xsm_make_checkbox('show_is_current',
         xcms_get_key_or($_POST, "show_is_current"), "current");
     ?>
+    <span class="ankListField">Фильтр ФИО</span>:
+    <input class="ankEdit filter" type="text"
+        value="<?php echo htmlspecialchars(xcms_get_key_or($_POST, 'show_name_filter')); ?>"
+        name="show_name_filter" />
     <input type="submit" value="Показать" />
 </span></form>
 <?php
@@ -29,6 +33,7 @@ function xsm_print_prep()
     $show_status = xcms_get_key_or($_POST, "show_activity_status", "notspam");
     $show_is_current = xcms_get_key_or($_POST, "show_is_current");
     $show_is_teacher = xcms_get_key_or($_POST, "show_is_teacher");
+    $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
 
     $show_statuses = xsm_get_person_show_statuses();
     $show_count = 50;
@@ -36,6 +41,7 @@ function xsm_print_prep()
     if ($show_status == "all") $show_count = 0; // show all
 
     $db = xdb_get();
+    $esc_name_filter = "%".$db->escapeString($show_name_filter)."%";
     $cond = "(1 = 1)";
     if ($show_is_teacher == "teacher")
         $cond .= " AND ( is_teacher = 'teacher' )";
@@ -54,6 +60,11 @@ function xsm_print_prep()
         $cond .= "";
     else
         $cond .= " AND ( activity_status = '$show_status' )";
+
+    if (strlen($show_name_filter))
+        $cond .=
+            " AND (( last_name LIKE '$esc_name_filter' ) ".
+            " OR ( first_name LIKE '$esc_name_filter' )) ";
 
     $query = "SELECT * FROM person";
     if (strlen($cond))

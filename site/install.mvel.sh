@@ -12,7 +12,9 @@ db="fizlesh.sqlite3"
 rm -f $db || true
 #sqlite3 $db < dbinit.sql
 #sqlite3 $db < unused-dbinit.sql
-sqlite3 $db < ../junk/fizlesh.ru-content/ank/anketas-2012.07.23.sql
+#sqlite3 $db < ../junk/fizlesh.ru-content/ank/anketas-2012.07.23.sql
+#cp /var/www/html/site/fizlesh.ru-content/ank/fizlesh.sqlite3 complete.sql
+cp complete.sql $db
 
 sudo mkdir -p "$dest"
 sudo rm -rf /var/www/html/site/*
