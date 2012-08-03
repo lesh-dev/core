@@ -62,8 +62,9 @@ function xsm_edit_exam()
                     if ($key == "exam_status")
                         echo xsm_make_enum_selector($key, $value, xsm_get_exam_statuses());
                 } elseif ($key == 'student_person_id') {
-                    echo xsm_make_selector('person', 'student_person_id', xcms_get_key_or($exam, $key, "-1"),
-                        array('first_name', 'last_name'), "is_student = 'student'");
+                    echo xsm_make_selector('person', 'student_person_id', $student_person_id,
+                        array('last_name', 'first_name'),
+                        "(is_student = 'student') AND (is_current = 'current') ORDER BY last_name, first_name");
                 } elseif ($key == 'course_id') {
                     echo xsm_make_selector('course', 'course_id', xcms_get_key_or($exam, $key, "-1"),
                         array('course_title'), "");
