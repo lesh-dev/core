@@ -136,7 +136,7 @@ a.stealthLink:hover {
 }
 
 textarea, input {
-  border: 1px solid #003f00;
+  border: 1px solid #8faf6f;
   background-color: #eeffee;
   padding-left: 2px;
   padding-right: 2px;
@@ -144,8 +144,10 @@ textarea, input {
 }
 
 input[type='submit'] {
-  border: 2px solid #003f00;
+  border: 1px solid #6f8f4f;
   background-color: #8ea76b;
+  color: #854310;
+  border-radius: 3px;
   padding-left: 10px;
   padding-right: 10px;
   margin-left: 0px;
@@ -181,7 +183,7 @@ a.linkButton {
   text-decoration: none;
   display: inline-block;
   margin: 1px 0px 3px 1px;
-  border: 1px solid #003f00;
+  border: 1px solid #6f8f4f;
   padding-left: 7px;
   padding-right: 7px;
   background-color: #8ea76b;

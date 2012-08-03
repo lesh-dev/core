@@ -3,6 +3,7 @@ span.ankLabel {
   font-weight: bold;
   display: inline-block;
   width: 370px;
+  padding-left: 2px;
 }
 
 div.ankLegend {
