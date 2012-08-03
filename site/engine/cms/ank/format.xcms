@@ -304,4 +304,14 @@
         return $sHTML;
     }
 
+    function xdb_like($mask, $value)
+    {
+        $mask = str_replace(
+            array("%", "_"),
+            array(".*?", "."),
+            preg_quote($mask, "/")
+        );
+        $mask = "/^$mask$/ui";
+        return preg_match($mask, $value);
+    }
 ?>

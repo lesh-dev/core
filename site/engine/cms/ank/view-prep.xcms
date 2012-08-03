@@ -41,6 +41,8 @@ function xsm_print_prep()
     if ($show_status == "all") $show_count = 0; // show all
 
     $db = xdb_get();
+    $db->createFunction('LIKE', 'xdb_like', 2);
+
     $esc_name_filter = "%".$db->escapeString($show_name_filter)."%";
     $cond = "(1 = 1)";
     if ($show_is_teacher == "teacher")
