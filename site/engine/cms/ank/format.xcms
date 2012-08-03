@@ -169,7 +169,7 @@
     }
 
 
-    function xsm_delete_entity($entity, $table_name, $title, $aux_param)
+    function xsm_delete_entity($entity, $table_name, $title, $aux_param = '')
     {
         $key_name = "${table_name}_id";
         $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
