@@ -20,15 +20,15 @@ tar cvzf $backup_folder/etc.tgz  /etc
 
 plan_a()
 {
+    dest_host=doctor@doctor.dtdns.net
     rsync -avz $backup_folder $dest_host:/data/backup/lesh/$back_date/
 }
 
 plan_b()
 {
-    dest_host=doctor@doctor.dtdns.net
-    chown -R mvel:mvel $backup_folder
-    # reverse scp-ying works!
     dest_host=mvel@mvel.dtdns.net
+    chown -R mvel:mvel $backup_folder
+    # reverse scp-ing works!
     dest_folder=backup/lesh/$back_date/
     ssh $dest_host mkdir -p $dest_folder
     # reverse scp-ying works!
