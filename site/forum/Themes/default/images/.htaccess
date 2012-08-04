@@ -1,1 +1,2 @@
-Allow from All
+Deny from All
+
