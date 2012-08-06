@@ -64,7 +64,7 @@ function xsm_print_prep()
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
 
     $show_statuses = xsm_get_person_show_statuses();
-    $show_count = 50;
+    $show_count = 250;
     if (!array_key_exists($show_status, $show_statuses)) $show_status = "notspam";
     if ($show_status == "all") $show_count = 0; // show all
 
