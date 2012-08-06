@@ -22,10 +22,38 @@
     <span class="ankListField">Фильтр ФИО</span>:
     <input class="ankEdit filter" type="text"
         value="<?php echo htmlspecialchars(xcms_get_key_or($_POST, 'show_name_filter')); ?>"
-        name="show_name_filter" />
+        name="show_name_filter"
+        title="Будут найдены все участники, в ФИО которых (в любом порядке) встречаются слова запроса, без учёта регистра. Например, 'дан Мих' найдёт Даниила Михайловича, Михаила Данилевского и Богдана Немихульского, но НЕ найдёт Мишу Данилкина (имена условны)" />
     <input type="submit" value="Показать" />
 </span></form>
 <?php
+
+function xsm_person_name_filter($db, $show_name_filter)
+{
+    $show_name_filter = trim($show_name_filter);
+    if (!strlen($show_name_filter))
+        return "";
+
+    $words = explode(' ', $show_name_filter);
+    $cond = "";
+    foreach ($words as $word)
+    {
+        $w = trim($word);
+        if (!strlen($w))
+            continue;
+
+        if (strlen($cond))
+            $cond .= " AND ";
+        $esc_word = $db->escapeString($w);
+        $cond .=
+            "((last_name LIKE '%$esc_word%') OR ".
+            "(first_name LIKE '%$esc_word%') OR ".
+            "(patronymic LIKE '%$esc_word%'))";
+    }
+    if (!strlen($cond))
+        return "";
+    return "($cond)";
+}
 
 function xsm_print_prep()
 {
@@ -43,7 +71,6 @@ function xsm_print_prep()
     $db = xdb_get();
     $db->createFunction('LIKE', 'xdb_like', 2);
 
-    $esc_name_filter = "%".$db->escapeString($show_name_filter)."%";
     $cond = "(1 = 1)";
     if ($show_is_teacher == "teacher")
         $cond .= " AND ( is_teacher = 'teacher' )";
@@ -63,15 +90,15 @@ function xsm_print_prep()
     else
         $cond .= " AND ( activity_status = '$show_status' )";
 
-    if (strlen($show_name_filter))
-        $cond .=
-            " AND (( last_name LIKE '$esc_name_filter' ) ".
-            " OR ( first_name LIKE '$esc_name_filter' )) ";
+    $name_filter_cond = xsm_person_name_filter($db, $show_name_filter);
+    if (strlen($name_filter_cond))
+        $cond .= " AND $name_filter_cond";
 
     $query = "SELECT * FROM person";
     if (strlen($cond))
         $query .= " WHERE $cond";
-    echo "<textarea rows='4' cols='80' style='display:none'>$query</textarea>";
+    // debug area (TODO: remove)
+    ?><textarea rows="10" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
     $person_sel = $db->query($query);
 
     $person_counter = 0;
