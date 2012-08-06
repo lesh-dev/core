@@ -147,7 +147,10 @@ input[type='submit'] {
   border: 1px solid #6f8f4f;
   background-color: #8ea76b;
   color: #854310;
-  border-radius: 3px;
+  border-radius: 5px;
+  font-size: 12pt;
+  line-height: 19px;
+  height: 22px;
   padding-left: 10px;
   padding-right: 10px;
   margin-left: 0px;
