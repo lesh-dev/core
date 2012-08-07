@@ -33,6 +33,9 @@ function xsm_edit_exam()
     <form method="post" action="edit-exam"><?php
         xsm_edit_operations('exam', 'exam', $exam_id,
             'Вернуться к списку зачётов', $aux_param);?>
+        <div style="font-weight: bold; margin-top: 3px; margin-bottom: 3px; color: #ff0000;">
+            ВНИМАНИЕ! Зачёт можно добавить только школьнику,
+            у которого выставлен статус ТЕКУЩИЙ!</div>
         <input type="hidden" name="exam_id" value="<?php echo $exam_id; ?>" />
         <input type="hidden" name="student_person_id" value="<?php echo $student_person_id; ?>" />
         <table summary="Зачёт" class="ankEdit">
