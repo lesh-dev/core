@@ -173,7 +173,15 @@ function xsm_print_prep()
                     ?>?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
                 <a style="margin-right: 10px" href="/<?php echo $web_prefix;
                     ?>?ref=get_ank&amp;mode=txt&amp;file=<?php echo $sBaseAnkFileName; ?>">TXT</a>-->
-                <a style="margin-right: 10px" href="view-exam&amp;student_person_id=<?php echo $person_id; ?>">Зачёты</a>
+                <?php
+                    if ($is_current == "current") {?>
+                        <a style="margin-right: 10px"
+                            href="view-exam&amp;student_person_id=<?php echo $person_id; ?>">Зачёты</a><?php
+                    } else {?>
+                        <span style="margin-right: 10px"
+                            title="Зачёты могут быть проставлены только текущим школьникам">Зачёты отключены</span><?php
+                    }?>
+
                 <img src="<?php echo "/${web_prefix}$design_dir"; ?>pic/mozillafirefox.png"
                     style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
                 <span class="ankListField next">Статус</span>:
