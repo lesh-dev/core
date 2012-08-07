@@ -108,7 +108,16 @@ function xsm_edit_prep()
 }
 
 if (@$_POST["update-prep"])
-    xsm_update_entity('prep', 'person', 'Участник', $person_fields);
+{
+    if (!strlen(@$_POST["last_name"]) || !strlen(@$_POST["first_name"]))
+    {?>
+        <p>Пожалуйста, укажите хотя бы имя и фамилию!
+            Нажмите Back в браузере, чтобы вернуться к заполнению!</p>
+      <?php
+    }
+    else
+        xsm_update_entity('prep', 'person', 'Участник', $person_fields);
+}
 elseif (@$_POST["delete-prep"])
     xsm_delete_entity('prep', 'person', 'Участник');
 else
