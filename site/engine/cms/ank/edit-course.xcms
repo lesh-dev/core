@@ -67,6 +67,8 @@ function xsm_edit_course()
 if (@$_POST["update-course"])
     xsm_update_entity('course', 'course', 'Курс', $course_fields);
 elseif (@$_POST["delete-course"])
+    xsm_warn_delete_entity('course', 'course', 'курс');
+elseif (@$_POST["confirm-delete-course"])
     xsm_delete_entity('course', 'course', 'Курс');
 else
     xsm_edit_course();

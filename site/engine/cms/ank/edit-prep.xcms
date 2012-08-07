@@ -119,6 +119,8 @@ if (@$_POST["update-prep"])
         xsm_update_entity('prep', 'person', 'Участник', $person_fields);
 }
 elseif (@$_POST["delete-prep"])
+    xsm_warn_delete_entity('prep', 'person', 'участника');
+elseif (@$_POST["confirm-delete-prep"])
     xsm_delete_entity('prep', 'person', 'Участник');
 else
     xsm_edit_prep();
