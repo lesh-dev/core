@@ -140,7 +140,7 @@ textarea, input {
   background-color: #eeffee;
   padding-left: 2px;
   padding-right: 2px;
-  margin: 1px;
+  margin: 0px;
 }
 
 input[type='submit'] {
