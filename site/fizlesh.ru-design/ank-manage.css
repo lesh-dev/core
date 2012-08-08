@@ -130,6 +130,10 @@ input.delete-button {
   color: #2f2f00;
 }
 
+.link-oper {
+    margin-left: 10px;
+}
+
 .linkButton.xsm {
   height: 20px;
   line-height: 20px;

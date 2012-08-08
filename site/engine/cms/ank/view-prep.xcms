@@ -169,20 +169,26 @@ function xsm_print_prep()
             <td class="ankListRowTitle">
             <?php echo "[$person_id] $last_name $first_name $patronymic"; ?><a name="<?php echo "person$person_id"; ?>"></a>
                 <span style="float: right">
-                <!--<a style="margin-right: 10px" href="/<?php echo $web_prefix;
+                <!--<a class="link-oper" href="/<?php echo $web_prefix;
                     ?>?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
-                <a style="margin-right: 10px" href="/<?php echo $web_prefix;
+                <a class="link-oper" href="/<?php echo $web_prefix;
                     ?>?ref=get_ank&amp;mode=txt&amp;file=<?php echo $sBaseAnkFileName; ?>">TXT</a>-->
                 <?php
                     if ($is_current == "current") {?>
-                        <a style="margin-right: 10px"
+                        <a class="link-oper"
                             href="view-exam&amp;student_person_id=<?php echo $person_id; ?>">Зачёты</a><?php
                     } else {?>
-                        <span style="margin-right: 10px"
+                        <span class="link-oper"
                             title="Зачёты могут быть проставлены только текущим школьникам">Зачёты отключены</span><?php
-                    }?>
+                    }
+                    if ($is_teacher == "teacher") {?>
+                        <a class="link-oper"
+                            href="edit-course&amp;course_id=new&amp;course_teacher_id=<?php
+                                echo $person_id; ?>">Добавить курс</a><?php
+                    }
 
-                <img src="<?php echo "/${web_prefix}$design_dir"; ?>pic/mozillafirefox.png"
+                ?>
+                <img class="link-oper" src="<?php echo "/${web_prefix}$design_dir"; ?>pic/mozillafirefox.png"
                     style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
                 <span class="ankListField next">Статус</span>:
                     <span class="ankStatus <?php echo $activity_status; ?>"><?php echo $hr_status; ?></span><?php

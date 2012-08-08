@@ -296,7 +296,7 @@
     {
         global $design_dir, $web_prefix;
         ?>
-        <a style="margin-left: 10px" href="edit-<?php echo "$entity$aux_param&amp;${table_name}_id=$id" ?>"><img
+        <a class="link-oper" href="edit-<?php echo "$entity$aux_param&amp;${table_name}_id=$id" ?>"><img
             src="<?php echo "/${web_prefix}$design_dir"; ?>pic/edit.gif" class="edit-icon"
             title="Редактировать" />Правка</a>
         <span class="ankListField next">Создан</span>: <?php echo $created;
