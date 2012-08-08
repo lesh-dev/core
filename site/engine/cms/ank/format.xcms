@@ -178,7 +178,7 @@
             <?php echo $title; ?> [<?php echo $id; ?>]?<br />
             Связанные с ним объекты также будут удалены,
             а восстановление будет невозможно!</div>
-        <div><form method="post" action="edit-<?php echo $entity; ?>">
+        <div><form method="post" action="edit-<?php echo "$entity$aux_param"; ?>">
             <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
             <input type="submit" name="confirm-delete-<?php echo $entity; ?>"
                 value="Таки да, удалить!" class="delete-button"/>
