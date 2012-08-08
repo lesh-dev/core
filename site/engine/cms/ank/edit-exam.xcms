@@ -98,7 +98,7 @@ elseif (@$_POST["delete-exam"])
 }
 elseif (@$_POST["confirm-delete-exam"])
 {
-    $student_person_id = xcms_get_key_or($_POST, 'student_person_id', '-1');
+    $student_person_id = xcms_get_key_or($_GET, 'student_person_id', '-1');
     $aux_param = "&amp;student_person_id=$student_person_id";
     xsm_delete_entity('exam', 'exam', 'Зачёт', $aux_param);
 }
