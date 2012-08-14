@@ -1,4 +1,6 @@
 <# cms/ank/func #>
+<# cms/ank/format #>
+
 <?php
     if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
     {
@@ -24,6 +26,7 @@
         $patronymic = xcms_get_key_or($person, "patronymic");
         $phone = xcms_get_key_or($person, "phone");
         $cellular = xcms_get_key_or($person, "cellular");
+        $current_class = xcms_get_key_or($person, "current_class");
 
         $person_fields = xsm_get_person_fields();
 
