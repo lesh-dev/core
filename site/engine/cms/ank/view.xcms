@@ -6,76 +6,62 @@
         if($login != "anonymous")
             echo "<h3><a href=\"?ref=ladmin&amp;page=$pageid\">Вы можете это исправить!</a></h3>";
     }
-    if(@$_POST["csrf_token"] == "ank_$pageid")
+    if(@$_POST["submit-anketa"])
     {
         $mailMsg = "Анкета:\n";
         $mailMsgHTML = file_get_contents("$design_dir/mail_template.html");
         $unixTime = mktime();
         $hrTimestamp = date("Y.m.d H:i:s", $unixTime);
-        $fileName = date("Y.m.d-H.i.s", $unixTime).".xml";
 
-        $studentName = "Школьнег";
+        $person = $_POST; // get all values here (_POST should not be spoiled)
+        // set some generic fields that cannot be overridden
+        $person["activity_status"] = "new";
+        $person["is_student"] = "student";
+        $user_agent = $person["user_agent"] = $_SERVER["HTTP_USER_AGENT"];
+        // extract some values to check
+        $last_name = xcms_get_key_or($person, "last_name");
+        $first_name = xcms_get_key_or($person, "first_name");
+        $patronymic = xcms_get_key_or($person, "patronymic");
+        $phone = xcms_get_key_or($person, "phone");
+        $cellular = xcms_get_key_or($person, "cellular");
 
-        $aFields = array(
-            "Name"=>"ФИО",
-            "BirthDate"=>"Дата рождения",
-            "School"=>"Школа",
-            "SchoolLocation"=>"Адрес школы",
-            "Class"=>"Класс",
-            "Phone"=>"Телефон",
-            "Cellular"=>"Мобильный телефон",
-            "EMail"=>"E-Mail",
-            "Skype"=>"Skype",
-            "Profile"=>"Профиль",
-            "Favourites"=>"Любимые предметы",
-            "Achivements"=>"Достижения",
-            "Hobby"=>"Хобби"
-        );
-        if (@empty($_POST["Name"]) ||
-            @empty($_POST["Class"]) ||
-            @empty($_POST["Phone"]) && @empty($_POST["Cellular"])) {
+        $person_fields = xsm_get_person_fields();
+
+        if (
+            empty($last_name) ||
+            empty($first_name) ||
+            empty($current_class) ||
+            (empty($phone) && empty($cellular))
+            )
+        {
             // someone hacked the js validator
             die("Invalid anketa data. ");
         }
+        $full_name = trim($last_name).' '.trim($first_name).' '.trim($patronymic);
 
-        // True programmers use UTF-8 only :)
-        $xml = simplexml_load_string('<?xml version="1.0" encoding="utf-8"?><Anketa/>');
         $htmlContent = ""; // @@TABLE-CONTENT@
-        // add some more fields
-        $_POST["UserAgent"] = $_SERVER["HTTP_USER_AGENT"];
-        $_POST["FileName"] = $fileName;
-        // creation/modification times
-        $_POST["Created"] = $unixTime;
-        $_POST["HRCreated"] = $hrTimestamp;
-        // initialy empty
-        $_POST["Modified"] = "";
-        $_POST["HRModified"] = "";
-        // status
-        $_POST["Status"] = "new";
 
-        foreach (@$_POST as $key=>$value)
+        foreach ($person as $key=>$value)
         {
-            if ($key == "Name") $studentName = $value;
-            if ($key == "csrf_token") continue; // ignore this trash
-            $xml->addChild($key, htmlspecialchars($value));
-            $keyTitle = $key;
-            if (array_key_exists($key, $aFields)) $keyTitle = $aFields[$key];
-            $mailMsg .= "$keyTitle: $value\r\n\r\n";
-            $htmlContent .= "<tr><td class=\"left\">$keyTitle</td><td>".htmlspecialchars($value)."</td></tr>\n";
+            $key_title = $key;
+            if (array_key_exists($key, $person_fields)) $key_title = $person_fields[$key];
+            $mailMsg .= "$key_title: $value\r\n";
+            $htmlContent .= "<tr><td class=\"left\">$key_title</td><td>".htmlspecialchars($value)."</td></tr>\n";
         }
         $ank_dir = "${content_dir}ank";
         @mkdir($ank_dir, 0777);
-        $write_success = (@$xml->asXML("$ank_dir/$fileName") === true);
+        xdb_insert_or_update('person', array('person_id'=>'new'), $person, $person_fields);
+        $write_success = true;// TODO: проверять SELECT-ом, что таки да, вставилось
         $mailMsgHTML = str_replace("@@TABLE-CONTENT@", $htmlContent, $mailMsgHTML);
         $mailMsgHTML = str_replace("@@DATE@", date("Y.m.d H:i:s", $unixTime), $mailMsgHTML);
 
         $aHTMLList = array();
         $aPlainList = array();
-        if (substr($studentName, 0, 12) == "NO-MAIL-TEST") // see bug #264
+        if (substr($full_name, 0, 12) == "NO-MAIL-TEST") // see bug #264
         {
             // do nothing
         }
-        elseif (substr($studentName, 0, 4) == "TEST") // see bug #111
+        elseif (substr($full_name, 0, 4) == "TEST") // see bug #111
         {
             $aHTMLList[] = "Mikhail Veltishchev <dichlofos-mv@yandex.ru>";
             $aPlainList[] = "Mikhail Veltishchev <dichlofos-mv@yandex.ru>";
@@ -96,7 +82,7 @@
 
         $addrHTMLList = join(", ", $aHTMLList);
         $addrPlainList = join(", ", $aPlainList);
-        $subject = "New fizlesh.ru anketa: ".xcms_transliterate($studentName);
+        $subject = "New fizlesh.ru anketa: ".xcms_transliterate($full_name);
 
         $bSuccessHTML = true;
         if (count($aHTMLList))
@@ -171,7 +157,6 @@
         }
         //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
         $text = file_get_contents( "{$SETTINGS["datadir"]}cms/pages/$pageid/content" );
-        $text = str_replace("\${csrf_token}","<input type=\"hidden\" name=\"csrf_token\" value=\"ank_$pageid\" />",$text);
         $source  = "";
         include(translate("<! cms/readtext --markdown --text !>"));
     }
