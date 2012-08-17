@@ -1,37 +1,67 @@
 <?
-    // Every install hook is executed by installer and can make something nesessary for a module.
-    // Install hook may:
-    // a) Request variables to fill by user
-    // b) Check something and if it is not correct -- fail.
-    // c) Do something
-    
-    // Subclass and reimplement this object
+    /**
+      Это пример "инсталл-хука". Вы можете сделать 
+      такой же, если Вы хотите контролировать 
+      процедуру установки.
+    **/
     class SampleInstallHook
     {
+        /** 
+          Эта функция определяет название модуля 
+          и не делает ничего больше **/
 	function module_name()
 	{
 	    return "Just Samble";
 	}
+	/** 
+	  Эта функция должна вернуть список переменных, 
+	  необходимых модулю для функционирования
+	**/
 	function request_variables()
 	{
-	    return array("another_var"=>array("name"=>"Samble Variable","type"=>"string","default"=>"def"));
+	    //return array("another_var"=>array("name"=>"Samble Variable","type"=>"string","default"=>"def"));
+	    return array();
 	}
+	/**
+	  Эта функция будет вызвана для проверки, 
+	  удовлетворяет ли система требованиям модуля. 
+	  Должна вернуть true если да, или строку с 
+	  описанием ошибки, если нет.
+	**/
 	function initial_check()
 	{
 	    return true;
 	}
+	/**
+          Эта функция будет вызвана для проверки после 
+          того, как пользователь введет дополнительные 
+          параметры. Должна вернуть true если все в порядке 
+          и можно начинать установку, или строку с описанием 
+          ошибки, если нет.
+	**/
 	function final_check($config)
 	{
 	    return true;
 	}
+	/** 
+          Эта функция должна полностью подчистить следы использования модуля.
+          Например, если инсталлятор дописывает что-то в файл, то этот метод должен файл удалить.
+	**/
 	function uninstall()
 	{
             return true;
 	}
+	/**
+	  Самый Главный Метод. Собственно, именно в нем можно что-нибудь сделать с устанавливаемой системой.
+	**/
 	function install($config)
 	{
 	    return true;
 	}
     }
+    
+    /**
+      Объект необходимо инстанциировать в переменную с названием $hook.
+    **/
     $hook = new SampleInstallHook();
 ?>

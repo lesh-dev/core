@@ -46,29 +46,31 @@
     }
     if (@$_POST["submit_variables"])
     {
-      // Handle them
-      foreach($hooks as $hook)
-      {
-        $ans = $hook->final_check(@$_POST);
-        if($ans === TRUE) continue;
-        display_error($ans);
-        die();
-      }
-      foreach($hooks as $hook)
-      {
-        $ans = $hook->uninstall();
-        if($ans === TRUE) continue;
-        display_error($ans);
-        die();
-      }
-      foreach($hooks as $hook)
-      {
-        $ans = $hook->install(@$_POST);
-        if($ans === TRUE) continue;
-        display_error($ans);
-        die();
-      }
-      echo "<h3>Установка завершена!</h3>";
+        // Handle them
+        foreach($hooks as $hook)
+        {
+            $ans = $hook->final_check(@$_POST);
+            if($ans === TRUE) continue;
+            display_error($ans);
+            die();
+        }
+        foreach($hooks as $hook)
+        {
+            $ans = $hook->uninstall();
+            if($ans === TRUE) continue;
+            display_error($ans);
+            die();
+        }
+        foreach($hooks as $hook)
+        {
+            $ans = $hook->install(@$_POST);
+            if($ans === TRUE) continue;
+            display_error($ans);
+            die();
+        }
+        unlink("install.php");
+        echo "<h3>Установка завершена!</h3>";
+        echo "<a href=\"index.php\">Перейти к сайту</a>";
     }
     else
     {
