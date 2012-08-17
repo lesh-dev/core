@@ -199,7 +199,7 @@
     else if(@$_GET["mode"]=="mailer" )
     {
         $editfile = "{$SETTINGS["datadir"]}cms/mailer.conf";
-        include(translate('<! edit/oldtag `edit`,`view`,`installed` !>'));
+        include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
     }
     else if(@$_GET["mode"]=="ank" )
     {
