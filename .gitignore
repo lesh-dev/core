@@ -7,4 +7,6 @@ site/.htaccess
 *-diff-*
 *~
 site/fizlesh.ru-content/ank
-
+site/settings.php
+site/install.php
+site/engine.log

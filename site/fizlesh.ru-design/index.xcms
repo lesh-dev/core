@@ -49,6 +49,9 @@
         include(translate('<a href="/<# web_prefix#>?'.
             xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).
             '" class="menu-item menu-level1 stealthLink">Авторизация</a>'));
+        include(translate('<a href="/<# web_prefix#>?'.
+            xcms_url(array('page'=>$pageid, 'mode'=>'vk', 'ref'=>'auth')).
+            '" class="menu-item menu-level1 stealthLink">Вконтактик</a>'));
       }
       ?>
         <!--a href="http://validator.w3.org/check?uri=referer"><img src="/<# web_prefix #>fizlesh.ru-design/pic/valid-html401-green.gif"
