@@ -42,7 +42,7 @@
             foreach($DEFREGUSER as $k=>$v)
                 $mail .= "\t$k :\t$v\r\n";
 
-            xcms_send_notification("developers",
+            xcms_send_notification("user-change",
                 "Пользователь создан: $reg_login",
                 $mail
             );

@@ -38,7 +38,7 @@
         }
         if(@$_POST["delUser"])
         {
-            xcms_send_notification("developers",
+            xcms_send_notification("user-change",
                 "Пользователь удален: ".@$_GET["username"],
                 "Был удален пользователь с именем {$_GET["username"]}.");
             @unlink($_GET['username']);
