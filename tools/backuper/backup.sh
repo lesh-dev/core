@@ -10,18 +10,20 @@
 backup_folder=/backup
 status_file=/tmp/backup-status
 
-rm -rf $backup_folder
-mkdir -p $backup_folder
+rm -rf "$backup_folder"
+mkdir -p "$backup_folder"
 
 # add more folders here if you need
-tar cvzf $backup_folder/git.tgz  /srv/git
-tar cvzf $backup_folder/trac.tgz /srv/trac
-tar cvzf $backup_folder/etc.tgz  /etc
+tar cvzf "$backup_folder/git.tgz"  /srv/git
+tar cvzf "$backup_folder/trac.tgz" /srv/trac
+tar cvzf "$backup_folder/etc.tgz"  /etc
+mysqldump -u backup -p "nothing_to_backup" --default-character-set=utf-8 smf | gzip > "$backup_folder/forum.gz"
+tar cvzf "$backup_folder/attach.tgz"  /srv/www/production/forum/attachments
 
 plan_a()
 {
     dest_host=doctor@doctor.dtdns.net
-    rsync -avz $backup_folder $dest_host:/data/backup/lesh/$back_date/
+    rsync -avz "$backup_folder" "$dest_host:/data/backup/lesh/$back_date/"
 }
 
 plan_b()
