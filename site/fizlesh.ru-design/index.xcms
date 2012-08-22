@@ -58,8 +58,16 @@
         <!--a href="http://validator.w3.org/check?uri=referer"><img src="/<# web_prefix #>fizlesh.ru-design/pic/valid-html401-green.gif"
         alt="Valid HTML 4.01 Transitional" height="31" width="88"></a-->
         </td>
-        <td class="mainField roundBorders">
-          <h2><?php echo @$INFO["header"];?></h2>
+        <td class="mainField roundBorders"><?php
+          $hdr = xcms_get_key_or($INFO, "header");
+          if (!strlen($hdr) ||
+            (xcms_get_key_or($INFO, "alias") == "register" &&
+              strlen(xcms_get_key_or($_GET, "aparam")))) {
+            // little spike: skip header display
+            // in case of special pages (XSM manager for now)
+          } else {?>
+            <h2><?php echo $hdr; ?></h2><?php
+          }?>
           <# if //!@$_GET["usr"]//cms/ #>
           <hr />
           <div style="font-size: 8pt; text-align: center; height: 15px;">

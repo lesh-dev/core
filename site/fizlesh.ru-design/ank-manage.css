@@ -50,6 +50,10 @@ input.ankEdit {
   width: 75%;
 }
 
+input.ankEdit.filter {
+  width: 200px;
+}
+
 textarea.ankEdit {
   width: 75%;
   height: 72px;
@@ -105,12 +109,6 @@ span.ankStatus.spam {
   color: #ff0000;
 }
 
-ul.ankList {
-  margin-left: 3px;
-  margin-bottom: 0px;
-  margin-top: 0px;
-}
-
 img.edit-icon {
     vertical-align: middle;
     margin-right: 2px;
@@ -118,6 +116,16 @@ img.edit-icon {
 
 .ankEdit.checkbox {
   width: 16px;
+}
+
+input.delete-button {
+  margin-top: 5px;
+  background-color: #ff9f7f;
+  color: #2f2f00;
+}
+
+.link-oper {
+    margin-left: 10px;
 }
 
 .linkButton.xsm {

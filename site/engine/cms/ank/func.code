@@ -1,99 +1,139 @@
 <?php
-    /*
-     * Complete list of valid person activity statuses
-     */
-    function xsm_get_activity_statuses()
-    {
-        return array(
-            "new"=>"Новая",
-            "progress"=>"В обработке",
-            "processed"=>"Обработана",
-            "declined"=>"Отклонена",
-            "cont"=>"Продолжающий",
-            "old"=>"Старый (не едет)",
-            "duplicate"=>"Дубликат",
-            "spam"=>"Спам");
-    }
 
-    /* DEPRECATED Anketa status selector for viewer */
-    function xcms_ank_get_show_status_list()
-    {
-        return array(
-          "notspam"=>"Без спама и дублей",
-          "notdecl"=>"Без спама, дублей и отклонённых",
-          "new"=>"Новые",
-          "progress"=>"В обработке",
-          "processed"=>"Обработанные",
-          "declined"=>"Отклонённые",
-          "cont"=>"Продолжающие школьники",
-          "old"=>"Старые школьники (не едут)",
-          "all"=>"Все");
-    }
+function xsm_get_person_fields()
+{
+    return array(
+        "activity_status"=>"Статус",
+        "is_current"=>"Текущий?",
 
-    function xsm_get_person_show_statuses()
-    {
-        return array(
-          "notspam"=>"Без спама и дублей",
-          "notdecl"=>"Без спама, дублей и отклонённых",
-          "new"=>"Новые",
-          "progress"=>"В обработке",
-          "processed"=>"Обработанные",
-          "declined"=>"Отклонённые",
-          "cont"=>"Продолжающие школьники",
-          "all"=>"Все");
-    }
+        "last_name"=>"Фамилия",
+        "first_name"=>"Имя",
+        "patronymic"=>"Отчество",
 
-    function xsm_get_curatorship_items()
-    {
-        return array(
-            "none"=>"Не куратор",
-            "assist"=>"Помощник куратора",
-            "cur"=>"Куратор"
-        );
-    }
+        "birth_date"=>"Дата рождения",
+        "passport_data"=>"Паспортные данные",
 
-    function xsm_get_exam_statuses()
-    {
-        return array(
-            "passed"=>"Сдан",
-            "notpassed"=>"Не сдан",
-            "almost"=>"Почти сдан",
-            "other"=>"Иное",
-        );
-    }
+        "school"=>"Школа",
+        "school_city"=>"Адрес школы",
+        "current_class"=>"Класс",
 
-    /**
-      * Replaces Russian UTF8 symbols to ANSI transliteration
-      * @param string string to transliterate
-      * @return transliterated string
-      **/
-    function xcms_transliterate($string) {
-        $converter = array(
-            'а' => 'a',   'б' => 'b',   'в' => 'v',
-            'г' => 'g',   'д' => 'd',   'е' => 'e',
-            'ё' => 'e',   'ж' => 'zh',  'з' => 'z',
-            'и' => 'i',   'й' => 'y',   'к' => 'k',
-            'л' => 'l',   'м' => 'm',   'н' => 'n',
-            'о' => 'o',   'п' => 'p',   'р' => 'r',
-            'с' => 's',   'т' => 't',   'у' => 'u',
-            'ф' => 'f',   'х' => 'h',   'ц' => 'c',
-            'ч' => 'ch',  'ш' => 'sh',  'щ' => 'sch',
-            'ь' => '',    'ы' => 'y',   'ъ' => '',
-            'э' => 'e',   'ю' => 'yu',  'я' => 'ya',
+        "phone"=>"Телефон",
+        "cellular"=>"Мобильный телефон",
+        "email"=>"E-Mail",
+        "skype"=>"Skype",
+        "social_profile"=>"Профиль в соц. сети",
 
-            'А' => 'A',   'Б' => 'B',   'В' => 'V',
-            'Г' => 'G',   'Д' => 'D',   'Е' => 'E',
-            'Ё' => 'E',   'Ж' => 'Zh',  'З' => 'Z',
-            'И' => 'I',   'Й' => 'Y',   'К' => 'K',
-            'Л' => 'L',   'М' => 'M',   'Н' => 'N',
-            'О' => 'O',   'П' => 'P',   'Р' => 'R',
-            'С' => 'S',   'Т' => 'T',   'У' => 'U',
-            'Ф' => 'F',   'Х' => 'H',   'Ц' => 'C',
-            'Ч' => 'Ch',  'Ш' => 'Sh',  'Щ' => 'Sch',
-            'Ь' => '',    'Ы' => 'Y',   'Ъ' => '',
-            'Э' => 'E',   'Ю' => 'Yu',  'Я' => 'Ya',
-        );
-        $string = strtr($string, $converter);
-        return $string;
-    }
+        "is_teacher"=>"Препод?",
+        "is_student"=>"Школьник?",
+        "curatorship"=>"Кураторство",
+
+        "favourites"=>"Любимые предметы",
+        "achievements"=>"Достижения",
+        "hobby"=>"Хобби",
+
+        "person_comment"=>"Заметки",
+        "user_agent"=>"UserAgent",
+
+        "person_created"=>"Время создания",
+        "person_modified"=>"Последняя модификация"
+    );
+}
+
+/*
+ * Complete list of valid person activity statuses
+ */
+function xsm_get_activity_statuses()
+{
+    return array(
+        "new"=>"Новая",
+        "progress"=>"В обработке",
+        "processed"=>"Обработана",
+        "declined"=>"Отклонена",
+        "cont"=>"Продолжающий",
+        "old"=>"Старый (не едет)",
+        "duplicate"=>"Дубликат",
+        "spam"=>"Спам");
+}
+
+/* DEPRECATED Anketa status selector for viewer */
+function xcms_ank_get_show_status_list()
+{
+    return array(
+        "notspam"=>"Без спама и дублей",
+        "notdecl"=>"Без спама, дублей и отклонённых",
+        "new"=>"Новые",
+        "progress"=>"В обработке",
+        "processed"=>"Обработанные",
+        "declined"=>"Отклонённые",
+        "cont"=>"Продолжающие школьники",
+        "old"=>"Старые школьники (не едут)",
+        "all"=>"Все");
+}
+
+function xsm_get_person_show_statuses()
+{
+    return array(
+        "notspam"=>"Без спама и дублей",
+        "notdecl"=>"Без спама, дублей и отклонённых",
+        "new"=>"Новые",
+        "progress"=>"В обработке",
+        "processed"=>"Обработанные",
+        "declined"=>"Отклонённые",
+        "cont"=>"Продолжающие школьники",
+        "all"=>"Все");
+}
+
+function xsm_get_curatorship_items()
+{
+    return array(
+        "none"=>"Не куратор",
+        "assist"=>"Помощник куратора",
+        "cur"=>"Куратор"
+    );
+}
+
+function xsm_get_exam_statuses()
+{
+    return array(
+        "passed"=>"Сдан",
+        "notpassed"=>"Не сдан",
+        "almost"=>"Почти сдан",
+        "other"=>"Иное",
+    );
+}
+
+/**
+  * Replaces Russian UTF8 symbols to ANSI transliteration
+  * @param string string to transliterate
+  * @return transliterated string
+  **/
+function xcms_transliterate($string) {
+    $converter = array(
+        'а' => 'a',   'б' => 'b',   'в' => 'v',
+        'г' => 'g',   'д' => 'd',   'е' => 'e',
+        'ё' => 'e',   'ж' => 'zh',  'з' => 'z',
+        'и' => 'i',   'й' => 'y',   'к' => 'k',
+        'л' => 'l',   'м' => 'm',   'н' => 'n',
+        'о' => 'o',   'п' => 'p',   'р' => 'r',
+        'с' => 's',   'т' => 't',   'у' => 'u',
+        'ф' => 'f',   'х' => 'h',   'ц' => 'c',
+        'ч' => 'ch',  'ш' => 'sh',  'щ' => 'sch',
+        'ь' => '',    'ы' => 'y',   'ъ' => '',
+        'э' => 'e',   'ю' => 'yu',  'я' => 'ya',
+
+        'А' => 'A',   'Б' => 'B',   'В' => 'V',
+        'Г' => 'G',   'Д' => 'D',   'Е' => 'E',
+        'Ё' => 'E',   'Ж' => 'Zh',  'З' => 'Z',
+        'И' => 'I',   'Й' => 'Y',   'К' => 'K',
+        'Л' => 'L',   'М' => 'M',   'Н' => 'N',
+        'О' => 'O',   'П' => 'P',   'Р' => 'R',
+        'С' => 'S',   'Т' => 'T',   'У' => 'U',
+        'Ф' => 'F',   'Х' => 'H',   'Ц' => 'C',
+        'Ч' => 'Ch',  'Ш' => 'Sh',  'Щ' => 'Sch',
+        'Ь' => '',    'Ы' => 'Y',   'Ъ' => '',
+        'Э' => 'E',   'Ю' => 'Yu',  'Я' => 'Ya',
+    );
+    $string = strtr($string, $converter);
+    return $string;
+}
 ?>

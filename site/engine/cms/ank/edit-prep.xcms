@@ -1,47 +1,10 @@
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
-<# cms/ank/format #>
 <?php
-
-$person_fields = array(
-    "activity_status"=>"Статус",
-    "is_current"=>"Текущий?",
-
-    "last_name"=>"Фамилия",
-    "first_name"=>"Имя",
-    "patronymic"=>"Отчество",
-
-    "birth_date"=>"Дата рождения",
-    "passport_data"=>"Паспортные данные",
-
-    "school"=>"Школа",
-    "school_city"=>"Адрес школы",
-    "current_class"=>"Класс",
-
-    "phone"=>"Телефон",
-    "cellular"=>"Мобильный телефон",
-    "email"=>"E-Mail",
-    "skype"=>"Skype",
-    "social_profile"=>"Профиль в соц. сети",
-
-    "is_teacher"=>"Препод?",
-    "is_student"=>"Школьник?",
-    "curatorship"=>"Кураторство",
-
-    "favourites"=>"Любимые предметы",
-    "achievements"=>"Достижения",
-    "hobby"=>"Хобби",
-
-    "person_comment"=>"Заметки",
-    "user_agent"=>"UserAgent",
-
-    "person_created"=>"Время создания",
-    "person_modified"=>"Последняя модификация"
-);
 
 function xsm_edit_prep()
 {
-    global $person_fields;
+    $person_fields = xsm_get_person_fields();
 
     $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
     $person = xdb_get_entity_by_id('prep', 'person', $person_id);
@@ -108,8 +71,19 @@ function xsm_edit_prep()
 }
 
 if (@$_POST["update-prep"])
-    xsm_update_entity('prep', 'person', 'Участник', $person_fields);
+{
+    if (!strlen(@$_POST["last_name"]) || !strlen(@$_POST["first_name"]))
+    {?>
+        <p>Пожалуйста, укажите хотя бы имя и фамилию!
+            Нажмите Back в браузере, чтобы вернуться к заполнению!</p>
+      <?php
+    }
+    else
+        xsm_update_entity('prep', 'person', 'Участник', xsm_get_person_fields());
+}
 elseif (@$_POST["delete-prep"])
+    xsm_warn_delete_entity('prep', 'person', 'участника');
+elseif (@$_POST["confirm-delete-prep"])
     xsm_delete_entity('prep', 'person', 'Участник');
 else
     xsm_edit_prep();

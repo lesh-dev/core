@@ -1,6 +1,5 @@
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
-<# cms/ank/format #>
 <?php
 
 $exam_fields = array(
@@ -33,6 +32,9 @@ function xsm_edit_exam()
     <form method="post" action="edit-exam"><?php
         xsm_edit_operations('exam', 'exam', $exam_id,
             'Вернуться к списку зачётов', $aux_param);?>
+        <div style="font-weight: bold; margin-top: 3px; margin-bottom: 3px; color: #ff0000;">
+            ВНИМАНИЕ! Зачёт можно добавить только школьнику,
+            у которого выставлен статус ТЕКУЩИЙ!</div>
         <input type="hidden" name="exam_id" value="<?php echo $exam_id; ?>" />
         <input type="hidden" name="student_person_id" value="<?php echo $student_person_id; ?>" />
         <table summary="Зачёт" class="ankEdit">
@@ -90,6 +92,12 @@ if (@$_POST["update-exam"])
 elseif (@$_POST["delete-exam"])
 {
     $student_person_id = xcms_get_key_or($_POST, 'student_person_id', '-1');
+    $aux_param = "&amp;student_person_id=$student_person_id";
+    xsm_warn_delete_entity('exam', 'exam', 'зачёт', $aux_param);
+}
+elseif (@$_POST["confirm-delete-exam"])
+{
+    $student_person_id = xcms_get_key_or($_GET, 'student_person_id', '-1');
     $aux_param = "&amp;student_person_id=$student_person_id";
     xsm_delete_entity('exam', 'exam', 'Зачёт', $aux_param);
 }
