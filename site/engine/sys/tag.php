@@ -244,8 +244,6 @@ function editlist_form($file, $addparams, $skipparams="",$securityflags="", $old
                     foreach($taglist as $vtag=>$tag)
                     {
                         if($vtag == "_NAME") continue;
-                        //$tag = str_replace("\n","",$tag);
-                        //$tag = str_replace("\r","",$tag);
                         if($tag == $value) echo "<option selected value=\"$tag\">$vtag</option>";
                         else echo "<option value=\"$tag\">$vtag</option>";
                     }

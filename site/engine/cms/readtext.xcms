@@ -119,12 +119,12 @@ if($need)
     // никаких ссылок, кроме как через теги. В любом случае искать в урлах последовательность
     // вида ref=index&page=... это очень странно
     //// Замена всех ссылок на страницы на их тег-версии
-    $tags = @unserialize(@file_get_contents("${SETTINGS["datadir"]}tags/list"));
-    if($tags)foreach($tags as $tag=>$page)
+    $aliases = xcms_get_aliases();
+    if($aliases)foreach($aliases as $alias=>$page)
     {
-        $text = str_replace("?ref=index&page=$page\"","$tag\"",$text);
-        $text = str_replace("?page=$page&ref=index\"","$tag\"",$text);
-        $text = str_replace("?page=$page\"","$tag\"",$text);
+        $text = str_replace("?ref=index&page=$page\"","$alias\"",$text);
+        $text = str_replace("?page=$page&ref=index\"","$alias\"",$text);
+        $text = str_replace("?page=$page\"","$alias\"",$text);
     }
     //// Обработка синтаксиса: <code>Моноширинный текст</code>
     $text = str_replace(

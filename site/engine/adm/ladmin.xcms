@@ -233,6 +233,7 @@
     }
     else if(@$_GET["mode"]=="rebuild_alias")
     {
+        include(translate('<! cms/rebuild_alias !>'));
         include(translate('<! cms/build_rewrite !>'));
         ?>
         <div class="admin-widget">
