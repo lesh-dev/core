@@ -222,3 +222,15 @@ span.td2 {
     width: 49%;
     display: inline-block;
 }
+
+table.key-value {
+    font-size: 9pt;
+}
+
+input.key-name {
+    width: 150px;
+}
+
+input.key-value {
+    width: 700px;
+}

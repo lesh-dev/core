@@ -224,8 +224,10 @@ function editlist_form($file, $addparams, $skipparams="",$securityflags="", $old
             $list = xcms_get_list($file);
         }
     }
+    ?>
 
-    echo '<form action="'.$addparams.'" method="post"><table>';
+    <form action="<?php echo $addparams; ?>" method="post">
+        <table class="key-value"><?php
     foreach ($list as $key=>$value)
     {
         if(!strstr($skipparams,$key))
@@ -234,37 +236,51 @@ function editlist_form($file, $addparams, $skipparams="",$securityflags="", $old
             {
                 $getTagList_output = "sss";
                 $taglist = getTagList("{$SETTINGS["elementsdir"]}taglist/$key");
-                echo "<tr><td>".$taglist["_NAME"]."<td>";
+                echo "<tr><td>".$taglist["_NAME"]."</td><td>";
+                $id = "edtg_$key";
                 if(count($taglist)>1)
-                {
-                    echo "<SELECT name=edtg_$key>";
+                {?>
+                    <select name="<?php echo $id; ?>" id="<?php echo $id; ?>" class="key-value"><?php
                     foreach($taglist as $vtag=>$tag)
                     {
                         if($vtag == "_NAME") continue;
                         //$tag = str_replace("\n","",$tag);
                         //$tag = str_replace("\r","",$tag);
-                        if($tag == $value) echo "<OPTION selected value=\"$tag\">$vtag</OPTION>";
-                        else echo "<OPTION value=\"$tag\">$vtag</OPTION>";
+                        if($tag == $value) echo "<option selected value=\"$tag\">$vtag</option>";
+                        else echo "<option value=\"$tag\">$vtag</option>";
                     }
-                    echo "</SELECT>";
+                    echo "</select>";
                 }
                 else
-                    echo "<input name=\"edtg_$key\" value=\"$value\">";
+                {?>
+                    <input name="<?php echo $id; ?>" id="<?php echo $id; ?>"
+                        value="<?php echo $value; ?>" class="key-value" /><?php
+                }?>
+                </td></tr>
+                <?php
             }
             else
-            {
-                echo "<tr><td>$key<td>";
-                echo "<input name=\"edtg_$key\" value=\"$value\">";
+            {?>
+                <tr><td><?php echo $key; ?></td><td>
+                    <input name="<?php echo $id; ?>" id="<?php echo $id; ?>"
+                        value="<?php echo $value; ?>" class="key-value" />
+                </td></tr><?php
             }
         }
     }
     if (!strstr($securityflags,"-newkey"))
-        echo "<tr><td><input name=\"newkey\" placeholder=\"Новое поле\"></td>".
-            "<td><input name=\"newvalue\" placeholder=\"Новое значение\">";
-
-    echo "</table>";
-    echo '<input type="submit" name="editTag" value="Save">';
-    echo '</form>';
+    {?>
+        <tr>
+            <td><input name="newkey" id="newkey"
+                class="key-name" placeholder="Новое поле" ></td>
+            <td><input name="newvalue" id="newvalue"
+                class="key-value" placeholder="Новое значение"></td>
+        </tr><?php
+    }
+    ?>
+        </table>
+        <input type="submit" name="editTag" id="editTag" value="Сохранить" />
+    </form><?php
 }
 
 ?>
