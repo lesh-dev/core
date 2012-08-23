@@ -20,7 +20,7 @@
         $listing[$level] .= "RewriteRule ^$alias/(.*)$ index.php?page=$path&aparam=$1\n";
     }
     $listing = array_reverse($listing);
-    $rewrite_text = join($listing);
+    $rewrite_text .= join($listing);
     $f = fopen(".htaccess", "w");
     if (false === fputs($f, $rewrite_text))
     {?>

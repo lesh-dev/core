@@ -5,7 +5,7 @@
     function xcms_get_aliases_file_name()
     {
         global $SETTINGS;
-        return "{$SETTINGS["datadir"]}aliases";
+        return "{$SETTINGS["datadir"]}cms/aliases";
     }
 
     /**
@@ -28,21 +28,21 @@
       * Internal-usage function (@sa xcms_collect_aliases)
       * and should not be invoked directly
       **/
-    function xcms_collect_aliases_int(&$aliases, $dir)
+    function xcms_collect_aliases_int(&$aliases, $dir, $root_len)
     {
         $subdirs = glob("$dir/*", GLOB_ONLYDIR);
         $info_fn = "$dir/info";
         if (file_exists($info_fn))
         {
             $cur_info = xcms_get_list($info_fn);
-            $page_id = $dir;
+            $page_id = substr($dir, $root_len + 1);
             $cur_alias = xcms_get_key_or($cur_info, "alias");
             if (!empty($cur_alias))
                 $aliases[$cur_alias] = $page_id;
         }
         foreach ($subdirs as $subdir)
         {
-            xcms_collect_aliases_int($aliases, $subdir);
+            xcms_collect_aliases_int($aliases, $subdir, $root_len);
         }
     }
 
@@ -55,7 +55,7 @@
         global $SETTINGS;
         $root = "{$SETTINGS["datadir"]}cms/pages";
         $aliases = array();
-        xcms_collect_aliases_int($aliases, $root);
+        xcms_collect_aliases_int($aliases, $root, strlen($root));
         return $aliases;
     }
 ?>
