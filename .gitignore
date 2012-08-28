@@ -1,8 +1,12 @@
 site/.prec
 site/admin_doc/.prec/*
+site/Content/cms/pages/*
+site/Content/tags/*
 site/.htaccess
 *-version-*
 *-diff-*
 *~
 site/fizlesh.ru-content/*
-
+site/settings.php
+site/install.php
+site/engine.log
