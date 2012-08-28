@@ -3,6 +3,8 @@
 ?>
 <h2>XCMS installer 2.0</h2>
 <?
+    require_once("engine/sys/tag.php");
+    require_once("engine/sys/logger.php");
     function display_error($err)
     {
 	echo "<font color=red>$err</font>";
