@@ -50,7 +50,7 @@
 	    }
 
             @mkdir(".prec", 0777);
-            if($f = @fopen(".prec/.htaccess", "w"))
+            if($f = @fopen(".prec/.htaccess", "a"))
             {
                 fputs($f,"deny from all");
                 $PERM["prec"] = true;
@@ -122,6 +122,8 @@
         }
 	function install($config)
 	{
+	    global $SETTINGS;
+	    global $content_dir;
             $dirs = array("content_dir","design_dir","engine_dir", "engine_pub");
 
             $string_settings = array(
@@ -149,9 +151,14 @@
             }
 
             fputs($f,"\n?>");
+	    fclose($f);
             include("settings.php");
             include("$engine_dir/sys/settings.php");
+            include_once("$engine_dir/sys/tag.php");
+            include_once("$engine_dir/cms/page_alias_func.php");
+            include("$engine_dir/cms/rebuild_alias.xcms");
             include("$engine_dir/cms/build_rewrite.xcms");
+
             return true;
         }
     }
