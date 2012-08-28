@@ -57,78 +57,93 @@
 	<td></td>
 </tr>
 <tr>
+	<td>assertElementPresent</td>
+	<td>//form/div/input[@id='last_name-input']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>assertTextPresent</td>
-	<td>Фамилия, имя, отчество</td>
+	<td>Фамилия</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//input[@id='i-Name']</td>
-	<td>NO-MAIL-TEST Пупкин Василий Иванович</td>
+	<td>//input[@id='last_name-input']</td>
+	<td>NO-MAIL-TEST Пупкин</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//input[@id='i-BirthDate']</td>
+	<td>//input[@id='first_name-input']</td>
+	<td>Василий</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='patronymic-input']</td>
+	<td>Иванович</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@id='birth_date-input']</td>
 	<td>10.11.2012</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//input[@id='i-School']</td>
+	<td>//input[@id='school-input']</td>
 	<td>Экспериментальная Школа им. Selenium-а #100500</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//input[@id='i-SchoolLocation']</td>
+	<td>//input[@id='school_city-input']</td>
 	<td>Школа находится в /dev/null</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//input[@id='i-Class']</td>
+	<td>//input[@id='current_class-input']</td>
 	<td>10 Гэ</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//input[@id='i-Phone']</td>
+	<td>//input[@id='phone-input']</td>
 	<td>8-100-500-1234</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//input[@id='i-Cellular']</td>
+	<td>//input[@id='cellular-input']</td>
 	<td>1-800-400-2010</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//input[@id='i-EMail']</td>
+	<td>//input[@id='email-input']</td>
 	<td>vdm-photo@ya.ru</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//input[@id='i-Skype']</td>
+	<td>//input[@id='skype-input']</td>
 	<td>vdm-photo</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//input[@id='i-Profile']</td>
+	<td>//input[@id='social_profile-input']</td>
 	<td>http://vk.com/vdm_p</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//textarea[@id='i-Favourites']</td>
+	<td>//textarea[@id='favourites-text']</td>
 	<td>Тестовый текст для заполнения раздела &quot;Любимые разделы физики&quot;</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//textarea[@id='i-Achivements']</td>
+	<td>//textarea[@id='achievements-text']</td>
 	<td>Тестовый текст для заполнения раздела &quot;Достижения&quot;</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//textarea[@id='i-Hobby']</td>
+	<td>//textarea[@id='hobby-text']</td>
 	<td>Тестовый текст для заполнения раздела &quot;Хобби&quot;</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//input[@type='submit' and @id='b-Submit']</td>
+	<td>//input[@type='submit' and @id='submit-anketa-button']</td>
 	<td></td>
 </tr>
 <tr>
@@ -241,18 +256,8 @@
 </tr>
 <!--navigate to anketas list button-->
 <tr>
-	<td>assertElementPresent</td>
-	<td>//div/a[@href='/register/view' and @class='h-menu-link']</td>
-	<td>Анкеты</td>
-</tr>
-<tr>
 	<td>open</td>
 	<td>/register/view</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>Регистрационная анкета</td>
 	<td></td>
 </tr>
 <tr>
