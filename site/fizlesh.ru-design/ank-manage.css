@@ -1,38 +1,39 @@
 /* CSS for anketa manager: view/edit */
 
 table.ankList {
-  width: 100%;
-  border-spacing: 0px;
-  padding: 0px;
-  border-collapse: collapse;
-  table-layout: fixed;
-  border: 0px solid #8faf6f;
-  font-size: 9pt;
-  margin-bottom: 10px;
+    width: 100%;
+    border-spacing: 0px;
+    padding: 0px;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border: 0px solid #8faf6f;
+    font-size: 9pt;
+    margin-bottom: 10px;
 }
 
 td.ankListRowDiv {
-  height: 8px;
+    height: 8px;
 }
 
 td.ankListRowTitle {
-  vertical-align: middle;
-  background-color: #9fdf8f;
-  border: 1px solid #8faf6f;
-  padding: 3px;
+    vertical-align: middle;
+    background-color: #9fdf8f;
+    border: 1px solid #8faf6f;
+    padding: 3px;
 }
 
-td.ankList {
-  border: 1px solid #8faf6f;
-  padding: 3px;
+td.ankList, th.ankList {
+    border: 1px solid #8faf6f;
+    padding: 3px;
+    text-align: left;
 }
 
 td.ankList.notes {
-  background-color: #85cf6f;
+    background-color: #85cf6f;
 }
 
 span.ankListField {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 span.ankListField.next {
@@ -40,73 +41,73 @@ span.ankListField.next {
 }
 
 span.ankEditField {
-  font-weight: bold;
-  display: inline-block;
-  width: 20%;
-  vertical-align: top;
+    font-weight: bold;
+    display: inline-block;
+    width: 20%;
+    vertical-align: top;
 }
 
 input.ankEdit {
-  width: 75%;
+    width: 75%;
 }
 
 input.ankEdit.filter {
-  width: 200px;
+    width: 200px;
 }
 
 textarea.ankEdit {
-  width: 75%;
-  height: 72px;
+    width: 75%;
+    height: 72px;
 }
 
 input[readonly='readonly'] {
-  background-color: #cceeaa;
+    background-color: #cceeaa;
 }
 
 table.ankEdit {
-  width: 100%;
-  border-spacing: 0px;
-  padding: 0px;
-  border-collapse: collapse;
-  table-layout: fixed;
-  border: 0px solid #8faf6f;
-  font-size: 9pt;
+    width: 100%;
+    border-spacing: 0px;
+    padding: 0px;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border: 0px solid #8faf6f;
+    font-size: 9pt;
 }
 
 span.ankStatus {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 span.ankStatus.new {
-  color: #ffff00;
+    color: #ffff00;
 }
 
 span.ankStatus.progress {
-  color: #9f7f00;
+    color: #9f7f00;
 }
 
 span.ankStatus.processed {
-  color: #008f00;
+    color: #008f00;
 }
 
 span.ankStatus.declined {
-  color: #7f7f7f;
+    color: #7f7f7f;
 }
 
 span.ankStatus.cont {
-  color: #006f00;
+    color: #006f00;
 }
 
 span.ankStatus.old {
-  color: #3f3faf;
+    color: #3f3faf;
 }
 
 span.ankStatus.duplicate {
-  color: #ff7f50;
+    color: #ff7f50;
 }
 
 span.ankStatus.spam {
-  color: #ff0000;
+    color: #ff0000;
 }
 
 img.edit-icon {
@@ -115,21 +116,29 @@ img.edit-icon {
 }
 
 .ankEdit.checkbox {
-  width: 16px;
+    width: 16px;
 }
 
 input.delete-button {
-  margin-top: 5px;
-  background-color: #ff9f7f;
-  color: #2f2f00;
+    margin-top: 5px;
+    background-color: #ff9f7f;
+    color: #2f2f00;
 }
 
 .link-oper {
     margin-left: 10px;
 }
 
+.link-oper-list {
+    margin-right: 10px;
+}
+
+span.link-oper-list {
+    border-bottom: 1px dotted black;
+}
+
 .linkButton.xsm {
-  height: 20px;
-  line-height: 20px;
-  vertical-align: bottom;
+    height: 20px;
+    line-height: 20px;
+    vertical-align: bottom;
 }
