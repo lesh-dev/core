@@ -4,8 +4,9 @@
       **/
     function xcms_get_aliases_file_name()
     {
-        global $SETTINGS;
-        return "{$SETTINGS["datadir"]}cms/aliases";
+        global $SETTINGS,$content_dir;
+        $ret= "{$SETTINGS["datadir"]}cms/aliases";
+        return $ret;
     }
 
     /**

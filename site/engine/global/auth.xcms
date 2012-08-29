@@ -1,0 +1,14 @@
+<?php
+	/** TODO: move this to config section **/
+	$SETTINGS["vk-id"] = "3083295";
+	$SETTINGS["vk-rights"] = "notify,offline";
+
+
+    $mode = @$_GET["mode"];
+    if ( $mode == "vk" )
+    {
+	$answer = 'http://'.$_SERVER["HTTP_HOST"] . "/" . $web_prefix;
+	$s = "http://oauth.vk.com/authorize?client_id=${SETTINGS['vk-id']}&scope=${SETTINGS['vk-rights']}&redirect_uri=$answer&response_type=code";
+	header("Location: $s");
+    }
+?>

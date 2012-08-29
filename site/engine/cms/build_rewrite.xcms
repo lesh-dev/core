@@ -8,7 +8,6 @@
         "# Remove trailing slashes\n".
         "RewriteCond %{REQUEST_FILENAME} !-d\n".
         "RewriteRule ^(.+)/\$ /$web_prefix\$1 [R=301,L]\n\n";
-
     $aliases = xcms_get_aliases();
     $listing = array();
     foreach ($aliases as $alias=>$path)
@@ -21,7 +20,7 @@
     }
     $listing = array_reverse($listing);
     $rewrite_text .= join($listing);
-    $f = fopen(".htaccess", "w");
+    $f = fopen(".htaccess", "a");
     if (false === fputs($f, $rewrite_text))
     {?>
         <div>Rewrite rules writing failed!<br /></div><?php
