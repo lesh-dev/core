@@ -1,4 +1,4 @@
-<?
+<?php
     class InstallerInstallHook
     {
 	function module_name()

@@ -1,4 +1,4 @@
-<?
+<?php
 	/** TODO: move this to config section **/
 	$SETTINGS["vk-id"] = "3083295";
 	$SETTINGS["vk-rights"] = "notify,offline";

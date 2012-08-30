@@ -1,4 +1,4 @@
-<?
+<?php
     require_once("$engine_dir/sys/tag.php");
     /**
 	This one returns file name by user's name
@@ -48,6 +48,6 @@
     }
 ?>
 <h3>Compiled</h3>
-<?
+<?php
     echo auth_create_user("test");
 ?>

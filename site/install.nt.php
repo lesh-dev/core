@@ -1,8 +1,8 @@
-<?
+<?php
   header("Content-type: text/html; charset=UTF-8;");
 ?>
 <h2>XCMS installer 2.0</h2>
-<?
+<?php
     function display_error($err)
     {
 	echo "<font color=red>$err</font>";

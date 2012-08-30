@@ -1,4 +1,4 @@
-<?
+<?php
     /**
       Это пример "инсталл-хука". Вы можете сделать 
       такой же, если Вы хотите контролировать 
@@ -60,8 +60,8 @@
 	function install($config)
 	{
 	    $f = fopen("settings.php","a");
-	    fputs($f,"<? \$auth_vk_id=\"${config['vk_id']}\"; ?>\n");
-	    fputs($f,"<? \$auth_vk_rights=\"${config['vk_rights']}\"; ?>\n");
+	    fputs($f,"<?php \$auth_vk_id=\"${config['vk_id']}\"; ?>\n");
+	    fputs($f,"<?php \$auth_vk_rights=\"${config['vk_rights']}\"; ?>\n");
 	    return true;
 	}
     }
