@@ -6,7 +6,7 @@ site/.htaccess
 *-version-*
 *-diff-*
 *~
-site/fizlesh.ru-content/ank
+site/fizlesh.ru-content/*
 site/settings.php
 site/install.php
 site/engine.log

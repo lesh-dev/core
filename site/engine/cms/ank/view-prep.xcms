@@ -1,0 +1,160 @@
+<# auth/ #admin #ank #>
+<# cms/ank/style #>
+<# cms/ank/format #>
+
+<form method="post" style="margin-bottom: 2px"><?php
+    //echo xcms_ank_make_selector(@$_POST["show-status"], "Show");
+    ?>
+    <input type="submit" value="Показать">
+</form>
+<?php
+
+/**
+  * @param nCount how many preps will be printed, zero means all
+  **/
+function xsm_print_prep(/*$sShowStatus*/)
+{
+    global $content_dir, $design_dir, $web_prefix;
+    global $DB;
+    //xcms_db_get();
+
+    //$aShowStatuses = xcms_ank_get_show_status_list();
+    $nCount = 50;
+    //if (!array_key_exists($sShowStatus, $aShowStatuses)) $sShowStatus = "notspam";
+    //if ($sShowStatus == "all") $nCount = 0; // show all
+
+    $db = xdb_get();
+    $preps_sel = $db->query("SELECT * FROM person WHERE is_teacher = 'teacher'");
+
+    $nPrepCounter = 0;
+    $bMaxReached = false;
+    ?>
+    <a style="margin-right: 10px" href="edit-prep&amp;person_id=new">Добавить</a>
+
+    <table summary="Преподаватели" class="ankList">
+    <?php
+    while ($person = $preps_sel->fetchArray(SQLITE3_ASSOC)) {?>
+        <tr><td class="ankListRowDiv">&nbsp;</td></tr>
+        <?php
+        $nPrepCounter++;
+
+        $person_id = htmlspecialchars($person["person_id"]); // assume always exists
+        $last_name = htmlspecialchars($person["last_name"]); // assume always exists
+        $first_name = htmlspecialchars($person["first_name"]); // assume always exists
+        $patronymic = htmlspecialchars($person["patronymic"]); // assume always exists
+        $birth_date = htmlspecialchars($person["birth_date"]);
+        //$entrance_class = htmlspecialchars($person["entrance_class"]);
+        $school = htmlspecialchars($person["school"]);
+        $school_city = htmlspecialchars($person["school_city"]);
+        $cellular = htmlspecialchars($person["cellular"]);
+        $phone = htmlspecialchars($person["phone"]);
+        $skype = htmlspecialchars($person["skype"]);
+
+        $email = htmlspecialchars($person["email"]);
+        $person_created = htmlspecialchars($person["person_created"]);
+        $person_modified = htmlspecialchars($person["person_modified"]);
+
+        $social_profile = xsm_prepare_social_profile($person["social_profile"]);
+
+        /*$sFavourites = xcms_html_wrap_by_crlf(htmlspecialchars($oAnk["Favourites"]));
+        $sAchivements = xcms_html_wrap_by_crlf(htmlspecialchars($oAnk["Achivements"]));
+        $sHobby = xcms_html_wrap_by_crlf(htmlspecialchars($oAnk["Hobby"]));
+        $sNotes = xcms_html_wrap_by_crlf(htmlspecialchars(xcms_get_key_or($oAnk, "Notes")));
+
+        $sUserAgent = htmlspecialchars(xcms_get_key_or($oAnk, "UserAgent"));
+        //$sFileName = htmlspecialchars(xcms_get_key_or($oAnk, "FileName"));
+        // default is to cut 'ank/' and extract 'YYYY.MM.DD'
+
+        $sStatus = htmlspecialchars(xcms_get_key_or($oAnk, "Status", "new"));
+        $aStatuses = xcms_ank_get_status_list();
+        if (!array_key_exists($sStatus, $aStatuses)) $sStatus = "new"; // default*/
+
+        $sHRStatus = "HRStatus";
+        ?>
+        <tr>
+            <td class="ankListRowTitle">
+            <?php echo "[$person_id] $last_name $first_name $patronymic"; ?><a name="<?php echo "person$person_id"; ?>"></a>
+                <span style="float: right">
+                <!--<a style="margin-right: 10px" href="/<?php echo $web_prefix;
+                    ?>?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
+                <a style="margin-right: 10px" href="/<?php echo $web_prefix;
+                    ?>?ref=get_ank&amp;mode=txt&amp;file=<?php echo $sBaseAnkFileName; ?>">TXT</a>-->
+                <a style="margin-right: 10px" href="edit-prep&amp;person_id=<?php echo $person_id; ?>">Редактировать</a>
+                <img src="<?php echo "/${web_prefix}$design_dir"; ?>pic/mozillafirefox.png"
+                    style="vertical-align: middle;" title="<?php echo "$sUserAgent"; ?>" />
+                <span style="margin-left: 10px;" class="ankListField">Статус</span>:
+                    <span class="ankStatus <?php echo $sStatus; ?>"><?php echo $sHRStatus; ?></span>
+                <span style="margin-left: 10px;" class="ankListField">Создана</span>: <?php echo $person_created; ?>
+                <?php if (!empty($person_modified)) {?>
+                    <span style="margin-left: 10px;" class="ankListField">Отредактирована</span>: <?php echo $person_modified; ?>
+                <?php } ?>
+                </span>
+            </td>
+        </tr>
+        <tr><td class="ankList"><span class="ankListField">Дата рождения</span>: <?php echo $birth_date; ?></td></tr>
+        <tr><td class="ankList"><span class="ankListField">Образование</span>: <?php echo $school; ?>
+        <?php echo $school_city; ?></td></tr>
+        <!-- phones -->
+        <?php if (!empty($cellular) || !empty($phone)) {?>
+            <tr><td class="ankList"><span class="ankListField">Телефоны</span>:
+            <?php
+            if ($cellular) {?>
+                <span class="ankListField">мобильный</span> <?php echo $cellular;
+            }
+            if ($phone) {
+                if (!empty($cellular)) echo ', ';
+                ?><span class="ankListField">домашний</span> <?php echo $phone;
+            }?>
+            </td></tr>
+        <?php } ?>
+        <!-- email, profile and skype -->
+        <?php if (!empty($email) || !empty($social_profile) || !empty($skype)) { ?>
+        <tr><td class="ankList"><?php if (!empty($email)) {
+            ?><span class="ankListField">E-Mail</span>:
+                <a href="mailto:<?php echo $email; ?>" ><?php echo $email; ?></a><?php
+            }
+            if (!empty($social_profile)) {
+                if (!empty($email)) echo ', '; ?>
+                <span class="ankListField">Профиль</span>:
+                    <a href="<?php echo $social_profile; ?>"><?php echo $social_profile; ?></a><?php
+            }
+            if (!empty($skype)) {
+                if (!empty($email) || !empty($social_profile)) echo ', '; ?>
+                <span class="ankListField">Skype</span>: <?php echo $skype; ?>
+            <?php
+            }?>
+        </td></tr>
+        <?php } ?>
+        <!--  other stuff -->
+        <?php if (!empty($sFavourites)) { ?>
+            <tr><td class="ankList"><span class="ankListField">Любимые предметы</span>:
+                <?php echo WrapIfMultiline($sFavourites); ?></td></tr>
+        <?php } ?>
+        <?php if (!empty($sAchivements)) { ?>
+        <tr><td class="ankList"><span class="ankListField">Достижения</span>:
+            <?php echo wrapIfMultiline($sAchivements); ?></td></tr>
+        <?php } ?>
+        <?php if (!empty($sHobby)) { ?>
+            <tr><td class="ankList"><span class="ankListField">Хобби</span>:
+                <?php echo WrapIfMultiline($sHobby); ?></td></tr>
+        <?php } ?>
+        <?php if (!empty($sNotes)) { ?>
+        <tr><td class="ankList notes"><span class="ankListField">Заметки</span>:
+            <?php echo WrapIfMultiline($sNotes); ?></td></tr>
+        <?php } ?>
+        <?php
+        }
+    ?>
+    </table>
+    <?php
+    if ($nCount > 0) {
+        $sMore = ($bMaxReached ? " (размер списка ограничен <b>$nCount</b>, возможно, есть ещё) " : ""); ?>
+        <p>Показано <b><?php echo $nPrepCounter; ?></b> преподов, типа
+            <b><?php /*echo $aShowStatuses[$sShowStatus];*/ ?></b><?php echo $sMore; ?></p><?php
+    } else {?>
+        <p>Показаны все преподы (<b><?php echo $nPrepCounter; ?></b> шт.)</p><?php
+    }
+}
+
+xsm_print_prep(/*@$_POST["ShowStatus"]*/);
+?>

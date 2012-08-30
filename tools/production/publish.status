@@ -1,4 +1,0 @@
-#!/bin/bash
-source $(dirname $0)/publish.conf
-echo Production content checksum:     $CHECKSUM_CONTENT
-echo Preproduction content checksum:  $CHECKSUM_NEXT

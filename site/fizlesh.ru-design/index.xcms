@@ -15,7 +15,7 @@
     <table cellspacing="0" cellpadding="0" class="topTable roundBorders" summary="Page Top">
       <tr>
         <td class="logoCell menuWidth">
-          <a href="index.php" title="ФизЛЭШ"><img
+          <a href="/<# web_prefix #>" title="ФизЛЭШ"><img
             src="/<# web_prefix #>fizlesh.ru-design/pic/fizlesh-logo-small.png" height="72" alt="Логотип ФизЛЭШ" /></a>
         </td>
         <td class="logoCell">
@@ -35,8 +35,10 @@
           <a class="menu-item menu-level1 menu-passive menu-passive-level1" href="/forum">Форум</a>
 
       <?php
-      if(@$_COOKIE["auth-login"])
+      if(strlen(@$_COOKIE["auth-login"]))
       {
+        include(translate('<a href="/<# web_prefix #>register/view'.
+            '" class="menu-item menuSys">Анкеты</a>'));
         include(translate('<a href="/<# web_prefix #>?'.
             xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).
             '" class="menu-item menuSys">Админка</a>'));
@@ -74,6 +76,29 @@
              screen.colorDepth:screen.pixelDepth))+';u'+escape(document.URL)+
              ';'+Math.random());
             </script>
+            <!-- Yandex.Metrika counter -->
+            <script type="text/javascript">
+            (function (d, w, c) {
+                (w[c] = w[c] || []).push(function() {
+                    try {
+                        w.yaCounter12421258 = new Ya.Metrika({id:12421258, enableAll: true});
+                    } catch(e) {}
+                });
+
+                var n = d.getElementsByTagName("script")[0],
+                    s = d.createElement("script"),
+                    f = function () { n.parentNode.insertBefore(s, n); };
+                s.type = "text/javascript";
+                s.async = true;
+                s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+                if (w.opera == "[object Opera]") {
+                    d.addEventListener("DOMContentLoaded", f);
+                } else { f(); }
+            })(document, window, "yandex_metrika_callbacks");
+            </script>
+            <noscript><div><img src="//mc.yandex.ru/watch/12421258" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+            <!-- /Yandex.Metrika counter -->
           </div>
         </td>
       </tr>

@@ -59,13 +59,6 @@
         </script>
     </head>
     <body>
-        <div style="padding: 2px">
-            <a <?php echo xcms_href(array('mode'=>'alias', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
-            <b title="Page Alias">ALI</b> <tt><?php echo @$INFO["alias"]; ?></tt></a> |
-            <b>HDR</b> <# cms/header #> |
-            <b>SUB</b> <?php echo htmlspecialchars(@$INFO["subheader"]); ?> |
-            <b>DIR</b> <tt><?php echo $pageid; ?></tt>
-        </div>
         <div>
         <?php
             include(translate('
@@ -73,6 +66,7 @@
                 <a'.xcms_href(array('mode'=>'delete', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Удалить</a>
                 <a'.xcms_href(array('page'=>$pageid, 'ref'=>'index')).'class="h-menu-link">Предпросмотр</a>
                 <a'.xcms_href(array('mode'=>'cleanprec', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Очистить кэш</a>
+                <a'.xcms_href(array('mode'=>'rebuild_alias', 'ref'=>'ladmin')).'class="h-menu-link">Перестроить alias-ы</a>
                 |
                 <a'.xcms_href(array('mode'=>'myprofile', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link"><b>'.$login.'</b></a>
                 <a'.xcms_href(array('mode'=>'change_passwd', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Сменить пароль</a>
@@ -81,9 +75,11 @@
                 <a'.xcms_href(array('mode'=>'userlist', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Пользователи</a>
                 <a'.xcms_href(array('mode'=>'groupadmin', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Группы</a>
                 <a'.xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Уведомления</a>
-                <a'.xcms_href(array('mode'=>'__convert', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Convert</a>
                 <a'.xcms_href(array('mode'=>'css', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Стиль</a>
                 <a href="/'.$web_prefix.'register/view" class="h-menu-link">Анкеты</a>
+                <a href="/'.$web_prefix.'register/view-prep" class="h-menu-link">Преподы</a>
+                <a href="/'.$web_prefix.'register/view-course" class="h-menu-link">Курсы</a>
+                <a'.xcms_href(array('mode'=>'__convert', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Convert [DoNotPush]</a>
             '));
         ?>
         </div>
@@ -92,20 +88,62 @@
             <div class="menu">
                 <?php
                     if (file_exists("INFO"))
-                    {
-                        echo "<pre>";
-                        echo file_get_contents("INFO");
-                        echo "</pre>";
+                    {?>
+                        <pre class="site-info"><?php
+                        echo file_get_contents("INFO"); ?>
+                        </pre><?php
                     }
                 ?>
                 <b>Menu</b>
                 <# cms/menu/display display_all devel start=1 end=5 #>
             </div>
             <div class="content">
+                <div class="page-info-box">
+                    <div class="page-info-box-top">
+                        <span class="td2">
+                            <span class="info-label">Alias</span>
+                            <a <?php echo xcms_href(array('mode'=>'edit_alias', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                            <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "alias", "<alias не задан>")); ?></tt></a>
+                        </span>
+                        <span class="td2">
+                            <span class="info-label">Заголовок</span>
+                            <a <?php echo xcms_href(array('mode'=>'edit_header', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                            <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "header", "<header не задан>")); ?></tt></a>
+                        </span>
+
+                        <span class="td2">
+                            <span class="info-label">Имя в меню</span>
+                            <a <?php echo xcms_href(array('mode'=>'edit_menu', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                            <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "menu-title", "<menu-title не задан>")); ?></tt></a>
+                        </span>
+
+                        <span class="td2">
+                            <span class="info-label">Подзаголовок</span>
+                            <a <?php echo xcms_href(array('mode'=>'edit_header', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                            <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "subheader", "<subheader не задан>")); ?></tt></a>
+                        </span>
+                    </div>
+
+                    <div class="page-info-box-bottom">
+                        <div><span class="info-label">Meta-описание</span>
+                            <a <?php echo xcms_href(array('mode'=>'edit_meta', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                            <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "meta-description", "<meta-description не задано>")); ?></tt></a>
+                        </div>
+                        <div><span class="info-label">Ключевые слова</span>
+                            <a <?php echo xcms_href(array('mode'=>'edit_meta', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                            <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "meta-keywords", "<meta-keywords не заданы>")); ?></tt></a>
+                        </div>
+                        <div><span class="info-label">Физический путь</span>
+                            <a <?php echo xcms_href(array('mode'=>'page_rename', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                            <tt><?php echo htmlspecialchars($pageid); ?></tt></a>
+                        </div>
+                    </div>
+                </div>
+
             <?php
                 echo '
                     <a'.xcms_href(array('page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Контент</a>
-                    <a'.xcms_href(array('mode'=>'meta', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Настройки</a>
+                    <a'.xcms_href(array('mode'=>'obsolete_settings', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Настройки (будет выпилено)</a>
                     <a'.xcms_href(array('mode'=>'img_edit', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Картинки</a>
                     <a'.xcms_href(array('mode'=>'access', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Доступ</a>';
             ?>
@@ -129,15 +167,23 @@
                 удалить раздел <?php echo "[$menu_title] $sec_name"; ?>">
         </form><?php
     }
-    else if(@$_GET["mode"]=="alias")
+    else if(@$_GET["mode"]=="edit_alias")
         include(translate("<! cms/page_alias !>"));
-    else if(@$_GET["mode"]=="meta")
-    {
-        include(translate("<! cms/light_edit_menu !>"));
-        include(translate("<! cms/page_rename !>"));
-        //include(translate("<! cms/page_alias !>"));
+    else if(@$_GET["mode"]=="edit_header")
+        include(translate("<! cms/page_header !>"));
+    else if(@$_GET["mode"]=="edit_meta")
         include(translate("<! cms/edit_meta_tags !>"));
+    else if(@$_GET["mode"]=="edit_menu")
+        include(translate("<! cms/edit_menu !>"));
+    else if(@$_GET["mode"]=="page_rename")
+        include(translate("<! cms/page_rename !>"));
+    else if(@$_GET["mode"]=="obsolete_settings")
+    {
+        // TODO: move icon editor
         include(translate("<! cms/light_icon_editor !>"));
+        // TODO: rewrite keys shmatrix
+        $editfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/info";
+        include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
     }
     else if(@$_GET["mode"]=="img_edit" )
     {
@@ -151,7 +197,7 @@
     else if(@$_GET["mode"]=="mailer" )
     {
         $editfile = "{$SETTINGS["datadir"]}cms/mailer.conf";
-        include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
+        include(translate('<! edit/oldtag `edit`,`view`,`installed` !>'));
     }
     else if(@$_GET["mode"]=="ank" )
     {
@@ -182,6 +228,14 @@
     else if(@$_GET["mode"]=="css")
     {
         include(translate('<! cms/light_css_editor !>'));
+    }
+    else if(@$_GET["mode"]=="rebuild_alias")
+    {
+        include(translate('<! cms/build_rewrite !>'));
+        ?>
+        <div class="admin-widget">
+            <div class="notice">Список alias-ов успешно обновлён</div>
+        </div><?php
     }
     else if(@$_GET["mode"]=="__convert")
     {
@@ -219,7 +273,7 @@
         elseif(@$_GET["mode"]=="groupadmin")
     {
         $editfile = "{$SETTINGS["datadir"]}groups";
-        include(translate("<! edit/tag !>"));
+        include(translate("<! edit/oldtag !>"));
     }
     elseif(@$_GET["mode"]=="register_form")
     {

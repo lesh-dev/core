@@ -101,7 +101,7 @@
 
     ?>
 <form method="post" enctype="multipart/form-data">
-    <textarea rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
+    <textarea class="editor" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
         name="edit-text"><?php echo $text; ?></textarea>
     <br />
     <input type="hidden" name="<?php echo $pathv; ?>" value="<?php echo $ename;?>">

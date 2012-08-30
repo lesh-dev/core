@@ -1,17 +1,36 @@
-<?php
-    if(@$_POST["rename-current-section"])
-    {
-        // TODO: check file path injection here
-        rename("{$SETTINGS["datadir"]}cms/pages/$pageid","{$SETTINGS["datadir"]}cms/pages/{$_POST["rename-current-section"]}");
-        ?>Путь успешно изменён!<?php
-    }
-?>
 <div class="admin-widget">
-<h3>Физический путь</h3>
-<div class="warn"><b>ВНИМАНИЕ:</b> Изменение физического пути страницы обычно нужно очень редко!</div>
-<form method="post">
-    Физический путь:
-    <input type="text" name="rename-current-section" value="<?php echo $pageid;?>" />
-    <input type="submit" value="Изменить">
-</form>
+	<h3>Физический путь</h3>
+	<form method="post">
+<?php
+	$redirect = false;
+    if (@$_POST["change-pageid"])
+    {
+        $new_pageid = xcms_get_key_or($_POST, "new-pageid");
+        // no dots or other stuff is allowed
+        $new_pageid = preg_replace("[^a-zA-Z0-9_/-]", '', $new_pageid);
+        if (!strlen($new_pageid))
+        {?>
+            <div class="error">Путь не может быть пустым!</div><?php
+        }
+        else
+        {
+            // TODO: rename error check
+            rename("{$SETTINGS["datadir"]}cms/pages/$pageid",
+                "{$SETTINGS["datadir"]}cms/pages/$new_pageid");
+            $redirect = true;
+            ?>
+            <div class="notice">Путь успешно изменён!</div><?php
+        }
+    }
+    if ($redirect)
+        include(translate("<! redir_msg ladmin 2 !>"));
+?>
+	<div class="warn"><b>ВНИМАНИЕ:</b> Изменение физического пути страницы обычно нужно очень редко!</div>
+    <div>
+        <span class="admin-form-label">Физический путь</span>
+        <input type="text" class="admin-long" xcms-track-changes="yes" name="new-pageid"
+            value="<?php echo htmlspecialchars($pageid); ?>" />
+    </div>
+    <input type="submit" name="change-pageid" value="Сохранить" />
+    </form>
 </div>

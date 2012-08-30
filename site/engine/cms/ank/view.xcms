@@ -1,3 +1,4 @@
+<# cms/ank/func #>
 <?php
     if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
     {
@@ -62,17 +63,20 @@
             $mailMsg .= "$keyTitle: $value\r\n\r\n";
             $htmlContent .= "<tr><td class=\"left\">$keyTitle</td><td>".htmlspecialchars($value)."</td></tr>\n";
         }
-        @mkdir("$content_dir/ank",0777);
-        $xml->asXML("$content_dir/ank/$fileName");
+        $ank_dir = "${content_dir}ank";
+        @mkdir($ank_dir, 0777);
+        $write_success = (@$xml->asXML("$ank_dir/$fileName") === true);
         $mailMsgHTML = str_replace("@@TABLE-CONTENT@", $htmlContent, $mailMsgHTML);
         $mailMsgHTML = str_replace("@@DATE@", date("Y.m.d H:i:s", $unixTime), $mailMsgHTML);
 
         $aHTMLList = array();
         $aPlainList = array();
-        $bDebugMode = false;
-        if (substr($studentName, 0, 4) == "TEST") // see bug #111
+        if (substr($studentName, 0, 12) == "NO-MAIL-TEST") // see bug #264
         {
-            $bDebugMode = true;
+            // do nothing
+        }
+        elseif (substr($studentName, 0, 4) == "TEST") // see bug #111
+        {
             $aHTMLList[] = "Mikhail Veltishchev <dichlofos-mv@yandex.ru>";
             $aPlainList[] = "Mikhail Veltishchev <dichlofos-mv@yandex.ru>";
         }
@@ -92,65 +96,70 @@
 
         $addrHTMLList = join(", ", $aHTMLList);
         $addrPlainList = join(", ", $aPlainList);
+        $subject = "New fizlesh.ru anketa: ".xcms_transliterate($studentName);
 
-        $bSuccessHTML = @mail($addrHTMLList, "New anketa from fizlesh.ru",
-            // text content
-            $mailMsg."\r\n".
-            // html content with boundary marker
-            "--==boundary-1\r\n".
-            "Content-Type: text/html; charset=utf-8\r\n".
-            "Content-Transfer-Encoding: 8bit\r\n".
-            "\r\n".
-            $mailMsgHTML.
-            "\r\n--==boundary-1\r\n",
-            // aux headers
-            "From: fizlesh.ru <noreply@fizlesh.ru>\r\n".
-            'Content-Type: multipart/related; boundary="==boundary-1"; type="text/html"; charset=utf-8'."\r\n".
-            "Content-Transfer-Encoding: 8bit\r\n"
-        );
-        $bSuccessText = @mail($addrPlainList, "New anketa from fizlesh.ru",
-            // text content
-            $mailMsg."\r\n",
-            // aux headers
-            "From: fizlesh.ru <noreply@fizlesh.ru>\r\n".
-            'Content-Type: text/plain; charset=utf-8'."\r\n".
-            "Content-Transfer-Encoding: 8bit\r\n"
-        );
-        $bSuccess = $bSuccessHTML || $bSuccessText;
+        $bSuccessHTML = true;
+        if (count($aHTMLList))
+            $bSuccessHTML = @mail($addrHTMLList, $subject,
+                // text content
+                $mailMsg."\r\n".
+                // html content with boundary marker
+                "--==boundary-1\r\n".
+                "Content-Type: text/html; charset=utf-8\r\n".
+                "Content-Transfer-Encoding: 8bit\r\n".
+                "\r\n".
+                $mailMsgHTML.
+                "\r\n--==boundary-1\r\n",
+                // aux headers
+                "From: fizlesh.ru <noreply@fizlesh.ru>\r\n".
+                'Content-Type: multipart/related; boundary="==boundary-1"; type="text/html"; charset=utf-8'."\r\n".
+                "Content-Transfer-Encoding: 8bit\r\n"
+            );
+        $bSuccessText = true;
+        if (count($aPlainList))
+            $bSuccessText = @mail($addrPlainList, $subject,
+                // text content
+                $mailMsg."\r\n",
+                // aux headers
+                "From: fizlesh.ru <noreply@fizlesh.ru>\r\n".
+                'Content-Type: text/plain; charset=utf-8'."\r\n".
+                "Content-Transfer-Encoding: 8bit\r\n"
+            );
+        $bSuccess = ($bSuccessHTML || $bSuccessText) && $write_success;
 
-        $message = 'Спасибо, Ваша анкета принята! Сейчас Вы будете перенаправлены '
-            .'на главную страницу. Если этого не произошло, '
-            .'нажмите <a href="/'.$web_prefix.'">сюда</a>.';
-        $meta = '<meta http-equiv="refresh" content="3;URL=/'.$web_prefix.'" />';
-
+        $dest_url = 'register/success';
+        $zero_redirect_delay = $SETTINGS["zero_redirect_delay"];
         if (!$bSuccess)
         {
             // В этом случае анкета всё равно сохранится у нас, и на самом деле мы всё узнаем про человека,
             // но чтобы не ждать три дня, пусть уж лучше нас пнут извне
-            $fE = fopen("$content_dir/ank/errors.log", "a+");
-            fputs($fE, "$fileName\n");
-            fclose($fE);
-            $meta = '<meta http-equiv="refresh" content="0;URL=/'.$web_prefix.'register/error" />';
-            echo $meta;
+            xcms_log(XLOG_ERROR, "[ANK] Anketa submission failed for $fileName. ".
+                "Statuses: HTML:$bSuccessHTML Plain:$bSuccessText Write:$write_success");
+            $dest_url = 'register/error';
         }
-        else
-        {
-            echo $meta;
-            echo $message;
-        }
+        $message = 'Сейчас Вы будете перенаправлены на страницу результата. Нажмите '.
+            '<a href="/'.$web_prefix.$dest_url.'">сюда</a>, если не хотите ждать.';
+        $meta = '<meta http-equiv="refresh" content="'.$zero_redirect_delay.';URL=/'.$web_prefix.$dest_url.'" />';
+        echo $message;
+        echo $meta;
     }
     else if(@$_GET["aparam"] == "edit")
         include(translate('<! cms/ank/edit-ank !>'));
     else if(@$_GET["aparam"] == "view")
         include(translate('<! cms/ank/view-ank !>'));
-    else if(@$_GET["aparam"] == "download")
-        // TODO: #232: this won't work due to header problem
-        include(translate('<! global/get_ank !>'));
+    else if(@$_GET["aparam"] == "view-prep")
+        include(translate('<! cms/ank/view-prep !>'));
+    else if(@$_GET["aparam"] == "edit-prep")
+        include(translate('<! cms/ank/edit-prep !>'));
+    else if(@$_GET["aparam"] == "view-course")
+        include(translate('<! cms/ank/view-course !>'));
+    else if(@$_GET["aparam"] == "edit-course")
+        include(translate('<! cms/ank/edit-course !>'));
     else
     {
         if (@$group["#admin"] || @$group["#ank"])
         {?>
-            <div><a class="linkButton" href="view">Manage</a></div><?php
+            <div><a class="linkButton" href="register/view">Manage</a></div><?php
         }
         //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
         $text = file_get_contents( "{$SETTINGS["datadir"]}cms/pages/$pageid/content" );

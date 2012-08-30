@@ -72,7 +72,7 @@
             <font color="red"><h3>Error</h3></font>
             <p>You don't have <b>mod_rewrite</b> enabled.</p>
             <ul>
-                <li>Please, configure Your apache server.</li>
+                <li>Please, configure your Apache server.</li>
             </ul>
             <p>Refresh this page to retry.</p><?php
 
@@ -83,7 +83,7 @@
         @mkdir(".prec", 0777);
         if($f = @fopen(".prec/.htaccess", "w"))
         {
-            fputs($f,"deny from all");
+            fputs($f, "Deny from all");
             $PERM["prec"] = true;
             fclose($f);
         }

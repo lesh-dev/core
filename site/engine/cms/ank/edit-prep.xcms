@@ -1,0 +1,125 @@
+<# auth/ #admin #ank #>
+<# cms/ank/style #>
+<# cms/ank/format #>
+<?php
+
+$fields = array(
+    //"Status"=>"Статус анкеты",
+    "last_name"=>"Фамилия",
+    "first_name"=>"Имя",
+    "patronymic"=>"Отчество",
+    "birth_date"=>"Дата рождения",
+    "school"=>"Школа",
+    "school_city"=>"Адрес школы",
+    //"Class"=>"Класс",
+    "phone"=>"Телефон",
+    "cellular"=>"Мобильный телефон",
+    "email"=>"E-Mail",
+    "skype"=>"Skype",
+    "social_profile"=>"Профиль",
+    //
+    "is_teacher"=>"Допущен к преподаванию",
+    //"Favourites"=>"Любимые предметы",
+    //"Achivements"=>"Достижения",
+    //"Hobby"=>"Хобби",
+    //"Notes"=>"Заметки",
+    //"UserAgent"=>"UserAgent",
+    "person_created"=>"Время создания",
+    "person_modified"=>"Последняя модификация"
+);
+
+function xsm_edit_prep()
+{
+    global $fields;
+    global $content_dir;
+
+    $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
+    // TODO: escaping/filtering
+    $db = xdb_get();
+    if ($person_id != "new")
+    {
+        $preps_sel = $db->query("SELECT * FROM person WHERE person_id = $person_id");
+        if (!($person = $preps_sel->fetchArray(SQLITE3_ASSOC)))
+        {
+            xcms_log(0, "Cannot fetch person with person_id=$person_id.");
+            return;
+        }
+        $db->close();
+    }
+    else
+    {
+        $person = array(
+            "person_id"=>$person_id,
+            "is_teacher"=>"teacher"
+        );
+    }
+
+    $field_types = array(
+        "Favourites"=>"textarea",
+        "Achivements"=>"textarea",
+        "Hobby"=>"textarea",
+        "skype"=>"textarea",
+        "Notes"=>"textarea"
+    );
+
+    ?>
+    <form method="post" action="edit-prep">
+        <input type="hidden" name="person_id" value="<?php echo $person_id; ?>" />
+        <table summary="Препод" class="ankEdit">
+            <tr>
+                <td class="ankListRowTitle">Препод</td>
+            </tr>
+            <!-- <tr><td class="ankList"><span class="ankEditField">Статус анкеты</span>
+                <?php echo xcms_ank_make_selector(@$oAnk["Status"], "Edit"); ?></td></tr> -->
+            <?php
+            foreach ($fields as $key=>$field_title)
+            {
+                $value = @$person[$key];
+                $attr = "";
+                if ($key == "Status") continue; // handled above the loop
+                // handle readonly fields
+                if ($key == "UserAgent" ||
+                    $key == "person_created" ||
+                    $key == "person_modified") $attr = ' readonly="readonly"'?>
+                <tr><td class="ankList"><span class="ankEditField"><?php echo $fields[$key]; ?></span>
+                <?php
+                if (array_key_exists($key, $field_types)) {?>
+                    <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
+                        echo htmlspecialchars($value); ?></textarea/><?php
+                } else {?>
+                    <input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
+                        name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
+                } ?>
+                </td></tr>
+                <?php
+            }?>
+        </table>
+        <div style="white-space: nowrap"><input type="submit" name="update-prep"
+            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
+        <a class="linkButton" href="view-prep#<?php echo $person_id; ?>"
+            style="height: 20px; line-height: 20px; vertical-align: bottom;">Вернуться к списку преподов</a></div>
+    </form>
+    <?php
+}
+
+function xsm_update_prep()
+{
+    global $fields;
+
+    $person_id = xcms_get_key_or($_POST, 'person_id', 'invalid'); // invalid key
+    $res = xdb_insert_or_update('person', array('person_id'=>$person_id), $_POST, $fields);
+    if ($res)
+    {?>
+        <p>Препод сохранён успешно. <a href="view-prep#<?php echo $person_id; ?>">Вернуться к просмотру</a></p>
+    }
+    else
+    {?>
+        <p>Не удалось добавить запись. <a href="view-prep#<?php echo $person_id; ?>">Вернуться к просмотру</a></p><?php
+    }
+}
+
+if (@$_POST["update-prep"])
+    xsm_update_prep();
+else
+    xsm_edit_prep();
+?>

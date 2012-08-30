@@ -1,36 +1,20 @@
 <# auth/ #admin #ank #>
-<# cms/ank/func #>
+<# cms/ank/format #>
 <# cms/ank/style #>
+
 <form method="post" style="margin-bottom: 2px">
-  <?php
-    echo xcms_ank_make_selector(@$_POST["ShowStatus"], "Show");
-  ?>
-  <input type="submit" value="Показать">
+    <?php
+        echo xcms_ank_make_selector(@$_POST["ShowStatus"], "Show");
+    ?>
+    <input type="submit" value="Показать">
 </form>
 <?php
-  function DoFormatting($sHTML) {
-    // detect UNIX or DOS line-endings
-    if (strpos($sHTML, "\n") !== false) {
-      // Unix or DOS, so \n -> <br />, '\r' -> void
-      $sHTML = str_replace("\n", "<br />", $sHTML);
-      $sHTML = str_replace("\r", "", $sHTML);
-    } elseif (strpos($sHTML, "\r") !== false) {
-      // MacOS, \r only
-      $sHTML = str_replace("\r", "<br />", $sHTML);
-    }
-    return $sHTML;
-  }
 
-  function WrapIfMultiline($sHTML) {
-    if (strpos($sHTML, "<br />")) $sHTML = "<br />$sHTML";
-    return $sHTML;
-  }
-
-  /**
-    * @param nCount how many anketas will be printed, zero means all
-    **/
-  function PrintAnk($sShowStatus)
-  {
+    /**
+      * @param nCount how many anketas will be printed, zero means all
+      **/
+    function PrintAnk($sShowStatus)
+    {
     global $content_dir, $design_dir, $web_prefix;
     $aShowStatuses = xcms_ank_get_show_status_list();
     $nCount = 50;
@@ -56,8 +40,7 @@
       }
 
       $oAnk = get_object_vars($xa);
-      $sCurStatus = @$oAnk["Status"];
-      if (empty($sCurStatus)) $sCurStatus = "new"; // default value
+      $sCurStatus = xcms_get_key_or($oAnk, "Status", "new");
       if ($sShowStatus == "notspam") {
         if ($sCurStatus == "spam") continue;
         if ($sCurStatus == "duplicate") continue;
@@ -80,32 +63,32 @@
       $sName = htmlspecialchars($oAnk["Name"]); // assume always exists
       $sBirthDate = htmlspecialchars($oAnk["BirthDate"]);
       $sSchool = htmlspecialchars($oAnk["School"]);
-      $sSchoolLocation = htmlspecialchars(@$oAnk["SchoolLocation"]);
+      $sSchoolLocation = htmlspecialchars(xcms_get_key_or($oAnk, "SchoolLocation"));
       $sClass = htmlspecialchars($oAnk["Class"]);
-      $sCellular = htmlspecialchars($oAnk["Cellular"]);
+      $sCellular = htmlspecialchars(xcms_get_key_or($oAnk, "Cellular"));
       $sPhone = htmlspecialchars($oAnk["Phone"]);
       $sEMail = htmlspecialchars($oAnk["EMail"]);
 
-      $sProfile = $oAnk["Profile"];
-      // make it valid URL if it was it form vk.com/name
-      if (!empty($sProfile) && substr($sProfile, 0, 7) != 'http://') $sProfile = "http://$sProfile";
+      $sProfile = xcms_get_key_or($oAnk, "Profile");
+      // make it valid URL if it was it form example.com/name
+      if (!empty($sProfile) &&
+        strpos(substr($sProfile, 0, 8), '://') === false) // http/https scheme not matched
+        $sProfile = "http://$sProfile"; // assume http scheme
       $sProfile = htmlspecialchars($sProfile);
 
-      $sSkype = htmlspecialchars($oAnk["Skype"]);
-      $sFavourites = DoFormatting(htmlspecialchars($oAnk["Favourites"]));
-      $sAchivements = DoFormatting(htmlspecialchars($oAnk["Achivements"]));
-      $sHobby = DoFormatting(htmlspecialchars($oAnk["Hobby"]));
-      $sNotes = DoFormatting(htmlspecialchars(@$oAnk["Notes"]));
+      $sSkype = htmlspecialchars(xcms_get_key_or($oAnk, "Skype"));
+      $sFavourites = xcms_html_wrap_by_crlf(htmlspecialchars($oAnk["Favourites"]));
+      $sAchivements = xcms_html_wrap_by_crlf(htmlspecialchars($oAnk["Achivements"]));
+      $sHobby = xcms_html_wrap_by_crlf(htmlspecialchars($oAnk["Hobby"]));
+      $sNotes = xcms_html_wrap_by_crlf(htmlspecialchars(xcms_get_key_or($oAnk, "Notes")));
 
-      $sUserAgent = htmlspecialchars(@$oAnk["UserAgent"]);
-      $sFileName = htmlspecialchars(@$oAnk["FileName"]);
-      $sHRCreated = htmlspecialchars(@$oAnk["HRCreated"]);
-      if (empty($sHRCreated)) {
-        $sHRCreated = substr($sBaseAnkFileName, 4, 10); // cut 'ank/' and extract 'YYYY.MM.DD'
-      }
-      $sHRModified = htmlspecialchars(@$oAnk["HRModified"]);
-      $sStatus = htmlspecialchars(@$oAnk["Status"]);
-
+      $sUserAgent = htmlspecialchars(xcms_get_key_or($oAnk, "UserAgent"));
+      $sFileName = htmlspecialchars(xcms_get_key_or($oAnk, "FileName"));
+      // default is to cut 'ank/' and extract 'YYYY.MM.DD'
+      $sHRCreated = htmlspecialchars(xcms_get_key_or(
+        $oAnk, "HRCreated", substr($sBaseAnkFileName, 4, 10)));
+      $sHRModified = htmlspecialchars(xcms_get_key_or($oAnk, "HRModified"));
+      $sStatus = htmlspecialchars(xcms_get_key_or($oAnk, "Status", "new"));
       $aStatuses = xcms_ank_get_status_list();
       if (!array_key_exists($sStatus, $aStatuses)) $sStatus = "new"; // default
       $sHRStatus = $aStatuses[$sStatus];
@@ -120,7 +103,7 @@
             <a style="margin-right: 10px" href="/<?php echo $web_prefix; ?>?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
             <a style="margin-right: 10px" href="/<?php echo $web_prefix; ?>?ref=get_ank&amp;mode=txt&amp;file=<?php echo $sBaseAnkFileName; ?>">TXT</a>
             <a style="margin-right: 10px" href="edit&amp;file=<?php echo $sBaseAnkFileName; ?>">Редактировать</a>
-            <img src="<?php echo "/$web_prefix/$design_dir"; ?>/pic/mozillafirefox.png" style="vertical-align: middle;" title="<?php echo "$sUserAgent"; ?>" />
+            <img src="<?php echo "/${web_prefix}$design_dir"; ?>pic/mozillafirefox.png" style="vertical-align: middle;" title="<?php echo "$sUserAgent"; ?>" />
             <span style="margin-left: 10px;" class="ankListField">Статус</span>: <span class="ankStatus <?php echo $sStatus; ?>"><?php echo $sHRStatus; ?></span>
             <span style="margin-left: 10px;" class="ankListField">Создана</span>: <?php echo $sHRCreated; ?>
             <?php if (!empty($sHRModified)) {?>
@@ -163,16 +146,16 @@
       <?php } ?>
       <!--  other stuff -->
       <?php if (!empty($sFavourites)) { ?>
-      <tr><td class="ankList"><span class="ankListField">Любимые предметы</span>: <?php echo WrapIfMultiline($sFavourites); ?></td></tr>
+      <tr><td class="ankList"><span class="ankListField">Любимые предметы</span>: <?php echo xcms_html_wrap_ml($sFavourites); ?></td></tr>
       <?php } ?>
       <?php if (!empty($sAchivements)) { ?>
-      <tr><td class="ankList"><span class="ankListField">Достижения</span>: <?php echo wrapIfMultiline($sAchivements); ?></td></tr>
+      <tr><td class="ankList"><span class="ankListField">Достижения</span>: <?php echo xcms_html_wrap_ml($sAchivements); ?></td></tr>
       <?php } ?>
       <?php if (!empty($sHobby)) { ?>
-      <tr><td class="ankList"><span class="ankListField">Хобби</span>: <?php echo WrapIfMultiline($sHobby); ?></td></tr>
+      <tr><td class="ankList"><span class="ankListField">Хобби</span>: <?php echo xcms_html_wrap_ml($sHobby); ?></td></tr>
       <?php } ?>
       <?php if (!empty($sNotes)) { ?>
-      <tr><td class="ankList notes"><span class="ankListField">Заметки</span>: <?php echo WrapIfMultiline($sNotes); ?></td></tr>
+      <tr><td class="ankList notes"><span class="ankListField">Заметки</span>: <?php echo xcms_html_wrap_ml($sNotes); ?></td></tr>
       <?php } ?>
       <?php
       ++$nAnkCounter;

@@ -1,0 +1,15 @@
+<?php
+    /* This template was added to provide backwards compatibility
+    to old key-value storage, that is still used for user management
+    and for some other things
+    */
+    $pathv = @$argv[1];
+    if(!$pathv) $pathv = "edit-file";
+    $ename = $editfile;
+    if(!$ename) $ename = @$_POST[$pathv];
+    if(!$ename) $ename = @$_GET[$pathv];
+    if(!$ename)
+        echo "<h4>List editor: illegal filename given</h4>";
+    else
+        @editlist_form($ename, "", @$argv[1], @$argv[2], true);
+?>

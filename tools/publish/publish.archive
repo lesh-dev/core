@@ -1,0 +1,48 @@
+#!/bin/bash
+
+source $(dirname $0)/publish.conf
+
+if [ "$1" == "--help" ]; then
+  echo "This script archives all old unused copies of the site stored in $CLONE_DIR"
+  exit 1
+fi
+
+if [ "`id -u`" != "0" ]; then
+        echo "Are you root to perform this? Use sudo, man."
+        exit 2
+fi
+
+echo "Archiving production copies..."
+
+for i in $CLONE_DIR/production.*; do
+  if [ "$i" == "$CLONE_DIR/production.last" ]; then
+    continue;
+  fi
+  if [ "$(readlink $CLONE_DIR/production)" == "$i" ]; then
+    echo "Skipping real production: $i"
+    continue
+  fi
+  if [ "$(readlink $CLONE_DIR/production.last)" == "$i" ]; then
+    echo "Skipping 'last chance': $i"
+    continue
+  fi
+  echo "Archiving $i ..."
+  ARC_NAME="`basename $i`"
+  DIR_NAME="`dirname $i`"
+  tar czf "$DIR_NAME/arc-$ARC_NAME.tgz" "$i"
+  rm -rf "$i"
+done
+
+echo "Archiving pre-production copies..."
+
+for i in $CLONE_DIR/preprod.*; do
+  if [ "$(readlink $CLONE_DIR/preprod)" == "$i" ]; then
+    echo "Skipping preprod: $i"
+    continue
+  fi
+  echo "Archiving $i ..."
+  ARC_NAME="`basename $i`"
+  DIR_NAME="`dirname $i`"
+  tar czf "$DIR_NAME/arc-$ARC_NAME.tgz" "$i"
+  rm -rf "$i"
+done
