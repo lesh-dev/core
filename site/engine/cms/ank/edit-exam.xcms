@@ -18,7 +18,7 @@ function xsm_edit_exam()
     global $exam_fields;
 
     $exam_id = xcms_get_key_or($_GET, 'exam_id', '-1'); // invalid key
-    $exam = xdb_get_entity_by_id('exam', 'exam', $exam_id);
+    $exam = xdb_get_entity_by_id('exam', $exam_id);
     $student_person_id = xcms_get_key_or($_GET, 'student_person_id', '-1');
 
     $field_types = array(

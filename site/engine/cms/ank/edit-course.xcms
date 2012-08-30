@@ -17,7 +17,7 @@ function xsm_edit_course()
     global $course_fields;
 
     $course_id = xcms_get_key_or($_GET, 'course_id', '-1'); // invalid key
-    $course = xdb_get_entity_by_id('course', 'course', $course_id);
+    $course = xdb_get_entity_by_id('course', $course_id);
     if ($course_id == "new")
     {
         $course_teacher_id = xcms_get_key_or($_GET, 'course_teacher_id');

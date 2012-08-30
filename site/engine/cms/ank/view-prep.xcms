@@ -1,122 +1,18 @@
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
 
-<form method="post" style="margin-bottom: 2px"><span>
-    <span class="ankListField">Статус</span>: <?php
-    echo xsm_make_enum_selector(
-        "show_activity_status",
-        xcms_get_key_or($_POST, "show_activity_status", "notspam"),
-        xsm_get_person_show_statuses());
-    ?>
-
-    <span class="ankListField">Только преподы</span>: <?php
-    echo xsm_make_checkbox('show_is_teacher',
-        xcms_get_key_or($_POST, "show_is_teacher"), "teacher");
-    ?>
-
-    <span class="ankListField">Только активные</span>: <?php
-    echo xsm_make_checkbox('show_is_current',
-        xcms_get_key_or($_POST, "show_is_current"), "current");
-    ?>
-    <span class="ankListField">Фильтр ФИО</span>:
-    <input class="ankEdit filter" type="text"
-        value="<?php echo htmlspecialchars(xcms_get_key_or($_POST, 'show_name_filter')); ?>"
-        name="show_name_filter"
-        title="Будут найдены все участники, в ФИО которых (в любом порядке) встречаются слова запроса, без учёта регистра. Например, 'дан Мих' найдёт Даниила Михайловича, Михаила Данилевского и Богдана Немихульского, но НЕ найдёт Мишу Данилкина (имена условны)" />
-    <input type="submit" value="Показать" />
-</span></form>
 <?php
 
-function xsm_person_name_filter($db, $show_name_filter)
-{
-    $show_name_filter = trim($show_name_filter);
-    if (!strlen($show_name_filter))
-        return "";
-
-    $words = explode(' ', $show_name_filter);
-    $cond = "";
-    foreach ($words as $word)
-    {
-        $w = trim($word);
-        if (!strlen($w))
-            continue;
-
-        if (strlen($cond))
-            $cond .= " AND ";
-        $esc_word = $db->escapeString($w);
-        $cond .=
-            "((last_name LIKE '%$esc_word%') OR ".
-            "(first_name LIKE '%$esc_word%') OR ".
-            "(patronymic LIKE '%$esc_word%'))";
-    }
-    if (!strlen($cond))
-        return "";
-    return "($cond)";
-}
-
-function xsm_print_prep()
+function xsm_print_person()
 {
     global $design_dir, $web_prefix;
-    $show_status = xcms_get_key_or($_POST, "show_activity_status", "notspam");
-    $show_is_current = xcms_get_key_or($_POST, "show_is_current");
-    $show_is_teacher = xcms_get_key_or($_POST, "show_is_teacher");
-    $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
 
-    $show_statuses = xsm_get_person_show_statuses();
-    $show_count = 250;
-    if (!array_key_exists($show_status, $show_statuses)) $show_status = "notspam";
-    if ($show_status == "all") $show_count = 0; // show all
+    $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
+    $person = xdb_get_entity_by_id('person', $person_id);
 
-    $db = xdb_get();
-    $db->createFunction('LIKE', 'xdb_like', 2);
-
-    $cond = "(1 = 1)";
-    if ($show_is_teacher == "teacher")
-        $cond .= " AND ( is_teacher = 'teacher' )";
-
-    if ($show_is_current == "current")
-        $cond .= " AND ( is_current = 'current' )";
-
-    if ($show_status == "notdecl")
-        $cond .=
-            " AND ( (activity_status <> 'duplicate')".
-            " AND (activity_status <> 'spam')".
-            " AND (activity_status <> 'declined') )";
-    elseif ($show_status == "notspam")
-        $cond .= " AND ( (activity_status <> 'duplicate') AND (activity_status <> 'spam') )";
-    elseif ($show_status == "all")
-        $cond .= "";
-    else
-        $cond .= " AND ( activity_status = '$show_status' )";
-
-    $name_filter_cond = xsm_person_name_filter($db, $show_name_filter);
-    if (strlen($name_filter_cond))
-        $cond .= " AND $name_filter_cond";
-
-    $query = "SELECT * FROM person";
-    if (strlen($cond))
-        $query .= " WHERE $cond";
-    $query .= " ORDER BY person_created DESC";
-    // debug area (TODO: remove)
-    ?><textarea rows="10" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
-    $person_sel = $db->query($query);
-
-    $person_counter = 0;
-    $max_reached = false;
-    xsm_view_operations('prep', 'person', 'участника');
     ?>
-    <table summary="Участники" class="ankList">
-    <?php
-    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC)) {
-        if ($show_count > 0 && $person_counter >= $show_count) {
-            $max_reached = true;
-            break;
-        }
-        ?>
-        <tr><td class="ankListRowDiv">&nbsp;</td></tr>
+    <table summary="Участник" class="ankList">
         <?php
-        $person_counter++;
-
         $person_id = htmlspecialchars($person["person_id"]);
 
         $last_name = htmlspecialchars($person["last_name"]);
@@ -260,20 +156,9 @@ function xsm_print_prep()
         <tr><td class="ankList notes"><span class="ankListField">Заметки</span>:
             <?php echo $person_comment; ?></td></tr>
         <?php } ?>
-        <?php
-        }
-    ?>
     </table>
     <?php
-    xsm_view_operations('prep', 'person', 'участника');
-    if ($show_count > 0) {
-        $more = ($max_reached ? " (размер списка ограничен <b>$show_count</b>, возможно, есть ещё) " : ""); ?>
-        <p>Показано <b><?php echo $person_counter; ?></b> участников, типа
-            <b><?php echo $show_statuses[$show_status]; ?></b><?php echo $more; ?></p><?php
-    } else {?>
-        <p>Показаны все люди (<b><?php echo $person_counter; ?></b> шт.)</p><?php
-    }
 }
 
-xsm_print_prep();
+xsm_print_person();
 ?>

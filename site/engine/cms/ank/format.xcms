@@ -205,7 +205,7 @@
         <a href="view-<?php echo $redir ?>">Вернуться к просмотру</a></p><?php
     }
 
-    function xdb_get_entity_by_id($entity, $table_name, $id)
+    function xdb_get_entity_by_id($table_name, $id)
     {
         $db = xdb_get();
         $key_name = "${table_name}_id";

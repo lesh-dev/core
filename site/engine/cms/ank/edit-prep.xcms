@@ -7,7 +7,7 @@ function xsm_edit_prep()
     $person_fields = xsm_get_person_fields();
 
     $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
-    $person = xdb_get_entity_by_id('prep', 'person', $person_id);
+    $person = xdb_get_entity_by_id('person', $person_id);
 
     $field_types = array(
         "favourites"=>"textarea",
