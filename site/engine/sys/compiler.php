@@ -92,7 +92,7 @@
             xcms_log(0, "Compiler fatal error: can't find source file '$filename'");
         }
         if(!file_exists($destination))$toCompile = true;
-        else if(filemtime($filename)>filemtime($destination))
+        else if(@filemtime($filename)>@filemtime($destination))
         {
             $toCompile = true;
         }
@@ -128,7 +128,7 @@
         return($fname);
     }
 
-    function xcms_main()
+    function xcms_main($refname = "")
     {
         global $SETTINGS, $engine_dir, $design_dir;
         global $main_ref_file;
@@ -136,7 +136,15 @@
         global $ref;
 
         // Choose filename
-        $ref = @$_GET["ref"];
+        if(strlen($refname) != 0 )
+        {
+            $ref = $refname;
+        }
+        else 
+        {
+            $ref = @$_GET["ref"];
+        }
+        
         if (!$ref) $ref = $SETTINGS["defaultpage"];
         if (file_exists("$design_dir/$ref.xcms"))
         {
@@ -151,8 +159,7 @@
             $ref = "nopage.xcms";
             $main_ref_file = "$design_dir/nopage.xcms";
         }
-
         // Find prec file
-        $main_ref_name = "{$SETTINGS["precdir"]}$ref.php";
+        $main_ref_name = "{$SETTINGS["precdir"]}f$refname-$ref.php";
     }
 ?>

@@ -68,7 +68,7 @@
                 <a'.xcms_href(array('mode'=>'cleanprec', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Очистить кэш</a>
                 <a'.xcms_href(array('mode'=>'rebuild_alias', 'ref'=>'ladmin')).'class="h-menu-link">Перестроить alias-ы</a>
                 |
-                <a'.xcms_href(array('mode'=>'myprofile', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link"><b>'.$login.'</b></a>
+                <a'.xcms_href(array('mode'=>'myprofile', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link"><b>'.xcms_user()->login().'</b></a>
                 <a'.xcms_href(array('mode'=>'change_passwd', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Сменить пароль</a>
                 <a'.xcms_href(array('mode'=>'logout', 'page'=>$pageid, 'ref'=>$ref)).'class="h-menu-link">Выйти</a>
                 |
@@ -211,7 +211,7 @@
         $text = "Справки нет. Напишите что-нибудь...";
         if (
             (@$_POST['change-help'] || !file_exists($editfile) || @$_POST["edit-submit"])
-            && ($login == "root") )
+            && (xcms_user()->login() == "root") )
         {
             include(translate('<! edit/file !>'));
             echo '<form method="POST"><input type="submit" value="Закончить." name="change-help-end"></form>';
@@ -220,7 +220,7 @@
         {
             $source = $editfile;
             include(translate("<! cms/readtext !>"));
-            if($login == "root")
+            if(xcms_user()->login() == "root")
             echo '<p><form method="POST"><input type="submit" value="Изменить!" name="change-help"></form>';
         }
     }

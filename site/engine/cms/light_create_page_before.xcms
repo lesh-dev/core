@@ -15,14 +15,13 @@
         $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid/{$_POST["create-name"]}";
 
         mkdir($dir);
-        @$LIST["owner"] = $login;
+        @$LIST["owner"] = xcms_user()->login();
         @$LIST["type"] = @$_POST["create-pagetype"];
-        @$LIST["view"] = "$login";
+        @$LIST["view"] = xcms_user()->login();
         @$LIST["header"] = $_POST["header"];
         @$LIST["subheader"] = $_POST["subheader"];
         if(@$_POST["viewForAll"]) $LIST["view"] = $LIST["view"]. " " . "#all";
-        @$LIST["edit"] = "$login";
-        if(@$_POST["delegateGroup"]) $LIST["edit"] = $LIST["edit"]. " " . "#$login";
+        @$LIST["edit"] = xcms_user()->login();
         @$LIST["edit"] = "";
         @$LIST["view"] = "";
         // ни в коем случае так делать нельзя!!! TODO выкосить цикл по POST-у

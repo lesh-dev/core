@@ -28,7 +28,7 @@
                 {
                   @$LIST["picname"] = $bpic;                  
                   $LIST["prename"] = $spic;
-                  $LIST["owner"] = $login;                  
+                  $LIST["owner"] = xcms_user()->login();                  
                   //$name = $login."-".mktime();
                   if(!file_exists("$dir/{$LIST["cat"]}.cat")) 
                   {

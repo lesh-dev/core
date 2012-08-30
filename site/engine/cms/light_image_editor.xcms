@@ -1,24 +1,8 @@
 <?php
                 $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
                 $prex = "${SETTINGS["datadir"]}cms/pages/$pageid";
-                /*if(@$_POST["Upload-image"])
-                {
-                  $name = $login."-".mktime();
-                  $lpic = "$dir/$name.pic";
-                  $bpic = "$dir/$name.jpeg";
-                  $spic = "$dir/$name-preview.jpeg";
-                  @make640($_FILES["image"]["tmp_name"],$bpic);
-                  @preview($_FILES["image"]["tmp_name"],$spic);
-                  @$LIST["picname"] = "$name.jpeg";
-                  $LIST["prename"] = "$name-preview.jpeg";
-                  $LIST["name"] = @$_POST["image-name"];
-                  $LIST["comment"] = @$_POST["image-comment"];
-                  $LIST["owner"] = $login;
-                  saveList($LIST,$lpic);
-                }*/
                 if(@$_POST["S-Upload-image"])
                 {
-                  //$name = $login."-".mktime();
                   $name = @$_POST["image-target"];
 		  if(!strlen($name))
 		  {
@@ -35,7 +19,7 @@
                   $LIST["prename"] = "$name-preview.jpeg";
                   $LIST["name"] = @$_POST["image-name"];                
                   $LIST["comment"] = @$_POST["image-comment"];
-                  $LIST["owner"] = $login;
+                  $LIST["owner"] = xcms_user()->login();
                   saveList($LIST,$lpic);                                  
                 }
                 if(@$_POST["Delete-image"])

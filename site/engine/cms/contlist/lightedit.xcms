@@ -55,7 +55,6 @@
             $value = str_replace(".pagetype","",$value);
             echo "<option name=\"$value\" value=\"$value\">$value</option>";
         }
-        echo "<tr><td>Право редактирования для #$login<td><input type=\"checkbox\" name=\"delegateGroup\">";
         foreach($group as $g)
         {
             $ch = "checked";
