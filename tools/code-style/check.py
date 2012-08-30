@@ -4,29 +4,48 @@ import os
 import sys
 import re
 
-def print_bad_context(lines, index, message):
+def print_bad_context(lines, bad_lines):
     line_count = len(lines)
-    print "* * *", message
-    for i in range(index - 3, index + 3):
-        if i < 0 or i >= line_count:
+    skip = True
+    for i in range(line_count):
+        l = lines[i].rstrip()
+        ln = i + 1
+        if i in bad_lines:
+            print '%3d > %s' % (ln, l)
+            skip = False
             continue
-        if i != index:
-            print ' ', lines[i].rstrip()
-        else:
-            print '>', lines[i].rstrip()
+        if (i+2) in bad_lines or (i+1) in bad_lines:
+            print '%3d   %s' % (ln, l)
+            skip = False
+            continue
+        if (i-2) in bad_lines or (i-1) in bad_lines:
+            print '%3d   %s' % (ln, l)
+            skip = False
+            continue
+        if not skip:
+            print '...'
+            skip = True
 
 def check_tab_style(lines):
     line_count = len(lines)
+    bad_lines = dict()
     for i in range(line_count):
         line = lines[i]
         sm = re.search('^[ ]+', line)
         if sm:
             spaces = sm.group()
             if len(spaces) % 4 != 0:
-                print_bad_context(lines, i, "Invalid spaces count: %d" % len(spaces))
+                message = "Invalid spaces count: %d" % len(spaces)
+                if i not in bad_lines:
+                    bad_lines[i] = []
+                bad_lines[i].append(message)
         tm = re.search('\t', line)
         if tm:
-            print_bad_context(lines, i, "Tab detected")
+            message = "Tab detected"
+            if i not in bad_lines:
+                bad_lines[i] = []
+            bad_lines[i].append(message)
+    print_bad_context(lines, bad_lines)
 
 
 def check_file(name):

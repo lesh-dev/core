@@ -4,13 +4,14 @@
 set -xe
 
 path="."
+my_base="`dirname $0`"
 
 check_tabs()
 {
-    if find $path -type f -name $1 | xargs grep $'\t' ; then
-        echo "Tabs check failed for xcms files, see files above. "
-        exit 1
-    fi
+    for i in `find $path -type f -name $1`; do
+        echo "*** Checking '$i'"
+        $my_base/check.py $i
+    done
     return 0
 }
 
