@@ -58,9 +58,9 @@
         foreach ($primary_keys as $key => $value)
             if ($value == "new") $insert = true;
         if ($insert)
-            xdb_insert_ai($table_name, $primary_keys, $values, $allowed_keys);
+            return xdb_insert_ai($table_name, $primary_keys, $values, $allowed_keys);
         else
-            xdb_update($table_name, $primary_keys, $values, $allowed_keys);
+            return xdb_update($table_name, $primary_keys, $values, $allowed_keys);
     }
 
     // single insert into autoincrement table
@@ -79,26 +79,33 @@
         foreach ($keys_values as $key => $value)
         {
             if (!array_key_exists($key, $allowed_keys))
+            {
+                xcms_log(0, "[DB] Key $key is not suitable for $table_name insert");
                 continue; // skip invalid keys
+            }
             if ($key == $pk_name)
                 continue; // skip autoincremented keys
             $keys .= "$key, ";
             $values .= "'".$db->escapeString($value)."', ";
             $fields_found = true;
         }
-        if (!$fields_found) return false;
+        if (!$fields_found)
+        {
+            xcms_log(0, "[DB:ERROR] No fields found");
+            $db->close();
+            return false;
+        }
         $keys = substr($keys, 0, strlen($keys) - 2);
         $values = substr($values, 0, strlen($values) - 2);
 
         $query = "INSERT INTO $table_name ($keys) VALUES ($values)";
-        if (!$db->exec($query))
-        {
+        $result = $db->exec($query);
+        if ($result)
+            xcms_log(0, "[DB] $query");
+        else
             xcms_log(0, "[DB:ERROR] $query");
-            return false;
-        }
-        xcms_log(0, "[DB] $query");
         $db->close();
-        return true;
+        return $result;
     }
 
 
@@ -114,8 +121,10 @@
         foreach ($keys_values as $key => $value)
         {
             if (!array_key_exists($key, $allowed_keys))
+            {
+                xcms_log(0, "[DB] Key $key is not suitable for $table_name update");
                 continue; // skip invalid keys
-
+            }
             if ($key == "${table_name}_created")
                 continue; // never update 'created' field
 
@@ -125,7 +134,12 @@
             $values .= "$key = '".$db->escapeString($value)."', ";
             $fields_found = true;
         }
-        if (!$fields_found) return false;
+        if (!$fields_found)
+        {
+            xcms_log("[DB:ERROR] No fields found");
+            $db->close();
+            return false;
+        }
         $values = substr($values, 0, strlen($values) - 2);
 
         $cond = "";
@@ -135,10 +149,181 @@
         }
         $cond = substr($cond, 0, strlen($cond) - 5);
         $query = "UPDATE $table_name SET $values WHERE $cond";
-        xcms_log(0, "[DB] $query");
-        $db->exec($query);
+        $result = $db->exec($query);
+        if ($result)
+            xcms_log(0, "[DB] $query");
+        else
+            xcms_log(0, "[DB:ERROR] $query");
         $db->close();
-        return true;
+        return $result;
+    }
+
+    function xdb_delete($table_name, $key_value)
+    {
+        $db = xdb_get_write();
+        $cond = "${table_name}_id = '".$db->escapeString($key_value)."'";
+        $query = "DELETE FROM $table_name WHERE $cond";
+        $result = $db->exec($query);
+        if ($result)
+            xcms_log(0, "[DB] $query");
+        else
+            xcms_log(0, "[DB:ERROR] $query");
+        $db->close();
+        return $result;
+    }
+
+
+    function xsm_update_entity($entity, $table_name, $title, $fields, $aux_param = '')
+    {
+        $key_name = "${table_name}_id";
+        $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+        $redir = ($id == 'new') ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
+        $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
+        if ($res)
+        {?>
+            <p><?php echo $title; ?> успешно сохранён.<?php
+        }
+        else
+        {?>
+            <p>Не удалось добавить <?php echo $title; ?>.<?php
+        }?>
+        <a href="view-<?php echo $redir; ?>">Вернуться к просмотру</a></p><?php
+    }
+
+
+    function xsm_delete_entity($entity, $table_name, $title, $aux_param)
+    {
+        $key_name = "${table_name}_id";
+        $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+        $redir = ($id == 'new') ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
+        $res = xdb_delete($table_name, $id);
+        if ($res)
+        {?>
+            <p><?php echo $title; ?> [<?php echo $id; ?>] удалён успешно.<?php
+        }
+        else
+        {?>
+            <p>Не удалось удалить <?php echo $title; ?> [<?php echo $id; ?>] (возможно, есть связанные объекты).<?php
+        }?>
+        <a href="view-<?php echo $redir ?>">Вернуться к просмотру</a></p><?php
+    }
+
+    function xdb_get_entity_by_id($entity, $table_name, $id)
+    {
+        $db = xdb_get();
+        $key_name = "${table_name}_id";
+
+
+        if ($id != "new")
+        {
+            $idf = preg_replace('/[^0-9]/', '', $id);
+            if (strlen($idf) == 0)
+            {
+                xcms_log(0, "Cannot fetch entity from '$table_name' with empty or filtered id '$id'.");
+                return array();
+            }
+            $id = $idf;
+            $query = "SELECT * FROM $table_name WHERE $key_name = $id";
+            $sel = $db->query($query);
+            if (!($ev = $sel->fetchArray(SQLITE3_ASSOC)))
+            {
+                xcms_log(0, "Cannot fetch entity from '$table_name' with id: '$id'. Query: $query.");
+                return array();
+            }
+            $db->close();
+        }
+        else
+        {
+            // new record
+            $ev = array(
+                $key_name=>$id
+            );
+        }
+        return $ev;
+    }
+
+
+    function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_cond = '')
+    {
+        $db = xdb_get();
+        $query = "SELECT * FROM $table_name";
+        if (strlen($aux_cond))
+            $query .= " WHERE $aux_cond";
+        $sel = $db->query($query);
+        $sHTML = "<select name=\"$name\">";
+        $list_key = "${table_name}_id";
+        while ($object = $sel->fetchArray(SQLITE3_ASSOC))
+        {
+            $title = "";
+            foreach ($title_keys as $key_name)
+                $title .= $object[$key_name].' ';
+            $title = htmlspecialchars(trim($title));
+            $key = $object[$list_key];
+            $selected = ($key == $current_key) ? 'selected="selected"' : '';
+            $sHTML .= "<option $selected value=\"$key\">$title</option>";
+        }
+        $sHTML .= "</select>";
+        $db->close();
+        return $sHTML;
+    }
+
+    // Here entity should be equal to table name, but...
+    function xsm_edit_operations($entity, $table_name, $id, $title, $aux_param = '')
+    {
+        $redir = ($id == 'new') ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
+        ?>
+        <div style="white-space: nowrap">
+            <input type="submit" name="update-<?php echo $entity; ?>"
+                value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
+            <input type="submit" name="delete-<?php echo $entity; ?>"
+            value="Удалить" style="margin-left: 0px; margin-top: 5px; background-color: #ff3f00;" />
+            <a class="linkButton xsm" href="view-<?php
+                echo $redir; ?>"><?php echo $title; ?></a>
+        </div><?php
+    }
+
+    // Here entity should be equal to table name, but...
+    function xsm_view_operations($entity, $table_name, $title, $aux_param = '')
+    {?>
+        <div style="white-space: nowrap">
+            <a class="linkButton xsm" href="edit-<?php
+                echo "$entity$aux_param&amp;${table_name}_id=new"; ?>">Добавить <?php echo $title; ?></a>
+        </div><?php
+    }
+
+    // Here entity should be equal to table name, but...
+    function xsm_edit_delete_info($entity, $table_name, $id, $created, $modified)
+    {
+        global $design_dir, $web_prefix;
+        ?>
+        <a style="margin-left: 10px" href="edit-<?php echo "$entity&amp;${table_name}_id=$id" ?>"><img
+            src="<?php echo "/${web_prefix}$design_dir"; ?>pic/edit.gif" class="edit-icon"
+            title="Редактировать" />Правка</a>
+        <span class="ankListField" style="margin-left: 10px;" >Создан</span>: <?php echo $created;
+        if (!empty($modified)) {?>
+            <span style="margin-left: 10px;" class="ankListField">Отредактирован</span>: <?php echo $modified;
+        }
+    }
+
+    function xsm_make_enum_selector($name, $value, $items)
+    {
+        $html = "<select name=\"$name\" id=\"$name-selector\">";
+        foreach ($items as $key => $title)
+        {
+            $sel = ($key == $value) ? ' selected="selected" ' : '';
+            $html .= "<option $sel value=\"$key\">$title</option>";
+        }
+        $html .= "</select>";
+        return $html;
+    }
+
+    function xsm_make_checkbox($name, $value, $checked_value)
+    {
+        if (strlen($value)) $checked = 'checked="checked"';
+        else $checked = '';
+        $sHTML = "<input class=\"ankEdit checkbox\" type=\"checkbox\" name=\"$name\" ".
+            "id=\"$name-checkbox\" value=\"$checked_value\" $checked />";
+        return $sHTML;
     }
 
 ?>

@@ -2,74 +2,128 @@
 <# cms/ank/style #>
 <# cms/ank/format #>
 
-<form method="post" style="margin-bottom: 2px"><?php
-    //echo xcms_ank_make_selector(@$_POST["show-status"], "Show");
+<form method="post" style="margin-bottom: 2px"><span>
+    <span class="ankListField">Статус</span>: <?php
+    echo xsm_make_enum_selector(
+        "show_activity_status",
+        xcms_get_key_or($_POST, "show_activity_status", "notspam"),
+        xsm_get_person_show_statuses());
     ?>
-    <input type="submit" value="Показать">
-</form>
+
+    <span class="ankListField">Только преподы</span>: <?php
+    echo xsm_make_checkbox('show_is_teacher',
+        xcms_get_key_or($_POST, "show_is_teacher"), "teacher");
+    ?>
+
+    <span class="ankListField">Только активные</span>: <?php
+    echo xsm_make_checkbox('show_is_current',
+        xcms_get_key_or($_POST, "show_is_current"), "current");
+    ?>
+    <input type="submit" value="Показать" />
+</span></form>
 <?php
 
-/**
-  * @param nCount how many preps will be printed, zero means all
-  **/
-function xsm_print_prep(/*$sShowStatus*/)
+function xsm_print_prep()
 {
-    global $content_dir, $design_dir, $web_prefix;
-    global $DB;
-    //xcms_db_get();
+    global $design_dir, $web_prefix;
+    $show_status = xcms_get_key_or($_POST, "show_activity_status", "notspam");
+    $show_is_current = xcms_get_key_or($_POST, "show_is_current");
+    $show_is_teacher = xcms_get_key_or($_POST, "show_is_teacher");
 
-    //$aShowStatuses = xcms_ank_get_show_status_list();
-    $nCount = 50;
-    //if (!array_key_exists($sShowStatus, $aShowStatuses)) $sShowStatus = "notspam";
-    //if ($sShowStatus == "all") $nCount = 0; // show all
+    $show_statuses = xsm_get_person_show_statuses();
+    $show_count = 50;
+    if (!array_key_exists($show_status, $show_statuses)) $show_status = "notspam";
+    if ($show_status == "all") $show_count = 0; // show all
 
     $db = xdb_get();
-    $preps_sel = $db->query("SELECT * FROM person WHERE is_teacher = 'teacher'");
+    $cond = "(1 = 1)";
+    if ($show_is_teacher == "teacher")
+        $cond .= " AND ( is_teacher = 'teacher' )";
 
-    $nPrepCounter = 0;
-    $bMaxReached = false;
+    if ($show_is_current == "current")
+        $cond .= " AND ( is_current = 'current' )";
+
+    if ($show_status == "notdecl")
+        $cond .=
+            " AND ( (activity_status <> 'duplicate')".
+            " AND (activity_status <> 'spam')".
+            " AND (activity_status <> 'declined') )";
+    elseif ($show_status == "notspam")
+        $cond .= " AND ( (activity_status <> 'duplicate') AND (activity_status <> 'spam') )";
+    elseif ($show_status == "all")
+        $cond .= "";
+    else
+        $cond .= " AND ( activity_status = '$show_status' )";
+
+    $query = "SELECT * FROM person";
+    if (strlen($cond))
+        $query .= " WHERE $cond";
+    echo "<textarea rows='4' cols='80' style='display:none'>$query</textarea>";
+    $person_sel = $db->query($query);
+
+    $person_counter = 0;
+    $max_reached = false;
+    xsm_view_operations('prep', 'person', 'участника');
     ?>
-    <a style="margin-right: 10px" href="edit-prep&amp;person_id=new">Добавить</a>
-
-    <table summary="Преподаватели" class="ankList">
+    <table summary="Участники" class="ankList">
     <?php
-    while ($person = $preps_sel->fetchArray(SQLITE3_ASSOC)) {?>
+    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC)) {
+        if ($person_counter >= $show_count) {
+            $max_reached = true;
+            break;
+        }
+        ?>
         <tr><td class="ankListRowDiv">&nbsp;</td></tr>
         <?php
-        $nPrepCounter++;
+        $person_counter++;
 
-        $person_id = htmlspecialchars($person["person_id"]); // assume always exists
-        $last_name = htmlspecialchars($person["last_name"]); // assume always exists
-        $first_name = htmlspecialchars($person["first_name"]); // assume always exists
-        $patronymic = htmlspecialchars($person["patronymic"]); // assume always exists
+        $person_id = htmlspecialchars($person["person_id"]);
+
+        $last_name = htmlspecialchars($person["last_name"]);
+        $first_name = htmlspecialchars($person["first_name"]);
+        $patronymic = htmlspecialchars($person["patronymic"]);
+
         $birth_date = htmlspecialchars($person["birth_date"]);
-        //$entrance_class = htmlspecialchars($person["entrance_class"]);
+        $passport_data = htmlspecialchars($person["passport_data"]);
+
         $school = htmlspecialchars($person["school"]);
         $school_city = htmlspecialchars($person["school_city"]);
-        $cellular = htmlspecialchars($person["cellular"]);
-        $phone = htmlspecialchars($person["phone"]);
-        $skype = htmlspecialchars($person["skype"]);
+        $current_class = htmlspecialchars($person["current_class"]);
 
+        $phone = htmlspecialchars($person["phone"]);
+        $cellular = htmlspecialchars($person["cellular"]);
         $email = htmlspecialchars($person["email"]);
+        $skype = htmlspecialchars($person["skype"]);
+        $social_profile = xsm_prepare_social_profile($person["social_profile"]);
+
+        $is_current = $person["is_current"];
+        $is_teacher = $person["is_teacher"];
+        $is_student = $person["is_student"];
+        $curatorship = $person["curatorship"];
+
+        $favourites = xcms_html_wrap_by_crlf(htmlspecialchars($person["favourites"]));
+        $achievements = xcms_html_wrap_by_crlf(htmlspecialchars($person["achievements"]));
+        $hobby = xcms_html_wrap_by_crlf(htmlspecialchars($person["hobby"]));
+
+        $person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
+        $user_agent = htmlspecialchars($person["user_agent"]);
+
         $person_created = htmlspecialchars($person["person_created"]);
         $person_modified = htmlspecialchars($person["person_modified"]);
 
-        $social_profile = xsm_prepare_social_profile($person["social_profile"]);
+        $activity_status = $person["activity_status"];
+        $statuses = xsm_get_activity_statuses();
+        if (!array_key_exists($activity_status, $statuses)) $activity_status = "new"; // default
+        $hr_status = $statuses[$activity_status];
 
-        /*$sFavourites = xcms_html_wrap_by_crlf(htmlspecialchars($oAnk["Favourites"]));
-        $sAchivements = xcms_html_wrap_by_crlf(htmlspecialchars($oAnk["Achivements"]));
-        $sHobby = xcms_html_wrap_by_crlf(htmlspecialchars($oAnk["Hobby"]));
-        $sNotes = xcms_html_wrap_by_crlf(htmlspecialchars(xcms_get_key_or($oAnk, "Notes")));
+        $curatorship_items = xsm_get_curatorship_items();
+        if (!array_key_exists($curatorship, $curatorship_items)) $curatorship = "none"; // default
+        $hr_curatorship = $curatorship_items[$curatorship];
 
-        $sUserAgent = htmlspecialchars(xcms_get_key_or($oAnk, "UserAgent"));
-        //$sFileName = htmlspecialchars(xcms_get_key_or($oAnk, "FileName"));
-        // default is to cut 'ank/' and extract 'YYYY.MM.DD'
+        $hr_teacher = ($is_teacher == "teacher" ? "Да" : "Нет");
+        $hr_student = ($is_student == "student" ? "Да" : "Нет");
+        $hr_current = ($is_current == "current" ? "Да" : "Нет");
 
-        $sStatus = htmlspecialchars(xcms_get_key_or($oAnk, "Status", "new"));
-        $aStatuses = xcms_ank_get_status_list();
-        if (!array_key_exists($sStatus, $aStatuses)) $sStatus = "new"; // default*/
-
-        $sHRStatus = "HRStatus";
         ?>
         <tr>
             <td class="ankListRowTitle">
@@ -79,19 +133,21 @@ function xsm_print_prep(/*$sShowStatus*/)
                     ?>?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
                 <a style="margin-right: 10px" href="/<?php echo $web_prefix;
                     ?>?ref=get_ank&amp;mode=txt&amp;file=<?php echo $sBaseAnkFileName; ?>">TXT</a>-->
-                <a style="margin-right: 10px" href="edit-prep&amp;person_id=<?php echo $person_id; ?>">Редактировать</a>
+                <a style="margin-right: 10px" href="view-exam&amp;student_person_id=<?php echo $person_id; ?>">Зачёты</a>
                 <img src="<?php echo "/${web_prefix}$design_dir"; ?>pic/mozillafirefox.png"
-                    style="vertical-align: middle;" title="<?php echo "$sUserAgent"; ?>" />
+                    style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
                 <span style="margin-left: 10px;" class="ankListField">Статус</span>:
-                    <span class="ankStatus <?php echo $sStatus; ?>"><?php echo $sHRStatus; ?></span>
-                <span style="margin-left: 10px;" class="ankListField">Создана</span>: <?php echo $person_created; ?>
-                <?php if (!empty($person_modified)) {?>
-                    <span style="margin-left: 10px;" class="ankListField">Отредактирована</span>: <?php echo $person_modified; ?>
-                <?php } ?>
+                    <span class="ankStatus <?php echo $activity_status; ?>"><?php echo $hr_status; ?></span><?php
+                xsm_edit_delete_info('prep', 'person', $person_id, $person_created, $person_modified); ?>
                 </span>
             </td>
         </tr>
-        <tr><td class="ankList"><span class="ankListField">Дата рождения</span>: <?php echo $birth_date; ?></td></tr>
+        <tr>
+            <td class="ankList"><span class="ankListField">Дата рождения</span>:
+                <?php echo $birth_date; ?>,
+                <span class="ankListField">Паспортные данные</span>:
+                <?php echo $passport_data; ?>
+            </td></tr>
         <tr><td class="ankList"><span class="ankListField">Образование</span>: <?php echo $school; ?>
         <?php echo $school_city; ?></td></tr>
         <!-- phones -->
@@ -125,36 +181,46 @@ function xsm_print_prep(/*$sShowStatus*/)
             }?>
         </td></tr>
         <?php } ?>
+        <tr><td class="ankList">
+            <span class="ankListField">Текущий</span>: <?php echo $hr_current; ?>
+            &nbsp;&nbsp;&nbsp;
+            <span class="ankListField">Школьник</span>: <?php echo $hr_student; ?>
+            &nbsp;&nbsp;&nbsp;
+            <span class="ankListField">Препод</span>: <?php echo $hr_teacher; ?>
+            &nbsp;&nbsp;&nbsp;
+            <span class="ankListField">Кураторство</span>: <?php echo $hr_curatorship; ?>
+        </td></tr>
         <!--  other stuff -->
-        <?php if (!empty($sFavourites)) { ?>
+        <?php if (!empty($favourites)) { ?>
             <tr><td class="ankList"><span class="ankListField">Любимые предметы</span>:
-                <?php echo WrapIfMultiline($sFavourites); ?></td></tr>
+                <?php echo $favourites; ?></td></tr>
         <?php } ?>
-        <?php if (!empty($sAchivements)) { ?>
+        <?php if (!empty($achievements)) { ?>
         <tr><td class="ankList"><span class="ankListField">Достижения</span>:
-            <?php echo wrapIfMultiline($sAchivements); ?></td></tr>
+            <?php echo $achievements; ?></td></tr>
         <?php } ?>
-        <?php if (!empty($sHobby)) { ?>
+        <?php if (!empty($hobby)) { ?>
             <tr><td class="ankList"><span class="ankListField">Хобби</span>:
-                <?php echo WrapIfMultiline($sHobby); ?></td></tr>
+                <?php echo $hobby; ?></td></tr>
         <?php } ?>
-        <?php if (!empty($sNotes)) { ?>
+        <?php if (!empty($person_comment)) { ?>
         <tr><td class="ankList notes"><span class="ankListField">Заметки</span>:
-            <?php echo WrapIfMultiline($sNotes); ?></td></tr>
+            <?php echo $person_comment; ?></td></tr>
         <?php } ?>
         <?php
         }
     ?>
     </table>
     <?php
-    if ($nCount > 0) {
-        $sMore = ($bMaxReached ? " (размер списка ограничен <b>$nCount</b>, возможно, есть ещё) " : ""); ?>
-        <p>Показано <b><?php echo $nPrepCounter; ?></b> преподов, типа
-            <b><?php /*echo $aShowStatuses[$sShowStatus];*/ ?></b><?php echo $sMore; ?></p><?php
+    xsm_view_operations('prep', 'person', 'участника');
+    if ($show_count > 0) {
+        $more = ($max_reached ? " (размер списка ограничен <b>$show_count</b>, возможно, есть ещё) " : ""); ?>
+        <p>Показано <b><?php echo $person_counter; ?></b> участников, типа
+            <b><?php echo $show_statuses[$show_status]; ?></b><?php echo $more; ?></p><?php
     } else {?>
-        <p>Показаны все преподы (<b><?php echo $nPrepCounter; ?></b> шт.)</p><?php
+        <p>Показаны все люди (<b><?php $person_counter; ?></b> шт.)</p><?php
     }
 }
 
-xsm_print_prep(/*@$_POST["ShowStatus"]*/);
+xsm_print_prep();
 ?>

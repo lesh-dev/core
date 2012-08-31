@@ -147,14 +147,22 @@
         include(translate('<! cms/ank/edit-ank !>'));
     else if(@$_GET["aparam"] == "view")
         include(translate('<! cms/ank/view-ank !>'));
+
     else if(@$_GET["aparam"] == "view-prep")
         include(translate('<! cms/ank/view-prep !>'));
     else if(@$_GET["aparam"] == "edit-prep")
         include(translate('<! cms/ank/edit-prep !>'));
+
     else if(@$_GET["aparam"] == "view-course")
         include(translate('<! cms/ank/view-course !>'));
     else if(@$_GET["aparam"] == "edit-course")
         include(translate('<! cms/ank/edit-course !>'));
+
+    else if(@$_GET["aparam"] == "view-exam")
+        include(translate('<! cms/ank/view-exam !>'));
+    else if(@$_GET["aparam"] == "edit-exam")
+        include(translate('<! cms/ank/edit-exam !>'));
+
     else
     {
         if (@$group["#admin"] || @$group["#ank"])

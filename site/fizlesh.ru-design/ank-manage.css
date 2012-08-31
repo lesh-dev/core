@@ -8,6 +8,7 @@ table.ankList {
   table-layout: fixed;
   border: 0px solid #8faf6f;
   font-size: 9pt;
+  margin-bottom: 10px;
 }
 
 td.ankListRowDiv {
@@ -38,6 +39,7 @@ span.ankEditField {
   font-weight: bold;
   display: inline-block;
   width: 20%;
+  vertical-align: top;
 }
 
 input.ankEdit {
@@ -103,4 +105,19 @@ ul.ankList {
   margin-left: 3px;
   margin-bottom: 0px;
   margin-top: 0px;
+}
+
+img.edit-icon {
+    vertical-align: middle;
+    margin-right: 2px;
+}
+
+.ankEdit.checkbox {
+  width: 16px;
+}
+
+.linkButton.xsm {
+  height: 20px;
+  line-height: 20px;
+  vertical-align: bottom;
 }

@@ -1,6 +1,8 @@
 <?php
-    /* Complete list of valid anketa statuses */
-    function xcms_ank_get_status_list()
+    /*
+     * Complete list of valid person activity statuses
+     */
+    function xsm_get_activity_statuses()
     {
         return array(
             "new"=>"Новая",
@@ -13,7 +15,7 @@
             "spam"=>"Спам");
     }
 
-    /* Anketa status selector for viewer */
+    /* DEPRECATED Anketa status selector for viewer */
     function xcms_ank_get_show_status_list()
     {
         return array(
@@ -28,22 +30,36 @@
           "all"=>"Все");
     }
 
-    function xcms_ank_make_selector($sSK, $mode)
+    function xsm_get_person_show_statuses()
     {
-        $name = ($mode == "Show") ? "ShowStatus" : "Status";
+        return array(
+          "notspam"=>"Все, кроме спама и дублей",
+          "notdecl"=>"Все, кроме спама, дублей и отклонённых",
+          "new"=>"Новые",
+          "progress"=>"В обработке",
+          "processed"=>"Обработанные",
+          "declined"=>"Отклонённые",
+          "cont"=>"Продолжающие школьники",
+          "all"=>"Все");
+    }
 
-        $aStatuses = ($mode == "Show") ?
-            xcms_ank_get_show_status_list() :
-            xcms_ank_get_status_list();
+    function xsm_get_curatorship_items()
+    {
+        return array(
+            "none"=>"Не куратор",
+            "assist"=>"Помощник куратора",
+            "cur"=>"Куратор"
+        );
+    }
 
-        $sHTML = "<select name=\"$name\">";
-        foreach ($aStatuses as $sKey => $sTitle)
-        {
-            $sSel = ($sKey == $sSK) ? ' selected="selected" ' : '';
-            $sHTML .= "<option$sSel value=\"$sKey\">$sTitle</option>";
-        }
-        $sHTML .= "</select>";
-        return $sHTML;
+    function xsm_get_exam_statuses()
+    {
+        return array(
+            "passed"=>"Сдан",
+            "notpassed"=>"Не сдан",
+            "almost"=>"Почти сдан",
+            "other"=>"Иное",
+        );
     }
 
     /**

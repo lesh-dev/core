@@ -3,123 +3,114 @@
 <# cms/ank/format #>
 <?php
 
-$fields = array(
-    //"Status"=>"Статус анкеты",
+$person_fields = array(
+    "activity_status"=>"Статус",
+    "is_current"=>"Текущий?",
+
     "last_name"=>"Фамилия",
     "first_name"=>"Имя",
     "patronymic"=>"Отчество",
+
     "birth_date"=>"Дата рождения",
+    "passport_data"=>"Паспортные данные",
+
     "school"=>"Школа",
     "school_city"=>"Адрес школы",
-    //"Class"=>"Класс",
+    "current_class"=>"Класс",
+
     "phone"=>"Телефон",
     "cellular"=>"Мобильный телефон",
     "email"=>"E-Mail",
     "skype"=>"Skype",
-    "social_profile"=>"Профиль",
-    //
-    "is_teacher"=>"Допущен к преподаванию",
-    //"Favourites"=>"Любимые предметы",
-    //"Achivements"=>"Достижения",
-    //"Hobby"=>"Хобби",
-    //"Notes"=>"Заметки",
-    //"UserAgent"=>"UserAgent",
+    "social_profile"=>"Профиль в соц. сети",
+
+    "is_teacher"=>"Препод?",
+    "is_student"=>"Школьник?",
+    "curatorship"=>"Кураторство",
+
+    "favourites"=>"Любимые предметы",
+    "achievements"=>"Достижения",
+    "hobby"=>"Хобби",
+
+    "person_comment"=>"Заметки",
+    "user_agent"=>"UserAgent",
+
     "person_created"=>"Время создания",
     "person_modified"=>"Последняя модификация"
 );
 
 function xsm_edit_prep()
 {
-    global $fields;
-    global $content_dir;
+    global $person_fields;
 
     $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
-    // TODO: escaping/filtering
-    $db = xdb_get();
-    if ($person_id != "new")
-    {
-        $preps_sel = $db->query("SELECT * FROM person WHERE person_id = $person_id");
-        if (!($person = $preps_sel->fetchArray(SQLITE3_ASSOC)))
-        {
-            xcms_log(0, "Cannot fetch person with person_id=$person_id.");
-            return;
-        }
-        $db->close();
-    }
-    else
-    {
-        $person = array(
-            "person_id"=>$person_id,
-            "is_teacher"=>"teacher"
-        );
-    }
+    $person = xdb_get_entity_by_id('prep', 'person', $person_id);
 
     $field_types = array(
-        "Favourites"=>"textarea",
-        "Achivements"=>"textarea",
-        "Hobby"=>"textarea",
-        "skype"=>"textarea",
-        "Notes"=>"textarea"
+        "favourites"=>"textarea",
+        "achievements"=>"textarea",
+        "hobby"=>"textarea",
+        "person_comment"=>"textarea",
+
+        "is_current"=>"checkbox",
+        "is_teacher"=>"checkbox",
+        "is_student"=>"checkbox",
+
+        "activity_status"=>"enum",
+        "curatorship"=>"enum"
     );
 
     ?>
-    <form method="post" action="edit-prep">
+    <form method="post" action="edit-prep"><?php
+        xsm_edit_operations('prep', 'person', $person_id, 'Вернуться к списку людей');?>
         <input type="hidden" name="person_id" value="<?php echo $person_id; ?>" />
-        <table summary="Препод" class="ankEdit">
+        <table summary="Участник" class="ankEdit">
             <tr>
-                <td class="ankListRowTitle">Препод</td>
+                <td class="ankListRowTitle">Участник</td>
             </tr>
-            <!-- <tr><td class="ankList"><span class="ankEditField">Статус анкеты</span>
-                <?php echo xcms_ank_make_selector(@$oAnk["Status"], "Edit"); ?></td></tr> -->
+
             <?php
-            foreach ($fields as $key=>$field_title)
+            foreach ($person_fields as $key=>$field_title)
             {
-                $value = @$person[$key];
+                $value = xcms_get_key_or($person, $key);
                 $attr = "";
-                if ($key == "Status") continue; // handled above the loop
                 // handle readonly fields
-                if ($key == "UserAgent" ||
+                if ($key == "user_agent" ||
                     $key == "person_created" ||
                     $key == "person_modified") $attr = ' readonly="readonly"'?>
-                <tr><td class="ankList"><span class="ankEditField"><?php echo $fields[$key]; ?></span>
+                <tr><td class="ankList"><span class="ankEditField"><?php echo $person_fields[$key]; ?></span>
                 <?php
-                if (array_key_exists($key, $field_types)) {?>
+                $ft = xcms_get_key_or($field_types, $key);
+                if ($ft == "textarea") {?>
                     <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
                         echo htmlspecialchars($value); ?></textarea/><?php
+                } elseif ($ft == "checkbox") {
+                    // КОСТЫЛЬ! checkbox-овое поле должно начинаться со слова 'is_'
+                    // и его "установленное" значение (true) соответствует
+                    // остатку названия ключа без префикса 'is_'
+                    echo xsm_make_checkbox($key, $value, substr($key, 3));
+                } elseif ($ft == "enum") {
+                    if ($key == "curatorship")
+                        echo xsm_make_enum_selector($key, $value, xsm_get_curatorship_items());
+                    elseif ($key == "activity_status")
+                        echo xsm_make_enum_selector($key, $value, xsm_get_activity_statuses());
                 } else {?>
                     <input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
-                        name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
+                        name="<?php echo $key; ?>" id="<?php echo $key; ?>-input" <?php echo $attr; ?> /><?php
                 } ?>
                 </td></tr>
                 <?php
             }?>
-        </table>
-        <div style="white-space: nowrap"><input type="submit" name="update-prep"
-            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
-        <a class="linkButton" href="view-prep#<?php echo $person_id; ?>"
-            style="height: 20px; line-height: 20px; vertical-align: bottom;">Вернуться к списку преподов</a></div>
+        </table><?php
+        xsm_edit_operations('prep', 'person', $person_id, 'Вернуться к списку людей');?>
     </form>
     <?php
 }
 
-function xsm_update_prep()
-{
-    global $fields;
-
-    $person_id = xcms_get_key_or($_POST, 'person_id', 'invalid'); // invalid key
-    $res = xdb_insert_or_update('person', array('person_id'=>$person_id), $_POST, $fields);
-    if ($res)
-    {?>
-        <p>Препод сохранён успешно. <a href="view-prep#<?php echo $person_id; ?>">Вернуться к просмотру</a></p>
-    }
-    else
-    {?>
-        <p>Не удалось добавить запись. <a href="view-prep#<?php echo $person_id; ?>">Вернуться к просмотру</a></p><?php
-    }
-}
-
 if (@$_POST["update-prep"])
-    xsm_update_prep();
+    xsm_update_entity('prep', 'person', 'Участник', $person_fields);
+elseif (@$_POST["delete-prep"])
+    xsm_delete_entity('prep', 'person', 'Участник');
 else
     xsm_edit_prep();
 ?>
