@@ -1,42 +1,14 @@
 <?
-    function auth_form()
-    {
-        ?>
-            <form method="post">
-                Login:<input type="text" name="auth-login" />
-                Passwd:<input type="password" name="auth-password" />
-                <input type="submit" name="auth-form" />
-            </form>
-        <?
-    }
-    function login_handler()
-    {
-        global $_SESSION;
-        try
-        {
-            xcms_user(@$_POST["auth-login"],@$_POST["auth-password"]);
-        }
-        catch(Exception $e)
-        {
-            echo "<h3>Пароль все еще неверный</h3>";
-            auth_form();
-        }
-    }
     if(FALSE)
     {
         
     }
-    else if ($Exception->getMessage() == "Wrong password!")
+    else if (
+        $Exception->getMessage() == "Wrong password!"
+        || $Exception->getMessage() == "Access denied!"
+    )
     {
-        if(@$_POST)
-        {
-            login_handler();
-        }
-        else
-        {
-            echo "<h3>Вы ввели неверный пароль и все такое</h3>";
-            auth_form();
-        }
+        include(translate('<# global/login #>'));
     }
     else
     {

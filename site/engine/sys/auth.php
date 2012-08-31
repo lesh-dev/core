@@ -27,6 +27,10 @@
             else return $this->setError("User is NULL, can't serialize!");
             return true;
         }
+        function isValid()
+        {
+            return $this->valid;
+        }
         function setValid()
         {
             $this->valid = true;
@@ -60,7 +64,7 @@
         function setParam($key, $value)
         {
             if(!in_array($key, array("password","email","name")))
-                $this->check_rights("superuser");
+                $this->check_rights("admin");
             $this->dict[$key] = $value;
             $this->_save();
         }
@@ -82,11 +86,13 @@
         {
             return explode(",",@$this->dict["groups"]);
         }
-        function check_rights($group)
+        function check_rights($group, $throw_exception=true)
         {
+            if($group == "all") return true;
+            if($group == "registered" && $this->isValid()) return true;
             if($this->isSuperuser()) return true;
             if(in_array($group,$this->groups())) return true;
-            throw new Exception("User don't belong to group $group to perform this action");
+            if($throw_exception) throw new Exception("User don't belong to group $group to perform this action");
             return false;
         }
         /**
@@ -103,7 +109,7 @@
         **/
         function setNull()
         {
-            $this->check_rights("superuser");
+            $this->check_rights("admin");
             $this->dict = array();
         }
         /**
@@ -126,7 +132,8 @@
         **/
         function groupadd($login, $group)
         {
-            $this->check_rights("superuser");
+            $group = str_replace("#","",$group);
+            $this->check_rights("admin");
             $user = new XcmsUser($login);
             if(in_array($group,$user->groups()))
                 return $this->setError("User already presented in this group");
@@ -135,7 +142,8 @@
         }
         function groupremove($login, $group)
         {
-            $this->check_rights("superuser");
+            $group = str_replace("#","",$group);
+            $this->check_rights("admin");
             $user = new XcmsUser($login);
             if(!in_array($group,$user->groups()))
                 return $this->setError("User does not belong to this group!");
@@ -172,20 +180,21 @@
         **/
         function create($login, $email="nobody@example.com")
         {
-            $this->check_rights("superuser");
+            $this->check_rights("admin");
             if(file_exists($this->_file_name($login)))
                 return $this->setError("User $login already exists!");
             $u = new XcmsUser($login);
             $u->setValid();
             $u->setParam("email",$email);
             $u->_save();
+            return $u;
         }
         /**
             Удаляет пользователя из системы
         **/
         function delete($login)
         {
-            $this->check_rights("superuser");
+            $this->check_rights("admin");
             @unlink($this->_file_name($login));
         }
         /**
@@ -212,10 +221,20 @@
                 throw new Exception("Wrong password!");
             return true;
         }
-        
+        function user_list()
+        {
+            $ans = array();
+            foreach(glob($this->_file_name("*")) as $li)
+            {
+                $li = preg_replace("/\\.user/","",$li);
+                $li = preg_replace("/.*\\//","",$li);
+                $ans[] = $li;
+            }
+            return $ans;
+        }
         function su($login)
         {
-            $this->check_rights("superuser");
+            $this->check_rights("admin");
             return new XcmsUser($login);
         }
         /**

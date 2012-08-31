@@ -1,4 +1,85 @@
+<# auth/ #admin #>
 <?php
     //echo $argv[1];
     require_once("$engine_dir/sys/auth.php");
+    require_once("$engine_dir/sys/groups.php");
+    $u = xcms_user();
 ?>
+<?php
+    $current_user_name = @$_GET["user"];
+    if($current_user_name != "")
+    {
+        $current_user = $u->su($current_user_name);
+    }
+?>
+
+<h2>Администрирование пользователей</h2>
+<table>
+    <tr>
+        <td valign="top"><div class="menu">
+            <?php
+                foreach($u->user_list() as $user)
+                {
+                    $activeness = ($user == $current_user_name)?"active":"passive";
+                    echo "<a class=\"menu-$activeness\" href=\"?user=$user$preface\">$user</a> <br />";
+                }
+            ?>
+            <a class="menu-passive" href="?do=create_user<?php echo $preface;?>">Create user</a>
+        </div>
+    <td width="3px" />
+    <td valign="top">
+        <?
+            if(@$_GET["do"] == "create_user")
+            {
+                if(@$_POST["create_user"])
+                {
+                    $login = @$_POST["login"];
+                    $password = @$_POST["p1"];
+                    if($password != @$_POST["p2"])
+                        throw new Exception("Passwords does not match!");
+                    if(!strlen($password))
+                        throw new Exception("Empty password!");
+                    if(!strlen($login))
+                        throw new Exception("Empty login!");
+                    $email = @$_POST["email"];
+                    $tu=$u->create($login, $email);
+                    $tu->passwd($password);
+                    foreach(xcms_all_groups() as $group=>$title)
+                    {
+                        if(@$_POST["group_$group"])
+                          $u->groupadd($login, $group);
+                    }
+                    if(@$_POST["notify_user"])
+                    {
+                        echo "<h3>Sendmail</h3>";
+                        xcms_send_email($email,"Fizlesh: user created","Welcome!");
+                    }
+                }
+                else
+                {
+                    ?>
+                    <form method="post">
+                    <table>
+                            <tr><td colspan="2"><b>Учетные данные</b>                               </td></tr>
+                            <tr><td>Имя пользователя:   </td><td> <input name="login">                </td></tr>
+                            <tr><td>Пароль:             </td><td> <input type="password" name="p1">   </td></tr>
+                            <tr><td>Пароль  (еще раз):  </td><td> <input type="password" name="p2">   </td></tr>
+                            <tr><td>Настоящее имя:      </td><td> <input name="name">                 </td></tr>
+                            <tr><td>Электропочта:       </td><td> <input name="email">                </td></tr>
+                            <tr><td colspan="2">  <input type="checkbox" name="notify_user" /> 
+                                                  Оповестить пользователя по почте                    </td></tr>
+                            <tr><td colspan="2"><b>Привилегии</b>                               </td></tr>
+                            <?php
+                                foreach(xcms_all_groups() as $group=>$title)
+                                {
+                                    echo "<tr><td colspan=\"2\"><input type=\"checkbox\" name=\"group_$group\" />$title ($group)</td></tr>";
+                                }
+                            ?>
+                    </table>
+                    <input type="submit" name="create_user" value="Создать пользователя">
+                    </form>
+                    <?php
+                }
+            }
+        ?>
+</table>

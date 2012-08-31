@@ -1,5 +1,5 @@
 <?php
-    function all_groups()
+    function xcms_all_groups()
     {
         global $content_dir;
         $ans = array(
@@ -16,5 +16,10 @@
                 $ans[$k] = $v;
         }
         return $ans;
+    }
+    /// Deprecated! Use xcms_all_groups instead!
+    function all_groups()
+    {
+        return xcms_all_groups();
     }
 ?>

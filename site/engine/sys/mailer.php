@@ -1,14 +1,11 @@
 <?php
-    function xcms_send_notification($targetList, $subject, $mailText)
+    function xcms_send_email($emailList, $subject, $mailText)
     {
         global $SETTINGS, $login;
         if (array_key_exists("mailer_enabled", $SETTINGS) && $SETTINGS["mailer_enabled"] === false) return;
         $message = $mailText;
         $message = wordwrap($message, 160);
-        $list = getList("{$SETTINGS["datadir"]}cms/mailer.conf");
-        $ml = $list[$targetList];
-
-        $ok = @mail($ml, $subject,
+        $ok = @mail($emailList, $subject,
             "$message"."\r\n".
             "-- \n".
             "Исполнитель     : $login\n".
@@ -21,5 +18,12 @@
             "Content-Transfer-Encoding: 8bit\r\n"
         );
         return $ok;
+    }
+    function xcms_send_notification($targetList, $subject, $mailText)
+    {
+        
+        $list = getList("{$SETTINGS["datadir"]}cms/mailer.conf");
+        $ml = $list[$targetList];
+        return xcms_send_email($ml, $subject, $mailText);
     }
 ?>
