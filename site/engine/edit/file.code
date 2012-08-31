@@ -50,7 +50,7 @@
             // addrssfeed("Изменения в разделе", "сабж","","");
             system("diff $target_name $ename > $diff_name");
             $lf = "\r\n";
-            xcms_send_notification("developers",
+            xcms_send_notification("content-change",
                 "[Lesh CMS notification] Изменена страница: $pageid",
                 "Была произведена правка страницы. Дифф:$lf".
                 "=======================================$lf".

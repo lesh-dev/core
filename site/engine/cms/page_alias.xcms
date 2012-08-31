@@ -1,3 +1,6 @@
+<?php
+    include_once("$engine_dir/cms/page_alias_func.php");
+?>
 <div class="admin-widget">
     <h3>Alias</h3>
     <form method="post">
@@ -6,13 +9,14 @@
     $redirect = false;
     if(@$_POST["change-alias"])
     {
-        $old_alias = @$info["alias"];
-        $new_alias = @$_POST["alias"];
-        $aliases = @unserialize(@file_get_contents("{$SETTINGS["datadir"]}tags/list"));
-        if(@strlen(@$aliases[@$new_alias]))
+        $old_alias = xcms_get_key_or($info, "alias");
+        $new_alias = xcms_get_key_or($_POST, "alias");
+        $aliases = xcms_get_aliases();
+        $prev_page_id = xcms_get_key_or($aliases, $new_alias);
+        if (!empty($prev_page_id))
         {
             if($old_alias != $new_alias)
-                echo "<div class=\"error\">Такой alias уже существует на странице <tt>".@$aliases[@$new_alias]."</tt></div>";
+                echo "<div class=\"error\">Такой alias уже существует на странице <tt>$prev_page_id</tt></div>";
             else
             {
                 echo "<div class=\"notice\">Список alias-ов обновлён, но alias текущей страницы не изменился</div>";
@@ -29,9 +33,7 @@
                     unset($aliases[$alias]);
             }
             $aliases[$new_alias] = $pageid;
-            $f = fopen("{$SETTINGS["datadir"]}tags/list","w");
-            fputs($f,serialize($aliases));
-            fclose($f);
+            xcms_save_aliases($aliases);
             echo "<div class=\"notice\">Список alias-ов обновлён</div>";
             $redirect = true;
         }

@@ -1,4 +1,6 @@
 <# cms/ank/func #>
+<# cms/ank/format #>
+
 <?php
     if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
     {
@@ -6,135 +8,130 @@
         if(xcms_user()->login() != "anonymous")
             echo "<h3><a href=\"?ref=ladmin&amp;page=$pageid\">Вы можете это исправить!</a></h3>";
     }
-    if(@$_POST["csrf_token"] == "ank_$pageid")
+    if(@$_POST["submit-anketa"])
     {
-        $mailMsg = "Анкета:\n";
-        $mailMsgHTML = file_get_contents("$design_dir/mail_template.html");
-        $unixTime = mktime();
-        $hrTimestamp = date("Y.m.d H:i:s", $unixTime);
-        $fileName = date("Y.m.d-H.i.s", $unixTime).".xml";
+        $mail_msg_plain = "Анкета:\n";
+        $mail_msg_html = file_get_contents("$design_dir/mail_template.html");
+        $unix_time = mktime();
+        $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
 
-        $studentName = "Школьнег";
+        $person = $_POST; // get all values here (_POST should not be spoiled)
+        // set some generic fields that cannot be overridden
+        $person["activity_status"] = "new";
+        $person["is_student"] = "student";
+        $user_agent = $person["user_agent"] = $_SERVER["HTTP_USER_AGENT"];
+        // extract some values to check
+        $last_name = xcms_get_key_or($person, "last_name");
+        $first_name = xcms_get_key_or($person, "first_name");
+        $patronymic = xcms_get_key_or($person, "patronymic");
+        $phone = xcms_get_key_or($person, "phone");
+        $cellular = xcms_get_key_or($person, "cellular");
+        $current_class = xcms_get_key_or($person, "current_class");
+        $email = xcms_get_key_or($person, "email");
 
-        $aFields = array(
-            "Name"=>"ФИО",
-            "BirthDate"=>"Дата рождения",
-            "School"=>"Школа",
-            "SchoolLocation"=>"Адрес школы",
-            "Class"=>"Класс",
-            "Phone"=>"Телефон",
-            "Cellular"=>"Мобильный телефон",
-            "EMail"=>"E-Mail",
-            "Skype"=>"Skype",
-            "Profile"=>"Профиль",
-            "Favourites"=>"Любимые предметы",
-            "Achivements"=>"Достижения",
-            "Hobby"=>"Хобби"
-        );
-        if (@empty($_POST["Name"]) ||
-            @empty($_POST["Class"]) ||
-            @empty($_POST["Phone"]) && @empty($_POST["Cellular"])) {
+        $person_fields = xsm_get_person_fields();
+
+        if (
+            empty($last_name) ||
+            empty($first_name) ||
+            empty($current_class) ||
+            (empty($phone) && empty($cellular))
+            )
+        {
             // someone hacked the js validator
             die("Invalid anketa data. ");
         }
+        $full_name = trim($last_name).' '.trim($first_name).' '.trim($patronymic);
 
-        // True programmers use UTF-8 only :)
-        $xml = simplexml_load_string('<?xml version="1.0" encoding="utf-8"?><Anketa/>');
-        $htmlContent = ""; // @@TABLE-CONTENT@
-        // add some more fields
-        $_POST["UserAgent"] = $_SERVER["HTTP_USER_AGENT"];
-        $_POST["FileName"] = $fileName;
-        // creation/modification times
-        $_POST["Created"] = $unixTime;
-        $_POST["HRCreated"] = $hrTimestamp;
-        // initialy empty
-        $_POST["Modified"] = "";
-        $_POST["HRModified"] = "";
-        // status
-        $_POST["Status"] = "new";
+        $html_content = ""; // @@TABLE-CONTENT@
 
-        foreach (@$_POST as $key=>$value)
+        foreach ($person as $key=>$value)
         {
-            if ($key == "Name") $studentName = $value;
-            if ($key == "csrf_token") continue; // ignore this trash
-            $xml->addChild($key, htmlspecialchars($value));
-            $keyTitle = $key;
-            if (array_key_exists($key, $aFields)) $keyTitle = $aFields[$key];
-            $mailMsg .= "$keyTitle: $value\r\n\r\n";
-            $htmlContent .= "<tr><td class=\"left\">$keyTitle</td><td>".htmlspecialchars($value)."</td></tr>\n";
+            $key_title = $key;
+            if (array_key_exists($key, $person_fields)) $key_title = $person_fields[$key];
+            if ($key == "is_student" || $key == "submit-anketa")
+                continue;
+            $kt = "$key_title: ";
+            while (strlen($kt) < 20)
+                $kt .= ' ';
+            $mail_msg_plain .= "$kt$value\r\n";
+            $html_content .= "<tr><td class=\"left\">$key_title</td><td>".htmlspecialchars($value)."</td></tr>\n";
         }
         $ank_dir = "${content_dir}ank";
         @mkdir($ank_dir, 0777);
-        $write_success = (@$xml->asXML("$ank_dir/$fileName") === true);
-        $mailMsgHTML = str_replace("@@TABLE-CONTENT@", $htmlContent, $mailMsgHTML);
-        $mailMsgHTML = str_replace("@@DATE@", date("Y.m.d H:i:s", $unixTime), $mailMsgHTML);
+        xdb_insert_or_update('person', array('person_id'=>'new'), $person, $person_fields);
+        $write_success = true; // TODO: проверять SELECT-ом, что таки да, вставилось
+        $mail_msg_html = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg_html);
+        $mail_msg_html = str_replace("@@DATE@", $hr_timestamp, $mail_msg_html);
 
-        $aHTMLList = array();
-        $aPlainList = array();
-        if (substr($studentName, 0, 12) == "NO-MAIL-TEST") // see bug #264
+        $mail_group_html = "";
+        $mail_group_plain = "";
+        if (substr($full_name, 0, 12) == "NO-MAIL-TEST") // see bug #264
         {
             // do nothing
         }
-        elseif (substr($studentName, 0, 4) == "TEST") // see bug #111
+        elseif (substr($full_name, 0, 4) == "TEST") // see bug #111
         {
-            $aHTMLList[] = "Mikhail Veltishchev <dichlofos-mv@yandex.ru>";
-            $aPlainList[] = "Mikhail Veltishchev <dichlofos-mv@yandex.ru>";
+            $mail_group_html = "reg-test-html";
+            $mail_group_plain = "reg-test-plain";
         }
         else
         {
-            // plain-text mails
-            $aPlainList[] = "Serge <serge19746@yandex.ru>";
-            $aPlainList[] = "Dimchik <demarin@mail.ru>";
-            $aPlainList[] = "Mikhail Veltishchev <dichlofos.mv@gmail.com>";
-            $aPlainList[] = "Dmitry Veltishchev <vdm-photo@ya.ru>";
-
-            $aHTMLList[] = "Dara <dara-dara-dara@yandex.ru>";
-            $aHTMLList[] = "Alena Zhigulina <zhigulinalena@yandex.ru>";
-            //$aHTMLList[] = "Fill <fillsv@mail.ru>";
-            $aHTMLList[] = "Mikhail Veltishchev <dichlofos-mv@yandex.ru>";
+            $mail_group_html = "reg-html";
+            $mail_group_plain = "reg-plain";
         }
 
-        $addrHTMLList = join(", ", $aHTMLList);
-        $addrPlainList = join(", ", $aPlainList);
-        $subject = "New fizlesh.ru anketa: ".xcms_transliterate($studentName);
+        $dom = "@fizlesh.ru";
 
-        $bSuccessHTML = true;
-        if (count($aHTMLList))
-            $bSuccessHTML = @mail($addrHTMLList, $subject,
-                // text content
-                $mailMsg."\r\n".
-                // html content with boundary marker
-                "--==boundary-1\r\n".
-                "Content-Type: text/html; charset=utf-8\r\n".
-                "Content-Transfer-Encoding: 8bit\r\n".
-                "\r\n".
-                $mailMsgHTML.
-                "\r\n--==boundary-1\r\n",
-                // aux headers
-                "From: fizlesh.ru <noreply@fizlesh.ru>\r\n".
-                'Content-Type: multipart/related; boundary="==boundary-1"; type="text/html"; charset=utf-8'."\r\n".
-                "Content-Transfer-Encoding: 8bit\r\n"
-            );
-        $bSuccessText = true;
-        if (count($aPlainList))
-            $bSuccessText = @mail($addrPlainList, $subject,
-                // text content
-                $mailMsg."\r\n",
-                // aux headers
-                "From: fizlesh.ru <noreply@fizlesh.ru>\r\n".
-                'Content-Type: text/plain; charset=utf-8'."\r\n".
-                "Content-Transfer-Encoding: 8bit\r\n"
-            );
-        $bSuccess = ($bSuccessHTML || $bSuccessText) && $write_success;
+        $full_name_tr = xcms_transliterate($full_name);
+        $subject = "[FizLesh-XSM] New anketa: $full_name_tr";
+
+        $success_html = true;
+        $mailer = xcms_get_mailer();
+        if (xcms_add_mail_group($mailer, $mail_group_html))
+        {
+            if (!empty($email))
+                $mailer->AddReplyTo($email, $full_name_tr);
+            else
+                $mailer->AddReplyTo("reg$dom", "FizLesh XSM");
+            $mailer->SetFrom('reg$dom', 'FizLesh XSM');
+            $mailer->Subject = $subject;
+            $mailer->AltBody = $mail_msg_plain;
+            $mailer->MsgHTML($mail_msg_html);
+            if (!$mailer->Send())
+            {
+                xcms_log(XLOG_ERROR, "[MAILER:XSM] ".$mailer->ErrorInfo);
+                $success_html = false;
+            }
+        }
+
+        $success_plain = true;
+        $mailer = xcms_get_mailer();
+        if (xcms_add_mail_group($mailer, $mail_group_plain))
+        {
+            if (!empty($email))
+                $mailer->AddReplyTo($email, $full_name_tr);
+            else
+                $mailer->AddReplyTo("reg$dom", "FizLesh XSM");
+            $mailer->SetFrom('reg$dom', 'FizLesh XSM');
+            $mailer->Subject = $subject;
+            $mailer->Body = $mail_msg_plain;
+            if (!$mailer->Send())
+            {
+                xcms_log(XLOG_ERROR, "[MAILER:XSM] ".$mailer->ErrorInfo);
+                $success_plain = false;
+            }
+        }
+        $success = ($success_html || $success_plain) && $write_success;
 
         $dest_url = 'register/success';
         $zero_redirect_delay = $SETTINGS["zero_redirect_delay"];
-        if (!$bSuccess)
+        if (!$success)
         {
             // В этом случае анкета всё равно сохранится у нас, и на самом деле мы всё узнаем про человека,
             // но чтобы не ждать три дня, пусть уж лучше нас пнут извне
-            xcms_log(XLOG_ERROR, "[ANK] Anketa submission failed for $fileName. ".
-                "Statuses: HTML:$bSuccessHTML Plain:$bSuccessText Write:$write_success");
+            xcms_log(XLOG_ERROR, "[ANK] Anketa submission failed. ".
+                "Statuses: HTML:$success_html Plain:$success_plain Write:$write_success");
             $dest_url = 'register/error';
         }
         $message = 'Сейчас Вы будете перенаправлены на страницу результата. Нажмите '.
@@ -146,8 +143,9 @@
     else if(@$_GET["aparam"] == "edit")
         include(translate('<! cms/ank/edit-ank !>'));
     else if(@$_GET["aparam"] == "view")
-        include(translate('<! cms/ank/view-ank !>'));
-
+        include(translate('<! cms/ank/list-person !>'));
+        //include(translate('<! cms/ank/view-ank !>'));
+    //else if(@$_GET["aparam"] == "list-person")
     else if(@$_GET["aparam"] == "view-prep")
         include(translate('<! cms/ank/view-prep !>'));
     else if(@$_GET["aparam"] == "edit-prep")
@@ -171,7 +169,6 @@
         }
         //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
         $text = file_get_contents( "{$SETTINGS["datadir"]}cms/pages/$pageid/content" );
-        $text = str_replace("\${csrf_token}","<input type=\"hidden\" name=\"csrf_token\" value=\"ank_$pageid\" />",$text);
         $source  = "";
         include(translate("<! cms/readtext --markdown --text !>"));
     }

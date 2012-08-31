@@ -199,12 +199,13 @@
     else if(@$_GET["mode"]=="mailer" )
     {
         $editfile = "{$SETTINGS["datadir"]}cms/mailer.conf";
-        include(translate('<! edit/oldtag `edit`,`view`,`installed` !>'));
+        include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
     }
+    /*
     else if(@$_GET["mode"]=="ank" )
     {
         include(translate('<! cms/ank/manage !>'));
-    }
+    }*/
     /*
     // Here is a dead code (mode is unreferenced in interface)
     else if(@$_GET["mode"]=="documentation")
@@ -233,6 +234,7 @@
     }
     else if(@$_GET["mode"]=="rebuild_alias")
     {
+        include(translate('<! cms/rebuild_alias !>'));
         include(translate('<! cms/build_rewrite !>'));
         ?>
         <div class="admin-widget">

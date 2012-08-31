@@ -76,24 +76,13 @@
         $keys_values["${table_name}_created"] = $hr_timestamp;
         $keys_values["${table_name}_modified"] = '';
 
-        foreach ($keys_values as $key => $value)
+        foreach ($allowed_keys as $key => $title)
         {
-            if (!array_key_exists($key, $allowed_keys))
-            {
-                xcms_log(0, "[DB] Key $key is not suitable for $table_name insert");
-                continue; // skip invalid keys
-            }
+            $value = xcms_get_key_or($keys_values, $key);
             if ($key == $pk_name)
                 continue; // skip autoincremented keys
             $keys .= "$key, ";
             $values .= "'".$db->escapeString($value)."', ";
-            $fields_found = true;
-        }
-        if (!$fields_found)
-        {
-            xcms_log(0, "[DB:ERROR] No fields found");
-            $db->close();
-            return false;
         }
         $keys = substr($keys, 0, strlen($keys) - 2);
         $values = substr($values, 0, strlen($values) - 2);
@@ -118,13 +107,9 @@
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
         $keys_values["${table_name}_modified"] = $hr_timestamp;
 
-        foreach ($keys_values as $key => $value)
+        foreach ($allowed_keys as $key => $title)
         {
-            if (!array_key_exists($key, $allowed_keys))
-            {
-                xcms_log(0, "[DB] Key $key is not suitable for $table_name update");
-                continue; // skip invalid keys
-            }
+            $value = xcms_get_key_or($keys_values, $key);
             if ($key == "${table_name}_created")
                 continue; // never update 'created' field
 
@@ -132,13 +117,6 @@
                 continue; // skip primary keys
 
             $values .= "$key = '".$db->escapeString($value)."', ";
-            $fields_found = true;
-        }
-        if (!$fields_found)
-        {
-            xcms_log("[DB:ERROR] No fields found");
-            $db->close();
-            return false;
         }
         $values = substr($values, 0, strlen($values) - 2);
 
@@ -190,8 +168,27 @@
         <a href="view-<?php echo $redir; ?>">Вернуться к просмотру</a></p><?php
     }
 
+    function xsm_warn_delete_entity($entity, $table_name, $title, $aux_param = '')
+    {
+        $key_name = "${table_name}_id";
+        $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+        $redir = ($id == 'new') ? "$entity$aux_param" : "$entity$aux_param#$table_name$id"; ?>
+        <div style="font-size: 12pt; font-weight: bold; color: #ff0000;">
+            Вы действительно хотите удалить
+            <?php echo $title; ?> [<?php echo $id; ?>]?<br />
+            Связанные с ним объекты также будут удалены,
+            а восстановление будет невозможно!</div>
+        <div><form method="post" action="edit-<?php echo "$entity$aux_param"; ?>">
+            <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
+            <input type="submit" name="confirm-delete-<?php echo $entity; ?>"
+                value="Таки да, удалить!" class="delete-button"/>
+            <a class="linkButton xsm"
+                href="view-<?php echo $redir ?>">Вернуться к просмотру</a>
+        </form></div>
+        <?php
+    }
 
-    function xsm_delete_entity($entity, $table_name, $title, $aux_param)
+    function xsm_delete_entity($entity, $table_name, $title, $aux_param = '')
     {
         $key_name = "${table_name}_id";
         $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
@@ -208,7 +205,7 @@
         <a href="view-<?php echo $redir ?>">Вернуться к просмотру</a></p><?php
     }
 
-    function xdb_get_entity_by_id($entity, $table_name, $id)
+    function xdb_get_entity_by_id($table_name, $id)
     {
         $db = xdb_get();
         $key_name = "${table_name}_id";
@@ -270,13 +267,16 @@
     // Here entity should be equal to table name, but...
     function xsm_edit_operations($entity, $table_name, $id, $title, $aux_param = '')
     {
-        $redir = ($id == 'new') ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
+        $is_new = ($id == 'new');
+        $redir = $is_new ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
         ?>
         <div style="white-space: nowrap">
             <input type="submit" name="update-<?php echo $entity; ?>"
-                value="Сохранить" style="margin-left: 0px; margin-top: 5px;" />
-            <input type="submit" name="delete-<?php echo $entity; ?>"
-            value="Удалить" style="margin-left: 0px; margin-top: 5px; background-color: #ff3f00;" />
+                value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
+            if (!$is_new) {?>
+                <input type="submit" name="delete-<?php echo $entity; ?>"
+                    value="Удалить" class="delete-button"/><?php
+            }?>
             <a class="linkButton xsm" href="view-<?php
                 echo $redir; ?>"><?php echo $title; ?></a>
         </div><?php
@@ -292,16 +292,16 @@
     }
 
     // Here entity should be equal to table name, but...
-    function xsm_edit_delete_info($entity, $table_name, $id, $created, $modified)
+    function xsm_edit_delete_info($entity, $table_name, $id, $created, $modified, $aux_param = '')
     {
         global $design_dir, $web_prefix;
         ?>
-        <a style="margin-left: 10px" href="edit-<?php echo "$entity&amp;${table_name}_id=$id" ?>"><img
+        <a class="link-oper" href="edit-<?php echo "$entity$aux_param&amp;${table_name}_id=$id" ?>"><img
             src="<?php echo "/${web_prefix}$design_dir"; ?>pic/edit.gif" class="edit-icon"
             title="Редактировать" />Правка</a>
-        <span class="ankListField" style="margin-left: 10px;" >Создан</span>: <?php echo $created;
+        <span class="ankListField next">Создан</span>: <?php echo $created;
         if (!empty($modified)) {?>
-            <span style="margin-left: 10px;" class="ankListField">Отредактирован</span>: <?php echo $modified;
+            <span class="ankListField next">Отредактирован</span>: <?php echo $modified;
         }
     }
 
@@ -326,4 +326,14 @@
         return $sHTML;
     }
 
+    function xdb_like($mask, $value)
+    {
+        $mask = str_replace(
+            array("%", "_"),
+            array(".*?", "."),
+            preg_quote($mask, "/")
+        );
+        $mask = "/^$mask$/ui";
+        return preg_match($mask, $value);
+    }
 ?>

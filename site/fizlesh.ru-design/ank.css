@@ -3,6 +3,7 @@ span.ankLabel {
   font-weight: bold;
   display: inline-block;
   width: 370px;
+  padding-left: 2px;
 }
 
 div.ankLegend {
@@ -62,4 +63,10 @@ div.ankMessageFrame {
   border: 1px solid #003f00;
   background-color: #aed79b;
   display: none;
+}
+
+ul.ankMessageList {
+  margin-right: 20px;
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
