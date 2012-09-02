@@ -11,7 +11,8 @@ def print_bad_context(lines, bad_lines):
         l = lines[i].rstrip()
         ln = i + 1
         if i in bad_lines:
-            print '%3d > %s' % (ln, l)
+            print '      ', bad_lines[i]
+            print '%3d > %s' % (ln, l) # , '#', bad_lines[i]
             skip = False
             continue
         if (i+2) in bad_lines or (i+1) in bad_lines:
@@ -45,6 +46,18 @@ def check_tab_style(lines):
             if i not in bad_lines:
                 bad_lines[i] = []
             bad_lines[i].append(message)
+
+        # shorttag check
+        stm = re.search('<[?][^px]', line)
+        if not stm:
+            stm = re.search('<[?]$', line)
+        if stm:
+            message = "Shotrtag detected"
+            if i not in bad_lines:
+                bad_lines[i] = []
+            bad_lines[i].append(message)
+
+
     print_bad_context(lines, bad_lines)
 
 
