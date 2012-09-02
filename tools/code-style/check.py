@@ -59,6 +59,10 @@ def check_tab_style(lines):
 
 
     print_bad_context(lines, bad_lines)
+    # return 1 if there some errors
+    if len(bad_lines) > 1:
+        return 1
+    return 0
 
 
 def check_file(name):
@@ -67,7 +71,7 @@ def check_file(name):
         for line in f:
             lines.append(line)
 
-    check_tab_style(lines)
+    return check_tab_style(lines)
 
 def print_usage():
     print "Syntax: " + sys.argv[0] + " <file-name-to-check>"
@@ -77,4 +81,5 @@ def print_usage():
 if len(sys.argv) < 2:
     print_usage()
 
-check_file(sys.argv[1])
+result = check_file(sys.argv[1])
+sys.exit(result)
