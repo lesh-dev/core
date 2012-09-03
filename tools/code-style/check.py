@@ -30,33 +30,39 @@ def print_bad_context(lines, bad_lines):
 def check_tab_style(lines):
     line_count = len(lines)
     bad_lines = dict()
+
+    def add_bad_line(bad_lines, message, index):
+        if index not in bad_lines:
+            bad_lines[index] = []
+        bad_lines[index].append(message)
+
     for i in range(line_count):
         line = lines[i]
+        # TODO: check trailing cr/lf symbols in code
+
+        # spaces count check
         sm = re.search('^[ ]+', line)
         if sm:
             spaces = sm.group()
             if len(spaces) % 4 != 0:
-                message = "Invalid spaces count: %d" % len(spaces)
-                if i not in bad_lines:
-                    bad_lines[i] = []
-                bad_lines[i].append(message)
+                add_bad_line(bad_lines, "Invalid spaces count: %d" % len(spaces), i)
+
+        # tab check
         tm = re.search('\t', line)
         if tm:
-            message = "Tab detected"
-            if i not in bad_lines:
-                bad_lines[i] = []
-            bad_lines[i].append(message)
+            add_bad_line(bad_lines, "No tabs allowed", i)
 
         # shorttag check
         stm = re.search('<[?][^px]', line)
         if not stm:
             stm = re.search('<[?]$', line)
         if stm:
-            message = "Shotrtag detected"
-            if i not in bad_lines:
-                bad_lines[i] = []
-            bad_lines[i].append(message)
+            add_bad_line(bad_lines, "No PHP shorttags allowed", i)
 
+        # trailing spaces check
+        ts = re.search('[^ ]+[ ]+$', line)
+        if ts:
+            add_bad_line(bad_lines, "No trailing spaces allowed", i)
 
     print_bad_context(lines, bad_lines)
     # return 1 if there some errors

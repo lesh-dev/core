@@ -21,8 +21,6 @@ check_style()
     return 0
 }
 
-# TODO: check cr/lf symbols in code
-
 check_style '*.xcms'
 check_style '*.php'
 check_style '*.code'
