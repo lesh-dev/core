@@ -1,4 +1,4 @@
-<?
+<?php
     header("Content-type: text/html; charset=UTF-8;");
 ?>
 <h2>XCMS installer 2.0</h2>

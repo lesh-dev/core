@@ -7,11 +7,12 @@
         var $superuser = false;*/
         private function _file_name($login)
         {
-            global $SETTINGS;
-            $content_dir = $SETTINGS["datadir"];
-            if($content_dir == "") 
+            global $SETTINGS, $content_dir;
+            $cd = $SETTINGS["datadir"];
+            if($cd == "") $cd = $content_dir;
+            if($cd == "") 
                 throw new Exception ("Content dir is empty!");
-            return "$content_dir/auth/usr/$login.user";
+            return "$cd/auth/usr/$login.user";
         }
         private function _hash($string)
         {
