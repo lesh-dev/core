@@ -135,7 +135,9 @@ function xsm_show_person_list()
     $query = "SELECT * FROM person";
     if (strlen($cond))
         $query .= " WHERE $cond";
-    $query .= " ORDER BY person_created DESC";
+    // TODO: this will be enabled later
+    //$query .= " ORDER BY person_created DESC";
+    $query .= " ORDER BY last_name, first_name";
     // debug area (TODO: remove)
     ?><textarea rows="10" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
     $person_sel = $db->query($query);
@@ -147,17 +149,13 @@ function xsm_show_person_list()
     <table summary="Участники" class="ankList">
         <colgroup>
             <col width="5%" />
-            <col width="20%" />
-            <col width="20%" />
-            <col width="20%" />
-            <col width="20%" />
-            <col width="15%" />
+            <col width="40%" />
+            <col width="30%" />
+            <col width="25%" />
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
-            <th class="ankList">Фамилия</th>
-            <th class="ankList">Имя</th>
-            <th class="ankList">Отчество</th>
+            <th class="ankList">Фамилия, Имя, Отчество</th>
             <th class="ankList">Info</th>
             <th class="ankList">Статус</th>
         </thead>
@@ -222,9 +220,7 @@ function xsm_show_person_list()
         <tr>
             <td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
             <td class="ankList"><a href="<?php echo "view-prep&amp;person_id=$person_id"; ?>"><?php
-                echo $last_name; ?></a></td>
-            <td class="ankList"><?php echo $first_name; ?></td>
-            <td class="ankList"><?php echo $patronymic; ?></td>
+                echo "$last_name $first_name $patronymic"; ?></a></td>
             <td class="ankList">
                 <?php
                     if ($is_current == "current") {?>

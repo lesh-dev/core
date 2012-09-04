@@ -38,7 +38,7 @@
       //if(strlen(@$_COOKIE["auth-login"]))
       if(xcms_user()->check_rights("registered",false))
       {
-        include(translate('<a href="/<# web_prefix #>register/view-prep'.
+        include(translate('<a href="/<# web_prefix #>register/view'.
             '" class="menu-item menuSys">Участники</a>'));
         include(translate('<a href="/<# web_prefix #>register/view-course'.
             '" class="menu-item menuSys">Курсы</a>'));
