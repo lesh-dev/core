@@ -197,7 +197,7 @@
             $u->setValid();
             $u->setParam("email",$email);
             $u->set_param("creator",$this->login());
-            $u->set_param("creation_date",mktime());
+            $u->set_param("creation_date",@mktime());
             $u->_save();
             return $u;
         }
