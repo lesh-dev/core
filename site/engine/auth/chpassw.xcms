@@ -1,0 +1,37 @@
+<h3>Сменить пароль</h3>
+
+<?php
+    $user = xcms_user();
+    $done = false;
+    if(@$_POST['chpass_me'])
+    {
+        if(@$_POST["pass1"] != @$_POST["pass2"])
+        {
+            echo "<b>Пароли не совпадают</b>";
+        }
+        else if(@$_POST["pass1"] == "")
+        {
+            echo "<b>Пароль -- пустой</b>";
+        }
+        $user->passwd($_POST["pass1"]);
+        $user->create_session($_POST["pass1"]);
+        $done = true;
+    }
+    if(!$done)
+    {
+        ?>
+            <form method='post'>
+            <table>
+                <tr><td>Новый пароль<td><input name="pass1" type="password" />
+                <tr><td>Новый пароль  (еще раз)<td><input name="pass2" type="password" />
+            </table>
+            <input type='submit' value='Сменить пароль' name='chpass_me' />
+            </form>
+        <?php
+    }
+    else
+    {
+        echo '<b>Пароль успешно изменен.</b>';
+        
+    }
+?>
