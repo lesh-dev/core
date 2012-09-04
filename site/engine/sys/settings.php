@@ -1,4 +1,5 @@
 <?php
+    include("settings.php");
     $SETTINGS["defaultpage"] = "index";
     $SETTINGS["nopage"] = ".nopage";
     $SETTINGS["nopagecode"] = "error.404";

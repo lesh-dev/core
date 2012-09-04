@@ -35,7 +35,8 @@
           <a class="menu-item menu-level1 menu-passive menu-passive-level1" href="/forum">Форум</a>
 
       <?php
-      if(strlen(@$_COOKIE["auth-login"]))
+      //if(strlen(@$_COOKIE["auth-login"]))
+      if(xcms_user()->check_rights("registered",false))
       {
         include(translate('<a href="/<# web_prefix #>register/view-prep'.
             '" class="menu-item menuSys">Участники</a>'));
@@ -51,7 +52,7 @@
       else
       {
         include(translate('<a href="/<# web_prefix#>?'.
-            xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).
+            xcms_url(array('page'=>$pageid, 'ref'=>'login', 'return'=>'?ref=index')).
             '" class="menu-item menu-level1 stealthLink">Авторизация</a>'));
       }
       ?>

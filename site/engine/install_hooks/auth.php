@@ -11,7 +11,7 @@
           и не делает ничего больше **/
 	function module_name()
 	{
-	    return "Auth install";
+	    return "Пользователи, права и доступ";
 	}
 	/** 
 	  Эта функция должна вернуть список переменных, 
@@ -20,7 +20,11 @@
 	function request_variables()
 	{
 	    return array(
-		"vk_id"=>array("name"=>"Идентификатор приложения ВКонтакте","type"=>"string")
+                "superuser_name" => array("name"=>"Имя (логин) администратора","default"=>"root")
+                ,"superuser_mail" => array("name"=>"Электронная почта администратора","default"=>"root@example.com")
+	        ,"superuser_password" => array("name"=>"Пароль администратора (умолчание: root)","default"=>"root","type"=>"password")
+	        ,"superuser_password2" => array("name"=>"Повторите пароль","default"=>"root","type"=>"password")
+		,"vk_id"=>array("name"=>"Идентификатор приложения ВКонтакте","type"=>"string")
 		,"vk_rights"=>array("name"=>"Список прав для ВК","default"=>"notify,offline")
 	    );
 	}
@@ -43,6 +47,9 @@
 	**/
 	function final_check($config)
 	{
+            if($config["superuser_name"] == "") return "Please, fill in superuser name";
+            if($config["superuser_password"] == "") return "Please, fill in superuser password";
+            if($config["superuser_password"] != $config["superuser_password2"])return "Passwords does not match.";
 	    return true;
 	}
 	/** 
@@ -59,7 +66,15 @@
 	**/
 	function install($config)
 	{
-	    $f = fopen("settings.php","a");
+            global $engine_dir, $SETTINGS;
+            require_once($SETTINGS["engine_dir"]."/sys/auth.php");
+            $u = xcms_user();
+            $u->setSuperuser();
+            $u->delete($config["superuser_name"]);
+            $target = $u->create($config["superuser_name"],$config["superuser_mail"]);
+            $target->passwd($config["superuser_password"]);
+            $u->groupadd($target->login(), "admin");
+            $f = fopen("settings.php","a");
 	    fputs($f,"<?php \$auth_vk_id=\"${config['vk_id']}\"; ?>\n");
 	    fputs($f,"<?php \$auth_vk_rights=\"${config['vk_rights']}\"; ?>\n");
 	    return true;

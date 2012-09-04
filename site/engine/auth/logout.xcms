@@ -1,0 +1,4 @@
+<h3>Logout</h3>
+<?
+    xcms_user()->logout("?");
+?>

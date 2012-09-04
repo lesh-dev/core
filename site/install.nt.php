@@ -1,5 +1,5 @@
 <?
-  header("Content-type: text/html; charset=UTF-8;");
+    header("Content-type: text/html; charset=UTF-8;");
 ?>
 <h2>XCMS installer 2.0</h2>
 <?php
@@ -7,40 +7,46 @@
     require_once("engine/sys/logger.php");
     function display_error($err)
     {
-	echo "<font color=red>$err</font>";
+        echo "<font color=red>$err</font>";
     }
 
     $hookls = glob("engine/install_hooks/*.php");
     $hooks = array();
     foreach($hookls as $hookfile)
     {
-	unset($hook);
-	require $hookfile;
-	if (isset($hook))
-	{
-	    $hooks[] = $hook;
-	}
+        unset($hook);
+        require $hookfile;
+        if (isset($hook))
+        {
+            $hooks[] = $hook;
+        }
     }
     $ok = true;
     // check if it's all OK
     foreach($hooks as $hook)
     {
-	$ans = $hook->initial_check();
-	if($ans === TRUE)
-	{
-	    //echo "<li>Test passed..";
-	}
-	else
-	{
-	    display_error($ans);
-	    $ok = false;
-	}
+        $ans = $hook->initial_check();
+        if($ans === TRUE)
+        {
+            //echo "<li>Test passed..";
+        }
+        else
+        {
+            display_error($ans);
+            $ok = false;
+        }
     }
     $ALLVARS = array();
+    $ALLSECVARS = array();
     foreach($hooks as $hook)
     {
+      if(!isset($ALLSECVARS[$hook->module_name()]))
+          $ALLSECVARS[$hook->module_name()] = array();
       foreach($hook->request_variables() as $k=>$v)
-        $ALLVARS[$k] = $v;
+      {
+          $ALLVARS[$k] = $v;
+          $ALLSECVARS[$hook->module_name()][$k] = $v;
+      }
     }
     if(!$ok)
     {
@@ -76,27 +82,34 @@
     }
     else
     {
-      echo "<form method=\"post\"><h3>Шаг 1/2: выбор дополнительных параметров</h3>";
-      echo "<table>";
-      foreach($ALLVARS as $variable=>$v)
-      {
-        $name = @$v["name"];
-        if($name === FALSE)
-            $name = $variable;
-        $type = @$v["type"];
-        if($type === FALSE)
-            $type = "string";
-        $def = @$v["default"];
-        $typehack = "";
-        if($type == "bool" || $type == "boolean") 
+        echo "<form method=\"post\"><h3>Шаг 1/2: выбор дополнительных параметров</h3>";
+        echo "<table>";
+        //foreach($ALLVARS as $variable=>$v)
+        foreach($ALLSECVARS as $hook_name=>$hook_variables)
         {
-          $typehack = "type=\"checkbox\"";
-          if($def == "true") $typehack .= " checked";
+            if(count($hook_variables))
+                echo "<tr><td colspan=\"2\"><h3>$hook_name</h3>";
+            foreach($hook_variables as $variable=>$v)
+            {
+                $name = @$v["name"];
+                if($name === FALSE)
+                    $name = $variable;
+                $type = @$v["type"];
+                if($type === FALSE)
+                    $type = "string";
+                $def = @$v["default"];
+                $typehack = "";
+                if($type == "bool" || $type == "boolean") 
+                {
+                    $typehack = "type=\"checkbox\"";
+                    if($def == "true") $typehack .= " checked";
+                }
+                if($type == "password") $typehack = "type=\"password\"";
+                echo "<tr><td>$name<td><input $typehack name=\"$variable\" value=\"$def\" />";
+            }
         }
-        echo "<tr><td>$name<td><input $typehack name=\"$variable\" value=\"$def\" />";
-      }
-      echo "</table>";
-      echo "<input type=\"submit\" name=\"submit_variables\" value=\"Установить >>\">";
-      echo "</form>";
+        echo "</table>";
+        echo "<input type=\"submit\" name=\"submit_variables\" value=\"Установить >>\">";
+        echo "</form>";
     }
 ?>

@@ -1,5 +1,5 @@
 <?php
-    require_once("$engine_dir/sys/tag.php");
+    //require_once("${SETTINGS['engine_dir']}/sys/tag.php");
     class XcmsUser
     {
         /*var $dict = array();
@@ -7,7 +7,10 @@
         var $superuser = false;*/
         private function _file_name($login)
         {
-            global $content_dir;
+            global $SETTINGS;
+            $content_dir = $SETTINGS["datadir"];
+            if($content_dir == "") 
+                throw new Exception ("Content dir is empty!");
             return "$content_dir/auth/usr/$login.user";
         }
         private function _hash($string)
@@ -61,9 +64,14 @@
         {
             return $this->dict["login"];
         }
-        function setParam($key, $value)
+        
+        function setParam($key, $value) /// Ooops. This was qt-style naming, will remove later.
         {
-            if(!in_array($key, array("password","email","name")))
+            return $this->set_param($key,$value);
+        }
+        function set_param($key, $value)
+        {
+            if(!in_array($key, array("password","email","name", "creator", "creation_date")))
                 $this->check_rights("admin");
             $this->dict[$key] = $value;
             $this->_save();
@@ -88,6 +96,7 @@
         }
         function check_rights($group, $throw_exception=true)
         {
+            $group = str_replace("#","",$group);
             if($group == "all") return true;
             if($group == "registered" && $this->isValid()) return true;
             if($this->isSuperuser()) return true;
@@ -186,6 +195,8 @@
             $u = new XcmsUser($login);
             $u->setValid();
             $u->setParam("email",$email);
+            $u->set_param("creator",$this->login());
+            $u->set_param("creation_date",mktime());
             $u->_save();
             return $u;
         }
@@ -295,6 +306,12 @@
             if($superuser->su("test_user")->login() != "test_user")
                 throw new Exception("su don't work");
         }
+        function logout($redirect)
+        {
+            $_SESSION["user"] = "";
+            $_SESSION["passwd"] = "";
+	    header("Location: $redirect");
+        }
     };
     /**
         This one returns current user object. It will have name "anonymous" if no logged in user.
@@ -317,10 +334,5 @@
             $u->create_session($password);
         $u->check_session();
         return $u;
-    }
-    function logout()
-    {
-        $_SESSION["user"] = "";
-        $_SESSION["passwd"] = "";
     }
 ?>

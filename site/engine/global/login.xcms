@@ -1,4 +1,4 @@
-<?
+<?php
     /**
         Добро пожаловать в универсальный обработчик логина -- глобальный шаблон login.xcms.
         
@@ -13,7 +13,7 @@
                 Passwd:<input type="password" name="auth-password" />
                 <input type="submit" name="auth-form" />
             </form>
-        <?
+        <?php
     }
     function login_handler()
     {
@@ -21,6 +21,8 @@
         try
         {
             xcms_user(@$_POST["auth-login"],@$_POST["auth-password"]);
+            if(@$_GET["return"])    header("Location: ".@$_GET["return"]);
+            else                    header("Location: ?".$_SERVER["QUERY_STRING"]);
         }
         catch(Exception $e)
         {
@@ -35,7 +37,8 @@
     else
     {
         echo "<h3>Требуется аутентификация</h3>";
-        echo $Exception->getMessage();
+        if(isset($Exception))
+            echo $Exception->getMessage();
         auth_form();
     }
     

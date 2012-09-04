@@ -3,10 +3,11 @@
     {
 	function module_name()
 	{
-	    return "Main installer [installer.php]";
+	    return "Основные настройки";
 	}
 	function request_variables()
 	{
+            global $SETTINGS;
             $design_list = glob("*design*", GLOB_ONLYDIR);
             if(count($design_list))
                 $design = $design_list[0];

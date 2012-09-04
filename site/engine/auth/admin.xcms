@@ -28,7 +28,8 @@
         </div>
     <td width="3px" />
     <td valign="top">
-        <?
+        <?php
+            $need_default = true;
             if(@$_GET["do"] == "create_user")
             {
                 if(@$_POST["create_user"])
@@ -44,6 +45,7 @@
                     $email = @$_POST["email"];
                     $tu=$u->create($login, $email);
                     $tu->passwd($password);
+                    $tu->set_param("name",@$_POST["name"]);
                     foreach(xcms_all_groups() as $group=>$title)
                     {
                         if(@$_POST["group_$group"])
@@ -54,9 +56,11 @@
                         echo "<h3>Sendmail</h3>";
                         xcms_send_email($email,"Fizlesh: user created","Welcome!");
                     }
+                    @$_GET["user"] = $login;
                 }
                 else
                 {
+                    $need_default = false;
                     ?>
                     <form method="post">
                     <table>
@@ -79,6 +83,80 @@
                     <input type="submit" name="create_user" value="Создать пользователя">
                     </form>
                     <?php
+                }
+            }
+            //else
+            {
+                if(@$_GET["user"] != "")
+                {
+                    $user = $u->su(@$_GET["user"]);
+                    if(@$_POST["update_user"])
+                    {
+                        foreach(array("name", "email") as $form_name)
+                        {
+                            $user->set_param($form_name, @$_POST["param_$form_name"]);
+                        }
+                        foreach(xcms_all_groups() as $group=>$title)
+                        {
+                            if(@$_POST["group_$group"])
+                            {
+                                try
+                                {
+                                    $u->groupadd($user->login(),$group);
+                                } 
+                                catch(Exception $e) {}
+                            }
+                            else 
+                            {
+                                try
+                                {
+                                    $u->groupremove($user->login(),$group);
+                                }
+                                catch(Exception $e) {}
+                            }
+                        }                      
+                    }
+                    if(@$_POST["delete_user"])
+                    {
+                        $u->delete($user->login());
+                        @$_GET["user"] = "";
+                    }
+                }
+                if(@$_GET["user"] == "")
+                {
+                    if($need_default)
+                        echo "<h3>Выберите пользователя в меню слева</h3>";
+                }
+                else
+                {
+                    echo "<form method='post'>";
+                    $user = $u->su(@$_GET["user"]);
+                    echo "<input name=\"param_name\" style=\"font-size: 24pt; border=\"0\"; \" value=\"{$user->param('name')}\" placeholder=\"Имя Пользователя\" />";
+                    echo "<br />Известен под логином <b>{$user->login()}</b>. ";
+                    echo "<br />Электропочта -- <input name=\"param_email\" style=\"border=\"0\"; \" value=\"{$user->param('email')}\" placeholder=\"nobody@example.com\" />";
+                    $cd = date('d.m.Y, i:h',$user->param('creation_date'));
+                    echo "<br />Создан администратором {$user->param('creator')}, {$cd}";
+                    echo "<h3>Привилегии</h3>";
+                    foreach(xcms_all_groups() as $group=>$title)
+                    {
+                        if($user->check_rights($group,false))
+                            $ch = " checked ";
+                        else
+                            $ch = "";
+                        echo "<input $ch type='checkbox' name='group_$group'>$title<br/>";
+                    }
+                    if($u->login() == $user->login()) echo "<h3>Вы не можете обновить свой собственный профиль</h3>";
+                    else 
+                    {
+                        echo "<input name='update_user' value='Обновить данные пользователя' type='submit' />";
+                        echo "<input name='check_delete_user' value='Удалить пользователя' type='submit' />";
+                        if(@$_POST['check_delete_user'])
+                        {
+                          echo "<p>Вы ТОЧНО УВЕРЕНЫ, что хотите удалить этого пользователя??";
+                          echo "<br /><input name='delete_user' value='Да, я абсолютно точно уверен.' type='submit' />";
+                        }
+                    }
+                    echo "</form>";
                 }
             }
         ?>

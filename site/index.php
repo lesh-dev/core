@@ -7,11 +7,11 @@
     header("Content-Type: text/html; charset=utf-8");
     date_default_timezone_set('Europe/Moscow');
     require_once ("settings.php");
-    require_once ("$engine_dir/sys/auth.php");
     require_once ("$engine_dir/sys/settings.php");
-    require_once ("$engine_dir/sys/logger.php");
-    require_once("$engine_dir/sys/compiler.php");
     require_once ("$engine_dir/sys/tag.php");
+    require_once ("$engine_dir/sys/auth.php");
+    require_once ("$engine_dir/sys/logger.php");
+    require_once ("$engine_dir/sys/compiler.php");
     require_once ("$engine_dir/sys/mailer.php");
     require_once ("$engine_dir/sys/resample.php");
 
