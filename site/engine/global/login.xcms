@@ -5,16 +5,6 @@
         Я не знаю, как его можно сдизайнить, ну да ладно.
     **/
     
-    function auth_form()
-    {
-        ?>
-            <form method="post">
-                Login:<input type="text" name="auth-login" />
-                Passwd:<input type="password" name="auth-password" />
-                <input type="submit" name="auth-form" />
-            </form>
-        <?php
-    }
     function login_handler()
     {
         global $_SESSION;
@@ -26,8 +16,8 @@
         }
         catch(Exception $e)
         {
-            echo "<h3>Пароль все еще неверный</h3>";
-            auth_form();
+            $AuthReason = "<h3>Пароль все еще неверный</h3>";
+            ?> <# auth/auth_form #> <?php
         }
     }
     if(@$_POST)
@@ -36,10 +26,12 @@
     }
     else
     {
-        echo "<h3>Требуется аутентификация</h3>";
+        $AuthReason =  "<h3>Требуется аутентификация</h3>";
         if(isset($Exception))
-            echo $Exception->getMessage();
-        auth_form();
+            $AuthReason =  $Exception->getMessage();
+
+        ?> <# auth/auth_form #> <?php
+
     }
     
 ?>
