@@ -17,6 +17,8 @@
 <table>
     <tr>
         <td valign="top"><div class="menu">
+            <a class="menu-passive" href="?do=create_user<?php echo $preface;?>">Create user</a>
+            <hr />
             <?php
                 foreach($u->user_list() as $user)
                 {
@@ -24,7 +26,6 @@
                     echo "<a class=\"menu-$activeness\" href=\"?user=$user$preface\">$user</a> <br />";
                 }
             ?>
-            <a class="menu-passive" href="?do=create_user<?php echo $preface;?>">Create user</a>
         </div>
     <td width="3px" />
     <td valign="top">
@@ -53,8 +54,16 @@
                     }
                     if(@$_POST["notify_user"])
                     {
-                        echo "<h3>Sendmail</h3>";
-                        xcms_send_email($email,"Fizlesh: user created","Welcome!");
+                        if(!xcms_send_email($email,"Welcome to XCMS!",
+                          "Добро пожаловать! Для Вас заведен логин и пароль на сайте. \n"
+                          ."\n"
+                          ."Ваш логин: $login\n"
+                          ."\n"
+                          ."Ваш пароль: $password\n"
+                          ."\n"
+                          ."Если у Вас будут какие-то проблемы, не бойтесь писать на support@fizlesh.ru, все равно его никто не читает.\n"
+                        ))
+                        echo "<li> Не вышло послать е-мейл";
                     }
                     @$_GET["user"] = $login;
                 }
