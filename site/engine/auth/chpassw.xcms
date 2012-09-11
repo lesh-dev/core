@@ -13,9 +13,12 @@
         {
             echo "<b>Пароль -- пустой</b>";
         }
-        $user->passwd($_POST["pass1"]);
-        $user->create_session($_POST["pass1"]);
-        $done = true;
+        else
+        {
+            $user->passwd($_POST["pass1"]);
+            $user->create_session($_POST["pass1"]);
+            $done = true;
+        }
     }
     if(!$done)
     {

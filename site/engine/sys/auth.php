@@ -190,6 +190,8 @@
         **/
         function create($login, $email="nobody@example.com")
         {
+            if(preg_replace("/[a-zA-Z0-9@._-]+/i","",$login) != "")
+                throw new Exception("Login format is incorrect!");
             $this->check_rights("admin");
             if(file_exists($this->_file_name($login)))
                 return $this->setError("User $login already exists!");
