@@ -215,11 +215,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>assertTextPresent</td>
-	<td>Для данного действия необходима авторизация</td>
-	<td></td>
-</tr>
-<tr>
 	<td>assertElementPresent</td>
 	<td>//div/form</td>
 	<td></td>
@@ -236,7 +231,7 @@
 </tr>
 <tr>
 	<td>type</td>
-	<td>//input[@name='auth-passw']</td>
+	<td>//input[@name='auth-password']</td>
 	<td>40KmnK111</td>
 </tr>
 <tr>
@@ -267,18 +262,18 @@
 </tr>
 <tr>
 	<td>assertElementPresent</td>
-	<td>//form/select[@name='ShowStatus']</td>
+	<td>//select[@name='show_activity_status']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertElementPresent</td>
-	<td>//form/input[@type='submit' and @value='Показать']</td>
+	<td>//input[@type='submit' and @value='Показать']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertElementPresent</td>
-	<td>//td[@class='ankListRowTitle']</td>
-	<td>TEST Пупкин Василий Иванович</td>
+	<td>//td[@class='ankList']</td>
+	<td>NO-MAIL-TEST Пупкин Василий Иванович</td>
 </tr>
 <tr>
 	<td>assertElementPresent</td>
@@ -293,12 +288,17 @@
 <tr>
 	<td>assertElementPresent</td>
 	<td>//a</td>
-	<td>XML</td>
+	<td>NO-MAIL-TEST Пупкин Василий Иванович</td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//a[text()='XML']</td>
+	<td>//a[text()='NO-MAIL-TEST Пупкин Василий Иванович']</td>
 	<td>XML</td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>300</td>
+	<td></td>
 </tr>
 <tr>
 	<td>assertTextPresent</td>
@@ -307,17 +307,12 @@
 </tr>
 <tr>
 	<td>assertTextPresent</td>
-	<td>Школа находится в /dev/null</td>
-	<td></td>
-</tr>
-<tr>
-	<td>open</td>
-	<td>/register/view</td>
+	<td>Экспериментальная</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertTextPresent</td>
-	<td>Регистрационная анкета</td>
+	<td>Школа находится в /dev/null</td>
 	<td></td>
 </tr>
 <tr>
