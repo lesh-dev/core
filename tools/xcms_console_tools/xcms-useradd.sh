@@ -46,3 +46,4 @@ if [ $password. == . ]; then
 fi
 
 sudo su www-data -c "php $(dirname $0)/xcms.php  basedir=$XCMS_HOME useradd login=$login password=$password mail=$mail groups=editor,ank notify=yes"
+
