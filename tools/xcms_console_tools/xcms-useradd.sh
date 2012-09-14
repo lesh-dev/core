@@ -21,7 +21,7 @@ while [ true ]; do
   fi
   if [ $1. == "-u". ]; then
     shift
-    username=$1
+    login=$1
     shift
     continue
   fi
@@ -46,3 +46,4 @@ if [ $password. == . ]; then
 fi
 
 sudo su www-data -c "php $(dirname $0)/xcms.php  basedir=$XCMS_HOME useradd login=$login password=$password mail=$mail groups=editor,ank notify=yes"
+
