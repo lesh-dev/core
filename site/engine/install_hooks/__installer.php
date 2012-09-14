@@ -147,7 +147,7 @@
             }
             foreach($bool_settings as $k)
             {
-                $v = (array_key_exists($k, $_POST) && $config[$k] == "on") ? "true" : "false";
+                $v = $config[$k]?"true":"false";
                 fputs($f, "\x20\x20\x20\x20\$$k = $v;\n");
             }
 
