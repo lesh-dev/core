@@ -18,7 +18,7 @@ tar cvzf "$backup_folder/git.tgz"  /srv/git
 tar cvzf "$backup_folder/trac.tgz" /srv/trac
 tar cvzf "$backup_folder/etc.tgz"  /etc
 mysqldump -ubackup -pnothing_to_backup --default-character-set=utf8 smf | gzip > "$backup_folder/forum.gz"
-tar cvzf "$backup_folder/attach.tgz"  /srv/www/production/forum/attachments
+tar cvzf "$backup_folder/attach.tgz"  /srv/www/clones/forum/attachments
 
 plan_a()
 {
