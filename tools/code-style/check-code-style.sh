@@ -9,7 +9,7 @@ fail=
 
 check_style()
 {
-    for i in `find $path -type f -name $1`; do
+    for i in `find $path -type f -name "$1"`; do
         if ! $my_base/check.py $i > /tmp/check-result ; then
             echo "*** Checking '$i' failed:"
             cat /tmp/check-result
