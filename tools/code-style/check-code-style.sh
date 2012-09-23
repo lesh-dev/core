@@ -11,20 +11,32 @@ fail=
 
 # ignore list (contrib files whose code style
 # we don't want to verify
-ignore_list="class.phpmailer.php"
+ignore_list_files="class.phpmailer.php"
+ignore_list_dirs="/forum/"
 
 check_style()
 {
     for i in `find $path -type f -name "$1"`; do
+        local ignore=""
         # skip ignored files
         ib="`basename $i`"
-        for b in $ignore_list ; do
+        for b in $ignore_list_files ; do
             if [ "$ib" == "$b" ] ; then
                 ignore="yes"
+                ignore_reason="whitelisted file"
                 break
             fi
         done
+        for d in $ignore_list_dirs ; do
+            if echo "$i" | grep -q "$d" ; then
+                ignore="yes"
+                ignore_reason="whitelisted directory"
+                break
+            fi
+        done
+
         if [ "$ignore" == "yes" ] ; then
+            #echo "IGNORED: $i by $ignore_reason"
             continue
         fi
         # check files
