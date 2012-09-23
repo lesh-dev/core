@@ -5,14 +5,40 @@ set -e
 
 # Runs python-based code style checker
 
-path="."
-my_base="`dirname $0`"
-fail=
-
 # ignore list (contrib files whose code style
 # we don't want to verify
 ignore_list_files="class.phpmailer.php"
 ignore_list_dirs="/forum/"
+
+print_usage()
+{
+    cat - <<EOF
+Usage: `basename $0` <options>
+    -h  --help        Show this help
+    -n  --names-only  Print only failed file names-only
+EOF
+    exit 1
+
+}
+
+while [ -n "$1" ] ; do
+    if [ "$1" == "-h" ] || [ "$1" == "--help" ] ; then
+        print_usage
+        names_only="yes"
+        shift
+        continue
+    fi
+    if [ "$1" == "-n" ] || [ "$1" == "--names-only" ] ; then
+        names_only="yes"
+        shift
+        continue
+    fi
+done
+
+# some settings that you don't need to touch
+path="."
+my_base="`dirname $0`"
+fail=
 
 check_style()
 {
@@ -41,10 +67,14 @@ check_style()
         fi
         # check files
         if ! $my_base/check.py $i > /tmp/check-result ; then
-            echo "*** Checking '$i' failed:"
-            cat /tmp/check-result
-            echo
-            echo
+            if [ "$names_only" == "yes" ] ; then
+                echo $i
+            else
+                echo "*** Checking '$i' failed:"
+                cat /tmp/check-result
+                echo
+                echo
+            fi
             fail="yes"
         fi
     done
