@@ -65,8 +65,8 @@
     }
 
 
-	/// Это -- последствия "быстрого" разрешения конфликта
-	//TODO: написать обертку к новому xmcs_send_notification
+    /// Это -- последствия "быстрого" разрешения конфликта
+    //TODO: написать обертку к новому xmcs_send_notification
     function xcms_send_email($emailList, $subject, $mailText)
     {
         global $SETTINGS, $login;
