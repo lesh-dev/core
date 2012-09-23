@@ -45,7 +45,12 @@ def check_tab_style(lines):
         if sm:
             spaces = sm.group()
             if len(spaces) % 4 != 0:
-                add_bad_line(bad_lines, "Invalid spaces count: %d" % len(spaces), i)
+                ls = line.lstrip()
+                if ls[0:2] == '* ' or ls[0:3] == '/**' or ls [0:3] == '**/':
+                    # okay, it seems like a Doxygen comment (TODO: add entrance/leave) check)
+                    pass
+                else:
+                    add_bad_line(bad_lines, "Invalid spaces count: %d" % len(spaces), i)
 
         # tab check
         tm = re.search('\t', line)
