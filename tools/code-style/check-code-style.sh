@@ -10,21 +10,39 @@ set -e
 ignore_list_files="class.phpmailer.php"
 ignore_list_dirs="/forum/"
 
+# some settings that you don't need to touch
+path="."
+my_base="`dirname $0`"
+tmp="/tmp"
+
 print_usage()
 {
     cat - <<EOF
 Usage: `basename $0` <options>
-    -h  --help        Show this help
-    -n  --names-only  Print only failed file names-only
+    -h  --help                 Show this help
+    -n  --names-only           Print only failed file names-only
+    -f  --file <file-name>     Check only given file
 EOF
     exit 1
 
 }
 
+# print error message, then print help and exit
+error_exit()
+{
+    local need_help="$1"
+    local message="$2"
+    echo "Error: $message"
+    echo
+    if [ "$need_help" == "help" ] ; then
+        print_usage
+    fi
+    exit 1
+}
+
 while [ -n "$1" ] ; do
     if [ "$1" == "-h" ] || [ "$1" == "--help" ] ; then
         print_usage
-        names_only="yes"
         shift
         continue
     fi
@@ -33,12 +51,39 @@ while [ -n "$1" ] ; do
         shift
         continue
     fi
+    if [ "$1" == "-f" ] || [ "$1" == "--file" ] ; then
+        shift
+        check_file_name="$1"
+        if [ -z "$check_file_name" ] ; then
+            error_exit "help" "File name is not given for 'file' parameter"
+        fi
+        shift
+        continue
+    fi
+    # invalid args, print usage and bail out
+    print_usage
 done
 
-# some settings that you don't need to touch
-path="."
-my_base="`dirname $0`"
+# flush global failure flag
 fail=
+
+check_file()
+{
+    fn="$1"
+    if $my_base/check.py "$fn" > $tmp/check-result ; then
+        return
+    fi
+
+    if [ "$names_only" == "yes" ] ; then
+        echo $fn
+    else
+        echo "*** Checking '$fn' failed:"
+        cat $tmp/check-result
+        echo
+        echo
+    fi
+    fail="yes"
+}
 
 check_style()
 {
@@ -66,25 +111,19 @@ check_style()
             continue
         fi
         # check files
-        if ! $my_base/check.py $i > /tmp/check-result ; then
-            if [ "$names_only" == "yes" ] ; then
-                echo $i
-            else
-                echo "*** Checking '$i' failed:"
-                cat /tmp/check-result
-                echo
-                echo
-            fi
-            fail="yes"
-        fi
+        check_file "$i"
     done
     return 0
 }
 
-check_style '*.xcms'
-check_style '*.php'
-check_style '*.code'
-check_style '*.sh'
+if [ -n "$check_file_name" ] ; then
+    check_file "$check_file_name"
+else
+    check_style '*.xcms'
+    check_style '*.php'
+    check_style '*.code'
+    check_style '*.sh'
+fi
 
 if [ "$fail" == "yes" ] ; then
     echo "Code style checking failed, see the output for details"

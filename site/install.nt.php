@@ -50,7 +50,7 @@
     }
     if(!$ok)
     {
-	die("<br/>Installation will not be continued until You will not take action.");
+        die("<br/>Installation will not be continued until You will not take action.");
     }
     if (@$_POST["submit_variables"])
     {
@@ -99,7 +99,7 @@
                     $type = "string";
                 $def = @$v["default"];
                 $typehack = "";
-                if($type == "bool" || $type == "boolean") 
+                if($type == "bool" || $type == "boolean")
                 {
                     $typehack = "type=\"checkbox\"";
                     if($def == "true") $typehack .= " checked";
