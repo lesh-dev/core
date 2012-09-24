@@ -163,7 +163,7 @@ function add_variable
 function assemble_folder
 {
     mkdir -p $local_target
-    cp -rf $location/* $local_target/
+    cp -rf $location/. $local_target/
     $hook
 }
 function assemble_symlink
@@ -185,7 +185,7 @@ function assemble_git
     git checkout $branch
     cd $OLDPWD
     mkdir -p $local_target
-    cp -rf $TEMP_REPO/$subfolder/* $local_target/
+    cp -rf $TEMP_REPO/$subfolder/. $local_target/
     $hook
     rm -rf $TEMP_REPO
 }
@@ -205,9 +205,9 @@ function assemble
         eval $variable=$value
     done
 
-    if [ $sympolicy == "date" ]; then
+    if [ $sympolicy. == "date." ]; then
         sym_suffix="-$(date +$date_format)"
-    elif [ $sympolicy == "none" ]; then
+    elif [ $sympolicy. == "none." ]; then
         sym_suffix=""
     else
         echo "Incorrect symbolic links policy: $sympolicy. Abort."
@@ -231,8 +231,8 @@ function assemble
 	ln -s ${target}${sym_suffix} ${target}
     fi
 
-    hook_end
     chown -R $owner ${target}${sym_suffix}
+    hook_end
 
 }
 function main

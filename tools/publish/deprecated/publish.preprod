@@ -52,7 +52,7 @@ chown -R www-data $PREPROD/*
 
 # rm $PREPROD/install.php*
 echo "Preparing XCMS installation..."
-mv $PREPROD/install.php.template $PREPROD/install.php
+mv $PREPROD/install.nt.php $PREPROD/install.php
 # cp $RESOURCE/settings.php $PREPROD
 cp -rf $CONTENT $PREPROD/content
 chown -R www-data:www-data $PREPROD/content
