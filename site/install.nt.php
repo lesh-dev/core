@@ -40,13 +40,13 @@
     $ALLSECVARS = array();
     foreach($hooks as $hook)
     {
-      if(!isset($ALLSECVARS[$hook->module_name()]))
-          $ALLSECVARS[$hook->module_name()] = array();
-      foreach($hook->request_variables() as $k=>$v)
-      {
-          $ALLVARS[$k] = $v;
-          $ALLSECVARS[$hook->module_name()][$k] = $v;
-      }
+        if (!isset($ALLSECVARS[$hook->module_name()]))
+            $ALLSECVARS[$hook->module_name()] = array();
+        foreach($hook->request_variables() as $k=>$v)
+        {
+            $ALLVARS[$k] = $v;
+            $ALLSECVARS[$hook->module_name()][$k] = $v;
+        }
     }
     if(!$ok)
     {
