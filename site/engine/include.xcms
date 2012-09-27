@@ -1,24 +1,7 @@
 <?php
-    if (file_exists($SETTINGS["datadir"]."cms/pages/".@$pageid."/".@$argv[1]))
-        include($SETTINGS["datadir"]."cms/pages/".@$pageid."/".@$argv[1]);
-  /*
-  // TODO: remove dead code
-  // this option was used only for metainfo.
-  // recursive metainfo should be implemented
-  // in a more intellectual way, it
-  // should not be simply copied (SEO requirement!)
-  else if($argv[2]=="recurce")
-  {
-    $predir = $SETTINGS["datadir"]."cms/pages/".@$pageid."";
-    while(1)
-    {
-      if(!file_exists("$predir/info")) break;
-      if(file_exists("$predir/{$argv[1]}"))
-      {
-        include("$predir/{$argv[1]}");
-      }
-      $predir = "$predir/..";
-    }
-  }
-  */
+    $include_file_name = $SETTINGS["datadir"]."cms/pages/".@$pageid."/".@$argv[1];
+    if (file_exists($include_file_name))
+        include($include_file_name);
+    else
+        xcms_log(XLOG_ERROR, "Include file '$include_file_name' does not exist, ignored");
 ?>
