@@ -8,7 +8,11 @@
         return $mailer;
     }
 
-    function xcms_add_mail_group($mailer, $mail_group)
+    define('XMAIL_DESTMODE_TO', 'to');
+    define('XMAIL_DESTMODE_CC', 'cc');
+    define('XMAIL_DESTMODE_BCC', 'bcc');
+
+    function xcms_add_mail_group($mailer, $mail_group, $mode = XMAIL_DESTMODE_TO)
     {
         global $SETTINGS;
         $mail_groups = xcms_get_list("{$SETTINGS["datadir"]}cms/mailer.conf");
@@ -25,7 +29,17 @@
             $mail_addr = trim($addr);
             if (empty($mail_addr))
                 continue;
-            $mailer->AddAddress($mail_addr);
+            if ($mode == XMAIL_DESTMODE_TO)
+                $mailer->AddAddress($mail_addr);
+            elseif ($mode == XMAIL_DESTMODE_CC)
+                $mailer->AddCC($mail_addr);
+            elseif ($mode == XMAIL_DESTMODE_BCC)
+                $mailer->AddBCC($mail_addr);
+            else
+            {
+                xcms_log(XLOG_ERROR, "[MAILER] Invalid address type mode '$mode', skipped");
+                continue;
+            }
             $added_some = true;
         }
         if (!$added_some)
@@ -34,7 +48,7 @@
         return $added_some;
     }
 
-    function xcms_send_notification($mail_group, $subject, $mail_text)
+    function xcms_send_notification($mail_group, $addr_list, $subject, $mail_text)
     {
         global $SETTINGS, $login;
         $enabled = xcms_get_key_or($SETTINGS, "mailer_enabled", true);
@@ -53,7 +67,21 @@
         $mailer = xcms_get_mailer();
         $mailer->AddReplyTo("noreply$dom", "FizLesh Notificator");
         $mailer->SetFrom('notify$dom', 'FizLesh Notificator');
-        xcms_add_mail_group($mailer, $mail_group);
+
+        if ($addr_list !== NULL)
+        {
+            foreach ($addr_list as $mail_addr)
+                $mailer->AddAddress($mail_addr);
+            // we send an email to address list, but add groups to BCC
+            if ($mail_group !== NULL)
+                xcms_add_mail_group($mailer, $mail_group, XMAIL_DESTMODE_BCC);
+        }
+        else
+        {
+            // regular notification
+            if ($mail_group !== NULL)
+                xcms_add_mail_group($mailer, $mail_group);
+        }
         $mailer->Subject = $subject;
         $mailer->Body = $body;
         if (!$mailer->Send())
@@ -63,30 +91,4 @@
         }
         return true;
     }
-
-
-    /// Это -- последствия "быстрого" разрешения конфликта
-    //TODO: написать обертку к новому xmcs_send_notification
-    function xcms_send_email($emailList, $subject, $mailText)
-    {
-        global $SETTINGS, $login;
-        if (array_key_exists("mailer_enabled", $SETTINGS) && $SETTINGS["mailer_enabled"] === false) return;
-        $message = $mailText;
-        $message = wordwrap($message, 160);
-        $ok = @mail($emailList, $subject,
-            "$message"."\r\n".
-            "-- \n".
-            "Исполнитель     : $login\n".
-            "Имя хоста       : ".php_uname('n')." \n".
-            "Обратная ссылка : {$_SERVER['HTTP_REFERER']}\n".
-            ""
-            ,
-            "From: xcms [".php_uname('n')."] mailer  <noreply@fizlesh.ru>\r\n".
-            'Content-Type: text/plain; charset=utf-8'."\r\n".
-            "Content-Transfer-Encoding: 8bit\r\n"
-        );
-        return $ok;
-    }
-
-
 ?>

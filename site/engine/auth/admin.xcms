@@ -50,20 +50,28 @@
                     foreach(xcms_all_groups() as $group=>$title)
                     {
                         if(@$_POST["group_$group"])
-                          $u->groupadd($login, $group);
+                            $u->groupadd($login, $group);
                     }
                     if(@$_POST["notify_user"])
                     {
-                        if(!xcms_send_email($email,"Welcome to XCMS!",
-                          "Добро пожаловать! Для Вас заведен логин и пароль на сайте. \n"
-                          ."\n"
-                          ."Ваш логин: $login\n"
-                          ."\n"
-                          ."Ваш пароль: $password\n"
-                          ."\n"
-                          ."Если у Вас будут какие-то проблемы, не бойтесь писать на support@fizlesh.ru, все равно его никто не читает.\n"
-                        ))
-                        echo "<li> Не вышло послать е-мейл";
+                        // TODO: this template should be taken from file
+                        $notify_result = xcms_send_notification(
+                            "developers",
+                            array($email),
+                            "Welcome to XCMS!",
+
+                            "Добро пожаловать! Для Вас заведён логин и пароль на сайте.\n"
+                            ."\n"
+                            ."Ваш логин: $login\n"
+                            ."\n"
+                            ."Ваш пароль: $password\n"
+                            ."\n"
+                            ."Если у Вас будут какие-то проблемы, не бойтесь писать "
+                            ."на support@fizlesh.ru, все равно его никто не читает.\n"
+                        );
+                        // TODO: fix this bullshit
+                        if (!$notify_result)
+                            echo "<li> Не вышло послать е-мейл";
                     }
                     @$_GET["user"] = $login;
                 }
@@ -79,8 +87,8 @@
                             <tr><td>Пароль  (еще раз):  </td><td> <input type="password" name="p2">   </td></tr>
                             <tr><td>Настоящее имя:      </td><td> <input name="name">                 </td></tr>
                             <tr><td>Электропочта:       </td><td> <input name="email">                </td></tr>
-                            <tr><td colspan="2">  <input type="checkbox" name="notify_user" /> 
-                                                  Оповестить пользователя по почте                    </td></tr>
+                            <tr><td colspan="2">  <input type="checkbox" name="notify_user" />
+                                Оповестить пользователя по почте                                      </td></tr>
                             <tr><td colspan="2"><b>Привилегии</b>                               </td></tr>
                             <?php
                                 foreach(xcms_all_groups() as $group=>$title)
@@ -112,10 +120,10 @@
                                 try
                                 {
                                     $u->groupadd($user->login(),$group);
-                                } 
+                                }
                                 catch(Exception $e) {}
                             }
-                            else 
+                            else
                             {
                                 try
                                 {
@@ -123,7 +131,7 @@
                                 }
                                 catch(Exception $e) {}
                             }
-                        }                      
+                        }
                     }
                     if(@$_POST["delete_user"])
                     {
@@ -155,14 +163,14 @@
                         echo "<input $ch type='checkbox' name='group_$group'>$title<br/>";
                     }
                     if($u->login() == $user->login()) echo "<h3>Вы не можете обновить свой собственный профиль</h3>";
-                    else 
+                    else
                     {
                         echo "<input name='update_user' value='Обновить данные пользователя' type='submit' />";
                         echo "<input name='check_delete_user' value='Удалить пользователя' type='submit' />";
                         if(@$_POST['check_delete_user'])
                         {
-                          echo "<p>Вы ТОЧНО УВЕРЕНЫ, что хотите удалить этого пользователя??";
-                          echo "<br /><input name='delete_user' value='Да, я абсолютно точно уверен.' type='submit' />";
+                            echo "<p>Вы ТОЧНО УВЕРЕНЫ, что хотите удалить этого пользователя??";
+                            echo "<br /><input name='delete_user' value='Да, я абсолютно точно уверен.' type='submit' />";
                         }
                     }
                     echo "</form>";
