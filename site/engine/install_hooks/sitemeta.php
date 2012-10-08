@@ -1,6 +1,7 @@
 <?php
     /**
       * Хук настройки метаинформации о сайте (имя сайта и т.п.)
+      * Maintainer: doctor@
       **/
     class MetaInfoHook
     {
@@ -67,7 +68,7 @@
     {
         $f = fopen("settings.php", "a+");
         if (!$f)
-            return "Cannot open settings.php for append. ";
+            return "Cannot open 'settings.php' for append. ";
 
         fputs($f, "\n<?php /* This block was inserted by installer -- sitemeta.php.");
         fputs($f, "\nYou may edit it, but it can be regenerated. */");
