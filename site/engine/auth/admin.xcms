@@ -50,7 +50,7 @@
                     foreach(xcms_all_groups() as $group=>$title)
                     {
                         if(@$_POST["group_$group"])
-                            $u->groupadd($login, $group);
+                            $u->group_add($login, $group);
                     }
                     if(@$_POST["notify_user"])
                     {
@@ -119,7 +119,7 @@
                             {
                                 try
                                 {
-                                    $u->groupadd($user->login(),$group);
+                                    $u->group_add($user->login(),$group);
                                 }
                                 catch(Exception $e) {}
                             }
@@ -127,7 +127,7 @@
                             {
                                 try
                                 {
-                                    $u->groupremove($user->login(),$group);
+                                    $u->group_remove($user->login(),$group);
                                 }
                                 catch(Exception $e) {}
                             }

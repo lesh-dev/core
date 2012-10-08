@@ -142,7 +142,7 @@
         /**
           * Добавляет пользователя в группу.
           **/
-        function groupadd($login, $group)
+        function group_add($login, $group)
         {
             $group = str_replace("#","",$group);
             $this->check_rights("admin");
@@ -152,7 +152,7 @@
             $user->dict["groups"] = implode(",",array_merge($user->groups(), array($group)));
             $user->_save();
         }
-        function groupremove($login, $group)
+        function group_remove($login, $group)
         {
             $group = str_replace("#","",$group);
             $this->check_rights("admin");
@@ -262,13 +262,13 @@
             $superuser->setSuperuser();
             $superuser->delete("test_user");
             $superuser->create("test_user", "test@example.com");
-            $superuser->groupadd("test_user", "testGroup1");
-            $superuser->groupadd("test_user", "testGroup2");
-            $superuser->groupadd("test_user", "testGroup3");
-            $superuser->groupremove("test_user", "testGroup2");
+            $superuser->group_add("test_user", "testGroup1");
+            $superuser->group_add("test_user", "testGroup2");
+            $superuser->group_add("test_user", "testGroup3");
+            $superuser->group_remove("test_user", "testGroup2");
             try
             {
-                $superuser->groupremove("test_user", "testGroup2");
+                $superuser->group_remove("test_user", "testGroup2");
                 echo ("Unit test failed: I still can remove user from testGroup2 which he don't belong");
             }
             catch (Exception $e)
@@ -286,7 +286,7 @@
             echo("Unit test failed: user can change his group list"); } catch (Exception $e) {}
 
             try{
-                $user->groupadd("test_user","kuku");
+                $user->group_add("test_user","kuku");
             echo("Unit test failed: user can add himself to group"); } catch (Exception $e) {}
 
             $user->check_rights("testGroup1");

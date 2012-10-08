@@ -1,6 +1,7 @@
 <?php
     /**
       * Install Hook для логгера
+      * Maintainer: mvel@
       **/
     class LoggerInstallHook
     {
