@@ -24,7 +24,7 @@
       * Outputs message to log
       * @param log_level log level
       * @param message message to log (or anything convertable to string)
-      */
+      **/
     function xcms_log($log_level, $message)
     {
         global $engine_dir;

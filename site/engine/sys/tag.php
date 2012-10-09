@@ -1,14 +1,15 @@
 <?php
-/* version 1.4. rewritten from scratch [mvel@] */
-
-/* version 1.3   added taglist system. Afraid, this makes tags depending of xcms.*/
-/* version 1.2.1. editlist_form list of skipping fields added*/
-/* version 1.2. function editlist_form - a gui editor for lists.*/
-/* version 1.1. _defend tag in the beginning added.
-   Now, if file is handled as php script, user will
-   not read it. */
-/* version 1.0. Library created */
-
+/*
+    version 1.4. rewritten from scratch [mvel@]
+    version 1.3   added taglist system. Afraid, this makes tags depending of xcms.
+    version 1.2.1. editlist_form list of skipping fields added
+    version 1.2. function editlist_form - a gui editor for lists.
+    version 1.1.
+        _defend tag in the beginning added.
+        Now, if file is handled as php script, user will
+        not read it.
+    version 1.0. Library created
+*/
 
 /**
   * Retrieve current page content location
@@ -106,10 +107,6 @@ function xcms_get_key_or($list, $key, $def_value = '')
     return $value;
 }
 
-/********************************/
-/*          SETTINGS            */
-/**/$tag_php_delim = "<###>"; /**/
-/********************************/
 function getTagList($file)
 {
     global $getTagList_output;
@@ -140,6 +137,9 @@ function getTagList($file)
     }
 }
 
+/**
+  * deprecated function, do not use
+  **/
 function saveList($list,$filename)
 {
     global $tag_php_delim;
@@ -159,8 +159,8 @@ function saveList($list,$filename)
 }
 
 /**
-  * deprecated
-  */
+  * deprecated function, do not use
+  **/
 function getList($filename)
 {
     global $tag_php_delim;
@@ -168,11 +168,11 @@ function getList($filename)
     $rez = array();
     foreach ($s as $key=>$value)
     {
-      $v = str_replace("\n","",$value);
-      $v = str_replace("\r","",$v);
-      $k = explode($tag_php_delim, $v, 2);
-      if($k[0] == "_defend") continue;
-      @$rez[$k[0]] = @$k[1];
+        $v = str_replace("\n","",$value);
+        $v = str_replace("\r","",$v);
+        $k = explode($tag_php_delim, $v, 2);
+        if($k[0] == "_defend") continue;
+        @$rez[$k[0]] = @$k[1];
     }
     return $rez;
 }
