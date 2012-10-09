@@ -33,6 +33,7 @@ function hook_reset
     else
       git reset --hard
       git clean -f
+      chown -R www-data:www-data .
     fi
 }
 function hook_end
