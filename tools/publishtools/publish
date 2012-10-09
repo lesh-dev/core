@@ -192,6 +192,11 @@ function assemble_git
 function assemble
 {
     RECEIPE=$1
+    COMMAND=$2
+    if [ $COMMAND. != "." ]; then
+      hook_$COMMAND
+      return 0
+    fi
     source $PUBLISH_REALM/receipes/$RECEIPE.receipe
     hook_begin
     eval $VARIABLE_HOOKS
@@ -241,6 +246,7 @@ function main
     VARIABLE_HOOKS=""
     while [ true ]; do
         ARG=$1
+        NEXT=$2
         if [ "$ARG." == "." ]; then
             do_help
             exit 0
@@ -263,7 +269,7 @@ function main
             exit 0
         fi
         if [ -f $PUBLISH_REALM/receipes/$ARG.receipe ]; then
-            assemble $ARG
+            assemble $ARG $NEXT
             exit 0
         fi
         #if [ "$ARG." == "assemble." ]; then
