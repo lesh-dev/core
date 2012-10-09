@@ -193,11 +193,11 @@ function assemble
 {
     RECEIPE=$1
     COMMAND=$2
+    source $PUBLISH_REALM/receipes/$RECEIPE.receipe
     if [ $COMMAND. != "." ]; then
       hook_$COMMAND
       return 0
     fi
-    source $PUBLISH_REALM/receipes/$RECEIPE.receipe
     hook_begin
     eval $VARIABLE_HOOKS
 

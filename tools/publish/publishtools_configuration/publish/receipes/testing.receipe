@@ -42,6 +42,7 @@ function hook_end
       echo " *** ERROR *** Can't create save state"
     else
       git init
+      hook_commit
     fi
     echo -en  # Add something useful is you want
     apachectl -k graceful
