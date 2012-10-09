@@ -12,16 +12,18 @@ ignore_list_dirs="/forum/"
 
 # some settings that you don't need to touch
 path="."
-my_base="`dirname $0`"
+my_base="$(dirname "$(readlink -f "$0")")"
 tmp="/tmp"
 
 print_usage()
 {
     cat - <<EOF
 Usage: `basename $0` <options>
-    -h  --help                 Show this help
-    -n  --names-only           Print only failed file names-only
-    -f  --file <file-name>     Check only given file
+    -h  --help                  Show this help
+    -n  --names-only            Print only failed file names-only
+    -f  --file <file-name>      Check only given file
+    -c  --commit                Check all modified files in GIT repo
+                                You must be inside GIT repo to use it
 EOF
     exit 1
 
@@ -48,6 +50,11 @@ while [ -n "$1" ] ; do
     fi
     if [ "$1" == "-n" ] || [ "$1" == "--names-only" ] ; then
         names_only="yes"
+        shift
+        continue
+    fi
+    if [ "$1" == "-c" ] || [ "$1" == "--commit" ] ; then
+        commit_only="yes"
         shift
         continue
     fi
@@ -118,6 +125,22 @@ check_style()
 
 if [ -n "$check_file_name" ] ; then
     check_file "$check_file_name"
+elif [ -n "$commit_only" ] ; then
+    # detect .git root directory
+    my_dir="$(pwd)"
+    while ! [ -d .git ] ; do
+        cd ..
+        if [ $(pwd) == "/" ] ; then
+            cd "$my_dir"
+            error_exit "help" "You are not inside the git repo"
+        fi
+    done
+    # obtain files list
+    files_to_check="$(git status --porcelain | grep '^ [MA]' | cut -c4-)"
+    for fn in $files_to_check; do
+        check_file "$fn"
+    done
+    cd $my_dir
 else
     check_style '*.xcms'
     check_style '*.php'
