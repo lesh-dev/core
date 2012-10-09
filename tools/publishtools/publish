@@ -288,7 +288,7 @@ function main
         if [ $found == true ]; then
             continue
         fi
-        echo "Illegal command: $1";
+        echo "Illegal command: $ARG"
         exit 1
     done
 }
