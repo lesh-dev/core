@@ -313,7 +313,7 @@
         {
             $_SESSION["user"] = "";
             $_SESSION["passwd"] = "";
-	    header("Location: $redirect");
+            header("Location: $redirect");
         }
     };
     /**
