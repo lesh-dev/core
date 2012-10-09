@@ -1,9 +1,6 @@
 <?php
     class XcmsUser
     {
-        /*var $dict = array();
-        var $error = "";
-        var $superuser = false;*/
         private function _file_name($login)
         {
             global $SETTINGS, $content_dir;
