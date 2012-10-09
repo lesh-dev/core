@@ -38,7 +38,7 @@
     /**
       * Требования этого модуля тривиальны
       * @return true в любом случае
-      */
+      **/
     function initial_check()
     {
         return true;
