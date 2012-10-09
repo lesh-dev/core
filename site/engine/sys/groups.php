@@ -9,12 +9,9 @@
             ,"#editor" => "Редактор"
             ,"#ank" => "Менеджер анкет"
         );
-        $A = @getList("$content_dir/groups");
-        if($A)
-        {
-            foreach($A as $k=>$v)
-                $ans[$k] = $v;
-        }
+        $groups = xcms_get_list("$content_dir/groups");
+        foreach($groups as $k=>$v)
+            $ans[$k] = $v;
         return $ans;
     }
     /// Deprecated! Use xcms_all_groups instead!

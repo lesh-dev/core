@@ -51,6 +51,7 @@
             system("diff $target_name $ename > $diff_name");
             $lf = "\r\n";
             xcms_send_notification("content-change",
+                NULL,
                 "[Lesh CMS notification] Изменена страница: $pageid",
                 "Была произведена правка страницы. Дифф:$lf".
                 "=======================================$lf".

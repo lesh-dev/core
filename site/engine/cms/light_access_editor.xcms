@@ -24,6 +24,14 @@
         if(@$_POST["add-view"])
             $nview = $_POST["add-view"]." ".$nview;
 
+        $nvarr = array_unique(explode(" ",trim($nview)));
+        sort($nvarr);
+        $nearr = array_unique(explode(" ",trim($nedit)));
+        sort($nearr);
+
+        $nview = implode(" ",$nvarr);
+        $nedit = implode(" ",$nearr);
+
         $INFO["view"] = $nview;
         $INFO["edit"] = $nedit;
         $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";

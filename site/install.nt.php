@@ -40,17 +40,17 @@
     $ALLSECVARS = array();
     foreach($hooks as $hook)
     {
-      if(!isset($ALLSECVARS[$hook->module_name()]))
-          $ALLSECVARS[$hook->module_name()] = array();
-      foreach($hook->request_variables() as $k=>$v)
-      {
-          $ALLVARS[$k] = $v;
-          $ALLSECVARS[$hook->module_name()][$k] = $v;
-      }
+        if (!isset($ALLSECVARS[$hook->module_name()]))
+            $ALLSECVARS[$hook->module_name()] = array();
+        foreach($hook->request_variables() as $k=>$v)
+        {
+            $ALLVARS[$k] = $v;
+            $ALLSECVARS[$hook->module_name()][$k] = $v;
+        }
     }
     if(!$ok)
     {
-	die("<br/>Installation will not be continued until You will not take action.");
+        die("<br/>Installation will not be continued until You will not take action.");
     }
     if (@$_POST["submit_variables"])
     {
@@ -99,7 +99,7 @@
                     $type = "string";
                 $def = @$v["default"];
                 $typehack = "";
-                if($type == "bool" || $type == "boolean") 
+                if($type == "bool" || $type == "boolean")
                 {
                     $typehack = "type=\"checkbox\"";
                     if($def == "true") $typehack .= " checked";

@@ -1,24 +1,29 @@
 <?php
-	/*
-	Transforms an key-value-array to properly encoded URI part:
-
-	array('param'=>'value1 value2', 'super'=>'puper') -->
-	&amp;param=value1%20value2&amp;super=puper
-	*/
-    function xcms_url($aArgs) {
-        $sRes = '';
-        foreach ($aArgs as $sK => $sV)
+    /**
+      * Transforms an key-value-array to properly encoded URI part:
+      * array('param'=>'value1 value2', 'super'=>'puper') will be translated to
+      * &amp;param=value1%20value2&amp;super=puper
+      * @param args_list array of arguments to encode
+      * @return encoded parameters string
+      **/
+    function xcms_url($args_list)
+    {
+        $res = '';
+        foreach ($args_list as $key => $value)
         {
-        	$sRes = "$sRes&amp;$sK=".rawurlencode($sV);
+            $res = "$res&amp;$key=".rawurlencode($value);
         }
-        return $sRes;
+        return $res;
     }
 
-	/*
-	Same as xcms_url, but makes complete href="..." attribute
-	containing given parameters
-	*/
-    function xcms_href($aArgs) {
-    	return ' href="?'.xcms_url($aArgs).'" ';
+    /**
+      * Same as @sa xcms_url, but makes complete href="..." attribute
+      * containing given parameters
+      * @param args_list array of arguments to encode
+      * @return encoded parameters string
+      **/
+    function xcms_href($args_list)
+    {
+        return ' href="?'.xcms_url($args_list).'" ';
     }
 ?>

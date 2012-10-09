@@ -1,16 +1,12 @@
 <?php
-    //require_once("${SETTINGS['engine_dir']}/sys/tag.php");
     class XcmsUser
     {
-        /*var $dict = array();
-        var $error = "";
-        var $superuser = false;*/
         private function _file_name($login)
         {
             global $SETTINGS, $content_dir;
             $cd = $SETTINGS["datadir"];
             if($cd == "") $cd = $content_dir;
-            if($cd == "") 
+            if($cd == "")
                 throw new Exception ("Content dir is empty!");
             return "$cd/auth/usr/$login.user";
         }
@@ -19,13 +15,13 @@
             return md5($string."saulty!");
         }
         /**
-          Сериализует пользователя
-        **/
+          * Сериализует пользователя
+          **/
         private function _save()
         {
             if(!$this->valid)
                 throw new Exception("Cannot save invalid user!");
-            
+
             if(!$this->isNull())
                 xcms_save_list($this->_file_name($this->login()),$this->dict);
             else return $this->setError("User is NULL, can't serialize!");
@@ -40,8 +36,9 @@
             $this->valid = true;
         }
         /**
-          Конструктор. Создает пользователя с таким именем.
-        **/
+          * Конструктор. Создает пользователя с заданным именем.
+          * @param login имя пользователя
+          **/
         public function XcmsUser($login)
         {
             $fn = $this->_file_name($login);
@@ -59,13 +56,13 @@
             $this->isSuperuser = false;
         }
         /**
-          Возвращает текущее имя пользователя.
-        **/
+          * Возвращает текущее имя пользователя
+          **/
         function login()
         {
             return $this->dict["login"];
         }
-        
+
         function setParam($key, $value) /// Ooops. This was qt-style naming, will remove later.
         {
             return $this->set_param($key,$value);
@@ -82,15 +79,16 @@
             return @$this->dict[$key];
         }
         /**
-          Возвращает электронную почту пользователя
-        **/
+          * Возвращает электронную почту пользователя
+          **/
         function email()
         {
             return @$this->dict["email"];
         }
         /**
-          Возвращает список групп, к которым принадлежит пользователь. Внимание! Использовать эту команду для проверки прав НЕЛЬЗЯ!
-        **/
+          * Возвращает список групп, к которым принадлежит пользователь.
+          * Внимание! Использовать эту команду для проверки прав НЕЛЬЗЯ!
+          **/
         function groups()
         {
             return explode(",",@$this->dict["groups"]);
@@ -102,12 +100,13 @@
             if($group == "registered" && $this->isValid()) return true;
             if($this->isSuperuser()) return true;
             if(in_array($group,$this->groups())) return true;
-            if($throw_exception) throw new Exception("User don't belong to group $group to perform this action");
+            if($throw_exception)
+                throw new Exception("User don't belong to group $group to perform this action");
             return false;
         }
         /**
-          Возвращает true, если пользователь кривой.
-        **/
+          * Возвращает true, если пользователь кривой.
+          **/
         function isNull()
         {
             if(strlen($this->login()))
@@ -115,32 +114,32 @@
             return true;
         }
         /**
-          Обнуляет пользователя
-        **/
+          * Обнуляет пользователя
+          **/
         function setNull()
         {
             $this->check_rights("admin");
             $this->dict = array();
         }
         /**
-          Делает пользователя суперпользователем, для которого любые проверки прав успешны.
-        **/
+          * Делает пользователя суперпользователем, для которого любые проверки прав успешны.
+          **/
         function setSuperuser()
         {
             // This is only way to get SU flag from code!
             $this->isSuperuser = true;
         }
-        /** 
-          Указывает, является ли пользователь суперпользователем.
-        **/
+        /**
+          * Указывает, является ли пользователь суперпользователем.
+          **/
         function isSuperuser()
         {
             return $this->isSuperuser;
         }
         /**
-          Добавляет пользователя в группу.
-        **/
-        function groupadd($login, $group)
+          * Добавляет пользователя в группу.
+          **/
+        function group_add($login, $group)
         {
             $group = str_replace("#","",$group);
             $this->check_rights("admin");
@@ -150,7 +149,7 @@
             $user->dict["groups"] = implode(",",array_merge($user->groups(), array($group)));
             $user->_save();
         }
-        function groupremove($login, $group)
+        function group_remove($login, $group)
         {
             $group = str_replace("#","",$group);
             $this->check_rights("admin");
@@ -161,8 +160,8 @@
             $user->_save();
         }
         /**
-          Выставляет значение lastError
-        **/
+          * Выставляет значение lastError
+          **/
         function setError($error)
         {
             $this->error = $error;
@@ -170,24 +169,24 @@
             return $error;
         }
         /**
-          Возвращает последнюю ошибку
-        **/
+          * Возвращает последнюю ошибку
+          **/
         function error()
         {
             return $this->error;
         }
         /**
-            Задает новый пароль пользователю
-        **/
+          * Задает новый пароль пользователю
+          **/
         function passwd($password)
         {
             $this->dict["password"] = $this->_hash($password);
             $this->plaintext_password = $password;
             $this->_save();
         }
-        /** 
-            Создает нового пользователя
-        **/
+        /**
+          * Создает нового пользователя
+          **/
         function create($login, $email="nobody@example.com")
         {
             if(preg_replace("/[a-zA-Z0-9@._-]+/i","",$login) != "")
@@ -204,26 +203,25 @@
             return $u;
         }
         /**
-            Удаляет пользователя из системы
-        **/
+          * Удаляет пользователя из системы
+          **/
         function delete($login)
         {
             $this->check_rights("admin");
             @unlink($this->_file_name($login));
         }
         /**
-            Создает сессию c текущим пользователем.
-        **/
+          * Создает сессию c текущим пользователем.
+          **/
         function create_session($password)
         {
             global $_SESSION;
             $_SESSION["user"] = $this->login();
             $_SESSION["passwd"] = $this->_hash($this->_hash($password));
-            //var_dump($this->param("password"));
         }
         /**
-          Проверяет сессию на соответствие пользователю.
-        **/
+          * Проверяет сессию на соответствие пользователю.
+          **/
         function check_session()
         {
             global $_SESSION;
@@ -231,6 +229,7 @@
                 throw new Exception("Wrong username!");
             if($this->login() == "anonymous")
                 return true;
+
             if($_SESSION["passwd"] != $this->_hash($this->param("password")))
                 throw new Exception("Wrong password!");
             return true;
@@ -252,60 +251,58 @@
             return new XcmsUser($login);
         }
         /**
-            
-        **/
+          * Unit-test для класса XcmsUser
+          **/
         static function unit_test()
         {
             $superuser = new XcmsUser("superuser");
             $superuser->setSuperuser();
             $superuser->delete("test_user");
             $superuser->create("test_user", "test@example.com");
-            $superuser->groupadd("test_user", "testGroup1");
-            $superuser->groupadd("test_user", "testGroup2");
-            $superuser->groupadd("test_user", "testGroup3");
-            $superuser->groupremove("test_user", "testGroup2");
+            $superuser->group_add("test_user", "testGroup1");
+            $superuser->group_add("test_user", "testGroup2");
+            $superuser->group_add("test_user", "testGroup3");
+            $superuser->group_remove("test_user", "testGroup2");
             try
             {
-                $superuser->groupremove("test_user", "testGroup2");
+                $superuser->group_remove("test_user", "testGroup2");
                 echo ("Unit test failed: I still can remove user from testGroup2 which he don't belong");
             }
             catch (Exception $e)
             {
                 // it's OK to fail here.
             }
-            
-            
-            
+
             $user = new XcmsUser("test_user");
             $user->passwd("kuku");
             $user->setParam("name","Vasya");
             $user->setParam("email","vasya@example.com");
-            
-            try{ 
+
+            try{
                 $user->setParam("groups","admin");
             echo("Unit test failed: user can change his group list"); } catch (Exception $e) {}
-            
-            try{ 
-                $user->groupadd("test_user","kuku"); 
+
+            try{
+                $user->group_add("test_user","kuku");
             echo("Unit test failed: user can add himself to group"); } catch (Exception $e) {}
-            
+
             $user->check_rights("testGroup1");
 
-            try{ 
+            try{
                 $user->check_rights("testGroup2");
             echo ("User belong to group it don't belong"); } catch (Exception $e) {}
-            try{ 
+            try{
                 $user->check_rights("testGroup5kuku2");
             echo("User belong to undefined group"); } catch (Exception $e) {}
-            
+
             $user->create_session("kuku");
             $user->check_session();
 
-            try{ 
+            try{
                 $user->create_session("kuku1");
                 $user->check_session();
             echo("User can login with invalid password"); } catch (Exception $e) {}
-            
+
             if($superuser->su("test_user")->login() != "test_user")
                 throw new Exception("su don't work");
         }
@@ -313,14 +310,13 @@
         {
             $_SESSION["user"] = "";
             $_SESSION["passwd"] = "";
-	    header("Location: $redirect");
+            header("Location: $redirect");
         }
     };
     /**
-        This one returns current user object. It will have name "anonymous" if no logged in user.
-        
-        If parameter(s) specified, they're pushed to session.
-    **/
+      * This one returns current user object. It will have name "anonymous" if no logged in user.
+      * If parameter(s) specified, they're pushed to session.
+      **/
     function xcms_user($login = NULL, $password= NULL)
     {
         global $_SESSION;
