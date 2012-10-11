@@ -48,7 +48,7 @@
             // FIXME: this should be deleted at all.
             // include_once("{$SETTINGS["elementsdir"]}cms/addrssfeed.php");
             // addrssfeed("Изменения в разделе", "сабж","","");
-            system("diff $target_name $ename > $diff_name");
+            system("diff -u $target_name $ename > $diff_name");
             $lf = "\r\n";
             xcms_send_notification("content-change",
                 NULL,
