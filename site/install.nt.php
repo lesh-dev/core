@@ -109,7 +109,7 @@
             }
         }
         echo "</table>";
-        echo "<input type=\"submit\" name=\"submit_variables\" value=\"Установить >>\">";
+        echo "<input type=\"submit\" name=\"submit_variables\" value=\"Установить &gt;&gt;\" />";
         echo "</form>";
     }
 ?>
