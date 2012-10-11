@@ -27,7 +27,7 @@ function xsm_print_exam()
 
     ?>
     <h3>Зачёты школьника
-        <a href="view-prep#person<?php echo $student_person_id; ?>"><?php
+        <a href="view-prep&amp;person_id=<?php echo $student_person_id; ?>"><?php
             echo "$student_first_name $student_last_name"; ?></a>:
     </h3>
     <?php xsm_view_operations('exam', 'exam', 'зачёт', $aux_param); ?>

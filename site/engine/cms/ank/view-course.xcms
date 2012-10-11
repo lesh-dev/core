@@ -41,7 +41,7 @@ function xsm_print_course()
         <tr><td class="ankList"><span class="ankListField">На какие классы рассчитан</span>:
             <?php echo $target_class; ?></td></tr>
         <tr><td class="ankList"><span class="ankListField">Препод</span>:
-            <a href="view-prep#person<?php echo $course_teacher_id; ?>"><?php
+            <a href="view-prep&amp;person_id=<?php echo $course_teacher_id; ?>"><?php
                 echo "$first_name $last_name"; ?></a></td></tr>
         <tr><td class="ankList"><span class="ankListField">Описание</span>:
             <?php echo xcms_html_wrap_by_crlf($course_desc); ?></td></tr>
