@@ -337,14 +337,17 @@ function xsm_show_person_list()
 }
 
     xsm_show_person_list();
-    echo "<pre style='font-size: 9px;'>--POST:\n";
-    print_r($_POST);
-    echo "--GET:\n";
-    print_r($_GET);
-    echo "--COOKIE:\n";
-    print_r($_COOKIE);
-    echo "results:\n";
-    echo "$show_is_teacher | $show_is_student | $show_is_current\n";
-    echo '</pre>';
+    // debug output, please do not remove this code // mvel
+    if (false) {
+        echo "<pre style='font-size: 9px;'>--POST:\n";
+        print_r($_POST);
+        echo "--GET:\n";
+        print_r($_GET);
+        echo "--COOKIE:\n";
+        print_r($_COOKIE);
+        echo "results:\n";
+        echo "$show_is_teacher | $show_is_student | $show_is_current\n";
+        echo '</pre>';
+    }
 
 ?>
