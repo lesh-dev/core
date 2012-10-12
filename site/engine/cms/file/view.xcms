@@ -1,7 +1,4 @@
 <?php
-  //include_once("{$SETTINGS["elementsdir"]}cms/common.php");
-  //include_once("{$SETTINGS["elementsdir"]}cms/content/common.php");
-  
   if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
   {
     echo "<h1>Раздел не заполнен.</h1>";

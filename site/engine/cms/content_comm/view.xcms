@@ -1,7 +1,4 @@
 <?php
-  //include_once("{$SETTINGS["elementsdir"]}cms/common.php");
-  //include_once("{$SETTINGS["elementsdir"]}cms/content/common.php");
-  
   $commfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/comments";
   
   if(@$_POST["create-comment"])
