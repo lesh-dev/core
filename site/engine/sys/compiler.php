@@ -140,11 +140,11 @@
         {
             $ref = $refname;
         }
-        else 
+        else
         {
             $ref = @$_GET["ref"];
         }
-        
+
         if (!$ref) $ref = $SETTINGS["defaultpage"];
         if (file_exists("$design_dir/$ref.xcms"))
         {
