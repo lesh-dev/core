@@ -5,112 +5,83 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <# cms/head #>
-  <link rel="stylesheet" type="text/css" href="/<# web_prefix #>fizlesh.ru-design/menu.css" />
-  <link rel="stylesheet" type="text/css" href="/<# web_prefix #>fizlesh.ru-design/default.css" />
-  <link rel="stylesheet" type="text/css" href="/<# web_prefix #>fizlesh.ru-design/news.css" />
+    <# cms/head #>
+    <link rel="stylesheet" type="text/css" href="/<# web_prefix #>fizlesh.ru-design/menu.css" />
+    <link rel="stylesheet" type="text/css" href="/<# web_prefix #>fizlesh.ru-design/default.css" />
+    <link rel="stylesheet" type="text/css" href="/<# web_prefix #>fizlesh.ru-design/news.css" />
 </head>
 <body>
-  <div id="fullHeight">
-    <table cellspacing="0" cellpadding="0" class="topTable roundBorders" summary="Page Top">
-      <tr>
-        <td class="logoCell menuWidth">
-          <a href="/<# web_prefix #>" title="ФизЛЭШ"><img
-            src="/<# web_prefix #>fizlesh.ru-design/pic/fizlesh-logo-small.png" height="72" alt="Логотип ФизЛЭШ" /></a>
-        </td>
-        <td class="logoCell">
-          <div style="position: relative; width: 100%; height: 80px;">
-            <img src="/<# web_prefix #>fizlesh.ru-design/pic/fizlesh-title.png" alt="Физическое отделение ЛЭШ"/>
-            <a class="leshLogoTitle" href="http://lesh.org.ru"><img
-                src="/<# web_prefix #>fizlesh.ru-design/pic/lesh-subheader-wood.png" alt="Летняя Экологическая Школа"/></a>
-          </div>
-          <!--<# cms/header #>-->
-        </td>
-      </tr>
-    </table>
-    <table cellspacing="0" cellpadding="0" class="bottomTable" summary="Page Bottom">
-      <tr>
-        <td class="menuField menuWidth roundBorders">
-          <# cms/menu/display start=1 end=5 #>
-          <a class="menu-item menu-level1 menu-passive menu-passive-level1" href="/forum">Форум</a>
+    <div id="fullHeight">
+        <table cellspacing="0" cellpadding="0" class="topTable roundBorders" summary="Page Top">
+            <tr>
+                <td class="logoCell menuWidth">
+                    <a href="/<# web_prefix #>" title="ФизЛЭШ"><img
+                        src="/<# web_prefix #>fizlesh.ru-design/pic/fizlesh-logo-small.png"
+                        height="72" alt="Логотип ФизЛЭШ" /></a>
+                </td>
+                <td class="logoCell">
+                    <div style="position: relative; width: 100%; height: 80px;">
+                        <img src="/<# web_prefix #>fizlesh.ru-design/pic/fizlesh-title.png"
+                            alt="Физическое отделение ЛЭШ"/>
+                        <a class="leshLogoTitle" href="http://lesh.org.ru"><img
+                            src="/<# web_prefix #>fizlesh.ru-design/pic/lesh-subheader-wood.png"
+                            alt="Летняя Экологическая Школа"/></a>
+                    </div>
+                    <!--<# cms/header #>-->
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" cellpadding="0" class="bottomTable" summary="Page Bottom">
+            <tr>
+                <td class="menuField menuWidth roundBorders">
+                    <# cms/menu/display start=1 end=5 #>
+                    <a class="menu-item menu-level1 menu-passive menu-passive-level1" href="/forum">Форум</a>
 
-      <?php
-      //if(strlen(@$_COOKIE["auth-login"]))
-      if(xcms_user()->check_rights("registered",false))
-      {
-        include(translate('<a href="/<# web_prefix #>register/view'.
-            '" class="menu-item menuSys">Участники</a>'));
-        include(translate('<a href="/<# web_prefix #>register/view-course'.
-            '" class="menu-item menuSys">Курсы</a>'));
-        include(translate('<a href="/<# web_prefix #>?'.
-            xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).
-            '" class="menu-item menuSys">Админка</a>'));
-        include(translate('<a href="/<# web_prefix #>?'.
-            xcms_url(array('page'=>$pageid, 'ref'=>'ladmin', 'mode'=>'logout')).
-            '" class="menu-item menuSys">Выход</a>'));
-      }
-      else
-      {
-        include(translate('<a href="/<# web_prefix#>?'.
-            xcms_url(array('page'=>$pageid, 'ref'=>'login', 'return'=>'?ref=index')).
-            '" class="menu-item menu-level1 stealthLink">Авторизация</a>'));
-      }
-      ?>
-        <!--a href="http://validator.w3.org/check?uri=referer"><img src="/<# web_prefix #>fizlesh.ru-design/pic/valid-html401-green.gif"
-        alt="Valid HTML 4.01 Transitional" height="31" width="88"></a-->
-        </td>
-        <td class="mainField roundBorders"><?php
-          $hdr = xcms_get_key_or($INFO, "header");
-          if (!strlen($hdr) ||
-            (xcms_get_key_or($INFO, "alias") == "register" &&
-              strlen(xcms_get_key_or($_GET, "aparam")))) {
-            // little spike: skip header display
-            // in case of special pages (XSM manager for now)
-          } else {?>
-            <h2><?php echo $hdr; ?></h2><?php
-          }?>
-          <# if //!@$_GET["usr"]//cms/ #>
-          <hr />
-          <div style="font-size: 8pt; text-align: center; height: 15px;">
-            <span style="">&copy; ФизЛЭШ, 2005&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
-            <a href="http://www.liveinternet.ru/click" style="vertical-align: middle" target="_blank"><img src="/<# web_prefix #>fizlesh.ru-design/pic/li.gif"
-              id="counterImage" alt="" title="LiveInternet: number of visitors for today is shown"
-              border="0" width="88" height="15"/></a>
-            <script type="text/javascript">
-             var img=document.getElementById('counterImage');
-             img.setAttribute('src', 'http://counter.yadro.ru/hit?t24.3;r'+
-             escape(document.referrer)+((typeof(screen)=='undefined')?'':
-             ';s'+screen.width+'*'+screen.height+'*'+(screen.colorDepth?
-             screen.colorDepth:screen.pixelDepth))+';u'+escape(document.URL)+
-             ';'+Math.random());
-            </script>
-            <!-- Yandex.Metrika counter -->
-            <script type="text/javascript">
-            (function (d, w, c) {
-                (w[c] = w[c] || []).push(function() {
-                    try {
-                        w.yaCounter12421258 = new Ya.Metrika({id:12421258, enableAll: true});
-                    } catch(e) {}
-                });
-
-                var n = d.getElementsByTagName("script")[0],
-                    s = d.createElement("script"),
-                    f = function () { n.parentNode.insertBefore(s, n); };
-                s.type = "text/javascript";
-                s.async = true;
-                s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
-
-                if (w.opera == "[object Opera]") {
-                    d.addEventListener("DOMContentLoaded", f);
-                } else { f(); }
-            })(document, window, "yandex_metrika_callbacks");
-            </script>
-            <noscript><div><img src="//mc.yandex.ru/watch/12421258" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-            <!-- /Yandex.Metrika counter -->
-          </div>
-        </td>
-      </tr>
-    </table>
-  </div>
+                    <?php
+                    if (xcms_user()->check_rights("registered", false))
+                    {
+                        include(translate('<a href="/<# web_prefix #>register/view'.
+                            '" class="menu-item menuSys">Участники</a>'));
+                        include(translate('<a href="/<# web_prefix #>register/view-course'.
+                            '" class="menu-item menuSys">Курсы</a>'));
+                        include(translate('<a href="/<# web_prefix #>?'.
+                            xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).
+                            '" class="menu-item menuSys">Админка</a>'));
+                        include(translate('<a href="/<# web_prefix #>?'.
+                            xcms_url(array('page'=>$pageid, 'ref'=>'ladmin', 'mode'=>'logout')).
+                            '" class="menu-item menuSys">Выход</a>'));
+                    }
+                    else
+                    {
+                        include(translate('<a href="/<# web_prefix#>?'.
+                            xcms_url(array('page'=>$pageid, 'ref'=>'login', 'return'=>'?ref=index')).
+                            '" class="menu-item menu-level1 stealthLink">Авторизация</a>'));
+                    }
+                ?>
+                <!--a href="http://validator.w3.org/check?uri=referer"><img
+                    src="/<# web_prefix #>fizlesh.ru-design/pic/valid-html401-green.gif"
+                    alt="Valid HTML 4.01 Transitional" height="31" width="88"></a-->
+                </td>
+                <td class="mainField roundBorders"><?php
+                    $hdr = xcms_get_key_or($INFO, "header");
+                    if (!strlen($hdr) ||
+                        (xcms_get_key_or($INFO, "alias") == "register" &&
+                        strlen(xcms_get_key_or($_GET, "aparam")))) {
+                        // little spike: skip header display
+                        // in case of special pages (XSM manager for now)
+                    } else {?>
+                        <h2><?php echo $hdr; ?></h2><?php
+                    }?>
+                    <# if //!@$_GET["usr"]//cms/ #>
+                    <hr />
+                    <div style="font-size: 8pt; text-align: center; height: 15px;">
+                        <span style="">&copy; ФизЛЭШ, 2005&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
+                        <# seo/liveinternet #>
+                        <# seo/yandex_metrika 12421258 #>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>
