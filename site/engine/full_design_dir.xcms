@@ -1,1 +1,5 @@
-<?php echo "/$web_prefix$design_dir"; ?>
+<?php
+    global $web_prefix;
+    global $design_dir;
+    echo "/$web_prefix$design_dir";
+?>
