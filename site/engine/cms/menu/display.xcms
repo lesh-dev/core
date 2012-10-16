@@ -4,7 +4,7 @@
     if (!@$_GET["ref"]) $_GET["ref"] = "index";
     // TODO: снивелировать разницу между $keys и $param
     // default template file
-    $template_file = "{$SETTINGS["designdir"]}menulinks.dat";
+    $template_file = "{$SETTINGS["design_dir"]}menulinks.dat";
     if (xcms_get_key_or($keys, "devel"))
         $template_file = "{$SETTINGS["elementsdir"]}/cms/menu/menulinks.dat";
     $s = 0;

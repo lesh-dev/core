@@ -5,7 +5,7 @@
 
 function xsm_print_person()
 {
-    global $design_dir, $web_prefix;
+    global $web_prefix;
 
     $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
     $person = xdb_get_entity_by_id('person', $person_id);
@@ -84,7 +84,7 @@ function xsm_print_person()
                     }
 
                 ?>
-                <img class="link-oper" src="<?php echo "/${web_prefix}$design_dir"; ?>pic/mozillafirefox.png"
+                <img class="link-oper" src="<# full_design_dir #>pic/mozillafirefox.png"
                     style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
                 <span class="ankListField next">Статус</span>:
                     <span class="ankStatus <?php echo $activity_status; ?>"><?php echo $hr_status; ?></span><?php

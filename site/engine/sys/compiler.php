@@ -44,7 +44,7 @@
 
         $name = $argv[0];
         $elem_full_name = $SETTINGS["elementsdir"].$name;
-        $template_full_name = $SETTINGS["designdir"]."$name.template";
+        $template_full_name = $SETTINGS["design_dir"]."$name.template";
 
         if(file_exists("$elem_full_name.php"))
         {

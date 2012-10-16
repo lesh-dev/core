@@ -1,1 +1,1 @@
-<link rel="stylesheet" type="text/css" href="<?php echo "/$web_prefix${design_dir}ank-manage.css"; ?>" />
+<link rel="stylesheet" type="text/css" href="<# full_design_dir #>ank-manage.css" />

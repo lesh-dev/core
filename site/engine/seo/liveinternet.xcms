@@ -1,5 +1,5 @@
 <a href="http://www.liveinternet.ru/click" style="vertical-align: middle" target="_blank"><img
-    src="/<# web_prefix #>fizlesh.ru-design/pic/li.gif"
+    src="<# full_design_dir #>pic/li.gif"
     id="counterImage" alt="" title="LiveInternet: number of visitors for today is shown"
     border="0" width="88" height="15"/></a>
 <script type="text/javascript">

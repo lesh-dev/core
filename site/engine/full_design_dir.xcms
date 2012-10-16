@@ -1,0 +1,1 @@
+<?php echo "/$web_prefix$design_dir"; ?>
