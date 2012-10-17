@@ -232,10 +232,10 @@ function editlist_form($file, $addparams, $skipparams="",$securityflags="", $old
     {
         if(!strstr($skipparams,$key))
         {
-            if(file_exists("{$SETTINGS["elementsdir"]}taglist/$key"))
+            if(file_exists("{$SETTINGS["engine_dir"]}taglist/$key"))
             {
                 $getTagList_output = "sss";
-                $taglist = getTagList("{$SETTINGS["elementsdir"]}taglist/$key");
+                $taglist = getTagList("{$SETTINGS["engine_dir"]}taglist/$key");
                 echo "<tr><td>".$taglist["_NAME"]."</td><td>";
                 $id = "edtg_$key";
                 if(count($taglist)>1)

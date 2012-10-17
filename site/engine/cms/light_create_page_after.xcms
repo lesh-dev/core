@@ -8,12 +8,12 @@
 <tr><td><h3>Настройки</h3>
 <tr><td>Служебное имя <br><font size="=-1">Выберите красивое, удобочитаемое, английское имя без пробелов.</font><td><input name="create-name" value="">
 <?php
-    $list = getTagList("{$SETTINGS["elementsdir"]}taglist/type");
+    $list = getTagList("{$SETTINGS["engine_dir"]}taglist/type");
     echo "<tr><td>Тип содержания<td><SELECT name=\"create-pagetype\">";
     foreach ($list as $key=>$value)
     {
         if($key == "_NAME") continue;
-        //$value = str_replace("{$SETTINGS["elementsdir"]}cms/","",$value);
+        //$value = str_replace("{$SETTINGS["engine_dir"]}cms/","",$value);
         //$value = str_replace(".pagetype","",$value);
         if($value == "content" || $key == "content") $s = "selected checked ";
         else $s = "";

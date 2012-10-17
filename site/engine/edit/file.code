@@ -46,7 +46,7 @@
             chmod($ename,0666);
             $current_version = "";
             // FIXME: this should be deleted at all.
-            // include_once("{$SETTINGS["elementsdir"]}cms/addrssfeed.php");
+            // include_once("{$SETTINGS["engine_dir"]}cms/addrssfeed.php");
             // addrssfeed("Изменения в разделе", "сабж","","");
             system("diff -u $target_name $ename > $diff_name");
             $lf = "\r\n";

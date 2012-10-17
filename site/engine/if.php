@@ -9,7 +9,7 @@
     $then = $input[2];
     @$else = $input[3];
 
-    @$elem_dir = $SETTINGS["elementsdir"];
+    @$elem_dir = $SETTINGS["engine_dir"];
     @$then_source = "$elem_dir$then.xcms";
     @$else_source = "$elem_dir$else.xcms";
     if(!file_exists(@$then_source)) @$then_source = "$elem_dir${then}default.xcms";
