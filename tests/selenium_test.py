@@ -20,6 +20,7 @@ import sys
 #'start_session', 'stop_client', 'switch_to_active_element', 'switch_to_alert', 'switch_to_default_content',
 #'switch_to_frame', 'switch_to_window', 'title', 'window_handles']
 
+
 class SeleniumTest:
 	def __init__(self, baseUrl = None):
 #		print "Init SeleniumTest"
@@ -40,6 +41,9 @@ class SeleniumTest:
 		if hasattr(self, 'm_driver'):
 			if self.m_closeOnExit:
 				self.m_driver.close()
+				
+	def isVoid(self, text):
+		return text is None or text.strip() == "";
 	
 	def setCloseOnExit(self, flag):
 		self.m_closeOnExit = flag;
@@ -75,8 +79,25 @@ class SeleniumTest:
 			
 	def drv(self):
 		return self.m_driver;
+
+	def getElementByName(self, name):
+		return self.m_driver.find_element_by_name(name)
 		
+	def fillElementByName(self, name, text):
+		if self.isVoid(name):
+			raise RuntimeError("Empty element name passed to fillElementByName(). ")
+		ele = self.getElementByName(name)
+#		print "ele = ", dir(ele)
+		ele.send_keys(text)
+	
+	def clickElementByName(self, name):
+		butt = self.getElementByName(name)
+		butt.click()
+	
 	def checkTextPresent(self, xpath, text):
+		if self.isVoid(xpath):
+			raise RuntimeError("Empty XPath passed to checkTextPresent");
+		
 		ele = self.m_driver.find_element_by_xpath(xpath)
 		return text in ele.text;
 		
@@ -87,7 +108,13 @@ class SeleniumTest:
 	def assertBodyTextPresent(self, text):
 		return self.assertTextPresent("/html/body", text)
 	
+	def assertSourceTextPresent(self, text):
+		return self.assertTextPresent("//*", text)
+			
 	def getUrlByLinkText(self, urlText):
+		if self.isVoid(urlText):
+			raise RuntimeError("Empty URL text passed to getUrlByLinkText");
+		
 		url = self.m_driver.find_element_by_link_text(urlText)
 		return url.get_attribute("href");
 	
