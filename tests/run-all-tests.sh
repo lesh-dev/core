@@ -19,6 +19,6 @@ run_test()
 
 echo "Test suite started on `date +%Y-%m-%d-%H:%M:%S`" > "$LOG"
 
-for i in ./*.py; do
-	run_test xcms-open-non-existing.py
+for TEST in ./xcms-*.py; do
+	run_test $TEST
 done
