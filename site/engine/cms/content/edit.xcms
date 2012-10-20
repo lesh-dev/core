@@ -18,19 +18,19 @@
                 if(@$_POST["changeTemplate"])
                 {
                   $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/content","w");
-                  fputs($f,@file_get_contents("{$SETTINGS["elementsdir"]}cms/content/{$_POST["changeTemplate"]}.template"));
+                  fputs($f,@file_get_contents("{$SETTINGS["engine_dir"]}cms/content/{$_POST["changeTemplate"]}.template"));
                   fclose($f);
                   echo "Заменил : "."{$SETTINGS["datadir"]}cms/pages/$pageid/content". 
-                  " на "."{$SETTINGS["elementsdir"]}cms/content/{$_POST["changeTemplate"]}.template" ;
+                  " на "."{$SETTINGS["engine_dir"]}cms/content/{$_POST["changeTemplate"]}.template" ;
                 }
               ?>
               <form method="post">
               <SELECT name="changeTemplate">
               <?php
-                $list = glob("{$SETTINGS["elementsdir"]}cms/content/*.template");
+                $list = glob("{$SETTINGS["engine_dir"]}cms/content/*.template");
                 foreach ($list as $key=>$value) 
                 {
-                  $value = str_replace("{$SETTINGS["elementsdir"]}cms/content/","",$value);
+                  $value = str_replace("{$SETTINGS["engine_dir"]}cms/content/","",$value);
                   $value = str_replace(".template","",$value);
                 	echo "<OPTION name=\"$value\" value=\"$value\">$value</OPTION>";
                 }                               

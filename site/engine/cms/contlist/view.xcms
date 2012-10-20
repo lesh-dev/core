@@ -1,7 +1,4 @@
 <?php
-  //include_once("{$SETTINGS["elementsdir"]}cms/common.php");
-  //include_once("{$SETTINGS["elementsdir"]}cms/content/common.php");
-  
   $list = glob("{$SETTINGS["datadir"]}cms/pages/$pageid/*",GLOB_ONLYDIR);
   foreach($list as $value)
   {

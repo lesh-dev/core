@@ -1,14 +1,11 @@
 <?php
-  //include_once("{$SETTINGS["elementsdir"]}cms/common.php");
-  //include_once("{$SETTINGS["elementsdir"]}cms/content/common.php");
-  
   if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
   {
     echo "<h1>Раздел не заполнен.</h1>";
     if(xcms_user()->login() != "anonymous")
       echo "<h3><a href=\"?ref=ladmin&page=$pageid\">Вы можете это исправить!</a></h3>";
   }
-  else 
+  else
   {
     //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
     $source = "{$SETTINGS["datadir"]}cms/pages/$pageid/content";

@@ -69,7 +69,7 @@ if($need)
 
     //// ${include:pageid} -- раскрывается в _содержимое_ целого раздела
     //// Обработка произвольных dollar notation
-    $dir = "$engine_dir"."plugins/dollar/";
+    $dir = "${engine_dir}plugins/dollar/";
     foreach(glob("$dir*.php") as $notation)
     {
         $name = $notation;

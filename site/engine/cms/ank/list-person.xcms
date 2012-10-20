@@ -26,7 +26,7 @@
             $value = xcms_get_key_or($_POST, $key_name);
         }
         xcms_log(0, "SETK $key_name $value");
-        setcookie($key_name, $value, 0/*24*3600*14*/);
+        //setcookie($key_name, $value, 0/*24*3600*14*/);
         //echo "$key_name|$value<br/>\n";
         return $value;
     }
@@ -89,7 +89,6 @@ function xsm_person_name_filter($db, $show_name_filter)
 
 function xsm_show_person_list()
 {
-    global $design_dir, $web_prefix;
     $show_status = xcms_get_key_or($_POST, "show_activity_status", "notspam");
 
     global $show_is_current;// = xcms_get_key_or($_POST, "show_is_current");
@@ -243,7 +242,7 @@ function xsm_show_person_list()
             </td>
             <!--<td class="ankListRowTitle">
                 <span style="float: right">
-                <img class="link-oper-list" src="<?php echo "/${web_prefix}$design_dir"; ?>pic/mozillafirefox.png"
+                <img class="link-oper-list" src="<# full_design_dir #>pic/mozillafirefox.png"
                     style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
                 <span class="ankListField next">Статус</span>:
                     <span class="ankStatus <?php echo $activity_status; ?>"><?php echo $hr_status; ?></span><?php
@@ -337,14 +336,17 @@ function xsm_show_person_list()
 }
 
     xsm_show_person_list();
-    echo "<pre style='font-size: 9px;'>--POST:\n";
-    print_r($_POST);
-    echo "--GET:\n";
-    print_r($_GET);
-    echo "--COOKIE:\n";
-    print_r($_COOKIE);
-    echo "results:\n";
-    echo "$show_is_teacher | $show_is_student | $show_is_current\n";
-    echo '</pre>';
+    // debug output, please do not remove this code // mvel
+    if (false) {
+        echo "<pre style='font-size: 9px;'>--POST:\n";
+        print_r($_POST);
+        echo "--GET:\n";
+        print_r($_GET);
+        echo "--COOKIE:\n";
+        print_r($_COOKIE);
+        echo "results:\n";
+        echo "$show_is_teacher | $show_is_student | $show_is_current\n";
+        echo '</pre>';
+    }
 
 ?>

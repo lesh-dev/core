@@ -43,8 +43,8 @@
         $argv = explode(' ', $code);
 
         $name = $argv[0];
-        $elem_full_name = $SETTINGS["elementsdir"].$name;
-        $template_full_name = $SETTINGS["designdir"]."$name.template";
+        $elem_full_name = $SETTINGS["engine_dir"].$name;
+        $template_full_name = $SETTINGS["design_dir"]."$name.template";
 
         if(file_exists("$elem_full_name.php"))
         {
@@ -78,7 +78,7 @@
             else
             {
                 xcms_log(0, "name is '$name', nopagecode: ".$SETTINGS["nopagecode"]);
-                fputs($outputStream,file_get_contents("{$SETTINGS["elementsdir"]}{$SETTINGS["nopagecode"]}.code"));
+                fputs($outputStream,file_get_contents("{$SETTINGS["engine_dir"]}{$SETTINGS["nopagecode"]}.code"));
             }
         }
         ParseString($close,$outputStream);
@@ -140,11 +140,11 @@
         {
             $ref = $refname;
         }
-        else 
+        else
         {
             $ref = @$_GET["ref"];
         }
-        
+
         if (!$ref) $ref = $SETTINGS["defaultpage"];
         if (file_exists("$design_dir/$ref.xcms"))
         {

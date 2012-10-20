@@ -2,15 +2,15 @@
 <?php
 	if(@$_POST["taglist-new"])
 	{
-		$f = fopen("{$SETTINGS["elementsdir"]}taglist/".@$_POST["taglist-source"],"w");
+		$f = fopen("{$SETTINGS["engine_dir"]}taglist/".@$_POST["taglist-source"],"w");
 		fputs($f,"");
 		fclose($f);
 	}
-	$tagfiles = glob("{$SETTINGS["elementsdir"]}taglist/*");
+	$tagfiles = glob("{$SETTINGS["engine_dir"]}taglist/*");
 	foreach($tagfiles as $value)
 	{
 		$v = $value;
-		$v = str_replace("{$SETTINGS["elementsdir"]}taglist/","",$v);
+		$v = str_replace("{$SETTINGS["engine_dir"]}taglist/","",$v);
 		$content = getTagList($value);
 		$content = @implode(",",$content);
 		echo "<br><b><a href=\"?ref=edittaglist&tag=$v\">$v</a></b><br><code>$content</code>";

@@ -1,8 +1,8 @@
 <div class="admin-widget">
-	<h3>Физический путь</h3>
-	<form method="post">
+    <h3>Физический путь</h3>
+    <form method="post">
 <?php
-	$redirect = false;
+    $redirect = false;
     if (@$_POST["change-pageid"])
     {
         $new_pageid = xcms_get_key_or($_POST, "new-pageid");
@@ -25,7 +25,7 @@
     if ($redirect)
         include(translate("<! redir_msg ladmin 2 !>"));
 ?>
-	<div class="warn"><b>ВНИМАНИЕ:</b> Изменение физического пути страницы обычно нужно очень редко!</div>
+    <div class="warn"><b>ВНИМАНИЕ:</b> Изменение физического пути страницы обычно нужно очень редко!</div>
     <div>
         <span class="admin-form-label">Физический путь</span>
         <input type="text" class="admin-long" xcms-track-changes="yes" name="new-pageid"

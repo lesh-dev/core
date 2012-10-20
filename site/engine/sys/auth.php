@@ -215,7 +215,6 @@
           **/
         function create_session($password)
         {
-            global $_SESSION;
             $_SESSION["user"] = $this->login();
             $_SESSION["passwd"] = $this->_hash($this->_hash($password));
         }
@@ -224,13 +223,12 @@
           **/
         function check_session()
         {
-            global $_SESSION;
             if($_SESSION["user"] != $this->login())
                 throw new Exception("Wrong username!");
             if($this->login() == "anonymous")
                 return true;
 
-            if($_SESSION["passwd"] != $this->_hash($this->param("password")))
+            if (xcms_get_key_or($_SESSION, "passwd") != $this->_hash($this->param("password")))
                 throw new Exception("Wrong password!");
             return true;
         }
@@ -319,7 +317,6 @@
       **/
     function xcms_user($login = NULL, $password= NULL)
     {
-        global $_SESSION;
         if($login != NULL)
             $_SESSION["user"] = $login;
         $login = @$_SESSION["user"];

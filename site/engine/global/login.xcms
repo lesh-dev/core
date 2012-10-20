@@ -1,37 +1,37 @@
 <?php
     /**
-        Добро пожаловать в универсальный обработчик логина -- глобальный шаблон login.xcms.
-        
-        Я не знаю, как его можно сдизайнить, ну да ладно.
-    **/
-    
+      * Универсальный обработчик логина -- глобальный шаблон login.xcms.
+      * Непонятно, как его можно сдизайнить универсальным образом.
+      **/
+
     function login_handler()
     {
-        global $_SESSION;
         try
         {
             xcms_user(@$_POST["auth-login"],@$_POST["auth-password"]);
-            if(@$_GET["return"])    header("Location: ".@$_GET["return"]);
-            else                    header("Location: ?".$_SERVER["QUERY_STRING"]);
+            if (@$_GET["return"])
+                header("Location: ".@$_GET["return"]);
+            else
+                header("Location: ?".$_SERVER["QUERY_STRING"]);
         }
         catch(Exception $e)
         {
-            $AuthReason = "<h3>Пароль все еще неверный</h3>";
-            ?> <# auth/auth_form #> <?php
+            $AuthReason = "Пароль всё ещё неверный";
+            ?><# auth/auth_form #><?php
         }
     }
-    if(@$_POST)
+    if (@$_POST)
     {
         login_handler();
     }
     else
     {
-        $AuthReason =  "<h3>Требуется аутентификация</h3>";
-        if(isset($Exception))
+        $AuthReason = "Требуется аутентификация";
+        if (isset($Exception))
             $AuthReason =  $Exception->getMessage();
 
-        ?> <# auth/auth_form #> <?php
+        ?><# auth/auth_form #><?php
 
     }
-    
+
 ?>

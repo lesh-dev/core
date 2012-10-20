@@ -15,7 +15,7 @@
     function PrintAnk($sShowStatus)
     {
       //$sql = fopen("aaa/ank$sShowStatus.sql", "w");
-    global $content_dir, $design_dir, $web_prefix;
+    global $content_dir, $web_prefix;
     //$aShowStatuses = xcms_ank_get_show_status_list();
     $nCount = 500;
     //if (!array_key_exists($sShowStatus, $aShowStatuses)) $sShowStatus = "notspam";
@@ -175,7 +175,7 @@
             <a style="margin-right: 10px" href="/<?php echo $web_prefix; ?>?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
             <a style="margin-right: 10px" href="/<?php echo $web_prefix; ?>?ref=get_ank&amp;mode=txt&amp;file=<?php echo $sBaseAnkFileName; ?>">TXT</a>
             <a style="margin-right: 10px" href="edit&amp;file=<?php echo $sBaseAnkFileName; ?>">Редактировать</a>
-            <img src="<?php echo "/${web_prefix}$design_dir"; ?>pic/mozillafirefox.png" style="vertical-align: middle;" title="<?php echo "$sUserAgent"; ?>" />
+            <img src="<# full_design_dir #>pic/mozillafirefox.png" style="vertical-align: middle;" title="<?php echo "$sUserAgent"; ?>" />
             <span style="margin-left: 10px;" class="ankListField">Статус</span>: <span class="ankStatus <?php echo $sStatus; ?>"><?php echo $sHRStatus; ?></span>
             <span style="margin-left: 10px;" class="ankListField">Создана</span>: <?php echo $sHRCreated; ?>
             <?php if (!empty($sHRModified)) {?>

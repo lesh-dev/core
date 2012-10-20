@@ -4,38 +4,25 @@
 from selenium import webdriver
 import os, sys, traceback
 
+import selenium_test
+
 debugMode = True #"TRUE" in os.getenv("XCMS_TEST_DEBUG");
 
-driver = webdriver.Firefox()
-
 try:
-#	print dir(driver)
-
-	baseUrl = "http://rc.fizlesh.ru/"
-	driver.get(baseUrl + "/qqq")
-
-	# expect error page
-	errorDiv = driver.find_element_by_xpath("//div[@class='error-widget']")
-
-	#print errorDiv.text
-
-	if u"Нет такой страницы" not in errorDiv.text:
-		raise RuntimeError("Wrong page opened on non-existing URL")
+	test = selenium_test.SeleniumTest()
+	test.gotoPage("/qqq");
+	test.assertTextPresent("//div[@class='error-widget']", u"Нет такой страницы")
+	homeHref = test.getUrlByLinkText(u"этой ссылке")
+	print "Home reference on 404 page: ", homeHref
 	
-	homeUrl = driver.find_element_by_link_text("этой ссылке")
+	test.gotoSite(homeHref)
 	
-	#print dir(homeUrl)
-	
-	homeHref = homeUrl.get_attribute("href")
-	print "home ref on 404 page: ", homeHref
-	
-	driver.get(homeHref)
-
-	print sys.argv[0], "PASSED"
-	driver.close()
-	
+except RuntimeError as e:
+	print "TEST FAILED: ", e
+	print "Last step: ", traceback.print_exc(1)
+	sys.exit(1)
 except Exception as e:
-	if debugMode: driver.close()
-	print "Test failed: ", e
-	traceback.print_exc(1)
+	print "TEST ERROR: ", e
+	traceback.print_exc()
+	sys.exit(2)
     
