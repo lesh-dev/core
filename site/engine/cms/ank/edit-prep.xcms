@@ -25,7 +25,7 @@ function xsm_edit_prep()
 
     ?>
     <form method="post" action="edit-prep"><?php
-        xsm_edit_operations('prep', 'person', $person_id, 'Вернуться к списку людей');?>
+        xsm_edit_operations_listmode('person', $person_id, 'Вернуться к списку людей');?>
         <input type="hidden" name="person_id" value="<?php echo $person_id; ?>" />
         <table summary="Участник" class="ankEdit">
             <tr>
@@ -65,7 +65,7 @@ function xsm_edit_prep()
                 <?php
             }?>
         </table><?php
-        xsm_edit_operations('prep', 'person', $person_id, 'Вернуться к списку людей');?>
+        xsm_edit_operations_listmode('person', $person_id, 'Вернуться к списку людей');?>
     </form>
     <?php
 }
@@ -75,16 +75,15 @@ if (@$_POST["update-prep"])
     if (!strlen(@$_POST["last_name"]) || !strlen(@$_POST["first_name"]))
     {?>
         <p>Пожалуйста, укажите хотя бы имя и фамилию!
-            Нажмите Back в браузере, чтобы вернуться к заполнению!</p>
-      <?php
+            Нажмите Back в браузере, чтобы вернуться к заполнению!</p><?php
     }
     else
         xsm_update_entity('prep', 'person', 'Участник', xsm_get_person_fields());
 }
-elseif (@$_POST["delete-prep"])
-    xsm_warn_delete_entity('prep', 'person', 'участника');
+elseif (@$_POST["delete-person"])
+    xsm_warn_delete_listmode_entity('prep', 'person', 'участника');
 elseif (@$_POST["confirm-delete-prep"])
-    xsm_delete_entity('prep', 'person', 'Участник');
+    xsm_delete_listmode_entity('person', 'person', 'Участник');
 else
     xsm_edit_prep();
 ?>

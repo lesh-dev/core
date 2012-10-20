@@ -1,3 +1,0 @@
-<?php
-	//FIXME: WTF??  
-?>

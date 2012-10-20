@@ -39,9 +39,10 @@ function xsm_get_person_fields()
     );
 }
 
-/*
- * Complete list of valid person activity statuses
- */
+/**
+  * Complete list of valid person activity statuses
+  * @return key-value array of activity statuses
+  **/
 function xsm_get_activity_statuses()
 {
     return array(
@@ -55,7 +56,9 @@ function xsm_get_activity_statuses()
         "spam"=>"Спам");
 }
 
-/* DEPRECATED Anketa status selector for viewer */
+/**
+  * DEPRECATED: Anketa status selector for viewer
+  **/
 function xcms_ank_get_show_status_list()
 {
     return array(
@@ -107,7 +110,8 @@ function xsm_get_exam_statuses()
   * @param string string to transliterate
   * @return transliterated string
   **/
-function xcms_transliterate($string) {
+function xcms_transliterate($string)
+{
     $converter = array(
         'а' => 'a',   'б' => 'b',   'в' => 'v',
         'г' => 'g',   'д' => 'd',   'е' => 'e',

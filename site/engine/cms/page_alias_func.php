@@ -19,7 +19,7 @@
 
     /**
       * Writes map of alias->page_id to content
-      */
+      **/
     function xcms_save_aliases($list)
     {
         xcms_save_list(xcms_get_aliases_file_name(), $list);

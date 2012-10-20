@@ -230,40 +230,40 @@ function editlist_form($file, $addparams, $skipparams="",$securityflags="", $old
         <table class="key-value"><?php
     foreach ($list as $key=>$value)
     {
-        if(!strstr($skipparams,$key))
+        if (strstr($skipparams, $key))
+            continue;
+
+        $id = "edtg_$key";
+        if(file_exists("{$SETTINGS["engine_dir"]}taglist/$key"))
         {
-            if(file_exists("{$SETTINGS["elementsdir"]}taglist/$key"))
-            {
-                $getTagList_output = "sss";
-                $taglist = getTagList("{$SETTINGS["elementsdir"]}taglist/$key");
-                echo "<tr><td>".$taglist["_NAME"]."</td><td>";
-                $id = "edtg_$key";
-                if(count($taglist)>1)
-                {?>
-                    <select name="<?php echo $id; ?>" id="<?php echo $id; ?>" class="key-value"><?php
-                    foreach($taglist as $vtag=>$tag)
-                    {
-                        if($vtag == "_NAME") continue;
-                        if($tag == $value) echo "<option selected value=\"$tag\">$vtag</option>";
-                        else echo "<option value=\"$tag\">$vtag</option>";
-                    }
-                    echo "</select>";
+            $getTagList_output = "sss";
+            $taglist = getTagList("{$SETTINGS["engine_dir"]}taglist/$key");
+            echo "<tr><td>".$taglist["_NAME"]."</td><td>";
+            if(count($taglist)>1)
+            {?>
+                <select name="<?php echo $id; ?>" id="<?php echo $id; ?>" class="key-value"><?php
+                foreach($taglist as $vtag=>$tag)
+                {
+                    if($vtag == "_NAME") continue;
+                    if($tag == $value) echo "<option selected value=\"$tag\">$vtag</option>";
+                    else echo "<option value=\"$tag\">$vtag</option>";
                 }
-                else
-                {?>
-                    <input name="<?php echo $id; ?>" id="<?php echo $id; ?>"
-                        value="<?php echo $value; ?>" class="key-value" /><?php
-                }?>
-                </td></tr>
-                <?php
+                echo "</select>";
             }
             else
             {?>
-                <tr><td><?php echo $key; ?></td><td>
-                    <input name="<?php echo $id; ?>" id="<?php echo $id; ?>"
-                        value="<?php echo $value; ?>" class="key-value" />
-                </td></tr><?php
-            }
+                <input name="<?php echo $id; ?>" id="<?php echo $id; ?>"
+                    value="<?php echo $value; ?>" class="key-value" /><?php
+            }?>
+            </td></tr>
+            <?php
+        }
+        else
+        {?>
+            <tr><td><?php echo $key; ?></td><td>
+                <input name="<?php echo $id; ?>" id="<?php echo $id; ?>"
+                    value="<?php echo $value; ?>" class="key-value" />
+            </td></tr><?php
         }
     }
     if (!strstr($securityflags,"-newkey"))

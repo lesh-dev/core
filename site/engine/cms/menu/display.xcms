@@ -1,12 +1,12 @@
 <?php
-    include_once("{$SETTINGS["elementsdir"]}cms/menu/func.php");
+    include_once("{$SETTINGS["engine_dir"]}cms/menu/func.php");
 
     if (!@$_GET["ref"]) $_GET["ref"] = "index";
     // TODO: снивелировать разницу между $keys и $param
     // default template file
-    $template_file = "{$SETTINGS["designdir"]}menulinks.dat";
+    $template_file = "{$SETTINGS["design_dir"]}menulinks.dat";
     if (xcms_get_key_or($keys, "devel"))
-        $template_file = "{$SETTINGS["elementsdir"]}/cms/menu/menulinks.dat";
+        $template_file = "{$SETTINGS["engine_dir"]}/cms/menu/menulinks.dat";
     $s = 0;
     $e = 999;
     if (@$param["start"]) $s = $param["start"];

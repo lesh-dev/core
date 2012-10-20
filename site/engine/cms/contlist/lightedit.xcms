@@ -47,11 +47,11 @@
                     <font size="-1">То есть тот текст, который (может быть) появится где-нибудь на странице.</font></td>
                 <td><input type="text" name="subheader" /></td><?php
 
-        $list = glob("{$SETTINGS["elementsdir"]}cms/*.pagetype");
+        $list = glob("{$SETTINGS["engine_dir"]}cms/*.pagetype");
         echo "<tr><td>Тип содержания<td><select name=\"create-pagetype\">";
         foreach ($list as $key=>$value)
         {
-            $value = str_replace("{$SETTINGS["elementsdir"]}cms/","",$value);
+            $value = str_replace("{$SETTINGS["engine_dir"]}cms/","",$value);
             $value = str_replace(".pagetype","",$value);
             echo "<option name=\"$value\" value=\"$value\">$value</option>";
         }
