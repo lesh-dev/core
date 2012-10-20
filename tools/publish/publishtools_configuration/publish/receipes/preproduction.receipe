@@ -22,8 +22,10 @@ function hook_git
 # This will be executed while publishing component end
 function hook_end
 {
+
     echo "preprod : ${sym_suffix}" >> INFO
     echo "branch  : $branch " >> INFO
+    echo "version : $(cat VERSION) rev. $git_revision" >> INFO
     mv install.nt.php install.php
     echo "Restarting apache..."
     apachectl -k graceful

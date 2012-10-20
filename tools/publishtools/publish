@@ -183,6 +183,7 @@ function assemble_git
     OLDPWD=$(pwd)
     cd $TEMP_REPO
     git checkout $branch
+    export git_revision=$(git rev-list --all | wc -l)
     cd $OLDPWD
     mkdir -p $local_target
     cp -rf $TEMP_REPO/$subfolder/. $local_target/
