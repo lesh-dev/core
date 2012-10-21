@@ -1,4 +1,0 @@
-#!/bin/bash -e
-source $(dirname $0)/publish.conf
-rm -rf $PREPROD/content
-cp -rf $CONTENT $PREPROD/content

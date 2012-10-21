@@ -17,12 +17,6 @@ function hook_content_symlink
     echo "Symlink_done"
     echo -en  # Add something useful is you want
 }
-# This will be executed while publishing component forum
-function hook_forum
-{
-    echo "Forum done"
-    echo -en  # Add something useful is you want
-}
 # This will be executed while publishing component preprod_copy
 function hook_preprod_copy
 {

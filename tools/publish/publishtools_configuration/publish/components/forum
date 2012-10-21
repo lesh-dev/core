@@ -3,4 +3,4 @@ type=git
 location=/srv/git/lesh
 local_target=./
 branch=$branch
-subfolder=./site/forum
+subfolder=./forum

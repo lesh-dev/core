@@ -16,7 +16,6 @@ function hook_content_copy
 # This will be executed while publishing component git
 function hook_git
 {
-    rm -rf forum
     echo -en  # Add something useful is you want
 }
 # This will be executed while publishing component end
