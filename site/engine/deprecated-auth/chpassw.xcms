@@ -1,4 +1,0 @@
-<# auth/chpassw_func #>
-<# auth/save #>
-
-<# if //$changed//auth/logout_msg #>
