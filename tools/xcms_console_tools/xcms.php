@@ -1,36 +1,36 @@
 #!/usr/bin/php
 <?php
-  function main($args)
-  { 
-      global $cnf,$meta_site_name, $meta_site_url, $meta_site_mail;
-      // var_dump(STDIN);
-      $command = $args[0];
-      if($command == "useradd")
-      {
-          $su = xcms_user();
-          $su->setSuperuser();
-          
-          $login = @$cnf["login"];
-          $password = @$cnf["password"];
-          $mail = @$cnf["mail"];
-          $groups = @$cnf["groups"];
-          $notify = @$cnf["notify"];
-          
-          if($login == "") throw new Exception("No login specified");
-          if($password == "") throw new Exception("No password specified");
-          if($mail == "") throw new Exception("No mail specified");
-          if($groups == "") throw new Exception("No groups specified");
-          if($notify == "yes") $notify = TRUE;
-          else if($notify == "yes") $notify = TRUE;
-          else throw new Exception("Notify should be 'yes' or 'no'.");
-          
-          $su->create($login, $mail);
-          foreach(explode(",",$groups) as $group)
-            $su->groupadd($login, $group);
-          $su->su($login)->passwd($password);
-          
-          $Subj = "Твой логин на сайте $meta_site_name.";
-          $Body = 
+    function main($args)
+    {
+        global $cnf,$meta_site_name, $meta_site_url, $meta_site_mail;
+        // var_dump(STDIN);
+        $command = $args[0];
+        if($command == "useradd")
+        {
+            $su = xcms_user();
+            $su->setSuperuser();
+            
+            $login = @$cnf["login"];
+            $password = @$cnf["password"];
+            $mail = @$cnf["mail"];
+            $groups = @$cnf["groups"];
+            $notify = @$cnf["notify"];
+            
+            if($login == "") throw new Exception("No login specified");
+            if($password == "") throw new Exception("No password specified");
+            if($mail == "") throw new Exception("No mail specified");
+            if($groups == "") throw new Exception("No groups specified");
+            if($notify == "yes") $notify = TRUE;
+            else if($notify == "yes") $notify = TRUE;
+            else throw new Exception("Notify should be 'yes' or 'no'.");
+            
+            $su->create($login, $mail);
+            foreach(explode(",",$groups) as $group)
+                $su->groupadd($login, $group);
+            $su->su($login)->passwd($password);
+            
+            $Subj = "Твой логин на сайте $meta_site_name.";
+            $Body =
 "Привет!
 
 Мы создали для тебя логин и пароль на сайте $meta_site_name ($meta_site_url). Вот они:
@@ -50,19 +50,19 @@
 
 Удачи!
 ";
-          if($notify)
-            if(!xcms_send_email($mail, $Subj , $Body))
-            {
-                echo "\n *** ERROR. Notification mail could not be delivered. Please, deliver it by yourself.\n";
-                echo "============================================================================\n";
-                echo "To: $mail\n";
-                echo "Sublect: $Subj\n\n";
-                echo $Body;
-                echo "============================================================================\n";
-            }
-          
-      }
-  }
+            if($notify)
+                if(!xcms_send_email($mail, $Subj , $Body))
+                {
+                    echo "\n *** ERROR. Notification mail could not be delivered. Please, deliver it by yourself.\n";
+                    echo "============================================================================\n";
+                    echo "To: $mail\n";
+                    echo "Sublect: $Subj\n\n";
+                    echo $Body;
+                    echo "============================================================================\n";
+                }
+            
+        }
+    }
 ?><?php
     $cnf["basedir"] = ".";
     $args = array();
@@ -74,8 +74,8 @@
             $arr = explode("=",$cmd,2);
             $cnf[$arr[0]] = $arr[1];
         }
-        else 
-          $args[] = $cmd;
+        else
+            $args[] = $cmd;
     }
     $basedir = $cnf["basedir"];
     if(!chdir($basedir))

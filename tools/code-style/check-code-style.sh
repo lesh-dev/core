@@ -117,7 +117,7 @@ check_file()
                     fi
                     $editor $fn
                     check_file $fn
-                    return 
+                    return
                 elif [ "$ans." == "no." ]; then
                     break;
                 fi
