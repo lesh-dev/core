@@ -27,6 +27,10 @@ Usage: `basename $0` <options>
     -f  --file <file-name>      Check only given file
     -c  --commit                Check all modified files in GIT repo
                                 You must be inside GIT repo to use it
+    -i  --interactive           Interactive mode. You will be prompted
+                                to edit every errored file
+    -e  --editor                Editor for interactive mode.
+                                Will be user \$EDITOR if not specified
 EOF
     exit 1
 
