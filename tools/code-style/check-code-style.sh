@@ -15,6 +15,9 @@ path="."
 my_base="$(dirname "$(readlink -f "$0")")"
 tmp="/tmp"
 
+interactive=false
+editor=$EDITOR
+
 print_usage()
 {
     cat - <<EOF
@@ -67,6 +70,20 @@ while [ -n "$1" ] ; do
         shift
         continue
     fi
+    if [ "$1" == "-i" ] || [ "$1" == "--interactive" ] ; then
+        shift
+        interactive=true
+        continue
+    fi
+    if [ "$1" == "-e" ] || [ "$1" == "--editor" ] ; then
+        shift
+        editor=$1
+        if [ -z "$editor" ] ; then
+            error_exit "help" "You should specify 'editor' value"
+        fi
+        shift
+        continue
+    fi
     # invalid args, print usage and bail out
     print_usage
 done
@@ -87,6 +104,23 @@ check_file()
         echo "*** Checking '$fn' failed:"
         cat $tmp/check-result
         echo
+        if [ $interactive == true ]; then
+            while [ true ]; do
+                read -p "Do You want to edit this file? (yes/no)" ans
+                if [ "$ans." == "yes." ]; then
+                    if [ -z $editor ]; then
+                        error_exit "no" "\$editor is not set"
+                    fi
+                    $editor $fn
+                    check_file $fn
+                    return 
+                elif [ "$ans." == "no." ]; then
+                    break;
+                fi
+                
+                
+            done
+        fi
         echo
     fi
     fail="yes"

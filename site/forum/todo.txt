@@ -1,4 +1,0 @@
-[med] jabber, skype in user profile instead of e.g. AOL and MSN (or add new)
-[lo] http://localhost/forum/index.php?action=membergroups: button separators as in main menu bar
-[lo] pictures for buttons (bg)
-
