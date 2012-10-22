@@ -20,7 +20,7 @@ body {
 	height: 100%;
 	min-height: 100%;
 	position: absolute;
-	font-family: Trebuchet MS, serif;
+	font-family: "Trebuchet MS", "Helvetica CY", sans-serif;
 }
 
 #chronic1 a{
@@ -68,6 +68,7 @@ body {
 	background: white;
 	background-attachment: fixed;
 	overflow: auto;
+	font-family: "Trebuchet MS", "Helvetica CY", sans-serif;
 }
 
 #header{
@@ -162,23 +163,6 @@ body {
 	color: #7AA643;
 }
 
-/*#sidebar{
-	width: 700px;
-}
-
-#sidebar ul{
-	margin-top: -10px;
-	margin-left: 10px;
-	color: black;
-	font-size: 12px;
-	float: left;
-}
-
-#sidebar ul li{
-	display: inline;
-	line-height:12px;
-}*/
-
 #sidebar2{
 	width: 150px;
 	float: right;
@@ -192,7 +176,7 @@ body {
 
 #sidebar2 ul{
 	font-size: 14px;
-	font-family: Trebuchet MS;
+	font-family: "Trebuchet MS", "Helvetica CY", sans-serif;
 }
 
 #sidebar2 ul li{
@@ -238,8 +222,9 @@ body {
 	width: 380px;
 	float: left;
 	text-align: justify;
-	letter-spacing: 0.5px;
+	letter-spacing: 0.1px;
 	word-spacing: 0.5px;
+	line-height: 18px;
 }
 
 #text span{
@@ -269,6 +254,7 @@ body {
 	text-align: justify;
 	letter-spacing: 0.5px;
 	word-spacing: 0.5px;
+	line-height: 18px;
 }
 
 #principles p{
@@ -277,16 +263,17 @@ body {
 }
 
 #res{
-	clear: both;
-	padding-left: 50px;
+	padding-left: 50px;              
 	padding-top: 10px;
 	_padding-top: 0px;
-	padding-right: 20px;
+	padding-right: 10px;
 	margin-top: 0px;
 	_margin-top: -50px;
+	float: left;
 	text-align: justify;
 	letter-spacing: 0.5px;
 	word-spacing: 0.5px;
+	line-height: 18px;
 }
 
 #res p{
@@ -298,6 +285,12 @@ body {
 	font-size: 18px;
 	color: black;
 	font-weight: bold;
+}
+
+#res img{
+	float: right;
+	width: 420px;
+	height: 324px;
 }
 
 #resV{
@@ -338,6 +331,13 @@ body {
 	background: #EBECEC;
 	float: right;
 	padding: 10px;
+	line-height: 18px;
+}
+
+#med2 p{
+	font-size: 14px;
+	color: black;
+	margin-top: 0px;
 }
 
 #res a.res{
@@ -375,9 +375,12 @@ body {
  	_list-style-type: decimal;
     counter-reset:  item;
 	font-size: 14px;
-	font-family: Trebuchet MS;
+	font-family: "Trebuchet MS", "Helvetica CY", sans-serif;
 	color: black;
-	margin-left: -40px;
+	margin-left: -20px;
+	letter-spacing: 0.1px;
+	word-spacing: 0.5px;
+	line-height: 18px;
 }
 
 #principles ol li:before {
@@ -388,6 +391,7 @@ body {
 #principles ol li{
 	display: block;
 	line-height:22px;
+	white-space: pre-wrap;
 }
 
 #main p.zaglav {
@@ -410,21 +414,23 @@ body {
 	width: 250px;
 	float: right;
 	text-align: justify;
+	line-height: 18px;
 }
 
 #chronic{
 	background-color:  #EBECEC;
 	color: black;
-	margin-top: 5px;
+	margin-top: -1px;
 	width: 250px;
 	float: right;
 	text-align: left;
 	font-size: 13px;
+	line-height: 18px;
 }
 
 #chronic1{
 	padding-left: 10px;
-	padding-right: 5px;
+	padding-right: 10px;
 }
 
 #chronic1 span.chronic{
@@ -477,6 +483,7 @@ body {
 #main img.ihres{
 	width: 58px;
 	height: 55px;
+	clear: both;
 	float: left;
 	padding-left: 50px;
 	padding-top: 20px;
@@ -484,7 +491,7 @@ body {
 }
 
 #text2{
-	background-color:  #769897;
+	background-color:  #83ac9b;
 	padding: 20px;
 	padding-top: 1px;
 	padding-bottom: 0px;
@@ -496,6 +503,7 @@ body {
 	text-align: left;
 	word-spacing: 3px;
 	border-bottom: 3px solid white;
+	line-height: 18px;
 }
 
 #text2 , x:-moz-any-link{
