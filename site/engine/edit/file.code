@@ -48,20 +48,23 @@
             // FIXME: this should be deleted at all.
             // include_once("{$SETTINGS["engine_dir"]}cms/addrssfeed.php");
             // addrssfeed("Изменения в разделе", "сабж","","");
-            system("diff -u $target_name $ename > $diff_name");
+            $diff_result = system("diff -ub $target_name $ename > $diff_name");
             $lf = "\r\n";
-            xcms_send_notification("content-change",
-                NULL,
-                "[Lesh CMS notification] Изменена страница: $pageid",
-                "Была произведена правка страницы. Дифф:$lf".
-                "=======================================$lf".
-                file_get_contents($diff_name).$lf.
-                "=======================================$lf".
-                "Теперь содержание страницы следующее:$lf".
-                "=======================================$lf".
-                file_get_contents($ename).$lf.
-                "=======================================$lf"
-            );
+            if ($diff_result != 0) // do not send notifications on empty diff
+            {
+                xcms_send_notification("content-change",
+                    NULL,
+                    "[XCMS Content] ({$_SERVER["HTTP_HOST"]}) Изменена страница: $pageid",
+                    "Была произведена правка страницы. Дифф:$lf".
+                    "=======================================$lf".
+                    file_get_contents($diff_name).$lf.
+                    "=======================================$lf".
+                    "Теперь содержание страницы следующее:$lf".
+                    "=======================================$lf".
+                    file_get_contents($ename).$lf.
+                    "=======================================$lf"
+                );
+            }
             unlink($diff_name);
             system("gzip $target_name");
         }
