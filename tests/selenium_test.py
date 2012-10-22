@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 from selenium import webdriver
-import sys
+import sys, random
 
 #['NATIVE_EVENTS_ALLOWED', '__class__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__',
 #'__hash__', '__init__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__',
@@ -20,6 +20,59 @@ import sys
 #'start_session', 'stop_client', 'switch_to_active_element', 'switch_to_alert', 'switch_to_default_content',
 #'switch_to_frame', 'switch_to_window', 'title', 'window_handles']
 
+rusAlphaSmall = u"абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+rusAlphaCap = u"АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+engAlphaSmall = "abcdefgiklmnopqrstuvwxyz"
+engAlphaCap = "ABCDEFGHIKLMNOPQRSTUVWZYZ"
+
+def randomText(length):
+	rs = ""
+	for i in range(0, length):
+		rs = rs + random.choice('abcdef0123456789')
+	return rs	
+
+def randomWord(length):
+	rs = ""
+	
+	enLang = (random.randint(0,10) < 7)
+	
+	if random.randint(0,10) < 3:
+		if enLang:
+			rs = random.choice(engAlphaCap)
+		else:
+			rs = random.choice(rusAlphaCap)
+	else:
+		if enLang:
+			rs = random.choice(engAlphaSmall)
+		else:
+			rs = random.choice(rusAlphaSmall)
+	
+	for i in range(0, length):
+		if enLang:
+			rs = rs + random.choice(engAlphaSmall)
+		else:
+			rs = rs + random.choice(rusAlphaSmall)
+		
+	if random.choice(range(0,20)) < 3:
+		rs = rs + random.choice('.,!?;:"<>-==@%$^&*()')
+			
+	return rs	
+		
+def randomDigits(length):
+	rs = ""
+	for i in range(0, length):
+		rs = rs + str(random.choice('0123456789'))
+	return rs
+
+def randomCrap(wordNumber, multiLine = False):
+	rs = ""
+	for i in range(0, wordNumber):
+		wordLen = random.randint(3,10)
+		rs = rs + " " + randomWord(wordLen)
+		if multiLine:
+			if random.random() < 0.1:
+				rs = rs + "\n"
+	return rs
 
 class SeleniumTest:
 	def __init__(self, baseUrl = None):
@@ -77,21 +130,38 @@ class SeleniumTest:
 		if self.m_checkErrors:
 			self.assertPhpErrors();
 			
+	def gotoUrlByLinkText(self, linkName):
+		link = self.getUrlByLinkText(linkName)
+		self.gotoSite(link)
+			
 	def drv(self):
 		return self.m_driver;
 
 	def getElementByName(self, name):
 		return self.m_driver.find_element_by_name(name)
-		
+
+	def getElementById(self, eleId):
+		return self.m_driver.find_element_by_id(eleId)
+
 	def fillElementByName(self, name, text):
 		if self.isVoid(name):
 			raise RuntimeError("Empty element name passed to fillElementByName(). ")
 		ele = self.getElementByName(name)
-#		print "ele = ", dir(ele)
 		ele.send_keys(text)
-	
+
+	def fillElementById(self, eleId, text):
+		if self.isVoid(eleId):
+			raise RuntimeError("Empty element ID passed to fillElementById(). ")
+		ele = self.getElementById(eleId)
+		ele.send_keys(text)
+		return ele.get_attribute('value')
+
 	def clickElementByName(self, name):
 		butt = self.getElementByName(name)
+		butt.click()
+
+	def clickElementById(self, eleId):
+		butt = self.getElementById(eleId)
 		butt.click()
 	
 	def checkTextPresent(self, xpath, text):
