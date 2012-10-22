@@ -35,6 +35,7 @@
             strpos(substr($social_profile, 0, 8), '://') === false) // http/https scheme not matched
             $social_profile = "http://$social_profile"; // assume http scheme
         $social_profile = htmlspecialchars($social_profile);
+        return $social_profile;
     }
 
     // DATABASE: xdb
