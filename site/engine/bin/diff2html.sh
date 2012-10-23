@@ -28,11 +28,11 @@ cat <<XX
 }
 .plus {
     color: green;
-    background: #e7e7e7;
+    #background: #e7e7e7;
 }
 .minus {
     color: red;
-    background: #d7d7d7;
+    #background: #d7d7d7;
 }
 .only {
     color: purple;
