@@ -6,10 +6,8 @@ import os, sys, traceback
 
 import selenium_test
 
-debugMode = True #"TRUE" in os.getenv("XCMS_TEST_DEBUG");
-
 try:
-	test = selenium_test.SeleniumTest()
+	test = selenium_test.SeleniumTest("xcsm-open-non-existing-page")
 	test.gotoPage("/qqq");
 	test.assertTextPresent("//div[@class='error-widget']", u"Нет такой страницы")
 	homeHref = test.getUrlByLinkText(u"этой ссылке")

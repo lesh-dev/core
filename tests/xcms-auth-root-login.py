@@ -7,7 +7,7 @@ import os, sys, traceback
 import selenium_test, tests_common
 
 try:
-	test = selenium_test.SeleniumTest()
+	test = selenium_test.SeleniumTest("xcms-auth-root-login")
 	
 	test.autoErrorCheckingOn()
 	if "-l" in sys.argv or "--leave-open" in sys.argv:
