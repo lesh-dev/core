@@ -251,3 +251,16 @@ input.delete-news {
     float: right;
     background-color: #ff7f7f;
 }
+
+div.news-block {
+    padding: 10px;
+    border-radius: 5px;
+}
+
+div.news-block.even {
+    background-color: #eefebe;
+}
+
+div.news-block.odd {
+    background-color: #ddedad;
+}

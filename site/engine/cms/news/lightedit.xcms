@@ -23,7 +23,10 @@
         {
             $cc++;
             if ($cc>10) break;
-            include($list[$i]);
+            $source = $list[$i];
+            $odd = ($i % 2) ? "odd" : "even";
+            ?><div class="news-block <?php echo $odd; ?>"><?php
+            include(translate("<! cms/readtext --markdown !>"));
             ?>
             <script type="text/javascript">
                 $(document).ready(function() {
@@ -35,7 +38,7 @@
                 });
             </script>
             <div id="slide-<?php echo $i; ?>">
-                <div>Операции:
+                <div><b>Операции:</b>
                     <input id="edit-<?php echo $i; ?>" type="submit" value="Редактировать новость..." />
                     <form method="post" style="display: inline;">
                         <input type="hidden" name="news-del-name" value="<?php echo $list[$i]; ?>" />
@@ -47,14 +50,15 @@
                 ?>
                 </div>
             </div>
-            <hr />
+            </div><!-- news-block odd-even-div -->
             <?php
             $count++;
         }
         if ($i != 0)
         {
-            @$offset += 10;
-            echo "<a href=\"?page=$pageid&ref=ladmin&offset=$offset\">&le;&le; Предыдущие 10 новостей</a>";
+            @$offset += 10; ?>
+            <a href="<?php echo "?page=$pageid&amp;ref=ladmin&amp;offset=$offset"?>">&laquo;&laquo;
+                Предыдущие 10 новостей</a><?php
         }
     }
 ?>
