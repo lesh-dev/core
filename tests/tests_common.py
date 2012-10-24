@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 from selenium import webdriver
-import os, sys, traceback
+import os, sys, traceback, time
 
 import selenium_test
 
@@ -10,7 +10,10 @@ def performLogin(test, login, password):
 	if test is None:
 		raise RuntimeError("Wrong webdriver parameter passed to performLogin. ")
 	
-	test.gotoPage("/")
+	test.gotoRoot()
+	
+	# assert we have no shit cookies here
+	test.assertUrlNotPresent(u"Админка")
 	
 	authUrl = test.getUrlByLinkText(u"Авторизация")
 	

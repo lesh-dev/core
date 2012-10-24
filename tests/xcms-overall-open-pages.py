@@ -6,10 +6,8 @@ import os, sys, traceback
 
 import selenium_test
 
-debugMode = True #"TRUE" in os.getenv("XCMS_TEST_DEBUG");
-
 try:
-	test = selenium_test.SeleniumTest()
+	test = selenium_test.SeleniumTest("xcms-overall-open-pages")
 	
 	test.autoErrorCheckingOn()
 #	test.setCloseOnExit(False)
