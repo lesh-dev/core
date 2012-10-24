@@ -13,7 +13,7 @@ try:
 	if "-l" in sys.argv or "--leave-open" in sys.argv:
 		test.setCloseOnExit(False)
 	
-	performLoginAsAdmin(test, "root", "root")
+	tests_common.performLoginAsAdmin(test, "root", "root")
 	
 	test.assertBodyTextPresent(u"Пользователи")
 	test.assertBodyTextPresent(u"Очистить кэш")

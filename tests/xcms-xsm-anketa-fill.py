@@ -82,7 +82,7 @@ try:
 	test.gotoUrlByLinkText(u"Участники")
 	
 	fullAlias = inpLastName + " " + inpFirstName + " " + inpMidName
-	print "Full student alias:", fullAlias
+	#print "Full student alias:", fullAlias.encode("utf-8")
 	anketaUrlName = fullAlias.strip()
 
 	# BUG: here is a bug on the page, but we skip it.

@@ -5,17 +5,18 @@ from selenium import webdriver
 import os, sys, traceback
 
 import selenium_test, tests_common
-import 
 
 try:
-	test = selenium_test.SeleniumTest()
+	test = selenium_test.SeleniumTest("xcms-auth-add-new-user")
+	
+	#this test logins as admin and adds new user to XCMS.
 	
 	test.autoErrorCheckingOn()
 	if "-l" in sys.argv or "--leave-open" in sys.argv:
 		test.setCloseOnExit(False)
 	
 # first, login as admin
-	performLoginAsAdmin(test, "root", "root")
+	tests_common.performLoginAsAdmin(test, "root", "root")
 # navigate to users CP
 	
 	
