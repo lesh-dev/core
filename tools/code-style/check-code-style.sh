@@ -181,6 +181,8 @@ else
     check_style '*.xcms'
     check_style '*.php'
     check_style '*.code'
+    check_style '*.html'
+    check_style '*.css'
     check_style '*.sh'
     check_style '*.py'
 fi
