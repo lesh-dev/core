@@ -2,20 +2,18 @@
 #
 # Convert diff output to colorized HTML.
 
-cat <<XX
-<html>
-<head>
-<title>Colorized Diff</title>
-</head>
+cat <<EOF
 <style>
 .diffdiv {
-    border: solid 1px black;
 }
 .comment {
     color: gray;
 }
 .diff {
     color: #8a2be2;
+    # we diff only one file,
+    # so we don't need file names
+    display: none;
 }
 .minus3 {
     color: blue;
@@ -28,19 +26,16 @@ cat <<XX
 }
 .plus {
     color: green;
-    #background: #e7e7e7;
 }
 .minus {
     color: red;
-    #background: #d7d7d7;
 }
 .only {
     color: purple;
 }
 </style>
-<body>
 <pre>
-XX
+EOF
 
 echo -n '<span class="comment">'
 
@@ -135,8 +130,6 @@ else
 fi
 echo
 
-cat <<XX
+cat <<EOF
 </pre>
-</body>
-</html>
-XX
+EOF
