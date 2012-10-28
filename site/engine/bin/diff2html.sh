@@ -3,41 +3,10 @@
 # Convert diff output to colorized HTML.
 
 cat <<EOF
-<style>
-.diffdiv {
-}
-.comment {
-    color: gray;
-}
-.diff {
-    color: #8a2be2;
-    # we diff only one file,
-    # so we don't need file names
-    display: none;
-}
-.minus3 {
-    color: blue;
-}
-.plus3 {
-    color: maroon;
-}
-.at2 {
-    color: lime;
-}
-.plus {
-    color: green;
-}
-.minus {
-    color: red;
-}
-.only {
-    color: purple;
-}
-</style>
 <pre>
 EOF
 
-echo -n '<span class="comment">'
+echo -n '<span style="color: gray">'
 
 first=1
 diffseen=0
@@ -62,7 +31,7 @@ do
 
     # Determine HTML class to use.
     if [[ "$t7" == 'Only in' ]]; then
-        cls='only'
+        cls='color: purple;' # only
         if [[ $diffseen -eq 0 ]]; then
             diffseen=1
             echo -n '</span>'
@@ -72,33 +41,33 @@ do
             fi
         fi
         if [[ $lastonly -eq 0 ]]; then
-            echo "<div class='diffdiv'>"
+            echo "<div style=''>" # diff-div
         fi
         lastonly=1
     elif [[ "$t4" == 'diff' ]]; then
-        cls='diff'
+        cls='color: #8a2be2; display: none;' # diff
         if [[ $diffseen -eq 0 ]]; then
             diffseen=1
             echo -n '</span>'
         else
             echo "</div>"
         fi
-        echo "<div class='diffdiv'>"
+        echo "<div style=''>" # diff-div
         lastonly=0
     elif [[ "$t3" == '+++' ]]; then
-        cls='plus3'
+        cls='color: maroon;' # plus3
         lastonly=0
     elif [[ "$t3" == '---' ]]; then
-        cls='minus3'
+        cls='color: blue;' # minus3
         lastonly=0
     elif [[ "$t2" == '@@' ]]; then
-        cls='at2'
+        cls='color: lime;' # at2
         lastonly=0
     elif [[ "$t1" == '+' ]]; then
-        cls='plus'
+        cls='color: green;' # plus
         lastonly=0
     elif [[ "$t1" == '-' ]]; then
-        cls='minus'
+        cls='color: red;' # minus
         lastonly=0
     else
         cls=
@@ -115,7 +84,7 @@ do
 
     # Output the line.
     if [[ "$cls" ]]; then
-        echo -n '<span class="'${cls}'">'${s}'</span>'
+        echo -n '<span style="'${cls}'">'${s}'</span>'
     else
         echo -n ${s}
     fi
