@@ -3,7 +3,7 @@
 # Convert diff output to colorized HTML.
 
 cat <<EOF
-<pre style="line-height: 10px; font-size: 10px;">
+<pre style="line-height: 8pt; font-size: 8pt;">
 EOF
 
 echo -n '<span style="color: gray">'
