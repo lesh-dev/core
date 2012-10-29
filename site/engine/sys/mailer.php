@@ -62,7 +62,8 @@
       **/
     function xcms_send_notification($mail_group, $addr_list, $subject, $mail_text, $mail_text_html = '')
     {
-        global $SETTINGS, $login;
+        global $SETTINGS;
+        $login = xcms_user()->login();
         $enabled = xcms_get_key_or($SETTINGS, "mailer_enabled", true);
         if (!$enabled) return;
         $dom = "@fizlesh.ru"; // TODO: remove fizlesh.ru spike
