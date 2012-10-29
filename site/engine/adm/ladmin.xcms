@@ -92,8 +92,10 @@
                     if (file_exists("INFO"))
                     {?>
                         <pre class="site-info"><?php
-                        echo file_get_contents("INFO"); ?>
-                        </pre><?php
+                        $rel_info = xcms_get_list("INFO");
+                        foreach ($rel_info as $key => $value)
+                            echo "$key: <b>$value</b>\n";
+                        ?></pre><?php
                     }
                 ?>
                 <b>Menu</b>
