@@ -71,13 +71,9 @@
                     file_get_contents($ename).$lf.
                     "============================================$lf";
 
-                $body_html =
-                    '<div style="font-weight: bold">Была произведена правка страницы. Изменения:</div>'.$lf.
-                    file_get_contents($diff_name_html).$lf.
-                    '<div style="font-weight: bold">Теперь содержание страницы следующее:</div>'.$lf.
-                    '<div style="background-color: #eeeeee; padding: 5px;"><pre>'.$lf.
-                    htmlspecialchars($new_text).$lf.
-                    '</pre></div>'.$lf;
+                $body_html = file_get_contents("{$SETTINGS["engine_dir"]}templates/content-change.html");
+                $body_html = str_replace('@@DIFF@', file_get_contents($diff_name_html), $body_html);
+                $body_html = str_replace('@@NEW-TEXT@', htmlspecialchars($new_text), $body_html);
 
                 xcms_send_notification("content-change",
                     NULL,
