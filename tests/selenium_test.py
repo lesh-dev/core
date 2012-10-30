@@ -4,12 +4,10 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 
-import sys, random
+import random, traceback
 from datetime import datetime
 
-#['NATIVE_EVENTS_ALLOWED', '__class__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__',
-#'__hash__', '__init__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__',
-#'__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_unwrap_value', '_wrap_value', 'add_cookie',
+#['_unwrap_value', '_wrap_value', 'add_cookie',
 #'back', 'binary', 'capabilities', 'close', 'command_executor', 'create_web_element', 'current_url', 'current_window_handle',
 #'delete_all_cookies', 'delete_cookie', 'desired_capabilities', 'error_handler', 'execute', 'execute_async_script',
 #'execute_script', 'find_element', 'find_element_by_class_name', 'find_element_by_css_selector', 'find_element_by_id',
@@ -22,6 +20,9 @@ from datetime import datetime
 #'set_page_load_timeout', 'set_script_timeout', 'set_window_position', 'set_window_size', 'start_client',
 #'start_session', 'stop_client', 'switch_to_active_element', 'switch_to_alert', 'switch_to_default_content',
 #'switch_to_frame', 'switch_to_window', 'title', 'window_handles']
+
+def printTestFailResult(exc):
+	print "TEST FAILED:", unicode(exc.message).encode("utf-8")
 
 rusAlphaSmall = u"абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 rusAlphaCap = u"АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
@@ -78,22 +79,20 @@ def randomCrap(wordNumber, multiLine = False):
 	return rs
 
 class SeleniumTest:
-	def __init__(self, testName, baseUrl = None):
+	def __init__(self, testName, baseUrl):
 #		print "Init SeleniumTest"
 		if testName is None or testName.strip() == "":
 			raise RuntimeError("Test name was not set. ")
 		self.m_testName = testName
-		self.m_checkErrors = False
+		self.m_checkErrors = True
 		self.m_closeOnExit = True
 		self.m_logStarted = False
+		self.m_errorsAsWarnings = False
 		
 		self.m_logFile = testName + ".log" #"_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") +
 		
 		if baseUrl is None:
-			if len(sys.argv) < 2:
-				raise RuntimeError("Base URL for test is not set neither in class ctor, nor in CLI. ")
-			else:
-				baseUrl = sys.argv[1]
+			raise RuntimeError("Base URL for test is not set. ")
 						
 		self.m_driver = webdriver.Firefox()
 		self.m_baseUrl = self.fixBaseUrl(baseUrl);
@@ -123,11 +122,11 @@ class SeleniumTest:
 		self.m_closeOnExit = flag;
 		
 	# PHP errors auto-check toggle
-	def autoErrorCheckingOn(self):
-		self.m_checkErrors = True;
+	def setAutoPhpErrorChecking(self, checkErrors = True):
+		self.m_checkErrors = checkErrors
 
-	def autoErrorCheckingOff(self):
-		self.m_checkErrors = False;
+	def setPhpErrorsAsWarnings(self, errorsAsWarnings = True):
+		self.m_errorsAsWarnings = errorsAsWarnings
 	
 	def fixBaseUrl(self, url):
 		if not (url.startswith("http://") or url.startswith("https://")):
@@ -143,19 +142,20 @@ class SeleniumTest:
 	def gotoPage(self, url):
 		fullUrl = self.m_baseUrl + url
 			
-		print "ST_DEBUG: navigating to " + fullUrl
+		#self.logAdd("navigating to " + fullUrl)
 		self.m_driver.get(fullUrl);
 		if self.m_checkErrors:
 			self.assertPhpErrors();
 	
 	def gotoSite(self, fullUrl):
-		print "ST_DEBUG: Going to site " + fullUrl
+		#self.logAdd("Going to site " + fullUrl)
 		self.m_driver.get(fullUrl)
 		if self.m_checkErrors:
 			self.assertPhpErrors();
 			
 	def gotoUrlByLinkText(self, linkName):
 		link = self.getUrlByLinkText(linkName)
+		#print "going to link ", link
 		self.gotoSite(link)
 
 	def assertUrlNotPresent(self, linkName):
@@ -169,11 +169,19 @@ class SeleniumTest:
 		return self.m_driver;
 
 	def getElementByName(self, name):
-		return self.m_driver.find_element_by_name(name)
+		try:
+			return self.m_driver.find_element_by_name(name)
+		except NoSuchElementException:
+			self.logAdd("getElementByName failed for name '" + name + "':\n" + traceback.format_exc())
+			raise RuntimeError(u"Cannot get element by name '" + name + "'")
 
 	def getElementById(self, eleId):
-		return self.m_driver.find_element_by_id(eleId)
-
+		try:
+			return self.m_driver.find_element_by_id(eleId)
+		except NoSuchElementException:
+			self.logAdd("getElementById failed for name '" + name + "':\n" + traceback.format_exc())
+			raise RuntimeError(u"Cannot get element by name '" + name + "'")
+			
 	def fillElementByName(self, name, text):
 		if self.isVoid(name):
 			raise RuntimeError("Empty element name passed to fillElementByName(). ")
@@ -204,7 +212,7 @@ class SeleniumTest:
 		
 	def assertTextPresent(self, xpath, text):
 		if not self.checkTextPresent(xpath, text):
-			raise RuntimeError("Text '" + text + "' not appers on page in element " + xpath)
+			raise RuntimeError(u"Text '" + text + u"' not appears on page in element '" + xpath + "'")
 
 	def assertBodyTextPresent(self, text):
 		return self.assertTextPresent("/html/body", text)
@@ -241,7 +249,7 @@ class SeleniumTest:
 		susp = ["Notice:", "Error:", "Warning:", "Fatal error:", "Parse error:"];
 		for word in susp:
 			if (word in pageText) and (" on line " in pageText):
-				self.logAdd("PHP ERROR on page '" + self.curUrl() + "':")
+				self.logAdd("PHP ERROR '" + word + "' detected on page '" + self.curUrl() + "':")
 				self.logAdd("ERROR_PAGE_BEGIN =================")
 				self.logAdd(pageText)
 				self.logAdd("ERROR_PAGE_END ===================")
@@ -251,7 +259,10 @@ class SeleniumTest:
 	def assertPhpErrors(self):
 		checkResult, suspWord = self.checkPhpErrors()
 		if checkResult:
-			raise RuntimeError("PHP error '" + suspWord + "' detected on the page '" + self.curUrl() + "'")
+			logMsg = "PHP error '" + suspWord + "' detected on the page '" + self.curUrl() + "'"
+			self.logAdd(logMsg)
+			if not self.m_errorsAsWarnings:
+				raise RuntimeError(logMsg)
 	
 		
 		

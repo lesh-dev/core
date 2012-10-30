@@ -5,16 +5,21 @@ from selenium import webdriver
 import os, sys, traceback
 #local imports
 import selenium_test, tests_common
+from xcms_test_config import XcmsTestConfig
 
 try:
-	test = selenium_test.SeleniumTest("xcms-xsm-anketa-fill")
+	test = selenium_test.SeleniumTest("xcms-xsm-anketa-fill", sys.argv[1])
 	
 	# anketa fill positive test:
 	# all fields are filled with correct values.
+	conf = XcmsTestConfig()
 	
-	testMailPrefix = "NO-MAIL-TEST"
+	adminLogin = conf.getAdminLogin()
+	adminPass = conf.getAdminPass()
 	
-	test.autoErrorCheckingOn()
+	testMailPrefix = conf.getAnketaNamePrefix()
+		
+	test.setAutoPhpErrorChecking(True)
 	if "-l" in sys.argv or "--leave-open" in sys.argv:
 		test.setCloseOnExit(False)
 	
@@ -71,10 +76,7 @@ try:
 	
 		
 # now login as admin
-	tests_common.performLoginAsAdmin(test, "root", "root")
-	
-	# BUG! we got to admin page after authorize!! 
-	# expected: root page with auth menu items.
+	tests_common.performLoginAsAdmin(test, adminLogin, adminPass)
 	
 	test.gotoRoot()
 		
@@ -86,9 +88,9 @@ try:
 	anketaUrlName = fullAlias.strip()
 
 	# BUG: here is a bug on the page, but we skip it.
-	test.autoErrorCheckingOff()
+#	test.setAutoPhpErrorChecking(False)
 	test.gotoUrlByLinkText(anketaUrlName)
-	test.autoErrorCheckingOn()
+#	test.setAutoPhpErrorChecking(True)
 
 # just check text is on the page.
 	print "Checking that all filled fields are displayed on the page. "
@@ -108,7 +110,7 @@ try:
 	test.assertBodyTextPresent(inpHob)	
 	
 except RuntimeError as e:
-	print "TEST FAILED:", e
+	print "TEST FAILED:", unicode(e.message).encode("UTF-8")
 	print "Last test command: "
 	if "-d" in sys.argv or "--debug" in sys.argv:
 		traceback.print_exc()
