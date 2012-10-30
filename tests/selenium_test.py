@@ -35,6 +35,9 @@ def randomText(length):
 		rs = rs + random.choice('abcdef0123456789')
 	return rs	
 
+def randomEmail():
+	return "mail_test_" + randomText(8) + "@example.com"
+		
 def randomWord(length):
 	rs = ""
 	
@@ -95,7 +98,9 @@ class SeleniumTest:
 			raise RuntimeError("Base URL for test is not set. ")
 						
 		self.m_driver = webdriver.Firefox()
-		self.m_baseUrl = self.fixBaseUrl(baseUrl);
+#		self.m_driver.window_maximize()
+		
+		self.m_baseUrl = self.fixBaseUrl(baseUrl)
 		
 	def __del__(self):
 #		print "Destructing SeleniumTest"
@@ -154,10 +159,13 @@ class SeleniumTest:
 			self.assertPhpErrors();
 			
 	def gotoUrlByLinkText(self, linkName):
-		link = self.getUrlByLinkText(linkName)
-		#print "going to link ", link
-		self.gotoSite(link)
-
+		try:
+			link = self.getUrlByLinkText(linkName)
+			self.gotoSite(link)
+		except NoSuchElementException:
+			self.logAdd("gotoUrlLinkByText failed for link name '" + linkName + "':\n" + traceback.format_exc())
+			raise RuntimeError(u"Cannot find URL with name '" + linkName + "'")
+		
 	def assertUrlNotPresent(self, linkName):
 		try:
 			self.getUrlByLinkText(linkName)
@@ -187,7 +195,8 @@ class SeleniumTest:
 			raise RuntimeError("Empty element name passed to fillElementByName(). ")
 		ele = self.getElementByName(name)
 		ele.send_keys(text)
-
+		return ele.get_attribute('value')
+		
 	def fillElementById(self, eleId, text):
 		if self.isVoid(eleId):
 			raise RuntimeError("Empty element ID passed to fillElementById(). ")
