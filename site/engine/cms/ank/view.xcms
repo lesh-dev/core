@@ -11,8 +11,9 @@
     if(@$_POST["submit-anketa"])
     {
         $mail_msg_plain = "Анкета:\n";
-        $mail_msg_html = file_get_contents("$design_dir/mail_template.html");
-        $row_template = file_get_contents("$design_dir/anketa_row.html");
+        $template_root = "{$SETTINGS['engine_dir']}templates";
+        $mail_msg_html = file_get_contents("$template_root/anketa_mail.html");
+        $row_template = file_get_contents("$template_root/anketa_mail_one_row.html");
         $unix_time = mktime();
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
 
