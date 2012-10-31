@@ -25,23 +25,18 @@ def performLogin(test, login, password):
 	
 	#<input type="text" name="auth-login" />
 	#ele = test.drv().find_element_by_name("auth-login")
-	test.fillElementByName("auth-login", login)
-	test.fillElementByName("auth-password", password)
+	test.fillElementById("auth-login", login)
+	test.fillElementById("auth-password", password)
 	
-	test.clickElementByName("auth-form")
+	test.clickElementById("auth-submit")
 	
-	#check that we have entered the CP.
-	# just chech that link exists.
-	test.getUrlByLinkText(u"Админка")
-	
-	#test.gotoSite(cpUrl)
-	#test.assertBodyTextPresent(u"Пользователи")
-    
+	#test.getUrlByLinkText(u"Админка")
+	    
 def performLoginAsAdmin(test, login, password):
 	performLogin(test, login, password)
 	
+	#check that we have entered the CP.
+	# just chech that link exists.
 	cpUrl = test.getUrlByLinkText(u"Админка")
-	test.gotoSite(cpUrl)
-	
-	test.assertBodyTextPresent(u"Пользователи")
-		
+	#test.gotoSite(cpUrl)
+			

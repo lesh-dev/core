@@ -7,7 +7,10 @@ import os, sys, traceback
 import selenium_test
 
 try:
-	test = selenium_test.SeleniumTest("xcsm-open-non-existing-page")
+	test = selenium_test.SeleniumTest("xcsm-open-non-existing-page", sys.argv[1])
+	
+	test.setAutoPhpErrorChecking(True)
+	
 	test.gotoPage("/qqq");
 	test.assertTextPresent("//div[@class='error-widget']", u"Нет такой страницы")
 	homeHref = test.getUrlByLinkText(u"этой ссылке")

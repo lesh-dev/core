@@ -7,9 +7,9 @@ import os, sys, traceback
 import selenium_test
 
 try:
-	test = selenium_test.SeleniumTest("xcms-overall-open-pages")
+	test = selenium_test.SeleniumTest("xcms-overall-open-pages", sys.argv[1])
 	
-	test.autoErrorCheckingOn()
+	test.setAutoPhpErrorChecking(True)
 #	test.setCloseOnExit(False)
 	
 	test.gotoPage("/")
