@@ -81,6 +81,9 @@ def randomCrap(wordNumber, multiLine = False):
 				rs = rs + "\n"
 	return rs
 
+class TestError(RuntimeError):
+	pass
+
 class SeleniumTest:
 	def __init__(self, testName, baseUrl):
 #		print "Init SeleniumTest"
@@ -164,13 +167,13 @@ class SeleniumTest:
 			self.gotoSite(link)
 		except NoSuchElementException:
 			self.logAdd("gotoUrlLinkByText failed for link name '" + linkName + "':\n" + traceback.format_exc())
-			raise RuntimeError(u"Cannot find URL with name '" + linkName + "'")
+			raise TestError(u"Cannot find URL with name '" + linkName + "'")
 		
 	def assertUrlNotPresent(self, linkName):
 		try:
 			self.getUrlByLinkText(linkName)
-			raise RuntimeError("Forbidden URL is found on the page in assertUrlNotPresent: '" + linkName + "'")
-		except NoSuchElementException:
+			raise TestError("Forbidden URL is found on the page in assertUrlNotPresent: '" + linkName + "'")
+		except TestError:
 			pass
 	
 	def drv(self):
@@ -181,14 +184,14 @@ class SeleniumTest:
 			return self.m_driver.find_element_by_name(name)
 		except NoSuchElementException:
 			self.logAdd("getElementByName failed for name '" + name + "':\n" + traceback.format_exc())
-			raise RuntimeError(u"Cannot get element by name '" + name + "'")
+			raise TestError(u"Cannot get element by name '" + name + "'")
 
 	def getElementById(self, eleId):
 		try:
 			return self.m_driver.find_element_by_id(eleId)
 		except NoSuchElementException:
 			self.logAdd("getElementById failed for name '" + name + "':\n" + traceback.format_exc())
-			raise RuntimeError(u"Cannot get element by name '" + name + "'")
+			raise TestError(u"Cannot get element by name '" + name + "'")
 			
 	def fillElementByName(self, name, text):
 		if self.isVoid(name):
@@ -221,7 +224,7 @@ class SeleniumTest:
 		
 	def assertTextPresent(self, xpath, text):
 		if not self.checkTextPresent(xpath, text):
-			raise RuntimeError(u"Text '" + text + u"' not appears on page in element '" + xpath + "'")
+			raise TestError(u"Text '" + text + u"' not appears on page in element '" + xpath + "'")
 
 	def assertBodyTextPresent(self, text):
 		return self.assertTextPresent("/html/body", text)
@@ -232,10 +235,13 @@ class SeleniumTest:
 	def getUrlByLinkText(self, urlText):
 		if self.isVoid(urlText):
 			raise RuntimeError("Empty URL text passed to getUrlByLinkText");
-		
-		url = self.m_driver.find_element_by_link_text(urlText)
-		return url.get_attribute("href");
-	
+		try:
+			url = self.m_driver.find_element_by_link_text(urlText)
+			return url.get_attribute("href");
+		except NoSuchElementException:
+			self.logAdd("getUrlByLinkText failed for URL '" + urlText + "':\n" + traceback.format_exc())
+			raise TestError(u"Cannot find URL by link text: '" + urlText + "'")
+			
 	def logAdd(self, text):
 		try:
 			if not self.m_logStarted:
@@ -271,7 +277,7 @@ class SeleniumTest:
 			logMsg = "PHP error '" + suspWord + "' detected on the page '" + self.curUrl() + "'"
 			self.logAdd(logMsg)
 			if not self.m_errorsAsWarnings:
-				raise RuntimeError(logMsg)
+				raise TestError(logMsg)
 	
 		
 		

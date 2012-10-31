@@ -20,10 +20,15 @@ try:
 	conf = XcmsTestConfig()
 	
 # first, login as admin
+	print "logging as admin"
 	tests_common.performLoginAsAdmin(test, conf.getAdminLogin(), conf.getAdminPass())
 	
+	print "go to user creation panel"
+	
+	#	test.gotoRoot()
 	test.gotoUrlByLinkText(u"Админка")
 	# navigate to users CP
+	print "goto user list."
 	test.gotoUrlByLinkText(u"Пользователи")
 	test.assertBodyTextPresent(u"Администрирование пользователей")
 	test.gotoUrlByLinkText("Create user")
@@ -55,6 +60,8 @@ try:
 	
 	test.clickElementByName("create_user")
 	
+	print "user created, going to user list again to refresh. "
+	
 	# here is a usability issue: user not appears in the list.
 	# refresh user list
 	test.gotoUrlByLinkText(u"Пользователи")
@@ -63,15 +70,14 @@ try:
 	
 	test.assertBodyTextPresent(u"Известен под логином " + inpLogin)
 	
+	print "logging as created user. "
+	tests_common.performLogin(test, inpLogin, inpPass1)	
 	
-except RuntimeError as e:
-	seleniumTest.printTestFailResult(e)
-	print "Last test command: "
-	if "-d" in sys.argv or "--debug" in sys.argv:
-		traceback.print_exc()
+except selenium_test.TestError as e:
+	selenium_test.printTestFailResult(e)
 	sys.exit(1)
 except Exception as e:
-	print "TEST ERROR:", e
+	print "TEST INTERNAL ERROR:", e
 	traceback.print_exc()
 	sys.exit(2)
     

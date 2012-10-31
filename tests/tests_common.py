@@ -12,6 +12,7 @@ def performLogin(test, login, password):
 	
 	test.gotoRoot()
 	
+	print "logging..."
 	# assert we have no shit cookies here
 	test.assertUrlNotPresent(u"Админка")
 	
@@ -33,7 +34,9 @@ def performLogin(test, login, password):
 	#test.getUrlByLinkText(u"Админка")
 	    
 def performLoginAsAdmin(test, login, password):
+	print "performLoginAsAdmin() called"
 	performLogin(test, login, password)
+	print "checking admin panel link"
 	
 	#check that we have entered the CP.
 	# just chech that link exists.
