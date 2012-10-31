@@ -1,0 +1,13 @@
+<?php
+function xcms_is_production()
+{
+    if (!file_exists("INFO"))
+        return false;
+
+    $rel_info = xcms_get_list("INFO");
+    if (xcms_get_key_or($rel_info, "release-date", "no") == "no")
+        return false;
+
+    return (xcms_get_key_or($rel_info, "release-status") == "accepted");
+}
+?>
