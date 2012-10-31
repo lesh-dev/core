@@ -68,6 +68,7 @@
         $write_success = true; // TODO: проверять SELECT-ом, что таки да, вставилось
         $mail_msg_html = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg_html);
         $mail_msg_html = str_replace("@@DATE@", $hr_timestamp, $mail_msg_html);
+        $mail_msg_html = str_replace("@@HOST@", $_SERVER['HTTP_HOST'], $mail_msg_html);
 
         $mail_group_html = "";
         $mail_group_plain = "";
