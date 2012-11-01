@@ -11,7 +11,9 @@
     if(@$_POST["submit-anketa"])
     {
         $mail_msg_plain = "Анкета:\n";
-        $mail_msg_html = file_get_contents("$design_dir/mail_template.html");
+        $template_root = "{$SETTINGS['engine_dir']}templates";
+        $mail_msg_html = file_get_contents("$template_root/anketa_mail.html");
+        $row_template = file_get_contents("$template_root/anketa_mail_one_row.html");
         $unix_time = mktime();
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
 
@@ -52,10 +54,13 @@
             if ($key == "is_student" || $key == "submit-anketa")
                 continue;
             $kt = "$key_title: ";
-            while (strlen($kt) < 20)
+            while (xcms_len($kt) < 22)
                 $kt .= ' ';
             $mail_msg_plain .= "$kt$value\r\n";
-            $html_content .= "<tr><td class=\"left\">$key_title</td><td>".htmlspecialchars($value)."</td></tr>\n";
+            $cur_row_html = $row_template;
+            $cur_row_html = str_replace("@@ANK-KEY@", $key_title, $cur_row_html);
+            $cur_row_html = str_replace("@@ANK-VALUE@", htmlspecialchars($value), $cur_row_html);
+            $html_content .=  $cur_row_html;
         }
         $ank_dir = "${content_dir}ank";
         @mkdir($ank_dir, 0777);
@@ -63,6 +68,7 @@
         $write_success = true; // TODO: проверять SELECT-ом, что таки да, вставилось
         $mail_msg_html = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg_html);
         $mail_msg_html = str_replace("@@DATE@", $hr_timestamp, $mail_msg_html);
+        $mail_msg_html = str_replace("@@HOST@", $_SERVER['HTTP_HOST'], $mail_msg_html);
 
         $mail_group_html = "";
         $mail_group_plain = "";

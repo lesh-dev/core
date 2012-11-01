@@ -16,10 +16,23 @@
         return preg_replace('/[\x00-\x1F]/', "", $string);
     }
 
-    /* Unit test */
-    function xcmsut_filter_password()
+    /**
+      * Returns length in UTF-8 characters
+      * It's just a simple wrapper around mb_strlen
+      **/
+    function xcms_len($string)
     {
-        return xcms_filter_password("\n\taa\rbb\0\\'qqq'+\"zzz") == "aabb\\'qqq'+\"zzz";
+        return mb_strlen($string, 'UTF-8');
     }
 
+    /**
+      * String library unit test
+      **/
+    function xcmsut_string()
+    {
+        $r = true;
+        $r = $r && (xcms_filter_password("\n\taa\rbb\0\\'qqq'+\"zzz") == "aabb\\'qqq'+\"zzz");
+        $r = $r && (xcms_len("Привет000") == 8);
+        return $r;
+    }
 ?>
