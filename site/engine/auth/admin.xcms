@@ -160,7 +160,7 @@
                     echo "<input name=\"param_name\" id=\"param_name\" style=\"font-size: 14pt;\" value=\"{$user->param('name')}\" placeholder=\"Логин\" />";
                     echo "<br />Известен под логином <b>{$user->login()}</b>. ";
                     echo "<br />Электропочта: <input name=\"param_email\" name=\"param_email\" value=\"{$user->param('email')}\" placeholder=\"nobody@example.com\" />";
-                    $cd = date('d.m.Y, i:h',$user->param('creation_date'));
+                    $cd = date('d.m.Y, H:i:s',$user->param('creation_date'));
                     echo "<br />Создан администратором {$user->param('creator')}, {$cd}";
                     echo "<h3>Привилегии</h3>";
                     foreach(xcms_all_groups() as $group=>$title)
