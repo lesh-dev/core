@@ -4,7 +4,7 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 
-import random, traceback
+import random, traceback, sys
 from datetime import datetime
 
 #['_unwrap_value', '_wrap_value', 'add_cookie',
@@ -21,94 +21,86 @@ from datetime import datetime
 #'start_session', 'stop_client', 'switch_to_active_element', 'switch_to_alert', 'switch_to_default_content',
 #'switch_to_frame', 'switch_to_window', 'title', 'window_handles']
 
-def printTestFailResult(exc):
-	print "TEST FAILED:", unicode(exc.message).encode("utf-8")
+class TestError(RuntimeError):
+	pass
 
-rusAlphaSmall = u"абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
-rusAlphaCap = u"АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
-engAlphaSmall = "abcdefgiklmnopqrstuvwxyz"
-engAlphaCap = "ABCDEFGHIKLMNOPQRSTUVWZYZ"
-
-def randomText(length):
-	rs = ""
-	for i in range(0, length):
-		rs = rs + random.choice('abcdef0123456789')
-	return rs	
-
-def randomEmail():
-	return "mail_test_" + randomText(8) + "@example.com"
-		
-def randomWord(length):
-	rs = ""
+# generic function to run any test.
+def RunTest(test):
+	try:
+		test.init()
+		test.run()
+	except TestError as e:
+		test.processTestFail(e)
+	except Exception as e:
+		print "HERE"
+		test.handleException(e)
 	
-	enLang = (random.randint(0,10) < 7)
-	
-	if random.randint(0,10) < 3:
-		if enLang:
-			rs = random.choice(engAlphaCap)
-		else:
-			rs = random.choice(rusAlphaCap)
-	else:
-		if enLang:
-			rs = random.choice(engAlphaSmall)
-		else:
-			rs = random.choice(rusAlphaSmall)
-	
-	for i in range(0, length):
-		if enLang:
-			rs = rs + random.choice(engAlphaSmall)
-		else:
-			rs = rs + random.choice(rusAlphaSmall)
-		
-	if random.choice(range(0,20)) < 3:
-		rs = rs + random.choice('.,!?;:"<>-==@%$^&*()')
-			
-	return rs	
-		
-def randomDigits(length):
-	rs = ""
-	for i in range(0, length):
-		rs = rs + str(random.choice('0123456789'))
-	return rs
-
-def randomCrap(wordNumber, multiLine = False):
-	rs = ""
-	for i in range(0, wordNumber):
-		wordLen = random.randint(3,10)
-		rs = rs + " " + randomWord(wordLen)
-		if multiLine:
-			if random.random() < 0.1:
-				rs = rs + "\n"
-	return rs
-
+#main API wrapper for Webdriver.
 class SeleniumTest:
-	def __init__(self, testName, baseUrl):
+	def __init__(self):
 #		print "Init SeleniumTest"
-		if testName is None or testName.strip() == "":
-			raise RuntimeError("Test name was not set. ")
-		self.m_testName = testName
+		self.m_testName = self.__class__.__name__
+		
+		if self.needHelp():
+			print self.m_testName, "test info:"
+			print self.getDoc()
+			self.shutdown()
+			
+		if self.needLeaveBrowserOpen():
+			self.setCloseOnExit(False)
+	
 		self.m_checkErrors = True
 		self.m_closeOnExit = True
 		self.m_logStarted = False
 		self.m_errorsAsWarnings = False
 		
-		self.m_logFile = testName + ".log" #"_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") +
+		self.m_logFile = self.m_testName + ".log" #"_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") +
 		
-		if baseUrl is None:
-			raise RuntimeError("Base URL for test is not set. ")
-						
-		self.m_driver = webdriver.Firefox()
 #		self.m_driver.window_maximize()
 		
-		self.m_baseUrl = self.fixBaseUrl(baseUrl)
 		
+	def init(self):
+		self.m_baseUrl = self.fixBaseUrl(self.getBaseUrl())
+		self.m_driver = webdriver.Firefox()
+		
+		#
+	def getDoc(self):
+		return self.__doc__
+			
 	def __del__(self):
 #		print "Destructing SeleniumTest"
 		if hasattr(self, 'm_driver'):
 			if self.m_closeOnExit:
 				self.m_driver.close()
 #		if hasattr(self, 'm_logFile'):
+
+	def getBaseUrl(self):
+		if len(sys.argv) < 2:
+			raise TestError("Base URL for test is not set. ")
+		return sys.argv[1]
+	
+	def needHelp(self):
+		"""
+		called to detemine wether help is needed.
+		uses sys.argv by default (keys --help or -h)
+		"""
+		return "--help" in sys.argv or "-h" in sys.argv
+		
+	def needLeaveBrowserOpen(self):
+		return "-l" in sys.argv or "--leave-open" in sys.argv
 			
+	def shutdown(self, exitCode = 0):
+		sys.exit(exitCode)
+			
+	def handleException(self, exc):
+		print "TEST INTERNAL ERROR:", unicode(exc.message).encode("utf-8")
+		traceback.print_exc()
+		self.shutdown(2)
+				
+	def processTestFail(self, exc):
+		print "TEST FAILED:", unicode(exc.message).encode("utf-8")
+		self.shutdown(1)
+						
 	def logStart(self):
 		try:
 			logFile = open(self.m_logFile, "w")
@@ -164,13 +156,13 @@ class SeleniumTest:
 			self.gotoSite(link)
 		except NoSuchElementException:
 			self.logAdd("gotoUrlLinkByText failed for link name '" + linkName + "':\n" + traceback.format_exc())
-			raise RuntimeError(u"Cannot find URL with name '" + linkName + "'")
+			raise TestError(u"Cannot find URL with name '" + linkName + "'")
 		
 	def assertUrlNotPresent(self, linkName):
 		try:
 			self.getUrlByLinkText(linkName)
-			raise RuntimeError("Forbidden URL is found on the page in assertUrlNotPresent: '" + linkName + "'")
-		except NoSuchElementException:
+			raise TestError("Forbidden URL is found on the page in assertUrlNotPresent: '" + linkName + "'")
+		except TestError:
 			pass
 	
 	def drv(self):
@@ -181,14 +173,14 @@ class SeleniumTest:
 			return self.m_driver.find_element_by_name(name)
 		except NoSuchElementException:
 			self.logAdd("getElementByName failed for name '" + name + "':\n" + traceback.format_exc())
-			raise RuntimeError(u"Cannot get element by name '" + name + "'")
+			raise TestError(u"Cannot get element by name '" + name + "'")
 
 	def getElementById(self, eleId):
 		try:
 			return self.m_driver.find_element_by_id(eleId)
 		except NoSuchElementException:
 			self.logAdd("getElementById failed for name '" + name + "':\n" + traceback.format_exc())
-			raise RuntimeError(u"Cannot get element by name '" + name + "'")
+			raise TestError(u"Cannot get element by name '" + name + "'")
 			
 	def fillElementByName(self, name, text):
 		if self.isVoid(name):
@@ -221,7 +213,7 @@ class SeleniumTest:
 		
 	def assertTextPresent(self, xpath, text):
 		if not self.checkTextPresent(xpath, text):
-			raise RuntimeError(u"Text '" + text + u"' not appears on page in element '" + xpath + "'")
+			raise TestError(u"Text '" + text + u"' not appears on page in element '" + xpath + "'")
 
 	def assertBodyTextPresent(self, text):
 		return self.assertTextPresent("/html/body", text)
@@ -232,10 +224,13 @@ class SeleniumTest:
 	def getUrlByLinkText(self, urlText):
 		if self.isVoid(urlText):
 			raise RuntimeError("Empty URL text passed to getUrlByLinkText");
-		
-		url = self.m_driver.find_element_by_link_text(urlText)
-		return url.get_attribute("href");
-	
+		try:
+			url = self.m_driver.find_element_by_link_text(urlText)
+			return url.get_attribute("href");
+		except NoSuchElementException:
+			self.logAdd("getUrlByLinkText failed for URL '" + urlText + "':\n" + traceback.format_exc())
+			raise TestError(u"Cannot find URL by link text: '" + urlText + "'")
+			
 	def logAdd(self, text):
 		try:
 			if not self.m_logStarted:
@@ -271,9 +266,6 @@ class SeleniumTest:
 			logMsg = "PHP error '" + suspWord + "' detected on the page '" + self.curUrl() + "'"
 			self.logAdd(logMsg)
 			if not self.m_errorsAsWarnings:
-				raise RuntimeError(logMsg)
+				raise TestError(logMsg)
 	
-		
-		
-		
 

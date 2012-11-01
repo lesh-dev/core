@@ -1,26 +1,26 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-from selenium import webdriver
-import os, sys, traceback
-#local imports
-import selenium_test, tests_common
+import selenium_test, tests_common, random_crap
+from xcms_test_config import XcmsTestConfig
+from selenium_test import SeleniumTest
 
-try:
-	test = selenium_test.SeleniumTest("test-installer", sys.argv[1])
-	# TODO: wait for fix of installer HTML testability.
+class TestInstaller(SeleniumTest):
+	"""
+	This test checks XCMS installator.
+	It does following steps:
+	* navigates to setup form
+	* submits form with default values
+	* checks if 'installation complete' message appeared
+	"""
 	
+	def run(self):
+		test.gotoRoot()
+		self.assertTextPresent("XCMS installer")
+		# very meaningful name...
+		self.clickElementByName("submit_variables")
+		self.assertTextPresent(u"Установка завершена!")
 	
-except RuntimeError as e:
-	print "TEST FAILED:", e
-	print "Last test command: "
-	if "-d" in sys.argv or "--debug" in sys.argv:
-		traceback.print_exc()
-	else:
-		traceback.print_exc(1)
-	sys.exit(1)
-except Exception as e:
-	print "TEST ERROR:", e
-	traceback.print_exc()
-	sys.exit(2)
+# def main():
+selenium_test.RunTest(TestInstaller())
     

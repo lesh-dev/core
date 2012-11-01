@@ -5,7 +5,7 @@ class XcmsTestConfig:
 	def __init__(self):
 		self.m_adminLogin = "root"
 		self.m_adminPass = "root"
-		self.m_testAnketaSend = False
+		self.m_testAnketaSend = True
 		
 	def getAdminLogin(self):
 		return self.m_adminLogin;
@@ -15,8 +15,8 @@ class XcmsTestConfig:
 
 	def getAnketaNamePrefix(self):
 		if self.m_testAnketaSend:
-			return "NO-MAIL-TEST"
-		else:
 			return "TEST"
-			
+		else:
+			return "NO-MAIL-TEST"
+				
 	
