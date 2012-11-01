@@ -54,7 +54,7 @@
             if ($key == "is_student" || $key == "submit-anketa")
                 continue;
             $kt = "$key_title: ";
-            while (mb_strlen($kt, 'UTF-8') < 22)
+            while (xcms_len($kt) < 22)
                 $kt .= ' ';
             $mail_msg_plain .= "$kt$value\r\n";
             $cur_row_html = $row_template;
