@@ -26,7 +26,7 @@ sudo rm -rf "$dest/.prec/"*
 sudo mkdir -p "$dest/.prec/"
 sudo touch "$dest/"{.htaccess,settings.php,engine.log}
 if [ "$1" = "-f" ] ; then
-    sudo touch "$dest/install.php"
+    sudo mv "$dest/install.nt.php" "$dest/install.php"
     sudo chown -R apache:apache "$dest/install.php"
 fi
 sudo chown -R apache:apache "$dest/"{.prec,fizlesh.ru-content,.htaccess,settings.php,engine.log}
