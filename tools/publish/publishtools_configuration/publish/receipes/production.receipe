@@ -43,6 +43,15 @@ function hook_end
     echo "And test all the installation manually. If all OK, you may "
     echo "press 'yes' and production copy will be created. "
     echo ""
+
+    if [ -f install.php ]; then
+        echo "                   *** ERROR ***"
+        echo "YOU'RE DOING COMPLETELY WRONG!"
+        echo "You should make xcms installation on preproduction copy (rc.fizlesh.ru)"
+        echo "Only after it You may make production"
+        exit 1
+    fi
+
     while [ true ]; do
         read -p "Did you tested it all and want to make production copy (yes/no)? " ans
         if [ $ans. == "no." ]; then
