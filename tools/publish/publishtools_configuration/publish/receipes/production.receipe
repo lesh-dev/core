@@ -33,7 +33,7 @@ function hook_end
 {
     #mkdir -p .prec
     #chown $owner .prec
-    echo "release : ${sym_suffix}" >> INFO
+    echo "release-date : ${sym_suffix}" >> INFO
     apachectl -k graceful
     echo " *** Last chance to quit ***"
     echo " Now, please, move your ass to:"
@@ -55,7 +55,7 @@ function hook_end
     while [ true ]; do
         read -p "Did you tested it all and want to make production copy (yes/no)? " ans
         if [ $ans. == "no." ]; then
-            echo "status  : rejected" >> INFO
+            echo "release-status  : rejected" >> INFO
             break
         fi
         if [ $ans. == "yes." ]; then
@@ -68,7 +68,7 @@ function hook_end
         echo "You can fix it at final.fizlesh.ru, but no production will be generated!"
         echo "************************************************************"
     elif [ $ans == "yes" ]; then
-        echo "status  : accepted" >> INFO
+        echo "release-status  : accepted" >> INFO
         if [ -h $final_target ]; then
             rm $final_target
         fi
