@@ -28,9 +28,9 @@ function hook_git
 function hook_end
 {
 
-    echo "preprod : ${sym_suffix}" >> INFO
-    echo "branch  : $branch " >> INFO
-    echo "version : $(cat VERSION) rev. $git_revision" >> INFO
+    echo "rc-date : ${sym_suffix}" >> INFO
+    # echo "branch  : $branch " >> INFO
+    echo "version : $branch-$(cat VERSION) rev. $git_revision" >> INFO
     mv install.nt.php install.php
     echo "Restarting apache..."
     apachectl -k graceful
