@@ -194,3 +194,8 @@ a.linkButton {
   -webkit-border-radius: 5px;
   border-radius: 5px;
 }
+
+span.gray
+{
+    color: #888888;
+}
