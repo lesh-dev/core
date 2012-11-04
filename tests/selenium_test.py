@@ -2,11 +2,12 @@
 # -*- coding: utf8 -*-
 
 from selenium import webdriver
-import sys
+from selenium.common.exceptions import NoSuchElementException
 
-#['NATIVE_EVENTS_ALLOWED', '__class__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__',
-#'__hash__', '__init__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__',
-#'__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_unwrap_value', '_wrap_value', 'add_cookie',
+import random, traceback, sys
+from datetime import datetime
+
+#['_unwrap_value', '_wrap_value', 'add_cookie',
 #'back', 'binary', 'capabilities', 'close', 'command_executor', 'create_web_element', 'current_url', 'current_window_handle',
 #'delete_all_cookies', 'delete_cookie', 'desired_capabilities', 'error_handler', 'execute', 'execute_async_script',
 #'execute_script', 'find_element', 'find_element_by_class_name', 'find_element_by_css_selector', 'find_element_by_id',
@@ -20,28 +21,97 @@ import sys
 #'start_session', 'stop_client', 'switch_to_active_element', 'switch_to_alert', 'switch_to_default_content',
 #'switch_to_frame', 'switch_to_window', 'title', 'window_handles']
 
+class TestError(RuntimeError):
+	pass
 
+# generic function to run any test.
+def RunTest(test):
+	try:
+		test.init()
+		test.run()
+	except TestError as e:
+		test.processTestFail(e)
+	except Exception as e:
+		print "HERE"
+		test.handleException(e)
+	
+#main API wrapper for Webdriver.
 class SeleniumTest:
-	def __init__(self, baseUrl = None):
+	def __init__(self):
 #		print "Init SeleniumTest"
-		self.m_checkErrors = False;
-		self.m_closeOnExit = True;
+		self.m_testName = self.__class__.__name__
 		
-		if baseUrl is None:
-			if len(sys.argv) < 2:
-				raise RuntimeError("Base URL for test is not set neither in class ctor, nor in CLI. ")
-			else:
-				baseUrl = sys.argv[1]
-						
+		if self.needHelp():
+			print self.m_testName, "test info:"
+			print self.getDoc()
+			self.shutdown()
+			
+		if self.needLeaveBrowserOpen():
+			self.setCloseOnExit(False)
+	
+		self.m_checkErrors = True
+		self.m_closeOnExit = True
+		self.m_logStarted = False
+		self.m_errorsAsWarnings = False
+		
+		self.m_logFile = self.m_testName + ".log" #"_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") +
+		
+#		self.m_driver.window_maximize()
+		
+		
+	def init(self):
+		self.m_baseUrl = self.fixBaseUrl(self.getBaseUrl())
 		self.m_driver = webdriver.Firefox()
-		self.m_baseUrl = self.fixBaseUrl(baseUrl);
 		
+		#
+	def getDoc(self):
+		return self.__doc__
+			
 	def __del__(self):
 #		print "Destructing SeleniumTest"
 		if hasattr(self, 'm_driver'):
 			if self.m_closeOnExit:
 				self.m_driver.close()
+#		if hasattr(self, 'm_logFile'):
+
+	def getBaseUrl(self):
+		if len(sys.argv) < 2:
+			raise TestError("Base URL for test is not set. ")
+		return sys.argv[1]
+	
+	def needHelp(self):
+		"""
+		called to detemine wether help is needed.
+		uses sys.argv by default (keys --help or -h)
+		"""
+		return "--help" in sys.argv or "-h" in sys.argv
+		
+	def needLeaveBrowserOpen(self):
+		return "-l" in sys.argv or "--leave-open" in sys.argv
+			
+	def shutdown(self, exitCode = 0):
+		sys.exit(exitCode)
+			
+	def handleException(self, exc):
+		print "TEST INTERNAL ERROR:", unicode(exc.message).encode("utf-8")
+		traceback.print_exc()
+		self.shutdown(2)
 				
+	def processTestFail(self, exc):
+		print "TEST FAILED:", unicode(exc.message).encode("utf-8")
+		self.shutdown(1)
+						
+	def logStart(self):
+		try:
+			logFile = open(self.m_logFile, "w")
+			logText = "[" + self.m_testName + " log start]\n"
+			logFile.write(logText.encode("utf-8"))
+			logFile.close()
+			#indicate that log was already created
+			self.m_logStarted = True
+		except IOError:
+			raise RuntimeError("Cannot create log file '" + m_logFile + "'. ")
+		
 	def isVoid(self, text):
 		return text is None or text.strip() == "";
 	
@@ -49,11 +119,11 @@ class SeleniumTest:
 		self.m_closeOnExit = flag;
 		
 	# PHP errors auto-check toggle
-	def autoErrorCheckingOn(self):
-		self.m_checkErrors = True;
+	def setAutoPhpErrorChecking(self, checkErrors = True):
+		self.m_checkErrors = checkErrors
 
-	def autoErrorCheckingOff(self):
-		self.m_checkErrors = False;
+	def setPhpErrorsAsWarnings(self, errorsAsWarnings = True):
+		self.m_errorsAsWarnings = errorsAsWarnings
 	
 	def fixBaseUrl(self, url):
 		if not (url.startswith("http://") or url.startswith("https://")):
@@ -63,35 +133,75 @@ class SeleniumTest:
 	def curUrl(self):
 		return self.m_driver.current_url;
 	
+	def gotoRoot(self):
+		return self.gotoPage("/")
+		
 	def gotoPage(self, url):
 		fullUrl = self.m_baseUrl + url
 			
-		print "ST_DEBUG: navigating to " + fullUrl
+		#self.logAdd("navigating to " + fullUrl)
 		self.m_driver.get(fullUrl);
 		if self.m_checkErrors:
 			self.assertPhpErrors();
 	
 	def gotoSite(self, fullUrl):
-		print "ST_DEBUG: Going to site " + fullUrl
+		#self.logAdd("Going to site " + fullUrl)
 		self.m_driver.get(fullUrl)
 		if self.m_checkErrors:
 			self.assertPhpErrors();
 			
+	def gotoUrlByLinkText(self, linkName):
+		try:
+			link = self.getUrlByLinkText(linkName)
+			self.gotoSite(link)
+		except NoSuchElementException:
+			self.logAdd("gotoUrlLinkByText failed for link name '" + linkName + "':\n" + traceback.format_exc())
+			raise TestError(u"Cannot find URL with name '" + linkName + "'")
+		
+	def assertUrlNotPresent(self, linkName):
+		try:
+			self.getUrlByLinkText(linkName)
+			raise TestError("Forbidden URL is found on the page in assertUrlNotPresent: '" + linkName + "'")
+		except TestError:
+			pass
+	
 	def drv(self):
 		return self.m_driver;
 
 	def getElementByName(self, name):
-		return self.m_driver.find_element_by_name(name)
-		
+		try:
+			return self.m_driver.find_element_by_name(name)
+		except NoSuchElementException:
+			self.logAdd("getElementByName failed for name '" + name + "':\n" + traceback.format_exc())
+			raise TestError(u"Cannot get element by name '" + name + "'")
+
+	def getElementById(self, eleId):
+		try:
+			return self.m_driver.find_element_by_id(eleId)
+		except NoSuchElementException:
+			self.logAdd("getElementById failed for name '" + name + "':\n" + traceback.format_exc())
+			raise TestError(u"Cannot get element by name '" + name + "'")
+			
 	def fillElementByName(self, name, text):
 		if self.isVoid(name):
 			raise RuntimeError("Empty element name passed to fillElementByName(). ")
 		ele = self.getElementByName(name)
-#		print "ele = ", dir(ele)
 		ele.send_keys(text)
-	
+		return ele.get_attribute('value')
+		
+	def fillElementById(self, eleId, text):
+		if self.isVoid(eleId):
+			raise RuntimeError("Empty element ID passed to fillElementById(). ")
+		ele = self.getElementById(eleId)
+		ele.send_keys(text)
+		return ele.get_attribute('value')
+
 	def clickElementByName(self, name):
 		butt = self.getElementByName(name)
+		butt.click()
+
+	def clickElementById(self, eleId):
+		butt = self.getElementById(eleId)
 		butt.click()
 	
 	def checkTextPresent(self, xpath, text):
@@ -103,7 +213,7 @@ class SeleniumTest:
 		
 	def assertTextPresent(self, xpath, text):
 		if not self.checkTextPresent(xpath, text):
-			raise RuntimeError("Text '" + text + "' not appers on page in element " + xpath)
+			raise TestError(u"Text '" + text + u"' not appears on page in element '" + xpath + "'")
 
 	def assertBodyTextPresent(self, text):
 		return self.assertTextPresent("/html/body", text)
@@ -114,24 +224,48 @@ class SeleniumTest:
 	def getUrlByLinkText(self, urlText):
 		if self.isVoid(urlText):
 			raise RuntimeError("Empty URL text passed to getUrlByLinkText");
+		try:
+			url = self.m_driver.find_element_by_link_text(urlText)
+			return url.get_attribute("href");
+		except NoSuchElementException:
+			self.logAdd("getUrlByLinkText failed for URL '" + urlText + "':\n" + traceback.format_exc())
+			raise TestError(u"Cannot find URL by link text: '" + urlText + "'")
+			
+	def logAdd(self, text):
+		try:
+			if not self.m_logStarted:
+				self.logStart()
+				
+			logFile = open(self.m_logFile, 'a')
+			fullLogText = text + u"\n"
+			logFile.write(fullLogText.encode('UTF-8'))
+			logFile.close()
+		except IOError:
+			raise RuntimeError("Cannot write message to log file '" + m_logFile + "'. ")
 		
-		url = self.m_driver.find_element_by_link_text(urlText)
-		return url.get_attribute("href");
 	
+	def getPageSource(self):
+		return self.m_driver.page_source;
+		
 	def checkPhpErrors(self):
 		#print dir(self.m_driver);
 		pageText = self.m_driver.page_source
 		susp = ["Notice:", "Error:", "Warning:", "Fatal error:", "Parse error:"];
 		for word in susp:
 			if (word in pageText) and (" on line " in pageText):
-				return True
-		return False
+				self.logAdd("PHP ERROR '" + word + "' detected on page '" + self.curUrl() + "':")
+				self.logAdd("ERROR_PAGE_BEGIN =================")
+				self.logAdd(pageText)
+				self.logAdd("ERROR_PAGE_END ===================")
+				return True, word
+		return False, None
 	
 	def assertPhpErrors(self):
-		if self.checkPhpErrors():
-			raise RuntimeError("PHP errors detected on the page '" + self.curUrl() + "'")
+		checkResult, suspWord = self.checkPhpErrors()
+		if checkResult:
+			logMsg = "PHP error '" + suspWord + "' detected on the page '" + self.curUrl() + "'"
+			self.logAdd(logMsg)
+			if not self.m_errorsAsWarnings:
+				raise TestError(logMsg)
 	
-		
-		
-		
 

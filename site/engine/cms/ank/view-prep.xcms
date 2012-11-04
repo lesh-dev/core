@@ -65,10 +65,12 @@ function xsm_print_person()
             <td class="ankListRowTitle">
             <?php echo "[$person_id] $last_name $first_name $patronymic"; ?><a name="<?php echo "person$person_id"; ?>"></a>
                 <span style="float: right">
-                <!--<a class="link-oper" href="/<?php echo $web_prefix;
+                <?php /*
+                <a class="link-oper" href="/<?php echo $web_prefix;
                     ?>?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
                 <a class="link-oper" href="/<?php echo $web_prefix;
-                    ?>?ref=get_ank&amp;mode=txt&amp;file=<?php echo $sBaseAnkFileName; ?>">TXT</a>-->
+                    ?>?ref=get_ank&amp;mode=txt&amp;file=<?php echo $sBaseAnkFileName; ?>">TXT</a>
+                */ ?>
                 <?php
                     if ($is_current == "current") {?>
                         <a class="link-oper"

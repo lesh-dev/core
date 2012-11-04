@@ -28,8 +28,8 @@ Usage: `basename $0` <options>
     -c  --commit                Check all modified files in GIT repo
                                 You must be inside GIT repo to use it
     -i  --interactive           Interactive mode. You will be prompted
-                                to edit every errored file
-    -e  --editor                Editor for interactive mode.
+                                to edit every ill-formatted file
+    -e  --editor                Editor for the interactive mode.
                                 Will be user \$EDITOR if not specified
 EOF
     exit 1
@@ -110,19 +110,17 @@ check_file()
         echo
         if [ $interactive == true ]; then
             while [ true ]; do
-                read -p "Do You want to edit this file? (yes/no)" ans
-                if [ "$ans." == "yes." ]; then
-                    if [ -z $editor ]; then
-                        error_exit "no" "\$editor is not set"
+                read -p "Do you want to edit this file? (yes/no)" ans
+                if [ "$ans" == "yes" ]; then
+                    if [ -z "$editor" ]; then
+                        error_exit "no" "Environment variable \$EDITOR is not set"
                     fi
                     $editor $fn
                     check_file $fn
                     return
-                elif [ "$ans." == "no." ]; then
-                    break;
+                elif [ "$ans" == "no" ]; then
+                    break
                 fi
-                
-                
             done
         fi
         echo
@@ -183,7 +181,10 @@ else
     check_style '*.xcms'
     check_style '*.php'
     check_style '*.code'
+    check_style '*.html'
+    check_style '*.css'
     check_style '*.sh'
+    check_style '*.py'
 fi
 
 if [ "$fail" == "yes" ] ; then

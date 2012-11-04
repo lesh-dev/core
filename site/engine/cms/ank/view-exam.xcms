@@ -75,7 +75,7 @@ function xsm_print_exam()
             <?php echo $target_class; ?></td></tr>
 
         <tr><td class="ankList"><span class="ankListField">Препод</span>:
-            <a href="view-prep#person<?php echo $course_teacher_id; ?>"><?php
+            <a href="view-prep&amp;person_id=<?php echo $course_teacher_id; ?>"><?php
                 echo "$teacher_first_name $teacher_last_name"; ?></a></td></tr>
 
         <tr><td class="ankList"><span class="ankListField">Статус зачёта</span>:

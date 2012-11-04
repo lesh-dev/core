@@ -1,13 +1,21 @@
 <?php
     header("Content-type: text/html; charset=UTF-8;");
 ?>
-<h2>XCMS installer 2.0</h2>
+<html>
+    <head>
+        <title>XCMS Installer 2.0</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    </head>
+    <body>
+        <style><?php echo "\n".@file_get_contents('install.css')."\n"; ?></style>
+        <h1>Установка XCMS 2.0</h1>
 <?php
     require_once("engine/sys/tag.php");
     require_once("engine/sys/logger.php");
+
     function display_error($err)
     {
-        echo "<font color=red>$err</font>";
+        echo "<span style=\"color: red\">$err</span>\n";
     }
 
     $hookls = glob("engine/install_hooks/*.php");
@@ -77,18 +85,22 @@
             die();
         }
         unlink("install.php");
-        echo "<h3>Установка завершена!</h3>";
-        echo "<a href=\"index.php\">Перейти к сайту</a>";
+        ?>
+        <h3>Установка завершена!</h3>
+        <a href="index.php">Перейти к сайту</a>
+        <?php
     }
     else
     {
-        echo "<form method=\"post\"><h3>Шаг 1/2: выбор дополнительных параметров</h3>";
-        echo "<table>";
-        //foreach($ALLVARS as $variable=>$v)
+        ?>
+        <form method="post">
+            <h3>Шаг 1/2: выбор дополнительных параметров</h3>
+            <table>
+        <?php
         foreach($ALLSECVARS as $hook_name=>$hook_variables)
         {
             if(count($hook_variables))
-                echo "<tr><td colspan=\"2\"><h3>$hook_name</h3>";
+                echo "<tr><td colspan=\"2\" class=\"hook-name\">$hook_name</td></tr>\n";
             foreach($hook_variables as $variable=>$v)
             {
                 $name = @$v["name"];
@@ -105,11 +117,16 @@
                     if($def == "true") $typehack .= " checked";
                 }
                 if($type == "password") $typehack = "type=\"password\"";
-                echo "<tr><td>$name<td><input $typehack name=\"$variable\" value=\"$def\" />";
+                echo "<tr><td class=\"key\">$name</td>".
+                    "<td><input $typehack name=\"$variable\" id=\"$variable\" value=\"$def\" /></td></tr>\n";
             }
         }
-        echo "</table>";
-        echo "<input type=\"submit\" name=\"submit_variables\" value=\"Установить &gt;&gt;\" />";
-        echo "</form>";
+        ?>
+            </table>
+            <input type="submit" name="submit_variables" value="Установить &gt;&gt;" />
+        </form>
+        <?php
     }
 ?>
+</body>
+</html>

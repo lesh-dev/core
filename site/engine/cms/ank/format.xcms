@@ -35,6 +35,7 @@
             strpos(substr($social_profile, 0, 8), '://') === false) // http/https scheme not matched
             $social_profile = "http://$social_profile"; // assume http scheme
         $social_profile = htmlspecialchars($social_profile);
+        return $social_profile;
     }
 
     // DATABASE: xdb
@@ -167,6 +168,24 @@
         }?>
         <a href="view-<?php echo $redir; ?>">Вернуться к просмотру</a></p><?php
     }
+
+    function xsm_update_entity_listmode($entity, $table_name, $title, $fields, $aux_param = '')
+    {
+        $key_name = "${table_name}_id";
+        $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+        $redir = ($id == 'new') ? "$entity$aux_param" : "$entity$aux_param&amp;$key_name=$id";
+        $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
+        if ($res)
+        {?>
+            <p><?php echo $title; ?> успешно сохранён.<?php
+        }
+        else
+        {?>
+            <p>Не удалось добавить <?php echo $title; ?>.<?php
+        }?>
+        <a href="view-<?php echo $redir; ?>">Вернуться к просмотру</a></p><?php
+    }
+
 
     function xsm_warn_delete_entity($entity, $table_name, $title, $aux_param = '')
     {

@@ -70,7 +70,7 @@ function xsm_edit_prep()
     <?php
 }
 
-if (@$_POST["update-prep"])
+if (@$_POST["update-person"])
 {
     if (!strlen(@$_POST["last_name"]) || !strlen(@$_POST["first_name"]))
     {?>
@@ -78,7 +78,7 @@ if (@$_POST["update-prep"])
             Нажмите Back в браузере, чтобы вернуться к заполнению!</p><?php
     }
     else
-        xsm_update_entity('prep', 'person', 'Участник', xsm_get_person_fields());
+        xsm_update_entity_listmode('prep', 'person', 'Участник', xsm_get_person_fields());
 }
 elseif (@$_POST["delete-person"])
     xsm_warn_delete_listmode_entity('prep', 'person', 'участника');

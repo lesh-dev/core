@@ -24,6 +24,16 @@ a:active {
     color: #ef0000;
 }
 
+table {
+    font-size: 10pt;
+}
+
+td.hook-name {
+    background-color: #ccda9a;
+    border-radius: 3px;
+    padding: 5px;
+}
+
 textarea {
     padding: 4px;
     border: 1px solid #7f7f7f;
@@ -46,11 +56,10 @@ input[type="submit"] {
 }
 
 td {
-    font-family: Monospace;
+    font-family: Arial, Sans-Serif;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 td.key {
-    width: 200px;
-}
-
-td.value {
+    width: 300px;
 }

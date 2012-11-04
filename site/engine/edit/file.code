@@ -36,32 +36,53 @@
         if(@$_POST["edit-submit"]&&@$_POST["multi-id"]==@$multiId)
         {
             $time = time();
-            $target_name=$ename."-version-".$time;
-            $diff_name=$ename."-diff-".$time;
+            $target_name = "$ename-version-$time";
+            $diff_name = "$ename-$time.diff";
+            $diff_name_html = "$ename-$time.diff.html";
             if (file_exists($ename)) @chmod($ename, 0666); // see bug #64
-            @rename($ename,$target_name);
-            $f = fopen($ename,"w");
-            fputs($f, @$_POST["edit-text"]);
+            @rename($ename, $target_name);
+            $new_text = @$_POST["edit-text"];
+            $f = fopen($ename, "w");
+            fputs($f, $new_text);
             fclose($f);
-            chmod($ename,0666);
+            chmod($ename, 0666);
             $current_version = "";
             // FIXME: this should be deleted at all.
             // include_once("{$SETTINGS["engine_dir"]}cms/addrssfeed.php");
             // addrssfeed("Изменения в разделе", "сабж","","");
-            system("diff -u $target_name $ename > $diff_name");
-            $lf = "\r\n";
-            xcms_send_notification("content-change",
-                NULL,
-                "[Lesh CMS notification] Изменена страница: $pageid",
-                "Была произведена правка страницы. Дифф:$lf".
-                "=======================================$lf".
-                file_get_contents($diff_name).$lf.
-                "=======================================$lf".
-                "Теперь содержание страницы следующее:$lf".
-                "=======================================$lf".
-                file_get_contents($ename).$lf.
-                "=======================================$lf"
-            );
+            $diff_cmd = "diff -ub $target_name $ename > $diff_name 2>$diff_name.err";
+            system($diff_cmd, $diff_result);
+            if ($diff_result) // send notifications on non-empty diffs
+            {
+                $diff_html_cmd =
+                    "cat $diff_name | ".
+                    "tail -n+2 | ".
+                    "(bash {$SETTINGS["engine_dir"]}bin/diff2html.sh) ".
+                    "> $diff_name_html 2>$diff_name_html.err ";
+                system($diff_html_cmd, $diff_html_result);
+                $lf = "\r\n";
+                $body_plain =
+                    "Была произведена правка страницы. Изменения:$lf".
+                    "============================================$lf".
+                    file_get_contents($diff_name).$lf.
+                    "============================================$lf".
+                    "Теперь содержание страницы следующее:$lf".
+                    "============================================$lf".
+                    file_get_contents($ename).$lf.
+                    "============================================$lf";
+
+                $body_html = file_get_contents("{$SETTINGS["engine_dir"]}templates/content-change.html");
+                $body_html = str_replace('@@DIFF@', file_get_contents($diff_name_html), $body_html);
+                $body_html = str_replace('@@NEW-TEXT@', htmlspecialchars($new_text), $body_html);
+
+                xcms_send_notification("content-change",
+                    NULL,
+                    "[XCMS Content] ({$_SERVER["HTTP_HOST"]}) Изменена страница: $pageid",
+                    $body_plain,
+                    $body_html
+                );
+                unlink($diff_name_html);
+            }
             unlink($diff_name);
             system("gzip $target_name");
         }

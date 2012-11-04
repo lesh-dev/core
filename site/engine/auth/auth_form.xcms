@@ -41,16 +41,15 @@
             <table>
                 <tr>
                     <td>Логин</td>
-                    <td><input type="text" name="auth-login" /></td>
+                    <td><input type="text" name="auth-login" id="auth-login" /></td>
                 </tr>
                 <tr>
                     <td>Пароль:</td>
-                    <td><input type="password" name="auth-password" /></td>
+                    <td><input type="password" name="auth-password" id="auth-password" /></td>
                 </tr>
             </table>
-            <input type="submit" value="Войти" name="auth-form" />
+            <input type="submit" value="Войти" name="auth-submit" id="auth-submit" />
         </form>
-    
 </div>
 
 

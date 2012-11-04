@@ -1,28 +1,27 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-from selenium import webdriver
-import os, sys, traceback
+import selenium_test, tests_common, random_crap
+from xcms_test_config import XcmsTestConfig
+from selenium_test import SeleniumTest
 
-import selenium_test
-
-debugMode = True #"TRUE" in os.getenv("XCMS_TEST_DEBUG");
-
-try:
-	test = selenium_test.SeleniumTest()
-	test.gotoPage("/qqq");
-	test.assertTextPresent("//div[@class='error-widget']", u"Нет такой страницы")
-	homeHref = test.getUrlByLinkText(u"этой ссылке")
-	print "Home reference on 404 page: ", homeHref
+class XcmsOverallOpenPages(SeleniumTest):
+	"""
+	This test checks '404 page' handling in XCMS functional
+	Steps:
+	* Navigate to non-existing page
+	* Check if special page appeared
+	* Go to home site url on 404 page
+	"""
+	def run(self):
+		self.setAutoPhpErrorChecking(True)
 	
-	test.gotoSite(homeHref)
+		self.gotoPage("/qqq");
+		self.assertTextPresent("//div[@class='error-widget']", u"Нет такой страницы")
+		homeHref = test.getUrlByLinkText(u"этой ссылке")
+		print "Home reference on 404 page: ", homeHref
 	
-except RuntimeError as e:
-	print "TEST FAILED: ", e
-	print "Last step: ", traceback.print_exc(1)
-	sys.exit(1)
-except Exception as e:
-	print "TEST ERROR: ", e
-	traceback.print_exc()
-	sys.exit(2)
-    
+		self.gotoSite(homeHref)
+
+# def main():	
+selenium_test.RunTest(XcmsOverallOpenPages())

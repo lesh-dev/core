@@ -1,96 +1,88 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-from selenium import webdriver
-import os, sys, traceback
+import selenium_test, tests_common, random_crap
+from xcms_test_config import XcmsTestConfig
+from selenium_test import SeleniumTest
 
-import selenium_test
-
-debugMode = True #"TRUE" in os.getenv("XCMS_TEST_DEBUG");
-
-try:
-	test = selenium_test.SeleniumTest()
-	
-	test.autoErrorCheckingOn()
-#	test.setCloseOnExit(False)
-	
-	test.gotoPage("/")
-	
-	test.assertBodyTextPresent(u"Здравствуйте!");
-	test.assertBodyTextPresent(u"Приветствуем Вас на сайте Физического отделения Летней Экологической Школы");
-
-	test.gotoPage("/news")
-	test.assertBodyTextPresent(u"Новости")
-	
-	test.gotoPage("/history")
-	test.assertBodyTextPresent(u"Школа существует достаточно давно")
-
-	test.gotoPage("/info")
-	test.assertBodyTextPresent(u"Официальная информация")
-	test.assertBodyTextPresent(u"Летняя Экологическая Школа (ЛЭШ) существует с 1990 года")
-	
-	test.gotoPage("/people")
-	test.assertBodyTextPresent(u"О нас")
-
-	test.gotoPage("/life")
-	test.assertBodyTextPresent(u"Жизнь на ЛЭШ")
-
-	test.gotoPage("/gear")
-	test.assertBodyTextPresent(u"Список вещей")
-
-	test.gotoPage("/gear/equipment")
-	test.assertBodyTextPresent(u"Туристическое снаряжение на ЛЭШ")
-
-	test.gotoPage("/gear/wear")
-	test.assertBodyTextPresent(u"Личные вещи и одежда")
-
-	test.gotoPage("/gear/wear")
-	test.assertBodyTextPresent(u"Личные вещи и одежда")
-	test.assertBodyTextPresent(u"КЛМН - Кружка, Ложка, Миска, Нож.")
-	
-	
-	test.gotoPage("/gear/docs")
-	test.assertBodyTextPresent(u"Справка из СЭС об отсутствии контактов")
-
-	test.gotoPage("/gear/misc")
-	test.assertBodyTextPresent(u"А еще я обычно беру с собой")
-
-	test.gotoPage("/study")
-	test.assertBodyTextPresent(u"Особенности ЛЭШевского образования")
-
-	test.gotoPage("/study/2006")
-	test.gotoPage("/study/2007")
-	test.gotoPage("/study/2008")
-	test.gotoPage("/study/2009")
-	test.gotoPage("/study/2010")
-	test.gotoPage("/study/2011")
-	test.gotoPage("/study/lectures2011")
-	test.gotoPage("/study/2012")
-	test.gotoPage("/study/experiment")
-	test.assertBodyTextPresent(u"Здесь приведены задачи физического практикума")
-	test.gotoPage("/science")
-
-	test.gotoPage("/join")
-	test.assertBodyTextPresent(u"Собеседование на Физическое Отделение")
-	test.gotoPage("/register")
-	test.assertBodyTextPresent(u"Регистрационная анкета")
-	test.gotoPage("/photo")
-	test.gotoPage("/fun")
-	test.gotoPage("/links")
-	test.gotoPage("/contacts")
+class XcmsOverallOpenPages(SeleniumTest):
+	"""
+	This test checks overall site content.
+	It does following steps:
+	* navigates to all current pages and checks some specific content on each page plus PHP errors.
+	"""
+	def run(self):
 		
-#	test.assertPhpErrors()
+	self.setAutoPhpErrorChecking(True)
+#	self.setCloseOnExit(False)
 	
-except RuntimeError as e:
-	print "TEST FAILED:", e
-	print "Last test command: "
-	if "--debug" in sys.argv:
-		traceback.print_exc()
-	else:
-		traceback.print_exc(1)
-	sys.exit(1)
-except Exception as e:
-	print "TEST ERROR:", e
-	traceback.print_exc()
-	sys.exit(2)
+	self.gotoPage("/")
+	
+	self.assertBodyTextPresent(u"Здравствуйте!");
+	self.assertBodyTextPresent(u"Приветствуем Вас на сайте Физического отделения Летней Экологической Школы");
+
+	self.gotoPage("/news")
+	self.assertBodyTextPresent(u"Новости")
+	
+	self.gotoPage("/history")
+	self.assertBodyTextPresent(u"Школа существует достаточно давно")
+
+	self.gotoPage("/info")
+	self.assertBodyTextPresent(u"Официальная информация")
+	self.assertBodyTextPresent(u"Летняя Экологическая Школа (ЛЭШ) существует с 1990 года")
+	
+	self.gotoPage("/people")
+	self.assertBodyTextPresent(u"О нас")
+
+	self.gotoPage("/life")
+	self.assertBodyTextPresent(u"Жизнь на ЛЭШ")
+
+	self.gotoPage("/gear")
+	self.assertBodyTextPresent(u"Список вещей")
+
+	self.gotoPage("/gear/equipment")
+	self.assertBodyTextPresent(u"Туристическое снаряжение на ЛЭШ")
+
+	self.gotoPage("/gear/wear")
+	self.assertBodyTextPresent(u"Личные вещи и одежда")
+
+	self.gotoPage("/gear/wear")
+	self.assertBodyTextPresent(u"Личные вещи и одежда")
+	self.assertBodyTextPresent(u"КЛМН - Кружка, Ложка, Миска, Нож.")
+	
+	
+	self.gotoPage("/gear/docs")
+	self.assertBodyTextPresent(u"Справка из СЭС об отсутствии контактов")
+
+	self.gotoPage("/gear/misc")
+	self.assertBodyTextPresent(u"А еще я обычно беру с собой")
+
+	self.gotoPage("/study")
+	self.assertBodyTextPresent(u"Особенности ЛЭШевского образования")
+
+	self.gotoPage("/study/2006")
+	self.gotoPage("/study/2007")
+	self.gotoPage("/study/2008")
+	self.gotoPage("/study/2009")
+	self.gotoPage("/study/2010")
+	self.gotoPage("/study/2011")
+	self.gotoPage("/study/lectures2011")
+	self.gotoPage("/study/2012")
+	self.gotoPage("/study/experiment")
+	self.assertBodyTextPresent(u"Здесь приведены задачи физического практикума")
+	self.gotoPage("/science")
+
+	self.gotoPage("/join")
+	self.assertBodyTextPresent(u"Собеседование на Физическое Отделение")
+	self.gotoPage("/register")
+	self.assertBodyTextPresent(u"Регистрационная анкета")
+	self.gotoPage("/photo")
+	self.gotoPage("/fun")
+	self.gotoPage("/links")
+	self.gotoPage("/contacts")
+		
+#	self.assertPhpErrors()
+
+# def main():
+selenium_test.RunTest(XcmsOverallOpenPages())
     

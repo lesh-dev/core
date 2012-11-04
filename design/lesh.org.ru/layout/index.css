@@ -20,45 +20,20 @@ body {
 	height: 100%;
 	min-height: 100%;
 	position: absolute;
-	font-family: Trebuchet MS, serif;
+	font-family: "Trebuchet MS", "Helvetica CY", "Arial" sans-serif;
 }
 
-#chronic1 a{
+#chronic1 a, #text a, #principles a, #res a{
 	font-size: 14px;
 	color: #4F4F4F;
 }
 
-#chronic1 a:hover{
+#chronic1 a:hover,#text a:hover, #text2 a:hover, #text3 a:hover, #principles a:hover, #res a:hover {
 	color: #CD3700;
 }
 
-/*#text2 a:link{
+#text2 a, #text3 a{
 	color: white;
-}
-
-#text2 a:visited{
-	color: #8B3A62;
-}
-
-#text2 a:active{
-	color: white;
-}*/
-
-#text2 a{
-	color: white;
-}
-
-#text2 a:hover{
-	color: #CD3700;
-}
-
-#text a{
-	font-size: 14px;
-	color: #4F4F4F;
-}
-
-#text a:hover{
-	color: #CD3700;
 }
 
 #main{
@@ -68,6 +43,7 @@ body {
 	background: white;
 	background-attachment: fixed;
 	overflow: auto;
+	font-family: "Trebuchet MS", "Helvetica CY", "Arial" sans-serif;
 }
 
 #header{
@@ -93,7 +69,7 @@ body {
 	float: right;
 }
 
-#sidebar1{
+#sidebar1, #minibar{
 	width: 500px;
 	float: left;
 }
@@ -101,23 +77,13 @@ body {
 #sidebar1 ul{
 	margin-left: 10px;
 	_margin-left: 50px;
-	color: black;
 	font-size: 14px;
 }
 
-#sidebar1 ul li{
+#sidebar1 ul li, #minibar ul li{
 	display: inline;
 	line-height:12px;
-	/*background:url(pict/round.gif);
-    background-repeat:no-repeat;
-    background-position:right;
-    padding-left:7px;
-    padding-right:25px;*/
-}
-
-#minibar{
-	width: 500px;
-	float: left;
+	color: black;
 }
 
 #minibar ul{
@@ -126,12 +92,6 @@ body {
 	font-size: 12px;
 	margin-top:-10px;
 	_margin-top: 0px
-}
-
-#minibar ul li{
-	display: inline;
-	line-height:12px;
-	color: black;
 }
 
 #minibar a{
@@ -162,23 +122,6 @@ body {
 	color: #7AA643;
 }
 
-/*#sidebar{
-	width: 700px;
-}
-
-#sidebar ul{
-	margin-top: -10px;
-	margin-left: 10px;
-	color: black;
-	font-size: 12px;
-	float: left;
-}
-
-#sidebar ul li{
-	display: inline;
-	line-height:12px;
-}*/
-
 #sidebar2{
 	width: 150px;
 	float: right;
@@ -190,17 +133,39 @@ body {
 	text-align: left;
 }
 
-#sidebar2 ul{
-	font-size: 14px;
-	font-family: Trebuchet MS;
+#sidebar_bio_cur{
+	width: 130px;
+	float: right;
+	_float: left;
+	margin-right: 110px;
+	_margin-left: 220px;
+	margin-top: -70px;
+	_margin-top: -82px;
+	text-align: left;
 }
 
-#sidebar2 ul li{
+#sidebar_bio_{
+	width: 130px;
+	float: right;
+	_float: left;
+	margin-right: 110px;
+	_margin-left: 220px;
+	margin-top: -85px;
+	_margin-top: -82px;
+	text-align: left;
+}
+
+#sidebar2 ul, #sidebar_bio_ ul, #sidebar_bio_cur ul{
+	font-size: 14px;
+	font-family: "Trebuchet MS", "Helvetica CY", "Arial" sans-serif;
+}
+
+#sidebar2 ul li, #sidebar_bio_ ul li, #sidebar_bio_cur ul li{
 	display: block;
 	line-height:22px;
 }
 
-#sidebar2 img{
+#sidebar2 img, #sidebar_bio_ img, #sidebar_bio_cur img{
 	width: 69px;
 	height: 85px;
 	float: right;
@@ -216,16 +181,27 @@ body {
 	_margin-right: 0px;
 }
 
-#sidebar2 a{
+#sidebar2 a, #sidebar_bio_ a, #sidebar_bio_cur a{
 	text-decoration: none;
 	font-size: 14px;
 	color: #555;
 }
 
-#sidebar2 a:hover{
+#sidebar2 a.aboutus{
+	text-decoration: none;
+	font-size: 12px;
+	color: #555;
+}
+
+#sidebar2 a:hover, #sidebar_bio_ a:hover, #sidebar_bio_cur a:hover{
 	text-decoration: none;
 	background-color: #7AA643;
 	color: white;
+}
+
+#sidebar2 span.aboutus {	
+	color: #7AA643;
+	font-size: 14px;
 }
 
 #text{
@@ -238,22 +214,18 @@ body {
 	width: 380px;
 	float: left;
 	text-align: justify;
-	letter-spacing: 0.5px;
+	letter-spacing: 0.1px;
 	word-spacing: 0.5px;
+	line-height: 18px;
 }
 
-#text span{
+#text span, #res span{
 	font-size: 18px;
 	color: black;
 	font-weight: bold;
 }
 
-#text p{
-	font-size: 14px;
-	color: black;
-}
-
-#text strong{
+#text p, #principles p, #res p, #text strong, #principles strong{
 	font-size: 14px;
 	color: black;
 }
@@ -269,35 +241,43 @@ body {
 	text-align: justify;
 	letter-spacing: 0.5px;
 	word-spacing: 0.5px;
-}
-
-#principles p{
-	font-size: 14px;
-	color: black;
+	line-height: 18px;
 }
 
 #res{
-	clear: both;
-	padding-left: 50px;
+	padding-left: 50px;              
 	padding-top: 10px;
 	_padding-top: 0px;
-	padding-right: 20px;
+	padding-right: 10px;
 	margin-top: 0px;
 	_margin-top: -50px;
+	float: left;
 	text-align: justify;
 	letter-spacing: 0.5px;
 	word-spacing: 0.5px;
+	line-height: 18px;
 }
 
-#res p{
+#res p.bio{
 	font-size: 14px;
 	color: black;
+	width: 200px;
+	margin-top: 150px;
 }
 
-#res span{
-	font-size: 18px;
-	color: black;
-	font-weight: bold;
+#res img{
+	float: right;
+	width: 420px;
+	height: 324px;
+}
+
+#res img.bio{
+	float: right;
+	width: 420px;
+	height: 324px;
+	padding-top: 50px;
+	padding-left: 30px;
+	padding-right: 20px;
 }
 
 #resV{
@@ -338,6 +318,13 @@ body {
 	background: #EBECEC;
 	float: right;
 	padding: 10px;
+	line-height: 18px;
+}
+
+#med2 p{
+	font-size: 14px;
+	color: black;
+	margin-top: 0px;
 }
 
 #res a.res{
@@ -346,21 +333,17 @@ body {
 	padding:2px;
 }
 
-#res a{
-	font-size: 14px;
-	color: #4F4F4F;
-}
-
-#res a:hover{
-	color: #CD3700;
-}
-
-#principles strong{
+#principles p.zagl{
+	width: 380px;
+	background: #D0C4A3;
 	font-size: 14px;
 	color: black;
+	padding:2px;
+	padding-left: 50px;
+	margin-left: -50px;
 }
 
-#principles div.zagl{
+#principles div.zagl, #principles span.zagl{
 	width: 380px;
 	background: #79A544;
 	font-size: 16px;
@@ -375,9 +358,12 @@ body {
  	_list-style-type: decimal;
     counter-reset:  item;
 	font-size: 14px;
-	font-family: Trebuchet MS;
+	font-family: "Trebuchet MS", "Helvetica CY", "Arial" sans-serif;
 	color: black;
-	margin-left: -40px;
+	margin-left: -20px;
+	letter-spacing: 0.1px;
+	word-spacing: 0.5px;
+	line-height: 18px;
 }
 
 #principles ol li:before {
@@ -388,6 +374,7 @@ body {
 #principles ol li{
 	display: block;
 	line-height:22px;
+	white-space: pre-wrap;
 }
 
 #main p.zaglav {
@@ -410,21 +397,23 @@ body {
 	width: 250px;
 	float: right;
 	text-align: justify;
+	line-height: 18px;
 }
 
 #chronic{
 	background-color:  #EBECEC;
 	color: black;
-	margin-top: 5px;
+	margin-top: -1px;
 	width: 250px;
 	float: right;
 	text-align: left;
 	font-size: 13px;
+	line-height: 18px;
 }
 
 #chronic1{
 	padding-left: 10px;
-	padding-right: 5px;
+	padding-right: 10px;
 }
 
 #chronic1 span.chronic{
@@ -477,6 +466,7 @@ body {
 #main img.ihres{
 	width: 58px;
 	height: 55px;
+	clear: both;
 	float: left;
 	padding-left: 50px;
 	padding-top: 20px;
@@ -484,7 +474,7 @@ body {
 }
 
 #text2{
-	background-color:  #769897;
+	background-color:  #83ac9b;
 	padding: 20px;
 	padding-top: 1px;
 	padding-bottom: 0px;
@@ -496,6 +486,7 @@ body {
 	text-align: left;
 	word-spacing: 3px;
 	border-bottom: 3px solid white;
+	line-height: 18px;
 }
 
 #text2 , x:-moz-any-link{
@@ -512,7 +503,7 @@ body {
 	border-bottom: 3px solid white;
 }
 
-#text2 p{
+#text2 p, #text3 p{
 	font-size: 13px;
 	color: black;
 }
@@ -557,19 +548,6 @@ body {
 	text-align: left;
 }
 
-#text3 p{
-	font-size: 13px;
-	color: black;
-}
-
-#text3 a{
-	color: white;
-}
-
-#text3 a:hover{
-	color: #CD3700;
-}
-
 #footer{
 	width: 100px;
 	position: relative;
@@ -585,11 +563,7 @@ body {
 	border:0px none; /*для IE */
 }
 
-#footer a{
-	text-decoration: none;
-}
-
-#footer a:hover{
+#footer a, #footer a:hover{
 	text-decoration: none;
 }
 
@@ -614,10 +588,6 @@ body {
     _zoom: 1; /* ie7 hack for display:inline-block */
     _display: block;
 }
-
-/*.searchform input {
-    font: normal 12px/100% Arial, Helvetica, sans-serif;
-}*/
 
 .searchform .searchfield {
 	float: right;
@@ -661,20 +631,6 @@ body {
 	margin-top: 5px;
 	_margin-top: -40px;
 	outline: 0;
-    /*color: #fff;
-    border: solid 1px #009933;
-    font-size: 11px;
-    height: 27px;
-    width: 27px;
-    text-shadow: 0 1px 1px rgba(0,0,0,.6);
-    -webkit-border-radius: 2em;
-    -moz-border-radius: 2em;
-    border-radius: 2em;
-    background: #5f5f5f;
-    background: -webkit-gradient(linear, left top, left bottom, from(#00CC00), to(#66CC00));
-    background: -moz-linear-gradient(top,  #00CC00,  #66CC00);
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00CC00', endColorstr='#66CC00'); /* ie7 */
-    /*-ms-filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00CC00', endColorstr='#66CC00'); /* ie8 */
 }
 
 .searchform .searchbutton:hover{

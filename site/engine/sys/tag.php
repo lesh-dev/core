@@ -58,9 +58,8 @@ function xcms_get_list($file)
             xcms_log(1, "Invalid line in file '$file': '$line'");
             continue;
         }
-        $key = substr($line, 0, $p);
-        $value = substr($line, $p + 1);
-        // TODO: key regexp filtering
+        $key = trim(substr($line, 0, $p));
+        $value = trim(substr($line, $p + 1));
         $keys[$key] = $value;
     }
     return $keys;

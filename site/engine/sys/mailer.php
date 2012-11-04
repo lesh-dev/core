@@ -48,21 +48,43 @@
         return $added_some;
     }
 
-    function xcms_send_notification($mail_group, $addr_list, $subject, $mail_text)
+    /**
+      * Посылает почтовое уведомление
+      * Баги: Знает про fizlesh.ru, вместо того, чтобы брать эти настройки
+      * из конфигурационного файла.
+      * @param mail_group Группа рассылки из списка mailer.conf (или NULL)
+      * @param addr_list Список адресов помимо группы рассылки (или NULL).
+      *        Если указан одновременно и адрес, и группа рассылки, то письмо отправляется
+      *        по указанному адресу, а адресаты из группы рассылки ставятся в BCC.
+      * @param subject Тема уведомления
+      * @param mail_text Тело уведомления (в формате plain text)
+      * @param mail_text_html Тело уведомления (в формате html)
+      **/
+    function xcms_send_notification($mail_group, $addr_list, $subject, $mail_text, $mail_text_html = '')
     {
-        global $SETTINGS, $login;
+        global $SETTINGS;
+        $login = xcms_user()->login();
         $enabled = xcms_get_key_or($SETTINGS, "mailer_enabled", true);
         if (!$enabled) return;
-        $message = $mail_text;
         $dom = "@fizlesh.ru"; // TODO: remove fizlesh.ru spike
 
         $body =
-            "$message\r\n".
+            "$mail_text\r\n".
             "--\r\n".
             "Это уведомление сгенерировано автоматически. Отвечать на него не нужно\r\n".
             "Пользователь    : $login\r\n".
-            "Имя хоста       : ".php_uname('n')." \r\n".
+            "Имя хоста       : {$_SERVER['HTTP_HOST']}\r\n".
             "Обратная ссылка : {$_SERVER['HTTP_REFERER']}\r\n";
+
+        if (!empty($mail_text_html))
+        {
+            $body_html = file_get_contents("{$SETTINGS['engine_dir']}templates/notification-template.html");
+            $body_html = str_replace('@@SUBJECT@', htmlspecialchars($subject), $body_html);
+            $body_html = str_replace('@@MESSAGE@', $mail_text_html, $body_html);
+            $body_html = str_replace('@@HOST@', $_SERVER['HTTP_HOST'], $body_html);
+            $body_html = str_replace('@@REFERER@', $_SERVER['HTTP_REFERER'], $body_html);
+            $body_html = str_replace('@@LOGIN@', $login, $body_html);
+        }
 
         $mailer = xcms_get_mailer();
         $mailer->AddReplyTo("noreply$dom", "FizLesh Notificator");
@@ -83,7 +105,13 @@
                 xcms_add_mail_group($mailer, $mail_group);
         }
         $mailer->Subject = $subject;
-        $mailer->Body = $body;
+        if (!empty($mail_text_html))
+        {
+            $mailer->MsgHTML($body_html);
+            $mailer->AltBody = $body;
+        }
+        else
+            $mailer->Body = $body;
         if (!$mailer->Send())
         {
             xcms_log(XLOG_ERROR, "[MAILER] ".$mailer->ErrorInfo);

@@ -36,8 +36,8 @@
                 if(@$_POST["create_user"])
                 {
                     $login = @$_POST["login"];
-                    $password = @$_POST["p1"];
-                    if($password != @$_POST["p2"])
+                    $password = @$_POST["password"];
+                    if($password != @$_POST["password_confirm"])
                         throw new Exception("Passwords does not match!");
                     if(!strlen($password))
                         throw new Exception("Empty password!");
@@ -81,19 +81,28 @@
                     ?>
                     <form method="post">
                     <table>
-                            <tr><td colspan="2"><b>Учетные данные</b>                               </td></tr>
-                            <tr><td>Имя пользователя:   </td><td> <input name="login">                </td></tr>
-                            <tr><td>Пароль:             </td><td> <input type="password" name="p1">   </td></tr>
-                            <tr><td>Пароль  (еще раз):  </td><td> <input type="password" name="p2">   </td></tr>
-                            <tr><td>Настоящее имя:      </td><td> <input name="name">                 </td></tr>
-                            <tr><td>Электропочта:       </td><td> <input name="email">                </td></tr>
-                            <tr><td colspan="2">  <input type="checkbox" name="notify_user" />
-                                Оповестить пользователя по почте                                      </td></tr>
-                            <tr><td colspan="2"><b>Привилегии</b>                               </td></tr>
+                            <tr><td colspan="2"><b>Учётные данные</b></td></tr>
+                            <tr><td>Логин:</td>
+                                <td><input name="login" id="login"/>
+                                    <span style="font-size: 10px;">Разрешены латинские буквы, цифры,
+                                        а также дефис (-), подчёркивание (_), точка (.) и собака (@)</span></td></tr>
+                            <tr><td>Пароль:</td>
+                                <td><input type="password" name="password" id="password"/></td></tr>
+                            <tr><td>Пароль (ещё раз):</td>
+                                <td><input type="password" name="password_confirm" id="password_confirm"/></td></tr>
+                            <tr><td>Настоящее имя:</td>
+                                <td><input name="name" id="name"/></td></tr>
+                            <tr><td>Электропочта:</td>
+                                <td><input name="email" id="email"/></td></tr>
+                            <tr><td colspan="2"><input type="checkbox" name="notify_user"/>
+                                Оповестить пользователя по почте</td></tr>
+                            <tr><td colspan="2"><b>Привилегии</b></td></tr>
                             <?php
                                 foreach(xcms_all_groups() as $group=>$title)
                                 {
-                                    echo "<tr><td colspan=\"2\"><input type=\"checkbox\" name=\"group_$group\" />$title ($group)</td></tr>";
+                                    echo "<tr><td colspan=\"2\">".
+                                        "<input type=\"checkbox\" name=\"group_$group\" id=\"group_$group\" />".
+                                        "$title ($group)</td></tr>";
                                 }
                             ?>
                     </table>
@@ -148,10 +157,10 @@
                 {
                     echo "<form method='post'>";
                     $user = $u->su(@$_GET["user"]);
-                    echo "<input name=\"param_name\" style=\"font-size: 24pt; border=\"0\"; \" value=\"{$user->param('name')}\" placeholder=\"Имя Пользователя\" />";
+                    echo "<input name=\"param_name\" id=\"param_name\" style=\"font-size: 14pt;\" value=\"{$user->param('name')}\" placeholder=\"Логин\" />";
                     echo "<br />Известен под логином <b>{$user->login()}</b>. ";
-                    echo "<br />Электропочта -- <input name=\"param_email\" style=\"border=\"0\"; \" value=\"{$user->param('email')}\" placeholder=\"nobody@example.com\" />";
-                    $cd = date('d.m.Y, i:h',$user->param('creation_date'));
+                    echo "<br />Электропочта: <input name=\"param_email\" name=\"param_email\" value=\"{$user->param('email')}\" placeholder=\"nobody@example.com\" />";
+                    $cd = date('d.m.Y, H:i:s',$user->param('creation_date'));
                     echo "<br />Создан администратором {$user->param('creator')}, {$cd}";
                     echo "<h3>Привилегии</h3>";
                     foreach(xcms_all_groups() as $group=>$title)
