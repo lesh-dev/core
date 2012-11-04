@@ -1,6 +1,0 @@
-<# auth/ #all #>
-<h3>Профиль <?php echo $login; ?></h3>
-<?php
-    $editfile = "{$SETTINGS["datadir"]}auth/usr/$login.usr";
-    include(translate("<! edit/oldtag `date`,`login`,`passwd`,`group` `-newkey`!>"));
-?>

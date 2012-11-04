@@ -4,6 +4,9 @@
 <# deploy_utils #>
 <# locale #>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<?php
+    $xcms_version = xcms_get_list("INFO");
+?>
 <html>
 <head>
     <# cms/head #>
@@ -77,6 +80,7 @@
                     <hr />
                     <div style="font-size: 8pt; text-align: center; height: 15px;">
                         <span style="">&copy; ФизЛЭШ, 2005&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
+                        <span class="gray"><?php echo $xcms_version['version']; ?></style>
                         <?php
                         if (xcms_is_production())
                         {?>

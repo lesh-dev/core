@@ -1,6 +1,0 @@
-<?php
-    setcookie("auth-login", "");
-    setcookie("auth-passw", "");
-    unset($_COOKIE["auth-login"]);
-    unset($_COOKIE["auth-passw"]);
-?>
