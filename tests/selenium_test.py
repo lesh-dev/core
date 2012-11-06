@@ -33,7 +33,7 @@ class TestAction:
 		self.m_details = details
 		
 	def printAction(self):
-		print self.m_action, self.m_details
+		print unicode(self.m_action + " " + self.m_details).encode("utf-8")
 
 # generic function to run any test.
 def RunTest(test):
