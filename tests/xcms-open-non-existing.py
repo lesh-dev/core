@@ -17,7 +17,7 @@ class XcmsOverallOpenPages(SeleniumTest):
 		self.setAutoPhpErrorChecking(True)
 		self.gotoPage("/qqq");
 		self.assertTextPresent("//div[@class='error-widget']", u"Нет такой страницы")
-		homeHref = test.getUrlByLinkText(u"этой ссылке")
+		homeHref = self.getUrlByLinkText(u"этой ссылке")
 		print "Home reference on 404 page: ", homeHref
 		self.gotoSite(homeHref)
 

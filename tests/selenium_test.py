@@ -24,15 +24,29 @@ from datetime import datetime
 class TestError(RuntimeError):
 	pass
 
+class TestShutdown(RuntimeError):
+	pass
+
+class TestAction:
+	def __init__(self, action, details):
+		self.m_action = action
+		self.m_details = details
+		
+	def printAction(self):
+		print self.m_action, self.m_details
+
 # generic function to run any test.
 def RunTest(test):
 	try:
 		test.init()
 		test.run()
 	except TestError as e:
-		test.processTestFail(e)
+		print "Test action log:"
+		test.printActionLog()
+		test.handleTestFail(e)
+	except TestShutdown as e:
+		test.handleShutdown(e)
 	except Exception as e:
-		print "HERE"
 		test.handleException(e)
 	
 #main API wrapper for Webdriver.
@@ -40,24 +54,29 @@ class SeleniumTest:
 	def __init__(self):
 #		print "Init SeleniumTest"
 		self.m_testName = self.__class__.__name__
+
+		self.initDefaults()
 		
 		if self.needHelp():
 			print self.m_testName, "test info:"
 			print self.getDoc()
-			self.shutdown()
+			raise TestShutdown("Display help")
 			
 		if self.needLeaveBrowserOpen():
 			self.setCloseOnExit(False)
 	
+		
+		
+#		self.m_driver.window_maximize()
+	
+	def initDefaults(self):
 		self.m_checkErrors = True
 		self.m_closeOnExit = True
 		self.m_logStarted = False
 		self.m_errorsAsWarnings = False
 		
 		self.m_logFile = self.m_testName + ".log" #"_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") +
-		
-#		self.m_driver.window_maximize()
-		
+		self.m_actionLog = []
 		
 	def init(self):
 		self.m_baseUrl = self.fixBaseUrl(self.getBaseUrl())
@@ -71,8 +90,8 @@ class SeleniumTest:
 #		print "Destructing SeleniumTest"
 		if hasattr(self, 'm_driver'):
 			if self.m_closeOnExit:
+#				print "closing driver"
 				self.m_driver.close()
-#		if hasattr(self, 'm_logFile'):
 
 	def getBaseUrl(self):
 		if len(sys.argv) < 2:
@@ -91,16 +110,27 @@ class SeleniumTest:
 			
 	def shutdown(self, exitCode = 0):
 		sys.exit(exitCode)
-			
+		
+	def handleShutdown(self, exc):
+		self.shutdown(0)
+		
 	def handleException(self, exc):
-		print "TEST INTERNAL ERROR:", unicode(exc.message).encode("utf-8")
+		print "TEST ERROR:", unicode(exc.message).encode("utf-8")
 		traceback.print_exc()
 		self.shutdown(2)
 				
-	def processTestFail(self, exc):
+	def handleTestFail(self, exc):
 		print "TEST FAILED:", unicode(exc.message).encode("utf-8")
 		self.shutdown(1)
-						
+	
+	def getActionLog(self):
+		# return copy of navigation log
+		return self.m_actionLog[:]
+	
+	def printActionLog(self):
+		for act in self.m_actionLog:
+			act.printAction()
+		
 	def logStart(self):
 		try:
 			logFile = open(self.m_logFile, "w")
@@ -138,14 +168,10 @@ class SeleniumTest:
 		
 	def gotoPage(self, url):
 		fullUrl = self.m_baseUrl + url
-			
-		#self.logAdd("navigating to " + fullUrl)
-		self.m_driver.get(fullUrl);
-		if self.m_checkErrors:
-			self.assertPhpErrors();
+		return self.gotoSite(fullUrl)
 	
 	def gotoSite(self, fullUrl):
-		#self.logAdd("Going to site " + fullUrl)
+		self.m_actionLog.append(TestAction("navigate", fullUrl))
 		self.m_driver.get(fullUrl)
 		if self.m_checkErrors:
 			self.assertPhpErrors();
@@ -186,6 +212,7 @@ class SeleniumTest:
 		if self.isVoid(name):
 			raise RuntimeError("Empty element name passed to fillElementByName(). ")
 		ele = self.getElementByName(name)
+		self.m_actionLog.append(TestAction("fill", "element name: '" + name + "', text: '" + text + "'"))
 		ele.send_keys(text)
 		return ele.get_attribute('value')
 		
@@ -193,11 +220,12 @@ class SeleniumTest:
 		if self.isVoid(eleId):
 			raise RuntimeError("Empty element ID passed to fillElementById(). ")
 		ele = self.getElementById(eleId)
+		self.m_actionLog.append(TestAction("fill", "element id: '" + eleId + "', text: '" + text + "'"))
 		ele.send_keys(text)
 		return ele.get_attribute('value')
 
 	def clickElementByName(self, name):
-		butt = self.getElementByName(name)
+		butt = self.getElementByName(name) 
 		butt.click()
 
 	def clickElementById(self, eleId):
@@ -208,12 +236,21 @@ class SeleniumTest:
 		if self.isVoid(xpath):
 			raise RuntimeError("Empty XPath passed to checkTextPresent");
 		
-		ele = self.m_driver.find_element_by_xpath(xpath)
+		try:
+			ele = self.m_driver.find_element_by_xpath(xpath)
+		except NoSuchElementException:
+			#self.logAdd("checkTextPresent does not found xpath '" + xpath + "':\n" + traceback.format_exc())
+			return False
+		
 		return text in ele.text;
+		
+	def failTest(self, errorText):
+		self.logAdd(errorText)
+		raise TestError(errorText)
 		
 	def assertTextPresent(self, xpath, text):
 		if not self.checkTextPresent(xpath, text):
-			raise TestError(u"Text '" + text + u"' not appears on page in element '" + xpath + "'")
+			self.failTest("Text '" + text + u"' not found on page '" + self.curUrl() + "' in element '" + xpath + "'")
 
 	def assertBodyTextPresent(self, text):
 		return self.assertTextPresent("/html/body", text)
@@ -228,8 +265,7 @@ class SeleniumTest:
 			url = self.m_driver.find_element_by_link_text(urlText)
 			return url.get_attribute("href");
 		except NoSuchElementException:
-			self.logAdd("getUrlByLinkText failed for URL '" + urlText + "':\n" + traceback.format_exc())
-			raise TestError(u"Cannot find URL by link text: '" + urlText + "'")
+			self.failTest(u"Cannot find URL by link text: '" + urlText + "' on page '" + self.curUrl())
 			
 	def logAdd(self, text):
 		try:
