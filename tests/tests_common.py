@@ -7,12 +7,15 @@ import os, sys, traceback, time
 import selenium_test
 
 def performLogin(test, login, password):
+	"""
+	returns True if login was successful
+	"""
 	if test is None:
 		raise RuntimeError("Wrong webdriver parameter passed to performLogin. ")
 	
 	test.gotoRoot()
 	
-	print "logging..."
+	print "login..."
 	# assert we have no shit cookies here
 	test.assertUrlNotPresent(u"Админка")
 	
@@ -31,8 +34,15 @@ def performLogin(test, login, password):
 	
 	test.clickElementById("auth-submit")
 	
+	wrongAuth = test.checkSourceTextPresent(u"Пароль всё ещё неверный")
+	return not wrongAuth
+	
 	#test.getUrlByLinkText(u"Админка")
 	    
+def performLogout(test):
+	print "logout..."
+	test.gotoPage("/?&mode=logout&ref=ladmin")
+	
 def performLoginAsAdmin(test, login, password):
 	print "performLoginAsAdmin() called"
 	performLogin(test, login, password)

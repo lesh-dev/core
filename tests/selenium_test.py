@@ -211,42 +211,43 @@ class SeleniumTest:
 	def fillElementByName(self, name, text):
 		if self.isVoid(name):
 			raise RuntimeError("Empty element name passed to fillElementByName(). ")
-		ele = self.getElementByName(name)
 		self.addAction("fill", "element name: '" + name + "', text: '" + text + "'")
-		ele.send_keys(text)
-		return ele.get_attribute('value')
+		self.getElementByName(name).send_keys(text)
+		return self.getElementByName(name).get_attribute('value')
 		
 	def fillElementById(self, eleId, text):
 		if self.isVoid(eleId):
 			raise RuntimeError("Empty element ID passed to fillElementById(). ")
-		ele = self.getElementById(eleId)
 		self.addAction("fill", "element id: '" + eleId + "', text: '" + text + "'")
-		ele.send_keys(text)
-		return ele.get_attribute('value')
+		self.getElementById(eleId).send_keys(text)
+		return self.getElementById(eleId).get_attribute('value')
 
 	def addAction(self, name, details):
 		self.m_actionLog.append(TestAction(name, details))		
 	
 	def clickElementByName(self, name):
-		butt = self.getElementByName(name) 
 		self.addAction("click", "element name: '" + name + "'")
-		butt.click()
+		self.getElementByName(name).click()
 
 	def clickElementById(self, eleId):
-		butt = self.getElementById(eleId)
-		butt.click()
+		self.addAction("click", "element id: '" + eleId + "'")
+		self.getElementById(eleId).click()
 	
 	def checkTextPresent(self, xpath, text):
 		if self.isVoid(xpath):
 			raise RuntimeError("Empty XPath passed to checkTextPresent");
 		
 		try:
-			ele = self.m_driver.find_element_by_xpath(xpath)
+			return text in self.m_driver.find_element_by_xpath(xpath).text
 		except NoSuchElementException:
 			#self.logAdd("checkTextPresent does not found xpath '" + xpath + "':\n" + traceback.format_exc())
 			return False
 		
-		return text in ele.text;
+	def checkSourceTextPresent(self, text):
+		return self.checkTextPresent("//*", text)
+		
+	def checkBodyTextPresent(self, text):
+		return self.checkTextPresent("/html/body", text)
 		
 	def failTest(self, errorText):
 		self.logAdd(errorText)
