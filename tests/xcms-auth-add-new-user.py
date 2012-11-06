@@ -35,11 +35,10 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		self.gotoUrlByLinkText("Create user")
 		
 		
-		inpLogin = "an_test_user_" + selenium_test.randomText(8)
-		inpEMail = selenium_test.randomEmail()
-		inpPass1 = selenium_test.randomText(10)
-		inpPass2 = inpPass1
-		inpName = u"Вася Пупкин" + selenium_test.randomText(6)
+		inpLogin = "an_test_user_" + random_crap.randomText(8)
+		inpEMail = random_crap.randomEmail()
+		inpPass = random_crap.randomText(10)
+		inpName = u"Вася Пупкин" + random_crap.randomText(6)
 		#inpName = u"Вася Пупкин" + selenium_test.randomText(6)
 		
 		#<tr><td colspan="2"><b>Учетные данные</b>                               </td></tr>
@@ -49,11 +48,18 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		#<tr><td>Настоящее имя:      </td><td> <input name="name">                 </td></tr>
 		#<tr><td>Электропочта:       </td><td> <input name="email">                </td></tr>
 		#<tr><td colspan="2">  <input type="checkbox" name="notify_user" />	
-		inpLogin = self.fillElementByName("login", inpLogin)
-		inpEMail = self.fillElementByName("email", inpEMail)
-		inpPass1 = self.fillElementByName("p1", inpPass1)
-		inpPass2 = self.fillElementByName("p2", inpPass2)
-		inpPass1 = self.fillElementByName("name", inpName)
+		inpLogin = self.fillElementById("login", inpLogin)
+		print "login = ", inpLogin
+		inpEMail = self.fillElementById("email", inpEMail)
+		inpPass1 = self.fillElementById("password", inpPass)
+		print "original pass: " + inpPass
+		inpPass2 = self.fillElementById("password_confirm", inpPass)
+		if inpPass1 != inpPass2:
+			raise RuntimeError("Unpredicted input behavior")
+		inpPass = inpPass1
+		print "actual pass: " + inpPass
+		
+		inpName = self.fillElementById("name", inpName)
 		
 		# set notify checkbox.
 		self.clickElementByName("notify_user")
@@ -71,8 +77,14 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		
 		self.assertBodyTextPresent(u"Известен под логином " + inpLogin)
 		
+		#logoff root
+		tests_common.performLogout(self)
+		
 		print "logging as created user. "
-		tests_common.performLogin(self, inpLogin, inpPass1)	
+		if not tests_common.performLogin(self, inpLogin, inpPass):
+			raise selenium_test.TestError("Cannot login as newly created user. ")
+		
+		self.getUrlByLinkText("Выход")
 	
 # def main():
 selenium_test.RunTest(XcmsAuthAddNewUser())
