@@ -171,7 +171,7 @@ class SeleniumTest:
 		return self.gotoSite(fullUrl)
 	
 	def gotoSite(self, fullUrl):
-		self.m_actionLog.append(TestAction("navigate", fullUrl))
+		self.addAction("navigate", fullUrl)
 		self.m_driver.get(fullUrl)
 		if self.m_checkErrors:
 			self.assertPhpErrors();
@@ -212,7 +212,7 @@ class SeleniumTest:
 		if self.isVoid(name):
 			raise RuntimeError("Empty element name passed to fillElementByName(). ")
 		ele = self.getElementByName(name)
-		self.m_actionLog.append(TestAction("fill", "element name: '" + name + "', text: '" + text + "'"))
+		self.addAction("fill", "element name: '" + name + "', text: '" + text + "'")
 		ele.send_keys(text)
 		return ele.get_attribute('value')
 		
@@ -220,12 +220,16 @@ class SeleniumTest:
 		if self.isVoid(eleId):
 			raise RuntimeError("Empty element ID passed to fillElementById(). ")
 		ele = self.getElementById(eleId)
-		self.m_actionLog.append(TestAction("fill", "element id: '" + eleId + "', text: '" + text + "'"))
+		self.addAction("fill", "element id: '" + eleId + "', text: '" + text + "'")
 		ele.send_keys(text)
 		return ele.get_attribute('value')
 
+	def addAction(self, name, details):
+		self.m_actionLog.append(TestAction(name, details))		
+	
 	def clickElementByName(self, name):
 		butt = self.getElementByName(name) 
+		self.addAction("click", "element name: '" + name + "'")
 		butt.click()
 
 	def clickElementById(self, eleId):
