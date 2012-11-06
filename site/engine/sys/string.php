@@ -1,16 +1,35 @@
 <?php
-    /* String library */
+    /**
+      * String library, user input filtering, etc
+      * Maintainer: mvel@
+      **/
 
-    function xcms_filter_user_name($user_name)
+    /**
+      * Checks if user name is valid
+      * @return true if user name is valid, false otherwise
+      **/
+    function xcms_check_user_name($user_name)
     {
-        return preg_replace("/[^a-zA-Z0-9._-]/", "", $user_name);
+        // everything should be replaced if OK
+        $bad = preg_replace("/[a-zA-Z0-9@._-]+/i", "", $user_name);
+        return empty($bad);
     }
 
-    function xcms_filter_password($passwd)
+    /**
+      * Checks if password consists of valid characters
+      * @param password to check
+      * @return true if valid, false otherwise
+      **/
+    function xcms_check_password($password)
     {
-        return preg_replace('/[\x0A\x0D\x09\x00]/', "", $passwd);
+        // no characters should be replaced
+        return ($password == preg_replace("/[\x00-\x1F]/", "", $password));
     }
 
+    /**
+      * Filters all non-printable characters from string
+      * @return filtered string
+      **/
     function xcms_filter_nonchars($string)
     {
         return preg_replace('/[\x00-\x1F]/', "", $string);
@@ -31,8 +50,9 @@
     function xcmsut_string()
     {
         $r = true;
-        $r = $r && (xcms_filter_password("\n\taa\rbb\0\\'qqq'+\"zzz") == "aabb\\'qqq'+\"zzz");
-        $r = $r && (xcms_len("Привет000") == 8);
+        $r = $r && (xcms_check_password("123@#$%^&abcABC bla\xFE\xFF") == true);
+        $r = $r && (xcms_check_password("\n\taa\rbb\0\\'qqq'+\"zzz") == false);
+        $r = $r && (xcms_len("Привет000") == 9);
         return $r;
     }
 ?>

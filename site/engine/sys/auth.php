@@ -24,7 +24,7 @@
 
             if(!$this->isNull())
                 xcms_save_list($this->_file_name($this->login()),$this->dict);
-            else return $this->setError("User is NULL, can't serialize!");
+            else return $this->set_error("User is NULL, can't serialize!");
             return true;
         }
         function isValid()
@@ -145,7 +145,7 @@
             $this->check_rights("admin");
             $user = new XcmsUser($login);
             if(in_array($group,$user->groups()))
-                return $this->setError("User already presented in this group");
+                return $this->set_error("User already presented in this group");
             $user->dict["groups"] = implode(",",array_merge($user->groups(), array($group)));
             $user->_save();
         }
@@ -155,14 +155,14 @@
             $this->check_rights("admin");
             $user = new XcmsUser($login);
             if(!in_array($group,$user->groups()))
-                return $this->setError("User does not belong to this group!");
+                return $this->set_error("User does not belong to this group!");
             $user->dict["groups"] = implode(",",array_diff($user->groups(), array($group)));
             $user->_save();
         }
         /**
-          * Выставляет значение lastError
+          * Выставляет значение последней ошибки
           **/
-        function setError($error)
+        function set_error($error)
         {
             $this->error = $error;
             throw new Exception($error);
@@ -180,6 +180,8 @@
           **/
         function passwd($password)
         {
+            if (!xcms_check_password($password))
+                throw new Exception("Invalid password. ");
             $this->dict["password"] = $this->_hash($password);
             $this->plaintext_password = $password;
             $this->_save();
@@ -189,11 +191,11 @@
           **/
         function create($login, $email="nobody@example.com")
         {
-            if(preg_replace("/[a-zA-Z0-9@._-]+/i","",$login) != "")
+            if (!xcms_check_user_name($login))
                 throw new Exception("Login format is incorrect!");
             $this->check_rights("admin");
             if(file_exists($this->_file_name($login)))
-                return $this->setError("User $login already exists!");
+                return $this->set_error("User $login already exists!");
             $u = new XcmsUser($login);
             $u->setValid();
             $u->setParam("email",$email);
