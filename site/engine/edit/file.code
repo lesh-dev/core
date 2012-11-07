@@ -71,13 +71,15 @@
                     file_get_contents($ename).$lf.
                     "============================================$lf";
 
+                $login = xcms_user()->login();
                 $body_html = file_get_contents("{$SETTINGS["engine_dir"]}templates/content-change.html");
+                $body_html = str_replace('@@LOGIN@', $login, $body_html);
+                $body_html = str_replace('@@PAGE-ID@', $pageid, $body_html);
                 $body_html = str_replace('@@DIFF@', file_get_contents($diff_name_html), $body_html);
                 $body_html = str_replace('@@NEW-TEXT@', htmlspecialchars($new_text), $body_html);
-
                 xcms_send_notification("content-change",
                     NULL,
-                    "[XCMS Content] ({$_SERVER["HTTP_HOST"]}) Изменена страница: $pageid",
+                    "[XCMS Content] ({$_SERVER["HTTP_HOST"]}) Пользователь $login изменил страницу $pageid",
                     $body_plain,
                     $body_html
                 );
