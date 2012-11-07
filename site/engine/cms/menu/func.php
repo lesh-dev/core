@@ -61,7 +61,7 @@
         // text is already escaped here
         $html = str_replace("<TEXT>", $text, $html);
 
-        if (strstr($pageid, $pageiid))
+        if ($pageid == $pageiid || strstr($pageid, "$pageiid/"))
             $html = str_replace("<ACTIVE>", "active", $html);
         else
             $html = str_replace("<ACTIVE>", "passive", $html);
