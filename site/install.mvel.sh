@@ -8,20 +8,22 @@ if [ -z "$dest" ] ; then
     exit 1
 fi
 
+content_name="fizlesh.ru-content"
 db="fizlesh.sqlite3"
 rm -f $db || true
 #sqlite3 $db < dbinit.sql
 #sqlite3 $db < unused-dbinit.sql
-#sqlite3 $db < ../junk/fizlesh.ru-content/ank/anketas-2012.07.23.sql
-cp ../junk/fizlesh.ru-content/ank/lesh-2012.08.30.sqlite3 $db
-#cp /var/www/html/site/fizlesh.ru-content/ank/fizlesh.sqlite3 complete.sql
+#sqlite3 $db < ../junk/$content_name/ank/anketas-2012.07.23.sql
+cp ../junk/$content_name/ank/lesh-2012.08.30.sqlite3 $db
+#cp /var/www/html/site/$content_name/ank/fizlesh.sqlite3 complete.sql
 #cp complete.sql $db
 
 sudo mkdir -p "$dest"
 sudo rm -rf /var/www/html/site/*
 sudo cp -a * "$dest/"
-sudo cp -a ../junk/fizlesh.ru-content "$dest/"
-sudo cp $db "$dest/fizlesh.ru-content/ank/"
+sudo mkdir -p "$dest/$content_name"
+sudo cp -a ../../content-fizlesh.ru/content/* "$dest/$content_name/"
+sudo cp $db "$dest/$content_name/ank/"
 sudo rm -rf "$dest/.prec/"*
 sudo mkdir -p "$dest/.prec/"
 sudo touch "$dest/"{.htaccess,settings.php,engine.log}
@@ -29,4 +31,4 @@ if [ "$1" = "-f" ] ; then
     sudo mv "$dest/install.nt.php" "$dest/install.php"
     sudo chown -R apache:apache "$dest/install.php"
 fi
-sudo chown -R apache:apache "$dest/"{.prec,fizlesh.ru-content,.htaccess,settings.php,engine.log}
+sudo chown -R apache:apache "$dest/"{.prec,"$content_name",.htaccess,settings.php,engine.log}
