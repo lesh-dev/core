@@ -24,6 +24,8 @@ sudo cp -a * "$dest/"
 sudo mkdir -p "$dest/$content_name"
 sudo cp -a ../../content-fizlesh.ru/content/* "$dest/$content_name/"
 sudo cp $db "$dest/$content_name/ank/"
+# hack mailer conf
+sudo cp ../junk/$content_name/cms/mailer.conf "$dest/$content_name/cms/mailer.conf"
 sudo rm -rf "$dest/.prec/"*
 sudo mkdir -p "$dest/.prec/"
 sudo touch "$dest/"{.htaccess,settings.php,engine.log}
