@@ -186,7 +186,6 @@ function editlist_form($file, $addparams, $skipparams="",$securityflags="", $old
     global $SETTINGS;
     if ($old_mode) $list = getList($file);
     else $list = xcms_get_list($file);
-    if(!$list) echo "bad filename!";
 
     if(@$_POST["editTag"])
     {
