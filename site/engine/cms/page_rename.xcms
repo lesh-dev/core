@@ -14,12 +14,24 @@
         }
         else
         {
-            // TODO: rename error check
-            rename("{$SETTINGS["datadir"]}cms/pages/$pageid",
-                "{$SETTINGS["datadir"]}cms/pages/$new_pageid");
-            $redirect = true;
-            ?>
-            <div class="notice">Путь успешно изменён!</div><?php
+            $old_path = "${content_dir}cms/pages/$pageid";
+            $new_path = "${content_dir}cms/pages/$new_pageid";
+            if (!@rename($old_path, $new_path))
+            {?>
+                <div class="error">Не удалось переименовать страницу, проверьте корректность путей файлов:</div>
+                <div>Исходный путь: <span style="font-family: Monospace;"><?php echo $old_path; ?></span></div>
+                <div>Новый путь: <span style="font-family: Monospace;"><?php echo $new_path; ?></span></div>
+                <?php
+            }
+            else
+            {
+                $pageid = $new_pageid;
+                $redirect = true;
+                ?>
+                <# cms/rebuild_alias #>
+                <# cms/build_rewrite #>
+                <div class="notice">Путь успешно изменён!</div><?php
+            }
         }
     }
     if ($redirect)
