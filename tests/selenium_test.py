@@ -21,6 +21,9 @@ from datetime import datetime
 #'start_session', 'stop_client', 'switch_to_active_element', 'switch_to_alert', 'switch_to_default_content',
 #'switch_to_frame', 'switch_to_window', 'title', 'window_handles']
 
+def isList(x):
+	return type(x) == type(list())
+	
 class TestError(RuntimeError):
 	pass
 
@@ -238,7 +241,13 @@ class SeleniumTest:
 			raise RuntimeError("Empty XPath passed to checkTextPresent");
 		
 		try:
-			return text in self.m_driver.find_element_by_xpath(xpath).text
+			if isList(text):
+				for phrase in text:
+					if phrase in self.m_driver.find_element_by_xpath(xpath).text:
+						return True
+				return False
+			else:
+				return text in self.m_driver.find_element_by_xpath(xpath).text
 		except NoSuchElementException:
 			#self.logAdd("checkTextPresent does not found xpath '" + xpath + "':\n" + traceback.format_exc())
 			return False
@@ -255,7 +264,10 @@ class SeleniumTest:
 		
 	def assertTextPresent(self, xpath, text):
 		if not self.checkTextPresent(xpath, text):
-			self.failTest("Text '" + text + u"' not found on page '" + self.curUrl() + "' in element '" + xpath + "'")
+			textInError = text
+			if isList(text):
+				textInError = text.join("|")
+			self.failTest("Text '" + textInError + "' not found on page '" + self.curUrl() + "' in element '" + xpath + "'")
 
 	def assertBodyTextPresent(self, text):
 		return self.assertTextPresent("/html/body", text)
