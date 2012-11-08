@@ -15,15 +15,24 @@ class XcmsOverallOpenPages(SeleniumTest):
 		self.setAutoPhpErrorChecking(True)
 		self.gotoPage("/")
 		
-		self.assertBodyTextPresent(u"Здравствуйте!");
+		self.gotoUrlByLinkText(u"Главная")
+		self.assertBodyTextPresent(u"Приветствуем Вас на сайте Физического отделения Летней Экологической Школы");
+		self.gotoPage("/index")
 		self.assertBodyTextPresent(u"Приветствуем Вас на сайте Физического отделения Летней Экологической Школы");
 
-		self.gotoPage("/news")
-		self.assertBodyTextPresent(u"Новости")
-		
+		self.gotoUrlByLinkText(u"История ЛЭШ")
+		self.assertBodyTextPresent(u"Школа существует достаточно давно")
 		self.gotoPage("/history")
 		self.assertBodyTextPresent(u"Школа существует достаточно давно")
 
+		self.gotoUrlByLinkText(u"Новости")
+		self.assertBodyTextPresent(u"Новости")
+		self.gotoPage("/news")
+		self.assertBodyTextPresent(u"Новости")
+
+		self.gotoUrlByLinkText(u"Официальная информация")
+		self.assertBodyTextPresent(u"Официальная информация")
+		self.assertBodyTextPresent(u"Летняя Экологическая Школа (ЛЭШ) существует с 1990 года")
 		self.gotoPage("/info")
 		self.assertBodyTextPresent(u"Официальная информация")
 		self.assertBodyTextPresent(u"Летняя Экологическая Школа (ЛЭШ) существует с 1990 года")
@@ -77,6 +86,8 @@ class XcmsOverallOpenPages(SeleniumTest):
 		self.gotoPage("/fun")
 		self.gotoPage("/links")
 		self.gotoPage("/contacts")
+		self.gotoPage("/contacts")
+		
 		
 # def main():
 selenium_test.RunTest(XcmsOverallOpenPages())
