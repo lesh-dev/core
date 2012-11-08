@@ -66,7 +66,6 @@
         $login = xcms_user()->login();
         $enabled = xcms_get_key_or($SETTINGS, "mailer_enabled", true);
         if (!$enabled) return;
-        $dom = "@fizlesh.ru"; // TODO: remove fizlesh.ru spike
 
         $body =
             "$mail_text\r\n".
@@ -87,8 +86,12 @@
         }
 
         $mailer = xcms_get_mailer();
-        $mailer->AddReplyTo("noreply$dom", "FizLesh Notificator");
-        $mailer->SetFrom('notify$dom', 'FizLesh Notificator');
+        // please note this address should be configured in postfix
+        $addr_from = "noreply@fizlesh.ru"; // TODO: remove these spikes!
+        $name_from = "FizLesh Notificator";
+        $mailer->AddReplyTo($addr_from, $name_from);
+        $mailer->SetFrom($addr_from, $name_from);
+        $mailer->Sender = $addr_from;
 
         if ($addr_list !== NULL)
         {
