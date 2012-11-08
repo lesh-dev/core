@@ -12,6 +12,7 @@
 <?php
     require_once("engine/sys/tag.php");
     require_once("engine/sys/logger.php");
+    require_once("engine/sys/string.php");
 
     function display_error($err)
     {

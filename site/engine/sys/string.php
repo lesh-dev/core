@@ -23,7 +23,7 @@
     function xcms_check_password($password)
     {
         // no characters should be replaced
-        return ($password == preg_replace("/[\x00-\x1F]/", "", $password));
+        return ($password == preg_replace('/[\x00-\x1F]/', "", $password));
     }
 
     /**
