@@ -87,7 +87,8 @@
             $mail_group_plain = "reg-plain";
         }
 
-        $dom = "@fizlesh.ru";
+        $addr_from = "reg@fizlesh.ru"; // TODO: remove this spike
+        $name_from = "FizLesh XSM";
 
         $full_name_tr = xcms_transliterate($full_name);
         $subject = "[FizLesh-XSM] New anketa: $full_name_tr";
@@ -99,8 +100,9 @@
             if (!empty($email))
                 $mailer->AddReplyTo($email, $full_name_tr);
             else
-                $mailer->AddReplyTo("reg$dom", "FizLesh XSM");
-            $mailer->SetFrom('reg$dom', 'FizLesh XSM');
+                $mailer->AddReplyTo($addr_from, $name_from);
+            $mailer->SetFrom($addr_from, $name_from);
+            $mailer->Sender = $addr_from;
             $mailer->Subject = $subject;
             $mailer->AltBody = $mail_msg_plain;
             $mailer->MsgHTML($mail_msg_html);
@@ -118,8 +120,9 @@
             if (!empty($email))
                 $mailer->AddReplyTo($email, $full_name_tr);
             else
-                $mailer->AddReplyTo("reg$dom", "FizLesh XSM");
-            $mailer->SetFrom('reg$dom', 'FizLesh XSM');
+                $mailer->AddReplyTo($addr_from, $name_from);
+            $mailer->SetFrom($addr_from, $name_from);
+            $mailer->Sender = $addr_from;
             $mailer->Subject = $subject;
             $mailer->Body = $mail_msg_plain;
             if (!$mailer->Send())
