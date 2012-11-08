@@ -15,42 +15,50 @@ class XcmsOverallOpenPages(SeleniumTest):
 		self.setAutoPhpErrorChecking(True)
 		self.gotoPage("/")
 		
-		self.assertBodyTextPresent(u"Здравствуйте!");
+		self.gotoUrlByLinkText(u"Главная")
 		self.assertBodyTextPresent(u"Приветствуем Вас на сайте Физического отделения Летней Экологической Школы");
 
-		self.gotoPage("/news")
-		self.assertBodyTextPresent(u"Новости")
-		
-		self.gotoPage("/history")
+		self.gotoUrlByLinkText(u"История ЛЭШ")
 		self.assertBodyTextPresent(u"Школа существует достаточно давно")
 
-		self.gotoPage("/info")
+		self.gotoUrlByLinkText(u"Новости")
+		self.assertBodyTextPresent(u"Новости")
+
+		self.gotoUrlByLinkText(u"Официальная информация")
 		self.assertBodyTextPresent(u"Официальная информация")
 		self.assertBodyTextPresent(u"Летняя Экологическая Школа (ЛЭШ) существует с 1990 года")
 		
-		self.gotoPage("/people")
+		self.gotoUrlByLinkText(u"О нас")
 		self.assertBodyTextPresent(u"О нас")
 
-		self.gotoPage("/life")
+		self.gotoUrlByLinkText(u"Жизнь на ЛЭШ")
 		self.assertBodyTextPresent(u"Жизнь на ЛЭШ")
 
+		self.gotoUrlByLinkText(u"Список вещей")
 		self.gotoPage("/gear")
 		self.assertBodyTextPresent(u"Список вещей")
+		self.assertBodyTextPresent(u"Снаряжение")
 
+		self.gotoUrlByLinkText(u"Снаряжение")
+		self.assertBodyTextPresent(u"Туристическое снаряжение на ЛЭШ")
+		self.assertBodyTextPresent(u"Спальник")
 		self.gotoPage("/gear/equipment")
 		self.assertBodyTextPresent(u"Туристическое снаряжение на ЛЭШ")
-
-		self.gotoPage("/gear/wear")
+		self.assertBodyTextPresent(u"Палатка")
+		
+		self.gotoUrlByLinkText(u"Личные вещи и одежда")
 		self.assertBodyTextPresent(u"Личные вещи и одежда")
-
 		self.gotoPage("/gear/wear")
-		self.assertBodyTextPresent(u"Личные вещи и одежда")
 		self.assertBodyTextPresent(u"КЛМН - Кружка, Ложка, Миска, Нож.")
 		
 		
+		self.gotoUrlByLinkText(u"Документы")
+		self.assertBodyTextPresent(u"Полис ОМС")
 		self.gotoPage("/gear/docs")
 		self.assertBodyTextPresent(u"Справка из СЭС об отсутствии контактов")
 
+		self.gotoUrlByLinkText(u"Прочее")
+		self.assertBodyTextPresent(u"Фонарик")
 		self.gotoPage("/gear/misc")
 		self.assertBodyTextPresent(u"А еще я обычно беру с собой")
 
@@ -77,6 +85,9 @@ class XcmsOverallOpenPages(SeleniumTest):
 		self.gotoPage("/fun")
 		self.gotoPage("/links")
 		self.gotoPage("/contacts")
+		
+		self.gotoUrlByLinkText(u"Главная")
+		
 		
 # def main():
 selenium_test.RunTest(XcmsOverallOpenPages())

@@ -15,11 +15,13 @@ class TestInstaller(SeleniumTest):
 	"""
 	
 	def run(self):
-		test.gotoRoot()
-		self.assertTextPresent("XCMS installer")
+		self.gotoRoot()
+		self.assertSourceTextPresent(["XCMS installer", u"Установка XCMS"])
 		# very meaningful name...
 		self.clickElementByName("submit_variables")
-		self.assertTextPresent(u"Установка завершена!")
+		self.assertSourceTextPresent(u"Установка завершена!")
+		self.gotoUrlByLinkText(u"Перейти к сайту")
+		
 	
 # def main():
 selenium_test.RunTest(TestInstaller())

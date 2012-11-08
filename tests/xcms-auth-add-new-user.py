@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import selenium_test, tests_common, random_crap
+import selenium_test, tests_common, random_crap, time
 from xcms_test_config import XcmsTestConfig
 from selenium_test import SeleniumTest
 
@@ -16,6 +16,7 @@ class XcmsAuthAddNewUser(SeleniumTest):
 	"""
 			
 	def run(self):
+#		self.drv().getEval("window.resizeTo(X, Y); window.moveTo(0,0);")
 		self.setAutoPhpErrorChecking(True)
 		
 		conf = XcmsTestConfig()
@@ -69,6 +70,7 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		
 		print "user created, going to user list again to refresh. "
 		
+		time.sleep(2)
 		# here is a usability issue: user not appears in the list.
 		# refresh user list
 		self.gotoUrlByLinkText(u"Пользователи")
