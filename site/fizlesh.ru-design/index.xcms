@@ -80,7 +80,7 @@
                     <hr />
                     <div style="font-size: 8pt; text-align: center; height: 15px;">
                         <span>&copy; ФизЛЭШ, 2005&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
-                        <span class="gray"><?php echo xcms_get_key_or($xcms_version, 'version'); ?></span>
+                        <span class="site-version"><?php echo xcms_get_key_or($xcms_version, 'version'); ?></span>
                         <?php
                         if (xcms_is_production())
                         {?>

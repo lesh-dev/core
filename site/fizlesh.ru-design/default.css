@@ -1,5 +1,5 @@
 html {
-  height: 100%;
+    height: 100%;
 }
 
 body {
@@ -27,175 +27,174 @@ div.monospace-inner {
 /* very common and simple rule */
 /* all exceptions should be handled separately */
 a img {
-  border: 0px;
+    border: 0px;
 }
 
 .roundBorders {
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
 }
 
 .topTable {
-  background-image: url("pic/grass-formulas.jpg");
-  height: 100px;
-  width: 100%;
-  margin-bottom: 3px;
+    background-image: url("pic/grass-formulas.jpg");
+    height: 100px;
+    width: 100%;
+    margin-bottom: 3px;
 }
 
 .bottomTable {
-  width: 100%;
+    width: 100%;
 }
 
 .logoCell {
-  text-align: center;
-  vertical-align: top;
-  padding-top: 20px;
+    text-align: center;
+    vertical-align: top;
+    padding-top: 20px;
 }
 
 .mainField {
-  background-color: #9ec78b;
-  vertical-align: top;
-  padding: 20px;
+    background-color: #9ec78b;
+    vertical-align: top;
+    padding: 20px;
 }
 
 #fullHeight {
-  padding-bottom: 6px;
-  border: none;
-  text-align: center;
+    padding-bottom: 6px;
+    border: none;
+    text-align: center;
 }
 
 p {
-  font-size: 10pt;
-  text-align: justify;
-  padding: 0px 0px 0px 0px;
-  text-decoration: none;
-  text-indent: 5mm;
-  margin-top: 3pt;
-  margin-bottom: 0px;
+    font-size: 10pt;
+    text-align: justify;
+    padding: 0px 0px 0px 0px;
+    text-decoration: none;
+    text-indent: 5mm;
+    margin-top: 3pt;
+    margin-bottom: 0px;
 }
 li {
-  font-size: 10pt;
-  text-align: justify;
-  padding: 0px 0px 0px 0px;
-  text-decoration: none;
+    font-size: 10pt;
+    text-align: justify;
+    padding: 0px 0px 0px 0px;
+    text-decoration: none;
 }
 h1 {
-  font-size: 26pt;
-  font-weight: normal;
-  text-indent: 0mm;
+    font-size: 26pt;
+    font-weight: normal;
+    text-indent: 0mm;
 }
 h2 {
-  font-size: 15pt;
-  font-weight: bold;
-  text-indent: 5mm;
-  margin-top: 10pt;
-  margin-bottom: 3pt;
+    font-size: 15pt;
+    font-weight: bold;
+    text-indent: 5mm;
+    margin-top: 10pt;
+    margin-bottom: 3pt;
 }
 h3 {
-  font: normal normal 12pt/12pt sans-serif;
-  color: #000020;
-  font-weight: bold;
-  text-indent: 5mm;
-  margin-top: 10pt;
-  margin-bottom: 3pt;
+    font: normal normal 12pt/12pt sans-serif;
+    color: #000020;
+    font-weight: bold;
+    text-indent: 5mm;
+    margin-top: 10pt;
+    margin-bottom: 3pt;
 }
 h4 {
-  font: normal normal 12pt/12pt sans-serif;
-  color:#000020;
-  text-indent: 5mm;
-  margin-top: 10pt;
-  margin-bottom: 3pt;
+    font: normal normal 12pt/12pt sans-serif;
+    color:#000020;
+    text-indent: 5mm;
+    margin-top: 10pt;
+    margin-bottom: 3pt;
 }
 
 a, a:link {
-  color: #cf5612;
+    color: #cf5612;
 }
 a:visited {
-  color: #854310;
+    color: #854310;
 }
 a:hover {
-  color: #d47f18;
+    color: #d47f18;
 }
 a:active {
-  color: #d47f18;
+    color: #d47f18;
 }
 
 a.stealthLink {
-  color: #b5c9a1;
+    color: #b5c9a1;
 }
 a.stealthLink:hover {
-  color: #a24f0c;
+    color: #a24f0c;
 }
 
 .photo-name {
-  font-family: sans-serif;
-  font-size: 12pt;
-  font-weight: bolder;
-  margin-left: 2ex;
+    font-family: sans-serif;
+    font-size: 12pt;
+    font-weight: bolder;
+    margin-left: 2ex;
 }
 
 textarea, input {
-  border: 1px solid #8faf6f;
-  background-color: #eeffee;
-  padding-left: 2px;
-  padding-right: 2px;
-  margin: 0px;
+    border: 1px solid #8faf6f;
+    background-color: #eeffee;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin: 0px;
 }
 
 input[type='submit'] {
-  border: 1px solid #6f8f4f;
-  background-color: #8ea76b;
-  color: #854310;
-  border-radius: 5px;
-  font-size: 12pt;
-  line-height: 19px;
-  height: 22px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-left: 0px;
-  margin-bottom: 3px;
-  margin-top: 3px;
-  margin-right: 0px;
+    border: 1px solid #6f8f4f;
+    background-color: #8ea76b;
+    color: #854310;
+    border-radius: 5px;
+    font-size: 12pt;
+    line-height: 19px;
+    height: 22px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 0px;
+    margin-bottom: 3px;
+    margin-top: 3px;
+    margin-right: 0px;
 }
 
 select {
-  border: 1px solid #8faf6f;
-  background-color: #eeffee;
-  margin-left: 0px;
+    border: 1px solid #8faf6f;
+    background-color: #eeffee;
+    margin-left: 0px;
 }
 
 /* email alignment */
 img.email {
-  vertical-align: -4px;
+    vertical-align: -4px;
 }
 
 input[name='menu-text'] {
-  width: 300px;
+    width: 300px;
 }
 
 a.leshLogoTitle {
-  position: absolute;
-  right: 7px;
-  bottom: 5px;
+    position: absolute;
+    right: 7px;
+    bottom: 5px;
 }
 
 a.linkButton {
-  font-size: 12pt;
-  line-height: 16pt;
-  text-decoration: none;
-  display: inline-block;
-  margin: 1px 0px 3px 1px;
-  border: 1px solid #6f8f4f;
-  padding-left: 7px;
-  padding-right: 7px;
-  background-color: #8ea76b;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
+    font-size: 12pt;
+    line-height: 16pt;
+    text-decoration: none;
+    display: inline-block;
+    margin: 1px 0px 3px 1px;
+    border: 1px solid #6f8f4f;
+    padding-left: 7px;
+    padding-right: 7px;
+    background-color: #8ea76b;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
 }
 
-span.gray
-{
+span.site-version {
     color: #888888;
 }
