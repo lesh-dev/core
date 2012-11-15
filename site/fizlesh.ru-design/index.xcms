@@ -37,7 +37,7 @@
         </table>
         <table cellspacing="0" cellpadding="0" class="bottomTable" summary="Page Bottom">
             <tr>
-                <td class="menuField menuWidth roundBorders">
+                <td class="menu-field menu-width roundBorders">
                     <# cms/menu/display start=1 end=5 #>
                     <a class="menu-item menu-level1 menu-passive menu-passive-level1" href="http://forum.fizlesh.ru">Форум</a>
 
@@ -45,15 +45,15 @@
                     if (xcms_user()->check_rights("registered", false))
                     {
                         include(translate('<a href="/<# web_prefix #>register/view'.
-                            '" class="menu-item menuSys">Участники</a>'));
+                            '" class="menu-item menu-sys">Участники</a>'));
                         include(translate('<a href="/<# web_prefix #>register/view-course'.
-                            '" class="menu-item menuSys">Курсы</a>'));
+                            '" class="menu-item menu-sys">Курсы</a>'));
                         include(translate('<a href="/<# web_prefix #>?'.
                             xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).
-                            '" class="menu-item menuSys">Админка</a>'));
+                            '" class="menu-item menu-sys">Админка</a>'));
                         include(translate('<a href="/<# web_prefix #>?'.
                             xcms_url(array('page'=>$pageid, 'ref'=>'ladmin', 'mode'=>'logout')).
-                            '" class="menu-item menuSys">Выход</a>'));
+                            '" class="menu-item menu-sys">Выход</a>'));
                     }
                     else
                     {
