@@ -12,24 +12,33 @@ class XcmsOpenRenamedPages(SeleniumTest):
 	* navigates to all current pages and checks some specific content on each page plus PHP errors.
 	"""
 	def run(self):
-		
-
-# current rename list:
-		#index/doctor-1170556276 index/history
-		#z024Official/lesh-1311690176 z021Official/lesh-2011-by-serge
-		#z024Official/root-1174265356 z021Official/for-parents
-		#z024Official z021Official
-		#z03Education/Arseniy-1205009664 z03Education/biophys-group
-		#z04Science/dimchik-1170608299 z04Science/science-works
-		#z04Science/dimchik-1170608594 z04Science/seminar
-		#z060JoinUs/anketa-send-fail z024JoinUs/anketa-send-fail
-		#z060JoinUs/anketa-send-success z024JoinUs/anketa-send-success
-		#z060JoinUs/doctor-1170705932 z024JoinUs/anketa
-		#z060JoinUs z024JoinUs
-		
-		self.setAutoPhpErrorChecking(True)
 		self.gotoPage("/")
-		
+		self.gotoPage("/?page=index/doctor-1170556276") # index/history
+		self.assertBodyTextPresent(u"История")
+
+		self.gotoPage("/?page=z024Official/lesh-1311690176") # lesh2011-by-serge
+		self.assertBodyTextPresent(u"МОИ ЛИЧНЫЕ НАБЛЮДЕНИЯ")
+
+		self.gotoPage("/?page=z024Official/root-1174265356") # info/parents
+		self.assertBodyTextPresent(u"Родителям школьников")
+
+		self.gotoPage("/?page=z03Education/Arseniy-1205009664") # biophys
+		self.assertBodyTextPresent(u"Биофизическая группа открыта для школьников")
+
+		self.gotoPage("/?page=z04Science/dimchik-1170608299") # science works
+		self.assertBodyTextPresent(u"возможность выполнения исследовательских работ")
+
+		self.gotoPage("/?page=z04Science/dimchik-1170608594") # science works
+		self.assertBodyTextPresent(u"на ЛЭШ работает межотделенческий семинар")
+
+		self.gotoPage("/?page=z060JoinUs/anketa-send-fail")
+		self.assertBodyTextPresent(u"По техническим причинам анкета")
+
+		self.gotoPage("/?page=z060JoinUs/anketa-send-success")
+		self.assertBodyTextPresent(u"свяжется один из наших координаторов")
+
+		self.gotoPage("/?page=z060JoinUs/doctor-1170705932") # anketa
+		self.assertBodyTextPresent(u"Обязательно укажите какие-нибудь свои координаты")
 		
 # def main():
 selenium_test.RunTest(XcmsOpenRenamedPages())

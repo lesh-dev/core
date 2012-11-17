@@ -14,10 +14,9 @@ run_test()
 	echo "========== Running test $1 =========="
 	if ! python $1 "$TARGET_SITE"; then
 		echo "Test $1 FAILED";
-		exit 1
+		return 1
 	else
 		echo "Test $1 PASSED"
-		exit 0
+		return 0
 	fi
-	
 }
