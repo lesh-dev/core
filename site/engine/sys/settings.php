@@ -17,4 +17,8 @@
     $SETTINGS["session_time"] = 7*24*3600;
     // redirect delay in seconds (for autotesting needs)
     $SETTINGS["zero_redirect_delay"] = "0";
+
+    // set up some common-used things
+    $full_content_dir = "/$web_prefix${content_dir}";
+    $full_design_dir = "/$web_prefix${design_dir}";
 ?>

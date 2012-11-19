@@ -1,5 +1,6 @@
 <?php
     include_once("$engine_dir/cms/page_alias_func.php");
+    global $full_design_dir;
 
     $rewrite_header_fn = "$engine_dir/cms/header.htaccess";
     if (!file_exists($rewrite_header_fn))
@@ -8,7 +9,7 @@
         xcms_log(XLOG_ERROR, "Cannot find rewrite template header");
     }
     $rewrite_text = file_get_contents($rewrite_header_fn);
-    $rewrite_text = str_replace('@@DESIGN-DIR@', "/$web_prefix{$SETTINGS["design_dir"]}", $rewrite_text);
+    $rewrite_text = str_replace('@@DESIGN-DIR@', $full_design_dir, $rewrite_text);
     $rewrite_text = str_replace('@@WEB-PREFIX@', "/$web_prefix", $rewrite_text);
     $rewrite_text .= "\n";
 
