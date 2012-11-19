@@ -21,4 +21,5 @@
     // set up some common-used things
     $full_content_dir = "/$web_prefix${content_dir}";
     $full_design_dir = "/$web_prefix${design_dir}";
+    $full_engine_pub = "/${web_prefix}{$SETTINGS["engine_pub"]}";
 ?>
