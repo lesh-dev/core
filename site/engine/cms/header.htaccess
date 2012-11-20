@@ -5,14 +5,6 @@ ErrorDocument 404 @@DESIGN-DIR@404.php
 
 RewriteEngine on
 
-# Pass all existing directories AS IS, without translation
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule (.*) $1 [L]
-
-# Pass all files AS IS, without translation
-RewriteCond %{REQUEST_FILENAME} -f
-RewriteRule (.*) $1 [L]
-
 # Remove trailing slashes
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)/$ @@WEB-PREFIX@$1 [R=301,L]
