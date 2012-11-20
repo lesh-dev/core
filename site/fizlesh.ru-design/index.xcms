@@ -31,7 +31,6 @@
                             src="<# full_design_dir #>pic/lesh-subheader-wood.png"
                             alt="Летняя Экологическая Школа"/></a>
                     </div>
-                    <!--<# cms/header #>-->
                 </td>
             </tr>
         </table>
