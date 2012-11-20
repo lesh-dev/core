@@ -10,12 +10,12 @@
     }
     if(@$_POST["submit-anketa"])
     {
-        $mail_msg_plain = "Анкета:\n";
         $template_root = "{$SETTINGS['engine_dir']}templates";
         $mail_msg_html = file_get_contents("$template_root/anketa_mail.html");
         $row_template = file_get_contents("$template_root/anketa_mail_one_row.html");
         $unix_time = mktime();
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
+        $mail_msg_plain = "Анкета от $hr_timestamp:\r\n-----------------------------------\r\n";
 
         $person = $_POST; // get all values here (_POST should not be spoiled)
         // set some generic fields that cannot be overridden
@@ -56,7 +56,11 @@
             $kt = "$key_title: ";
             while (xcms_len($kt) < 22)
                 $kt .= ' ';
-            $mail_msg_plain .= "$kt$value\r\n";
+            $one_line = "$kt$value";
+            $mail_msg_plain .= "$one_line\r\n";
+            // append new line after long lines
+            if (xcms_len($one_line) > 80)
+                $mail_msg_plain .= "\r\n";
             $cur_row_html = $row_template;
             $cur_row_html = str_replace("@@ANK-KEY@", $key_title, $cur_row_html);
             $cur_row_html = str_replace("@@ANK-VALUE@", htmlspecialchars($value), $cur_row_html);
