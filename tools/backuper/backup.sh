@@ -15,6 +15,7 @@ mkdir -p "$backup_folder"
 
 backup_db()
 {
+	echo "dumping database $1"
 	ENC=utf8
 	if ! [ -z "$3" ]; then
 		ENC=$3
@@ -23,15 +24,19 @@ backup_db()
 }
 
 # add more folders here if you need
-tar cvzf "$backup_folder/git.tgz"  /srv/git
-tar cvzf "$backup_folder/trac.tgz" /srv/trac
-tar cvzf "$backup_folder/etc.tgz"  /etc
+echo "Taring git..."
+tar czf "$backup_folder/git.tgz"  /srv/git
+echo "Taring trac..."
+tar czf "$backup_folder/trac.tgz" /srv/trac
+echo "Taring etc..."
+tar czf "$backup_folder/etc.tgz"  /etc
 backup_db smf "$backup_folder/forum.sql.gz"
 backup_db information_schema "$backup_folder/information_schema.sql.gz"
 backup_db mysql "$backup_folder/mysql.sql.gz"
 backup_db postfix "$backup_folder/postfix.sql.gz" "latin1"
 
-tar cvzf "$backup_folder/attach.tgz"  /srv/www/clones/forum/attachments
+echo "Taring attachments..."
+tar czf "$backup_folder/attach.tgz"  /srv/www/clones/forum/attachments
 
 plan_a()
 {
