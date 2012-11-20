@@ -13,11 +13,24 @@ status_file=/tmp/backup-status
 rm -rf "$backup_folder"
 mkdir -p "$backup_folder"
 
+backup_db()
+{
+	ENC=utf8
+	if ! [ -z "$3" ]; then
+		ENC=$3
+	fi
+	mysqldump -ubackup -pnothing_to_backup --default-character-set=$ENC "$1" | gzip > "$2"
+}
+
 # add more folders here if you need
 tar cvzf "$backup_folder/git.tgz"  /srv/git
 tar cvzf "$backup_folder/trac.tgz" /srv/trac
 tar cvzf "$backup_folder/etc.tgz"  /etc
-mysqldump -ubackup -pnothing_to_backup --default-character-set=utf8 smf | gzip > "$backup_folder/forum.gz"
+backup_db smf "$backup_folder/forum.sql.gz"
+backup_db information_schema "$backup_folder/information_schema.sql.gz"
+backup_db mysql "$backup_folder/mysql.sql.gz"
+backup_db postfix "$backup_folder/postfix.sql.gz" "latin1"
+
 tar cvzf "$backup_folder/attach.tgz"  /srv/www/clones/forum/attachments
 
 plan_a()
