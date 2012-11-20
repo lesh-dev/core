@@ -24,7 +24,6 @@
         @$LIST["edit"] = xcms_user()->login();
         @$LIST["edit"] = "";
         @$LIST["view"] = "";
-        // ни в коем случае так делать нельзя!!! TODO выкосить цикл по POST-у
         foreach($_POST as $key=>$value)
         {
             if (substr($key,0,5)=="edit_")
