@@ -31,8 +31,6 @@ tar czf "$backup_folder/trac.tgz" /srv/trac
 echo "Taring etc..."
 tar czf "$backup_folder/etc.tgz"  /etc
 backup_db smf "$backup_folder/forum.sql.gz"
-backup_db information_schema "$backup_folder/information_schema.sql.gz"
-backup_db mysql "$backup_folder/mysql.sql.gz"
 backup_db postfix "$backup_folder/postfix.sql.gz" "latin1"
 
 echo "Taring attachments..."
