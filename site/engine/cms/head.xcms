@@ -11,11 +11,9 @@
 <title><?php
     // TODO: now we take these from INFO array, but all metainfo using another mechanism
     // they will be merged so $INFO will contain all proper information
-    $subheader = @$INFO["subheader"];
-    $header = @$INFO["header"];
-    $title = $subheader;
-    if (strlen($title)) $title .= " :: ";
-    $title .= $header;
-    if (strlen($title)) $title .= " :: ФизЛЭШ"; // TODO: убрать костыль
+    $title = "ФизЛЭШ"; // TODO: fizlesh.ru spike
+    $append = xcms_get_key_or($INFO, "menu-title");
+    if (!empty($append))
+        $title = "$append :: $title";
     echo htmlspecialchars($title);
 ?></title>

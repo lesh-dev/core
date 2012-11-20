@@ -52,14 +52,14 @@ if($need)
     //// ${prefix} раскрывается в путь до текущего $pageid
     $text = str_replace(
         '${prefix}',
-        "/$web_prefix${SETTINGS["datadir"]}cms/pages/$pageid",
+        "${full_content_dir}cms/pages/$pageid",
         $text);
     //// ${web_prefix} раскрывается в путь до корня сайта
     $wpx = "/$web_prefix";
     $wpx = preg_replace('#/$#i', "", $wpx);
     $text = str_replace('${web_prefix}', $wpx, $text);
     //// ${content_prefix} раскрывается в путь до контента сайта
-    $cpx = "/$web_prefix${SETTINGS["datadir"]}";
+    $cpx = $full_content_dir;
     $cpx = preg_replace('#/$#i', "", $cpx);
     $text = str_replace('${content_prefix}', $cpx, $text);
     //// ${engine_pub} раскрывается в путь до системного каталога с общим web-содержимым

@@ -27,7 +27,7 @@ def print_bad_context(lines, bad_lines):
             print '...'
             skip = True
 
-def check_tab_style(lines):
+def check_code_style(lines):
     line_count = len(lines)
     bad_lines = dict()
 
@@ -38,7 +38,17 @@ def check_tab_style(lines):
 
     for i in range(line_count):
         line = lines[i]
-        # TODO: check trailing cr/lf symbols in code
+
+        if not len(line) or line == "\n":
+            continue
+
+        # line endings check
+        lem = re.match('^[^\x0A\x0D]+[\n]$', line)
+        if not lem:
+            lem = re.match('^[^\x0A\x0D]+$', line)
+            # okay, last line may contain no CR-LF chars
+            if not lem:
+                add_bad_line(bad_lines, "UNIX-style line endings only allowed" , i)
 
         # spaces count check
         sm = re.search('^[ ]+', line)
@@ -82,7 +92,7 @@ def check_file(name):
         for line in f:
             lines.append(line)
 
-    return check_tab_style(lines)
+    return check_code_style(lines)
 
 def print_usage():
     print "Syntax: " + sys.argv[0] + " <file-name-to-check>"

@@ -47,8 +47,8 @@
 <html>
     <head>
         <# cms/head #>
-        <link rel="stylesheet" type="text/css" href="<?php echo "/$web_prefix${engine_pub}css/admin.css"; ?>" />
-        <script language="javascript" type="text/javascript" src="<?php echo "/$web_prefix${engine_pub}js/jquery-1.7.1.min.js"?>"></script>
+        <link rel="stylesheet" type="text/css" href="<?php echo "${full_engine_pub}css/admin.css"; ?>" />
+        <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/jquery-1.7.1.min.js"?>"></script>
         <script type="text/javascript">
             $(document).ready(function() {
                 $('div.view').hide();
