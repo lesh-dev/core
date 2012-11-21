@@ -13,12 +13,28 @@ status_file=/tmp/backup-status
 rm -rf "$backup_folder"
 mkdir -p "$backup_folder"
 
+backup_db()
+{
+	echo "dumping database $1"
+	ENC=utf8
+	if ! [ -z "$3" ]; then
+		ENC=$3
+	fi
+	mysqldump -ubackup -pnothing_to_backup --default-character-set=$ENC "$1" | gzip > "$2"
+}
+
 # add more folders here if you need
-tar cvzf "$backup_folder/git.tgz"  /srv/git
-tar cvzf "$backup_folder/trac.tgz" /srv/trac
-tar cvzf "$backup_folder/etc.tgz"  /etc
-mysqldump -ubackup -pnothing_to_backup --default-character-set=utf8 smf | gzip > "$backup_folder/forum.gz"
-tar cvzf "$backup_folder/attach.tgz"  /srv/www/clones/forum/attachments
+echo "Taring git..."
+tar czf "$backup_folder/git.tgz"  /srv/git
+echo "Taring trac..."
+tar czf "$backup_folder/trac.tgz" /srv/trac
+echo "Taring etc..."
+tar czf "$backup_folder/etc.tgz"  /etc
+backup_db smf "$backup_folder/forum.sql.gz"
+backup_db postfix "$backup_folder/postfix.sql.gz" "latin1"
+
+echo "Taring attachments..."
+tar czf "$backup_folder/attach.tgz"  /srv/www/clones/forum/attachments
 
 plan_a()
 {
