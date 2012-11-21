@@ -59,7 +59,7 @@
         else
             $mod_rewrite = (getenv('HTTP_MOD_REWRITE')=='On') ? true : false;
         if(!$mod_rewrite)
-            return "Apache mod_rewrite is not enabled. Please, configure Your apache server.";
+            return "Apache 'mod_rewrite' module is not enabled. Please enable it in your Apache webserver configuration.";
 
         @mkdir(".prec", 0777);
         if($f = @fopen(".prec/.htaccess", "a"))
