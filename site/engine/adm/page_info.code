@@ -23,9 +23,15 @@ function xcmst_page_info($INFO, $pageid)
             </span>
 
             <span class="td2">
-                <span class="info-label">Имя в меню</span>
+                <span class="info-label">Настройки меню</span>
                 <a <?php echo xcms_href(array('mode'=>'edit_menu', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
-                <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "menu-title", "<menu-title не задан>")); ?></tt></a>
+                <tt><?php
+                    echo htmlspecialchars(xcms_get_key_or($INFO, "menu-title", "<menu-title не задан>"));
+                    $flags = "";
+                    $flags .= ((xcms_get_key_or($INFO, "menu-hidden", "no") == "yes") ? "[Hid]" : "[Vis]");
+                    $flags .= ((xcms_get_key_or($INFO, "menu-auth-only", "no") == "yes") ? "[Auth]" : "[All]");
+                    echo "<sup>$flags</sup>";
+                ?></tt></a>
             </span>
 
             <span class="td2">
