@@ -1,4 +1,6 @@
 <?php
+    require_once("$engine_dir/sys/db.php");
+
     /**
       * Replace \n by <br /> with respect to various systems line endings
       **/
@@ -37,120 +39,6 @@
         $social_profile = htmlspecialchars($social_profile);
         return $social_profile;
     }
-
-    // DATABASE: xdb
-
-    function xdb_get()
-    {
-        global $content_dir;
-        return new SQlite3("$content_dir/ank/fizlesh.sqlite3", SQLITE3_OPEN_READONLY);
-    }
-
-    function xdb_get_write()
-    {
-        global $content_dir;
-        return new SQlite3("$content_dir/ank/fizlesh.sqlite3", SQLITE3_OPEN_READWRITE);
-    }
-
-
-    function xdb_insert_or_update($table_name, $primary_keys, $values, $allowed_keys)
-    {
-        $insert = false;
-        foreach ($primary_keys as $key => $value)
-            if ($value == "new") $insert = true;
-        if ($insert)
-            return xdb_insert_ai($table_name, $primary_keys, $values, $allowed_keys);
-        else
-            return xdb_update($table_name, $primary_keys, $values, $allowed_keys);
-    }
-
-    // single insert into autoincrement table
-    function xdb_insert_ai($table_name, $pk_name, $keys_values, $allowed_keys)
-    {
-        $db = xdb_get_write();
-        $keys = "";
-        $values = "";
-
-        // override 'created' and 'modified' field
-        $unix_time = mktime();
-        $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
-        $keys_values["${table_name}_created"] = $hr_timestamp;
-        $keys_values["${table_name}_modified"] = '';
-
-        foreach ($allowed_keys as $key => $title)
-        {
-            $value = xcms_get_key_or($keys_values, $key);
-            if ($key == $pk_name)
-                continue; // skip autoincremented keys
-            $keys .= "$key, ";
-            $values .= "'".$db->escapeString($value)."', ";
-        }
-        $keys = substr($keys, 0, strlen($keys) - 2);
-        $values = substr($values, 0, strlen($values) - 2);
-
-        $query = "INSERT INTO $table_name ($keys) VALUES ($values)";
-        $result = $db->exec($query);
-        if ($result)
-            xcms_log(0, "[DB] $query");
-        else
-            xcms_log(0, "[DB:ERROR] $query");
-        $db->close();
-        return $result;
-    }
-
-
-    function xdb_update($table_name, $primary_keys, $keys_values, $allowed_keys)
-    {
-        $db = xdb_get_write();
-        $values = "";
-        // update '<table-name>-modified' timestamp
-        $unix_time = mktime();
-        $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
-        $keys_values["${table_name}_modified"] = $hr_timestamp;
-
-        foreach ($allowed_keys as $key => $title)
-        {
-            $value = xcms_get_key_or($keys_values, $key);
-            if ($key == "${table_name}_created")
-                continue; // never update 'created' field
-
-            if (array_key_exists($key, $primary_keys))
-                continue; // skip primary keys
-
-            $values .= "$key = '".$db->escapeString($value)."', ";
-        }
-        $values = substr($values, 0, strlen($values) - 2);
-
-        $cond = "";
-        foreach ($primary_keys as $key => $value)
-        {
-            $cond .= "($key = '".$db->escapeString($value)."') AND ";
-        }
-        $cond = substr($cond, 0, strlen($cond) - 5);
-        $query = "UPDATE $table_name SET $values WHERE $cond";
-        $result = $db->exec($query);
-        if ($result)
-            xcms_log(0, "[DB] $query");
-        else
-            xcms_log(0, "[DB:ERROR] $query");
-        $db->close();
-        return $result;
-    }
-
-    function xdb_delete($table_name, $key_value)
-    {
-        $db = xdb_get_write();
-        $cond = "${table_name}_id = '".$db->escapeString($key_value)."'";
-        $query = "DELETE FROM $table_name WHERE $cond";
-        $result = $db->exec($query);
-        if ($result)
-            xcms_log(0, "[DB] $query");
-        else
-            xcms_log(0, "[DB:ERROR] $query");
-        $db->close();
-        return $result;
-    }
-
 
     function xsm_update_entity($entity, $table_name, $title, $fields, $aux_param = '')
     {
@@ -262,42 +150,6 @@
         <a href="list-<?php echo $redir ?>">Вернуться к просмотру</a></p><?php
     }
 
-
-    function xdb_get_entity_by_id($table_name, $id)
-    {
-        $db = xdb_get();
-        $key_name = "${table_name}_id";
-
-
-        if ($id != "new")
-        {
-            $idf = preg_replace('/[^0-9]/', '', $id);
-            if (strlen($idf) == 0)
-            {
-                xcms_log(0, "Cannot fetch entity from '$table_name' with empty or filtered id '$id'.");
-                return array();
-            }
-            $id = $idf;
-            $query = "SELECT * FROM $table_name WHERE $key_name = $id";
-            $sel = $db->query($query);
-            if (!($ev = $sel->fetchArray(SQLITE3_ASSOC)))
-            {
-                xcms_log(0, "Cannot fetch entity from '$table_name' with id: '$id'. Query: $query.");
-                return array();
-            }
-            $db->close();
-        }
-        else
-        {
-            // new record
-            $ev = array(
-                $key_name=>$id
-            );
-        }
-        return $ev;
-    }
-
-
     function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_cond = '')
     {
         $db = xdb_get();
@@ -399,16 +251,5 @@
         $sHTML = "<input class=\"ankEdit checkbox\" type=\"checkbox\" name=\"$name\" ".
             "id=\"$name-checkbox\" value=\"$checked_value\" $checked />";
         return $sHTML;
-    }
-
-    function xdb_like($mask, $value)
-    {
-        $mask = str_replace(
-            array("%", "_"),
-            array(".*?", "."),
-            preg_quote($mask, "/")
-        );
-        $mask = "/^$mask$/ui";
-        return preg_match($mask, $value);
     }
 ?>
