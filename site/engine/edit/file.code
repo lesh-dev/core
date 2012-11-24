@@ -22,17 +22,6 @@
     }
     else
     {
-        /*
-        // commented in order to fix bug #141
-        if(@$_POST["clear-versions"]&&@$_POST["multi-id"]==@$multiId)
-        {
-            foreach(glob("$ename-version-*") as $k=>$v)
-                unlink($v);
-
-            $current_version = "";
-        }
-        else
-        */
         if(@$_POST["edit-submit"]&&@$_POST["multi-id"]==@$multiId)
         {
             $time = time();
@@ -109,7 +98,6 @@
 
         if(!@$keys["-h"]) echo "<$tag>edit: $ename</$tag>";
         $ty = "submit";
-        //echo $multiId;
 
         $vlist = '<option value="">HEAD</option>';
         foreach(glob("$ename-version-*") as $k=>$v )
@@ -129,17 +117,24 @@
 
     ?>
 <form method="post" enctype="multipart/form-data">
+    <input type="hidden" name="<?php echo $pathv; ?>" value="<?php echo $ename;?>" />
+    <input type="hidden" name="multi-id" value="<?php echo $multiId; ?>" />
+    <div style="padding-top: 15px;">
+        <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-sumbit-top" value="<?php echo $submitVal; ?>" />
+        <input type="submit" name="edit-preview" id="edit-preview-top" value="Предпросмотр" />
+        Версия:
+        <select name="versions" id="versions-top"><?php echo $vlist; ?></select>
+        <input type="submit" name="set-version" id="set-version-top" value="Смотреть версию"/>
+    </div>
     <textarea class="editor" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
-        name="edit-text"><?php echo $text; ?></textarea>
-    <br />
-    <input type="hidden" name="<?php echo $pathv; ?>" value="<?php echo $ename;?>">
-    <input type="hidden" name="multi-id" value="<?php echo $multiId; ?>">
-    <input type="<?php echo $ty; ?>" name="edit-submit" value="<?php echo $submitVal; ?>">
-    <input type="submit" name="edit-preview" value="Предпросмотр" />
-    Версия:
-    <select name="versions"><?php echo $vlist; ?></select>
-    <input type="submit" name="set-version" value="Смотреть версию"/>
-    <!--<input type="submit" name="clear-versions" value="Очистить версии"/>-->
+        name="edit-text" id="edit-text"><?php echo $text; ?></textarea>
+    <div>
+        <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-sumbit-top" value="<?php echo $submitVal; ?>" />
+        <input type="submit" name="edit-preview" id="edit-preview-bottom" value="Предпросмотр" />
+        Версия:
+        <select name="versions" id="versions-bottom"><?php echo $vlist; ?></select>
+        <input type="submit" name="set-version" id="set-version-bottom" value="Смотреть версию"/>
+    </div>
 </form>
 <?php
         if(@$_POST["edit-preview"])
