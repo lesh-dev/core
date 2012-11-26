@@ -74,7 +74,7 @@
                 <a'.xcms_href(array('mode'=>'logout', 'page'=>$pageid, 'ref'=>$ref)).'class="h-menu-link">Выйти</a>
                 |
                 <a'.xcms_href(array('mode'=>'userlist', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Пользователи</a>
-                <a'.xcms_href(array('mode'=>'groupadmin', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Группы</a>
+                <a'.xcms_href(array('mode'=>'group_admin', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Группы</a>
                 <a'.xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Уведомления</a>
                 <a'.xcms_href(array('mode'=>'css', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-link">Стиль</a>
                 <a href="/'.$web_prefix.'register/view" class="h-menu-link">Люди</a>
@@ -231,10 +231,10 @@
     {
         include(translate("<! cms/light_access_editor !>"));
     }
-        elseif(@$_GET["mode"]=="groupadmin")
+    elseif(@$_GET["mode"]=="group_admin")
     {
         $editfile = "{$SETTINGS["datadir"]}groups";
-        include(translate("<! edit/oldtag !>"));
+        include(translate("<! edit/tag !>"));
     }
     elseif(@$_GET["mode"]=="register_form")
     {
