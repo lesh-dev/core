@@ -181,11 +181,10 @@ function getList($filename)
   * secyrityflags:
   * -newkey - disable newkey option
   **/
-function editlist_form($file, $addparams, $skipparams="",$securityflags="", $old_mode=false)
+function editlist_form($file, $addparams, $skip_params = "", $security_flags = "")
 {
     global $SETTINGS;
-    if ($old_mode) $list = getList($file);
-    else $list = xcms_get_list($file);
+    $list = xcms_get_list($file);
 
     if(@$_POST["editTag"])
     {
@@ -208,19 +207,11 @@ function editlist_form($file, $addparams, $skipparams="",$securityflags="", $old
         }
         if(@$_POST["newkey"])
         {
-            if(!strstr($securityflags,"-newkey"))
+            if(!strstr($security_flags,"-newkey"))
                 $list[$_POST["newkey"]] = @$_POST["newvalue"];
         }
-        if ($old_mode)
-        {
-            saveList($list, $file);
-            $list = getList($file);
-        }
-        else
-        {
-            xcms_save_list($file, $list);
-            $list = xcms_get_list($file);
-        }
+        xcms_save_list($file, $list);
+        $list = xcms_get_list($file);
     }
     ?>
 
@@ -228,7 +219,7 @@ function editlist_form($file, $addparams, $skipparams="",$securityflags="", $old
         <table class="key-value"><?php
     foreach ($list as $key=>$value)
     {
-        if (strstr($skipparams, $key))
+        if (strstr($skip_params, $key))
             continue;
 
         $id = "edtg_$key";
@@ -264,7 +255,7 @@ function editlist_form($file, $addparams, $skipparams="",$securityflags="", $old
             </td></tr><?php
         }
     }
-    if (!strstr($securityflags,"-newkey"))
+    if (!strstr($security_flags,"-newkey"))
     {?>
         <tr>
             <td><input name="newkey" id="newkey"
