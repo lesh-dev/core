@@ -48,15 +48,8 @@
     <head>
         <# cms/head #>
         <link rel="stylesheet" type="text/css" href="<?php echo "${full_engine_pub}css/admin.css"; ?>" />
-        <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/jquery-1.7.1.min.js"?>"></script>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $('div.view').hide();
-                $('div.slide').click(function() {
-                    $('div.view').slideToggle(400);
-                    return false;
-                });
-            });
+        <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/jquery-1.7.1.min.js"; ?>"></script>
+        <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/admin.js"; ?>"></script>
         </script>
     </head>
     <body>

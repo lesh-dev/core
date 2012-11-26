@@ -1,0 +1,9 @@
+<a href="#" id="show-editor-help" class="popup-link">Показать посказку</a>
+<div id="editor-help">
+    <div><span class="help-left">~</span> неразрывный пробел</div>
+    <div><span class="help-left">--</span> короткое тире</div>
+    <div><span class="help-left">---</span> длинное тире</div>
+    <div><span class="help-left">&lt;p&gt;...&lt;/p&gt;</span> параграф</div>
+    <div><span class="help-left">&lt;h2&gt;...&lt;/h2&gt;</span> заголовок первого уровня</div>
+    <div><span class="help-left">[[текст:/sect/subsect]]</span> ссылка на раздел сайта</div>
+</div>

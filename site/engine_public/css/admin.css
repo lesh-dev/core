@@ -264,3 +264,10 @@ div.news-block.even {
 div.news-block.odd {
     background-color: #ddedad;
 }
+
+span.help-left {
+    font-family: monospace;
+    display: inline-block;
+    width: 200px;
+    text-align: center;
+}
