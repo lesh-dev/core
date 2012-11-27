@@ -56,7 +56,7 @@ def check_code_style(lines):
             spaces = sm.group()
             if len(spaces) % 4 != 0:
                 ls = line.lstrip()
-                if ls[0:2] == '* ' or ls[0:3] == '/**' or ls [0:3] == '**/':
+                if ls[0:2] == '* ' or ls == '*\n' or ls[0:3] == '/**' or ls [0:3] == '**/':
                     # okay, it seems like a Doxygen comment (TODO: add entrance/leave) check)
                     pass
                 else:
