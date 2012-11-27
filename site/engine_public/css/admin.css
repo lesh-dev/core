@@ -65,7 +65,7 @@ div.content {
 /* default padding is too small */
 textarea {
     padding: 4px;
-    border: 1px solid #7f7f7f;
+    border: 1px solid #cfcf7f;
     background-color: #fefef3;
 }
 
@@ -85,7 +85,7 @@ pre.site-info {
 }
 
 input {
-    border: 1px solid #7f7f7f;
+    border: 1px solid #cfcf7f;
     padding-left: 2px;
     padding-right: 2px;
 }
@@ -152,7 +152,7 @@ span.admin-form-label {
 }
 
 div.admin-widget {
-    border: 1px solid #7f7f7f;
+    border: 1px solid #cfcf7f;
     border-radius: 3px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -193,7 +193,6 @@ div.page-info-box {
     margin-bottom: 10px;
     border: 1px solid #cfcf7f;
     border-radius: 5px;
-    width: 980px;
 }
 
 div.page-info-box-top {

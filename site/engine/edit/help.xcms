@@ -1,5 +1,5 @@
-<a href="#" id="show-editor-help" class="popup-link">Показать посказку</a>
-<div id="editor-help">
+<a href="#" id="show-editor-help" class="popup-link">Шпаргалка по вёрстке</a>
+<div id="editor-help" class="admin-widget">
     <div><span class="help-left">~</span> неразрывный пробел</div>
     <div><span class="help-left">--</span> короткое тире</div>
     <div><span class="help-left">---</span> длинное тире</div>
