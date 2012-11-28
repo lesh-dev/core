@@ -45,7 +45,7 @@
                 <input name="image-name" value="auto-uploaded" type="hidden" />
                 <input name="image-comment" value="" type="hidden" />
                 <tr>
-                    <td>Наименование<br/><font size="-1">Выберите имя файла -- английское, без пробелов</font></td>
+                    <td>Наименование<br/><font size="-1">Выберите имя файла &#8212; английское, без пробелов</font></td>
                     <td><input name="image-target" /></td>
                 </tr>
                 <tr>
@@ -76,25 +76,19 @@
             $pic_src = "$page_prefix/{$lst["pic-name"]}";
             $aux_style = ($pic_counter % 2) ? "odd" : "even";
             ?>
-            <div class="news-block <?php echo $aux_style; ?>">
-            <table cellpadding="0" cellspacing="0">
-            <tr>
-                <td rowspan="2">
-                <a href="<?php echo $pic_src; ?>"><img
-                    width="90" src="<?php echo $pre_src; ?>" /></a>
-                <td style="padding-left: 5px;">Picture: <tt><?php echo "$page_prefix/".$lst["pic-name"]; ?></tt><!--
-                    <input value="<?php echo $lst["pic-name"]; ?>" size="60" />--></td>
-            </tr>
-            <tr>
-                <td style="padding-left: 5px;">Preview: <tt><?php echo "$page_prefix/".$lst["preview-name"]; ?></tt><!--
-                    <input value="<?php echo $lst["preview-name"]; ?>" size="60" />--></td>
-            </tr>
-            </table>
-            <form method="post">
-                <input type="hidden" name="name" value="<?php echo $value; ?>" />
-                <input type="submit" name="delete-image" value="Удалить" />
-            </form>
-            </div><?php
+            <div class="floating-box news-block <?php echo $aux_style; ?>">
+                <a class="image-link" href="<?php echo $pic_src; ?>"><img
+                    class="image-link" src="<?php echo $pre_src; ?>" /></a>
+                <div class="right-image-box">
+                    <span style="padding-left: 5px;">Picture: <tt>${prefix}/<?php echo $lst["pic-name"]; ?></tt></span><br />
+                    <span style="padding-left: 5px;">Preview: <tt>${prefix}<?php echo $lst["preview-name"]; ?></tt></span>
+                    <form method="post">
+                        <input type="hidden" name="name" value="<?php echo $value; ?>" />
+                        <input type="submit" name="delete-image" value="Удалить" />
+                    </form>
+                </div>
+            </div>
+            <?php
             $pic_counter++;
         }
     }

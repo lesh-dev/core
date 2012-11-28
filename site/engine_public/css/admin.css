@@ -218,7 +218,7 @@ span.info-label {
 }
 
 div.td1 {
-   line-height: 18px;
+    line-height: 18px;
 }
 
 span.td2 {
@@ -274,4 +274,24 @@ span.help-left {
     display: inline-block;
     width: 200px;
     text-align: center;
+}
+
+div.floating-box {
+    overflow: auto;
+}
+
+a.image-link {
+    float: left;
+    width: 102px;
+    display: inline-block;
+}
+
+img.image-link {
+    border: 1px solid #cfcf7f;
+    width: 100px;
+}
+
+div.right-image-box {
+    padding-left: 10px;
+    display: inline-block;
 }
