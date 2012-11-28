@@ -217,9 +217,14 @@ span.info-label {
     color: #5f4f00;
 }
 
+div.td1 {
+   line-height: 18px;
+}
+
 span.td2 {
     width: 49%;
     display: inline-block;
+    line-height: 18px;
 }
 
 table.key-value {

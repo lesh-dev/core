@@ -2,15 +2,14 @@
     <h3>Заголовки страницы</h3>
     <form method="post">
     <?php
-    // TODO: избавиться от глобального кода, надо всё распилить на функции
     $info = xcms_get_list(xcms_get_info_file_name());
     $redirect = false;
-    if(@$_POST["change-header-subheader"])
+    if(@$_POST["change-header"])
     {
         $info["header"] = xcms_get_key_or($_POST, "header");
-        $info["subheader"] = xcms_get_key_or($_POST, "subheader");
+        //$info["subheader"] = xcms_get_key_or($_POST, "subheader");
         xcms_save_list(xcms_get_info_file_name(), $info);
-        echo "<div class=\"notice\">Информация о заголовках обновлена</div>";
+        echo "<div class=\"notice\">Информация о заголовке обновлена</div>";
         $redirect = true;
     }
     if ($redirect)
@@ -19,13 +18,13 @@
     <div>
         <span class="admin-form-label">Заголовок</span>
         <input type="text" class="admin-long" xcms-track-changes="yes" name="header"
-            value="<?php echo htmlspecialchars(@$info["header"]); ?>" />
+            value="<?php echo htmlspecialchars(xcms_get_key_or($info, "header")); ?>" />
     </div>
-    <div>
+    <!--<div>
         <span class="admin-form-label">Подзаголовок</span>
         <input type="text" class="admin-long" xcms-track-changes="yes" name="subheader"
-            value="<?php echo htmlspecialchars(@$info["subheader"]); ?>">
-    </div>
-    <input name="change-header-subheader" type="submit" value="Сохранить" />
+            value="<?php echo htmlspecialchars(xcms_get_key_or($info, "subheader")); ?>">
+    </div>-->
+    <input name="change-header" type="submit" value="Сохранить" />
     </form>
 </div>
