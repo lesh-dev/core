@@ -129,10 +129,10 @@
         include(translate("<! cms/edit_menu !>"));
     else if(@$_GET["mode"]=="page_rename")
         include(translate("<! cms/page_rename !>"));
+    else if(@$_GET["mode"]=="edit_icon")
+        include(translate("<! cms/light_icon_editor !>"));
     else if(@$_GET["mode"]=="obsolete_settings")
     {
-        // TODO: move icon editor
-        include(translate("<! cms/light_icon_editor !>"));
         // TODO: rewrite keys shmatrix
         $editfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/info";
         include(translate('<! edit/tag `edit`,`view`,`installed` !>'));

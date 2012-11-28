@@ -61,9 +61,10 @@ function xcmst_page_info($INFO, $pageid)
     </div><?php
     echo '
         <a'.xcms_href(array('page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Контент</a>
-        <a'.xcms_href(array('mode'=>'obsolete_settings', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Настройки (будет выпилено)</a>
         <a'.xcms_href(array('mode'=>'img_edit', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Картинки</a>
-        <a'.xcms_href(array('mode'=>'access', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Доступ</a>';
+        <a'.xcms_href(array('mode'=>'edit_icon', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Иконка меню</a>
+        <a'.xcms_href(array('mode'=>'access', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Доступ</a>
+        <a'.xcms_href(array('mode'=>'obsolete_settings', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Настройки (будет выпилено)</a>';
 }
 
 ?>

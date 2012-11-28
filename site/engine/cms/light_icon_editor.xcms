@@ -1,19 +1,31 @@
-                <?php 
-                  if(@$_POST["uploadIcons"])
-                  {
-                    foreach ($_FILES as $key=>$value) 
-                    {
-                        $key = str_replace("_",".",$key);
-                      	copy($value["tmp_name"],"{$SETTINGS["datadir"]}cms/pages/$pageid/$key");
-                      	//echo "{$SETTINGS["datadir"]}cms/pages/$pageid/$key";
-                    }
-                  }
-                ?>
-                <h4>Иконка меню</h4>
-                <form method="post" enctype="multipart/form-data">
-                  <table>
-                  <tr><td><img src="<?php echo "{$SETTINGS["datadir"]}cms/pages/$pageid/menuicon.gif"; ?>"><td><input type="file" name="menuicon.gif">
-                  </table>
-                  
-                  <input type="submit" name="uploadIcons" value="Загрузить">
-                </form>
+<?php
+function xcmst_upload_icon()
+{
+    global $SETTINGS;
+    global $pageid;
+    // exactly one file should be uploaded
+    if (count($_FILES) != 1)
+    {?>
+        <div class="error">Должен быть загружен ровно 1 файл</div><?php
+        return;
+    }
+
+    foreach ($_FILES as $key=>$value)
+    {
+        $path = "{$SETTINGS["datadir"]}cms/pages/$pageid";
+        copy($value["tmp_name"], "$path/menu-icon.png");
+    }
+}
+?>
+<div class="admin-widget">
+    <h3>Иконка меню (png)</h3>
+    <?php
+        if(@$_POST["upload-icon"])
+            xcmst_upload_icon();
+    ?>
+    <form method="post" enctype="multipart/form-data">
+        <img class="image-link" src="<?php echo "{$SETTINGS["datadir"]}cms/pages/$pageid/menu-icon.png"; ?>">
+        <input type="file" name="menu-icon"/>
+        <input type="submit" name="upload-icon" value="Загрузить" />
+    </form>
+</div>
