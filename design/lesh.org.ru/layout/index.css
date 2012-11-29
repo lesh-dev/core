@@ -15,17 +15,21 @@ html,body {
 	overflow: auto;
 }
 
-@font-face { 
-   font-family: 'Trebuchet MS', sans-serif; 
-   src: url('trebuc.ttf');  
-} 
+@font-face {
+	font-family: "trebuc", sans-serif;  
+   	src: url('trebuc.eot'); /* IE9 */
+   	src: url('trebuc.eot?') format('eot'),  /* IE6-IE8 */
+   	url('trebuc.woff') format('woff'), /* Современные браузеры */
+   	url('trebuc.ttf')  format('truetype'), /* Safari, Android, iOS */ 
+   	url('trebuc.svg#svgtrebuc') format('svg'); /* iOS */ 
+}
 
 body {
 	width: 100%;
 	height: 100%;
 	min-height: 100%;
 	position: absolute;
-	font-family: "Trebuchet MS", "Helvetica CY", "Arial", sans-serif;
+	font-family: "Trebuchet MS",sans-serif;
 }
 
 .indent_form a, 
@@ -52,7 +56,7 @@ body {
 	background: white;
 	background-attachment: fixed;
 	overflow: auto;
-	font-family: "Trebuchet MS", "Helvetica CY", "Arial", sans-serif;
+	font-family: "Trebuchet MS", sans-serif;
 }
 
 .header{
@@ -140,7 +144,7 @@ body {
 
 .sidebar_left ul{
 	font-size: 14px;
-	font-family: "Trebuchet MS", "Helvetica CY", "Arial", sans-serif;
+	font-family: "Trebuchet MS", sans-serif;
 }
 
 .sidebar_left ul li{
@@ -171,6 +175,7 @@ body {
 	text-decoration: none;
 	background-color: #7AA643;
 	color: white;
+	padding: 3px 5px 3px 5px;
 }
 
 .main_text{
@@ -295,6 +300,11 @@ p.grey_fond{
 
 .right_text p.indent{
 	padding-top: 7px;
+}
+
+.right_text a.after_year,
+.right_text span.after_year{
+	padding: 7px 0px 0px 10px;
 }
 
 .length_of_text p.note_bottom{
@@ -477,31 +487,25 @@ p.grey_fond{
 }
 
 .right_text div.indent_form{
-	padding-left: 10px;
-	padding-right: 10px;
+	padding-left: 15px;
+	padding-right: 20px;
 	padding-bottom: 10px;
-}
-
-.right_text .indent_form a{
-	white-space: nowrap;
 }
 
 .right_text span.setting_year{
 	background: #7A9181;
 	color: white;
 	width: 250px;
-	padding:2px;
-	padding-left: 9px;
-	margin-left: -10px;
+	padding:2px 5px 2px 15px;
+	margin-left: -15px;
 }
 
 .indent_form div.title_as_chronicle{
 	background: #79A544;
 	color: white;
-	width: 240px;
-	padding-bottom:7px;
-	padding-left: 10px;
-	margin-left: -10px;
+	width: 235px;
+	padding:2px 0px 7px 15px;
+	margin-left: -15px;
 	font-size: 16px;
 	vertical-align: middle;
 }
@@ -529,7 +533,7 @@ p.grey_fond{
 .text_left_top{
 	width: 200px;
 	background-color:  #83ac9b;
-	padding: 10px 20px 20px 20px;
+	padding: 5px 20px 20px 20px;
 	margin-left: 10px;
 	margin-top: -30px;
 	text-align: left;
@@ -557,6 +561,7 @@ p.grey_fond{
 .text_left_bottom p.word_left_top{
 	font-size: 15px; 
 	color: black;
+	padding-bottom: 10px;
 }
 
 .text_left_top, .text_left_bottom p{
