@@ -1,9 +1,16 @@
 <a href="#" id="show-editor-help" class="popup-link">Шпаргалка по вёрстке</a>
 <div id="editor-help" class="admin-widget">
-    <div><span class="help-left">~</span> неразрывный пробел</div>
-    <div><span class="help-left">--</span> короткое тире</div>
-    <div><span class="help-left">---</span> длинное тире</div>
-    <div><span class="help-left">&lt;p&gt;...&lt;/p&gt;</span> параграф</div>
-    <div><span class="help-left">&lt;h2&gt;...&lt;/h2&gt;</span> заголовок первого уровня</div>
-    <div><span class="help-left">[[текст:/sect/subsect]]</span> ссылка на раздел сайта</div>
+    <div><span class="help-left"><b>~</b></span> неразрывный пробел</div>
+    <div><span class="help-left"><b>--</b></span> короткое тире</div>
+    <div><span class="help-left"><b>---</b></span> длинное тире</div>
+    <div><span class="help-left"><b>&lt;p&gt;</b>Длинное предложение. Целый абзац.<b>&lt;/p&gt;</b></span> параграф</div>
+    <div><span class="help-left"><b>&lt;h1&gt;</b>Название заголовка<b>&lt;/h1&gt;</b></span> заголовок страницы</div>
+    <div><span class="help-left"><b>&lt;h2&gt;</b>Название главы<b>&lt;/h2&gt;</b></span> заголовок главы на странице</div>
+    <div><span class="help-left"><b>&lt;h3&gt;</b>Название параграфа<b>&lt;/h3&gt;</b></span> заголовок параграфа на странице</div>
+    <div><span class="help-left"><b>[[</b>текст<b>:</b>/sect/subsect<b>]]</b></span> ссылка на раздел сайта</div>
+    <div><span class="help-left"><b>&lt;code&gt;</b>some monotyped code<b>&lt;code/&gt;</b></span> код (моноширинный шрифт)</div>
+    <div><span class="help-left"><b>${prefix}</b></span> путь до текущей страницы</div>
+    <div><span class="help-left"><b>${content_prefix}</b></span> путь до каталога с контентом</div>
+    <div><span class="help-left"><b>${email:</b>name<b>}</b></span> $-плагин для email-ов</div>
+    <div><span class="help-left"><b>${staffimg:</b>name<b>:</b>title<b>}</b></span> $-плагин для списка людей</div>
 </div>

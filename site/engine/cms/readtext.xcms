@@ -144,6 +144,7 @@ if($need)
     $text = str_replace("~","&nbsp;", $text);
 
     //// Обработка сокращенного наименования
+    // TODO: fix UNICODE bug here!!!
     if($limit > 0 && strlen($text) > $limit)
     {
         $text = substr($text,0,$limit);

@@ -272,8 +272,8 @@ div.news-block.odd {
 span.help-left {
     font-family: monospace;
     display: inline-block;
-    width: 200px;
-    text-align: center;
+    width: 260px;
+    padding-left: 6px;
 }
 
 div.floating-box {
