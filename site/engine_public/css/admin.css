@@ -269,6 +269,11 @@ div.news-block.odd {
     background-color: #ddedad;
 }
 
+span.top-menu-div {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 span.help-left {
     font-family: monospace;
     display: inline-block;
