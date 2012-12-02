@@ -72,6 +72,7 @@ textarea {
 textarea.editor {
     margin-top: 5px;
     margin-bottom: 5px;
+    width: 100%;
 }
 
 textarea.admin-long {
@@ -279,6 +280,16 @@ span.help-left {
     display: inline-block;
     width: 260px;
     padding-left: 6px;
+}
+
+div.help-widget {
+    position: absolute;
+    width: 500px;
+    top: 15px;
+    right: -5px;
+    background-color: #e3e38f;
+    padding-bottom: 5px;
+    padding-top: 5px;
 }
 
 div.floating-box {
