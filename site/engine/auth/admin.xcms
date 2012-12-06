@@ -1,189 +1,235 @@
 <# auth/ #admin #>
 <?php
-    //echo $argv[1];
     require_once("$engine_dir/sys/auth.php");
     require_once("$engine_dir/sys/groups.php");
     $u = xcms_user();
-?>
-<?php
-    $current_user_name = @$_GET["user"];
-    if($current_user_name != "")
+    $target_user = xcms_get_key_or($_GET, "user");
+
+    function xcmst_draw_user_list($u, $target_user)
     {
-        $current_user = $u->su($current_user_name);
+        global $preface;
+        ?>
+        <div>
+        <div style="padding-bottom: 5px">
+            <a class="h-menu-link" href="?action=create_user<?php echo $preface;?>">Создать пользователя</a>
+        </div>
+        <?php
+            foreach($u->user_list() as $user)
+            {
+                $activeness = ($user == $target_user) ? "menu-active" : "";
+                echo "<a class=\"user-list $activeness\" href=\"?user=$user$preface\">$user</a>\n";
+            }
+        ?>
+        </div><?php
+    }
+
+    function xcmst_user_create_notify($email, $login, $password)
+    {
+        // TODO: this template should be taken from file
+        $notify_result = xcms_send_notification(
+            "developers",
+            array($email),
+            "Welcome to XCMS!",
+
+            "Добро пожаловать! Для Вас заведён логин и пароль на сайте.\n"
+            ."\n"
+            ."Ваш логин: $login\n"
+            ."\n"
+            ."Ваш пароль: $password\n"
+            ."\n"
+            ."Если у Вас будут какие-то проблемы, не бойтесь писать "
+            ."на support@fizlesh.ru, все равно его никто не читает.\n"
+        );
+        // TODO: fix this bullshit
+        if (!$notify_result)
+            echo "<li> Не вышло послать е-мейл";
+    }
+
+    function xcmst_draw_privileges($user)
+    {?>
+        <h3>Привилегии</h3>
+        <?php
+        foreach(xcms_all_groups() as $group => $title)
+        {
+            if ($user != NULL and $user->check_rights($group, false))
+                $ch = " checked ";
+            else
+                $ch = "";
+            echo "<div><input $ch type=\"checkbox\" name=\"group_$group\" />$title</div>\n";
+        }
+    }
+
+
+    function xcmst_draw_user_create_form()
+    {?>
+        <form method="post">
+            <h3>Учётные данные</h3>
+            <div><span class="user-label">Логин:</span> <input name="login" id="login" /></div>
+            <div><span class="user-help-label">Разрешены латинские буквы, цифры,
+                а также дефис (-), подчёркивание (_), точка (.) и собака (@)</span></div>
+            <div><span class="user-label">Пароль:</span>
+                <input type="password" name="password" id="password"/></div>
+            <div><span class="user-label">Пароль (ещё раз):</span>
+                <input type="password" name="password_confirm" id="password_confirm"/></div>
+            <div><span class="user-label">Настоящее имя:</span>
+                <input name="name" id="name"/></div>
+            <div><span class="user-label">Электропочта:</span>
+                <input name="email" id="email"/></div>
+            <div><span class="user-label">Оповестить пользователя</span>
+                <input type="checkbox" name="notify_user" id="notify_user"/></div>
+            <?php
+            xcmst_draw_privileges(NULL);
+            ?>
+            <input type="submit" name="create_user" value="Создать пользователя" />
+        </form><?php
+    }
+
+    function xcmst_draw_user_modify_form($u, $need_default)
+    {
+        global $target_user;
+        if (empty($target_user))
+        {
+            if ($need_default)
+                echo "<h3>Выберите пользователя в меню слева</h3>";
+            return;
+        }
+        $user = $u->su($target_user);
+        $cd = date('d.m.Y, H:i:s',$user->param('creation_date'));
+        ?>
+        <form method="post">
+        <h3>Учётные данные</h3>
+
+        <div><span class="user-label">Логин:</span><?php echo $user->login(); ?></div>
+        <div><span class="user-label">Создал</span><?php echo $user->param('creator').", $cd"; ?></div>
+
+        <div><span class="user-label">Настоящее имя:</span><input name="user_name" name="user_name"
+            value="<?php echo $user->param('name'); ?>" placeholder="Вася Пупкин" /></div>
+
+        <div><span class="user-label">Электропочта:</span><input name="user_email" name="user_email"
+            value="<?php echo $user->param('email'); ?>" placeholder="nobody@example.com" /></div>
+
+        <?php
+        xcmst_draw_privileges($user);
+
+        if($u->login() == $user->login())
+        {?>
+            <div class="error">Вы не можете обновить свой собственный профиль</div><?php
+        }
+        else
+        {?>
+            <input name="update_user" id="update_user" value="Обновить данные пользователя" type="submit" />
+            <input name="check_delete_user" id="check_delete_user" value="Удалить пользователя"
+                type="submit" class="delete"/><?php
+            if(@$_POST['check_delete_user'])
+            {?>
+                <div class="warning">Вы точно уверены, что хотите <b>удалить</b> этого пользователя?</div>
+                <input name="delete_user" id="delete_user" value="Таки да, удалить!"
+                    type="submit" class="delete"/><?php
+            }
+        }?>
+        </form><?php
+    }
+
+    function xcmst_redir_userlist($message, $target_user)
+    {
+        global $preface;
+        $suffix = empty($target_user) ? "" : "&amp;user=$target_user";
+        ?>
+        <div class="notice" id="before-redirect-notice"><?php echo $message; ?>
+            Вы будете перенаправлены через 2 сек...</div>
+        <script>$('#before-redirect-notice').fadeTo(1450, 0).delay(500);</script>
+        <meta http-equiv="refresh" content="2;URL=?<?php echo "$preface$suffix"; ?>" /><?php
+    }
+
+    function xcmst_create_user($u)
+    {
+        $login = @$_POST["login"];
+        $password = @$_POST["password"];
+        if ($password != @$_POST["password_confirm"])
+            throw new Exception("Passwords do not match. ");
+        if (!strlen($password))
+            throw new Exception("Empty password. ");
+        if (!strlen($login))
+            throw new Exception("Empty login. ");
+        $email = @$_POST["email"];
+        $tu = $u->create($login, $email);
+        $tu->passwd($password);
+        $tu->set_param("name", xcms_get_key_or($_POST, "name"));
+        foreach(xcms_all_groups() as $group=>$title)
+        {
+            if (@$_POST["group_$group"])
+                $u->group_add($login, $group);
+        }
+        if (@$_POST["notify_user"])
+            xcmst_user_create_notify($email, $login, $password);
+
+        xcmst_redir_userlist("Пользователь добавлен. ", $login);
+    }
+
+
+    function xcmst_update_user($u, $target_user)
+    {
+        $user = $u->su($target_user);
+        foreach (array("name", "email") as $field)
+        {
+            $user->set_param($field, @$_POST["user_$field"]);
+        }
+        foreach (xcms_all_groups() as $group=>$title)
+        {
+            if(@$_POST["group_$group"])
+            {
+                try
+                {
+                    $u->group_add($user->login(), $group);
+                }
+                catch(Exception $e) {}
+            }
+            else
+            {
+                try
+                {
+                    $u->group_remove($user->login(), $group);
+                }
+                catch(Exception $e) {}
+            }
+        }
+        xcmst_redir_userlist("Пользователь обновлён. ", $user->login());
+    }
+
+    function xcmst_delete_user($u, $target_user)
+    {
+        $user = $u->su($target_user);
+        $u->delete($user->login());
+        xcmst_redir_userlist("Пользователь удалён. ", "");
     }
 ?>
 
-<h2>Администрирование пользователей</h2>
-<table>
-    <tr>
-        <td valign="top"><div class="menu">
-            <a class="menu-passive" href="?do=create_user<?php echo $preface;?>">Create user</a>
-            <hr />
-            <?php
-                foreach($u->user_list() as $user)
-                {
-                    $activeness = ($user == $current_user_name)?"active":"passive";
-                    echo "<a class=\"menu-$activeness\" href=\"?user=$user$preface\">$user</a> <br />";
-                }
-            ?>
+<div class="admin-widget floating-box">
+    <h3>Администрирование пользователей</h3><?php
+    if (@$_POST["create_user"])
+        xcmst_create_user($u);
+    elseif (@$_POST["update_user"])
+        xcmst_update_user($u, $target_user);
+    elseif (@$_POST["delete_user"])
+        xcmst_delete_user($u, $target_user);
+    else
+    {?>
+        <div class="user-list">
+            <?php xcmst_draw_user_list($u, $target_user); ?>
         </div>
-    <td width="3px" />
-    <td valign="top">
-        <?php
-            $need_default = true;
-            if(@$_GET["do"] == "create_user")
-            {
-                if(@$_POST["create_user"])
-                {
-                    $login = @$_POST["login"];
-                    $password = @$_POST["password"];
-                    if($password != @$_POST["password_confirm"])
-                        throw new Exception("Passwords does not match!");
-                    if(!strlen($password))
-                        throw new Exception("Empty password!");
-                    if(!strlen($login))
-                        throw new Exception("Empty login!");
-                    $email = @$_POST["email"];
-                    $tu=$u->create($login, $email);
-                    $tu->passwd($password);
-                    $tu->set_param("name",@$_POST["name"]);
-                    foreach(xcms_all_groups() as $group=>$title)
-                    {
-                        if(@$_POST["group_$group"])
-                            $u->group_add($login, $group);
-                    }
-                    if(@$_POST["notify_user"])
-                    {
-                        // TODO: this template should be taken from file
-                        $notify_result = xcms_send_notification(
-                            "developers",
-                            array($email),
-                            "Welcome to XCMS!",
+        <div class="user-ops"><?php
 
-                            "Добро пожаловать! Для Вас заведён логин и пароль на сайте.\n"
-                            ."\n"
-                            ."Ваш логин: $login\n"
-                            ."\n"
-                            ."Ваш пароль: $password\n"
-                            ."\n"
-                            ."Если у Вас будут какие-то проблемы, не бойтесь писать "
-                            ."на support@fizlesh.ru, все равно его никто не читает.\n"
-                        );
-                        // TODO: fix this bullshit
-                        if (!$notify_result)
-                            echo "<li> Не вышло послать е-мейл";
-                    }
-                    @$_GET["user"] = $login;
-                }
-                else
-                {
-                    $need_default = false;
-                    ?>
-                    <form method="post">
-                    <table>
-                            <tr><td colspan="2"><b>Учётные данные</b></td></tr>
-                            <tr><td>Логин:</td>
-                                <td><input name="login" id="login"/>
-                                    <span style="font-size: 10px;">Разрешены латинские буквы, цифры,
-                                        а также дефис (-), подчёркивание (_), точка (.) и собака (@)</span></td></tr>
-                            <tr><td>Пароль:</td>
-                                <td><input type="password" name="password" id="password"/></td></tr>
-                            <tr><td>Пароль (ещё раз):</td>
-                                <td><input type="password" name="password_confirm" id="password_confirm"/></td></tr>
-                            <tr><td>Настоящее имя:</td>
-                                <td><input name="name" id="name"/></td></tr>
-                            <tr><td>Электропочта:</td>
-                                <td><input name="email" id="email"/></td></tr>
-                            <tr><td colspan="2"><input type="checkbox" name="notify_user"/>
-                                Оповестить пользователя по почте</td></tr>
-                            <tr><td colspan="2"><b>Привилегии</b></td></tr>
-                            <?php
-                                foreach(xcms_all_groups() as $group=>$title)
-                                {
-                                    echo "<tr><td colspan=\"2\">".
-                                        "<input type=\"checkbox\" name=\"group_$group\" id=\"group_$group\" />".
-                                        "$title ($group)</td></tr>";
-                                }
-                            ?>
-                    </table>
-                    <input type="submit" name="create_user" value="Создать пользователя">
-                    </form>
-                    <?php
-                }
-            }
-            //else
-            {
-                if(@$_GET["user"] != "")
-                {
-                    $user = $u->su(@$_GET["user"]);
-                    if(@$_POST["update_user"])
-                    {
-                        foreach(array("name", "email") as $form_name)
-                        {
-                            $user->set_param($form_name, @$_POST["param_$form_name"]);
-                        }
-                        foreach(xcms_all_groups() as $group=>$title)
-                        {
-                            if(@$_POST["group_$group"])
-                            {
-                                try
-                                {
-                                    $u->group_add($user->login(),$group);
-                                }
-                                catch(Exception $e) {}
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    $u->group_remove($user->login(),$group);
-                                }
-                                catch(Exception $e) {}
-                            }
-                        }
-                    }
-                    if(@$_POST["delete_user"])
-                    {
-                        $u->delete($user->login());
-                        @$_GET["user"] = "";
-                    }
-                }
-                if(@$_GET["user"] == "")
-                {
-                    if($need_default)
-                        echo "<h3>Выберите пользователя в меню слева</h3>";
-                }
-                else
-                {
-                    echo "<form method='post'>";
-                    $user = $u->su(@$_GET["user"]);
-                    echo "<input name=\"param_name\" id=\"param_name\" style=\"font-size: 14pt;\" value=\"{$user->param('name')}\" placeholder=\"Логин\" />";
-                    echo "<br />Известен под логином <b>{$user->login()}</b>. ";
-                    echo "<br />Электропочта: <input name=\"param_email\" name=\"param_email\" value=\"{$user->param('email')}\" placeholder=\"nobody@example.com\" />";
-                    $cd = date('d.m.Y, H:i:s',$user->param('creation_date'));
-                    echo "<br />Создан администратором {$user->param('creator')}, {$cd}";
-                    echo "<h3>Привилегии</h3>";
-                    foreach(xcms_all_groups() as $group=>$title)
-                    {
-                        if($user->check_rights($group,false))
-                            $ch = " checked ";
-                        else
-                            $ch = "";
-                        echo "<input $ch type='checkbox' name='group_$group'>$title<br/>";
-                    }
-                    if($u->login() == $user->login()) echo "<h3>Вы не можете обновить свой собственный профиль</h3>";
-                    else
-                    {
-                        echo "<input name='update_user' value='Обновить данные пользователя' type='submit' />";
-                        echo "<input name='check_delete_user' value='Удалить пользователя' type='submit' />";
-                        if(@$_POST['check_delete_user'])
-                        {
-                            echo "<p>Вы ТОЧНО УВЕРЕНЫ, что хотите удалить этого пользователя??";
-                            echo "<br /><input name='delete_user' value='Да, я абсолютно точно уверен.' type='submit' />";
-                        }
-                    }
-                    echo "</form>";
-                }
-            }
-        ?>
-</table>
+        $need_default = true;
+        if(@$_GET["action"] == "create_user")
+        {
+            $need_default = false;
+            xcmst_draw_user_create_form();
+        }
+        else
+            xcmst_draw_user_modify_form($u, $need_default);
+    ?>
+</div><!-- right column -->
+<?php
+}
+?>
+</div><!-- floating-box->
