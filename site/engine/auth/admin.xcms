@@ -65,6 +65,12 @@
             htmlspecialchars(xcms_get_key_or($_POST, $key))."\"";
     }
 
+    function xcmst_checkbox_attrs_from_post($key)
+    {
+        echo "id=\"$key\" name=\"$key\" ".
+            xcms_checkbox_attr(xcms_get_key_or($_POST, $key))
+    }
+
     function xcmst_draw_user_create_form($prefill = false)
     {?>
         <form method="post">
@@ -80,9 +86,8 @@
                 <input <?php xcmst_input_attrs_from_post("name"); ?> /></div>
             <div><span class="user-label">Электропочта:</span>
                 <input <?php xcmst_input_attrs_from_post("email"); ?> /></div>
-                <!-- TODO checkbox -->
             <div><span class="user-label">Оповестить пользователя</span>
-                <input type="checkbox" name="notify_user" id="notify_user" /></div>
+                <input type="checkbox" <?php xcmst_checkbox_attrs_from_post("notify_user"); ?> /></div>
             <?php
             xcmst_draw_privileges(NULL);
             ?>

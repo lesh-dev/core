@@ -113,31 +113,24 @@ a.menu-active {
     font-weight: bold;
 }
 
+a.user-list {
+    display: block;
+    padding-left: 8px;
+    line-height: 17px;
+}
+
+div.user-list {
+    float: left;
+    width: 20%;
+}
+
+div.user-ops {
+    float: right;
+    width: 77%;
+}
+
 div.menuitem-hidden a {
     color: #8f6f6f;
-}
-
-table.user-list {
-    width: 100%;
-    border: none;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-td.user-names {
-    width: 150px;
-    text-align: left;
-    vertical-align: top;
-    border-right: 1px solid #7f7f7f;
-    padding: 2px;
-}
-
-td.user-ops {
-    padding-top: 2px;
-    padding-bottom: 2px;
-    padding-left: 10px;
-    text-align: left;
-    vertical-align: top;
 }
 
 form {
@@ -218,6 +211,14 @@ span.info-label {
     color: #5f4f00;
 }
 
+span.user-label {
+    display: inline-block;
+    font-weight: bold;
+    width: 220px;
+    line-height: 16px;
+    color: #5f4f00;
+}
+
 div.td1 {
     line-height: 18px;
 }
@@ -254,6 +255,10 @@ div.newstitle {
 
 input.delete-news {
     float: right;
+    background-color: #ff7f7f;
+}
+
+input.delete {
     background-color: #ff7f7f;
 }
 
