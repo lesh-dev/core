@@ -59,24 +59,30 @@
         }
     }
 
+    function xcmst_input_attrs_from_post($key)
+    {
+        echo "id=\"$key\" name=\"$key\" value=\"".
+            htmlspecialchars(xcms_get_key_or($_POST, $key))."\"";
+    }
 
-    function xcmst_draw_user_create_form()
+    function xcmst_draw_user_create_form($prefill = false)
     {?>
         <form method="post">
             <h3>Учётные данные</h3>
-            <div><span class="user-label">Логин:</span> <input name="login" id="login" /></div>
+            <div><span class="user-label">Логин:</span> <input <?php xcmst_input_attrs_from_post("login"); ?> /></div>
             <div><span class="user-help-label">Разрешены латинские буквы, цифры,
                 а также дефис (-), подчёркивание (_), точка (.) и собака (@)</span></div>
             <div><span class="user-label">Пароль:</span>
-                <input type="password" name="password" id="password"/></div>
+                <input type="password" <?php xcmst_input_attrs_from_post("password"); ?>/></div>
             <div><span class="user-label">Пароль (ещё раз):</span>
-                <input type="password" name="password_confirm" id="password_confirm"/></div>
+                <input type="password" <?php xcmst_input_attrs_from_post("password_confirm"); ?> /></div>
             <div><span class="user-label">Настоящее имя:</span>
-                <input name="name" id="name"/></div>
+                <input <?php xcmst_input_attrs_from_post("name"); ?> /></div>
             <div><span class="user-label">Электропочта:</span>
-                <input name="email" id="email"/></div>
+                <input <?php xcmst_input_attrs_from_post("email"); ?> /></div>
+                <!-- TODO checkbox -->
             <div><span class="user-label">Оповестить пользователя</span>
-                <input type="checkbox" name="notify_user" id="notify_user"/></div>
+                <input type="checkbox" name="notify_user" id="notify_user" /></div>
             <?php
             xcmst_draw_privileges(NULL);
             ?>
@@ -141,16 +147,19 @@
         <meta http-equiv="refresh" content="2;URL=?<?php echo "$preface$suffix"; ?>" /><?php
     }
 
+    /**
+      * @return null on success and error message otherwise
+      **/
     function xcmst_create_user($u)
     {
         $login = @$_POST["login"];
         $password = @$_POST["password"];
         if ($password != @$_POST["password_confirm"])
-            throw new Exception("Passwords do not match. ");
+            return "Пароли не совпадают. ";
         if (!strlen($password))
-            throw new Exception("Empty password. ");
+            return "Пароль не должен быть пустым. ";
         if (!strlen($login))
-            throw new Exception("Empty login. ");
+            return "Логин не может быть пустым. ";
         $email = @$_POST["email"];
         $tu = $u->create($login, $email);
         $tu->passwd($password);
@@ -164,6 +173,7 @@
             xcmst_user_create_notify($email, $login, $password);
 
         xcmst_redir_userlist("Пользователь добавлен. ", $login);
+        return null;
     }
 
 
@@ -202,22 +212,20 @@
         $u->delete($user->login());
         xcmst_redir_userlist("Пользователь удалён. ", "");
     }
-?>
 
-<div class="admin-widget floating-box">
-    <h3>Администрирование пользователей</h3><?php
-    if (@$_POST["create_user"])
-        xcmst_create_user($u);
-    elseif (@$_POST["update_user"])
-        xcmst_update_user($u, $target_user);
-    elseif (@$_POST["delete_user"])
-        xcmst_delete_user($u, $target_user);
-    else
+    /**
+      * Draws main user operations panel
+      **/
+    function xcmst_draw_user_forms($u, $target_user, $error_message = null)
     {?>
         <div class="user-list">
             <?php xcmst_draw_user_list($u, $target_user); ?>
         </div>
         <div class="user-ops"><?php
+        if (!empty($error_message))
+        {?>
+            <div class="error"><?php echo $error_message; ?></div><?php
+        }
 
         $need_default = true;
         if(@$_GET["action"] == "create_user")
@@ -227,9 +235,25 @@
         }
         else
             xcmst_draw_user_modify_form($u, $need_default);
-    ?>
-</div><!-- right column -->
-<?php
-}
+        ?>
+        </div><!-- right column -->
+        <?php
+    }
+?>
+
+<div class="admin-widget floating-box">
+    <h3>Администрирование пользователей</h3><?php
+    if (@$_POST["create_user"])
+    {
+        $err = xcmst_create_user($u);
+        if ($err)
+            xcmst_draw_user_forms($u, $target_user, $err);
+    }
+    elseif (@$_POST["update_user"])
+        xcmst_update_user($u, $target_user);
+    elseif (@$_POST["delete_user"])
+        xcmst_delete_user($u, $target_user);
+    else
+        xcmst_draw_user_forms($u, $target_user);
 ?>
 </div><!-- floating-box->
