@@ -45,17 +45,18 @@
             echo "<li> Не вышло послать е-мейл";
     }
 
-    function xcmst_draw_privileges($user)
+    function xcmst_draw_privileges($user, $read_only = false)
     {?>
         <h3>Привилегии</h3>
         <?php
         foreach(xcms_all_groups() as $group => $title)
         {
-            if ($user != NULL and $user->check_rights($group, false))
-                $ch = " checked ";
-            else
-                $ch = "";
-            echo "<div><input $ch type=\"checkbox\" name=\"group_$group\" />$title</div>\n";
+            $attrs = "";
+            if ($user and $user->check_rights($group, false))
+                $attrs .= " checked=\"checked\" ";
+            if ($read_only)
+                $attrs .= " disabled=\"disabled\" ";
+            echo "<div><input $attrs type=\"checkbox\" name=\"group_$group\" id=\"group_$group\" />$title</div>\n";
         }
     }
 
@@ -63,6 +64,17 @@
     {
         echo "id=\"$key\" name=\"$key\" value=\"".
             htmlspecialchars(xcms_get_key_or($_POST, $key))."\"";
+    }
+
+    function xcmst_input_attrs_from_user($user, $key, $read_only = false, $placeholder = "")
+    {
+        $attrs = "";
+        if ($read_only)
+            $attrs .= " readonly=\"readonly\" ";
+        if ($placeholder)
+            $attrs .= " placeholder=\"".htmlspecialchars($placeholder)."\" ";
+        echo "id=\"$key\" name=\"$key\" $attrs value=\"".
+            htmlspecialchars($user->param($key))."\"";
     }
 
     function xcmst_checkbox_attrs_from_post($key)
@@ -106,6 +118,7 @@
         }
         $user = $u->su($target_user);
         $cd = date('d.m.Y, H:i:s',$user->param('creation_date'));
+        $read_only = ($u->login() == $user->login());
         ?>
         <form method="post">
         <h3>Учётные данные</h3>
@@ -113,18 +126,17 @@
         <div><span class="user-label">Логин:</span><?php echo $user->login(); ?></div>
         <div><span class="user-label">Создал</span><?php echo $user->param('creator').", $cd"; ?></div>
 
-        <div><span class="user-label">Настоящее имя:</span><input name="user_name" name="user_name"
-            value="<?php echo $user->param('name'); ?>" placeholder="Вася Пупкин" /></div>
+        <div><span class="user-label">Настоящее имя:</span><input
+            <?php xcmst_input_attrs_from_user($user, 'name', $read_only, "Вася Пупкин"); ?> /></div>
 
-        <div><span class="user-label">Электропочта:</span><input name="user_email" name="user_email"
-            value="<?php echo $user->param('email'); ?>" placeholder="nobody@example.com" /></div>
-
+        <div><span class="user-label">Электропочта:</span><input
+            <?php xcmst_input_attrs_from_user($user, 'email', $read_only, "nobody@example.com"); ?> /></div>
         <?php
-        xcmst_draw_privileges($user);
-
-        if($u->login() == $user->login())
+        xcmst_draw_privileges($user, $read_only);
+        if ($read_only)
         {?>
-            <div class="error">Вы не можете обновить свой собственный профиль</div><?php
+            <div>Свой собственный профиль Вы можете отредактировать
+            <a <?php echo xcms_href(array('mode'=>'myprofile', 'ref'=>'ladmin')); ?> >здесь</a>.</div><?php
         }
         else
         {?>
@@ -187,7 +199,7 @@
         $user = $u->su($target_user);
         foreach (array("name", "email") as $field)
         {
-            $user->set_param($field, @$_POST["user_$field"]);
+            $user->set_param($field, xcms_get_key_or($_POST, $field));
         }
         foreach (xcms_all_groups() as $group=>$title)
         {
