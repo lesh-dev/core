@@ -68,7 +68,7 @@
     function xcmst_checkbox_attrs_from_post($key)
     {
         echo "id=\"$key\" name=\"$key\" ".
-            xcms_checkbox_attr(xcms_get_key_or($_POST, $key))
+            xcms_checkbox_attr(xcms_get_key_or($_POST, $key));
     }
 
     function xcmst_draw_user_create_form($prefill = false)
