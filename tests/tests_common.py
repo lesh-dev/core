@@ -34,7 +34,7 @@ def performLogin(test, login, password):
 	
 	test.clickElementById("auth-submit")
 	
-	wrongAuth = test.checkSourceTextPresent(u"Пароль всё ещё неверный")
+	wrongAuth = test.checkSourceTextPresent([u"Пароль всё ещё неверный", "Wrong password"])
 	return not wrongAuth
 	
 	#test.getUrlByLinkText(u"Админка")

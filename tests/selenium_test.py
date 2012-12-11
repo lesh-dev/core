@@ -27,6 +27,9 @@ def isList(x):
 class TestError(RuntimeError):
 	pass
 
+class ItemNotFound(TestError):
+	pass
+
 class TestShutdown(RuntimeError):
 	pass
 
@@ -98,7 +101,7 @@ class SeleniumTest:
 
 	def getBaseUrl(self):
 		if len(sys.argv) < 2:
-			raise TestError("Base URL for test is not set. ")
+			self.failTest("Base URL for test is not set. ")
 		return sys.argv[1]
 	
 	def needHelp(self):
@@ -184,14 +187,13 @@ class SeleniumTest:
 			link = self.getUrlByLinkText(linkName)
 			self.gotoSite(link)
 		except NoSuchElementException:
-			self.logAdd("gotoUrlLinkByText failed for link name '" + linkName + "':\n" + traceback.format_exc())
-			raise TestError(u"Cannot find URL with name '" + linkName + "'")
+			self.failTest(u"Cannot find URL with name '" + self.serialize(linkName) + "'")
 		
 	def assertUrlNotPresent(self, linkName):
 		try:
 			self.getUrlByLinkText(linkName)
 			raise TestError("Forbidden URL is found on the page in assertUrlNotPresent: '" + linkName + "'")
-		except TestError:
+		except ItemNotFound:
 			pass
 	
 	def drv(self):
@@ -212,15 +214,13 @@ class SeleniumTest:
 			raise TestError(u"Cannot get element by name '" + name + "'")
 			
 	def fillElementByName(self, name, text):
-		if self.isVoid(name):
-			raise RuntimeError("Empty element name passed to fillElementByName(). ")
+		self.checkEmptyParam(name, "fillElementByName")
 		self.addAction("fill", "element name: '" + name + "', text: '" + text + "'")
 		self.getElementByName(name).send_keys(text)
 		return self.getElementByName(name).get_attribute('value')
 		
 	def fillElementById(self, eleId, text):
-		if self.isVoid(eleId):
-			raise RuntimeError("Empty element ID passed to fillElementById(). ")
+		self.checkEmptyParam(eleId, "fillElementById")
 		self.addAction("fill", "element id: '" + eleId + "', text: '" + text + "'")
 		self.getElementById(eleId).send_keys(text)
 		return self.getElementById(eleId).get_attribute('value')
@@ -237,8 +237,8 @@ class SeleniumTest:
 		self.getElementById(eleId).click()
 	
 	def checkTextPresent(self, xpath, text):
-		if self.isVoid(xpath):
-			raise RuntimeError("Empty XPath passed to checkTextPresent");
+		self.checkEmptyParam(xpath, "checkTextPresent")
+		self.checkEmptyParam(text, "checkTextPresent")
 		
 		try:
 			if isList(text):
@@ -261,28 +261,58 @@ class SeleniumTest:
 	def failTest(self, errorText):
 		self.logAdd(errorText)
 		raise TestError(errorText)
-		
+
+	def failTestWithItemNotFound(self, errorText):
+		self.logAdd(errorText)
+		raise ItemNotFound(errorText)
+
+	def serialize(self, text):
+		if isList(text):
+			return "|".join(text)
+		return text
+
 	def assertTextPresent(self, xpath, text):
 		if not self.checkTextPresent(xpath, text):
-			textInError = text
-			if isList(text):
-				textInError = text.join("|")
-			self.failTest("Text '" + textInError + "' not found on page '" + self.curUrl() + "' in element '" + xpath + "'")
+			self.failTest("Text '" + self.serialize(text) + "' not found on page '" + self.curUrl() + "' in element '" + xpath + "'")
 
 	def assertBodyTextPresent(self, text):
 		return self.assertTextPresent("/html/body", text)
 	
 	def assertSourceTextPresent(self, text):
 		return self.assertTextPresent("//*", text)
-			
+
+	def checkEmptyParam(self, stringOrList, methodName):
+		if isList(stringOrList):
+			if len(stringOrList) == 0:
+				raise RuntimeError("Empty list passed to " + methodName);
+			for text in stringOrList:
+				if self.isVoid(text):
+					raise RuntimeError("Empty string passed in the list to " + methodName);
+		else:		
+			if self.isVoid(stringOrList):
+				raise RuntimeError("Empty param passed to " + methodName);
+
 	def getUrlByLinkText(self, urlText):
-		if self.isVoid(urlText):
-			raise RuntimeError("Empty URL text passed to getUrlByLinkText");
-		try:
-			url = self.m_driver.find_element_by_link_text(urlText)
-			return url.get_attribute("href");
-		except NoSuchElementException:
-			self.failTest(u"Cannot find URL by link text: '" + urlText + "' on page '" + self.curUrl())
+		self.checkEmptyParam(urlText, "getUrlByLinkText");
+		if isList(urlText):
+			for urlName in urlText:
+				try:
+					url = self.m_driver.find_element_by_link_text(urlName)
+					return url.get_attribute("href");
+				except NoSuchElementException:
+					self.logAdd("Tried to find url by name '" + urlName + "', not found. ")
+					pass
+			else:
+				# loop ended, found nothing
+				# here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
+				self.failTestWithItemNotFound(u"Cannot find URL by link texts: '" + self.serialize(urlText) + "' on page '" + self.curUrl())
+		else:		
+			try:
+				url = self.m_driver.find_element_by_link_text(urlText)
+				return url.get_attribute("href");
+			except NoSuchElementException:
+				# here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
+				self.failTestWithItemNotFound(u"Cannot find URL by link text: '" + self.serialize(urlText) + "' on page '" + self.curUrl())
 			
 	def logAdd(self, text):
 		try:
