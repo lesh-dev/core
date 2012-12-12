@@ -27,6 +27,16 @@ def print_bad_context(lines, bad_lines):
             print '...'
             skip = True
 
+
+# removes quoted strings from code
+def remove_strings(line):
+    # remove double quotes
+    line = re.sub(r'".*?"', '', line)
+    # remove single quotes
+    line = re.sub(r"'.*?'", '', line)
+    return line
+
+
 def check_code_style(lines):
     line_count = len(lines)
     bad_lines = dict()
@@ -73,6 +83,13 @@ def check_code_style(lines):
             stm = re.search('<[?]$', line)
         if stm:
             add_bad_line(bad_lines, "No PHP shorttags allowed", i)
+
+        # missing spaces after commas
+        line_wo_strings = remove_strings(line)
+        line_wo_strings = re.sub(r',$', '', line_wo_strings)
+        sac = re.search(r',[^ ]', line_wo_strings)
+        if sac:
+            add_bad_line(bad_lines, "Commas should contain spaces after them", i)
 
         # trailing spaces check
         ts = re.search('[^ ]+[ ]+$', line)
