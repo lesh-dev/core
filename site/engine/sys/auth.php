@@ -244,8 +244,19 @@
                 return true;
 
             if (xcms_get_key_or($_SESSION, "passwd") != $this->_hash($this->param("password")))
+            {
+                $this->cleanup_session();
                 throw new Exception("Wrong password. ", XE_WRONG_PASSWORD);
+            }
             return true;
+        }
+        /**
+          * Очищает текущую сессию
+          **/
+        private function cleanup_session()
+        {
+            $_SESSION["user"] = "";
+            $_SESSION["passwd"] = "";
         }
         /**
           * Выдаёт список всех пользователей в виде массива логинов
@@ -272,14 +283,13 @@
             return new XcmsUser($login);
         }
         /**
-          * Очищает текущую сессию (разлогинивает)
+          * Разлогинивает текущего пользователя (в том числе чистит сессию)
           * TODO: не сработает, если вывод уже начался (требуется JS-перенаправление в этом случае)
           * @param redirect URL, на который нужно перенаправить пользователя после выхода
           **/
         function logout($redirect)
         {
-            $_SESSION["user"] = "";
-            $_SESSION["passwd"] = "";
+            $this->cleanup_session();
             header("Location: $redirect");
         }
         /**
