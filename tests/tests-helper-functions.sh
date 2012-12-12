@@ -11,7 +11,7 @@ run_test()
 		exit 1
 	fi
 	
-	echo "========== Running test $1 =========="
+	echo "====== Running test $1 at `date +%Y-%m-%d-%H:%M:%S` ======="
 	if ! python $1 "$TARGET_SITE"; then
 		echo "Test $1 FAILED";
 		return 1
