@@ -33,8 +33,7 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		print "goto user list."
 		self.gotoUrlByLinkText(u"Пользователи")
 		self.assertBodyTextPresent(u"Администрирование пользователей")
-		self.gotoUrlByLinkText("Create user")
-		
+		self.gotoUrlByLinkText(["Create user", u"Создать пользователя"])
 		
 		inpLogin = "an_test_user_" + random_crap.randomText(8)
 		inpEMail = random_crap.randomEmail()
@@ -50,7 +49,10 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		#<tr><td>Электропочта:       </td><td> <input name="email">                </td></tr>
 		#<tr><td colspan="2">  <input type="checkbox" name="notify_user" />	
 		inpLogin = self.fillElementById("login", inpLogin)
-		print "login = ", inpLogin
+		print "login = '" + inpLogin + "'"
+		if inpLogin == "":
+			raise RuntimeError("Filled login value is empty!")
+		
 		inpEMail = self.fillElementById("email", inpEMail)
 		inpPass1 = self.fillElementById("password", inpPass)
 		print "original pass: " + inpPass
@@ -77,7 +79,7 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		
 		self.gotoUrlByLinkText(inpLogin)
 		
-		self.assertBodyTextPresent(u"Известен под логином " + inpLogin)
+		self.assertTextPresent("//div[@class='user-ops']", inpLogin)
 		
 		#logoff root
 		tests_common.performLogout(self)
@@ -86,7 +88,25 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		if not tests_common.performLogin(self, inpLogin, inpPass):
 			raise selenium_test.TestError("Cannot login as newly created user. ")
 		
-		self.getUrlByLinkText("Выход")
+		# logout self 
+		self.gotoUrlByLinkText("Выход")
+
+		# test wrong auth
+		print "logging as created user with incorrect password "
+		if tests_common.performLogin(self, inpLogin, "wrong_pass" + inpPass):
+			raise selenium_test.TestError("I'm able to login with incorrect password. Auth is broken. ")
+		
+#		self.assertBodyTextPresent(u"Пароль всё ещё неверный"); already checked inside
+
+# and now, test bug with remaining cookies:
+		# we navigate to root page, and see auth panel!
+		print "logging again as created user. "
+		if not tests_common.performLogin(self, inpLogin, inpPass):
+			raise selenium_test.TestError("Cannot login again as newly created user. ")
+
+		# logout self 
+#		self.gotoUrlByLinkText("Выход")
+		
 	
 # def main():
 selenium_test.RunTest(XcmsAuthAddNewUser())
