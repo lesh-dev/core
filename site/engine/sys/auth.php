@@ -9,13 +9,14 @@
         {
             global $SETTINGS, $content_dir;
             $cd = $SETTINGS["datadir"];
-            if($cd == "") $cd = $content_dir;
-            if($cd == "")
-                throw new Exception ("Content dir is empty!");
+            if (empty($cd)) $cd = $content_dir;
+            if (empty($cd))
+                throw new Exception ("Content directory not set in SETTINGS. ");
             return "$cd/auth/usr/$login.user";
         }
         private function _hash($string)
         {
+            // TODO: replace md5 with secure hash (sha256)
             return md5($string."saulty!");
         }
         /**
@@ -23,19 +24,19 @@
           **/
         private function _save()
         {
-            if(!$this->valid)
-                throw new Exception("Cannot save invalid user!");
+            if(!$this->is_valid())
+                throw new Exception("Cannot save invalid user. ");
 
-            if(!$this->isNull())
-                xcms_save_list($this->_file_name($this->login()),$this->dict);
+            if(!$this->is_null())
+                xcms_save_list($this->_file_name($this->login()), $this->dict);
             else return $this->set_error("User is NULL, can't serialize!");
             return true;
         }
-        function isValid()
+        function is_valid()
         {
             return $this->valid;
         }
-        function setValid()
+        function set_valid()
         {
             $this->valid = true;
         }
@@ -57,7 +58,7 @@
                 $this->dict["login"] = $login;
                 $this->valid = false;
             }
-            $this->isSuperuser = false;
+            $this->is_superuser = false;
         }
         /**
           * Возвращает текущее имя пользователя
@@ -91,23 +92,23 @@
           **/
         function groups()
         {
-            return explode(",",@$this->dict["groups"]);
+            return explode(",", @$this->dict["groups"]);
         }
         function check_rights($group, $throw_exception=true)
         {
             $group = str_replace("#","",$group);
             if($group == "all") return true;
-            if($group == "registered" && $this->isValid()) return true;
-            if($this->isSuperuser()) return true;
+            if($group == "registered" && $this->is_valid()) return true;
+            if($this->is_superuser()) return true;
             if(in_array($group,$this->groups())) return true;
             if($throw_exception)
-                throw new Exception("User don't belong to group $group to perform this action");
+                throw new Exception("User doesn't belong to group $group to perform this action");
             return false;
         }
         /**
           * Возвращает true, если пользователь кривой.
           **/
-        function isNull()
+        function is_null()
         {
             if(strlen($this->login()))
                 return false;
@@ -116,7 +117,7 @@
         /**
           * Обнуляет пользователя
           **/
-        function setNull()
+        function set_null()
         {
             $this->check_rights("admin");
             $this->dict = array();
@@ -124,17 +125,17 @@
         /**
           * Делает пользователя суперпользователем, для которого любые проверки прав успешны.
           **/
-        function setSuperuser()
+        function set_superuser()
         {
             // This is only way to get SU flag from code!
-            $this->isSuperuser = true;
+            $this->is_superuser = true;
         }
         /**
           * Указывает, является ли пользователь суперпользователем.
           **/
-        function isSuperuser()
+        function is_superuser()
         {
-            return $this->isSuperuser;
+            return $this->is_superuser;
         }
         /**
           * Добавляет пользователя в группу.
@@ -207,7 +208,7 @@
             if(file_exists($this->_file_name($login)))
                 return $this->set_error("User $login already exists. ");
             $u = new XcmsUser($login);
-            $u->setValid();
+            $u->set_valid();
             $u->set_param("email", $email);
             $u->set_param("creator", $this->login());
             $u->set_param("creation_date", @mktime());
@@ -239,21 +240,21 @@
         function check_session()
         {
             if($_SESSION["user"] != $this->login())
-                throw new Exception("Wrong username!");
+                throw new Exception("Неправильное имя пользователя. ");
             if($this->login() == "anonymous")
                 return true;
 
             if (xcms_get_key_or($_SESSION, "passwd") != $this->_hash($this->param("password")))
             {
-                $this->cleanup_session();
-                throw new Exception("Wrong password. ", XE_WRONG_PASSWORD);
+                $this->_cleanup_session();
+                throw new Exception("Неправильный пароль. ", XE_WRONG_PASSWORD);
             }
             return true;
         }
         /**
           * Очищает текущую сессию
           **/
-        private function cleanup_session()
+        private function _cleanup_session()
         {
             $_SESSION["user"] = "";
             $_SESSION["passwd"] = "";
@@ -289,7 +290,7 @@
           **/
         function logout($redirect)
         {
-            $this->cleanup_session();
+            $this->_cleanup_session();
             header("Location: $redirect");
         }
         /**
@@ -298,7 +299,7 @@
         static function unit_test()
         {
             $superuser = new XcmsUser("superuser");
-            $superuser->setSuperuser();
+            $superuser->set_superuser();
             $superuser->delete("test_user");
             $superuser->create("test_user", "test@example.com");
             $superuser->group_add("test_user", "testGroup1");

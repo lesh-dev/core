@@ -78,7 +78,7 @@
         global $engine_dir, $SETTINGS;
         require_once($SETTINGS["engine_dir"]."/sys/auth.php");
         $u = xcms_user();
-        $u->setSuperuser();
+        $u->set_superuser();
         $u->delete($config["superuser_name"]);
         $target = $u->create($config["superuser_name"], $config["superuser_mail"]);
         $target->passwd($config["superuser_password"]);

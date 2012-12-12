@@ -18,5 +18,5 @@
             }
     }
     if(!$ag)
-        throw new Exception("Access denied. ", XE_ACCESS_DENIED);
+        throw new Exception("Доступ запрещён. ", XE_ACCESS_DENIED);
 ?>
