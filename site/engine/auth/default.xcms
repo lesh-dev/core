@@ -4,19 +4,19 @@
     foreach($argv as $k=>$v)
     {
         if($k == 0) continue;
-        if($v[0] == "#") 
+        if($v[0] == "#")
         {
             if($u->check_rights(substr($v,1),false))
             {
                 $ag = true;
             }
         }
-        else 
-            if ($u->login() == $v) 
+        else
+            if ($u->login() == $v)
             {
                 $ag = true;
             }
     }
     if(!$ag)
-        throw new Exception("Access denied!");
+        throw new Exception("Access denied. ", XE_ACCESS_DENIED);
 ?>

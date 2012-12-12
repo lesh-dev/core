@@ -1,4 +1,8 @@
 <?php
+    // error codes for generic errors
+    define('XE_WRONG_PASSWORD',       1000);
+    define('XE_ACCESS_DENIED',        1001);
+
     class XcmsUser
     {
         private function _file_name($login)
@@ -63,10 +67,6 @@
             return $this->dict["login"];
         }
 
-        function setParam($key, $value) /// Ooops. This was qt-style naming, will remove later.
-        {
-            return $this->set_param($key,$value);
-        }
         function set_param($key, $value)
         {
             if(!in_array($key, array("password","email","name", "creator", "creation_date")))
@@ -138,6 +138,7 @@
         }
         /**
           * Добавляет пользователя в группу.
+          * TODO: переименовать в add_to_group
           **/
         function group_add($login, $group)
         {
@@ -146,9 +147,13 @@
             $user = new XcmsUser($login);
             if(in_array($group,$user->groups()))
                 return $this->set_error("User already presented in this group");
-            $user->dict["groups"] = implode(",",array_merge($user->groups(), array($group)));
+            $user->dict["groups"] = implode(",", array_merge($user->groups(), array($group)));
             $user->_save();
         }
+        /**
+          * Удаляет пользователя из группы
+          * TODO: переименовать в remove_from_group
+          **/
         function group_remove($login, $group)
         {
             $group = str_replace("#","",$group);
@@ -177,35 +182,41 @@
         }
         /**
           * Задает новый пароль пользователю
+          * TODO: Зачем хранить plaintext_password? Очень непонятное поведение,
+          * скорее всего небезопасное.
           **/
         function passwd($password)
         {
             if (!xcms_check_password($password))
-                throw new Exception("Invalid password. ");
+                throw new Exception("Password contains invalid characters. ");
             $this->dict["password"] = $this->_hash($password);
             $this->plaintext_password = $password;
             $this->_save();
         }
         /**
           * Создает нового пользователя
+          * @param login логин нового пользователя
+          * @param email email нового пользователя (не обязательно)
+          * @return экземпляр созданного только что пользователя
           **/
-        function create($login, $email="nobody@example.com")
+        function create($login, $email = "nobody@example.com")
         {
             if (!xcms_check_user_name($login))
-                throw new Exception("Login format is incorrect!");
+                throw new Exception("Login format is incorrect. ");
             $this->check_rights("admin");
             if(file_exists($this->_file_name($login)))
-                return $this->set_error("User $login already exists!");
+                return $this->set_error("User $login already exists. ");
             $u = new XcmsUser($login);
             $u->setValid();
-            $u->setParam("email",$email);
-            $u->set_param("creator",$this->login());
-            $u->set_param("creation_date",@mktime());
+            $u->set_param("email", $email);
+            $u->set_param("creator", $this->login());
+            $u->set_param("creation_date", @mktime());
             $u->_save();
             return $u;
         }
         /**
-          * Удаляет пользователя из системы
+          * Удаляет указанного пользователя из системы
+          * @param login логин удаляемого пользователя
           **/
         function delete($login)
         {
@@ -213,7 +224,9 @@
             @unlink($this->_file_name($login));
         }
         /**
-          * Создает сессию c текущим пользователем.
+          * Создает сессию c текущим пользователем
+          * TODO: странный API, это какая-то очень private-функция (или название неудачное)
+          * @param password пароль пользователя
           **/
         function create_session($password)
         {
@@ -231,24 +244,43 @@
                 return true;
 
             if (xcms_get_key_or($_SESSION, "passwd") != $this->_hash($this->param("password")))
-                throw new Exception("Wrong password!");
+                throw new Exception("Wrong password. ", XE_WRONG_PASSWORD);
             return true;
         }
+        /**
+          * Выдаёт список всех пользователей в виде массива логинов
+          **/
         function user_list()
         {
             $ans = array();
             foreach(glob($this->_file_name("*")) as $li)
             {
-                $li = preg_replace("/\\.user/","",$li);
-                $li = preg_replace("/.*\\//","",$li);
+                $li = preg_replace("/\\.user/", "", $li);
+                $li = preg_replace("/.*\\//", "", $li);
                 $ans[] = $li;
             }
             return $ans;
         }
+        /**
+          * Операция su (switch user). На самом деле никакой подмены
+          * текущего пользователя при этой операции не происходит.
+          * @return экземпляр запрошенного пользователя
+          **/
         function su($login)
         {
             $this->check_rights("admin");
             return new XcmsUser($login);
+        }
+        /**
+          * Очищает текущую сессию (разлогинивает)
+          * TODO: не сработает, если вывод уже начался (требуется JS-перенаправление в этом случае)
+          * @param redirect URL, на который нужно перенаправить пользователя после выхода
+          **/
+        function logout($redirect)
+        {
+            $_SESSION["user"] = "";
+            $_SESSION["passwd"] = "";
+            header("Location: $redirect");
         }
         /**
           * Unit-test для класса XcmsUser
@@ -275,15 +307,15 @@
 
             $user = new XcmsUser("test_user");
             $user->passwd("kuku");
-            $user->setParam("name","Vasya");
-            $user->setParam("email","vasya@example.com");
+            $user->set_param("name", "Vasya");
+            $user->set_param("email", "vasya@example.com");
 
             try{
-                $user->setParam("groups","admin");
+                $user->set_param("groups", "admin");
             echo("Unit test failed: user can change his group list"); } catch (Exception $e) {}
 
             try{
-                $user->group_add("test_user","kuku");
+                $user->group_add("test_user", "kuku");
             echo("Unit test failed: user can add himself to group"); } catch (Exception $e) {}
 
             $user->check_rights("testGroup1");
@@ -305,12 +337,6 @@
 
             if($superuser->su("test_user")->login() != "test_user")
                 throw new Exception("su don't work");
-        }
-        function logout($redirect)
-        {
-            $_SESSION["user"] = "";
-            $_SESSION["passwd"] = "";
-            header("Location: $redirect");
         }
     };
     /**
