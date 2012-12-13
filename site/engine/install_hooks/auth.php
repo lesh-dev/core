@@ -28,7 +28,7 @@
             , "superuser_password2" =>
                 array("name"=>"Повторите пароль", "default"=>"root", "type"=>"password")
             , "vk_id" =>
-                array("name"=>"Идентификатор приложения ВКонтакте","type"=>"string")
+                array("name"=>"Идентификатор приложения ВКонтакте", "type"=>"string")
             , "vk_rights" =>
                 array("name"=>"Список прав для ВК", "default"=>"notify,offline")
         );
@@ -86,8 +86,8 @@
         $f = fopen("settings.php", "a");
         if (!$f)
             return "Cannot open settings.php for append. ";
-        fputs($f,"<?php \$auth_vk_id=\"${config['vk_id']}\"; ?>\n");
-        fputs($f,"<?php \$auth_vk_rights=\"${config['vk_rights']}\"; ?>\n");
+        fputs($f, "<?php \$auth_vk_id=\"${config['vk_id']}\"; ?>\n");
+        fputs($f, "<?php \$auth_vk_rights=\"${config['vk_rights']}\"; ?>\n");
         fclose($f);
         return true;
     }
