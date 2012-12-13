@@ -70,7 +70,7 @@
 
         function set_param($key, $value)
         {
-            if(!in_array($key, array("password","email","name", "creator", "creation_date")))
+            if(!in_array($key, array("password", "email", "name", "creator", "creation_date")))
                 $this->check_rights("admin");
             $this->dict[$key] = $value;
             $this->_save();
@@ -96,11 +96,11 @@
         }
         function check_rights($group, $throw_exception=true)
         {
-            $group = str_replace("#","",$group);
+            $group = str_replace("#", "", $group);
             if($group == "all") return true;
             if($group == "registered" && $this->is_valid()) return true;
             if($this->is_superuser()) return true;
-            if(in_array($group,$this->groups())) return true;
+            if(in_array($group, $this->groups())) return true;
             if($throw_exception)
                 throw new Exception("User doesn't belong to group $group to perform this action");
             return false;
@@ -143,11 +143,11 @@
           **/
         function group_add($login, $group)
         {
-            $group = str_replace("#","",$group);
+            $group = str_replace("#", "", $group);
             $this->check_rights("admin");
             $user = new XcmsUser($login);
-            if(in_array($group,$user->groups()))
-                return $this->set_error("User already presented in this group");
+            if(in_array($group, $user->groups()))
+                return $this->set_error("User already present in group $group");
             $user->dict["groups"] = implode(",", array_merge($user->groups(), array($group)));
             $user->_save();
         }
@@ -157,12 +157,12 @@
           **/
         function group_remove($login, $group)
         {
-            $group = str_replace("#","",$group);
+            $group = str_replace("#", "", $group);
             $this->check_rights("admin");
             $user = new XcmsUser($login);
-            if(!in_array($group,$user->groups()))
-                return $this->set_error("User does not belong to this group!");
-            $user->dict["groups"] = implode(",",array_diff($user->groups(), array($group)));
+            if(!in_array($group, $user->groups()))
+                return $this->set_error("User does not belong to group $group!");
+            $user->dict["groups"] = implode(",", array_diff($user->groups(), array($group)));
             $user->_save();
         }
         /**
