@@ -38,7 +38,7 @@
             $current_version = "";
             // FIXME: this should be deleted at all.
             // include_once("{$SETTINGS["engine_dir"]}cms/addrssfeed.php");
-            // addrssfeed("Изменения в разделе", "сабж","","");
+            // addrssfeed("Изменения в разделе", "сабж", " ", "");
             $diff_name_err = "$diff_name.err";
             $diff_cmd = "diff -ub $target_name $ename > $diff_name 2>$diff_name_err ";
             system($diff_cmd, $diff_result);
@@ -85,10 +85,10 @@
 
         if(file_exists($ename))
         {
-            if(strpos($current_version,".gz") )
+            if(strpos($current_version, ".gz") )
             {
-                $f = gzopen($ename.$current_version,"r");
-                $text = gzread($f,10000000);
+                $f = gzopen($ename.$current_version, "r");
+                $text = gzread($f, 10000000);
                 fclose($f);
             }
             else $text = file_get_contents($ename.$current_version);
@@ -102,8 +102,10 @@
         $vlist = '<option value="">HEAD</option>';
         foreach(glob("$ename-version-*") as $k=>$v )
         {
-            $version_time = date("d.m.Y H:i", str_replace(".gz","",str_replace("$ename-version-","",$v)) );
-            $version_suffix = str_replace("$ename","",$v);
+            $timestamp_gz = str_replace("$ename-version-", "", $v);
+            $timestamp = str_replace(".gz", "", $timestamp_gz);
+            $version_time = date("d.m.Y H:i", $timestamp);
+            $version_suffix = str_replace("$ename", "", $v);
             $selected = "";
             if($version_suffix == $current_version) $selected = "selected";
             $vlist .= "<option $selected value=\"$version_suffix\">$version_time</option>";
