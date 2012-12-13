@@ -51,12 +51,12 @@
         if (xcms_get_key_or($options, "devel") || !@$INFO["alias"])
         {
             // if alias not set or in devel mode, always show unaliased menu items
-            $html = str_replace("<HREF>","/$web_prefix?page=$pageiid&amp;$add_href_params", $html);
+            $html = str_replace("<HREF>", "/$web_prefix?page=$pageiid&amp;$add_href_params", $html);
         }
         else
         {
             $alias = $INFO["alias"];
-            $html = str_replace("<HREF>","/$web_prefix$alias/$add_href_params", $html);
+            $html = str_replace("<HREF>", "/$web_prefix$alias/$add_href_params", $html);
         }
         // text is already escaped here
         $html = str_replace("<TEXT>", $text, $html);
