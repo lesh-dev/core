@@ -167,6 +167,9 @@
         }
         /**
           * Выставляет значение последней ошибки
+          * TODO: Это неправильная политика. Исключения должны лететь в любом случае
+          * а уж ловить их, или перехватывать только в глобальном обработчике -- дело
+          * шаблона
           **/
         function set_error($error)
         {
@@ -188,6 +191,8 @@
           **/
         function passwd($password)
         {
+            if (!strlen($password))
+                return $this->set_error("Пароль не должен быть пустым. ");
             if (!xcms_check_password($password))
                 throw new Exception("Password contains invalid characters. ");
             $this->dict["password"] = $this->_hash($password);
@@ -202,11 +207,13 @@
           **/
         function create($login, $email = "nobody@example.com")
         {
+            if (!strlen($login))
+                return $this->set_error("Логин не может быть пустым. ");
             if (!xcms_check_user_name($login))
-                throw new Exception("Login format is incorrect. ");
+                return $this->set_error("Недопустимое имя пользователя. ");
             $this->check_rights("admin");
             if(file_exists($this->_file_name($login)))
-                return $this->set_error("User $login already exists. ");
+                return $this->set_error("Пользователь $login уже существует. ");
             $u = new XcmsUser($login);
             $u->set_valid();
             $u->set_param("email", $email);
