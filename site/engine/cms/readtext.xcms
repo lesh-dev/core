@@ -14,13 +14,13 @@
 */
 include_once("$engine_dir/cms/page_alias_func.php");
 
-$ARG = implode(",",$argv);
+$ARG = implode(",", $argv);
 $compiled = ".prec/cms_readfile_".md5($ARG).md5(@$source).md5(@$text).".dat";
 
 $need = false;
-if(!file_exists($compiled))$need = true;
-if(@filemtime($source)>@filemtime($compiled))$need = true;
-if($need)
+if (!file_exists($compiled)) $need = true;
+if (@filemtime($source) > @filemtime($compiled)) $need = true;
+if ($need)
 {
     $markdown = false;
     $text_defined = false;
@@ -33,9 +33,9 @@ if($need)
             $markdown = true;
         if($arg == "--text")
             $text_defined = true;
-        elseif(strpos($arg,"="))
+        elseif (strpos($arg, "="))
         {
-            $arr = explode($arg,"=",1);
+            $arr = explode($arg, "=", 1);
             if($arr[0] == "--limit")
                 $limit = $arr[1];
             if($arr[0] == "--next-link")
@@ -73,30 +73,28 @@ if($need)
     foreach(glob("$dir*.php") as $notation)
     {
         $name = $notation;
-        $name = str_replace("$dir","",$name);
-        $name = str_replace(".php","",$name);
+        $name = str_replace("$dir", "", $name);
+        $name = str_replace(".php", "", $name);
         while(1)
         {
-            $p = strpos($text,"\${"."$name");
+            $p = strpos($text, "\${"."$name");
             if($p === FALSE)
                 break;
-            $l = strpos($text,"}",$p);
-            $target = substr($text,$p,$l-$p);
-            $target = substr($target,strlen($name)+3);
+            $l = strpos($text, "}", $p);
+            $target = substr($text, $p, $l-$p);
+            $target = substr($target, strlen($name)+3);
             if(strlen($target))
-                $uargs = explode(":",$target);
+                $uargs = explode(":", $target);
             else
                 $uargs = array();
-            //var_dump($args);
-            //$text = str_replace("$name","WAAAGH",$text);
             $idata = "";
             foreach($uargs as $k=>$v)
             {
                 $idata .= "\$_$k = \"$v\";";
             }
-            $text = substr($text,0,$p).
+            $text = substr($text, 0, $p).
                 "<?php $idata ; include(\"$engine_dir/plugins/dollar/$name.php\"); ?>".
-                substr($text,$l+1);
+                substr($text, $l+1);
         }
     }
     //// Обработка синтаксиса: [[Текст ссылки:pageid]]
@@ -124,43 +122,43 @@ if($need)
     $aliases = xcms_get_aliases();
     if($aliases)foreach($aliases as $alias=>$page)
     {
-        $text = str_replace("?ref=index&page=$page\"","$alias\"",$text);
-        $text = str_replace("?page=$page&ref=index\"","$alias\"",$text);
-        $text = str_replace("?page=$page\"","$alias\"",$text);
+        $text = str_replace("?ref=index&page=$page\"", "$alias\"", $text);
+        $text = str_replace("?page=$page&ref=index\"", "$alias\"", $text);
+        $text = str_replace("?page=$page\"", "$alias\"", $text);
     }
     //// Обработка синтаксиса: <code>Моноширинный текст</code>
     $text = str_replace(
         "<code>",
         '<div class="monospace-outer"><div class="monospace-inner">',
         $text);
-    $text = str_replace("</code>", "</div></div>",$text);
+    $text = str_replace("</code>", "</div></div>", $text);
     //// Обработка кавычек-ёлочек
-    $text = str_replace("<<","&laquo;", $text);
-    $text = str_replace(">>","&raquo;", $text);
+    $text = str_replace("<<", "&laquo;", $text);
+    $text = str_replace(">>", "&raquo;", $text);
     //// Обработка тире и неразрывных пробелов
     $text = str_replace("---", "&#8212;", $text);
     // avoid HTML comments replacing here
     $text = preg_replace('/([^!])--([^>])/', '\1&#8211;\2', $text);
-    $text = str_replace("~","&nbsp;", $text);
+    $text = str_replace("~", "&nbsp;", $text);
 
     //// Обработка сокращенного наименования
     // TODO: fix UNICODE bug here!!!
     if($limit > 0 && strlen($text) > $limit)
     {
-        $text = substr($text,0,$limit);
+        $text = substr($text, 0, $limit);
         $n = strlen($text);
-        for($i=$n-1;$i>=0;$i--)
+        for($i = $n-1; $i>=0; $i--)
         {
             if
             (
                 ($text[$i]==' ')
             )
-            { $text = substr($text,0,$i); break; }
+            { $text = substr($text, 0, $i); break; }
         }
         $text = $text."<a href=\"$nextlink\">$nexttext</a>";
     }
     $f = fopen($compiled, "w");
-    fputs($f,$text);
+    fputs($f, $text);
     fclose($f);
 }
 

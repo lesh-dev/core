@@ -19,7 +19,7 @@
     $main_ref_file = "";
     $main_ref_name = "";
     xcms_main();
-    compile($main_ref_file, $main_ref_name);
+    xcms_compile($main_ref_file, $main_ref_name);
     try
     {
         include($main_ref_name);
@@ -27,7 +27,7 @@
     catch(Exception $e)
     {
         xcms_main("exception");
-        compile($main_ref_file, $main_ref_name);
+        xcms_compile($main_ref_file, $main_ref_name);
         $Exception = $e;
         include($main_ref_name);
     }

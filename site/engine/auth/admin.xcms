@@ -40,9 +40,8 @@
             ."Если у Вас будут какие-то проблемы, не бойтесь писать "
             ."на support@fizlesh.ru, все равно его никто не читает.\n"
         );
-        // TODO: fix this bullshit
-        if (!$notify_result)
-            echo "<li> Не вышло послать е-мейл";
+
+        return $notify_result ? null : "Не удалось послать оповещение пользователю. ";
     }
 
     function xcmst_draw_privileges($user, $read_only = false)
@@ -60,10 +59,13 @@
         }
     }
 
-    function xcmst_input_attrs_from_post($key)
+    function xcmst_input_attrs_from_post($key, $placeholder = "")
     {
-        echo "id=\"$key\" name=\"$key\" value=\"".
+        $attrs = "id=\"$key\" name=\"$key\" value=\"".
             htmlspecialchars(xcms_get_key_or($_POST, $key))."\"";
+        if (!empty($placeholder))
+            $attrs .= " placeholder=\"$placeholder\" ";
+        echo $attrs;
     }
 
     function xcmst_input_attrs_from_user($user, $key, $read_only = false, $placeholder = "")
@@ -83,21 +85,23 @@
             xcms_checkbox_attr(xcms_get_key_or($_POST, $key));
     }
 
-    function xcmst_draw_user_create_form($prefill = false)
-    {?>
-        <form method="post">
+    function xcmst_draw_user_create_form()
+    {
+        global $preface;
+        ?>
+        <form method="post" action="?<?php echo $preface; ?>" >
             <h3>Учётные данные</h3>
-            <div><span class="user-label">Логин:</span> <input <?php xcmst_input_attrs_from_post("login"); ?> /></div>
+            <div><span class="user-label">Логин:</span> <input <?php xcmst_input_attrs_from_post("login", "vasya-pupkin"); ?> /></div>
             <div><span class="user-help-label">Разрешены латинские буквы, цифры,
                 а также дефис (-), подчёркивание (_), точка (.) и собака (@)</span></div>
             <div><span class="user-label">Пароль:</span>
-                <input type="password" <?php xcmst_input_attrs_from_post("password"); ?>/></div>
+                <input type="password" <?php xcmst_input_attrs_from_post("password", 'Sup3r-P@ssw0rd'); ?>/></div>
             <div><span class="user-label">Пароль (ещё раз):</span>
                 <input type="password" <?php xcmst_input_attrs_from_post("password_confirm"); ?> /></div>
             <div><span class="user-label">Настоящее имя:</span>
-                <input <?php xcmst_input_attrs_from_post("name"); ?> /></div>
+                <input <?php xcmst_input_attrs_from_post("name", "Вася Пупкин"); ?> /></div>
             <div><span class="user-label">Электропочта:</span>
-                <input <?php xcmst_input_attrs_from_post("email"); ?> /></div>
+                <input <?php xcmst_input_attrs_from_post("email", "user@example.com"); ?> /></div>
             <div><span class="user-label">Оповестить пользователя</span>
                 <input type="checkbox" <?php xcmst_checkbox_attrs_from_post("notify_user"); ?> /></div>
             <?php
@@ -107,13 +111,11 @@
         </form><?php
     }
 
-    function xcmst_draw_user_modify_form($u, $need_default)
+    function xcmst_draw_user_modify_form($u, $target_user)
     {
-        global $target_user;
         if (empty($target_user))
         {
-            if ($need_default)
-                echo "<h3>Выберите пользователя в меню слева</h3>";
+            echo "<h3>Выберите пользователя в меню слева</h3>";
             return;
         }
         $user = $u->su($target_user);
@@ -130,7 +132,7 @@
             <?php xcmst_input_attrs_from_user($user, 'name', $read_only, "Вася Пупкин"); ?> /></div>
 
         <div><span class="user-label">Электропочта:</span><input
-            <?php xcmst_input_attrs_from_user($user, 'email', $read_only, "nobody@example.com"); ?> /></div>
+            <?php xcmst_input_attrs_from_user($user, 'email', $read_only, "user@example.com"); ?> /></div>
         <?php
         xcmst_draw_privileges($user, $read_only);
         if ($read_only)
@@ -165,32 +167,37 @@
     }
 
     /**
-      * @return null on success and error message otherwise
+      * @param $u operator (user)
+      * @return array of (error, warning, notice) messages
       **/
     function xcmst_create_user($u)
     {
         $login = @$_POST["login"];
         $password = @$_POST["password"];
         if ($password != @$_POST["password_confirm"])
-            return "Пароли не совпадают. ";
-        if (!strlen($password))
-            return "Пароль не должен быть пустым. ";
-        if (!strlen($login))
-            return "Логин не может быть пустым. ";
-        $email = @$_POST["email"];
-        $tu = $u->create($login, $email);
-        $tu->passwd($password);
-        $tu->set_param("name", xcms_get_key_or($_POST, "name"));
-        foreach(xcms_all_groups() as $group=>$title)
-        {
-            if (@$_POST["group_$group"])
-                $u->group_add($login, $group);
-        }
-        if (@$_POST["notify_user"])
-            xcmst_user_create_notify($email, $login, $password);
+            return array("Пароли не совпадают. ", null, null);
 
-        xcmst_redir_userlist("Пользователь добавлен. ", $login);
-        return null;
+        $email = @$_POST["email"];
+        try
+        {
+            $tu = $u->create($login, $email);
+            $tu->passwd($password);
+            $tu->set_param("name", xcms_get_key_or($_POST, "name"));
+            foreach (xcms_all_groups() as $group=>$title)
+            {
+                if (@$_POST["group_$group"])
+                    $u->group_add($login, $group);
+            }
+        }
+        catch (Exception $e)
+        {
+            return array($e->getMessage(), null, null);
+        }
+        $warn = null;
+        if (@$_POST["notify_user"])
+            $warn = xcmst_user_create_notify($email, $login, $password);
+
+        return array(null, $warn, "Пользователь успешно создан. ");
     }
 
 
@@ -232,26 +239,46 @@
 
     /**
       * Draws main user operations panel
+      * @param $u operator (user)
+      * @param $target_user target user name
+      * @param $messages array with error, warning and notice messages or null
       **/
-    function xcmst_draw_user_forms($u, $target_user, $error_message = null)
+    function xcmst_draw_user_forms($u, $target_user, $messages = null)
     {?>
         <div class="user-list">
             <?php xcmst_draw_user_list($u, $target_user); ?>
         </div>
         <div class="user-ops"><?php
-        if (!empty($error_message))
-        {?>
-            <div class="error"><?php echo $error_message; ?></div><?php
-        }
-
-        $need_default = true;
-        if(@$_GET["action"] == "create_user")
+        if ($messages !== null)
         {
-            $need_default = false;
+            if ($messages[0])
+            {?>
+                <div class="error"><?php echo $messages[0]; ?></div><?php
+            }
+            if ($messages[1])
+            {?>
+                <div class="warning"><?php echo $messages[1]; ?></div><?php
+            }
+            if ($messages[2])
+            {?>
+                <div class="notice"><?php echo $messages[2]; ?></div><?php
+            }
+        }
+        if (@$_GET["action"] == "create_user" ||
+            @$_POST["create_user"] && $messages !== null && ($messages[0] || $messages[1]) )
+        {
             xcmst_draw_user_create_form();
         }
+        elseif (@$_POST["create_user"])
+        {
+            // switch to user modification form
+            $target_user = $_POST["login"];
+            xcmst_draw_user_modify_form($u, $target_user);
+        }
         else
-            xcmst_draw_user_modify_form($u, $need_default);
+        {
+            xcmst_draw_user_modify_form($u, $target_user);
+        }
         ?>
         </div><!-- right column -->
         <?php
@@ -262,9 +289,8 @@
     <h3>Администрирование пользователей</h3><?php
     if (@$_POST["create_user"])
     {
-        $err = xcmst_create_user($u);
-        if ($err)
-            xcmst_draw_user_forms($u, $target_user, $err);
+        $messages = xcmst_create_user($u);
+        xcmst_draw_user_forms($u, $target_user, $messages);
     }
     elseif (@$_POST["update_user"])
         xcmst_update_user($u, $target_user);

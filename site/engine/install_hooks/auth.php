@@ -28,7 +28,7 @@
             , "superuser_password2" =>
                 array("name"=>"Повторите пароль", "default"=>"root", "type"=>"password")
             , "vk_id" =>
-                array("name"=>"Идентификатор приложения ВКонтакте","type"=>"string")
+                array("name"=>"Идентификатор приложения ВКонтакте", "type"=>"string")
             , "vk_rights" =>
                 array("name"=>"Список прав для ВК", "default"=>"notify,offline")
         );
@@ -78,7 +78,7 @@
         global $engine_dir, $SETTINGS;
         require_once($SETTINGS["engine_dir"]."/sys/auth.php");
         $u = xcms_user();
-        $u->setSuperuser();
+        $u->set_superuser();
         $u->delete($config["superuser_name"]);
         $target = $u->create($config["superuser_name"], $config["superuser_mail"]);
         $target->passwd($config["superuser_password"]);
@@ -86,8 +86,8 @@
         $f = fopen("settings.php", "a");
         if (!$f)
             return "Cannot open settings.php for append. ";
-        fputs($f,"<?php \$auth_vk_id=\"${config['vk_id']}\"; ?>\n");
-        fputs($f,"<?php \$auth_vk_rights=\"${config['vk_rights']}\"; ?>\n");
+        fputs($f, "<?php \$auth_vk_id=\"${config['vk_id']}\"; ?>\n");
+        fputs($f, "<?php \$auth_vk_rights=\"${config['vk_rights']}\"; ?>\n");
         fclose($f);
         return true;
     }

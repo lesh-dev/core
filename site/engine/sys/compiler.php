@@ -1,43 +1,42 @@
 <?php
-    function setArgs($code,$outputStream)
+    function xcms_set_args($code, $outputStream)
     {
         global $SETTINGS;
-        $argv = explode(" ",$code);
+        $argv = explode(" ", $code);
         fputs($outputStream, $SETTINGS["code_begin"]);
         foreach ($argv as $key=>$value)
         {
-            fputs($outputStream,"\$code=\"$code\";");
-            fputs($outputStream,"@\$argv[] = \"$value\";");
+            fputs($outputStream, "\$code=\"$code\";");
+            fputs($outputStream, "@\$argv[] = \"$value\";");
             if($key!=0)
             {
                 //@$KEYLISTER[$value] = true;
-                @fputs($outputStream,"@\$keys[\"$value\"] = true;");
+                @fputs($outputStream, "@\$keys[\"$value\"] = true;");
                 $a = explode("=", $value);
-                @fputs($outputStream,"@\$param[\"{$a[0]}\"] = \"{$a[1]}\";");
+                @fputs($outputStream, "@\$param[\"{$a[0]}\"] = \"{$a[1]}\";");
                 //@$PARAM[$key][$a[0]]=$a[1];
             }
         }
         fputs($outputStream, $SETTINGS["code_end"]);
     }
 
-    function ParseString($s, $outputStream)
+    function xcms_parse_string($s, $outputStream)
     {
         global $SETTINGS;
-        $open = stristr($s,$SETTINGS["openbracket"]);
+        $open = stristr($s, $SETTINGS["openbracket"]);
         if(!$open)
         {
-            fputs($outputStream,$s);
+            fputs($outputStream, $s);
             return;
         }
-        $close = stristr($s,$SETTINGS["closebracket"]);
-        $close = substr($close,strlen($SETTINGS["closebracket"]));
+        $close = stristr($s, $SETTINGS["closebracket"]);
+        $close = substr($close, strlen($SETTINGS["closebracket"]));
         $before = substr($s, 0, strlen($s) - strlen($open));
 
-        fputs($outputStream,$before);
+        fputs($outputStream, $before);
 
-
-        $code = substr($open,strlen($SETTINGS["openbracket"])  );
-        $code = substr($code,0,strlen($code)-strlen($close)-strlen($SETTINGS["closebracket"]));
+        $code = substr($open, strlen($SETTINGS["openbracket"])  );
+        $code = substr($code, 0, strlen($code)-strlen($close)-strlen($SETTINGS["closebracket"]));
 
         $code = trim($code);
         $argv = explode(' ', $code);
@@ -52,7 +51,7 @@
         }
         else
         {
-            setArgs($code, $outputStream);
+            xcms_set_args($code, $outputStream);
             $full_name = "$elem_full_name.xcms";
             if (!file_exists($full_name))
                 $full_name = "${elem_full_name}default.xcms";
@@ -65,7 +64,7 @@
                 $newS = preg_replace('/%[0-9]/', '', $newS);
                 // replace wildcarded arguments
                 $newS = str_replace("%*", $code, $newS);
-                ParseString($newS,$outputStream);
+                xcms_parse_string($newS, $outputStream);
             }
             elseif(file_exists("$elem_full_name.code"))
             {
@@ -73,18 +72,18 @@
             }
             elseif(file_exists($template_full_name))
             {
-                fputs($outputStream,file_get_contents($template_full_name));
+                fputs($outputStream, file_get_contents($template_full_name));
             }
             else
             {
                 xcms_log(0, "name is '$name', nopagecode: ".$SETTINGS["nopagecode"]);
-                fputs($outputStream,file_get_contents("{$SETTINGS["engine_dir"]}{$SETTINGS["nopagecode"]}.code"));
+                fputs($outputStream, file_get_contents("{$SETTINGS["engine_dir"]}{$SETTINGS["nopagecode"]}.code"));
             }
         }
-        ParseString($close,$outputStream);
+        xcms_parse_string($close, $outputStream);
     }
 
-    function compile($filename,$destination)
+    function xcms_compile($filename, $destination)
     {
         $toCompile = false;
         if(!file_exists($filename))
@@ -92,7 +91,7 @@
             xcms_log(0, "Compiler fatal error: can't find source file '$filename'");
         }
         if(!file_exists($destination))$toCompile = true;
-        else if(@filemtime($filename)>@filemtime($destination))
+        else if(@filemtime($filename) > @filemtime($destination))
         {
             $toCompile = true;
         }
@@ -104,7 +103,7 @@
                 xcms_log(0, "Compile error: cannot find file '$filename'");
                 return;
             }
-            ParseString(file_get_contents($filename),$f);
+            xcms_parse_string(file_get_contents($filename), $f);
             fclose($f);
         }
     }
@@ -115,12 +114,12 @@
         $fname = "{$SETTINGS["precdir"]}transl-".md5($string).".php";
         if(!file_exists($fname))
         {
-            $f = fopen($fname,"w");
-            $string = str_replace("<!","<#",$string);
-            $string = str_replace("!>","#>",$string);
-            ParseString($string,$f);
+            $f = fopen($fname, "w");
+            $string = str_replace("<!", "<#", $string);
+            $string = str_replace("!>", "#>", $string);
+            xcms_parse_string($string, $f);
             fclose($f);
-            $btname = $fname . ".backtrace";
+            $btname = "$fname.backtrace";
             $f = fopen($btname, "w");
             fputs($f, $string);
             fclose($f);

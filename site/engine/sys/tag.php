@@ -110,10 +110,10 @@ function getTagList($file)
 {
     global $getTagList_output;
     $filec = file_get_contents($file);
-    $filec = str_replace("\r","",$filec);
-    if(substr($filec,0,5) != "<?php")
+    $filec = str_replace("\r", "", $filec);
+    if(substr($filec, 0, 5) != "<?php")
     {
-        $rez = explode("\n",$filec);
+        $rez = explode("\n", $filec);
         foreach($rez as $key=>$value)
         {
             if(!$key)
@@ -121,8 +121,8 @@ function getTagList($file)
                 $taglist["_NAME"]=$value;
                 continue;
             }
-            $arr = explode("=",$value);
-            $taglist[$arr[0]]=$arr[1];
+            $arr = explode("=", $value);
+            $taglist[$arr[0]] = $arr[1];
         }
         return $taglist;
     }
@@ -139,20 +139,20 @@ function getTagList($file)
 /**
   * deprecated function, do not use
   **/
-function saveList($list,$filename)
+function saveList($list, $filename)
 {
     global $tag_php_delim;
-    $f = fopen($filename,"w");
+    $f = fopen($filename, "w");
 
     $rez = "_defend".$tag_php_delim."<?php die(); ?".'>'."\n";
-    fputs($f,$rez);
+    fputs($f, $rez);
 
     foreach ($list as $key=>$value)
     {
         if($key=="") continue;
         if($key[0]=='_') continue;
         $rez = $key.$tag_php_delim.$value."\n";
-        fputs($f,$rez);
+        fputs($f, $rez);
     }
     fclose($f);
 }
@@ -167,8 +167,8 @@ function getList($filename)
     $rez = array();
     foreach ($s as $key=>$value)
     {
-        $v = str_replace("\n","",$value);
-        $v = str_replace("\r","",$v);
+        $v = str_replace("\n", "", $value);
+        $v = str_replace("\r", "", $v);
         $k = explode($tag_php_delim, $v, 2);
         if($k[0] == "_defend") continue;
         @$rez[$k[0]] = @$k[1];
@@ -200,14 +200,14 @@ function editlist_form($file, $addparams, $skip_params = "", $security_flags = "
                 unset($list[substr($key, "5")]);
                 continue;
             }
-            if(strstr($key,"edtg_"))
+            if(strstr($key, "edtg_"))
             {
                 $list[substr($key, "5")] = stripslashes($value);
             }
         }
         if(@$_POST["newkey"])
         {
-            if(!strstr($security_flags,"-newkey"))
+            if(!strstr($security_flags, "-newkey"))
                 $list[$_POST["newkey"]] = @$_POST["newvalue"];
         }
         xcms_save_list($file, $list);
@@ -255,7 +255,7 @@ function editlist_form($file, $addparams, $skip_params = "", $security_flags = "
             </td></tr><?php
         }
     }
-    if (!strstr($security_flags,"-newkey"))
+    if (!strstr($security_flags, "-newkey"))
     {?>
         <tr>
             <td><input name="newkey" id="newkey"

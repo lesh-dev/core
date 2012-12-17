@@ -1,19 +1,16 @@
 <?php
-    if(FALSE)
-    {
-
-    }
-    else if (
-        $Exception->getMessage() == "Wrong password!"
-        || $Exception->getMessage() == "Access denied!"
+    if (false // just to align code
+        || $Exception->getCode() == XE_WRONG_PASSWORD
+        || $Exception->getCode() == XE_ACCESS_DENIED
     )
     {
         include(translate('<# global/login #>'));
     }
     else
     {
-        echo "<h3>Unknown exception.</h3>";
-        echo "<p><b>".$Exception->getMessage()."</b>";
+        echo "<h3>Unrecognized exception:</h3>";
+        echo "<p>Code: <b>".$Exception->getCode()."</b></p>";
+        echo "<p>Message: <b>".$Exception->getMessage()."</b></p>";
         echo "<pre>".$Exception->getTraceAsString()."</pre>";
     }
 

@@ -13,7 +13,7 @@
     if(@$_POST["delete-section"])
     {
         $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
-        $list = glob("$dir/*",GLOB_ONLYDIR);
+        $list = glob("$dir/*", GLOB_ONLYDIR);
         if($list)
         {
             echo '<script>alert("Не могу удалить! Сначала удалите все подразделы!");</script>';

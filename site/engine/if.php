@@ -21,10 +21,11 @@
     @$then_dest = $SETTINGS["precdir"].str_replace('/', '_', $then_source).".php";
     @$else_dest = $SETTINGS["precdir"].str_replace('/', '_', $else_source).".php";
 
-    compile($then_source, $then_dest);
-    if (@$else && $else != "NULL") compile($else_source, $else_dest);
+    xcms_compile($then_source, $then_dest);
+    if (@$else && $else != "NULL")
+        xcms_compile($else_source, $else_dest);
 
-    setArgs(@$input[4], $outputStream);
+    xcms_set_args(@$input[4], $outputStream);
     fputs($outputStream,
         '<'.'?php '.
         "if($cond) { include('$then_dest'); } ");
