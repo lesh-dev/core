@@ -236,6 +236,9 @@ class SeleniumTest:
 		self.addAction("click", "element id: '" + eleId + "'")
 		self.getElementById(eleId).click()
 	
+	def getElementContent(self, xpath):
+		return self.m_driver.find_element_by_xpath(xpath).text
+		
 	def checkTextPresent(self, xpath, text):
 		self.checkEmptyParam(xpath, "checkTextPresent")
 		self.checkEmptyParam(text, "checkTextPresent")
