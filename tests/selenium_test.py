@@ -275,11 +275,18 @@ class SeleniumTest:
 		if not self.checkTextPresent(xpath, text):
 			self.failTest("Text '" + self.serialize(text) + "' not found on page '" + self.curUrl() + "' in element '" + xpath + "'")
 
+	def assertTextNotPresent(self, xpath, text):
+		if self.checkTextPresent(xpath, text):
+			self.failTest("Forbidden text '" + self.serialize(text) + "' found on page '" + self.curUrl() + "' in element '" + xpath + "'")
+
 	def assertBodyTextPresent(self, text):
 		return self.assertTextPresent("/html/body", text)
 	
 	def assertSourceTextPresent(self, text):
 		return self.assertTextPresent("//*", text)
+
+	def assertSourceTextNotPresent(self, text):
+		return self.assertTextNotPresent("//*", text)
 
 	def checkEmptyParam(self, stringOrList, methodName):
 		if isList(stringOrList):
