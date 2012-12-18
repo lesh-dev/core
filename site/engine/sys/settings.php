@@ -1,5 +1,5 @@
 <?php
-    include("settings.php");
+    require_once("settings.php");
     global $SETTINGS;
     $SETTINGS["defaultpage"] = "index";
     $SETTINGS["nopage"] = ".nopage";
