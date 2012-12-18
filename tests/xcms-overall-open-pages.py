@@ -49,7 +49,7 @@ class XcmsOverallOpenPages(SeleniumTest):
 		self.gotoUrlByLinkText(u"Личные вещи и одежда")
 		self.assertBodyTextPresent(u"Личные вещи и одежда")
 		self.gotoPage("/gear/wear")
-		self.assertBodyTextPresent(u"КЛМН - Кружка, Ложка, Миска, Нож.")
+		self.assertBodyTextPresent(u"Кружка, Ложка, Миска, Нож.")
 		
 		
 		self.gotoUrlByLinkText(u"Документы")
