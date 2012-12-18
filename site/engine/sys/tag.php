@@ -65,7 +65,6 @@ function xcms_get_list($file)
     return $keys;
 }
 
-// TODO: document doxygen code style
 /**
   *  Writes key-value array to file
   *  @param file file name
