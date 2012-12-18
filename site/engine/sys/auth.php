@@ -322,6 +322,8 @@
           **/
         static function unit_test()
         {
+            xut_begin("XcmsUser");
+
             $superuser = new XcmsUser("superuser");
             $superuser->set_superuser();
             $superuser->delete("test_user");
@@ -378,6 +380,7 @@
 
             if ($superuser->su("test_user")->login() != "test_user")
                 xut_report("XcmsUser::su doesn't work properly");
+            xut_end();
         }
     };
     /**

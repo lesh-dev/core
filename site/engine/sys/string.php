@@ -47,12 +47,12 @@
     /**
       * String library unit test
       **/
-    function xcmsut_string()
+    function xcms_string_unit_test()
     {
-        $r = true;
-        $r = $r && (xcms_check_password("123@#$%^&abcABC bla\xFE\xFF") == true);
-        $r = $r && (xcms_check_password("\n\taa\rbb\0\\'qqq'+\"zzz") == false);
-        $r = $r && (xcms_len("Привет000") == 9);
-        return $r;
+        xut_begin("xcms_string");
+        xut_check(xcms_check_password("123@#$%^&abcABC bla\xFE\xFF"), "Check valid password");
+        xut_check(!xcms_check_password("\n\taa\rbb\0\\'qqq'+\"zzz"), "Check invalid password");
+        xut_check(xcms_len("Привет000") == 9, "Check xcms_len");
+        xut_end();
     }
 ?>
