@@ -10,6 +10,7 @@
     require_once ("$engine_dir/sys/settings.php");
     require_once ("$engine_dir/sys/string.php");
     require_once ("$engine_dir/sys/tag.php");
+    require_once ("$engine_dir/sys/unittest.php");
     require_once ("$engine_dir/sys/auth.php");
     require_once ("$engine_dir/sys/logger.php");
     require_once ("$engine_dir/sys/compiler.php");
