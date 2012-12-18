@@ -12,12 +12,31 @@ class XcmsVersionCheck(SeleniumTest):
 	"""
 	def run(self):
 		self.gotoPage("/")
-		self.assertTextPresent("//span[@class='site-version']", "rev. ");
-		siteVersion = self.getElementContent("//span[@class='site-version']");
+		feVerXpath = "//span[@class='site-version']"
+		self.assertTextPresent(feVerXpath, "rev. ");
+		siteVersion = self.getElementContent(feVerXpath);
 		print "XCMS version: ", siteVersion
-		m = re.search("[\w\d\-_\.]+[\d\.]+ rev\. [\d]+", siteVersion)
+		
+		# master-2.1 rev. 848
+		versionRegexp = "[\w\d_]+\-[\d\.]+ rev\. [\d]+"
+		m = re.search(versionRegexp, siteVersion)
 		if not m:
-			raise selenium_test.TestError("Site version does not patch expected regexp. ");
+			raise selenium_test.TestError("Site version does not match expected regexp. ");
+		
+		conf = XcmsTestConfig()
+		
+		tests_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
+		
+		self.gotoUrlByLinkText("Админка")
+		
+		
+		beVerXpath = "//pre[@class='site-info']"
+		self.assertTextPresent(beVerXpath, "rev. ");
+		cpVersion = self.getElementContent(beVerXpath);
+		print "XCMS version in CP: ", cpVersion
+		m = re.search(versionRegexp, cpVersion)
+		if not m:
+			raise selenium_test.TestError("Site version in admin CP does not match expected regexp. ");
 		
 # def main():
 selenium_test.RunTest(XcmsVersionCheck())
