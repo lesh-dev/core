@@ -124,6 +124,7 @@
     <div style="padding-top: 15px;">
         <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-sumbit-top" value="<?php echo $submitVal; ?>" />
         <input type="submit" name="edit-preview" id="edit-preview-top" value="Предпросмотр" />
+        <a <?php echo xcms_href(array('page'=>$pageid, 'ref'=>'index')); ?> class="submit">Свернуть реактор</a>
         Версия:
         <select name="versions" id="versions-top"><?php echo $vlist; ?></select>
         <input type="submit" name="set-version" id="set-version-top" value="Смотреть версию"/>

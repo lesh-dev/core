@@ -54,7 +54,6 @@
     </head>
     <body>
         <div style="padding-bottom: 7px;">
-            <!--<a <?php echo xcms_href(array('page'=>$pageid, 'ref'=>'index')); ?> class="h-menu-link">Предпросмотр</a>-->
             <a <?php echo xcms_href(array('mode'=>'create_page', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Подстраница</a>
             <a <?php echo xcms_href(array('mode'=>'delete', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Удалить</a>
             <a <?php echo xcms_href(array('mode'=>'cleanprec', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Очистить кэш</a>
