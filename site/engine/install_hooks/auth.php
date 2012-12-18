@@ -82,7 +82,7 @@
         $u->delete($config["superuser_name"]);
         $target = $u->create($config["superuser_name"], $config["superuser_mail"]);
         $target->passwd($config["superuser_password"]);
-        $u->group_add($target->login(), "admin");
+        $u->add_to_group($target->login(), "admin");
         $f = fopen("settings.php", "a");
         if (!$f)
             return "Cannot open settings.php for append. ";

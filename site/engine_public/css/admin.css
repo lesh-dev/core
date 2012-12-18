@@ -99,6 +99,20 @@ input[type="submit"] {
     min-width: 70px;
 }
 
+/* Link a-la-button masquerade */
+a.submit {
+    border: 2px solid #7f7f7f;
+    border-radius: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    min-width: 70px;
+    height: 16px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    background-color: #dddddd;
+    color: #000000;
+}
+
 input[type="file"] {
     border: none;
     padding: 0px;

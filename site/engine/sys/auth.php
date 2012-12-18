@@ -3,6 +3,10 @@
     define('XE_WRONG_PASSWORD',       1000);
     define('XE_ACCESS_DENIED',        1001);
 
+    require_once("${engine_dir}sys/logger.php");
+    require_once("${engine_dir}sys/tag.php");
+    require_once("${engine_dir}sys/string.php");
+
     class XcmsUser
     {
         private function _file_name($login)
@@ -11,8 +15,9 @@
             $cd = $SETTINGS["datadir"];
             if (empty($cd)) $cd = $content_dir;
             if (empty($cd))
-                throw new Exception ("Content directory not set in SETTINGS. ");
-            return "$cd/auth/usr/$login.user";
+                throw new Exception ("Content directory is not set in SETTINGS. ");
+            $fn = "${cd}auth/usr/$login.user";
+            return $fn;
         }
         private function _hash($string)
         {
@@ -27,9 +32,13 @@
             if(!$this->is_valid())
                 throw new Exception("Cannot save invalid user. ");
 
-            if(!$this->is_null())
-                xcms_save_list($this->_file_name($this->login()), $this->dict);
-            else return $this->set_error("User is NULL, can't serialize!");
+            if ($this->is_null())
+                return $this->set_error("Cannot save NULL user. ");
+
+            $fn = $this->_file_name($this->login());
+            if (!xcms_save_list($fn, $this->dict))
+                throw new Exception("Cannot save user to file '$fn'. ");
+
             return true;
         }
         function is_valid()
@@ -139,31 +148,39 @@
         }
         /**
           * Добавляет пользователя в группу.
-          * TODO: переименовать в add_to_group
+          * @param $login имя пользователя
+          * @param $group группа, в которую будет добавлен пользователь $login
+          * @return true, если пользователь успешно добавлен, false, если пользователь уже
+          * принадлежит указанной группе. В случае ошибок будет кинуто исключение.
           **/
-        function group_add($login, $group)
+        function add_to_group($login, $group)
         {
             $group = str_replace("#", "", $group);
             $this->check_rights("admin");
             $user = new XcmsUser($login);
-            if(in_array($group, $user->groups()))
-                return $this->set_error("User already present in group $group");
+            if (in_array($group, $user->groups()))
+                return false;
             $user->dict["groups"] = implode(",", array_merge($user->groups(), array($group)));
             $user->_save();
+            return true;
         }
         /**
-          * Удаляет пользователя из группы
-          * TODO: переименовать в remove_from_group
+          * Удаляет пользователя из группы.
+          * @param $login имя пользователя
+          * @param $group имя группы, из которой надо исключить пользователя
+          * @return true, если пользователь успешно исключён, false, если пользователя
+          * в этой группе не было. В случае ошибки будет кинуто исключение.
           **/
-        function group_remove($login, $group)
+        function remove_from_group($login, $group)
         {
             $group = str_replace("#", "", $group);
             $this->check_rights("admin");
             $user = new XcmsUser($login);
-            if(!in_array($group, $user->groups()))
-                return $this->set_error("User does not belong to group $group!");
+            if (!in_array($group, $user->groups()))
+                return false;
             $user->dict["groups"] = implode(",", array_diff($user->groups(), array($group)));
             $user->_save();
+            return true;
         }
         /**
           * Выставляет значение последней ошибки
@@ -305,56 +322,65 @@
           **/
         static function unit_test()
         {
+            xut_begin("XcmsUser");
+
             $superuser = new XcmsUser("superuser");
             $superuser->set_superuser();
             $superuser->delete("test_user");
             $superuser->create("test_user", "test@example.com");
-            $superuser->group_add("test_user", "testGroup1");
-            $superuser->group_add("test_user", "testGroup2");
-            $superuser->group_add("test_user", "testGroup3");
-            $superuser->group_remove("test_user", "testGroup2");
-            try
-            {
-                $superuser->group_remove("test_user", "testGroup2");
-                echo ("Unit test failed: I still can remove user from testGroup2 which he don't belong");
-            }
-            catch (Exception $e)
-            {
-                // it's OK to fail here.
-            }
+
+            xut_check($superuser->add_to_group("test_user", "testGroup1"), "Add to testGroup1");
+            xut_check($superuser->add_to_group("test_user", "testGroup2"), "Add to testGroup2");
+            xut_check($superuser->add_to_group("test_user", "testGroup3"), "Add to testGroup3");
+
+            $superuser->remove_from_group("test_user", "testGroup2");
+            if ($superuser->remove_from_group("test_user", "testGroup2"))
+                xut_report("I still can remove user from testGroup2 which he don't belong");
 
             $user = new XcmsUser("test_user");
             $user->passwd("kuku");
             $user->set_param("name", "Vasya");
             $user->set_param("email", "vasya@example.com");
 
-            try{
+            try
+            {
                 $user->set_param("groups", "admin");
-            echo("Unit test failed: user can change his group list"); } catch (Exception $e) {}
+                xut_report("User can change his group list");
+            } catch (Exception $e) {}
 
-            try{
-                $user->group_add("test_user", "kuku");
-            echo("Unit test failed: user can add himself to group"); } catch (Exception $e) {}
+            try
+            {
+                $user->add_to_group("test_user", "kuku");
+                xut_report("User can add himself to group");
+            } catch (Exception $e) {}
 
             $user->check_rights("testGroup1");
 
-            try{
+            try
+            {
                 $user->check_rights("testGroup2");
-            echo ("User belong to group it don't belong"); } catch (Exception $e) {}
-            try{
+                xut_report("User belong to group it don't belong");
+            } catch (Exception $e) {}
+
+            try
+            {
                 $user->check_rights("testGroup5kuku2");
-            echo("User belong to undefined group"); } catch (Exception $e) {}
+                xut_report("User belong to undefined group");
+            } catch (Exception $e) {}
 
             $user->create_session("kuku");
             $user->check_session();
 
-            try{
+            try
+            {
                 $user->create_session("kuku1");
                 $user->check_session();
-            echo("User can login with invalid password"); } catch (Exception $e) {}
+                xut_report("User can login with invalid password");
+            } catch (Exception $e) {}
 
-            if($superuser->su("test_user")->login() != "test_user")
-                throw new Exception("su don't work");
+            if ($superuser->su("test_user")->login() != "test_user")
+                xut_report("XcmsUser::su doesn't work properly");
+            xut_end();
         }
     };
     /**
@@ -366,11 +392,9 @@
         if($login != NULL)
             $_SESSION["user"] = $login;
         $login = @$_SESSION["user"];
-        //echo "<h3>$login ";
         if(!strlen($login))
-        {
             return new XcmsUser("anonymous");
-        }
+
         $u = new XcmsUser($login);
         if($password != NULL)
             $u->create_session($password);
