@@ -119,7 +119,7 @@
             return;
         }
         $user = $u->su($target_user);
-        $cd = date('d.m.Y, H:i:s',$user->param('creation_date'));
+        $cd = date('d.m.Y, H:i:s', $user->param('creation_date'));
         $read_only = ($u->login() == $user->login());
         ?>
         <form method="post">
