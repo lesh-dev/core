@@ -6,6 +6,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 import random, traceback, sys
 from datetime import datetime
+import time
 
 #['_unwrap_value', '_wrap_value', 'add_cookie',
 #'back', 'binary', 'capabilities', 'close', 'command_executor', 'create_web_element', 'current_url', 'current_window_handle',
@@ -243,17 +244,25 @@ class SeleniumTest:
 		self.checkEmptyParam(xpath, "checkTextPresent")
 		self.checkEmptyParam(text, "checkTextPresent")
 		
-		try:
-			if isList(text):
-				for phrase in text:
-					if phrase in self.m_driver.find_element_by_xpath(xpath).text:
-						return True
+		count = 0
+		while count < 3:
+			try:
+				if isList(text):
+					for phrase in text:
+						if phrase in self.m_driver.find_element_by_xpath(xpath).text:
+							return True
+					return False
+				else:
+					return text in self.m_driver.find_element_by_xpath(xpath).text
+			except NoSuchElementException:
+				#self.logAdd("checkTextPresent does not found xpath '" + xpath + "':\n" + traceback.format_exc())
 				return False
-			else:
-				return text in self.m_driver.find_element_by_xpath(xpath).text
-		except NoSuchElementException:
-			#self.logAdd("checkTextPresent does not found xpath '" + xpath + "':\n" + traceback.format_exc())
-			return False
+			except StaleElementReferenceException:
+				self.logAdd("Cache problem in checkTextPresent(" + xpath + ", " + self.serialize(text) + "), trying again. ")
+				count += 1
+				time.sleep(1)
+				continue
+		self.failTest("Unsolvable cache problem in checkTextPresent(" + xpath + ", " + self.serialize(text) + "), trying again. ")
 		
 	def checkSourceTextPresent(self, text):
 		return self.checkTextPresent("//*", text)
