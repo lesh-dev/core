@@ -58,7 +58,7 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		print "original pass: " + inpPass
 		inpPass2 = self.fillElementById("password_confirm", inpPass)
 		if inpPass1 != inpPass2:
-			raise RuntimeError("Unpredicted input behavior")
+			raise RuntimeError("Unpredicted input behavior on password entering")
 		inpPass = inpPass1
 		print "actual pass: " + inpPass
 		
@@ -104,8 +104,27 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		if not tests_common.performLogin(self, inpLogin, inpPass):
 			raise selenium_test.TestError("Cannot login again as newly created user. ")
 
+		self.gotoUrlByLinkText(u"Админка")
+		
+		# let's try to change password.
+		self.gotoUrlByLinkText(u"Сменить пароль")
+		
+		newPass = inpPass + "_new"
+		newPass1 = self.fillElementByName("pass1", newPass)
+		newPass2 = self.fillElementByName("pass2", newPass)
+		if newPass1 != newPass2:
+			raise RuntimeError("Unpredicted imput behavior on password change")
+		newPass = newPass1
+		self.clickElementByName("chpass_me")
+		self.assertBodyTextPresent(u"Пароль успешно изменен.")
+		self.gotoUrlByLinkText(u"Выйти")
+		
+		print "logging again as created user with new password"
+		if not tests_common.performLogin(self, inpLogin, newPass):
+			raise selenium_test.TestError("Cannot login again as newly created user with changed password. ")
+
 		# logout self 
-#		self.gotoUrlByLinkText("Выход")
+		self.gotoUrlByLinkText("Выход")
 		
 	
 # def main():
