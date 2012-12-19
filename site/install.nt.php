@@ -10,16 +10,17 @@
         <style><?php echo "\n".@file_get_contents('install.css')."\n"; ?></style>
         <h1>Установка XCMS 2.0</h1>
 <?php
-    require_once("engine/sys/tag.php");
-    require_once("engine/sys/logger.php");
-    require_once("engine/sys/string.php");
+    $engine_dir = "engine/"; // some initial hardcode. TODO: make autodetection
+    require_once("${engine_dir}sys/tag.php");
+    require_once("${engine_dir}sys/logger.php");
+    require_once("${engine_dir}sys/string.php");
 
     function display_error($err)
     {
         echo "<span style=\"color: red\">$err</span>\n";
     }
 
-    $hookls = glob("engine/install_hooks/*.php");
+    $hookls = glob("${engine_dir}install_hooks/*.php");
     $hooks = array();
     foreach($hookls as $hookfile)
     {
