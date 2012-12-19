@@ -28,7 +28,11 @@
       **/
     function initial_check()
     {
-        require_once "engine/sys/logger.php";
+        global $engine_dir;
+        if (!isset($engine_dir))
+            return "Engine directory (\$engine_dir global variable) not specified. ";
+
+        require_once "${engine_dir}sys/logger.php";
         $f = fopen(xcms_log_filename(), "a+");
         if(!$f)
         {

@@ -29,19 +29,21 @@
         //$SETTINGS["web_prefix"]  = ;
         $SETTINGS["mailer_enabled"] = true;
 
+        $request_uri = str_replace("install.php", "", $_SERVER["REQUEST_URI"]);
+
         return array(
             "content_dir" =>
-                array("name"=>"Содержимое сайта","default"=>"$content/")
+                array("name"=>"Содержимое сайта", "default"=>"$content/")
             ,"design_dir" =>
-                array("name"=>"Дизайн","default"=>"$design/")
+                array("name"=>"Дизайн", "default"=>"$design/")
             ,"engine_dir" =>
-                array("name"=>"Движок","default"=>"engine/")
+                array("name"=>"Движок", "default"=>"engine/")
             ,"engine_pub" =>
-                array("name"=>"Публичное содержимое движка","default"=>"engine_public/")
+                array("name"=>"Публичное содержимое движка", "default"=>"engine_public/")
             ,"web_prefix" =>
-                array("name"=>"Префикс","default"=>substr(str_replace("install.php","",$_SERVER["REQUEST_URI"]),1))
+                array("name"=>"Префикс", "default"=>substr($request_uri, 1))
             ,"mailer_enabled" =>
-                array("name"=>"Использовать ли оповещения по e-mail","default"=>"true", "type"=>"bool")
+                array("name"=>"Использовать ли оповещения по e-mail", "default"=>"true", "type"=>"bool")
         );
 
     }
@@ -64,27 +66,27 @@
         @mkdir(".prec", 0777);
         if($f = @fopen(".prec/.htaccess", "a"))
         {
-            fputs($f,"deny from all");
+            fputs($f, "deny from all");
             $PERM["prec"] = true;
             fclose($f);
         }
         else $PERM["prec"] = false;
 
-        if($f = @fopen(".htaccess","a"))
+        if($f = @fopen(".htaccess", "a"))
         {
             $PERM["htaccess"] = true;
             fclose($f);
         }
         else $PERM["htaccess"] = false;
 
-        if($f = @fopen("install.php","a"))
+        if($f = @fopen("install.php", "a"))
         {
             $PERM["install"] = true;
             fclose($f);
         }
         else $PERM["install"] = false;
 
-        if($f = @fopen("settings.php","a"))
+        if($f = @fopen("settings.php", "a"))
         {
             $PERM["settings"] = true;
             fclose($f);
@@ -117,7 +119,12 @@
       **/
     function final_check($config)
     {
-        $dirs = array("content_dir","design_dir","engine_dir", "engine_pub");
+        $dirs = array(
+            "content_dir",
+            "design_dir",
+            "engine_dir",
+            "engine_pub"
+        );
 
         foreach ($dirs as $d)
             if(!is_dir(@$config[$d]))
@@ -141,7 +148,12 @@
     {
         global $SETTINGS;
         global $content_dir;
-        $dirs = array("content_dir","design_dir","engine_dir", "engine_pub");
+        $dirs = array(
+            "content_dir",
+            "design_dir",
+            "engine_dir",
+            "engine_pub"
+        );
 
         $string_settings = array(
             'content_dir',
@@ -156,8 +168,8 @@
 
         $f = fopen("settings.php", "a");
         if (!$f)
-            return "Cannot open 'settings.php' for append'. ";
-        fputs($f,"<?php\n");
+            return "Cannot open 'settings.php' for append. ";
+        fputs($f, "<?php\n");
         foreach ($string_settings as $k)
         {
             $val = $config[$k];
@@ -170,7 +182,7 @@
             fputs($f, "\x20\x20\x20\x20\$$k = $v;\n");
         }
 
-        fputs($f,"\n?>");
+        fputs($f, "\n?>");
         fclose($f);
         include("settings.php");
         include("$engine_dir/sys/settings.php");

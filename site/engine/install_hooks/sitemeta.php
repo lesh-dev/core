@@ -18,6 +18,7 @@
       **/
     function request_variables()
     {
+        $request_uri = str_replace("install.php", "", $_SERVER["REQUEST_URI"]);
         return array(
             "site_name"=>array(
                 "name"=>"Название веб-сайта",
@@ -27,7 +28,7 @@
             "site_url"=>array(
                 "name"=>"Адрес веб-сайта",
                 "type"=>"string",
-                "default"=>"http://{$_SERVER['HTTP_HOST']}".str_replace("install.php","",$_SERVER["REQUEST_URI"])
+                "default"=>"http://{$_SERVER['HTTP_HOST']}$request_uri"
                 ),
             "webmaster_mail"=>array(
                 "name"=>"Адрес службы техподдержки",
