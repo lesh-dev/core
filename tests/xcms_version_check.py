@@ -2,8 +2,8 @@
 # -*- coding: utf8 -*-
 
 import re
-import selenium_test, tests_common, random_crap
-from xcms_test_config import XcmsTestConfig
+import selenium_test, xtest_common, random_crap
+from xtest_config import XcmsTestConfig
 from selenium_test import SeleniumTest
 
 class XcmsVersionCheck(SeleniumTest):
@@ -25,7 +25,7 @@ class XcmsVersionCheck(SeleniumTest):
 		
 		conf = XcmsTestConfig()
 		
-		tests_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
+		xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
 		
 		self.gotoUrlByLinkText("Админка")
 		
