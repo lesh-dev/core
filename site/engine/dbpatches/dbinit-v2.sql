@@ -1,7 +1,9 @@
--- drop table if exists exam_attempt;
 drop table if exists exam;
 drop table if exists course;
+drop table if exists person_school;
 drop table if exists person;
+drop table if exists school;
+
 
 /* Участник (препод, куратор, школьник...) */
 create table person (
@@ -72,6 +74,8 @@ create table school (
     school_id integer primary key autoincrement,
     school_title text,
     school_type text, -- enum:(летняя, зимняя)
+    school_date_start text, -- дата начала
+    school_date_end text, -- дата конца
     school_created text, -- utc timestamp
     school_modified text -- utc timestamp
 );
@@ -85,8 +89,8 @@ create table school (
 переезжают сюда.
 */
 create table person_school (
-    person_school_id primary key autoincrement,
-    school_person_id integer not null, -- fk person
+    person_school_id integer primary key autoincrement,
+    member_person_id integer not null, -- fk person
     school_id integer not null, -- fk school
     is_student text, -- является ли школьником на данной школе
     is_teacher text, -- является ли преподом на данной школе
@@ -96,7 +100,9 @@ create table person_school (
         -- (для Летней школы надо договориться, какой именно класс мы ставим,
         -- будущий или прошедший
     person_school_created text, -- utc timestamp
-    person_school_modified text -- utc timestamp
+    person_school_modified text, -- utc timestamp
+    foreign key (member_person_id) references person(person_id),
+    foreign key (school_id) references school(school_id)
 );
 
 /*
@@ -104,11 +110,14 @@ create table person_school (
 (чатик при наборе и поведении на школе)
 */
 create table person_comment (
-    person_comment_id primary key autoincrement,
+    person_comment_id integer primary key autoincrement,
     person_comment text, -- текст комментария
-    blame_person_id integer not null, -- fk person -- сабжевый участник (типично школьник)
+    blamed_person_id integer not null, -- fk person -- сабжевый участник (типично школьник)
     school_id integer not null, -- fk school -- школа, о которой идёт речь
     owner_person_id integer not null, -- fk person -- владелец комментария (типично препод)
     person_comment_created text, -- utc timestamp
-    person_comment_modified text -- utc timestamp
+    person_comment_modified text, -- utc timestamp
+    foreign key (blamed_person_id) references person(person_id),
+    foreign key (school_id) references school(school_id),
+    foreign key (owner_person_id) references person(person_id)
 );
