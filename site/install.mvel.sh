@@ -11,10 +11,10 @@ fi
 content_name="fizlesh.ru-content"
 db="fizlesh.sqlite3"
 rm -f $db || true
-#sqlite3 $db < dbinit.sql
+sqlite3 $db < engine/dbpatches/dbinit-v2.sql
 #sqlite3 $db < unused-dbinit.sql
 #sqlite3 $db < ../junk/$content_name/ank/anketas-2012.07.23.sql
-cp ../junk/$content_name/ank/lesh-2012.08.30.sqlite3 $db
+#cp ../junk/$content_name/ank/lesh-2012.08.30.sqlite3 $db
 #cp /var/www/html/site/$content_name/ank/fizlesh.sqlite3 complete.sql
 #cp complete.sql $db
 

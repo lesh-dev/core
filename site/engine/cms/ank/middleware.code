@@ -1,0 +1,54 @@
+<?php
+    // some common XSM functions, not listed in func.code
+
+    function xcms_get_persistent_key($key_name, $default_value = '')
+    {
+        $value = '';
+
+        $is_first = !array_key_exists("show-person", $_POST);
+        if ($is_first)
+        {
+            $preset_val = xcms_get_key_or($_COOKIE, $key_name, $default_value);
+            xcms_log(0, "PRESET: $preset_val");
+            // GET value has a priority over COOKIES
+            $value = array_key_exists($key_name, $_GET) ? $_GET[$key_name] : $preset_val;
+        }
+        else
+        {
+            $value = xcms_get_key_or($_POST, $key_name);
+        }
+        xcms_log(0, "SETK $key_name $value");
+        //setcookie($key_name, $value, 0/*24*3600*14*/);
+        //echo "$key_name|$value<br/>\n";
+        return $value;
+    }
+
+
+    function xsm_person_name_filter($db, $show_name_filter)
+    {
+        $show_name_filter = trim($show_name_filter);
+        if (!strlen($show_name_filter))
+            return "";
+
+        $words = explode(' ', $show_name_filter);
+        $cond = "";
+        foreach ($words as $word)
+        {
+            $w = trim($word);
+            if (!strlen($w))
+                continue;
+
+            if (strlen($cond))
+                $cond .= " AND ";
+            $esc_word = $db->escapeString($w);
+            $cond .=
+                "((last_name LIKE '%$esc_word%') OR ".
+                "(first_name LIKE '%$esc_word%') OR ".
+                "(patronymic LIKE '%$esc_word%'))";
+        }
+        if (!strlen($cond))
+            return "";
+        return "($cond)";
+    }
+
+?>

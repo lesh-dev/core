@@ -121,3 +121,36 @@ create table person_comment (
     foreign key (school_id) references school(school_id),
     foreign key (owner_person_id) references person(person_id)
 );
+
+
+insert into person (last_name, first_name, patronymic,
+    birth_date,
+    school, school_city, current_class,
+    phone, cellular, email, skype,
+    anketa_status, person_created) values
+    ('Вельтищев', 'Михаил', 'Николаевич',
+    '2012.05.06',
+    '444', 'Москва', '9г',
+    '+7 (495) 618 30 21', '+7 (915) 0-686-186', 'dichlofos-mv@yandex.ru', 'dichlofos.mv',
+    'new', '2012.05.07 03:05:01');
+
+insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
+    values ('Вельтищев', 'Дмитрий', 'Николаевич', 'declined', '2012.05.07 03:05:01', '2012.06.10 01:02:03');
+
+insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
+    values ('Школьница', 'Мария', 'Батьковна', 'processed', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
+
+insert into person (last_name, first_name, patronymic, anketa_status, current_class, school_city, person_created, person_modified)
+    values ('Школьница', 'Мария', 'Батьковна', 'processed', '10a', 'Default City of USA', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
+
+
+insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
+    values ('Школьница2', 'Мария2', 'Батьковна2', 'cont', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
+
+insert into school values(1, 'qqqq', 'summmer', '2011.07.23', '2011.08.22', null, null);
+insert into school values(2, 'zzzzzqqqq', 'winter', '2011.07.23', '2011.08.22', null, null);
+
+insert into person_school values(1, 3, 1, 'student', null, null, '10', null, null);
+insert into person_school values(2, 3, 2, 'teacher', null, null, '10', null, null);
+
+SELECT p.person_id FROM person p LEFT JOIN person_school ps ON p.person_id = ps.member_person_id WHERE ps.member_person_id IS NULL;

@@ -1,4 +1,5 @@
 <# cms/ank/func #>
+<# cms/ank/middleware #>
 <# cms/ank/format #>
 
 <?php
@@ -153,6 +154,12 @@
         echo $message;
         echo $meta;
     }
+    else if(@$_GET["aparam"] == "list-ank")
+        include(translate('<! cms/ank/list-ank !>'));
+    else if(@$_GET["aparam"] == "list-members")
+        include(translate('<! cms/ank/list-person !>'));
+
+
     else if(@$_GET["aparam"] == "edit")
         include(translate('<! cms/ank/edit-ank !>'));
     else if(@$_GET["aparam"] == "view")

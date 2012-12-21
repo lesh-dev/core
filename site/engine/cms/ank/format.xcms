@@ -209,7 +209,7 @@
         </div><?php
     }
 
-
+    // non-kosher function!
     // Here entity should be equal to table name, but...
     function xsm_view_operations($entity, $table_name, $title, $aux_param = '')
     {?>
@@ -218,6 +218,16 @@
                 echo "$entity$aux_param&amp;${table_name}_id=new"; ?>">Добавить <?php echo $title; ?></a>
         </div><?php
     }
+
+    // kosher function
+    function NEW_xsm_view_operations($table_name, $title, $aux_param = '')
+    {?>
+        <div style="white-space: nowrap">
+            <a class="linkButton xsm" href="edit-<?php
+                echo "$table_name$aux_param&amp;${table_name}_id=new"; ?>">Добавить <?php echo $title; ?></a>
+        </div><?php
+    }
+
 
     // Here entity should be equal to table name, but...
     function xsm_edit_delete_info($entity, $table_name, $id, $created, $modified, $aux_param = '')

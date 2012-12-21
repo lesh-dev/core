@@ -43,7 +43,7 @@ function xsm_get_person_fields()
   * Complete list of valid person activity statuses
   * @return key-value array of activity statuses
   **/
-function xsm_get_activity_statuses()
+function xsm_get_anketa_statuses()
 {
     return array(
         "new"=>"Новая",
@@ -55,6 +55,8 @@ function xsm_get_activity_statuses()
         "duplicate"=>"Дубликат",
         "spam"=>"Спам");
 }
+
+
 
 /**
   * DEPRECATED: Anketa status selector for viewer
