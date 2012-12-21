@@ -10,3 +10,4 @@ site/fizlesh.ru-content/*
 site/settings.php
 site/install.php
 site/engine.log
+tests/*.pyc
