@@ -15,7 +15,6 @@ def performLogin(test, login, password):
 	
 	test.gotoRoot()
 	
-	print "login..."
 	# assert we have no shit cookies here
 	test.assertUrlNotPresent(u"Админка")
 	
@@ -44,7 +43,6 @@ def performLogout(test):
 	test.gotoPage("/?&mode=logout&ref=ladmin")
 	
 def performLoginAsAdmin(test, login, password):
-	print "performLoginAsAdmin() called"
 	performLogin(test, login, password)
 	print "checking admin panel link"
 	
