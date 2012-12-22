@@ -1,18 +1,23 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import selenium_test, tests_common, random_crap, time
-from xcms_test_config import XcmsTestConfig
+import selenium_test, xtest_common, random_crap, time
+from xtest_config import XcmsTestConfig
 from selenium_test import SeleniumTest
 
 class XcmsAuthAddNewUser(SeleniumTest):
 	"""
 	This test checks user add functional.
 	It does following steps:
-	1) login as root user
-	2) navigate to user control panes
-	3) add random user
-	4) login as new user 
+	* login as root user
+	* navigate to user control panes
+	* add random user
+	* login as new user 
+	* change user password
+	* logout
+	* login with incorrect password
+	* change password
+	* login again with changed password 
 	"""
 			
 	def run(self):
@@ -23,7 +28,7 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		
 	# first, login as admin
 		print "logging as admin"
-		tests_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
+		xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
 		
 		print "go to user creation panel"
 		
@@ -82,10 +87,10 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		self.assertTextPresent("//div[@class='user-ops']", inpLogin)
 		
 		#logoff root
-		tests_common.performLogout(self)
+		xtest_common.performLogout(self)
 		
 		print "logging as created user. "
-		if not tests_common.performLogin(self, inpLogin, inpPass):
+		if not xtest_common.performLogin(self, inpLogin, inpPass):
 			raise selenium_test.TestError("Cannot login as newly created user. ")
 		
 		# logout self 
@@ -93,7 +98,7 @@ class XcmsAuthAddNewUser(SeleniumTest):
 
 		# test wrong auth
 		print "logging as created user with incorrect password "
-		if tests_common.performLogin(self, inpLogin, "wrong_pass" + inpPass):
+		if xtest_common.performLogin(self, inpLogin, "wrong_pass" + inpPass):
 			raise selenium_test.TestError("I'm able to login with incorrect password. Auth is broken. ")
 		
 #		self.assertBodyTextPresent(u"Пароль всё ещё неверный"); already checked inside
@@ -101,7 +106,7 @@ class XcmsAuthAddNewUser(SeleniumTest):
 # and now, test bug with remaining cookies:
 		# we navigate to root page, and see auth panel!
 		print "logging again as created user. "
-		if not tests_common.performLogin(self, inpLogin, inpPass):
+		if not xtest_common.performLogin(self, inpLogin, inpPass):
 			raise selenium_test.TestError("Cannot login again as newly created user. ")
 
 		self.gotoUrlByLinkText(u"Админка")
@@ -120,13 +125,10 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		self.gotoUrlByLinkText(u"Выйти")
 		
 		print "logging again as created user with new password"
-		if not tests_common.performLogin(self, inpLogin, newPass):
+		if not xtest_common.performLogin(self, inpLogin, newPass):
 			raise selenium_test.TestError("Cannot login again as newly created user with changed password. ")
 
 		# logout self 
 		self.gotoUrlByLinkText("Выход")
 		
-	
-# def main():
-selenium_test.RunTest(XcmsAuthAddNewUser())
 

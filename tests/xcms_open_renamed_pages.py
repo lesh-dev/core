@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import selenium_test, tests_common, random_crap
-from xcms_test_config import XcmsTestConfig
+import selenium_test, xtest_common, random_crap
+from xtest_config import XcmsTestConfig
 from selenium_test import SeleniumTest
 
 class XcmsOpenRenamedPages(SeleniumTest):
@@ -40,6 +40,4 @@ class XcmsOpenRenamedPages(SeleniumTest):
 		self.gotoPage("/?page=z060JoinUs/doctor-1170705932") # anketa
 		self.assertBodyTextPresent(u"Обязательно укажите какие-нибудь свои координаты")
 		
-# def main():
-selenium_test.RunTest(XcmsOpenRenamedPages())
     

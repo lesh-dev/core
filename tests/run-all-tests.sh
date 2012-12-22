@@ -28,27 +28,4 @@ source "./tests-helper-functions.sh"
 
 echo "$0 started on `date +%Y-%m-%d-%H:%M:%S`"
 
-echo "tests to run: "
-ls -1 ./xcms-*.py
-
-FAILED_COUNT=0
-PASSED_COUNT=0
-
-for TEST in ./xcms-*.py; do
-	if ! run_test $TEST; then
-		if [ "$CONTINUE" == "YES" ]; then
-			FAILED_COUNT=`expr $FAILED_COUNT + 1`
-			continue
-		else
-			exit 1
-		fi
-	else
-		PASSED_COUNT=`expr $PASSED_COUNT + 1`
-	fi
-done
-
-echo "Tests passed: $PASSED_COUNT, failed: $FAILED_COUNT. "
-
-if [ $FAILED_COUNT -ge 0 ]; then
-	exit 1
-fi
+python test-suite.py

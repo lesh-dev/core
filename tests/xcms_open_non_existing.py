@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import selenium_test, tests_common, random_crap
-from xcms_test_config import XcmsTestConfig
+import selenium_test, xtest_common, random_crap
+from xtest_config import XcmsTestConfig
 from selenium_test import SeleniumTest
 
-class XcmsOverallOpenPages(SeleniumTest):
+class XcmsOpenNonExisting(SeleniumTest):
 	"""
 	This test checks '404 page' handling in XCMS functional
 	Steps:
@@ -21,5 +21,3 @@ class XcmsOverallOpenPages(SeleniumTest):
 		print "Home reference on 404 page: ", homeHref
 		self.gotoSite(homeHref)
 
-# def main():	
-selenium_test.RunTest(XcmsOverallOpenPages())
