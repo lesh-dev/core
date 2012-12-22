@@ -26,68 +26,13 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		
 		conf = XcmsTestConfig()
 		
-	# first, login as admin
-		print "logging as admin"
-		xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
-		
-		print "go to user creation panel"
-		
-		#	self.gotoRoot()
-		self.gotoUrlByLinkText(u"Админка")
-		# navigate to users CP
-		print "goto user list."
-		self.gotoUrlByLinkText(u"Пользователи")
-		self.assertBodyTextPresent(u"Администрирование пользователей")
-		self.gotoUrlByLinkText(["Create user", u"Создать пользователя"])
-		
+		# first, login as admin
 		inpLogin = "an_test_user_" + random_crap.randomText(8)
 		inpEMail = random_crap.randomEmail()
 		inpPass = random_crap.randomText(10)
 		inpName = u"Вася Пупкин" + random_crap.randomText(6)
-		#inpName = u"Вася Пупкин" + selenium_test.randomText(6)
-		
-		#<tr><td colspan="2"><b>Учетные данные</b>                               </td></tr>
-		#<tr><td>Имя пользователя:   </td><td> <input name="login">                </td></tr>
-		#<tr><td>Пароль:             </td><td> <input type="password" name="p1">   </td></tr>
-		#<tr><td>Пароль  (еще раз):  </td><td> <input type="password" name="p2">   </td></tr>
-		#<tr><td>Настоящее имя:      </td><td> <input name="name">                 </td></tr>
-		#<tr><td>Электропочта:       </td><td> <input name="email">                </td></tr>
-		#<tr><td colspan="2">  <input type="checkbox" name="notify_user" />	
-		inpLogin = self.fillElementById("login", inpLogin)
-		print "login = '" + inpLogin + "'"
-		if inpLogin == "":
-			raise RuntimeError("Filled login value is empty!")
-		
-		inpEMail = self.fillElementById("email", inpEMail)
-		inpPass1 = self.fillElementById("password", inpPass)
-		print "original pass: " + inpPass
-		inpPass2 = self.fillElementById("password_confirm", inpPass)
-		if inpPass1 != inpPass2:
-			raise RuntimeError("Unpredicted input behavior on password entering")
-		inpPass = inpPass1
-		print "actual pass: " + inpPass
-		
-		inpName = self.fillElementById("name", inpName)
-		
-		# set notify checkbox.
-		self.clickElementByName("notify_user")
-		# send form
-		
-		self.clickElementByName("create_user")
-		
-		print "user created, going to user list again to refresh. "
-		
-		time.sleep(2)
-		# here is a usability issue: user not appears in the list.
-		# refresh user list
-		self.gotoUrlByLinkText(u"Пользователи")
-		
-		self.gotoUrlByLinkText(inpLogin)
-		
-		self.assertTextPresent("//div[@class='user-ops']", inpLogin)
-		
-		#logoff root
-		xtest_common.performLogout(self)
+
+		inpLogin, inpEMail, inpPass, inpName = xtest_common.createNewUser(self, conf, inpLogin, inpEMail, inpPass, inpName)
 		
 		print "logging as created user. "
 		if not xtest_common.performLogin(self, inpLogin, inpPass):

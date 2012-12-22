@@ -24,6 +24,15 @@ import time
 
 def isList(x):
 	return type(x) == type(list())
+
+def isString(x):
+	return type(x) == type("string")
+
+def isEqual(x, y):
+	if isString(x) and isString(y):
+		return (x.strip() == y.strip())
+	else:
+		raise RuntimeError("Cannot compare anything except strings, sorry. ")
 	
 class TestError(RuntimeError):
 	pass
@@ -225,6 +234,23 @@ class SeleniumTest:
 		self.addAction("fill", "element id: '" + eleId + "', text: '" + text + "'")
 		self.getElementById(eleId).send_keys(text)
 		return self.getElementById(eleId).get_attribute('value')
+
+	def getElementValueById(self, eleId):
+		self.checkEmptyParam(eleId, "getElementValueById")
+		self.addAction("get-value", "element id: '" + eleId + "'")
+		return self.getElementById(eleId).get_attribute('value')
+
+	def checkElementValueById(self, eleId, text):
+		self.checkEmptyParam(eleId, "checkElementValueById")
+		self.addAction("check-value", "element id: '" + eleId + "'")
+		eleValue = self.getElementById(eleId).get_attribute('value')
+		if isEqual(eleValue, text):
+			return True
+		return False
+
+	def assertElementValueById(self, eleId, text):
+		if not self.checkElementValueById(eleId, text):
+			raise TestError("Element '" + eleId + "' value does not match expected: '" + text + "'")
 
 	def addAction(self, name, details):
 		self.m_actionLog.append(TestAction(name, details))		
