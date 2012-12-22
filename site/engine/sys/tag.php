@@ -80,10 +80,14 @@ function xcms_save_list($file, $keys)
     }
     foreach ($keys as $key => $value)
     {
-        $value = trim($value);
+        // keys are cleaned from non-printing chars
+        $key = str_replace("\r", " ", $key);
+        $key = str_replace("\n", " ", $key);
+        $key = str_replace("\t", " ", $key);
+        $key = trim($key);
         $value = str_replace("\r", " ", $value);
         $value = str_replace("\n", " ", $value);
-        $value = str_replace("  ", " ", $value);
+        $value = trim($value);
 
         // TODO: write error handling
         fwrite($f, "$key:$value\n");
@@ -267,6 +271,38 @@ function editlist_form($file, $addparams, $skip_params = "", $security_flags = "
         </table>
         <input type="submit" name="editTag" id="editTag" value="Сохранить" />
     </form><?php
+}
+
+function xcms_keyvalue_unit_test()
+{
+    xut_begin("keyvalue");
+    $values = array();
+    $values["key1"] = " value 1\n\r";
+    $values["key2 "] = " value\r2   ";
+    $values["key 3 "] = "proper-value-without-spaces";
+    $values[" key-4 "] = "proper-value-without-spaces";
+    $values[" key\n5 "] = "proper\nvalue\rwithout\r\nspaces";
+    $values[" key6 "] = "proper\nvalue\rwithout\r\nspaces";
+    $values[" key7 "] = "generic  values  with   lots  of spaces";
+    xut_check(xcms_save_list("test-list", $values), "List save");
+    $read_values = xcms_get_list("test-list");
+
+    $check["key1"] = "value 1";
+    $check["key2"] = "value 2";
+    $check["key 3"] = "proper-value-without-spaces";
+    $check["key-4"] = "proper-value-without-spaces";
+    $check["key 5"] = "proper value without  spaces";
+    $check["key6"] = "proper value without  spaces";
+    $check["key7"] = "generic  values  with   lots  of spaces";
+
+    foreach ($read_values as $key => $value)
+    {
+        $cv = xcms_get_key_or($check, $key, "INVALID");
+        xut_check($cv != "INVALID", "Invalid value received");
+        xut_check($value == $cv, "Values do not match");
+    }
+
+    xut_end();
 }
 
 ?>
