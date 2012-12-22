@@ -11,6 +11,7 @@
 
     // put your unit test function call here
     xcms_string_unit_test();
+    xcms_keyvalue_unit_test();
     XcmsUser::unit_test();
 
     xut_finalize();
