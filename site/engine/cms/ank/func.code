@@ -3,8 +3,9 @@
 function xsm_get_person_fields()
 {
     return array(
-        "activity_status"=>"Статус",
-        "is_current"=>"Текущий?",
+        "anketa_status"=>"Статус",
+        //"activity_status"=>"Статус",
+        //"is_current"=>"Текущий?",
 
         "last_name"=>"Фамилия",
         "first_name"=>"Имя",
@@ -23,15 +24,15 @@ function xsm_get_person_fields()
         "skype"=>"Skype",
         "social_profile"=>"Профиль в соц. сети",
 
-        "is_teacher"=>"Препод?",
-        "is_student"=>"Школьник?",
-        "curatorship"=>"Кураторство",
+        //"is_teacher"=>"Препод?",
+        //"is_student"=>"Школьник?",
+        //"curatorship"=>"Кураторство",
 
         "favourites"=>"Любимые предметы",
         "achievements"=>"Достижения",
         "hobby"=>"Хобби",
 
-        "person_comment"=>"Заметки",
+        //"person_comment"=>"Заметки",
         "user_agent"=>"UserAgent",
 
         "person_created"=>"Время создания",
