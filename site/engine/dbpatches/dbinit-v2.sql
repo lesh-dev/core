@@ -87,6 +87,8 @@ create table school (
 (на одной школе он был школьником, на школе следующей он был уже преподом)
 Таким образом, статусы is_student, is_teacher, curatorship участника
 переезжают сюда.
+
+TODO добавить место проведения школы
 */
 create table person_school (
     person_school_id integer primary key autoincrement,
@@ -147,8 +149,8 @@ insert into person (last_name, first_name, patronymic, anketa_status, current_cl
 insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
     values ('Школьница2', 'Мария2', 'Батьковна2', 'cont', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
 
-insert into school values(1, 'qqqq', 'summmer', '2011.07.23', '2011.08.22', null, null);
-insert into school values(2, 'zzzzzqqqq', 'winter', '2011.07.23', '2011.08.22', null, null);
+insert into school values(1, 'ЛЭШ-2011', 'summmer', '2011.07.23', '2011.08.22', null, null);
+insert into school values(2, 'ЗЭШ-2012', 'winter', '2012.01.02', '2012.01.09', null, null);
 
 insert into person_school values(1, 3, 1, 'student', null, null, '10', null, null);
 insert into person_school values(2, 3, 2, 'teacher', null, null, '10', null, null);

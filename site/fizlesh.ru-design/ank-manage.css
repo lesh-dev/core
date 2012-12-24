@@ -142,3 +142,25 @@ span.link-oper-list {
     line-height: 20px;
     vertical-align: bottom;
 }
+
+div.person-portrait {
+    display: inline-block;
+    float: left;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+img.person-portrait {
+    height: 120px;
+    width: 120px;
+    border: 1px solid #8faf6f;
+}
+
+div.person-title {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+span.person-value {
+    font-weight: bold;
+}

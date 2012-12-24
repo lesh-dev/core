@@ -69,7 +69,7 @@ function xsm_show_ank_list()
 
     if (strlen($cond))
         $query .= " $cond";
-    $query .= " ORDER BY anketa_status, last_name, first_name";
+    $query .= " ORDER BY person_created DESC";
     // debug area (TODO: remove)
     ?><textarea rows="10" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
     $person_sel = $db->query($query);
@@ -84,8 +84,8 @@ function xsm_show_ank_list()
             <col width="20%" />
             <col width="70px" />
             <col width="30px" />
+            <col width="15%" />
             <col width="25%" />
-            <col width="20%" />
             <col width="10%" />
         </colgroup>
         <thead>
@@ -145,7 +145,7 @@ function xsm_show_ank_list()
         ?>
         <tr>
             <td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
-            <td class="ankList"><a href="<?php echo "view-prep&amp;person_id=$person_id"; ?>"><?php
+            <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"><?php
                 echo "$last_name $first_name $patronymic"; ?></a></td>
             <td class="ankList"><?php echo $birth_date; ?></td>
             <td class="ankList"><?php echo $current_class; ?></td>

@@ -196,7 +196,7 @@ function xsm_show_person_list()
                     style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
                 <span class="ankListField next">Статус</span>:
                     <span class="ankStatus <?php echo $activity_status; ?>"><?php echo $hr_status; ?></span><?php
-                xsm_edit_delete_info('prep', 'person', $person_id, $person_created, $person_modified); ?>
+                xsm_edit_delete_info('person', 'person', $person_id, $person_created, $person_modified); ?>
                 </span>
             </td>-->
         </tr>
