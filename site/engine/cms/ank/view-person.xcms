@@ -34,14 +34,25 @@ function xsm_print_person_header($person)
 
 
     ?>
-    <div class="person-portrait"><img class="person-portrait"
-        src="<?php echo $full_engine_pub; ?>img/stalin.jpg"/></div>
-    <div class="person-title"><?php echo "$last_name $first_name $patronymic"; ?></div><?php
-    xsm_draw_person_textval('Почта', $email);
-    xsm_draw_person_textval('Мобильный', $cellular);
-    xsm_draw_person_textval('Домашний', $phone);
-    xsm_draw_person_textval('Skype', $skype);
-    xsm_draw_person_textval('Профиль', $social_profile);
+    <div style="width: 100%; overflow: auto">
+    <div class="person-topleft">
+        <div class="person-portrait"><img class="person-portrait"
+            src="<?php echo $full_engine_pub; ?>img/stalin.jpg"/></div>
+        <div class="person-title"><?php echo "$last_name $first_name $patronymic"; ?></div><?php
+        xsm_draw_person_textval('Почта', $email);
+        xsm_draw_person_textval('Мобильный', $cellular);
+        xsm_draw_person_textval('Домашний', $phone);
+        xsm_draw_person_textval('Skype', $skype);
+        xsm_draw_person_textval('Профиль', $social_profile);
+        ?>
+    </div>
+    <div class="person-topright"><?php
+        xsm_draw_person_textval('Создана', $person_created);
+        xsm_draw_person_textval('Отредактирована', $person_modified);
+        ?>
+    </div>
+    </div><!-- container -->
+    <?php
 }
 
 function xsm_print_person_schools($db, $person_id, $current_school_id)
@@ -54,13 +65,13 @@ function xsm_print_person_schools($db, $person_id, $current_school_id)
     $href_ank = "view-person&amp;person_id=$person_id&amp;school_id=".SCHOOL_ANK_ID;
     ?>
     <table class="ankList"><tr>
-        <td class="ankList"><a href="<?php echo $href_ank; ?>">Анкета</a></td>
+        <td class="ankListRowTitle"><a href="<?php echo $href_ank; ?>">Анкета</a></td>
         <?php
         while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
         {
             $href = "view-person&amp;person_id=$person_id&amp;school_id=${school['school_id']}";
             $title = htmlspecialchars($school['school_title']); ?>
-            <td class="ankList"><a href="<?php echo $href; ?>"><?php echo $title; ?></a></td>
+            <td class="ankListRowTitle"><a href="<?php echo $href; ?>"><?php echo $title; ?></a></td>
             <?php
         }?>
     </tr></table><?php

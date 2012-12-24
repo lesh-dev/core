@@ -164,3 +164,13 @@ div.person-title {
 span.person-value {
     font-weight: bold;
 }
+
+div.person-topleft {
+    width: 60%;
+    float: left;
+}
+
+div.person-topright {
+    float: right;
+    width: 35%;
+}
