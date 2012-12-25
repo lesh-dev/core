@@ -161,8 +161,12 @@ div.person-title {
     font-weight: bold;
 }
 
+span.person-key {
+    font-style: italic;
+}
+
 span.person-value {
-    font-weight: bold;
+    font-weight: normal;
 }
 
 div.person-topleft {

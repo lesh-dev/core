@@ -129,11 +129,13 @@ insert into person (last_name, first_name, patronymic,
     birth_date,
     school, school_city, current_class,
     phone, cellular, email, skype,
+    social_profile,
     anketa_status, person_created) values
     ('Вельтищев', 'Михаил', 'Николаевич',
     '2012.05.06',
     '444', 'Москва', '9г',
     '+7 (495) 618 30 21', '+7 (915) 0-686-186', 'dichlofos-mv@yandex.ru', 'dichlofos.mv',
+    'http://vk.com/dichlofos',
     'new', '2012.05.07 03:05:01');
 
 insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
@@ -154,5 +156,7 @@ insert into school values(2, 'ЗЭШ-2012', 'winter', '2012.01.02', '2012.01.09'
 
 insert into person_school values(1, 3, 1, 'student', null, null, '10', null, null);
 insert into person_school values(2, 3, 2, 'teacher', null, null, '10', null, null);
+
+insert into course values(1, 'test course', 1, 1, 'qqq', 'ppp', 'zzz', 't666', 'aaa');
 
 SELECT p.person_id FROM person p LEFT JOIN person_school ps ON p.person_id = ps.member_person_id WHERE ps.member_person_id IS NULL;

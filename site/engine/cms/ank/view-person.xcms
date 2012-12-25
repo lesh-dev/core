@@ -7,8 +7,16 @@ define('SCHOOL_ANK_ID', 'ank');
 
 function xsm_draw_person_textval($text, $value)
 {?>
-    <div><?php echo $text; ?>: <span class="person-value"><?php echo $value; ?></span></div><?php
+    <div><span class="person-key"><?php echo $text; ?></span>:
+        <span class="person-value"><?php echo $value; ?></span></div><?php
 }
+
+function xsm_draw_person_longtextval($text, $value)
+{?>
+    <div><span class="person-key"><?php echo $text; ?></span>:
+        <?php echo $value; ?></div><?php
+}
+
 
 function xsm_print_person_header($person)
 {
@@ -78,12 +86,82 @@ function xsm_print_person_schools($db, $person_id, $current_school_id)
 
 }
 
-function xsm_print_person_ank_data()
+function xsm_print_person_ank_data($person)
 {
+
+    $person_id = htmlspecialchars($person["person_id"]);
+
+    $last_name = htmlspecialchars($person["last_name"]);
+    $first_name = htmlspecialchars($person["first_name"]);
+    $patronymic = htmlspecialchars($person["patronymic"]);
+
+    $birth_date = htmlspecialchars($person["birth_date"]);
+    $passport_data = htmlspecialchars($person["passport_data"]);
+
+    $school = htmlspecialchars($person["school"]);
+    $school_city = htmlspecialchars($person["school_city"]);
+
+
+
+    $current_class = htmlspecialchars($person["current_class"]);
+
+    $phone = htmlspecialchars($person["phone"]);
+    $cellular = htmlspecialchars($person["cellular"]);
+    $email = htmlspecialchars($person["email"]);
+    $skype = htmlspecialchars($person["skype"]);
+    $social_profile = xsm_prepare_social_profile($person["social_profile"]);
+
+
+    //$is_current = $person["is_current"];
+    //$is_teacher = $person["is_teacher"];
+    //$is_student = $person["is_student"];
+    //$curatorship = $person["curatorship"];
+
+    $favourites = xcms_html_wrap_by_crlf(htmlspecialchars($person["favourites"]));
+    $achievements = xcms_html_wrap_by_crlf(htmlspecialchars($person["achievements"]));
+    $hobby = xcms_html_wrap_by_crlf(htmlspecialchars($person["hobby"]));
+
+    //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
+    $user_agent = htmlspecialchars($person["user_agent"]);
+
+    $person_created = htmlspecialchars($person["person_created"]);
+    $person_modified = htmlspecialchars($person["person_modified"]);
+
+    $anketa_status = $person["anketa_status"];
+    $statuses = xsm_get_anketa_statuses();
+    if (!array_key_exists($anketa_status, $statuses)) $anketa_status = "new"; // default
+    $hr_status = $statuses[$anketa_status];
+
+
+    xsm_draw_person_textval('Дата рождения', $birth_date);
+    xsm_draw_person_textval('Паспортные данные', $passport_data);
+    xsm_draw_person_textval('Класс подачи анкеты', $current_class);
+    xsm_draw_person_textval('Школа', $school);
+    xsm_draw_person_textval('Город', $school_city);
+    xsm_draw_person_textval('Статус анкеты', $hr_status);
+    xsm_draw_person_textval('User Agent', $user_agent);
+    xsm_draw_person_longtextval('Любимые предметы', $favourites);
+    xsm_draw_person_longtextval('Достижения', $achievements);
+    xsm_draw_person_longtextval('Хобби', $hobby);
+/*
+
+    <img class="link-oper" src="<# full_design_dir #>pic/mozillafirefox.png"
+        style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
+    <span class="ankListField next">Статус</span>:
+        <span class="ankStatus <?php echo $anketa_status; ?>"><?php echo $hr_status; ?></span><?php
+
+*/
+
+
+    //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
+
+    xsm_edit_delete_info('person', 'person', $person_id, $person_created, $person_modified);
 }
 
-function xsm_print_person_selected_school($school_id)
+function xsm_print_person_selected_school($school_id, $person)
 {
+    echo "Про школу $school_id<br />Тут будет информация о зачётах";
+    // выгребать информацию о зачётах и т.п.
 
 }
 
@@ -102,7 +180,7 @@ function xsm_print_person()
     xsm_print_person_schools($db, $person_id, $school_id);
 
     if ($school_id == SCHOOL_ANK_ID)
-        xsm_print_person_ank_data();
+        xsm_print_person_ank_data($person);
     else
         xsm_print_person_selected_school($school_id);
 
@@ -111,48 +189,15 @@ function xsm_print_person()
         <?php
         $person_id = htmlspecialchars($person["person_id"]);
 
-        $last_name = htmlspecialchars($person["last_name"]);
-        $first_name = htmlspecialchars($person["first_name"]);
-        $patronymic = htmlspecialchars($person["patronymic"]);
-
-        $birth_date = htmlspecialchars($person["birth_date"]);
-        $passport_data = htmlspecialchars($person["passport_data"]);
-
-        $school = htmlspecialchars($person["school"]);
-        $school_city = htmlspecialchars($person["school_city"]);
-
-
-
-        $current_class = htmlspecialchars($person["current_class"]);
-
-        $phone = htmlspecialchars($person["phone"]);
-        $cellular = htmlspecialchars($person["cellular"]);
-        $email = htmlspecialchars($person["email"]);
-        $skype = htmlspecialchars($person["skype"]);
-        $social_profile = xsm_prepare_social_profile($person["social_profile"]);
-
 
         //$is_current = $person["is_current"];
         //$is_teacher = $person["is_teacher"];
         //$is_student = $person["is_student"];
         //$curatorship = $person["curatorship"];
 
-        $favourites = xcms_html_wrap_by_crlf(htmlspecialchars($person["favourites"]));
-        $achievements = xcms_html_wrap_by_crlf(htmlspecialchars($person["achievements"]));
-        $hobby = xcms_html_wrap_by_crlf(htmlspecialchars($person["hobby"]));
 
-        //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
-        $user_agent = htmlspecialchars($person["user_agent"]);
+        //$curatorship_items = xsm_get_curatorship_items();
 
-        $person_created = htmlspecialchars($person["person_created"]);
-        $person_modified = htmlspecialchars($person["person_modified"]);
-
-        $anketa_status = $person["anketa_status"];
-        $statuses = xsm_get_anketa_statuses();
-        if (!array_key_exists($anketa_status, $statuses)) $anketa_status = "new"; // default
-        $hr_status = $statuses[$anketa_status];
-
-        $curatorship_items = xsm_get_curatorship_items();
         //if (!array_key_exists($curatorship, $curatorship_items)) $curatorship = "none"; // default
         //$hr_curatorship = $curatorship_items[$curatorship];
 
@@ -160,85 +205,42 @@ function xsm_print_person()
         $hr_teacher = ($is_teacher == "teacher" ? "Да" : "Нет");
         $hr_student = ($is_student == "student" ? "Да" : "Нет");
         $hr_current = ($is_current == "current" ? "Да" : "Нет");
-        */
 
-        ?>
         <tr>
             <td class="ankListRowTitle">
-            <?php echo "[$person_id] $last_name $first_name $patronymic"; ?><a name="<?php echo "person$person_id"; ?>"></a>
+            <?php
+             echo "[$person_id] $last_name $first_name $patronymic"; ?><a name="<?php echo "person$person_id"; ?>"></a>
                 <span style="float: right">
-                <?php /*
+                <?php
                 <a class="link-oper" href="/<?php echo $web_prefix;
                     ?>?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
                 <a class="link-oper" href="/<?php echo $web_prefix;
                     ?>?ref=get_ank&amp;mode=txt&amp;file=<?php echo $sBaseAnkFileName; ?>">TXT</a>
-                */ ?>
-                <?php
-                    /*
+
                     if ($is_current == "current") {?>
                         <a class="link-oper"
                             href="view-exam&amp;student_person_id=<?php echo $person_id; ?>">Зачёты</a><?php
-                    } else*/ {?>
+                    } else {?>
                         <span class="link-oper"
                             title="Зачёты могут быть проставлены только текущим школьникам">Зачёты отключены</span><?php
                     }
-                    /*
+
                     if ($is_teacher == "teacher") {?>
                         <a class="link-oper"
                             href="edit-course&amp;course_id=new&amp;course_teacher_id=<?php
                                 echo $person_id; ?>">Добавить курс</a><?php
-                    }*/
+                    }
 
                 ?>
                 <img class="link-oper" src="<# full_design_dir #>pic/mozillafirefox.png"
                     style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
                 <span class="ankListField next">Статус</span>:
                     <span class="ankStatus <?php echo $anketa_status; ?>"><?php echo $hr_status; ?></span><?php
-                xsm_edit_delete_info('person', 'person', $person_id, $person_created, $person_modified); ?>
                 </span>
             </td>
         </tr>
-        <tr>
-            <td class="ankList"><span class="ankListField">Дата рождения</span>:
-                <?php echo $birth_date; ?>
-                <span class="ankListField next">Паспортные данные</span>:
-                <?php echo $passport_data; ?>
-            </td></tr>
-        <tr><td class="ankList">
-            <span class="ankListField">Школа</span>: <?php echo "$school $school_city"; ?>
-            <span class="ankListField next">Класс</span>: <?php echo "$current_class"; ?>
-        </td></tr>
-        <!-- phones -->
-        <?php if (!empty($cellular) || !empty($phone)) {?>
-            <tr><td class="ankList"><span class="ankListField">Телефоны</span>:
-            <?php
-            if ($cellular) {?>
-                <span class="ankListField">мобильный</span> <?php echo $cellular;
-            }
-            if ($phone) {
-                if (!empty($cellular)) echo ', ';
-                ?><span class="ankListField">домашний</span> <?php echo $phone;
-            }?>
-            </td></tr>
-        <?php } ?>
-        <!-- email, profile and skype -->
-        <?php if (!empty($email) || !empty($social_profile) || !empty($skype)) { ?>
-        <tr><td class="ankList"><?php if (!empty($email)) {
-            ?><span class="ankListField">E-Mail</span>:
-                <a href="mailto:<?php echo $email; ?>" ><?php echo $email; ?></a><?php
-            }
-            if (!empty($social_profile)) {
-                if (!empty($email)) echo ', '; ?>
-                <span class="ankListField">Профиль</span>:
-                    <a href="<?php echo $social_profile; ?>"><?php echo $social_profile; ?></a><?php
-            }
-            if (!empty($skype)) {
-                if (!empty($email) || !empty($social_profile)) echo ', '; ?>
-                <span class="ankListField">Skype</span>: <?php echo $skype; ?>
-            <?php
-            }?>
-        </td></tr>
-        <?php } ?>
+
+
         <!--
         <tr><td class="ankList">
             <span class="ankListField">Текущий</span>: <?php echo $hr_current; ?>
@@ -247,22 +249,7 @@ function xsm_print_person()
             <span class="ankListField next">Кураторство</span>: <?php echo $hr_curatorship; ?>
         </td></tr> -->
         <!--  other stuff -->
-        <?php if (!empty($favourites)) { ?>
-            <tr><td class="ankList"><span class="ankListField">Любимые предметы</span>:
-                <?php echo $favourites; ?></td></tr>
-        <?php } ?>
-        <?php if (!empty($achievements)) { ?>
-        <tr><td class="ankList"><span class="ankListField">Достижения</span>:
-            <?php echo $achievements; ?></td></tr>
-        <?php } ?>
-        <?php if (!empty($hobby)) { ?>
-            <tr><td class="ankList"><span class="ankListField">Хобби</span>:
-                <?php echo $hobby; ?></td></tr>
-        <?php } ?>
-        <?php if (!empty($person_comment)) { ?>
-        <tr><td class="ankList notes"><span class="ankListField">Заметки</span>:
-            <?php echo $person_comment; ?></td></tr>
-        <?php } ?>
+        */?>
     </table>
     <?php
 }
