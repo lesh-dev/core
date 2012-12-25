@@ -189,7 +189,6 @@ function xsm_print_person()
         <?php
         $person_id = htmlspecialchars($person["person_id"]);
 
-
         //$is_current = $person["is_current"];
         //$is_teacher = $person["is_teacher"];
         //$is_student = $person["is_student"];

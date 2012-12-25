@@ -93,7 +93,7 @@ function xsm_show_person_list()
 
     $person_counter = 0;
     $max_reached = false;
-    xsm_view_operations('prep', 'person', 'участника');
+    xsm_view_operations('person', 'person', 'участника');
     ?>
     <table summary="Участники" class="ankList">
         <colgroup>
@@ -168,7 +168,7 @@ function xsm_show_person_list()
         ?>
         <tr>
             <td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
-            <td class="ankList"><a href="<?php echo "view-prep&amp;person_id=$person_id"; ?>"><?php
+            <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"><?php
                 echo "$last_name $first_name $patronymic"; ?></a></td>
             <td class="ankList">
                 <?php
@@ -275,7 +275,7 @@ function xsm_show_person_list()
     ?>
     </table>
     <?php
-    xsm_view_operations('prep', 'person', 'участника');
+    xsm_view_operations('person', 'person', 'участника');
     if ($show_count > 0) {
         $more = ($max_reached ? " (размер списка ограничен <b>$show_count</b>, возможно, есть ещё) " : ""); ?>
         <p>Показано <b><?php echo $person_counter; ?></b> участников, типа
