@@ -182,7 +182,7 @@ function xsm_print_person()
     if ($school_id == SCHOOL_ANK_ID)
         xsm_print_person_ank_data($person);
     else
-        xsm_print_person_selected_school($school_id);
+        xsm_print_person_selected_school($school_id, $person);
 
     ?>
     <table summary="Участник" class="ankList">
