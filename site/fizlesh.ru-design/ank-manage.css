@@ -22,6 +22,15 @@ td.ankListRowTitle, th.ankList {
     padding: 3px;
 }
 
+td.ankListRowTitle.current {
+    background-color: #ffee99;
+}
+
+td.ankListRowTitle a {
+    text-align: center;
+    display: block;
+}
+
 td.ankList, th.ankList {
     border: 1px solid #8faf6f;
     padding: 3px;

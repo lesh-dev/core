@@ -35,6 +35,7 @@
 <?php
 
 // печать всех школ (селектор сверху)
+// см. также xsm_print_person_schools
 function xsm_print_schools($db, $current_school_id)
 {
     // надо получать заранее информацию о всех предыдущих школах,
@@ -42,18 +43,23 @@ function xsm_print_schools($db, $current_school_id)
     $school_count = 5;
     $query = "SELECT * FROM school ORDER BY school_date_start DESC LIMIT $school_count";
     $school_sel = $db->query($query);
-    //$href = "list-person&amp;school_id=$current_school_id";
     ?>
     <table class="ankList"><tr>
         <?php
         while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
         {
             $href = "list-person&amp;school_id=${school['school_id']}";
-            $title = htmlspecialchars($school['school_title']); ?>
-            <td class="ankListRowTitle"><a href="<?php echo $href; ?>"><?php echo $title; ?></a></td>
+            $title = htmlspecialchars($school['school_title']);
+            $active = ($school['school_id'] == $current_school_id) ? "current" : ""; ?>
+            <td class="ankListRowTitle <?php echo $active; ?>"><a
+                href="<?php echo $href; ?>"><?php echo $title; ?></a></td>
             <?php
         }?>
-    </tr></table><?php
+    </tr></table>
+
+    ЗДЕСЬ ВСЁ ПОКА РАЗЛОМАНО НАХРЕН!
+
+    <?php
 
 }
 

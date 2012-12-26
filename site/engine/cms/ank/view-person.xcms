@@ -71,15 +71,19 @@ function xsm_print_person_schools($db, $person_id, $current_school_id)
     $query = "SELECT * FROM school ORDER BY school_date_start DESC LIMIT $school_count";
     $school_sel = $db->query($query);
     $href_ank = "view-person&amp;person_id=$person_id&amp;school_id=".SCHOOL_ANK_ID;
+    $active_ank = (SCHOOL_ANK_ID == $current_school_id) ? "current" : "";
     ?>
     <table class="ankList"><tr>
-        <td class="ankListRowTitle"><a href="<?php echo $href_ank; ?>">Анкета</a></td>
+        <td class="ankListRowTitle <?php echo $active_ank; ?>"><a
+            href="<?php echo $href_ank; ?>">Анкета</a></td>
         <?php
         while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
         {
             $href = "view-person&amp;person_id=$person_id&amp;school_id=${school['school_id']}";
-            $title = htmlspecialchars($school['school_title']); ?>
-            <td class="ankListRowTitle"><a href="<?php echo $href; ?>"><?php echo $title; ?></a></td>
+            $title = htmlspecialchars($school['school_title']);
+            $active = ($school['school_id'] == $current_school_id) ? "current" : ""; ?>
+            <td class="ankListRowTitle <?php echo $active; ?>"><a
+                href="<?php echo $href; ?>"><?php echo $title; ?></a></td>
             <?php
         }?>
     </tr></table><?php
