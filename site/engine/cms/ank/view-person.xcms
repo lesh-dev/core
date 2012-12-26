@@ -71,15 +71,19 @@ function xsm_print_person_schools($db, $person_id, $current_school_id)
     $query = "SELECT * FROM school ORDER BY school_date_start DESC LIMIT $school_count";
     $school_sel = $db->query($query);
     $href_ank = "view-person&amp;person_id=$person_id&amp;school_id=".SCHOOL_ANK_ID;
+    $active_ank = (SCHOOL_ANK_ID == $current_school_id) ? "current" : "";
     ?>
     <table class="ankList"><tr>
-        <td class="ankListRowTitle"><a href="<?php echo $href_ank; ?>">Анкета</a></td>
+        <td class="ankListRowTitle <?php echo $active_ank; ?>"><a
+            href="<?php echo $href_ank; ?>">Анкета</a></td>
         <?php
         while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
         {
             $href = "view-person&amp;person_id=$person_id&amp;school_id=${school['school_id']}";
-            $title = htmlspecialchars($school['school_title']); ?>
-            <td class="ankListRowTitle"><a href="<?php echo $href; ?>"><?php echo $title; ?></a></td>
+            $title = htmlspecialchars($school['school_title']);
+            $active = ($school['school_id'] == $current_school_id) ? "current" : ""; ?>
+            <td class="ankListRowTitle <?php echo $active; ?>"><a
+                href="<?php echo $href; ?>"><?php echo $title; ?></a></td>
             <?php
         }?>
     </tr></table><?php
@@ -158,11 +162,96 @@ function xsm_print_person_ank_data($person)
     xsm_edit_delete_info('person', 'person', $person_id, $person_created, $person_modified);
 }
 
-function xsm_print_person_selected_school($school_id, $person)
+function xsm_print_person_selected_school($db, $school_id, $student_person_id)
 {
-    echo "Про школу $school_id<br />Тут будет информация о зачётах";
-    // выгребать информацию о зачётах и т.п.
+    $exam_sel = $db->query(
+        "SELECT
+        tp.last_name as teacher_last_name, tp.first_name as teacher_first_name,
+        c.course_id, c.course_title, c.course_teacher_id, c.target_class,
+        e.exam_id, e.exam_status, e.exam_comment, e.deadline_date, e.exam_created, e.exam_modified
+        FROM course c, person tp, exam e WHERE
+        (c.course_teacher_id = tp.person_id) AND
+        (c.school_id = $school_id) AND
+        (e.course_id = c.course_id) AND
+        (e.student_person_id = $student_person_id)"
+    );
 
+    //$aux_param = "&amp;student_person_id=$student_person_id";
+
+    ?>
+    <h3>Зачёты</h3>
+    <?php //xsm_view_operations('exam', 'exam', 'зачёт', $aux_param); ?>
+    <table summary="Зачёты школьника <?php echo $student_person_id; ?>" class="ankList">
+        <colgroup>
+            <col width="25%" />
+            <col width="10%" />
+            <col width="30%" />
+            <col width="30%" />
+        </colgroup>
+        <thead>
+            <th class="ankList">Курс</th>
+            <th class="ankList">Класс</th>
+            <th class="ankList">Препод</th>
+            <th class="ankList">Статус</th>
+        </thead>
+    <?php
+    while ($exam_data = $exam_sel->fetchArray(SQLITE3_ASSOC)) {?>
+        <?php
+
+        $exam_id = htmlspecialchars($exam_data["exam_id"]);
+        $course_id = htmlspecialchars($exam_data["course_id"]);
+        $course_title = htmlspecialchars($exam_data["course_title"]);
+        $course_teacher_id = htmlspecialchars($exam_data["course_teacher_id"]);
+        $target_class = htmlspecialchars($exam_data["target_class"]);
+        //$course_desc = htmlspecialchars($exam_data["course_desc"]);
+
+        // enum
+        $exam_status = htmlspecialchars($exam_data["exam_status"]);
+
+        $exam_comment = htmlspecialchars($exam_data["exam_comment"]);
+        $deadline_date = htmlspecialchars($exam_data["deadline_date"]);
+
+        $exam_created = htmlspecialchars($exam_data["exam_created"]);
+        $exam_modified = htmlspecialchars($exam_data["exam_modified"]);
+
+        $teacher_first_name = htmlspecialchars($exam_data["teacher_first_name"]);
+        $teacher_last_name = htmlspecialchars($exam_data["teacher_last_name"]);
+
+        $exam_status_items = xsm_get_exam_statuses();
+        if (!array_key_exists($exam_status, $exam_status_items)) $exam_status = "passed"; // default
+        $hr_exam_status = $exam_status_items[$exam_status];
+
+        ?>
+        <!--<tr>
+            <td class="ankListRowTitle">
+            <?php echo "[$exam_id] Зачёт по курсу <i>$course_title</i>"; ?><a name="<?php echo "exam$exam_id"; ?>"></a>
+                <span style="float: right"><?php
+                xsm_edit_delete_info('exam', 'exam', $exam_id, $exam_created, $exam_modified, $aux_param); ?>
+                </span>
+            </td>
+        </tr>-->
+        <!--<tr><td class="ankList"><span class="ankListField">Название курса</span>:
+            <?php echo $course_title; ?></td></tr>-->
+        <tr>
+        <td class="ankList"><?php echo $course_title; ?></td>
+        <td class="ankList"><?php echo $target_class; ?></td>
+        <td class="ankList"><a href="view-person&amp;person_id=<?php echo $course_teacher_id; ?>"><?php
+                echo "$teacher_first_name $teacher_last_name"; ?></a></td>
+        <td class="ankList"><?php echo $hr_exam_status; ?></td>
+        </tr><?php /*
+        <tr><td class="ankList"><span class="ankListField">Дедлайн</span>:
+            <?php echo $deadline_date; ?></td></tr>
+
+        <tr><td class="ankList"><span class="ankListField">Описание курса</span>:
+            <?php echo xcms_html_wrap_by_crlf($course_desc); ?></td></tr>
+        <tr><td class="ankList"><span class="ankListField">Комментарий к зачёту</span>:
+            <?php echo xcms_html_wrap_by_crlf($exam_comment); ?></td></tr>
+        */
+        }
+    ?>
+    </table>
+    <?php
+    //xsm_view_operations('exam', 'exam', 'зачёт', $aux_param);
 }
 
 // shows person information sliced by school
@@ -182,13 +271,12 @@ function xsm_print_person()
     if ($school_id == SCHOOL_ANK_ID)
         xsm_print_person_ank_data($person);
     else
-        xsm_print_person_selected_school($school_id, $person);
+        xsm_print_person_selected_school($db, $school_id, $person_id);
 
     ?>
     <table summary="Участник" class="ankList">
         <?php
         $person_id = htmlspecialchars($person["person_id"]);
-
 
         //$is_current = $person["is_current"];
         //$is_teacher = $person["is_teacher"];

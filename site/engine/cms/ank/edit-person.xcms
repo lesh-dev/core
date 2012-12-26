@@ -2,7 +2,7 @@
 <# cms/ank/style #>
 <?php
 
-function xsm_edit_prep()
+function xsm_edit_person()
 {
     $person_fields = xsm_get_person_fields();
 
@@ -19,12 +19,12 @@ function xsm_edit_prep()
         "is_teacher"=>"checkbox",
         "is_student"=>"checkbox",
 
-        //"activity_status"=>"enum",
+        "anketa_status"=>"enum",
         //"curatorship"=>"enum"
     );
 
     ?>
-    <form method="post" action="edit-prep"><?php
+    <form method="post" action="edit-person"><?php
         xsm_edit_operations_listmode('person', $person_id, 'Вернуться к списку людей');?>
         <input type="hidden" name="person_id" value="<?php echo $person_id; ?>" />
         <table summary="Участник" class="ankEdit">
@@ -78,12 +78,12 @@ if (@$_POST["update-person"])
             Нажмите Back в браузере, чтобы вернуться к заполнению!</p><?php
     }
     else
-        xsm_update_entity_listmode('prep', 'person', 'Участник', xsm_get_person_fields());
+        xsm_update_entity_listmode('person', 'person', 'Участник', xsm_get_person_fields());
 }
 elseif (@$_POST["delete-person"])
-    xsm_warn_delete_listmode_entity('prep', 'person', 'участника');
-elseif (@$_POST["confirm-delete-prep"])
+    xsm_warn_delete_listmode_entity('person', 'person', 'участника');
+elseif (@$_POST["confirm-delete-person"])
     xsm_delete_listmode_entity('person', 'person', 'Участник');
 else
-    xsm_edit_prep();
+    xsm_edit_person();
 ?>

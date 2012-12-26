@@ -11,21 +11,21 @@ function xsm_print_course()
     ?>
     <table summary="Курсы" class="ankList">
     <?php
-    while ($course_prep = $course_sel->fetchArray(SQLITE3_ASSOC)) {?>
+    while ($course_person = $course_sel->fetchArray(SQLITE3_ASSOC)) {?>
         <tr><td class="ankListRowDiv">&nbsp;</td></tr>
         <?php
 
-        $course_id = htmlspecialchars($course_prep["course_id"]);
-        $course_title = htmlspecialchars($course_prep["course_title"]);
-        $course_teacher_id = htmlspecialchars($course_prep["course_teacher_id"]);
-        $target_class = htmlspecialchars($course_prep["target_class"]);
-        $course_desc = htmlspecialchars($course_prep["course_desc"]);
-        $course_comment = htmlspecialchars($course_prep["course_comment"]);
-        $course_created = htmlspecialchars($course_prep["course_created"]);
-        $course_modified = htmlspecialchars($course_prep["course_modified"]);
+        $course_id = htmlspecialchars($course_person["course_id"]);
+        $course_title = htmlspecialchars($course_person["course_title"]);
+        $course_teacher_id = htmlspecialchars($course_person["course_teacher_id"]);
+        $target_class = htmlspecialchars($course_person["target_class"]);
+        $course_desc = htmlspecialchars($course_person["course_desc"]);
+        $course_comment = htmlspecialchars($course_person["course_comment"]);
+        $course_created = htmlspecialchars($course_person["course_created"]);
+        $course_modified = htmlspecialchars($course_person["course_modified"]);
 
-        $first_name = htmlspecialchars($course_prep["first_name"]);
-        $last_name = htmlspecialchars($course_prep["last_name"]);
+        $first_name = htmlspecialchars($course_person["first_name"]);
+        $last_name = htmlspecialchars($course_person["last_name"]);
 
         ?>
         <tr>
@@ -41,7 +41,7 @@ function xsm_print_course()
         <tr><td class="ankList"><span class="ankListField">На какие классы рассчитан</span>:
             <?php echo $target_class; ?></td></tr>
         <tr><td class="ankList"><span class="ankListField">Препод</span>:
-            <a href="view-prep&amp;person_id=<?php echo $course_teacher_id; ?>"><?php
+            <a href="view-person&amp;person_id=<?php echo $course_teacher_id; ?>"><?php
                 echo "$first_name $last_name"; ?></a></td></tr>
         <tr><td class="ankList"><span class="ankListField">Описание</span>:
             <?php echo xcms_html_wrap_by_crlf($course_desc); ?></td></tr>
