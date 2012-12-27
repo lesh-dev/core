@@ -22,6 +22,8 @@ function xsm_print_person_header($person)
 {
     global $full_engine_pub;
 
+    $person_id = $person['person_id'];
+
     $last_name = htmlspecialchars($person["last_name"]);
     $first_name = htmlspecialchars($person["first_name"]);
     $patronymic = htmlspecialchars($person["patronymic"]);
@@ -55,6 +57,7 @@ function xsm_print_person_header($person)
         ?>
     </div>
     <div class="person-topright"><?php
+        xsm_edit_link('person', $person_id);
         xsm_draw_person_textval('Создана', $person_created);
         xsm_draw_person_textval('Отредактирована', $person_modified);
         ?>
@@ -159,7 +162,6 @@ function xsm_print_person_ank_data($person)
 
     //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
 
-    xsm_edit_delete_info('person', 'person', $person_id, $person_created, $person_modified);
 }
 
 function xsm_print_person_selected_school($db, $school_id, $student_person_id)

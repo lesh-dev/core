@@ -168,10 +168,10 @@ insert into course values(2, 'not a Test course', 1, 2, 'qqq', 'ppp', 'zzz', 't6
 insert into course values(3, 'Вынос мозга', 2, 2, 'qqq', 'ppp', 'zzz', 't666', 'aaa');
 insert into course values(4, 'Пайтон', 2, 2, 'qqq', 'ppp', 'zzz', 't666', 'aaa');
 
-insert into exam values(1, 1, 1, 'passed', 'qqq2', 'qqq3', 'qqq4', 'qqq5', 'aaaa');
-insert into exam values(2, 2, 2, 'passed', 'qqq21', 'qqq330', 'qqq4', 'qqq5', 'bbb');
-insert into exam values(3, 2, 3, 'failed', 'qqq22', 'qqq34-', 'qqq4', 'qqq5', 'ccc');
-insert into exam values(4, 2, 4, 'failed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
+insert into exam values(1, 4, 1, 'passed', 'qqq2', 'qqq3', 'qqq4', 'qqq5', 'aaaa');
+insert into exam values(2, 5, 2, 'passed', 'qqq21', 'qqq330', 'qqq4', 'qqq5', 'bbb');
+insert into exam values(3, 5, 3, 'failed', 'qqq22', 'qqq34-', 'qqq4', 'qqq5', 'ccc');
+insert into exam values(4, 5, 4, 'failed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
 
 
 SELECT p.person_id FROM person p LEFT JOIN person_school ps ON p.person_id = ps.member_person_id WHERE ps.member_person_id IS NULL;

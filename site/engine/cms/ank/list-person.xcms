@@ -56,11 +56,7 @@ function xsm_print_schools($db, $current_school_id)
             <?php
         }?>
     </tr></table>
-
-    ЗДЕСЬ ВСЁ ПОКА РАЗЛОМАНО НАХРЕН!
-
     <?php
-
 }
 
 
@@ -68,8 +64,8 @@ function xsm_print_schools($db, $current_school_id)
 function xsm_show_person_list()
 {
     $show_status = xcms_get_key_or($_POST, "show_activity_status", "notspam");
-
-    $school_id = xcms_get_key_or($_GET, 'school_id', "-1");
+    // TODO: big BUG HERE!!! default school is absent
+    $school_id = xcms_get_key_or($_GET, 'school_id', "1");
 
     //global $show_is_current;// = xcms_get_key_or($_POST, "show_is_current");
     global $show_is_teacher;// = xcms_get_key_or($_POST, "show_is_teacher");

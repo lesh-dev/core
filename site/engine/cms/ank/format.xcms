@@ -231,8 +231,7 @@
 
     // Here entity should be equal to table name, but...
     function xsm_edit_delete_info($entity, $table_name, $id, $created, $modified, $aux_param = '')
-    {
-        ?>
+    {?>
         <a class="link-oper" href="edit-<?php echo "$entity$aux_param&amp;${table_name}_id=$id" ?>"><img
             src="<# full_design_dir #>pic/edit.gif" class="edit-icon"
             title="Редактировать" />Правка</a>
@@ -241,6 +240,16 @@
             <span class="ankListField next">Отредактирован</span>: <?php echo $modified;
         }
     }
+
+    // Kosher function
+    function xsm_edit_link($table_name, $id, $aux_param = '')
+    {?>
+        <a class="link-oper" href="edit-<?php
+            echo "$table_name$aux_param&amp;${table_name}_id=$id" ?>"><img
+            src="<# full_design_dir #>pic/edit.gif" class="edit-icon"
+            title="Редактировать" />Правка</a><?php
+    }
+
 
     function xsm_make_enum_selector($name, $value, $items)
     {
