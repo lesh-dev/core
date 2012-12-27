@@ -67,9 +67,10 @@ def RunTest(test):
 	
 #main API wrapper for Webdriver.
 class SeleniumTest:
-	def __init__(self):
+	def __init__(self, baseUrl = ""):
 #		print "Init SeleniumTest"
 		self.m_testName = self.__class__.__name__
+		self.m_baseUrl = baseUrl
 
 		self.initDefaults()
 		
@@ -97,8 +98,10 @@ class SeleniumTest:
 	def init(self):
 		self.m_baseUrl = self.fixBaseUrl(self.getBaseUrl())
 		self.m_driver = webdriver.Firefox()
+	
+	def getName(self):
+		return self.m_testName
 		
-		#
 	def getDoc(self):
 		return self.__doc__
 			
@@ -110,9 +113,9 @@ class SeleniumTest:
 				self.m_driver.close()
 
 	def getBaseUrl(self):
-		if len(sys.argv) < 2:
-			self.failTest("Base URL for test is not set. ")
-		return sys.argv[1]
+		if self.isVoid(self.m_baseUrl):
+			self.failTest("Base URL for test '" + self.getName() + "' is not set. ")
+		return self.m_baseUrl
 	
 	def needHelp(self):
 		"""

@@ -37,7 +37,4 @@ class XcmsVersionCheck(SeleniumTest):
 		m = re.search(versionRegexp, cpVersion)
 		if not m:
 			raise selenium_test.TestError("Site version in admin CP does not match expected regexp. ");
-		
-# def main():
-selenium_test.RunTest(XcmsVersionCheck())
     
