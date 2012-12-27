@@ -78,9 +78,8 @@ function xsm_show_person_list()
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
 
     $show_statuses = xsm_get_person_show_statuses();
-    $show_count = 250;
+
     if (!array_key_exists($show_status, $show_statuses)) $show_status = "notspam";
-    if ($show_status == "all") $show_count = 0; // show all
 
     $db = xdb_get();
     $db->createFunction('LIKE', 'xdb_like', 2);
@@ -114,12 +113,12 @@ function xsm_show_person_list()
         "ps.curatorship, ps.is_teacher, ps.is_student, ".
         "ps.current_class ".
         "FROM person p, person_school ps ".
-        "ORDER BY ps.is_student, p.last_name, p.first_name";
+        "WHERE (ps.member_person_id == p.person_id) ".
+        "AND (ps.school_id == $school_id)";
     /*
     if (strlen($cond))
         $query .= " WHERE $cond";*/
-    // TODO: this will be enabled later
-    //$query .= " ORDER BY person_created DESC";
+    $query .= " ORDER BY ps.is_student, p.last_name, p.first_name";
     //$query .= " ORDER BY last_name, first_name";
     // debug area (TODO: remove)
     ?><textarea rows="10" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
@@ -146,12 +145,6 @@ function xsm_show_person_list()
         </thead>
     <?php
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC)) {
-        if ($show_count > 0 && $person_counter >= $show_count) {
-            $max_reached = true;
-            break;
-        }
-        ?>
-        <?php
         $person_counter++;
 
         $person_id = htmlspecialchars($person["person_id"]);
@@ -285,13 +278,6 @@ function xsm_show_person_list()
     </table>
     <?php
     xsm_view_operations('person', 'person', 'участника');
-    if ($show_count > 0) {
-        $more = ($max_reached ? " (размер списка ограничен <b>$show_count</b>, возможно, есть ещё) " : ""); ?>
-        <p>Показано <b><?php echo $person_counter; ?></b> участников, типа
-            <b><?php echo $show_statuses[$show_status]; ?></b><?php echo $more; ?></p><?php
-    } else {?>
-        <p>Показаны все люди (<b><?php echo $person_counter; ?></b> шт.)</p><?php
-    }
 }
 
     xsm_show_person_list();
