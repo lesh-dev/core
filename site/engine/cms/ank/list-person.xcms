@@ -134,7 +134,7 @@ function xsm_show_person_list()
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
-            <th class="ankList">Фамилия, Имя, Отчество</th>
+            <th class="ankList">Фамилия, имя</th>
             <th class="ankList">Info</th>
         </thead>
     <?php
