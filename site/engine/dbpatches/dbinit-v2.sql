@@ -177,6 +177,8 @@ insert into exam values(1, 4, 1, 'passed', 'qqq2', 'qqq3', 'qqq4', 'qqq5', 'aaaa
 insert into exam values(2, 5, 2, 'passed', 'qqq21', 'qqq330', 'qqq4', 'qqq5', 'bbb');
 insert into exam values(3, 5, 3, 'failed', 'qqq22', 'qqq34-', 'qqq4', 'qqq5', 'ccc');
 insert into exam values(4, 5, 4, 'failed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
+insert into exam values(6, 6, 2, 'passed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
+insert into exam values(5, 6, 4, 'passed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
 
 -- notbound students
 SELECT * FROM person p LEFT JOIN person_school ps ON p.person_id = ps.member_person_id WHERE ps.member_person_id IS NULL;
