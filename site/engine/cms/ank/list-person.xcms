@@ -131,13 +131,11 @@ function xsm_show_person_list()
             <col width="5%" />
             <col width="40%" />
             <col width="30%" />
-            <col width="25%" />
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
             <th class="ankList">Фамилия, Имя, Отчество</th>
             <th class="ankList">Info</th>
-            <th class="ankList">Статус</th>
         </thead>
     <?php
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC)) {
@@ -182,8 +180,8 @@ function xsm_show_person_list()
         if (!array_key_exists($curatorship, $curatorship_items)) $curatorship = "none"; // default
         $hr_curatorship = $curatorship_items[$curatorship];
 
-        $hr_teacher = ($is_teacher == "teacher" ? "Да" : "Нет");
-        $hr_student = ($is_student == "student" ? "Да" : "Нет");
+        $hr_teacher = ($is_teacher == "teacher" ? "Препод, " : "");
+        $hr_student = ($is_student == "student" ? "Школьник, " : "");
 
         ?>
         <tr>
@@ -191,16 +189,18 @@ function xsm_show_person_list()
             <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"><?php
                 echo "$last_name $first_name"; ?></a></td>
             <td class="ankList">
+                <a class="link-oper-list"
+                    href="view-exam&amp;student_person_id=<?php echo $person_id; ?>">Зачёты</a>
+                <?php
+                if ($is_teacher == "teacher") {?>
                     <a class="link-oper-list"
-                        href="view-exam&amp;student_person_id=<?php echo $person_id; ?>">Зачёты</a>
-                    <?php
-                    if ($is_teacher == "teacher") {?>
-                        <a class="link-oper-list"
-                            href="edit-course&amp;course_id=new&amp;course_teacher_id=<?php
-                                echo $person_id; ?>">Добавить курс</a><?php
-                    }
-
-                ?>
+                        href="edit-course&amp;course_id=new&amp;course_teacher_id=<?php
+                            echo $person_id; ?>">Добавить курс</a><?php
+                } ?>
+                <?php echo $hr_student; ?>
+                <?php echo $hr_teacher; ?>
+                <?php echo $hr_curatorship; ?>
+            </td>
             </td>
             <!--<td class="ankListRowTitle">
                 <span style="float: right">
@@ -253,13 +253,8 @@ function xsm_show_person_list()
             <?php
             }?>
         </td></tr>
-        <?php } ?>
-        <tr><td class="ankList">
-            <span class="ankListField next">Школьник</span>: <?php echo $hr_student; ?>
-            <span class="ankListField next">Препод</span>: <?php echo $hr_teacher; ?>
-            <span class="ankListField next">Кураторство</span>: <?php echo $hr_curatorship; ?>
-        </td></tr>
-        <?php if (!empty($person_comment)) { ?>
+        <?php }
+        if (!empty($person_comment)) { ?>
         <tr><td class="ankList notes"><span class="ankListField">Заметки</span>:
             <?php echo $person_comment; ?></td></tr>
         <?php } ?>
