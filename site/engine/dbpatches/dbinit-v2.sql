@@ -142,30 +142,36 @@ insert into person (last_name, first_name, patronymic, anketa_status, person_cre
     values ('Вельтищев', 'Дмитрий', 'Николаевич', 'declined', '2012.05.07 03:05:01', '2012.06.10 01:02:03');
 
 insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
-    values ('Школьница', 'Мария', 'Батьковна', 'processed', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
+    values ('Школьница', 'Мария-3', 'Батьковна', 'processed', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
 
 insert into person (last_name, first_name, patronymic, anketa_status, current_class, school_city, person_created, person_modified)
     values ('Школьница', 'Мария', 'Батьковна', 'processed', '10a', 'Default City of USA', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
 
-
 insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
     values ('Школьница2', 'Мария2', 'Батьковна2', 'cont', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
+insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
+    values ('Школьница3', 'Настоящая', 'Михайловна', 'cont', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
+insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
+    values ('Школьница4', 'Настоящая', 'Ивановна', 'cont', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
 
 insert into school values(1, 'ЛЭШ-2011', 'summmer', '2011.07.23', '2011.08.22', null, null);
 insert into school values(2, 'ЗЭШ-2012', 'winter', '2012.01.02', '2012.01.09', null, null);
 
 insert into person_school values(1, 3, 1, 'student', null, null, '10', null, null);
-insert into person_school values(2, 3, 2, 'teacher', null, null, '10', null, null);
+insert into person_school values(2, 4, 2, 'teacher', null, null, '9', null, null);
+insert into person_school values(3, 5, 2, 'teacher', null, null, '8', null, null);
+insert into person_school values(4, 6, 2, 'student', null, null, '7', null, null);
+insert into person_school values(5, 7, 2, 'teacher', null, null, '11', null, null);
 
 insert into course values(1, 'test course', 1, 1, 'qqq', 'ppp', 'zzz', 't666', 'aaa');
 insert into course values(2, 'not a Test course', 1, 2, 'qqq', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(3, 'not a Test course 2', 2, 2, 'qqq', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(4, 'not a Test course 3', 2, 2, 'qqq', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(3, 'Вынос мозга', 2, 2, 'qqq', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(4, 'Пайтон', 2, 2, 'qqq', 'ppp', 'zzz', 't666', 'aaa');
 
-insert into exam values(1, 1, 1, 'qqq', 'qqq2', 'qqq3', 'qqq4', 'qqq5', 'aaaa');
-insert into exam values(2, 2, 2, 'qqq1', 'qqq21', 'qqq330', 'qqq4', 'qqq5', 'bbb');
-insert into exam values(3, 2, 3, 'qqq2', 'qqq22', 'qqq34-', 'qqq4', 'qqq5', 'ccc');
-insert into exam values(4, 2, 4, 'qqq3', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
+insert into exam values(1, 4, 1, 'passed', 'qqq2', 'qqq3', 'qqq4', 'qqq5', 'aaaa');
+insert into exam values(2, 5, 2, 'passed', 'qqq21', 'qqq330', 'qqq4', 'qqq5', 'bbb');
+insert into exam values(3, 5, 3, 'failed', 'qqq22', 'qqq34-', 'qqq4', 'qqq5', 'ccc');
+insert into exam values(4, 5, 4, 'failed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
 
 
 SELECT p.person_id FROM person p LEFT JOIN person_school ps ON p.person_id = ps.member_person_id WHERE ps.member_person_id IS NULL;
