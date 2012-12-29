@@ -1,7 +1,7 @@
 <?php
     xcms_log(0, $_COOKIE);
     // this should be done BEFORE any output started
-    $show_activity_status = xcms_get_persistent_key("show_activity_status", "notspam");
+    $show_anketa_status = xcms_get_persistent_key("show_anketa_status", "notspam");
     $show_is_teacher = xcms_get_persistent_key("show_is_teacher");
     $show_is_student = xcms_get_persistent_key("show_is_student");
     //$show_is_current = xcms_get_persistent_key("show_is_current");
@@ -10,9 +10,9 @@
 <# cms/ank/style #>
 
 <form method="post" action="view" style="margin-bottom: 2px"><span>
-    <span class="ankListField">Статус</span>: <?php
+    <span class="ankListField">Выпилить это отсудова</span>: <?php
     echo xsm_make_enum_selector(
-        "show_activity_status", $show_activity_status,
+        "show_anketa_status", $show_anketa_status,
         xsm_get_person_show_statuses());
     ?>
 
@@ -63,11 +63,10 @@ function xsm_print_schools($db, $current_school_id)
 // вывод активных участников (пошкольно)
 function xsm_show_person_list()
 {
-    $show_status = xcms_get_key_or($_POST, "show_activity_status", "notspam");
+    $show_status = xcms_get_key_or($_POST, "show_anketa_status", "notspam");
     // TODO: big BUG HERE!!! default school is absent
     $school_id = xcms_get_key_or($_GET, 'school_id', "1");
 
-    //global $show_is_current;// = xcms_get_key_or($_POST, "show_is_current");
     global $show_is_teacher;// = xcms_get_key_or($_POST, "show_is_teacher");
     global $show_is_student;// = xcms_get_key_or($_POST, "show_is_student");
 
@@ -89,79 +88,77 @@ function xsm_show_person_list()
 
     if ($show_status == "notdecl")
         $cond .=
-            " AND ( (activity_status <> 'duplicate')".
-            " AND (activity_status <> 'spam')".
-            " AND (activity_status <> 'declined') )";
+            " AND ( (anketa_status <> 'duplicate')".
+            " AND (anketa_status <> 'spam')".
+            " AND (anketa_status <> 'declined') )";
     elseif ($show_status == "notspam")
-        $cond .= " AND ( (activity_status <> 'duplicate') AND (activity_status <> 'spam') )";
+        $cond .= " AND ( (anketa_status <> 'duplicate') AND (anketa_status <> 'spam') )";
     elseif ($show_status == "all")
         $cond .= "";
     else
-        $cond .= " AND ( activity_status = '$show_status' )";
+        $cond .= " AND ( anketa_status = '$show_status' )";
 
     $name_filter_cond = xsm_person_name_filter($db, $show_name_filter);
     if (strlen($name_filter_cond))
         $cond .= " AND $name_filter_cond";
 
     $query = "SELECT ".
-        "p.person_id, p.last_name, p.first_name, ".
+        "p.person_id, p.last_name, p.first_name, p.phone, p.cellular, ".
         "p.person_created, p.person_modified, ".
         "ps.curatorship, ps.is_teacher, ps.is_student, ".
         "ps.current_class ".
         "FROM person p, person_school ps ".
         "WHERE (ps.member_person_id == p.person_id) ".
         "AND (ps.school_id == $school_id)";
-    /*
+
     if (strlen($cond))
-        $query .= " WHERE $cond";*/
+        $query .= " AND $cond";
     $query .= " ORDER BY ps.is_student, p.last_name, p.first_name";
-    //$query .= " ORDER BY last_name, first_name";
+
     // debug area (TODO: remove)
     ?><textarea rows="10" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
     $person_sel = $db->query($query);
 
     xsm_print_schools($db, $school_id);
 
-    $person_counter = 0;
-    $max_reached = false;
-    xsm_view_operations('person', 'person', 'участника');
+    //xsm_view_operations('person', 'person', 'участника');
     ?>
     <table summary="Участники" class="ankList">
         <colgroup>
             <col width="5%" />
-            <col width="40%" />
+            <col width="25%" />
+            <col width="30px" />
+            <col width="25%" />
             <col width="30%" />
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
             <th class="ankList">Фамилия, имя</th>
+            <th class="ankList">Кл.</th>
+            <th class="ankList">Контакты</th>
             <th class="ankList">Info</th>
         </thead>
     <?php
-    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC)) {
-        $person_counter++;
-
+    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
+    {
         $person_id = htmlspecialchars($person["person_id"]);
 
         $last_name = htmlspecialchars($person["last_name"]);
         $first_name = htmlspecialchars($person["first_name"]);
-        //$patronymic = htmlspecialchars($person["patronymic"]);
 
         /*$school = htmlspecialchars($person["school"]);
-        $school_city = htmlspecialchars($person["school_city"]);
-        $current_class = htmlspecialchars($person["current_class"]);*/
-        //$phone = htmlspecialchars($person["phone"]);
-        //$cellular = htmlspecialchars($person["cellular"]);
-        //$email = htmlspecialchars($person["email"]);
-        //$skype = htmlspecialchars($person["skype"]);
-        //$social_profile = xsm_prepare_social_profile($person["social_profile"]);
+        $school_city = htmlspecialchars($person["school_city"]);*/
+        // класс на данной школе
+        $current_class = htmlspecialchars($person["current_class"]);
+
+        $phone = htmlspecialchars($person["phone"]);
+        $cellular = htmlspecialchars($person["cellular"]);
 
         $is_teacher = $person["is_teacher"];
         $is_student = $person["is_student"];
         $curatorship = $person["curatorship"];
 
         //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
-        //$user_agent = htmlspecialchars($person["user_agent"]);
 
         $person_created = htmlspecialchars($person["person_created"]);
         $person_modified = htmlspecialchars($person["person_modified"]);
@@ -171,10 +168,10 @@ function xsm_show_person_list()
         $person_school_modified = htmlspecialchars($person["person_school_modified"]);
         */
 
-        /*$activity_status = $person["activity_status"];
-        $statuses = xsm_get_activity_statuses();
-        if (!array_key_exists($activity_status, $statuses)) $activity_status = "new"; // default
-        $hr_status = $statuses[$activity_status];
+        /*$anketa_status = $person["anketa_status"];
+        $statuses = xsm_get_anketa_statuses();
+        if (!array_key_exists($anketa_status, $statuses)) $anketa_status = "new"; // default
+        $hr_status = $statuses[$anketa_status];
         */
         $curatorship_items = xsm_get_curatorship_items();
         if (!array_key_exists($curatorship, $curatorship_items)) $curatorship = "none"; // default
@@ -188,6 +185,11 @@ function xsm_show_person_list()
             <td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
             <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"><?php
                 echo "$last_name $first_name"; ?></a></td>
+            <td class="ankList"><?php echo $current_class; ?></a></td>
+            <td class="ankList"><?php
+                echo $cellular;
+                if ($cellular && $phone)
+                    echo ", $phone"; ?></a></td>
             <td class="ankList">
                 <a class="link-oper-list"
                     href="view-exam&amp;student_person_id=<?php echo $person_id; ?>">Зачёты</a>
@@ -207,68 +209,18 @@ function xsm_show_person_list()
                 <img class="link-oper-list" src="<# full_design_dir #>pic/mozillafirefox.png"
                     style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
                 <span class="ankListField next">Статус</span>:
-                    <span class="ankStatus <?php echo $activity_status; ?>"><?php echo $hr_status; ?></span><?php
+                    <span class="ankStatus <?php echo $anketa_status; ?>"><?php echo $hr_status; ?></span><?php
                 xsm_edit_delete_info('person', 'person', $person_id, $person_created, $person_modified); ?>
                 </span>
             </td>-->
         </tr>
-        <?php if (false) {?>
-        <tr>
-            <td class="ankList"><span class="ankListField">Дата рождения</span>:
-                <?php echo $birth_date; ?>
-                <span class="ankListField next">Паспортные данные</span>:
-                <?php echo $passport_data; ?>
-            </td></tr>
-        <tr><td class="ankList">
-            <span class="ankListField">Школа</span>: <?php echo "$school $school_city"; ?>
-            <span class="ankListField next">Класс</span>: <?php echo "$current_class"; ?>
-        </td></tr>
-
-        <?php if (!empty($cellular) || !empty($phone)) {?>
-            <tr><td class="ankList"><span class="ankListField">Телефоны</span>:
-            <?php
-            if ($cellular) {?>
-                <span class="ankListField">мобильный</span> <?php echo $cellular;
-            }
-            if ($phone) {
-                if (!empty($cellular)) echo ', ';
-                ?><span class="ankListField">домашний</span> <?php echo $phone;
-            }?>
-            </td></tr>
-        <?php } ?>
-        <!-- email, profile and skype -->
-        <?php if (!empty($email) || !empty($social_profile) || !empty($skype)) { ?>
-        <tr><td class="ankList"><?php if (!empty($email)) {
-            ?><span class="ankListField">E-Mail</span>:
-                <a href="mailto:<?php echo $email; ?>" ><?php echo $email; ?></a><?php
-            }
-            if (!empty($social_profile)) {
-                if (!empty($email)) echo ', '; ?>
-                <span class="ankListField">Профиль</span>:
-                    <a href="<?php echo $social_profile; ?>"><?php echo $social_profile; ?></a><?php
-            }
-            if (!empty($skype)) {
-                if (!empty($email) || !empty($social_profile)) echo ', '; ?>
-                <span class="ankListField">Skype</span>: <?php echo $skype; ?>
-            <?php
-            }?>
-        </td></tr>
-        <?php }
-        if (!empty($person_comment)) { ?>
-        <tr><td class="ankList notes"><span class="ankListField">Заметки</span>:
-            <?php echo $person_comment; ?></td></tr>
-        <?php } ?>
-
-        <?php } // if false
-        ?>
-
         <?php
-
-        }
+    }
     ?>
     </table>
     <?php
-    xsm_view_operations('person', 'person', 'участника');
+    // TODO: перенести это в список участников
+    //xsm_view_operations('person', 'person', 'участника');
 }
 
     xsm_show_person_list();
