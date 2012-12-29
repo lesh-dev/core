@@ -51,13 +51,11 @@ function xsm_get_anketa_statuses()
         "progress"=>"В обработке",
         "processed"=>"Обработана",
         "declined"=>"Отклонена",
-        "cont"=>"Продолжающий",
-        "old"=>"Старый (не едет)",
+        "cont"=>"Активный",
+        "old"=>"Архивный",
         "duplicate"=>"Дубликат",
         "spam"=>"Спам");
 }
-
-
 
 /**
   * DEPRECATED: Anketa status selector for viewer

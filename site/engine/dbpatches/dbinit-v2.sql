@@ -155,16 +155,27 @@ insert into person (last_name, first_name, patronymic, anketa_status, person_cre
 -- 7
 insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
     values ('Школьница7', 'Настоящая', 'Ивановна', 'cont', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
+-- 8
+insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
+    values ('Новобранец8', 'ТолькоЧто', 'Хреновый', 'new', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
+-- 9
+insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
+    values ('Ветеран9', 'ДавноУже', 'НеШкольник', 'cont', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
 
 insert into school values(1, 'ЛЭШ-2011', 'summmer', '2011.07.23', '2011.08.22', null, null);
 insert into school values(2, 'ЗЭШ-2012', 'winter', '2012.01.02', '2012.01.09', null, null);
+insert into school values(3, 'ЗЭШ-2010', 'winter', '2010.01.02', '2010.01.09', null, null);
 
 -- member_person_id, school_id
-insert into person_school values(1, 3, 1, 'student', null, null, '10', null, null);
-insert into person_school values(2, 4, 2, 'teacher', null, null, '9', null, null);
-insert into person_school values(3, 5, 2, 'teacher', null, null, '8', null, null);
-insert into person_school values(4, 6, 2, 'student', null, null, '7', null, null);
-insert into person_school values(5, 7, 2, 'teacher', null, null, '11', null, null);
+insert into person_school values(1, 3, 1, 'student', null,      null, '9',  null, null);
+insert into person_school values(2, 3, 2, 'student', null,      null, '10', null, null);
+insert into person_school values(3, 4, 2, null,     'teacher',  null, '9',  null, null);
+insert into person_school values(4, 5, 2, null,     'teacher',  null, '8',  null, null);
+insert into person_school values(5, 6, 2, 'student', null,      null, '7',  null, null);
+insert into person_school values(6, 7, 2, 'student', 'teacher', null, '11', null, null);
+
+insert into person_school values(7, 9, 3, 'teacher', null, null, '11ж', null, null);
+
 
 -- school_id, course_teacher_id
 insert into course values(1, 'test course',       1, 1, 'qqq', 'ppp', 'zzz', 't666', 'aaa');

@@ -174,6 +174,28 @@
         return $sHTML;
     }
 
+    function xsm_make_selector_ext($table_name, $name, $current_key, $title_keys, $query)
+    {
+        $db = xdb_get();
+        $sel = $db->query($query);
+        $sHTML = "<select name=\"$name\">";
+        $list_key = "${table_name}_id";
+        while ($object = $sel->fetchArray(SQLITE3_ASSOC))
+        {
+            $title = "";
+            foreach ($title_keys as $key_name)
+                $title .= $object[$key_name].' ';
+            $title = htmlspecialchars(trim($title));
+            $key = $object[$list_key];
+            $selected = ($key == $current_key) ? 'selected="selected"' : '';
+            $sHTML .= "<option $selected value=\"$key\">$title</option>";
+        }
+        $sHTML .= "</select>";
+        $db->close();
+        return $sHTML;
+    }
+
+
     // Here entity should be equal to table name, but...
     function xsm_edit_operations($entity, $table_name, $id, $title, $aux_param = '')
     {

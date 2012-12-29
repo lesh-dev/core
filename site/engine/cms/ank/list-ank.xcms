@@ -71,7 +71,7 @@ function xsm_show_ank_list()
         $query .= " $cond";
     $query .= " ORDER BY person_created DESC";
     // debug area (TODO: remove)
-    ?><textarea rows="10" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
+    ?><textarea rows="10" cols="120" style="display: " id="person-query-debug"><?php echo $query; ?></textarea><?php
     $person_sel = $db->query($query);
 
     $person_counter = 0;

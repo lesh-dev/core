@@ -22,11 +22,18 @@ td.ankListRowTitle, th.ankList {
     padding: 3px;
 }
 
-td.ankListRowTitle.current {
+td.school-selection {
+    vertical-align: middle;
+    background-color: #9fdf8f;
+    border: 1px solid #8faf6f;
+    padding: 3px;
+}
+
+td.school-selection.current {
     background-color: #ffee99;
 }
 
-td.ankListRowTitle a {
+td.school-selection a {
     text-align: center;
     display: block;
 }
