@@ -47,10 +47,10 @@ function xsm_get_person_fields()
 function xsm_get_anketa_statuses()
 {
     return array(
-        "new"=>"Новая",
-        "progress"=>"В обработке",
-        "processed"=>"Обработана",
-        "declined"=>"Отклонена",
+        "new"=>"Новый",
+        "progress"=>"Приглашён на собеседование",
+        "processed"=>"Принят",
+        "declined"=>"Послан",
         "cont"=>"Активный",
         "old"=>"Архивный",
         "duplicate"=>"Дубликат",
@@ -66,8 +66,8 @@ function xcms_ank_get_show_status_list()
         "notspam"=>"Без спама и дублей",
         "notdecl"=>"Без спама, дублей и отклонённых",
         "new"=>"Новые",
-        "progress"=>"В обработке",
-        "processed"=>"Обработанные",
+        "progress"=>"Приглашённые",
+        "processed"=>"Принятые",
         "declined"=>"Отклонённые",
         "cont"=>"Продолжающие школьники",
         "old"=>"Старые школьники (не едут)",
