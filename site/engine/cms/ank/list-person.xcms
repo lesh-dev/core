@@ -51,7 +51,7 @@ function xsm_print_schools($db, $current_school_id)
             $href = "list-person&amp;school_id=${school['school_id']}";
             $title = htmlspecialchars($school['school_title']);
             $active = ($school['school_id'] == $current_school_id) ? "current" : ""; ?>
-            <td class="ankListRowTitle <?php echo $active; ?>"><a
+            <td class="school-selection <?php echo $active; ?>"><a
                 href="<?php echo $href; ?>"><?php echo $title; ?></a></td>
             <?php
         }?>

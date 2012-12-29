@@ -6,6 +6,7 @@ $course_fields = array(
     "course_title"=>"Название курса",
     "target_class"=>"Уровень (диапазон классов)",
     "course_teacher_id"=>"Препод курса",
+    "school_id"=>"Школа, на которой читался курс",
     "course_desc"=>"Описание",
     "course_comment"=>"Комментарий",
     "course_created"=>"Время создания",
@@ -20,9 +21,14 @@ function xsm_edit_course()
     $course = xdb_get_entity_by_id('course', $course_id);
     if ($course_id == "new")
     {
+        // prefill teacher
         $course_teacher_id = xcms_get_key_or($_GET, 'course_teacher_id');
         if (strlen($course_teacher_id))
             $course['course_teacher_id'] = $course_teacher_id;
+        // prefill school
+        $school_id = xcms_get_key_or($_GET, 'school_id');
+        if (strlen($school_id))
+            $course['school_id'] = $school_id;
     }
 
     $field_types = array(
@@ -48,14 +54,25 @@ function xsm_edit_course()
                     $key == "course_modified") $attr = ' readonly="readonly"'?>
                 <tr><td class="ankList"><span class="ankEditField"><?php echo $course_fields[$key]; ?></span>
                 <?php
-                if (array_key_exists($key, $field_types)) {?>
+                if (array_key_exists($key, $field_types))
+                {?>
                     <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
                         echo htmlspecialchars($value); ?></textarea/><?php
                 }
-                elseif ($key == 'course_teacher_id') {
-                    echo xsm_make_selector('person', 'course_teacher_id', xcms_get_key_or($course, $key, "-1"),
+                elseif ($key == 'course_teacher_id')
+                {
+                    echo "Ахтунг, id школы захардкожен11111 ";
+                    $school_id = 2; /// АХТУНГ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    echo xsm_make_selector_ext('person', 'course_teacher_id', xcms_get_key_or($course, $key, "-1"),
                         array('last_name', 'first_name'),
-                        "(is_teacher = 'teacher') ORDER BY last_name, first_name");
+                        "SELECT person_id, last_name, first_name FROM person p LEFT JOIN person_school ps ON p.person_id = ps.member_person_id ".
+                        "WHERE ps.school_id = $school_id AND ps.is_teacher = 'teacher' ORDER BY last_name, first_name");
+                }
+                elseif ($key == 'school_id')
+                {
+                    echo xsm_make_selector('school', 'school_id', xcms_get_key_or($course, $key, "-1"),
+                        array('school_title'),
+                        "(1 = 1) ORDER BY school_date_start DESC");
                 }
                 else {?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
                         name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
