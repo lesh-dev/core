@@ -84,9 +84,15 @@
         $query = "INSERT INTO $table_name ($keys) VALUES ($values)";
         $result = $db->exec($query);
         if ($result)
+        {
+            $result = $db->lastInsertRowid();
             xcms_log(0, "[DB] $query");
+        }
         else
+        {
+            $result = false;
             xcms_log(0, "[DB:ERROR] $query");
+        }
         $db->close();
         return $result;
     }
