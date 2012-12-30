@@ -235,7 +235,7 @@
             $u->set_valid();
             $u->set_param("email", $email);
             $u->set_param("creator", $this->login());
-            $u->set_param("creation_date", @mktime());
+            $u->set_param("creation_date", @time());
             $u->_save();
             return $u;
         }

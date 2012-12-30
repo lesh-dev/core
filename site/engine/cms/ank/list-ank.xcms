@@ -8,6 +8,12 @@
 <?php
 ?>
 
+<div>В этом списке по умолчанию показываются люди, с которыми идёт (или недавно шло) взаимодействие.</div>
+<div>Для школьников и преподов, которые стабильно ездят на школы уже 2-3 года, осмысленно выставлять статус
+    <span class="ankStatus old">Архивный</span>, чтобы они не показывались в этом списке. В этот же статус
+    можно переводить через 1-2 года тех, кому по результатам собеседования был проставлен статус
+    <span class="ankStatus declined">Послан</span> (сразу этого делать не следует).
+</div>
 <form method="post" action="list-ank" style="margin-bottom: 2px"><span>
     <span class="ankListField">Статус</span>: <?php
     echo xsm_make_enum_selector(
@@ -32,9 +38,7 @@ function xsm_show_ank_list()
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
 
     $show_statuses = xsm_get_person_show_statuses();
-    $show_count = 250;
     if (!array_key_exists($show_status, $show_statuses)) $show_status = "not-spam";
-    if ($show_status == "all") $show_count = 0; // show all
 
     $db = xdb_get();
     $db->createFunction('LIKE', 'xdb_like', 2);
@@ -70,12 +74,9 @@ function xsm_show_ank_list()
     if (strlen($cond))
         $query .= " $cond";
     $query .= " ORDER BY person_created DESC";
-    // debug area (TODO: remove)
-    ?><textarea rows="10" cols="120" style="display: " id="person-query-debug"><?php echo $query; ?></textarea><?php
+    ?><textarea rows="10" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
     $person_sel = $db->query($query);
 
-    $person_counter = 0;
-    $max_reached = false;
     NEW_xsm_view_operations('person', 'участника');
     ?>
     <table summary="Участники" class="ankList">
@@ -99,12 +100,6 @@ function xsm_show_ank_list()
         </thead>
     <?php
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC)) {
-        if ($show_count > 0 && $person_counter >= $show_count) {
-            $max_reached = true;
-            break;
-        }
-        $person_counter++;
-
         $person_id = htmlspecialchars($person["person_id"]);
 
         $last_name = htmlspecialchars($person["last_name"]);
@@ -246,13 +241,6 @@ function xsm_show_ank_list()
     </table>
     <?php
     NEW_xsm_view_operations('person', 'участника');
-    if ($show_count > 0) {
-        $more = ($max_reached ? " (размер списка ограничен <b>$show_count</b>, возможно, есть ещё) " : ""); ?>
-        <p>Показано <b><?php echo $person_counter; ?></b> участников, типа
-            <b><?php echo $show_statuses[$show_status]; ?></b><?php echo $more; ?></p><?php
-    } else {?>
-        <p>Показаны все люди (<b><?php echo $person_counter; ?></b> шт.)</p><?php
-    }
 }
 
     xsm_show_ank_list();

@@ -8,6 +8,13 @@ function xsm_edit_person()
 
     $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
     $person = xdb_get_entity_by_id('person', $person_id);
+    if ($person_id == "new")
+    {
+        // prefill anketa status for new records
+        $anketa_status = xcms_get_key_or($_GET, 'anketa_status');
+        if ($anketa_status)
+            $person['anketa_status'] = $anketa_status;
+    }
 
     $field_types = array(
         "favourites"=>"textarea",

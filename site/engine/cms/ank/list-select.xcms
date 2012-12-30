@@ -89,7 +89,7 @@ function xsm_show_all_person_list()
     ?><textarea rows="5" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
     $person_sel = $db->query($query);
 
-    xsm_view_operations('person', 'person', 'участника', '&amp;activity_status=cont');
+    xsm_view_operations('person', 'person', 'участника', '&amp;anketa_status=cont');
     ?>
     <table summary="Участники" class="ankList">
         <colgroup>
@@ -172,7 +172,7 @@ function xsm_show_all_person_list()
     ?>
     </table>
     <?php
-    xsm_view_operations('person', 'person', 'участника', '&amp;activity_status=cont');
+    xsm_view_operations('person', 'person', 'участника', '&amp;anketa_status=cont');
 }
 
     xsm_show_all_person_list();

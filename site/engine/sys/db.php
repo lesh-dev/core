@@ -65,7 +65,7 @@
         $values = "";
 
         // override 'created' and 'modified' field
-        $unix_time = mktime();
+        $unix_time = time();
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
         $keys_values["${table_name}_created"] = $hr_timestamp;
         $keys_values["${table_name}_modified"] = '';
@@ -108,7 +108,7 @@
         $db = xdb_get_write();
         $values = "";
         // update '<table-name>-modified' timestamp
-        $unix_time = mktime();
+        $unix_time = time();
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
         $keys_values["${table_name}_modified"] = $hr_timestamp;
 
