@@ -158,7 +158,8 @@
         include(translate('<! cms/ank/list-ank !>'));
     else if(@$_GET["aparam"] == "list-members")
         include(translate('<! cms/ank/list-person !>'));
-
+    else if(@$_GET["aparam"] == "list-select")
+        include(translate('<! cms/ank/list-select !>'));
 
     else if(@$_GET["aparam"] == "edit")
         include(translate('<! cms/ank/edit-ank !>'));

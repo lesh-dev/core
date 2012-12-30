@@ -1,7 +1,7 @@
 <?php
     xcms_log(0, $_COOKIE);
     // this should be done BEFORE any output started
-    $show_anketa_status = xcms_get_persistent_key("show_anketa_status", "notspam");
+    $show_anketa_status = xcms_get_persistent_key("show_anketa_status", "not-spam");
 ?>
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
@@ -27,13 +27,13 @@
 
 function xsm_show_ank_list()
 {
-    $show_status = xcms_get_key_or($_POST, "show_anketa_status", "notspam");
+    $show_status = xcms_get_key_or($_POST, "show_anketa_status", "not-spam");
 
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
 
     $show_statuses = xsm_get_person_show_statuses();
     $show_count = 250;
-    if (!array_key_exists($show_status, $show_statuses)) $show_status = "notspam";
+    if (!array_key_exists($show_status, $show_statuses)) $show_status = "not-spam";
     if ($show_status == "all") $show_count = 0; // show all
 
     $db = xdb_get();
@@ -41,12 +41,12 @@ function xsm_show_ank_list()
 
     $cond = "";
 
-    if ($show_status == "notdecl")
+    if ($show_status == "not-decl")
         $cond .=
             " AND ( (anketa_status <> 'duplicate')".
             " AND (anketa_status <> 'spam')".
             " AND (anketa_status <> 'declined') )";
-    elseif ($show_status == "notspam")
+    elseif ($show_status == "not-spam")
         $cond .= " AND ( (anketa_status <> 'duplicate') AND (anketa_status <> 'spam') )";
     elseif ($show_status == "all")
         $cond .= "";

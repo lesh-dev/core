@@ -1,0 +1,179 @@
+<?php
+    xcms_log(0, $_COOKIE);
+    // this should be done BEFORE any output started
+    $show_anketa_status = xcms_get_persistent_key("show_anketa_status", "not-old");
+    //$show_is_teacher = xcms_get_persistent_key("show_is_teacher");
+    //$show_is_student = xcms_get_persistent_key("show_is_student");
+?>
+<# auth/ #admin #ank #>
+<# cms/ank/style #>
+
+<form method="post" action="list-select" style="margin-bottom: 2px"><span>
+    <span class="ankListField">Статус</span>: <?php
+    echo xsm_make_enum_selector(
+        "show_anketa_status", $show_anketa_status,
+        xsm_get_person_show_statuses());
+
+        //echo xsm_make_checkbox('show_is_teacher', $show_is_teacher, "teacher");
+    ?><!--<span class="ankListField">Преподы</span>&nbsp;&nbsp;-->
+
+    <?php
+        //echo xsm_make_checkbox('show_is_student', $show_is_student, "student");
+    ?><!--
+    <span class="ankListField">Школьники</span>&nbsp;&nbsp;-->
+
+    <span class="ankListField">Фильтр ФИО</span>:
+    <input class="ankEdit filter" type="text"
+        value="<?php echo htmlspecialchars(xcms_get_key_or($_POST, 'show_name_filter')); ?>"
+        name="show_name_filter"
+        title="Будут найдены все участники, в ФИО которых (в любом порядке) встречаются слова запроса, без учёта регистра. Например, 'дан Мих' найдёт Даниила Михайловича, Михаила Данилевского и Богдана Немихульского, но НЕ найдёт Мишу Данилкина (имена условны)" />
+    <input type="submit" name="show-person" value="Показать" />
+
+</span></form>
+<?php
+
+
+// вывод активных участников
+function xsm_show_all_person_list()
+{
+    $show_status = xcms_get_key_or($_POST, "show_anketa_status", "not-spam");
+
+    global $show_is_teacher;// = xcms_get_key_or($_POST, "show_is_teacher");
+    global $show_is_student;// = xcms_get_key_or($_POST, "show_is_student");
+
+    $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
+
+    $show_statuses = xsm_get_person_show_statuses();
+
+    if (!array_key_exists($show_status, $show_statuses)) $show_status = "not-spam";
+
+    $db = xdb_get();
+    $db->createFunction('LIKE', 'xdb_like', 2);
+
+    $cond = "(1 = 1)";
+/*    if ($show_is_teacher == "teacher")
+        $cond .= " AND ( is_teacher = 'teacher' )";
+
+    if ($show_is_student == "student")
+        $cond .= " AND ( is_student = 'student' )";
+*/
+    if ($show_status == "not-decl")
+        $cond .=
+            " AND ( (anketa_status <> 'duplicate')".
+            " AND (anketa_status <> 'spam')".
+            " AND (anketa_status <> 'declined') )";
+    elseif ($show_status == "not-old")
+        $cond .= " AND ( (anketa_status <> 'duplicate') AND (anketa_status <> 'spam') AND (anketa_status <> 'old') )";
+    elseif ($show_status == "not-spam")
+        $cond .= " AND ( (anketa_status <> 'duplicate') AND (anketa_status <> 'spam') )";
+    elseif ($show_status == "all")
+        $cond .= "";
+    else
+        $cond .= " AND ( anketa_status = '$show_status' )";
+
+    $name_filter_cond = xsm_person_name_filter($db, $show_name_filter);
+    if (strlen($name_filter_cond))
+        $cond .= " AND $name_filter_cond";
+
+    $query = "SELECT ".
+        "p.person_id, p.last_name, p.first_name, ".
+        "p.school, p.school_city, ".
+        "p.phone, p.cellular, p.anketa_status ".
+        "FROM person p";
+
+    if (strlen($cond))
+        $query .= " WHERE $cond";
+    $query .= " ORDER BY p.last_name, p.first_name";
+
+    // debug area (TODO: remove)
+    ?><textarea rows="5" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
+    $person_sel = $db->query($query);
+
+    xsm_view_operations('person', 'person', 'участника', '&amp;activity_status=cont');
+    ?>
+    <table summary="Участники" class="ankList">
+        <colgroup>
+            <col width="5%" />
+            <col width="25%" />
+            <!--<col width="30px" />-->
+            <col width="25%" />
+            <col width="30%" />
+        </colgroup>
+        <thead>
+            <th class="ankList">ID</th>
+            <th class="ankList">Фамилия, имя</th>
+            <!--<th class="ankList">Кл.</th>-->
+            <th class="ankList">Контакты</th>
+            <th class="ankList">Info</th>
+        </thead>
+    <?php
+    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $person_id = htmlspecialchars($person["person_id"]);
+        $last_name = htmlspecialchars($person["last_name"]);
+        $first_name = htmlspecialchars($person["first_name"]);
+
+        $school = htmlspecialchars($person["school"]);
+        $school_city = htmlspecialchars($person["school_city"]);
+
+        // Заготовка на будущее: подзапрос с прочими данными участника для попапов
+        /*$sub_query = "SELECT ".
+            "ps.is_teacher, ps.is_student, ps.curatorship, ps. p.person_id, p.last_name, p.first_name, p.phone, p.cellular, p.anketa_status ".
+            "FROM person p";*/
+
+        // класс на данной школе
+        //$current_class = htmlspecialchars($person["current_class"]);
+
+        $phone = htmlspecialchars($person["phone"]);
+        $cellular = htmlspecialchars($person["cellular"]);
+
+        //$is_teacher = $person["is_teacher"];
+        //$is_student = $person["is_student"];
+        //$curatorship = $person["curatorship"];
+
+        //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
+
+        //$person_created = htmlspecialchars($person["person_created"]);
+        //$person_modified = htmlspecialchars($person["person_modified"]);
+
+        /* TODO: enable
+        $person_school_created = htmlspecialchars($person["person_school_created"]);
+        $person_school_modified = htmlspecialchars($person["person_school_modified"]);
+        */
+
+        $anketa_status = $person["anketa_status"];
+        $statuses = xsm_get_anketa_statuses();
+        if (!array_key_exists($anketa_status, $statuses)) $anketa_status = "new"; // default
+        $hr_status = $statuses[$anketa_status];
+
+        /*$curatorship_items = xsm_get_curatorship_items();
+        if (!array_key_exists($curatorship, $curatorship_items)) $curatorship = "none"; // default
+        $hr_curatorship = $curatorship_items[$curatorship];
+
+        $hr_teacher = ($is_teacher == "teacher" ? "Препод, " : "");
+        $hr_student = ($is_student == "student" ? "Школьник, " : "");
+        */
+        ?>
+        <tr>
+            <td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
+            <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"><?php
+                echo "$last_name $first_name"; ?></a></td>
+            <td class="ankList"><?php
+                echo $cellular;
+                if ($cellular && $phone)
+                    echo ", $phone"; ?></a></td>
+            </td>
+            <td class="ankList">
+                <span class="ankStatus <?php echo $anketa_status; ?>"><?php echo $hr_status; ?></span>
+            </td>
+        </tr>
+        <?php
+    }
+    ?>
+    </table>
+    <?php
+    xsm_view_operations('person', 'person', 'участника', '&amp;activity_status=cont');
+}
+
+    xsm_show_all_person_list();
+?>

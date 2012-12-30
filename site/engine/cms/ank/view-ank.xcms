@@ -18,7 +18,7 @@
     global $content_dir, $web_prefix;
     //$aShowStatuses = xcms_ank_get_show_status_list();
     $nCount = 500;
-    //if (!array_key_exists($sShowStatus, $aShowStatuses)) $sShowStatus = "notspam";
+    //if (!array_key_exists($sShowStatus, $aShowStatuses)) $sShowStatus = "not-spam";
 
     //if ($sShowStatus == "all") $nCount = 0; // show all
     $sShowStatus = "all";
@@ -47,10 +47,10 @@
 
       $oAnk = get_object_vars($xa);
       $sCurStatus = xcms_get_key_or($oAnk, "Status", "new");
-      if ($sShowStatus == "notspam") {
+      if ($sShowStatus == "not-spam") {
         if ($sCurStatus == "spam") continue;
         if ($sCurStatus == "duplicate") continue;
-      } elseif ($sShowStatus == "notdecl") {
+      } elseif ($sShowStatus == "not-decl") {
         if ($sCurStatus == "spam") continue;
         if ($sCurStatus == "duplicate") continue;
         if ($sCurStatus == "declined") continue;
