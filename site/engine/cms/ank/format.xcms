@@ -61,16 +61,19 @@
     {
         $key_name = "${table_name}_id";
         $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $redir = ($id == 'new') ? "$entity$aux_param" : "$entity$aux_param&amp;$key_name=$id";
         $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
         if ($res)
-        {?>
+        {
+            $id = $res;
+            ?>
             <p><?php echo $title; ?> успешно сохранён.<?php
         }
         else
         {?>
             <p>Не удалось добавить <?php echo $title; ?>.<?php
-        }?>
+        }
+        $redir = "$entity$aux_param&amp;$key_name=$id";
+        ?>
         <a href="view-<?php echo $redir; ?>">Вернуться к просмотру</a></p><?php
     }
 
@@ -218,7 +221,8 @@
     function NEW_xsm_edit_operations($table_name, $id, $title, $aux_param = '')
     {
         $is_new = ($id == 'new');
-        $redir = $is_new ? "$table_name$aux_param" : "$table_name$aux_param&amp;${table_name}_id=$id";
+        // TODO: маленький костылик
+        $redir = $is_new ? "list-select" : "view-$table_name$aux_param&amp;${table_name}_id=$id";
         ?>
         <div style="white-space: nowrap">
             <input type="submit" name="update-<?php echo $table_name; ?>"
@@ -227,8 +231,7 @@
                 <input type="submit" name="delete-<?php echo $table_name; ?>"
                     value="Удалить" class="delete-button"/><?php
             }?>
-            <a class="linkButton xsm" href="view-<?php
-                echo $redir; ?>"><?php echo $title; ?></a>
+            <a class="linkButton xsm" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
         </div><?php
     }
 
