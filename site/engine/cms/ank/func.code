@@ -63,8 +63,8 @@ function xsm_get_anketa_statuses()
 function xcms_ank_get_show_status_list()
 {
     return array(
-        "notspam"=>"Без спама и дублей",
-        "notdecl"=>"Без спама, дублей и отклонённых",
+        "not-spam"=>"Без спама и дублей",
+        "not-decl"=>"Без спама, дублей и отклонённых",
         "new"=>"Новые",
         "progress"=>"Приглашённые",
         "processed"=>"Принятые",
@@ -77,13 +77,15 @@ function xcms_ank_get_show_status_list()
 function xsm_get_person_show_statuses()
 {
     return array(
-        "notspam"=>"Без спама и дублей",
-        "notdecl"=>"Без спама, дублей и отклонённых",
+        "not-old"=>"Все, кроме архивных",
         "new"=>"Новые",
-        "progress"=>"В обработке",
-        "processed"=>"Обработанные",
+        "progress"=>"Приглашённые",
+        "processed"=>"Принятые",
         "declined"=>"Отклонённые",
-        "cont"=>"Продолжающие школьники",
+        "cont"=>"Продолжающие",
+        "old"=>"Архивные",
+        "not-spam"=>"Без спама и дублей",
+        "not-decl"=>"Без спама, дублей и отклонённых",
         "all"=>"Все");
 }
 
