@@ -39,7 +39,7 @@
         <h3>Добавить раздел содержания</h3>
         <form method="post">
             <!-- мы вроде как договорились, что мы против автогенерённых имён -->
-            <input type="text" name="create-name" value="<?php echo mktime(); ?>">
+            <input type="text" name="create-name" value="<?php echo time(); ?>">
 
         <table>
             <tr>

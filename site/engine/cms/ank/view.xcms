@@ -14,14 +14,13 @@
         $template_root = "{$SETTINGS['engine_dir']}templates";
         $mail_msg_html = file_get_contents("$template_root/anketa_mail.html");
         $row_template = file_get_contents("$template_root/anketa_mail_one_row.html");
-        $unix_time = mktime();
+        $unix_time = time();
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
         $mail_msg_plain = "Анкета от $hr_timestamp:\r\n-----------------------------------\r\n";
 
         $person = $_POST; // get all values here (_POST should not be spoiled)
         // set some generic fields that cannot be overridden
-        $person["activity_status"] = "new";
-        $person["is_student"] = "student";
+        $person["anketa_status"] = "new";
         $user_agent = $person["user_agent"] = $_SERVER["HTTP_USER_AGENT"];
         // extract some values to check
         $last_name = xcms_get_key_or($person, "last_name");
@@ -52,7 +51,7 @@
         {
             $key_title = $key;
             if (array_key_exists($key, $person_fields)) $key_title = $person_fields[$key];
-            if ($key == "is_student" || $key == "submit-anketa")
+            if ($key == "submit-anketa")
                 continue;
             $kt = "$key_title: ";
             while (xcms_len($kt) < 22)
