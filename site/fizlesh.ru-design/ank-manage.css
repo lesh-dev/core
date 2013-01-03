@@ -44,9 +44,15 @@ td.ankList, th.ankList {
     text-align: left;
 }
 
+tr.teacher td.ankList {
+    background-color: #85cf6f;
+}
+
+/* ank-notes
 td.ankList.notes {
     background-color: #85cf6f;
 }
+*/
 
 span.ankListField {
     font-weight: bold;
