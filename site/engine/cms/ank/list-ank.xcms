@@ -63,7 +63,7 @@ function xsm_show_ank_list()
 
     $query = "SELECT ".
         "p.person_id, p.last_name, p.first_name, p.patronymic, p.birth_date, p.passport_data, ".
-        "p.school, p.school_city, p.current_class, ".
+        "p.school, p.school_city, p.ank_class, ".
         "p.phone, p.cellular, p.email, p.skype, p.social_profile, ".
         "p.favourites, p.achievements, p.hobby, ".
         "p.anketa_status, p.user_agent, p.person_created, p.person_modified ".
@@ -113,7 +113,7 @@ function xsm_show_ank_list()
         $school_city = htmlspecialchars($person["school_city"]);
         if (!$school_city)
             $school_city = "город не указан";
-        $current_class = htmlspecialchars($person["current_class"]);
+        $ank_class = htmlspecialchars($person["ank_class"]);
 
         $phone = htmlspecialchars($person["phone"]);
         $cellular = htmlspecialchars($person["cellular"]);
@@ -143,7 +143,7 @@ function xsm_show_ank_list()
             <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"><?php
                 echo "$last_name $first_name $patronymic"; ?></a></td>
             <td class="ankList"><?php echo $birth_date; ?></td>
-            <td class="ankList"><?php echo $current_class; ?></td>
+            <td class="ankList"><?php echo $ank_class; ?></td>
             <td class="ankList"><?php echo "$school ($school_city)"; ?></td>
             <td class="ankList">
             <?php
@@ -174,7 +174,7 @@ function xsm_show_ank_list()
             </td></tr>
         <tr><td class="ankList">
             <span class="ankListField">Школа</span>: <?php echo "$school $school_city"; ?>
-            <span class="ankListField next">Класс</span>: <?php echo "$current_class"; ?>
+            <span class="ankListField next">Класс</span>: <?php echo "$ank_class"; ?>
         </td></tr>
 
         <?php if (!empty($cellular) || !empty($phone)) {?>

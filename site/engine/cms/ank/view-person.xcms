@@ -108,9 +108,7 @@ function xsm_print_person_ank_data($person)
     $school = htmlspecialchars($person["school"]);
     $school_city = htmlspecialchars($person["school_city"]);
 
-
-
-    $current_class = htmlspecialchars($person["current_class"]);
+    $current_class = htmlspecialchars($person["ank_class"]);
 
     $phone = htmlspecialchars($person["phone"]);
     $cellular = htmlspecialchars($person["cellular"]);
@@ -118,11 +116,8 @@ function xsm_print_person_ank_data($person)
     $skype = htmlspecialchars($person["skype"]);
     $social_profile = xsm_prepare_social_profile($person["social_profile"]);
 
-
-    //$is_current = $person["is_current"];
-    //$is_teacher = $person["is_teacher"];
-    //$is_student = $person["is_student"];
-    //$curatorship = $person["curatorship"];
+    $is_teacher = $person["is_teacher"];
+    $is_student = $person["is_student"];
 
     $favourites = xcms_html_wrap_by_crlf(htmlspecialchars($person["favourites"]));
     $achievements = xcms_html_wrap_by_crlf(htmlspecialchars($person["achievements"]));
@@ -139,6 +134,8 @@ function xsm_print_person_ank_data($person)
     if (!array_key_exists($anketa_status, $statuses)) $anketa_status = "new"; // default
     $hr_status = $statuses[$anketa_status];
 
+    $hr_teacher = ($is_teacher == "teacher" ? "Препод" : "-");
+    $hr_student = ($is_student == "student" ? "Школьник" : "-");
 
     xsm_draw_person_textval('Дата рождения', $birth_date);
     xsm_draw_person_textval('Паспортные данные', $passport_data);
@@ -146,6 +143,7 @@ function xsm_print_person_ank_data($person)
     xsm_draw_person_textval('Школа', $school);
     xsm_draw_person_textval('Город', $school_city);
     xsm_draw_person_textval('Статус анкеты', $hr_status);
+    xsm_draw_person_textval('Типичная роль', "$hr_teacher/$hr_student");
     xsm_draw_person_textval('User Agent', $user_agent);
     xsm_draw_person_longtextval('Любимые предметы', $favourites);
     xsm_draw_person_longtextval('Достижения', $achievements);
@@ -281,8 +279,8 @@ function xsm_print_person()
         $person_id = htmlspecialchars($person["person_id"]);
 
         //$is_current = $person["is_current"];
-        //$is_teacher = $person["is_teacher"];
-        //$is_student = $person["is_student"];
+        $is_teacher = $person["is_teacher"];
+        $is_student = $person["is_student"];
         //$curatorship = $person["curatorship"];
 
 
@@ -291,9 +289,8 @@ function xsm_print_person()
         //if (!array_key_exists($curatorship, $curatorship_items)) $curatorship = "none"; // default
         //$hr_curatorship = $curatorship_items[$curatorship];
 
+
         /*
-        $hr_teacher = ($is_teacher == "teacher" ? "Да" : "Нет");
-        $hr_student = ($is_student == "student" ? "Да" : "Нет");
         $hr_current = ($is_current == "current" ? "Да" : "Нет");
 
         <tr>

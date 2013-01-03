@@ -18,7 +18,7 @@ create table person (
 
     school text,        -- школа, в которой учится школьник
     school_city text,   -- город, в котором находится школа
-    current_class text, -- класс подачи заявки
+    ank_class text, -- класс подачи заявки
 
     phone text,         -- телефон (городской)
     cellular text,      -- мобильный телефон
@@ -27,6 +27,9 @@ create table person (
     social_profile text,  -- профиль ВКонтакте и т.п. (используемый!)
 
     -- исторические поля -- имеют смысл только при первом наборе (регистрации)
+    is_student text, -- является ли школьником (исторически)
+    is_teacher text, -- является ли преподом (исторически)
+
     favourites text,     -- любимые предметы
     achievements text,   -- достижения
     hobby text,          -- хобби
@@ -83,6 +86,8 @@ create table school (
 /*
 Связка "Бытие участника на школе"
 
+Роль человека на школе по умолчанию копируется из
+
 Именно в этой связке должна быть проставлена роль участника на школе
 (на одной школе он был школьником, на школе следующей он был уже преподом)
 Таким образом, статусы is_student, is_teacher, curatorship участника
@@ -97,7 +102,6 @@ create table person_school (
     is_student text, -- является ли школьником на данной школе
     is_teacher text, -- является ли преподом на данной школе
     curatorship text, -- кураторство на данной школе enum:(никто, помкур, куратор)
-    -- is_current text -- становится просто ненужным
     current_class text, -- класс, в котором находится школьник
         -- (для Летней школы надо договориться, какой именно класс мы ставим,
         -- будущий или прошедший
@@ -127,40 +131,42 @@ create table person_comment (
 -- 1
 insert into person (last_name, first_name, patronymic,
     birth_date,
-    school, school_city, current_class,
+    school, school_city, ank_class,
+    is_teacher, is_student,
     phone, cellular, email, skype,
     social_profile,
     anketa_status, person_created) values
     ('Вельтищев1', 'Михаил', 'Николаевич',
     '2012.05.06',
     '444', 'Москва', '9г',
+    'teacher', '',
     '+7 (495) 618 30 21', '+7 (915) 0-686-186', 'dichlofos-mv@yandex.ru', 'dichlofos.mv',
     'http://vk.com/dichlofos',
     'new', '2012.05.07 03:05:01');
 -- 2
-insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
-    values ('Вельтищев2', 'Дмитрий', 'Николаевич', 'declined', '2012.05.07 03:05:01', '2012.06.10 01:02:03');
+insert into person (last_name, first_name, patronymic, anketa_status, is_teacher, person_created, person_modified)
+    values ('Вельтищев2', 'Дмитрий', 'Николаевич', 'declined', 'teacher', '2012.05.07 03:05:01', '2012.06.10 01:02:03');
 -- 3
-insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
-    values ('Школьница3', 'Мария-3', 'Батьковна', 'processed', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
+insert into person (last_name, first_name, patronymic, anketa_status, is_student, person_created, person_modified)
+    values ('Школьница3', 'Мария-3', 'Батьковна', 'processed', 'student', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
 -- 4
-insert into person (last_name, first_name, patronymic, anketa_status, current_class, school_city, person_created, person_modified)
-    values ('Школьница4', 'Мария', 'Батьковна', 'processed', '10a', 'Default City of USA', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
+insert into person (last_name, first_name, patronymic, anketa_status, is_student, ank_class, school_city, person_created, person_modified)
+    values ('Школьница4', 'Мария', 'Батьковна', 'processed', 'student', '10a', 'Default City of USA', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
 -- 5
-insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
-    values ('Школьница5', 'Мария2', 'Батьковна2', 'cont', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
+insert into person (last_name, first_name, patronymic, anketa_status, is_student, person_created, person_modified)
+    values ('Школьница5', 'Мария2', 'Батьковна2', 'cont', 'student', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
 -- 6
-insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
-    values ('Школьница6', 'Настоящая', 'Михайловна', 'cont', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
+insert into person (last_name, first_name, patronymic, anketa_status, is_student, person_created, person_modified)
+    values ('Школьница6', 'Настоящая', 'Михайловна', 'cont', 'student', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
 -- 7
-insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
-    values ('Школьница7', 'Настоящая', 'Ивановна', 'cont', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
+insert into person (last_name, first_name, patronymic, anketa_status, is_student, person_created, person_modified)
+    values ('Школьница7', 'Настоящая', 'Ивановна', 'cont', 'student', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
 -- 8
-insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
-    values ('Новобранец8', 'ТолькоЧто', 'Хреновый', 'new', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
+insert into person (last_name, first_name, patronymic, anketa_status, is_student, person_created, person_modified)
+    values ('Новобранец8', 'ТолькоЧто', 'Хреновый', 'new', 'student', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
 -- 9
-insert into person (last_name, first_name, patronymic, anketa_status, person_created, person_modified)
-    values ('Ветеран9', 'ДавноУже', 'НеШкольник', 'cont', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
+insert into person (last_name, first_name, patronymic, anketa_status, is_student, person_created, person_modified)
+    values ('Ветеран9', 'ДавноУже', 'НеШкольник', 'cont', 'student', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
 
 insert into school values(1, 'ЛЭШ-2011', 'summmer', '2011.07.23', '2011.08.22', null, null);
 insert into school values(2, 'ЗЭШ-2012', 'winter', '2012.01.02', '2012.01.09', null, null);
@@ -178,18 +184,20 @@ insert into person_school values(7, 9, 3, 'teacher', null, null, '11ж', null, n
 
 
 -- school_id, course_teacher_id
-insert into course values(1, 'test course',       1, 1, 'qqq', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(2, 'not a Test course', 1, 2, 'qqq', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(3, 'Вынос мозга',       2, 2, 'qqq', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(4, 'Пайтон',            2, 2, 'qqq', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(1, 'test course',       1, 1, 'qqq4', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(2, 'not a Test course', 1, 2, 'qqq4', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(3, 'Вынос мозга',       2, 2, 'qqq3', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(4, 'Пайтон',            2, 2, 'qqq2', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(5, 'Хрень, а не курс',  2, 2, 'qqq1', 'ppp', 'zzz', 't666', 'aaa');
 
 -- student_person_id, course_id
 insert into exam values(1, 4, 1, 'passed', 'qqq2', 'qqq3', 'qqq4', 'qqq5', 'aaaa');
 insert into exam values(2, 5, 2, 'passed', 'qqq21', 'qqq330', 'qqq4', 'qqq5', 'bbb');
 insert into exam values(3, 5, 3, 'failed', 'qqq22', 'qqq34-', 'qqq4', 'qqq5', 'ccc');
 insert into exam values(4, 5, 4, 'failed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
-insert into exam values(6, 6, 2, 'passed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
-insert into exam values(5, 6, 4, 'passed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
+insert into exam values(5, 6, 2, 'passed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
+insert into exam values(6, 6, 4, 'passed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
+insert into exam values(7, 6, 5, 'passed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
 
 -- notbound students
 SELECT * FROM person p LEFT JOIN person_school ps ON p.person_id = ps.member_person_id WHERE ps.member_person_id IS NULL;
