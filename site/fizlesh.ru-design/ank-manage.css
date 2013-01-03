@@ -184,7 +184,7 @@ div.person-title {
 }
 
 span.person-key {
-    font-style: italic;
+    font-weight: bold;
 }
 
 span.person-value {

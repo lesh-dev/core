@@ -89,7 +89,9 @@ function xsm_print_person_schools($db, $person_id, $current_school_id)
                 href="<?php echo $href; ?>"><?php echo $title; ?></a></td>
             <?php
         }?>
-    </tr></table><?php
+    </tr></table>
+
+    <?php
 
 }
 
@@ -148,21 +150,10 @@ function xsm_print_person_ank_data($person)
     xsm_draw_person_longtextval('Любимые предметы', $favourites);
     xsm_draw_person_longtextval('Достижения', $achievements);
     xsm_draw_person_longtextval('Хобби', $hobby);
-/*
-
-    <img class="link-oper" src="<# full_design_dir #>pic/mozillafirefox.png"
-        style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
-    <span class="ankListField next">Статус</span>:
-        <span class="ankStatus <?php echo $anketa_status; ?>"><?php echo $hr_status; ?></span><?php
-
-*/
-
-
-    //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
 
 }
 
-function xsm_print_person_selected_school($db, $school_id, $student_person_id)
+function xsm_print_person_selected_school($db, $school_id, $person_id)
 {
     $exam_sel = $db->query(
         "SELECT
@@ -173,15 +164,17 @@ function xsm_print_person_selected_school($db, $school_id, $student_person_id)
         (c.course_teacher_id = tp.person_id) AND
         (c.school_id = $school_id) AND
         (e.course_id = c.course_id) AND
-        (e.student_person_id = $student_person_id)"
+        (e.student_person_id = $person_id)"
     );
 
     //$aux_param = "&amp;student_person_id=$student_person_id";
 
     ?>
     <h3>Зачёты</h3>
-    <?php //xsm_view_operations('exam', 'exam', 'зачёт', $aux_param); ?>
-    <table summary="Зачёты школьника <?php echo $student_person_id; ?>" class="ankList">
+    <?php
+        //xsm_view_operations('exam', 'exam', 'зачёт', $aux_param);
+    ?>
+    <table summary="Зачёты школьника <?php echo $person_id; ?>" class="ankList">
         <colgroup>
             <col width="25%" />
             <col width="10%" />
@@ -238,18 +231,50 @@ function xsm_print_person_selected_school($db, $school_id, $student_person_id)
         <td class="ankList"><a href="view-person&amp;person_id=<?php echo $course_teacher_id; ?>"><?php
                 echo "$teacher_first_name $teacher_last_name"; ?></a></td>
         <td class="ankList"><?php echo $hr_exam_status; ?></td>
-        </tr><?php /*
-        <tr><td class="ankList"><span class="ankListField">Дедлайн</span>:
-            <?php echo $deadline_date; ?></td></tr>
-
-        <tr><td class="ankList"><span class="ankListField">Описание курса</span>:
-            <?php echo xcms_html_wrap_by_crlf($course_desc); ?></td></tr>
-        <tr><td class="ankList"><span class="ankListField">Комментарий к зачёту</span>:
-            <?php echo xcms_html_wrap_by_crlf($exam_comment); ?></td></tr>
-        */
+        </tr><?php
         }
     ?>
     </table>
+    <?php
+    $course_sel = $db->query(
+        "SELECT
+        c.course_id, c.course_title, c.target_class
+        FROM course c WHERE
+        (c.school_id = $school_id) AND
+        (c.course_teacher_id = $person_id)"
+    );
+
+    ?>
+
+    <h3>Курсы</h3>
+    <?php //xsm_view_operations('exam', 'exam', 'зачёт', $aux_param); ?>
+    <table summary="Курсы <?php echo $teacher_person_id; ?>" class="ankList">
+        <colgroup>
+            <col width="70%" />
+            <col width="30%" />
+        </colgroup>
+        <thead>
+            <th class="ankList">Курс</th>
+            <th class="ankList">Класс</th>
+        </thead>
+    <?php
+
+    while ($course_data = $course_sel->fetchArray(SQLITE3_ASSOC)) {
+
+        $course_id = htmlspecialchars($course_data["course_id"]);
+        $course_title = htmlspecialchars($course_data["course_title"]);
+        $target_class = htmlspecialchars($course_data["target_class"]);
+
+        ?>
+        <tr>
+            <td class="ankList"><a href="view-course&amp;course_id=<?php echo $course_id; ?>"><?php
+                echo "$course_title"; ?></a></td>
+            <td class="ankList"><?php echo $target_class; ?></td>
+        </tr><?php
+        }
+    ?>
+    </table>
+
     <?php
     //xsm_view_operations('exam', 'exam', 'зачёт', $aux_param);
 }
@@ -273,72 +298,6 @@ function xsm_print_person()
     else
         xsm_print_person_selected_school($db, $school_id, $person_id);
 
-    ?>
-    <table summary="Участник" class="ankList">
-        <?php
-        $person_id = htmlspecialchars($person["person_id"]);
-
-        //$is_current = $person["is_current"];
-        $is_teacher = $person["is_teacher"];
-        $is_student = $person["is_student"];
-        //$curatorship = $person["curatorship"];
-
-
-        //$curatorship_items = xsm_get_curatorship_items();
-
-        //if (!array_key_exists($curatorship, $curatorship_items)) $curatorship = "none"; // default
-        //$hr_curatorship = $curatorship_items[$curatorship];
-
-
-        /*
-        $hr_current = ($is_current == "current" ? "Да" : "Нет");
-
-        <tr>
-            <td class="ankListRowTitle">
-            <?php
-             echo "[$person_id] $last_name $first_name $patronymic"; ?><a name="<?php echo "person$person_id"; ?>"></a>
-                <span style="float: right">
-                <?php
-                <a class="link-oper" href="/<?php echo $web_prefix;
-                    ?>?ref=get_ank&amp;mode=xml&amp;file=<?php echo $sBaseAnkFileName; ?>">XML</a>
-                <a class="link-oper" href="/<?php echo $web_prefix;
-                    ?>?ref=get_ank&amp;mode=txt&amp;file=<?php echo $sBaseAnkFileName; ?>">TXT</a>
-
-                    if ($is_current == "current") {?>
-                        <a class="link-oper"
-                            href="view-exam&amp;student_person_id=<?php echo $person_id; ?>">Зачёты</a><?php
-                    } else {?>
-                        <span class="link-oper"
-                            title="Зачёты могут быть проставлены только текущим школьникам">Зачёты отключены</span><?php
-                    }
-
-                    if ($is_teacher == "teacher") {?>
-                        <a class="link-oper"
-                            href="edit-course&amp;course_id=new&amp;course_teacher_id=<?php
-                                echo $person_id; ?>">Добавить курс</a><?php
-                    }
-
-                ?>
-                <img class="link-oper" src="<# full_design_dir #>pic/mozillafirefox.png"
-                    style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
-                <span class="ankListField next">Статус</span>:
-                    <span class="ankStatus <?php echo $anketa_status; ?>"><?php echo $hr_status; ?></span><?php
-                </span>
-            </td>
-        </tr>
-
-
-        <!--
-        <tr><td class="ankList">
-            <span class="ankListField">Текущий</span>: <?php echo $hr_current; ?>
-            <span class="ankListField next">Школьник</span>: <?php echo $hr_student; ?>
-            <span class="ankListField next">Препод</span>: <?php echo $hr_teacher; ?>
-            <span class="ankListField next">Кураторство</span>: <?php echo $hr_curatorship; ?>
-        </td></tr> -->
-        <!--  other stuff -->
-        */?>
-    </table>
-    <?php
 }
 
 xsm_print_person();
