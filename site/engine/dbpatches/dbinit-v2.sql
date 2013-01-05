@@ -173,15 +173,17 @@ insert into school values(2, 'ЗЭШ-2012', 'winter', '2012.01.02', '2012.01.09'
 insert into school values(3, 'ЗЭШ-2010', 'winter', '2010.01.02', '2010.01.09', null, null);
 
 -- member_person_id, school_id
-insert into person_school values(1, 3, 1, 'student', null,      null, '9',  null, null);
-insert into person_school values(2, 3, 2, 'student', null,      null, '10', null, null);
-insert into person_school values(3, 4, 2, null,     'teacher',  null, '9',  null, null);
-insert into person_school values(4, 5, 2, null,     'teacher',  null, '8',  null, null);
-insert into person_school values(5, 6, 2, 'student', null,      null, '7',  null, null);
-insert into person_school values(6, 7, 2, 'student', 'teacher', null, '11', null, null);
-
-insert into person_school values(7, 9, 3, 'teacher', null, null, '11ж', null, null);
-
+insert into person_school values(1,  1, 1, null,     'teacher',  null, 'мм',  null, null);
+insert into person_school values(2,  1, 2, null,     'teacher',  null, 'вмк', null, null);
+insert into person_school values(3,  2, 1, null,     'teacher',  null, 'мм',  null, null);
+insert into person_school values(4,  2, 2, null,     'teacher',  null, 'вмк', null, null);
+insert into person_school values(5,  3, 1, 'student', null,      null, '9',   null, null);
+insert into person_school values(6,  3, 2, 'student', null,      null, '10',  null, null);
+insert into person_school values(7,  4, 2, null,     'teacher',  null, '9',   null, null);
+insert into person_school values(8,  5, 2, null,     'teacher',  null, '8',   null, null);
+insert into person_school values(9,  6, 2, 'student', null,      null, '7',   null, null);
+insert into person_school values(10, 7, 2, 'student', 'teacher', null, '11',  null, null);
+insert into person_school values(11, 9, 3, 'teacher', null,      null, '11ж', null, null);
 
 -- school_id, course_teacher_id
 insert into course values(1, 'test course',       1, 1, 'qqq4', 'ppp', 'zzz', 't666', 'aaa');
