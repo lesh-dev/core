@@ -35,12 +35,6 @@ function xsm_edit_course()
 
     $teacher = xdb_get_entity_by_id('person', $course_teacher_id);
     $school = xdb_get_entity_by_id('school', $school_id);
-    echo "<pre>\n";
-    print_r($course_teacher_id);
-    print_r("zzzz");
-    print_r($teacher);
-    print_r($school);
-    echo "</pre>\n";
 
     $field_types = array(
         "course_comment"=>"textarea",
@@ -62,7 +56,12 @@ function xsm_edit_course()
                 $attr = "";
                 // handle readonly fields
                 if ($key == "course_created" ||
-                    $key == "course_modified") $attr = ' readonly="readonly"'?>
+                    $key == "course_modified")
+                    $attr = 'readonly="readonly"';
+                // selectors cannot be readonly
+                if ($key == "school_id" ||
+                    $key == "course_teacher_id")
+                    $attr = 'disabled="disabled"'; ?>
                 <tr><td class="ankList"><span class="ankEditField"><?php echo $course_fields[$key]; ?></span>
                 <?php
                 if (array_key_exists($key, $field_types))
@@ -72,18 +71,16 @@ function xsm_edit_course()
                 }
                 elseif ($key == 'course_teacher_id')
                 {
-
-                    $school_id = 2; /// АХТУНГ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     echo xsm_make_selector_ext('person', 'course_teacher_id', xcms_get_key_or($course, $key, "-1"),
                         array('last_name', 'first_name'),
                         "SELECT person_id, last_name, first_name FROM person p LEFT JOIN person_school ps ON p.person_id = ps.member_person_id ".
-                        "WHERE ps.school_id = $school_id AND ps.is_teacher = 'teacher' ORDER BY last_name, first_name");
+                        "WHERE ps.school_id = $school_id AND ps.is_teacher = 'teacher' ORDER BY last_name, first_name", $attr);
                 }
                 elseif ($key == 'school_id')
                 {
                     echo xsm_make_selector('school', 'school_id', xcms_get_key_or($course, $key, "-1"),
                         array('school_title'),
-                        "(1 = 1) ORDER BY school_date_start DESC");
+                        "(1 = 1) ORDER BY school_date_start DESC", $attr);
                 }
                 else {?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
                         name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
