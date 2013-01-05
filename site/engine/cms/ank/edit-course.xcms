@@ -73,7 +73,7 @@ function xsm_edit_course()
                 {
                     echo xsm_make_selector_ext('person', 'course_teacher_id', xcms_get_key_or($course, $key, "-1"),
                         array('last_name', 'first_name'),
-                        "SELECT person_id, last_name, first_name FROM person p LEFT JOIN person_school ps ON p.person_id = ps.member_person_id ".
+                        "SELECT person_id, last_name, first_name FROM person_school ps LEFT JOIN person p ON p.person_id = ps.member_person_id ".
                         "WHERE ps.school_id = $school_id AND ps.is_teacher = 'teacher' ORDER BY last_name, first_name", $attr);
                 }
                 elseif ($key == 'school_id')
