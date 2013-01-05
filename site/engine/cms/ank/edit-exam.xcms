@@ -19,7 +19,16 @@ function xsm_edit_exam()
 
     $exam_id = xcms_get_key_or($_GET, 'exam_id', '-1'); // invalid key
     $exam = xdb_get_entity_by_id('exam', $exam_id);
-    $student_person_id = xcms_get_key_or($_GET, 'student_person_id', '-1');
+    if ($exam_id == "new")
+    {
+        $student_person_id = xcms_get_key_or($_GET, 'student_person_id', '-1');
+        $school_id = xcms_get_key_or($_GET, 'school_id', '-1');
+    }
+    else
+    {
+        $student_person_id = $exam['student_person_id'];
+        $school_id = $exam['school_id'];
+    }
 
     $field_types = array(
         "exam_comment"=>"textarea",
@@ -37,6 +46,7 @@ function xsm_edit_exam()
             у которого выставлен статус ТЕКУЩИЙ!</div>
         <input type="hidden" name="exam_id" value="<?php echo $exam_id; ?>" />
         <input type="hidden" name="student_person_id" value="<?php echo $student_person_id; ?>" />
+        <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
         <table summary="Зачёт" class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Зачёт</td>
@@ -66,10 +76,10 @@ function xsm_edit_exam()
                 } elseif ($key == 'student_person_id') {
                     echo xsm_make_selector('person', 'student_person_id', $student_person_id,
                         array('last_name', 'first_name'),
-                        "(is_student = 'student') AND (is_current = 'current') ORDER BY last_name, first_name");
+                        "(is_student = 'student') ORDER BY last_name, first_name");
                 } elseif ($key == 'course_id') {
                     echo xsm_make_selector('course', 'course_id', xcms_get_key_or($exam, $key, "-1"),
-                        array('course_title'), "");
+                        array('course_title'), "(school_id = $school_id) ");
                 }
                 else {?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
                         name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php

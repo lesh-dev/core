@@ -19,17 +19,28 @@ function xsm_edit_course()
 
     $course_id = xcms_get_key_or($_GET, 'course_id', '-1'); // invalid key
     $course = xdb_get_entity_by_id('course', $course_id);
+    $course_teacher_id = -1;
     if ($course_id == "new")
     {
         // prefill teacher
         $course_teacher_id = xcms_get_key_or($_GET, 'course_teacher_id');
         if (strlen($course_teacher_id))
             $course['course_teacher_id'] = $course_teacher_id;
+
         // prefill school
         $school_id = xcms_get_key_or($_GET, 'school_id');
         if (strlen($school_id))
             $course['school_id'] = $school_id;
     }
+
+    $teacher = xdb_get_entity_by_id('person', $course_teacher_id);
+    $school = xdb_get_entity_by_id('school', $school_id);
+    echo "<pre>\n";
+    print_r($course_teacher_id);
+    print_r("zzzz");
+    print_r($teacher);
+    print_r($school);
+    echo "</pre>\n";
 
     $field_types = array(
         "course_comment"=>"textarea",
@@ -61,7 +72,7 @@ function xsm_edit_course()
                 }
                 elseif ($key == 'course_teacher_id')
                 {
-                    echo "Ахтунг, id школы захардкожен11111 ";
+
                     $school_id = 2; /// АХТУНГ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     echo xsm_make_selector_ext('person', 'course_teacher_id', xcms_get_key_or($course, $key, "-1"),
                         array('last_name', 'first_name'),

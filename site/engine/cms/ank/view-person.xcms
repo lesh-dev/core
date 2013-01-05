@@ -167,12 +167,12 @@ function xsm_print_person_selected_school($db, $school_id, $person_id)
         (e.student_person_id = $person_id)"
     );
 
-    //$aux_param = "&amp;student_person_id=$student_person_id";
+    $exam_aux_param = "&amp;student_person_id=$person_id&amp;school_id=$school_id";
 
     ?>
     <h3>Зачёты</h3>
     <?php
-        //xsm_view_operations('exam', 'exam', 'зачёт', $aux_param);
+        xsm_view_operations('exam', 'exam', 'зачёт', $exam_aux_param);
     ?>
     <table summary="Зачёты школьника <?php echo $person_id; ?>" class="ankList">
         <colgroup>
@@ -243,12 +243,14 @@ function xsm_print_person_selected_school($db, $school_id, $person_id)
         (c.school_id = $school_id) AND
         (c.course_teacher_id = $person_id)"
     );
-
+    $course_aux_param = "&amp;course_teacher_id=$person_id&amp;school_id=$school_id";
     ?>
 
     <h3>Курсы</h3>
-    <?php //xsm_view_operations('exam', 'exam', 'зачёт', $aux_param); ?>
-    <table summary="Курсы <?php echo $teacher_person_id; ?>" class="ankList">
+    <?php
+        xsm_view_operations('course', 'course', 'курс', $course_aux_param);
+    ?>
+    <table summary="Курсы <?php echo $person_id; ?>" class="ankList">
         <colgroup>
             <col width="70%" />
             <col width="30%" />
@@ -276,7 +278,6 @@ function xsm_print_person_selected_school($db, $school_id, $person_id)
     </table>
 
     <?php
-    //xsm_view_operations('exam', 'exam', 'зачёт', $aux_param);
 }
 
 // shows person information sliced by school
