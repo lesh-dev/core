@@ -155,6 +155,24 @@ function xsm_print_person_ank_data($person)
 
 function xsm_print_person_selected_school($db, $school_id, $person_id)
 {
+    $ps_sel = $db->query(
+        "SELECT
+        ps.person_school_id
+        FROM person_school ps WHERE
+        (ps.member_person_id = $person_id) AND
+        (ps.school_id = $school_id)"
+    );
+
+    // TODO: fix this
+    if (!($ps_data = $ps_sel->fetchArray(SQLITE3_ASSOC)))
+        return;
+
+    $person_school_id = $ps_data['person_school_id'];
+    $href_ps = "edit-person-school&amp;person_school_id=$person_school_id";
+
+    ?>
+    <a href="<?php echo $href_ps; ?>">person school id</a><?php
+
     $exam_sel = $db->query(
         "SELECT
         tp.last_name as teacher_last_name, tp.first_name as teacher_first_name,
@@ -166,6 +184,10 @@ function xsm_print_person_selected_school($db, $school_id, $person_id)
         (e.course_id = c.course_id) AND
         (e.student_person_id = $person_id)"
     );
+
+    $href_ank = "view-person-school&amp;person_school_id=$person_id&amp;school_id=".SCHOOL_ANK_ID;
+
+
 
     $exam_aux_param = "&amp;student_person_id=$person_id&amp;school_id=$school_id";
 
