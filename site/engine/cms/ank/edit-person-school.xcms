@@ -6,9 +6,9 @@ $person_school_fields = array(
     "member_person_id"=>"Участник",
     "school_id"=>"Школа, на которой читался курс",
     "is_student"=>"Школьник",
-    "is_teacher"=>"Студент",
+    "is_teacher"=>"Препод",
     "curatorship"=>"Кураторство",
-    "current_class"=>"Кураторство",
+    "current_class"=>"Класс",
     "person_school_created"=>"Время создания",
     "person_school_modified"=>"Последняя модификация"
 );
