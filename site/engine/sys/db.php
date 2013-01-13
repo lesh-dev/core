@@ -166,7 +166,7 @@
 
         if ($id != "new")
         {
-            $idf = preg_replace('/[^0-9]/', '', $id);
+            $idf = preg_replace('/[^-0-9]/', '', $id);
             if (strlen($idf) == 0)
             {
                 xcms_log(0, "Cannot fetch entity from '$table_name' with empty or filtered id '$id'.");
