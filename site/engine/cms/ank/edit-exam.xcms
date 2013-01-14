@@ -13,21 +13,53 @@ $exam_fields = array(
     "exam_modified"=>"Последняя модификация"
 );
 
+function xsm_edit_exam_operations($school_id, $student_person_id, $id)
+{
+    $is_new = ($id == 'new');
+    $table_name = "exam";
+    $title = "Вернуться к просмотру участника";
+    $redir = "view-person&amp;school_id=$school_id&amp;person_id=$student_person_id";
+    ?>
+    <div style="white-space: nowrap">
+        <input type="submit" name="update-<?php echo $table_name; ?>"
+            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
+        if (!$is_new) {?>
+            <input type="submit" name="delete-<?php echo $table_name; ?>"
+                value="Удалить" class="delete-button"/><?php
+        }?>
+        <a class="linkButton xsm" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
+    </div><?php
+}
+
 function xsm_edit_exam()
 {
     global $exam_fields;
 
     $exam_id = xcms_get_key_or($_GET, 'exam_id', '-1'); // invalid key
     $exam = xdb_get_entity_by_id('exam', $exam_id);
+    $course = array();
+    $student = array();
     if ($exam_id == "new")
     {
+        // prefill student person
         $student_person_id = xcms_get_key_or($_GET, 'student_person_id', '-1');
+        if ($student_person_id == "-1")
+        {
+            echo "Недопустимый ID участника. ";
+            return;
+        }
+        $student = xdb_get_entity_by_id('person', $student_person_id);
         $school_id = xcms_get_key_or($_GET, 'school_id', '-1');
     }
     else
     {
         $student_person_id = $exam['student_person_id'];
-        $school_id = $exam['school_id'];
+        $student = xdb_get_entity_by_id('person', $student_person_id);
+        $course_id = $exam['course_id'];
+        $course = xdb_get_entity_by_id('course', $course_id);
+        $school_id = $course['school_id'];
+        $school = xdb_get_entity_by_id('school', $school_id);
+        $school_title = $school['school_title'];
     }
 
     $field_types = array(
@@ -39,11 +71,8 @@ function xsm_edit_exam()
 
     ?>
     <form method="post" action="edit-exam"><?php
-        xsm_edit_operations('exam', 'exam', $exam_id,
-            'Вернуться к списку зачётов', $aux_param);?>
-        <div style="font-weight: bold; margin-top: 3px; margin-bottom: 3px; color: #ff0000;">
-            ВНИМАНИЕ! Зачёт можно добавить только школьнику,
-            у которого выставлен статус ТЕКУЩИЙ!</div>
+        xsm_edit_exam_operations($school_id, $student_person_id, $exam_id);
+        ?>
         <input type="hidden" name="exam_id" value="<?php echo $exam_id; ?>" />
         <input type="hidden" name="student_person_id" value="<?php echo $student_person_id; ?>" />
         <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
@@ -73,13 +102,35 @@ function xsm_edit_exam()
                 } elseif ($ft == "enum") {
                     if ($key == "exam_status")
                         echo xsm_make_enum_selector($key, $value, xsm_get_exam_statuses());
-                } elseif ($key == 'student_person_id') {
+                }
+                elseif ($key == 'student_person_id')
+                {?>
+                    <input type="text" class="ankEdit" value="<?php
+                        echo htmlspecialchars($student['last_name'].' '.$student['first_name']); ?>"
+                        readonly="readonly" /><?php
+                }
+                elseif ($key == 'school_id')
+                {?>
+                    <input type="text" class="ankEdit" value="<?php
+                        echo htmlspecialchars($school['school_title']); ?>"
+                        readonly="readonly" /><?php
+                /*} elseif ($key == 'student_person_id') {
                     echo xsm_make_selector('person', 'student_person_id', $student_person_id,
                         array('last_name', 'first_name'),
                         "(is_student = 'student') ORDER BY last_name, first_name");
+                */
                 } elseif ($key == 'course_id') {
-                    echo xsm_make_selector('course', 'course_id', xcms_get_key_or($exam, $key, "-1"),
-                        array('course_title'), "(school_id = $school_id) ");
+                    if ($exam_id == "new")
+                    {
+                        echo xsm_make_selector('course', 'course_id', xcms_get_key_or($exam, $key, "-1"),
+                            array('course_title'), "(school_id = $school_id) ");
+                    }
+                    else
+                    {?>
+                        <input type="text" class="ankEdit" value="<?php
+                            echo htmlspecialchars($course['course_title']); ?>"
+                            readonly="readonly" /><?php
+                    }
                 }
                 else {?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
                         name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
@@ -88,7 +139,7 @@ function xsm_edit_exam()
                 <?php
             }?>
         </table><?php
-        xsm_edit_operations('exam', 'exam', $exam_id, 'Вернуться к списку зачётов');?>
+        xsm_edit_exam_operations($school_id, $student_person_id, $exam_id); ?>
     </form>
     <?php
 }
