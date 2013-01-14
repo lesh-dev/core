@@ -100,12 +100,12 @@ function xsm_edit_person_school()
     <?php
 }
 
-if (@$_POST["update-person-school"])
-    xsm_update_entity('person_school', 'person_school', 'Курс', $person_school_fields);
-elseif (@$_POST["delete-person-school"])
-    xsm_warn_delete_entity('person_school', 'person_school', 'Бытиё на школе');
-elseif (@$_POST["confirm-delete-person-school"])
-    xsm_delete_entity('person_school', 'person_school', 'Бытиё на школе');
+if (@$_POST["update-person_school"])
+    xsm_update_entity('person_school', 'person_school', 'Участник-на-Школе', $person_school_fields);
+elseif (@$_POST["delete-person_school"])
+    xsm_warn_delete_entity('person_school', 'person_school', 'Участник-на-Школе');
+elseif (@$_POST["confirm-delete-person_school"])
+    xsm_delete_entity('person_school', 'person_school', 'Участник-на-Школе');
 else
     xsm_edit_person_school();
 ?>
