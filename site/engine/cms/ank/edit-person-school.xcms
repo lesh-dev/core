@@ -47,7 +47,7 @@ function xsm_edit_person_school()
         <input type="hidden" name="person_school_id" value="<?php echo $person_school_id; ?>" />
         <table summary="Участие на школе" class="ankEdit">
             <tr>
-                <td class="ankListRowTitle">Курс</td>
+                <td class="ankListRowTitle">Участие на школе</td>
             </tr>
             <?php
             foreach ($person_school_fields as $key=>$field_title)
