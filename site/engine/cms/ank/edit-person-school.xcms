@@ -41,6 +41,12 @@ function xsm_edit_person_school()
     $member = xdb_get_entity_by_id('person', $member_person_id);
     $school = xdb_get_entity_by_id('school', $school_id);
 
+    $field_types = array(
+        "is_student"=>"checkbox",
+        "is_teacher"=>"checkbox",
+        "curatorship"=>"enum"
+    );
+
     ?>
     <form method="post" action="edit-person-school"><?php
         xsm_edit_operations('person_school', 'person_school', $person_school_id, 'Вернуться куда-то');?>
@@ -60,7 +66,17 @@ function xsm_edit_person_school()
                     $attr = 'readonly="readonly"'; ?>
                 <tr><td class="ankList"><span class="ankEditField"><?php echo $person_school_fields[$key]; ?></span>
                 <?php
-                if ($key == 'member_person_id')
+                $ft = xcms_get_key_or($field_types, $key);
+                if ($ft == "checkbox")
+                {
+                    echo xsm_make_checkbox($key, $value, substr($key, 3));
+                }
+                elseif ($ft == "enum")
+                {
+                    if ($key == "curatorship")
+                        echo xsm_make_enum_selector($key, $value, xsm_get_curatorship_items());
+                }
+                elseif ($key == 'member_person_id')
                 {?>
                     <input type="text" class="ankEdit" value="<?php echo htmlspecialchars($member['last_name']); ?>"
                         readonly="readonly" /><?php
