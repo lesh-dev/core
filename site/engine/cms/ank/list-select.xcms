@@ -8,6 +8,12 @@
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
 
+<p>В этом списке по умолчанию показываются люди, с которыми идёт (или недавно шло) взаимодействие.
+    Для школьников и преподов, которые стабильно <b>не ездят</b> на школы уже 2-3&nbsp;года, осмысленно выставлять статус
+    <span class="ankStatus old">Архивный</span>. В&nbsp;этот же статус
+    можно переводить через 1-2 года тех, кому по результатам собеседования был проставлен статус
+    <span class="ankStatus declined">Послан</span> (сразу этого делать не следует).
+</p>
 <form method="post" action="list-select" style="margin-bottom: 2px"><span>
     <span class="ankListField">Статус</span>: <?php
     echo xsm_make_enum_selector(
@@ -93,7 +99,7 @@ function xsm_show_all_person_list()
     $query .= " ORDER BY p.is_student, p.is_teacher, p.last_name, p.first_name";
 
     // debug area (TODO: remove)
-    ?><textarea rows="5" cols="120" style="display: ;" id="person-query-debug"><?php echo $query; ?></textarea><?php
+    ?><textarea rows="5" cols="120" style="display: none;" id="person-query-debug"><?php echo $query; ?></textarea><?php
     $person_sel = $db->query($query);
 
     xsm_view_operations('person', 'person', 'участника', '&amp;anketa_status=cont');
@@ -101,9 +107,9 @@ function xsm_show_all_person_list()
     <table summary="Участники" class="ankList">
         <colgroup>
             <col width="5%" />
-            <col width="25%" />
-            <col width="25%" />
             <col width="30%" />
+            <col width="35%" />
+            <col width="20%" />
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
