@@ -77,8 +77,9 @@ function xcms_ank_get_show_status_list()
 function xsm_get_person_show_statuses()
 {
     return array(
+        "active"=>"Актив",
         "not-old"=>"Все, кроме архивных",
-        "new"=>"Новые",
+        //"new"=>"Новые",
         "progress"=>"Приглашённые",
         "processed"=>"Принятые",
         "declined"=>"Посланные",

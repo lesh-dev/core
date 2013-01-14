@@ -1,7 +1,7 @@
 <?php
     xcms_log(0, $_COOKIE);
     // this should be done BEFORE any output started
-    $show_anketa_status = xcms_get_persistent_key("show_anketa_status", "not-old");
+    $show_anketa_status = xcms_get_persistent_key("show_anketa_status", "active");
     //$show_is_teacher = xcms_get_persistent_key("show_is_teacher");
     //$show_is_student = xcms_get_persistent_key("show_is_student");
 ?>
@@ -36,7 +36,7 @@
 // вывод активных участников
 function xsm_show_all_person_list()
 {
-    $show_status = xcms_get_key_or($_POST, "show_anketa_status", "not-spam");
+    $show_status = xcms_get_key_or($_POST, "show_anketa_status", "active");
 
     global $show_is_teacher;// = xcms_get_key_or($_POST, "show_is_teacher");
     global $show_is_student;// = xcms_get_key_or($_POST, "show_is_student");
@@ -45,7 +45,7 @@ function xsm_show_all_person_list()
 
     $show_statuses = xsm_get_person_show_statuses();
 
-    if (!array_key_exists($show_status, $show_statuses)) $show_status = "not-spam";
+    if (!array_key_exists($show_status, $show_statuses)) $show_status = "active";
 
     $db = xdb_get();
     $db->createFunction('LIKE', 'xdb_like', 2);
@@ -57,13 +57,20 @@ function xsm_show_all_person_list()
     if ($show_is_student == "student")
         $cond .= " AND ( is_student = 'student' )";
 */
-    if ($show_status == "not-decl")
+    if ($show_status == "active")
+        $cond .=
+            " AND ( (anketa_status = 'processed') ".
+            " OR (anketa_status = 'cont') )";
+    elseif ($show_status == "not-decl")
         $cond .=
             " AND ( (anketa_status <> 'duplicate')".
             " AND (anketa_status <> 'spam')".
             " AND (anketa_status <> 'declined') )";
     elseif ($show_status == "not-old")
-        $cond .= " AND ( (anketa_status <> 'duplicate') AND (anketa_status <> 'spam') AND (anketa_status <> 'old') )";
+        $cond .=
+            " AND ( (anketa_status <> 'duplicate') ".
+            " AND (anketa_status <> 'spam') ".
+            " AND (anketa_status <> 'old') )";
     elseif ($show_status == "not-spam")
         $cond .= " AND ( (anketa_status <> 'duplicate') AND (anketa_status <> 'spam') )";
     elseif ($show_status == "all")
@@ -86,7 +93,7 @@ function xsm_show_all_person_list()
     $query .= " ORDER BY p.is_student, p.is_teacher, p.last_name, p.first_name";
 
     // debug area (TODO: remove)
-    ?><textarea rows="5" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
+    ?><textarea rows="5" cols="120" style="display: ;" id="person-query-debug"><?php echo $query; ?></textarea><?php
     $person_sel = $db->query($query);
 
     xsm_view_operations('person', 'person', 'участника', '&amp;anketa_status=cont');

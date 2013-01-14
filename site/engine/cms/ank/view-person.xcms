@@ -17,8 +17,7 @@ function xsm_draw_person_longtextval($text, $value)
         <?php echo $value; ?></div><?php
 }
 
-
-function xsm_print_person_header($person)
+function xsm_print_person_header($db, $person, $school_id)
 {
     global $full_engine_pub;
 
@@ -57,9 +56,11 @@ function xsm_print_person_header($person)
         ?>
     </div>
     <div class="person-topright"><?php
-        xsm_edit_link('person', $person_id);
+        xsm_edit_link('person', $person_id, '', 'Редактировать анкетные данные');
         xsm_draw_person_textval('Создана', $person_created);
         xsm_draw_person_textval('Отредактирована', $person_modified);
+        if ($school_id != SCHOOL_ANK_ID)
+            xsm_print_person_school_edit($db, $school_id, $person_id);
         ?>
     </div>
     </div><!-- container -->
@@ -153,7 +154,7 @@ function xsm_print_person_ank_data($person)
 
 }
 
-function xsm_print_person_selected_school($db, $school_id, $person_id)
+function xsm_print_person_school_edit($db, $school_id, $person_id)
 {
     $ps_sel = $db->query(
         "SELECT
@@ -163,15 +164,23 @@ function xsm_print_person_selected_school($db, $school_id, $person_id)
         (ps.school_id = $school_id)"
     );
 
-    // TODO: fix this
+    // TODO: fix this, insert count check
     if (!($ps_data = $ps_sel->fetchArray(SQLITE3_ASSOC)))
+    {
+        echo "На данной школе не присутствовал";
         return;
+    }
 
     $person_school_id = $ps_data['person_school_id'];
     $href_ps = "edit-person-school&amp;person_school_id=$person_school_id";
 
     ?>
-    <a href="<?php echo $href_ps; ?>">person school id</a><?php
+    <a href="<?php echo $href_ps; ?>">Редактировать статусы на этой школе</a><?php
+}
+
+function xsm_print_person_selected_school($db, $school_id, $person_id)
+{
+
 
     $exam_sel = $db->query(
         "SELECT
@@ -184,10 +193,6 @@ function xsm_print_person_selected_school($db, $school_id, $person_id)
         (e.course_id = c.course_id) AND
         (e.student_person_id = $person_id)"
     );
-
-    $href_ank = "view-person-school&amp;person_school_id=$person_id&amp;school_id=".SCHOOL_ANK_ID;
-
-
 
     $exam_aux_param = "&amp;student_person_id=$person_id&amp;school_id=$school_id";
 
@@ -313,7 +318,7 @@ function xsm_print_person()
 
     $school_id = xcms_get_key_or($_GET, 'school_id', SCHOOL_ANK_ID);
 
-    xsm_print_person_header($person);
+    xsm_print_person_header($db, $person, $school_id);
     xsm_print_person_schools($db, $person_id, $school_id);
 
     if ($school_id == SCHOOL_ANK_ID)
