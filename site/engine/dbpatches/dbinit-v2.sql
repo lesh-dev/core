@@ -64,7 +64,7 @@ create table exam (
     course_id integer not null, -- fk
     exam_status text,
     deadline_date text,
-    is_prac text, -- enum
+    is_prac text, -- enum -- ой, зачем же это в свойствах зачёта? это же свойство курса!
     exam_comment text,
     exam_created text,
     exam_modified text,
