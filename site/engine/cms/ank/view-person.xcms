@@ -172,7 +172,7 @@ function xsm_print_person_school_edit($db, $school_id, $person_id)
     }
 
     $person_school_id = $ps_data['person_school_id'];
-    $href_ps = "edit-person-school&amp;person_school_id=$person_school_id";
+    $href_ps = "edit-person_school&amp;person_school_id=$person_school_id";
 
     ?>
     <a href="<?php echo $href_ps; ?>">Редактировать статусы на этой школе</a><?php

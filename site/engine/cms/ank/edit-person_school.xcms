@@ -48,7 +48,7 @@ function xsm_edit_person_school()
     );
 
     ?>
-    <form method="post" action="edit-person-school"><?php
+    <form method="post" action="edit-person_school"><?php
         xsm_edit_operations('person_school', 'person_school', $person_school_id, 'Вернуться куда-то');?>
         <input type="hidden" name="person_school_id" value="<?php echo $person_school_id; ?>" />
         <table summary="Участие на школе" class="ankEdit">

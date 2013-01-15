@@ -163,10 +163,22 @@ insert into person (last_name, first_name, patronymic, anketa_status, is_student
     values ('Школьница7', 'Настоящая', 'Ивановна', 'cont', 'student', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
 -- 8
 insert into person (last_name, first_name, patronymic, anketa_status, is_student, person_created, person_modified)
-    values ('Новобранец8', 'ТолькоЧто', 'Хреновый', 'new', 'student', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
+    values ('Новобранец8', 'ТолькоЧто', 'Хреновый', 'new', '', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
 -- 9
 insert into person (last_name, first_name, patronymic, anketa_status, is_student, person_created, person_modified)
     values ('Ветеран9', 'ДавноУже', 'НеШкольник', 'cont', 'student', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
+-- 10
+insert into person (last_name, first_name, patronymic, anketa_status, is_student, person_created, person_modified)
+    values ('Новобранец10', 'ТолькоЧто2', 'Школьник2', 'processed', '', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
+-- 11
+insert into person (last_name, first_name, patronymic, anketa_status, is_student, person_created, person_modified)
+    values ('Приглашённый2', 'ТолькоЧто3', 'Школьник3', 'progress', '', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
+-- 12
+insert into person (last_name, first_name, patronymic, anketa_status, is_student, person_created, person_modified)
+    values ('Приглашённый2', 'ТолькоЧто3', 'Школьник3', 'progress', '', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
+-- 13
+insert into person (last_name, first_name, patronymic, anketa_status, is_student, person_created, person_modified)
+    values ('Посланный1', 'Намедни', 'Школьник4', 'declined', '', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
 
 insert into school values(1, 'ЛЭШ-2011', 'summmer', '2011.07.23', '2011.08.22', null, null);
 insert into school values(2, 'ЗЭШ-2012', 'winter', '2012.01.02', '2012.01.09', null, null);

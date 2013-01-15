@@ -168,8 +168,8 @@
         include(translate('<! cms/ank/list-person !>'));
     else if(@$_GET["aparam"] == "view-person")
         include(translate('<! cms/ank/view-person !>'));
-    else if(@$_GET["aparam"] == "edit-person-school")
-        include(translate('<! cms/ank/edit-person-school !>'));
+    else if(@$_GET["aparam"] == "edit-person_school")
+        include(translate('<! cms/ank/edit-person_school !>'));
     else if(@$_GET["aparam"] == "edit-person")
         include(translate('<! cms/ank/edit-person !>'));
 

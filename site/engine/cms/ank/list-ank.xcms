@@ -100,7 +100,7 @@ function xsm_show_ank_list()
     <table summary="Участники" class="ankList">
         <colgroup>
             <col width="20px" />
-            <col width="20%" />
+            <col width="25%" />
             <col width="70px" />
             <col width="30px" />
             <col width="15%" />
