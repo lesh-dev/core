@@ -183,7 +183,7 @@ function xsm_show_person_list()
         ?>
         <tr>
             <td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
-            <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"><?php
+            <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id&amp;school_id=$school_id"; ?>"><?php
                 echo "$last_name $first_name"; ?></a></td>
             <td class="ankList"><?php echo $current_class; ?></a></td>
             <td class="ankList"><?php
