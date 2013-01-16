@@ -13,6 +13,30 @@ $person_school_fields = array(
     "person_school_modified"=>"Последняя модификация"
 );
 
+
+function xsm_update_person_school($title, $fields)
+{
+    $table_name = "person_school";
+    $key_name = "${table_name}_id";
+    $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+    $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
+    if ($res)
+    {
+        $id = $res;
+        ?>
+        <p><?php echo $title; ?> успешно сохранён.<?php
+    }
+    else
+    {?>
+        <p>Не удалось добавить <?php echo $title; ?>.<?php
+    }
+    $person_id = $_POST['member_person_id'];
+    $redir = "view-person&amp;$key_name=$member_person_id";
+    ?>
+    <a href="view-<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
+}
+
+
 function xsm_edit_person_school()
 {
     global $person_school_fields;
@@ -101,7 +125,7 @@ function xsm_edit_person_school()
 }
 
 if (@$_POST["update-person_school"])
-    xsm_update_entity('person_school', 'person_school', 'Участник-на-Школе', $person_school_fields);
+    xsm_update_person_school('Участник-на-Школе', $person_school_fields);
 elseif (@$_POST["delete-person_school"])
     xsm_warn_delete_entity('person_school', 'person_school', 'Участник-на-Школе');
 elseif (@$_POST["confirm-delete-person_school"])
