@@ -77,7 +77,6 @@
         <a href="view-<?php echo $redir; ?>">Вернуться к просмотру</a></p><?php
     }
 
-
     function xsm_warn_delete_entity($entity, $table_name, $title, $aux_param = '')
     {
         $key_name = "${table_name}_id";
@@ -305,6 +304,23 @@
         }
         $html .= "</select>";
         return $html;
+    }
+
+    function xsm_get_person_school_id($db, $school_id, $person_id)
+    {
+        $ps_sel = $db->query(
+            "SELECT
+            ps.person_school_id
+            FROM person_school ps WHERE
+            (ps.member_person_id = $person_id) AND
+            (ps.school_id = $school_id)"
+        );
+
+        // TODO: fix this, insert count check
+        if (!($ps_data = $ps_sel->fetchArray(SQLITE3_ASSOC)))
+            return NULL;
+
+        return $ps_data['person_school_id'];
     }
 
     function xsm_make_checkbox($name, $value, $checked_value)

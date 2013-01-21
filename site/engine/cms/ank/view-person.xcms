@@ -156,32 +156,18 @@ function xsm_print_person_ank_data($person)
 
 function xsm_print_person_school_edit($db, $school_id, $person_id)
 {
-    $ps_sel = $db->query(
-        "SELECT
-        ps.person_school_id
-        FROM person_school ps WHERE
-        (ps.member_person_id = $person_id) AND
-        (ps.school_id = $school_id)"
-    );
-
-    // TODO: fix this, insert count check
-    if (!($ps_data = $ps_sel->fetchArray(SQLITE3_ASSOC)))
-    {
+    $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
+    if ($person_school_id === NULL) {
         echo "На данной школе не присутствовал";
         return;
     }
-
-    $person_school_id = $ps_data['person_school_id'];
     $href_ps = "edit-person_school&amp;person_school_id=$person_school_id";
-
     ?>
     <a href="<?php echo $href_ps; ?>">Редактировать статусы на этой школе</a><?php
 }
 
-function xsm_print_person_selected_school($db, $school_id, $person_id)
+function xsm_print_student_exams($db, $school_id, $person_id)
 {
-
-
     $exam_sel = $db->query(
         "SELECT
         tp.last_name as teacher_last_name, tp.first_name as teacher_first_name,
@@ -263,6 +249,10 @@ function xsm_print_person_selected_school($db, $school_id, $person_id)
     ?>
     </table>
     <?php
+}
+
+function xsm_print_teacher_courses($db, $school_id, $person_id)
+{
     $course_sel = $db->query(
         "SELECT
         c.course_id, c.course_title, c.target_class
@@ -303,8 +293,20 @@ function xsm_print_person_selected_school($db, $school_id, $person_id)
         }
     ?>
     </table>
-
     <?php
+}
+
+function xsm_print_person_selected_school($db, $school_id, $person_id)
+{
+    $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
+    if ($person_school_id === NULL)
+        return;
+    $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
+    if ($person_school['is_student'] == 'student')
+        xsm_print_student_exams($db, $school_id, $person_id);
+
+    if ($person_school['is_teacher'] == 'teacher')
+        xsm_print_teacher_courses($db, $school_id, $person_id);
 }
 
 // shows person information sliced by school
