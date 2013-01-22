@@ -161,9 +161,7 @@ function xsm_print_person_school_edit($db, $school_id, $person_id)
         echo "На данной школе не присутствовал";
         return;
     }
-    $href_ps = "edit-person_school&amp;person_school_id=$person_school_id";
-    ?>
-    <a href="<?php echo $href_ps; ?>">Редактировать статусы на этой школе</a><?php
+    xsm_edit_link('person_school', $person_school_id, '', 'Редактировать участника на этой школе');
 }
 
 function xsm_print_student_exams($db, $school_id, $person_id)
