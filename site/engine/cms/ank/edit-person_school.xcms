@@ -41,6 +41,31 @@ function xsm_update_person_school($title, $fields)
     <a href="<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
 }
 
+// Специфическая функция для данной таблицы
+// Нельзя удалять такие сущности просто так (это спец-операция)
+// TODO: обобщить, кажется можно ввести понятие места, куда возвращаться
+// но в данном конкретном случае есть проблема с getbyid-спецификой
+function xsm_person_school_edit_operations($entity, $table_name, $id, $title, $aux_param = '')
+{
+    $person_school = xdb_get_entity_by_id('person_school', $id);
+    $member_person_id = $person_school['member_person_id'];
+    $school_id = $person_school['school_id'];
+
+    $is_new = ($id == 'new');
+    $redir = $is_new ? "$entity$aux_param" : "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$member_person_id));
+    ?>
+    <div style="white-space: nowrap">
+        <input type="submit" name="update-<?php echo $entity; ?>"
+            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
+        if (!$is_new) {?>
+            <input type="submit" name="delete-<?php echo $entity; ?>"
+                value="Отчислить со школы" class="delete-button"/><?php
+        }?>
+        <a class="linkButton xsm" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
+    </div><?php
+}
+
+
 
 function xsm_edit_person_school()
 {
@@ -78,7 +103,7 @@ function xsm_edit_person_school()
 
     ?>
     <form method="post" action="edit-person_school"><?php
-        xsm_edit_operations('person_school', 'person_school', $person_school_id, 'Вернуться куда-то');?>
+        xsm_person_school_edit_operations('person_school', 'person_school', $person_school_id, 'Вернуться к просмотру');?>
         <input type="hidden" name="person_school_id" value="<?php echo $person_school_id; ?>" />
         <input type="hidden" name="member_person_id" value="<?php echo $member_person_id; ?>" />
         <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
@@ -126,7 +151,7 @@ function xsm_edit_person_school()
                 <?php
             }?>
         </table><?php
-        xsm_edit_operations('person_school', 'person_school', $person_school_id, 'Вернуться к списку курсов');?>
+        xsm_person_school_edit_operations('person_school', 'person_school', $person_school_id, 'Вернуться к списку курсов');?>
     </form>
     <?php
 }
