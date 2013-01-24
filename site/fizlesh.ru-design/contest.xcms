@@ -294,6 +294,16 @@
     {
         ctx_add_or_edit_form(@$_GET["table"],@$_GET["id"], "edit", @$_SERVER["HTTP_REFERER"]);
     }
+    if($mode == "structure")
+    {
+        if(@$_POST)
+        {
+            ctx_create_structure();
+        }  
+        echo "<h3>Запрос на удаление</h3>";
+        echo "<h1>СТОЙ!!! ПОДУМАЙ, ЧТО ТЫ ДЕЛАЕШЬ!!!!</h1>";
+        echo "<form method='post'><input name='delete' value='ОЧИСТИТЬ ВООБЩЕ ВСЮ БАЗУ' class='btn btn-danger' type=\"submit\"></form>";
+    }
     if($mode == "delete")
     {
         if(@$_POST)
