@@ -82,7 +82,8 @@ if (@$_POST["update-person"])
     if (!strlen(@$_POST["last_name"]) || !strlen(@$_POST["first_name"]))
     {?>
         <p>Пожалуйста, укажите хотя бы <b>имя и фамилию</b>!
-            Нажмите Back в браузере, чтобы вернуться к заполнению!</p><?php
+            Нажмите &laquo;Назад&laquo; (&laquo;Back&raquo;) в браузере,
+            чтобы вернуться к заполнению!</p><?php
     }
     else
         xsm_update_entity_listmode('person', 'person', 'Участник', xsm_get_person_fields());

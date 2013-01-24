@@ -16,7 +16,7 @@ function xsm_get_person_fields()
 
         "school"=>"Школа",
         "school_city"=>"Адрес школы",
-        "current_class"=>"Класс",
+        "ank_class"=>"Класс", // former current_class
 
         "phone"=>"Телефон",
         "cellular"=>"Мобильный телефон",
@@ -24,8 +24,8 @@ function xsm_get_person_fields()
         "skype"=>"Skype",
         "social_profile"=>"Профиль в соц. сети",
 
-        //"is_teacher"=>"Препод?",
-        //"is_student"=>"Школьник?",
+        "is_teacher"=>"Типично препод",
+        "is_student"=>"Типично школьник",
         //"curatorship"=>"Кураторство",
 
         "favourites"=>"Любимые предметы",
