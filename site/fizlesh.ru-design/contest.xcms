@@ -1,0 +1,372 @@
+<# auth/ root administrator ank admin editor #ank #admin #editor #>
+  <head>
+    <title>Contest</title>
+    <!-- Bootstrap -->
+    <link href="<?php echo $design_dir; ?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="<?php echo $design_dir; ?>/bootstrap/js/bootstrap.min.js"></script>
+
+<?php
+    include("engine/sys/db.php");
+    function ctx_create_structure()
+    {
+        $db = xdb_get_write();
+        $db->exec("DROP TABLE contestants;");
+        $db->exec("CREATE TABLE contestants(contestants_id integer  PRIMARY KEY AUTOINCREMENT, name TEXT, mail TEXT, address TEXT, school TEXT, level TEXT, teacher_name TEXT, work TEXT, status TEXT);");
+        $db->exec("DROP TABLE problems;");
+        $db->exec("CREATE TABLE problems(problems_id integer PRIMARY KEY AUTOINCREMENT , problem_name, problem_html, people text,criteria text);");
+        $db->exec("DROP TABLE solutions;");
+        $db->exec("CREATE TABLE solutions(solutions_id integer PRIMARY KEY AUTOINCREMENT , problem_id, contestant_id integer, resolution_text, resolution_author, resolution_mark);");
+        $db->exec("DROP TABLE sol_discussion;");
+        $db->exec("CREATE TABLE sol_discussion(sol_discussion_id integer PRIMARY KEY AUTOINCREMENT , problem_id,  contestant_id, author, comment);");
+    }
+    $CTX_META["problems"] = array(
+        "problems_id" => array("name"=>"ID", "type"=>"pk")
+        ,"problem_name" => array("name"=>"Название задачи", "type"=>"text")
+        ,"people" => array("name"=>"Проверяющие", "type"=>"text")
+        ,"problem_html" => array("name"=>"Текст задачи", "type"=>"large")
+        ,"criteria" => array("name"=>"Критетий", "type"=>"large")
+    );
+    // TEXT,  TEXT,  TEXT, school TEXT, level TEXT, teacher_name TEXT, work TEXT, status=TEXT);");
+    $CTX_META["contestants"] = array(
+        "contestants_id" => array("name"=>"", "type"=>"pk")
+        ,"name" => array("name"=>"Ф.И.О. ученика", "type"=>"text")
+        ,"mail" => array("name"=>"Электропочта", "type"=>"text")
+        ,"address" => array("name"=>"Адрес проживания", "type"=>"text")
+        ,"school" => array("name"=>"Школа", "type"=>"text")
+        ,"level" => array("name"=>"Класс", "type"=>"text")
+        ,"teacher_name" => array("name"=>"Преподаватель", "type"=>"text")
+        ,"work" => array("name"=>"Работа", "type"=>"file")
+        ,"status" => array("name"=>"Комментарии", "type"=>"text")
+    );   
+    //solutions_id integer PRIMARY KEY AUTOINCREMENT , problem_id, contestant_id integer, resolution_text, resolution_author, resolution_mark
+    $CTX_META["solutions"] = array(
+        "solutions_id" => array("name"=>"pk", "type"=>"pk")
+        ,"problem_id" => array("name"=>"Идентификатор проблемы", "type"=>"pk")
+        ,"contestant_id" => array("name"=>"Идентификатор работы", "type"=>"pk")
+        ,"resolution_text" => array("name"=>"Текст резолюции", "type"=>"large")
+        ,"resolution_author" => array("name"=>"Проверяющий", "type"=>"text")
+        ,"resolution_mark" => array("name"=>"Итоговая оценка", "type"=>"text")
+    );
+    
+    function ctx_widget()
+    {
+        
+    }
+    
+    function ctx_custom_form($table_name, $pk, $item_template)
+    {
+        global $CTX_META, $_GET, $_POST, $content_dir;
+        $ans = "";
+        if(@$_POST["ctx_custom_$table_name"])
+        {            
+            $values = array();
+            foreach($CTX_META[$table_name] as $id=>$arr)
+            {
+              $values[$id] = @$_POST[$id];
+              if(@$_FILES["$id"])
+              {
+                $home = "$content_dir/contest/attach/$table_name/".mktime();
+                $new_name = "$home/".$_FILES["$id"]["name"];
+                @mkdir("$home", 0777, true);
+                if(!copy($_FILES["$id"]["tmp_name"], $new_name))
+                  die("Can't upload file");
+                $values[$id] = $new_name;
+              }
+            }
+            $pkv = $values["$table_name"."_id"];
+            unset($values["$table_name"."_id"]);
+            xdb_insert_or_update($table_name, array("$table_name"."_id" => $pkv), $values, $values);
+            $ans .= "Запись добавлена. ";
+            if($return)
+              $ans .= "<a href='$return'>Вернуться.</a>";
+        }
+        else 
+        {
+            
+            $ans .= "<form enctype='multipart/form-data'  method=\"POST\"><input type='hidden' name='MAX_FILE_SIZE' value='15000000' />";
+            
+            $values = xdb_get_entity_by_id($table_name, $pk);
+            foreach($values as $k=>$v)
+                $item_template = str_replace("{".$k."}", $v, $item_template);
+            $item_template = str_replace("{#submit}","<input class='btn btn-primary' type='submit' name='ctx_add_or_edit_form_$table_name' value='Добавить / изменить' />", $item_template);
+            $ans .= "</form>";
+        }
+     }
+    function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid="x", $defvalues=array())
+    {
+        global $CTX_META, $_GET, $_POST, $content_dir;
+        $show_form = true;
+        if(@$_POST["ctx_add_or_edit_form_$table_name"."_$fid"])
+        {            
+            $show_form = false;
+            $values = array();
+            foreach($CTX_META[$table_name] as $id=>$arr)
+            {
+              $values[$id] = @$_POST[$id];
+              if(@$_FILES["$id"])
+              {
+                $home = "$content_dir/contest/attach/$table_name/".mktime();
+                $new_name = "$home/".$_FILES["$id"]["name"];
+                @mkdir("$home", 0777, true);
+                if(!copy($_FILES["$id"]["tmp_name"], $new_name))
+                  die("Can't upload file");
+                $values[$id] = $new_name;
+              }
+            }
+            $pkv = $values["$table_name"."_id"];
+            unset($values["$table_name"."_id"]);
+            xdb_insert_or_update($table_name, array("$table_name"."_id" => $pkv), $values, $values);
+            if($return == "stay")
+              $show_form = true;
+            else
+            {
+                echo "Запись добавлена. ";
+                if($return)
+                    echo "<a href='$return'>Вернуться.</a>";
+                else "<meta http-equiv=\"refresh\" content=\"0\"></meta>";
+            }
+        }
+        if($show_form)
+        {
+            echo "<form enctype='multipart/form-data'  method=\"POST\"><input type='hidden' name='MAX_FILE_SIZE' value='15000000' />";
+            echo "<table>\n";
+            $values = array();
+            if($pk !== NULL)
+            $values = xdb_get_entity_by_id($table_name, $pk);
+            foreach($CTX_META[$table_name] as $id=>$arr)
+            {
+                $name = $arr["name"];
+                $type = $arr["type"];
+                $value = @$values[$id];
+                if(!$value) $value = @$defvalues[$id];
+                if($operation == "edit")
+                {
+                    if($type == "pk")
+                    {
+                        if(!$value) $value = "new";
+                        echo "<input type='hidden' name='$id' value='$value' />";
+                    }
+                    if($type == "text")
+                    {
+                        echo "<tr><td>$name</td><td><input name='$id' value='{$value}'/></td>\n";
+                    }
+                    if($type == "file")
+                    {
+                        echo "<tr><td>$name</td><td><input name='$id' type=\"file\" value=\"$value\"/></td>\n";
+                    }
+                    if($type == "large")
+                    {
+                        echo "<tr><td colspan=2>$name:</td>";
+                        echo "<tr><td colspan=2><textarea class='field span12' rows=10 name='$id'>$value</textarea></td>\n";
+                    }
+                }
+                if($operation == "view")
+                {
+                    if($type == "pk")
+                    {
+                        
+                    }
+                    if($type == "file")
+                    {
+                        echo "<tr><td>$name</td><td><a href='$value'>Скачать</a></td>\n";
+                    }
+                    if($type == "text")
+                    {
+                        echo "<tr><td>$name</td><td>$value</td>\n";
+                    }
+                    if($type == "large")
+                    {
+                        echo "<tr><td colspan=2>$name:</td>";
+                        echo "<tr><td colspan=2>$value</td>\n";
+                    }
+                }
+            }
+            echo "</table>\n";
+            if($operation == "edit") 
+                echo "<input type='submit' class='btn btn-primary' name='ctx_add_or_edit_form_$table_name"."_$fid' value='Добавить / изменить' />";
+            echo "</form>";
+        }
+    }
+    function ctx_show_tasty_list($table_name, $order, $filter, $row_template)
+    {
+        global $CTX_META, $ref;
+        $ans = "";
+        foreach(xdb_get_table($table_name, $order, $filter) as $line)
+        {
+            $template = $row_template;
+            foreach($line as $field=>$value)
+            {
+                $template = str_replace("{".$field."}","$value",$template);
+            }
+            $pk = $line["$table_name"."_id"];
+            $template = str_replace("{#edit}","href='?ref=$ref&mode=edit&table=$table_name&id=$pk'",$template);
+            $template = str_replace("{#view}","?ref=$ref&mode=view&table=$table_name&id=$pk",$template);
+            $ans .= $template;
+        }
+        return $ans;
+    }      
+?> 
+
+<div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#">Проверка олимпиады</a>
+    <ul class="nav">
+        <li><a href="?ref=contest&mode=problems" >Список задач</a></li>
+        <li><a href="?ref=contest&mode=works" >Список работ</a></li>
+        <li><a href="?ref=contest&mode=edit&table=contestants" >Добавить работу</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="well">
+<?php
+    $mode = @$_GET["mode"];
+    if($mode == "problems")
+    {
+        echo ctx_show_tasty_list("problems",NULL,NULL, "<b>Задача <a href='{#view}'>{problem_name}</a></b>, проверяют: {people}<br />");
+        echo "<a href='?ref=$ref&mode=edit&table=problems'>Добавить еще одну задачу</a><br/>";
+    }
+    if($mode == "works")
+    {
+        /*echo "<table><tr><td>Ученик<td>Класс<td>Школа<td>Статус проверки<td>Работа";
+        echo ctx_show_tasty_list("contestants",NULL,NULL, "<tr><td><a href='{#view}'>{name}</a></b><td>{level}<td>{school}<td>{status}<td><a href='{work}'>Работа</a>");
+        echo "</table>";*/
+        $works = xdb_get_table("contestants",NULL,NULL);
+        $sols = xdb_get_table("solutions",NULL,NULL);
+        $probs = xdb_get_table("problems",NULL,NULL);
+        $works2 = array();
+        foreach($works as $work)
+        {
+            $id = $work["contestants_id"];
+            $works2[$id] = $work;
+        }
+        foreach($sols as $line) 
+        {
+            $pid = $line["problem_id"];
+            $wid = $line["contestant_id"];
+            $works2[$wid]["p$pid"] = $line["resolution_mark"];
+        }
+        echo "<h3>Непроверенные</h3><table border='1'><tr><td>Ученик<td>Класс<td>Школа<td>Работа";
+        $done = array();
+        $undone = array();
+        $done_balls = array();
+        foreach($probs as $value) echo "<td>".$value["problem_name"];
+        foreach($works2 as $line)
+        {
+            $id = $line["contestants_id"];
+            $ans = "";
+            $ans .= "<td><a href='?ref=$ref&mode=view&table=contestants&id=$id'>{$line['name']}</a><td>{$line['level']}<td>{$line['school']}<td><a href='{$line['work']}'>Скачать</a>";
+            $isDone = true;
+            $sum = 0;
+            foreach($probs as $value) 
+            {
+                $ans .= "<td>";
+                $val = @$line["p".$value["problems_id"]];
+                if(!$val) { $val = "???"; $isDone = false;}
+                $ans .= $val;
+                $sum += (int)$val;
+            }
+            if($isDone)$ans .= "<td>$sum";
+            $ans .= "<td><a href='?ref=$ref&mode=delete&table=contestants&id=$id'>Удалить</a>";
+            if($isDone) 
+            {
+             @$done[$sum][]= $ans;
+             $done_balls[$sum] = $sum;
+            }
+            else $undone[] = $ans;
+        }
+        foreach($undone as $l) echo "<tr>$l";
+        echo "</table>";
+        echo "<h3>Проверенные</h3><table border='1'><tr><td>№<td>Ученик<td>Класс<td>Школа<td>Работа";
+        foreach($probs as $value) echo "<td>".$value["problem_name"];
+        echo "<td>Итоговый балл";
+        rsort($done_balls);
+        $i=1;
+        foreach($done_balls as $id)
+            foreach($done[$id] as $l) { echo "<tr><td>$i$l"; $i++;}
+        echo "</table>";
+        
+    }
+    if($mode == "edit")
+    {
+        ctx_add_or_edit_form(@$_GET["table"],@$_GET["id"], "edit", @$_SERVER["HTTP_REFERER"]);
+    }
+    if($mode == "delete")
+    {
+        if(@$_POST)
+        {
+            $table = @$_GET["table"];
+            $id = @$_GET["id"];
+            xdb_get_write()->exec("DELETE FROM $table WHERE ".$table."_id = '$id';");
+        }  
+        echo "<h3>Запрос на удаление</h3>";
+        echo "<h1>СТОЙ!!! ПОДУМАЙ, ЧТО ТЫ ДЕЛАЕШЬ!!!!</h1>";
+        $table = @$_GET["table"];
+        $id = @$_GET["id"];
+        echo "<p>Таблица: $table";
+        echo "<p>Идентификатор: $id";
+        echo "<table>";
+        foreach(xdb_get_entity_by_id($table,$id) as $k=>$v)
+        {
+            echo "<tr><td>$k<td>$v";
+        }
+        echo "</table><form method='post'><input name='delete' value='УДАЛИТЬ ЗАПИСЬ ОКОНЧАТЕЛЬНО' class='btn btn-danger' type=\"submit\"></form>";
+    }
+    if($mode == "view")
+    {
+        
+        $table = $_GET["table"];
+        if($table == "contestants")
+        {
+            echo '<div class="tabbable tabs-top">';
+            echo '<ul class="nav nav-tabs">';
+            $problems_table = xdb_get_table("problems",NULL,NULL);
+            $solutions_table = xdb_get_table("solutions",NULL,NULL);
+            echo '<li class="active"><a href="#def" data-toggle="tab">Информация</a></li>';
+            foreach($problems_table as $problem)
+            {
+                echo '<li><a href="#pr_'.$problem["problems_id"].'" data-toggle="tab">'.$problem["problem_name"].'</a></li>';
+            }
+            echo "</ul>";
+            echo '<div class="tab-content">';
+            echo '<div class="tab-pane active" id="def">';
+            ctx_add_or_edit_form(@$_GET["table"],@$_GET["id"], "view", @$_SERVER["HTTP_REFERER"]);
+            echo "<a href='?ref=$ref&mode=edit&id={$_GET['id']}&table=$table'>Правка</a>";
+            echo '</div>';
+            foreach($problems_table as $problem)
+            {
+                $c_id = $_GET["id"];
+                $p_id = $problem["problems_id"];
+                $sid = "new";
+                echo '<div class="tab-pane" id="pr_'.$problem["problems_id"].'">';
+                foreach($solutions_table as $line)
+                {
+                    if($line["problem_id"] != $p_id) continue;
+                    if($line["contestant_id"] != $c_id) continue;
+                    $sid = $line["solutions_id"];
+                    
+                }
+                echo "<h3>".$problem["problem_name"]."</h3>";
+                if($sid == 'new') $retur = FALSE;
+                else $retur = 'stay';
+                ctx_add_or_edit_form("solutions", $sid, "edit", $retur, $c_id.$p_id, array("problem_id"=>$p_id, "contestant_id"=>$c_id));
+                //ctx_add_or_edit_form("problems", $_GET["id"]);
+                echo "</div>";
+            }
+            echo "</div>";
+            echo "</div>";
+        }
+        else 
+        {
+            ctx_add_or_edit_form(@$_GET["table"],@$_GET["id"], "view", @$_SERVER["HTTP_REFERER"]);
+            echo "<a href='?ref=$ref&mode=edit&id={$_GET['id']}&table=$table'>Правка</a>";
+        }
+        
+    }
+    
+?>
+</div>
+
