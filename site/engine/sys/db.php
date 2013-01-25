@@ -237,4 +237,25 @@
         $mask = "/^$mask$/ui";
         return preg_match($mask, $value);
     }
+    /**
+      *  This function returns whole content of $table_name, using (if provided) $order and $filter properly.
+    **/
+    function xdb_get_table($table_name, $order, $filter)
+    {
+            $db = xdb_get();
+            $query = "SELECT * FROM $table_name";
+            if($filter)
+              $query += " WHERE $filter ";
+            if($order)
+              $query += " ORDER BY $order ";
+            //echo $query;
+            //$query += ";";
+            $sel = $db->query($query);
+            $ans = array();
+            while($ev = $sel->fetchArray(SQLITE3_ASSOC))
+            {
+                $ans[] = $ev;
+            }
+            return $ans;
+    }
 ?>

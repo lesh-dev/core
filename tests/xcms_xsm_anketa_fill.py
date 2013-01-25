@@ -115,7 +115,4 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		self.assertBodyTextPresent(inpFav)
 		self.assertBodyTextPresent(inpAch)
 		self.assertBodyTextPresent(inpHob)	
-
-#main 
-selenium_test.RunTest(XcmsXsmAnketaFill())
 	

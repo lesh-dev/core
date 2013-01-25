@@ -24,6 +24,15 @@ import time
 
 def isList(x):
 	return type(x) == type(list())
+
+def isString(x):
+	return type(x) == type("string")
+
+def isEqual(x, y):
+	if isString(x) and isString(y):
+		return (x.strip() == y.strip())
+	else:
+		raise RuntimeError("Cannot compare anything except strings, sorry. ")
 	
 class TestError(RuntimeError):
 	pass
@@ -58,9 +67,10 @@ def RunTest(test):
 	
 #main API wrapper for Webdriver.
 class SeleniumTest:
-	def __init__(self):
+	def __init__(self, baseUrl = ""):
 #		print "Init SeleniumTest"
 		self.m_testName = self.__class__.__name__
+		self.m_baseUrl = baseUrl
 
 		self.initDefaults()
 		
@@ -88,8 +98,10 @@ class SeleniumTest:
 	def init(self):
 		self.m_baseUrl = self.fixBaseUrl(self.getBaseUrl())
 		self.m_driver = webdriver.Firefox()
+	
+	def getName(self):
+		return self.m_testName
 		
-		#
 	def getDoc(self):
 		return self.__doc__
 			
@@ -101,9 +113,9 @@ class SeleniumTest:
 				self.m_driver.close()
 
 	def getBaseUrl(self):
-		if len(sys.argv) < 2:
-			self.failTest("Base URL for test is not set. ")
-		return sys.argv[1]
+		if self.isVoid(self.m_baseUrl):
+			self.failTest("Base URL for test '" + self.getName() + "' is not set. ")
+		return self.m_baseUrl
 	
 	def needHelp(self):
 		"""
@@ -225,6 +237,23 @@ class SeleniumTest:
 		self.addAction("fill", "element id: '" + eleId + "', text: '" + text + "'")
 		self.getElementById(eleId).send_keys(text)
 		return self.getElementById(eleId).get_attribute('value')
+
+	def getElementValueById(self, eleId):
+		self.checkEmptyParam(eleId, "getElementValueById")
+		self.addAction("get-value", "element id: '" + eleId + "'")
+		return self.getElementById(eleId).get_attribute('value')
+
+	def checkElementValueById(self, eleId, text):
+		self.checkEmptyParam(eleId, "checkElementValueById")
+		self.addAction("check-value", "element id: '" + eleId + "'")
+		eleValue = self.getElementById(eleId).get_attribute('value')
+		if isEqual(eleValue, text):
+			return True
+		return False
+
+	def assertElementValueById(self, eleId, text):
+		if not self.checkElementValueById(eleId, text):
+			raise TestError("Element '" + eleId + "' value does not match expected: '" + text + "'")
 
 	def addAction(self, name, details):
 		self.m_actionLog.append(TestAction(name, details))		
