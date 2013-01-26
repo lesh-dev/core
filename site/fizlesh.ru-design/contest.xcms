@@ -104,18 +104,22 @@
         if(@$_POST["ctx_add_or_edit_form_$table_name"."_$fid"])
         {            
             $show_form = false;
-            $values = array();
+            if($pk!= "" && $pk != 'new')
+              $values = xdb_get_entity_by_id($table_name, $pk);
             foreach($CTX_META[$table_name] as $id=>$arr)
             {
               $values[$id] = @$_POST[$id];
               if(@$_FILES["$id"])
               {
-                $home = "$content_dir/contest/attach/$table_name/".mktime();
-                $new_name = "$home/".$_FILES["$id"]["name"];
-                @mkdir("$home", 0777, true);
-                if(!copy($_FILES["$id"]["tmp_name"], $new_name))
-                  die("Can't upload file");
-                $values[$id] = $new_name;
+                if($_FILES["$id"]["tmp_name"] != "")
+                {
+                  $home = "$content_dir/contest/attach/$table_name/".mktime();
+                  $new_name = "$home/".$_FILES["$id"]["name"];
+                  @mkdir("$home", 0777, true);
+                  if(!copy($_FILES["$id"]["tmp_name"], $new_name))
+                    die("Can't upload file");
+                  $values[$id] = $new_name;
+                }
               }
             }
             $pkv = $values["$table_name"."_id"];
@@ -173,7 +177,7 @@
                     }
                     if($type == "file")
                     {
-                        echo "<tr><td>$name</td><td><a href='$value'>Скачать</a></td>\n";
+                        echo "<tr><td>$name</td><td><a class='btn btn-success' href='$value'>Скачать</a></td>\n";
                     }
                     if($type == "text")
                     {
@@ -211,10 +215,19 @@
         return $ans;
     }      
 ?> 
+    <style type="text/css">
 
-<div class="navbar">
+        .SiteBody 
+        {
+            
+            margin-left: 15px ;
+            margin-right: 15px ;
+        }
+    </style>
+
+<div class="navbar navbar-inverse">
   <div class="navbar-inner">
-    <a class="brand" href="#">Проверка олимпиады</a>
+    <a class="brand" href="?ref=contest">Проверка олимпиады</a>
     <ul class="nav">
         <li><a href="?ref=contest&mode=problems" >Список задач</a></li>
         <li><a href="?ref=contest&mode=works" >Список работ</a></li>
@@ -223,7 +236,10 @@
   </div>
 </div>
 
-<div class="well">
+<div class="SiteBody">
+
+
+<div id="container">
 <?php
     $mode = @$_GET["mode"];
     if($mode == "problems")
@@ -258,7 +274,8 @@
         foreach($probs as $value) echo "<td>".substr($value["problem_name"],0,3);
         foreach($works2 as $line)
         {
-            $id = $line["contestants_id"];
+            $id = @$line["contestants_id"];
+	    if(!$id) continue;
             $ans = "";
             $ans .= "<td><a href='?ref=$ref&mode=view&table=contestants&id=$id'>{$line['name']}</a><td>{$line['level']}<td><a href='{$line['work']}'>Скачать</a>";
             $isDone = true;
@@ -294,6 +311,7 @@
     }
     if($mode == "edit")
     {
+        if($_GET["table"] == "contestants" && @$_GET["id"] != "") unset($CTX_META["contestants"]["work"]);
         ctx_add_or_edit_form(@$_GET["table"],@$_GET["id"], "edit", @$_SERVER["HTTP_REFERER"]);
     }
     if($mode == "structure")
@@ -333,26 +351,32 @@
         $table = $_GET["table"];
         if($table == "contestants")
         {
-            echo '<div class="tabbable tabs-top">';
-            echo '<ul class="nav nav-tabs">';
+            echo '<ul class="nav nav-pills">';
             $problems_table = xdb_get_table("problems",NULL,NULL);
             $solutions_table = xdb_get_table("solutions",NULL,NULL);
-            echo '<li class="active"><a href="#def" data-toggle="tab">Информация</a></li>';
+            if(!@$_GET["pid"]) $activeness = "class='active'";
+            else $activeness = "";
+            echo "<li $activeness ><a href='?ref=$ref&mode=view&table=contestants&id={$_GET['id']}' >Информация</a></li>";
             foreach($problems_table as $problem)
             {
-                echo '<li><a href="#pr_'.$problem["problems_id"].'" data-toggle="tab">'.$problem["problem_name"].'</a></li>';
+                if(@$_GET["pid"] == $problem["problems_id"]) $activeness = "class='active'";
+                else $activeness = "";;
+                echo "<li $activeness><a  href='?ref=$ref&mode=view&table=contestants&id={$_GET['id']}&pid={$problem["problems_id"]}' >".$problem["problem_name"]."</a></li>";
             }
             echo "</ul>";
-            echo '<div class="tab-content">';
-            echo '<div class="tab-pane active" id="def">';
-            ctx_add_or_edit_form(@$_GET["table"],@$_GET["id"], "view", @$_SERVER["HTTP_REFERER"]);
-            echo "<a href='?ref=$ref&mode=edit&id={$_GET['id']}&table=$table'>Правка</a>";
-            echo '</div>';
+            if(!@$_GET["pid"])
+            {
+                echo '<div class="tab-pane active" id="def">';
+                ctx_add_or_edit_form(@$_GET["table"],@$_GET["id"], "view", @$_SERVER["HTTP_REFERER"]);
+                echo "<a class='btn btn-warning' href='?ref=$ref&mode=edit&id={$_GET['id']}&table=$table'>Правка</a>";
+                echo '</div>';
+            }
             foreach($problems_table as $problem)
             {
                 $c_id = $_GET["id"];
                 $p_id = $problem["problems_id"];
                 $sid = "new";
+                if($p_id != @$_GET["pid"]) continue;
                 echo '<div class="tab-pane" id="pr_'.$problem["problems_id"].'">';
                 foreach($solutions_table as $line)
                 {
@@ -368,8 +392,7 @@
                 //ctx_add_or_edit_form("problems", $_GET["id"]);
                 echo "</div>";
             }
-            echo "</div>";
-            echo "</div>";
+            
         }
         else 
         {
@@ -382,3 +405,4 @@
 ?>
 </div>
 
+</div>
