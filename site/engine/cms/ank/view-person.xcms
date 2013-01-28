@@ -96,7 +96,46 @@ function xsm_print_person_schools($db, $person_id, $current_school_id)
 
 }
 
-function xsm_print_person_ank_data($person)
+function xsm_draw_person_comments($db, $person_id)
+{
+    xsm_view_operations('person_comment', 'person_comment', 'комментарий', "&amp;blamed_person_id=$person_id");
+
+    $query = "SELECT * FROM person_comment WHERE blamed_person_id = $person_id ORDER BY person_comment_created DESC";
+    $comment_sel = $db->query($query);
+    ?>
+
+    <table summary="Комментарии" class="ankList">
+        <colgroup>
+            <col width="10%" />
+            <col width="10%" />
+            <col width="80%" />
+        </colgroup>
+        <thead>
+            <th class="ankList">Автор</th>
+            <th class="ankList">Дата</th>
+            <th class="ankList">Текст</th>
+        </thead>
+    <?php
+    while ($comment_data = $comment_sel->fetchArray(SQLITE3_ASSOC)) {?>
+        <?php
+
+        $comment_id = htmlspecialchars($comment_data["person_comment_id"]);
+        $owner_login = htmlspecialchars($comment_data["owner_login"]);
+        $comment_text = xcms_html_wrap_by_crlf(htmlspecialchars($comment_data["comment_text"]));
+        $person_comment_created = htmlspecialchars($comment_data["person_comment_created"]);
+        $person_comment_modified = htmlspecialchars($comment_data["person_comment_modified"]); ?>
+        <tr>
+            <td class="ankList"><?php echo $owner_login; ?></td>
+            <td class="ankList"><?php echo $person_comment_created; ?></td>
+            <td class="ankList"><?php echo $comment_text; ?></td>
+        </tr><?php
+        }
+    ?>
+    </table>
+    <?php
+}
+
+function xsm_print_person_ank_data($db, $person)
 {
 
     $person_id = htmlspecialchars($person["person_id"]);
@@ -152,6 +191,7 @@ function xsm_print_person_ank_data($person)
     xsm_draw_person_longtextval('Достижения', $achievements);
     xsm_draw_person_longtextval('Хобби', $hobby);
 
+    xsm_draw_person_comments($db, $person_id);
 }
 
 function xsm_print_person_school_edit($db, $school_id, $person_id)
@@ -324,7 +364,7 @@ function xsm_print_person()
     xsm_print_person_schools($db, $person_id, $school_id);
 
     if ($school_id == SCHOOL_ANK_ID)
-        xsm_print_person_ank_data($person);
+        xsm_print_person_ank_data($db, $person);
     else
         xsm_print_person_selected_school($db, $school_id, $person_id);
 

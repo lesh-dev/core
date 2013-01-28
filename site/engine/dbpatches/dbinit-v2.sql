@@ -117,15 +117,16 @@ create table person_school (
 */
 create table person_comment (
     person_comment_id integer primary key autoincrement,
-    person_comment text, -- текст комментария
+    comment_text text, -- текст комментария
     blamed_person_id integer not null, -- fk person -- сабжевый участник (типично школьник)
-    school_id integer not null, -- fk school -- школа, о которой идёт речь
-    owner_person_id integer not null, -- fk person -- владелец комментария (типично препод)
+    -- school_id integer not null, -- fk school -- школа, о которой идёт речь
+    owner_login text not null, -- логин автора комментария
+    -- owner_person_id integer not null, -- fk person -- владелец комментария (типично препод)
     person_comment_created text, -- utc timestamp
     person_comment_modified text, -- utc timestamp
-    foreign key (blamed_person_id) references person(person_id),
-    foreign key (school_id) references school(school_id),
-    foreign key (owner_person_id) references person(person_id)
+    foreign key (blamed_person_id) references person(person_id)
+    -- foreign key (school_id) references school(school_id),
+    -- foreign key (owner_person_id) references person(person_id)
 );
 
 -- 1
