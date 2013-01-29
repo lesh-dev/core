@@ -107,8 +107,8 @@ function xsm_draw_person_comments($db, $person_id)
     <table summary="Комментарии" class="ankList">
         <colgroup>
             <col width="10%" />
-            <col width="10%" />
-            <col width="80%" />
+            <col width="15%" />
+            <col width="75%" />
         </colgroup>
         <thead>
             <th class="ankList">Автор</th>
