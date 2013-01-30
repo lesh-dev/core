@@ -327,8 +327,12 @@
     {
         if (strlen($value)) $checked = 'checked="checked"';
         else $checked = '';
-        $sHTML = "<input class=\"ankEdit checkbox\" type=\"checkbox\" name=\"$name\" ".
-            "id=\"$name-checkbox\" value=\"$checked_value\" $checked />";
+        // prepend fake input with empty value to submit it as checkbox 'unchecked' value
+        // See http://iamcam.wordpress.com/2008/01/15/unchecked-checkbox-values/
+        $sHTML =
+            "<input type=\"hidden\" name=\"$name\" value=\"\"/>".
+            "<input class=\"ankEdit checkbox\" type=\"checkbox\" name=\"$name\" ".
+                "id=\"$name-checkbox\" value=\"$checked_value\" $checked />";
         return $sHTML;
     }
 ?>

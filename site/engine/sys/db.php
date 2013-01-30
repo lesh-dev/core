@@ -118,9 +118,11 @@
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
         $keys_values["${table_name}_modified"] = $hr_timestamp;
 
-        foreach ($allowed_keys as $key => $title)
+        foreach ($keys_values as $key => $value)
         {
-            $value = xcms_get_key_or($keys_values, $key);
+            if (!array_key_exists($key, $allowed_keys))
+                continue; // skip keys that are not in scheme
+
             if ($key == "${table_name}_created")
                 continue; // never update 'created' field
 
