@@ -100,17 +100,23 @@ function xsm_draw_person_comments($db, $person_id)
 {
     xsm_view_operations('person_comment', 'person_comment', 'комментарий', "&amp;blamed_person_id=$person_id");
 
-    $query = "SELECT * FROM person_comment WHERE blamed_person_id = $person_id ORDER BY person_comment_created DESC";
+    $query = "SELECT * FROM person_comment".
+        " WHERE".
+        " (blamed_person_id = $person_id)".
+        " AND (person_comment_deleted <> 'deleted')".
+        " ORDER BY person_comment_created DESC";
     $comment_sel = $db->query($query);
     ?>
 
     <table summary="Комментарии" class="ankList">
         <colgroup>
+            <col width="55" />
             <col width="10%" />
             <col width="15%" />
             <col width="75%" />
         </colgroup>
         <thead>
+            <th class="ankList">&nbsp;</th>
             <th class="ankList">Автор</th>
             <th class="ankList">Дата</th>
             <th class="ankList">Текст</th>
@@ -125,6 +131,7 @@ function xsm_draw_person_comments($db, $person_id)
         $person_comment_created = htmlspecialchars($comment_data["person_comment_created"]);
         $person_comment_modified = htmlspecialchars($comment_data["person_comment_modified"]); ?>
         <tr>
+            <td class="ankList"><a href="edit-person_comment&amp;person_comment_id=<?php echo $comment_id; ?>">Правка</a></td>
             <td class="ankList"><?php echo $owner_login; ?></td>
             <td class="ankList"><?php echo $person_comment_created; ?></td>
             <td class="ankList"><?php echo $comment_text; ?></td>

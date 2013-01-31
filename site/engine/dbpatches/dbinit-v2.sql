@@ -124,6 +124,7 @@ create table person_comment (
     -- owner_person_id integer not null, -- fk person -- владелец комментария (типично препод)
     person_comment_created text, -- utc timestamp
     person_comment_modified text, -- utc timestamp
+    person_comment_deleted text, -- признак удаления (из базы ничего удалить нельзя)
     foreign key (blamed_person_id) references person(person_id)
     -- foreign key (school_id) references school(school_id),
     -- foreign key (owner_person_id) references person(person_id)
