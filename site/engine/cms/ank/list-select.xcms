@@ -91,6 +91,7 @@ function xsm_show_all_person_list()
 
     if (strlen($cond))
         $query .= " WHERE $cond";
+
     $query .= " ORDER BY p.is_student, p.is_teacher, p.last_name, p.first_name";
 
     // debug area (TODO: remove)
