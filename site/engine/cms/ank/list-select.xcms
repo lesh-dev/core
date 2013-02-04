@@ -1,13 +1,10 @@
-<?php
-    xcms_log(0, $_COOKIE);
-    // this should be done BEFORE any output started
-    $show_anketa_status = xcms_get_persistent_key("show_anketa_status", "active");
-    //$show_is_teacher = xcms_get_persistent_key("show_is_teacher");
-    //$show_is_student = xcms_get_persistent_key("show_is_student");
-?>
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
-
+<?php
+    $show_anketa_status = xcms_get_persistent_key("list-select", "show_anketa_status", "active");
+    $show_is_teacher = xcms_get_persistent_key("list-select", "show_is_teacher");
+    $show_is_student = xcms_get_persistent_key("list-seelct", "show_is_student");
+?>
 <p>В этом списке по умолчанию показываются люди, с которыми идёт (или недавно шло) взаимодействие.
     Для школьников и преподов, которые стабильно <b>не ездят</b> на школы уже 2-3&nbsp;года, осмысленно выставлять статус
     <span class="ankStatus old">Архивный</span>. В&nbsp;этот же статус
@@ -19,14 +16,12 @@
     echo xsm_make_enum_selector(
         "show_anketa_status", $show_anketa_status,
         xsm_get_person_show_statuses());
-
-        //echo xsm_make_checkbox('show_is_teacher', $show_is_teacher, "teacher");
-    ?><!--<span class="ankListField">Преподы</span>&nbsp;&nbsp;-->
-
+    echo xsm_make_checkbox('show_is_teacher', $show_is_teacher, "teacher");
+    ?><span class="ankListField">Только преподы</span>&nbsp;&nbsp;
     <?php
-        //echo xsm_make_checkbox('show_is_student', $show_is_student, "student");
-    ?><!--
-    <span class="ankListField">Школьники</span>&nbsp;&nbsp;-->
+        echo xsm_make_checkbox('show_is_student', $show_is_student, "student");
+    ?>
+    <span class="ankListField">Только школьники</span>&nbsp;&nbsp;
 
     <span class="ankListField">Фильтр ФИО</span>:
     <input class="ankEdit filter" type="text"
@@ -57,12 +52,12 @@ function xsm_show_all_person_list()
     $db->createFunction('LIKE', 'xdb_like', 2);
 
     $cond = "(1 = 1)";
-/*    if ($show_is_teacher == "teacher")
+    if ($show_is_teacher == "teacher")
         $cond .= " AND ( is_teacher = 'teacher' )";
 
     if ($show_is_student == "student")
         $cond .= " AND ( is_student = 'student' )";
-*/
+
     if ($show_status == "active")
         $cond .=
             " AND ( (anketa_status = 'processed') ".

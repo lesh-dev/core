@@ -1,28 +1,20 @@
-<?php
-    xcms_log(0, $_COOKIE);
-    // this should be done BEFORE any output started
-    $show_anketa_status = xcms_get_persistent_key("show_anketa_status", "not-spam");
-    $show_is_teacher = xcms_get_persistent_key("show_is_teacher");
-    $show_is_student = xcms_get_persistent_key("show_is_student");
-    //$show_is_current = xcms_get_persistent_key("show_is_current");
-?>
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
+<?php
+    $show_is_teacher = xcms_get_persistent_key("list-person", "show_is_teacher");
+    $show_is_student = xcms_get_persistent_key("list-person", "show_is_student");
 
-<form method="post" action="view" style="margin-bottom: 2px"><span>
-    <span class="ankListField">Выпилить это отсудова</span>: <?php
-    echo xsm_make_enum_selector(
-        "show_anketa_status", $show_anketa_status,
-        xsm_get_person_show_statuses());
-    ?>
+    $school_id = xcms_get_key_or($_GET, 'school_id', "1");
 
+?>
+<form method="post" action="list-person&amp;school_id=<?php echo $school_id; ?>" style="margin-bottom: 2px"><span>
     <?php
         echo xsm_make_checkbox('show_is_teacher', $show_is_teacher, "teacher");
-    ?><span class="ankListField">Преподы</span>&nbsp;&nbsp;
+    ?><span class="ankListField">Только преподы</span>&nbsp;&nbsp;
 
     <?php
         echo xsm_make_checkbox('show_is_student', $show_is_student, "student");
-    ?><span class="ankListField">Школьники</span>&nbsp;&nbsp;
+    ?><span class="ankListField">Только школьники</span>&nbsp;&nbsp;
 
     <span class="ankListField">Фильтр ФИО</span>:
     <input class="ankEdit filter" type="text"
@@ -61,42 +53,23 @@ function xsm_print_schools($db, $current_school_id)
 
 
 // вывод активных участников (пошкольно)
-function xsm_show_person_list()
+function xsm_show_person_list($school_id)
 {
-    $show_status = xcms_get_key_or($_POST, "show_anketa_status", "not-spam");
-    // TODO: big BUG HERE!!! default school is absent
-    $school_id = xcms_get_key_or($_GET, 'school_id', "1");
+    //$show_status = xcms_get_key_or($_POST, "show_anketa_status", "not-spam");
 
-    global $show_is_teacher;// = xcms_get_key_or($_POST, "show_is_teacher");
-    global $show_is_student;// = xcms_get_key_or($_POST, "show_is_student");
+    global $show_is_teacher;
+    global $show_is_student;
 
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
-
-    $show_statuses = xsm_get_person_show_statuses();
-
-    if (!array_key_exists($show_status, $show_statuses)) $show_status = "not-spam";
-
     $db = xdb_get();
     $db->createFunction('LIKE', 'xdb_like', 2);
 
     $cond = "(1 = 1)";
     if ($show_is_teacher == "teacher")
-        $cond .= " AND ( is_teacher = 'teacher' )";
+        $cond .= " AND ( ps.is_teacher = 'teacher' )";
 
     if ($show_is_student == "student")
-        $cond .= " AND ( is_student = 'student' )";
-
-    if ($show_status == "not-decl")
-        $cond .=
-            " AND ( (anketa_status <> 'duplicate')".
-            " AND (anketa_status <> 'spam')".
-            " AND (anketa_status <> 'declined') )";
-    elseif ($show_status == "not-spam")
-        $cond .= " AND ( (anketa_status <> 'duplicate') AND (anketa_status <> 'spam') )";
-    elseif ($show_status == "all")
-        $cond .= "";
-    else
-        $cond .= " AND ( anketa_status = '$show_status' )";
+        $cond .= " AND ( ps.is_student = 'student' )";
 
     $name_filter_cond = xsm_person_name_filter($db, $show_name_filter);
     if (strlen($name_filter_cond))
@@ -116,7 +89,7 @@ function xsm_show_person_list()
     $query .= " ORDER BY ps.is_student, p.last_name, p.first_name";
 
     // debug area (TODO: remove)
-    ?><textarea rows="10" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
+    ?><textarea rows="5" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
     $person_sel = $db->query($query);
 
     xsm_print_schools($db, $school_id);
@@ -125,14 +98,14 @@ function xsm_show_person_list()
     ?>
     <table summary="Участники" class="ankList">
         <colgroup>
-            <col width="5%" />
+            <!--<col width="5%" />-->
             <col width="25%" />
             <col width="30px" />
             <col width="25%" />
             <col width="30%" />
         </colgroup>
         <thead>
-            <th class="ankList">ID</th>
+            <!--<th class="ankList">ID</th>-->
             <th class="ankList">Фамилия, имя</th>
             <th class="ankList">Кл.</th>
             <th class="ankList">Контакты</th>
@@ -158,8 +131,6 @@ function xsm_show_person_list()
         $is_student = $person["is_student"];
         $curatorship = $person["curatorship"];
 
-        //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
-
         $person_created = htmlspecialchars($person["person_created"]);
         $person_modified = htmlspecialchars($person["person_modified"]);
 
@@ -182,7 +153,7 @@ function xsm_show_person_list()
 
         ?>
         <tr>
-            <td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
+            <!--<td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>-->
             <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id&amp;school_id=$school_id"; ?>"><?php
                 echo "$last_name $first_name"; ?></a></td>
             <td class="ankList"><?php echo $current_class; ?></a></td>
@@ -223,17 +194,17 @@ function xsm_show_person_list()
     //xsm_view_operations('person', 'person', 'участника');
 }
 
-    xsm_show_person_list();
+    xsm_show_person_list($school_id);
     // debug output, please do not remove this code // mvel
     if (false) {
         echo "<pre style='font-size: 9px;'>--POST:\n";
         print_r($_POST);
         echo "--GET:\n";
         print_r($_GET);
-        echo "--COOKIE:\n";
-        print_r($_COOKIE);
+        echo "--SESSION:\n";
+        print_r($_SESSION);
         echo "results:\n";
-        echo "$show_is_teacher | $show_is_student | $show_is_current\n";
+        echo "$show_is_teacher | $show_is_student\n";
         echo '</pre>';
     }
 

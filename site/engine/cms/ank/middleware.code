@@ -1,25 +1,25 @@
 <?php
     // some common XSM functions, not listed in func.code
 
-    function xcms_get_persistent_key($key_name, $default_value = '')
+    // Persistent session keys storage
+    function xcms_get_persistent_key($key_prefix, $key_name, $default_value = '')
     {
-        $value = '';
-
-        $is_first = !array_key_exists("show-person", $_POST);
-        if ($is_first)
+        $value = $default_value;
+        $session_key = "$key_prefix::$key_name";
+        if (array_key_exists($key_name, $_POST))
         {
-            $preset_val = xcms_get_key_or($_COOKIE, $key_name, $default_value);
-            xcms_log(0, "PRESET: $preset_val");
-            // GET value has a priority over COOKIES
-            $value = array_key_exists($key_name, $_GET) ? $_GET[$key_name] : $preset_val;
+            $value = $_POST[$key_name];
+            $_SESSION[$session_key] = $value; // update value in cache
         }
-        else
+        elseif (array_key_exists($key_name, $_GET))
         {
-            $value = xcms_get_key_or($_POST, $key_name);
+            $value = $_GET[$key_name];
+            $_SESSION[$session_key] = $value; // update value in cache
         }
-        xcms_log(0, "SETK $key_name $value");
-        //setcookie($key_name, $value, 0/*24*3600*14*/);
-        //echo "$key_name|$value<br/>\n";
+        elseif (array_key_exists($session_key, $_SESSION))
+        {
+            $value = $_SESSION[$session_key];
+        }
         return $value;
     }
 

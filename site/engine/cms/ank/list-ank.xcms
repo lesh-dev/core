@@ -14,11 +14,12 @@
             "all"=>"Все");
     }
 
-    $show_anketa_status = xcms_get_persistent_key("show_anketa_status", "abitur");
 ?>
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
-
+<?php
+    $show_anketa_status = xcms_get_persistent_key("list-ank", "show_anketa_status", "abitur");
+?>
 <p>В этом списке по умолчанию показываются <b>свежие заявки</b>. Когда приходит новая анкета, она получает статус
     <span class="ankStatus new">Новый</span>. После приглашения на собеседование школьнику следует выставлять
     статус <span class="ankStatus progress">Приглашён</span>, а в заметках указать дату собеседования.
@@ -265,16 +266,4 @@ function xsm_show_ank_list()
 }
 
     xsm_show_ank_list();
-    // debug output, please do not remove this code // mvel
-    if (false) {
-        echo "<pre style='font-size: 9px;'>--POST:\n";
-        print_r($_POST);
-        echo "--GET:\n";
-        print_r($_GET);
-        echo "--COOKIE:\n";
-        print_r($_COOKIE);
-        echo "results:\n";
-        echo '</pre>';
-    }
-
 ?>
