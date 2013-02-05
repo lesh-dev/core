@@ -92,7 +92,7 @@ function xsm_show_all_person_list()
     if (strlen($cond))
         $query .= " WHERE $cond";
 
-    $query .= " ORDER BY p.is_student, p.is_teacher, p.last_name, p.first_name";
+    $query .= " ORDER BY not (p.is_teacher IS NULL OR p.is_teacher = ''), p.last_name, p.first_name";
 
     // debug area (TODO: remove)
     ?><textarea rows="5" cols="120" style="display: none;" id="person-query-debug"><?php echo $query; ?></textarea><?php
