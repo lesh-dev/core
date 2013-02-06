@@ -10,7 +10,8 @@ def performLogin(test, login, password):
 	"""
 	returns True if login was successful
 	"""
-	print "performLogin(" + login + ", " + password + ")"
+	test.addAction("user-login", login + " / " + password)
+#	test.logAdd("performLogin(" + login + ", " + password + ")")
 	
 	if test is None:
 		raise RuntimeError("Wrong webdriver parameter passed to performLogin. ")
@@ -18,7 +19,7 @@ def performLogin(test, login, password):
 	test.gotoRoot()
 	
 	# assert we have no shit cookies here
-	test.assertUrlNotPresent(u"Админка")
+	test.assertUrlNotPresent(u"Админка", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
 	
 	authUrl = test.getUrlByLinkText(u"Авторизация")
 	
@@ -42,6 +43,7 @@ def performLogin(test, login, password):
 	    
 def performLogout(test):
 	print "logout..."
+	test.addAction("user-logout")
 	test.gotoPage("/?&mode=logout&ref=ladmin")
 	
 def performLoginAsAdmin(test, login, password):

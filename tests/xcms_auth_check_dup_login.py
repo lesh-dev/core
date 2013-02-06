@@ -28,7 +28,9 @@ class XcmsAuthCheckDupLogin(SeleniumTest):
 
 		inpLogin, inpEMail, inpPass, inpName = xtest_common.createNewUser(self, conf, inpLogin, inpEMail2, inpPass2, inpName2, ["do_not_validate"])
 
-		test.assertBodyTextNotPresent(u"Пользователь успешно создан")
+		self.assertBodyTextNotPresent(u"Пользователь успешно создан")
+		
+		xtest_common.performLogout(self)
 		
 		print "logging as created first user. "
 		if not xtest_common.performLogin(self, inpLogin, inpPass1):

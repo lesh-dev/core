@@ -27,13 +27,13 @@ def isList(x):
 	return type(x) == type(list())
 
 def isString(x):
-	return type(x) == type("string")
+	return type(x) == type("string") or type(x) == type(u"string")
 
 def isEqual(x, y):
 	if isString(x) and isString(y):
 		return (x.strip() == y.strip())
 	else:
-		raise RuntimeError("Cannot compare anything except strings, sorry. ")
+		raise RuntimeError("Cannot compare anything except strings, sorry. Type of X is " + str(type(x)) + ", and type of Y is " + str(type(y)) + ".")
 	
 class TestError(RuntimeError):
 	pass
@@ -201,12 +201,19 @@ class SeleniumTest:
 			link = self.getUrlByLinkText(linkName)
 			self.gotoSite(link)
 		except NoSuchElementException:
-			self.failTest(u"Cannot find URL with name '" + self.serialize(linkName) + "'")
-		
-	def assertUrlNotPresent(self, linkName):
+			self.failTest(u"Cannot find URL with name '" + self.serialize(linkName) + "'. ")
+
+	def displayReason(self, reason):
+		if reason is None or reason == "":
+			return ""
+		else:
+			return "Reason: '" + reason + "'. "
+
+	def assertUrlNotPresent(self, linkName, forbidReason = ""):
 		try:
 			self.getUrlByLinkText(linkName)
-			raise TestError("Forbidden URL is found on the page in assertUrlNotPresent: '" + linkName + "'")
+			exceptionMessage = "Forbidden URL is found on the page in assertUrlNotPresent: '" + self.serialize(linkName) + "'. " + self.displayReason(forbidReason)
+			raise TestError(exceptionMessage)
 		except ItemNotFound:
 			pass
 	
@@ -218,14 +225,14 @@ class SeleniumTest:
 			return self.m_driver.find_element_by_name(name)
 		except NoSuchElementException:
 			self.logAdd("getElementByName failed for name '" + name + "':\n" + traceback.format_exc())
-			raise TestError(u"Cannot get element by name '" + name + "'")
+			raise TestError(u"Cannot get element by name '" + name + "'. ")
 
 	def getElementById(self, eleId):
 		try:
 			return self.m_driver.find_element_by_id(eleId)
 		except NoSuchElementException:
 			self.logAdd("getElementById failed for name '" + name + "':\n" + traceback.format_exc())
-			raise TestError(u"Cannot get element by name '" + name + "'")
+			raise TestError(u"Cannot get element by name '" + name + "'. ")
 			
 	def fillElementByName(self, name, text):
 		self.checkEmptyParam(name, "fillElementByName")
@@ -254,9 +261,9 @@ class SeleniumTest:
 
 	def assertElementValueById(self, eleId, text):
 		if not self.checkElementValueById(eleId, text):
-			raise TestError("Element '" + eleId + "' value does not match expected: '" + text + "'")
+			raise TestError("Element '" + eleId + "' value does not match expected: '" + text + "'. ")
 
-	def addAction(self, name, details):
+	def addAction(self, name, details = ""):
 		self.m_actionLog.append(TestAction(name, details))		
 	
 	def clickElementByName(self, name):
@@ -315,15 +322,19 @@ class SeleniumTest:
 
 	def assertTextPresent(self, xpath, text):
 		if not self.checkTextPresent(xpath, text):
-			self.failTest("Text '" + self.serialize(text) + "' not found on page '" + self.curUrl() + "' in element '" + xpath + "'")
+			self.failTest("Text '" + self.serialize(text) + "' not found on page '" + self.curUrl() + "' in element '" + xpath + "'. ")
 
-	def assertTextNotPresent(self, xpath, text):
+	def assertTextNotPresent(self, xpath, text, forbidReason = ""):
 		if self.checkTextPresent(xpath, text):
-			self.failTest("Forbidden text '" + self.serialize(text) + "' found on page '" + self.curUrl() + "' in element '" + xpath + "'")
+			errText = "Forbidden text '" + self.serialize(text) + "' found on page '" + self.curUrl() + "' in element '" + xpath + "'. " + self.displayReason(forbidReason)
+			self.failTest(errText)
 
 	def assertBodyTextPresent(self, text):
 		return self.assertTextPresent("/html/body", text)
-	
+
+	def assertBodyTextNotPresent(self, text, forbidReason = ""):
+		return self.assertTextNotPresent("/html/body", text, forbidReason)
+
 	def assertSourceTextPresent(self, text):
 		return self.assertTextPresent("//*", text)
 
