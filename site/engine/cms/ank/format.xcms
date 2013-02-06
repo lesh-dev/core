@@ -221,7 +221,7 @@
     {
         $is_new = ($id == 'new');
         // TODO: маленький костылик
-        $redir = $is_new ? "list-select" : "view-$table_name$aux_param&amp;${table_name}_id=$id";
+        $redir = $is_new ? "list-person-locator" : "view-$table_name$aux_param&amp;${table_name}_id=$id";
         ?>
         <div style="white-space: nowrap">
             <input type="submit" name="update-<?php echo $table_name; ?>"

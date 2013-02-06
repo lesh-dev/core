@@ -45,7 +45,7 @@
                     {
                         include(translate('<a href="/<# web_prefix #>register/list-ank'.
                             '" class="menu-item menu-sys">Анкеты</a>'));
-                        include(translate('<a href="/<# web_prefix #>register/list-select'.
+                        include(translate('<a href="/<# web_prefix #>register/list-person-locator'.
                             '" class="menu-item menu-sys">Актив отделения</a>'));
                         include(translate('<a href="/<# web_prefix #>register/list-person'.
                             '" class="menu-item menu-sys">Участники</a>'));

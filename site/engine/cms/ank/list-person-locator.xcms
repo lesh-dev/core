@@ -1,8 +1,8 @@
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
 <?php
-    $show_anketa_status = xcms_get_persistent_key("list-select", "show_anketa_status", "active");
-    $show_is_teacher = xcms_get_persistent_key("list-select", "show_is_teacher");
+    $show_anketa_status = xcms_get_persistent_key("list-person-locator", "show_anketa_status", "active");
+    $show_is_teacher = xcms_get_persistent_key("list-person-locator", "show_is_teacher");
     $show_is_student = xcms_get_persistent_key("list-seelct", "show_is_student");
 ?>
 <p>В этом списке по умолчанию показываются люди, с которыми идёт (или недавно шло) взаимодействие.
@@ -11,7 +11,7 @@
     можно переводить через 1-2 года тех, кому по результатам собеседования был проставлен статус
     <span class="ankStatus declined">Послан</span> (сразу этого делать не следует).
 </p>
-<form method="post" action="list-select" style="margin-bottom: 2px"><span>
+<form method="post" action="list-person-locator" style="margin-bottom: 2px"><span>
     <span class="ankListField">Статус</span>: <?php
     echo xsm_make_enum_selector(
         "show_anketa_status", $show_anketa_status,
