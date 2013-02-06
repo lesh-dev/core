@@ -70,21 +70,21 @@ def createNewUser(test, conf, login, email, password, name, auxParams = []):
 	test.assertBodyTextPresent(u"Администрирование пользователей")
 	test.gotoUrlByLinkText(["Create user", u"Создать пользователя"])
 	
-	inpLogin = test.fillElementById("login", inpLogin)
+	inpLogin = test.fillElementById("login", login)
 	print "login = '" + inpLogin + "'"
 	if inpLogin == "":
 		raise RuntimeError("Filled login value is empty!")
 	
-	inpEMail = test.fillElementById("email", inpEMail)
-	inpPass1 = test.fillElementById("password", inpPass)
-	print "original pass: " + inpPass
-	inpPass2 = test.fillElementById("password_confirm", inpPass)
+	inpEMail = test.fillElementById("email", email)
+	inpPass1 = test.fillElementById("password", password)
+	print "original pass: '" + password + "'"
+	inpPass2 = test.fillElementById("password_confirm", password)
 	if inpPass1 != inpPass2:
 		raise RuntimeError("Unpredicted input behavior on password entering")
 	inpPass = inpPass1
-	print "actual pass: " + inpPass
+	print "actual pass: '" + inpPass + "'"
 	
-	inpName = test.fillElementById("name", inpName)
+	inpName = test.fillElementById("name", name)
 	
 	# set notify checkbox.
 	test.clickElementByName("notify_user")

@@ -36,5 +36,6 @@ if ! [ -r "$FOOTER" ]; then
 fi
 cat "$FOOTER" | grep -v "^##" >> "$TEST_SUITE"
 
-chmod +x "$TEST_SUITE"
+sed -i s@'##auto_generated_warning_placeholder##'@'WARNING! This file is AUTO-GENERATED. Do not edit it directly, edit header/footer/generator instead.'@ "$TEST_SUITE"
+chmod +x-w "$TEST_SUITE"
 echo "Created test suite $TEST_SUITE"

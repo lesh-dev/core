@@ -3,6 +3,7 @@
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import StaleElementReferenceException
 
 import random, traceback, sys
 from datetime import datetime
@@ -67,7 +68,7 @@ def RunTest(test):
 	
 #main API wrapper for Webdriver.
 class SeleniumTest:
-	def __init__(self, baseUrl = ""):
+	def __init__(self, baseUrl):
 #		print "Init SeleniumTest"
 		self.m_testName = self.__class__.__name__
 		self.m_baseUrl = baseUrl
