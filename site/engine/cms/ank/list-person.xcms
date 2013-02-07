@@ -104,7 +104,7 @@ function xsm_show_person_list($school_id)
 
     if (strlen($cond))
         $query .= " AND $cond";
-    $query .= " ORDER BY ps.is_student, ps.is_teacher, p.last_name, p.first_name";
+    $query .= " ORDER BY NOT (ps.is_teacher IS NULL OR ps.is_teacher = ''), p.last_name, p.first_name";
 
     // debug area (TODO: remove)
     ?><textarea rows="5" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
@@ -169,11 +169,12 @@ function xsm_show_person_list($school_id)
         $hr_teacher = ($is_teacher == "teacher" ? "Препод, " : "");
         $hr_student = ($is_student == "student" ? "Школьник, " : "");
 
+        $row_class = ($is_teacher == "teacher" ? "teacher" : "");
         ?>
-        <tr>
+        <tr class="<?php echo $row_class; ?>">
             <!--<td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>-->
             <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id&amp;school_id=$school_id"; ?>"><?php
-                echo "$last_name $first_name"; ?></a></td>
+                echo "$last_name $first_name $hr_teacher $hr_student"; ?></a></td>
             <td class="ankList"><?php echo $current_class; ?></a></td>
             <td class="ankList"><?php
                 echo $cellular;
