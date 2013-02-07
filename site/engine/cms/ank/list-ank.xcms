@@ -7,7 +7,7 @@
             "progress"=>"Приглашённые",
             "processed"=>"Принятые",
             "declined"=>"Посланные",
-            "not-old"=>"Все, кроме архивных",
+            //"not-old"=>"Все, кроме архивных",
             "old"=>"Архивные",
             //"not-spam"=>"Без спама и дублей",
             //"not-decl"=>"Без спама, дублей и посланых",
@@ -64,7 +64,7 @@ function xsm_show_ank_list()
             " AND ( (anketa_status = 'new')".
             " OR (anketa_status = 'progress')".
             " OR (anketa_status = 'declined') )";
-    /*elseif ($show_status == "not-decl")
+    /*elseif ($show_status == "not-old")
         $cond .=
             " AND ( (anketa_status <> 'duplicate')".
             " AND (anketa_status <> 'spam')".
