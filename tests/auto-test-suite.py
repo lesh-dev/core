@@ -57,7 +57,9 @@ print "Running tests on base URL", baseUrl
 if installerTest:
 	print "Running installer test. "
 	RunTest(test_xcms_installer.TestXcmsInstaller())
+ 
 import xcms_auth_add_new_user
+import xcms_auth_check_dup_email
 import xcms_auth_check_dup_login
 import xcms_auth_root_login
 import xcms_download_lectures
@@ -70,6 +72,7 @@ import xcms_version_check
 import xcms_xsm_anketa_fill
 tests = [
 xcms_auth_add_new_user.XcmsAuthAddNewUser(baseUrl),
+xcms_auth_check_dup_email.XcmsAuthCheckDupEmail(baseUrl),
 xcms_auth_check_dup_login.XcmsAuthCheckDupLogin(baseUrl),
 xcms_auth_root_login.XcmsAuthRootLogin(baseUrl),
 xcms_download_lectures.XcmsDownloadLectures(baseUrl),

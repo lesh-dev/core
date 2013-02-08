@@ -24,9 +24,9 @@ class XcmsAuthCheckDupLogin(SeleniumTest):
 		inpName1 = u"Вася " + random_crap.randomText(6)
 		inpName2 = u"Петя " + random_crap.randomText(6)
 
-		inpLogin, inpEMail, inpPass, inpName = xtest_common.createNewUser(self, conf, inpLogin, inpEMail1, inpPass1, inpName1)
+		inpLogin, inpEMail1, inpPass1, inpName1 = xtest_common.createNewUser(self, conf, inpLogin, inpEMail1, inpPass1, inpName1)
 
-		inpLogin, inpEMail, inpPass, inpName = xtest_common.createNewUser(self, conf, inpLogin, inpEMail2, inpPass2, inpName2, ["do_not_validate"])
+		inpLogin, inpEMail2, inpPass2, inpName2 = xtest_common.createNewUser(self, conf, inpLogin, inpEMail2, inpPass2, inpName2, ["do_not_validate"])
 
 		self.assertBodyTextNotPresent(u"Пользователь успешно создан")
 		

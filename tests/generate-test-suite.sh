@@ -19,8 +19,14 @@ if ! [ -r "$HEADER" ]; then
 fi
 
 TEST_SUITE="./auto-test-suite.py"
+if [ -r "$TEST_SUITE" ]; then
+	chmod +w "$TEST_SUITE"
+	mv "$TEST_SUITE" "$TEST_SUITE.bak"
+fi
 
 cat "$HEADER" > "$TEST_SUITE"
+
+echo " " >> "$TEST_SUITE"
 
 ls -1 $TESTS | sed s@'.py$'@@  | sed s@xcms_@'import xcms_'@ >> "$TEST_SUITE"
 
