@@ -3,10 +3,13 @@
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import StaleElementReferenceException
 
 import random, traceback, sys
 from datetime import datetime
 import time
+
+from bawlib import isVoid, isList, isString, isEqual, getSingleOption
 
 #['_unwrap_value', '_wrap_value', 'add_cookie',
 #'back', 'binary', 'capabilities', 'close', 'command_executor', 'create_web_element', 'current_url', 'current_window_handle',
@@ -22,18 +25,6 @@ import time
 #'start_session', 'stop_client', 'switch_to_active_element', 'switch_to_alert', 'switch_to_default_content',
 #'switch_to_frame', 'switch_to_window', 'title', 'window_handles']
 
-def isList(x):
-	return type(x) == type(list())
-
-def isString(x):
-	return type(x) == type("string")
-
-def isEqual(x, y):
-	if isString(x) and isString(y):
-		return (x.strip() == y.strip())
-	else:
-		raise RuntimeError("Cannot compare anything except strings, sorry. ")
-	
 class TestError(RuntimeError):
 	pass
 
@@ -67,17 +58,18 @@ def RunTest(test):
 	
 #main API wrapper for Webdriver.
 class SeleniumTest:
-	def __init__(self, baseUrl = ""):
+	def __init__(self, baseUrl, params = []):
 #		print "Init SeleniumTest"
 		self.m_testName = self.__class__.__name__
 		self.m_baseUrl = baseUrl
+		self.m_params = params
 
 		self.initDefaults()
 		
-		if self.needHelp():
+		if self.needDoc():
 			print self.m_testName, "test info:"
 			print self.getDoc()
-			raise TestShutdown("Display help")
+			raise TestShutdown("Display doc")
 			
 		if self.needLeaveBrowserOpen():
 			self.setCloseOnExit(False)
@@ -113,19 +105,17 @@ class SeleniumTest:
 				self.m_driver.close()
 
 	def getBaseUrl(self):
-		if self.isVoid(self.m_baseUrl):
+		if isVoid(self.m_baseUrl):
 			self.failTest("Base URL for test '" + self.getName() + "' is not set. ")
 		return self.m_baseUrl
 	
-	def needHelp(self):
-		"""
-		called to detemine wether help is needed.
-		uses sys.argv by default (keys --help or -h)
-		"""
-		return "--help" in sys.argv or "-h" in sys.argv
+	def needDoc(self):
+		opt, _ = getSingleOption(["-d", "--doc"], self.m_params)
+		return opt
 		
 	def needLeaveBrowserOpen(self):
-		return "-l" in sys.argv or "--leave-open" in sys.argv
+		opt, _ = getSingleOption(["-l", "--leave-open"], self.m_params);
+		return opt
 			
 	def shutdown(self, exitCode = 0):
 		sys.exit(exitCode)
@@ -160,10 +150,7 @@ class SeleniumTest:
 			self.m_logStarted = True
 		except IOError:
 			raise RuntimeError("Cannot create log file '" + m_logFile + "'. ")
-		
-	def isVoid(self, text):
-		return text is None or text.strip() == "";
-	
+			
 	def setCloseOnExit(self, flag):
 		self.m_closeOnExit = flag;
 		
@@ -200,12 +187,19 @@ class SeleniumTest:
 			link = self.getUrlByLinkText(linkName)
 			self.gotoSite(link)
 		except NoSuchElementException:
-			self.failTest(u"Cannot find URL with name '" + self.serialize(linkName) + "'")
-		
-	def assertUrlNotPresent(self, linkName):
+			self.failTest(u"Cannot find URL with name '" + self.serialize(linkName) + "'. ")
+
+	def displayReason(self, reason):
+		if reason is None or reason == "":
+			return ""
+		else:
+			return "Reason: '" + reason + "'. "
+
+	def assertUrlNotPresent(self, linkName, forbidReason = ""):
 		try:
 			self.getUrlByLinkText(linkName)
-			raise TestError("Forbidden URL is found on the page in assertUrlNotPresent: '" + linkName + "'")
+			exceptionMessage = "Forbidden URL is found on the page in assertUrlNotPresent: '" + self.serialize(linkName) + "'. " + self.displayReason(forbidReason)
+			raise TestError(exceptionMessage)
 		except ItemNotFound:
 			pass
 	
@@ -217,14 +211,14 @@ class SeleniumTest:
 			return self.m_driver.find_element_by_name(name)
 		except NoSuchElementException:
 			self.logAdd("getElementByName failed for name '" + name + "':\n" + traceback.format_exc())
-			raise TestError(u"Cannot get element by name '" + name + "'")
+			raise TestError(u"Cannot get element by name '" + name + "'. ")
 
 	def getElementById(self, eleId):
 		try:
 			return self.m_driver.find_element_by_id(eleId)
 		except NoSuchElementException:
 			self.logAdd("getElementById failed for name '" + name + "':\n" + traceback.format_exc())
-			raise TestError(u"Cannot get element by name '" + name + "'")
+			raise TestError(u"Cannot get element by name '" + name + "'. ")
 			
 	def fillElementByName(self, name, text):
 		self.checkEmptyParam(name, "fillElementByName")
@@ -253,9 +247,9 @@ class SeleniumTest:
 
 	def assertElementValueById(self, eleId, text):
 		if not self.checkElementValueById(eleId, text):
-			raise TestError("Element '" + eleId + "' value does not match expected: '" + text + "'")
+			raise TestError("Element '" + eleId + "' value does not match expected: '" + text + "'. ")
 
-	def addAction(self, name, details):
+	def addAction(self, name, details = ""):
 		self.m_actionLog.append(TestAction(name, details))		
 	
 	def clickElementByName(self, name):
@@ -314,15 +308,19 @@ class SeleniumTest:
 
 	def assertTextPresent(self, xpath, text):
 		if not self.checkTextPresent(xpath, text):
-			self.failTest("Text '" + self.serialize(text) + "' not found on page '" + self.curUrl() + "' in element '" + xpath + "'")
+			self.failTest("Text '" + self.serialize(text) + "' not found on page '" + self.curUrl() + "' in element '" + xpath + "'. ")
 
-	def assertTextNotPresent(self, xpath, text):
+	def assertTextNotPresent(self, xpath, text, forbidReason = ""):
 		if self.checkTextPresent(xpath, text):
-			self.failTest("Forbidden text '" + self.serialize(text) + "' found on page '" + self.curUrl() + "' in element '" + xpath + "'")
+			errText = "Forbidden text '" + self.serialize(text) + "' found on page '" + self.curUrl() + "' in element '" + xpath + "'. " + self.displayReason(forbidReason)
+			self.failTest(errText)
 
 	def assertBodyTextPresent(self, text):
 		return self.assertTextPresent("/html/body", text)
-	
+
+	def assertBodyTextNotPresent(self, text, forbidReason = ""):
+		return self.assertTextNotPresent("/html/body", text, forbidReason)
+
 	def assertSourceTextPresent(self, text):
 		return self.assertTextPresent("//*", text)
 
@@ -334,10 +332,10 @@ class SeleniumTest:
 			if len(stringOrList) == 0:
 				raise RuntimeError("Empty list passed to " + methodName);
 			for text in stringOrList:
-				if self.isVoid(text):
+				if isVoid(text):
 					raise RuntimeError("Empty string passed in the list to " + methodName);
 		else:		
-			if self.isVoid(stringOrList):
+			if isVoid(stringOrList):
 				raise RuntimeError("Empty param passed to " + methodName);
 
 	def getUrlByLinkText(self, urlText):
