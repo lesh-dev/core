@@ -219,18 +219,20 @@
         /**
           * Создает нового пользователя
           * @param login логин нового пользователя
-          * @param email email нового пользователя (не обязательно)
+          * @param email email нового пользователя
           * @return экземпляр созданного только что пользователя
           **/
-        function create($login, $email = "nobody@example.com")
+        function create($login, $email)
         {
             if (!strlen($login))
                 return $this->set_error("Логин не может быть пустым. ");
             if (!xcms_check_user_name($login))
                 return $this->set_error("Недопустимое имя пользователя. ");
             $this->check_rights("admin");
-            if(file_exists($this->_file_name($login)))
-                return $this->set_error("Пользователь $login уже существует. ");
+            if (file_exists($this->_file_name($login)))
+                return $this->set_error("Пользователь '$login' уже существует. ");
+            if ($this->find_by_email($email) !== NULL)
+                return $this->set_error("Пользователь с электронной почтой '$email' уже существует. ");
             $u = new XcmsUser($login);
             $u->set_valid();
             $u->set_param("email", $email);
@@ -296,6 +298,19 @@
                 $ans[] = $li;
             }
             return $ans;
+        }
+        /**
+          * Находит пользователя по email
+          **/
+        function find_by_email($email)
+        {
+            $users = $this->user_list();
+            foreach ($users as $login) {
+                $u = $this->su($login);
+                if ($u->email() == $email)
+                    return $u;
+            }
+            return NULL;
         }
         /**
           * Операция su (switch user). На самом деле никакой подмены
@@ -380,6 +395,13 @@
 
             if ($superuser->su("test_user")->login() != "test_user")
                 xut_report("XcmsUser::su doesn't work properly");
+
+            try
+            {
+                $superuser->create("another_user", "vasya@example.com");
+                xut_report("Able to create another user with same email");
+            } catch (Exception $e) {}
+
             xut_end();
         }
     };

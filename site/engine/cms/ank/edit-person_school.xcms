@@ -4,7 +4,7 @@
 
 $person_school_fields = array(
     "member_person_id"=>"Участник",
-    "school_id"=>"Школа, на которой читался курс",
+    "school_id"=>"Школа",
     "is_student"=>"Школьник",
     "is_teacher"=>"Препод",
     "curatorship"=>"Кураторство",
@@ -182,7 +182,7 @@ function xsm_edit_person_school()
                 <?php
             }?>
         </table><?php
-        xsm_person_school_edit_operations('person_school', 'person_school', $person_school_id, 'Вернуться к списку курсов', $school_id, $member_person_id);?>
+        xsm_person_school_edit_operations('person_school', 'person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id);?>
     </form>
     <?php
 }

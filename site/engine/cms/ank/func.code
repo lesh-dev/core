@@ -48,7 +48,7 @@ function xsm_get_anketa_statuses()
 {
     return array(
         "new"=>"Новый",
-        "progress"=>"Приглашён на собеседование",
+        "progress"=>"Ждёт собеседования",
         "processed"=>"Принят",
         "declined"=>"Послан",
         "cont"=>"Активный",
@@ -66,7 +66,7 @@ function xcms_ank_get_show_status_list()
         "not-spam"=>"Без спама и дублей",
         "not-decl"=>"Без спама, дублей и посланых",
         "new"=>"Новые",
-        "progress"=>"Приглашённые",
+        "progress"=>"Ждут собеседования",
         "processed"=>"Принятые",
         "declined"=>"Посланные",
         "cont"=>"Продолжающие школьники",
@@ -80,7 +80,7 @@ function xsm_get_person_show_statuses()
         "active"=>"Актив",
         "not-old"=>"Все, кроме архивных",
         //"new"=>"Новые",
-        //"progress"=>"Приглашённые",
+        //"progress"=>"Ждут собеседования",
         "processed"=>"Принятые",
         //"declined"=>"Посланные",
         "cont"=>"Продолжающие",

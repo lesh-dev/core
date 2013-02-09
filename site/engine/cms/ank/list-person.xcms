@@ -4,7 +4,8 @@
     $show_is_teacher = xcms_get_persistent_key("list-person", "show_is_teacher");
     $show_is_student = xcms_get_persistent_key("list-person", "show_is_student");
 
-    $school_id = xcms_get_key_or($_GET, 'school_id', "1");
+    $default_school_id = xsm_get_default_school();
+    $school_id = xcms_get_key_or($_GET, 'school_id', $default_school_id);
 
 ?>
 <form method="post" action="list-person&amp;school_id=<?php echo $school_id; ?>" style="margin-bottom: 2px"><span>
@@ -26,8 +27,25 @@
 </span></form>
 <?php
 
-// печать всех школ (селектор сверху)
-// см. также xsm_print_person_schools
+/**
+  * Получение дефолтной школы (самой последней по времени)
+  **/
+function xsm_get_default_school()
+{
+    $db = xdb_get();
+    $query = "SELECT school_id FROM school ORDER BY school_date_start DESC LIMIT 1";
+    $school_sel = $db->query($query);
+    if ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
+        return $school['school_id'];
+
+    echo "Warning: NO SCHOOLS FOUND AT ALL<br />";
+    return "-1";
+}
+
+/**
+  * Печать всех школ (селектор сверху)
+  * @sa xsm_print_person_schools
+  **/
 function xsm_print_schools($db, $current_school_id)
 {
     // надо получать заранее информацию о всех предыдущих школах,
@@ -86,7 +104,7 @@ function xsm_show_person_list($school_id)
 
     if (strlen($cond))
         $query .= " AND $cond";
-    $query .= " ORDER BY ps.is_student, p.last_name, p.first_name";
+    $query .= " ORDER BY NOT (ps.is_teacher IS NULL OR ps.is_teacher = ''), p.last_name, p.first_name";
 
     // debug area (TODO: remove)
     ?><textarea rows="5" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
@@ -151,11 +169,12 @@ function xsm_show_person_list($school_id)
         $hr_teacher = ($is_teacher == "teacher" ? "Препод, " : "");
         $hr_student = ($is_student == "student" ? "Школьник, " : "");
 
+        $row_class = ($is_teacher == "teacher" ? "teacher" : "");
         ?>
-        <tr>
+        <tr class="<?php echo $row_class; ?>">
             <!--<td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>-->
             <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id&amp;school_id=$school_id"; ?>"><?php
-                echo "$last_name $first_name"; ?></a></td>
+                echo "$last_name $first_name $hr_teacher $hr_student"; ?></a></td>
             <td class="ankList"><?php echo $current_class; ?></a></td>
             <td class="ankList"><?php
                 echo $cellular;

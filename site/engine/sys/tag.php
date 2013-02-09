@@ -284,7 +284,8 @@ function xcms_keyvalue_unit_test()
     $values[" key\n5 "] = "proper\nvalue\rwithout\r\nspaces";
     $values[" key6 "] = "proper\nvalue\rwithout\r\nspaces";
     $values[" key7 "] = "generic  values  with   lots  of spaces";
-    xut_check(xcms_save_list("test-list", $values), "List save");
+    global $SETTINGS;
+    xut_check(xcms_save_list("${SETTINGS["datadir"]}test-list", $values), "List save");
     $read_values = xcms_get_list("test-list");
 
     $check["key1"] = "value 1";

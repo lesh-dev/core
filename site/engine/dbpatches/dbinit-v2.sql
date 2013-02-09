@@ -144,10 +144,10 @@ insert into person (last_name, first_name, patronymic,
     'teacher', '',
     '+7 (495) 618 30 21', '+7 (915) 0-686-186', 'dichlofos-mv@yandex.ru', 'dichlofos.mv',
     'http://vk.com/dichlofos',
-    'new', '2012.05.07 03:05:01');
+    'cont', '2012.05.07 03:05:01');
 -- 2
 insert into person (last_name, first_name, patronymic, anketa_status, is_teacher, person_created, person_modified)
-    values ('Вельтищев2', 'Дмитрий', 'Николаевич', 'declined', 'teacher', '2012.05.07 03:05:01', '2012.06.10 01:02:03');
+    values ('Вельтищев2', 'Дмитрий', 'Николаевич', 'cont', 'teacher', '2012.05.07 03:05:01', '2012.06.10 01:02:03');
 -- 3
 insert into person (last_name, first_name, patronymic, anketa_status, is_student, person_created, person_modified)
     values ('Школьница3', 'Мария-3', 'Батьковна', 'processed', 'student', '2012.01.04 03:05:01', '2012.05.01 01:05:01');
@@ -181,30 +181,35 @@ insert into person (last_name, first_name, patronymic, anketa_status, is_student
 -- 13
 insert into person (last_name, first_name, patronymic, anketa_status, is_student, person_created, person_modified)
     values ('Посланный1', 'Намедни', 'Школьник4', 'declined', '', '2012.01.04 04:01:02', '2012.06.01 01:05:01');
+-- 14
+insert into person (last_name, first_name, patronymic, anketa_status, is_teacher, person_created, person_modified)
+    values ('Трусевич1', 'Александр', 'Николаевич', 'cont', 'teacher', '2012.05.07 03:05:01', '2012.06.10 01:02:03');
 
 insert into school values(1, 'ЛЭШ-2011', 'summmer', '2011.07.23', '2011.08.22', null, null);
 insert into school values(2, 'ЗЭШ-2012', 'winter', '2012.01.02', '2012.01.09', null, null);
 insert into school values(3, 'ЗЭШ-2010', 'winter', '2010.01.02', '2010.01.09', null, null);
 
 -- member_person_id, school_id
-insert into person_school values(1,  1, 1, null,     'teacher',  null, 'мм',  null, null);
-insert into person_school values(2,  1, 2, null,     'teacher',  null, 'вмк', null, null);
-insert into person_school values(3,  2, 1, null,     'teacher',  null, 'мм',  null, null);
-insert into person_school values(4,  2, 2, null,     'teacher',  null, 'вмк', null, null);
-insert into person_school values(5,  3, 1, 'student', null,      null, '9',   null, null);
-insert into person_school values(6,  3, 2, 'student', null,      null, '10',  null, null);
-insert into person_school values(7,  4, 2, null,     'teacher',  null, '9',   null, null);
-insert into person_school values(8,  5, 2, null,     'teacher',  null, '8',   null, null);
-insert into person_school values(9,  6, 2, 'student', null,      null, '7',   null, null);
-insert into person_school values(10, 7, 2, 'student', 'teacher', null, '11',  null, null);
-insert into person_school values(11, 9, 3, 'teacher', null,      null, '11ж', null, null);
+insert into person_school values(1,   1,  1, null,     'teacher',  null, 'мм',  null, null);
+insert into person_school values(2,   1,  2, null,     'teacher',  null, 'вмк', null, null);
+insert into person_school values(3,   2,  1, null,     'teacher',  null, 'мм',  null, null);
+insert into person_school values(4,   2,  2, null,     'teacher',  null, 'вмк', null, null);
+insert into person_school values(5,   3,  1, 'student', null,      null, '9',   null, null);
+insert into person_school values(6,   3,  2, 'student', null,      null, '10',  null, null);
+insert into person_school values(7,   4,  2, null,     'teacher',  null, '9',   null, null);
+insert into person_school values(8,   5,  2, null,     'teacher',  null, '8',   null, null);
+insert into person_school values(9,   6,  2, 'student', null,      null, '7',   null, null);
+insert into person_school values(10,  7,  2, 'student', 'teacher', null, '11',  null, null);
+insert into person_school values(11,  9,  3, 'teacher', null,      null, '11ж', null, null);
+insert into person_school values(12, 14,  3, 'teacher', 'teacher', null, '5к', null, null);
 
 -- school_id, course_teacher_id
-insert into course values(1, 'test course',       1, 1, 'qqq4', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(2, 'not a Test course', 1, 2, 'qqq4', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(3, 'Вынос мозга',       2, 2, 'qqq3', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(4, 'Пайтон',            2, 2, 'qqq2', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(5, 'Хрень, а не курс',  2, 2, 'qqq1', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(1, 'test course',       1,  1, 'qqq4', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(2, 'not a Test course', 1,  2, 'qqq4', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(3, 'Вынос мозга',       2,  2, 'qqq3', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(4, 'Пайтон',            2,  2, 'qqq2', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(5, 'Хрень, а не курс',  2,  2, 'qqq1', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(6, 'Дыры в PHP',        2, 14, 'qqq1', 'ppp', 'zzz', 't666', 'aaa');
 
 -- student_person_id, course_id
 insert into exam values(1, 4, 1, 'passed', 'qqq2', 'qqq3', 'qqq4', 'qqq5', 'aaaa');

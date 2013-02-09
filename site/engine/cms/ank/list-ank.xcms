@@ -4,10 +4,10 @@
         return array(
             "abitur"=>"Набор",
             "new"=>"Новые",
-            "progress"=>"Приглашённые",
+            "progress"=>"Ждут собеседования",
             "processed"=>"Принятые",
             "declined"=>"Посланные",
-            "not-old"=>"Все, кроме архивных",
+            //"not-old"=>"Все, кроме архивных",
             "old"=>"Архивные",
             //"not-spam"=>"Без спама и дублей",
             //"not-decl"=>"Без спама, дублей и посланых",
@@ -22,7 +22,7 @@
 ?>
 <p>В этом списке по умолчанию показываются <b>свежие заявки</b>. Когда приходит новая анкета, она получает статус
     <span class="ankStatus new">Новый</span>. После приглашения на собеседование школьнику следует выставлять
-    статус <span class="ankStatus progress">Приглашён</span>, а в заметках указать дату собеседования.
+    статус <span class="ankStatus progress">Ждёт собеседования</span>, а в заметках указать дату собеседования.
     По результатам собеседования должен быть выставлен статус <span class="ankStatus processed">Принят</span> или
     <span class="ankStatus declined">Послан</span>.</p>
 <p>Для людей, которые стабильно <b>не ездят</b> на школы уже 2-3 года, осмысленно выставлять статус
@@ -64,7 +64,7 @@ function xsm_show_ank_list()
             " AND ( (anketa_status = 'new')".
             " OR (anketa_status = 'progress')".
             " OR (anketa_status = 'declined') )";
-    /*elseif ($show_status == "not-decl")
+    /*elseif ($show_status == "not-old")
         $cond .=
             " AND ( (anketa_status <> 'duplicate')".
             " AND (anketa_status <> 'spam')".
@@ -107,7 +107,7 @@ function xsm_show_ank_list()
             <col width="15%" />
             <col width="25%" />
             <col width="15%" />
-            <col width="10%" />
+            <col width="15%" />
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
