@@ -9,6 +9,8 @@ import random, traceback, sys
 from datetime import datetime
 import time
 
+from bawlib import isVoid, isList, isString, isEqual, getSingleOption
+
 #['_unwrap_value', '_wrap_value', 'add_cookie',
 #'back', 'binary', 'capabilities', 'close', 'command_executor', 'create_web_element', 'current_url', 'current_window_handle',
 #'delete_all_cookies', 'delete_cookie', 'desired_capabilities', 'error_handler', 'execute', 'execute_async_script',
@@ -23,18 +25,6 @@ import time
 #'start_session', 'stop_client', 'switch_to_active_element', 'switch_to_alert', 'switch_to_default_content',
 #'switch_to_frame', 'switch_to_window', 'title', 'window_handles']
 
-def isList(x):
-	return type(x) == type(list())
-
-def isString(x):
-	return type(x) == type("string") or type(x) == type(u"string")
-
-def isEqual(x, y):
-	if isString(x) and isString(y):
-		return (x.strip() == y.strip())
-	else:
-		raise RuntimeError("Cannot compare anything except strings, sorry. Type of X is " + str(type(x)) + ", and type of Y is " + str(type(y)) + ".")
-	
 class TestError(RuntimeError):
 	pass
 
@@ -68,17 +58,18 @@ def RunTest(test):
 	
 #main API wrapper for Webdriver.
 class SeleniumTest:
-	def __init__(self, baseUrl):
+	def __init__(self, baseUrl, params = []):
 #		print "Init SeleniumTest"
 		self.m_testName = self.__class__.__name__
 		self.m_baseUrl = baseUrl
+		self.m_params = params
 
 		self.initDefaults()
 		
-		if self.needHelp():
+		if self.needDoc():
 			print self.m_testName, "test info:"
 			print self.getDoc()
-			raise TestShutdown("Display help")
+			raise TestShutdown("Display doc")
 			
 		if self.needLeaveBrowserOpen():
 			self.setCloseOnExit(False)
@@ -118,15 +109,11 @@ class SeleniumTest:
 			self.failTest("Base URL for test '" + self.getName() + "' is not set. ")
 		return self.m_baseUrl
 	
-	def needHelp(self):
-		"""
-		called to detemine wether help is needed.
-		uses sys.argv by default (keys --help or -h)
-		"""
-		return "--help" in sys.argv or "-h" in sys.argv
+	def needDoc(self):
+		return getSingleOption(["-d", "--doc"], self.m_params);
 		
 	def needLeaveBrowserOpen(self):
-		return "-l" in sys.argv or "--leave-open" in sys.argv
+		return getSingleOption(["-l", "--leave-open"], self.m_params);
 			
 	def shutdown(self, exitCode = 0):
 		sys.exit(exitCode)
@@ -161,10 +148,7 @@ class SeleniumTest:
 			self.m_logStarted = True
 		except IOError:
 			raise RuntimeError("Cannot create log file '" + m_logFile + "'. ")
-		
-	def isVoid(self, text):
-		return text is None or text.strip() == "";
-	
+			
 	def setCloseOnExit(self, flag):
 		self.m_closeOnExit = flag;
 		
@@ -346,10 +330,10 @@ class SeleniumTest:
 			if len(stringOrList) == 0:
 				raise RuntimeError("Empty list passed to " + methodName);
 			for text in stringOrList:
-				if self.isVoid(text):
+				if isVoid(text):
 					raise RuntimeError("Empty string passed in the list to " + methodName);
 		else:		
-			if self.isVoid(stringOrList):
+			if isVoid(stringOrList):
 				raise RuntimeError("Empty param passed to " + methodName);
 
 	def getUrlByLinkText(self, urlText):
