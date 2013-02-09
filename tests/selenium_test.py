@@ -105,15 +105,17 @@ class SeleniumTest:
 				self.m_driver.close()
 
 	def getBaseUrl(self):
-		if self.isVoid(self.m_baseUrl):
+		if isVoid(self.m_baseUrl):
 			self.failTest("Base URL for test '" + self.getName() + "' is not set. ")
 		return self.m_baseUrl
 	
 	def needDoc(self):
-		return getSingleOption(["-d", "--doc"], self.m_params);
+		opt, _ = getSingleOption(["-d", "--doc"], self.m_params)
+		return opt
 		
 	def needLeaveBrowserOpen(self):
-		return getSingleOption(["-l", "--leave-open"], self.m_params);
+		opt, _ = getSingleOption(["-l", "--leave-open"], self.m_params);
+		return opt
 			
 	def shutdown(self, exitCode = 0):
 		sys.exit(exitCode)

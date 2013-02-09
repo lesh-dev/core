@@ -34,8 +34,6 @@ doInstallerTest, args = getSingleOption(["-i", "--installer"], args)
 
 specTest, args = getOption(["-t", "--test"], args)
 
-print "spectest = ", specTest
-
 doShowHelp, args = getOption(["-h", "--help"], args)
 
 testSet, args = getOption(["-s", "--set"], args)
@@ -67,7 +65,6 @@ try:
 	tests = testSetModule.getTests(baseUrl, args)
 	while len(tests) > 0:
 		test = tests.pop()
-		print "Extracted test ", test.getName()
 		if specTest and test.getName() != specTest:
 			continue
 		print "Running test", test.getName()
