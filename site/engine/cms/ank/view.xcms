@@ -175,6 +175,8 @@
     else if(@$_GET["aparam"] == "edit-person_comment")
         include(translate('<! cms/ank/edit-person_comment !>'));
 
+    else if(@$_GET["aparam"] == "list-course")
+        include(translate('<! cms/ank/list-course !>'));
     else if(@$_GET["aparam"] == "view-course")
         include(translate('<! cms/ank/view-course !>'));
     else if(@$_GET["aparam"] == "edit-course")

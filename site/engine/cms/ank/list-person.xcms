@@ -28,21 +28,6 @@
 <?php
 
 /**
-  * Получение дефолтной школы (самой последней по времени)
-  **/
-function xsm_get_default_school()
-{
-    $db = xdb_get();
-    $query = "SELECT school_id FROM school ORDER BY school_date_start DESC LIMIT 1";
-    $school_sel = $db->query($query);
-    if ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
-        return $school['school_id'];
-
-    echo "Warning: NO SCHOOLS FOUND AT ALL<br />";
-    return "-1";
-}
-
-/**
   * Печать всех школ (селектор сверху)
   * @sa xsm_print_person_schools
   **/
