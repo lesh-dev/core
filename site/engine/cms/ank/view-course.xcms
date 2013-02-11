@@ -6,26 +6,23 @@
 function xsm_print_course()
 {
     $db = xdb_get();
-    $course_sel = $db->query("SELECT * FROM course, person WHERE course_teacher_id = person_id");
-    xsm_view_operations('course', 'course', 'курс');
-    ?>
-    <table summary="Курсы" class="ankList">
+    //xsm_view_operations('course', 'course', 'курс');
+    $course_id = xcms_get_key_or($_GET, 'course_id', "-1");
+    $course = xdb_get_entity_by_id('course', $course_id);
+    $course_teacher_id = xcms_get_key_or($course, 'course_teacher_id', 'new');
+    // TODO: handle empty teacher
+    $teacher = xdb_get_entity_by_id('person', $course_teacher_id); ?>
+    <table summary="Курс" class="ankList">
     <?php
-    while ($course_person = $course_sel->fetchArray(SQLITE3_ASSOC)) {?>
-        <tr><td class="ankListRowDiv">&nbsp;</td></tr>
-        <?php
+        $course_title = htmlspecialchars($course["course_title"]);
+        $target_class = htmlspecialchars($course["target_class"]);
+        $course_desc = htmlspecialchars($course["course_desc"]);
+        $course_comment = htmlspecialchars($course["course_comment"]);
+        $course_created = htmlspecialchars($course["course_created"]);
+        $course_modified = htmlspecialchars($course["course_modified"]);
 
-        $course_id = htmlspecialchars($course_person["course_id"]);
-        $course_title = htmlspecialchars($course_person["course_title"]);
-        $course_teacher_id = htmlspecialchars($course_person["course_teacher_id"]);
-        $target_class = htmlspecialchars($course_person["target_class"]);
-        $course_desc = htmlspecialchars($course_person["course_desc"]);
-        $course_comment = htmlspecialchars($course_person["course_comment"]);
-        $course_created = htmlspecialchars($course_person["course_created"]);
-        $course_modified = htmlspecialchars($course_person["course_modified"]);
-
-        $first_name = htmlspecialchars($course_person["first_name"]);
-        $last_name = htmlspecialchars($course_person["last_name"]);
+        $first_name = htmlspecialchars($teacher["first_name"]);
+        $last_name = htmlspecialchars($teacher["last_name"]);
 
         ?>
         <tr>
@@ -47,12 +44,10 @@ function xsm_print_course()
             <?php echo xcms_html_wrap_by_crlf($course_desc); ?></td></tr>
         <tr><td class="ankList"><span class="ankListField">Комментарий</span>:
             <?php echo xcms_html_wrap_by_crlf($course_comment); ?></td></tr>
-        <?php
-        }
-    ?>
     </table>
+    <b>Реклама</b>: Тут будет информация о сданных и несданных зачётах по этому курсу!
     <?php
-    xsm_view_operations('course', 'course', 'курс');
+    //xsm_view_operations('course', 'course', 'курс');
 }
 
 xsm_print_course();

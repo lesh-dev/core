@@ -40,6 +40,97 @@
     }
 
 
+    /**
+      * Печаталка таблицы курсов (общая для списка курсов на школе и одного препода)
+      **/
+    function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = "all")
+    {
+        $query =
+            "SELECT * FROM course c WHERE
+            (c.school_id = $school_id)
+            ORDER BY course_title";
+        $pers = ($course_teacher_id != "all");
+        if ($pers)
+            $query .= " AND (c.course_teacher_id = $course_teacher_id)";
+
+        $course_sel = $db->query($query);
+        $course_aux_param = $pers
+            ? "&amp;course_teacher_id=$course_teacher_id&amp;school_id=$school_id"
+            : "&amp;school_id=$school_id";
+
+        xsm_view_operations('course', 'course', 'курс', $course_aux_param);
+        ?>
+        <table summary="Курсы" class="ankList">
+            <colgroup>
+                <col width="40%" />
+                <col width="30%" />
+                <?php if (!$pers) {?>
+                <col width="10%" /><?php
+                } ?>
+                <col width="15%" />
+            </colgroup>
+            <thead>
+                <th class="ankList">Курс</th>
+                <?php if (!$pers) {?>
+                <th class="ankList">Препод</th><?php
+                } ?>
+                <th class="ankList">Класс</th>
+                <th class="ankList">Успехи</th>
+            </thead>
+        <?php
+
+        while ($course = $course_sel->fetchArray(SQLITE3_ASSOC)) {
+
+            $course_id = htmlspecialchars($course["course_id"]);
+            $course_title = htmlspecialchars($course["course_title"]);
+            $target_class = htmlspecialchars($course["target_class"]);
+            $course_teacher_id = xcms_get_key_or($course, "course_teacher_id", "new");
+            // ахтунг, тут будет N SELECT-ов
+            $teacher = ($course_teacher_id != "new")
+                ? xdb_get_entity_by_id('person', $course_teacher_id)
+                : array("first_name" => "Хрен", "last_name" => "Знает");
+
+            $teacher_first_name = htmlspecialchars($teacher["first_name"]);
+            $teacher_last_name = htmlspecialchars($teacher["last_name"]);
+
+            // до кучи посчитаем количество сдавших
+            $exam_passed_sel = $db->query(
+                "SELECT
+                COUNT(*) AS pass_count from exam
+                WHERE
+                (course_id = '$course_id') AND
+                (exam_status = 'passed')"
+            );
+            $exam_pass_count = 0;
+            if ($exam_pass_data = $exam_passed_sel->fetchArray(SQLITE3_ASSOC))
+                $exam_pass_count = $exam_pass_data['pass_count'];
+            $exam_total_sel = $db->query(
+                "SELECT
+                COUNT(*) AS total_count from exam
+                WHERE
+                (course_id = '$course_id')"
+            );
+            $exam_total_count = 0;
+            if ($exam_total_data = $exam_total_sel->fetchArray(SQLITE3_ASSOC))
+                $exam_total_count = $exam_total_data['total_count'];
+            ?>
+            <tr>
+                <td class="ankList"><a href="view-course&amp;course_id=<?php echo $course_id; ?>"><?php
+                    echo "$course_title"; ?></a></td>
+                <?php if (!$pers) {?>
+                <td class="ankList"><a href="view-person&amp;person_id=<?php echo $course_teacher_id; ?>"><?php
+                    echo "$teacher_first_name $teacher_last_name"; ?></a></td>
+                <?php } ?>
+                <td class="ankList"><?php echo $target_class; ?></td>
+                <td class="ankList"><a href="view-course&amp;course_id=<?php echo $course_id; ?>"><?php
+                    echo "Сдало <b>$exam_pass_count</b> из <b>$exam_total_count</b>"; ?></a></td>
+            </tr><?php
+            }
+        ?>
+        </table>
+        <?php
+    }
+
 
     function xsm_person_name_filter($db, $show_name_filter)
     {

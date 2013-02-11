@@ -169,45 +169,6 @@ function xsm_print_student_exams($db, $school_id, $person_id)
     <?php
 }
 
-function xsm_print_course_selected_school($db, $school_id)
-{
-    $course_sel = $db->query(
-        "SELECT
-        c.course_id, c.course_title, c.target_class
-        FROM course c WHERE
-        (c.school_id = $school_id)"
-    );
-    $course_aux_param = "&amp;school_id=$school_id";
-    xsm_view_operations('course', 'course', 'курс', $course_aux_param);
-    ?>
-    <table summary="Курсы <?php echo $person_id; ?>" class="ankList">
-        <colgroup>
-            <col width="70%" />
-            <col width="30%" />
-        </colgroup>
-        <thead>
-            <th class="ankList">Курс</th>
-            <th class="ankList">Класс</th>
-        </thead>
-    <?php
-
-    while ($course_data = $course_sel->fetchArray(SQLITE3_ASSOC)) {
-
-        $course_id = htmlspecialchars($course_data["course_id"]);
-        $course_title = htmlspecialchars($course_data["course_title"]);
-        $target_class = htmlspecialchars($course_data["target_class"]);
-
-        ?>
-        <tr>
-            <td class="ankList"><a href="view-course&amp;course_id=<?php echo $course_id; ?>"><?php
-                echo "$course_title"; ?></a></td>
-            <td class="ankList"><?php echo $target_class; ?></td>
-        </tr><?php
-        }
-    ?>
-    </table>
-    <?php
-}
 
 // shows course information sliced by school
 function xsm_print_courses()
