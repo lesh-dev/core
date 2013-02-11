@@ -49,7 +49,7 @@
                             '" class="menu-item menu-sys">Актив отделения</a>'));
                         include(translate('<a href="/<# web_prefix #>register/list-person'.
                             '" class="menu-item menu-sys">Участники</a>'));
-                        include(translate('<a href="/<# web_prefix #>register/view-course'.
+                        include(translate('<a href="/<# web_prefix #>register/list-course'.
                             '" class="menu-item menu-sys">Курсы</a>'));
                         include(translate('<a href="/<# web_prefix #>?'.
                             xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).
