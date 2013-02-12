@@ -1,8 +1,24 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import os
+
 # Bells-And-Whistles (tm) Python 2.x library
 # Contains non-categorized common crap code used in selenium tests.
+
+class BawError(RuntimeError):
+	pass
+
+class CliParamError(BawError):
+	pass
+
+def fileBaseName(fileName):
+	return os.path.basename(fileName)
+	
+def userSerialize(text):
+	if isList(text):
+		return "|".join(text)
+	return str(text)
 
 def isList(x):
 	return type(x) == type(list())
@@ -46,6 +62,9 @@ def getOption(opt, inArgs):
 			value = args[i]
 			del args[i]
 			return value, args
+	# check last argument match
+	if argMatchOption(args[-1], opt):
+		raise CliParamError("Option " + userSerialize(opt) + " specified without argument. ")
 	return None, args
 
 def getSingleOption(opt, inArgs):
