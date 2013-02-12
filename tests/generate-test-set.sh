@@ -18,7 +18,7 @@ if [ -r "$TEST_SET" ]; then
 	mv "$TEST_SET" "$TEST_SET.bak"
 fi
 
-echo "This file is AUTO-GENERATED. Do not edit it directly, edit generator instead. " > "$TEST_SET"
+echo "# This file is AUTO-GENERATED. Do not edit it directly, edit generator instead. " > "$TEST_SET"
 
 echo " " >> "$TEST_SET"
 

@@ -71,10 +71,10 @@ setModuleName = "auto_test_set"
 
 if testSet:
 	setModuleName = testSet.replace(".py", "")
-	
-testSetModule = __import__(setModuleName, [])	
 
 try:
+	testSetModule = __import__(setModuleName, [])	
+	
 	tests = testSetModule.getTests(baseUrl, args)
 	while len(tests) > 0:
 		test = tests.pop()
@@ -89,5 +89,8 @@ try:
 
 except TestShutdown as e:
 	pass
-
+except ImportError as e:
+	print "Failed to load test set " + setModuleName + " as Python module. "
+	print "Details: "
+	print e
 

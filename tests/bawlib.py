@@ -63,7 +63,7 @@ def getOption(opt, inArgs):
 			del args[i]
 			return value, args
 	# check last argument match
-	if argMatchOption(args[-1], opt):
+	if len(inArgs) > 0 and argMatchOption(args[-1], opt):
 		raise CliParamError("Option " + userSerialize(opt) + " specified without argument. ")
 	return None, args
 
