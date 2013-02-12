@@ -9,6 +9,7 @@ $person_school_fields = array(
     "is_teacher"=>"Препод",
     "curatorship"=>"Кураторство",
     "current_class"=>"Класс",
+    "courses_needed"=>"Потребное кол-во зачётов",
     "person_school_created"=>"Время создания",
     "person_school_modified"=>"Последняя модификация"
 );
