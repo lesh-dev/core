@@ -13,6 +13,8 @@ class XcmsAuthCheckDupLogin(SeleniumTest):
 	def run(self):
 		self.setAutoPhpErrorChecking(True)
 		
+		xtest_common.assertNoInstallerPage(self)
+
 		conf = XcmsTestConfig()
 		
 		# first, login as admin

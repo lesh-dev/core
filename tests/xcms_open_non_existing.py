@@ -15,6 +15,9 @@ class XcmsOpenNonExisting(SeleniumTest):
 	"""
 	def run(self):
 		self.setAutoPhpErrorChecking(True)
+		
+		xtest_common.assertNoInstallerPage(self)
+		
 		self.gotoPage("/qqq");
 		self.assertTextPresent("//div[@class='error-widget']", u"Нет такой страницы")
 		homeHref = self.getUrlByLinkText(u"этой ссылке")

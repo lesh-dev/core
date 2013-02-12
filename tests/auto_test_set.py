@@ -12,8 +12,7 @@ import xcms_open_renamed_pages
 import xcms_unittests
 import xcms_version_check
 import xcms_xsm_anketa_fill
-def getTests(baseUrl, args):
-return [
+def getTests(baseUrl, args): return [
 xcms_auth_add_new_user.XcmsAuthAddNewUser(baseUrl, args),
 xcms_auth_check_dup_email.XcmsAuthCheckDupEmail(baseUrl, args),
 xcms_auth_check_dup_login.XcmsAuthCheckDupLogin(baseUrl, args),

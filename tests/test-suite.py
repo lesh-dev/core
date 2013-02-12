@@ -24,15 +24,15 @@ Examples:
   {script} -t XcmsXsmAnketaFill test.fizlesh.ru
 
 ALL OPTIONS:
-  -h, --help\t\t\tDisplay this help
-  -i, --installer\t\t\tRun installer test prior to all rest suite
-  -t, --test <test>\t\tRun specific test instead of all suite
+  -h, --help\t\tDisplay this help
+  -i, --installer\tRun installer test prior to all rest suite
+  -t, --test <test>\tRun specific test instead of all suite
   -l, --list\t\tList all tests in test set
   -s, --set\t\tSpecify test set to run (instead of default auto_test_set.py)
 
 TEST OPTIONS could be test-dependent. Commonly supported options are: 
-  -l, --leave-open\t\tLeave browser window after test finish/fail
-  -d, --doc\t\t\tDisplay test documentation
+  -p, --preserve\tLeave browser window after test finish/fail
+  -d, --doc\t\tDisplay test documentation
 """.format(script = fileBaseName(sys.argv[0]))
 	
 args = sys.argv[1:] # exclude program name

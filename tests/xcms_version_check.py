@@ -11,7 +11,12 @@ class XcmsVersionCheck(SeleniumTest):
 	This test checks if version is displayed on main page and in admin panel.
 	"""
 	def run(self):
-		self.gotoPage("/")
+		
+		xtest_common.assertNoInstallerPage(self)
+
+		self.gotoRoot()
+
+		# frontend 
 		feVerXpath = "//span[@class='site-version']"
 		self.assertTextPresent(feVerXpath, "rev. ");
 		siteVersion = self.getElementContent(feVerXpath);
@@ -29,7 +34,7 @@ class XcmsVersionCheck(SeleniumTest):
 		
 		self.gotoUrlByLinkText("Админка")
 		
-		
+		# backend
 		beVerXpath = "//pre[@class='site-info']"
 		self.assertTextPresent(beVerXpath, "rev. ");
 		cpVersion = self.getElementContent(beVerXpath);

@@ -24,6 +24,8 @@ class XcmsAuthAddNewUser(SeleniumTest):
 #		self.drv().getEval("window.resizeTo(X, Y); window.moveTo(0,0);")
 		self.setAutoPhpErrorChecking(True)
 		
+		xtest_common.assertNoInstallerPage(self)
+		
 		conf = XcmsTestConfig()
 		
 		# first, login as admin

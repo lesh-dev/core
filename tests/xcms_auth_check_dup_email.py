@@ -13,6 +13,8 @@ class XcmsAuthCheckDupEmail(SeleniumTest):
 	def run(self):
 		self.setAutoPhpErrorChecking(True)
 		
+		xtest_common.assertNoInstallerPage(self)
+		
 		conf = XcmsTestConfig()
 		
 		inpLogin1 = "dup_email_" + random_crap.randomText(8)

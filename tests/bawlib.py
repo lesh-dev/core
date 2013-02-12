@@ -18,6 +18,8 @@ def fileBaseName(fileName):
 def userSerialize(text):
 	if isList(text):
 		return "|".join(text)
+	if isString(text):
+		return text
 	return str(text)
 
 def isList(x):

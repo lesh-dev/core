@@ -28,6 +28,9 @@ from bawlib import isVoid, isList, isString, isEqual, getSingleOption, userSeria
 class TestError(RuntimeError):
 	pass
 
+class TestFatal(TestError):
+	pass
+
 class ItemNotFound(TestError):
 	pass
 
@@ -47,6 +50,9 @@ def RunTest(test):
 	try:
 		test.init()
 		test.run()
+	except TestFatal as e:
+#		test.printActionLog()
+		test.handleTestFatal(e)
 	except TestError as e:
 		print "Test action log:"
 		test.printActionLog()
@@ -114,7 +120,7 @@ class SeleniumTest:
 		return opt
 		
 	def needLeaveBrowserOpen(self):
-		opt, _ = getSingleOption(["-l", "--leave-open"], self.m_params);
+		opt, _ = getSingleOption(["-p", "--preserve"], self.m_params);
 		return opt
 			
 	def shutdown(self, exitCode = 0):
@@ -131,7 +137,11 @@ class SeleniumTest:
 	def handleTestFail(self, exc):
 		print "TEST FAILED:", unicode(exc.message).encode("utf-8")
 		self.shutdown(1)
-	
+
+	def handleTestFatal(self, exc):
+		print "TEST FATALED:", unicode(exc.message).encode("utf-8")
+		self.shutdown(2)
+
 	def getActionLog(self):
 		# return copy of navigation log
 		return self.m_actionLog[:]
@@ -166,6 +176,7 @@ class SeleniumTest:
 			url = "http://" + url;
 		return url;
 
+	# get current URL of tested site
 	def curUrl(self):
 		return self.m_driver.current_url;
 	

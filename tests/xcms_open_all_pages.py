@@ -13,7 +13,10 @@ class XcmsOverallOpenPages(SeleniumTest):
 	"""
 	def run(self):
 		self.setAutoPhpErrorChecking(True)
-		self.gotoPage("/")
+		
+		xtest_common.assertNoInstallerPage(self)
+
+		self.gotoRoot()
 		
 		self.gotoUrlByLinkText(u"Главная")
 		self.assertBodyTextPresent(u"Приветствуем Вас на сайте Физического отделения Летней Экологической Школы");
