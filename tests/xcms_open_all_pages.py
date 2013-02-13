@@ -27,7 +27,7 @@ class XcmsOverallOpenPages(SeleniumTest):
 		self.gotoUrlByLinkText(u"Новости")
 		self.assertBodyTextPresent(u"Новости")
 
-		self.gotoUrlByLinkText(u"Информация")
+		self.gotoUrlByLinkText(u"Официально о ЛЭШ")
 		self.assertBodyTextPresent(u"Официальная информация")
 		self.assertBodyTextPresent(u"Летняя Экологическая Школа (ЛЭШ) существует с 1990 года")
 		
