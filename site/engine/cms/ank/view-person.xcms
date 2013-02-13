@@ -210,12 +210,12 @@ function xsm_print_person_school_edit($db, $school_id, $person_id)
         На данной школе не присутствовал. <a href="<?php echo $add_href; ?>">Зачислить</a><?php
         return;
     }
-    xsm_edit_link('person_school', $person_school_id, '', 'Редактировать участника на этой школе');
+    xsm_edit_link('person_school', $person_school_id, '', 'Редактировать роли и статусы');
 }
 
-function xsm_print_student_exams($db, $school_id, $person_id)
+function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
 {
-    $exam_sel = $db->query(
+    $query =
         "SELECT
         tp.last_name as teacher_last_name, tp.first_name as teacher_first_name,
         c.course_id, c.course_title, c.course_teacher_id, c.target_class,
@@ -224,8 +224,8 @@ function xsm_print_student_exams($db, $school_id, $person_id)
         (c.course_teacher_id = tp.person_id) AND
         (c.school_id = $school_id) AND
         (e.course_id = c.course_id) AND
-        (e.student_person_id = $person_id)"
-    );
+        (e.student_person_id = $person_id)";
+    $exam_sel = $db->query($query);
 
     $exam_aux_param = "&amp;student_person_id=$person_id&amp;school_id=$school_id";
 
@@ -305,10 +305,21 @@ function xsm_print_person_selected_school($db, $school_id, $person_id)
         return;
     $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
     if ($person_school['is_student'] == 'student')
-        xsm_print_student_exams($db, $school_id, $person_id);
-
+        xsm_print_student_exams($db, $school_id, $person_id, $person_school);
+    else
+    {?>
+        <div>Зачёты можно добавлять только тем, кто имеет роль <b>Школьника</b> на этой Школе: <?php
+        xsm_edit_link('person_school', $person_school_id, '&amp;is_student=student', 'Добавить роль Школьника');?>
+        </div><?php
+    }
     if ($person_school['is_teacher'] == 'teacher')
         xsm_print_course_selected_school($db, $school_id, $person_id);
+    else
+    {?>
+        <div>Курсы можно добавлять только тем, кто имеет роль <b>Препода</b> на этой Школе: <?php
+        xsm_edit_link('person_school', $person_school_id, '&amp;is_teacher=teacher', 'Добавить роль Препода');?>
+        </div><?php
+    }
 }
 
 // shows person information sliced by school

@@ -285,12 +285,12 @@
     }
 
     // Kosher function
-    function xsm_edit_link($table_name, $id, $aux_param = '', $custom_title = 'Правка')
+    function xsm_edit_link($table_name, $id, $aux_param = '', $custom_title = 'Правка', $custom_hover = 'Редактировать')
     {?>
         <a href="edit-<?php
             echo "$table_name$aux_param&amp;${table_name}_id=$id" ?>"><img
             src="<# full_design_dir #>pic/edit.gif" class="edit-icon"
-            title="Редактировать" /><?php echo $custom_title; ?></a><?php
+            title="<?php echo $custom_hover; ?>" /><?php echo $custom_title; ?></a><?php
     }
 
 
