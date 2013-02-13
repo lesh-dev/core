@@ -16,8 +16,8 @@ Most generic usage:
   This command runs default test set 'auto_test_set.py'
 Run specific test:
   {script} -t <test-name> [TEST OPTIONS] <site-url>
-List test in test set:
-  {script} -l <test-name>
+List test in test set (or list tests with full descriptions):
+  {script} -l(-f) <test-name>
 
 Examples:
   {script} test.fizlesh.ru
@@ -28,6 +28,7 @@ ALL OPTIONS:
   -i, --installer\tRun installer test prior to all rest suite
   -t, --test <test>\tRun specific test instead of all suite
   -l, --list\t\tList all tests in test set
+  -f, --full-list\t\tList all tests in test set with descriptions
   -s, --set\t\tSpecify test set to run (instead of default auto_test_set.py)
 
 TEST OPTIONS could be test-dependent. Commonly supported options are: 
@@ -44,6 +45,8 @@ try:
 	doShowHelp, args = getSingleOption(["-h", "--help"], args)
 	testSet, args = getOption(["-s", "--set"], args)
 	doList, args = getSingleOption(["-l", "--list"], args)
+	doFullList, args = getSingleOption(["-f", "--full-list"], args)
+	
 except CliParamError as e:
 	print "Option syntax error: ", e
 	showHelp()
@@ -58,7 +61,7 @@ if len(args) >= 1:
 		showHelp()
 		sys.exit(1)
 else:
-	if not doList:
+	if not (doList or doFullList):
 		print "Test site URL not defined. "
 		showHelp()
 		sys.exit(1)
@@ -82,6 +85,11 @@ try:
 			continue
 		if doList:
 			print test.getName();
+		elif doFullList:
+			print "=" * 30;
+			print test.getName();
+			print test.getDoc();
+			print;
 		else:
 			print "Running test", test.getName()
 			print test.getDoc()
