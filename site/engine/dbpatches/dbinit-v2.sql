@@ -204,22 +204,22 @@ insert into person_school values(10,  7,   2,   'student', 'teacher', null, '11'
 insert into person_school values(11,  9,   3,   '',        null,      null, '11ж', '8', null, null);
 insert into person_school values(12, 14,   3,   '',        'teacher', null, '5к',  '8', null, null);
 
--- school_id, course_teacher_id
-insert into course values(1, 'test course',       1,  1, 'qqq4', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(2, 'not a Test course', 1,  2, 'qqq4', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(3, 'Вынос мозга',       2,  2, 'qqq3', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(4, 'Пайтон',            2,  2, 'qqq2', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(5, 'Хрень, а не курс',  2,  2, 'qqq1', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(6, 'Дыры в PHP',        2, 14, 'qqq1', 'ppp', 'zzz', 't666', 'aaa');
+--                        id, title,              sch, tch
+insert into course values(1, 'test course',       1,    1,  'qqq4', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(2, 'not a Test course', 1,    2,  'qqq4', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(3, 'Вынос мозга',       2,    2,  'qqq3', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(4, 'Пайтон',            2,    2,  'qqq2', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(5, 'Хрень, а не курс',  2,    2,  'qqq1', 'ppp', 'zzz', 't666', 'aaa');
+insert into course values(6, 'Дыры в PHP',        2,   14,  'qqq1', 'ppp', 'zzz', 't666', 'aaa');
 
--- student_person_id, course_id
-insert into exam values(1, 4, 1, 'passed', 'qqq2', 'qqq3', 'qqq4', 'qqq5', 'aaaa');
-insert into exam values(2, 5, 2, 'passed', 'qqq21', 'qqq330', 'qqq4', 'qqq5', 'bbb');
-insert into exam values(3, 5, 3, 'failed', 'qqq22', 'qqq34-', 'qqq4', 'qqq5', 'ccc');
-insert into exam values(4, 5, 4, 'failed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
-insert into exam values(5, 6, 2, 'passed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
-insert into exam values(6, 6, 4, 'passed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
-insert into exam values(7, 6, 5, 'passed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
+--                         stu, crs
+insert into exam values(1, 4,   1,  'passed', 'qqq2',  'qqq3',    'qqq4', 'qqq5', 'aaaa');
+insert into exam values(2, 5,   2,  'passed', 'qqq21', 'qqq330',  'qqq4', 'qqq5', 'bbb');
+insert into exam values(3, 5,   3,  'failed', 'qqq22', 'qqq34-',  'qqq4', 'qqq5', 'ccc');
+insert into exam values(4, 5,   4,  'failed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
+insert into exam values(5, 6,   2,  'passed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
+insert into exam values(6, 6,   4,  'passed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
+insert into exam values(7, 6,   5,  'passed', 'qqq23', 'qqq35--', 'qqq4', 'qqq5', 'ddd');
 
 -- notbound students
 SELECT * FROM person p LEFT JOIN person_school ps ON p.person_id = ps.member_person_id WHERE ps.member_person_id IS NULL;
