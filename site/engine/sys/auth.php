@@ -227,7 +227,7 @@
             if (!strlen($login))
                 return $this->set_error("Логин не может быть пустым. ");
             if (!xcms_check_user_name($login))
-                return $this->set_error("Недопустимое имя пользователя. ");
+                return $this->set_error("Указан недопустимый логин. ");
             $this->check_rights("admin");
             if (file_exists($this->_file_name($login)))
                 return $this->set_error("Пользователь '$login' уже существует. ");
