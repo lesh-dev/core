@@ -32,6 +32,8 @@
       * and table should have AI key
       * @param $values KV-array of row values
       * @param $allowed_keys only these keys will be taken from $values
+      * @return true on successful update, false on error
+      * and autoincremented field id on insertion
       *
       * TODO: Unhardcode database location ("$content_dir/ank/fizlesh.sqlite3")
       **/
@@ -108,6 +110,7 @@
       * A special field, ${table_name}_modified, will be updated
       * using current UTC time value in human-readable form
       * @sa xdb_insert_ai
+      * @return true in case of success, false otherwise
       **/
     function xdb_update($table_name, $primary_keys, $keys_values, $allowed_keys)
     {
@@ -146,7 +149,7 @@
         else
             xcms_log(0, "[DB:ERROR] $query");
         $db->close();
-        return $result;
+        return $result ? true : false;
     }
 
     /**

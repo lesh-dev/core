@@ -62,9 +62,10 @@
         $key_name = "${table_name}_id";
         $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
         $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
-        if ($res)
+        if ($res === true || $res > 0)
         {
-            $id = $res;
+            if ($id == 'new')
+                $id = $res;
             ?>
             <p><?php echo $title; ?> успешно сохранён.<?php
         }
