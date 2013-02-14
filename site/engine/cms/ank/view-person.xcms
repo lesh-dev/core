@@ -228,12 +228,16 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
     $exam_sel = $db->query($query);
 
     $exam_aux_param = "&amp;student_person_id=$person_id&amp;school_id=$school_id";
+    $need = xcms_get_key_or($person_school, 'courses_needed', '?');
 
+    $need_href = "edit-person_school".
+        xcms_url(array('person_school_id'=>$person_school['person_school_id']));
     ?>
     <h3>Зачёты</h3>
     <?php
         xsm_view_operations('exam', 'exam', 'зачёт', $exam_aux_param);
     ?>
+    <div>Всего нужно сдать <a href="<?php echo $need_href; ?>"><?php echo $need; ?> зачётов</a>.</div>
     <table summary="Зачёты школьника <?php echo $person_id; ?>" class="ankList">
         <colgroup>
             <col width="25%" />
