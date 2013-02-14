@@ -15,11 +15,16 @@ td.ankListRowDiv {
     height: 8px;
 }
 
-td.ankListRowTitle, th.ankList {
+td.ankListRowTitle, th.ankList, td.ankList {
     vertical-align: middle;
     background-color: #9fdf8f;
     border: 1px solid #8faf6f;
     padding: 3px;
+    padding-left: 5px;
+}
+
+td.ankList, th.ankList {
+    text-align: left;
 }
 
 td.school-selection {
@@ -36,12 +41,6 @@ td.school-selection.current {
 td.school-selection a {
     text-align: center;
     display: block;
-}
-
-td.ankList, th.ankList {
-    border: 1px solid #8faf6f;
-    padding: 3px;
-    text-align: left;
 }
 
 tr.teacher td.ankList {
@@ -199,4 +198,9 @@ div.person-topleft {
 div.person-topright {
     float: right;
     width: 35%;
+}
+
+div.line {
+    padding-top: 5px;
+    padding-bottom: 5px;
 }

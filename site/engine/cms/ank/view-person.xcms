@@ -237,7 +237,9 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
     <?php
         xsm_view_operations('exam', 'exam', 'зачёт', $exam_aux_param);
     ?>
-    <div>Всего нужно сдать <a href="<?php echo $need_href; ?>"><?php echo $need; ?> зачётов</a>.</div>
+    <div class="line">
+        Всего нужно сдать <a href="<?php echo $need_href; ?>"><?php echo $need; ?> зачётов</a>.
+    </div>
     <table summary="Зачёты школьника <?php echo $person_id; ?>" class="ankList">
         <colgroup>
             <col width="25%" />
@@ -307,21 +309,25 @@ function xsm_print_person_selected_school($db, $school_id, $person_id)
     $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
     if ($person_school_id === NULL)
         return;
+
     $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
     if ($person_school['is_student'] == 'student')
         xsm_print_student_exams($db, $school_id, $person_id, $person_school);
     else
     {?>
-        <div>Зачёты можно добавлять только тем, кто имеет роль <b>Школьника</b> на этой Школе: <?php
-        xsm_edit_link('person_school', $person_school_id, '&amp;is_student=student', 'Добавить роль Школьника');?>
+        <div class="line">
+            Зачёты можно добавлять только тем, кто имеет роль <b>Школьника</b> на этой Школе: <?php
+            xsm_edit_link('person_school', $person_school_id, '&amp;is_student=student', 'Добавить роль Школьника');?>
         </div><?php
     }
+
     if ($person_school['is_teacher'] == 'teacher')
         xsm_print_course_selected_school($db, $school_id, $person_id);
     else
     {?>
-        <div>Курсы можно добавлять только тем, кто имеет роль <b>Препода</b> на этой Школе: <?php
-        xsm_edit_link('person_school', $person_school_id, '&amp;is_teacher=teacher', 'Добавить роль Препода');?>
+        <div class="line">
+            Курсы можно добавлять только тем, кто имеет роль <b>Препода</b> на этой Школе: <?php
+            xsm_edit_link('person_school', $person_school_id, '&amp;is_teacher=teacher', 'Добавить роль Препода');?>
         </div><?php
     }
 }
