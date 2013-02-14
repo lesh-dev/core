@@ -45,13 +45,12 @@
       **/
     function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = "all")
     {
-        $query =
-            "SELECT * FROM course c WHERE
-            (c.school_id = $school_id)
-            ORDER BY course_title";
         $pers = ($course_teacher_id != "all");
+
+        $where = "(c.school_id = $school_id)";
         if ($pers)
-            $query .= " AND (c.course_teacher_id = $course_teacher_id)";
+            $where .= " AND (c.course_teacher_id = $course_teacher_id)";
+        $query = "SELECT * FROM course c WHERE $where ORDER BY course_title";
 
         $course_sel = $db->query($query);
         $course_aux_param = $pers
