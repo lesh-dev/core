@@ -21,6 +21,7 @@ sqlite3 $db < engine/dbpatches/dbinit-v2.sql
 #cp ../junk/$content_name/ank/lesh-2012.08.30.sqlite3 $db
 #cp /var/www/html/$dest_name/$content_name/ank/fizlesh.sqlite3 complete.sql
 #cp complete.sql $db
+echo "version : $(../tools/publish/version.sh)-mvel" > INFO
 
 sudo mkdir -p "$dest"
 sudo rm -rf /var/www/html/$dest_name/*
