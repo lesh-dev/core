@@ -243,24 +243,25 @@
         return preg_match($mask, $value);
     }
     /**
-      *  This function returns whole content of $table_name, using (if provided) $order and $filter properly.
-    **/
-    function xdb_get_table($table_name, $order, $filter)
+      * Returns whole content of the table in array, using given order and filter (WHERE condition)
+      * @param table_name table name
+      * @param order ORDER BY clause
+      * @param filter WHERE clause
+      **/
+    function xdb_get_table($table_name, $order = '', $filter = '')
     {
-            $db = xdb_get();
-            $query = "SELECT * FROM $table_name";
-            if($filter)
-              $query += " WHERE $filter ";
-            if($order)
-              $query += " ORDER BY $order ";
-            //echo $query;
-            //$query += ";";
-            $sel = $db->query($query);
-            $ans = array();
-            while($ev = $sel->fetchArray(SQLITE3_ASSOC))
-            {
-                $ans[] = $ev;
-            }
-            return $ans;
+        $db = xdb_get();
+        $query = "SELECT * FROM $table_name";
+        if (strlen($filter))
+            $query .= " WHERE $filter ";
+        if (strlen($order))
+            $query .= " ORDER BY $order ";
+        $sel = $db->query($query);
+        $ans = array();
+        while($ev = $sel->fetchArray(SQLITE3_ASSOC))
+        {
+            $ans[] = $ev;
+        }
+        return $ans;
     }
 ?>
