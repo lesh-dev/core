@@ -60,7 +60,7 @@ function xsm_print_person_header($db, $person, $school_id)
         xsm_draw_person_textval('Создана', $person_created);
         xsm_draw_person_textval('Отредактирована', $person_modified);
         if ($school_id != SCHOOL_ANK_ID)
-            xsm_print_person_school_edit($db, $school_id, $person_id);
+            xsm_print_person_school_edit($db, $school_id, $person);
         ?>
     </div>
     </div><!-- container -->
@@ -201,12 +201,22 @@ function xsm_print_person_ank_data($db, $person)
     xsm_draw_person_comments($db, $person_id);
 }
 
-function xsm_print_person_school_edit($db, $school_id, $person_id)
+function xsm_print_person_school_edit($db, $school_id, $person)
 {
+    $person_id = $person['person_id'];
+    $is_teacher_typical = $person['is_teacher'];
+    $is_student_typical = $person['is_student'];
     $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
     if ($person_school_id === NULL) {
         $add_href = "edit-person_school".
-            xcms_url(array('person_school_id'=>'new', 'school_id'=>$school_id, 'member_person_id'=>$person_id)); ?>
+            xcms_url(array(
+                'person_school_id'=>'new',
+                'school_id'=>$school_id,
+                'member_person_id'=>$person_id,
+                'is_teacher'=>$is_teacher_typical,
+                'is_student'=>$is_student_typical
+                ));
+        ?>
         На данной школе не присутствовал. <a href="<?php echo $add_href; ?>">Зачислить</a><?php
         return;
     }
