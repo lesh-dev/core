@@ -20,6 +20,7 @@ function xsm_edit_course()
     $course_id = xcms_get_key_or($_GET, 'course_id', '-1'); // invalid key
     $course = xdb_get_entity_by_id('course', $course_id);
     $course_teacher_id = -1;
+    $school_id = -1;
     if ($course_id == "new")
     {
         // prefill teacher
@@ -32,6 +33,11 @@ function xsm_edit_course()
         if (strlen($school_id))
             $course['school_id'] = $school_id;
     }
+    else
+    {
+        $school_id = $course['school_id'];
+        $course_teacher_id = $course['course_teacher_id'];
+    }
 
     $teacher = xdb_get_entity_by_id('person', $course_teacher_id);
     $school = xdb_get_entity_by_id('school', $school_id);
@@ -43,8 +49,11 @@ function xsm_edit_course()
 
     ?>
     <form method="post" action="edit-course"><?php
-        xsm_edit_operations('course', 'course', $course_id, 'Вернуться к списку курсов');?>
+        xsm_edit_operations_listmode('course', $course_id, 'Вернуться к списку курсов', "&amp;school_id=$school_id");?>
         <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" />
+        <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+        <input type="hidden" name="course_teacher_id" value="<?php echo $course_teacher_id; ?>" />
+
         <table summary="Курс" class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Курс</td>
@@ -95,11 +104,23 @@ function xsm_edit_course()
 }
 
 if (@$_POST["update-course"])
-    xsm_update_entity('course', 'course', 'Курс', $course_fields);
+{
+    $school_id = xcms_get_key_or($_POST, 'school_id', '-1');
+    $aux_param = "&amp;school_id=$school_id";
+    xsm_update_entity_listmode('course', 'course', 'Курс', $course_fields, $aux_param);
+}
 elseif (@$_POST["delete-course"])
-    xsm_warn_delete_entity('course', 'course', 'курс');
+{
+    $school_id = xcms_get_key_or($_POST, 'school_id', '-1');
+    $aux_param = "&amp;school_id=$school_id";
+    xsm_warn_delete_entity_listmode('course', 'course', 'курс', $aux_param);
+}
 elseif (@$_POST["confirm-delete-course"])
-    xsm_delete_entity('course', 'course', 'Курс');
+{
+    $school_id = xcms_get_key_or($_GET, 'school_id', '-1');
+    $aux_param = "&amp;school_id=$school_id";
+    xsm_warn_delete_entity_listmode('course', 'course', 'Курс', $aux_param);
+}
 else
     xsm_edit_course();
 ?>
