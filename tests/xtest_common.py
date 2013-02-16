@@ -56,7 +56,10 @@ def performLogout(test):
 	
 def performLoginAsAdmin(test, login, password):
 	print "performLoginAsAdmin(" + login + ", " + password + ")"
-	performLogin(test, login, password)
+	if not performLogin(test, login, password):
+		print "Admin authorization failed"
+		raise selenium_test.TestError("Cannot perform Admin authorization as " + login + "/" + password)
+		
 	print "checking admin panel link"
 	
 	#check that we have entered the CP.
