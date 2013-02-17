@@ -14,6 +14,7 @@ function xsm_print_course()
     $teacher = xdb_get_entity_by_id('person', $course_teacher_id); ?>
     <table summary="Курс" class="ankList">
     <?php
+        $school_id = htmlspecialchars($course["school_id"]);
         $course_title = htmlspecialchars($course["course_title"]);
         $target_class = htmlspecialchars($course["target_class"]);
         $course_desc = htmlspecialchars($course["course_desc"]);
@@ -23,6 +24,9 @@ function xsm_print_course()
 
         $first_name = htmlspecialchars($teacher["first_name"]);
         $last_name = htmlspecialchars($teacher["last_name"]);
+        $href_teacher = "view-person".xcms_url(array(
+            'person_id'=>$course_teacher_id,
+            'school_id'=>$school_id));
 
         ?>
         <tr>
@@ -38,7 +42,7 @@ function xsm_print_course()
         <tr><td class="ankList"><span class="ankListField">На какие классы рассчитан</span>:
             <?php echo $target_class; ?></td></tr>
         <tr><td class="ankList"><span class="ankListField">Препод</span>:
-            <a href="view-person&amp;person_id=<?php echo $course_teacher_id; ?>"><?php
+            <a href="<?php echo $href_teacher; ?>"><?php
                 echo "$first_name $last_name"; ?></a></td></tr>
         <tr><td class="ankList"><span class="ankListField">Описание</span>:
             <?php echo xcms_html_wrap_by_crlf($course_desc); ?></td></tr>
