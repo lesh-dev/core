@@ -6,10 +6,10 @@ $person_school_fields = array(
     "member_person_id"=>"Участник",
     "school_id"=>"Школа",
     "is_student"=>"Школьник",
-    "is_teacher"=>"Препод",
-    "curatorship"=>"Кураторство",
     "current_class"=>"Класс",
     "courses_needed"=>"Потребное кол-во зачётов",
+    "is_teacher"=>"Препод",
+    "curatorship"=>"Кураторство",
     "person_school_created"=>"Время создания",
     "person_school_modified"=>"Последняя модификация"
 );
@@ -148,7 +148,7 @@ function xsm_edit_person_school()
         <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
         <table summary="Участие на школе" class="ankEdit">
             <tr>
-                <td class="ankListRowTitle">Участие на школе</td>
+                <td class="ankListRowTitle">Роли на этой школе</td>
             </tr>
             <?php
             foreach ($person_school_fields as $key=>$field_title)

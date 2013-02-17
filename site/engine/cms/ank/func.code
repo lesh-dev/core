@@ -24,8 +24,8 @@ function xsm_get_person_fields()
         "skype"=>"Skype",
         "social_profile"=>"Профиль в соц. сети",
 
-        "is_teacher"=>"Типично препод",
-        "is_student"=>"Типично школьник",
+        "is_teacher"=>"Препод",
+        "is_student"=>"Школьник",
         //"curatorship"=>"Кураторство",
 
         "favourites"=>"Любимые предметы",
