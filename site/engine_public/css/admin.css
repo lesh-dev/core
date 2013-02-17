@@ -118,6 +118,10 @@ input[type="file"] {
     padding: 0px;
 }
 
+input.admin-medium {
+    width: 300px;
+}
+
 input.admin-long {
     width: 700px;
 }
