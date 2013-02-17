@@ -83,9 +83,9 @@
         $key_name = "${table_name}_id";
         $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
         $redir = ($id == 'new') ? "$entity$aux_param" : "$entity$aux_param#$table_name$id"; ?>
-        <div style="font-size: 12pt; font-weight: bold; color: #ff0000;">
+        <div class="delete-warning">
             Вы действительно хотите удалить
-            <?php echo $title; ?> [<?php echo $id; ?>]?<br />
+            <b><?php echo $title; ?></b> с кодом <b><?php echo $id; ?></b>?<br />
             Связанные с ним объекты также будут удалены,
             а восстановление будет невозможно!</div>
         <div><form method="post" action="edit-<?php echo "$entity$aux_param"; ?>">
@@ -103,9 +103,9 @@
         $key_name = "${table_name}_id";
         $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
         $redir = ($id == 'new') ? "$entity$aux_param" : "$entity$aux_param&amp;$key_name=$id"; ?>
-        <div style="font-size: 12pt; font-weight: bold; color: #ff0000;">
+        <div class="delete-warning">
             Вы действительно хотите удалить
-            <?php echo $title; ?> [<?php echo $id; ?>]?<br />
+            <b><?php echo $title; ?></b> с кодом <b><?php echo $id; ?></b>?<br />
             Связанные с ним объекты также будут удалены,
             а восстановление будет невозможно!</div>
         <div><form method="post" action="edit-<?php echo "$entity$aux_param"; ?>">

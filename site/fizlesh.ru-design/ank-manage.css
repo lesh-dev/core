@@ -149,6 +149,11 @@ input.delete-button {
     color: #2f2f00;
 }
 
+div.delete-warning {
+    font-size: 11pt;
+    color: #9f0000;
+}
+
 .link-oper {
     margin-left: 10px;
 }

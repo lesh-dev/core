@@ -82,8 +82,9 @@ function xsm_print_person_school_edit($db, $school_id, $person_id)
         return;
     }
     xsm_edit_link('person_school', $person_school_id, '', 'Редактировать участника на этой школе');
-}*/
+}
 
+// TODO: reanimate this unused here function
 function xsm_print_student_exams($db, $school_id, $person_id)
 {
     $exam_sel = $db->query(
@@ -168,7 +169,7 @@ function xsm_print_student_exams($db, $school_id, $person_id)
     </table>
     <?php
 }
-
+*/
 
 // shows course information sliced by school
 function xsm_print_courses()

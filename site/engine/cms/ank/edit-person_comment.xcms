@@ -63,8 +63,8 @@ function xsm_warn_delete_person_comment($entity, $table_name, $title, $aux_param
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
     $redir = "$entity$aux_param".xcms_url(array($key_name=>$id)); ?>
-    <div style="font-size: 12pt; font-weight: bold; color: #ff0000;">
-        Вы действительно хотите удалить комментарий [<?php echo $id; ?>] (восстановление будет невозможно)?</div>
+    <div class="delete-warning">Вы действительно хотите удалить комментарий [<?php echo $id; ?>]
+        (восстановление будет невозможно)?</div>
     <div><form method="post" action="edit-<?php echo "$entity$aux_param"; ?>">
         <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
         <input type="submit" name="confirm-delete-<?php echo $entity; ?>"
