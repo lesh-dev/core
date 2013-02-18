@@ -7,6 +7,7 @@ $course_fields = array(
     "target_class"=>"Уровень (диапазон классов)",
     "course_teacher_id"=>"Препод курса",
     "school_id"=>"Школа, на которой читался курс",
+    "course_cycle"=>"Цикл, на котором читался курс",
     "course_desc"=>"Описание",
     "course_comment"=>"Комментарий",
     "course_created"=>"Время создания",

@@ -48,6 +48,7 @@ create table course (
     course_id integer primary key autoincrement,
     course_title text, -- название курса
     school_id integer not null, -- ссылка на школу, на которой читали курс
+    course_cycle text,  -- цикл, на котором читался курс
     course_teacher_id integer not null, -- ссылка на препода
     target_class text, -- диапазон классов, на которые рассчитан курс
     course_desc text,  -- описание курса
@@ -204,14 +205,13 @@ insert into person_school values(10,  7,   2,   'student', 'teacher', null, '11'
 insert into person_school values(11,  9,   3,   '',        null,      null, '11ж', '8', null, null);
 insert into person_school values(12, 14,   3,   '',        'teacher', null, '5к',  '8', null, null);
 
---                        id, title,              sch, tch
-insert into course values(1, 'test course',       1,    1,  'qqq4', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(2, 'not a Test course', 1,    2,  'qqq4', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(3, 'Вынос мозга',       2,    2,  'qqq3', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(4, 'Пайтон',            2,    2,  'qqq2', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(5, 'Хрень, а не курс',  2,    2,  'qqq1', 'ppp', 'zzz', 't666', 'aaa');
-insert into course values(6, 'Дыры в PHP',        2,   14,  'qqq1', 'ppp', 'zzz', 't666', 'aaa');
-
+--                        id, title,              sch, cyc,  tch,    cl
+insert into course values(1, 'test course',       1,    '1',   1,  '7-9',  'тестовый курс для болванов',    'comm1',      't666', 'aaa');
+insert into course values(2, 'not a Test course', 1,  '1-2',   2,   '9+',  'то же самое, только в профиль', 'comment 2',  't666', 'aaa');
+insert into course values(3, 'Вынос мозга',       2,    '3',   2,  '10+',  'не для болванов',               'comment 3',  't666', 'aaa');
+insert into course values(4, 'Пайтон',            2,    '3',   2,   '6+',  'Школота схавает',               'comment 4',  't666', 'aaa');
+insert into course values(5, 'Хрень, а не курс',  2,    '4',   2,  '6-8',  'Как вязать крючком',            'comment 5',  't666', 'aaa');
+insert into course values(6, 'Дыры в PHP',        2,  '2-3',  14,   '8+',  'Kernel PHP hacking',            'comment 10', 't666', 'aaa');
 --                         stu, crs
 insert into exam values(1, 4,   1,  'passed', 'qqq2',  'qqq3',    'qqq4', 'qqq5', 'aaaa');
 insert into exam values(2, 5,   2,  'passed', 'qqq21', 'qqq330',  'qqq4', 'qqq5', 'bbb');
