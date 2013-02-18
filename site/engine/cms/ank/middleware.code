@@ -117,16 +117,20 @@
             $exam_total_count = 0;
             if ($exam_total_data = $exam_total_sel->fetchArray(SQLITE3_ASSOC))
                 $exam_total_count = $exam_total_data['total_count'];
+            $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
+            $teacher_url = "view-person".xcms_url(array(
+                'person_id'=>$course_teacher_id,
+                'school_id'=>$school_id));
             ?>
             <tr>
-                <td class="ankList"><a href="view-course&amp;course_id=<?php echo $course_id; ?>"><?php
+                <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
                     echo "$course_title"; ?></a></td>
                 <?php if (!$pers) {?>
-                <td class="ankList"><a href="view-person&amp;person_id=<?php echo $course_teacher_id; ?>"><?php
+                <td class="ankList"><a href="<?php echo $teacher_url; ?>"><?php
                     echo "$teacher_first_name $teacher_last_name"; ?></a></td>
                 <?php } ?>
                 <td class="ankList"><?php echo $target_class; ?></td>
-                <td class="ankList"><a href="view-course&amp;course_id=<?php echo $course_id; ?>"><?php
+                <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
                     echo "Сдало <b>$exam_pass_count</b> из <b>$exam_total_count</b>"; ?></a></td>
             </tr><?php
             }
