@@ -3,8 +3,7 @@ site/admin_doc/.prec/*
 site/doc/html
 site/Content/cms/pages/*
 site/Content/tags/*
-#*-version-* -- set more precise match.
-*-diff-*
+*-version-[0-9][0-9]*.gz
 *~
 site/fizlesh.ru-content/*
 site/settings.php
