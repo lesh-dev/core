@@ -50,7 +50,8 @@
         foreach ($person as $key=>$value)
         {
             $key_title = $key;
-            if (array_key_exists($key, $person_fields)) $key_title = $person_fields[$key];
+            if (array_key_exists($key, $person_fields))
+                $key_title = $person_fields[$key];
             if ($key == "submit-anketa")
                 continue;
             $kt = "$key_title: ";
@@ -69,9 +70,10 @@
         $ank_dir = "${content_dir}ank";
         @mkdir($ank_dir, 0777);
         xdb_insert_or_update('person', array('person_id'=>'new'), $person, $person_fields);
+        $table_title = "Анкета от $hr_timestamp";
         $write_success = true; // TODO: проверять SELECT-ом, что таки да, вставилось
         $mail_msg_html = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg_html);
-        $mail_msg_html = str_replace("@@DATE@", $hr_timestamp, $mail_msg_html);
+        $mail_msg_html = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg_html);
         $mail_msg_html = str_replace("@@HOST@", $_SERVER['HTTP_HOST'], $mail_msg_html);
 
         $mail_group_html = "";

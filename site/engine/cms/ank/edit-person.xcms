@@ -2,6 +2,88 @@
 <# cms/ank/style #>
 <?php
 
+function xcms_array_diff($new, $old)
+{
+    $diff = array();
+    // assume key
+    foreach ($new as $key => $value)
+    {
+        if (!array_key_exists($key, $old))
+        {
+            $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>'');
+            continue;
+        }
+        // key exists in both arrays
+        if ($old[$key] != $value)
+            $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>$old[$key]);
+    }
+    foreach ($old as $key => $old_value)
+    {
+        if (!array_key_exists($key, $new))
+            $diff[] = array('key'=>$key, 'new'=>'', 'old'=>$old_value);
+    }
+    return $diff;
+}
+
+
+function xsm_notify_person_edit($person)
+{
+    global $SETTINGS;
+    // some common stuff
+    $template_root = "{$SETTINGS['engine_dir']}templates";
+    $mail_msg_html = file_get_contents("$template_root/xsm-diff-message.html");
+    $row_template = file_get_contents("$template_root/xsm-row-diff.html");
+    $row_long_template = file_get_contents("$template_root/xsm-row-long-diff.html");
+
+    $person_fields = xsm_get_person_fields();
+    $field_types = xcms_get_person_field_types();
+    $person_id = $person['person_id'];
+    $old_person = ($person_id != XDB_NEW) ? xdb_get_entity_by_id('person', $person_id) : array();
+    $diff_array = xcms_array_diff($person, $old_person);
+
+    $html_content = ""; // @@TABLE-CONTENT@
+    foreach ($diff_array as $diff)
+    {
+        $key = $diff['key'];
+        if (!array_key_exists($key, $person_fields))
+            continue;
+        $key_title = $person_fields[$key];
+        $type = xcms_get_key_or($field_types, $key);
+        $old_value = $diff['old'];
+        $new_value = $diff['new'];
+        if ($type == "checkbox")
+        {
+            $old_value = strlen($old_value) ? "Да" : "Нет";
+            $new_value = strlen($new_value) ? "Да" : "Нет";
+        }
+        elseif ($key == "anketa_status")
+        {
+            $anketa_statuses = xsm_get_anketa_statuses();
+            $old_value = $anketa_statuses[$old_value];
+            $new_value = $anketa_statuses[$new_value];;
+        }
+        $cur_row_html = ($type == "textarea") ? $row_long_template : $row_template;
+        $cur_row_html = str_replace("@@KEY@", $key_title, $cur_row_html);
+        $cur_row_html = str_replace("@@OLD-VALUE@", htmlspecialchars($old_value), $cur_row_html);
+        $cur_row_html = str_replace("@@NEW-VALUE@", htmlspecialchars($new_value), $cur_row_html);
+        $html_content .=  $cur_row_html;
+    }
+    $table_title = "Изменения в анкете Участника";
+    $mail_msg_html = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg_html);
+    $mail_msg_html = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg_html);
+
+    $mail_group_html = "reg-html";
+
+    $addr_from = "noreply@fizlesh.ru";
+    $name_from = "FizLesh XSM";
+
+    $full_name = $person['last_name'].' '.$person['first_name'].' '.$person['patronymic'];
+    $full_name_tr = xcms_transliterate($full_name);
+    $subject = "[FizLesh-XSM] Changed: $full_name_tr";
+
+    xcms_send_notification($mail_group_html, NULL, $subject, "This message is in HTML format.\r\n", $mail_msg_html);
+}
+
 function xsm_edit_person()
 {
     $person_fields = xsm_get_person_fields();
@@ -15,20 +97,7 @@ function xsm_edit_person()
         if ($anketa_status)
             $person['anketa_status'] = $anketa_status;
     }
-
-    $field_types = array(
-        "favourites"=>"textarea",
-        "achievements"=>"textarea",
-        "hobby"=>"textarea",
-        "person_comment"=>"textarea",
-
-        "is_current"=>"checkbox",
-        "is_teacher"=>"checkbox",
-        "is_student"=>"checkbox",
-
-        "anketa_status"=>"enum",
-        //"curatorship"=>"enum"
-    );
+    $field_types = xcms_get_person_field_types();
 
     ?>
     <form method="post" action="edit-person"><?php
@@ -86,7 +155,10 @@ if (@$_POST["update-person"])
             чтобы вернуться к заполнению!</p><?php
     }
     else
+    {
+        xsm_notify_person_edit($_POST);
         xsm_update_entity_listmode('person', 'person', 'Участник', xsm_get_person_fields());
+    }
 }
 elseif (@$_POST["delete-person"])
     xsm_warn_delete_entity_listmode('person', 'person', 'участника');

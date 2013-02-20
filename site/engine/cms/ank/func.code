@@ -4,8 +4,6 @@ function xsm_get_person_fields()
 {
     return array(
         "anketa_status"=>"Статус",
-        //"activity_status"=>"Статус",
-        //"is_current"=>"Текущий?",
 
         "last_name"=>"Фамилия",
         "first_name"=>"Имя",
@@ -26,17 +24,30 @@ function xsm_get_person_fields()
 
         "is_teacher"=>"Препод",
         "is_student"=>"Школьник",
-        //"curatorship"=>"Кураторство",
 
         "favourites"=>"Любимые предметы",
         "achievements"=>"Достижения",
         "hobby"=>"Хобби",
 
-        //"person_comment"=>"Заметки",
         "user_agent"=>"UserAgent",
 
         "person_created"=>"Время создания",
         "person_modified"=>"Последняя модификация"
+    );
+}
+
+function xcms_get_person_field_types()
+{
+    return array(
+        "favourites"=>"textarea",
+        "achievements"=>"textarea",
+        "hobby"=>"textarea",
+        "person_comment"=>"textarea",
+
+        "is_teacher"=>"checkbox",
+        "is_student"=>"checkbox",
+
+        "anketa_status"=>"enum"
     );
 }
 

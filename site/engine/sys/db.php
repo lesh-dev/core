@@ -3,7 +3,7 @@
       * @author Mikhail Veltishchev <dichlofos-mv@yandex.ru>
       * Database management module
       **/
-
+    define('XDB_NEW', 'new');
     /**
       * Obtains database handle in read-only mode
       * TODO: Unhardcode database location ("$content_dir/ank/fizlesh.sqlite3")
@@ -28,7 +28,7 @@
       * Inserts or updates DB record
       * @param $table_name Table name to update/insert into
       * @param $primary_keys KV-array of table primary keys
-      * @note If PK value has the special value 'new', the insertion is performed
+      * @note If PK value has the special value XDB_NEW, the insertion is performed
       * and table should have AI key
       * @param $values KV-array of row values
       * @param $allowed_keys only these keys will be taken from $values
@@ -41,7 +41,7 @@
     {
         $insert = false;
         foreach ($primary_keys as $key => $value)
-            if ($value == "new") $insert = true;
+            if ($value == XDB_NEW) $insert = true;
         if ($insert)
             return xdb_insert_ai($table_name, $primary_keys, $values, $allowed_keys);
         else
@@ -160,7 +160,7 @@
       * A convention states that primary keys in our tables have
       * special names obtained from table name: ${table_name}_id
       *
-      * If the $id has the magic value 'new', the empty record is
+      * If the $id has the magic value XDB_NEW, the empty record is
       * returned
       **/
     function xdb_get_entity_by_id($table_name, $id)
@@ -169,7 +169,7 @@
         $key_name = "${table_name}_id";
 
 
-        if ($id != "new")
+        if ($id != XDB_NEW)
         {
             $idf = preg_replace('/[^-0-9]/', '', $id);
             if (strlen($idf) == 0)
@@ -206,7 +206,7 @@
       * A convention states that primary keys in our tables have
       * special names obtained from table name: ${table_name}_id
       *
-      * If the $id has the magic value 'new', the empty record is
+      * If the $id has the magic value XDB_NEW, the empty record is
       * returned
       **/
     function xdb_delete($table_name, $key_value)
