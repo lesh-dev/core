@@ -17,6 +17,7 @@ class XcmsAuthRootLogin(SeleniumTest):
 	
 	def run(self):
 		self.setAutoPhpErrorChecking(True)
+		self.maximizeWindow()
 		
 		conf = XcmsTestConfig()
 		

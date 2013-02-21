@@ -9,7 +9,7 @@ import random, traceback, sys
 from datetime import datetime
 import time
 
-from bawlib import isVoid, isList, isString, isEqual, getSingleOption, userSerialize
+from bawlib import isVoid, isList, isString, isEqual, getSingleOption, userSerialize, toUnicode
 
 #['_unwrap_value', '_wrap_value', 'add_cookie',
 #'back', 'binary', 'capabilities', 'close', 'command_executor', 'create_web_element', 'current_url', 'current_window_handle',
@@ -43,7 +43,7 @@ class TestAction:
 		self.m_details = details
 		
 	def printAction(self):
-		print unicode(self.m_action + " " + self.m_details).encode("utf-8")
+		print toUnicode(self.m_action + " " + self.m_details)
 
 # generic function to run any test.
 def RunTest(test):
@@ -102,6 +102,10 @@ class SeleniumTest:
 		
 	def getDoc(self):
 		return self.__doc__
+	
+	def maximizeWindow(self):
+		if hasattr(self, 'm_driver'):
+			self.m_driver.maximize_window()		
 			
 	def __del__(self):
 #		print "Destructing SeleniumTest"
@@ -130,16 +134,16 @@ class SeleniumTest:
 		self.shutdown(0)
 		
 	def handleException(self, exc):
-		print "TEST ERROR:", unicode(exc.message).encode("utf-8")
+		print "TEST ERROR:", toUnicode(exc.message)
 		traceback.print_exc()
 		self.shutdown(2)
 				
 	def handleTestFail(self, exc):
-		print "TEST FAILED:", unicode(exc.message).encode("utf-8")
+		print "TEST FAILED:", toUnicode(exc.message)
 		self.shutdown(1)
 
 	def handleTestFatal(self, exc):
-		print "TEST FATALED:", unicode(exc.message).encode("utf-8")
+		print "TEST FATALED:", toUnicode(exc.message)
 		self.shutdown(2)
 
 	def getActionLog(self):
@@ -154,7 +158,7 @@ class SeleniumTest:
 		try:
 			logFile = open(self.m_logFile, "w")
 			logText = "[" + self.m_testName + " log start]\n"
-			logFile.write(logText.encode("utf-8"))
+			logFile.write(toUnicode(logText))
 			logFile.close()
 			#indicate that log was already created
 			self.m_logStarted = True
@@ -247,6 +251,11 @@ class SeleniumTest:
 		self.checkEmptyParam(eleId, "getElementValueById")
 		self.addAction("get-value", "element id: '" + eleId + "'")
 		return self.getElementById(eleId).get_attribute('value')
+
+	def getElementValueByName(self, eleName):
+		self.checkEmptyParam(eleName, "getElementValueByName")
+		self.addAction("get-value", "element name: '" + eleName + "'")
+		return self.getElementByName(eleName).get_attribute('value')
 
 	def checkElementValueById(self, eleId, text):
 		self.checkEmptyParam(eleId, "checkElementValueById")
@@ -357,14 +366,18 @@ class SeleniumTest:
 			else:
 				# loop ended, found nothing
 				# here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
-				self.failTestWithItemNotFound(u"Cannot find URL by link texts: '" + userSerialize(urlText) + "' on page '" + self.curUrl())
+				msg = u"Cannot find URL by link texts: '" + toUnicode(userSerialize(urlText))
+				msg += ("' on page '" + self.curUrl())
+				self.failTestWithItemNotFound(msg)
 		else:		
 			try:
 				url = self.m_driver.find_element_by_link_text(urlText)
 				return url.get_attribute("href");
 			except NoSuchElementException:
 				# here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
-				self.failTestWithItemNotFound(u"Cannot find URL by link text: '" + userSerialize(urlText) + "' on page '" + self.curUrl())
+				msg = u"Cannot find URL by link text: '" + userSerialize(urlText)
+				msg += ("' on page '" + self.curUrl())
+				self.failTestWithItemNotFound(msg)
 			
 	def logAdd(self, text):
 		try:
