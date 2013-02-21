@@ -4,7 +4,6 @@ drop table if exists person_school;
 drop table if exists person;
 drop table if exists school;
 
-
 /* Участник (препод, куратор, школьник...) */
 create table person (
     person_id integer primary key autoincrement,
@@ -26,9 +25,8 @@ create table person (
     skype text,         -- skype
     social_profile text,  -- профиль ВКонтакте и т.п. (используемый!)
 
-    -- исторические поля -- имеют смысл только при первом наборе (регистрации)
-    is_student text, -- является ли школьником (исторически)
-    is_teacher text, -- является ли преподом (исторически)
+    is_teacher text, -- типично препод
+    is_student text, -- типично школьник
 
     favourites text,     -- любимые предметы
     achievements text,   -- достижения
