@@ -41,7 +41,7 @@ class XcmsAuthAddNewUser(SeleniumTest):
 			raise selenium_test.TestError("Cannot login as newly created user. ")
 		
 		# logout self 
-		self.gotoUrlByLinkText("Выход")
+		xtest_common.performLogoutFromSite(self)
 
 		# test wrong auth
 		print "logging as created user with incorrect password "
@@ -56,7 +56,7 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		if not xtest_common.performLogin(self, inpLogin, inpPass):
 			raise selenium_test.TestError("Cannot login again as newly created user. ")
 
-		self.gotoUrlByLinkText(u"Админка")
+		xtest_common.gotoAdminPanel(self)
 		
 		# let's try to change password.
 		self.gotoUrlByLinkText(u"Сменить пароль")
@@ -69,14 +69,15 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		newPass = newPass1
 		self.clickElementByName("chpass_me")
 		self.assertBodyTextPresent(u"Пароль успешно изменен.")
-		self.gotoUrlByLinkText(u"Выйти")
+		
+		xtest_common.performLogoutFromAdminPanel(self)
 		
 		print "logging again as created user with new password"
 		if not xtest_common.performLogin(self, inpLogin, newPass):
 			raise selenium_test.TestError("Cannot login again as newly created user with changed password. ")
 
 		# logout self 
-		self.gotoUrlByLinkText("Выход")
+		xtest_common.performLogoutFromSite(self)
 
 		# and now let's edit user profile.
 
@@ -84,7 +85,7 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		if not xtest_common.performLogin(self, inpLogin, newPass):
 			raise selenium_test.TestError("Cannot login again for profile info change. ")
 
-		self.gotoUrlByLinkText(u"Админка")
+		xtest_common.gotoAdminPanel(self)
 		# navigate to user profile which is just user login
 		self.gotoUrlByLinkText(inpLogin)
 		self.assertBodyTextPresent(u"Привет, " + inpLogin)
@@ -111,13 +112,13 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		
 		self.clickElementByName("update_me")
 		
-		self.gotoUrlByLinkText("Выход!!!") # BUG HERE UnicodeDecodeError: 'ascii' codec can't decode byte 0xd0 in position 0: ordinal not in range(128)
+		xtest_common.performLogoutFromAdminPanel(self)
 		
 		print "now let's login again and see updated profile."
 		if not xtest_common.performLogin(self, inpLogin, newPass):
 			raise selenium_test.TestError("Cannot login after profile info change. ")
 		
-		self.gotoUrlByLinkText(u"Админка")
+		xtest_common.gotoAdminPanel(self)
 		# navigate to user profile which is just user login
 		self.gotoUrlByLinkText(inpLogin)
 		self.assertBodyTextPresent(u"Привет, " + inpLogin)

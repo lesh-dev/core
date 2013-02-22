@@ -39,6 +39,6 @@ class XcmsAuthCheckDupLogin(SeleniumTest):
 			raise selenium_test.TestError("Cannot login as newly created user. ")
 
 		# logout self 
-		self.gotoUrlByLinkText("Выход")
+		self.gotoUrlByLinkText(u"Выход")
 
 

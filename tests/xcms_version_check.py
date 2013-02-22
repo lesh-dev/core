@@ -32,7 +32,7 @@ class XcmsVersionCheck(SeleniumTest):
 		
 		xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
 		
-		self.gotoUrlByLinkText("Админка")
+		xtest_common.gotoAdminPanel(self)
 		
 		# backend
 		beVerXpath = "//pre[@class='site-info']"

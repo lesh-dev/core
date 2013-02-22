@@ -366,8 +366,7 @@ class SeleniumTest:
 			else:
 				# loop ended, found nothing
 				# here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
-				msg = u"Cannot find URL by link texts: '" + toUnicode(userSerialize(urlText))
-				msg += ("' on page '" + self.curUrl())
+				msg = u"Cannot find URL by link texts: '" + userSerialize(urlText) + "' on page '" + self.curUrl() + "'. "
 				self.failTestWithItemNotFound(msg)
 		else:		
 			try:
@@ -375,8 +374,7 @@ class SeleniumTest:
 				return url.get_attribute("href");
 			except NoSuchElementException:
 				# here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
-				msg = u"Cannot find URL by link text: '" + userSerialize(urlText)
-				msg += ("' on page '" + self.curUrl())
+				msg = u"Cannot find URL by link text: '" + userSerialize(urlText) + "' on page '" + self.curUrl() + "'. "
 				self.failTestWithItemNotFound(msg)
 			
 	def logAdd(self, text):
