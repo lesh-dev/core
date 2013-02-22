@@ -106,7 +106,7 @@ function xsm_edit_exam()
                 elseif ($key == 'student_person_id')
                 {?>
                     <input type="text" class="ankEdit" value="<?php
-                        echo htmlspecialchars($student['last_name'].' '.$student['first_name']); ?>"
+                        echo htmlspecialchars(xsm_fi($student)); ?>"
                         readonly="readonly" /><?php
                 }
                 elseif ($key == 'school_id')

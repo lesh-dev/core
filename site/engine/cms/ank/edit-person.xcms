@@ -77,7 +77,7 @@ function xsm_notify_person_edit($person)
     $addr_from = "noreply@fizlesh.ru";
     $name_from = "FizLesh XSM";
 
-    $full_name = $person['last_name'].' '.$person['first_name'].' '.$person['patronymic'];
+    $full_name = xsm_fio($person);
     $full_name_tr = xcms_transliterate($full_name);
     $subject = "[FizLesh-XSM] Changed: $full_name_tr";
 

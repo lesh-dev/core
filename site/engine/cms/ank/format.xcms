@@ -30,6 +30,18 @@
         return $sHTML;
     }
 
+    /**
+      * Canonical way to obtain FIO
+      **/
+    function xsm_fio($person)
+    {
+        return $person['last_name'].' '.$person['first_name'].' '.$person['patronymic'];
+    }
+    function xsm_fi($person)
+    {
+        return $person['last_name'].' '.$person['first_name'];
+    }
+
     function xsm_prepare_social_profile($social_profile)
     {
         // make it valid URL if it was it form example.com/name

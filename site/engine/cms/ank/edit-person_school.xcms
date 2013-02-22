@@ -180,8 +180,10 @@ function xsm_edit_person_school()
                         echo xsm_make_enum_selector($key, $value, xsm_get_curatorship_items());
                 }
                 elseif ($key == 'member_person_id')
-                {?>
-                    <input type="text" class="ankEdit" value="<?php echo htmlspecialchars($member['last_name']); ?>"
+                {
+                    $fio = htmlspecialchars(xsm_fio($member));
+                    ?>
+                    <input type="text" class="ankEdit" value="<?php echo $fio; ?>"
                         readonly="readonly" /><?php
                 }
                 elseif ($key == 'school_id')

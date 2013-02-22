@@ -117,8 +117,7 @@ function xsm_show_all_person_list()
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
     {
         $person_id = htmlspecialchars($person["person_id"]);
-        $last_name = htmlspecialchars($person["last_name"]);
-        $first_name = htmlspecialchars($person["first_name"]);
+        $fi = htmlspecialchars(xsm_fi($person));
 
         $school = htmlspecialchars($person["school"]);
         $school_city = htmlspecialchars($person["school_city"]);
@@ -165,7 +164,7 @@ function xsm_show_all_person_list()
         <tr class="<?php echo $row_class; ?>">
             <td class="ankList "><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
             <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"><?php
-                echo "$last_name $first_name"; ?></a></td>
+                echo $fi; ?></a></td>
             <td class="ankList"><?php
                 echo $cellular;
                 if ($cellular && $phone)
