@@ -20,8 +20,10 @@
       **/
     function xdb_get_write()
     {
+        global $SETTINGS;
         global $content_dir;
-        return new SQlite3("$content_dir/ank/fizlesh.sqlite3", SQLITE3_OPEN_READWRITE);
+        $db_name = xcms_get_key_or($SETTINGS, 'xsm_db_name', "$content_dir/ank/fizlesh.sqlite3");
+        return new SQlite3($db_name, SQLITE3_OPEN_READWRITE);
     }
 
     /**
@@ -54,28 +56,31 @@
       * @param $pk_name primary key name (autoincrement)
       * @param $keys_values KV-array of row values
       * @param $allowed_keys only these keys will be taken from $values
+      * @param $override do not override timestamps, ignore autoincrement
       *
       * Two special fields, ${table_name}_created and ${table_name}_modifed
       * are filled using current UTC time value in human-readable form
       * (that can be converted back to timestamp, though)
       * so they should always present in any table
       **/
-    function xdb_insert_ai($table_name, $pk_name, $keys_values, $allowed_keys)
+    function xdb_insert_ai($table_name, $pk_name, $keys_values, $allowed_keys, $override_ts = true, $ignore_ai = false)
     {
         $db = xdb_get_write();
         $keys = "";
         $values = "";
 
-        // override 'created' and 'modified' field
-        $unix_time = time();
-        $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
-        $keys_values["${table_name}_created"] = $hr_timestamp;
-        $keys_values["${table_name}_modified"] = '';
+        if ($override_ts)
+        {
+            $unix_time = time();
+            $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
+            $keys_values["${table_name}_created"] = $hr_timestamp;
+            $keys_values["${table_name}_modified"] = '';
+        }
 
         foreach ($allowed_keys as $key => $title)
         {
             $value = xcms_get_key_or($keys_values, $key);
-            if ($key == $pk_name)
+            if ($ignore_ai and $key == $pk_name)
                 continue; // skip autoincremented keys
             $keys .= "$key, ";
             $values .= "'".$db->escapeString($value)."', ";
