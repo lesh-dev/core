@@ -157,8 +157,9 @@ function xsm_show_person_list($school_id)
         $row_class = ($is_teacher == "teacher" ? "teacher" : "");
         ?>
         <tr class="<?php echo $row_class; ?>">
-            <!--<td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>-->
-            <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id&amp;school_id=$school_id"; ?>"><?php
+            <td class="ankList">
+                <a name="<?php echo "person$person_id"; ?>"></a>
+                <a href="<?php echo "view-person&amp;person_id=$person_id&amp;school_id=$school_id"; ?>"><?php
                 echo "$last_name $first_name $hr_teacher $hr_student"; ?></a></td>
             <td class="ankList"><?php echo $current_class; ?></a></td>
             <td class="ankList"><?php
@@ -177,9 +178,8 @@ function xsm_show_person_list($school_id)
                 <?php echo $hr_student; ?>
                 <?php echo $hr_teacher; ?>
                 <?php echo $hr_curatorship; ?>
-            </td>
-            </td>
-            <!--<td class="ankListRowTitle">
+            </td><?php /*
+            <td class="ankListRowTitle">
                 <span style="float: right">
                 <img class="link-oper-list" src="<# full_design_dir #>pic/mozillafirefox.png"
                     style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
@@ -187,7 +187,7 @@ function xsm_show_person_list($school_id)
                     <span class="ankStatus <?php echo $anketa_status; ?>"><?php echo $hr_status; ?></span><?php
                 xsm_edit_delete_info('person', 'person', $person_id, $person_created, $person_modified); ?>
                 </span>
-            </td>-->
+            </td>*/ ?>
         </tr>
         <?php
     }
