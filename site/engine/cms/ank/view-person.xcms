@@ -186,8 +186,8 @@ function xsm_print_person_ank_data($db, $person)
     if (!array_key_exists($anketa_status, $statuses)) $anketa_status = "new"; // default
     $hr_status = $statuses[$anketa_status];
 
-    $hr_teacher = ($is_teacher == "teacher" ? "Препод" : "-");
-    $hr_student = ($is_student == "student" ? "Школьник" : "-");
+    $hr_teacher = ($is_teacher == "teacher" ? "Препод" : "&#8212;");
+    $hr_student = ($is_student == "student" ? "Школьник" : "&#8212;");
 
     xsm_draw_person_textval('Дата рождения', $birth_date);
     xsm_draw_person_textval('Паспортные данные', $passport_data);
@@ -195,7 +195,7 @@ function xsm_print_person_ank_data($db, $person)
     xsm_draw_person_textval('Школа', $school);
     xsm_draw_person_textval('Город', $school_city);
     xsm_draw_person_textval('Статус анкеты', $hr_status);
-    xsm_draw_person_textval('Типичная роль', "$hr_teacher/$hr_student");
+    xsm_draw_person_textval('Типичная роль', "$hr_teacher / $hr_student");
     xsm_draw_person_textval('User Agent', $user_agent);
     xsm_draw_person_longtextval('Любимые предметы', $favourites);
     xsm_draw_person_longtextval('Достижения', $achievements);
@@ -233,7 +233,7 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
         (c.school_id = $school_id) AND
         (e.course_id = c.course_id) AND
         (e.student_person_id = $person_id)
-        ORDER BY c.course_title";
+        ORDER BY e.exam_status, c.course_title";
     $exam_sel = $db->query($query);
 
     $exam_aux_param = "&amp;student_person_id=$person_id&amp;school_id=$school_id";
