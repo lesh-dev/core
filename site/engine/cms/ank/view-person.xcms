@@ -115,15 +115,15 @@ function xsm_draw_person_comments($db, $person_id)
     <table summary="Комментарии" class="ankList">
         <colgroup>
             <col width="55" />
-            <col width="10%" />
-            <col width="15%" />
             <col width="75%" />
+            <col width="10%" />
+            <col width="10%" />
         </colgroup>
         <thead>
             <th class="ankList">&nbsp;</th>
+            <th class="ankList">Текст</th>
             <th class="ankList">Автор</th>
             <th class="ankList">Дата</th>
-            <th class="ankList">Текст</th>
         </thead>
     <?php
     while ($comment_data = $comment_sel->fetchArray(SQLITE3_ASSOC)) {?>
@@ -132,13 +132,13 @@ function xsm_draw_person_comments($db, $person_id)
         $comment_id = htmlspecialchars($comment_data["person_comment_id"]);
         $owner_login = htmlspecialchars($comment_data["owner_login"]);
         $comment_text = xcms_html_wrap_by_crlf(htmlspecialchars($comment_data["comment_text"]));
-        $person_comment_created = htmlspecialchars($comment_data["person_comment_created"]);
-        $person_comment_modified = htmlspecialchars($comment_data["person_comment_modified"]); ?>
+        $person_comment_created = xsm_ymdhm($comment_data["person_comment_created"]);
+        $person_comment_modified = xsm_ymdhm($comment_data["person_comment_modified"]); ?>
         <tr>
             <td class="ankList"><a href="edit-person_comment&amp;person_comment_id=<?php echo $comment_id; ?>">Правка</a></td>
+            <td class="ankList"><?php echo $comment_text; ?></td>
             <td class="ankList"><?php echo $owner_login; ?></td>
             <td class="ankList"><?php echo $person_comment_created; ?></td>
-            <td class="ankList"><?php echo $comment_text; ?></td>
         </tr><?php
         }
     ?>

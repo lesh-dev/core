@@ -42,6 +42,14 @@
         return $person['last_name'].' '.$person['first_name'];
     }
 
+    function xsm_ymdhm($timestamp)
+    {
+        $timestamp = substr($timestamp, 0, strlen($timestamp) - 3);
+        $timestamp = str_replace(' ', '&nbsp;', $timestamp);
+        return $timestamp;
+    }
+
+
     function xsm_prepare_social_profile($social_profile)
     {
         // make it valid URL if it was it form example.com/name
