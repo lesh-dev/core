@@ -1,8 +1,10 @@
 #/usr/bin/env bash
+set -xe
 
 new="new.v2.sqlite3"
-rm $new
+rm -f $new
 
-sqlite3 $new < engine/dbpatches/dbinit-v2.sql
+sqlite3 $new < ../dbinit-v2.sql
 # run merger
-php merger.php
+cd ../../../
+php merger-v1-to-v2.php
