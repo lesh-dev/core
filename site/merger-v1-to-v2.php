@@ -41,18 +41,24 @@
     // clear tables...
     $db_new->query("DELETE FROM person");
     $db_new->query("DELETE FROM person_comment");
+    $db_new->query("DELETE FROM course");
+    $db_new->query("DELETE FROM exam");
+    $db_new->query("DELETE FROM school");
+    $db_new->query("INSERT INTO school VALUES(1, 'ЛЭШ-2012', 'summmer', '2012.07.23', '2012.08.23', null, null)");
+    $db_new->query("INSERT INTO school VALUES(2, 'ЗЭШ-2013', 'winter',  '2013.01.02', '2013.01.09', null, null)");
     $db_new->close();
 
     $persons = 0;
     $comments = 0;
     $courses = 0;
+    $exams = 0;
 
     // first of all, incorporate all existing data from current database
 
     // person
     xcms_log(XLOG_INFO, "Processing current persons");
-    $person_sel = xmerger_get_selector($db_cur, "person");
-    while ($person_old = $person_sel->fetchArray(SQLITE3_ASSOC))
+    $sel = xmerger_get_selector($db_cur, "person");
+    while ($person_old = $sel->fetchArray(SQLITE3_ASSOC))
     {
         $person_new = $person_old;
         $person_id = $person_old['person_id'];
@@ -97,10 +103,9 @@
 
     // course
     xcms_log(XLOG_INFO, "Processing current courses");
-    $course_sel = xmerger_get_selector($db_cur, "course");
-    while ($course = $course_sel->fetchArray(SQLITE3_ASSOC))
+    $sel = xmerger_get_selector($db_cur, "course");
+    while ($course = $sel->fetchArray(SQLITE3_ASSOC))
     {
-        //$person_new = $person_old;
         $course_id = $course['course_id'];
         xcms_log(XLOG_DEBUG, "Read course $course_id");
 
@@ -111,10 +116,25 @@
         $courses++;
     }
 
+    // exam
+    xcms_log(XLOG_INFO, "Processing current exams");
+    $sel = xmerger_get_selector($db_cur, "exam");
+    while ($exam = $sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $exam_id = $exam['exam_id'];
+        xcms_log(XLOG_DEBUG, "Read exam $exam_id");
+
+        $exam_id_inserted = xdb_insert_ai("exam", "exam_id", $exam, $exam, false, false);
+        xcms_log(XLOG_DEBUG, "Write exam $exam_id_inserted");
+        $exams++;
+    }
+    // TODO: contestants, problems, solutions !!!
 
     xcms_log(XLOG_INFO, "========================================================");
     xcms_log(XLOG_INFO, "Persons processed: $persons");
     xcms_log(XLOG_INFO, "Comments processed: $comments");
     xcms_log(XLOG_INFO, "Courses processed: $courses");
+    xcms_log(XLOG_INFO, "Exams processed: $exams");
+    xcms_log(XLOG_INFO, "Contestants processed: NONE");
 
 ?>
