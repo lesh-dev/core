@@ -42,7 +42,6 @@ function xcms_get_person_field_types()
         "favourites"=>"textarea",
         "achievements"=>"textarea",
         "hobby"=>"textarea",
-        "person_comment"=>"textarea",
 
         "is_teacher"=>"checkbox",
         "is_student"=>"checkbox",
