@@ -41,6 +41,7 @@
     // clear tables...
     $db_new->query("DELETE FROM person");
     $db_new->query("DELETE FROM person_comment");
+    $db_new->query("DELETE FROM person_school");
     $db_new->query("DELETE FROM course");
     $db_new->query("DELETE FROM exam");
     $db_new->query("DELETE FROM school");
@@ -49,9 +50,10 @@
     $db_new->close();
 
     $persons = 0;
-    $comments = 0;
+    $person_comments = 0;
     $courses = 0;
     $exams = 0;
+    $person_schools = 0;
 
     // first of all, incorporate all existing data from current database
 
@@ -74,7 +76,7 @@
         // curatorship is absent in new person
         unset($person_new['curatorship']);
 
-        // TODO: is_current -> person_school for LESH-2012
+        // is_current is absent in new person
         unset($person_new['is_current']);
 
         // comment: move to separate table
@@ -97,8 +99,26 @@
 
             $person_comment_id = xdb_insert_ai("person_comment", "person_comment_id", $person_comment, $person_comment);
             xcms_log(XLOG_DEBUG, "Write person_comment $person_comment_id");
-            $comments++;
+            $person_comments++;
         }
+
+        if ($person_old['is_current'] == 'current')
+        {
+            $person_school = array(
+                "member_person_id"=>$person_id,
+                "school_id"=>"1",
+                "is_student"=>$person_old["is_student"],
+                "is_teacher"=>$person_old["is_teacher"],
+                "curatorship"=>"",
+                "current_class"=>$person_old["current_class"],
+                "courses_needed"=>"8",
+                "person_school_created"=>$person_new["person_created"],
+                "person_school_modified"=>$person_new["person_modified"]);
+            $person_school_id = xdb_insert_ai("person_school", "person_school_id", $person_school, $person_school);
+            xcms_log(XLOG_DEBUG, "Write person_school $person_school_id");
+            $person_schools++;
+        }
+
     }
 
     // course
@@ -132,7 +152,8 @@
 
     xcms_log(XLOG_INFO, "========================================================");
     xcms_log(XLOG_INFO, "Persons processed: $persons");
-    xcms_log(XLOG_INFO, "Comments processed: $comments");
+    xcms_log(XLOG_INFO, "Person comments processed: $person_comments");
+    xcms_log(XLOG_INFO, "Person schools processed: $person_schools");
     xcms_log(XLOG_INFO, "Courses processed: $courses");
     xcms_log(XLOG_INFO, "Exams processed: $exams");
     xcms_log(XLOG_INFO, "Contestants processed: NONE");
