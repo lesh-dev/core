@@ -100,18 +100,18 @@ function xsm_show_ank_list()
     ?>
     <table summary="Участники" class="ankList">
         <colgroup>
-            <col width="20px" />
-            <col width="25%" />
-            <col width="70px" />
             <col width="30px" />
-            <col width="15%" />
+            <col width="13%" />
+            <col width="70px" />
+            <col width="40px" />
+            <col width="17%" />
             <col width="25%" />
-            <col width="15%" />
-            <col width="15%" />
+            <col width="11%" />
+            <col width="10%" />
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
-            <th class="ankList">Фамилия, имя, отчество</th>
+            <th class="ankList">ФИО</th>
             <th class="ankList">ДР</th>
             <th class="ankList">Кл.</th>
             <th class="ankList">Школа</th>
@@ -122,10 +122,8 @@ function xsm_show_ank_list()
     <?php
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC)) {
         $person_id = htmlspecialchars($person["person_id"]);
-
-        $last_name = htmlspecialchars($person["last_name"]);
-        $first_name = htmlspecialchars($person["first_name"]);
-        $patronymic = htmlspecialchars($person["patronymic"]);
+        $fi = htmlspecialchars(xsm_fi($person));
+        $fio = htmlspecialchars(xsm_fio($person));
 
         $birth_date = htmlspecialchars($person["birth_date"]);
         $passport_data = htmlspecialchars($person["passport_data"]);
@@ -161,8 +159,8 @@ function xsm_show_ank_list()
         ?>
         <tr>
             <td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
-            <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"><?php
-                echo "$last_name $first_name $patronymic"; ?></a></td>
+            <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"
+                title="<?php echo $fio; ?>"><?php echo $fi; ?></a></td>
             <td class="ankList"><?php echo $birth_date; ?></td>
             <td class="ankList"><?php echo $ank_class; ?></td>
             <td class="ankList"><?php echo "$school ($school_city)"; ?></td>
