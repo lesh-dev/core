@@ -4,6 +4,13 @@
       * Database management module
       **/
     define('XDB_NEW', 'new');
+
+    define('XDB_OVERRIDE_TS', true);
+    define('XDB_NO_OVERRIDE_TS', false); // default
+
+    define('XDB_USE_AI', true);
+    define('XDB_NO_USE_AI', false); // default
+
     /**
       * Obtains database handle in read-only mode
       * TODO: Unhardcode database location ("$content_dir/ank/fizlesh.sqlite3")
@@ -56,14 +63,15 @@
       * @param $pk_name primary key name (autoincrement)
       * @param $keys_values KV-array of row values
       * @param $allowed_keys only these keys will be taken from $values
-      * @param $override do not override timestamps, ignore autoincrement
+      * @param $override_ts do not override timestamps
+      * @param @ignore_ai ignore autoincrement keys, use value from @keys_values
       *
       * Two special fields, ${table_name}_created and ${table_name}_modifed
       * are filled using current UTC time value in human-readable form
       * (that can be converted back to timestamp, though)
       * so they should always present in any table
       **/
-    function xdb_insert_ai($table_name, $pk_name, $keys_values, $allowed_keys, $override_ts = true, $ignore_ai = false)
+    function xdb_insert_ai($table_name, $pk_name, $keys_values, $allowed_keys, $override_ts = XDB_OVERRIDE_TS, $use_ai = XDB_USE_AI)
     {
         $db = xdb_get_write();
         $keys = "";
@@ -80,7 +88,7 @@
         foreach ($allowed_keys as $key => $title)
         {
             $value = xcms_get_key_or($keys_values, $key);
-            if ($ignore_ai and $key == $pk_name)
+            if ($use_ai and $key == $pk_name)
                 continue; // skip autoincremented keys
             $keys .= "$key, ";
             $values .= "'".$db->escapeString($value)."', ";

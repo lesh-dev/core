@@ -54,7 +54,9 @@
       **/
     function xsm_ymdhm($timestamp)
     {
-        $timestamp = substr($timestamp, 0, strlen($timestamp) - 3);
+        if (strlen($timestamp) != 19)
+            return $timestamp;
+        $timestamp = substr($timestamp, 0, 16);
         $timestamp = str_replace(' ', '&nbsp;', $timestamp);
         return $timestamp;
     }
