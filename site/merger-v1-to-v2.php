@@ -28,6 +28,24 @@
         return $db->query($query);
     }
 
+    function xmerger_copy_table($db_src, $table_name, $debug_type)
+    {
+        $obj_count = 0;
+        xcms_log(XLOG_INFO, "Processing table '$table_name' [$debug_type]");
+        $sel = xmerger_get_selector($db_src, $table_name);
+        while ($obj = $sel->fetchArray(SQLITE3_ASSOC))
+        {
+            $key_name = "${table_name}_id";
+            $id = $obj[$key_name];
+            xcms_log(XLOG_DEBUG, "Read object '$table_name' #$id");
+
+            $id_inserted = xdb_insert_ai($table_name, $key_name, $obj, $obj, false, false);
+            xcms_log(XLOG_DEBUG, "Write object '$table_name' #$id_inserted");
+            $obj_count++;
+        }
+        return $obj_count;
+    }
+
     global $SETTINGS;
     $path = "./engine/dbpatches/2013.03.03-v1-to-v2";
     // set db for writing
@@ -137,17 +155,7 @@
     }
 
     // exam
-    xcms_log(XLOG_INFO, "Processing current exams");
-    $sel = xmerger_get_selector($db_cur, "exam");
-    while ($exam = $sel->fetchArray(SQLITE3_ASSOC))
-    {
-        $exam_id = $exam['exam_id'];
-        xcms_log(XLOG_DEBUG, "Read exam $exam_id");
-
-        $exam_id_inserted = xdb_insert_ai("exam", "exam_id", $exam, $exam, false, false);
-        xcms_log(XLOG_DEBUG, "Write exam $exam_id_inserted");
-        $exams++;
-    }
+    $exams = xmerger_copy_table($db_cur, "exam", "current");
     // TODO: contestants, problems, solutions !!!
 
     xcms_log(XLOG_INFO, "========================================================");
