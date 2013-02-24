@@ -134,12 +134,12 @@ function xsm_show_person_list($school_id)
         $is_student = $person["is_student"];
         $curatorship = $person["curatorship"];
 
-        $person_created = htmlspecialchars($person["person_created"]);
-        $person_modified = htmlspecialchars($person["person_modified"]);
+        $person_created = xsm_ymdhm($person["person_created"]);
+        $person_modified = xsm_ymdhm($person["person_modified"]);
 
         /* TODO: enable
-        $person_school_created = htmlspecialchars($person["person_school_created"]);
-        $person_school_modified = htmlspecialchars($person["person_school_modified"]);
+        $person_school_created = xsm_ymdhm($person["person_school_created"]);
+        $person_school_modified = xsm_ymdhm($person["person_school_modified"]);
         */
 
         /*$anketa_status = $person["anketa_status"];

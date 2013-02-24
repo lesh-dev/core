@@ -20,8 +20,8 @@ function xsm_print_course()
         $course_desc = htmlspecialchars($course["course_desc"]);
         $course_cycle = htmlspecialchars($course["course_cycle"]);
         $course_comment = htmlspecialchars($course["course_comment"]);
-        $course_created = htmlspecialchars($course["course_created"]);
-        $course_modified = htmlspecialchars($course["course_modified"]);
+        $course_created = xsm_ymdhm($course["course_created"]);
+        $course_modified = xsm_ymdhm($course["course_modified"]);
 
         $first_name = htmlspecialchars($teacher["first_name"]);
         $last_name = htmlspecialchars($teacher["last_name"]);

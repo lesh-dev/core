@@ -150,8 +150,8 @@ function xsm_show_ank_list()
         //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
         $user_agent = htmlspecialchars($person["user_agent"]);
 
-        $person_created = htmlspecialchars($person["person_created"]);
-        $person_modified = htmlspecialchars($person["person_modified"]);
+        $person_created = xsm_ymdhm($person["person_created"]);
+        $person_modified = xsm_ymdhm($person["person_modified"]);
 
         $anketa_status = $person["anketa_status"];
         $statuses = xsm_get_anketa_statuses();

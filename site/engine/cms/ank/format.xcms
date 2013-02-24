@@ -37,18 +37,27 @@
     {
         return $person['last_name'].' '.$person['first_name'].' '.$person['patronymic'];
     }
+
+    /**
+      * Canonical way to obtain FI
+      **/
     function xsm_fi($person)
     {
         return $person['last_name'].' '.$person['first_name'];
     }
 
+    /**
+      * Process human-usable timestamp without seconds
+      * with non-breaking spaces inside.
+      * @param $timestamp should be in format used in in DBMS,
+      * i.e. YYYY.MM.DD HH:MM:SS
+      **/
     function xsm_ymdhm($timestamp)
     {
         $timestamp = substr($timestamp, 0, strlen($timestamp) - 3);
         $timestamp = str_replace(' ', '&nbsp;', $timestamp);
         return $timestamp;
     }
-
 
     function xsm_prepare_social_profile($social_profile)
     {
