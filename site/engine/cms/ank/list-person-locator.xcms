@@ -94,15 +94,14 @@ function xsm_show_all_person_list()
 
     $query .= " ORDER BY NOT (p.is_teacher IS NULL OR p.is_teacher = ''), p.last_name, p.first_name";
 
-    // debug area (TODO: remove)
-    ?><textarea rows="5" cols="120" style="display: none;" id="person-query-debug"><?php echo $query; ?></textarea><?php
+    xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
     $person_sel = $db->query($query);
 
     xsm_view_operations('person', 'person', 'участника', '&amp;anketa_status=cont');
     ?>
     <table summary="Участники" class="ankList">
         <colgroup>
-            <col width="5%" />
+            <col width="30px" />
             <col width="30%" />
             <col width="35%" />
             <col width="20%" />

@@ -78,21 +78,22 @@ function xsm_show_person_list($school_id)
     if (strlen($name_filter_cond))
         $cond .= " AND $name_filter_cond";
 
-    $query = "SELECT ".
-        "p.person_id, p.last_name, p.first_name, p.phone, p.cellular, ".
-        "p.person_created, p.person_modified, ".
-        "ps.curatorship, ps.is_teacher, ps.is_student, ".
-        "ps.current_class ".
-        "FROM person p, person_school ps ".
-        "WHERE (ps.member_person_id == p.person_id) ".
-        "AND (ps.school_id == $school_id)";
+    $query =
+        "SELECT
+        p.person_id,
+        p.last_name, p.first_name, p.patronymic,
+        p.phone, p.cellular,
+        p.person_created, p.person_modified,
+        ps.curatorship, ps.is_teacher, ps.is_student,
+        ps.current_class
+        FROM person p, person_school ps
+        WHERE (ps.member_person_id == p.person_id)
+        AND (ps.school_id == $school_id)";
 
     if (strlen($cond))
         $query .= " AND $cond";
     $query .= " ORDER BY NOT (ps.is_teacher IS NULL OR ps.is_teacher = ''), p.last_name, p.first_name";
-
-    // debug area (TODO: remove)
-    ?><textarea rows="5" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
+    xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
     $person_sel = $db->query($query);
 
     xsm_print_schools($db, $school_id);
@@ -119,8 +120,8 @@ function xsm_show_person_list($school_id)
     {
         $person_id = htmlspecialchars($person["person_id"]);
 
-        $last_name = htmlspecialchars($person["last_name"]);
-        $first_name = htmlspecialchars($person["first_name"]);
+        $fi = htmlspecialchars(xsm_fi($person));
+        $fio = htmlspecialchars(xsm_fio($person));
 
         /*$school = htmlspecialchars($person["school"]);
         $school_city = htmlspecialchars($person["school_city"]);*/
@@ -159,8 +160,8 @@ function xsm_show_person_list($school_id)
         <tr class="<?php echo $row_class; ?>">
             <td class="ankList">
                 <a name="<?php echo "person$person_id"; ?>"></a>
-                <a href="<?php echo "view-person&amp;person_id=$person_id&amp;school_id=$school_id"; ?>"><?php
-                echo "$last_name $first_name $hr_teacher $hr_student"; ?></a></td>
+                <a href="<?php echo "view-person&amp;person_id=$person_id&amp;school_id=$school_id"; ?>"
+                    title="<?php echo $fio; ?>"><?php echo $fi; ?></a></td>
             <td class="ankList"><?php echo $current_class; ?></a></td>
             <td class="ankList"><?php
                 echo $cellular;

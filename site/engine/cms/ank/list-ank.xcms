@@ -80,20 +80,21 @@ function xsm_show_ank_list()
     if (strlen($name_filter_cond))
         $cond .= " AND $name_filter_cond";
 
-    $query = "SELECT ".
-        "p.person_id, p.last_name, p.first_name, p.patronymic, p.birth_date, p.passport_data, ".
-        "p.school, p.school_city, p.ank_class, ".
-        "p.phone, p.cellular, p.email, p.skype, p.social_profile, ".
-        "p.favourites, p.achievements, p.hobby, ".
-        "p.anketa_status, p.user_agent, p.person_created, p.person_modified ".
-        "FROM person p ".
-        "LEFT JOIN person_school ps ON p.person_id = ps.member_person_id ".
-        "WHERE (ps.member_person_id IS NULL) ";
+    $query =
+        "SELECT
+        p.person_id, p.last_name, p.first_name, p.patronymic, p.birth_date, p.passport_data,
+        p.school, p.school_city, p.ank_class,
+        p.phone, p.cellular, p.email, p.skype, p.social_profile,
+        p.favourites, p.achievements, p.hobby,
+        p.anketa_status, p.user_agent, p.person_created, p.person_modified
+        FROM person p
+        LEFT JOIN person_school ps ON p.person_id = ps.member_person_id
+        WHERE (ps.member_person_id IS NULL)";
 
     if (strlen($cond))
         $query .= " $cond";
     $query .= " ORDER BY person_created DESC";
-    ?><textarea rows="10" cols="120" style="display: none" id="person-query-debug"><?php echo $query; ?></textarea><?php
+    xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
     $person_sel = $db->query($query);
 
     NEW_xsm_view_operations('person', 'участника');

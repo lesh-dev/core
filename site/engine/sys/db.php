@@ -11,6 +11,9 @@
     define('XDB_USE_AI', true);
     define('XDB_NO_USE_AI', false); // default
 
+    define('XDB_DEBUG_AREA_DISABLED', false);
+    define('XDB_DEBUG_AREA_ENABLED', true); // default
+
     /**
       * Obtains database handle in read-only mode
       * TODO: Unhardcode database location ("$content_dir/ank/fizlesh.sqlite3")
@@ -255,6 +258,7 @@
         $mask = "/^$mask$/ui";
         return preg_match($mask, $value);
     }
+
     /**
       * Returns whole content of the table in array, using given order and filter (WHERE condition)
       * @param table_name table name
@@ -276,5 +280,14 @@
             $ans[] = $ev;
         }
         return $ans;
+    }
+
+    /**
+      * Embedded query debugger
+      **/
+    function xdb_debug_area($query, $enabled = XDB_DEBUG_AREA_ENABLED)
+    {?>
+        <textarea rows="5" cols="120" style="display: <?php echo ($enabled ? "" : "none"); ?>;"
+            id="person-query-debug"><?php echo $query; ?></textarea><?php
     }
 ?>
