@@ -126,6 +126,7 @@ function xsm_show_ank_list()
         $fio = htmlspecialchars(xsm_fio($person));
 
         $birth_date = htmlspecialchars($person["birth_date"]);
+        // not shown now
         $passport_data = htmlspecialchars($person["passport_data"]);
 
         $school = htmlspecialchars($person["school"]);
@@ -144,9 +145,7 @@ function xsm_show_ank_list()
         $achievements = xcms_html_wrap_by_crlf(htmlspecialchars($person["achievements"]));
         $hobby = xcms_html_wrap_by_crlf(htmlspecialchars($person["hobby"]));
 
-        $person_comment = "";
-        //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
-        $user_agent = htmlspecialchars($person["user_agent"]);
+        // TODO: person comments?
 
         $person_created = xsm_ymdhm($person["person_created"]);
         $person_modified = xsm_ymdhm($person["person_modified"]);
@@ -175,40 +174,9 @@ function xsm_show_ank_list()
             <td class="ankList">
                 <span class="ankStatus <?php echo $anketa_status; ?>"><?php echo $hr_status; ?></span>
             </td>
-            <!--<td class="ankListRowTitle">
-                <span style="float: right">
-                <img class="link-oper-list" src="<# full_design_dir #>pic/mozillafirefox.png"
-                    style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
-                <span class="ankListField next">Статус</span>:
-                    <span class="ankStatus <?php echo $anketa_status; ?>"><?php echo $hr_status; ?></span><?php
-                xsm_edit_delete_info('prep', 'person', $person_id, $person_created, $person_modified); ?>
-                </span>
-            </td>-->
         </tr>
         <?php if (false) {?>
-        <tr>
-            <td class="ankList"><span class="ankListField">Дата рождения</span>:
-                <?php echo $birth_date; ?>
-                <span class="ankListField next">Паспортные данные</span>:
-                <?php echo $passport_data; ?>
-            </td></tr>
-        <tr><td class="ankList">
-            <span class="ankListField">Школа</span>: <?php echo "$school $school_city"; ?>
-            <span class="ankListField next">Класс</span>: <?php echo "$ank_class"; ?>
-        </td></tr>
 
-        <?php if (!empty($cellular) || !empty($phone)) {?>
-            <tr><td class="ankList"><span class="ankListField">Телефоны</span>:
-            <?php
-            if ($cellular) {?>
-                <span class="ankListField">мобильный</span> <?php echo $cellular;
-            }
-            if ($phone) {
-                if (!empty($cellular)) echo ', ';
-                ?><span class="ankListField">домашний</span> <?php echo $phone;
-            }?>
-            </td></tr>
-        <?php } ?>
         <!-- email, profile and skype -->
         <?php if (!empty($email) || !empty($social_profile) || !empty($skype)) { ?>
         <tr><td class="ankList"><?php if (!empty($email)) {
@@ -227,12 +195,6 @@ function xsm_show_ank_list()
             }?>
         </td></tr>
         <?php } ?>
-        <tr><td class="ankList">
-            <span class="ankListField">Текущий</span>: <?php echo $hr_current; ?>
-            <span class="ankListField next">Школьник</span>: <?php echo $hr_student; ?>
-            <span class="ankListField next">Препод</span>: <?php echo $hr_teacher; ?>
-            <span class="ankListField next">Кураторство</span>: <?php echo $hr_curatorship; ?>
-        </td></tr>
         <!--  other stuff -->
         <?php if (!empty($favourites)) { ?>
             <tr><td class="ankList"><span class="ankListField">Любимые предметы</span>:
