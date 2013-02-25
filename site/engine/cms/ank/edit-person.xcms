@@ -58,9 +58,12 @@ function xsm_notify_person_edit($person)
         }
         elseif ($key == "anketa_status")
         {
+            if (!strlen($old_value))
+                $old_value = "new";
+
             $anketa_statuses = xsm_get_anketa_statuses();
             $old_value = $anketa_statuses[$old_value];
-            $new_value = $anketa_statuses[$new_value];;
+            $new_value = $anketa_statuses[$new_value];
         }
         $cur_row_html = ($type == "textarea") ? $row_long_template : $row_template;
         $cur_row_html = str_replace("@@KEY@", $key_title, $cur_row_html);
