@@ -102,28 +102,22 @@ function xsm_edit_exam()
                 } elseif ($ft == "enum") {
                     if ($key == "exam_status")
                         echo xsm_make_enum_selector($key, $value, xsm_get_exam_statuses());
-                }
-                elseif ($key == 'student_person_id')
+                } elseif ($key == 'student_person_id')
                 {?>
                     <input type="text" class="ankEdit" value="<?php
                         echo htmlspecialchars(xsm_fi($student)); ?>"
                         readonly="readonly" /><?php
-                }
-                elseif ($key == 'school_id')
-                {?>
-                    <input type="text" class="ankEdit" value="<?php
-                        echo htmlspecialchars($school['school_title']); ?>"
-                        readonly="readonly" /><?php
-                /*} elseif ($key == 'student_person_id') {
-                    echo xsm_make_selector('person', 'student_person_id', $student_person_id,
-                        array('last_name', 'first_name'),
-                        "(is_student = 'student') ORDER BY last_name, first_name");
-                */
                 } elseif ($key == 'course_id') {
                     if ($exam_id == "new")
                     {
-                        echo xsm_make_selector('course', 'course_id', xcms_get_key_or($exam, $key, "-1"),
-                            array('course_title'), "(school_id = $school_id) ");
+                        echo xsm_make_selector_ext($key, $key, xcms_get_key_or($exam, $key, "-1"),
+                            "@@last_name@ @@first_name@ &#8212; @@course_title@",
+                            "SELECT
+                            course_id, last_name, first_name, course_title
+                            FROM course c LEFT JOIN person p ON p.person_id = c.course_teacher_id
+                            WHERE c.school_id = '$school_id' ORDER BY last_name, first_name, course_title",
+                            $attr);
+
                     }
                     else
                     {?>
