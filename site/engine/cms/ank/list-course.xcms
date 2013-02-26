@@ -77,7 +77,7 @@ function xsm_print_person_school_edit($db, $school_id, $person_id)
     $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
     if ($person_school_id === NULL) {
         $add_href = "edit-person_school".
-            xcms_url(array('person_school_id'=>'new', 'school_id'=>$school_id, 'member_person_id'=>$person_id)); ?>
+            xcms_url(array('person_school_id'=>XDB_NEW, 'school_id'=>$school_id, 'member_person_id'=>$person_id)); ?>
         На данной школе не присутствовал. <a href="<?php echo $add_href; ?>">Зачислить</a><?php
         return;
     }

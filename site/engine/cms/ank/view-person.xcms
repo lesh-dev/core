@@ -210,7 +210,7 @@ function xsm_print_add_person_to_school($db, $school_id, $person)
     $is_student_typical = $person['is_student'];
     $add_href = "edit-person_school".
         xcms_url(array(
-            'person_school_id'=>'new',
+            'person_school_id'=>XDB_NEW,
             'school_id'=>$school_id,
             'member_person_id'=>$person_id,
             'is_teacher'=>$is_teacher_typical,

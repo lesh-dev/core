@@ -70,7 +70,7 @@
         }
         $ank_dir = "${content_dir}ank";
         @mkdir($ank_dir, 0777);
-        xdb_insert_or_update('person', array('person_id'=>'new'), $person, $person_fields);
+        xdb_insert_or_update('person', array('person_id'=>XDB_NEW), $person, $person_fields);
         $table_title = "Анкета от $hr_timestamp";
         $write_success = true; // TODO: проверять SELECT-ом, что таки да, вставилось
         $mail_msg_html = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg_html);

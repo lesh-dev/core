@@ -75,7 +75,7 @@
     {
         $key_name = "${table_name}_id";
         $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $redir = ($id == 'new') ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
+        $redir = ($id == XDB_NEW) ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
         $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
         if ($res)
         {?>
@@ -95,7 +95,7 @@
         $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
         if ($res === true || $res > 0)
         {
-            if ($id == 'new')
+            if ($id == XDB_NEW)
                 $id = $res;
             ?>
             <p><?php echo $title; ?> успешно сохранён.<?php
@@ -113,7 +113,7 @@
     {
         $key_name = "${table_name}_id";
         $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $redir = ($id == 'new') ? "$entity$aux_param" : "$entity$aux_param#$table_name$id"; ?>
+        $redir = ($id == XDB_NEW) ? "$entity$aux_param" : "$entity$aux_param#$table_name$id"; ?>
         <div class="delete-warning">
             Вы действительно хотите удалить
             <b><?php echo $title; ?></b> с кодом <b><?php echo $id; ?></b>?<br />
@@ -133,7 +133,7 @@
     {
         $key_name = "${table_name}_id";
         $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $redir = ($id == 'new') ? "$entity$aux_param" : "$entity$aux_param&amp;$key_name=$id"; ?>
+        $redir = ($id == XDB_NEW) ? "$entity$aux_param" : "$entity$aux_param&amp;$key_name=$id"; ?>
         <div class="delete-warning">
             Вы действительно хотите удалить
             <b><?php echo $title; ?></b> с кодом <b><?php echo $id; ?></b>?<br />
@@ -154,7 +154,7 @@
     {
         $key_name = "${table_name}_id";
         $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $redir = ($id == 'new') ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
+        $redir = ($id == XDB_NEW) ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
         $res = xdb_delete($table_name, $id);
         if ($res)
         {?>
@@ -171,7 +171,7 @@
     {
         $key_name = "${table_name}_id";
         $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $redir = ($id == 'new') ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
+        $redir = ($id == XDB_NEW) ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
         $res = xdb_delete($table_name, $id);
         if ($res)
         {?>
@@ -241,7 +241,7 @@
     // Here entity should be equal to table name, but...
     function xsm_edit_operations($entity, $table_name, $id, $title, $aux_param = '')
     {
-        $is_new = ($id == 'new');
+        $is_new = ($id == XDB_NEW);
         $redir = $is_new ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
         ?>
         <div style="white-space: nowrap">
@@ -259,7 +259,7 @@
     // Kosher function for person
     function NEW_xsm_edit_operations($table_name, $id, $title, $aux_param = '')
     {
-        $is_new = ($id == 'new');
+        $is_new = ($id == XDB_NEW);
         // TODO: маленький костылик
         $redir = $is_new ? "list-person-locator" : "view-$table_name$aux_param&amp;${table_name}_id=$id";
         ?>
@@ -277,7 +277,7 @@
 
     function xsm_edit_operations_listmode($entity, $id, $title, $aux_param = '')
     {
-        $is_new = ($id == 'new');
+        $is_new = ($id == XDB_NEW);
         $redir = $is_new ? "$entity$aux_param" : "$entity$aux_param#$entity$id";
         ?>
         <div style="white-space: nowrap">

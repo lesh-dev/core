@@ -9,7 +9,7 @@ function xsm_print_course()
     //xsm_view_operations('course', 'course', 'курс');
     $course_id = xcms_get_key_or($_GET, 'course_id', "-1");
     $course = xdb_get_entity_by_id('course', $course_id);
-    $course_teacher_id = xcms_get_key_or($course, 'course_teacher_id', 'new');
+    $course_teacher_id = xcms_get_key_or($course, 'course_teacher_id', XDB_NEW);
     // TODO: handle empty teacher
     $teacher = xdb_get_entity_by_id('person', $course_teacher_id); ?>
     <table summary="Курс" class="ankList">

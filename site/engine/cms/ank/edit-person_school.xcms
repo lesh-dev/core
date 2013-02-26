@@ -45,7 +45,7 @@ function xsm_update_person_school($title, $fields)
 // Специфическая функция для данной таблицы
 function xsm_person_school_edit_operations($entity, $table_name, $id, $title, $school_id, $member_person_id)
 {
-    $is_new = ($id == 'new');
+    $is_new = ($id == XDB_NEW);
     $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$member_person_id));
     ?>
     <div style="white-space: nowrap">

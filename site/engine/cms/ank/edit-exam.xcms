@@ -15,7 +15,7 @@ $exam_fields = array(
 
 function xsm_edit_exam_operations($school_id, $student_person_id, $id)
 {
-    $is_new = ($id == 'new');
+    $is_new = ($id == XDB_NEW);
     $table_name = "exam";
     $title = "Вернуться к просмотру участника";
     $redir = "view-person&amp;school_id=$school_id&amp;person_id=$student_person_id";
