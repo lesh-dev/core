@@ -50,7 +50,12 @@
         $where = "(c.school_id = $school_id)";
         if ($pers)
             $where .= " AND (c.course_teacher_id = $course_teacher_id)";
-        $query = "SELECT * FROM course c WHERE $where ORDER BY course_title";
+        $query =
+        "SELECT *
+        FROM course c LEFT JOIN person p
+        ON c.course_teacher_id = p.person_id
+        WHERE $where
+        ORDER BY last_name, first_name, course_title";
 
         $course_sel = $db->query($query);
         $course_aux_param = $pers
@@ -66,37 +71,33 @@
         <?php } ?>
         <table summary="Курсы" class="ankList">
             <colgroup>
-                <col width="40%" />
-                <col width="30%" />
                 <?php if (!$pers) {?>
-                <col width="10%" /><?php
+                <col width="30%" /><?php
                 } ?>
+                <col width="40%" />
+                <col width="10%" />
                 <col width="15%" />
             </colgroup>
             <thead>
-                <th class="ankList">Курс</th>
                 <?php if (!$pers) {?>
                 <th class="ankList">Препод</th><?php
                 } ?>
+                <th class="ankList">Курс</th>
                 <th class="ankList">Класс</th>
                 <th class="ankList">Успехи</th>
             </thead>
         <?php
 
-        while ($course = $course_sel->fetchArray(SQLITE3_ASSOC)) {
+        while ($course_and_teacher = $course_sel->fetchArray(SQLITE3_ASSOC)) {
 
-            $course_id = htmlspecialchars($course["course_id"]);
-            $course_title = htmlspecialchars($course["course_title"]);
-            $target_class = htmlspecialchars($course["target_class"]);
-            $course_teacher_id = xcms_get_key_or($course, "course_teacher_id", XDB_NEW);
+            $course_id = htmlspecialchars($course_and_teacher["course_id"]);
+            $course_title = htmlspecialchars($course_and_teacher["course_title"]);
+            $target_class = htmlspecialchars($course_and_teacher["target_class"]);
+            $course_teacher_id = xcms_get_key_or($course_and_teacher, "course_teacher_id", XDB_NEW);
+
+            $teacher_fi = htmlspecialchars(xsm_fi($course_and_teacher));
+
             // ахтунг, тут будет N SELECT-ов
-            $teacher = ($course_teacher_id != XDB_NEW)
-                ? xdb_get_entity_by_id('person', $course_teacher_id)
-                : array("first_name" => "Хрен", "last_name" => "Знает");
-
-            $teacher_first_name = htmlspecialchars($teacher["first_name"]);
-            $teacher_last_name = htmlspecialchars($teacher["last_name"]);
-
             // до кучи посчитаем количество сдавших
             $exam_passed_sel = $db->query(
                 "SELECT
@@ -123,12 +124,12 @@
                 'school_id'=>$school_id));
             ?>
             <tr>
-                <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
-                    echo "$course_title"; ?></a></td>
                 <?php if (!$pers) {?>
                 <td class="ankList"><a href="<?php echo $teacher_url; ?>"><?php
-                    echo "$teacher_first_name $teacher_last_name"; ?></a></td>
+                    echo "$teacher_fi"; ?></a></td>
                 <?php } ?>
+                <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
+                    echo "$course_title"; ?></a></td>
                 <td class="ankList"><?php echo $target_class; ?></td>
                 <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
                     echo "Сдало <b>$exam_pass_count</b> из <b>$exam_total_count</b>"; ?></a></td>
