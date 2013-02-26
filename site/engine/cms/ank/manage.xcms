@@ -1,5 +1,5 @@
 <?php
-    include(translate("<! cms/ank/func !>"));
+    include(translate("<! cms/ank/field-desc !>"));
     if (@$_GET["act"]=="editAnk")
     {
         $preface = "ref=ladmin&amp;act=editAnk&amp;page=$pageid";
