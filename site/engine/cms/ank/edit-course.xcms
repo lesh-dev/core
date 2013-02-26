@@ -22,7 +22,7 @@ function xsm_edit_course()
     $course = xdb_get_entity_by_id('course', $course_id);
     $course_teacher_id = -1;
     $school_id = -1;
-    if ($course_id == "new")
+    if ($course_id == XDB_NEW)
     {
         // prefill teacher
         $course_teacher_id = xcms_get_key_or($_GET, 'course_teacher_id');

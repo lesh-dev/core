@@ -115,7 +115,7 @@ function xsm_edit_person_school()
     $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
     $member_person_id = -1;
     $school_id = -1;
-    if ($person_school_id == "new")
+    if ($person_school_id == XDB_NEW)
     {
         // prefill member
         $member_person_id = xcms_get_key_or($_GET, 'member_person_id');

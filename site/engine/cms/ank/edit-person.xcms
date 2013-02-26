@@ -93,7 +93,7 @@ function xsm_edit_person()
 
     $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
     $person = xdb_get_entity_by_id('person', $person_id);
-    if ($person_id == "new")
+    if ($person_id == XDB_NEW)
     {
         // prefill anketa status for new records
         $anketa_status = xcms_get_key_or($_GET, 'anketa_status');

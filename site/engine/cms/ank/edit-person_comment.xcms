@@ -106,7 +106,7 @@ function xsm_edit_person_comment()
 
     $person_comment_id = xcms_get_key_or($_GET, 'person_comment_id', '-1'); // invalid key
     $person_comment = xdb_get_entity_by_id('person_comment', $person_comment_id);
-    if ($person_comment_id == "new")
+    if ($person_comment_id == XDB_NEW)
     {
         // prefill
         $person_comment['owner_login'] = xcms_user()->login();

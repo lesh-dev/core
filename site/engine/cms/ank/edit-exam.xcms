@@ -39,7 +39,7 @@ function xsm_edit_exam()
     $exam = xdb_get_entity_by_id('exam', $exam_id);
     $course = array();
     $student = array();
-    if ($exam_id == "new")
+    if ($exam_id == XDB_NEW)
     {
         // prefill student person
         $student_person_id = xcms_get_key_or($_GET, 'student_person_id', '-1');
@@ -108,7 +108,7 @@ function xsm_edit_exam()
                         echo htmlspecialchars(xsm_fi($student)); ?>"
                         readonly="readonly" /><?php
                 } elseif ($key == 'course_id') {
-                    if ($exam_id == "new")
+                    if ($exam_id == XDB_NEW)
                     {
                         echo xsm_make_selector_ext($key, $key, xcms_get_key_or($exam, $key, "-1"),
                             "@@last_name@ @@first_name@ &#8212; @@course_title@",

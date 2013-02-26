@@ -88,9 +88,9 @@
             $course_id = htmlspecialchars($course["course_id"]);
             $course_title = htmlspecialchars($course["course_title"]);
             $target_class = htmlspecialchars($course["target_class"]);
-            $course_teacher_id = xcms_get_key_or($course, "course_teacher_id", "new");
+            $course_teacher_id = xcms_get_key_or($course, "course_teacher_id", XDB_NEW);
             // ахтунг, тут будет N SELECT-ов
-            $teacher = ($course_teacher_id != "new")
+            $teacher = ($course_teacher_id != XDB_NEW)
                 ? xdb_get_entity_by_id('person', $course_teacher_id)
                 : array("first_name" => "Хрен", "last_name" => "Знает");
 
