@@ -14,25 +14,27 @@
     define('XDB_DEBUG_AREA_DISABLED', false);
     define('XDB_DEBUG_AREA_ENABLED', true); // default
 
+    define('XDB_DEFAULT_DB_PATH', "ank/fizlesh.sqlite3");
+
     /**
       * Obtains database handle in read-only mode
-      * TODO: Unhardcode database location ("$content_dir/ank/fizlesh.sqlite3")
       **/
     function xdb_get()
     {
+        global $SETTINGS;
         global $content_dir;
-        return new SQlite3("$content_dir/ank/fizlesh.sqlite3", SQLITE3_OPEN_READONLY);
+        $db_name = xcms_get_key_or($SETTINGS, 'xsm_db_name', $content_dir.XDB_DEFAULT_DB_PATH);
+        return new SQlite3($db_name, SQLITE3_OPEN_READONLY);
     }
 
     /**
       * Obtains database handle in writeable mode
-      * TODO: Unhardcode database location ("$content_dir/ank/fizlesh.sqlite3")
       **/
     function xdb_get_write()
     {
         global $SETTINGS;
         global $content_dir;
-        $db_name = xcms_get_key_or($SETTINGS, 'xsm_db_name', "$content_dir/ank/fizlesh.sqlite3");
+        $db_name = xcms_get_key_or($SETTINGS, 'xsm_db_name', $content_dir.XDB_DEFAULT_DB_PATH);
         return new SQlite3($db_name, SQLITE3_OPEN_READWRITE);
     }
 
@@ -128,15 +130,17 @@
       * @sa xdb_insert_ai
       * @return true in case of success, false otherwise
       **/
-    function xdb_update($table_name, $primary_keys, $keys_values, $allowed_keys)
+    function xdb_update($table_name, $primary_keys, $keys_values, $allowed_keys, $override_ts = XDB_OVERRIDE_TS)
     {
         $db = xdb_get_write();
         $values = "";
-        // update '<table-name>-modified' timestamp
-        $unix_time = time();
-        $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
-        $keys_values["${table_name}_modified"] = $hr_timestamp;
-
+        if ($override_ts)
+        {
+            // update '<table-name>-modified' timestamp
+            $unix_time = time();
+            $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
+            $keys_values["${table_name}_modified"] = $hr_timestamp;
+        }
         foreach ($keys_values as $key => $value)
         {
             if (!array_key_exists($key, $allowed_keys))
@@ -279,6 +283,7 @@
         {
             $ans[] = $ev;
         }
+        $db->close();
         return $ans;
     }
 
