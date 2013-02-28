@@ -59,12 +59,12 @@ function xsm_get_anketa_statuses()
 {
     return array(
         "new"=>"Новый",
-        "progress"=>"Ждёт собеседования",
+        "progress"=>"Ждёт собес.",
         "processed"=>"Принят",
         "declined"=>"Послан",
         "cont"=>"Активный",
-        "old"=>"Архивный",
-        "duplicate"=>"Дубликат",
+        "old"=>"Архив",
+        "duplicate"=>"Дубль",
         "spam"=>"Спам");
 }
 

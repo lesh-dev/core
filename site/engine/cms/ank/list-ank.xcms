@@ -104,11 +104,11 @@ function xsm_show_ank_list()
             <col width="30px" />
             <col width="13%" />
             <col width="70px" />
-            <col width="40px" />
+            <col width="45px" />
             <col width="17%" />
-            <col width="25%" />
+            <col width="23%" />
             <col width="11%" />
-            <col width="10%" />
+            <col width="55px" />
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
