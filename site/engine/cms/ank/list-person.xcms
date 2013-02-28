@@ -106,14 +106,12 @@ function xsm_show_person_list($school_id)
             <col width="25%" />
             <col width="30px" />
             <col width="25%" />
-            <col width="30%" />
         </colgroup>
         <thead>
             <!--<th class="ankList">ID</th>-->
             <th class="ankList">Фамилия, имя</th>
             <th class="ankList">Кл.</th>
             <th class="ankList">Контакты</th>
-            <th class="ankList">Info</th>
         </thead>
     <?php
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
@@ -167,6 +165,7 @@ function xsm_show_person_list($school_id)
                 echo $cellular;
                 if ($cellular && $phone)
                     echo ", $phone"; ?></a></td>
+            <?php /*
             <td class="ankList">
                 <a class="link-oper-list"
                     href="view-exam&amp;student_person_id=<?php echo $person_id; ?>">Зачёты</a>
@@ -179,7 +178,7 @@ function xsm_show_person_list($school_id)
                 <?php echo $hr_student; ?>
                 <?php echo $hr_teacher; ?>
                 <?php echo $hr_curatorship; ?>
-            </td><?php /*
+            </td>
             <td class="ankListRowTitle">
                 <span style="float: right">
                 <img class="link-oper-list" src="<# full_design_dir #>pic/mozillafirefox.png"
