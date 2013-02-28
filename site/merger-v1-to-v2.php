@@ -79,6 +79,7 @@
     $db_new->query("DELETE FROM school");
     $db_new->query("INSERT INTO school VALUES(1, 'ЛЭШ-2012', 'summmer', '2012.07.23', '2012.08.23', null, null)");
     $db_new->query("INSERT INTO school VALUES(2, 'ЗЭШ-2013', 'winter',  '2013.01.02', '2013.01.09', null, null)");
+    $db_new->query("INSERT INTO school VALUES(3, 'ЛЭШ-2013', 'summer',  '2013.07.23', '2013.08.23', null, null)");
     $db_new->close();
 
     ctx_create_structure($path);
