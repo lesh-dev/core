@@ -146,8 +146,6 @@ function xsm_show_ank_list()
         $achievements = xcms_html_wrap_by_crlf(htmlspecialchars($person["achievements"]));
         $hobby = xcms_html_wrap_by_crlf(htmlspecialchars($person["hobby"]));
 
-        // TODO: person comments?
-
         $person_created = xsm_ymdhm($person["person_created"]);
         $person_modified = xsm_ymdhm($person["person_modified"]);
 

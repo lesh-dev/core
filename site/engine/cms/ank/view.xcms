@@ -30,6 +30,7 @@
         $phone = xcms_get_key_or($person, "phone");
         $cellular = xcms_get_key_or($person, "cellular");
         $current_class = xcms_get_key_or($person, "current_class");
+        $person['ank_class'] = $current_class;
         $email = xcms_get_key_or($person, "email");
 
         $person_fields = xsm_get_person_fields();

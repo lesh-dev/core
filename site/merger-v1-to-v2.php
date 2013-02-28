@@ -273,6 +273,8 @@
 
         if (!$merge_fail && !$dup_merged)
         {
+            // default status is old people
+            $person_new['anketa_status'] = 'old';
             $person_id_inserted = xdb_insert_ai("person", "person_id", $person_new, $person_new, XDB_NO_OVERRIDE_TS);
             xcms_log(XLOG_DEBUG, "Write person $person_id_inserted");
             $persons++;
@@ -281,6 +283,7 @@
         {
             xcms_log(XLOG_INFO, "DUP:      count: $dup_count");
             $person_new['last_name'] .= ' NOT_MERGED';
+            $person_new['anketa_status'] = 'new';
             $person_id_inserted = xdb_insert_ai("person", "person_id", $person_new, $person_new, XDB_NO_OVERRIDE_TS);
             xcms_log(XLOG_DEBUG, "Write person $person_id_inserted");
             $persons++;
