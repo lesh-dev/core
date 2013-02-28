@@ -14,7 +14,8 @@ function xsm_get_person_fields()
 
         "school"=>"Школа",
         "school_city"=>"Адрес школы",
-        "ank_class"=>"Класс", // former current_class
+        "ank_class"=>"Класс подачи анкеты",
+        "current_class"=>"Класс",
 
         "phone"=>"Телефон",
         "cellular"=>"Мобильный телефон",

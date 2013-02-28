@@ -159,7 +159,8 @@ function xsm_print_person_ank_data($db, $person)
     $school = htmlspecialchars($person["school"]);
     $school_city = htmlspecialchars($person["school_city"]);
 
-    $current_class = htmlspecialchars($person["ank_class"]);
+    $ank_class = htmlspecialchars($person["ank_class"]);
+    $current_class = htmlspecialchars($person["current_class"]);
 
     $phone = htmlspecialchars($person["phone"]);
     $cellular = htmlspecialchars($person["cellular"]);
@@ -190,7 +191,8 @@ function xsm_print_person_ank_data($db, $person)
 
     xsm_draw_person_textval('Дата рождения', $birth_date);
     xsm_draw_person_textval('Паспортные данные', $passport_data);
-    xsm_draw_person_textval('Класс подачи анкеты', $current_class);
+    xsm_draw_person_textval('Класс подачи анкеты', $ank_class);
+    xsm_draw_person_textval('Класс', $current_class);
     xsm_draw_person_textval('Школа', $school);
     xsm_draw_person_textval('Город', $school_city);
     xsm_draw_person_textval('Статус анкеты', $hr_status);

@@ -84,9 +84,19 @@
         $person_id = $person_old['person_id'];
         xcms_log(XLOG_DEBUG, "Read person $person_id");
 
-        // current_class -> ank_class
+        // apply name fixups
+        $last_name = $person_old['last_name'];
+        $first_name = $person_old['first_name'];
+        if ($last_name == 'Афонина')
+            $person_new['first_name'] = 'Маришка'; // like in old database
+        if ($last_name == 'Коноваленко')
+            $person_new['first_name'] = 'Даниил'; // like in old database
+        if ($last_name == 'Додонова')
+            $person_new['first_name'] = 'Алена'; // like in old database
+
+        // copy current_class -> ank_class
         $person_new['ank_class'] = $person_old['current_class'];
-        unset($person_new['current_class']);
+
         // activity_status -> anketa_status
         $person_new['anketa_status'] = $person_old['activity_status'];
         unset($person_new['activity_status']);
@@ -158,7 +168,7 @@
     $exams = xmerger_copy_table($db_cur, "exam", "current");
     // TODO: contestants, problems, solutions !!!
 
-
+    $merges = 0;
     // persons from old database
     xcms_log(XLOG_INFO, "Processing old persons");
     $sel = xmerger_get_selector($db_old, "person");
@@ -167,12 +177,22 @@
         $person_new = $person_old;
         $person_id = $person_old['person_id'];
         xcms_log(XLOG_DEBUG, "Read person $person_id");
+        $last_name = $person_old['last_name'];
+        $first_name = $person_old['first_name'];
 
-        // current_class -> ank_class
+        // copy current_class -> ank_class
         $person_new['ank_class'] = $person_old['current_class'];
-        unset($person_new['current_class']);
+        //unset($person_new['current_class']);
+
         // activity_status -> anketa_status
         $person_new['anketa_status'] = $person_old['activity_status'];
+        $status = $person_new['anketa_status'];
+        if ($status == "spam" || $status == "duplicate")
+        {
+            // filter some trash
+            xcms_log(XLOG_INFO, "DUP: Skipped [$status] $last_name $first_name");
+            continue;
+        }
         unset($person_new['activity_status']);
         // TODO: convert 'new' statuses to 'archive' ?
 
@@ -186,9 +206,64 @@
         $comment_text = trim($person_old['person_comment']);
         unset($person_new['person_comment']);
 
-        $person_id_inserted = xdb_insert_ai("person", "person_id", $person_new, $person_new, XDB_NO_OVERRIDE_TS);
-        xcms_log(XLOG_DEBUG, "Write person $person_id_inserted");
-        $persons++;
+        $dup_merged = false;
+        $merge_fail = false;
+        // duplicates are taken from new db
+        $duplicates = xdb_get_table('person', '', "last_name = '$last_name'");
+        $dup_count = count($duplicates);
+
+        xcms_log(XLOG_INFO, "DUP: -------------------------------------------------");
+        // detect duplicates and merge
+        foreach ($duplicates as $person_dup)
+        {
+            // person_dup was taken from new_db
+            $person_merged = $person_dup; // just a copy to compare
+            foreach ($person_dup as $key => $value)
+            {
+                if ($key == "person_created" ||
+                    $key == "person_modified" ||
+                    $key == "person_id" ||
+                    $key == "last_name" ||
+                    $key == "anketa_status")
+                continue;
+
+                $new_value = trim($person_new[$key]);
+                $value = trim($value);
+                if (strlen($value) && strlen($new_value) && $value != $new_value)
+                {
+                    xcms_log(XLOG_INFO, "DUP: key conflict: $key|$value|$new_value");
+                    $merge_fail = true;
+                    continue;
+                }
+                $person_merged[$key] = $new_value;
+            }
+            if ($merge_fail)
+            {
+                xcms_log(XLOG_INFO, "DUP: Unresolved duplicate (see above) found for $last_name $first_name @ ".$person_dup['anketa_status']);
+                break;
+            }
+
+            //xcms_log(XLOG_DEBUG, "DUP:   Merge OK");
+            xdb_update("person", array("person_id"=>$person_merged['person_id']), $person_merged, $person_merged, XDB_NO_OVERRIDE_TS);
+            //xcms_log(XLOG_DEBUG, "Update person ".$person_merged['person_id']);
+            ++$merges;
+            $dup_merged = true;
+        }
+
+        if (!$merge_fail && !$dup_merged)
+        {
+            $person_id_inserted = xdb_insert_ai("person", "person_id", $person_new, $person_new, XDB_NO_OVERRIDE_TS);
+            xcms_log(XLOG_DEBUG, "Write person $person_id_inserted");
+            $persons++;
+        }
+        if ($merge_fail)
+        {
+            xcms_log(XLOG_INFO, "DUP:      count: $dup_count");
+            $person_new['last_name'] .= ' NOT_MERGED';
+            $person_id_inserted = xdb_insert_ai("person", "person_id", $person_new, $person_new, XDB_NO_OVERRIDE_TS);
+            xcms_log(XLOG_DEBUG, "Write person $person_id_inserted");
+            $persons++;
+        }
 
         if (strlen($comment_text) > 0)
         {
@@ -204,30 +279,7 @@
             xcms_log(XLOG_DEBUG, "Write person_comment $person_comment_id");
             $person_comments++;
         }
-
-        if ($person_old['is_current'] == 'current')
-        {
-            // TODO: ensure these people are merged correctly into LESH-2012
-            echo "OSHIT!!!!--------------------------------------------\n";
-            print_r($person_old);
-            /*
-            $person_school = array(
-                "member_person_id"=>$person_id,
-                "school_id"=>"1",
-                "is_student"=>$person_old["is_student"],
-                "is_teacher"=>$person_old["is_teacher"],
-                "curatorship"=>"",
-                "current_class"=>$person_old["current_class"],
-                "courses_needed"=>"8",
-                "person_school_created"=>$person_new["person_created"],
-                "person_school_modified"=>$person_new["person_modified"]);
-            $person_school_id = xdb_insert_ai("person_school", "person_school_id", $person_school, $person_school);
-            xcms_log(XLOG_DEBUG, "Write person_school $person_school_id");
-            $person_schools++;
-            */
-        }
     }
-
 
     xcms_log(XLOG_INFO, "========================================================");
     xcms_log(XLOG_INFO, "Persons processed: $persons");
@@ -235,6 +287,6 @@
     xcms_log(XLOG_INFO, "Person schools processed: $person_schools");
     xcms_log(XLOG_INFO, "Courses processed: $courses");
     xcms_log(XLOG_INFO, "Exams processed: $exams");
-    xcms_log(XLOG_INFO, "Contestants processed: NONE");
+    xcms_log(XLOG_INFO, "Merges: $merges");
 
 ?>

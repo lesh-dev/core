@@ -17,7 +17,8 @@ create table person (
 
     school text,        -- школа, в которой учится школьник
     school_city text,   -- город, в котором находится школа
-    ank_class text, -- класс подачи заявки
+    ank_class text,     -- класс подачи заявки
+    current_class text, -- текущий класс
 
     phone text,         -- телефон (городской)
     cellular text,      -- мобильный телефон
