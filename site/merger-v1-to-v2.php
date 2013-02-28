@@ -201,6 +201,12 @@
         $last_name = $person_old['last_name'];
         $first_name = $person_old['first_name'];
 
+        // fix upyachka with quotes in old records
+        $person_qfix = array();
+        foreach ($person_old as $key => $value)
+            $person_qfix[$key] = str_replace('\"', '"', $value);
+        $person_old = $person_qfix;
+
         // copy current_class -> ank_class
         $person_new['ank_class'] = $person_old['current_class'];
         //unset($person_new['current_class']);
