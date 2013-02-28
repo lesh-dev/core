@@ -15,6 +15,11 @@ function do_prepare_installer
 
 set -e
 
+if ! which sqlite3 > /dev/null; then
+	echo "Please install SQLite v.3 on your machine. "
+	exit 1
+fi
+
 if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
 	echo "This script installs XCMS to local www root. "
 	exit 1
@@ -39,15 +44,23 @@ if ! [ -d "$CONT_DIR" ]; then
 fi
 
 echo "Preparing XSM database. "
-xsm_db="/tmp/fizlesh.sqlite3"
-rm -f $xsm_db || true
-sqlite3 $xsm_db < ./site/engine/dbpatches/dbinit-v2.sql
+xsm_db="fizlesh.sqlite3"
 
 sudo mkdir -p "$dest"
 # double-check that we are not doing something awful.
+
+DB_SUBDIR="$DEST_CONT/ank"
+TEMP_DB="/tmp/xcms_local_installer_$$_$xsm_db"
+DEST_DB="$dest/$DB_SUBDIR/$xsm_db"
+
+if [ -r "$DEST_DB" ]; then
+        echo "Database already exists, backuping it."
+        sudo cp $VERBOSE_COPY "$DEST_DB" $TEMP_DB
+fi
+
 if ! [ -z "$dest" ]; then
 	echo "Cleaning dest directory $dest"
-	sudo rm -rf "$dest/*"
+	sudo rm -rf "$dest/{doc,$DEST_CONT,fizlesh.ru-design,engine,engine_public}"
 else
 	echo "Bug in your script!"
 	exit 1
@@ -57,18 +70,24 @@ echo "Copying all stuff to destination. "
 sudo cp -a $VERBOSE_COPY site/* "$dest/"
 
 sudo cp -a $VERBOSE_COPY $CONT_DIR "$dest/$DEST_CONT"
-DB_SUBDIR="$DEST_CONT/ank"
-if ! [ -r "$dest/$DB_SUBDIR/$xsm_db" ]; then
-	echo "Database not exists, installing..."
-	sudo mv $xsm_db "$dest/$DB_SUBDIR/"
+
+if [ -r "$TEMP_DB" ]; then
+	echo "Backuped database exists, installing..."
+	sudo mv $TEMP_DB "$DEST_DB"
+else
+	echo "No database found, creating fresh database. "
+	TEMP_DB="/tmp/temp_$$_$xsm_db"
+	rm -f $TEMP_DB || true
+	sqlite3 $TEMP_DB < ./site/engine/dbpatches/dbinit-v2.sql
+	sudo cp $VERBOSE_COPY $TEMP_DB $DEST_DB
 fi
 
 echo "Cleaning temporary stuff and caches. "
 
 sudo rm -rf "$dest/.prec/"*
-sudo rm -rf "$dest/admin_doc/.prec/"*
+#sudo rm -rf "$dest/admin_doc/.prec/"*
 sudo mkdir -p "$dest/.prec/"
-sudo mkdir -p "$dest/admin_doc/.prec/"
+#sudo mkdir -p "$dest/admin_doc/.prec/"
 sudo touch "$dest/"{.htaccess,engine.log}
 
 if ! [ -r $dest/site/settings.php ]; then
