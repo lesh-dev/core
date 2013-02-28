@@ -7,13 +7,9 @@
             "progress"=>"Ждут собеседования",
             "processed"=>"Принятые",
             "declined"=>"Посланные",
-            //"not-old"=>"Все, кроме архивных",
             "old"=>"Архивные",
-            //"not-spam"=>"Без спама и дублей",
-            //"not-decl"=>"Без спама, дублей и посланых",
             "all"=>"Все");
     }
-
 ?>
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
@@ -48,33 +44,27 @@
 
 function xsm_show_ank_list()
 {
-    $show_status = xcms_get_key_or($_POST, "show_anketa_status", "abitur");
+    global $show_anketa_status;
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
 
     $show_statuses = xsm_get_anklist_show_statuses();
-    if (!array_key_exists($show_status, $show_statuses)) $show_status = "abitur";
+    if (!array_key_exists($show_anketa_status, $show_statuses))
+        $show_anketa_status = "abitur";
 
     $db = xdb_get();
     $db->createFunction('LIKE', 'xdb_like', 2);
 
     $cond = "";
 
-    if ($show_status == "abitur")
+    if ($show_anketa_status == "abitur")
         $cond .=
             " AND ( (anketa_status = 'new')".
             " OR (anketa_status = 'progress')".
             " OR (anketa_status = 'declined') )";
-    /*elseif ($show_status == "not-old")
-        $cond .=
-            " AND ( (anketa_status <> 'duplicate')".
-            " AND (anketa_status <> 'spam')".
-            " AND (anketa_status <> 'declined') )";
-    elseif ($show_status == "not-spam")
-        $cond .= " AND ( (anketa_status <> 'duplicate') AND (anketa_status <> 'spam') )";*/
-    elseif ($show_status == "all")
+    elseif ($show_anketa_status == "all")
         $cond .= "";
     else
-        $cond .= " AND ( anketa_status = '$show_status' )";
+        $cond .= " AND ( anketa_status = '$show_anketa_status' )";
 
     $name_filter_cond = xsm_person_name_filter($db, $show_name_filter);
     if (strlen($name_filter_cond))
