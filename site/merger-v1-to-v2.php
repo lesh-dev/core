@@ -28,6 +28,20 @@
         return $db->query($query);
     }
 
+    function ctx_create_structure($path)
+    {
+        $db = xmerger_open_db_write("$path/new.v2.sqlite3");
+        $db->exec("DROP TABLE IF EXISTS contestants;");
+        $db->exec("CREATE TABLE contestants(contestants_id integer  PRIMARY KEY AUTOINCREMENT, name TEXT, mail TEXT, phone TEXT, parents TEXT, address TEXT, school TEXT, level TEXT, teacher_name TEXT, work TEXT, status TEXT);");
+        $db->exec("DROP TABLE IF EXISTS problems;");
+        $db->exec("CREATE TABLE problems(problems_id integer PRIMARY KEY AUTOINCREMENT , problem_name, problem_html, people text,criteria text);");
+        $db->exec("DROP TABLE IF EXISTS solutions;");
+        $db->exec("CREATE TABLE solutions(solutions_id integer PRIMARY KEY AUTOINCREMENT , problem_id, contestant_id integer, resolution_text, resolution_author, resolution_mark);");
+        $db->exec("DROP TABLE IF EXISTS sol_discussion;");
+        $db->exec("CREATE TABLE sol_discussion(sol_discussion_id integer PRIMARY KEY AUTOINCREMENT , problem_id,  contestant_id, author, comment);");
+        $db->close();
+    }
+
     function xmerger_copy_table($db_src, $table_name, $debug_type)
     {
         $obj_count = 0;
@@ -66,6 +80,8 @@
     $db_new->query("INSERT INTO school VALUES(1, 'ЛЭШ-2012', 'summmer', '2012.07.23', '2012.08.23', null, null)");
     $db_new->query("INSERT INTO school VALUES(2, 'ЗЭШ-2013', 'winter',  '2013.01.02', '2013.01.09', null, null)");
     $db_new->close();
+
+    ctx_create_structure($path);
 
     $persons = 0;
     $person_comments = 0;
@@ -166,7 +182,11 @@
 
     // exam
     $exams = xmerger_copy_table($db_cur, "exam", "current");
-    // TODO: contestants, problems, solutions !!!
+    // merge contest tables AS IS
+    xmerger_copy_table($db_cur, "contestants", "current");
+    xmerger_copy_table($db_cur, "problems", "current");
+    xmerger_copy_table($db_cur, "solutions", "current");
+    xmerger_copy_table($db_cur, "sol_discussion", "current");
 
     $merges = 0;
     // persons from old database
@@ -283,10 +303,10 @@
 
     xcms_log(XLOG_INFO, "========================================================");
     xcms_log(XLOG_INFO, "Persons processed: $persons");
+    xcms_log(XLOG_INFO, "Person merges: $merges");
     xcms_log(XLOG_INFO, "Person comments processed: $person_comments");
     xcms_log(XLOG_INFO, "Person schools processed: $person_schools");
     xcms_log(XLOG_INFO, "Courses processed: $courses");
     xcms_log(XLOG_INFO, "Exams processed: $exams");
-    xcms_log(XLOG_INFO, "Merges: $merges");
-
+    xcms_log(XLOG_INFO, "Merged contestants, solutions, problems, sol_discussion tables");
 ?>
