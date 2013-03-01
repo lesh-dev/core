@@ -76,6 +76,7 @@
                 } ?>
                 <col width="40%" />
                 <col width="10%" />
+                <col width="10%" />
                 <col width="15%" />
             </colgroup>
             <thead>
@@ -83,6 +84,7 @@
                 <th class="ankList">Препод</th><?php
                 } ?>
                 <th class="ankList">Курс</th>
+                <th class="ankList">Цикл</th>
                 <th class="ankList">Класс</th>
                 <th class="ankList">Успехи</th>
             </thead>
@@ -93,6 +95,7 @@
             $course_id = htmlspecialchars($course_and_teacher["course_id"]);
             $course_title = htmlspecialchars($course_and_teacher["course_title"]);
             $target_class = htmlspecialchars($course_and_teacher["target_class"]);
+            $course_cycle = htmlspecialchars($course_and_teacher["course_cycle"]);
             $course_teacher_id = xcms_get_key_or($course_and_teacher, "course_teacher_id", XDB_NEW);
 
             $teacher_fi = htmlspecialchars(xsm_fi($course_and_teacher));
@@ -130,6 +133,7 @@
                 <?php } ?>
                 <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
                     echo "$course_title"; ?></a></td>
+                <td class="ankList"><?php echo $course_cycle; ?></td>
                 <td class="ankList"><?php echo $target_class; ?></td>
                 <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
                     echo "Сдало <b>$exam_pass_count</b> из <b>$exam_total_count</b>"; ?></a></td>
