@@ -22,7 +22,7 @@
     По результатам собеседования должен быть выставлен статус <span class="ankStatus processed">Принят</span> или
     <span class="ankStatus declined">Послан</span>.</p>
 <p>Для людей, которые стабильно <b>не ездят</b> на школы уже 2-3 года, осмысленно выставлять статус
-    <span class="ankStatus old">Архивный</span>. В этот же статус
+    <span class="ankStatus old">Архив</span>. В этот же статус
     можно переводить через 1-2 года тех, кому по результатам собеседования был проставлен статус
     <span class="ankStatus declined">Послан</span> (сразу этого делать не следует).</p>
 <form method="post" action="list-ank" style="margin-bottom: 2px"><span>
