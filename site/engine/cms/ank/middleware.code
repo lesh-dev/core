@@ -179,4 +179,13 @@
         return "<span class=\"ankStatus $anketa_status\">$hr_status</span>";
     }
 
+    function xsm_draw_exam_status($exam)
+    {
+        $exam_status = $exam['exam_status'];
+        $exam_status_items = xsm_get_exam_statuses();
+        if (!array_key_exists($exam_status, $exam_status_items))
+            $exam_status = "passed"; // default
+        $hr_status = $exam_status_items[$exam_status];
+        return "<span class=\"exam-status $exam_status\">$hr_status</span>";
+    }
 ?>

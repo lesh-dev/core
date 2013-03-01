@@ -134,6 +134,26 @@ span.ankStatus.spam {
     color: #ff0000;
 }
 
+span.exam-status {
+    font-weight: bold;
+}
+
+span.exam-status.passed {
+    color: #008f00;
+}
+
+span.exam-status.notpassed {
+    color: #ff0000;
+}
+
+span.exam-status.almost {
+    color: #ffff00;
+}
+
+span.exam-status.almost {
+    color: #0000ff;
+}
+
 img.edit-icon {
     vertical-align: middle;
     margin-right: 2px;
