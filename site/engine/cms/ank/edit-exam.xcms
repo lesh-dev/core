@@ -18,7 +18,7 @@ function xsm_edit_exam_operations($school_id, $student_person_id, $id)
     $is_new = ($id == XDB_NEW);
     $table_name = "exam";
     $title = "Вернуться к просмотру участника";
-    $redir = "view-person&amp;school_id=$school_id&amp;person_id=$student_person_id";
+    $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$student_person_id));
     ?>
     <div style="white-space: nowrap">
         <input type="submit" name="update-<?php echo $table_name; ?>"
@@ -29,6 +29,73 @@ function xsm_edit_exam_operations($school_id, $student_person_id, $id)
         }?>
         <a class="linkButton xsm" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
     </div><?php
+}
+
+/**
+  * Специфическая функция: возврат происходит совсем в другую таблицу, нежели редактируемая сущность
+  * TODO: Сделать более генерический update, чтобы можно было гибко обрабатывать и такие случаи тоже
+  **/
+function xsm_update_exam($table_name, $title, $fields)
+{
+    $key_name = "${table_name}_id";
+    $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+    $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
+    if ($res)
+    {
+        $id = $res;
+        ?>
+        <p><?php echo $title; ?> успешно сохранён.<?php
+    }
+    else
+    {?>
+        <p>Не удалось добавить <?php echo $title; ?>.<?php
+    }
+    $person_id = xcms_get_key_or($_POST, 'student_person_id', -1);
+    $school_id = xcms_get_key_or($_POST, 'school_id', -1);
+    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
+    ?>
+    <a href="<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
+}
+
+/* Ещё одна специфическая функция -- возврат на редактирование, а не на просмотр,
+т.к. просмотра отдельно не существует) */
+function xsm_warn_delete_exam($table_name, $title)
+{
+    $key_name = "${table_name}_id";
+    $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+    $redir = $table_name.xcms_url(array($key_name=>$id)); ?>
+    <div class="delete-warning">Вы действительно хотите удалить зачёт [<?php echo $id; ?>]?</div>
+    <div><form method="post" action="edit-<?php echo $table_name; ?>">
+        <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
+        <input type="submit" name="confirm-delete-<?php echo $table_name; ?>"
+            value="Таки да, удалить!" class="delete-button"/>
+        <a class="linkButton xsm"
+            href="edit-<?php echo $redir ?>">Вернуться к редактированию</a>
+    </form></div>
+    <?php
+}
+
+function xsm_delete_exam($table_name, $title)
+{
+    global $exam_fields;
+    $key_name = "${table_name}_id";
+    $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+    $exam = xdb_get_entity_by_id($table_name, $id);
+    $person_id = $exam['student_person_id'];
+    $course_id = $exam['course_id'];
+    $course = xdb_get_entity_by_id("course", $course_id);
+    $school_id = $course['school_id'];
+    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
+    $res = xdb_delete($table_name, $id);
+    if ($res)
+    {?>
+        <p><?php echo $title; ?> [<?php echo $id; ?>] удалён успешно.<?php
+    }
+    else
+    {?>
+        <p>Не удалось удалить <?php echo $title; ?> [<?php echo $id; ?>] (возможно, есть связанные объекты).<?php
+    }?>
+    <a href="<?php echo $redir ?>">Вернуться к просмотру участника</a></p><?php
 }
 
 function xsm_edit_exam()
@@ -67,7 +134,6 @@ function xsm_edit_exam()
         "exam_status"=>"enum",
         "is_prac"=>"checkbox"
     );
-    $aux_param = "&amp;student_person_id=$student_person_id";
 
     ?>
     <form method="post" action="edit-exam"><?php
@@ -140,21 +206,15 @@ function xsm_edit_exam()
 
 if (@$_POST["update-exam"])
 {
-    $student_person_id = xcms_get_key_or($_POST, 'student_person_id', '-1');
-    $aux_param = "&amp;student_person_id=$student_person_id";
-    xsm_update_entity('exam', 'exam', 'Зачёт', $exam_fields, $aux_param);
+    xsm_update_exam('exam', 'Зачёт', $exam_fields);
 }
 elseif (@$_POST["delete-exam"])
 {
-    $student_person_id = xcms_get_key_or($_POST, 'student_person_id', '-1');
-    $aux_param = "&amp;student_person_id=$student_person_id";
-    xsm_warn_delete_entity('exam', 'exam', 'зачёт', $aux_param);
+    xsm_warn_delete_exam('exam', 'зачёт');
 }
 elseif (@$_POST["confirm-delete-exam"])
 {
-    $student_person_id = xcms_get_key_or($_GET, 'student_person_id', '-1');
-    $aux_param = "&amp;student_person_id=$student_person_id";
-    xsm_delete_entity('exam', 'exam', 'Зачёт', $aux_param);
+    xsm_delete_exam('exam', 'Зачёт');
 }
 else
     xsm_edit_exam();
