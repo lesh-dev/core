@@ -139,11 +139,6 @@ function xsm_show_ank_list()
         $person_created = xsm_ymdhm($person["person_created"]);
         $person_modified = xsm_ymdhm($person["person_modified"]);
 
-        $anketa_status = $person["anketa_status"];
-        $statuses = xsm_get_anketa_statuses();
-        if (!array_key_exists($anketa_status, $statuses)) $anketa_status = "new"; // default
-        $hr_status = $statuses[$anketa_status];
-
         ?>
         <tr>
             <td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
@@ -160,9 +155,7 @@ function xsm_show_ank_list()
             ?>
             </td>
             <td class="ankList"><?php echo $person_created; ?></td>
-            <td class="ankList">
-                <span class="ankStatus <?php echo $anketa_status; ?>"><?php echo $hr_status; ?></span>
-            </td>
+            <td class="ankList"><?php echo xsm_draw_person_status($person); ?></td>
         </tr>
         <?php if (false) {?>
 

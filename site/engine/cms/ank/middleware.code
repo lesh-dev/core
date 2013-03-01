@@ -168,4 +168,15 @@
         return "($cond)";
     }
 
+    function xsm_draw_person_status($person)
+    {
+        $anketa_status = $person["anketa_status"];
+        $statuses = xsm_get_anketa_statuses();
+        if (!array_key_exists($anketa_status, $statuses))
+            $anketa_status = "new"; // default
+
+        $hr_status = $statuses[$anketa_status];
+        return "<span class=\"ankStatus $anketa_status\">$hr_status</span>";
+    }
+
 ?>

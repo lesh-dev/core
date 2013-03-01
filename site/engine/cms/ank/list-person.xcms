@@ -141,11 +141,6 @@ function xsm_show_person_list($school_id)
         $person_school_modified = xsm_ymdhm($person["person_school_modified"]);
         */
 
-        /*$anketa_status = $person["anketa_status"];
-        $statuses = xsm_get_anketa_statuses();
-        if (!array_key_exists($anketa_status, $statuses)) $anketa_status = "new"; // default
-        $hr_status = $statuses[$anketa_status];
-        */
         $curatorship_items = xsm_get_curatorship_items();
         if (!array_key_exists($curatorship, $curatorship_items)) $curatorship = "none"; // default
         $hr_curatorship = $curatorship_items[$curatorship];

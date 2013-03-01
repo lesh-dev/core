@@ -5,15 +5,15 @@
 
 define('SCHOOL_ANK_ID', 'ank');
 
-function xsm_draw_person_textval($text, $value)
+function xsm_draw_person_textval($class, $text, $value)
 {?>
-    <div><span class="person-key"><?php echo $text; ?></span>:
+    <div><span class="person-key <?php echo $class; ?>"><?php echo "$text:"; ?></span>
         <span class="person-value"><?php echo $value; ?></span></div><?php
 }
 
-function xsm_draw_person_longtextval($text, $value)
+function xsm_draw_person_longtextval($class, $text, $value)
 {?>
-    <div><span class="person-key"><?php echo $text; ?></span>:
+    <div><span class="person-key <?php echo $class; ?>"><?php echo "$text:"; ?></span>
         <?php echo $value; ?></div><?php
 }
 
@@ -38,6 +38,8 @@ function xsm_print_person_header($db, $person, $school_id)
     $skype = htmlspecialchars($person["skype"]);
     $social_profile = xsm_prepare_social_profile($person["social_profile"]);
 
+    $hr_status = xsm_draw_person_status($person);
+
     $person_created = xsm_ymdhm($person["person_created"]);
     $person_modified = xsm_ymdhm($person["person_modified"]);
 
@@ -47,17 +49,18 @@ function xsm_print_person_header($db, $person, $school_id)
         <div class="person-portrait"><img class="person-portrait"
             src="<?php echo $full_engine_pub; ?>img/stalin.jpg"/></div>
         <div class="person-title"><?php echo "$last_name $first_name $patronymic"; ?></div><?php
-        xsm_draw_person_textval('Почта', $email);
-        xsm_draw_person_textval('Мобильный', $cellular);
-        xsm_draw_person_textval('Домашний', $phone);
-        xsm_draw_person_textval('Skype', $skype);
-        xsm_draw_person_textval('Профиль', $social_profile);
+        xsm_draw_person_textval('top', 'Статус анкеты', $hr_status);
+        xsm_draw_person_textval('top', 'Почта', $email);
+        xsm_draw_person_textval('top', 'Мобильный', $cellular);
+        xsm_draw_person_textval('top', 'Домашний', $phone);
+        xsm_draw_person_textval('top', 'Skype', $skype);
+        xsm_draw_person_textval('top', 'Профиль', $social_profile);
         ?>
     </div>
     <div class="person-topright"><?php
         xsm_edit_link('person', $person_id, '', 'Редактировать анкетные данные');
-        xsm_draw_person_textval('Создана', $person_created);
-        xsm_draw_person_textval('Отредактирована', $person_modified);
+        xsm_draw_person_textval('top', 'Создана', $person_created);
+        xsm_draw_person_textval('top', 'Исправлена', $person_modified);
         if ($school_id != SCHOOL_ANK_ID)
         {
             $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
@@ -116,7 +119,7 @@ function xsm_draw_person_comments($db, $person_id)
             <col width="55" />
             <col width="75%" />
             <col width="10%" />
-            <col width="10%" />
+            <col width="105px" />
         </colgroup>
         <thead>
             <th class="ankList">&nbsp;</th>
@@ -181,26 +184,20 @@ function xsm_print_person_ank_data($db, $person)
     $person_created = xsm_ymdhm($person["person_created"]);
     $person_modified = xsm_ymdhm($person["person_modified"]);
 
-    $anketa_status = $person["anketa_status"];
-    $statuses = xsm_get_anketa_statuses();
-    if (!array_key_exists($anketa_status, $statuses)) $anketa_status = "new"; // default
-    $hr_status = $statuses[$anketa_status];
-
     $hr_teacher = ($is_teacher == "teacher" ? "Препод" : "&#8212;");
     $hr_student = ($is_student == "student" ? "Школьник" : "&#8212;");
 
-    xsm_draw_person_textval('Дата рождения', $birth_date);
-    xsm_draw_person_textval('Паспортные данные', $passport_data);
-    xsm_draw_person_textval('Класс подачи анкеты', $ank_class);
-    xsm_draw_person_textval('Класс', $current_class);
-    xsm_draw_person_textval('Школа', $school);
-    xsm_draw_person_textval('Город', $school_city);
-    xsm_draw_person_textval('Статус анкеты', $hr_status);
-    xsm_draw_person_textval('Типичная роль', "$hr_teacher / $hr_student");
-    xsm_draw_person_textval('User Agent', $user_agent);
-    xsm_draw_person_longtextval('Любимые предметы', $favourites);
-    xsm_draw_person_longtextval('Достижения', $achievements);
-    xsm_draw_person_longtextval('Хобби', $hobby);
+    xsm_draw_person_textval('main', 'Дата рождения', $birth_date);
+    xsm_draw_person_textval('main', 'Паспортные данные', $passport_data);
+    xsm_draw_person_textval('main', 'Класс подачи анкеты', $ank_class);
+    xsm_draw_person_textval('main', 'Класс', $current_class);
+    xsm_draw_person_textval('main', 'Школа', $school);
+    xsm_draw_person_textval('main', 'Город', $school_city);
+    xsm_draw_person_textval('main', 'Роль', "$hr_teacher / $hr_student");
+    xsm_draw_person_textval('main', 'User Agent', $user_agent);
+    xsm_draw_person_longtextval('main', 'Любимые предметы', $favourites);
+    xsm_draw_person_longtextval('main', 'Достижения', $achievements);
+    xsm_draw_person_longtextval('main', 'Хобби', $hobby);
 
     xsm_draw_person_comments($db, $person_id);
 }

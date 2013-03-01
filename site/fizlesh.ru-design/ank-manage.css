@@ -192,6 +192,15 @@ div.person-title {
 
 span.person-key {
     font-weight: bold;
+    display: inline-block;
+}
+
+span.person-key.top {
+    width: 100px;
+}
+
+span.person-key.main {
+    width: 170px;
 }
 
 span.person-value {
