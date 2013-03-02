@@ -138,6 +138,8 @@ function xsm_edit_person_school()
         $person_school['is_teacher'] = $_GET['is_teacher'];
     if (array_key_exists('is_student', $_GET))
         $person_school['is_student'] = $_GET['is_student'];
+    if (array_key_exists('current_class', $_GET))
+        $person_school['current_class'] = $_GET['current_class'];
 
     $member = xdb_get_entity_by_id('person', $member_person_id);
     $school = xdb_get_entity_by_id('school', $school_id);
