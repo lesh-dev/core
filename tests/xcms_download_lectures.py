@@ -13,6 +13,8 @@ class XcmsDownloadLectures(SeleniumTest):
 	* downloads some files from this folder.
 	"""
 	def run(self):
+		
+		
 		self.gotoPage("/")
 		self.gotoPage("/lectures")
 		self.gotoPage("/lectures/iext.pdf")

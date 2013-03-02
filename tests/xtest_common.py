@@ -6,6 +6,14 @@ import os, sys, traceback, time
 
 import selenium_test
 
+def isInstallerPage(test):
+	return test.curUrl().endswith("install.php")
+
+def assertNoInstallerPage(test):
+	test.gotoRoot()
+	if isInstallerPage(test):
+		raise selenium_test.TestFatal("Installer page detected, while we did not expected it. You should run this test on installed XCMS. ")
+		
 def performLogin(test, login, password):
 	"""
 	returns True if login was successful
@@ -48,7 +56,10 @@ def performLogout(test):
 	
 def performLoginAsAdmin(test, login, password):
 	print "performLoginAsAdmin(" + login + ", " + password + ")"
-	performLogin(test, login, password)
+	if not performLogin(test, login, password):
+		print "Admin authorization failed"
+		raise selenium_test.TestError("Cannot perform Admin authorization as " + login + "/" + password)
+		
 	print "checking admin panel link"
 	
 	#check that we have entered the CP.

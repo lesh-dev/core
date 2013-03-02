@@ -10,6 +10,9 @@ class XcmsUnitTests(SeleniumTest):
 	This test runs unittests and checks if all are passed OK.
 	"""
 	def run(self):
+
+		xtest_common.assertNoInstallerPage(self)
+
 		self.gotoPage("/unittest.php")
 		self.assertSourceTextPresent(u"UNIT TESTS PASSED OK");
 		

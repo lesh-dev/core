@@ -9,7 +9,7 @@ import random, traceback, sys
 from datetime import datetime
 import time
 
-from bawlib import isVoid, isList, isString, isEqual, getSingleOption
+from bawlib import isVoid, isList, isString, isEqual, getSingleOption, userSerialize
 
 #['_unwrap_value', '_wrap_value', 'add_cookie',
 #'back', 'binary', 'capabilities', 'close', 'command_executor', 'create_web_element', 'current_url', 'current_window_handle',
@@ -26,6 +26,9 @@ from bawlib import isVoid, isList, isString, isEqual, getSingleOption
 #'switch_to_frame', 'switch_to_window', 'title', 'window_handles']
 
 class TestError(RuntimeError):
+	pass
+
+class TestFatal(TestError):
 	pass
 
 class ItemNotFound(TestError):
@@ -47,6 +50,9 @@ def RunTest(test):
 	try:
 		test.init()
 		test.run()
+	except TestFatal as e:
+#		test.printActionLog()
+		test.handleTestFatal(e)
 	except TestError as e:
 		print "Test action log:"
 		test.printActionLog()
@@ -114,7 +120,7 @@ class SeleniumTest:
 		return opt
 		
 	def needLeaveBrowserOpen(self):
-		opt, _ = getSingleOption(["-l", "--leave-open"], self.m_params);
+		opt, _ = getSingleOption(["-p", "--preserve"], self.m_params);
 		return opt
 			
 	def shutdown(self, exitCode = 0):
@@ -131,7 +137,11 @@ class SeleniumTest:
 	def handleTestFail(self, exc):
 		print "TEST FAILED:", unicode(exc.message).encode("utf-8")
 		self.shutdown(1)
-	
+
+	def handleTestFatal(self, exc):
+		print "TEST FATALED:", unicode(exc.message).encode("utf-8")
+		self.shutdown(2)
+
 	def getActionLog(self):
 		# return copy of navigation log
 		return self.m_actionLog[:]
@@ -166,6 +176,7 @@ class SeleniumTest:
 			url = "http://" + url;
 		return url;
 
+	# get current URL of tested site
 	def curUrl(self):
 		return self.m_driver.current_url;
 	
@@ -187,7 +198,7 @@ class SeleniumTest:
 			link = self.getUrlByLinkText(linkName)
 			self.gotoSite(link)
 		except NoSuchElementException:
-			self.failTest(u"Cannot find URL with name '" + self.serialize(linkName) + "'. ")
+			self.failTest(u"Cannot find URL with name '" + userSerialize(linkName) + "'. ")
 
 	def displayReason(self, reason):
 		if reason is None or reason == "":
@@ -198,7 +209,7 @@ class SeleniumTest:
 	def assertUrlNotPresent(self, linkName, forbidReason = ""):
 		try:
 			self.getUrlByLinkText(linkName)
-			exceptionMessage = "Forbidden URL is found on the page in assertUrlNotPresent: '" + self.serialize(linkName) + "'. " + self.displayReason(forbidReason)
+			exceptionMessage = "Forbidden URL is found on the page in assertUrlNotPresent: '" + userSerialize(linkName) + "'. " + self.displayReason(forbidReason)
 			raise TestError(exceptionMessage)
 		except ItemNotFound:
 			pass
@@ -281,11 +292,11 @@ class SeleniumTest:
 				#self.logAdd("checkTextPresent does not found xpath '" + xpath + "':\n" + traceback.format_exc())
 				return False
 			except StaleElementReferenceException:
-				self.logAdd("Cache problem in checkTextPresent(" + xpath + ", " + self.serialize(text) + "), trying again. ")
+				self.logAdd("Cache problem in checkTextPresent(" + xpath + ", " + userSerialize(text) + "), trying again. ")
 				count += 1
 				time.sleep(1)
 				continue
-		self.failTest("Unsolvable cache problem in checkTextPresent(" + xpath + ", " + self.serialize(text) + "), trying again. ")
+		self.failTest("Unsolvable cache problem in checkTextPresent(" + xpath + ", " + userSerialize(text) + "), trying again. ")
 		
 	def checkSourceTextPresent(self, text):
 		return self.checkTextPresent("//*", text)
@@ -301,18 +312,13 @@ class SeleniumTest:
 		self.logAdd(errorText)
 		raise ItemNotFound(errorText)
 
-	def serialize(self, text):
-		if isList(text):
-			return "|".join(text)
-		return text
-
 	def assertTextPresent(self, xpath, text):
 		if not self.checkTextPresent(xpath, text):
-			self.failTest("Text '" + self.serialize(text) + "' not found on page '" + self.curUrl() + "' in element '" + xpath + "'. ")
+			self.failTest("Text '" + userSerialize(text) + "' not found on page '" + self.curUrl() + "' in element '" + xpath + "'. ")
 
 	def assertTextNotPresent(self, xpath, text, forbidReason = ""):
 		if self.checkTextPresent(xpath, text):
-			errText = "Forbidden text '" + self.serialize(text) + "' found on page '" + self.curUrl() + "' in element '" + xpath + "'. " + self.displayReason(forbidReason)
+			errText = "Forbidden text '" + userSerialize(text) + "' found on page '" + self.curUrl() + "' in element '" + xpath + "'. " + self.displayReason(forbidReason)
 			self.failTest(errText)
 
 	def assertBodyTextPresent(self, text):
@@ -351,14 +357,14 @@ class SeleniumTest:
 			else:
 				# loop ended, found nothing
 				# here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
-				self.failTestWithItemNotFound(u"Cannot find URL by link texts: '" + self.serialize(urlText) + "' on page '" + self.curUrl())
+				self.failTestWithItemNotFound(u"Cannot find URL by link texts: '" + userSerialize(urlText) + "' on page '" + self.curUrl())
 		else:		
 			try:
 				url = self.m_driver.find_element_by_link_text(urlText)
 				return url.get_attribute("href");
 			except NoSuchElementException:
 				# here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
-				self.failTestWithItemNotFound(u"Cannot find URL by link text: '" + self.serialize(urlText) + "' on page '" + self.curUrl())
+				self.failTestWithItemNotFound(u"Cannot find URL by link text: '" + userSerialize(urlText) + "' on page '" + self.curUrl())
 			
 	def logAdd(self, text):
 		try:

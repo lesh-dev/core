@@ -30,6 +30,8 @@ class XcmsXsmAnketaFill(SeleniumTest):
 			
 		self.setAutoPhpErrorChecking(True)
 		
+		xtest_common.assertNoInstallerPage(self)
+
 		self.gotoRoot()
 		
 		#navigate to anketas

@@ -10,7 +10,12 @@ class XcmsMetricsCheck(SeleniumTest):
 	This test checks if metrics counter successfully wiped off from test website.
 	"""
 	def run(self):
-		self.gotoPage("/")
+
+		self.setAutoPhpErrorChecking(True)
+		
+		xtest_common.assertNoInstallerPage(self)
+		
+		self.gotoRoot();
 		self.assertSourceTextNotPresent("Metrika");
 		
     
