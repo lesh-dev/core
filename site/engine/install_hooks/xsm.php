@@ -29,11 +29,14 @@
     }
     /**
       * Мы любим считать длины строк, поэтому нам нужен модуль php-mbstring
-      * @return true, если найдена функция mb_strlen
+      * @return true, если найдена функция mb_strlen и сообщение об ошибке
+      * в противном случае.
       **/
     function initial_check()
     {
-        return function_exists('mb_strlen');
+        if (!function_exists('mb_strlen'))
+            return "PHP function 'mb_strlen' is missing. Please install php-mbstring package/module. ";
+        return true;
     }
     /**
       * Проверяем введённые параметры
