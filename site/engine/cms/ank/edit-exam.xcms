@@ -125,9 +125,9 @@ function xsm_edit_exam()
         $course_id = $exam['course_id'];
         $course = xdb_get_entity_by_id('course', $course_id);
         $school_id = $course['school_id'];
-        $school = xdb_get_entity_by_id('school', $school_id);
-        $school_title = $school['school_title'];
     }
+    $school = xdb_get_entity_by_id('school', $school_id);
+    $school_title = $school['school_title'];
 
     $field_types = array(
         "exam_comment"=>"textarea",
@@ -146,6 +146,12 @@ function xsm_edit_exam()
             <tr>
                 <td class="ankListRowTitle">Зачёт</td>
             </tr>
+            <tr><td class="ankList">
+                <span class="ankEditField">Школа</span>
+                <input type="text" class="ankEdit" value="<?php
+                    echo htmlspecialchars($school_title); ?>"
+                    readonly="readonly" />
+            </td></tr>
             <?php
             foreach ($exam_fields as $key=>$field_title)
             {
@@ -186,9 +192,13 @@ function xsm_edit_exam()
 
                     }
                     else
-                    {?>
+                    {
+                        $course_teacher_id = $course['course_teacher_id'];
+                        $teacher = xdb_get_entity_by_id('person', $course_teacher_id);
+                        $teacher_fi = htmlspecialchars(xsm_fi($teacher));
+                        ?>
                         <input type="text" class="ankEdit" value="<?php
-                            echo htmlspecialchars($course['course_title']); ?>"
+                            echo "$teacher_fi &#8212; ".htmlspecialchars($course['course_title']); ?>"
                             readonly="readonly" /><?php
                     }
                 }
