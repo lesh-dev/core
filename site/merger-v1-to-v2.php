@@ -195,17 +195,15 @@
     $sel = xmerger_get_selector($db_old, "person");
     while ($person_old = $sel->fetchArray(SQLITE3_ASSOC))
     {
+        // fix upyachka with quotes in old records
+        foreach ($person_old as $key => $value)
+            $person_old[$key] = str_replace('\"', '"', $value);
         $person_new = $person_old;
+
         $person_id = $person_old['person_id'];
         xcms_log(XLOG_DEBUG, "Read person $person_id");
         $last_name = $person_old['last_name'];
         $first_name = $person_old['first_name'];
-
-        // fix upyachka with quotes in old records
-        $person_qfix = array();
-        foreach ($person_old as $key => $value)
-            $person_qfix[$key] = str_replace('\"', '"', $value);
-        $person_old = $person_qfix;
 
         // copy current_class -> ank_class
         $person_new['ank_class'] = $person_old['current_class'];
