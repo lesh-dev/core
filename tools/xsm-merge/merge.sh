@@ -9,8 +9,7 @@ if ! [ "$1" = "--local" ] ; then
 fi
 echo "Initializing new database '$new'"
 rm -f $new
-sqlite3 $new < ../dbinit-v2.sql
+sqlite3 $new < ../../site/engine/dbpatches/dbinit-v2.sql
 
 echo "Run merger..."
-cd ../../../
 php merger-v1-to-v2.php

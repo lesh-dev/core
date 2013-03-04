@@ -61,7 +61,7 @@
     }
 
     global $SETTINGS;
-    $path = "./engine/dbpatches/2013.03.03-v1-to-v2";
+    $path = ".";
     // set db for writing
     $SETTINGS['xsm_db_name'] = "$path/new.v2.sqlite3";
 
