@@ -5,8 +5,13 @@ set -e
 # set this to -v to add some verbosity
 VERBOSE_COPY=""
 
+dest_name="site"
+if [ "$HOSTNAME" == "blackbox" ] ; then
+    dest_name="lesh"
+fi
+
 # site root
-dest="/var/www/html/site"
+dest="/var/www/html/$dest_name"
 # name of the folder with content repo
 REPO_NAME="content-fizlesh.ru"
 # content path
@@ -23,6 +28,7 @@ function print_usage()
     echo "Install XCMS to local www root."
     echo "Usage: $(basename $0) <options>"
     echo "          [-i|--installer]     Force installer installation"
+    echo "          [-v|--verbose]       Verbose mode"
     echo "          [-h|--help]          This help"
 }
 
@@ -44,8 +50,9 @@ while [ -n "$1" ]; do
     if [ "$arg" = "-h" ] || [ "$arg" = "--help" ]; then
         print_usage
         exit 1
-    fi
-    if [ "$arg" = "-i" ] || [ "$arg" = "--installer" ]; then
+    elif [ "$arg" = "-v" ] || [ "$arg" = "--verbose" ]; then
+        VERBOSE_COPY="-v"
+    elif [ "$arg" = "-i" ] || [ "$arg" = "--installer" ]; then
         prepare_installer="yes"
     fi
     shift || true
@@ -91,12 +98,12 @@ else
 fi
 
 echo "Copying all stuff to destination. "
-sudo cp -a $VERBOSE_COPY site/* "$dest/"
+sudo cp -a $VERBOSE_COPY ./site/* "$dest/"
 
 sudo cp -a $VERBOSE_COPY $CONT_DIR "$dest/$DEST_CONT"
 
 if [ -r "$TEMP_DB" ]; then
-    echo "Backuped database exists, installing..."
+    echo "Database backup exists, installing..."
     sudo mv $TEMP_DB "$DEST_DB"
 else
     echo "No database found, creating fresh database. "
@@ -112,7 +119,7 @@ sudo rm -rf "$dest/.prec/"*
 sudo mkdir -p "$dest/.prec/"
 sudo touch "$dest/"{.htaccess,engine.log}
 
-if ! [ -r $dest/site/settings.php ]; then
+if ! [ -r $dest/settings.php ]; then
     echo "Seems that installation is performed for a first time. "
     echo "So you should go through XCMS install process. "
     do_prepare_installer $dest
@@ -130,7 +137,5 @@ sudo chown -R $httpd_user:$httpd_user "$dest"
 # why all this shit needed?! We need to set apache rules for ALL <www-root>/site !
 ### CRAP {.prec,$DEST_CONT,.htaccess,settings.php,install.nt.php,engine.log} CRAP ###
 # got error on this line. I don't have this directory in repo!
-
-#sudo chown -R apache:apache "$dest/admin_doc/"{.prec,content,.htaccess,settings.php}
 
 echo "XCMS installed to http://localhost/site"
