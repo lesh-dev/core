@@ -27,9 +27,14 @@ function print_usage()
 {
     echo "Install XCMS to local www root."
     echo "Usage: $(basename $0) <options>"
-    echo "          [-i|--installer]     Force installer installation"
-    echo "          [-v|--verbose]       Verbose mode"
-    echo "          [-h|--help]          This help"
+    echo "          [-i|--installer]       Force installer installation"
+    echo "          [-v|--verbose]         Verbose mode"
+    echo "          [-d|--db-mode] <mode>  DB install mode:"
+    echo "                   original      Save original database (default)"
+    echo "                   empty         Init fresh database using dbinit"
+    echo "                   merged        Install merged database"
+    echo "          [-h|--help]            This help"
+    exit 1
 }
 
 function do_prepare_installer()
@@ -44,14 +49,25 @@ function do_prepare_installer()
     sudo chown -R $httpd_user:$httpd_user "$dest/install.php"
 }
 
+function install_fresh_db()
+{
+    echo "Creating fresh database. "
+    TEMP_DB="/tmp/temp_$$_$xsm_db"
+    rm -f $TEMP_DB || true
+    sqlite3 $TEMP_DB < ./site/engine/dbpatches/dbinit-v2.sql
+    sudo cp $VERBOSE_COPY $TEMP_DB $DEST_DB
+}
+
 # read options
 while [ -n "$1" ]; do
     arg="$1"
     if [ "$arg" = "-h" ] || [ "$arg" = "--help" ]; then
         print_usage
-        exit 1
     elif [ "$arg" = "-v" ] || [ "$arg" = "--verbose" ]; then
         VERBOSE_COPY="-v"
+    elif [ "$arg" = "-d" ] || [ "$arg" = "--db-mode" ]; then
+        shift || true
+        db_mode="$1"
     elif [ "$arg" = "-i" ] || [ "$arg" = "--installer" ]; then
         prepare_installer="yes"
     fi
@@ -102,15 +118,21 @@ sudo cp -a $VERBOSE_COPY ./site/* "$dest/"
 
 sudo cp -a $VERBOSE_COPY $CONT_DIR "$dest/$DEST_CONT"
 
-if [ -r "$TEMP_DB" ]; then
-    echo "Database backup exists, installing..."
+version="$(tools/publish/version.sh)-local"
+echo "Set version: $version"
+echo "version : $version" > $dest/INFO
+
+# process database
+if [ "$db_mode" == "merged" ] ; then
+    echo "Installing merged database"
+    sudo cp $VERBOSE_COPY tools/xsm-merge/new*sqlite3 $DEST_DB
+elif [ "$db_mode" == "empty" ] ; then
+    install_fresh_db
+elif [ "$db_mode" == "original" ] || [ -r "$TEMP_DB" ] ; then
+    echo "Database backup found, installing..."
     sudo mv $TEMP_DB "$DEST_DB"
 else
-    echo "No database found, creating fresh database. "
-    TEMP_DB="/tmp/temp_$$_$xsm_db"
-    rm -f $TEMP_DB || true
-    sqlite3 $TEMP_DB < ./site/engine/dbpatches/dbinit-v2.sql
-    sudo cp $VERBOSE_COPY $TEMP_DB $DEST_DB
+    print_usage
 fi
 
 echo "Cleaning temporary stuff and caches. "
