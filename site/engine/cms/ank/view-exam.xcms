@@ -27,7 +27,7 @@ function xsm_print_exam()
 
     ?>
     <h3>Зачёты школьника
-        <a href="view-prep&amp;person_id=<?php echo $student_person_id; ?>"><?php
+        <a href="view-person&amp;person_id=<?php echo $student_person_id; ?>"><?php
             echo "$student_first_name $student_last_name"; ?></a>:
     </h3>
     <?php xsm_view_operations('exam', 'exam', 'зачёт', $aux_param); ?>
@@ -50,8 +50,8 @@ function xsm_print_exam()
         $exam_comment = htmlspecialchars($exam_data["exam_comment"]);
         $deadline_date = htmlspecialchars($exam_data["deadline_date"]);
 
-        $exam_created = htmlspecialchars($exam_data["exam_created"]);
-        $exam_modified = htmlspecialchars($exam_data["exam_modified"]);
+        $exam_created = xsm_ymdhm($exam_data["exam_created"]);
+        $exam_modified = xsm_ymdhm($exam_data["exam_modified"]);
 
         $teacher_first_name = htmlspecialchars($exam_data["teacher_first_name"]);
         $teacher_last_name = htmlspecialchars($exam_data["teacher_last_name"]);
@@ -75,7 +75,7 @@ function xsm_print_exam()
             <?php echo $target_class; ?></td></tr>
 
         <tr><td class="ankList"><span class="ankListField">Препод</span>:
-            <a href="view-prep&amp;person_id=<?php echo $course_teacher_id; ?>"><?php
+            <a href="view-person&amp;person_id=<?php echo $course_teacher_id; ?>"><?php
                 echo "$teacher_first_name $teacher_last_name"; ?></a></td></tr>
 
         <tr><td class="ankList"><span class="ankListField">Статус зачёта</span>:

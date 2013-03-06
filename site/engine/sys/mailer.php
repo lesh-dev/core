@@ -66,6 +66,8 @@
         $login = xcms_user()->login();
         $enabled = xcms_get_key_or($SETTINGS, "mailer_enabled", true);
         if (!$enabled) return;
+        $unix_time = time();
+        $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
 
         $body =
             "$mail_text\r\n".
@@ -74,6 +76,7 @@
             "Пользователь    : $login\r\n".
             "Имя хоста       : {$_SERVER['HTTP_HOST']}\r\n".
             "Обратная ссылка : {$_SERVER['HTTP_REFERER']}\r\n";
+            "Дата и время    : $hr_timestamp\r\n";
 
         if (!empty($mail_text_html))
         {
@@ -83,6 +86,7 @@
             $body_html = str_replace('@@HOST@', $_SERVER['HTTP_HOST'], $body_html);
             $body_html = str_replace('@@REFERER@', $_SERVER['HTTP_REFERER'], $body_html);
             $body_html = str_replace('@@LOGIN@', $login, $body_html);
+            $body_html = str_replace('@@TIMESTAMP@', $hr_timestamp, $body_html);
         }
 
         $mailer = xcms_get_mailer();

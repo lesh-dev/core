@@ -1,0 +1,181 @@
+<# auth/ #admin #ank #>
+<# cms/ank/style #>
+<?php
+
+$person_comment_fields = array(
+    "comment_text"=>"Текст комментария",
+    "owner_login"=>"Логин автора",
+    "blamed_person_id"=>"Субъект",
+    "person_comment_created"=>"Время создания",
+    "person_comment_modified"=>"Последняя модификация",
+    "person_comment_deleted"=>"Объект удалён"
+);
+
+// Специфическая функция для данной таблицы (можно объединить с person_school)
+function xsm_person_comment_edit_operations($entity, $table_name, $id, $title, /*$school_id, */$member_person_id)
+{
+    $school_id = "ank";
+    $is_new = ($id == XDB_NEW);
+    $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$member_person_id));
+    ?>
+    <div style="white-space: nowrap">
+        <input type="submit" name="update-<?php echo $entity; ?>"
+            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
+        if (!$is_new) {?>
+            <input type="submit" name="delete-<?php echo $entity; ?>"
+                value="Удалить комментарий" class="delete-button"/><?php
+        }?>
+        <a class="linkButton xsm" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
+    </div><?php
+}
+
+/**
+  * Специфическая функция: возврат происходит совсем в другую таблицу, нежели редактируемая сущность
+  * TODO: Сделать более генерический update, чтобы можно было гибко обрабатывать и такие случаи тоже
+  **/
+function xsm_update_person_comment($title, $fields)
+{
+    $table_name = "person_comment";
+    $key_name = "${table_name}_id";
+    $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+    $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
+    if ($res)
+    {
+        $id = $res;
+        ?>
+        <p><?php echo $title; ?> успешно сохранён.<?php
+    }
+    else
+    {?>
+        <p>Не удалось добавить <?php echo $title; ?>.<?php
+    }
+    $person_id = xcms_get_key_or($_POST, 'blamed_person_id', -1);
+    $school_id = "ank";
+    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
+    ?>
+    <a href="<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
+}
+
+/* Ещё одна специфическая функция -- возврат на редактирование, а не на просмотр,
+т.к. просмотра отдельно не существует) */
+function xsm_warn_delete_person_comment($entity, $table_name, $title, $aux_param = '')
+{
+    $key_name = "${table_name}_id";
+    $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+    $redir = "$entity$aux_param".xcms_url(array($key_name=>$id)); ?>
+    <div class="delete-warning">Вы действительно хотите удалить комментарий [<?php echo $id; ?>]
+        (восстановление будет невозможно)?</div>
+    <div><form method="post" action="edit-<?php echo "$entity$aux_param"; ?>">
+        <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
+        <input type="submit" name="confirm-delete-<?php echo $entity; ?>"
+            value="Таки да, удалить!" class="delete-button"/>
+        <a class="linkButton xsm"
+            href="edit-<?php echo $redir ?>">Вернуться к редактированию</a>
+    </form></div>
+    <?php
+}
+
+function xsm_delete_person_comment($entity, $table_name, $title, $aux_param = '')
+{
+    global $person_comment_fields;
+    $key_name = "${table_name}_id";
+    $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+    $person_comment = xdb_get_entity_by_id($table_name, $id);
+    $person_id = $person_comment['blamed_person_id'];
+    $school_id = "ank";
+    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
+    // experimental 'delete as status update'
+    $res = xdb_insert_or_update($table_name, array($key_name=>$id),
+        array('person_comment_deleted'=>'deleted'), $person_comment_fields);
+    //$res = xdb_delete($table_name, $id);
+    if ($res)
+    {?>
+        <p><?php echo $title; ?> [<?php echo $id; ?>] удалён успешно.<?php
+    }
+    else
+    {?>
+        <p>Не удалось удалить <?php echo $title; ?> [<?php echo $id; ?>] (возможно, есть связанные объекты).<?php
+    }?>
+    <a href="<?php echo $redir ?>">Вернуться к просмотру участника</a></p><?php
+}
+
+
+function xsm_edit_person_comment()
+{
+    global $person_comment_fields;
+
+    $person_comment_id = xcms_get_key_or($_GET, 'person_comment_id', '-1'); // invalid key
+    $person_comment = xdb_get_entity_by_id('person_comment', $person_comment_id);
+    if ($person_comment_id == XDB_NEW)
+    {
+        // prefill
+        $person_comment['owner_login'] = xcms_user()->login();
+        $blamed_person_id = xcms_get_key_or($_GET, 'blamed_person_id');
+    }
+    else
+    {
+        $blamed_person_id = $person_comment['blamed_person_id'];
+    }
+
+    $person = xdb_get_entity_by_id('person', $blamed_person_id);
+
+    $field_types = array(
+        "comment_text"=>"textarea"
+    );
+
+    ?>
+    <form method="post" action="edit-person_comment"><?php
+        xsm_person_comment_edit_operations('person_comment', 'person_comment', $person_comment_id, 'Вернуться к списку комментов', $blamed_person_id);?>
+        <input type="hidden" name="person_comment_id" value="<?php echo $person_comment_id; ?>" />
+        <input type="hidden" name="blamed_person_id" value="<?php echo $blamed_person_id; ?>" />
+        <table summary="Комментарий" class="ankEdit">
+            <tr>
+                <td class="ankListRowTitle">Комментарий</td>
+            </tr>
+            <?php
+            foreach ($person_comment_fields as $key=>$field_title)
+            {
+                $value = xcms_get_key_or($person_comment, $key);
+                $attr = "";
+                if ($key == "person_comment_deleted")
+                    continue;
+                // handle readonly fields
+                if ($key == "owner_login" ||
+                    $key == "blamed_person_id" ||
+                    $key == "person_comment_created" ||
+                    $key == "person_comment_modified")
+                    $attr = 'readonly="readonly"'; ?>
+                <tr><td class="ankList"><span class="ankEditField"><?php echo $person_comment_fields[$key]; ?></span>
+                <?php
+                if (array_key_exists($key, $field_types))
+                {?>
+                    <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
+                        echo htmlspecialchars($value); ?></textarea/><?php
+                }
+                elseif ($key == 'blamed_person_id')
+                {?>
+                    <input type="text" class="ankEdit" value="<?php
+                        echo htmlspecialchars($person['last_name'].' '.$person['first_name']); ?>"
+                        <?php echo $attr; ?> /><?php
+                }
+                else {?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
+                        name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
+                } ?>
+                </td></tr>
+                <?php
+            }?>
+        </table><?php
+        xsm_person_comment_edit_operations('person_comment', 'person_comment', $person_comment_id, 'Вернуться к списку комментов', $blamed_person_id);?>
+    </form>
+    <?php
+}
+
+if (@$_POST["update-person_comment"])
+    xsm_update_person_comment('Комментарий', $person_comment_fields);
+elseif (@$_POST["delete-person_comment"])
+    xsm_warn_delete_person_comment('person_comment', 'person_comment', 'комментарий');
+elseif (@$_POST["confirm-delete-person_comment"])
+    xsm_delete_person_comment('person_comment', 'person_comment', 'Комментарий');
+else
+    xsm_edit_person_comment();
+?>

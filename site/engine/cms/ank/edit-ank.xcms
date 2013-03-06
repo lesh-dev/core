@@ -100,7 +100,7 @@
   if (@$_POST["update-ank"])
   {
     $xml = simplexml_load_string('<?xml version="1.0" encoding="utf-8"?><Anketa/>');
-    $unixTime = mktime();
+    $unixTime = time();
     $hrTimestamp = date("Y.m.d H:i:s", $unixTime);
     $_POST["Modified"] = $unixTime;
     $_POST["HRModified"] = $hrTimestamp;

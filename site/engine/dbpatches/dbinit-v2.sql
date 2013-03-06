@@ -4,7 +4,6 @@ drop table if exists person_school;
 drop table if exists person;
 drop table if exists school;
 
-
 /* Участник (препод, куратор, школьник...) */
 create table person (
     person_id integer primary key autoincrement,
@@ -18,7 +17,8 @@ create table person (
 
     school text,        -- школа, в которой учится школьник
     school_city text,   -- город, в котором находится школа
-    current_class text, -- класс подачи заявки
+    ank_class text,     -- класс подачи заявки
+    current_class text, -- текущий класс
 
     phone text,         -- телефон (городской)
     cellular text,      -- мобильный телефон
@@ -26,7 +26,9 @@ create table person (
     skype text,         -- skype
     social_profile text,  -- профиль ВКонтакте и т.п. (используемый!)
 
-    -- исторические поля -- имеют смысл только при первом наборе (регистрации)
+    is_teacher text, -- типично препод
+    is_student text, -- типично школьник
+
     favourites text,     -- любимые предметы
     achievements text,   -- достижения
     hobby text,          -- хобби
@@ -45,6 +47,7 @@ create table course (
     course_id integer primary key autoincrement,
     course_title text, -- название курса
     school_id integer not null, -- ссылка на школу, на которой читали курс
+    course_cycle text,  -- цикл, на котором читался курс
     course_teacher_id integer not null, -- ссылка на препода
     target_class text, -- диапазон классов, на которые рассчитан курс
     course_desc text,  -- описание курса
@@ -61,7 +64,7 @@ create table exam (
     course_id integer not null, -- fk
     exam_status text,
     deadline_date text,
-    is_prac text, -- enum
+    is_prac text, -- enum -- ой, зачем же это в свойствах зачёта? это же свойство курса!
     exam_comment text,
     exam_created text,
     exam_modified text,
@@ -83,10 +86,14 @@ create table school (
 /*
 Связка "Бытие участника на школе"
 
+Роль человека на школе по умолчанию копируется из
+
 Именно в этой связке должна быть проставлена роль участника на школе
 (на одной школе он был школьником, на школе следующей он был уже преподом)
 Таким образом, статусы is_student, is_teacher, curatorship участника
 переезжают сюда.
+
+TODO добавить место проведения школы
 */
 create table person_school (
     person_school_id integer primary key autoincrement,
@@ -95,10 +102,10 @@ create table person_school (
     is_student text, -- является ли школьником на данной школе
     is_teacher text, -- является ли преподом на данной школе
     curatorship text, -- кураторство на данной школе enum:(никто, помкур, куратор)
-    -- is_current text -- становится просто ненужным
     current_class text, -- класс, в котором находится школьник
         -- (для Летней школы надо договориться, какой именно класс мы ставим,
         -- будущий или прошедший
+    courses_needed integer, -- потребное кол-во курсов для сдачи на школе
     person_school_created text, -- utc timestamp
     person_school_modified text, -- utc timestamp
     foreign key (member_person_id) references person(person_id),
@@ -111,13 +118,15 @@ create table person_school (
 */
 create table person_comment (
     person_comment_id integer primary key autoincrement,
-    person_comment text, -- текст комментария
+    comment_text text, -- текст комментария
     blamed_person_id integer not null, -- fk person -- сабжевый участник (типично школьник)
-    school_id integer not null, -- fk school -- школа, о которой идёт речь
-    owner_person_id integer not null, -- fk person -- владелец комментария (типично препод)
+    -- school_id integer not null, -- fk school -- школа, о которой идёт речь
+    owner_login text not null, -- логин автора комментария
+    -- owner_person_id integer not null, -- fk person -- владелец комментария (типично препод)
     person_comment_created text, -- utc timestamp
     person_comment_modified text, -- utc timestamp
-    foreign key (blamed_person_id) references person(person_id),
-    foreign key (school_id) references school(school_id),
-    foreign key (owner_person_id) references person(person_id)
+    person_comment_deleted text, -- признак удаления (из базы ничего удалить нельзя)
+    foreign key (blamed_person_id) references person(person_id)
+    -- foreign key (school_id) references school(school_id),
+    -- foreign key (owner_person_id) references person(person_id)
 );

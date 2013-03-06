@@ -1,0 +1,123 @@
+<?php
+
+function xsm_get_person_fields()
+{
+    return array(
+        "anketa_status"=>"Статус",
+
+        "last_name"=>"Фамилия",
+        "first_name"=>"Имя",
+        "patronymic"=>"Отчество",
+
+        "birth_date"=>"Дата рождения",
+        "passport_data"=>"Паспортные данные",
+
+        "school"=>"Школа",
+        "school_city"=>"Адрес школы",
+        "ank_class"=>"Класс подачи анкеты",
+        "current_class"=>"Класс",
+
+        "phone"=>"Телефон",
+        "cellular"=>"Мобильный телефон",
+        "email"=>"E-Mail",
+        "skype"=>"Skype",
+        "social_profile"=>"Профиль в соц. сети",
+
+        "is_teacher"=>"Препод",
+        "is_student"=>"Школьник",
+
+        "favourites"=>"Любимые предметы",
+        "achievements"=>"Достижения",
+        "hobby"=>"Хобби",
+
+        "user_agent"=>"UserAgent",
+
+        "person_created"=>"Время создания",
+        "person_modified"=>"Последняя модификация"
+    );
+}
+
+function xcms_get_person_field_types()
+{
+    return array(
+        "favourites"=>"textarea",
+        "achievements"=>"textarea",
+        "hobby"=>"textarea",
+
+        "is_teacher"=>"checkbox",
+        "is_student"=>"checkbox",
+
+        "anketa_status"=>"enum"
+    );
+}
+
+/**
+  * Complete list of valid person activity statuses
+  * @return key-value array of activity statuses
+  **/
+function xsm_get_anketa_statuses()
+{
+    return array(
+        "new"=>"Новый",
+        "progress"=>"Ждёт собес.",
+        "processed"=>"Принят",
+        "declined"=>"Послан",
+        "cont"=>"Активный",
+        "old"=>"Архив",
+        "duplicate"=>"Дубль",
+        "spam"=>"Спам");
+}
+
+/**
+  * DEPRECATED: Anketa status selector for viewer
+  **/
+function xcms_ank_get_show_status_list()
+{
+    return array(
+        "not-spam"=>"Без спама и дублей",
+        "not-decl"=>"Без спама, дублей и посланых",
+        "new"=>"Новые",
+        "progress"=>"Ждут собеседования",
+        "processed"=>"Принятые",
+        "declined"=>"Посланные",
+        "cont"=>"Продолжающие школьники",
+        "old"=>"Старые школьники (не едут)",
+        "all"=>"Все");
+}
+
+function xsm_get_person_show_statuses()
+{
+    return array(
+        "active"=>"Актив",
+        "not-old"=>"Все, кроме архивных",
+        //"new"=>"Новые",
+        //"progress"=>"Ждут собеседования",
+        "processed"=>"Принятые",
+        //"declined"=>"Посланные",
+        "cont"=>"Продолжающие",
+        "old"=>"Архивные",
+        //"not-spam"=>"Без спама и дублей",
+        "not-decl"=>"Без спама, дублей и посланых",
+        "all"=>"Все");
+}
+
+function xsm_get_curatorship_items()
+{
+    return array(
+        "none"=>"Не куратор",
+        "assist"=>"Помощник куратора",
+        "cur"=>"Куратор"
+    );
+}
+
+function xsm_get_exam_statuses()
+{
+    return array(
+        "passed"=>"Сдан",
+        "notpassed"=>"Не сдан",
+        "almost"=>"Почти сдан",
+        "other"=>"Иное",
+    );
+}
+
+?>

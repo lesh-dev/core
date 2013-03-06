@@ -15,22 +15,46 @@ td.ankListRowDiv {
     height: 8px;
 }
 
-td.ankListRowTitle {
+td.ankListRowTitle, th.ankList, td.ankList {
+    vertical-align: middle;
+    border: 1px solid #8faf6f;
+    padding: 3px;
+    padding-left: 5px;
+}
+
+td.ankList, th.ankList {
+    text-align: left;
+}
+
+td.ankListRowTitle, th.ankList {
+    background-color: #9fdf8f;
+}
+
+td.school-selection {
     vertical-align: middle;
     background-color: #9fdf8f;
     border: 1px solid #8faf6f;
     padding: 3px;
 }
 
-td.ankList, th.ankList {
-    border: 1px solid #8faf6f;
-    padding: 3px;
-    text-align: left;
+td.school-selection.current {
+    background-color: #ffee99;
 }
 
+td.school-selection a {
+    text-align: center;
+    display: block;
+}
+
+tr.teacher td.ankList {
+    background-color: #b5b16f;
+}
+
+/* ank-notes
 td.ankList.notes {
     background-color: #85cf6f;
 }
+*/
 
 span.ankListField {
     font-weight: bold;
@@ -110,6 +134,26 @@ span.ankStatus.spam {
     color: #ff0000;
 }
 
+span.exam-status {
+    font-weight: bold;
+}
+
+span.exam-status.passed {
+    color: #008f00;
+}
+
+span.exam-status.notpassed {
+    color: #ff0000;
+}
+
+span.exam-status.almost {
+    color: #ffff00;
+}
+
+span.exam-status.almost {
+    color: #0000ff;
+}
+
 img.edit-icon {
     vertical-align: middle;
     margin-right: 2px;
@@ -123,6 +167,11 @@ input.delete-button {
     margin-top: 5px;
     background-color: #ff9f7f;
     color: #2f2f00;
+}
+
+div.delete-warning {
+    font-size: 11pt;
+    color: #9f0000;
 }
 
 .link-oper {
@@ -141,4 +190,53 @@ span.link-oper-list {
     height: 20px;
     line-height: 20px;
     vertical-align: bottom;
+}
+
+div.person-portrait {
+    display: inline-block;
+    float: left;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+img.person-portrait {
+    width: 50px;
+    border: 1px solid #8faf6f;
+}
+
+div.person-title {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+span.person-key {
+    font-weight: bold;
+    display: inline-block;
+}
+
+span.person-key.top {
+    width: 100px;
+}
+
+span.person-key.main {
+    width: 170px;
+}
+
+span.person-value {
+    font-weight: normal;
+}
+
+div.person-topleft {
+    width: 60%;
+    float: left;
+}
+
+div.person-topright {
+    float: right;
+    width: 35%;
+}
+
+div.line {
+    padding-top: 5px;
+    padding-bottom: 5px;
 }

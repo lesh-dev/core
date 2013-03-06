@@ -63,9 +63,8 @@
             <a <?php echo xcms_href(array('mode'=>'userlist', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Пользователи</a>
             <a <?php echo xcms_href(array('mode'=>'group_admin', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Группы</a>
             <a <?php echo xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Уведомления</a>
-            <span class="top-menu-div">&nbsp;</span>
-            <a href="/<# web_prefix #>register/view" class="h-menu-link">Люди</a>
-            <a href="/<# web_prefix #>register/view-course" class="h-menu-link">Курсы</a>
+            <!--<span class="top-menu-div">&nbsp;</span>
+            <a href="/<# web_prefix #>register/list-ank" class="h-menu-link">Анкеты</a>-->
 
             <span style="display:none;">
                 <a <?php echo xcms_href(array('mode'=>'__convert', 'page'=>$pageid, 'ref'=>'ladmin')); ?>

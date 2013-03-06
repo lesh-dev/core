@@ -43,9 +43,13 @@
                     <?php
                     if (xcms_user()->check_rights("registered", false))
                     {
-                        include(translate('<a href="/<# web_prefix #>register/view'.
+                        include(translate('<a href="/<# web_prefix #>register/list-ank'.
+                            '" class="menu-item menu-sys">Анкеты</a>'));
+                        include(translate('<a href="/<# web_prefix #>register/list-person-locator'.
+                            '" class="menu-item menu-sys">Актив отделения</a>'));
+                        include(translate('<a href="/<# web_prefix #>register/list-person'.
                             '" class="menu-item menu-sys">Участники</a>'));
-                        include(translate('<a href="/<# web_prefix #>register/view-course'.
+                        include(translate('<a href="/<# web_prefix #>register/list-course'.
                             '" class="menu-item menu-sys">Курсы</a>'));
                         include(translate('<a href="/<# web_prefix #>?'.
                             xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).

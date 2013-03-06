@@ -1,0 +1,211 @@
+<?php
+    function xsm_get_anklist_show_statuses()
+    {
+        return array(
+            "abitur"=>"Набор",
+            "new"=>"Новые",
+            "progress"=>"Ждут собеседования",
+            "processed"=>"Принятые",
+            "declined"=>"Посланные",
+            "old"=>"Архивные",
+            "all"=>"Все");
+    }
+?>
+<# auth/ #admin #ank #>
+<# cms/ank/style #>
+<?php
+    $show_anketa_status = xcms_get_persistent_key("list-ank", "show_anketa_status", "abitur");
+?>
+<p>В этом списке по умолчанию показываются <b>свежие заявки</b>. Когда приходит новая анкета, она получает статус
+    <span class="ankStatus new">Новый</span>. После приглашения на собеседование школьнику следует выставлять
+    статус <span class="ankStatus progress">Ждёт собеседования</span>, а в заметках указать дату собеседования.
+    По результатам собеседования должен быть выставлен статус <span class="ankStatus processed">Принят</span> или
+    <span class="ankStatus declined">Послан</span>.</p>
+<p>Для людей, которые стабильно <b>не ездят</b> на школы уже 2-3 года, осмысленно выставлять статус
+    <span class="ankStatus old">Архив</span>. В этот же статус
+    можно переводить через 1-2 года тех, кому по результатам собеседования был проставлен статус
+    <span class="ankStatus declined">Послан</span> (сразу этого делать не следует).</p>
+<form method="post" action="list-ank" style="margin-bottom: 2px"><span>
+    <span class="ankListField">Фильтрация</span>: <?php
+    echo xsm_make_enum_selector(
+        "show_anketa_status", $show_anketa_status,
+        xsm_get_anklist_show_statuses());
+    ?>
+
+    <span class="ankListField">Фильтр ФИО</span>:
+    <input class="ankEdit filter" type="text"
+        value="<?php echo htmlspecialchars(xcms_get_key_or($_POST, 'show_name_filter')); ?>"
+        name="show_name_filter"
+        title="Будут найдены все участники, в ФИО которых (в любом порядке) встречаются слова запроса, без учёта регистра. Например, 'дан Мих' найдёт Даниила Михайловича, Михаила Данилевского и Богдана Немихульского, но НЕ найдёт Мишу Данилкина (имена условны)" />
+    <input type="submit" name="show-person" value="Показать" />
+</span></form>
+<?php
+
+
+function xsm_show_ank_list()
+{
+    global $show_anketa_status;
+    $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
+
+    $show_statuses = xsm_get_anklist_show_statuses();
+    if (!array_key_exists($show_anketa_status, $show_statuses))
+        $show_anketa_status = "abitur";
+
+    $db = xdb_get();
+    $db->createFunction('LIKE', 'xdb_like', 2);
+
+    $cond = "";
+
+    if ($show_anketa_status == "abitur")
+        $cond .=
+            " AND ( (anketa_status = 'new')".
+            " OR (anketa_status = 'progress')".
+            " OR (anketa_status = 'declined') )";
+    elseif ($show_anketa_status == "all")
+        $cond .= "";
+    else
+        $cond .= " AND ( anketa_status = '$show_anketa_status' )";
+
+    $name_filter_cond = xsm_person_name_filter($db, $show_name_filter);
+    if (strlen($name_filter_cond))
+        $cond .= " AND $name_filter_cond";
+
+    $query =
+        "SELECT
+        p.person_id, p.last_name, p.first_name, p.patronymic, p.birth_date, p.passport_data,
+        p.school, p.school_city, p.ank_class,
+        p.phone, p.cellular, p.email, p.skype, p.social_profile,
+        p.favourites, p.achievements, p.hobby,
+        p.anketa_status, p.user_agent, p.person_created, p.person_modified
+        FROM person p
+        LEFT JOIN person_school ps ON p.person_id = ps.member_person_id
+        WHERE (ps.member_person_id IS NULL)";
+
+    if (strlen($cond))
+        $query .= " $cond";
+    $query .= " ORDER BY person_created DESC";
+    xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
+    $person_sel = $db->query($query);
+
+    NEW_xsm_view_operations('person', 'участника');
+    ?>
+    <table summary="Участники" class="ankList">
+        <colgroup>
+            <col width="30px" />
+            <col width="13%" />
+            <col width="70px" />
+            <col width="45px" />
+            <col width="17%" />
+            <col width="23%" />
+            <col width="11%" />
+            <col width="55px" />
+        </colgroup>
+        <thead>
+            <th class="ankList">ID</th>
+            <th class="ankList">ФИО</th>
+            <th class="ankList">ДР</th>
+            <th class="ankList">Кл.</th>
+            <th class="ankList">Школа</th>
+            <th class="ankList">Контакты</th>
+            <th class="ankList">Дата анкеты</th>
+            <th class="ankList">Статус</th>
+        </thead>
+    <?php
+    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC)) {
+        $person_id = htmlspecialchars($person["person_id"]);
+        $fi = htmlspecialchars(xsm_fi($person));
+        $fio = htmlspecialchars(xsm_fio($person));
+
+        $birth_date = htmlspecialchars($person["birth_date"]);
+        // not shown now
+        $passport_data = htmlspecialchars($person["passport_data"]);
+
+        $school = htmlspecialchars($person["school"]);
+        $school_city = htmlspecialchars($person["school_city"]);
+        if (!$school_city)
+            $school_city = "город не указан";
+        $ank_class = htmlspecialchars($person["ank_class"]);
+
+        $phone = htmlspecialchars($person["phone"]);
+        $cellular = htmlspecialchars($person["cellular"]);
+        $email = htmlspecialchars($person["email"]);
+        $skype = htmlspecialchars($person["skype"]);
+        $social_profile = xsm_prepare_social_profile($person["social_profile"]);
+
+        $favourites = xcms_html_wrap_by_crlf(htmlspecialchars($person["favourites"]));
+        $achievements = xcms_html_wrap_by_crlf(htmlspecialchars($person["achievements"]));
+        $hobby = xcms_html_wrap_by_crlf(htmlspecialchars($person["hobby"]));
+
+        $person_created = xsm_ymdhm($person["person_created"]);
+        $person_modified = xsm_ymdhm($person["person_modified"]);
+
+        ?>
+        <tr>
+            <td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
+            <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"
+                title="<?php echo $fio; ?>"><?php echo $fi; ?></a></td>
+            <td class="ankList"><?php echo $birth_date; ?></td>
+            <td class="ankList"><?php echo $ank_class; ?></td>
+            <td class="ankList"><?php echo "$school ($school_city)"; ?></td>
+            <td class="ankList">
+            <?php
+                if ($cellular) echo $cellular;
+                if ($cellular && $phone) echo ", ";
+                if ($phone) echo $phone;
+            ?>
+            </td>
+            <td class="ankList"><?php echo $person_created; ?></td>
+            <td class="ankList"><?php echo xsm_draw_person_status($person); ?></td>
+        </tr>
+        <?php if (false) {?>
+
+        <!-- email, profile and skype -->
+        <?php if (!empty($email) || !empty($social_profile) || !empty($skype)) { ?>
+        <tr><td class="ankList"><?php if (!empty($email)) {
+            ?><span class="ankListField">E-Mail</span>:
+                <a href="mailto:<?php echo $email; ?>" ><?php echo $email; ?></a><?php
+            }
+            if (!empty($social_profile)) {
+                if (!empty($email)) echo ', '; ?>
+                <span class="ankListField">Профиль</span>:
+                    <a href="<?php echo $social_profile; ?>"><?php echo $social_profile; ?></a><?php
+            }
+            if (!empty($skype)) {
+                if (!empty($email) || !empty($social_profile)) echo ', '; ?>
+                <span class="ankListField">Skype</span>: <?php echo $skype; ?>
+            <?php
+            }?>
+        </td></tr>
+        <?php } ?>
+        <!--  other stuff -->
+        <?php if (!empty($favourites)) { ?>
+            <tr><td class="ankList"><span class="ankListField">Любимые предметы</span>:
+                <?php echo $favourites; ?></td></tr>
+        <?php } ?>
+        <?php if (!empty($achievements)) { ?>
+        <tr><td class="ankList"><span class="ankListField">Достижения</span>:
+            <?php echo $achievements; ?></td></tr>
+        <?php } ?>
+        <?php if (!empty($hobby)) { ?>
+            <tr><td class="ankList"><span class="ankListField">Хобби</span>:
+                <?php echo $hobby; ?></td></tr>
+        <?php } ?>
+        <?php if (!empty($person_comment)) { ?>
+        <tr><td class="ankList notes"><span class="ankListField">Заметки</span>:
+            <?php echo $person_comment; ?></td></tr>
+        <?php } ?>
+
+        <?php } // if false
+        ?>
+
+        <?php
+
+        }
+    ?>
+    </table>
+    <?php
+    NEW_xsm_view_operations('person', 'участника');
+}
+
+    xsm_show_ank_list();
+?>

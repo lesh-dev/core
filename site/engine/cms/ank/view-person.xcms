@@ -1,0 +1,385 @@
+<# auth/ #admin #ank #>
+<# cms/ank/style #>
+
+<?php
+
+define('SCHOOL_ANK_ID', 'ank');
+
+function xsm_draw_person_textval($class, $text, $value)
+{?>
+    <div><span class="person-key <?php echo $class; ?>"><?php echo "$text:"; ?></span>
+        <span class="person-value"><?php echo $value; ?></span></div><?php
+}
+
+function xsm_draw_person_longtextval($class, $text, $value)
+{?>
+    <div><span class="person-key <?php echo $class; ?>"><?php echo "$text:"; ?></span>
+        <?php echo $value; ?></div><?php
+}
+
+function xsm_get_avatar($social_profile)
+{
+    // set default av
+    global $full_engine_pub;
+    $av = "${full_engine_pub}img/stalin50.jpg";
+
+    $match = array();
+    preg_match("/[0-9]+/", $social_profile, $match);
+    if (!count($match))
+        return $av;
+
+    $vk_uid = $match[0];
+    $json_fn = sys_get_temp_dir()."/vk-json-".rand();
+    if (0 != system("wget 'https://api.vkontakte.ru/method/getProfiles?uids=$vk_uid&fields=photo' -O $json_fn"))
+        return $av;
+
+    $json_text = file_get_contents($json_fn);
+    $json = json_decode($json_text, true);
+    $av = $json['response'][0]['photo'];
+    return $av;
+}
+
+function xsm_print_person_header($db, $person, $school_id)
+{
+    global $full_engine_pub;
+
+    $person_id = $person['person_id'];
+
+    $last_name = htmlspecialchars($person["last_name"]);
+    $first_name = htmlspecialchars($person["first_name"]);
+    $patronymic = htmlspecialchars($person["patronymic"]);
+
+    $birth_date = htmlspecialchars($person["birth_date"]);
+
+    $school = htmlspecialchars($person["school"]);
+    $school_city = htmlspecialchars($person["school_city"]);
+
+    $phone = htmlspecialchars($person["phone"]);
+    $cellular = htmlspecialchars($person["cellular"]);
+    $email = htmlspecialchars($person["email"]);
+    $skype = htmlspecialchars($person["skype"]);
+    $social_profile = xsm_prepare_social_profile($person["social_profile"]);
+
+    $hr_status = xsm_draw_person_status($person);
+
+    $person_created = xsm_ymdhm($person["person_created"]);
+    $person_modified = xsm_ymdhm($person["person_modified"]);
+
+    ?>
+    <div style="width: 100%; overflow: auto">
+    <div class="person-topleft">
+        <?php
+        $av = xsm_get_avatar($social_profile);
+        ?>
+        <div class="person-portrait"><img id="avatar" class="person-portrait"
+            src="<?php echo $av; ?>" /></div>
+        <div class="person-title"><?php echo "$last_name $first_name $patronymic"; ?></div><?php
+        xsm_draw_person_textval('top', 'Статус анкеты', $hr_status);
+        xsm_draw_person_textval('top', 'Почта', $email);
+        xsm_draw_person_textval('top', 'Мобильный', $cellular);
+        xsm_draw_person_textval('top', 'Домашний', $phone);
+        xsm_draw_person_textval('top', 'Skype', $skype);
+        xsm_draw_person_textval('top', 'Профиль', $social_profile);
+        ?>
+    </div>
+    <div class="person-topright"><?php
+        xsm_edit_link('person', $person_id, '', 'Редактировать анкетные данные');
+        xsm_draw_person_textval('top', 'Создана', $person_created);
+        xsm_draw_person_textval('top', 'Исправлена', $person_modified);
+        if ($school_id != SCHOOL_ANK_ID)
+        {
+            $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
+            if ($person_school_id !== NULL)
+                xsm_edit_link('person_school', $person_school_id, '', 'Редактировать роли и статусы');
+        }
+        ?>
+    </div>
+    </div><!-- container -->
+    <?php
+}
+
+function xsm_print_person_schools($db, $person_id, $current_school_id)
+{
+    // надо получать заранее информацию о всех предыдущих школах,
+    // но мы пока что будем отображать список из N последних
+    $school_count = 5;
+    $query = "SELECT * FROM school ORDER BY school_date_start DESC LIMIT $school_count";
+    $school_sel = $db->query($query);
+    $href_ank = "view-person&amp;person_id=$person_id&amp;school_id=".SCHOOL_ANK_ID;
+    $active_ank = (SCHOOL_ANK_ID == $current_school_id) ? "current" : "";
+    ?>
+    <table class="ankList"><tr>
+        <td class="school-selection <?php echo $active_ank; ?>"><a
+            href="<?php echo $href_ank; ?>">Анкета</a></td>
+        <?php
+        while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
+        {
+            $href = "view-person&amp;person_id=$person_id&amp;school_id=${school['school_id']}";
+            $title = htmlspecialchars($school['school_title']);
+            $active = ($school['school_id'] == $current_school_id) ? "current" : ""; ?>
+            <td class="school-selection <?php echo $active; ?>"><a
+                href="<?php echo $href; ?>"><?php echo $title; ?></a></td>
+            <?php
+        }?>
+    </tr></table>
+
+    <?php
+
+}
+
+function xsm_draw_person_comments($db, $person_id)
+{
+    xsm_view_operations('person_comment', 'person_comment', 'комментарий', "&amp;blamed_person_id=$person_id");
+
+    $query = "SELECT * FROM person_comment".
+        " WHERE".
+        " (blamed_person_id = $person_id)".
+        " AND (person_comment_deleted <> 'deleted')".
+        " ORDER BY person_comment_created DESC";
+    $comment_sel = $db->query($query);
+    ?>
+
+    <table summary="Комментарии" class="ankList">
+        <colgroup>
+            <col width="55" />
+            <col width="75%" />
+            <col width="10%" />
+            <col width="105px" />
+        </colgroup>
+        <thead>
+            <th class="ankList">&nbsp;</th>
+            <th class="ankList">Текст</th>
+            <th class="ankList">Автор</th>
+            <th class="ankList">Дата</th>
+        </thead>
+    <?php
+    while ($comment_data = $comment_sel->fetchArray(SQLITE3_ASSOC)) {?>
+        <?php
+
+        $comment_id = htmlspecialchars($comment_data["person_comment_id"]);
+        $owner_login = htmlspecialchars($comment_data["owner_login"]);
+        $comment_text = xcms_html_wrap_by_crlf(htmlspecialchars($comment_data["comment_text"]));
+        $person_comment_created = xsm_ymdhm($comment_data["person_comment_created"]);
+        $person_comment_modified = xsm_ymdhm($comment_data["person_comment_modified"]); ?>
+        <tr>
+            <td class="ankList"><a href="edit-person_comment&amp;person_comment_id=<?php echo $comment_id; ?>">Правка</a></td>
+            <td class="ankList"><?php echo $comment_text; ?></td>
+            <td class="ankList"><?php echo $owner_login; ?></td>
+            <td class="ankList"><?php echo $person_comment_created; ?></td>
+        </tr><?php
+        }
+    ?>
+    </table>
+    <?php
+}
+
+function xsm_print_person_ank_data($db, $person)
+{
+    $person_id = htmlspecialchars($person["person_id"]);
+
+    $last_name = htmlspecialchars($person["last_name"]);
+    $first_name = htmlspecialchars($person["first_name"]);
+    $patronymic = htmlspecialchars($person["patronymic"]);
+
+    $birth_date = htmlspecialchars($person["birth_date"]);
+    $passport_data = htmlspecialchars($person["passport_data"]);
+
+    $school = htmlspecialchars($person["school"]);
+    $school_city = htmlspecialchars($person["school_city"]);
+
+    $ank_class = htmlspecialchars($person["ank_class"]);
+    $current_class = htmlspecialchars($person["current_class"]);
+
+    $phone = htmlspecialchars($person["phone"]);
+    $cellular = htmlspecialchars($person["cellular"]);
+    $email = htmlspecialchars($person["email"]);
+    $skype = htmlspecialchars($person["skype"]);
+    $social_profile = xsm_prepare_social_profile($person["social_profile"]);
+
+    $is_teacher = $person["is_teacher"];
+    $is_student = $person["is_student"];
+
+    $favourites = xcms_html_wrap_by_crlf(htmlspecialchars($person["favourites"]));
+    $achievements = xcms_html_wrap_by_crlf(htmlspecialchars($person["achievements"]));
+    $hobby = xcms_html_wrap_by_crlf(htmlspecialchars($person["hobby"]));
+
+    //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
+    $user_agent = htmlspecialchars($person["user_agent"]);
+
+    $person_created = xsm_ymdhm($person["person_created"]);
+    $person_modified = xsm_ymdhm($person["person_modified"]);
+
+    $hr_teacher = ($is_teacher == "teacher" ? "Препод" : "&#8212;");
+    $hr_student = ($is_student == "student" ? "Школьник" : "&#8212;");
+
+    xsm_draw_person_textval('main', 'Дата рождения', $birth_date);
+    xsm_draw_person_textval('main', 'Паспортные данные', $passport_data);
+    xsm_draw_person_textval('main', 'Класс подачи анкеты', $ank_class);
+    xsm_draw_person_textval('main', 'Класс', $current_class);
+    xsm_draw_person_textval('main', 'Школа', $school);
+    xsm_draw_person_textval('main', 'Город', $school_city);
+    xsm_draw_person_textval('main', 'Роль', "$hr_teacher / $hr_student");
+    xsm_draw_person_textval('main', 'User Agent', $user_agent);
+    xsm_draw_person_longtextval('main', 'Любимые предметы', $favourites);
+    xsm_draw_person_longtextval('main', 'Достижения', $achievements);
+    xsm_draw_person_longtextval('main', 'Хобби', $hobby);
+
+    xsm_draw_person_comments($db, $person_id);
+}
+
+function xsm_print_add_person_to_school($db, $school_id, $person)
+{
+    $person_id = $person['person_id'];
+    $is_teacher_typical = $person['is_teacher'];
+    $is_student_typical = $person['is_student'];
+    $current_class = $person['current_class'];
+    $add_href = "edit-person_school".
+        xcms_url(array(
+            'person_school_id'=>XDB_NEW,
+            'school_id'=>$school_id,
+            'member_person_id'=>$person_id,
+            'current_class'=>$current_class,
+            'is_teacher'=>$is_teacher_typical,
+            'is_student'=>$is_student_typical
+            ));
+    ?>
+    На данной школе не присутствовал. <a href="<?php echo $add_href; ?>">Зачислить</a><?php
+}
+
+function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
+{
+    $query =
+        "SELECT
+        tp.last_name, tp.first_name,
+        c.course_id, c.course_title, c.course_teacher_id, c.target_class,
+        e.exam_id, e.exam_status, e.exam_comment, e.deadline_date, e.exam_created, e.exam_modified
+        FROM course c, person tp, exam e WHERE
+        (c.course_teacher_id = tp.person_id) AND
+        (c.school_id = $school_id) AND
+        (e.course_id = c.course_id) AND
+        (e.student_person_id = $person_id)
+        ORDER BY e.exam_status, tp.last_name, c.course_title";
+    $exam_sel = $db->query($query);
+
+    $exam_aux_param = "&amp;student_person_id=$person_id&amp;school_id=$school_id";
+    $need = xcms_get_key_or($person_school, 'courses_needed', '?');
+
+    $need_href = "edit-person_school".
+        xcms_url(array('person_school_id'=>$person_school['person_school_id']));
+    ?>
+    <h3>Зачёты</h3>
+    <?php
+        xsm_view_operations('exam', 'exam', 'зачёт', $exam_aux_param);
+    ?>
+    <div class="line">
+        Всего нужно сдать <a href="<?php echo $need_href; ?>"><?php echo $need; ?> зачётов</a>.
+    </div>
+    <table summary="Зачёты школьника <?php echo $person_id; ?>" class="ankList">
+        <colgroup>
+            <col width="15%" />
+            <col width="25%" />
+            <col width="40%" />
+            <col width="10%" />
+            <col width="15%" />
+        </colgroup>
+        <thead>
+            <th class="ankList">Статус</th>
+            <th class="ankList">Препод</th>
+            <th class="ankList">Курс</th>
+            <th class="ankList">Класс</th>
+            <th class="ankList">Дедлайн</th>
+        </thead>
+    <?php
+    while ($exam_data = $exam_sel->fetchArray(SQLITE3_ASSOC)) {?>
+        <?php
+
+        $exam_id = htmlspecialchars($exam_data["exam_id"]);
+        $course_id = htmlspecialchars($exam_data["course_id"]);
+        $course_title = htmlspecialchars($exam_data["course_title"]);
+        $course_teacher_id = htmlspecialchars($exam_data["course_teacher_id"]);
+        $target_class = htmlspecialchars($exam_data["target_class"]);
+
+        // enum
+        $exam_status = htmlspecialchars($exam_data["exam_status"]);
+
+        $exam_comment = htmlspecialchars($exam_data["exam_comment"]);
+        $deadline_date = htmlspecialchars($exam_data["deadline_date"]);
+
+        $exam_created = xsm_ymdhm($exam_data["exam_created"]);
+        $exam_modified = xsm_ymdhm($exam_data["exam_modified"]);
+
+        $teacher_fi = htmlspecialchars(xsm_fi($exam_data));
+
+        $hr_exam_status = xsm_draw_exam_status($exam_data);
+
+        $teacher_url = "view-person".xcms_url(array('person_id'=>$course_teacher_id));
+        $exam_url = "edit-exam".xcms_url(array('exam_id'=>$exam_id));
+        ?>
+        <tr>
+            <td class="ankList"><?php echo $hr_exam_status; ?></td>
+            <td class="ankList"><a href="<?php echo $teacher_url; ?>"><?php echo $teacher_fi; ?></a></td>
+            <td class="ankList"><a href="<?php echo $exam_url; ?>"><?php echo $course_title; ?></a></td>
+            <td class="ankList"><?php echo $target_class; ?></td>
+            <td class="ankList"><?php echo $deadline_date; ?></td>
+        </tr><?php
+        }
+    ?>
+    </table>
+    <?php
+}
+
+function xsm_print_person_selected_school($db, $school_id, $person)
+{
+    $person_id = $person['person_id'];
+    $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
+    if ($person_school_id === NULL)
+    {
+        xsm_print_add_person_to_school($db, $school_id, $person);
+        return;
+    }
+
+    $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
+    if ($person_school['is_student'] == 'student')
+        xsm_print_student_exams($db, $school_id, $person_id, $person_school);
+    else
+    {?>
+        <div class="line">
+            Зачёты можно добавлять только тем, кто имеет роль <b>Школьника</b> на этой Школе: <?php
+            xsm_edit_link('person_school', $person_school_id, '&amp;is_student=student', 'Добавить роль Школьника');?>
+        </div><?php
+    }
+
+    if ($person_school['is_teacher'] == 'teacher')
+        xsm_print_course_selected_school($db, $school_id, $person_id);
+    else
+    {?>
+        <div class="line">
+            Курсы можно добавлять только тем, кто имеет роль <b>Препода</b> на этой Школе: <?php
+            xsm_edit_link('person_school', $person_school_id, '&amp;is_teacher=teacher', 'Добавить роль Препода');?>
+        </div><?php
+    }
+}
+
+// shows person information sliced by school
+function xsm_print_person()
+{
+    global $web_prefix;
+    $db = xdb_get();
+
+    $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
+    $person = xdb_get_entity_by_id('person', $person_id);
+
+    $school_id = xcms_get_key_or($_GET, 'school_id', SCHOOL_ANK_ID);
+
+    xsm_print_person_header($db, $person, $school_id);
+    xsm_print_person_schools($db, $person_id, $school_id);
+
+    if ($school_id == SCHOOL_ANK_ID)
+        xsm_print_person_ank_data($db, $person);
+    else
+        xsm_print_person_selected_school($db, $school_id, $person);
+
+}
+
+xsm_print_person();
+?>

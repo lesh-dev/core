@@ -1,4 +1,5 @@
-<# cms/ank/func #>
+<# cms/ank/field-desc #>
+<# cms/ank/middleware #>
 <# cms/ank/format #>
 
 <?php
@@ -13,13 +14,13 @@
         $template_root = "{$SETTINGS['engine_dir']}templates";
         $mail_msg_html = file_get_contents("$template_root/anketa_mail.html");
         $row_template = file_get_contents("$template_root/anketa_mail_one_row.html");
-        $unix_time = mktime();
+        $unix_time = time();
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
         $mail_msg_plain = "Анкета от $hr_timestamp:\r\n-----------------------------------\r\n";
 
         $person = $_POST; // get all values here (_POST should not be spoiled)
         // set some generic fields that cannot be overridden
-        $person["activity_status"] = "new";
+        $person["anketa_status"] = "new";
         $person["is_student"] = "student";
         $user_agent = $person["user_agent"] = $_SERVER["HTTP_USER_AGENT"];
         // extract some values to check
@@ -29,6 +30,7 @@
         $phone = xcms_get_key_or($person, "phone");
         $cellular = xcms_get_key_or($person, "cellular");
         $current_class = xcms_get_key_or($person, "current_class");
+        $person['ank_class'] = $current_class;
         $email = xcms_get_key_or($person, "email");
 
         $person_fields = xsm_get_person_fields();
@@ -50,8 +52,9 @@
         foreach ($person as $key=>$value)
         {
             $key_title = $key;
-            if (array_key_exists($key, $person_fields)) $key_title = $person_fields[$key];
-            if ($key == "is_student" || $key == "submit-anketa")
+            if (array_key_exists($key, $person_fields))
+                $key_title = $person_fields[$key];
+            if ($key == "submit-anketa")
                 continue;
             $kt = "$key_title: ";
             while (xcms_len($kt) < 22)
@@ -68,10 +71,11 @@
         }
         $ank_dir = "${content_dir}ank";
         @mkdir($ank_dir, 0777);
-        xdb_insert_or_update('person', array('person_id'=>'new'), $person, $person_fields);
+        xdb_insert_or_update('person', array('person_id'=>XDB_NEW), $person, $person_fields);
+        $table_title = "Анкета от $hr_timestamp";
         $write_success = true; // TODO: проверять SELECT-ом, что таки да, вставилось
         $mail_msg_html = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg_html);
-        $mail_msg_html = str_replace("@@DATE@", $hr_timestamp, $mail_msg_html);
+        $mail_msg_html = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg_html);
         $mail_msg_html = str_replace("@@HOST@", $_SERVER['HTTP_HOST'], $mail_msg_html);
 
         $mail_group_html = "";
@@ -153,17 +157,30 @@
         echo $message;
         echo $meta;
     }
+    else if(@$_GET["aparam"] == "list-ank")
+        include(translate('<! cms/ank/list-ank !>'));
+    else if(@$_GET["aparam"] == "list-members")
+        include(translate('<! cms/ank/list-person !>'));
+    else if(@$_GET["aparam"] == "list-person-locator")
+        include(translate('<! cms/ank/list-person-locator !>'));
+
     else if(@$_GET["aparam"] == "edit")
         include(translate('<! cms/ank/edit-ank !>'));
     else if(@$_GET["aparam"] == "view")
         include(translate('<! cms/ank/list-person !>'));
     else if(@$_GET["aparam"] == "list-person")
         include(translate('<! cms/ank/list-person !>'));
-    else if(@$_GET["aparam"] == "view-prep")
-        include(translate('<! cms/ank/view-prep !>'));
-    else if(@$_GET["aparam"] == "edit-prep")
-        include(translate('<! cms/ank/edit-prep !>'));
+    else if(@$_GET["aparam"] == "view-person")
+        include(translate('<! cms/ank/view-person !>'));
+    else if(@$_GET["aparam"] == "edit-person_school")
+        include(translate('<! cms/ank/edit-person_school !>'));
+    else if(@$_GET["aparam"] == "edit-person")
+        include(translate('<! cms/ank/edit-person !>'));
+    else if(@$_GET["aparam"] == "edit-person_comment")
+        include(translate('<! cms/ank/edit-person_comment !>'));
 
+    else if(@$_GET["aparam"] == "list-course")
+        include(translate('<! cms/ank/list-course !>'));
     else if(@$_GET["aparam"] == "view-course")
         include(translate('<! cms/ank/view-course !>'));
     else if(@$_GET["aparam"] == "edit-course")

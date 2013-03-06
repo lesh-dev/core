@@ -104,6 +104,10 @@ function xcms_get_key_or($list, $key, $def_value = '')
     if (!array_key_exists($key, $list))
         return $def_value;
     $value = $list[$key];
+    // special case for bool vars
+    if (is_bool($def_value))
+        return $value;
+
     if (!strlen($value))
         return $def_value;
     return $value;
@@ -276,6 +280,24 @@ function editlist_form($file, $addparams, $skip_params = "", $security_flags = "
 function xcms_keyvalue_unit_test()
 {
     xut_begin("keyvalue");
+    // first of all, test xcms_get_key_or function
+    $obj = array();
+    $obj["super"] = 1;
+    $obj["pupper"] = false;
+    $obj["zero-value"] = 0;
+    $obj["another"] = "test string";
+    $obj["empty"] = "";
+
+    xut_check(1 === xcms_get_key_or($obj, "super"), "Invalid 'super' key");
+    xut_check(false === xcms_get_key_or($obj, "pupper", true), "Invalid 'pupper' key");
+    xut_check(0 === xcms_get_key_or($obj, "zero-value"), "Invalid 'zero-value' key");
+    xut_check("test string" === xcms_get_key_or($obj, "another"), "Invalid 'another' key");
+    xut_check("" === xcms_get_key_or($obj, "empty"), "Invalid 'empty' key");
+    xut_check("some" === xcms_get_key_or($obj, "empty", "some"), "Failed empty value key test");
+    xut_check("" === xcms_get_key_or($obj, "missing"), "Failed missing key test");
+    xut_check(true === xcms_get_key_or($obj, "missing-bool", true), "Failed missing bool key");
+    xut_check(false === xcms_get_key_or($obj, "pupper", true), "Failed existing bool key");
+
     $values = array();
     $values["key1"] = " value 1\n\r";
     $values["key2 "] = " value\r2   ";
@@ -284,7 +306,8 @@ function xcms_keyvalue_unit_test()
     $values[" key\n5 "] = "proper\nvalue\rwithout\r\nspaces";
     $values[" key6 "] = "proper\nvalue\rwithout\r\nspaces";
     $values[" key7 "] = "generic  values  with   lots  of spaces";
-    xut_check(xcms_save_list("test-list", $values), "List save");
+    global $SETTINGS;
+    xut_check(xcms_save_list("${SETTINGS["datadir"]}test-list", $values), "List save");
     $read_values = xcms_get_list("test-list");
 
     $check["key1"] = "value 1";
