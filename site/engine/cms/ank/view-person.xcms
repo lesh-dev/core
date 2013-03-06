@@ -17,6 +17,28 @@ function xsm_draw_person_longtextval($class, $text, $value)
         <?php echo $value; ?></div><?php
 }
 
+function xsm_get_avatar($social_profile)
+{
+    // set default av
+    global $full_engine_pub;
+    $av = "${full_engine_pub}img/stalin50.jpg";
+
+    $match = array();
+    preg_match("/[0-9]+/", $social_profile, $match);
+    if (!count($match))
+        return $av;
+
+    $vk_uid = $match[0];
+    $json_fn = sys_get_temp_dir()."/vk-json-".rand();
+    if (0 != system("wget 'https://api.vkontakte.ru/method/getProfiles?uids=$vk_uid&fields=photo' -O $json_fn"))
+        return $av;
+
+    $json_text = file_get_contents($json_fn);
+    $json = json_decode($json_text, true);
+    $av = $json['response'][0]['photo'];
+    return $av;
+}
+
 function xsm_print_person_header($db, $person, $school_id)
 {
     global $full_engine_pub;
@@ -46,8 +68,11 @@ function xsm_print_person_header($db, $person, $school_id)
     ?>
     <div style="width: 100%; overflow: auto">
     <div class="person-topleft">
-        <div class="person-portrait"><img class="person-portrait"
-            src="<?php echo $full_engine_pub; ?>img/stalin.jpg"/></div>
+        <?php
+        $av = xsm_get_avatar($social_profile);
+        ?>
+        <div class="person-portrait"><img id="avatar" class="person-portrait"
+            src="<?php echo $av; ?>" /></div>
         <div class="person-title"><?php echo "$last_name $first_name $patronymic"; ?></div><?php
         xsm_draw_person_textval('top', 'Статус анкеты', $hr_status);
         xsm_draw_person_textval('top', 'Почта', $email);

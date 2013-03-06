@@ -200,8 +200,7 @@ div.person-portrait {
 }
 
 img.person-portrait {
-    height: 120px;
-    width: 120px;
+    width: 50px;
     border: 1px solid #8faf6f;
 }
 
