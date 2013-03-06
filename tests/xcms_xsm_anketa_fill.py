@@ -89,17 +89,15 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		
 		self.gotoRoot()
 			
-	# TODO: TEMPORARY link, make different anketa list.
-		self.gotoUrlByLinkText(u"Участники")
+		self.gotoUrlByLinkText(u"Анкеты")
 		
-		fullAlias = inpLastName + " " + inpFirstName + " " + inpMidName
+		fullAlias = inpLastName + " " + inpFirstName
+		#+ " " + inpMidName
 		#print "Full student alias:", fullAlias.encode("utf-8")
 		anketaUrlName = fullAlias.strip()
+		# try to drill-down into table with new anketa.
 
-		# BUG: here is a bug on the page, but we skip it.
-	#	self.setAutoPhpErrorChecking(False)
 		self.gotoUrlByLinkText(anketaUrlName)
-	#	self.setAutoPhpErrorChecking(True)
 
 	# just check text is on the page.
 		print "Checking that all filled fields are displayed on the page. "

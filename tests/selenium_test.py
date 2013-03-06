@@ -12,14 +12,14 @@ import time
 from bawlib import isVoid, isList, isString, isEqual, getSingleOption, userSerialize, toUnicode
 
 #['_unwrap_value', '_wrap_value', 'add_cookie',
-#'back', 'binary', 'capabilities', 'close', 'command_executor', 'create_web_element', 'current_url', 'current_window_handle',
+#'back', 'binary', 'capabilities', 'close', 'command_executor', 'create_web_element', 'current_window_handle',
 #'delete_all_cookies', 'delete_cookie', 'desired_capabilities', 'error_handler', 'execute', 'execute_async_script',
-#'execute_script', 'find_element', 'find_element_by_class_name', 'find_element_by_css_selector', 'find_element_by_id',
-#'find_element_by_link_text', 'find_element_by_name', 'find_element_by_partial_link_text', 'find_element_by_tag_name',
+#'execute_script', 'find_element', 'find_element_by_class_name', 'find_element_by_css_selector', 
+# 'find_element_by_partial_link_text', 'find_element_by_tag_name',
 #'find_element_by_xpath', 'find_elements', 'find_elements_by_class_name', 'find_elements_by_css_selector', 'find_elements_by_id',
 #'find_elements_by_link_text', 'find_elements_by_name', 'find_elements_by_partial_link_text', 'find_elements_by_tag_name',
 #'find_elements_by_xpath', 'firefox_profile', 'forward', 'get', 'get_cookie', 'get_cookies', 'get_screenshot_as_base64',
-#'get_screenshot_as_file', 'get_window_position', 'get_window_size', 'implicitly_wait', 'maximize_window',
+#'get_screenshot_as_file', 'get_window_position', 'get_window_size', 'implicitly_wait', 
 #'name', 'orientation', 'page_source', 'profile', 'quit', 'refresh', 'save_screenshot', 'session_id',
 #'set_page_load_timeout', 'set_script_timeout', 'set_window_position', 'set_window_size', 'start_client',
 #'start_session', 'stop_client', 'switch_to_active_element', 'switch_to_alert', 'switch_to_default_content',
@@ -96,6 +96,7 @@ class SeleniumTest:
 	def init(self):
 		self.m_baseUrl = self.fixBaseUrl(self.getBaseUrl())
 		self.m_driver = webdriver.Firefox()
+		self.maximizeWindow()
 	
 	def getName(self):
 		return self.m_testName

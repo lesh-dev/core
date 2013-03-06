@@ -41,4 +41,9 @@ class XcmsAuthCheckDupLogin(SeleniumTest):
 		# logout self 
 		self.gotoUrlByLinkText(u"Выход")
 
+		print "try logging as created second user. "
+		if xtest_common.performLogin(self, inpLogin, inpPass2):
+			raise selenium_test.TestError("I am able to login as 'second' user with duplicate login and new password. ")
+
+
 
