@@ -120,7 +120,8 @@ sudo cp -a $VERBOSE_COPY $CONT_DIR "$dest/$DEST_CONT"
 
 version="$(tools/publish/version.sh)-local"
 echo "Set version: $version"
-echo "version : $version" > $dest/INFO
+echo "version : $version" > /tmp/INFO
+sudo cp $VERBOSE_COPY /tmp/INFO $dest/INFO
 
 # process database
 if [ "$db_mode" == "merged" ] ; then
