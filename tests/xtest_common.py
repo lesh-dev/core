@@ -13,7 +13,26 @@ def assertNoInstallerPage(test):
 	test.gotoRoot()
 	if isInstallerPage(test):
 		raise selenium_test.TestFatal("Installer page detected, while we did not expected it. You should run this test on installed XCMS. ")
-		
+
+
+def gotoAuthLink(test):
+	test.gotoUrlByLinkText(u"Авторизация")
+
+def gotoAdminPanel(test):
+	test.gotoUrlByLinkText(u"Админка")
+
+def getAuthLink(test):
+	return test.getUrlByLinkText(u"Авторизация")
+
+def getAdminPanelLink(test):
+	return test.getUrlByLinkText(u"Админка")
+
+def performLogoutFromSite(test):
+	test.gotoUrlByLinkText(u"Выход")
+
+def performLogoutFromAdminPanel(test):
+	test.gotoUrlByLinkText(u"Выйти")
+
 def performLogin(test, login, password):
 	"""
 	returns True if login was successful
@@ -29,9 +48,7 @@ def performLogin(test, login, password):
 	# assert we have no shit cookies here
 	test.assertUrlNotPresent(u"Админка", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
 	
-	authUrl = test.getUrlByLinkText(u"Авторизация")
-	
-	test.gotoSite(authUrl)
+	gotoAuthLink(test)
 	
 	test.assertSourceTextPresent(u"Логин")
 	test.assertSourceTextPresent(u"Пароль")
@@ -64,7 +81,7 @@ def performLoginAsAdmin(test, login, password):
 	
 	#check that we have entered the CP.
 	# just chech that link exists.
-	cpUrl = test.getUrlByLinkText(u"Админка")
+	cpUrl = getAdminPanelLink(test)
 	#test.gotoSite(cpUrl)
 	
 	
@@ -76,7 +93,8 @@ def createNewUser(test, conf, login, email, password, name, auxParams = []):
 	print "go to user creation panel"
 	
 	#	test.gotoRoot()
-	test.gotoUrlByLinkText(u"Админка")
+	gotoAdminPanel(test)
+	
 	# navigate to users CP
 	print "goto user list."
 	test.gotoUrlByLinkText(u"Пользователи")

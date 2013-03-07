@@ -39,10 +39,8 @@ class XcmsAuthCheckDupEmail(SeleniumTest):
 
 		xtest_common.performLogout(self)
 
-		print "logging as second created user. "
-		if not xtest_common.performLogin(self, inpLogin2, inpPass1):
-			raise selenium_test.TestError("Cannot login as newly created second user. ")
-
-		xtest_common.performLogout(self)
+		print "try logging as second created user. "
+		if xtest_common.performLogin(self, inpLogin2, inpPass2):
+			raise selenium_test.TestError("I was able to login as second user with duplicate e-mail. ")
 
 

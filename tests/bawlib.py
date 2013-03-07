@@ -34,6 +34,9 @@ def isEqual(x, y):
 	else:
 		raise RuntimeError("Cannot compare anything except strings, sorry. Type of X is " + str(type(x)) + ", and type of Y is " + str(type(y)) + ".")
 
+def toUnicode(s):
+	return unicode(s).encode("utf-8")
+	
 def isVoid(x):
 	return x is None or x.strip() == ""
 	

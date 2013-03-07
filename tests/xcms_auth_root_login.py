@@ -17,12 +17,13 @@ class XcmsAuthRootLogin(SeleniumTest):
 	
 	def run(self):
 		self.setAutoPhpErrorChecking(True)
+		self.maximizeWindow()
 		
 		conf = XcmsTestConfig()
 		
 		xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
 		
-		self.gotoUrlByLinkText(u"Админка")
+		xtest_common.gotoAdminPanel(self)
 		
 		self.assertBodyTextPresent(u"Пользователи")
 		self.assertBodyTextPresent(u"Очистить кэш")
