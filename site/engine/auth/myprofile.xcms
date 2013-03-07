@@ -1,6 +1,6 @@
 <?php
-  $u = xcms_user();
-  $user = $u;
+    $u = xcms_user();
+    $user = $u;
 ?>
 <h3>Привет, <?php echo $u->login(); ?>!</h3>
 
@@ -12,7 +12,7 @@
             $user->set_param($form_name, @$_POST["param_$form_name"]);
         }
     }
-    
+
     echo "<form method='post'>";
     echo "Меня зовут <input name=\"param_name\" value=\"{$user->param('name')}\" />";
     echo "<br />Моя электропочта -- <input name=\"param_email\" value=\"{$user->param('email')}\" />";
