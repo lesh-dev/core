@@ -29,13 +29,26 @@ function xsm_get_avatar($social_profile)
         return $av;
 
     $vk_uid = $match[0];
-    $json_fn = sys_get_temp_dir()."/vk-json-".rand();
-    if (0 != system("wget 'https://api.vkontakte.ru/method/getProfiles?uids=$vk_uid&fields=photo' -O $json_fn"))
+
+    $cache_dir = ".prec/avatar-cache";
+    @mkdir($cache_dir, 0777);
+
+    $json_fn = "$cache_dir/vk-json-$vk_uid";
+    // TODO: cache expiration
+    if (!file_exists($json_fn))
+    {
+        if (0 != system("wget 'https://api.vkontakte.ru/method/getProfiles?uids=$vk_uid&fields=photo' -O $json_fn"))
         return $av;
+    }
 
     $json_text = file_get_contents($json_fn);
-    $json = json_decode($json_text, true);
-    $av = $json['response'][0]['photo'];
+    $json = @json_decode($json_text, true);
+    if (!is_array($json))
+        return $av;
+    if (!array_key_exists('response', $json))
+        return $av;
+    $response = $json['response'];
+    $av = $response[0]['photo'];
     return $av;
 }
 
