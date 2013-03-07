@@ -37,6 +37,12 @@ def remove_strings(line):
     return line
 
 
+# removes bash arrays file{a,bc}
+def remove_file_expansions(line):
+    line = re.sub(r'\{[\$a-zA-Z0-9._,-]*?\}', '', line)
+    return line
+
+
 def check_code_style(lines):
     line_count = len(lines)
     bad_lines = dict()
@@ -85,9 +91,10 @@ def check_code_style(lines):
             add_bad_line(bad_lines, "No PHP shorttags allowed", i)
 
         # missing spaces after commas
-        line_wo_strings = remove_strings(line)
-        line_wo_strings = re.sub(r',$', '', line_wo_strings)
-        sac = re.search(r',[^ ]', line_wo_strings)
+        line_cleanup = remove_strings(line)
+        line_cleanup = remove_file_expansions(line_cleanup)
+        line_cleanup = re.sub(r',$', '', line_cleanup)
+        sac = re.search(r',[^ ]', line_cleanup)
         if sac:
             add_bad_line(bad_lines, "Commas should contain spaces after them", i)
 
