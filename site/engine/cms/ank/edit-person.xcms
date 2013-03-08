@@ -14,7 +14,7 @@ function xcms_array_diff($new, $old)
             continue;
         }
         // key exists in both arrays
-        if ($old[$key] != $value)
+        if (trim($old[$key]) != trim($value))
             $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>$old[$key]);
     }
     foreach ($old as $key => $old_value)
