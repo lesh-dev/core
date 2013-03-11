@@ -4,7 +4,7 @@
 from selenium import webdriver
 import os, sys, traceback, time
 
-import selenium_test
+import selenium_test, random_crap
 
 def isInstallerPage(test):
 	return test.curUrl().endswith("install.php")
@@ -153,4 +153,21 @@ def createNewUser(test, conf, login, email, password, name, auxParams = []):
 	performLogout(test)
 	
 	return inpLogin, inpEMail, inpPass, inpName
+	
+
+def addCommentToPerson(test):
+	test.gotoUrlByLinkText(u"Добавить комментарий")
+	commentText = random_crap.randomText(40) + "\n" + random_crap.randomText(50) + "\n" + random_crap.randomText(30)
+	
+	commentText = test.fillElementByName("comment_text", commentText)
+	print "Sleeping 1 sec"
+	time.sleep(1)
+	print "Done"
+
+	test.gotoUrlByLinkText(u"Сохранить")
+	test.assertBodyTextPresent(u"Комментарий успешно сохранён")
+	test.gotoUrlByLinkText(u"Вернуться к просмотру участника")
+	return commentText
+	
+
 

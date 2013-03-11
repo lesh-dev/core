@@ -7,8 +7,8 @@ from selenium_test import SeleniumTest
 
 class XcmsXsmAnketaFill(SeleniumTest):
 	"""
-	This test checks anketa add functional.
-	It does following steps:
+	This test checks anketa add functional and following person processing steps.
+	It does following:
 	* navigates to anketa form
 	* fill anketa with all correct values
 	* submits form
@@ -16,22 +16,26 @@ class XcmsXsmAnketaFill(SeleniumTest):
 	* naviagates to anketa list
 	* clicks on new anketa
 	* checks if all enetered data match screen form.
+	* adds comment to this new person
+	* TODO: change person status incrementally
+	* TODO: change personal data
+	* TODO: make 'active'
+	* TODO: check presence in active list
+	* TODO: add person to some schools.
+	* TODO: remove person from one of schools
 	"""
 	
 	def run(self):
 		# anketa fill positive test:
 		# all fields are filled with correct values.
-		conf = XcmsTestConfig()
 		
-		adminLogin = conf.getAdminLogin()
-		adminPass = conf.getAdminPass()
+		self.setAutoPhpErrorChecking(True)
+		xtest_common.assertNoInstallerPage(self)
+
+		conf = XcmsTestConfig()
 		
 		testMailPrefix = conf.getAnketaNamePrefix()
 			
-		self.setAutoPhpErrorChecking(True)
-		
-		xtest_common.assertNoInstallerPage(self)
-
 		self.gotoRoot()
 		
 		#navigate to anketas
@@ -85,6 +89,10 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		
 			
 	# now login as admin
+	
+		adminLogin = conf.getAdminLogin()
+		adminPass = conf.getAdminPass()
+	
 		xtest_common.performLoginAsAdmin(self, adminLogin, adminPass)
 		
 		self.gotoRoot()
@@ -114,5 +122,13 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		self.assertBodyTextPresent(inpSocial)
 		self.assertBodyTextPresent(inpFav)
 		self.assertBodyTextPresent(inpAch)
-		self.assertBodyTextPresent(inpHob)	
+		self.assertBodyTextPresent(inpHob)
+		
+		# now let's add some comment to person
+		
+		commentText = xtest_common.addCommentToPerson(self)
+		
+				
+		
+		
 	
