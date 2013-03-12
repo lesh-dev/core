@@ -150,7 +150,7 @@ function xsm_edit_person_comment()
                 if (array_key_exists($key, $field_types))
                 {?>
                     <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
-                        echo htmlspecialchars($value); ?></textarea/><?php
+                        echo htmlspecialchars($value); ?></textarea><?php
                 }
                 elseif ($key == 'blamed_person_id')
                 {?>

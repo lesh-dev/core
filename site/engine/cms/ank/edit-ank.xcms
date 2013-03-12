@@ -78,7 +78,7 @@
           <tr><td class="ankList"><span class="ankEditField"><?php echo $aFields[$sKey]; ?></span>
             <?php
               if (array_key_exists($sKey, $aFieldTypes)) {?>
-                <textarea class="ankEdit" name="<?php echo $sKey; ?>"><?php echo htmlspecialchars($sValue); ?></textarea/><?php
+                <textarea class="ankEdit" name="<?php echo $sKey; ?>"><?php echo htmlspecialchars($sValue); ?></textarea><?php
               } else {?>
                 <input type="text" class="ankEdit" value="<?php echo htmlspecialchars($sValue); ?>" name="<?php echo $sKey; ?>" <?php echo $sAttr; ?> /><?php
               } ?>

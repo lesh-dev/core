@@ -79,7 +79,7 @@ function xsm_edit_course()
                 if (array_key_exists($key, $field_types))
                 {?>
                     <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
-                        echo htmlspecialchars($value); ?></textarea/><?php
+                        echo htmlspecialchars($value); ?></textarea><?php
                 }
                 elseif ($key == 'course_teacher_id')
                 {

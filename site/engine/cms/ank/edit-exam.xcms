@@ -165,7 +165,7 @@ function xsm_edit_exam()
                 $ft = xcms_get_key_or($field_types, $key);
                 if ($ft == "textarea") {?>
                     <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
-                        echo htmlspecialchars($value); ?></textarea/><?php
+                        echo htmlspecialchars($value); ?></textarea><?php
                 } elseif ($ft == "checkbox") {
                     // КОСТЫЛЬ! checkbox-овое поле должно начинаться со слова 'is_'
                     // и его "установленное" значение (true) соответствует
