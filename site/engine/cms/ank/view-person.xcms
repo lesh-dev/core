@@ -166,7 +166,7 @@ function xsm_draw_person_comments($db, $person_id)
             <th class="ankList">Дата</th>
         </thead>
     <?php
-    $comment_num = 0; // for auto-testing purposes
+    $comment_num = 0; // for auto-testing purposes (#525)
     while ($comment_data = $comment_sel->fetchArray(SQLITE3_ASSOC)) {?>
         <?php
 

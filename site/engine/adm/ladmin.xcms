@@ -153,11 +153,6 @@
         include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
     }
     /*
-    else if(@$_GET["mode"]=="ank" )
-    {
-        include(translate('<! cms/ank/manage !>'));
-    }*/
-    /*
     // Here is a dead code (mode is unreferenced in interface)
     else if(@$_GET["mode"]=="documentation")
     {

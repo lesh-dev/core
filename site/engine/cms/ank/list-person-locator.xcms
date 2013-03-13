@@ -72,8 +72,6 @@ function xsm_show_all_person_list()
             " AND ( (anketa_status <> 'duplicate') ".
             " AND (anketa_status <> 'spam') ".
             " AND (anketa_status <> 'old') )";
-    elseif ($show_status == "not-spam")
-        $cond .= " AND ( (anketa_status <> 'duplicate') AND (anketa_status <> 'spam') )";
     elseif ($show_status == "all")
         $cond .= "";
     else
