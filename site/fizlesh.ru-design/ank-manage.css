@@ -107,7 +107,11 @@ span.ankStatus.new {
 }
 
 span.ankStatus.progress {
-    color: #9f7f00;
+    color: #7f007f;
+}
+
+span.ankStatus.less {
+    color: #2f2faf;
 }
 
 span.ankStatus.processed {
@@ -123,7 +127,7 @@ span.ankStatus.cont {
 }
 
 span.ankStatus.old {
-    color: #3f3faf;
+    color: #000000;
 }
 
 span.ankStatus.duplicate {
