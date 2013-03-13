@@ -4,6 +4,7 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
+from selenium.webdriver.remote.webdriver import WebElement
 
 import random, traceback, sys
 from datetime import datetime
@@ -245,7 +246,11 @@ class SeleniumTest:
 	def fillElementById(self, eleId, text):
 		self.checkEmptyParam(eleId, "fillElementById")
 		self.addAction("fill", "element id: '" + eleId + "', text: '" + text + "'")
-		self.getElementById(eleId).send_keys(text)
+		#print "sending keys" , text
+		ele = self.getElementById(eleId)
+		#print "got element "
+		#print "dir", dir(ele)
+		ele.send_keys(text)
 		return self.getElementById(eleId).get_attribute('value')
 
 	def getElementValueById(self, eleId):
@@ -346,13 +351,13 @@ class SeleniumTest:
 	def checkEmptyParam(self, stringOrList, methodName):
 		if isList(stringOrList):
 			if len(stringOrList) == 0:
-				raise RuntimeError("Empty list passed to " + methodName);
+				raise RuntimeError("Empty list passed to " + methodName)
 			for text in stringOrList:
 				if isVoid(text):
-					raise RuntimeError("Empty string passed in the list to " + methodName);
+					raise RuntimeError("Empty string passed in the list to " + methodName)
 		else:		
 			if isVoid(stringOrList):
-				raise RuntimeError("Empty param passed to " + methodName);
+				raise RuntimeError("Empty param passed to " + methodName)
 
 	def getUrlByLinkText(self, urlText):
 		self.checkEmptyParam(urlText, "getUrlByLinkText");
@@ -377,6 +382,27 @@ class SeleniumTest:
 				# here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
 				msg = u"Cannot find URL by link text: '" + userSerialize(urlText) + "' on page '" + self.curUrl() + "'. "
 				self.failTestWithItemNotFound(msg)
+				
+	def gotoIndexedUrlByLinkText(self, urlText, index):
+		try:
+			urls = self.m_driver.find_elements_by_xpath("//a[text()='" + urlText + "']")
+
+			#print "Type = ", type(urls)
+			if isList(urls):
+				if index < len(urls):
+					url = urls[index]
+					href = url.get_attribute("href")
+					self.logAdd("Found URL with index " + userSerialize(index) + ": " + href)
+					self.gotoSite(href)
+				else:
+					self.failTest(u"No index in URL array with link text '" + userSerialize(urlText) + "' on page '" + self.curUrl() + "'. ")
+			else:
+				raise RuntimeError("Something bad retrieved from find_elements_by_xpath: it's not a list of WebElement. ")
+		except NoSuchElementException:
+			# here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
+			msg = u"Cannot find no one URL by link text: '" + userSerialize(urlText) + "' on page '" + self.curUrl() + "'. "
+			self.failTestWithItemNotFound(msg)
+
 			
 	def logAdd(self, text):
 		try:

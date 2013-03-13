@@ -126,7 +126,23 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		
 		# now let's add some comment to person
 		
-		commentText = xtest_common.addCommentToPerson(self)
+		commentText1 = xtest_common.addCommentToPerson(self)
+		print "Added first comment: ", commentText1
+		self.assertBodyTextPresent(commentText1)
+		
+		self.gotoIndexedUrlByLinkText(u"Правка", 0)
+		
+		commentText2 = xtest_common.addCommentToPerson(self)
+		print "Added second comment: ", commentText2
+		self.assertBodyTextPresent(commentText2)
+		
+		commentText3 = xtest_common.addCommentToPerson(self)
+		print "Added third comment: ", commentText3
+		self.assertBodyTextPresent(commentText3)
+		
+		
+		
+		
 		
 				
 		

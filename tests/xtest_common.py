@@ -37,11 +37,13 @@ def performLogin(test, login, password):
 	"""
 	returns True if login was successful
 	"""
-	test.addAction("user-login", login + " / " + password)
-#	test.logAdd("performLogin(" + login + ", " + password + ")")
-	
 	if test is None:
 		raise RuntimeError("Wrong webdriver parameter passed to performLogin. ")
+	
+	test.addAction("user-login", login + " / " + password)
+#	test.logAdd("performLogin(" + login + ", " + password + ")")
+
+	print "goto root"
 	
 	test.gotoRoot()
 	
@@ -160,11 +162,8 @@ def addCommentToPerson(test):
 	commentText = random_crap.randomText(40) + "\n" + random_crap.randomText(50) + "\n" + random_crap.randomText(30)
 	
 	commentText = test.fillElementByName("comment_text", commentText)
-	print "Sleeping 1 sec"
-	time.sleep(1)
-	print "Done"
 
-	test.gotoUrlByLinkText(u"Сохранить")
+	test.clickElementByName("update-person_comment")
 	test.assertBodyTextPresent(u"Комментарий успешно сохранён")
 	test.gotoUrlByLinkText(u"Вернуться к просмотру участника")
 	return commentText
