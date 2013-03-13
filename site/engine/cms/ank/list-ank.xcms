@@ -5,8 +5,9 @@
             "abitur"=>"Набор",
             "new"=>"Новые",
             "progress"=>"Ждут собеседования",
+            "less"=>"Ждут леса",
             "processed"=>"Принятые",
-            "declined"=>"Посланные",
+            "declined"=>"Отклонённые",
             "old"=>"Архивные",
             "all"=>"Все");
     }
@@ -19,12 +20,12 @@
 <p>В этом списке по умолчанию показываются <b>свежие заявки</b>. Когда приходит новая анкета, она получает статус
     <span class="ankStatus new">Новый</span>. После приглашения на собеседование школьнику следует выставлять
     статус <span class="ankStatus progress">Ждёт собеседования</span>, а в заметках указать дату собеседования.
-    По результатам собеседования должен быть выставлен статус <span class="ankStatus processed">Принят</span> или
-    <span class="ankStatus declined">Послан</span>.</p>
+    По результатам собеседования могут быть выставлены статус <span class="ankStatus processed">Принят</span>,
+    <span class="ankStatus less">Ждёт леса</span> или <span class="ankStatus declined">Отклонён</span>.</p>
 <p>Для людей, которые стабильно <b>не ездят</b> на школы уже 2-3 года, осмысленно выставлять статус
     <span class="ankStatus old">Архив</span>. В этот же статус
     можно переводить через 1-2 года тех, кому по результатам собеседования был проставлен статус
-    <span class="ankStatus declined">Послан</span> (сразу этого делать не следует).</p>
+    <span class="ankStatus declined">Отклонён</span> (сразу этого делать не следует).</p>
 <form method="post" action="list-ank" style="margin-bottom: 2px"><span>
     <span class="ankListField">Фильтрация</span>: <?php
     echo xsm_make_enum_selector(
@@ -60,6 +61,7 @@ function xsm_show_ank_list()
         $cond .=
             " AND ( (anketa_status = 'new')".
             " OR (anketa_status = 'progress')".
+            " OR (anketa_status = 'less')".
             " OR (anketa_status = 'declined') )";
     elseif ($show_anketa_status == "all")
         $cond .= "";

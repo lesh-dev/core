@@ -52,16 +52,17 @@ function xcms_get_person_field_types()
 }
 
 /**
-  * Complete list of valid person activity statuses
-  * @return key-value array of activity statuses
+  * Complete list of valid person statuses
+  * @return key-value array of statuses
   **/
 function xsm_get_anketa_statuses()
 {
     return array(
         "new"=>"Новый",
         "progress"=>"Ждёт собес.",
+        "less"=>"Ждёт леса",
         "processed"=>"Принят",
-        "declined"=>"Послан",
+        "declined"=>"Отклонён",
         "cont"=>"Активный",
         "old"=>"Архив",
         "duplicate"=>"Дубль",
@@ -69,22 +70,8 @@ function xsm_get_anketa_statuses()
 }
 
 /**
-  * DEPRECATED: Anketa status selector for viewer
+  * Status groups for person locator
   **/
-function xcms_ank_get_show_status_list()
-{
-    return array(
-        "not-spam"=>"Без спама и дублей",
-        "not-decl"=>"Без спама, дублей и посланых",
-        "new"=>"Новые",
-        "progress"=>"Ждут собеседования",
-        "processed"=>"Принятые",
-        "declined"=>"Посланные",
-        "cont"=>"Продолжающие школьники",
-        "old"=>"Старые школьники (не едут)",
-        "all"=>"Все");
-}
-
 function xsm_get_person_show_statuses()
 {
     return array(
@@ -92,11 +79,11 @@ function xsm_get_person_show_statuses()
         "not-old"=>"Все, кроме архивных",
         //"new"=>"Новые",
         //"progress"=>"Ждут собеседования",
+        //"less"=>"Ждут леса",
         "processed"=>"Принятые",
-        //"declined"=>"Посланные",
+        //"declined"=>"Отклонённые",
         "cont"=>"Продолжающие",
         "old"=>"Архивные",
-        //"not-spam"=>"Без спама и дублей",
         "not-decl"=>"Без спама, дублей и посланых",
         "all"=>"Все");
 }
