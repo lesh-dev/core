@@ -189,12 +189,17 @@ class SeleniumTest:
 	def gotoRoot(self):
 		return self.gotoPage("/")
 		
-	def gotoPage(self, url):
+	# @comment usually means link name (or id), which we used to navigate to this URL.
+	def gotoPage(self, url, comment = ""):
 		fullUrl = self.m_baseUrl + url
-		return self.gotoSite(fullUrl)
+		return self.gotoSite(fullUrl, comment)
 	
-	def gotoSite(self, fullUrl):
-		self.addAction("navigate", fullUrl)
+	# @comment usually means link name (or id), which we used to navigate to this URL.
+	def gotoSite(self, fullUrl, comment = ""):
+		actionMsg = u"Link: '" + userSerialize(fullUrl);
+		if not isVoid(comment):
+			actionMsg +=  (u"' comment: '" + userSerialize(comment) + "'")
+		self.addAction("navigate", actionMsg)
 		self.m_driver.get(fullUrl)
 		if self.m_checkErrors:
 			self.assertPhpErrors();
@@ -202,12 +207,16 @@ class SeleniumTest:
 	def gotoUrlByLinkText(self, linkName):
 		try:
 			link = self.getUrlByLinkText(linkName)
-			self.gotoSite(link)
+			self.gotoSite(link, linkName)
 		except NoSuchElementException:
 			self.failTest(u"Cannot find URL with name '" + userSerialize(linkName) + "'. ")
 
+	def gotoUrlByLinkId(self, linkId):
+		href = self.getElementById(linkId).get_attribute("href")
+		self.gotoSite(href, linkId)
+		
 	def displayReason(self, reason):
-		if reason is None or reason == "":
+		if isVoid(reason):
 			return ""
 		else:
 			return "Reason: '" + reason + "'. "
@@ -281,14 +290,19 @@ class SeleniumTest:
 	def clickElementByName(self, name):
 		self.addAction("click", "element name: '" + name + "'")
 		self.getElementByName(name).click()
+		if self.m_checkErrors:
+			self.assertPhpErrors();
 
 	def clickElementById(self, eleId):
 		self.addAction("click", "element id: '" + eleId + "'")
 		self.getElementById(eleId).click()
+		if self.m_checkErrors:
+			self.assertPhpErrors();
 	
+	# getElementText
 	def getElementContent(self, xpath):
 		return self.m_driver.find_element_by_xpath(xpath).text
-		
+
 	def checkTextPresent(self, xpath, text):
 		self.checkEmptyParam(xpath, "checkTextPresent")
 		self.checkEmptyParam(text, "checkTextPresent")
@@ -327,17 +341,17 @@ class SeleniumTest:
 		self.logAdd(errorText)
 		raise ItemNotFound(errorText)
 
-	def assertTextPresent(self, xpath, text):
+	def assertTextPresent(self, xpath, text, reason = ""):
 		if not self.checkTextPresent(xpath, text):
-			self.failTest("Text '" + userSerialize(text) + "' not found on page '" + self.curUrl() + "' in element '" + xpath + "'. ")
+			self.failTest("Text '" + userSerialize(text) + "' not found on page '" + self.curUrl() + "' in element '" + xpath + "'. " + self.displayReason(reason))
 
 	def assertTextNotPresent(self, xpath, text, forbidReason = ""):
 		if self.checkTextPresent(xpath, text):
 			errText = "Forbidden text '" + userSerialize(text) + "' found on page '" + self.curUrl() + "' in element '" + xpath + "'. " + self.displayReason(forbidReason)
 			self.failTest(errText)
 
-	def assertBodyTextPresent(self, text):
-		return self.assertTextPresent("/html/body", text)
+	def assertBodyTextPresent(self, text, reason = ""):
+		return self.assertTextPresent("/html/body", text, reason)
 
 	def assertBodyTextNotPresent(self, text, forbidReason = ""):
 		return self.assertTextNotPresent("/html/body", text, forbidReason)
@@ -345,8 +359,8 @@ class SeleniumTest:
 	def assertSourceTextPresent(self, text):
 		return self.assertTextPresent("//*", text)
 
-	def assertSourceTextNotPresent(self, text):
-		return self.assertTextNotPresent("//*", text)
+	def assertSourceTextNotPresent(self, text, forbidReason = ""):
+		return self.assertTextNotPresent("//*", text, forbidReason)
 
 	def checkEmptyParam(self, stringOrList, methodName):
 		if isList(stringOrList):

@@ -16,7 +16,8 @@ class XcmsXsmAnketaFill(SeleniumTest):
 	* naviagates to anketa list
 	* clicks on new anketa
 	* checks if all enetered data match screen form.
-	* adds comment to this new person
+	* adds 3 comments to this new person
+	* edits 2 of 3 comments
 	* TODO: change person status incrementally
 	* TODO: change personal data
 	* TODO: make 'active'
@@ -124,13 +125,11 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		self.assertBodyTextPresent(inpAch)
 		self.assertBodyTextPresent(inpHob)
 		
-		# now let's add some comment to person
+		# now let's add some comments to person
 		
 		commentText1 = xtest_common.addCommentToPerson(self)
 		print "Added first comment: ", commentText1
 		self.assertBodyTextPresent(commentText1)
-		
-		self.gotoIndexedUrlByLinkText(u"Правка", 0)
 		
 		commentText2 = xtest_common.addCommentToPerson(self)
 		print "Added second comment: ", commentText2
@@ -140,11 +139,28 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		print "Added third comment: ", commentText3
 		self.assertBodyTextPresent(commentText3)
 		
+		# and now let's edit one of them.
 		
+		self.gotoIndexedUrlByLinkText(u"Правка", 0)
+		self.gotoUrlByLinkText(u"Вернуться к списку комментов")
+
+		self.gotoIndexedUrlByLinkText(u"Правка", 1)
+		self.gotoUrlByLinkText(u"Вернуться к списку комментов")
+
+		# oh, no! we want to use comment link ids!
 		
+		commentTextNew1 = xtest_common.editCommentToPerson(self, "comment-edit-1")
+		self.assertBodyTextPresent(commentTextNew1)
+
+		commentTextNew3 = xtest_common.editCommentToPerson(self, "comment-edit-3")
+		self.assertBodyTextPresent(commentTextNew3)
 		
-		
-				
+		# check if all new comments are present here, and 2-nd comment left unchanged
+
+		self.assertBodyTextPresent(commentTextNew1, "Comment 1 must change value. ")
+		self.assertBodyTextPresent(commentText2, "Comment should remain unchanged. ")
+		self.assertBodyTextPresent(commentTextNew3, "Comment 3 must change value. ")
+
 		
 		
 	

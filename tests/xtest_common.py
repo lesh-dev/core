@@ -168,5 +168,18 @@ def addCommentToPerson(test):
 	test.gotoUrlByLinkText(u"Вернуться к просмотру участника")
 	return commentText
 	
+def editCommentToPerson(test, commentLinkId):
+	test.gotoUrlByLinkId("comment-edit-1")
+	oldCommentText = test.getElementValueByName("comment_text")
+	newCommentText =  random_crap.randomText(10) + "\n" + oldCommentText + "\n" + random_crap.randomText(6)
+	newCommentText = test.fillElementByName("comment_text", newCommentText)
+	test.clickElementByName("update-person_comment")
+	test.assertBodyTextPresent(u"Комментарий успешно сохранён")
+	test.gotoUrlByLinkText(u"Вернуться к просмотру участника")
+	return newCommentText
+	
+
+
+	
 
 
