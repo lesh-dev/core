@@ -10,7 +10,8 @@ function xcms_array_diff($new, $old)
     {
         if (!array_key_exists($key, $old))
         {
-            $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>'');
+            if (trim($value) != '')
+                $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>'');
             continue;
         }
         // key exists in both arrays
@@ -19,7 +20,9 @@ function xcms_array_diff($new, $old)
     }
     foreach ($old as $key => $old_value)
     {
-        if (!array_key_exists($key, $new))
+        if (array_key_exists($key, $new))
+            continue;
+        if (trim($old_value) != '')
             $diff[] = array('key'=>$key, 'new'=>'', 'old'=>$old_value);
     }
     return $diff;
