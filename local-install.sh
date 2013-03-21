@@ -126,12 +126,12 @@ sudo cp $VERBOSE_COPY $VFILE $DEST/INFO
 rm -f $VFILE
 
 # process database
-if [ "$db_mode" == "merged" ] ; then
+if [ "$DB_MODE" == "merged" ] ; then
     echo "Installing merged database"
     sudo cp $VERBOSE_COPY tools/xsm-merge/new*sqlite3 $DEST_DB
-elif [ "$db_mode" == "empty" ] ; then
+elif [ "$DB_MODE" == "empty" ] ; then
     install_fresh_db
-elif [ "$db_mode" == "original" ] || [ -r "$TEMP_DB" ] ; then
+elif [ "$DB_MODE" == "original" ] || [ -r "$TEMP_DB" ] ; then
     echo "Database backup found, installing..."
     sudo mv $TEMP_DB "$DEST_DB"
 else
