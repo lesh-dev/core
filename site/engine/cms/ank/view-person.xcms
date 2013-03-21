@@ -24,11 +24,19 @@ function xsm_get_avatar($social_profile)
     $av = "${full_engine_pub}img/stalin50.jpg";
 
     $match = array();
+    $vk_uid = "";
+    // match id
     preg_match("/[0-9]+/", $social_profile, $match);
     if (!count($match))
-        return $av;
-
-    $vk_uid = $match[0];
+    {
+        // match aliase
+        preg_match("/.*vk.com\/([a-z._]+)/", $social_profile, $match);
+        if (!count($match))
+            return $av;
+        $vk_uid = $match[1];
+    }
+    else
+        $vk_uid = $match[0];
 
     $cache_dir = ".prec/avatar-cache";
     @mkdir($cache_dir, 0777);
