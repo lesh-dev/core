@@ -19,6 +19,7 @@ function xsm_draw_person_longtextval($class, $text, $value)
 
 function xsm_get_avatar($social_profile)
 {
+    // TODO: extract first profile (e.g. by spaces)
     // set default av
     global $full_engine_pub;
     $av = "${full_engine_pub}img/stalin50.jpg";
@@ -100,7 +101,7 @@ function xsm_print_person_header($db, $person, $school_id)
         xsm_draw_person_textval('top', 'Мобильный', $cellular);
         xsm_draw_person_textval('top', 'Домашний', $phone);
         xsm_draw_person_textval('top', 'Skype', $skype);
-        xsm_draw_person_textval('top', 'Профиль', $social_profile);
+        xsm_draw_person_textval('top', 'Профиль', "<a href=\"$social_profile\">$social_profile</a>");
         ?>
     </div>
     <div class="person-topright"><?php
@@ -214,12 +215,6 @@ function xsm_print_person_ank_data($db, $person)
 
     $ank_class = htmlspecialchars($person["ank_class"]);
     $current_class = htmlspecialchars($person["current_class"]);
-
-    $phone = htmlspecialchars($person["phone"]);
-    $cellular = htmlspecialchars($person["cellular"]);
-    $email = htmlspecialchars($person["email"]);
-    $skype = htmlspecialchars($person["skype"]);
-    $social_profile = xsm_prepare_social_profile($person["social_profile"]);
 
     $is_teacher = $person["is_teacher"];
     $is_student = $person["is_student"];
