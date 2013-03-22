@@ -164,16 +164,16 @@ function xsm_draw_person_comments($db, $person_id)
 
     <table summary="Комментарии" class="ankList">
         <colgroup>
-            <col width="55" />
-            <col width="75%" />
             <col width="10%" />
+            <col width="75%" />
             <col width="105px" />
+            <col width="55" />
         </colgroup>
         <thead>
-            <th class="ankList">&nbsp;</th>
-            <th class="ankList">Текст</th>
             <th class="ankList">Автор</th>
+            <th class="ankList">Текст</th>
             <th class="ankList">Дата</th>
+            <th class="ankList">&nbsp;</th>
         </thead>
     <?php
     $comment_num = 0; // for auto-testing purposes (#525)
@@ -188,11 +188,11 @@ function xsm_draw_person_comments($db, $person_id)
         $comment_num++;
         ?>
         <tr>
+            <td class="ankList"><?php echo $owner_login; ?></td>
+            <td class="ankList"><?php echo $comment_text; ?></td>
+            <td class="ankList"><?php echo $person_comment_created; ?></td>
             <td class="ankList"><a href="edit-person_comment&amp;person_comment_id=<?php echo $comment_id; ?>"
                 id="comment-edit-<?php echo $comment_num; ?>">Правка</a></td>
-            <td class="ankList"><?php echo $comment_text; ?></td>
-            <td class="ankList"><?php echo $owner_login; ?></td>
-            <td class="ankList"><?php echo $person_comment_created; ?></td>
         </tr><?php
         }
     ?>
