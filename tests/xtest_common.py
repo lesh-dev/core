@@ -177,6 +177,25 @@ def editCommentToPerson(test, commentLinkId):
 	test.assertBodyTextPresent(u"Комментарий успешно сохранён")
 	test.gotoUrlByLinkText(u"Вернуться к просмотру участника")
 	return newCommentText
+
+def setTestNotifications(test, emailString, adminLogin, adminPass):
+	performLoginAsAdmin(test, adminLogin, adminPass)
+	gotoAdminPanel(test)
+	test.gotoUrlByLinkText(u"Уведомления")
+
+	test.fillElementById("edtg_user-change", emailString);
+	test.fillElementById("edtg_content-change", emailString);
+
+	test.fillElementById("edtg_reg-html", emailString);
+	test.fillElementById("edtg_reg-plain", emailString);
+
+	test.fillElementById("edtg_reg-test-plain", emailString);
+	test.fillElementById("edtg_reg-test-html", emailString);
+	
+	test.clickElementById("editTag")
+	performLogout(test)
+	
+	
 	
 
 

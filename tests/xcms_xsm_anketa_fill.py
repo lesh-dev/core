@@ -36,6 +36,8 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		conf = XcmsTestConfig()
 		
 		testMailPrefix = conf.getAnketaNamePrefix()
+		
+		xtest_common.setTestNotifications(self, "vdm-photo@ya.ru", conf.getAdminLogin(), conf.getAdminPass())
 			
 		self.gotoRoot()
 		

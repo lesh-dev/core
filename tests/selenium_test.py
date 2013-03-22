@@ -246,14 +246,21 @@ class SeleniumTest:
 			self.logAdd("getElementById failed for name '" + name + "':\n" + traceback.format_exc())
 			raise TestError(u"Cannot get element by name '" + name + "'. ")
 			
-	def fillElementByName(self, name, text):
+	def fillElementByName(self, name, text, clear = True):
 		self.checkEmptyParam(name, "fillElementByName")
+		if clear:
+			self.addAction("clear", "element name: '" + name + "'")
+			self.getElementByName(name).clear()
 		self.addAction("fill", "element name: '" + name + "', text: '" + text + "'")
 		self.getElementByName(name).send_keys(text)
 		return self.getElementByName(name).get_attribute('value')
 		
-	def fillElementById(self, eleId, text):
+	def fillElementById(self, eleId, text, clear = True):
 		self.checkEmptyParam(eleId, "fillElementById")
+		if clear:
+			self.addAction("clear", "element id: '" + eleId + "'")
+			self.getElementById(eleId).clear()
+
 		self.addAction("fill", "element id: '" + eleId + "', text: '" + text + "'")
 		#print "sending keys" , text
 		ele = self.getElementById(eleId)
