@@ -243,8 +243,8 @@ class SeleniumTest:
 		try:
 			return self.m_driver.find_element_by_id(eleId)
 		except NoSuchElementException:
-			self.logAdd("getElementById failed for name '" + name + "':\n" + traceback.format_exc())
-			raise TestError(u"Cannot get element by name '" + name + "'. ")
+			self.logAdd("getElementById failed for id '" + eleId + "':\n" + traceback.format_exc())
+			raise TestError(u"Cannot get element by id '" + eleId + "'. ")
 			
 	def fillElementByName(self, name, text, clear = True):
 		self.checkEmptyParam(name, "fillElementByName")
@@ -281,15 +281,27 @@ class SeleniumTest:
 
 	def checkElementValueById(self, eleId, text):
 		self.checkEmptyParam(eleId, "checkElementValueById")
-		self.addAction("check-value", "element id: '" + eleId + "'")
+		self.addAction("check-value", "element id: '" + eleId + "', expected: '" + text + "'. ")
 		eleValue = self.getElementById(eleId).get_attribute('value')
+		if isEqual(eleValue, text):
+			return True
+		return False
+
+	def checkElementValueByName(self, name, text):
+		self.checkEmptyParam(name, "checkElementValueByName")
+		self.addAction("check-value", "element name: '" + name + "', expected: '" + text + "'. ")
+		eleValue = self.getElementByName(name).get_attribute('value')
 		if isEqual(eleValue, text):
 			return True
 		return False
 
 	def assertElementValueById(self, eleId, text):
 		if not self.checkElementValueById(eleId, text):
-			raise TestError("Element '" + eleId + "' value does not match expected: '" + text + "'. ")
+			raise TestError("Element with id '" + eleId + "' value does not match expected: '" + text + "'. ")
+
+	def assertElementValueByName(self, name, text):
+		if not self.checkElementValueByName(name, text):
+			raise TestError("Element with name '" + name + "' value does not match expected: '" + text + "'. ")
 
 	def addAction(self, name, details = ""):
 		self.m_actionLog.append(TestAction(name, details))		
