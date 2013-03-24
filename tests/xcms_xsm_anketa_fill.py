@@ -36,6 +36,8 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		conf = XcmsTestConfig()
 		
 		testMailPrefix = conf.getAnketaNamePrefix()
+		
+		xtest_common.setTestNotifications(self, "vdm-photo@ya.ru", conf.getAdminLogin(), conf.getAdminPass())
 			
 		self.gotoRoot()
 		
@@ -160,7 +162,44 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		self.assertBodyTextPresent(commentTextNew1, "Comment 1 must change value. ")
 		self.assertBodyTextPresent(commentText2, "Comment should remain unchanged. ")
 		self.assertBodyTextPresent(commentTextNew3, "Comment 3 must change value. ")
+		
+		# now, let's change anketa status to "Ждет собеседования"
+		
+		self.gotoUrlByLinkText(u"Редактировать анкетные данные")
+		
+		# first, check that values in opened form match entered in anketa.
 
+		self.assertElementValueById("last_name-input", inpLastName)
+		self.assertElementValueById("first_name-input", inpFirstName)
+		self.assertElementValueById("patronymic-input", inpMidName)
+		self.assertElementValueById("birth_date-input", inpBirthDate)
+		self.assertElementValueById("school-input", inpSchool)
+		self.assertElementValueById("school_city-input", inpSchoolCity)
+		self.assertElementValueById("ank_class-input", inpClass)
+		# current_class should now be equal to ank_class (fresh anketa)
+		self.assertElementValueById("current_class-input", inpClass)
+		self.assertElementValueById("phone-input", inpPhone)
+		self.assertElementValueById("cellular-input", inpCell)
+		self.assertElementValueById("email-input", inpEmail)
+		self.assertElementValueById("skype-input", inpSkype)
+		self.assertElementValueById("social_profile-input", inpSocial)
+		# no ids!!! TODO: wait for #538 bugfix.
+		self.assertElementValueByName("favourites", inpFav)
+		self.assertElementValueByName("achievements", inpAch)
+		self.assertElementValueByName("hobby", inpHob)
 		
+		self.assertElementValueById("anketa_status-selector", "new")
+		# change anketa status and save it.
 		
+		# BUG HERE!! not working.
+		self.fillElementById("anketa_status-selector", "progress", False)
+		
+		self.clickElementByName("update-person")
+		
+		self.assertBodyTextPresent(u"Участник успешно сохранён")
+		#xtest_common.gotoBackToAnketaView(self) TODO: bug #540
+		self.gotoUrlByLinkText(u"Вернуться к просмотру")
+		
+		self.assertTextPresent("//span[@class='ankStatus new']", u"Ждет собес.")
+	
 	

@@ -24,6 +24,9 @@ def gotoAdminPanel(test):
 def getAuthLink(test):
 	return test.getUrlByLinkText(u"Авторизация")
 
+def gotoBackToAnketaView(test):
+	test.gotoUrlByLinkText(u"Вернуться к просмотру участника")
+
 def getAdminPanelLink(test):
 	return test.getUrlByLinkText(u"Админка")
 
@@ -165,7 +168,7 @@ def addCommentToPerson(test):
 
 	test.clickElementByName("update-person_comment")
 	test.assertBodyTextPresent(u"Комментарий успешно сохранён")
-	test.gotoUrlByLinkText(u"Вернуться к просмотру участника")
+	gotoBackToAnketaView(test)
 	return commentText
 	
 def editCommentToPerson(test, commentLinkId):
@@ -175,8 +178,27 @@ def editCommentToPerson(test, commentLinkId):
 	newCommentText = test.fillElementByName("comment_text", newCommentText)
 	test.clickElementByName("update-person_comment")
 	test.assertBodyTextPresent(u"Комментарий успешно сохранён")
-	test.gotoUrlByLinkText(u"Вернуться к просмотру участника")
+	gotoBackToAnketaView(test)
 	return newCommentText
+
+def setTestNotifications(test, emailString, adminLogin, adminPass):
+	performLoginAsAdmin(test, adminLogin, adminPass)
+	gotoAdminPanel(test)
+	test.gotoUrlByLinkText(u"Уведомления")
+
+	test.fillElementById("edtg_user-change", emailString);
+	test.fillElementById("edtg_content-change", emailString);
+
+	test.fillElementById("edtg_reg-html", emailString);
+	test.fillElementById("edtg_reg-plain", emailString);
+
+	test.fillElementById("edtg_reg-test-plain", emailString);
+	test.fillElementById("edtg_reg-test-html", emailString);
+	
+	test.clickElementById("editTag")
+	performLogout(test)
+	
+	
 	
 
 
