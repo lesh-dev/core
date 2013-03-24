@@ -150,7 +150,7 @@
     else if(@$_GET["mode"]=="mailer" )
     {
         $editfile = "{$SETTINGS["datadir"]}cms/mailer.conf";
-        include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
+        include(translate('<! edit/tag `edit`,`view`,`installed` `longtext` !>'));
     }
     /*
     // Here is a dead code (mode is unreferenced in interface)

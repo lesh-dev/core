@@ -115,7 +115,6 @@ function xcms_get_key_or($list, $key, $def_value = '')
 
 function getTagList($file)
 {
-    global $getTagList_output;
     $filec = file_get_contents($file);
     $filec = str_replace("\r", "", $filec);
     if(substr($filec, 0, 5) != "<?php")
@@ -137,7 +136,6 @@ function getTagList($file)
     {
         $taglist = array();
         include($file);
-        $getTagList_output = $tagname;
         $taglist["_NAME"]=$tagname;
         return $taglist;
     }
@@ -183,12 +181,32 @@ function getList($filename)
     return $rez;
 }
 
+
+function xcms_draw_text_tag($id, $value, $is_longtext, $placeholder = "")
+{
+    if ($is_longtext)
+    {
+        $text_value = str_replace("|", "\n", $value);
+        ?>
+        <textarea name="<?php echo $id; ?>" id="<?php echo $id; ?>"
+            placeholder="<?php echo htmlspecialchars($placeholder); ?>"
+            class="key-value" ><?php echo htmlspecialchars($text_value); ?></textarea><?php
+    }
+    else
+    {?>
+        <input name="<?php echo $id; ?>" id="<?php echo $id; ?>"
+            placeholder="<?php echo htmlspecialchars($placeholder); ?>"
+            value="<?php echo htmlspecialchars($value); ?>" class="key-value" /><?php
+    }
+}
+
 /**
   * WARNING: This function contains deprecated code
-  * secyrityflags:
-  * -newkey - disable newkey option
+  * flags:
+  * newkey - disable newkey option
+  * longtext - use textareas instead of text input
   **/
-function editlist_form($file, $addparams, $skip_params = "", $security_flags = "")
+function xcms_editlist_form($file, $skip_params = "", $flags = "")
 {
     global $SETTINGS;
     $list = xcms_get_list($file);
@@ -197,32 +215,41 @@ function editlist_form($file, $addparams, $skip_params = "", $security_flags = "
     {
         foreach ($_POST as $key=>$value)
         {
-            if($value == "_FORGET")
+            $key_name = substr($key, 5);
+            if ($value == "_FORGET")
             {
-                unset($list[substr($key, "5")]);
+                unset($list[$key_name]);
                 continue;
             }
             if($value == "__FORGET")
             {
-                unset($list[substr($key, "5")]);
+                unset($list[$key_name]);
                 continue;
             }
-            if(strstr($key, "edtg_"))
+            if (strstr($key, "edtg_"))
             {
-                $list[substr($key, "5")] = stripslashes($value);
+                // handle windows
+                $value = str_replace("\r\n", "|", $value);
+                // linux
+                $value = str_replace("\n", "|", $value);
+                // and old MacOS
+                $value = str_replace("\r", "|", $value);
+                $list[$key_name] = $value;
             }
         }
         if(@$_POST["newkey"])
         {
-            if(!strstr($security_flags, "-newkey"))
+            if (!strstr($flags, "newkey"))
                 $list[$_POST["newkey"]] = @$_POST["newvalue"];
         }
         xcms_save_list($file, $list);
         $list = xcms_get_list($file);
     }
+    $is_longtext = (strstr($flags, "longtext") !== false);
+
     ?>
 
-    <form action="<?php echo $addparams; ?>" method="post">
+    <form action="" method="post">
         <table class="key-value"><?php
     foreach ($list as $key=>$value)
     {
@@ -230,45 +257,47 @@ function editlist_form($file, $addparams, $skip_params = "", $security_flags = "
             continue;
 
         $id = "edtg_$key";
-        if(file_exists("{$SETTINGS["engine_dir"]}taglist/$key"))
+        if (file_exists("{$SETTINGS["engine_dir"]}taglist/$key"))
         {
-            $getTagList_output = "sss";
-            $taglist = getTagList("{$SETTINGS["engine_dir"]}taglist/$key");
-            echo "<tr><td>".$taglist["_NAME"]."</td><td>";
-            if(count($taglist)>1)
+            $taglist = getTagList("{$SETTINGS["engine_dir"]}taglist/$key"); ?>
+
+            <tr><td><?php echo $taglist["_NAME"]; ?></td><td><?php
+
+            if (count($taglist) > 1)
             {?>
+
                 <select name="<?php echo $id; ?>" id="<?php echo $id; ?>" class="key-value"><?php
-                foreach($taglist as $vtag=>$tag)
+                foreach ($taglist as $vtag=>$tag)
                 {
-                    if($vtag == "_NAME") continue;
-                    if($tag == $value) echo "<option selected value=\"$tag\">$vtag</option>";
+                    if ($vtag == "_NAME") continue;
+                    $vtag = htmlspecialchars($vtag);
+                    $tag = htmlspecialchars($tag);
+                    if ($tag == $value) echo "<option selected value=\"$tag\">$vtag</option>";
                     else echo "<option value=\"$tag\">$vtag</option>";
                 }
                 echo "</select>";
             }
             else
-            {?>
-                <input name="<?php echo $id; ?>" id="<?php echo $id; ?>"
-                    value="<?php echo $value; ?>" class="key-value" /><?php
-            }?>
+                xcms_draw_text_tag($id, $value, $is_longtext); ?>
+
             </td></tr>
             <?php
         }
         else
         {?>
-            <tr><td><?php echo $key; ?></td><td>
-                <input name="<?php echo $id; ?>" id="<?php echo $id; ?>"
-                    value="<?php echo $value; ?>" class="key-value" />
+            <tr><td><?php echo $key; ?></td><td><?php
+            xcms_draw_text_tag($id, $value, $is_longtext); ?>
             </td></tr><?php
         }
     }
-    if (!strstr($security_flags, "-newkey"))
+    if (!strstr($flags, "newkey"))
     {?>
         <tr>
             <td><input name="newkey" id="newkey"
                 class="key-name" placeholder="Новое поле" ></td>
-            <td><input name="newvalue" id="newvalue"
-                class="key-value" placeholder="Новое значение"></td>
+            <td><?php
+                xcms_draw_text_tag("newvalue", "", $is_longtext, "Новое значение");
+            ?></td>
         </tr><?php
     }
     ?>

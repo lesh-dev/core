@@ -251,11 +251,15 @@ table.key-value {
     font-size: 9pt;
 }
 
+table.key-value td {
+    vertical-align: top;
+}
+
 input.key-name {
     width: 150px;
 }
 
-input.key-value {
+input.key-value, textarea.key-value {
     width: 700px;
 }
 
