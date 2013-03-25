@@ -180,7 +180,7 @@
             $anketa_status = "new"; // default
 
         $hr_status = $statuses[$anketa_status];
-        return "<span class=\"ankStatus $anketa_status\">$hr_status</span>";
+        return "<span class=\"ankStatus $anketa_status\" id=\"anketa_status-span\">$hr_status</span>";
     }
 
     function xsm_draw_exam_status($exam)
