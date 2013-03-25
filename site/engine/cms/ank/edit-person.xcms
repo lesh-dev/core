@@ -108,7 +108,7 @@ function xsm_edit_person()
     ?>
     <form method="post" action="edit-person"><?php
         NEW_xsm_edit_operations('person', $person_id, 'Вернуться к просмотру');?>
-        <input type="hidden" name="person_id" value="<?php echo $person_id; ?>" />
+        <input type="hidden" id="person_id-input" name="person_id" value="<?php echo $person_id; ?>" />
         <table summary="Участник" class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Участник</td>
@@ -127,7 +127,7 @@ function xsm_edit_person()
                 <?php
                 $ft = xcms_get_key_or($field_types, $key);
                 if ($ft == "textarea") {?>
-                    <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
+                    <textarea class="ankEdit" name="<?php echo $key; ?>" id="<?php echo $key; ?>-text"><?php
                         echo htmlspecialchars($value); ?></textarea><?php
                 } elseif ($ft == "checkbox") {
                     // КОСТЫЛЬ! checkbox-овое поле должно начинаться со слова 'is_'
