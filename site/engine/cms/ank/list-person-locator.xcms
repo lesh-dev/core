@@ -37,16 +37,16 @@
 // вывод активных участников
 function xsm_show_all_person_list()
 {
-    $show_status = xcms_get_key_or($_POST, "show_anketa_status", "active");
-
-    global $show_is_teacher;// = xcms_get_key_or($_POST, "show_is_teacher");
-    global $show_is_student;// = xcms_get_key_or($_POST, "show_is_student");
+    global $show_anketa_status;
+    global $show_is_teacher;
+    global $show_is_student;
 
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
 
     $show_statuses = xsm_get_person_show_statuses();
 
-    if (!array_key_exists($show_status, $show_statuses)) $show_status = "active";
+    if (!array_key_exists($show_anketa_status, $show_statuses))
+        $show_anketa_status = "active";
 
     $db = xdb_get();
     $db->createFunction('LIKE', 'xdb_like', 2);
@@ -58,24 +58,24 @@ function xsm_show_all_person_list()
     if ($show_is_student == "student")
         $cond .= " AND ( is_student = 'student' )";
 
-    if ($show_status == "active")
+    if ($show_anketa_status == "active")
         $cond .=
             " AND ( (anketa_status = 'processed') ".
             " OR (anketa_status = 'cont') )";
-    elseif ($show_status == "not-decl")
+    elseif ($show_anketa_status == "not-decl")
         $cond .=
             " AND ( (anketa_status <> 'duplicate')".
             " AND (anketa_status <> 'spam')".
             " AND (anketa_status <> 'declined') )";
-    elseif ($show_status == "not-old")
+    elseif ($show_anketa_status == "not-old")
         $cond .=
             " AND ( (anketa_status <> 'duplicate') ".
             " AND (anketa_status <> 'spam') ".
             " AND (anketa_status <> 'old') )";
-    elseif ($show_status == "all")
+    elseif ($show_anketa_status == "all")
         $cond .= "";
     else
-        $cond .= " AND ( anketa_status = '$show_status' )";
+        $cond .= " AND ( anketa_status = '$show_anketa_status' )";
 
     $name_filter_cond = xsm_person_name_filter($db, $show_name_filter);
     if (strlen($name_filter_cond))
