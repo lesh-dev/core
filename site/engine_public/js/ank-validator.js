@@ -53,6 +53,7 @@ function WarnPersonal(aWarning) {
     CheckEmpty("#favourites-text", "любимые предметы", aWarning);
     CheckEmpty("#achievements-text", "достижения", aWarning);
     CheckEmpty("#hobby-text", "хобби", aWarning);
+    CheckEmpty("#lesh_ref-text", "откуда Вы узнали о школе", aWarning);
 }
 
 function MakeList(aList) {
