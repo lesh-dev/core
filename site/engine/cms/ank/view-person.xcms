@@ -224,6 +224,7 @@ function xsm_print_person_ank_data($db, $person)
     $favourites = xcms_html_wrap_by_crlf(htmlspecialchars($person["favourites"]));
     $achievements = xcms_html_wrap_by_crlf(htmlspecialchars($person["achievements"]));
     $hobby = xcms_html_wrap_by_crlf(htmlspecialchars($person["hobby"]));
+    $lesh_ref = xcms_html_wrap_by_crlf(htmlspecialchars($person["lesh_ref"]));
 
     //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
     $user_agent = htmlspecialchars($person["user_agent"]);
@@ -245,6 +246,7 @@ function xsm_print_person_ank_data($db, $person)
     xsm_draw_person_longtextval('main', 'Любимые предметы', $favourites);
     xsm_draw_person_longtextval('main', 'Достижения', $achievements);
     xsm_draw_person_longtextval('main', 'Хобби', $hobby);
+    xsm_draw_person_longtextval('main', 'Откуда узнали о школе', $lesh_ref);
 
     xsm_draw_person_comments($db, $person_id);
 }

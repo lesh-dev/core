@@ -29,6 +29,7 @@ function xsm_get_person_fields()
         "favourites"=>"Любимые предметы",
         "achievements"=>"Достижения",
         "hobby"=>"Хобби",
+        "lesh_ref"=>"Откуда узнали о школе",
 
         "user_agent"=>"UserAgent",
 
@@ -43,6 +44,7 @@ function xcms_get_person_field_types()
         "favourites"=>"textarea",
         "achievements"=>"textarea",
         "hobby"=>"textarea",
+        "lesh_ref"=>"textarea",
 
         "is_teacher"=>"checkbox",
         "is_student"=>"checkbox",

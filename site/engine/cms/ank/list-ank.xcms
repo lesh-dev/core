@@ -159,49 +159,7 @@ function xsm_show_ank_list()
             <td class="ankList"><?php echo $person_created; ?></td>
             <td class="ankList"><?php echo xsm_draw_person_status($person); ?></td>
         </tr>
-        <?php if (false) {?>
-
-        <!-- email, profile and skype -->
-        <?php if (!empty($email) || !empty($social_profile) || !empty($skype)) { ?>
-        <tr><td class="ankList"><?php if (!empty($email)) {
-            ?><span class="ankListField">E-Mail</span>:
-                <a href="mailto:<?php echo $email; ?>" ><?php echo $email; ?></a><?php
-            }
-            if (!empty($social_profile)) {
-                if (!empty($email)) echo ', '; ?>
-                <span class="ankListField">Профиль</span>:
-                    <a href="<?php echo $social_profile; ?>"><?php echo $social_profile; ?></a><?php
-            }
-            if (!empty($skype)) {
-                if (!empty($email) || !empty($social_profile)) echo ', '; ?>
-                <span class="ankListField">Skype</span>: <?php echo $skype; ?>
-            <?php
-            }?>
-        </td></tr>
-        <?php } ?>
-        <!--  other stuff -->
-        <?php if (!empty($favourites)) { ?>
-            <tr><td class="ankList"><span class="ankListField">Любимые предметы</span>:
-                <?php echo $favourites; ?></td></tr>
-        <?php } ?>
-        <?php if (!empty($achievements)) { ?>
-        <tr><td class="ankList"><span class="ankListField">Достижения</span>:
-            <?php echo $achievements; ?></td></tr>
-        <?php } ?>
-        <?php if (!empty($hobby)) { ?>
-            <tr><td class="ankList"><span class="ankListField">Хобби</span>:
-                <?php echo $hobby; ?></td></tr>
-        <?php } ?>
-        <?php if (!empty($person_comment)) { ?>
-        <tr><td class="ankList notes"><span class="ankListField">Заметки</span>:
-            <?php echo $person_comment; ?></td></tr>
-        <?php } ?>
-
-        <?php } // if false
-        ?>
-
         <?php
-
         }
     ?>
     </table>
