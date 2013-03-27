@@ -1,4 +1,6 @@
 <# auth/ #admin #>
+<# auth/format #>
+
 <?php
     require_once("$engine_dir/sys/auth.php");
     require_once("$engine_dir/sys/groups.php");
@@ -42,47 +44,6 @@
         );
 
         return $notify_result ? null : "Не удалось послать оповещение пользователю. ";
-    }
-
-    function xcmst_draw_privileges($user, $read_only = false)
-    {?>
-        <h3>Привилегии</h3>
-        <?php
-        foreach(xcms_all_groups() as $group => $title)
-        {
-            $attrs = "";
-            if ($user and $user->check_rights($group, false))
-                $attrs .= " checked=\"checked\" ";
-            if ($read_only)
-                $attrs .= " disabled=\"disabled\" ";
-            echo "<div><input $attrs type=\"checkbox\" name=\"group_$group\" id=\"group_$group\" />$title</div>\n";
-        }
-    }
-
-    function xcmst_input_attrs_from_post($key, $placeholder = "")
-    {
-        $attrs = "class=\"admin-medium\" id=\"$key\" name=\"$key\" value=\"".
-            htmlspecialchars(xcms_get_key_or($_POST, $key))."\"";
-        if (!empty($placeholder))
-            $attrs .= " placeholder=\"$placeholder\" ";
-        echo $attrs;
-    }
-
-    function xcmst_input_attrs_from_user($user, $key, $read_only = false, $placeholder = "")
-    {
-        $attrs = "";
-        if ($read_only)
-            $attrs .= " readonly=\"readonly\" ";
-        if ($placeholder)
-            $attrs .= " placeholder=\"".htmlspecialchars($placeholder)."\" ";
-        echo "class=\"admin-medium\" id=\"$key\" name=\"$key\" $attrs value=\"".
-            htmlspecialchars($user->param($key))."\"";
-    }
-
-    function xcmst_checkbox_attrs_from_post($key)
-    {
-        echo "id=\"$key\" name=\"$key\" ".
-            xcms_checkbox_attr(xcms_get_key_or($_POST, $key));
     }
 
     function xcmst_draw_user_create_form()
