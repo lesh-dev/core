@@ -104,8 +104,11 @@ if [ -r "$DEST_DB" ]; then
     sudo cp $VERBOSE_COPY "$DEST_DB" $TEMP_DB
 fi
 
-# double-check that we are not doing something awful.
-if ! [ -z "$DEST" ]; then
+# double-check that we are not doing something awful:
+# ensure that DEST with removed slashes is not empty
+# to avoid 'sudo rm -rf /'
+DEST_CHECK="` echo -n $DEST | sed -e 's:/::g' `"
+if ! [ -z "$DEST_CHECK" ]; then
     echo "Cleaning destination directory $DEST"
     sudo rm -rf "$DEST/{doc,$DEST_CONT,fizlesh.ru-design,engine,engine_public}"
 else
@@ -116,6 +119,8 @@ fi
 echo "Copying all stuff to destination. "
 sudo cp -a $VERBOSE_COPY ./site/* "$DEST/"
 
+# need to remove destination, otherwise it will be nested
+sudo rm -rf "$DEST/$DEST_CONT"
 sudo cp -a $VERBOSE_COPY $CONT_DIR "$DEST/$DEST_CONT"
 
 VERSION="`tools/publish/version.sh`-local"
