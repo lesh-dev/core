@@ -10,9 +10,9 @@
     if ($f)
     {
         fputs($f,
-            '<div class="newstitle"><a href="<STAMP>"><DATE>. Header</a></div>'."\n".
-            '<p class="text">text</p>'."\n".
-            '<div class="signature"><LOGIN></div>');
+            '<div class="newstitle">@@DATE@. Заголовок новости</div>'."\n".
+            '<p class="text">Текст новости</p>'."\n".
+            '<div class="signature">@@AUTHOR@</div>');
         fclose($f);
     }
     else
