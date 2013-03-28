@@ -45,6 +45,7 @@ function xsm_notify_person_edit($person)
     $diff_array = xcms_array_diff($person, $old_person);
 
     $html_content = ""; // @@TABLE-CONTENT@
+    // some common code here that can be reused
     foreach ($diff_array as $diff)
     {
         $key = $diff['key'];
@@ -74,20 +75,19 @@ function xsm_notify_person_edit($person)
         $cur_row_html = str_replace("@@NEW-VALUE@", htmlspecialchars($new_value), $cur_row_html);
         $html_content .=  $cur_row_html;
     }
-    $table_title = "Изменения в анкете Участника";
+    $full_name = xsm_fio($person);
+    $table_title = 'Товарищ <span style="color: #0000ff">'.htmlspecialchars($full_name).'</span> изменился';
+
     $mail_msg_html = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg_html);
     $mail_msg_html = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg_html);
-
-    $mail_group_html = "reg-html";
 
     $addr_from = "noreply@fizlesh.ru";
     $name_from = "FizLesh XSM";
 
-    $full_name = xsm_fio($person);
     $full_name_tr = xcms_transliterate($full_name);
     $subject = "[FizLesh-XSM] Changed: $full_name_tr";
 
-    xcms_send_notification($mail_group_html, NULL, $subject, "This message is in HTML format.\r\n", $mail_msg_html);
+    xcms_send_notification("reg-html", NULL, $subject, "This message is in HTML format.\r\n", $mail_msg_html);
 }
 
 function xsm_edit_person()
