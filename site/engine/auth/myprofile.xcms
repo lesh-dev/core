@@ -16,9 +16,9 @@
     }
     ?>
     <form method="post">
-        <div><span class="user-label">Настоящее имя:</span><input
+        <div><span class="user-label">Настоящее имя</span><input
             <?php xcmst_input_attrs_from_user($user, 'name', false, "Вася Пупкин"); ?> /></div>
-        <div><span class="user-label">EMail:</span><input
+        <div><span class="user-label">EMail</span><input
             <?php xcmst_input_attrs_from_user($user, 'email', true, "user@example.com"); ?> /></div>
 
         <input type="submit" name='update_me' id="update_me" value="Обновить мои данные" />

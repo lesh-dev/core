@@ -16,10 +16,16 @@
             <a class="h-menu-link" href="?action=create_user<?php echo $preface;?>">Создать пользователя</a>
         </div>
         <?php
-            foreach($u->user_list() as $user)
+            $uid = 0;
+            foreach($u->user_list() as $login)
             {
-                $activeness = ($user == $target_user) ? "menu-active" : "";
-                echo "<a class=\"user-list $activeness\" href=\"?user=$user$preface\">$user</a>\n";
+                $activeness = ($login == $target_user) ? "menu-active" : "";
+                $user = $u->su($login);
+                $name = htmlspecialchars($user->param("name")); ?>
+                <a class="user-list <?php echo $activeness; ?>" href="?user=<?php echo $login.$preface; ?>"><span
+                    class="user-login" id="uid-<?php echo $uid; ?>"><?php echo $login; ?></span><span
+                    id="uname-<?php echo $uid; ?>"><?php echo $name; ?></span></a><?php
+                $uid++;
             }
         ?>
         </div><?php
@@ -29,7 +35,7 @@
     {
         // TODO: this template should be taken from file
         $notify_result = xcms_send_notification(
-            "developers",
+            "user-change",
             array($email),
             "Welcome to XCMS!",
 
@@ -52,16 +58,16 @@
         ?>
         <form method="post" action="?<?php echo $preface; ?>" >
             <h3>Учётные данные</h3>
-            <div><span class="user-label">Логин:</span> <input <?php xcmst_input_attrs_from_post("login", "vasya-pupkin"); ?> /></div>
+            <div><span class="user-label">Логин</span> <input <?php xcmst_input_attrs_from_post("login", "vasya-pupkin"); ?> /></div>
             <div><span class="user-help-label">Разрешены латинские буквы, цифры,
                 а также дефис (-), подчёркивание (_), точка (.) и собака (@)</span></div>
-            <div><span class="user-label">Пароль:</span>
+            <div><span class="user-label">Пароль</span>
                 <input type="password" <?php xcmst_input_attrs_from_post("password", 'Sup3r-P@ssw0rd'); ?>/></div>
-            <div><span class="user-label">Пароль (ещё раз):</span>
+            <div><span class="user-label">Пароль (ещё раз)</span>
                 <input type="password" <?php xcmst_input_attrs_from_post("password_confirm"); ?> /></div>
-            <div><span class="user-label">Настоящее имя:</span>
+            <div><span class="user-label">Настоящее имя</span>
                 <input <?php xcmst_input_attrs_from_post("name", "Вася Пупкин"); ?> /></div>
-            <div><span class="user-label">Электропочта:</span>
+            <div><span class="user-label">EMail</span>
                 <input <?php xcmst_input_attrs_from_post("email", "user@example.com"); ?> /></div>
             <div><span class="user-label">Оповестить пользователя</span>
                 <input type="checkbox" <?php xcmst_checkbox_attrs_from_post("notify_user"); ?> /></div>
@@ -86,19 +92,19 @@
         <form method="post">
         <h3>Учётные данные</h3>
 
-        <div><span class="user-label">Логин:</span><?php echo $user->login(); ?></div>
+        <div><span class="user-label">Логин</span><span id="login"><?php echo $user->login(); ?></span></div>
         <div><span class="user-label">Создал</span><?php echo $user->param('creator').", $cd"; ?></div>
 
-        <div><span class="user-label">Настоящее имя:</span><input
+        <div><span class="user-label">Настоящее имя</span><input
             <?php xcmst_input_attrs_from_user($user, 'name', $read_only, "Вася Пупкин"); ?> /></div>
 
-        <div><span class="user-label">Электропочта:</span><input
+        <div><span class="user-label">EMail</span><input
             <?php xcmst_input_attrs_from_user($user, 'email', $read_only, "user@example.com"); ?> /></div>
         <?php
         xcmst_draw_privileges($user, $read_only);
         if ($read_only)
         {?>
-            <div>Свой собственный профиль Вы можете отредактировать
+            <div style="padding-top: 10px">Свой собственный профиль Вы можете отредактировать
             <a <?php echo xcms_href(array('mode'=>'myprofile', 'ref'=>'ladmin')); ?> >здесь</a>.</div><?php
         }
         else
