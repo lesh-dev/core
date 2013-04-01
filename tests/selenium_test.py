@@ -211,6 +211,13 @@ class SeleniumTest:
 		except NoSuchElementException:
 			self.failTest(u"Cannot find URL with name '" + userSerialize(linkName) + "'. ")
 
+	def gotoUrlByPartialLinkText(self, linkName):
+		try:
+			link = self.getUrlByLinkText(linkName, ["partial"])
+			self.gotoSite(link, linkName)
+		except NoSuchElementException:
+			self.failTest(u"Cannot find URL with name '" + userSerialize(linkName) + "'. ")
+
 	def gotoUrlByLinkId(self, linkId):
 		href = self.getElementById(linkId).get_attribute("href")
 		self.gotoSite(href, linkId)
@@ -392,12 +399,16 @@ class SeleniumTest:
 			if isVoid(stringOrList):
 				raise RuntimeError("Empty param passed to " + methodName)
 
-	def getUrlByLinkText(self, urlText):
+	def getUrlByLinkText(self, urlText, optionList = []):
 		self.checkEmptyParam(urlText, "getUrlByLinkText");
+		searchMethod = self.m_driver.find_element_by_link_text
+		if "partial" in optionList:
+			searchMethod = self.m_driver.find_element_by_partial_link_text
+		
 		if isList(urlText):
 			for urlName in urlText:
 				try:
-					url = self.m_driver.find_element_by_link_text(urlName)
+					url = searchMethod(urlName)
 					return url.get_attribute("href");
 				except NoSuchElementException:
 					self.logAdd("Tried to find url by name '" + urlName + "', not found. ")
@@ -407,15 +418,15 @@ class SeleniumTest:
 				# here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
 				msg = u"Cannot find URL by link texts: '" + userSerialize(urlText) + "' on page '" + self.curUrl() + "'. "
 				self.failTestWithItemNotFound(msg)
-		else:		
+		else: # single link
 			try:
-				url = self.m_driver.find_element_by_link_text(urlText)
+				url = searchMethod(urlText)
 				return url.get_attribute("href");
 			except NoSuchElementException:
 				# here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
 				msg = u"Cannot find URL by link text: '" + userSerialize(urlText) + "' on page '" + self.curUrl() + "'. "
 				self.failTestWithItemNotFound(msg)
-				
+
 	def gotoIndexedUrlByLinkText(self, urlText, index):
 		try:
 			urls = self.m_driver.find_elements_by_xpath("//a[text()='" + urlText + "']")

@@ -68,6 +68,7 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		inpFav = random_crap.randomCrap(20)
 		inpAch = random_crap.randomCrap(15)
 		inpHob = random_crap.randomCrap(10)
+		inpSource = random_crap.randomCrap(10)
 		
 		inpLastName = self.fillElementById("last_name-input", inpLastName)
 		
@@ -85,6 +86,7 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		inpFav = self.fillElementById("favourites-text", inpFav)
 		inpAch = self.fillElementById("achievements-text", inpAch)
 		inpHob = self.fillElementById("hobby-text", inpHob)
+		inpSource = self.fillElementById("lesh_ref-text", inpSource)
 		
 		self.clickElementById("submit-anketa-button")
 		

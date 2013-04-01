@@ -141,7 +141,10 @@ def createNewUser(test, conf, login, email, password, name, auxParams = []):
 	
 	# enter user profile
 	print "entering user profile. "
-	test.gotoUrlByLinkText(inpLogin)
+	
+	profileLink = inpLogin
+	# TODO, BUG: make two separate links
+	test.gotoUrlByPartialLinkText(profileLink)
 
 	test.assertBodyTextPresent(u"Учётные данные")
 	test.assertBodyTextPresent(u"Привилегии")
