@@ -106,7 +106,9 @@ function xsm_edit_course()
                 <?php
             }?>
         </table><?php
-        xsm_edit_operations('course', 'course', $course_id, 'Вернуться к списку курсов');?>
+        xsm_edit_operations_listmode('course', $course_id, 'Вернуться к списку курсов',
+            xcms_url(array('school_id'=>$school_id)));
+        ?>
     </form>
     <?php
 }
