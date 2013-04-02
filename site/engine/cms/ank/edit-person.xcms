@@ -76,7 +76,7 @@ function xsm_notify_person_edit($person)
         $html_content .=  $cur_row_html;
     }
     $full_name = xsm_fio($person);
-    $table_title = 'Товарищ <span style="color: #0000ff">'.htmlspecialchars($full_name).'</span> изменился';
+    $table_title = 'Изменения в анкете: <span style="color: #0000ff">'.htmlspecialchars($full_name).'</span>';
 
     $mail_msg_html = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg_html);
     $mail_msg_html = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg_html);
