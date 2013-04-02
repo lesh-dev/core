@@ -26,6 +26,6 @@ xcms_open_renamed_pages.XcmsOpenRenamedPages(baseUrl, args),
 xcms_unittests.XcmsUnitTests(baseUrl, args),
 xcms_version_check.XcmsVersionCheck(baseUrl, args),
 xcms_xsm_anketa_fill.XcmsXsmAnketaFill(baseUrl, args),
-xcms_xsm_anketa_wrong_fill.XcmsXsmAnketaWrongFill(baseUrl, args)
+#xcms_xsm_anketa_wrong_fill.XcmsXsmAnketaWrongFill(baseUrl, args)
 ]
 

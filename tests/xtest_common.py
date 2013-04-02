@@ -143,7 +143,7 @@ def createNewUser(test, conf, login, email, password, name, auxParams = []):
 	print "entering user profile. "
 	
 	profileLink = inpLogin
-	# TODO, BUG: make two separate links
+	# TODO, SITE BUG: make two separate links
 	test.gotoUrlByPartialLinkText(profileLink)
 
 	test.assertBodyTextPresent(u"Учётные данные")
