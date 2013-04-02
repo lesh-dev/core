@@ -32,13 +32,13 @@ function xcmst_input_attrs_from_user($user, $key, $read_only = false, $placehold
         $attrs .= " readonly=\"readonly\" ";
     if ($placeholder)
         $attrs .= " placeholder=\"".htmlspecialchars($placeholder)."\" ";
-    echo "class=\"admin-medium\" id=\"$key\" name=\"$key\" $attrs value=\"".
+    echo "class=\"admin-medium\" id=\"$key-input\" name=\"$key\" $attrs value=\"".
         htmlspecialchars($user->param($key))."\"";
 }
 
 function xcmst_checkbox_attrs_from_post($key)
 {
-    echo "id=\"$key\" name=\"$key\" ".
+    echo "id=\"$key-checkbox\" name=\"$key\" ".
         xcms_checkbox_attr(xcms_get_key_or($_POST, $key));
 }
 

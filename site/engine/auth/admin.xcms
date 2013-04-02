@@ -92,7 +92,7 @@
         <form method="post">
         <h3>Учётные данные</h3>
 
-        <div><span class="user-label">Логин</span><span id="login"><?php echo $user->login(); ?></span></div>
+        <div><span class="user-label">Логин</span><span id="login-span"><?php echo $user->login(); ?></span></div>
         <div><span class="user-label">Создал</span><?php echo $user->param('creator').", $cd"; ?></div>
 
         <div><span class="user-label">Настоящее имя</span><input
