@@ -61,9 +61,9 @@ class XcmsXsmAnketaWrongFill(SeleniumTest):
 		inpSkype = random_crap.randomText(12)
 		inpSocial = random_crap.randomVkontakte()
 		
-		inpFav = random_crap.randomCrap(20)
-		inpAch = random_crap.randomCrap(15)
-		inpHob = random_crap.randomCrap(10)
+		inpFav = random_crap.randomCrap(20, ["multiline"])
+		inpAch = random_crap.randomCrap(15, ["multiline"])
+		inpHob = random_crap.randomCrap(10, ["multiline"])
 		
 		# try fill only surname 
 		inpLastName = self.fillElementById("last_name-input", inpLastName)

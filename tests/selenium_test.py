@@ -4,6 +4,8 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import InvalidElementStateException
+
 from selenium.webdriver.remote.webdriver import WebElement
 
 import random, traceback, sys
@@ -136,16 +138,16 @@ class SeleniumTest:
 		self.shutdown(0)
 		
 	def handleException(self, exc):
-		print "TEST ERROR:", toUnicode(exc.message)
+		print "TEST " + self.getName() + " ERROR:", toUnicode(exc.message)
 		traceback.print_exc()
 		self.shutdown(2)
 				
 	def handleTestFail(self, exc):
-		print "TEST FAILED:", toUnicode(exc.message)
+		print "TEST " + self.getName() + " FAILED:", toUnicode(exc.message)
 		self.shutdown(1)
 
 	def handleTestFatal(self, exc):
-		print "TEST FATALED:", toUnicode(exc.message)
+		print "TEST " + self.getName() + " FATALED:", toUnicode(exc.message)
 		self.shutdown(2)
 
 	def getActionLog(self):
@@ -211,6 +213,13 @@ class SeleniumTest:
 		except NoSuchElementException:
 			self.failTest(u"Cannot find URL with name '" + userSerialize(linkName) + "'. ")
 
+	def gotoUrlByPartialLinkText(self, linkName):
+		try:
+			link = self.getUrlByLinkText(linkName, ["partial"])
+			self.gotoSite(link, linkName)
+		except NoSuchElementException:
+			self.failTest(u"Cannot find URL with name '" + userSerialize(linkName) + "'. ")
+
 	def gotoUrlByLinkId(self, linkId):
 		href = self.getElementById(linkId).get_attribute("href")
 		self.gotoSite(href, linkId)
@@ -256,18 +265,30 @@ class SeleniumTest:
 		return self.getElementByName(name).get_attribute('value')
 		
 	def fillElementById(self, eleId, text, clear = True):
-		self.checkEmptyParam(eleId, "fillElementById")
-		if clear:
-			self.addAction("clear", "element id: '" + eleId + "'")
-			self.getElementById(eleId).clear()
+		try:
+			self.checkEmptyParam(eleId, "fillElementById")
+			if clear:
+				self.addAction("clear", "element id: '" + eleId + "'")
+				self.getElementById(eleId).clear()
 
-		self.addAction("fill", "element id: '" + eleId + "', text: '" + text + "'")
-		#print "sending keys" , text
-		ele = self.getElementById(eleId)
-		#print "got element "
-		#print "dir", dir(ele)
-		ele.send_keys(text)
-		return self.getElementById(eleId).get_attribute('value')
+			self.addAction("fill", "element id: '" + eleId + "', text: '" + text + "'")
+			#print "sending keys" , text
+			ele = self.getElementById(eleId)
+			#print "got element "
+			#print "dir", dir(ele)
+			ele.send_keys(text)
+			return self.getElementById(eleId).get_attribute('value')
+		except InvalidElementStateException as e:
+			self.logAdd("fillElementById failed for id '" + eleId + "':\n" + traceback.format_exc())
+			raise TestError(u"Cannot set element value by id '" + eleId + "', possibly element is read-only.")
+			
+	
+	def setOptionValueById(self, eleId, optValue):
+		try:
+			self.getElementById(eleId).find_element_by_xpath(u"//option[@value='" + optValue + "']").click()
+		except NoSuchElementException:
+			self.logAdd("setOptionValueById failed for id '" + eleId + "':\n" + traceback.format_exc())
+			raise TestError(u"Cannot get drop-down (select) element by id '" + eleId + "'. ")
 
 	def getElementValueById(self, eleId):
 		self.checkEmptyParam(eleId, "getElementValueById")
@@ -287,6 +308,14 @@ class SeleniumTest:
 			return True
 		return False
 
+	def checkElementTextById(self, eleId, text):
+		self.checkEmptyParam(eleId, "checkElementTextById")
+		self.addAction("check-text", "element id: '" + eleId + "', expected: '" + text + "'. ")
+		eleText = self.getElementById(eleId).text
+		if isEqual(eleText, text):
+			return True
+		return False
+
 	def checkElementValueByName(self, name, text):
 		self.checkEmptyParam(name, "checkElementValueByName")
 		self.addAction("check-value", "element name: '" + name + "', expected: '" + text + "'. ")
@@ -294,6 +323,10 @@ class SeleniumTest:
 		if isEqual(eleValue, text):
 			return True
 		return False
+
+	def assertElementTextById(self, eleId, text):
+		if not self.checkElementTextById(eleId, text):
+			raise TestError("Element with id '" + eleId + "' text does not match expected: '" + text + "'. ")
 
 	def assertElementValueById(self, eleId, text):
 		if not self.checkElementValueById(eleId, text):
@@ -392,12 +425,17 @@ class SeleniumTest:
 			if isVoid(stringOrList):
 				raise RuntimeError("Empty param passed to " + methodName)
 
-	def getUrlByLinkText(self, urlText):
+	def getUrlByLinkText(self, urlText, optionList = []):
 		self.checkEmptyParam(urlText, "getUrlByLinkText");
+		searchMethod = self.m_driver.find_element_by_link_text
+		if "partial" in optionList:
+			self.logAdd(u"Search for partial link text '" + userSerialize(urlText) + "'. ")
+			searchMethod = self.m_driver.find_element_by_partial_link_text
+		
 		if isList(urlText):
 			for urlName in urlText:
 				try:
-					url = self.m_driver.find_element_by_link_text(urlName)
+					url = searchMethod(urlName)
 					return url.get_attribute("href");
 				except NoSuchElementException:
 					self.logAdd("Tried to find url by name '" + urlName + "', not found. ")
@@ -407,15 +445,15 @@ class SeleniumTest:
 				# here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
 				msg = u"Cannot find URL by link texts: '" + userSerialize(urlText) + "' on page '" + self.curUrl() + "'. "
 				self.failTestWithItemNotFound(msg)
-		else:		
+		else: # single link
 			try:
-				url = self.m_driver.find_element_by_link_text(urlText)
+				url = searchMethod(urlText)
 				return url.get_attribute("href");
 			except NoSuchElementException:
 				# here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
 				msg = u"Cannot find URL by link text: '" + userSerialize(urlText) + "' on page '" + self.curUrl() + "'. "
 				self.failTestWithItemNotFound(msg)
-				
+
 	def gotoIndexedUrlByLinkText(self, urlText, index):
 		try:
 			urls = self.m_driver.find_elements_by_xpath("//a[text()='" + urlText + "']")

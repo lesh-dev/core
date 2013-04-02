@@ -87,27 +87,29 @@ class XcmsAuthAddNewUser(SeleniumTest):
 
 		xtest_common.gotoAdminPanel(self)
 		# navigate to user profile which is just user login
-		self.gotoUrlByLinkText(inpLogin)
+		# TODO: BUG, make separate links
+		
+		self.gotoUrlByPartialLinkText(inpLogin)
 		self.assertBodyTextPresent(u"Привет, " + inpLogin)
 		
-		nameEle = "param_name"
-		emailEle = "param_email"
+		nameEle = "name"
+		emailEle = "email"
 		
-		currentDisplayName = self.getElementValueByName(nameEle)
+		currentDisplayName = self.getElementValueById(nameEle)
 		if currentDisplayName != inpName:
 			raise selenium_test.TestError("Display name in user profile does not match name entered on user creation. Expected: '" + inpName + "', got '" + currentDisplayName + "'. ")
 
-		currentEMail = self.getElementValueByName(emailEle)
+		currentEMail = self.getElementValueById(emailEle)
 		if currentEMail != inpEMail:
 			raise selenium_test.TestError("User e-mail in user profile does not match e-mail entered on user creation. Expected: '" + inpEMail + "', got '" + currentEMail + "'. ")
 
 		newName = u"Петя Иванов" + random_crap.randomText(6)
 		newEMail = random_crap.randomEmail()
 		
-		newName = self.fillElementByName(nameEle, newName)
+		newName = self.fillElementById(nameEle, newName)
 		
 		print "New user display name is ", newName
-		newEMail = self.fillElementByName(emailEle, newEMail)
+		newEMail = self.fillElementById(emailEle, newEMail)
 		print "New user e-mail is ", newEMail
 		
 		self.clickElementByName("update_me")
@@ -123,11 +125,11 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		self.gotoUrlByLinkText(inpLogin)
 		self.assertBodyTextPresent(u"Привет, " + inpLogin)
 		
-		currentDisplayName = self.getElementValueByName(nameEle)
+		currentDisplayName = self.getElementValueById(nameEle)
 		if currentDisplayName != newName:
 			raise selenium_test.TestError("Display name in user profile does not match changed user name. Expected: '" + newName + "', got '" + currentDisplayName + "'. ")
 
-		currentEMail = self.getElementValueByName(emailEle)
+		currentEMail = self.getElementValueById(emailEle)
 		if currentEMail != newEMail:
 			raise selenium_test.TestError("User e-mail in user profile does not match changed user e-mail. Expected: '" + newEMail + "', got '" + currentEMail + "'. ")
 
