@@ -56,12 +56,12 @@ def randomDigits(length):
 		rs = rs + str(random.choice('0123456789'))
 	return rs
 
-def randomCrap(wordNumber, multiLine = False):
+def randomCrap(wordNumber, crapOptions = []):
 	rs = ""
 	for i in range(0, wordNumber):
 		wordLen = random.randint(3,10)
 		rs = rs + " " + randomWord(wordLen)
-		if multiLine:
-			if random.random() < 0.1:
+		if "multiLine" in crapOptions:
+			if random.random() < 0.2:
 				rs = rs + "\n"
 	return rs

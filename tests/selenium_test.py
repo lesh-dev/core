@@ -275,6 +275,13 @@ class SeleniumTest:
 		#print "dir", dir(ele)
 		ele.send_keys(text)
 		return self.getElementById(eleId).get_attribute('value')
+	
+	def setOptionValueById(self, eleId, optValue):
+		try:
+			self.getElementById(eleId).find_element_by_xpath(u"//option[@value='" + optValue + "']").click()
+		except NoSuchElementException:
+			self.logAdd("setOptionValueById failed for id '" + eleId + "':\n" + traceback.format_exc())
+			raise TestError(u"Cannot get drop-down (select) element by id '" + eleId + "'. ")
 
 	def getElementValueById(self, eleId):
 		self.checkEmptyParam(eleId, "getElementValueById")
@@ -294,6 +301,14 @@ class SeleniumTest:
 			return True
 		return False
 
+	def checkElementTextById(self, eleId, text):
+		self.checkEmptyParam(eleId, "checkElementTextById")
+		self.addAction("check-text", "element id: '" + eleId + "', expected: '" + text + "'. ")
+		eleText = self.getElementById(eleId).text
+		if isEqual(eleText, text):
+			return True
+		return False
+
 	def checkElementValueByName(self, name, text):
 		self.checkEmptyParam(name, "checkElementValueByName")
 		self.addAction("check-value", "element name: '" + name + "', expected: '" + text + "'. ")
@@ -301,6 +316,10 @@ class SeleniumTest:
 		if isEqual(eleValue, text):
 			return True
 		return False
+
+	def assertElementTextById(self, eleId, text):
+		if not self.checkElementTextById(eleId, text):
+			raise TestError("Element with id '" + eleId + "' text does not match expected: '" + text + "'. ")
 
 	def assertElementValueById(self, eleId, text):
 		if not self.checkElementValueById(eleId, text):

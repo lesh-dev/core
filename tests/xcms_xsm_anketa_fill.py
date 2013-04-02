@@ -26,6 +26,41 @@ class XcmsXsmAnketaFill(SeleniumTest):
 	* TODO: remove person from one of schools
 	"""
 	
+	def addCommentsToPerson(self):
+		commentText1 = xtest_common.addCommentToPerson(self)
+		print "Added first comment: ", commentText1
+		self.assertBodyTextPresent(commentText1)
+		
+		commentText2 = xtest_common.addCommentToPerson(self)
+		print "Added second comment: ", commentText2
+		self.assertBodyTextPresent(commentText2)
+		
+		commentText3 = xtest_common.addCommentToPerson(self)
+		print "Added third comment: ", commentText3
+		self.assertBodyTextPresent(commentText3)
+		
+		# and now let's edit one of them.
+		
+		self.gotoIndexedUrlByLinkText(u"Правка", 0)
+		self.gotoUrlByLinkText(u"Вернуться к списку комментов")
+
+		self.gotoIndexedUrlByLinkText(u"Правка", 1)
+		self.gotoUrlByLinkText(u"Вернуться к списку комментов")
+
+		# oh, no! we want to use comment link ids!
+		
+		commentTextNew1 = xtest_common.editCommentToPerson(self, "comment-edit-1")
+		self.assertBodyTextPresent(commentTextNew1)
+
+		commentTextNew3 = xtest_common.editCommentToPerson(self, "comment-edit-3")
+		self.assertBodyTextPresent(commentTextNew3)
+		
+		# check if all new comments are present here, and 2-nd comment left unchanged
+
+		self.assertBodyTextPresent(commentTextNew1, "Comment 1 must change value. ")
+		self.assertBodyTextPresent(commentText2, "Comment should remain unchanged. ")
+		self.assertBodyTextPresent(commentTextNew3, "Comment 3 must change value. ")
+	
 	def run(self):
 		# anketa fill positive test:
 		# all fields are filled with correct values.
@@ -65,10 +100,10 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		inpSkype = random_crap.randomText(12)
 		inpSocial = random_crap.randomVkontakte()
 		
-		inpFav = random_crap.randomCrap(20)
-		inpAch = random_crap.randomCrap(15)
-		inpHob = random_crap.randomCrap(10)
-		inpSource = random_crap.randomCrap(10)
+		inpFav = random_crap.randomCrap(20, ["multiline"])
+		inpAch = random_crap.randomCrap(15, ["multiline"])
+		inpHob = random_crap.randomCrap(10, ["multiline"])
+		inpSource = random_crap.randomCrap(10, ["multiline"])
 		
 		inpLastName = self.fillElementById("last_name-input", inpLastName)
 		
@@ -128,42 +163,9 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		self.assertBodyTextPresent(inpFav)
 		self.assertBodyTextPresent(inpAch)
 		self.assertBodyTextPresent(inpHob)
+		self.assertBodyTextPresent(inpSource)
 		
-		# now let's add some comments to person
-		
-		commentText1 = xtest_common.addCommentToPerson(self)
-		print "Added first comment: ", commentText1
-		self.assertBodyTextPresent(commentText1)
-		
-		commentText2 = xtest_common.addCommentToPerson(self)
-		print "Added second comment: ", commentText2
-		self.assertBodyTextPresent(commentText2)
-		
-		commentText3 = xtest_common.addCommentToPerson(self)
-		print "Added third comment: ", commentText3
-		self.assertBodyTextPresent(commentText3)
-		
-		# and now let's edit one of them.
-		
-		self.gotoIndexedUrlByLinkText(u"Правка", 0)
-		self.gotoUrlByLinkText(u"Вернуться к списку комментов")
-
-		self.gotoIndexedUrlByLinkText(u"Правка", 1)
-		self.gotoUrlByLinkText(u"Вернуться к списку комментов")
-
-		# oh, no! we want to use comment link ids!
-		
-		commentTextNew1 = xtest_common.editCommentToPerson(self, "comment-edit-1")
-		self.assertBodyTextPresent(commentTextNew1)
-
-		commentTextNew3 = xtest_common.editCommentToPerson(self, "comment-edit-3")
-		self.assertBodyTextPresent(commentTextNew3)
-		
-		# check if all new comments are present here, and 2-nd comment left unchanged
-
-		self.assertBodyTextPresent(commentTextNew1, "Comment 1 must change value. ")
-		self.assertBodyTextPresent(commentText2, "Comment should remain unchanged. ")
-		self.assertBodyTextPresent(commentTextNew3, "Comment 3 must change value. ")
+		self.addCommentsToPerson()
 		
 		# now, let's change anketa status to "Ждет собеседования"
 		
@@ -185,16 +187,15 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		self.assertElementValueById("email-input", inpEmail)
 		self.assertElementValueById("skype-input", inpSkype)
 		self.assertElementValueById("social_profile-input", inpSocial)
-		# no ids!!! TODO: wait for #538 bugfix.
-		self.assertElementValueByName("favourites", inpFav)
-		self.assertElementValueByName("achievements", inpAch)
-		self.assertElementValueByName("hobby", inpHob)
+		self.assertElementValueById("favourites-text", inpFav)
+		self.assertElementValueById("achievements-text", inpAch)
+		self.assertElementValueById("hobby-text", inpHob)
+		self.assertElementValueById("lesh_ref-text", inpSource)
 		
 		self.assertElementValueById("anketa_status-selector", "new")
 		# change anketa status and save it.
 		
-		# BUG HERE!! not working.
-		self.fillElementById("anketa_status-selector", "progress", False)
+		self.setOptionValueById("anketa_status-selector", "progress")
 		
 		self.clickElementByName("update-person")
 		
@@ -202,6 +203,6 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		#xtest_common.gotoBackToAnketaView(self) TODO: bug #540
 		self.gotoUrlByLinkText(u"Вернуться к просмотру")
 		
-		self.assertTextPresent("//span[@class='ankStatus new']", u"Ждет собес.")
+		self.assertElementTextById("anketa_status-span", u"Ждёт собес.")
 	
 	
