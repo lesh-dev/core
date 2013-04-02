@@ -125,7 +125,7 @@ function xsm_edit_person_comment()
 
     ?>
     <form method="post" action="edit-person_comment"><?php
-        xsm_person_comment_edit_operations('person_comment', 'person_comment', $person_comment_id, 'Вернуться к списку комментов', $blamed_person_id);?>
+        xsm_person_comment_edit_operations('person_comment', 'person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id);?>
         <input type="hidden" name="person_comment_id" value="<?php echo $person_comment_id; ?>" />
         <input type="hidden" name="blamed_person_id" value="<?php echo $blamed_person_id; ?>" />
         <table summary="Комментарий" class="ankEdit">
@@ -165,7 +165,7 @@ function xsm_edit_person_comment()
                 <?php
             }?>
         </table><?php
-        xsm_person_comment_edit_operations('person_comment', 'person_comment', $person_comment_id, 'Вернуться к списку комментов', $blamed_person_id);?>
+        xsm_person_comment_edit_operations('person_comment', 'person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id);?>
     </form>
     <?php
 }

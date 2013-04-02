@@ -113,7 +113,7 @@
     {
         $key_name = "${table_name}_id";
         $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $redir = ($id == XDB_NEW) ? "$entity$aux_param" : "$entity$aux_param#$table_name$id"; ?>
+        $redir = "$entity$aux_param#$table_name$id"; ?>
         <div class="delete-warning">
             Вы действительно хотите удалить
             <b><?php echo $title; ?></b> с кодом <b><?php echo $id; ?></b>?<br />
@@ -133,7 +133,7 @@
     {
         $key_name = "${table_name}_id";
         $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $redir = ($id == XDB_NEW) ? "$entity$aux_param" : "$entity$aux_param&amp;$key_name=$id"; ?>
+        $redir = "$entity$aux_param&amp;$key_name=$id"; ?>
         <div class="delete-warning">
             Вы действительно хотите удалить
             <b><?php echo $title; ?></b> с кодом <b><?php echo $id; ?></b>?<br />
@@ -144,7 +144,7 @@
             <input type="submit" name="confirm-delete-<?php echo $entity; ?>"
                 value="Таки да, удалить!" class="delete-button"/>
             <a class="linkButton xsm"
-                href="view-<?php echo $redir ?>">Вернуться к просмотру</a>
+                href="view-<?php echo $redir ?>">Вернуться к просмотру <?php echo $title; ?></a>
         </form></div>
         <?php
     }
@@ -154,7 +154,7 @@
     {
         $key_name = "${table_name}_id";
         $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $redir = ($id == XDB_NEW) ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
+        $redir = "$entity$aux_param#$table_name$id";
         $res = xdb_delete($table_name, $id);
         if ($res)
         {?>
@@ -171,7 +171,7 @@
     {
         $key_name = "${table_name}_id";
         $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $redir = ($id == XDB_NEW) ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
+        $redir = "$entity$aux_param#$table_name$id";
         $res = xdb_delete($table_name, $id);
         if ($res)
         {?>
@@ -181,7 +181,7 @@
         {?>
             <p>Не удалось удалить <?php echo $title; ?> [<?php echo $id; ?>] (возможно, есть связанные объекты).<?php
         }?>
-        <a href="list-<?php echo $redir ?>">Вернуться к просмотру</a></p><?php
+        <a href="list-<?php echo $redir ?>">Вернуться к просмотру списка</a></p><?php
     }
 
     function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_cond = '', $attr = '')
