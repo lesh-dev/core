@@ -81,13 +81,8 @@ function xsm_notify_person_edit($person)
     $mail_msg_html = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg_html);
     $mail_msg_html = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg_html);
 
-    $addr_from = "noreply@fizlesh.ru";
-    $name_from = "FizLesh XSM";
-
-    $full_name_tr = xcms_transliterate($full_name);
-    $subject = "[FizLesh-XSM] Changed: $full_name_tr";
-
-    xcms_send_notification("reg-html", NULL, $subject, "This message is in HTML format.\r\n", $mail_msg_html);
+    $subject = "Изменения: $full_name";
+    xcms_send_notification("reg-html", NULL, "db", $subject, "This message is in HTML format.\r\n", $mail_msg_html);
 }
 
 function xsm_edit_person()

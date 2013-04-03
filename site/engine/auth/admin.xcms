@@ -37,16 +37,16 @@
         $notify_result = xcms_send_notification(
             "user-change",
             array($email),
-            "Welcome to XCMS!",
+            "auth",
+            "Добро пожаловать на fizlesh.ru!",
 
             "Добро пожаловать! Для Вас заведён логин и пароль на сайте.\n"
             ."\n"
             ."Ваш логин: $login\n"
-            ."\n"
             ."Ваш пароль: $password\n"
             ."\n"
             ."Если у Вас будут какие-то проблемы, не бойтесь писать "
-            ."на support@fizlesh.ru, все равно его никто не читает.\n"
+            ."на support@fizlesh.ru.\n"
         );
 
         return $notify_result ? null : "Не удалось послать оповещение пользователю. ";

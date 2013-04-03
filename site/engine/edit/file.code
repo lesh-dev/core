@@ -68,6 +68,9 @@
                 $page_alias = xcms_get_key_or($page_info, 'alias');
                 $url_name = $_SERVER["HTTP_HOST"]."/${web_prefix}$page_alias";
                 $page_url = "http://$url_name";
+                $id = $page_alias;
+                if (!strlen($id))
+                    $id = $pageid;
                 $body_html = file_get_contents("{$SETTINGS["engine_dir"]}templates/content-change.html");
                 $body_html = str_replace('@@LOGIN@', $login, $body_html);
                 $body_html = str_replace('@@PAGE-ID@', $pageid, $body_html);
@@ -75,9 +78,11 @@
                 $body_html = str_replace('@@PAGE-ALIAS@', $url_name, $body_html);
                 $body_html = str_replace('@@DIFF@', file_get_contents($diff_name_html), $body_html);
                 $body_html = str_replace('@@NEW-TEXT@', htmlspecialchars($new_text), $body_html);
-                xcms_send_notification("content-change",
+                xcms_send_notification(
+                    "content-change",
                     NULL,
-                    "[XCMS Content] ({$_SERVER["HTTP_HOST"]}) Пользователь $login изменил страницу $pageid",
+                    "cont",
+                    "Пользователь $login изменил страницу $id",
                     $body_plain,
                     $body_html
                 );
