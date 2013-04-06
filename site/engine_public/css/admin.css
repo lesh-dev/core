@@ -139,12 +139,17 @@ a.user-list {
 
 div.user-list {
     float: left;
-    width: 20%;
+    width: 30%;
+}
+
+span.user-login {
+    display: inline-block;
+    width: 120px;
 }
 
 div.user-ops {
     float: right;
-    width: 77%;
+    width: 67%;
 }
 
 div.menuitem-hidden a {
@@ -251,11 +256,15 @@ table.key-value {
     font-size: 9pt;
 }
 
+table.key-value td {
+    vertical-align: top;
+}
+
 input.key-name {
     width: 150px;
 }
 
-input.key-value {
+input.key-value, textarea.key-value {
     width: 700px;
 }
 

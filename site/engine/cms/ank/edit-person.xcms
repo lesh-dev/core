@@ -10,16 +10,19 @@ function xcms_array_diff($new, $old)
     {
         if (!array_key_exists($key, $old))
         {
-            $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>'');
+            if (trim($value) != '')
+                $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>'');
             continue;
         }
         // key exists in both arrays
-        if ($old[$key] != $value)
+        if (trim($old[$key]) != trim($value))
             $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>$old[$key]);
     }
     foreach ($old as $key => $old_value)
     {
-        if (!array_key_exists($key, $new))
+        if (array_key_exists($key, $new))
+            continue;
+        if (trim($old_value) != '')
             $diff[] = array('key'=>$key, 'new'=>'', 'old'=>$old_value);
     }
     return $diff;
@@ -42,6 +45,7 @@ function xsm_notify_person_edit($person)
     $diff_array = xcms_array_diff($person, $old_person);
 
     $html_content = ""; // @@TABLE-CONTENT@
+    // some common code here that can be reused
     foreach ($diff_array as $diff)
     {
         $key = $diff['key'];
@@ -71,20 +75,14 @@ function xsm_notify_person_edit($person)
         $cur_row_html = str_replace("@@NEW-VALUE@", htmlspecialchars($new_value), $cur_row_html);
         $html_content .=  $cur_row_html;
     }
-    $table_title = "Изменения в анкете Участника";
+    $full_name = xsm_fio($person);
+    $table_title = 'Изменения в анкете: <span style="color: #0000ff">'.htmlspecialchars($full_name).'</span>';
+
     $mail_msg_html = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg_html);
     $mail_msg_html = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg_html);
 
-    $mail_group_html = "reg-html";
-
-    $addr_from = "noreply@fizlesh.ru";
-    $name_from = "FizLesh XSM";
-
-    $full_name = xsm_fio($person);
-    $full_name_tr = xcms_transliterate($full_name);
-    $subject = "[FizLesh-XSM] Changed: $full_name_tr";
-
-    xcms_send_notification($mail_group_html, NULL, $subject, "This message is in HTML format.\r\n", $mail_msg_html);
+    $subject = "Изменения: $full_name";
+    xcms_send_notification("reg-html", NULL, "db", $subject, "This message is in HTML format.\r\n", $mail_msg_html);
 }
 
 function xsm_edit_person()
@@ -104,8 +102,8 @@ function xsm_edit_person()
 
     ?>
     <form method="post" action="edit-person"><?php
-        NEW_xsm_edit_operations('person', $person_id, 'Вернуться к просмотру');?>
-        <input type="hidden" name="person_id" value="<?php echo $person_id; ?>" />
+        NEW_xsm_edit_operations('person', $person_id, 'Вернуться к просмотру участника');?>
+        <input type="hidden" id="person_id-input" name="person_id" value="<?php echo $person_id; ?>" />
         <table summary="Участник" class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Участник</td>
@@ -124,8 +122,8 @@ function xsm_edit_person()
                 <?php
                 $ft = xcms_get_key_or($field_types, $key);
                 if ($ft == "textarea") {?>
-                    <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
-                        echo htmlspecialchars($value); ?></textarea/><?php
+                    <textarea class="ankEdit" name="<?php echo $key; ?>" id="<?php echo $key; ?>-text"><?php
+                        echo htmlspecialchars($value); ?></textarea><?php
                 } elseif ($ft == "checkbox") {
                     // КОСТЫЛЬ! checkbox-овое поле должно начинаться со слова 'is_'
                     // и его "установленное" значение (true) соответствует
@@ -144,7 +142,7 @@ function xsm_edit_person()
                 <?php
             }?>
         </table><?php
-        NEW_xsm_edit_operations('person', $person_id, 'Вернуться к просмотру'); ?>
+        NEW_xsm_edit_operations('person', $person_id, 'Вернуться к просмотру участника'); ?>
     </form>
     <?php
 }

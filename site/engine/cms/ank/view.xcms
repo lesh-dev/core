@@ -96,10 +96,10 @@
         }
 
         $addr_from = "reg@fizlesh.ru"; // TODO: remove this spike
-        $name_from = "FizLesh XSM";
+        $name_from = "FizLesh Notificator";
 
-        $full_name_tr = xcms_transliterate($full_name);
-        $subject = "[FizLesh-XSM] New anketa: $full_name_tr";
+        $host = $_SERVER["HTTP_HOST"];
+        $subject = "[xcms-ank] ($host) Новая анкета: $full_name";
 
         $success_html = true;
         $mailer = xcms_get_mailer();
@@ -164,8 +164,6 @@
     else if(@$_GET["aparam"] == "list-person-locator")
         include(translate('<! cms/ank/list-person-locator !>'));
 
-    else if(@$_GET["aparam"] == "edit")
-        include(translate('<! cms/ank/edit-ank !>'));
     else if(@$_GET["aparam"] == "view")
         include(translate('<! cms/ank/list-person !>'));
     else if(@$_GET["aparam"] == "list-person")

@@ -45,6 +45,24 @@
     }
 
     /**
+      * Cuts a substring from UTF-8 string
+      * It's just a simple wrapper around mb_substr
+      **/
+    function xcms_substr($string, $start, $length)
+    {
+        return mb_substr($string, $start, $length, 'UTF-8');
+    }
+
+    /**
+      * Returns char-based substring position (UTF-8)
+      * It's just a simple wrapper around mb_strpos
+      **/
+    function xcms_strpos($haystack, $needle, $offset)
+    {
+        return mb_strpos($haystack, $needle, $offset, 'UTF-8');
+    }
+
+    /**
       * Replaces Russian UTF-8 symbols to ANSI transliteration
       * @param string string to transliterate
       * @return transliterated string
@@ -89,6 +107,8 @@
         xut_check(xcms_check_password("123@#$%^&abcABC bla\xFE\xFF"), "Check valid password");
         xut_check(!xcms_check_password("\n\taa\rbb\0\\'qqq'+\"zzz"), "Check invalid password");
         xut_check(xcms_len("Привет000") == 9, "Check xcms_len");
+        xut_check(xcms_strpos("Привет000", "т00", 0) == 5, "Check xcms_strpos");
+        xut_check(xcms_substr("Привет000", 3, 3) == "вет", "Check xcms_substr");
         xut_check(xcms_transliterate("Вельтищев Михаил") == "Veltischev Mihail", "Check xcms_transliterate");
         xut_end();
     }

@@ -8,7 +8,6 @@
     {
         $source = $news_file_name;
         $text = file_get_contents($source);
-        $text = preg_replace("/<a.*?<STAMP>.*?>(.*?)<\\/a>/","\\1", $text);
         include(translate("<! cms/readtext --text --markdown !>"));
     }
     else
@@ -21,11 +20,7 @@
         for ($i = $n-1; $i>=0; $i--)
         {
             $source = $list[$i];
-            $stamp = $source;
-            $stamp = str_replace("$prefix/","",$stamp);
-            $stamp = str_replace(".news", "", $stamp);
             $text = file_get_contents($source);
-            $text = str_replace("<STAMP>","/$web_prefix$alias/$stamp", $text);
             $odd = ($i % 2) ? "odd" : "even";
             ?><div class="news-block <?php echo $odd; ?>"><?php
             include(translate("<! cms/readtext --markdown --text !>"));

@@ -4,7 +4,7 @@
 from selenium import webdriver
 import os, sys, traceback, time
 
-import selenium_test
+import selenium_test, random_crap
 
 def isInstallerPage(test):
 	return test.curUrl().endswith("install.php")
@@ -24,6 +24,9 @@ def gotoAdminPanel(test):
 def getAuthLink(test):
 	return test.getUrlByLinkText(u"Авторизация")
 
+def gotoBackToAnketaView(test):
+	test.gotoUrlByLinkText(u"Вернуться к просмотру участника")
+
 def getAdminPanelLink(test):
 	return test.getUrlByLinkText(u"Админка")
 
@@ -37,11 +40,13 @@ def performLogin(test, login, password):
 	"""
 	returns True if login was successful
 	"""
-	test.addAction("user-login", login + " / " + password)
-#	test.logAdd("performLogin(" + login + ", " + password + ")")
-	
 	if test is None:
 		raise RuntimeError("Wrong webdriver parameter passed to performLogin. ")
+	
+	test.addAction("user-login", login + " / " + password)
+#	test.logAdd("performLogin(" + login + ", " + password + ")")
+
+	print "goto root"
 	
 	test.gotoRoot()
 	
@@ -136,7 +141,10 @@ def createNewUser(test, conf, login, email, password, name, auxParams = []):
 	
 	# enter user profile
 	print "entering user profile. "
-	test.gotoUrlByLinkText(inpLogin)
+	
+	profileLink = inpLogin
+	# TODO, SITE BUG: make two separate links
+	test.gotoUrlByPartialLinkText(profileLink)
 
 	test.assertBodyTextPresent(u"Учётные данные")
 	test.assertBodyTextPresent(u"Привилегии")
@@ -153,4 +161,50 @@ def createNewUser(test, conf, login, email, password, name, auxParams = []):
 	performLogout(test)
 	
 	return inpLogin, inpEMail, inpPass, inpName
+	
+
+def addCommentToPerson(test):
+	test.gotoUrlByLinkText(u"Добавить комментарий")
+	commentText = random_crap.randomText(40) + "\n" + random_crap.randomText(50) + "\n" + random_crap.randomText(30)
+	
+	commentText = test.fillElementByName("comment_text", commentText)
+
+	test.clickElementByName("update-person_comment")
+	test.assertBodyTextPresent(u"Комментарий успешно сохранён")
+	gotoBackToAnketaView(test)
+	return commentText
+	
+def editCommentToPerson(test, commentLinkId):
+	test.gotoUrlByLinkId("comment-edit-1")
+	oldCommentText = test.getElementValueByName("comment_text")
+	newCommentText =  random_crap.randomText(10) + "\n" + oldCommentText + "\n" + random_crap.randomText(6)
+	newCommentText = test.fillElementByName("comment_text", newCommentText)
+	test.clickElementByName("update-person_comment")
+	test.assertBodyTextPresent(u"Комментарий успешно сохранён")
+	gotoBackToAnketaView(test)
+	return newCommentText
+
+def setTestNotifications(test, emailString, adminLogin, adminPass):
+	performLoginAsAdmin(test, adminLogin, adminPass)
+	gotoAdminPanel(test)
+	test.gotoUrlByLinkText(u"Уведомления")
+
+	test.fillElementById("edtg_user-change", emailString);
+	test.fillElementById("edtg_content-change", emailString);
+
+	test.fillElementById("edtg_reg-html", emailString);
+	test.fillElementById("edtg_reg-plain", emailString);
+
+	test.fillElementById("edtg_reg-test-plain", emailString);
+	test.fillElementById("edtg_reg-test-html", emailString);
+	
+	test.clickElementById("editTag")
+	performLogout(test)
+	
+	
+	
+
+
+	
+
 

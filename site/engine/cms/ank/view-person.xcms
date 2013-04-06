@@ -19,16 +19,25 @@ function xsm_draw_person_longtextval($class, $text, $value)
 
 function xsm_get_avatar($social_profile)
 {
+    // TODO: extract first profile (e.g. by spaces)
     // set default av
     global $full_engine_pub;
     $av = "${full_engine_pub}img/stalin50.jpg";
 
     $match = array();
+    $vk_uid = "";
+    // match id
     preg_match("/[0-9]+/", $social_profile, $match);
     if (!count($match))
-        return $av;
-
-    $vk_uid = $match[0];
+    {
+        // match aliase
+        preg_match("/.*vk.com\/([a-z._]+)/", $social_profile, $match);
+        if (!count($match))
+            return $av;
+        $vk_uid = $match[1];
+    }
+    else
+        $vk_uid = $match[0];
 
     $cache_dir = ".prec/avatar-cache";
     @mkdir($cache_dir, 0777);
@@ -79,7 +88,7 @@ function xsm_print_person_header($db, $person, $school_id)
     $person_modified = xsm_ymdhm($person["person_modified"]);
 
     ?>
-    <div style="width: 100%; overflow: auto">
+    <div style="width: 100%; overflow: auto; padding-bottom: 10px">
     <div class="person-topleft">
         <?php
         $av = xsm_get_avatar($social_profile);
@@ -87,12 +96,13 @@ function xsm_print_person_header($db, $person, $school_id)
         <div class="person-portrait"><img id="avatar" class="person-portrait"
             src="<?php echo $av; ?>" /></div>
         <div class="person-title"><?php echo "$last_name $first_name $patronymic"; ?></div><?php
-        xsm_draw_person_textval('top', 'Статус анкеты', $hr_status);
+        xsm_draw_person_textval('top', 'Статус анкеты', $hr_status); ?>
+        <div style="clear: both;"></div><?php
         xsm_draw_person_textval('top', 'Почта', $email);
         xsm_draw_person_textval('top', 'Мобильный', $cellular);
         xsm_draw_person_textval('top', 'Домашний', $phone);
         xsm_draw_person_textval('top', 'Skype', $skype);
-        xsm_draw_person_textval('top', 'Профиль', $social_profile);
+        xsm_draw_person_textval('top', 'Профиль', "<a href=\"$social_profile\">$social_profile</a>");
         ?>
     </div>
     <div class="person-topright"><?php
@@ -141,7 +151,8 @@ function xsm_print_person_schools($db, $person_id, $current_school_id)
 }
 
 function xsm_draw_person_comments($db, $person_id)
-{
+{?>
+    <div style="height: 10px;"></div><?php
     xsm_view_operations('person_comment', 'person_comment', 'комментарий', "&amp;blamed_person_id=$person_id");
 
     $query = "SELECT * FROM person_comment".
@@ -154,18 +165,19 @@ function xsm_draw_person_comments($db, $person_id)
 
     <table summary="Комментарии" class="ankList">
         <colgroup>
-            <col width="55" />
-            <col width="75%" />
             <col width="10%" />
+            <col width="75%" />
             <col width="105px" />
+            <col width="55" />
         </colgroup>
         <thead>
-            <th class="ankList">&nbsp;</th>
-            <th class="ankList">Текст</th>
             <th class="ankList">Автор</th>
+            <th class="ankList">Текст</th>
             <th class="ankList">Дата</th>
+            <th class="ankList">&nbsp;</th>
         </thead>
     <?php
+    $comment_num = 0; // for auto-testing purposes (#525)
     while ($comment_data = $comment_sel->fetchArray(SQLITE3_ASSOC)) {?>
         <?php
 
@@ -173,12 +185,15 @@ function xsm_draw_person_comments($db, $person_id)
         $owner_login = htmlspecialchars($comment_data["owner_login"]);
         $comment_text = xcms_html_wrap_by_crlf(htmlspecialchars($comment_data["comment_text"]));
         $person_comment_created = xsm_ymdhm($comment_data["person_comment_created"]);
-        $person_comment_modified = xsm_ymdhm($comment_data["person_comment_modified"]); ?>
+        $person_comment_modified = xsm_ymdhm($comment_data["person_comment_modified"]);
+        $comment_num++;
+        ?>
         <tr>
-            <td class="ankList"><a href="edit-person_comment&amp;person_comment_id=<?php echo $comment_id; ?>">Правка</a></td>
-            <td class="ankList"><?php echo $comment_text; ?></td>
             <td class="ankList"><?php echo $owner_login; ?></td>
+            <td class="ankList"><?php echo $comment_text; ?></td>
             <td class="ankList"><?php echo $person_comment_created; ?></td>
+            <td class="ankList"><a href="edit-person_comment&amp;person_comment_id=<?php echo $comment_id; ?>"
+                id="comment-edit-<?php echo $comment_num; ?>">Правка</a></td>
         </tr><?php
         }
     ?>
@@ -203,18 +218,13 @@ function xsm_print_person_ank_data($db, $person)
     $ank_class = htmlspecialchars($person["ank_class"]);
     $current_class = htmlspecialchars($person["current_class"]);
 
-    $phone = htmlspecialchars($person["phone"]);
-    $cellular = htmlspecialchars($person["cellular"]);
-    $email = htmlspecialchars($person["email"]);
-    $skype = htmlspecialchars($person["skype"]);
-    $social_profile = xsm_prepare_social_profile($person["social_profile"]);
-
     $is_teacher = $person["is_teacher"];
     $is_student = $person["is_student"];
 
     $favourites = xcms_html_wrap_by_crlf(htmlspecialchars($person["favourites"]));
     $achievements = xcms_html_wrap_by_crlf(htmlspecialchars($person["achievements"]));
     $hobby = xcms_html_wrap_by_crlf(htmlspecialchars($person["hobby"]));
+    $lesh_ref = xcms_html_wrap_by_crlf(htmlspecialchars($person["lesh_ref"]));
 
     //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
     $user_agent = htmlspecialchars($person["user_agent"]);
@@ -236,6 +246,7 @@ function xsm_print_person_ank_data($db, $person)
     xsm_draw_person_longtextval('main', 'Любимые предметы', $favourites);
     xsm_draw_person_longtextval('main', 'Достижения', $achievements);
     xsm_draw_person_longtextval('main', 'Хобби', $hobby);
+    xsm_draw_person_longtextval('main', 'Откуда узнали о школе', $lesh_ref);
 
     xsm_draw_person_comments($db, $person_id);
 }

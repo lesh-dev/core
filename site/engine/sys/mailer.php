@@ -22,7 +22,7 @@
             xcms_log(XLOG_ERROR, "[MAILER] Mail group '$mail_group' not found or empty, skipped");
             return false;
         }
-        $mails = explode(',', $ml);
+        $mails = explode('|', $ml);
         $added_some = false;
         foreach ($mails as $addr)
         {
@@ -56,11 +56,12 @@
       * @param addr_list Список адресов помимо группы рассылки (или NULL).
       *        Если указан одновременно и адрес, и группа рассылки, то письмо отправляется
       *        по указанному адресу, а адресаты из группы рассылки ставятся в BCC.
+      * @param prefix Префикс для удобной фильтрации писем: [xcms-<prefix>]
       * @param subject Тема уведомления
       * @param mail_text Тело уведомления (в формате plain text)
       * @param mail_text_html Тело уведомления (в формате html)
       **/
-    function xcms_send_notification($mail_group, $addr_list, $subject, $mail_text, $mail_text_html = '')
+    function xcms_send_notification($mail_group, $addr_list, $prefix, $subject, $mail_text, $mail_text_html = '')
     {
         global $SETTINGS;
         $login = xcms_user()->login();
@@ -111,7 +112,8 @@
             if ($mail_group !== NULL)
                 xcms_add_mail_group($mailer, $mail_group);
         }
-        $mailer->Subject = $subject;
+        $host = $_SERVER["HTTP_HOST"];
+        $mailer->Subject = "[xcms-$prefix] ($host) $subject";
         if (!empty($mail_text_html))
         {
             $mailer->MsgHTML($body_html);

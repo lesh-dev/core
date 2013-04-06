@@ -79,7 +79,7 @@ function xsm_edit_course()
                 if (array_key_exists($key, $field_types))
                 {?>
                     <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
-                        echo htmlspecialchars($value); ?></textarea/><?php
+                        echo htmlspecialchars($value); ?></textarea><?php
                 }
                 elseif ($key == 'course_teacher_id')
                 {
@@ -106,7 +106,9 @@ function xsm_edit_course()
                 <?php
             }?>
         </table><?php
-        xsm_edit_operations('course', 'course', $course_id, 'Вернуться к списку курсов');?>
+        xsm_edit_operations_listmode('course', $course_id, 'Вернуться к списку курсов',
+            xcms_url(array('school_id'=>$school_id)));
+        ?>
     </form>
     <?php
 }

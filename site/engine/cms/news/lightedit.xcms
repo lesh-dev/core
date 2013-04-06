@@ -5,8 +5,11 @@
         $id = time();
         $fname = "{$SETTINGS["datadir"]}cms/pages/$pageid/".$id.".news";
         $text = @file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/template");
-        $text = str_replace("<DATE>", date("d.m.y", time()), $text);
-        $text = str_replace("<LOGIN>", xcms_user()->login(), $text);
+        $text = str_replace("@@DATE@", date("d.m.y", time()), $text);
+        $author = xcms_user()->param("name");
+        if (!strlen($author))
+            $author = xcms_user()->login();
+        $text = str_replace("@@AUTHOR@", $author, $text);
         include(translate("<! var editfile $fname !><! edit/file xz -h rows=10 !>"));
 
         if (@$_POST["delete-news"])
@@ -16,13 +19,10 @@
 
         $list = glob("{$SETTINGS["datadir"]}cms/pages/$pageid/*.news");
         $n = count($list);
-        $count=0;
-        $cc=0;
+        $count = 0;
         $offset = @$_GET["offset"];
-        for ($i=$n-1-$offset; $i>=0; $i--)
+        for ($i = $n - 1 - $offset, $cc = 0; $i >= 0 && $cc <= 10; $i--, $cc++)
         {
-            $cc++;
-            if ($cc>10) break;
             $source = $list[$i];
             $odd = ($i % 2) ? "odd" : "even";
             ?><div class="news-block <?php echo $odd; ?>"><?php

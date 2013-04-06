@@ -38,8 +38,10 @@ def toUnicode(s):
 	return unicode(s).encode("utf-8")
 	
 def isVoid(x):
-	return x is None or x.strip() == ""
-	
+	if isList(x):
+		return (not x)
+	else:
+		return x is None or x.strip() == ""
 	
 # simple command line framework
 def argMatchOption(value, optSpec):
