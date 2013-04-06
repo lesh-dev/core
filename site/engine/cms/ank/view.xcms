@@ -12,11 +12,12 @@
     if(@$_POST["submit-anketa"])
     {
         $template_root = "{$SETTINGS['engine_dir']}templates";
-        $mail_msg_html = file_get_contents("$template_root/anketa_mail.html");
+        $mail_msg = file_get_contents("$template_root/anketa_mail.html");
+        $reply_link = file_get_contents("$template_root/anketa_reply_link.html");
+        $reply_body = file_get_contents("$template_root/anketa_reply_body.html");
         $row_template = file_get_contents("$template_root/anketa_mail_one_row.html");
         $unix_time = time();
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
-        $mail_msg_plain = "Анкета от $hr_timestamp:\r\n-----------------------------------\r\n";
 
         $person = $_POST; // get all values here (_POST should not be spoiled)
         // set some generic fields that cannot be overridden
@@ -56,90 +57,58 @@
                 $key_title = $person_fields[$key];
             if ($key == "submit-anketa")
                 continue;
-            $kt = "$key_title: ";
-            while (xcms_len($kt) < 22)
-                $kt .= ' ';
-            $one_line = "$kt$value";
-            $mail_msg_plain .= "$one_line\r\n";
-            // append new line after long lines
-            if (xcms_len($one_line) > 80)
-                $mail_msg_plain .= "\r\n";
-            $cur_row_html = $row_template;
-            $cur_row_html = str_replace("@@ANK-KEY@", $key_title, $cur_row_html);
-            $cur_row_html = str_replace("@@ANK-VALUE@", htmlspecialchars($value), $cur_row_html);
-            $html_content .=  $cur_row_html;
+            $cur_row = $row_template;
+            $cur_row = str_replace("@@ANK-KEY@", $key_title, $cur_row);
+            $cur_row = str_replace("@@ANK-VALUE@", htmlspecialchars($value), $cur_row);
+            $html_content .=  $cur_row;
         }
         $ank_dir = "${content_dir}ank";
         @mkdir($ank_dir, 0777);
         xdb_insert_or_update('person', array('person_id'=>XDB_NEW), $person, $person_fields);
         $table_title = "Анкета от $hr_timestamp";
         $write_success = true; // TODO: проверять SELECT-ом, что таки да, вставилось
-        $mail_msg_html = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg_html);
-        $mail_msg_html = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg_html);
-        $mail_msg_html = str_replace("@@HOST@", $_SERVER['HTTP_HOST'], $mail_msg_html);
+        $mail_msg = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg);
+        $mail_msg = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg);
+        $mail_msg = str_replace("@@HOST@", $_SERVER['HTTP_HOST'], $mail_msg);
 
-        $mail_group_html = "";
-        $mail_group_plain = "";
+        // prepare reply_link
+        $reply_body = str_replace("@@NAME@", $first_name, $reply_body);
+        // TODO hardcoded subject
+        $reply_link = str_replace("@@REPLY-SUBJECT@", rawurlencode("ФизЛЭШ: Анкета принята"), $reply_link);
+        $reply_link = str_replace("@@REPLY-BODY@", rawurlencode($reply_body), $reply_link);
+        $reply_link = str_replace("@@REPLY-TO@", $email, $reply_link);
+
+        // main compose finished
+        if (!strlen($email))
+            $reply_link = "";
+        $mail_msg_managers = str_replace("@@REPLY-LINK@", $reply_link, $mail_msg);
+
+        // remove unused placeholder in notification letter
+        $mail_msg = str_replace("@@REPLY-LINK@", "", $mail_msg);
+
+        // TODO: выпилить режим reg-test* -- вместо этого тест должен
+        // подменять поля уведомления, чтобы не спамить
+
+        $mail_group_notify = "reg";
+        $mail_group_managers = "reg-managers";
         if (substr($full_name, 0, 12) == "NO-MAIL-TEST") // see bug #264
         {
-            // do nothing
+            $mail_group_notify = "";
+            $mail_group_managers = "";
         }
         elseif (substr($full_name, 0, 4) == "TEST") // see bug #111
         {
-            $mail_group_html = "reg-test-html";
-            $mail_group_plain = "reg-test-plain";
-        }
-        else
-        {
-            $mail_group_html = "reg-html";
-            $mail_group_plain = "reg-plain";
+            $mail_group_notify = "reg-test";
+            $mail_group_managers = "reg-managers-test";
         }
 
-        $addr_from = "reg@fizlesh.ru"; // TODO: remove this spike
-        $name_from = "FizLesh Notificator";
+        $success_managers = xsm_send_anketa($mail_group_managers, $mail_msg_managers,
+            $subject, $full_name, $email, true);
 
-        $host = $_SERVER["HTTP_HOST"];
-        $subject = "[xcms-ank] ($host) Новая анкета: $full_name";
+        $success_notify = xsm_send_anketa($mail_group_notify, $mail_msg,
+            $subject, $full_name, $email, false);
 
-        $success_html = true;
-        $mailer = xcms_get_mailer();
-        if (xcms_add_mail_group($mailer, $mail_group_html))
-        {
-            if (!empty($email))
-                $mailer->AddReplyTo($email, $full_name_tr);
-            else
-                $mailer->AddReplyTo($addr_from, $name_from);
-            $mailer->SetFrom($addr_from, $name_from);
-            $mailer->Sender = $addr_from;
-            $mailer->Subject = $subject;
-            $mailer->AltBody = $mail_msg_plain;
-            $mailer->MsgHTML($mail_msg_html);
-            if (!$mailer->Send())
-            {
-                xcms_log(XLOG_ERROR, "[MAILER:XSM] ".$mailer->ErrorInfo);
-                $success_html = false;
-            }
-        }
-
-        $success_plain = true;
-        $mailer = xcms_get_mailer();
-        if (xcms_add_mail_group($mailer, $mail_group_plain))
-        {
-            if (!empty($email))
-                $mailer->AddReplyTo($email, $full_name_tr);
-            else
-                $mailer->AddReplyTo($addr_from, $name_from);
-            $mailer->SetFrom($addr_from, $name_from);
-            $mailer->Sender = $addr_from;
-            $mailer->Subject = $subject;
-            $mailer->Body = $mail_msg_plain;
-            if (!$mailer->Send())
-            {
-                xcms_log(XLOG_ERROR, "[MAILER:XSM] ".$mailer->ErrorInfo);
-                $success_plain = false;
-            }
-        }
-        $success = ($success_html || $success_plain) && $write_success;
+        $success = ($success_managers || $success_notify) && $write_success;
 
         $dest_url = 'register/success';
         $zero_redirect_delay = $SETTINGS["zero_redirect_delay"];
@@ -148,7 +117,7 @@
             // В этом случае анкета всё равно сохранится у нас, и на самом деле мы всё узнаем про человека,
             // но чтобы не ждать три дня, пусть уж лучше нас пнут извне
             xcms_log(XLOG_ERROR, "[ANK] Anketa submission failed. ".
-                "Statuses: HTML:$success_html Plain:$success_plain Write:$write_success");
+                "Statuses: HTML:$success_notify Write:$write_success");
             $dest_url = 'register/error';
         }
         $message = 'Сейчас Вы будете перенаправлены на страницу результата. Нажмите '.

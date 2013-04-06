@@ -24,6 +24,41 @@
     }
 
     /**
+      * Посылатор анкет (вынесен сюда, чтобы не затмевать суть дела)
+      **/
+    function xsm_send_anketa($mail_group, $mail_msg, $subject, $full_name, $email, $manager_mode = false)
+    {
+        $host = $_SERVER["HTTP_HOST"];
+        $subject = "[xcms-ank] ($host) Новая анкета: $full_name";
+
+        $addr_from = "reg@fizlesh.ru"; // TODO: remove this spike
+        $name_from = "FizLesh Notificator";
+
+        $mailer = xcms_get_mailer();
+
+        // no mails is a success
+        if (!xcms_add_mail_group($mailer, $mail_group))
+            return true;
+
+        $full_name_tr = xcms_transliterate($full_name);
+        if ($manager_mode && !empty($email))
+            $mailer->AddReplyTo($email, $full_name_tr);
+        else
+            $mailer->AddReplyTo($addr_from, $name_from);
+        $mailer->SetFrom($addr_from, $name_from);
+        $mailer->Sender = $addr_from;
+        $mailer->Subject = $subject;
+        $mailer->AltBody = "This message is in HTML format\r\n";
+        $mailer->MsgHTML($mail_msg);
+        if (!$mailer->Send())
+        {
+            xcms_log(XLOG_ERROR, "[MAILER:XSM] ".$mailer->ErrorInfo);
+            return false;
+        }
+        return true;
+    }
+
+    /**
       * Получение дефолтной школы (самой последней по времени)
       * @return school id (or -1 in case of empty schools list
       **/
