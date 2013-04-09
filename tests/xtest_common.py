@@ -27,6 +27,10 @@ def getAuthLink(test):
 def gotoBackToAnketaView(test):
 	test.gotoUrlByLinkText(u"Вернуться к просмотру участника")
 
+def gotoBackAfterComment(test):
+	#test.gotoUrlByLinkText(u"Вернуться к списку комментов") # older variant
+	gotoBackToAnketaView(test)
+	
 def getAdminPanelLink(test):
 	return test.getUrlByLinkText(u"Админка")
 
@@ -192,11 +196,11 @@ def setTestNotifications(test, emailString, adminLogin, adminPass):
 	test.fillElementById("edtg_user-change", emailString);
 	test.fillElementById("edtg_content-change", emailString);
 
-	test.fillElementById("edtg_reg-html", emailString);
-	test.fillElementById("edtg_reg-plain", emailString);
+	test.fillElementById("edtg_reg", emailString);
 
-	test.fillElementById("edtg_reg-test-plain", emailString);
-	test.fillElementById("edtg_reg-test-html", emailString);
+	test.fillElementById("edtg_reg-test", emailString);
+	test.fillElementById("edtg_reg-managers", emailString);
+	test.fillElementById("edtg_reg-managers-test", emailString);
 	
 	test.clickElementById("editTag")
 	performLogout(test)

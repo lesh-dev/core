@@ -54,6 +54,10 @@ except CliParamError as e:
 	
 # last remaining argument is base test URL.
 
+if doShowHelp:
+	showHelp()
+	sys.exit(1)
+	
 baseUrl = None
 if len(args) >= 1:
 	baseUrl = args.pop()
@@ -78,17 +82,26 @@ if testSet:
 try:
 	testSetModule = __import__(setModuleName, [])	
 	
+	if not testSetModule.getTests:
+		print "There is no 'getTests' function defined in specified test set. "
+		sys.exit(1)
+		
 	tests = testSetModule.getTests(baseUrl, args)
-	while len(tests) > 0:
-		test = tests.pop()
-		if specTest and test.getName() != specTest:
-			continue
+	for fileName in tests:
+		test = tests[fileName]
+		if specTest:
+			if specTest.endswith(".py"): # it is a filename
+				if fileName != specTest:
+					continue
+			else: # it is a test class name
+				if test.getName() != specTest:
+					continue
 		if doList:
-			print test.getName();
+			print fileName, test.getName()
 		elif doFullList:
 			print "=" * 30;
-			print test.getName();
-			print test.getDoc();
+			print test.getName()
+			print test.getDoc()
 			print;
 		else:
 			print "Running test", test.getName()

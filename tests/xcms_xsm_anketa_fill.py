@@ -42,10 +42,10 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		# and now let's edit one of them.
 		
 		self.gotoIndexedUrlByLinkText(u"Правка", 0)
-		self.gotoUrlByLinkText(u"Вернуться к списку комментов")
+		xtest_common.gotoBackAfterComment(self)
 
 		self.gotoIndexedUrlByLinkText(u"Правка", 1)
-		self.gotoUrlByLinkText(u"Вернуться к списку комментов")
+		xtest_common.gotoBackAfterComment(self)
 
 		# oh, no! we want to use comment link ids!
 		
@@ -61,6 +61,7 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		self.assertBodyTextPresent(commentText2, "Comment should remain unchanged. ")
 		self.assertBodyTextPresent(commentTextNew3, "Comment 3 must change value. ")
 	
+	# -------------------- begining of the test
 	def run(self):
 		# anketa fill positive test:
 		# all fields are filled with correct values.
@@ -200,8 +201,8 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		self.clickElementByName("update-person")
 		
 		self.assertBodyTextPresent(u"Участник успешно сохранён")
-		#xtest_common.gotoBackToAnketaView(self) TODO: bug #540
 		self.gotoUrlByLinkText(u"Вернуться к просмотру")
+		#BUG 540 xtest_common.gotoBackToAnketaView(self)
 		
 		self.assertElementTextById("anketa_status-span", u"Ждёт собес.")
 	

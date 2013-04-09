@@ -98,7 +98,7 @@ class SeleniumTest:
 		
 	def init(self):
 		self.m_baseUrl = self.fixBaseUrl(self.getBaseUrl())
-		self.m_driver = webdriver.Firefox()
+		self.m_driver = webdriver.Firefox() # executable_path="/home/vdm/bin/firefox/firefox"
 		self.maximizeWindow()
 	
 	def getName(self):
@@ -143,10 +143,12 @@ class SeleniumTest:
 		self.shutdown(2)
 				
 	def handleTestFail(self, exc):
+		self.m_driver.execute_script("alert('Test failed! See console log for details. ');")
 		print "TEST " + self.getName() + " FAILED:", toUnicode(exc.message)
 		self.shutdown(1)
 
 	def handleTestFatal(self, exc):
+		self.m_driver.execute_script("alert('Test fataled! See logs and check your test/environment. ');")
 		print "TEST " + self.getName() + " FATALED:", toUnicode(exc.message)
 		self.shutdown(2)
 
