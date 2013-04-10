@@ -75,7 +75,8 @@
         $reply_body = str_replace("@@NAME@", $first_name, $reply_body);
         // TODO hardcoded subject
         $reply_link = str_replace("@@REPLY-SUBJECT@", rawurlencode("ФизЛЭШ: Анкета принята"), $reply_link);
-        $reply_link = str_replace("@@REPLY-BODY@", rawurlencode($reply_body), $reply_link);
+        $reply_link = str_replace("@@REPLY-BODY@", str_replace("\n", "<br />", $reply_body), $reply_link);
+        $reply_link = str_replace("@@REPLY-BODY-ENC@", rawurlencode($reply_body), $reply_link);
         $reply_link = str_replace("@@REPLY-TO@", $email, $reply_link);
 
         // main compose finished
