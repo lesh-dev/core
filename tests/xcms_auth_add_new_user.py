@@ -92,8 +92,8 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		self.gotoUrlByPartialLinkText(inpLogin)
 		self.assertBodyTextPresent(u"Привет, " + inpLogin)
 		
-		nameEle = "name"
-		emailEle = "email"
+		nameEle = "name-input"
+		emailEle = "email-input"
 		
 		currentDisplayName = self.getElementValueById(nameEle)
 		if currentDisplayName != inpName:

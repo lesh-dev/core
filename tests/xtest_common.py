@@ -158,8 +158,8 @@ def createNewUser(test, conf, login, email, password, name, auxParams = []):
 	test.assertTextPresent("//div[@class='user-ops']", inpLogin)
 	# test user creator (root)
 	test.assertTextPresent("//div[@class='user-ops']", conf.getAdminLogin())
-	test.assertElementValueById("name", inpName)
-	test.assertElementValueById("email", inpEMail)
+	test.assertElementValueById("name-input", inpName)
+	test.assertElementValueById("email-input", inpEMail)
 	
 	#logoff root
 	performLogout(test)
