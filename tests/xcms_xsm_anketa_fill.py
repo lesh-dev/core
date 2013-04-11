@@ -201,9 +201,6 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		self.clickElementByName("update-person")
 		
 		self.assertBodyTextPresent(u"Участник успешно сохранён")
-		self.gotoUrlByLinkText(u"Вернуться к просмотру")
-		#BUG 540 xtest_common.gotoBackToAnketaView(self)
+		xtest_common.gotoBackToAnketaView(self)
 		
 		self.assertElementTextById("anketa_status-span", u"Ждёт собес.")
-	
-	
