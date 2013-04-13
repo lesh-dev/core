@@ -4,7 +4,7 @@ import re
 from os import listdir
 from os.path import isfile, join
 
-py_files = [ f for f in listdir('.') if isfile(f) and f[-3:] == '.py' ]
+py_files = sorted([ f for f in listdir('.') if isfile(f) and f[-3:] == '.py' ])
 
 imp = []
 main = []
