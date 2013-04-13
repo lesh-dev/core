@@ -12,6 +12,10 @@ function CheckName(aError, sFieldName, sFieldTitle) {
     }
 }
 
+function OnChange() {
+    GShowWarning = true;
+}
+
 function CheckClass(aError) {
     var val = $("#current_class-input").val();
     val = $.trim(val);
@@ -58,15 +62,18 @@ function WarnPersonal(aWarning) {
 
 function MakeList(aList) {
     var sRes = '<ul class="ankMessageList">';
-    for (var i = 0; i < aList.length; ++i) {
+    for (var i = 0; i < aList.length; ++i)
         sRes += ("<li>" + aList[i] + "</li>");
-    }
     return sRes + "</ul>";
 }
 
 var GShowWarning = true;
 
 $(document).ready(function() {
+
+    $('#favourites-text').change(OnChange);
+    $('#achievements-text').change(OnChange);
+    $('#hobby-text').change(OnChange);
 
     $('#submit-anketa-button').click(function() {
         var aError = [];
@@ -82,32 +89,32 @@ $(document).ready(function() {
 
         var bResult = true;
         if (aError.length) {
-              $("#t-Error").html(MakeList(aError));
-              bResult = false;
+            $("#t-Error").html(MakeList(aError));
+            bResult = false;
         } else {
             $("#t-Error").html(' ');
         }
 
         if (aWarning.length) {
-              var sWarning = MakeList(aWarning);
-              // warn once
-              if (bResult) { // no severe errors detected
+            var sWarning = MakeList(aWarning);
+            // warn once
+            if (bResult) { // no severe errors detected
                 $("#t-Warning").html(sWarning +
                     "<p>Если Вы уверены, что не хотите указывать эту информацию, нажмите кнопку <b>Отправить</b> ещё раз.</p>");
                 if (GShowWarning) {
-                  GShowWarning = false;
-                  bResult = false;
+                    GShowWarning = false;
+                    bResult = false;
                 }
-              } else {
+            } else {
                 $("#t-Warning").html(sWarning);
                 GShowWarning = true; // restore flag in case of severe errors
-              }
-            } else {
-              $("#t-Warning").html(' ');
+            }
+        } else {
+            $("#t-Warning").html(' ');
         }
         if (!aError.length && !aWarning.length) $("#c-Message").hide();
         else $("#c-Message").show();
 
         return bResult;
-  });
+    });
 });
