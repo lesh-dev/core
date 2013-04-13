@@ -91,7 +91,7 @@ class XcmsXsmAnketaWrongFill(SeleniumTest):
 		self.assertBodyTextPresent(u"Укажите правильно хотя бы один из телефонов")
 
 		inpPhone = self.fillElementById("phone-input",inpPhone)
-		# inpCell = self.fillElementById("cellular-input", inpCell)
+		inpCell = self.fillElementById("cellular-input", inpCell)
 		
 		inpEmail = self.fillElementById("email-input", inpEmail)
 		inpSkype = self.fillElementById("skype-input", inpSkype)
@@ -159,7 +159,3 @@ class XcmsXsmAnketaWrongFill(SeleniumTest):
 		self.assertBodyTextPresent(inpFav)
 		self.assertBodyTextPresent(inpAch)
 		self.assertBodyTextPresent(inpHob)
-
-		
-		
-	
