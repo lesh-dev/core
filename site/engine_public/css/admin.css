@@ -139,17 +139,17 @@ a.user-list {
 
 div.user-list {
     float: left;
-    width: 30%;
+    width: 35%;
 }
 
 span.user-login {
     display: inline-block;
-    width: 120px;
+    width: 190px;
 }
 
 div.user-ops {
     float: right;
-    width: 67%;
+    width: 63%;
 }
 
 div.menuitem-hidden a {
