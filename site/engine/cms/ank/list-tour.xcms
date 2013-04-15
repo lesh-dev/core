@@ -1,0 +1,140 @@
+<?php
+    function xsm_get_tourlist_show_statuses()
+    {
+        return array(
+            "tour"=>"Туристы-маёвники"
+            );
+    }
+?>
+<# auth/ #admin #ank #>
+<# cms/ank/style #>
+<?php
+    $show_anketa_status = xcms_get_persistent_key("list-tour", "show_anketa_status", "tour");
+?>
+<p>В этом списке показываются активные и принятые или полупринятые школьники и преподы.</p>
+<form method="post" action="list-ank" style="margin-bottom: 2px"><span>
+    <span class="ankListField">Фильтрация</span>: <?php
+    echo xsm_make_enum_selector(
+        "show_anketa_status", $show_anketa_status,
+        xsm_get_tourlist_show_statuses());
+    ?>
+
+    <span class="ankListField">Фильтр ФИО</span>:
+    <input class="ankEdit filter" type="text"
+        value="<?php echo htmlspecialchars(xcms_get_key_or($_POST, 'show_name_filter')); ?>"
+        name="show_name_filter"
+        title="Будут найдены все участники, в ФИО которых (в любом порядке) встречаются слова запроса, без учёта регистра. Например, 'дан Мих' найдёт Даниила Михайловича, Михаила Данилевского и Богдана Немихульского, но НЕ найдёт Мишу Данилкина (имена условны)" />
+    <input type="submit" name="show-person" value="Показать" />
+</span></form>
+<?php
+
+
+function xsm_show_tour_list()
+{
+    global $show_anketa_status;
+    $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
+
+    $show_statuses = xsm_get_tourlist_show_statuses();
+    if (!array_key_exists($show_anketa_status, $show_statuses))
+        $show_anketa_status = "abitur";
+
+    $db = xdb_get();
+    $db->createFunction('LIKE', 'xdb_like', 2);
+
+    $cond = "";
+
+    if ($show_anketa_status == "tour")
+        $cond .=
+            "(   (anketa_status = 'progress')".
+            " OR (anketa_status = 'processed')".
+            " OR (anketa_status = 'cont')".
+            " OR (anketa_status = 'less') )";
+
+    $name_filter_cond = xsm_person_name_filter($db, $show_name_filter);
+    if (strlen($name_filter_cond))
+        $cond .= " AND $name_filter_cond";
+
+    $query =
+        "SELECT
+        p.person_id, p.last_name, p.first_name, p.patronymic,
+        p.current_class,
+        p.is_teacher,
+        p.phone, p.cellular,
+        p.tent_capacity, p.tour_requisites,
+        p.anketa_status, p.person_created, p.person_modified
+        FROM person p";
+
+    if (strlen($cond))
+        $query .= " WHERE $cond";
+    $query .= " ORDER BY NOT (p.is_teacher IS NULL OR p.is_teacher = ''), p.last_name, p.first_name";
+    xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
+    $person_sel = $db->query($query);
+
+    NEW_xsm_view_operations('person', 'участника');
+    ?>
+    <table summary="Участники" class="ankList">
+        <colgroup>
+            <col width="30px" />
+            <col width="13%" />
+            <col width="45px" />
+            <col width="50px" />
+            <col width="23%" />
+            <col width="17%" />
+            <col width="60px" />
+        </colgroup>
+        <thead>
+            <th class="ankList">ID</th>
+            <th class="ankList">ФИО</th>
+            <th class="ankList">Кл.</th>
+            <th class="ankList">Палатка</th>
+            <th class="ankList">Снаряжение</th>
+            <th class="ankList">Контакты</th>
+            <th class="ankList">Статус</th>
+        </thead>
+    <?php
+    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC)) {
+        $person_id = htmlspecialchars($person["person_id"]);
+        $fi = htmlspecialchars(xsm_fi($person));
+        $fio = htmlspecialchars(xsm_fio($person));
+
+        $is_teacher = $person["is_teacher"];
+
+        $current_class = htmlspecialchars($person["current_class"]);
+
+        $phone = htmlspecialchars($person["phone"]);
+        $cellular = htmlspecialchars($person["cellular"]);
+
+        $tent_capacity = htmlspecialchars($person["tent_capacity"]);
+        $tour_requisites = htmlspecialchars($person["tour_requisites"]);
+
+        $person_created = xsm_ymdhm($person["person_created"]);
+        $person_modified = xsm_ymdhm($person["person_modified"]);
+
+        $row_class = ($is_teacher == "teacher" ? "teacher" : "");
+        ?>
+        <tr class="<?php echo $row_class; ?>">
+            <td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
+            <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"
+                title="<?php echo $fio; ?>"><?php echo $fi; ?></a></td>
+            <td class="ankList"><?php echo $current_class; ?></td>
+            <td class="ankList"><?php echo $tent_capacity; ?></td>
+            <td class="ankList"><?php echo $tour_requisites; ?></td>
+            <td class="ankList">
+            <?php
+                if ($cellular) echo $cellular;
+                if ($cellular && $phone) echo ", ";
+                if ($phone) echo $phone;
+            ?>
+            </td>
+            <td class="ankList"><?php echo xsm_draw_person_status($person); ?></td>
+        </tr>
+        <?php
+        }
+    ?>
+    </table>
+    <?php
+    NEW_xsm_view_operations('person', 'участника');
+}
+
+    xsm_show_tour_list();
+?>

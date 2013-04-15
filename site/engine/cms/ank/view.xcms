@@ -129,6 +129,8 @@
     }
     else if(@$_GET["aparam"] == "list-ank")
         include(translate('<! cms/ank/list-ank !>'));
+    else if(@$_GET["aparam"] == "list-tour")
+        include(translate('<! cms/ank/list-tour !>'));
     else if(@$_GET["aparam"] == "list-members")
         include(translate('<! cms/ank/list-person !>'));
     else if(@$_GET["aparam"] == "list-person-locator")

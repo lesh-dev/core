@@ -48,6 +48,8 @@
                         include(translate('<a href="/<# web_prefix #>register/list-person-locator'.
                             xcms_url(array('show_anketa_status'=>'all')).
                             '" class="menu-item menu-sys">Все люди</a>'));
+                        include(translate('<a href="/<# web_prefix #>register/list-tour'.
+                            '" class="menu-item menu-sys">Выходы в лес</a>'));
                         include(translate('<a href="/<# web_prefix #>register/list-person-locator'.
                             xcms_url(array('show_anketa_status'=>'active')).
                             '" class="menu-item menu-sys">Актив отделения</a>'));
