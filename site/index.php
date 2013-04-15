@@ -1,4 +1,5 @@
 <?php
+    session_set_cookie_params(14 * 24 * 3600); // 2 weeks
     session_start();
     if (file_exists("install.php"))
     {
