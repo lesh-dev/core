@@ -33,6 +33,9 @@ create table person (
     achievements text,   -- достижения
     hobby text,          -- хобби
 
+    tent_capacity text,   -- количество мест в палатке (0 = палатки нет)
+    tour_requisites text, -- имеющиеся предметы туристского обихода
+
     anketa_status text, -- former activity_status
         -- enum:(new, processed, declined, taken, duplicated, spam)
 

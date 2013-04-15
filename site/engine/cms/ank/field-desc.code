@@ -26,6 +26,9 @@ function xsm_get_person_fields()
         "is_teacher"=>"Препод",
         "is_student"=>"Школьник",
 
+        "tent_capacity"=>"Вместимость палатки",
+        "tour_requisites"=>"Туристское барахло",
+
         "favourites"=>"Любимые предметы",
         "achievements"=>"Достижения",
         "hobby"=>"Хобби",
@@ -45,6 +48,7 @@ function xcms_get_person_field_types()
         "achievements"=>"textarea",
         "hobby"=>"textarea",
         "lesh_ref"=>"textarea",
+        "tour_requisites"=>"textarea",
 
         "is_teacher"=>"checkbox",
         "is_student"=>"checkbox",

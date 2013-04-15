@@ -203,6 +203,8 @@ function xsm_draw_person_comments($db, $person_id)
 
 function xsm_print_person_ank_data($db, $person)
 {
+    $fields = xsm_get_person_fields();
+
     $person_id = htmlspecialchars($person["person_id"]);
 
     $last_name = htmlspecialchars($person["last_name"]);
@@ -221,6 +223,9 @@ function xsm_print_person_ank_data($db, $person)
     $is_teacher = $person["is_teacher"];
     $is_student = $person["is_student"];
 
+    $tent_capacity = htmlspecialchars($person["tent_capacity"]);
+    $tour_requisites = xcms_html_wrap_by_crlf(htmlspecialchars($person["tour_requisites"]));
+
     $favourites = xcms_html_wrap_by_crlf(htmlspecialchars($person["favourites"]));
     $achievements = xcms_html_wrap_by_crlf(htmlspecialchars($person["achievements"]));
     $hobby = xcms_html_wrap_by_crlf(htmlspecialchars($person["hobby"]));
@@ -235,18 +240,22 @@ function xsm_print_person_ank_data($db, $person)
     $hr_teacher = ($is_teacher == "teacher" ? "Препод" : "&#8212;");
     $hr_student = ($is_student == "student" ? "Школьник" : "&#8212;");
 
-    xsm_draw_person_textval('main', 'Дата рождения', $birth_date);
-    xsm_draw_person_textval('main', 'Паспортные данные', $passport_data);
-    xsm_draw_person_textval('main', 'Класс подачи анкеты', $ank_class);
-    xsm_draw_person_textval('main', 'Класс', $current_class);
-    xsm_draw_person_textval('main', 'Школа', $school);
-    xsm_draw_person_textval('main', 'Город', $school_city);
+    xsm_draw_person_textval('main', $fields['birth_date'], $birth_date);
+    xsm_draw_person_textval('main', $fields['passport_data'], $passport_data);
+    xsm_draw_person_textval('main', $fields['ank_class'], $ank_class);
+    xsm_draw_person_textval('main', $fields['current_class'], $current_class);
+    xsm_draw_person_textval('main', $fields['school'], $school);
+    xsm_draw_person_textval('main', $fields['school_city'], $school_city);
     xsm_draw_person_textval('main', 'Роль', "$hr_teacher / $hr_student");
-    xsm_draw_person_textval('main', 'User Agent', $user_agent);
-    xsm_draw_person_longtextval('main', 'Любимые предметы', $favourites);
-    xsm_draw_person_longtextval('main', 'Достижения', $achievements);
-    xsm_draw_person_longtextval('main', 'Хобби', $hobby);
-    xsm_draw_person_longtextval('main', 'Откуда узнали о школе', $lesh_ref);
+    echo "<hr/>\n";
+    xsm_draw_person_textval('main', $fields['tent_capacity'], $tent_capacity);
+    xsm_draw_person_textval('main', $fields['tour_requisites'], $tour_requisites);
+    echo "<hr/>\n";
+    xsm_draw_person_textval('main', $fields['user_agent'], $user_agent);
+    xsm_draw_person_longtextval('main', $fields['favourites'], $favourites);
+    xsm_draw_person_longtextval('main', $fields['achievements'], $achievements);
+    xsm_draw_person_longtextval('main', $fields['hobby'], $hobby);
+    xsm_draw_person_longtextval('main', $fields['lesh_ref'], $lesh_ref);
 
     xsm_draw_person_comments($db, $person_id);
 }
