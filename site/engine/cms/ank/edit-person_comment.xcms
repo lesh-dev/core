@@ -1,15 +1,7 @@
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
+<# cms/ank/diff #>
 <?php
-
-$person_comment_fields = array(
-    "comment_text"=>"Текст комментария",
-    "owner_login"=>"Логин автора",
-    "blamed_person_id"=>"Субъект",
-    "person_comment_created"=>"Время создания",
-    "person_comment_modified"=>"Последняя модификация",
-    "person_comment_deleted"=>"Объект удалён"
-);
 
 // Специфическая функция для данной таблицы (можно объединить с person_school)
 function xsm_person_comment_edit_operations($entity, $table_name, $id, $title, /*$school_id, */$member_person_id)
@@ -77,7 +69,6 @@ function xsm_warn_delete_person_comment($entity, $table_name, $title, $aux_param
 
 function xsm_delete_person_comment($entity, $table_name, $title, $aux_param = '')
 {
-    global $person_comment_fields;
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
     $person_comment = xdb_get_entity_by_id($table_name, $id);
@@ -86,7 +77,7 @@ function xsm_delete_person_comment($entity, $table_name, $title, $aux_param = ''
     $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
     // experimental 'delete as status update'
     $res = xdb_insert_or_update($table_name, array($key_name=>$id),
-        array('person_comment_deleted'=>'deleted'), $person_comment_fields);
+        array('person_comment_deleted'=>'deleted'), xsm_get_person_comment_fields());
     //$res = xdb_delete($table_name, $id);
     if ($res)
     {?>
@@ -100,10 +91,32 @@ function xsm_delete_person_comment($entity, $table_name, $title, $aux_param = ''
 }
 
 
+function xsm_notify_person_comment_edit($person_comment)
+{
+    $person_comment_id = $person_comment['person_comment_id'];
+    $old_person_comment = ($person_comment_id != XDB_NEW) ? xdb_get_entity_by_id('person_comment', $person_comment_id) : array();
+
+    $person_id = $person_comment['blamed_person_id'];
+    $person = xdb_get_entity_by_id('person', $person_id);
+
+    $full_name = xsm_fio($person);
+    $table_title = 'Добавлен комментарий к участнику: <span style="color: #0000ff">'.htmlspecialchars($full_name).'</span>';
+
+    $mail_msg = xsm_build_diff_msg(
+        $person_comment,
+        $old_person_comment,
+        xsm_get_person_comment_fields(),
+        xsm_get_person_comment_field_types(),
+        $table_title);
+
+    $subject = "Комментарий: $full_name";
+    xcms_send_notification("reg", NULL, "db", $subject, "This message is in HTML format.\r\n", $mail_msg);
+}
+
+
 function xsm_edit_person_comment()
 {
-    global $person_comment_fields;
-
+    $person_comment_fields = xsm_get_person_comment_fields();
     $person_comment_id = xcms_get_key_or($_GET, 'person_comment_id', '-1'); // invalid key
     $person_comment = xdb_get_entity_by_id('person_comment', $person_comment_id);
     if ($person_comment_id == XDB_NEW)
@@ -119,9 +132,7 @@ function xsm_edit_person_comment()
 
     $person = xdb_get_entity_by_id('person', $blamed_person_id);
 
-    $field_types = array(
-        "comment_text"=>"textarea"
-    );
+    $field_types = xsm_get_person_comment_field_types();
 
     ?>
     <form method="post" action="edit-person_comment"><?php
@@ -171,7 +182,10 @@ function xsm_edit_person_comment()
 }
 
 if (@$_POST["update-person_comment"])
-    xsm_update_person_comment('Комментарий', $person_comment_fields);
+{
+    xsm_notify_person_comment_edit($_POST);
+    xsm_update_person_comment('Комментарий', xsm_get_person_comment_fields());
+}
 elseif (@$_POST["delete-person_comment"])
     xsm_warn_delete_person_comment('person_comment', 'person_comment', 'комментарий');
 elseif (@$_POST["confirm-delete-person_comment"])

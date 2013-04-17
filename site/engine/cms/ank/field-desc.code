@@ -1,5 +1,6 @@
 <?php
 
+// Person
 function xsm_get_person_fields()
 {
     return array(
@@ -41,7 +42,7 @@ function xsm_get_person_fields()
     );
 }
 
-function xcms_get_person_field_types()
+function xsm_get_person_field_types()
 {
     return array(
         "favourites"=>"textarea",
@@ -54,6 +55,26 @@ function xcms_get_person_field_types()
         "is_student"=>"checkbox",
 
         "anketa_status"=>"enum"
+    );
+}
+
+// Person comment
+function xsm_get_person_comment_fields()
+{
+    return array(
+        "comment_text"=>"Текст комментария",
+        "owner_login"=>"Логин автора",
+        "blamed_person_id"=>"ID субъекта",
+        "person_comment_created"=>"Время создания",
+        "person_comment_modified"=>"Последняя модификация",
+        "person_comment_deleted"=>"Объект удалён"
+    );
+}
+
+function xsm_get_person_comment_field_types()
+{
+    return array(
+        "comment_text"=>"textarea"
     );
 }
 
