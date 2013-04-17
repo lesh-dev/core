@@ -39,7 +39,8 @@ function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_ti
     $template_root = "{$SETTINGS['engine_dir']}templates";
     $mail_msg = file_get_contents("$template_root/xsm-diff-message.html");
     $row_template = file_get_contents("$template_root/xsm-row-diff.html");
-    $row_long_template = file_get_contents("$template_root/xsm-row-long-diff.html");
+    $row_long_diff_template = file_get_contents("$template_root/xsm-row-long-diff.html");
+    $row_long_add_template = file_get_contents("$template_root/xsm-row-long-add.html");
 
     $diff_array = xcms_array_diff($new_object, $old_object);
 
@@ -53,6 +54,7 @@ function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_ti
         $type = xcms_get_key_or($types, $key);
         $old_value = $diff['old'];
         $new_value = $diff['new'];
+        $cur_row = $row_template;
         if ($type == "checkbox")
         {
             $old_value = strlen($old_value) ? "Да" : "Нет";
@@ -68,7 +70,10 @@ function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_ti
             $old_value = $anketa_statuses[$old_value];
             $new_value = $anketa_statuses[$new_value];
         }
-        $cur_row = ($type == "textarea") ? $row_long_template : $row_template;
+        if ($type == "textarea")
+        {
+            $cur_row = (strlen($old_value) > 0) ? $row_long_diff_template : $row_long_add_template;
+        }
         $cur_row = str_replace("@@KEY@", $key_title, $cur_row);
         $cur_row = str_replace("@@OLD-VALUE@", htmlspecialchars($old_value), $cur_row);
         $cur_row = str_replace("@@NEW-VALUE@", htmlspecialchars($new_value), $cur_row);
