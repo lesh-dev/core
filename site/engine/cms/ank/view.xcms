@@ -69,7 +69,7 @@
         $write_success = true; // TODO: проверять SELECT-ом, что таки да, вставилось
         $mail_msg = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg);
         $mail_msg = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg);
-        $mail_msg = str_replace("@@HOST@", $_SERVER['HTTP_HOST'], $mail_msg);
+        $mail_msg = str_replace("@@HOST@", xcms_hostname(), $mail_msg);
 
         // prepare reply_link
         $reply_body = str_replace("@@NAME@", $first_name, $reply_body);

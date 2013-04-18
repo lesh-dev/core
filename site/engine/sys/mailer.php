@@ -1,5 +1,6 @@
 <?php
     include_once("$engine_dir/sys/phpmailer/class.phpmailer.php");
+    include_once("$engine_dir/sys/util.php");
     include_once("$engine_dir/sys/db.php");
 
     function xcms_get_mailer()
@@ -156,7 +157,7 @@
                 xcms_add_mail_group($mailer, $mail_group);
         //}
 
-        $host = @shell_exec("hostname -f"); // $_SERVER["HTTP_HOST"];
+        $host = xcms_hostname();
         // TODO: prefix is broken
         $mailer->Subject = "[xcms-$mail_group] ($host) $subject";
 

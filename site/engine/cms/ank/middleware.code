@@ -28,7 +28,7 @@
       **/
     function xsm_send_anketa($mail_group, $mail_msg, $subject, $full_name, $email, $manager_mode = false)
     {
-        $host = $_SERVER["HTTP_HOST"];
+        $host = xcms_hostname();
         $subject = "[xcms-ank] ($host) Новая анкета: $full_name";
 
         $addr_from = "reg@fizlesh.ru"; // TODO: remove this spike
