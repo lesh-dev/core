@@ -1,5 +1,6 @@
 <?php
     include_once("$engine_dir/sys/phpmailer/class.phpmailer.php");
+    include_once("$engine_dir/sys/db.php");
 
     function xcms_get_mailer()
     {
@@ -11,6 +12,14 @@
     define('XMAIL_DESTMODE_TO', 'to');
     define('XMAIL_DESTMODE_CC', 'cc');
     define('XMAIL_DESTMODE_BCC', 'bcc');
+
+    function xcms_get_notification_fields()
+    {
+        return array(
+            "mail_group"=>"Почтовая группа",
+            "notification_text"=>"Текст уведомления в формате HTML"
+        );
+    }
 
     function xcms_add_mail_group($mailer, $mail_group, $mode = XMAIL_DESTMODE_TO)
     {
@@ -49,7 +58,7 @@
     }
 
     /**
-      * Посылает почтовое уведомление
+      * Ставит почтовое уведомление в очередь
       * Баги: Знает про fizlesh.ru, вместо того, чтобы брать эти настройки
       * из конфигурационного файла.
       * @param mail_group Группа рассылки из списка mailer.conf (или NULL)
@@ -67,6 +76,7 @@
         $login = xcms_user()->login();
         $enabled = xcms_get_key_or($SETTINGS, "mailer_enabled", true);
         if (!$enabled) return;
+
         $unix_time = time();
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
 
@@ -81,14 +91,44 @@
 
         if (!empty($mail_text_html))
         {
-            $body_html = file_get_contents("{$SETTINGS['engine_dir']}templates/notification-template.html");
-            $body_html = str_replace('@@SUBJECT@', htmlspecialchars($subject), $body_html);
+            $body_html = file_get_contents("{$SETTINGS['engine_dir']}templates/notification-body.html");
             $body_html = str_replace('@@MESSAGE@', $mail_text_html, $body_html);
             $body_html = str_replace('@@HOST@', $_SERVER['HTTP_HOST'], $body_html);
             $body_html = str_replace('@@REFERER@', $_SERVER['HTTP_REFERER'], $body_html);
             $body_html = str_replace('@@LOGIN@', $login, $body_html);
             $body_html = str_replace('@@TIMESTAMP@', $hr_timestamp, $body_html);
         }
+
+        $values = array(
+            "mail_group"=>$mail_group,
+            "notification_text"=>$body_html
+        );
+
+        return xdb_insert_or_update("notification", array("notification_id"=>XDB_NEW), $values, xcms_get_notification_fields());
+    }
+
+    /**
+      * Доставляет накопленные почтовые уведомления
+      * Баги: Знает про fizlesh.ru, вместо того, чтобы брать эти настройки
+      * из конфигурационного файла.
+      * @param mail_group Группа рассылки из списка mailer.conf (или NULL)
+      **/
+    function xcms_deliver_notifications($mail_group)
+    {
+        global $SETTINGS;
+
+        // it is essential to open DB in write mode to lock it
+        $db = xdb_get_write();
+        $query = "SELECT * FROM notification WHERE mail_group = '$mail_group' ORDER BY notification_id DESC";
+        $notification_sel = $db->query($query);
+        $notification_body = "";
+        while ($notification = $notification_sel->fetchArray(SQLITE3_ASSOC))
+            $notification_body .= $notification['notification_text'];
+
+        $body_html = file_get_contents("{$SETTINGS['engine_dir']}templates/notification-template.html");
+        $body_html = str_replace('@@NOTIFICATION-BODY@', $notification_body, $body_html);
+
+        $subject = "Уведомления [$mail_group]";
 
         $mailer = xcms_get_mailer();
         // please note this address should be configured in postfix
@@ -98,6 +138,8 @@
         $mailer->SetFrom($addr_from, $name_from);
         $mailer->Sender = $addr_from;
 
+        /*
+        TODO: this code is used for USER notifications and should be REWRITTEN
         if ($addr_list !== NULL)
         {
             foreach ($addr_list as $mail_addr)
@@ -108,24 +150,30 @@
         }
         else
         {
+        */
             // regular notification
             if ($mail_group !== NULL)
                 xcms_add_mail_group($mailer, $mail_group);
-        }
-        $host = $_SERVER["HTTP_HOST"];
-        $mailer->Subject = "[xcms-$prefix] ($host) $subject";
-        if (!empty($mail_text_html))
-        {
-            $mailer->MsgHTML($body_html);
-            $mailer->AltBody = $body;
-        }
-        else
-            $mailer->Body = $body;
+        //}
+
+        $host = @shell_exec("hostname -f"); // $_SERVER["HTTP_HOST"];
+        // TODO: prefix is broken
+        $mailer->Subject = "[xcms-$mail_group] ($host) $subject";
+
+        // plain text letters is a former century
+        $mailer->MsgHTML($body_html);
+        $mailer->AltBody = "This message is in HTML format";
+
         if (!$mailer->Send())
         {
             xcms_log(XLOG_ERROR, "[MAILER] ".$mailer->ErrorInfo);
             return false;
         }
+
+        // purge notifications in case of success
+        $del_query = "DELETE FROM notification WHERE mail_group = '$mail_group'";
+        $db->query($del_query);
+
         return true;
     }
 ?>

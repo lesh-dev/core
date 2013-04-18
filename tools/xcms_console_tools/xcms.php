@@ -1,92 +1,42 @@
 #!/usr/bin/php
 <?php
-    function main($args)
+    function xcms_console_main($args, $params)
     {
-        global $cnf,$meta_site_name, $meta_site_url, $meta_site_mail;
-        // var_dump(STDIN);
         $command = $args[0];
-        if($command == "useradd")
+        if ($command == "useradd")
+            xcms_console_create_user($params);
+        elseif ($command == "deliver-notifications")
         {
-            $su = xcms_user();
-            $su->setSuperuser();
-            
-            $login = @$cnf["login"];
-            $password = @$cnf["password"];
-            $mail = @$cnf["mail"];
-            $groups = @$cnf["groups"];
-            $notify = @$cnf["notify"];
-            
-            if($login == "") throw new Exception("No login specified");
-            if($password == "") throw new Exception("No password specified");
-            if($mail == "") throw new Exception("No mail specified");
-            if($groups == "") throw new Exception("No groups specified");
-            if($notify == "yes") $notify = TRUE;
-            else if($notify == "yes") $notify = TRUE;
-            else throw new Exception("Notify should be 'yes' or 'no'.");
-            
-            $su->create($login, $mail);
-            foreach(explode(",",$groups) as $group)
-                $su->groupadd($login, $group);
-            $su->su($login)->passwd($password);
-            
-            $Subj = "Твой логин на сайте $meta_site_name.";
-            $Body =
-"Привет!
-
-Мы создали для тебя логин и пароль на сайте $meta_site_name ($meta_site_url). Вот они:
-
-Логин (имя пользователя):  $login
-Пароль:                    $password
-
-Для того, чтобы войти на сайт, ты можешь пройти по этой ссылке: $meta_site_url
-
-Для того, чтобы редактировать тексты (и добавлять новости), зайди сюда: $meta_site_url?ref=ladmin
-
-Для того, чотбы посмотреть все курсы, зайди сюда: $meta_site_url/register/view-course
-
-Для того, чтобы посмотреть список людей, зайди сюда: $meta_site_url/register/view
-
-Если что-то не так, пароль не подходит, сайт не открывается и т.п. -- пожалуйста, напиши нам на $meta_site_mail
-
-Удачи!
-";
-            if($notify)
-                if(!xcms_send_email($mail, $Subj , $Body))
-                {
-                    echo "\n *** ERROR. Notification mail could not be delivered. Please, deliver it by yourself.\n";
-                    echo "============================================================================\n";
-                    echo "To: $mail\n";
-                    echo "Sublect: $Subj\n\n";
-                    echo $Body;
-                    echo "============================================================================\n";
-                }
-            
+            $mail_group = $params["mail-group"];
+            xcms_deliver_notifications($mail_group);
         }
     }
-?><?php
-    $cnf["basedir"] = ".";
+
+    $params = array();
+    $params["basedir"] = ".";
     $args = array();
-    foreach( $_SERVER["argv"] as $i=>$cmd)
+    foreach ($_SERVER["argv"] as $i=>$cmd)
     {
-        if($i == 0) continue;
-        if(strpos($cmd,"=") !== FALSE)
+        if ($i == 0) continue;
+        if (strpos($cmd, "=") !== false)
         {
-            $arr = explode("=",$cmd,2);
-            $cnf[$arr[0]] = $arr[1];
+            $arr = explode("=", $cmd, 2);
+            $params[$arr[0]] = $arr[1];
         }
         else
             $args[] = $cmd;
     }
-    $basedir = $cnf["basedir"];
-    if(!chdir($basedir))
-        throw new Exception("Can't CD to basedir");
+
+    $basedir = $params["basedir"];
+    if (!chdir($basedir))
+        throw new Exception("Can't change directory to basedir. ");
     if (!file_exists("index.php"))
-        throw new Exception("No index.php found!");
+        throw new Exception("No index.php found. ");
     if (file_exists("install.php"))
-        throw new Exception("install.php found, this is uninstalled version!");
+        throw new Exception("Installer detected, this installation is not configured yet. ");
     if (!file_exists("settings.php"))
-        throw new Exception("setting.php NOT found, this is uninstalled version!");
-    
+        throw new Exception("No 'settings.php' detected, this installation is not configured yet. ");
+
     session_start();
     header("Content-Type: text/html; charset=utf-8");
     date_default_timezone_set('Europe/Moscow');
@@ -96,12 +46,12 @@
     require_once ("$engine_dir/sys/auth.php");
     require_once ("$engine_dir/sys/logger.php");
     require_once ("$engine_dir/sys/compiler.php");
+    require_once ("$engine_dir/sys/db.php");
     require_once ("$engine_dir/sys/mailer.php");
-    require_once ("$engine_dir/sys/resample.php");
 
     $main_ref_file = "";
     $main_ref_name = "";
     xcms_main();
-    compile($main_ref_file, $main_ref_name);
-    main($args);
+    xcms_compile($main_ref_file, $main_ref_name);
+    xcms_console_main($args, $params);
 ?>

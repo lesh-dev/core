@@ -1,0 +1,47 @@
+<?php
+
+function xcms_console_create_user($params)
+{
+    global $meta_site_name, $meta_site_url, $meta_site_mail;
+
+    $su = xcms_user();
+    $su->setSuperuser();
+
+    $login = xcms_get_key_or($params, "login");
+    $password = xcms_get_key_or($params, "password");
+    $email = xcms_get_key_or($params, "email");
+    $groups = explode(',', xcms_get_key_or($params, "groups"));
+    $notify = (xcms_get_key_or($params, $notify, "yes") == "no");
+
+    $su->create($login, $email);
+    foreach ($groups as $group)
+        $su->add_to_group($login, $group);
+    $su->su($login)->passwd($password);
+
+    if ($notify)
+        xcms_user_create_notify($email, $login, $password);
+}
+
+
+function xcms_user_create_notify($email, $login, $password)
+{
+    // TODO: this template should be taken from file
+    $notify_result = xcms_send_notification(
+        "user-change",
+        array($email),
+        "auth",
+        "Добро пожаловать на fizlesh.ru!",
+
+        "Добро пожаловать! Для Вас заведён логин и пароль на сайте.\n"
+        ."\n"
+        ."Ваш логин: $login\n"
+        ."Ваш пароль: $password\n"
+        ."\n"
+        ."Если у Вас будут какие-то проблемы, не бойтесь писать "
+        ."на support@fizlesh.ru.\n"
+    );
+
+    return $notify_result ? null : "Не удалось послать оповещение пользователю. ";
+}
+
+?>

@@ -1,4 +1,5 @@
 <# auth/ #admin #>
+<# auth/user #>
 <# auth/format #>
 
 <?php
@@ -29,27 +30,6 @@
             }
         ?>
         </div><?php
-    }
-
-    function xcmst_user_create_notify($email, $login, $password)
-    {
-        // TODO: this template should be taken from file
-        $notify_result = xcms_send_notification(
-            "user-change",
-            array($email),
-            "auth",
-            "Добро пожаловать на fizlesh.ru!",
-
-            "Добро пожаловать! Для Вас заведён логин и пароль на сайте.\n"
-            ."\n"
-            ."Ваш логин: $login\n"
-            ."Ваш пароль: $password\n"
-            ."\n"
-            ."Если у Вас будут какие-то проблемы, не бойтесь писать "
-            ."на support@fizlesh.ru.\n"
-        );
-
-        return $notify_result ? null : "Не удалось послать оповещение пользователю. ";
     }
 
     function xcmst_draw_user_create_form()
@@ -162,7 +142,7 @@
         }
         $warn = null;
         if (@$_POST["notify_user"])
-            $warn = xcmst_user_create_notify($email, $login, $password);
+            $warn = xcms_user_create_notify($email, $login, $password);
 
         return array(null, $warn, "Пользователь успешно создан. ");
     }
