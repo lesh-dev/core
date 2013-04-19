@@ -3,10 +3,13 @@
     include_once("$engine_dir/sys/util.php");
     include_once("$engine_dir/sys/db.php");
 
-    function xcms_get_mailer()
+    function xcms_get_mailer($addr_from, $name_from)
     {
         $mailer = new PHPMailer();
         $mailer->CharSet = "utf-8";
+        // please note this address should be configured in postfix
+        $mailer->SetFrom($addr_from, $name_from);
+        $mailer->Sender = $addr_from;
         return $mailer;
     }
 
@@ -18,7 +21,8 @@
     {
         return array(
             "mail_group"=>"Почтовая группа",
-            "notification_text"=>"Текст уведомления в формате HTML"
+            "notification_text"=>"Текст уведомления в формате plain text"
+            "notification_html"=>"Текст уведомления в формате HTML"
         );
     }
 
@@ -71,7 +75,7 @@
       * @param mail_text Тело уведомления (в формате plain text)
       * @param mail_text_html Тело уведомления (в формате html)
       **/
-    function xcms_send_notification($mail_group, $addr_list, $prefix, $subject, $mail_text, $mail_text_html = '')
+    function xcms_send_notification($mail_group, $addr_list, $prefix, $subject, $mail_text, $mail_text_html, $immediate = false)
     {
         global $SETTINGS;
         $login = xcms_user()->login();
@@ -94,7 +98,7 @@
         {
             $body_html = file_get_contents("{$SETTINGS['engine_dir']}templates/notification-body.html");
             $body_html = str_replace('@@MESSAGE@', $mail_text_html, $body_html);
-            $body_html = str_replace('@@HOST@', $_SERVER['HTTP_HOST'], $body_html);
+            $body_html = str_replace('@@HOST@', xcms_hostname(), $body_html);
             $body_html = str_replace('@@REFERER@', $_SERVER['HTTP_REFERER'], $body_html);
             $body_html = str_replace('@@LOGIN@', $login, $body_html);
             $body_html = str_replace('@@TIMESTAMP@', $hr_timestamp, $body_html);
@@ -102,7 +106,8 @@
 
         $values = array(
             "mail_group"=>$mail_group,
-            "notification_text"=>$body_html
+            "notification_text"=>$body_text
+            "notification_html"=>$body_html
         );
 
         return xdb_insert_or_update("notification", array("notification_id"=>XDB_NEW), $values, xcms_get_notification_fields());
@@ -131,13 +136,10 @@
 
         $subject = "Уведомления [$mail_group]";
 
-        $mailer = xcms_get_mailer();
-        // please note this address should be configured in postfix
         $addr_from = "noreply@fizlesh.ru"; // TODO: remove these spikes!
         $name_from = "FizLesh Notificator";
+        $mailer = xcms_get_mailer($addr_from, $name_from);
         $mailer->AddReplyTo($addr_from, $name_from);
-        $mailer->SetFrom($addr_from, $name_from);
-        $mailer->Sender = $addr_from;
 
         /*
         TODO: this code is used for USER notifications and should be REWRITTEN
@@ -163,7 +165,7 @@
 
         // plain text letters is a former century
         $mailer->MsgHTML($body_html);
-        $mailer->AltBody = "This message is in HTML format";
+        $mailer->AltBody = "This message is in HTML format.\r\n";
 
         if (!$mailer->Send())
         {

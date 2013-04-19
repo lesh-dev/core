@@ -33,8 +33,7 @@
 
         $addr_from = "reg@fizlesh.ru"; // TODO: remove this spike
         $name_from = "FizLesh Notificator";
-
-        $mailer = xcms_get_mailer();
+        $mailer = xcms_get_mailer($addr_from, $name_from);
 
         // no mails is a success
         if (!xcms_add_mail_group($mailer, $mail_group))
@@ -45,8 +44,7 @@
             $mailer->AddReplyTo($email, $full_name_tr);
         else
             $mailer->AddReplyTo($addr_from, $name_from);
-        $mailer->SetFrom($addr_from, $name_from);
-        $mailer->Sender = $addr_from;
+
         $mailer->Subject = $subject;
         $mailer->AltBody = "This message is in HTML format\r\n";
         $mailer->MsgHTML($mail_msg);
