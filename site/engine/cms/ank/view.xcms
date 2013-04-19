@@ -103,11 +103,8 @@
             $mail_group_managers = "reg-managers-test";
         }
 
-        $success_managers = xsm_send_anketa($mail_group_managers, $mail_msg_managers,
-            $subject, $full_name, $email, true);
-
-        $success_notify = xsm_send_anketa($mail_group_notify, $mail_msg,
-            $subject, $full_name, $email, false);
+        $success_managers = xsm_send_anketa($mail_group_managers, $mail_msg_managers, $full_name, $email, true);
+        $success_notify = xsm_send_anketa($mail_group_notify, $mail_msg, $full_name, $email, false);
 
         $success = ($success_managers || $success_notify) && $write_success;
 

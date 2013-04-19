@@ -26,7 +26,7 @@
     /**
       * Посылатор анкет (вынесен сюда, чтобы не затмевать суть дела)
       **/
-    function xsm_send_anketa($mail_group, $mail_msg, $subject, $full_name, $email, $manager_mode = false)
+    function xsm_send_anketa($mail_group, $mail_msg, $full_name, $email, $manager_mode = false)
     {
         $host = xcms_hostname();
         $subject = "[xcms-ank] ($host) Новая анкета: $full_name";
@@ -44,16 +44,7 @@
             $mailer->AddReplyTo($email, $full_name_tr);
         else
             $mailer->AddReplyTo($addr_from, $name_from);
-
-        $mailer->Subject = $subject;
-        $mailer->AltBody = "This message is in HTML format\r\n";
-        $mailer->MsgHTML($mail_msg);
-        if (!$mailer->Send())
-        {
-            xcms_log(XLOG_ERROR, "[MAILER:XSM] ".$mailer->ErrorInfo);
-            return false;
-        }
-        return true;
+        return xcms_mailer_send($mailer, $subject, $mail_msg);
     }
 
     /**

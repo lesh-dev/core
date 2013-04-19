@@ -13,6 +13,21 @@
         return $mailer;
     }
 
+    function xcms_mailer_send($mailer, $subject, $body_html)
+    {
+        $mailer->Subject = $subject;
+        // plain text letters is a former century
+        $mailer->MsgHTML($body_html);
+        $mailer->AltBody = "This message is in HTML format.\r\n";
+
+        if (!$mailer->Send())
+        {
+            xcms_log(XLOG_ERROR, "[MAILER] ".$mailer->ErrorInfo);
+            return false;
+        }
+        return true;
+    }
+
     define('XMAIL_DESTMODE_TO', 'to');
     define('XMAIL_DESTMODE_CC', 'cc');
     define('XMAIL_DESTMODE_BCC', 'bcc');
@@ -161,17 +176,8 @@
 
         $host = xcms_hostname();
         // TODO: prefix is broken
-        $mailer->Subject = "[xcms-$mail_group] ($host) $subject";
-
-        // plain text letters is a former century
-        $mailer->MsgHTML($body_html);
-        $mailer->AltBody = "This message is in HTML format.\r\n";
-
-        if (!$mailer->Send())
-        {
-            xcms_log(XLOG_ERROR, "[MAILER] ".$mailer->ErrorInfo);
+        if (!xcms_mailer_send($mailer, "[xcms-$mail_group] ($host) $subject", $body_html))
             return false;
-        }
 
         // purge notifications in case of success
         $del_query = "DELETE FROM notification WHERE mail_group = '$mail_group'";
