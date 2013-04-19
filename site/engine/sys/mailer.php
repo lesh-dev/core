@@ -36,7 +36,7 @@
     {
         return array(
             "mail_group"=>"Почтовая группа",
-            "notification_text"=>"Текст уведомления в формате plain text"
+            "notification_text"=>"Текст уведомления в формате plain text",
             "notification_html"=>"Текст уведомления в формате HTML"
         );
     }
@@ -100,7 +100,7 @@
         $unix_time = time();
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
 
-        $body =
+        $body_text =
             "$mail_text\r\n".
             "--\r\n".
             "Это уведомление сгенерировано автоматически. Отвечать на него не нужно\r\n".
@@ -121,7 +121,7 @@
 
         $values = array(
             "mail_group"=>$mail_group,
-            "notification_text"=>$body_text
+            "notification_text"=>$body_text,
             "notification_html"=>$body_html
         );
 

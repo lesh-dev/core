@@ -118,6 +118,10 @@ span.ankStatus.processed {
     color: #008f00;
 }
 
+span.ankStatus.nextyear {
+    color: #9f5f5f;
+}
+
 span.ankStatus.declined {
     color: #7f7f7f;
 }
