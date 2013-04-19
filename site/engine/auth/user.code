@@ -19,7 +19,14 @@ function xcms_console_create_user($params)
     $su->su($login)->passwd($password);
 
     if ($notify)
-        xcms_user_create_notify($email, $login, $password);
+    {
+        $res = xcms_user_create_notify($email, $login, $password);
+        if ($res)
+        {
+            echo "Cannot send notification to user, do it yourself:\n".
+                "EMail: $email, login: $login, password: $password\n";
+        }
+    }
 }
 
 
