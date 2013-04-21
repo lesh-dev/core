@@ -41,6 +41,9 @@
         );
     }
 
+    /**
+      * For internal usage only
+      **/
     function xcms_add_mail_group($mailer, $mail_group, $mode = XMAIL_DESTMODE_TO)
     {
         global $SETTINGS;
@@ -78,9 +81,48 @@
     }
 
     /**
-      * Ставит почтовое уведомление в очередь
+      * For internal usage only
       * Баги: Знает про fizlesh.ru, вместо того, чтобы брать эти настройки
       * из конфигурационного файла.
+      **/
+    function xcms_deliver_mail_int($mail_group, $addr_list, $prefix, $notification_body, $subject = '')
+    {
+        global $SETTINGS;
+
+        $body_html = file_get_contents("{$SETTINGS['engine_dir']}templates/notification-template.html");
+        $body_html = str_replace('@@NOTIFICATION-BODY@', $notification_body, $body_html);
+
+        if (empty($subject))
+            $subject = "Уведомления [$mail_group]";
+
+        $addr_from = "noreply@fizlesh.ru"; // TODO: remove these spikes!
+        $name_from = "FizLesh Notificator";
+        $mailer = xcms_get_mailer($addr_from, $name_from);
+        $mailer->AddReplyTo($addr_from, $name_from);
+
+        if ($addr_list !== NULL)
+        {
+            foreach ($addr_list as $mail_addr)
+                $mailer->AddAddress($mail_addr);
+            // we send an email to address list, but add groups to BCC
+            if ($mail_group !== NULL)
+                xcms_add_mail_group($mailer, $mail_group, XMAIL_DESTMODE_BCC);
+        }
+        else
+        {
+            // regular notification
+            if ($mail_group !== NULL)
+                xcms_add_mail_group($mailer, $mail_group);
+        }
+
+        $host = xcms_hostname();
+        if (!xcms_mailer_send($mailer, "[xcms-$prefix] ($host) $subject", $body_html))
+            return false;
+    }
+
+
+    /**
+      * Ставит почтовое уведомление в очередь
       * @param mail_group Группа рассылки из списка mailer.conf (или NULL)
       * @param addr_list Список адресов помимо группы рассылки (или NULL).
       *        Если указан одновременно и адрес, и группа рассылки, то письмо отправляется
@@ -89,6 +131,7 @@
       * @param subject Тема уведомления
       * @param mail_text Тело уведомления (в формате plain text)
       * @param mail_text_html Тело уведомления (в формате html)
+      * @param immediate Послать письмо немедленно, не складывая в очередь
       **/
     function xcms_send_notification($mail_group, $addr_list, $prefix, $subject, $mail_text, $mail_text_html, $immediate = false)
     {
@@ -100,12 +143,13 @@
         $unix_time = time();
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
 
+        $host = xcms_hostname();
         $body_text =
             "$mail_text\r\n".
             "--\r\n".
             "Это уведомление сгенерировано автоматически. Отвечать на него не нужно\r\n".
             "Пользователь    : $login\r\n".
-            "Имя хоста       : {$_SERVER['HTTP_HOST']}\r\n".
+            "Имя хоста       : $host\r\n".
             "Обратная ссылка : {$_SERVER['HTTP_REFERER']}\r\n";
             "Дата и время    : $hr_timestamp\r\n";
 
@@ -113,12 +157,15 @@
         {
             $body_html = file_get_contents("{$SETTINGS['engine_dir']}templates/notification-body.html");
             $body_html = str_replace('@@MESSAGE@', $mail_text_html, $body_html);
-            $body_html = str_replace('@@HOST@', xcms_hostname(), $body_html);
+            $body_html = str_replace('@@HOST@', $host, $body_html);
             $body_html = str_replace('@@REFERER@', $_SERVER['HTTP_REFERER'], $body_html);
             $body_html = str_replace('@@LOGIN@', $login, $body_html);
             $body_html = str_replace('@@TIMESTAMP@', $hr_timestamp, $body_html);
         }
+        if ($immediate)
+            return xcms_deliver_mail_int($mail_group, $addr_list, $mail_group, $body_html, $subject);
 
+        // In case of delayed sending, subject and prefix are lost
         $values = array(
             "mail_group"=>$mail_group,
             "notification_text"=>$body_text,
@@ -136,8 +183,6 @@
       **/
     function xcms_deliver_notifications($mail_group)
     {
-        global $SETTINGS;
-
         // it is essential to open DB in write mode to lock it
         $db = xdb_get_write();
         $query = "SELECT * FROM notification WHERE mail_group = '$mail_group' ORDER BY notification_id DESC";
@@ -146,37 +191,7 @@
         while ($notification = $notification_sel->fetchArray(SQLITE3_ASSOC))
             $notification_body .= $notification['notification_text'];
 
-        $body_html = file_get_contents("{$SETTINGS['engine_dir']}templates/notification-template.html");
-        $body_html = str_replace('@@NOTIFICATION-BODY@', $notification_body, $body_html);
-
-        $subject = "Уведомления [$mail_group]";
-
-        $addr_from = "noreply@fizlesh.ru"; // TODO: remove these spikes!
-        $name_from = "FizLesh Notificator";
-        $mailer = xcms_get_mailer($addr_from, $name_from);
-        $mailer->AddReplyTo($addr_from, $name_from);
-
-        /*
-        TODO: this code is used for USER notifications and should be REWRITTEN
-        if ($addr_list !== NULL)
-        {
-            foreach ($addr_list as $mail_addr)
-                $mailer->AddAddress($mail_addr);
-            // we send an email to address list, but add groups to BCC
-            if ($mail_group !== NULL)
-                xcms_add_mail_group($mailer, $mail_group, XMAIL_DESTMODE_BCC);
-        }
-        else
-        {
-        */
-            // regular notification
-            if ($mail_group !== NULL)
-                xcms_add_mail_group($mailer, $mail_group);
-        //}
-
-        $host = xcms_hostname();
-        // TODO: prefix is broken
-        if (!xcms_mailer_send($mailer, "[xcms-$mail_group] ($host) $subject", $body_html))
+        if (!xcms_deliver_mail_int($mail_group, null, $mail_group, $notification_body))
             return false;
 
         // purge notifications in case of success
