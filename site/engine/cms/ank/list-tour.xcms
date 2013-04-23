@@ -117,7 +117,8 @@ function xsm_show_tour_list()
         $person_modified = xsm_ymdhm($person["person_modified"]);
 
         $row_class = xsm_get_city_class($school_city);
-        $row_class .= ($is_teacher == "teacher" ? " teacher" : "");
+        if ($is_teacher == "teacher")
+            $row_class = "teacher";
         ?>
         <tr class="<?php echo $row_class; ?>">
             <!--<td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>-->
