@@ -78,12 +78,12 @@ function xsm_show_tour_list()
             <col width="13%" />
             <col width="45px" />
             <col width="50px" />
-            <col width="55px" />
-            <col width="55px" />
-            <col width="55px" />
-            <col width="23%" />
+            <col width="60px" />
+            <col width="60px" />
+            <col width="60px" />
             <col width="17%" />
-            <col width="65px" />
+            <col width="17%" />
+            <col width="70px" />
         </colgroup>
         <thead>
             <th class="ankList">ФИО</th>
