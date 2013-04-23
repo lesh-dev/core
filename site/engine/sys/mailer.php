@@ -89,11 +89,12 @@
     {
         global $SETTINGS;
 
-        $body_html = file_get_contents("{$SETTINGS['engine_dir']}templates/notification-template.html");
-        $body_html = str_replace('@@NOTIFICATION-BODY@', $notification_body, $body_html);
-
         if (empty($subject))
             $subject = "Уведомления [$mail_group]";
+
+        $body_html = file_get_contents("{$SETTINGS['engine_dir']}templates/notification-template.html");
+        $body_html = str_replace('@@NOTIFICATION-BODY@', $notification_body, $body_html);
+        $body_html = str_replace('@@SUBJECT@', $subject, $body_html);
 
         $addr_from = "noreply@fizlesh.ru"; // TODO: remove these spikes!
         $name_from = "FizLesh Notificator";
@@ -189,7 +190,7 @@
         $notification_sel = $db->query($query);
         $notification_body = "";
         while ($notification = $notification_sel->fetchArray(SQLITE3_ASSOC))
-            $notification_body .= $notification['notification_text'];
+            $notification_body .= $notification['notification_html'];
 
         if (!xcms_deliver_mail_int($mail_group, null, $mail_group, $notification_body))
             return false;
