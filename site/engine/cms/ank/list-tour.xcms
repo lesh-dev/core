@@ -57,7 +57,7 @@ function xsm_show_tour_list()
     $query =
         "SELECT
         p.person_id, p.last_name, p.first_name, p.patronymic,
-        p.current_class,
+        p.current_class, p.school_city,
         p.is_teacher,
         p.phone, p.cellular,
         p.tent_capacity, p.tour_requisites,
@@ -98,6 +98,7 @@ function xsm_show_tour_list()
         $fio = htmlspecialchars(xsm_fio($person));
 
         $is_teacher = $person["is_teacher"];
+        $school_city = $person["school_city"];
 
         $current_class = htmlspecialchars($person["current_class"]);
 
@@ -110,7 +111,8 @@ function xsm_show_tour_list()
         $person_created = xsm_ymdhm($person["person_created"]);
         $person_modified = xsm_ymdhm($person["person_modified"]);
 
-        $row_class = ($is_teacher == "teacher" ? "teacher" : "");
+        $row_class = xsm_get_city_class($school_city);
+        $row_class .= ($is_teacher == "teacher" ? " teacher" : "");
         ?>
         <tr class="<?php echo $row_class; ?>">
             <td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>

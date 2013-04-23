@@ -148,8 +148,9 @@ function xsm_show_ank_list()
         $person_created = xsm_ymdhm($person["person_created"]);
         $person_modified = xsm_ymdhm($person["person_modified"]);
 
+        $row_class = xsm_get_city_class($school_city);
         ?>
-        <tr>
+        <tr class="<?php echo $row_class; ?>">
             <td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
             <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"
                 title="<?php echo $fio; ?>"><?php echo $fi; ?></a></td>

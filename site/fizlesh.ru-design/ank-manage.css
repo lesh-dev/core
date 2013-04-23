@@ -50,6 +50,14 @@ tr.teacher td.ankList {
     background-color: #b5b16f;
 }
 
+tr.not-msk-city td.ankList {
+    background-color: #7fffaf;
+}
+
+tr.far-city td.ankList {
+    background-color: #7fcfff;
+}
+
 /* ank-notes
 td.ankList.notes {
     background-color: #85cf6f;

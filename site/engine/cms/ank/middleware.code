@@ -47,6 +47,16 @@
         return xcms_mailer_send($mailer, $subject, $mail_msg);
     }
 
+    function xsm_get_city_class($school_city)
+    {
+        $class = "";
+        if (strpos($school_city, "Моск") === false)
+            $class = "far-city";
+        elseif (strpos($school_city, "Москва") === false)
+            $class = "not-msk-city";
+        return $class;
+    }
+
     /**
       * Получение дефолтной школы (самой последней по времени)
       * @return school id (or -1 in case of empty schools list
