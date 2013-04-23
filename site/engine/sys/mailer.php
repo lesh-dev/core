@@ -117,8 +117,7 @@
         }
 
         $host = xcms_hostname();
-        if (!xcms_mailer_send($mailer, "[xcms-$prefix] ($host) $subject", $body_html))
-            return false;
+        return xcms_mailer_send($mailer, "[xcms-$prefix] ($host) $subject", $body_html);
     }
 
 
