@@ -106,6 +106,33 @@ table.ankEdit {
     font-size: 9pt;
 }
 
+/* forest status */
+
+td.ankList.c {
+    text-align: center;
+}
+
+span.forest-status {
+    font-weight: bold;
+}
+span.forest-status.notable {
+    color: #ff0000;
+}
+span.forest-status.no {
+    color: #7f0000;
+}
+span.forest-status.maybe {
+    color: #0000ff;
+}
+span.forest-status.able {
+    color: #009f00;
+}
+span.forest-status.yes {
+    color: #007f00;
+}
+
+/* anketa status */
+
 span.ankStatus {
     font-weight: bold;
 }

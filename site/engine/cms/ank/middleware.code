@@ -217,6 +217,17 @@
         return "<span class=\"ankStatus $anketa_status\" id=\"anketa_status-span\">$hr_status</span>";
     }
 
+    function xsm_draw_forest_status($person, $fn)
+    {
+        $forest_status = $person["forest_$fn"];
+        $statuses = xsm_get_forest_statuses();
+        if (!array_key_exists($forest_status, $statuses))
+            $forest_status = "no"; // default
+
+        $hr_status = $statuses[$forest_status];
+        return "<span class=\"forest-status $forest_status\" id=\"forest_status-span\">$hr_status</span>";
+    }
+
     function xsm_draw_exam_status($exam)
     {
         $exam_status = $exam['exam_status'];

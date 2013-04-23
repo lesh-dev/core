@@ -30,6 +30,10 @@ function xsm_get_person_fields()
         "tent_capacity"=>"Вместимость палатки",
         "tour_requisites"=>"Туристское барахло",
 
+        "forest_1"=>"1-й выход в лес",
+        "forest_2"=>"2-й выход в лес",
+        "forest_3"=>"3-й выход в лес",
+
         "favourites"=>"Любимые предметы",
         "achievements"=>"Достижения",
         "hobby"=>"Хобби",
@@ -54,7 +58,11 @@ function xsm_get_person_field_types()
         "is_teacher"=>"checkbox",
         "is_student"=>"checkbox",
 
-        "anketa_status"=>"enum"
+        "anketa_status"=>"enum",
+
+        "forest_1"=>"enum",
+        "forest_2"=>"enum",
+        "forest_3"=>"enum"
     );
 }
 
@@ -96,6 +104,21 @@ function xsm_get_anketa_statuses()
         "duplicate"=>"Дубль",
         "spam"=>"Спам");
 }
+
+/**
+  * Complete list of valid forest presence statuses
+  * @return key-value array of statuses
+  **/
+function xsm_get_forest_statuses()
+{
+    return array(
+        "notable"=>"Не может",
+        "no"=>"Не идёт",
+        "maybe"=>"ХЗ",
+        "able"=>"Может",
+        "yes"=>"Идёт");
+}
+
 
 /**
   * Status groups for person locator

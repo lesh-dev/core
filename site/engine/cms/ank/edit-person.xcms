@@ -72,6 +72,8 @@ function xsm_edit_person()
                         echo xsm_make_enum_selector($key, $value, xsm_get_curatorship_items());
                     elseif ($key == "anketa_status")
                         echo xsm_make_enum_selector($key, $value, xsm_get_anketa_statuses());
+                    elseif (substr($key, 0, strlen("forest_")) == "forest_")
+                        echo xsm_make_enum_selector($key, $value, xsm_get_forest_statuses());
                 } else {?>
                     <input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
                         name="<?php echo $key; ?>" id="<?php echo $key; ?>-input" <?php echo $attr; ?> /><?php

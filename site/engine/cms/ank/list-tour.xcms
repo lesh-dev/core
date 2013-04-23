@@ -61,6 +61,7 @@ function xsm_show_tour_list()
         p.is_teacher,
         p.phone, p.cellular,
         p.tent_capacity, p.tour_requisites,
+        p.forest_1, p.forest_2, p.forest_3,
         p.anketa_status, p.person_created, p.person_modified
         FROM person p";
 
@@ -74,18 +75,22 @@ function xsm_show_tour_list()
     ?>
     <table summary="Участники" class="ankList">
         <colgroup>
-            <col width="30px" />
             <col width="13%" />
             <col width="45px" />
             <col width="50px" />
+            <col width="55px" />
+            <col width="55px" />
+            <col width="55px" />
             <col width="23%" />
             <col width="17%" />
-            <col width="60px" />
+            <col width="65px" />
         </colgroup>
         <thead>
-            <th class="ankList">ID</th>
             <th class="ankList">ФИО</th>
             <th class="ankList">Кл.</th>
+            <th class="ankList">М1</th>
+            <th class="ankList">М2</th>
+            <th class="ankList">М3</th>
             <th class="ankList">Палатка</th>
             <th class="ankList">Снаряжение</th>
             <th class="ankList">Контакты</th>
@@ -115,10 +120,13 @@ function xsm_show_tour_list()
         $row_class .= ($is_teacher == "teacher" ? " teacher" : "");
         ?>
         <tr class="<?php echo $row_class; ?>">
-            <td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
+            <!--<td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>-->
             <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"
                 title="<?php echo $fio; ?>"><?php echo $fi; ?></a></td>
             <td class="ankList"><?php echo $current_class; ?></td>
+            <td class="ankList c"><?php echo xsm_draw_forest_status($person, 1); ?></td>
+            <td class="ankList c"><?php echo xsm_draw_forest_status($person, 2); ?></td>
+            <td class="ankList c"><?php echo xsm_draw_forest_status($person, 3); ?></td>
             <td class="ankList"><?php echo $tent_capacity; ?></td>
             <td class="ankList"><?php echo $tour_requisites; ?></td>
             <td class="ankList">

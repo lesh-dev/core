@@ -225,6 +225,9 @@ function xsm_print_person_ank_data($db, $person)
 
     $tent_capacity = htmlspecialchars($person["tent_capacity"]);
     $tour_requisites = xcms_html_wrap_by_crlf(htmlspecialchars($person["tour_requisites"]));
+    $forest_status_1 = xsm_draw_forest_status($person, 1);
+    $forest_status_2 = xsm_draw_forest_status($person, 2);
+    $forest_status_3 = xsm_draw_forest_status($person, 3);
 
     $favourites = xcms_html_wrap_by_crlf(htmlspecialchars($person["favourites"]));
     $achievements = xcms_html_wrap_by_crlf(htmlspecialchars($person["achievements"]));
@@ -250,6 +253,9 @@ function xsm_print_person_ank_data($db, $person)
     echo "<hr/>\n";
     xsm_draw_person_textval('main', $fields['tent_capacity'], $tent_capacity);
     xsm_draw_person_textval('main', $fields['tour_requisites'], $tour_requisites);
+    xsm_draw_person_textval('main', $fields['forest_1'], $forest_status_1);
+    xsm_draw_person_textval('main', $fields['forest_2'], $forest_status_2);
+    xsm_draw_person_textval('main', $fields['forest_3'], $forest_status_3);
     echo "<hr/>\n";
     xsm_draw_person_textval('main', $fields['user_agent'], $user_agent);
     xsm_draw_person_longtextval('main', $fields['favourites'], $favourites);
