@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-su apache -c "php tools/xcms_console_tools/xcms.php 'basedir=/srv/www/production' deliver-notifications 'mail-group=reg'"
+XCMS_HOME="/srv/www/production"
+su apache -c "php /srv/tools/git-working-copy/tools/xcms_console_tools/xcms.php 'basedir=$XCMS_HOME' deliver-notifications 'mail-group=reg'"
