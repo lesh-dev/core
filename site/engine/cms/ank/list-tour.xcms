@@ -125,9 +125,9 @@ function xsm_show_tour_list()
             <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"
                 title="<?php echo $fio; ?>"><?php echo $fi; ?></a></td>
             <td class="ankList"><?php echo $current_class; ?></td>
-            <td class="ankList c"><?php echo xsm_draw_forest_status($person, 1); ?></td>
-            <td class="ankList c"><?php echo xsm_draw_forest_status($person, 2); ?></td>
-            <td class="ankList c"><?php echo xsm_draw_forest_status($person, 3); ?></td>
+            <td class="ankList c"><?php echo xsm_draw_forest_enum($person, 1); ?></td>
+            <td class="ankList c"><?php echo xsm_draw_forest_enum($person, 2); ?></td>
+            <td class="ankList c"><?php echo xsm_draw_forest_enum($person, 3); ?></td>
             <td class="ankList"><?php echo $tent_capacity; ?></td>
             <td class="ankList"><?php echo $tour_requisites; ?></td>
             <td class="ankList">
@@ -137,7 +137,7 @@ function xsm_show_tour_list()
                 if ($phone) echo $phone;
             ?>
             </td>
-            <td class="ankList"><?php echo xsm_draw_person_status($person); ?></td>
+            <td class="ankList"><?php echo xsm_draw_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php
         }

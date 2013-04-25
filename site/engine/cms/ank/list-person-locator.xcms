@@ -7,15 +7,13 @@
 ?>
 <p>В этом списке по умолчанию показываются люди, с которыми идёт (или недавно шло) взаимодействие.
     Для школьников и преподов, которые стабильно <b>не ездят</b> на школы уже 2-3&nbsp;года, осмысленно выставлять статус
-    <span class="ankStatus old">Архив</span>. В&nbsp;этот же статус
+    <span class="anketa-status old">Архив</span>. В&nbsp;этот же статус
     можно переводить через 1-2 года тех, кому по результатам собеседования был проставлен статус
-    <span class="ankStatus declined">Отклонён</span> (сразу этого делать не следует).
+    <span class="anketa-status declined">Отклонён</span> (сразу этого делать не следует).
 </p>
 <form method="post" action="list-person-locator" style="margin-bottom: 2px"><span>
     <span class="ankListField">Статус</span>: <?php
-    echo xsm_make_enum_selector(
-        "show_anketa_status", $show_anketa_status,
-        xsm_get_person_show_statuses());
+    echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status");
     echo xsm_make_checkbox('show_is_teacher', $show_is_teacher, "teacher");
     ?><span class="ankListField">Только преподы</span>&nbsp;&nbsp;
     <?php
@@ -43,8 +41,8 @@ function xsm_show_all_person_list()
 
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
 
-    $show_statuses = xsm_get_person_show_statuses();
-
+    // TODO: WRAP into common code
+    $show_statuses = xsm_get_enum("show_anketa_status");
     if (!array_key_exists($show_anketa_status, $show_statuses))
         $show_anketa_status = "active";
 
@@ -142,16 +140,6 @@ function xsm_show_all_person_list()
         /* TODO: enable
         $person_school_created = xsm_ymdhm($person["person_school_created"]);
         $person_school_modified = xsm_ymdhm($person["person_school_modified"]);
-        */
-
-        $anketa_status = $person["anketa_status"];
-        $statuses = xsm_get_anketa_statuses();
-        if (!array_key_exists($anketa_status, $statuses)) $anketa_status = "new"; // default
-        $hr_status = $statuses[$anketa_status];
-
-        /*$curatorship_items = xsm_get_curatorship_items();
-        if (!array_key_exists($curatorship, $curatorship_items)) $curatorship = "none"; // default
-        $hr_curatorship = $curatorship_items[$curatorship];
 
         $hr_teacher = ($is_teacher == "teacher" ? "Препод, " : "");
         $hr_student = ($is_student == "student" ? "Школьник, " : "");
@@ -167,9 +155,7 @@ function xsm_show_all_person_list()
                 if ($cellular && $phone)
                     echo ", $phone"; ?></a></td>
             </td>
-            <td class="ankList">
-                <span class="ankStatus <?php echo $anketa_status; ?>"><?php echo $hr_status; ?></span>
-            </td>
+            <td class="ankList"><?php echo xsm_draw_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php
     }

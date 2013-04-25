@@ -133,47 +133,47 @@ span.forest-status.yes {
 
 /* anketa status */
 
-span.ankStatus {
+span.anketa-status {
     font-weight: bold;
 }
 
-span.ankStatus.new {
+span.anketa-status.new {
     color: #ffff00;
 }
 
-span.ankStatus.progress {
+span.anketa-status.progress {
     color: #7f007f;
 }
 
-span.ankStatus.less {
+span.anketa-status.less {
     color: #2f2faf;
 }
 
-span.ankStatus.processed {
+span.anketa-status.processed {
     color: #008f00;
 }
 
-span.ankStatus.nextyear {
+span.anketa-status.nextyear {
     color: #9f5f5f;
 }
 
-span.ankStatus.declined {
+span.anketa-status.declined {
     color: #7f7f7f;
 }
 
-span.ankStatus.cont {
+span.anketa-status.cont {
     color: #006f00;
 }
 
-span.ankStatus.old {
+span.anketa-status.old {
     color: #000000;
 }
 
-span.ankStatus.duplicate {
+span.anketa-status.duplicate {
     color: #ff7f50;
 }
 
-span.ankStatus.spam {
+span.anketa-status.spam {
     color: #ff0000;
 }
 

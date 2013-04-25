@@ -19,14 +19,14 @@
     $show_anketa_status = xcms_get_persistent_key("list-ank", "show_anketa_status", "abitur");
 ?>
 <p>В этом списке по умолчанию показываются <b>свежие заявки</b>. Когда приходит новая анкета, она получает статус
-    <span class="ankStatus new">Новый</span>. После приглашения на собеседование школьнику следует выставлять
-    статус <span class="ankStatus progress">Ждёт собеседования</span>, а в заметках указать дату собеседования.
-    По результатам собеседования могут быть выставлены статус <span class="ankStatus processed">Принят</span>,
-    <span class="ankStatus less">Ждёт леса</span>, <span class="ankStatus nextyear">Отложен</span>
-    или <span class="ankStatus declined">Отклонён</span>.
-    В статус <span class="ankStatus old">Архив</span> можно переводить через 1-2 года тех,
+    <span class="anketa-status new">Новый</span>. После приглашения на собеседование школьнику следует выставлять
+    статус <span class="anketa-status progress">Ждёт собеседования</span>, а в заметках указать дату собеседования.
+    По результатам собеседования могут быть выставлены статус <span class="anketa-status processed">Принят</span>,
+    <span class="anketa-status less">Ждёт леса</span>, <span class="anketa-status nextyear">Отложен</span>
+    или <span class="anketa-status declined">Отклонён</span>.
+    В статус <span class="anketa-status old">Архив</span> можно переводить через 1-2 года тех,
     кому по результатам собеседования был проставлен статус
-    <span class="ankStatus declined">Отклонён</span> (сразу этого делать не следует).
+    <span class="anketa-status declined">Отклонён</span> (сразу этого делать не следует).
 </p>
 <p>Если человек был зачислен хотя бы на одну школу, в этом списке он <b>не</b> будет показан! Если нужно найти человека,
     воспользуйтесь списком <a href="list-person-locator&amp;show_anketa_status=all">Все люди</a>.
@@ -165,7 +165,7 @@ function xsm_show_ank_list()
             ?>
             </td>
             <td class="ankList"><?php echo $person_created; ?></td>
-            <td class="ankList"><?php echo xsm_draw_person_status($person); ?></td>
+            <td class="ankList"><?php echo xsm_draw_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php
         }

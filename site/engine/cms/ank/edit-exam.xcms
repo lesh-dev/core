@@ -172,8 +172,7 @@ function xsm_edit_exam()
                     // остатку названия ключа без префикса 'is_'
                     echo xsm_make_checkbox($key, $value, substr($key, 3));
                 } elseif ($ft == "enum") {
-                    if ($key == "exam_status")
-                        echo xsm_make_enum_selector($key, $value, xsm_get_exam_statuses());
+                    echo xsm_make_enum_by_type($key, $value, $key);
                 } elseif ($key == 'student_person_id')
                 {?>
                     <input type="text" class="ankEdit" value="<?php

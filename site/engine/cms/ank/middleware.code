@@ -206,35 +206,28 @@
         return "($cond)";
     }
 
-    function xsm_draw_person_status($person)
+    function xsm_draw_enum($object, $key)
     {
-        $anketa_status = $person["anketa_status"];
-        $statuses = xsm_get_anketa_statuses();
-        if (!array_key_exists($anketa_status, $statuses))
-            $anketa_status = "new"; // default
+        $enum_value = $object[$key];
+        $enum_values = xsm_get_enum($key);
+        $default_value = xsm_get_enum_default_value($key);
+        if (!array_key_exists($enum_value, $enum_values))
+            $enum_value = $default_value;
 
-        $hr_status = $statuses[$anketa_status];
-        return "<span class=\"ankStatus $anketa_status\" id=\"anketa_status-span\">$hr_status</span>";
+        $css_class = str_replace('_', '-', $key);
+        $hr_status = $enum_values[$enum_value];
+        return "<span class=\"$css_class $enum_value\" id=\"$key-span\">$hr_status</span>";
     }
 
-    function xsm_draw_forest_status($person, $fn)
+    function xsm_draw_forest_enum($person, $fn)
     {
+        // TODO: fix default value
         $forest_status = $person["forest_$fn"];
-        $statuses = xsm_get_forest_statuses();
+        $statuses = xsm_get_enum("forest_status");
         if (!array_key_exists($forest_status, $statuses))
             $forest_status = "no"; // default
 
         $hr_status = $statuses[$forest_status];
         return "<span class=\"forest-status $forest_status\" id=\"forest_status-span\">$hr_status</span>";
-    }
-
-    function xsm_draw_exam_status($exam)
-    {
-        $exam_status = $exam['exam_status'];
-        $exam_status_items = xsm_get_exam_statuses();
-        if (!array_key_exists($exam_status, $exam_status_items))
-            $exam_status = "passed"; // default
-        $hr_status = $exam_status_items[$exam_status];
-        return "<span class=\"exam-status $exam_status\">$hr_status</span>";
     }
 ?>

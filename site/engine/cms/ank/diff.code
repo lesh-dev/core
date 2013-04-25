@@ -63,10 +63,11 @@ function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_ti
         // some spikes here
         elseif ($key == "anketa_status")
         {
+            // TODO: generic enum handling here in diff-er
             if (!strlen($old_value))
                 $old_value = "new";
 
-            $anketa_statuses = xsm_get_anketa_statuses();
+            $anketa_statuses = xsm_get_enum("anketa_status");
             $old_value = $anketa_statuses[$old_value];
             $new_value = $anketa_statuses[$new_value];
         }

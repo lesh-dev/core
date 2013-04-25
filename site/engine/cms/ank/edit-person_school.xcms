@@ -178,8 +178,7 @@ function xsm_edit_person_school()
                 }
                 elseif ($ft == "enum")
                 {
-                    if ($key == "curatorship")
-                        echo xsm_make_enum_selector($key, $value, xsm_get_curatorship_items());
+                    echo xsm_make_enum_by_type($key, $value, $key);
                 }
                 elseif ($key == 'member_person_id')
                 {
