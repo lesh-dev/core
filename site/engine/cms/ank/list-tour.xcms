@@ -137,7 +137,7 @@ function xsm_show_tour_list()
                 if ($phone) echo $phone;
             ?>
             </td>
-            <td class="ankList"><?php echo xsm_draw_enum($person, "anketa_status"); ?></td>
+            <td class="ankList"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php
         }

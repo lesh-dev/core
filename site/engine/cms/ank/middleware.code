@@ -206,7 +206,7 @@
         return "($cond)";
     }
 
-    function xsm_draw_enum($object, $key)
+    function xsm_make_enum($object, $key)
     {
         $enum_value = $object[$key];
         $enum_values = xsm_get_enum($key);

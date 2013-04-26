@@ -82,7 +82,7 @@ function xsm_print_person_header($db, $person, $school_id)
     $skype = htmlspecialchars($person["skype"]);
     $social_profile = xsm_prepare_social_profile($person["social_profile"]);
 
-    $hr_status = xsm_draw_enum($person, "anketa_status");
+    $hr_status = xsm_make_enum($person, "anketa_status");
 
     $person_created = xsm_ymdhm($person["person_created"]);
     $person_modified = xsm_ymdhm($person["person_modified"]);
@@ -349,7 +349,7 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
 
         $teacher_fi = htmlspecialchars(xsm_fi($exam_data));
 
-        $hr_exam_status = xsm_draw_enum($exam_data, "exam_status");
+        $hr_exam_status = xsm_make_enum($exam_data, "exam_status");
 
         $teacher_url = "view-person".xcms_url(array('person_id'=>$course_teacher_id));
         $exam_url = "edit-exam".xcms_url(array('exam_id'=>$exam_id));

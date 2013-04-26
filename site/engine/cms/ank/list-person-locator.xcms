@@ -155,7 +155,7 @@ function xsm_show_all_person_list()
                 if ($cellular && $phone)
                     echo ", $phone"; ?></a></td>
             </td>
-            <td class="ankList"><?php echo xsm_draw_enum($person, "anketa_status"); ?></td>
+            <td class="ankList"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php
     }
