@@ -189,17 +189,4 @@ function xsm_show_person_list($school_id)
 }
 
     xsm_show_person_list($school_id);
-    // debug output, please do not remove this code // mvel
-    if (false) {
-        echo "<pre style='font-size: 9px;'>--POST:\n";
-        print_r($_POST);
-        echo "--GET:\n";
-        print_r($_GET);
-        echo "--SESSION:\n";
-        print_r($_SESSION);
-        echo "results:\n";
-        echo "$show_is_teacher | $show_is_student\n";
-        echo '</pre>';
-    }
-
 ?>

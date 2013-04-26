@@ -225,9 +225,9 @@ function xsm_print_person_ank_data($db, $person)
 
     $tent_capacity = htmlspecialchars($person["tent_capacity"]);
     $tour_requisites = xcms_html_wrap_by_crlf(htmlspecialchars($person["tour_requisites"]));
-    $forest_status_1 = xsm_draw_forest_enum($person, 1);
-    $forest_status_2 = xsm_draw_forest_enum($person, 2);
-    $forest_status_3 = xsm_draw_forest_enum($person, 3);
+    $forest_status_1 = xsm_make_forest_enum($person, 1);
+    $forest_status_2 = xsm_make_forest_enum($person, 2);
+    $forest_status_3 = xsm_make_forest_enum($person, 3);
 
     $favourites = xcms_html_wrap_by_crlf(htmlspecialchars($person["favourites"]));
     $achievements = xcms_html_wrap_by_crlf(htmlspecialchars($person["achievements"]));
