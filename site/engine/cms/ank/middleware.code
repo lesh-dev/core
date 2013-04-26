@@ -1,209 +1,204 @@
 <?php
-    /**
-      * Посылатор анкет (вынесен сюда, чтобы не затмевать суть дела)
-      **/
-    function xsm_send_anketa($mail_group, $mail_msg, $full_name, $email, $manager_mode = false)
-    {
-        $host = xcms_hostname();
-        $subject = "[xcms-ank] ($host) Новая анкета: $full_name";
+/**
+  * Посылатор анкет (вынесен сюда, чтобы не затмевать суть дела)
+  **/
+function xsm_send_anketa($mail_group, $mail_msg, $full_name, $email, $manager_mode = false)
+{
+    $host = xcms_hostname();
+    $subject = "[xcms-ank] ($host) Новая анкета: $full_name";
 
-        $addr_from = "reg@fizlesh.ru"; // TODO: remove this spike
-        $name_from = "FizLesh Notificator";
-        $mailer = xcms_get_mailer($addr_from, $name_from);
+    $addr_from = "reg@fizlesh.ru"; // TODO: remove this spike
+    $name_from = "FizLesh Notificator";
+    $mailer = xcms_get_mailer($addr_from, $name_from);
 
-        // no mails is a success
-        if (!xcms_add_mail_group($mailer, $mail_group))
-            return true;
+    // no mails is a success
+    if (!xcms_add_mail_group($mailer, $mail_group))
+        return true;
 
-        $full_name_tr = xcms_transliterate($full_name);
-        if ($manager_mode && !empty($email))
-            $mailer->AddReplyTo($email, $full_name_tr);
-        else
-            $mailer->AddReplyTo($addr_from, $name_from);
-        return xcms_mailer_send($mailer, $subject, $mail_msg);
-    }
+    $full_name_tr = xcms_transliterate($full_name);
+    if ($manager_mode && !empty($email))
+        $mailer->AddReplyTo($email, $full_name_tr);
+    else
+        $mailer->AddReplyTo($addr_from, $name_from);
+    return xcms_mailer_send($mailer, $subject, $mail_msg);
+}
 
-    function xsm_get_city_class($school_city)
-    {
-        $class = "";
-        if (strpos($school_city, "Моск") === false)
-            $class = "far-city";
-        elseif (strpos($school_city, "Москва") === false)
-            $class = "not-msk-city";
-        return $class;
-    }
+function xsm_get_city_class($school_city)
+{
+    $class = "";
+    if (strpos($school_city, "Моск") === false)
+        $class = "far-city";
+    elseif (strpos($school_city, "Москва") === false)
+        $class = "not-msk-city";
+    return $class;
+}
 
-    /**
-      * Получение дефолтной школы (самой последней по времени)
-      * @return school id (or -1 in case of empty schools list
-      **/
-    function xsm_get_default_school()
-    {
-        $db = xdb_get();
-        $query = "SELECT school_id FROM school ORDER BY school_date_start DESC LIMIT 1";
-        $school_sel = $db->query($query);
-        if ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
-            return $school['school_id'];
+/**
+  * Получение дефолтной школы (самой последней по времени)
+  * @return school id (or -1 in case of empty schools list
+  **/
+function xsm_get_default_school()
+{
+    $db = xdb_get();
+    $query = "SELECT school_id FROM school ORDER BY school_date_start DESC LIMIT 1";
+    $school_sel = $db->query($query);
+    if ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
+        return $school['school_id'];
 
-        echo "Warning: NO SCHOOLS FOUND AT ALL<br />";
-        return "-1";
-    }
+    echo "Warning: NO SCHOOLS FOUND AT ALL<br />";
+    return "-1";
+}
 
+/**
+  * Получение person_school_id по person_id и school_id
+  * @return person_school_id (или NULL)
+  **/
+function xsm_get_person_school_id($db, $school_id, $person_id)
+{
+    $ps_sel = $db->query(
+        "SELECT
+        ps.person_school_id
+        FROM person_school ps WHERE
+        (ps.member_person_id = $person_id) AND
+        (ps.school_id = $school_id)"
+    );
 
-    /**
-      * Печаталка таблицы курсов (общая для списка курсов на школе и одного препода)
-      **/
-    function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = "all")
-    {
-        $pers = ($course_teacher_id != "all");
+    // TODO: fix this, insert count check
+    if (!($ps_data = $ps_sel->fetchArray(SQLITE3_ASSOC)))
+        return NULL;
 
-        $where = "(c.school_id = $school_id)";
-        if ($pers)
-            $where .= " AND (c.course_teacher_id = $course_teacher_id)";
-        $query =
-        "SELECT *
-        FROM course c LEFT JOIN person p
-        ON c.course_teacher_id = p.person_id
-        WHERE $where
-        ORDER BY last_name, first_name, course_title";
+    return $ps_data['person_school_id'];
+}
 
-        $course_sel = $db->query($query);
-        $course_aux_param = $pers
-            ? "&amp;course_teacher_id=$course_teacher_id&amp;school_id=$school_id"
-            : "&amp;school_id=$school_id";
+/**
+  * Печаталка таблицы курсов (общая для списка курсов на школе и одного препода)
+  **/
+function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = "all")
+{
+    $pers = ($course_teacher_id != "all");
 
-        if ($pers)
-            xsm_view_operations('course', 'course', 'курс', $course_aux_param);
-        else {?>
-            Чтобы создать курс, зайдите в карточку нужного <b>Препода</b>, выберите нужную вам <b>Школу</b>
-            и нажимите кнопку &laquo;Добавить курс&raquo;.<br />Это временный костыль, потом мы сделаем
-            более удобно.
-        <?php } ?>
-        <table summary="Курсы" class="ankList">
-            <colgroup>
-                <?php if (!$pers) {?>
-                <col width="30%" /><?php
-                } ?>
-                <col width="40%" />
-                <col width="10%" />
-                <col width="10%" />
-                <col width="15%" />
-            </colgroup>
-            <thead>
-                <?php if (!$pers) {?>
-                <th class="ankList">Препод</th><?php
-                } ?>
-                <th class="ankList">Курс</th>
-                <th class="ankList">Цикл</th>
-                <th class="ankList">Класс</th>
-                <th class="ankList">Успехи</th>
-            </thead>
-        <?php
+    $where = "(c.school_id = $school_id)";
+    if ($pers)
+        $where .= " AND (c.course_teacher_id = $course_teacher_id)";
+    $query =
+    "SELECT *
+    FROM course c LEFT JOIN person p
+    ON c.course_teacher_id = p.person_id
+    WHERE $where
+    ORDER BY last_name, first_name, course_title";
 
-        while ($course_and_teacher = $course_sel->fetchArray(SQLITE3_ASSOC)) {
+    $course_sel = $db->query($query);
+    $course_aux_param = $pers
+        ? "&amp;course_teacher_id=$course_teacher_id&amp;school_id=$school_id"
+        : "&amp;school_id=$school_id";
 
-            $course_id = htmlspecialchars($course_and_teacher["course_id"]);
-            $course_title = htmlspecialchars($course_and_teacher["course_title"]);
-            $target_class = htmlspecialchars($course_and_teacher["target_class"]);
-            $course_cycle = htmlspecialchars($course_and_teacher["course_cycle"]);
-            $course_teacher_id = xcms_get_key_or($course_and_teacher, "course_teacher_id", XDB_NEW);
+    if ($pers)
+        xsm_view_operations('course', 'course', 'курс', $course_aux_param);
+    else {?>
+        Чтобы создать курс, зайдите в карточку нужного <b>Препода</b>, выберите нужную вам <b>Школу</b>
+        и нажимите кнопку &laquo;Добавить курс&raquo;.<br />Это временный костыль, потом мы сделаем
+        более удобно.
+    <?php } ?>
+    <table summary="Курсы" class="ankList">
+        <colgroup>
+            <?php if (!$pers) {?>
+            <col width="30%" /><?php
+            } ?>
+            <col width="40%" />
+            <col width="10%" />
+            <col width="10%" />
+            <col width="15%" />
+        </colgroup>
+        <thead>
+            <?php if (!$pers) {?>
+            <th class="ankList">Препод</th><?php
+            } ?>
+            <th class="ankList">Курс</th>
+            <th class="ankList">Цикл</th>
+            <th class="ankList">Класс</th>
+            <th class="ankList">Успехи</th>
+        </thead>
+    <?php
 
-            $teacher_fi = htmlspecialchars(xsm_fi($course_and_teacher));
+    while ($course_and_teacher = $course_sel->fetchArray(SQLITE3_ASSOC)) {
 
-            // ахтунг, тут будет N SELECT-ов
-            // до кучи посчитаем количество сдавших
-            $exam_passed_sel = $db->query(
-                "SELECT
-                COUNT(*) AS pass_count from exam
-                WHERE
-                (course_id = '$course_id') AND
-                (exam_status = 'passed')"
-            );
-            $exam_pass_count = 0;
-            if ($exam_pass_data = $exam_passed_sel->fetchArray(SQLITE3_ASSOC))
-                $exam_pass_count = $exam_pass_data['pass_count'];
-            $exam_total_sel = $db->query(
-                "SELECT
-                COUNT(*) AS total_count from exam
-                WHERE
-                (course_id = '$course_id')"
-            );
-            $exam_total_count = 0;
-            if ($exam_total_data = $exam_total_sel->fetchArray(SQLITE3_ASSOC))
-                $exam_total_count = $exam_total_data['total_count'];
-            $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
-            $teacher_url = "view-person".xcms_url(array(
-                'person_id'=>$course_teacher_id,
-                'school_id'=>$school_id));
-            ?>
-            <tr>
-                <?php if (!$pers) {?>
-                <td class="ankList"><a href="<?php echo $teacher_url; ?>"><?php
-                    echo "$teacher_fi"; ?></a></td>
-                <?php } ?>
-                <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
-                    echo "$course_title"; ?></a></td>
-                <td class="ankList"><?php echo $course_cycle; ?></td>
-                <td class="ankList"><?php echo $target_class; ?></td>
-                <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
-                    echo "Сдало <b>$exam_pass_count</b> из <b>$exam_total_count</b>"; ?></a></td>
-            </tr><?php
-            }
+        $course_id = htmlspecialchars($course_and_teacher["course_id"]);
+        $course_title = htmlspecialchars($course_and_teacher["course_title"]);
+        $target_class = htmlspecialchars($course_and_teacher["target_class"]);
+        $course_cycle = htmlspecialchars($course_and_teacher["course_cycle"]);
+        $course_teacher_id = xcms_get_key_or($course_and_teacher, "course_teacher_id", XDB_NEW);
+
+        $teacher_fi = htmlspecialchars(xsm_fi($course_and_teacher));
+
+        // ахтунг, тут будет N SELECT-ов
+        // до кучи посчитаем количество сдавших
+        $exam_passed_sel = $db->query(
+            "SELECT
+            COUNT(*) AS pass_count from exam
+            WHERE
+            (course_id = '$course_id') AND
+            (exam_status = 'passed')"
+        );
+        $exam_pass_count = 0;
+        if ($exam_pass_data = $exam_passed_sel->fetchArray(SQLITE3_ASSOC))
+            $exam_pass_count = $exam_pass_data['pass_count'];
+        $exam_total_sel = $db->query(
+            "SELECT
+            COUNT(*) AS total_count from exam
+            WHERE
+            (course_id = '$course_id')"
+        );
+        $exam_total_count = 0;
+        if ($exam_total_data = $exam_total_sel->fetchArray(SQLITE3_ASSOC))
+            $exam_total_count = $exam_total_data['total_count'];
+        $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
+        $teacher_url = "view-person".xcms_url(array(
+            'person_id'=>$course_teacher_id,
+            'school_id'=>$school_id));
         ?>
-        </table>
-        <?php
-    }
-
-
-    function xsm_person_name_filter($db, $show_name_filter)
-    {
-        $show_name_filter = trim($show_name_filter);
-        if (!strlen($show_name_filter))
-            return "";
-
-        $words = explode(' ', $show_name_filter);
-        $cond = "";
-        foreach ($words as $word)
-        {
-            $w = trim($word);
-            if (!strlen($w))
-                continue;
-
-            if (strlen($cond))
-                $cond .= " AND ";
-            $esc_word = $db->escapeString($w);
-            $cond .=
-                "((last_name LIKE '%$esc_word%') OR ".
-                "(first_name LIKE '%$esc_word%') OR ".
-                "(patronymic LIKE '%$esc_word%'))";
+        <tr>
+            <?php if (!$pers) {?>
+            <td class="ankList"><a href="<?php echo $teacher_url; ?>"><?php
+                echo "$teacher_fi"; ?></a></td>
+            <?php } ?>
+            <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
+                echo "$course_title"; ?></a></td>
+            <td class="ankList"><?php echo $course_cycle; ?></td>
+            <td class="ankList"><?php echo $target_class; ?></td>
+            <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
+                echo "Сдало <b>$exam_pass_count</b> из <b>$exam_total_count</b>"; ?></a></td>
+        </tr><?php
         }
-        if (!strlen($cond))
-            return "";
-        return "($cond)";
-    }
+    ?>
+    </table>
+    <?php
+}
 
-    function xsm_make_enum($object, $key)
+
+function xsm_person_name_filter($db, $show_name_filter)
+{
+    $show_name_filter = trim($show_name_filter);
+    if (!strlen($show_name_filter))
+        return "";
+
+    $words = explode(' ', $show_name_filter);
+    $cond = "";
+    foreach ($words as $word)
     {
-        $enum_value = $object[$key];
-        $enum_values = xsm_get_enum($key);
-        $default_value = xsm_get_enum_default_value($key);
-        if (!array_key_exists($enum_value, $enum_values))
-            $enum_value = $default_value;
+        $w = trim($word);
+        if (!strlen($w))
+            continue;
 
-        $css_class = str_replace('_', '-', $key);
-        $hr_status = $enum_values[$enum_value];
-        return "<span class=\"$css_class $enum_value\" id=\"$key-span\">$hr_status</span>";
+        if (strlen($cond))
+            $cond .= " AND ";
+        $esc_word = $db->escapeString($w);
+        $cond .=
+            "((last_name LIKE '%$esc_word%') OR ".
+            "(first_name LIKE '%$esc_word%') OR ".
+            "(patronymic LIKE '%$esc_word%'))";
     }
-
-    function xsm_make_forest_enum($person, $fn)
-    {
-        // TODO: fix default value
-        $forest_status = $person["forest_$fn"];
-        $statuses = xsm_get_enum("forest_status");
-        if (!array_key_exists($forest_status, $statuses))
-            $forest_status = "no"; // default
-
-        $hr_status = $statuses[$forest_status];
-        return "<span class=\"forest-status $forest_status\" id=\"forest_status-span\">$hr_status</span>";
-    }
+    if (!strlen($cond))
+        return "";
+    return "($cond)";
+}
 ?>
