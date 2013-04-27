@@ -74,30 +74,21 @@ function xsm_prepare_social_profile($social_profile)
 
 function xsm_make_enum($object, $key)
 {
-    $enum_value = $object[$key];
-    $enum_values = xsm_get_enum($key);
-    $default_value = xsm_get_enum_default_value($key);
-    if (!array_key_exists($enum_value, $enum_values))
-        $enum_value = $default_value;
-
+    $enum_value = xsm_check_enum_key($key, $object[$key]);
     $css_class = str_replace('_', '-', $key);
-    $hr_status = $enum_values[$enum_value];
-    return "<span class=\"$css_class $enum_value\" id=\"$key-span\">$hr_status</span>";
+    $values = xsm_get_enum($key);
+    $title = $values[$enum_value];
+    return "<span class=\"$css_class $enum_value\" id=\"$key-span\">$title</span>";
 }
 
 // TODO: non-generic function!
 function xsm_make_forest_enum($person, $fn)
 {
-    // TODO: fix default value
-    $forest_status = $person["forest_$fn"];
-    $statuses = xsm_get_enum("forest_status");
-    if (!array_key_exists($forest_status, $statuses))
-        $forest_status = "no"; // default
-
-    $hr_status = $statuses[$forest_status];
-    return "<span class=\"forest-status $forest_status\" id=\"forest_status-span\">$hr_status</span>";
+    $forest_status = xsm_check_enum_key("forest_status", $person["forest_$fn"]);
+    $values = xsm_get_enum("forest_status");
+    $title = $values[$forest_status];
+    return "<span class=\"forest-status $forest_status\" id=\"forest_status-span\">$title</span>";
 }
-
 
 
 function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_cond = '', $attr = '')

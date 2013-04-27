@@ -1,7 +1,7 @@
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
 <?php
-    $show_anketa_status = xcms_get_persistent_key("list-person-locator", "show_anketa_status", "active");
+    $show_anketa_status = xsm_get_persistent_enum_key("list-person-locator", "show_anketa_status_locator");
     $show_is_teacher = xcms_get_persistent_key("list-person-locator", "show_is_teacher");
     $show_is_student = xcms_get_persistent_key("list-seelct", "show_is_student");
 ?>
@@ -13,7 +13,7 @@
 </p>
 <form method="post" action="list-person-locator" style="margin-bottom: 2px"><span>
     <span class="ankListField">Статус</span>: <?php
-    echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status");
+    echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_locator");
     echo xsm_make_checkbox('show_is_teacher', $show_is_teacher, "teacher");
     ?><span class="ankListField">Только преподы</span>&nbsp;&nbsp;
     <?php
@@ -40,11 +40,6 @@ function xsm_show_all_person_list()
     global $show_is_student;
 
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
-
-    // TODO: WRAP into common code
-    $show_statuses = xsm_get_enum("show_anketa_status");
-    if (!array_key_exists($show_anketa_status, $show_statuses))
-        $show_anketa_status = "active";
 
     $db = xdb_get();
     $db->createFunction('LIKE', 'xdb_like', 2);

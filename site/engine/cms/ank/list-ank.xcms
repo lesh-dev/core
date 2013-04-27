@@ -1,22 +1,7 @@
-<?php
-    function xsm_get_anklist_show_statuses()
-    {
-        return array(
-            "abitur"=>"Набор",
-            "new"=>"Новые",
-            "progress"=>"Ждут собеседования",
-            "less"=>"Ждут леса",
-            "processed"=>"Принятые",
-            "nextyear"=>"Отложенные",
-            "declined"=>"Отклонённые",
-            "old"=>"Архивные",
-            "all"=>"Все");
-    }
-?>
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
 <?php
-    $show_anketa_status = xcms_get_persistent_key("list-ank", "show_anketa_status", "abitur");
+    $show_anketa_status = xsm_get_persistent_enum_key("list-ank", "show_anketa_status_ank");
 ?>
 <p>В этом списке по умолчанию показываются <b>свежие заявки</b>. Когда приходит новая анкета, она получает статус
     <span class="anketa-status new">Новый</span>. После приглашения на собеседование школьнику следует выставлять
@@ -34,10 +19,7 @@
 
 <form method="post" action="list-ank" style="margin-bottom: 2px"><span>
     <span class="ankListField">Фильтрация</span>: <?php
-    echo xsm_make_enum_selector(
-        "show_anketa_status", $show_anketa_status,
-        xsm_get_anklist_show_statuses());
-    ?>
+    echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_ank"); ?>
 
     <span class="ankListField">Фильтр ФИО</span>:
     <input class="ankEdit filter" type="text"
@@ -48,15 +30,10 @@
 </span></form>
 <?php
 
-
 function xsm_show_ank_list()
 {
     global $show_anketa_status;
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
-
-    $show_statuses = xsm_get_anklist_show_statuses();
-    if (!array_key_exists($show_anketa_status, $show_statuses))
-        $show_anketa_status = "abitur";
 
     $db = xdb_get();
     $db->createFunction('LIKE', 'xdb_like', 2);

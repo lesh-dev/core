@@ -103,7 +103,7 @@ $XSM_ENUMS = array(
         "default"=>"new"),
 
     // селектор для list-person-locator
-    "show_anketa_status"=>array(
+    "show_anketa_status_locator"=>array(
         "values"=>array(
             "active"=>"Актив",
             "not-old"=>"Все, кроме архивных",
@@ -113,6 +113,26 @@ $XSM_ENUMS = array(
             "not-decl"=>"Без спама, дублей и посланых",
             "all"=>"Все"),
         "default"=>"active"),
+
+    // селектор для list-ank
+    "show_anketa_status_ank"=>array(
+        "values"=>array(
+            "abitur"=>"Набор",
+            "new"=>"Новые",
+            "progress"=>"Ждут собеседования",
+            "less"=>"Ждут леса",
+            "processed"=>"Принятые",
+            "nextyear"=>"Отложенные",
+            "declined"=>"Отклонённые",
+            "old"=>"Архивные",
+            "all"=>"Все"),
+        "default"=>"abitur"),
+
+    // селектор для list-tour
+    "show_anketa_status_tour"=>array(
+        "values"=>array(
+            "tour"=>"Туристы"),
+        "default"=>"tour"),
 
     // Статус выхода в лес
     "forest_status"=>array(
@@ -141,7 +161,7 @@ $XSM_ENUMS = array(
         "other"=>"Иное")
 );
 
-
+// Enum API
 function xsm_get_enum($enum_type)
 {
     global $XSM_ENUMS;
@@ -153,6 +173,23 @@ function xsm_get_enum_default_value($enum_type)
     global $XSM_ENUMS;
     return $XSM_ENUMS[$enum_type]["default"];
 }
+
+function xsm_check_enum_key($enum_type, $key)
+{
+    global $XSM_ENUMS;
+    $enum_data = $XSM_ENUMS[$enum_type];
+    if (!array_key_exists($key, $enum_data["values"]))
+        return $enum_data["default"];
+    return $key;
+}
+
+function xsm_get_persistent_enum_key($scope, $enum_type)
+{
+    $default = xsm_get_enum_default_value($enum_type);
+    $key = xcms_get_persistent_key($scope, $enum_type, $default);
+    return xsm_check_enum_key($enum_type, $key);
+}
+
 
 // Wrapper around generic API call
 function xsm_make_enum_by_type($name, $value, $enum_type)

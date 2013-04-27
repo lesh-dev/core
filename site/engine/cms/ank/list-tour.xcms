@@ -1,23 +1,12 @@
-<?php
-    function xsm_get_tourlist_show_statuses()
-    {
-        return array(
-            "tour"=>"Туристы-маёвники"
-            );
-    }
-?>
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
 <?php
-    $show_anketa_status = xcms_get_persistent_key("list-tour", "show_anketa_status", "tour");
+    $show_anketa_status = xsm_get_persistent_enum_key("list-tour", "show_anketa_status_tour");
 ?>
 <p>В этом списке показываются активные и принятые или полупринятые школьники и преподы.</p>
 <form method="post" action="list-ank" style="margin-bottom: 2px"><span>
     <span class="ankListField">Фильтрация</span>: <?php
-    echo xsm_make_enum_selector(
-        "show_anketa_status", $show_anketa_status,
-        xsm_get_tourlist_show_statuses());
-    ?>
+    echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_tour"); ?>
 
     <span class="ankListField">Фильтр ФИО</span>:
     <input class="ankEdit filter" type="text"
@@ -28,15 +17,10 @@
 </span></form>
 <?php
 
-
 function xsm_show_tour_list()
 {
     global $show_anketa_status;
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
-
-    $show_statuses = xsm_get_tourlist_show_statuses();
-    if (!array_key_exists($show_anketa_status, $show_statuses))
-        $show_anketa_status = "abitur";
 
     $db = xdb_get();
     $db->createFunction('LIKE', 'xdb_like', 2);
