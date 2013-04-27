@@ -183,10 +183,10 @@ function xsm_check_enum_key($enum_type, $key)
     return $key;
 }
 
-function xsm_get_persistent_enum_key($scope, $enum_type)
+function xsm_get_persistent_enum_key($scope, $name, $enum_type)
 {
     $default = xsm_get_enum_default_value($enum_type);
-    $key = xcms_get_persistent_key($scope, $enum_type, $default);
+    $key = xcms_get_persistent_key($scope, $name, $default);
     return xsm_check_enum_key($enum_type, $key);
 }
 

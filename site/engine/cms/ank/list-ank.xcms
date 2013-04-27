@@ -1,7 +1,7 @@
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
 <?php
-    $show_anketa_status = xsm_get_persistent_enum_key("list-ank", "show_anketa_status_ank");
+    $show_anketa_status = xsm_get_persistent_enum_key("list-ank", "show_anketa_status", "show_anketa_status_ank");
 ?>
 <p>В этом списке по умолчанию показываются <b>свежие заявки</b>. Когда приходит новая анкета, она получает статус
     <span class="anketa-status new">Новый</span>. После приглашения на собеседование школьнику следует выставлять
