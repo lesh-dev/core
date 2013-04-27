@@ -115,6 +115,9 @@ td.ankList.c {
 span.forest-status {
     font-weight: bold;
 }
+span.forest-status.undef {
+    color: #7f7f7f;
+}
 span.forest-status.notable {
     color: #ff0000;
 }
