@@ -88,7 +88,7 @@
     function xcms_deliver_mail_int($mail_group, $addr_list, $prefix, $notification_body, $subject = '')
     {
         global $SETTINGS;
-        $notification_time = date("d.m.Y", time());
+        $notification_time = date("d.m.Y");
 
         if (empty($subject))
             $subject = "Уведомления [$mail_group] за $notification_time";
