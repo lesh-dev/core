@@ -256,13 +256,20 @@ function xsm_print_person_ank_data($db, $person)
     xsm_draw_person_textval('main', $fields['forest_1'], $forest_status_1);
     xsm_draw_person_textval('main', $fields['forest_2'], $forest_status_2);
     xsm_draw_person_textval('main', $fields['forest_3'], $forest_status_3);
-    echo "<hr/>\n";
+    ?>
+    <div style="height: 5px;">&nbsp;</div>
+    <a href="#" id="show-extra-person-info" class="popup-link">Прочие анкетные данные</a>
+    <div id="extra-person-info" style="padding-top: 3px;"><?php
     xsm_draw_person_textval('main', $fields['user_agent'], $user_agent);
     xsm_draw_person_longtextval('main', $fields['favourites'], $favourites);
     xsm_draw_person_longtextval('main', $fields['achievements'], $achievements);
     xsm_draw_person_longtextval('main', $fields['hobby'], $hobby);
     xsm_draw_person_longtextval('main', $fields['lesh_ref'], $lesh_ref);
-
+    ?></div>
+    <script>
+        AddSlider('extra-person-info', 'show-extra-person-info');
+    </script>
+    <?php
     xsm_draw_person_comments($db, $person_id);
 }
 

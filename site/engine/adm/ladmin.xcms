@@ -49,10 +49,12 @@
         <# cms/head #>
         <link rel="stylesheet" type="text/css" href="<?php echo "${full_engine_pub}css/admin.css"; ?>" />
         <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/jquery-1.7.1.min.js"; ?>"></script>
-        <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/admin.js"; ?>"></script>
-        </script>
+        <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
     </head>
     <body>
+        <script language="javascript" type="text/javascript">
+            AddSlider('editor-help', 'show-editor-help');
+        </script>
         <div style="padding-bottom: 7px;">
             <a <?php echo xcms_href(array('mode'=>'create_page', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Подстраница</a>
             <a <?php echo xcms_href(array('mode'=>'delete', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Удалить</a>
