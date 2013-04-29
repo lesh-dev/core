@@ -117,8 +117,7 @@
         }
 
         $host = xcms_hostname();
-        if (!xcms_mailer_send($mailer, "[xcms-$prefix] ($host) $subject", $body_html))
-            return false;
+        return xcms_mailer_send($mailer, "[xcms-$prefix] ($host) $subject", $body_html);
     }
 
 
@@ -191,6 +190,8 @@
         $notification_body = "";
         while ($notification = $notification_sel->fetchArray(SQLITE3_ASSOC))
             $notification_body .= $notification['notification_html'];
+        if (empty($notification_body)) // nothing was added
+            return true;
 
         if (!xcms_deliver_mail_int($mail_group, null, $mail_group, $notification_body))
             return false;

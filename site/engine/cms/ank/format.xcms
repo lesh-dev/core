@@ -1,379 +1,173 @@
 <?php
-    require_once("$engine_dir/sys/db.php");
+require_once("$engine_dir/sys/db.php");
 
-    /**
-      * Replace \n by <br /> with respect to various systems line endings
-      **/
-    function xcms_html_wrap_by_crlf($html)
+/**
+  * Replace \n by <br /> with respect to various systems line endings
+  **/
+function xcms_html_wrap_by_crlf($html)
+{
+    // detect UNIX or DOS line-endings
+    if (strpos($html, "\n") !== false)
     {
-        // detect UNIX or DOS line-endings
-        if (strpos($html, "\n") !== false)
-        {
-            // Unix or DOS, so \n -> <br />, '\r' -> void
-            $html = str_replace("\n", "<br />", $html);
-            $html = str_replace("\r", "", $html);
-        }
-        elseif (strpos($html, "\r") !== false)
-        {
-            // MacOS, \r only
-            $html = str_replace("\r", "<br />", $html);
-        }
-        return $html;
+        // Unix or DOS, so \n -> <br />, '\r' -> void
+        $html = str_replace("\n", "<br />", $html);
+        $html = str_replace("\r", "", $html);
     }
-
-    /**
-      * Prepend one <br /> when HTML code already contains some
-      **/
-    function xcms_html_wrap_ml($html)
+    elseif (strpos($html, "\r") !== false)
     {
-        if (strpos($html, "<br />")) $html = "<br />$html";
-        return $html;
+        // MacOS, \r only
+        $html = str_replace("\r", "<br />", $html);
     }
+    return $html;
+}
 
-    /**
-      * Canonical way to obtain FIO
-      **/
-    function xsm_fio($person)
-    {
-        return $person['last_name'].' '.$person['first_name'].' '.$person['patronymic'];
-    }
+/**
+  * Prepend one <br /> when HTML code already contains some
+  **/
+function xcms_html_wrap_ml($html)
+{
+    if (strpos($html, "<br />")) $html = "<br />$html";
+    return $html;
+}
 
-    /**
-      * Canonical way to obtain FI
-      **/
-    function xsm_fi($person)
-    {
-        return $person['last_name'].' '.$person['first_name'];
-    }
+/**
+  * Canonical way to obtain FIO
+  **/
+function xsm_fio($person)
+{
+    return $person['last_name'].' '.$person['first_name'].' '.$person['patronymic'];
+}
 
-    /**
-      * Process human-usable timestamp without seconds
-      * with non-breaking spaces inside.
-      * @param $timestamp should be in format used in in DBMS,
-      * i.e. YYYY.MM.DD HH:MM:SS
-      **/
-    function xsm_ymdhm($timestamp)
-    {
-        if (strlen($timestamp) != 19)
-            return $timestamp;
-        $timestamp = substr($timestamp, 0, 16);
-        $timestamp = str_replace(' ', '&nbsp;', $timestamp);
+/**
+  * Canonical way to obtain FI
+  **/
+function xsm_fi($person)
+{
+    return $person['last_name'].' '.$person['first_name'];
+}
+
+/**
+  * Process human-usable timestamp without seconds
+  * with non-breaking spaces inside.
+  * @param $timestamp should be in format used in in DBMS,
+  * i.e. YYYY.MM.DD HH:MM:SS
+  **/
+function xsm_ymdhm($timestamp)
+{
+    if (strlen($timestamp) != 19)
         return $timestamp;
-    }
+    $timestamp = substr($timestamp, 0, 16);
+    $timestamp = str_replace(' ', '&nbsp;', $timestamp);
+    return $timestamp;
+}
 
-    function xsm_prepare_social_profile($social_profile)
+function xsm_prepare_social_profile($social_profile)
+{
+    // make it valid URL if it was it form example.com/name
+    if (!empty($social_profile) &&
+        strpos(substr($social_profile, 0, 8), '://') === false) // http/https scheme not matched
+        $social_profile = "http://$social_profile"; // assume http scheme
+    $social_profile = htmlspecialchars($social_profile);
+    return $social_profile;
+}
+
+
+function xsm_make_enum($object, $key)
+{
+    $enum_value = xsm_check_enum_key($key, $object[$key]);
+    $css_class = str_replace('_', '-', $key);
+    $values = xsm_get_enum($key);
+    $title = $values[$enum_value];
+    return "<span class=\"$css_class $enum_value\" id=\"$key-span\">$title</span>";
+}
+
+// TODO: non-generic function!
+function xsm_make_forest_enum($person, $fn)
+{
+    $forest_status = xsm_check_enum_key("forest_status", $person["forest_$fn"]);
+    $values = xsm_get_enum("forest_status");
+    $title = $values[$forest_status];
+    return "<span class=\"forest-status $forest_status\" id=\"forest_status-span\">$title</span>";
+}
+
+
+function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_cond = '', $attr = '')
+{
+    $db = xdb_get();
+    $query = "SELECT * FROM $table_name";
+    if (strlen($aux_cond))
+        $query .= " WHERE $aux_cond";
+    $sel = $db->query($query);
+    $html = "<select name=\"$name\" id=\"$name-selector\" $attr>\n";
+    $list_key = "${table_name}_id";
+    while ($object = $sel->fetchArray(SQLITE3_ASSOC))
     {
-        // make it valid URL if it was it form example.com/name
-        if (!empty($social_profile) &&
-            strpos(substr($social_profile, 0, 8), '://') === false) // http/https scheme not matched
-            $social_profile = "http://$social_profile"; // assume http scheme
-        $social_profile = htmlspecialchars($social_profile);
-        return $social_profile;
+        $title = "";
+        foreach ($title_keys as $key_name)
+            $title .= $object[$key_name].' ';
+        $title = htmlspecialchars(trim($title));
+        $key = $object[$list_key];
+        $selected = ($key == $current_key) ? 'selected="selected"' : '';
+        $html .= "<option $selected value=\"$key\">$title</option>\n";
     }
+    $html .= "</select>";
+    $db->close();
+    return $html;
+}
 
-    function xsm_update_entity($entity, $table_name, $title, $fields, $aux_param = '')
+/**
+  * Builds selector HTML element from SQL data
+  * @param $list_key key name to use as option ids
+  * @param $name select HTML name
+  * @param $current_key selected key value
+  * @param $title_pattern string with @@key@ patterns
+  * that will be replaced by values taken from database
+  * @example "@@book_title@ - @@author_name"
+  * @param $query SQL statement to get data
+  * @param $attr auxillary attributes passed to SELECT element (empty by default)
+  **/
+function xsm_make_selector_ext($list_key, $name, $current_key, $title_pattern, $query, $attr = '')
+{
+    $db = xdb_get();
+    $sel = $db->query($query);
+    $html = "<select name=\"$name\" id=\"$name-selector\" $attr>\n";
+    while ($object = $sel->fetchArray(SQLITE3_ASSOC))
     {
-        $key_name = "${table_name}_id";
-        $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $redir = ($id == XDB_NEW) ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
-        $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
-        if ($res)
-        {?>
-            <p><?php echo $title; ?> успешно сохранён.<?php
-        }
-        else
-        {?>
-            <p>Не удалось добавить <?php echo $title; ?>.<?php
-        }?>
-        <a href="view-<?php echo $redir; ?>">Вернуться к просмотру</a></p><?php
+        $title = $title_pattern;
+        foreach ($object as $key => $value)
+            $title = str_replace("@@$key@", htmlspecialchars($value), $title);
+        $key = $object[$list_key];
+        $selected = ($key == $current_key) ? 'selected="selected"' : '';
+        $html .= "<option $selected value=\"$key\">$title</option>\n";
     }
+    $html .= "</select>";
+    $db->close();
+    return $html;
+}
 
-    function xsm_update_entity_listmode($entity, $table_name, $title, $fields, $aux_param = '', $return_title = '')
+function xsm_make_enum_selector($name, $value, $items)
+{
+    $html = "<select name=\"$name\" id=\"$name-selector\">\n";
+    foreach ($items as $key => $title)
     {
-        $key_name = "${table_name}_id";
-        $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
-        if ($res === true || $res > 0)
-        {
-            if ($id == XDB_NEW)
-                $id = $res;
-            ?>
-            <p><?php echo $title; ?> успешно сохранён.<?php
-        }
-        else
-        {?>
-            <p>Не удалось добавить <?php echo $title; ?>.<?php
-        }
-        $redir = "$entity$aux_param&amp;$key_name=$id";
-        ?>
-        <a href="view-<?php echo $redir; ?>">Вернуться к просмотру<?php
-            if (strlen($return_title)) echo " $return_title"; ?></a></p><?php
+        $sel = ($key == $value) ? ' selected="selected" ' : '';
+        $html .= "<option $sel value=\"$key\">$title</option>\n";
     }
-
-    function xsm_warn_delete_entity($entity, $table_name, $title, $aux_param = '')
-    {
-        $key_name = "${table_name}_id";
-        $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $redir = "$entity$aux_param#$table_name$id"; ?>
-        <div class="delete-warning">
-            Вы действительно хотите удалить
-            <b><?php echo $title; ?></b> с кодом <b><?php echo $id; ?></b>?<br />
-            Связанные с ним объекты также будут удалены,
-            а восстановление будет невозможно!</div>
-        <div><form method="post" action="edit-<?php echo "$entity$aux_param"; ?>">
-            <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
-            <input type="submit" name="confirm-delete-<?php echo $entity; ?>"
-                value="Таки да, удалить!" class="delete-button"/>
-            <a class="linkButton xsm"
-                href="view-<?php echo $redir ?>">Вернуться к просмотру</a>
-        </form></div>
-        <?php
-    }
-
-    function xsm_warn_delete_entity_listmode($entity, $table_name, $title, $aux_param = '')
-    {
-        $key_name = "${table_name}_id";
-        $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $redir = "$entity$aux_param&amp;$key_name=$id"; ?>
-        <div class="delete-warning">
-            Вы действительно хотите удалить
-            <b><?php echo $title; ?></b> с кодом <b><?php echo $id; ?></b>?<br />
-            Связанные с ним объекты также будут удалены,
-            а восстановление будет невозможно!</div>
-        <div><form method="post" action="edit-<?php echo "$entity$aux_param"; ?>">
-            <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
-            <input type="submit" name="confirm-delete-<?php echo $entity; ?>"
-                value="Таки да, удалить!" class="delete-button"/>
-            <a class="linkButton xsm"
-                href="view-<?php echo $redir ?>">Вернуться к просмотру <?php echo $title; ?></a>
-        </form></div>
-        <?php
-    }
+    $html .= "</select>";
+    return $html;
+}
 
 
-    function xsm_delete_entity($entity, $table_name, $title, $aux_param = '')
-    {
-        $key_name = "${table_name}_id";
-        $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $redir = "$entity$aux_param#$table_name$id";
-        $res = xdb_delete($table_name, $id);
-        if ($res)
-        {?>
-            <p><?php echo $title; ?> [<?php echo $id; ?>] удалён успешно.<?php
-        }
-        else
-        {?>
-            <p>Не удалось удалить <?php echo $title; ?> [<?php echo $id; ?>] (возможно, есть связанные объекты).<?php
-        }?>
-        <a href="view-<?php echo $redir ?>">Вернуться к просмотру</a></p><?php
-    }
-
-    function xsm_delete_entity_listmode($entity, $table_name, $title, $aux_param = '')
-    {
-        $key_name = "${table_name}_id";
-        $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-        $redir = "$entity$aux_param#$table_name$id";
-        $res = xdb_delete($table_name, $id);
-        if ($res)
-        {?>
-            <p><?php echo $title; ?> [<?php echo $id; ?>] удалён успешно.<?php
-        }
-        else
-        {?>
-            <p>Не удалось удалить <?php echo $title; ?> [<?php echo $id; ?>] (возможно, есть связанные объекты).<?php
-        }?>
-        <a href="list-<?php echo $redir ?>">Вернуться к просмотру списка</a></p><?php
-    }
-
-    function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_cond = '', $attr = '')
-    {
-        $db = xdb_get();
-        $query = "SELECT * FROM $table_name";
-        if (strlen($aux_cond))
-            $query .= " WHERE $aux_cond";
-        $sel = $db->query($query);
-        $html = "<select name=\"$name\" id=\"$name-selector\" $attr>\n";
-        $list_key = "${table_name}_id";
-        while ($object = $sel->fetchArray(SQLITE3_ASSOC))
-        {
-            $title = "";
-            foreach ($title_keys as $key_name)
-                $title .= $object[$key_name].' ';
-            $title = htmlspecialchars(trim($title));
-            $key = $object[$list_key];
-            $selected = ($key == $current_key) ? 'selected="selected"' : '';
-            $html .= "<option $selected value=\"$key\">$title</option>\n";
-        }
-        $html .= "</select>";
-        $db->close();
-        return $html;
-    }
-
-    /**
-      * Builds selector HTML element from SQL data
-      * @param $list_key key name to use as option ids
-      * @param $name select HTML name
-      * @param $current_key selected key value
-      * @param $title_pattern string with @@key@ patterns
-      * that will be replaced by values taken from database
-      * @example "@@book_title@ - @@author_name"
-      * @param $query SQL statement to get data
-      * @param $attr auxillary attributes passed to SELECT element (empty by default)
-      **/
-    function xsm_make_selector_ext($list_key, $name, $current_key, $title_pattern, $query, $attr = '')
-    {
-        $db = xdb_get();
-        $sel = $db->query($query);
-        $html = "<select name=\"$name\" id=\"$name-selector\" $attr>\n";
-        while ($object = $sel->fetchArray(SQLITE3_ASSOC))
-        {
-            $title = $title_pattern;
-            foreach ($object as $key => $value)
-                $title = str_replace("@@$key@", htmlspecialchars($value), $title);
-            $key = $object[$list_key];
-            $selected = ($key == $current_key) ? 'selected="selected"' : '';
-            $html .= "<option $selected value=\"$key\">$title</option>\n";
-        }
-        $html .= "</select>";
-        $db->close();
-        return $html;
-    }
-
-    // Here entity should be equal to table name, but...
-    function xsm_edit_operations($entity, $table_name, $id, $title, $aux_param = '')
-    {
-        $is_new = ($id == XDB_NEW);
-        $redir = $is_new ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
-        ?>
-        <div style="white-space: nowrap">
-            <input type="submit" name="update-<?php echo $entity; ?>"
-                value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
-            if (!$is_new) {?>
-                <input type="submit" name="delete-<?php echo $entity; ?>"
-                    value="Удалить" class="delete-button"/><?php
-            }?>
-            <a class="linkButton xsm" href="view-<?php
-                echo $redir; ?>"><?php echo $title; ?></a>
-        </div><?php
-    }
-
-    // Kosher function for person
-    function NEW_xsm_edit_operations($table_name, $id, $title, $aux_param = '')
-    {
-        $is_new = ($id == XDB_NEW);
-        // TODO: маленький костылик
-        $redir = $is_new ? "list-person-locator" : "view-$table_name$aux_param&amp;${table_name}_id=$id";
-        ?>
-        <div style="white-space: nowrap">
-            <input type="submit" name="update-<?php echo $table_name; ?>"
-                value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
-            if (!$is_new) {?>
-                <input type="submit" name="delete-<?php echo $table_name; ?>"
-                    value="Удалить" class="delete-button"/><?php
-            }?>
-            <a class="linkButton xsm" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
-        </div><?php
-    }
-
-
-    function xsm_edit_operations_listmode($entity, $id, $title, $aux_param = '')
-    {
-        $is_new = ($id == XDB_NEW);
-        $redir = $is_new ? "$entity$aux_param" : "$entity$aux_param#$entity$id";
-        ?>
-        <div style="white-space: nowrap">
-            <input type="submit" name="update-<?php echo $entity; ?>"
-                value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
-            if (!$is_new) {?>
-                <input type="submit" name="delete-<?php echo $entity; ?>"
-                    value="Удалить" class="delete-button"/><?php
-            }?>
-            <a class="linkButton xsm" href="list-<?php
-                echo $redir; ?>"><?php echo $title; ?></a>
-        </div><?php
-    }
-
-    // non-kosher function!
-    // Here entity should be equal to table name, but...
-    function xsm_view_operations($entity, $table_name, $title, $aux_param = '')
-    {?>
-        <div style="white-space: nowrap">
-            <a class="linkButton xsm" href="edit-<?php
-                echo "$entity$aux_param&amp;${table_name}_id=new"; ?>">Добавить <?php echo $title; ?></a>
-        </div><?php
-    }
-
-    // kosher function
-    function NEW_xsm_view_operations($table_name, $title, $aux_param = '')
-    {?>
-        <div style="white-space: nowrap">
-            <a class="linkButton xsm" href="edit-<?php
-                echo "$table_name$aux_param&amp;${table_name}_id=new"; ?>">Добавить <?php echo $title; ?></a>
-        </div><?php
-    }
-
-
-    // Here entity should be equal to table name, but...
-    function xsm_edit_delete_info($entity, $table_name, $id, $created, $modified, $aux_param = '')
-    {?>
-        <a class="link-oper" href="edit-<?php echo "$entity$aux_param&amp;${table_name}_id=$id" ?>"><img
-            src="<# full_design_dir #>pic/edit.gif" class="edit-icon"
-            title="Редактировать" />Правка</a>
-        <span class="ankListField next">Создан</span>: <?php echo $created;
-        if (!empty($modified)) {?>
-            <span class="ankListField next">Отредактирован</span>: <?php echo $modified;
-        }
-    }
-
-    // Kosher function
-    function xsm_edit_link($table_name, $id, $aux_param = '', $custom_title = 'Правка', $custom_hover = 'Редактировать')
-    {?>
-        <a href="edit-<?php
-            echo "$table_name$aux_param&amp;${table_name}_id=$id" ?>"><img
-            src="<# full_design_dir #>pic/edit.gif" class="edit-icon"
-            title="<?php echo $custom_hover; ?>" /><?php echo $custom_title; ?></a><?php
-    }
-
-
-    function xsm_make_enum_selector($name, $value, $items)
-    {
-        $html = "<select name=\"$name\" id=\"$name-selector\">\n";
-        foreach ($items as $key => $title)
-        {
-            $sel = ($key == $value) ? ' selected="selected" ' : '';
-            $html .= "<option $sel value=\"$key\">$title</option>\n";
-        }
-        $html .= "</select>";
-        return $html;
-    }
-
-    function xsm_get_person_school_id($db, $school_id, $person_id)
-    {
-        $ps_sel = $db->query(
-            "SELECT
-            ps.person_school_id
-            FROM person_school ps WHERE
-            (ps.member_person_id = $person_id) AND
-            (ps.school_id = $school_id)"
-        );
-
-        // TODO: fix this, insert count check
-        if (!($ps_data = $ps_sel->fetchArray(SQLITE3_ASSOC)))
-            return NULL;
-
-        return $ps_data['person_school_id'];
-    }
-
-    function xsm_make_checkbox($name, $value, $checked_value)
-    {
-        if (strlen($value)) $checked = 'checked="checked"';
-        else $checked = '';
-        // prepend fake input with empty value to submit it as checkbox 'unchecked' value
-        // See http://iamcam.wordpress.com/2008/01/15/unchecked-checkbox-values/
-        $html =
-            "<input type=\"hidden\" name=\"$name\" value=\"\"/>".
-            "<input class=\"ankEdit checkbox\" type=\"checkbox\" name=\"$name\" ".
-                "id=\"$name-checkbox\" value=\"$checked_value\" $checked />";
-        return $html;
-    }
+function xsm_make_checkbox($name, $value, $checked_value)
+{
+    if (strlen($value)) $checked = 'checked="checked"';
+    else $checked = '';
+    // prepend fake input with empty value to submit it as checkbox 'unchecked' value
+    // See http://iamcam.wordpress.com/2008/01/15/unchecked-checkbox-values/
+    $html =
+        "<input type=\"hidden\" name=\"$name\" value=\"\"/>".
+        "<input class=\"ankEdit checkbox\" type=\"checkbox\" name=\"$name\" ".
+            "id=\"$name-checkbox\" value=\"$checked_value\" $checked />";
+    return $html;
+}
 ?>
