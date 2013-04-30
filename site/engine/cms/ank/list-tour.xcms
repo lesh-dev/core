@@ -6,13 +6,8 @@
 <p>В этом списке показываются активные и принятые или полупринятые школьники и преподы.</p>
 <form method="post" action="list-tour" style="margin-bottom: 2px"><span>
     <span class="ankListField">Фильтрация</span>: <?php
-    echo xsm_make_enum_by_type("show_forest_num", $show_forest_num, "show_forest_num"); ?>
-
-    <span class="ankListField">Фильтр ФИО</span>:
-    <input class="ankEdit filter" type="text"
-        value="<?php echo htmlspecialchars(xcms_get_key_or($_POST, 'show_name_filter')); ?>"
-        name="show_name_filter"
-        title="Будут найдены все участники, в ФИО которых (в любом порядке) встречаются слова запроса, без учёта регистра. Например, 'дан Мих' найдёт Даниила Михайловича, Михаила Данилевского и Богдана Немихульского, но НЕ найдёт Мишу Данилкина (имена условны)" />
+    echo xsm_make_enum_by_type("show_forest_num", $show_forest_num, "show_forest_num");
+    xsm_draw_fio_filter(); ?>
     <input type="submit" name="show-person" value="Показать" />
 </span></form>
 <?php

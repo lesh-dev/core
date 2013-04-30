@@ -91,6 +91,17 @@ function xsm_make_forest_enum($person, $fn)
 }
 
 
+function xsm_draw_fio_filter()
+{
+    ?><span class="ankListField">Фильтр ФИО</span>:
+    <input class="ankEdit filter" type="text"
+        value="<?php echo htmlspecialchars(xcms_get_key_or($_POST, 'show_name_filter')); ?>"
+        name="show_name_filter"
+        title="Будут найдены все участники, в ФИО которых (в любом порядке) встречаются слова запроса,
+        без учёта регистра. Например, 'дан Мих' найдёт Даниила Михайловича, Михаила Данилевского
+        и Богдана Немихульского, но НЕ найдёт Мишу Данилкина (имена условны)" /><?php
+}
+
 function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_cond = '', $attr = '')
 {
     $db = xdb_get();

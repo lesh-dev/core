@@ -15,19 +15,11 @@
     <span class="ankListField">Статус</span>: <?php
     echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_locator");
     echo xsm_make_checkbox('show_is_teacher', $show_is_teacher, "teacher");
-    ?><span class="ankListField">Только преподы</span>&nbsp;&nbsp;
-    <?php
+    ?><span class="ankListField">Только преподы</span>&nbsp;&nbsp;<?php
         echo xsm_make_checkbox('show_is_student', $show_is_student, "student");
-    ?>
-    <span class="ankListField">Только школьники</span>&nbsp;&nbsp;
-
-    <span class="ankListField">Фильтр ФИО</span>:
-    <input class="ankEdit filter" type="text"
-        value="<?php echo htmlspecialchars(xcms_get_key_or($_POST, 'show_name_filter')); ?>"
-        name="show_name_filter"
-        title="Будут найдены все участники, в ФИО которых (в любом порядке) встречаются слова запроса, без учёта регистра. Например, 'дан Мих' найдёт Даниила Михайловича, Михаила Данилевского и Богдана Немихульского, но НЕ найдёт Мишу Данилкина (имена условны)" />
+    ?><span class="ankListField">Только школьники</span>&nbsp;&nbsp;<?php
+        xsm_draw_fio_filter(); ?>
     <input type="submit" name="show-person" value="Показать" />
-
 </span></form>
 <?php
 
