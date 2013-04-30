@@ -10,7 +10,9 @@ function xsm_notify_person_edit($person)
     $old_person = ($person_id != XDB_NEW) ? xdb_get_entity_by_id('person', $person_id) : array();
 
     $full_name = xsm_fio($person);
-    $table_title = 'Изменения в анкете: <span style="color: #0000ff">'.htmlspecialchars($full_name).'</span>';
+    $table_title = 'Изменения в анкете: <a'.
+        xcms_ext_href('view-person', array('person_id'=>$person_id)).'>'.
+        htmlspecialchars($full_name).'</a>';
 
     $mail_msg = xsm_build_diff_msg(
         $person,

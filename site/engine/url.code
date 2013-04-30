@@ -1,29 +1,40 @@
 <?php
-    /**
-      * Transforms an key-value-array to properly encoded URI part:
-      * array('param'=>'value1 value2', 'super'=>'puper') will be translated to
-      * &amp;param=value1%20value2&amp;super=puper
-      * @param args_list array of arguments to encode
-      * @return encoded parameters string
-      **/
-    function xcms_url($args_list)
+/**
+  * Transforms an key-value-array to properly encoded URI part:
+  * array('param'=>'value1 value2', 'super'=>'puper') will be translated to
+  * &amp;param=value1%20value2&amp;super=puper
+  * @param args_list array of arguments to encode
+  * @return encoded parameters string
+  **/
+function xcms_url($args_list)
+{
+    $res = '';
+    foreach ($args_list as $key => $value)
     {
-        $res = '';
-        foreach ($args_list as $key => $value)
-        {
-            $res = "$res&amp;$key=".rawurlencode($value);
-        }
-        return $res;
+        $res = "$res&amp;$key=".rawurlencode($value);
     }
+    return $res;
+}
 
-    /**
-      * Same as @sa xcms_url, but makes complete href="..." attribute
-      * containing given parameters
-      * @param args_list array of arguments to encode
-      * @return encoded parameters string
-      **/
-    function xcms_href($args_list)
-    {
-        return ' href="?'.xcms_url($args_list).'" ';
-    }
+/**
+  * Same as @sa xcms_url, but makes complete href="..." attribute
+  * containing given parameters
+  * @param args_list array of arguments to encode
+  * @return encoded parameters string
+  **/
+function xcms_href($args_list)
+{
+    return ' href="?'.xcms_url($args_list).'" ';
+}
+
+/**
+  * External link to aliased page
+  **/
+function xcms_ext_href($suffix, $args_list)
+{
+    global $INFO, $web_prefix;
+    $alias = xcms_get_key_or($INFO, "alias");
+    $url = 'http://'.$_SERVER["HTTP_HOST"]."/${web_prefix}$alias/$suffix".xcms_url($args_list);
+    return " href=\"$url\" ";
+}
 ?>

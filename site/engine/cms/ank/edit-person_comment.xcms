@@ -100,7 +100,9 @@ function xsm_notify_person_comment_edit($person_comment)
     $person = xdb_get_entity_by_id('person', $person_id);
 
     $full_name = xsm_fio($person);
-    $table_title = 'Добавлен комментарий к участнику: <span style="color: #0000ff">'.htmlspecialchars($full_name).'</span>';
+    $table_title = 'Добавлен комментарий к участнику: <a'.
+        xcms_ext_href('view-person', array('person_id'=>$person_id)).'>'.
+        htmlspecialchars($full_name).'</a>';
 
     $mail_msg = xsm_build_diff_msg(
         $person_comment,
