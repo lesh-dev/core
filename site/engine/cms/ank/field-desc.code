@@ -128,12 +128,6 @@ $XSM_ENUMS = array(
             "all"=>"Все"),
         "default"=>"abitur"),
 
-    // селектор для list-tour
-    "show_anketa_status_tour"=>array(
-        "values"=>array(
-            "tour"=>"Туристы"),
-        "default"=>"tour"),
-
     // Статус выхода в лес
     "forest_status"=>array(
         "values"=>array(
@@ -144,6 +138,15 @@ $XSM_ENUMS = array(
             "able"=>"Может",
             "yes"=>"Идёт"),
         "default"=>"undef"),
+
+    // Фильтр для показов выходов в лес
+    "show_forest_num"=>array(
+        "values"=>array(
+            "all"=>"Все выходы",
+            "forest_1"=>"1-й выход",
+            "forest_2"=>"2-й выход",
+            "forest_3"=>"3-й выход"),
+        "default"=>"all"),
 
     // Кураторство
     "curatorship"=>array(

@@ -1,12 +1,12 @@
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
 <?php
-    $show_anketa_status = xsm_get_persistent_enum_key("list-tour", "show_anketa_status", "show_anketa_status_tour");
+    $show_forest_num = xsm_get_persistent_enum_key("list-tour", "show_forest_num", "show_forest_num");
 ?>
 <p>В этом списке показываются активные и принятые или полупринятые школьники и преподы.</p>
-<form method="post" action="list-ank" style="margin-bottom: 2px"><span>
+<form method="post" action="list-tour" style="margin-bottom: 2px"><span>
     <span class="ankListField">Фильтрация</span>: <?php
-    echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_tour"); ?>
+    echo xsm_make_enum_by_type("show_forest_num", $show_forest_num, "show_forest_num"); ?>
 
     <span class="ankListField">Фильтр ФИО</span>:
     <input class="ankEdit filter" type="text"
@@ -19,20 +19,25 @@
 
 function xsm_show_tour_list()
 {
-    global $show_anketa_status;
+    global $show_forest_num;
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
 
     $db = xdb_get();
     $db->createFunction('LIKE', 'xdb_like', 2);
 
-    $cond = "";
+    // base filter condition
+    $cond =
+        "(   (anketa_status = 'progress')".
+        " OR (anketa_status = 'processed')".
+        " OR (anketa_status = 'cont')".
+        " OR (anketa_status = 'less') )";
 
-    if ($show_anketa_status == "tour")
+    if ($show_forest_num != xsm_get_enum_default_value("show_forest_num"))
         $cond .=
-            "(   (anketa_status = 'progress')".
-            " OR (anketa_status = 'processed')".
-            " OR (anketa_status = 'cont')".
-            " OR (anketa_status = 'less') )";
+            " AND (p.$show_forest_num IS NOT NULL)".
+            " AND (p.$show_forest_num <> 'undef')".
+            " AND (p.$show_forest_num <> 'notable')".
+            " AND (p.$show_forest_num <> 'not')";
 
     $name_filter_cond = xsm_person_name_filter($db, $show_name_filter);
     if (strlen($name_filter_cond))
