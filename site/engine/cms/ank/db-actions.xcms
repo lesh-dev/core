@@ -193,6 +193,7 @@ function xsm_edit_delete_info($entity, $table_name, $id, $created, $modified, $a
 {?>
     <a class="link-oper" href="edit-<?php echo "$entity$aux_param&amp;${table_name}_id=$id" ?>"><img
         src="<# full_design_dir #>pic/edit.gif" class="edit-icon"
+        width="16" height="16"
         title="Редактировать" />Правка</a>
     <span class="ankListField next">Создан</span>: <?php echo $created;
     if (!empty($modified)) {?>
@@ -206,6 +207,7 @@ function xsm_edit_link($table_name, $id, $aux_param = '', $custom_title = 'Пр�
     <a href="edit-<?php
         echo "$table_name$aux_param&amp;${table_name}_id=$id" ?>"><img
         src="<# full_design_dir #>pic/edit.gif" class="edit-icon"
+        width="16" height="16"
         title="<?php echo $custom_hover; ?>" /><?php echo $custom_title; ?></a><?php
 }
 

@@ -21,14 +21,16 @@
                 <td class="logoCell menuWidth">
                     <a href="/<# web_prefix #>" title="ФизЛЭШ"><img
                         src="<# full_design_dir #>pic/fizlesh-logo-small.png"
-                        height="72" alt="Логотип ФизЛЭШ" /></a>
+                        width="96" height="72" alt="Логотип ФизЛЭШ" /></a>
                 </td>
                 <td class="logoCell">
                     <div style="position: relative; width: 100%; height: 80px;">
                         <img src="<# full_design_dir #>pic/fizlesh-title.png"
+                            width="659" height="58"
                             alt="Физическое отделение ЛЭШ"/>
                         <a class="leshLogoTitle" href="http://lesh.org.ru"><img
                             src="<# full_design_dir #>pic/lesh-subheader-wood.png"
+                            width="400" height="30"
                             alt="Летняя Экологическая Школа"/></a>
                     </div>
                 </td>
