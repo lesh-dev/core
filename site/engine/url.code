@@ -29,6 +29,10 @@ function xcms_href($args_list)
 
 /**
   * External link to aliased page
+  * @param suffix tail after alias (interpreted as aparam after rewrite)
+  * @param args_list array of arguments to encode
+  * @return complete link with scheme and server name to use as link
+  * on (external to site) pages, e.g. in-mail links, etc
   **/
 function xcms_ext_href($suffix, $args_list)
 {
