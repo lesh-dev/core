@@ -158,10 +158,12 @@ $XSM_ENUMS = array(
 
     // Зачёт
     "exam_status"=>array(
-        "passed"=>"Сдан",
-        "notpassed"=>"Не сдан",
-        "almost"=>"Почти сдан",
-        "other"=>"Иное")
+        "values"=>array(
+            "passed"=>"Сдан",
+            "notpassed"=>"Не сдан",
+            "almost"=>"Почти сдан",
+            "other"=>"Иное"),
+        "default"=>"passed")
 );
 
 // Enum API
