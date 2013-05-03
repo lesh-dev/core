@@ -8,11 +8,10 @@
     {
         try
         {
-            xcms_user(@$_POST["auth-login"],@$_POST["auth-password"]);
-            if (@$_GET["return"])
-                header("Location: ".@$_GET["return"]);
-            else
-                header("Location: ?".$_SERVER["QUERY_STRING"]);
+            xcms_user(@$_POST["auth-login"], @$_POST["auth-password"]);
+            $return = xcms_get_key_or($_GET, "return");
+            $location = strlen($return) ? $return : $_SERVER["REQUEST_URI"]; ?>
+            <meta http-equiv="refresh" content="0;URL=<?php echo $location; ?>" /><?php
         }
         catch(Exception $e)
         {

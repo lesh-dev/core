@@ -1,0 +1,217 @@
+<# auth/ #admin #ank #>
+<# cms/ank/style #>
+<?php
+
+$person_school_fields = array(
+    "member_person_id"=>"Участник",
+    "school_id"=>"Школа",
+    "is_student"=>"Школьник",
+    "current_class"=>"Класс",
+    "courses_needed"=>"Потребное кол-во зачётов",
+    "is_teacher"=>"Препод",
+    "curatorship"=>"Кураторство",
+    "person_school_created"=>"Время создания",
+    "person_school_modified"=>"Последняя модификация"
+);
+
+
+/**
+  * Специфическая функция: возврат происходит совсем в другую таблицу, нежели редактируемая сущность
+  * TODO: Сделать более генерический update, чтобы можно было гибко обрабатывать и такие случаи тоже
+  **/
+function xsm_update_person_school($title, $fields)
+{
+    $table_name = "person_school";
+    $key_name = "${table_name}_id";
+    $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+    $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
+    if ($res)
+    {
+        $id = $res;
+        ?>
+        <p><?php echo $title; ?> успешно сохранён.<?php
+    }
+    else
+    {?>
+        <p>Не удалось добавить <?php echo $title; ?>.<?php
+    }
+    $person_id = xcms_get_key_or($_POST, 'member_person_id', -1);
+    $school_id = xcms_get_key_or($_POST, 'school_id', -1);
+    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
+    ?>
+    <a href="<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
+}
+
+// Специфическая функция для данной таблицы
+function xsm_person_school_edit_operations($entity, $table_name, $id, $title, $school_id, $member_person_id)
+{
+    $is_new = ($id == XDB_NEW);
+    $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$member_person_id));
+    ?>
+    <div style="white-space: nowrap">
+        <input type="submit" name="update-<?php echo $entity; ?>"
+            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
+        if (!$is_new) {?>
+            <input type="submit" name="delete-<?php echo $entity; ?>"
+                value="Отчислить со школы" class="delete-button"/><?php
+        }?>
+        <a class="linkButton xsm" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
+    </div><?php
+}
+
+/* Ещё одна специфическая функция -- возврат на редактирование, а не на просмотр,
+т.к. просмотра отдельно не существует) */
+function xsm_warn_delete_person_school($entity, $table_name, $title, $aux_param = '')
+{
+    $key_name = "${table_name}_id";
+    $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+    $person_school = xdb_get_entity_by_id($table_name, $id);
+    $person_id = $person_school['member_person_id'];
+    $school_id = $person_school['school_id'];
+    $person = xdb_get_entity_by_id('person', $person_id);
+    $school = xdb_get_entity_by_id('school', $school_id);
+    $first_name = xcms_get_key_or($person, 'first_name');
+    $last_name = xcms_get_key_or($person, 'last_name');
+    $school_title = xcms_get_key_or($school, 'school_title');
+    $redir = "$entity$aux_param".xcms_url(array($key_name=>$id)); ?>
+    <div class="delete-warning">
+        Вы действительно хотите отчислить участника <b><?php echo "$first_name $last_name"; ?></b>
+        со школы <b><?php echo $school_title; ?></b>?</div>
+    <div><form method="post" action="edit-<?php echo "$entity$aux_param"; ?>">
+        <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
+        <input type="submit" name="confirm-delete-<?php echo $entity; ?>"
+            value="Таки да, удалить!" class="delete-button"/>
+        <a class="linkButton xsm"
+            href="edit-<?php echo $redir ?>">Вернуться к редактированию</a>
+    </form></div>
+    <?php
+}
+
+function xsm_delete_person_school($entity, $table_name, $title, $aux_param = '')
+{
+    $key_name = "${table_name}_id";
+    $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+    $person_school = xdb_get_entity_by_id('person_school', $id);
+    $person_id = $person_school['member_person_id'];
+    $school_id = $person_school['school_id'];
+    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
+    $res = xdb_delete($table_name, $id);
+    if ($res)
+    {?>
+        <p><?php echo $title; ?> [<?php echo $id; ?>] удалён успешно.<?php
+    }
+    else
+    {?>
+        <p>Не удалось удалить <?php echo $title; ?> [<?php echo $id; ?>] (возможно, есть связанные объекты).<?php
+    }?>
+    <a href="<?php echo $redir ?>">Вернуться к просмотру участника</a></p><?php
+}
+
+function xsm_edit_person_school()
+{
+    global $person_school_fields;
+
+    $person_school_id = xcms_get_key_or($_GET, 'person_school_id', '-1'); // invalid key
+    $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
+    $member_person_id = -1;
+    $school_id = -1;
+    if ($person_school_id == XDB_NEW)
+    {
+        // prefill member
+        $member_person_id = xcms_get_key_or($_GET, 'member_person_id');
+        if (strlen($member_person_id))
+            $person_school['member_person_id'] = $member_person_id;
+
+        // prefill school
+        $school_id = xcms_get_key_or($_GET, 'school_id');
+        if (strlen($school_id))
+            $person_school['school_id'] = $school_id;
+    }
+    else
+    {
+        $member_person_id = $person_school['member_person_id'];
+        $school_id = $person_school['school_id'];
+    }
+
+    // override some fields from _GET if exists there (prefill is_teacher and is_student)
+    if (array_key_exists('is_teacher', $_GET))
+        $person_school['is_teacher'] = $_GET['is_teacher'];
+    if (array_key_exists('is_student', $_GET))
+        $person_school['is_student'] = $_GET['is_student'];
+    if (array_key_exists('current_class', $_GET))
+        $person_school['current_class'] = $_GET['current_class'];
+
+    $member = xdb_get_entity_by_id('person', $member_person_id);
+    $school = xdb_get_entity_by_id('school', $school_id);
+
+    $field_types = array(
+        "is_student"=>"checkbox",
+        "is_teacher"=>"checkbox",
+        "curatorship"=>"enum"
+    );
+
+    ?>
+    <form method="post" action="edit-person_school"><?php
+        xsm_person_school_edit_operations('person_school', 'person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id);?>
+        <input type="hidden" name="person_school_id" value="<?php echo $person_school_id; ?>" />
+        <input type="hidden" name="member_person_id" value="<?php echo $member_person_id; ?>" />
+        <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+        <table summary="Участие на школе" class="ankEdit">
+            <tr>
+                <td class="ankListRowTitle">Роли на этой школе</td>
+            </tr>
+            <?php
+            foreach ($person_school_fields as $key=>$field_title)
+            {
+                $value = xcms_get_key_or($person_school, $key);
+                $attr = "";
+                // handle readonly fields
+                if ($key == "person_school_created" ||
+                    $key == "person_school_modified")
+                    $attr = 'readonly="readonly"'; ?>
+                <tr><td class="ankList"><span class="ankEditField"><?php echo $person_school_fields[$key]; ?></span>
+                <?php
+                $ft = xcms_get_key_or($field_types, $key);
+                if ($ft == "checkbox")
+                {
+                    echo xsm_make_checkbox($key, $value, substr($key, 3));
+                }
+                elseif ($ft == "enum")
+                {
+                    echo xsm_make_enum_by_type($key, $value, $key);
+                }
+                elseif ($key == 'member_person_id')
+                {
+                    $fio = htmlspecialchars(xsm_fio($member));
+                    ?>
+                    <input type="text" class="ankEdit" value="<?php echo $fio; ?>"
+                        readonly="readonly" /><?php
+                }
+                elseif ($key == 'school_id')
+                {?>
+                    <input type="text" class="ankEdit" value="<?php echo htmlspecialchars($school['school_title']); ?>"
+                        readonly="readonly" /><?php
+                }
+                else
+                {?>
+                    <input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
+                        name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
+                } ?>
+                </td></tr>
+                <?php
+            }?>
+        </table><?php
+        xsm_person_school_edit_operations('person_school', 'person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id);?>
+    </form>
+    <?php
+}
+
+if (@$_POST["update-person_school"])
+    xsm_update_person_school('Участник-на-Школе', $person_school_fields);
+elseif (@$_POST["delete-person_school"])
+    xsm_warn_delete_person_school('person_school', 'person_school', 'Участник-на-Школе');
+elseif (@$_POST["confirm-delete-person_school"])
+    xsm_delete_person_school('person_school', 'person_school', 'Участник-на-Школе');
+else
+    xsm_edit_person_school();
+?>

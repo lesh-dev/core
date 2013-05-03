@@ -3,10 +3,10 @@
     $ag = false;
     foreach($argv as $k=>$v)
     {
-        if($k == 0) continue;
-        if($v[0] == "#")
+        if ($k == 0) continue;
+        if ($v[0] == "#")
         {
-            if($u->check_rights(substr($v,1),false))
+            if ($u->check_rights(substr($v, 1), false))
             {
                 $ag = true;
             }
@@ -17,6 +17,6 @@
                 $ag = true;
             }
     }
-    if(!$ag)
+    if (!$ag)
         throw new Exception("Доступ запрещён. ", XE_ACCESS_DENIED);
 ?>

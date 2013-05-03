@@ -13,6 +13,8 @@ class XcmsAuthCheckDupLogin(SeleniumTest):
 	def run(self):
 		self.setAutoPhpErrorChecking(True)
 		
+		xtest_common.assertNoInstallerPage(self)
+
 		conf = XcmsTestConfig()
 		
 		# first, login as admin
@@ -24,17 +26,24 @@ class XcmsAuthCheckDupLogin(SeleniumTest):
 		inpName1 = u"Вася " + random_crap.randomText(6)
 		inpName2 = u"Петя " + random_crap.randomText(6)
 
-		inpLogin, inpEMail, inpPass, inpName = xtest_common.createNewUser(self, conf, inpLogin, inpEMail1, inpPass1, inpName1)
+		inpLogin, inpEMail1, inpPass1, inpName1 = xtest_common.createNewUser(self, conf, inpLogin, inpEMail1, inpPass1, inpName1)
 
-		inpLogin, inpEMail, inpPass, inpName = xtest_common.createNewUser(self, conf, inpLogin, inpEMail2, inpPass2, inpName2, ["do_not_validate"])
+		inpLogin, inpEMail2, inpPass2, inpName2 = xtest_common.createNewUser(self, conf, inpLogin, inpEMail2, inpPass2, inpName2, ["do_not_validate"])
 
-		test.assertBodyTextNotPresent(u"Пользователь успешно создан")
+		self.assertBodyTextNotPresent(u"Пользователь успешно создан")
+		
+		xtest_common.performLogout(self)
 		
 		print "logging as created first user. "
 		if not xtest_common.performLogin(self, inpLogin, inpPass1):
 			raise selenium_test.TestError("Cannot login as newly created user. ")
 
 		# logout self 
-		self.gotoUrlByLinkText("Выход")
+		self.gotoUrlByLinkText(u"Выход")
+
+		print "try logging as created second user. "
+		if xtest_common.performLogin(self, inpLogin, inpPass2):
+			raise selenium_test.TestError("I am able to login as 'second' user with duplicate login and new password. ")
+
 
 

@@ -6,7 +6,7 @@
                   $LIST["comment"] = @$_POST["image-comment"];
                   $LIST["cat"] = @$_POST["image-cat"];
                   if(!$LIST["cat"])$LIST["cat"]="none";
-                  $name = $LIST["cat"].'-'.mktime();
+                  $name = $LIST["cat"].'-'.time();
                 }
                 if(@$_POST["Album-Upload-image"])
                 {

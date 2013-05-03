@@ -1,7 +1,5 @@
 <?php
-    $prec_list = glob(".prec/*");
-    foreach ($prec_list as $i)
-        unlink($i);
+    system("rm -rf .prec/*");
     if (@$argv[1] == "repeat")
     {
         echo 'Кэш очищается...';?>

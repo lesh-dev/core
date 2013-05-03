@@ -1,4 +1,5 @@
 <?php
+    session_set_cookie_params(14 * 24 * 3600); // 2 weeks
     session_start();
     if (file_exists("install.php"))
     {
@@ -10,6 +11,7 @@
     require_once ("$engine_dir/sys/settings.php");
     require_once ("$engine_dir/sys/string.php");
     require_once ("$engine_dir/sys/tag.php");
+    require_once ("$engine_dir/sys/util.php");
     require_once ("$engine_dir/sys/unittest.php");
     require_once ("$engine_dir/sys/auth.php");
     require_once ("$engine_dir/sys/logger.php");

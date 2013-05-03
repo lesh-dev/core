@@ -29,7 +29,7 @@
           **/
         private function _save()
         {
-            if(!$this->is_valid())
+            if (!$this->is_valid())
                 throw new Exception("Cannot save invalid user. ");
 
             if ($this->is_null())
@@ -56,7 +56,7 @@
         public function XcmsUser($login)
         {
             $fn = $this->_file_name($login);
-            if(file_exists($fn))
+            if (file_exists($fn))
             {
                 $this->dict = xcms_get_list($fn);
                 $this->valid = true;
@@ -79,8 +79,14 @@
 
         function set_param($key, $value)
         {
-            if(!in_array($key, array("password", "email", "name", "creator", "creation_date")))
+            if (!in_array($key, array("password", "email", "name", "creator", "creation_date")))
                 $this->check_rights("admin");
+            if ($key == "email")
+            {
+                $cand_login = $this->find_by_email($value);
+                if ($cand_login !== NULL && $cand_login != $this->login())
+                    return $this->set_error("Невозможно изменить email: пользователь с такой почтой '$value' уже существует. ");
+            }
             $this->dict[$key] = $value;
             $this->_save();
         }
@@ -106,11 +112,11 @@
         function check_rights($group, $throw_exception=true)
         {
             $group = str_replace("#", "", $group);
-            if($group == "all") return true;
-            if($group == "registered" && $this->is_valid()) return true;
-            if($this->is_superuser()) return true;
-            if(in_array($group, $this->groups())) return true;
-            if($throw_exception)
+            if ($group == "all") return true;
+            if ($group == "registered" && $this->is_valid()) return true;
+            if ($this->is_superuser()) return true;
+            if (in_array($group, $this->groups())) return true;
+            if ($throw_exception)
                 throw new Exception("User doesn't belong to group $group to perform this action");
             return false;
         }
@@ -119,7 +125,7 @@
           **/
         function is_null()
         {
-            if(strlen($this->login()))
+            if (strlen($this->login()))
                 return false;
             return true;
         }
@@ -219,23 +225,25 @@
         /**
           * Создает нового пользователя
           * @param login логин нового пользователя
-          * @param email email нового пользователя (не обязательно)
+          * @param email email нового пользователя
           * @return экземпляр созданного только что пользователя
           **/
-        function create($login, $email = "nobody@example.com")
+        function create($login, $email)
         {
             if (!strlen($login))
                 return $this->set_error("Логин не может быть пустым. ");
             if (!xcms_check_user_name($login))
-                return $this->set_error("Недопустимое имя пользователя. ");
+                return $this->set_error("Указан недопустимый логин. ");
             $this->check_rights("admin");
-            if(file_exists($this->_file_name($login)))
-                return $this->set_error("Пользователь $login уже существует. ");
+            if (file_exists($this->_file_name($login)))
+                return $this->set_error("Пользователь '$login' уже существует. ");
+            if ($this->find_by_email($email) !== NULL)
+                return $this->set_error("Пользователь с электронной почтой '$email' уже существует. ");
             $u = new XcmsUser($login);
             $u->set_valid();
             $u->set_param("email", $email);
             $u->set_param("creator", $this->login());
-            $u->set_param("creation_date", @mktime());
+            $u->set_param("creation_date", @time());
             $u->_save();
             return $u;
         }
@@ -263,9 +271,9 @@
           **/
         function check_session()
         {
-            if($_SESSION["user"] != $this->login())
+            if ($_SESSION["user"] != $this->login())
                 throw new Exception("Неправильное имя пользователя. ");
-            if($this->login() == "anonymous")
+            if ($this->login() == "anonymous")
                 return true;
 
             if (xcms_get_key_or($_SESSION, "passwd") != $this->_hash($this->param("password")))
@@ -296,6 +304,21 @@
                 $ans[] = $li;
             }
             return $ans;
+        }
+        /**
+          * Находит пользователя по email
+          * @return login, если нашёлся, и NULL в противном случае
+          **/
+        function find_by_email($email)
+        {
+            $users = $this->user_list();
+            foreach ($users as $login)
+            {
+                $dict = xcms_get_list($this->_file_name($login));
+                if (xcms_get_key_or($dict, "email") == $email)
+                    return xcms_get_key_or($dict, "login");
+            }
+            return NULL;
         }
         /**
           * Операция su (switch user). На самом деле никакой подмены
@@ -380,6 +403,13 @@
 
             if ($superuser->su("test_user")->login() != "test_user")
                 xut_report("XcmsUser::su doesn't work properly");
+
+            try
+            {
+                $superuser->create("another_user", "vasya@example.com");
+                xut_report("Able to create another user with same email");
+            } catch (Exception $e) {}
+
             xut_end();
         }
     };
@@ -389,14 +419,14 @@
       **/
     function xcms_user($login = NULL, $password= NULL)
     {
-        if($login != NULL)
+        if ($login != NULL)
             $_SESSION["user"] = $login;
         $login = @$_SESSION["user"];
-        if(!strlen($login))
+        if (!strlen($login))
             return new XcmsUser("anonymous");
 
         $u = new XcmsUser($login);
-        if($password != NULL)
+        if ($password != NULL)
             $u->create_session($password);
         $u->check_session();
         return $u;

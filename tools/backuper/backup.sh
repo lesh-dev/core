@@ -15,12 +15,12 @@ mkdir -p "$backup_folder"
 
 backup_db()
 {
-	echo "dumping database $1"
-	ENC=utf8
-	if ! [ -z "$3" ]; then
-		ENC=$3
-	fi
-	mysqldump -ubackup -pnothing_to_backup --default-character-set=$ENC "$1" | gzip > "$2"
+    echo "dumping database $1"
+    db_encoding=utf8
+    if ! [ -z "$3" ]; then
+        db_encoding=$3
+    fi
+    mysqldump -ubackup -pnothing_to_backup --default-character-set=$db_encoding "$1" | gzip > "$2"
 }
 
 # add more folders here if you need

@@ -1,4 +1,7 @@
 <# auth/ #admin #>
+<# auth/user #>
+<# auth/format #>
+
 <?php
     require_once("$engine_dir/sys/auth.php");
     require_once("$engine_dir/sys/groups.php");
@@ -14,75 +17,19 @@
             <a class="h-menu-link" href="?action=create_user<?php echo $preface;?>">Создать пользователя</a>
         </div>
         <?php
-            foreach($u->user_list() as $user)
+            $uid = 0;
+            foreach($u->user_list() as $login)
             {
-                $activeness = ($user == $target_user) ? "menu-active" : "";
-                echo "<a class=\"user-list $activeness\" href=\"?user=$user$preface\">$user</a>\n";
+                $activeness = ($login == $target_user) ? "menu-active" : "";
+                $user = $u->su($login);
+                $name = htmlspecialchars($user->param("name")); ?>
+                <a class="user-list <?php echo $activeness; ?>" href="?user=<?php echo $login.$preface; ?>"><span
+                    class="user-login" id="uid-<?php echo $uid; ?>"><?php echo $login; ?></span><span
+                    id="uname-<?php echo $uid; ?>"><?php echo $name; ?></span></a><?php
+                $uid++;
             }
         ?>
         </div><?php
-    }
-
-    function xcmst_user_create_notify($email, $login, $password)
-    {
-        // TODO: this template should be taken from file
-        $notify_result = xcms_send_notification(
-            "developers",
-            array($email),
-            "Welcome to XCMS!",
-
-            "Добро пожаловать! Для Вас заведён логин и пароль на сайте.\n"
-            ."\n"
-            ."Ваш логин: $login\n"
-            ."\n"
-            ."Ваш пароль: $password\n"
-            ."\n"
-            ."Если у Вас будут какие-то проблемы, не бойтесь писать "
-            ."на support@fizlesh.ru, все равно его никто не читает.\n"
-        );
-
-        return $notify_result ? null : "Не удалось послать оповещение пользователю. ";
-    }
-
-    function xcmst_draw_privileges($user, $read_only = false)
-    {?>
-        <h3>Привилегии</h3>
-        <?php
-        foreach(xcms_all_groups() as $group => $title)
-        {
-            $attrs = "";
-            if ($user and $user->check_rights($group, false))
-                $attrs .= " checked=\"checked\" ";
-            if ($read_only)
-                $attrs .= " disabled=\"disabled\" ";
-            echo "<div><input $attrs type=\"checkbox\" name=\"group_$group\" id=\"group_$group\" />$title</div>\n";
-        }
-    }
-
-    function xcmst_input_attrs_from_post($key, $placeholder = "")
-    {
-        $attrs = "id=\"$key\" name=\"$key\" value=\"".
-            htmlspecialchars(xcms_get_key_or($_POST, $key))."\"";
-        if (!empty($placeholder))
-            $attrs .= " placeholder=\"$placeholder\" ";
-        echo $attrs;
-    }
-
-    function xcmst_input_attrs_from_user($user, $key, $read_only = false, $placeholder = "")
-    {
-        $attrs = "";
-        if ($read_only)
-            $attrs .= " readonly=\"readonly\" ";
-        if ($placeholder)
-            $attrs .= " placeholder=\"".htmlspecialchars($placeholder)."\" ";
-        echo "id=\"$key\" name=\"$key\" $attrs value=\"".
-            htmlspecialchars($user->param($key))."\"";
-    }
-
-    function xcmst_checkbox_attrs_from_post($key)
-    {
-        echo "id=\"$key\" name=\"$key\" ".
-            xcms_checkbox_attr(xcms_get_key_or($_POST, $key));
     }
 
     function xcmst_draw_user_create_form()
@@ -91,16 +38,16 @@
         ?>
         <form method="post" action="?<?php echo $preface; ?>" >
             <h3>Учётные данные</h3>
-            <div><span class="user-label">Логин:</span> <input <?php xcmst_input_attrs_from_post("login", "vasya-pupkin"); ?> /></div>
+            <div><span class="user-label">Логин</span> <input <?php xcmst_input_attrs_from_post("login", "vasya-pupkin"); ?> /></div>
             <div><span class="user-help-label">Разрешены латинские буквы, цифры,
                 а также дефис (-), подчёркивание (_), точка (.) и собака (@)</span></div>
-            <div><span class="user-label">Пароль:</span>
+            <div><span class="user-label">Пароль</span>
                 <input type="password" <?php xcmst_input_attrs_from_post("password", 'Sup3r-P@ssw0rd'); ?>/></div>
-            <div><span class="user-label">Пароль (ещё раз):</span>
+            <div><span class="user-label">Пароль (ещё раз)</span>
                 <input type="password" <?php xcmst_input_attrs_from_post("password_confirm"); ?> /></div>
-            <div><span class="user-label">Настоящее имя:</span>
+            <div><span class="user-label">Настоящее имя</span>
                 <input <?php xcmst_input_attrs_from_post("name", "Вася Пупкин"); ?> /></div>
-            <div><span class="user-label">Электропочта:</span>
+            <div><span class="user-label">EMail</span>
                 <input <?php xcmst_input_attrs_from_post("email", "user@example.com"); ?> /></div>
             <div><span class="user-label">Оповестить пользователя</span>
                 <input type="checkbox" <?php xcmst_checkbox_attrs_from_post("notify_user"); ?> /></div>
@@ -125,19 +72,19 @@
         <form method="post">
         <h3>Учётные данные</h3>
 
-        <div><span class="user-label">Логин:</span><?php echo $user->login(); ?></div>
+        <div><span class="user-label">Логин</span><span id="login-span"><?php echo $user->login(); ?></span></div>
         <div><span class="user-label">Создал</span><?php echo $user->param('creator').", $cd"; ?></div>
 
-        <div><span class="user-label">Настоящее имя:</span><input
+        <div><span class="user-label">Настоящее имя</span><input
             <?php xcmst_input_attrs_from_user($user, 'name', $read_only, "Вася Пупкин"); ?> /></div>
 
-        <div><span class="user-label">Электропочта:</span><input
+        <div><span class="user-label">EMail</span><input
             <?php xcmst_input_attrs_from_user($user, 'email', $read_only, "user@example.com"); ?> /></div>
         <?php
         xcmst_draw_privileges($user, $read_only);
         if ($read_only)
         {?>
-            <div>Свой собственный профиль Вы можете отредактировать
+            <div style="padding-top: 10px">Свой собственный профиль Вы можете отредактировать
             <a <?php echo xcms_href(array('mode'=>'myprofile', 'ref'=>'ladmin')); ?> >здесь</a>.</div><?php
         }
         else
@@ -195,7 +142,7 @@
         }
         $warn = null;
         if (@$_POST["notify_user"])
-            $warn = xcmst_user_create_notify($email, $login, $password);
+            $warn = xcms_user_create_notify($email, $login, $password);
 
         return array(null, $warn, "Пользователь успешно создан. ");
     }

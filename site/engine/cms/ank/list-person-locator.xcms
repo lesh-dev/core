@@ -1,0 +1,156 @@
+<# auth/ #admin #ank #>
+<# cms/ank/style #>
+<?php
+    $show_anketa_status = xsm_get_persistent_enum_key("list-person-locator", "show_anketa_status", "show_anketa_status_locator");
+    $show_is_teacher = xcms_get_persistent_key("list-person-locator", "show_is_teacher");
+    $show_is_student = xcms_get_persistent_key("list-person-locator", "show_is_student");
+?>
+<p>В этом списке по умолчанию показываются люди, с которыми идёт (или недавно шло) взаимодействие.
+    Для школьников и преподов, которые стабильно <b>не ездят</b> на школы уже 2-3&nbsp;года, осмысленно выставлять статус
+    <span class="anketa-status old">Архив</span>. В&nbsp;этот же статус
+    можно переводить через 1-2 года тех, кому по результатам собеседования был проставлен статус
+    <span class="anketa-status declined">Отклонён</span> (сразу этого делать не следует).
+</p>
+<form method="post" action="list-person-locator" style="margin-bottom: 2px"><span>
+    <span class="ankListField">Статус</span>: <?php
+    echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_locator");
+    echo xsm_make_checkbox('show_is_teacher', $show_is_teacher, "teacher");
+    ?><span class="ankListField">Только преподы</span>&nbsp;&nbsp;<?php
+        echo xsm_make_checkbox('show_is_student', $show_is_student, "student");
+    ?><span class="ankListField">Только школьники</span>&nbsp;&nbsp;<?php
+        xsm_draw_fio_filter(); ?>
+    <input type="submit" name="show-person" value="Показать" />
+</span></form>
+<?php
+
+
+// вывод активных участников
+function xsm_show_all_person_list()
+{
+    global $show_anketa_status;
+    global $show_is_teacher;
+    global $show_is_student;
+
+    $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
+
+    $db = xdb_get();
+    $db->createFunction('LIKE', 'xdb_like', 2);
+
+    $cond = "(1 = 1)";
+    if ($show_is_teacher == "teacher")
+        $cond .= " AND ( is_teacher = 'teacher' )";
+
+    if ($show_is_student == "student")
+        $cond .= " AND ( is_student = 'student' )";
+
+    if ($show_anketa_status == "active")
+        $cond .=
+            " AND ( (anketa_status = 'processed') ".
+            " OR (anketa_status = 'cont') )";
+    elseif ($show_anketa_status == "not-decl")
+        $cond .=
+            " AND ( (anketa_status <> 'duplicate')".
+            " AND (anketa_status <> 'spam')".
+            " AND (anketa_status <> 'declined') )";
+    elseif ($show_anketa_status == "not-old")
+        $cond .=
+            " AND ( (anketa_status <> 'duplicate') ".
+            " AND (anketa_status <> 'spam') ".
+            " AND (anketa_status <> 'old') )";
+    elseif ($show_anketa_status == "all")
+        $cond .= "";
+    else
+        $cond .= " AND ( anketa_status = '$show_anketa_status' )";
+
+    $name_filter_cond = xsm_person_name_filter($db, $show_name_filter);
+    if (strlen($name_filter_cond))
+        $cond .= " AND $name_filter_cond";
+
+    $query = "SELECT ".
+        "p.person_id, p.last_name, p.first_name, ".
+        "p.school, p.school_city, ".
+        "p.phone, p.cellular, p.anketa_status, p.is_student, p.is_teacher ".
+        "FROM person p";
+
+    if (strlen($cond))
+        $query .= " WHERE $cond";
+
+    $query .= " ORDER BY NOT (p.is_teacher IS NULL OR p.is_teacher = ''), p.last_name, p.first_name";
+
+    xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
+    $person_sel = $db->query($query);
+
+    xsm_view_operations('person', 'person', 'участника', '&amp;anketa_status=cont');
+    ?>
+    <table summary="Участники" class="ankList">
+        <colgroup>
+            <col width="30px" />
+            <col width="30%" />
+            <col width="35%" />
+            <col width="20%" />
+        </colgroup>
+        <thead>
+            <th class="ankList">ID</th>
+            <th class="ankList">Фамилия, имя</th>
+            <th class="ankList">Контакты</th>
+            <th class="ankList">Info</th>
+        </thead>
+    <?php
+    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $person_id = htmlspecialchars($person["person_id"]);
+        $fi = htmlspecialchars(xsm_fi($person));
+
+        $school = htmlspecialchars($person["school"]);
+        $school_city = htmlspecialchars($person["school_city"]);
+
+        // Заготовка на будущее: подзапрос с прочими данными участника для попапов
+        /*$sub_query = "SELECT ".
+            "ps.is_teacher, ps.is_student, ps.curatorship, ps. p.person_id, p.last_name, p.first_name, p.phone, p.cellular, p.anketa_status ".
+            "FROM person p";*/
+
+        // класс на данной школе
+        //$current_class = htmlspecialchars($person["current_class"]);
+
+        $phone = htmlspecialchars($person["phone"]);
+        $cellular = htmlspecialchars($person["cellular"]);
+
+        $is_teacher = $person["is_teacher"];
+        $is_student = $person["is_student"];
+        //$curatorship = $person["curatorship"];
+
+        //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
+
+        //$person_created = xsm_ymdhm($person["person_created"]);
+        //$person_modified = xsm_ymdhm($person["person_modified"]);
+
+        /* TODO: enable
+        $person_school_created = xsm_ymdhm($person["person_school_created"]);
+        $person_school_modified = xsm_ymdhm($person["person_school_modified"]);
+
+        $hr_teacher = ($is_teacher == "teacher" ? "Препод, " : "");
+        $hr_student = ($is_student == "student" ? "Школьник, " : "");
+        */
+        $row_class = ($is_teacher == "teacher" ? "teacher" : "");
+        ?>
+        <tr class="<?php echo $row_class; ?>">
+            <td class="ankList "><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
+            <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"><?php
+                echo $fi; ?></a></td>
+            <td class="ankList"><?php
+                echo $cellular;
+                if ($cellular && $phone)
+                    echo ", $phone"; ?></a></td>
+            </td>
+            <td class="ankList"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
+        </tr>
+        <?php
+    }
+    ?>
+    </table>
+    <?php
+    xsm_view_operations('person', 'person', 'участника', '&amp;anketa_status=cont');
+}
+
+    xsm_show_all_person_list();
+?>

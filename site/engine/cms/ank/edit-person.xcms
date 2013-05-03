@@ -1,0 +1,110 @@
+<# auth/ #admin #ank #>
+<# cms/ank/style #>
+<# cms/ank/diff #>
+
+<?php
+
+function xsm_notify_person_edit($person)
+{
+    $person_id = $person['person_id'];
+    $old_person = ($person_id != XDB_NEW) ? xdb_get_entity_by_id('person', $person_id) : array();
+
+    $full_name = xsm_fio($person);
+    $table_title = 'Изменения в анкете: <a'.
+        xcms_ext_href('view-person', array('person_id'=>$person_id)).'>'.
+        htmlspecialchars($full_name).'</a>';
+
+    $mail_msg = xsm_build_diff_msg(
+        $person,
+        $old_person,
+        xsm_get_person_fields(),
+        xsm_get_person_field_types(),
+        $table_title);
+
+    $subject = "Изменения: $full_name";
+    xcms_send_notification("reg", NULL, "db", $subject, "This message is in HTML format.\r\n", $mail_msg);
+}
+
+function xsm_edit_person()
+{
+    $person_fields = xsm_get_person_fields();
+
+    $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
+    $person = xdb_get_entity_by_id('person', $person_id);
+    if ($person_id == XDB_NEW)
+    {
+        // prefill anketa status for new records
+        $anketa_status = xcms_get_key_or($_GET, 'anketa_status');
+        if ($anketa_status)
+            $person['anketa_status'] = $anketa_status;
+    }
+    $field_types = xsm_get_person_field_types();
+
+    ?>
+    <form method="post" action="edit-person"><?php
+        NEW_xsm_edit_operations('person', $person_id, 'Вернуться к просмотру участника');?>
+        <input type="hidden" id="person_id-input" name="person_id" value="<?php echo $person_id; ?>" />
+        <table summary="Участник" class="ankEdit">
+            <tr>
+                <td class="ankListRowTitle">Участник</td>
+            </tr>
+
+            <?php
+            foreach ($person_fields as $key=>$field_title)
+            {
+                $value = xcms_get_key_or($person, $key);
+                $attr = "";
+                // handle readonly fields
+                if ($key == "user_agent" ||
+                    $key == "person_created" ||
+                    $key == "person_modified") $attr = ' readonly="readonly"'?>
+                <tr><td class="ankList"><span class="ankEditField"><?php echo $person_fields[$key]; ?></span>
+                <?php
+                $ft = xcms_get_key_or($field_types, $key);
+                if ($ft == "textarea") {?>
+                    <textarea class="ankEdit" name="<?php echo $key; ?>" id="<?php echo $key; ?>-text"><?php
+                        echo htmlspecialchars($value); ?></textarea><?php
+                } elseif ($ft == "checkbox") {
+                    // КОСТЫЛЬ! checkbox-овое поле должно начинаться со слова 'is_'
+                    // и его "установленное" значение (true) соответствует
+                    // остатку названия ключа без префикса 'is_'
+                    echo xsm_make_checkbox($key, $value, substr($key, 3));
+                } elseif ($ft == "enum") {
+                    if (substr($key, 0, strlen("forest_")) == "forest_")
+                        echo xsm_make_enum_by_type($key, $value, "forest_status");
+                    else
+                        echo xsm_make_enum_by_type($key, $value, $key);
+                } else {?>
+                    <input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
+                        name="<?php echo $key; ?>" id="<?php echo $key; ?>-input" <?php echo $attr; ?> /><?php
+                } ?>
+                </td></tr>
+                <?php
+            }?>
+        </table><?php
+        NEW_xsm_edit_operations('person', $person_id, 'Вернуться к просмотру участника'); ?>
+    </form>
+    <?php
+}
+
+if (@$_POST["update-person"])
+{
+    if (!strlen(@$_POST["last_name"]) || !strlen(@$_POST["first_name"]))
+    {?>
+        <p>Пожалуйста, укажите хотя бы <b>имя и фамилию</b>!
+            Нажмите &laquo;Назад&laquo; (&laquo;Back&raquo;) в браузере,
+            чтобы вернуться к заполнению!</p><?php
+    }
+    else
+    {
+        xsm_notify_person_edit($_POST);
+        xsm_update_entity_listmode('person', 'person', 'Участник', xsm_get_person_fields(), '', 'участника');
+    }
+}
+elseif (@$_POST["delete-person"])
+    xsm_warn_delete_entity_listmode('person', 'person', 'участника');
+elseif (@$_POST["confirm-delete-person"])
+    xsm_delete_entity_listmode('person', 'person', 'Участник');
+else
+    xsm_edit_person();
+?>

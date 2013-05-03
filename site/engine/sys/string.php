@@ -45,6 +45,60 @@
     }
 
     /**
+      * Cuts a substring from UTF-8 string
+      * It's just a simple wrapper around mb_substr
+      **/
+    function xcms_substr($string, $start, $length)
+    {
+        return mb_substr($string, $start, $length, 'UTF-8');
+    }
+
+    /**
+      * Returns char-based substring position (UTF-8)
+      * It's just a simple wrapper around mb_strpos
+      **/
+    function xcms_strpos($haystack, $needle, $offset)
+    {
+        return mb_strpos($haystack, $needle, $offset, 'UTF-8');
+    }
+
+    /**
+      * Replaces Russian UTF-8 symbols to ANSI transliteration
+      * @param string string to transliterate
+      * @return transliterated string
+      **/
+    function xcms_transliterate($string)
+    {
+        $converter = array(
+            'а' => 'a',   'б' => 'b',   'в' => 'v',
+            'г' => 'g',   'д' => 'd',   'е' => 'e',
+            'ё' => 'e',   'ж' => 'zh',  'з' => 'z',
+            'и' => 'i',   'й' => 'y',   'к' => 'k',
+            'л' => 'l',   'м' => 'm',   'н' => 'n',
+            'о' => 'o',   'п' => 'p',   'р' => 'r',
+            'с' => 's',   'т' => 't',   'у' => 'u',
+            'ф' => 'f',   'х' => 'h',   'ц' => 'c',
+            'ч' => 'ch',  'ш' => 'sh',  'щ' => 'sch',
+            'ь' => '',    'ы' => 'y',   'ъ' => '',
+            'э' => 'e',   'ю' => 'yu',  'я' => 'ya',
+
+            'А' => 'A',   'Б' => 'B',   'В' => 'V',
+            'Г' => 'G',   'Д' => 'D',   'Е' => 'E',
+            'Ё' => 'E',   'Ж' => 'Zh',  'З' => 'Z',
+            'И' => 'I',   'Й' => 'Y',   'К' => 'K',
+            'Л' => 'L',   'М' => 'M',   'Н' => 'N',
+            'О' => 'O',   'П' => 'P',   'Р' => 'R',
+            'С' => 'S',   'Т' => 'T',   'У' => 'U',
+            'Ф' => 'F',   'Х' => 'H',   'Ц' => 'C',
+            'Ч' => 'Ch',  'Ш' => 'Sh',  'Щ' => 'Sch',
+            'Ь' => '',    'Ы' => 'Y',   'Ъ' => '',
+            'Э' => 'E',   'Ю' => 'Yu',  'Я' => 'Ya',
+        );
+        $string = strtr($string, $converter);
+        return $string;
+    }
+
+    /**
       * String library unit test
       **/
     function xcms_string_unit_test()
@@ -53,6 +107,9 @@
         xut_check(xcms_check_password("123@#$%^&abcABC bla\xFE\xFF"), "Check valid password");
         xut_check(!xcms_check_password("\n\taa\rbb\0\\'qqq'+\"zzz"), "Check invalid password");
         xut_check(xcms_len("Привет000") == 9, "Check xcms_len");
+        xut_check(xcms_strpos("Привет000", "т00", 0) == 5, "Check xcms_strpos");
+        xut_check(xcms_substr("Привет000", 3, 3) == "вет", "Check xcms_substr");
+        xut_check(xcms_transliterate("Вельтищев Михаил") == "Veltischev Mihail", "Check xcms_transliterate");
         xut_end();
     }
 ?>

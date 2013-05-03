@@ -1,0 +1,205 @@
+<?php
+
+// Person
+function xsm_get_person_fields()
+{
+    return array(
+        "anketa_status"=>"Статус",
+
+        "last_name"=>"Фамилия",
+        "first_name"=>"Имя",
+        "patronymic"=>"Отчество",
+
+        "birth_date"=>"Дата рождения",
+        "passport_data"=>"Паспортные данные",
+
+        "school"=>"Школа",
+        "school_city"=>"Адрес школы",
+        "ank_class"=>"Класс подачи анкеты",
+        "current_class"=>"Класс",
+
+        "phone"=>"Телефон",
+        "cellular"=>"Мобильный телефон",
+        "email"=>"E-Mail",
+        "skype"=>"Skype",
+        "social_profile"=>"Профиль в соц. сети",
+
+        "is_teacher"=>"Препод",
+        "is_student"=>"Школьник",
+
+        "tent_capacity"=>"Вместимость палатки",
+        "tour_requisites"=>"Туристское барахло",
+
+        "forest_1"=>"1-й выход в лес",
+        "forest_2"=>"2-й выход в лес",
+        "forest_3"=>"3-й выход в лес",
+
+        "favourites"=>"Любимые предметы",
+        "achievements"=>"Достижения",
+        "hobby"=>"Хобби",
+        "lesh_ref"=>"Откуда узнали о школе",
+
+        "user_agent"=>"UserAgent",
+
+        "person_created"=>"Время создания",
+        "person_modified"=>"Последняя модификация"
+    );
+}
+
+function xsm_get_person_field_types()
+{
+    return array(
+        "favourites"=>"textarea",
+        "achievements"=>"textarea",
+        "hobby"=>"textarea",
+        "lesh_ref"=>"textarea",
+        "tour_requisites"=>"textarea",
+
+        "is_teacher"=>"checkbox",
+        "is_student"=>"checkbox",
+
+        "anketa_status"=>"enum",
+
+        "forest_1"=>"enum",
+        "forest_2"=>"enum",
+        "forest_3"=>"enum"
+    );
+}
+
+// Person comment
+function xsm_get_person_comment_fields()
+{
+    return array(
+        "comment_text"=>"Текст комментария",
+        "owner_login"=>"Логин автора",
+        "blamed_person_id"=>"ID субъекта",
+        "person_comment_created"=>"Время создания",
+        "person_comment_modified"=>"Последняя модификация",
+        "person_comment_deleted"=>"Объект удалён"
+    );
+}
+
+function xsm_get_person_comment_field_types()
+{
+    return array(
+        "comment_text"=>"textarea"
+    );
+}
+
+$XSM_ENUMS = array(
+    // статус анкеты (значения в базе)
+    "anketa_status"=>array(
+        "values"=>array(
+            "new"=>"Новый",
+            "progress"=>"Ждёт собес.",
+            "less"=>"Ждёт леса",
+            "processed"=>"Принят",
+            "nextyear"=>"Отложен",
+            "declined"=>"Отклонён",
+            "cont"=>"Активный",
+            "old"=>"Архив",
+            "duplicate"=>"Дубль",
+            "spam"=>"Спам"),
+        "default"=>"new"),
+
+    // селектор для list-person-locator
+    "show_anketa_status_locator"=>array(
+        "values"=>array(
+            "active"=>"Актив",
+            "not-old"=>"Все, кроме архивных",
+            "processed"=>"Принятые",
+            "cont"=>"Продолжающие",
+            "old"=>"Архивные",
+            "not-decl"=>"Без спама, дублей и посланых",
+            "all"=>"Все"),
+        "default"=>"active"),
+
+    // селектор для list-ank
+    "show_anketa_status_ank"=>array(
+        "values"=>array(
+            "abitur"=>"Набор",
+            "new"=>"Новые",
+            "progress"=>"Ждут собеседования",
+            "less"=>"Ждут леса",
+            "processed"=>"Принятые",
+            "nextyear"=>"Отложенные",
+            "declined"=>"Отклонённые",
+            "old"=>"Архивные",
+            "all"=>"Все"),
+        "default"=>"abitur"),
+
+    // Статус выхода в лес
+    "forest_status"=>array(
+        "values"=>array(
+            "undef"=>"Не задано",
+            "notable"=>"Не может",
+            "no"=>"Не идёт",
+            "maybe"=>"Под ?",
+            "able"=>"Может",
+            "yes"=>"Идёт"),
+        "default"=>"undef"),
+
+    // Фильтр для показов выходов в лес
+    "show_forest_num"=>array(
+        "values"=>array(
+            "all"=>"Все выходы",
+            "forest_1"=>"1-й выход",
+            "forest_2"=>"2-й выход",
+            "forest_3"=>"3-й выход"),
+        "default"=>"all"),
+
+    // Кураторство
+    "curatorship"=>array(
+        "values"=>array(
+            "none"=>"Не куратор",
+            "assist"=>"Помощник куратора",
+            "cur"=>"Куратор"),
+        "default"=>"none"),
+
+    // Зачёт
+    "exam_status"=>array(
+        "values"=>array(
+            "passed"=>"Сдан",
+            "notpassed"=>"Не сдан",
+            "almost"=>"Почти сдан",
+            "other"=>"Иное"),
+        "default"=>"passed")
+);
+
+// Enum API
+function xsm_get_enum($enum_type)
+{
+    global $XSM_ENUMS;
+    return $XSM_ENUMS[$enum_type]["values"];
+}
+
+function xsm_get_enum_default_value($enum_type)
+{
+    global $XSM_ENUMS;
+    return $XSM_ENUMS[$enum_type]["default"];
+}
+
+function xsm_check_enum_key($enum_type, $key)
+{
+    global $XSM_ENUMS;
+    $enum_data = $XSM_ENUMS[$enum_type];
+    if (!array_key_exists($key, $enum_data["values"]))
+        return $enum_data["default"];
+    return $key;
+}
+
+function xsm_get_persistent_enum_key($scope, $name, $enum_type)
+{
+    $default = xsm_get_enum_default_value($enum_type);
+    $key = xcms_get_persistent_key($scope, $name, $default);
+    return xsm_check_enum_key($enum_type, $key);
+}
+
+
+// Wrapper around generic API call
+function xsm_make_enum_by_type($name, $value, $enum_type)
+{
+    return xsm_make_enum_selector($name, $value, xsm_get_enum($enum_type));
+}
+
+?>

@@ -1,5 +1,10 @@
-<# cms/ank/func #>
+<# cms/ank/pss #>
+<# cms/ank/field-desc #>
+<# cms/ank/middleware #>
+<# cms/ank/db-actions #>
 <# cms/ank/format #>
+<script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/jquery-1.7.1.min.js"; ?>"></script>
+<script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
 
 <?php
     if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
@@ -11,15 +16,16 @@
     if(@$_POST["submit-anketa"])
     {
         $template_root = "{$SETTINGS['engine_dir']}templates";
-        $mail_msg_html = file_get_contents("$template_root/anketa_mail.html");
+        $mail_msg = file_get_contents("$template_root/anketa_mail.html");
+        $reply_link = file_get_contents("$template_root/anketa_reply_link.html");
+        $reply_body = file_get_contents("$template_root/anketa_reply_body.html");
         $row_template = file_get_contents("$template_root/anketa_mail_one_row.html");
-        $unix_time = mktime();
+        $unix_time = time();
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
-        $mail_msg_plain = "Анкета от $hr_timestamp:\r\n-----------------------------------\r\n";
 
         $person = $_POST; // get all values here (_POST should not be spoiled)
         // set some generic fields that cannot be overridden
-        $person["activity_status"] = "new";
+        $person["anketa_status"] = "new";
         $person["is_student"] = "student";
         $user_agent = $person["user_agent"] = $_SERVER["HTTP_USER_AGENT"];
         // extract some values to check
@@ -29,6 +35,7 @@
         $phone = xcms_get_key_or($person, "phone");
         $cellular = xcms_get_key_or($person, "cellular");
         $current_class = xcms_get_key_or($person, "current_class");
+        $person['ank_class'] = $current_class;
         $email = xcms_get_key_or($person, "email");
 
         $person_fields = xsm_get_person_fields();
@@ -50,92 +57,60 @@
         foreach ($person as $key=>$value)
         {
             $key_title = $key;
-            if (array_key_exists($key, $person_fields)) $key_title = $person_fields[$key];
-            if ($key == "is_student" || $key == "submit-anketa")
+            if (array_key_exists($key, $person_fields))
+                $key_title = $person_fields[$key];
+            if ($key == "submit-anketa")
                 continue;
-            $kt = "$key_title: ";
-            while (xcms_len($kt) < 22)
-                $kt .= ' ';
-            $one_line = "$kt$value";
-            $mail_msg_plain .= "$one_line\r\n";
-            // append new line after long lines
-            if (xcms_len($one_line) > 80)
-                $mail_msg_plain .= "\r\n";
-            $cur_row_html = $row_template;
-            $cur_row_html = str_replace("@@ANK-KEY@", $key_title, $cur_row_html);
-            $cur_row_html = str_replace("@@ANK-VALUE@", htmlspecialchars($value), $cur_row_html);
-            $html_content .=  $cur_row_html;
+            $cur_row = $row_template;
+            $cur_row = str_replace("@@ANK-KEY@", $key_title, $cur_row);
+            $cur_row = str_replace("@@ANK-VALUE@", htmlspecialchars($value), $cur_row);
+            $html_content .=  $cur_row;
         }
         $ank_dir = "${content_dir}ank";
         @mkdir($ank_dir, 0777);
-        xdb_insert_or_update('person', array('person_id'=>'new'), $person, $person_fields);
+        xdb_insert_or_update('person', array('person_id'=>XDB_NEW), $person, $person_fields);
+        $table_title = "Анкета от $hr_timestamp";
         $write_success = true; // TODO: проверять SELECT-ом, что таки да, вставилось
-        $mail_msg_html = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg_html);
-        $mail_msg_html = str_replace("@@DATE@", $hr_timestamp, $mail_msg_html);
-        $mail_msg_html = str_replace("@@HOST@", $_SERVER['HTTP_HOST'], $mail_msg_html);
+        $mail_msg = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg);
+        $mail_msg = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg);
+        $mail_msg = str_replace("@@HOST@", xcms_hostname(), $mail_msg);
 
-        $mail_group_html = "";
-        $mail_group_plain = "";
+        // prepare reply_link
+        $reply_body = str_replace("@@NAME@", $first_name, $reply_body);
+        // TODO hardcoded subject
+        $reply_link = str_replace("@@REPLY-SUBJECT@", rawurlencode("ФизЛЭШ: Анкета принята"), $reply_link);
+        $reply_link = str_replace("@@REPLY-BODY@", str_replace("\n", "<br />", $reply_body), $reply_link);
+        $reply_link = str_replace("@@REPLY-BODY-ENC@", rawurlencode($reply_body), $reply_link);
+        $reply_link = str_replace("@@REPLY-TO@", $email, $reply_link);
+
+        // main compose finished
+        if (!strlen($email))
+            $reply_link = "";
+        $mail_msg_managers = str_replace("@@REPLY-LINK@", $reply_link, $mail_msg);
+
+        // remove unused placeholder in notification letter
+        $mail_msg = str_replace("@@REPLY-LINK@", "", $mail_msg);
+
+        // TODO: выпилить режим reg-test* -- вместо этого тест должен
+        // подменять поля уведомления, чтобы не спамить
+
+        $mail_group_notify = "reg";
+        $mail_group_managers = "reg-managers";
         if (substr($full_name, 0, 12) == "NO-MAIL-TEST") // see bug #264
         {
-            // do nothing
+            $mail_group_notify = "";
+            $mail_group_managers = "";
         }
         elseif (substr($full_name, 0, 4) == "TEST") // see bug #111
         {
-            $mail_group_html = "reg-test-html";
-            $mail_group_plain = "reg-test-plain";
-        }
-        else
-        {
-            $mail_group_html = "reg-html";
-            $mail_group_plain = "reg-plain";
+            $mail_group_notify = "reg-test";
+            $mail_group_managers = "reg-managers-test";
         }
 
-        $addr_from = "reg@fizlesh.ru"; // TODO: remove this spike
-        $name_from = "FizLesh XSM";
+        $success_managers = xsm_send_anketa($mail_group_managers, $mail_msg_managers, $full_name, $email, true);
+        $success_notify = xsm_send_anketa($mail_group_notify, $mail_msg, $full_name, $email, false);
 
-        $full_name_tr = xcms_transliterate($full_name);
-        $subject = "[FizLesh-XSM] New anketa: $full_name_tr";
-
-        $success_html = true;
-        $mailer = xcms_get_mailer();
-        if (xcms_add_mail_group($mailer, $mail_group_html))
-        {
-            if (!empty($email))
-                $mailer->AddReplyTo($email, $full_name_tr);
-            else
-                $mailer->AddReplyTo($addr_from, $name_from);
-            $mailer->SetFrom($addr_from, $name_from);
-            $mailer->Sender = $addr_from;
-            $mailer->Subject = $subject;
-            $mailer->AltBody = $mail_msg_plain;
-            $mailer->MsgHTML($mail_msg_html);
-            if (!$mailer->Send())
-            {
-                xcms_log(XLOG_ERROR, "[MAILER:XSM] ".$mailer->ErrorInfo);
-                $success_html = false;
-            }
-        }
-
-        $success_plain = true;
-        $mailer = xcms_get_mailer();
-        if (xcms_add_mail_group($mailer, $mail_group_plain))
-        {
-            if (!empty($email))
-                $mailer->AddReplyTo($email, $full_name_tr);
-            else
-                $mailer->AddReplyTo($addr_from, $name_from);
-            $mailer->SetFrom($addr_from, $name_from);
-            $mailer->Sender = $addr_from;
-            $mailer->Subject = $subject;
-            $mailer->Body = $mail_msg_plain;
-            if (!$mailer->Send())
-            {
-                xcms_log(XLOG_ERROR, "[MAILER:XSM] ".$mailer->ErrorInfo);
-                $success_plain = false;
-            }
-        }
-        $success = ($success_html || $success_plain) && $write_success;
+        $success = ($success_managers || $success_notify) && $write_success;
 
         $dest_url = 'register/success';
         $zero_redirect_delay = $SETTINGS["zero_redirect_delay"];
@@ -144,7 +119,7 @@
             // В этом случае анкета всё равно сохранится у нас, и на самом деле мы всё узнаем про человека,
             // но чтобы не ждать три дня, пусть уж лучше нас пнут извне
             xcms_log(XLOG_ERROR, "[ANK] Anketa submission failed. ".
-                "Statuses: HTML:$success_html Plain:$success_plain Write:$write_success");
+                "Statuses: HTML:$success_notify Write:$write_success");
             $dest_url = 'register/error';
         }
         $message = 'Сейчас Вы будете перенаправлены на страницу результата. Нажмите '.
@@ -153,17 +128,30 @@
         echo $message;
         echo $meta;
     }
-    else if(@$_GET["aparam"] == "edit")
-        include(translate('<! cms/ank/edit-ank !>'));
+    else if(@$_GET["aparam"] == "list-ank")
+        include(translate('<! cms/ank/list-ank !>'));
+    else if(@$_GET["aparam"] == "list-tour")
+        include(translate('<! cms/ank/list-tour !>'));
+    else if(@$_GET["aparam"] == "list-members")
+        include(translate('<! cms/ank/list-person !>'));
+    else if(@$_GET["aparam"] == "list-person-locator")
+        include(translate('<! cms/ank/list-person-locator !>'));
+
     else if(@$_GET["aparam"] == "view")
         include(translate('<! cms/ank/list-person !>'));
     else if(@$_GET["aparam"] == "list-person")
         include(translate('<! cms/ank/list-person !>'));
-    else if(@$_GET["aparam"] == "view-prep")
-        include(translate('<! cms/ank/view-prep !>'));
-    else if(@$_GET["aparam"] == "edit-prep")
-        include(translate('<! cms/ank/edit-prep !>'));
+    else if(@$_GET["aparam"] == "view-person")
+        include(translate('<! cms/ank/view-person !>'));
+    else if(@$_GET["aparam"] == "edit-person_school")
+        include(translate('<! cms/ank/edit-person_school !>'));
+    else if(@$_GET["aparam"] == "edit-person")
+        include(translate('<! cms/ank/edit-person !>'));
+    else if(@$_GET["aparam"] == "edit-person_comment")
+        include(translate('<! cms/ank/edit-person_comment !>'));
 
+    else if(@$_GET["aparam"] == "list-course")
+        include(translate('<! cms/ank/list-course !>'));
     else if(@$_GET["aparam"] == "view-course")
         include(translate('<! cms/ank/view-course !>'));
     else if(@$_GET["aparam"] == "edit-course")

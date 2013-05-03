@@ -1,21 +1,28 @@
+<# auth/format #>
+
 <?php
-  $u = xcms_user();
-  $user = $u;
+    require_once("$engine_dir/sys/auth.php");
+    require_once("$engine_dir/sys/groups.php");
+
+    $user = xcms_user();
 ?>
-<h3>Привет, <?php echo $u->login(); ?>!</h3>
+<h3>Привет, <?php echo $user->login(); ?>!</h3>
 
 <?php
     if(@$_POST["update_me"])
     {
         foreach(array("name", "email") as $form_name)
-        {
-            $user->set_param($form_name, @$_POST["param_$form_name"]);
-        }
+            $user->set_param($form_name, @$_POST[$form_name]);
     }
-    
-    echo "<form method='post'>";
-    echo "Меня зовут <input name=\"param_name\" value=\"{$user->param('name')}\" />";
-    echo "<br />Моя электропочта -- <input name=\"param_email\" value=\"{$user->param('email')}\" />";
-    echo "<br /><input type='submit' name='update_me' value='Обновить мои данные' />";
-    echo "</form>";
+    ?>
+    <form method="post">
+        <div><span class="user-label">Настоящее имя</span><input
+            <?php xcmst_input_attrs_from_user($user, 'name', false, "Вася Пупкин"); ?> /></div>
+        <div><span class="user-label">EMail</span><input
+            <?php xcmst_input_attrs_from_user($user, 'email', false, "user@example.com"); ?> /></div>
+
+        <input type="submit" name='update_me' id="update_me" value="Обновить мои данные" />
+    </form>
+    <?php
+    xcmst_draw_privileges($user, true);
 ?>

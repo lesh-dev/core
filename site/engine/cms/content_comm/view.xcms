@@ -1,12 +1,12 @@
 <?php
   $commfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/comments";
-  
+
   if(@$_POST["create-comment"])
   {
     $auth_noaccess = 'Вы можете добавлять комментарии, только зарегистрировавшись.';
     include(translate('<! auth/ #registered !>'));
   	$f = fopen($commfile,"a");
-  	$date = mktime();
+  	$date = time();
   	$name = @$_POST["commentator"];
   	$html = @$_POST["comment"];
   	$html = stripslashes($html);
@@ -24,12 +24,12 @@
 	echo "<h1>Раздел не заполнен.</h1>";
 	echo "<h3><a href=\"?ref=ladmin&page=$pageid\">Вы можете это исправить!</a></h3>";
 	}
-	else 
+	else
 	{
 	//include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
 	$source = "{$SETTINGS["datadir"]}cms/pages/$pageid/content";
 	include(translate("<! cms/readtext --markdown !>"));
-	
+
 	if(file_exists($commfile))
 	{
 		echo '<h3>Комментарии</h3>';
@@ -38,7 +38,7 @@
 		{
 			$value = str_replace("\n","",$value);
 			$value = str_replace("\r","",$value);
-			$arr = explode(" ",$value,3); 
+			$arr = explode(" ",$value,3);
 			if(!@$arr[2]) continue;
 			echo '
 			<table width="100%">
@@ -46,18 +46,18 @@
 			'<td class="comment-date">'.date("d-m-y, H:i",$arr[0]).
 			'<tr><td colspan="2" class="comment-text">'.$arr[2].
 			'</table>';
-			
+
 		}
 	}
-	
+
 	echo '<h3> Оставить комментарий';
 	echo '
 		<form method="post">
 		<textarea cols="80" rows="5" name="comment"></textarea>
-		<br> 
+		<br>
 		<input name="commentator" value="Ваше имя">
 		<input name="create-comment" value="Оставить" type="submit">
-		
+
 		</form>
 	';
     }

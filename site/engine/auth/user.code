@@ -1,0 +1,56 @@
+<?php
+
+function xcms_console_create_user($params)
+{
+    $su = xcms_user();
+    $su->setSuperuser();
+
+    $login = xcms_get_key_or($params, "login");
+    $password = xcms_get_key_or($params, "password");
+    $email = xcms_get_key_or($params, "email");
+    $groups = explode(',', xcms_get_key_or($params, "groups"));
+    $notify = (xcms_get_key_or($params, $notify, "yes") == "no");
+
+    $su->create($login, $email);
+    foreach ($groups as $group)
+        $su->add_to_group($login, $group);
+    $su->su($login)->passwd($password);
+
+    if ($notify)
+    {
+        $res = xcms_user_create_notify($email, $login, $password);
+        if ($res)
+        {
+            echo "Cannot send notification to user, do it yourself:\n".
+                "EMail: $email, login: $login, password: $password\n";
+        }
+    }
+}
+
+
+function xcms_user_create_notify($email, $login, $password)
+{
+    global $SETTINGS;
+    global $meta_site_name, $meta_site_url, $meta_site_mail;
+
+    $body_html = file_get_contents("{$SETTINGS['engine_dir']}templates/new_user.html");
+    $body_html = str_replace('@@SITE@', htmlspecialchars($meta_site_name), $body_html);
+    $body_html = str_replace('@@SITE-URL@', htmlspecialchars($meta_site_url), $body_html);
+    $body_html = str_replace('@@LOGIN@', $login, $body_html);
+    $body_html = str_replace('@@PASSWORD@', htmlspecialchars($password), $body_html);
+    $body_html = str_replace('@@SUPPORT@', "support@fizlesh.ru", $body_html);
+
+    $notify_result = xcms_send_notification(
+        "user-change",
+        array($email),
+        "auth",
+        "Добро пожаловать на $meta_site_name",
+        "This message is in HTML format\r\n",
+        $body_html,
+        true // immediate
+    );
+
+    return $notify_result ? null : "Не удалось послать оповещение пользователю. ";
+}
+
+?>

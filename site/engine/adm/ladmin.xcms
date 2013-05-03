@@ -50,23 +50,23 @@
         <# cms/head #>
         <link rel="stylesheet" type="text/css" href="<?php echo "${full_engine_pub}css/admin.css"; ?>" />
         <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/jquery-1.7.1.min.js"; ?>"></script>
-        <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/admin.js"; ?>"></script>
-        </script>
+        <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
     </head>
     <body>
+        <script language="javascript" type="text/javascript">
+            AddSlider('editor-help', 'show-editor-help');
+        </script>
         <div style="padding-bottom: 7px;">
             <a <?php echo xcms_href(array('mode'=>'create_page', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Подстраница</a>
             <a <?php echo xcms_href(array('mode'=>'delete', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Удалить</a>
             <a <?php echo xcms_href(array('mode'=>'cleanprec', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Очистить кэш</a>
             <a <?php echo xcms_href(array('mode'=>'rebuild_alias', 'ref'=>'ladmin')); ?> class="h-menu-link">Перестроить alias-ы</a>
-            <a <?php echo xcms_href(array('mode'=>'css', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Стиль</a>
             <span class="top-menu-div">&nbsp;</span>
             <a <?php echo xcms_href(array('mode'=>'userlist', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Пользователи</a>
             <a <?php echo xcms_href(array('mode'=>'group_admin', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Группы</a>
             <a <?php echo xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Уведомления</a>
-            <span class="top-menu-div">&nbsp;</span>
-            <a href="/<# web_prefix #>register/view" class="h-menu-link">Люди</a>
-            <a href="/<# web_prefix #>register/view-course" class="h-menu-link">Курсы</a>
+            <!--<span class="top-menu-div">&nbsp;</span>
+            <a href="/<# web_prefix #>register/list-ank" class="h-menu-link">Анкеты</a>-->
 
             <span style="display:none;">
                 <a <?php echo xcms_href(array('mode'=>'__convert', 'page'=>$pageid, 'ref'=>'ladmin')); ?>
@@ -152,13 +152,8 @@
     else if(@$_GET["mode"]=="mailer" )
     {
         $editfile = "{$SETTINGS["datadir"]}cms/mailer.conf";
-        include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
+        include(translate('<! edit/tag `edit`,`view`,`installed` `longtext` !>'));
     }
-    /*
-    else if(@$_GET["mode"]=="ank" )
-    {
-        include(translate('<! cms/ank/manage !>'));
-    }*/
     /*
     // Here is a dead code (mode is unreferenced in interface)
     else if(@$_GET["mode"]=="documentation")
@@ -181,10 +176,6 @@
         }
     }
     */
-    else if(@$_GET["mode"]=="css")
-    {
-        include(translate('<! cms/light_css_editor !>'));
-    }
     else if(@$_GET["mode"]=="rebuild_alias")
     {
         include(translate('<! cms/rebuild_alias !>'));

@@ -3,35 +3,51 @@
       * @author Mikhail Veltishchev <dichlofos-mv@yandex.ru>
       * Database management module
       **/
+    define('XDB_NEW', 'new');
+
+    define('XDB_OVERRIDE_TS', true);
+    define('XDB_NO_OVERRIDE_TS', false); // default
+
+    define('XDB_USE_AI', true);
+    define('XDB_NO_USE_AI', false); // default
+
+    define('XDB_DEBUG_AREA_DISABLED', false);
+    define('XDB_DEBUG_AREA_ENABLED', true); // default
+
+    define('XDB_DEFAULT_DB_PATH', "ank/fizlesh.sqlite3");
 
     /**
       * Obtains database handle in read-only mode
-      * TODO: Unhardcode database location ("$content_dir/ank/fizlesh.sqlite3")
       **/
     function xdb_get()
     {
+        global $SETTINGS;
         global $content_dir;
-        return new SQlite3("$content_dir/ank/fizlesh.sqlite3", SQLITE3_OPEN_READONLY);
+        $db_name = xcms_get_key_or($SETTINGS, 'xsm_db_name', $content_dir.XDB_DEFAULT_DB_PATH);
+        return new SQlite3($db_name, SQLITE3_OPEN_READONLY);
     }
 
     /**
       * Obtains database handle in writeable mode
-      * TODO: Unhardcode database location ("$content_dir/ank/fizlesh.sqlite3")
       **/
     function xdb_get_write()
     {
+        global $SETTINGS;
         global $content_dir;
-        return new SQlite3("$content_dir/ank/fizlesh.sqlite3", SQLITE3_OPEN_READWRITE);
+        $db_name = xcms_get_key_or($SETTINGS, 'xsm_db_name', $content_dir.XDB_DEFAULT_DB_PATH);
+        return new SQlite3($db_name, SQLITE3_OPEN_READWRITE);
     }
 
     /**
       * Inserts or updates DB record
       * @param $table_name Table name to update/insert into
       * @param $primary_keys KV-array of table primary keys
-      * @note If PK value has the special value 'new', the insertion is performed
+      * @note If PK value has the special value XDB_NEW, the insertion is performed
       * and table should have AI key
       * @param $values KV-array of row values
       * @param $allowed_keys only these keys will be taken from $values
+      * @return true on successful update, false on error
+      * and autoincremented field id on insertion
       *
       * TODO: Unhardcode database location ("$content_dir/ank/fizlesh.sqlite3")
       **/
@@ -39,7 +55,7 @@
     {
         $insert = false;
         foreach ($primary_keys as $key => $value)
-            if ($value == "new") $insert = true;
+            if ($value == XDB_NEW) $insert = true;
         if ($insert)
             return xdb_insert_ai($table_name, $primary_keys, $values, $allowed_keys);
         else
@@ -52,28 +68,32 @@
       * @param $pk_name primary key name (autoincrement)
       * @param $keys_values KV-array of row values
       * @param $allowed_keys only these keys will be taken from $values
+      * @param $override_ts do not override timestamps
+      * @param @ignore_ai ignore autoincrement keys, use value from @keys_values
       *
       * Two special fields, ${table_name}_created and ${table_name}_modifed
       * are filled using current UTC time value in human-readable form
       * (that can be converted back to timestamp, though)
       * so they should always present in any table
       **/
-    function xdb_insert_ai($table_name, $pk_name, $keys_values, $allowed_keys)
+    function xdb_insert_ai($table_name, $pk_name, $keys_values, $allowed_keys, $override_ts = XDB_OVERRIDE_TS, $use_ai = XDB_USE_AI)
     {
         $db = xdb_get_write();
         $keys = "";
         $values = "";
 
-        // override 'created' and 'modified' field
-        $unix_time = mktime();
-        $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
-        $keys_values["${table_name}_created"] = $hr_timestamp;
-        $keys_values["${table_name}_modified"] = '';
+        if ($override_ts)
+        {
+            $unix_time = time();
+            $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
+            $keys_values["${table_name}_created"] = $hr_timestamp;
+            $keys_values["${table_name}_modified"] = '';
+        }
 
         foreach ($allowed_keys as $key => $title)
         {
             $value = xcms_get_key_or($keys_values, $key);
-            if ($key == $pk_name)
+            if ($use_ai and $key == $pk_name)
                 continue; // skip autoincremented keys
             $keys .= "$key, ";
             $values .= "'".$db->escapeString($value)."', ";
@@ -84,9 +104,15 @@
         $query = "INSERT INTO $table_name ($keys) VALUES ($values)";
         $result = $db->exec($query);
         if ($result)
+        {
+            $result = $db->lastInsertRowid();
             xcms_log(0, "[DB] $query");
+        }
         else
+        {
+            $result = false;
             xcms_log(0, "[DB:ERROR] $query");
+        }
         $db->close();
         return $result;
     }
@@ -102,19 +128,24 @@
       * A special field, ${table_name}_modified, will be updated
       * using current UTC time value in human-readable form
       * @sa xdb_insert_ai
+      * @return true in case of success, false otherwise
       **/
-    function xdb_update($table_name, $primary_keys, $keys_values, $allowed_keys)
+    function xdb_update($table_name, $primary_keys, $keys_values, $allowed_keys, $override_ts = XDB_OVERRIDE_TS)
     {
         $db = xdb_get_write();
         $values = "";
-        // update '<table-name>-modified' timestamp
-        $unix_time = mktime();
-        $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
-        $keys_values["${table_name}_modified"] = $hr_timestamp;
-
-        foreach ($allowed_keys as $key => $title)
+        if ($override_ts)
         {
-            $value = xcms_get_key_or($keys_values, $key);
+            // update '<table-name>-modified' timestamp
+            $unix_time = time();
+            $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
+            $keys_values["${table_name}_modified"] = $hr_timestamp;
+        }
+        foreach ($keys_values as $key => $value)
+        {
+            if (!array_key_exists($key, $allowed_keys))
+                continue; // skip keys that are not in scheme
+
             if ($key == "${table_name}_created")
                 continue; // never update 'created' field
 
@@ -138,7 +169,7 @@
         else
             xcms_log(0, "[DB:ERROR] $query");
         $db->close();
-        return $result;
+        return $result ? true : false;
     }
 
     /**
@@ -149,7 +180,7 @@
       * A convention states that primary keys in our tables have
       * special names obtained from table name: ${table_name}_id
       *
-      * If the $id has the magic value 'new', the empty record is
+      * If the $id has the magic value XDB_NEW, the empty record is
       * returned
       **/
     function xdb_get_entity_by_id($table_name, $id)
@@ -158,9 +189,9 @@
         $key_name = "${table_name}_id";
 
 
-        if ($id != "new")
+        if ($id != XDB_NEW)
         {
-            $idf = preg_replace('/[^0-9]/', '', $id);
+            $idf = preg_replace('/[^-0-9]/', '', $id);
             if (strlen($idf) == 0)
             {
                 xcms_log(0, "Cannot fetch entity from '$table_name' with empty or filtered id '$id'.");
@@ -195,7 +226,7 @@
       * A convention states that primary keys in our tables have
       * special names obtained from table name: ${table_name}_id
       *
-      * If the $id has the magic value 'new', the empty record is
+      * If the $id has the magic value XDB_NEW, the empty record is
       * returned
       **/
     function xdb_delete($table_name, $key_value)
@@ -231,25 +262,37 @@
         $mask = "/^$mask$/ui";
         return preg_match($mask, $value);
     }
+
     /**
-      *  This function returns whole content of $table_name, using (if provided) $order and $filter properly.
-    **/
-    function xdb_get_table($table_name, $order, $filter)
+      * Returns whole content of the table in array, using given order and filter (WHERE condition)
+      * @param table_name table name
+      * @param order ORDER BY clause
+      * @param filter WHERE clause
+      **/
+    function xdb_get_table($table_name, $order = '', $filter = '')
     {
-            $db = xdb_get();
-            $query = "SELECT * FROM $table_name";
-            if($filter)
-              $query += " WHERE $filter ";
-            if($order)
-              $query += " ORDER BY $order ";
-            //echo $query;
-            //$query += ";";
-            $sel = $db->query($query);
-            $ans = array();
-            while($ev = $sel->fetchArray(SQLITE3_ASSOC))
-            {
-                $ans[] = $ev;
-            }
-            return $ans;
+        $db = xdb_get();
+        $query = "SELECT * FROM $table_name";
+        if (strlen($filter))
+            $query .= " WHERE $filter ";
+        if (strlen($order))
+            $query .= " ORDER BY $order ";
+        $sel = $db->query($query);
+        $ans = array();
+        while($ev = $sel->fetchArray(SQLITE3_ASSOC))
+        {
+            $ans[] = $ev;
+        }
+        $db->close();
+        return $ans;
+    }
+
+    /**
+      * Embedded query debugger
+      **/
+    function xdb_debug_area($query, $enabled = XDB_DEBUG_AREA_ENABLED)
+    {?>
+        <textarea rows="5" cols="120" style="display: <?php echo ($enabled ? "" : "none"); ?>;"
+            id="person-query-debug"><?php echo $query; ?></textarea><?php
     }
 ?>

@@ -13,7 +13,10 @@ class XcmsOverallOpenPages(SeleniumTest):
 	"""
 	def run(self):
 		self.setAutoPhpErrorChecking(True)
-		self.gotoPage("/")
+		
+		xtest_common.assertNoInstallerPage(self)
+
+		self.gotoRoot()
 		
 		self.gotoUrlByLinkText(u"Главная")
 		self.assertBodyTextPresent(u"Приветствуем Вас на сайте Физического отделения Летней Экологической Школы");
@@ -24,10 +27,12 @@ class XcmsOverallOpenPages(SeleniumTest):
 		self.gotoUrlByLinkText(u"Новости")
 		self.assertBodyTextPresent(u"Новости")
 
-		self.gotoUrlByLinkText(u"Информация")
+		self.gotoUrlByLinkText(u"Официально о ЛЭШ")
 		self.assertBodyTextPresent(u"Официальная информация")
 		self.assertBodyTextPresent(u"Летняя Экологическая Школа (ЛЭШ) существует с 1990 года")
-		
+
+		self.gotoUrlByLinkText(u"Набор на Школу - 2013")
+
 		self.gotoUrlByLinkText(u"О нас")
 		self.assertBodyTextPresent(u"О нас")
 

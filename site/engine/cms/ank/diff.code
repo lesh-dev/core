@@ -1,0 +1,90 @@
+<?php
+
+/**
+  * Построение разности двух key-массивов
+  **/
+function xcms_array_diff($new, $old)
+{
+    $diff = array();
+    // assume key
+    foreach ($new as $key => $value)
+    {
+        if (!array_key_exists($key, $old))
+        {
+            if (trim($value) != '')
+                $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>'');
+            continue;
+        }
+        // key exists in both arrays
+        if (trim($old[$key]) != trim($value))
+            $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>$old[$key]);
+    }
+    foreach ($old as $key => $old_value)
+    {
+        if (array_key_exists($key, $new))
+            continue;
+        if (trim($old_value) != '')
+            $diff[] = array('key'=>$key, 'new'=>'', 'old'=>$old_value);
+    }
+    return $diff;
+}
+
+/**
+  * Построение diff-а двух объектов в шаблон html
+  **/
+function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_title)
+{
+    global $SETTINGS;
+    // some common stuff
+    $template_root = "{$SETTINGS['engine_dir']}templates";
+    $mail_msg = file_get_contents("$template_root/xsm-diff-message.html");
+    $row_template = file_get_contents("$template_root/xsm-row-diff.html");
+    $row_long_diff_template = file_get_contents("$template_root/xsm-row-long-diff.html");
+    $row_long_add_template = file_get_contents("$template_root/xsm-row-long-add.html");
+
+    $diff_array = xcms_array_diff($new_object, $old_object);
+
+    $content = ""; // @@TABLE-CONTENT@
+    foreach ($diff_array as $diff)
+    {
+        $key = $diff['key'];
+        if (!array_key_exists($key, $fields))
+            continue;
+        $key_title = $fields[$key];
+        $type = xcms_get_key_or($types, $key);
+        $old_value = $diff['old'];
+        $new_value = $diff['new'];
+        $cur_row = $row_template;
+        if ($type == "checkbox")
+        {
+            $old_value = strlen($old_value) ? "Да" : "Нет";
+            $new_value = strlen($new_value) ? "Да" : "Нет";
+        }
+        // some spikes here
+        elseif ($key == "anketa_status")
+        {
+            // TODO: generic enum handling here in diff-er
+            if (!strlen($old_value))
+                $old_value = "new";
+
+            $anketa_statuses = xsm_get_enum("anketa_status");
+            $old_value = $anketa_statuses[$old_value];
+            $new_value = $anketa_statuses[$new_value];
+        }
+        if ($type == "textarea")
+        {
+            $cur_row = (strlen($old_value) > 0) ? $row_long_diff_template : $row_long_add_template;
+        }
+        $cur_row = str_replace("@@KEY@", $key_title, $cur_row);
+        $cur_row = str_replace("@@OLD-VALUE@", htmlspecialchars($old_value), $cur_row);
+        $cur_row = str_replace("@@NEW-VALUE@", htmlspecialchars($new_value), $cur_row);
+        $content .=  $cur_row;
+    }
+
+    $mail_msg = str_replace("@@TABLE-CONTENT@", $content, $mail_msg);
+    $mail_msg = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg);
+
+    return $mail_msg;
+}
+
+?>
