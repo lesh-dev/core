@@ -9,6 +9,7 @@
     include(translate("<! auth/ #editor #admin {$INFO["edit"]} !>"));
 ?>
 <# cms/light_create_page_before #>
+<# auth/ #admin #editor #>
 <?php
     if(@$_POST["delete-section"])
     {
