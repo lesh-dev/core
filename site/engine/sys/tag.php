@@ -1,16 +1,4 @@
 <?php
-/*
-    version 1.4. rewritten from scratch [mvel@]
-    version 1.3   added taglist system. Afraid, this makes tags depending of xcms.
-    version 1.2.1. editlist_form list of skipping fields added
-    version 1.2. function editlist_form - a gui editor for lists.
-    version 1.1.
-        _defend tag in the beginning added.
-        Now, if file is handled as php script, user will
-        not read it.
-    version 1.0. Library created
-*/
-
 /**
   * Retrieve current page content location
   * Assumes @name pageid and @name SETTINGS are defined
@@ -113,6 +101,21 @@ function xcms_get_key_or($list, $key, $def_value = '')
     return $value;
 }
 
+/**
+  * For internal usage only
+  **/
+function xcms_convert_multiline($value)
+{
+    // handle windows
+    $value = str_replace("\r\n", "|", $value);
+    // linux
+    $value = str_replace("\n", "|", $value);
+    // and old MacOS
+    $value = str_replace("\r", "|", $value);
+    return $value;
+}
+
+
 function getTagList($file)
 {
     $filec = file_get_contents($file);
@@ -203,7 +206,7 @@ function xcms_draw_text_tag($id, $value, $is_longtext, $placeholder = "")
 /**
   * WARNING: This function contains deprecated code
   * flags:
-  * newkey - disable newkey option
+  * no-new-key - disable new key addition (not used in XCMS now)
   * longtext - use textareas instead of text input
   **/
 function xcms_editlist_form($file, $skip_params = "", $flags = "")
@@ -211,37 +214,23 @@ function xcms_editlist_form($file, $skip_params = "", $flags = "")
     global $SETTINGS;
     $list = xcms_get_list($file);
 
-    if(@$_POST["editTag"])
+    if (@$_POST["editTag"])
     {
         foreach ($_POST as $key=>$value)
         {
             $key_name = substr($key, 5);
-            if ($value == "_FORGET")
-            {
-                unset($list[$key_name]);
-                continue;
-            }
-            if($value == "__FORGET")
+            if ($value == "_FORGET" || $value == "__FORGET")
             {
                 unset($list[$key_name]);
                 continue;
             }
             if (strstr($key, "edtg_"))
-            {
-                // handle windows
-                $value = str_replace("\r\n", "|", $value);
-                // linux
-                $value = str_replace("\n", "|", $value);
-                // and old MacOS
-                $value = str_replace("\r", "|", $value);
-                $list[$key_name] = $value;
-            }
+                $list[$key_name] = xcms_convert_multiline($value);
         }
-        if(@$_POST["newkey"])
-        {
-            if (!strstr($flags, "newkey"))
-                $list[$_POST["newkey"]] = @$_POST["newvalue"];
-        }
+
+        if (!strstr($flags, "no-new-key") && @$_POST["newkey"])
+            $list[$_POST["newkey"]] = xcms_convert_multiline(xcms_get_key_or($_POST, "newvalue"));
+
         xcms_save_list($file, $list);
         $list = xcms_get_list($file);
     }
@@ -290,7 +279,7 @@ function xcms_editlist_form($file, $skip_params = "", $flags = "")
             </td></tr><?php
         }
     }
-    if (!strstr($flags, "newkey"))
+    if (!strstr($flags, "no-new-key"))
     {?>
         <tr>
             <td><input name="newkey" id="newkey"
