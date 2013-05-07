@@ -61,6 +61,36 @@ function xsm_get_avatar($social_profile)
     return $av;
 }
 
+
+function xsm_draw_person_school_panel($db, $school_id, $person_id)
+{
+    if ($school_id == SCHOOL_ANK_ID)
+        return;
+
+    $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
+    if ($person_school_id == NULL)
+        return;
+
+    xsm_edit_link('person_school', $person_school_id, '', 'Редактировать роли и статусы');
+    $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
+
+    if ($person_school['is_student'] != 'student')
+    {?>
+        <div class="line">
+            <?php xsm_edit_link('person_school', $person_school_id, '&amp;is_student=student', 'Добавить роль Школьника');?>
+            (можно ставить зачёты)
+        </div><?php
+    }
+
+    if ($person_school['is_teacher'] != 'teacher')
+    {?>
+        <div class="line">
+            <?php xsm_edit_link('person_school', $person_school_id, '&amp;is_teacher=teacher', 'Добавить роль Препода');?>
+            (можно добавлять курсы)
+        </div><?php
+    }
+}
+
 function xsm_print_person_header($db, $person, $school_id)
 {
     global $full_engine_pub;
@@ -109,12 +139,7 @@ function xsm_print_person_header($db, $person, $school_id)
         xsm_edit_link('person', $person_id, '', 'Редактировать анкетные данные');
         xsm_draw_person_textval('top', 'Создана', $person_created);
         xsm_draw_person_textval('top', 'Исправлена', $person_modified);
-        if ($school_id != SCHOOL_ANK_ID)
-        {
-            $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
-            if ($person_school_id !== NULL)
-                xsm_edit_link('person_school', $person_school_id, '', 'Редактировать роли и статусы');
-        }
+        xsm_draw_person_school_panel($db, $school_id, $person_id)
         ?>
     </div>
     </div><!-- container -->
@@ -387,23 +412,9 @@ function xsm_print_person_selected_school($db, $school_id, $person)
     $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
     if ($person_school['is_student'] == 'student')
         xsm_print_student_exams($db, $school_id, $person_id, $person_school);
-    else
-    {?>
-        <div class="line">
-            Зачёты можно добавлять только тем, кто имеет роль <b>Школьника</b> на этой Школе: <?php
-            xsm_edit_link('person_school', $person_school_id, '&amp;is_student=student', 'Добавить роль Школьника');?>
-        </div><?php
-    }
 
     if ($person_school['is_teacher'] == 'teacher')
         xsm_print_course_selected_school($db, $school_id, $person_id);
-    else
-    {?>
-        <div class="line">
-            Курсы можно добавлять только тем, кто имеет роль <b>Препода</b> на этой Школе: <?php
-            xsm_edit_link('person_school', $person_school_id, '&amp;is_teacher=teacher', 'Добавить роль Препода');?>
-        </div><?php
-    }
 }
 
 // shows person information sliced by school
@@ -424,7 +435,6 @@ function xsm_print_person()
         xsm_print_person_ank_data($db, $person);
     else
         xsm_print_person_selected_school($db, $school_id, $person);
-
 }
 
 xsm_print_person();
