@@ -149,8 +149,9 @@ input[type='submit'] {
     color: #854310;
     border-radius: 5px;
     font-size: 12pt;
-    line-height: 19px;
-    height: 22px;
+    line-height: 25px;
+    height: 25px;
+    vertical-align: middle;
     padding-left: 10px;
     padding-right: 10px;
     margin-left: 0px;
@@ -180,10 +181,12 @@ a.leshLogoTitle {
     bottom: 5px;
 }
 
-a.linkButton {
+a.link-button {
     font-size: 12pt;
-    line-height: 16pt;
+    height: 22px;
+    line-height: 25px;
     text-decoration: none;
+    vertical-align: bottom;
     display: inline-block;
     margin: 1px 0px 3px 1px;
     border: 1px solid #6f8f4f;

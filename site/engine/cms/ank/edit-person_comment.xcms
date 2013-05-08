@@ -17,7 +17,7 @@ function xsm_person_comment_edit_operations($entity, $table_name, $id, $title, /
             <input type="submit" name="delete-<?php echo $entity; ?>"
                 value="Удалить комментарий" class="delete-button"/><?php
         }?>
-        <a class="linkButton xsm" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
+        <a class="link-button" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
     </div><?php
 }
 
@@ -61,7 +61,7 @@ function xsm_warn_delete_person_comment($entity, $table_name, $title, $aux_param
         <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
         <input type="submit" name="confirm-delete-<?php echo $entity; ?>"
             value="Таки да, удалить!" class="delete-button"/>
-        <a class="linkButton xsm"
+        <a class="link-button"
             href="edit-<?php echo $redir ?>">Вернуться к редактированию</a>
     </form></div>
     <?php

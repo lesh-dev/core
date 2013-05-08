@@ -53,7 +53,7 @@ function xsm_warn_delete_entity($entity, $table_name, $title, $aux_param = '')
         <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
         <input type="submit" name="confirm-delete-<?php echo $entity; ?>"
             value="Таки да, удалить!" class="delete-button"/>
-        <a class="linkButton xsm"
+        <a class="link-button"
             href="view-<?php echo $redir ?>">Вернуться к просмотру</a>
     </form></div>
     <?php
@@ -73,7 +73,7 @@ function xsm_warn_delete_entity_listmode($entity, $table_name, $title, $aux_para
         <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
         <input type="submit" name="confirm-delete-<?php echo $entity; ?>"
             value="Таки да, удалить!" class="delete-button"/>
-        <a class="linkButton xsm"
+        <a class="link-button"
             href="view-<?php echo $redir ?>">Вернуться к просмотру <?php echo $title; ?></a>
     </form></div>
     <?php
@@ -127,7 +127,7 @@ function xsm_edit_operations($entity, $table_name, $id, $title, $aux_param = '')
             <input type="submit" name="delete-<?php echo $entity; ?>"
                 value="Удалить" class="delete-button"/><?php
         }?>
-        <a class="linkButton xsm" href="view-<?php
+        <a class="link-button" href="view-<?php
             echo $redir; ?>"><?php echo $title; ?></a>
     </div><?php
 }
@@ -146,7 +146,7 @@ function NEW_xsm_edit_operations($table_name, $id, $title, $aux_param = '')
             <input type="submit" name="delete-<?php echo $table_name; ?>"
                 value="Удалить" class="delete-button"/><?php
         }?>
-        <a class="linkButton xsm" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
+        <a class="link-button" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
     </div><?php
 }
 
@@ -163,7 +163,7 @@ function xsm_edit_operations_listmode($entity, $id, $title, $aux_param = '')
             <input type="submit" name="delete-<?php echo $entity; ?>"
                 value="Удалить" class="delete-button"/><?php
         }?>
-        <a class="linkButton xsm" href="list-<?php
+        <a class="link-button" href="list-<?php
             echo $redir; ?>"><?php echo $title; ?></a>
     </div><?php
 }
@@ -173,7 +173,7 @@ function xsm_edit_operations_listmode($entity, $id, $title, $aux_param = '')
 function xsm_view_operations($entity, $table_name, $title, $aux_param = '')
 {?>
     <div style="white-space: nowrap">
-        <a class="linkButton xsm" href="edit-<?php
+        <a class="link-button" href="edit-<?php
             echo "$entity$aux_param&amp;${table_name}_id=new"; ?>">Добавить <?php echo $title; ?></a>
     </div><?php
 }
@@ -182,7 +182,7 @@ function xsm_view_operations($entity, $table_name, $title, $aux_param = '')
 function NEW_xsm_view_operations($table_name, $title, $aux_param = '')
 {?>
     <div style="white-space: nowrap">
-        <a class="linkButton xsm" href="edit-<?php
+        <a class="link-button" href="edit-<?php
             echo "$table_name$aux_param&amp;${table_name}_id=new"; ?>">Добавить <?php echo $title; ?></a>
     </div><?php
 }

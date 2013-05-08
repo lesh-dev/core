@@ -27,7 +27,7 @@ function xsm_edit_exam_operations($school_id, $student_person_id, $id)
             <input type="submit" name="delete-<?php echo $table_name; ?>"
                 value="Удалить" class="delete-button"/><?php
         }?>
-        <a class="linkButton xsm" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
+        <a class="link-button" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
     </div><?php
 }
 
@@ -69,7 +69,7 @@ function xsm_warn_delete_exam($table_name, $title)
         <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
         <input type="submit" name="confirm-delete-<?php echo $table_name; ?>"
             value="Таки да, удалить!" class="delete-button"/>
-        <a class="linkButton xsm"
+        <a class="link-button"
             href="edit-<?php echo $redir ?>">Вернуться к редактированию</a>
     </form></div>
     <?php
