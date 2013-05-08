@@ -166,11 +166,6 @@
 
     else
     {
-        if (@$group["#admin"] || @$group["#ank"])
-        {?>
-            <div><a class="linkButton" href="register/view">Manage</a></div><?php
-        }
-        //include("{$SETTINGS["datadir"]}cms/pages/$pageid/content");
         $text = file_get_contents( "{$SETTINGS["datadir"]}cms/pages/$pageid/content" );
         $source  = "";
         include(translate("<! cms/readtext --markdown --text !>"));
