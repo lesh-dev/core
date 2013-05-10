@@ -1,0 +1,8 @@
+<?php
+/**
+  * Owner: mvel@
+  * Actuality: 2.x
+  * This is a global redirector to cabinet template. It allows us to write
+  * ref=cabinet without any paths (since global/* is accessible without paths).
+  **/
+?><# adm/cabinet #>
