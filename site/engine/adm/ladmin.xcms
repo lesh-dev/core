@@ -223,10 +223,6 @@
         $editfile = "{$SETTINGS["datadir"]}groups";
         include(translate("<! edit/tag !>"));
     }
-    elseif(@$_GET["mode"]=="register_form")
-    {
-        include(translate('<! auth/ #admin !><! auth/register !>'));
-    }
     elseif(@$_GET["mode"]=="userlist")
     {
         $preface = xcms_url(array('ref'=>'ladmin', 'mode'=>'userlist', 'page'=>$pageid));

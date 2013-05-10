@@ -47,23 +47,34 @@
                     {
                         include(translate('<a href="/<# web_prefix #>register/list-ank'.
                             '" class="menu-item menu-sys">Анкеты</a>'));
+
                         include(translate('<a href="/<# web_prefix #>register/list-person-locator'.
                             xcms_url(array('show_anketa_status'=>'all')).
                             '" class="menu-item menu-sys">Все люди</a>'));
+
                         include(translate('<a href="/<# web_prefix #>register/list-tour'.
                             '" class="menu-item menu-sys">Выходы в лес</a>'));
+
                         include(translate('<a href="/<# web_prefix #>register/list-person-locator'.
                             xcms_url(array('show_anketa_status'=>'active')).
                             '" class="menu-item menu-sys">Актив отделения</a>'));
+
                         include(translate('<a href="/<# web_prefix #>register/list-person'.
                             '" class="menu-item menu-sys">Участники школ</a>'));
+
                         include(translate('<a href="/<# web_prefix #>register/list-course'.
                             '" class="menu-item menu-sys">Курсы</a>'));
+
+                        include(translate('<a href="/<# web_prefix #>?'.
+                            xcms_url(array('page'=>$pageid, 'ref'=>'cabinet')).
+                            '" class="menu-item menu-sys">Личный кабинет</a>'));
+
                         include(translate('<a href="/<# web_prefix #>?'.
                             xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).
                             '" class="menu-item menu-sys">Админка</a>'));
+
                         include(translate('<a href="/<# web_prefix #>?'.
-                            xcms_url(array('page'=>$pageid, 'ref'=>'ladmin', 'mode'=>'logout')).
+                            xcms_url(array('page'=>$pageid, 'ref'=>'cabinet', 'mode'=>'logout')).
                             '" class="menu-item menu-sys">Выход</a>'));
                     }
                     else
