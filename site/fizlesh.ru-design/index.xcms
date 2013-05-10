@@ -43,7 +43,7 @@
                     <a class="menu-item menu-level1 menu-passive menu-passive-level1" href="http://forum.fizlesh.ru">Форум</a>
 
                     <?php
-                    if (xcms_user()->check_rights("registered", false))
+                    if (xcms_user()->check_rights("ank", false))
                     {
                         include(translate('<a href="/<# web_prefix #>register/list-ank'.
                             '" class="menu-item menu-sys">Анкеты</a>'));
@@ -64,15 +64,24 @@
 
                         include(translate('<a href="/<# web_prefix #>register/list-course'.
                             '" class="menu-item menu-sys">Курсы</a>'));
+                    }
 
+                    if (xcms_user()->check_rights("registered", false))
+                    {
                         include(translate('<a href="/<# web_prefix #>?'.
                             xcms_url(array('page'=>$pageid, 'ref'=>'cabinet')).
                             '" class="menu-item menu-sys">Личный кабинет</a>'));
+                    }
 
+                    if (xcms_user()->check_rights("editor", false) || xcms_user()->check_rights("admin", false))
+                    {
                         include(translate('<a href="/<# web_prefix #>?'.
                             xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).
                             '" class="menu-item menu-sys">Админка</a>'));
+                    }
 
+                    if (xcms_user()->check_rights("registered", false))
+                    {
                         include(translate('<a href="/<# web_prefix #>?'.
                             xcms_url(array('page'=>$pageid, 'ref'=>'cabinet', 'mode'=>'logout')).
                             '" class="menu-item menu-sys">Выход</a>'));
