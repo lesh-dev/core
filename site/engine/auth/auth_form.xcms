@@ -40,7 +40,7 @@
         <form method="post">
             <table>
                 <tr>
-                    <td>Логин</td>
+                    <td>Логин:</td>
                     <td><input type="text" name="auth-login" id="auth-login" /></td>
                 </tr>
                 <tr>
