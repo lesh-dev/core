@@ -21,6 +21,9 @@ function xsm_notify_person_edit($person)
         xsm_get_person_field_types(),
         $table_title);
 
+    if (empty($mail_msg)) // do not send empty diffs
+        return;
+
     $subject = "Изменения: $full_name";
     xcms_send_notification("reg", NULL, "db", $subject, "This message is in HTML format.\r\n", $mail_msg);
 }

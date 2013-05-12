@@ -3,7 +3,7 @@
 /**
   * Построение разности двух key-массивов
   **/
-function xcms_array_diff($new, $old)
+function xcms_array_diff($new, $old, $fields)
 {
     $diff = array();
     // assume key
@@ -11,26 +11,27 @@ function xcms_array_diff($new, $old)
     {
         if (!array_key_exists($key, $old))
         {
-            if (trim($value) != '')
+            if (trim($value) != '' && array_key_exists($key, $fields))
                 $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>'');
             continue;
         }
         // key exists in both arrays
-        if (trim($old[$key]) != trim($value))
+        if (trim($old[$key]) != trim($value) && array_key_exists($key, $fields))
             $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>$old[$key]);
     }
     foreach ($old as $key => $old_value)
     {
         if (array_key_exists($key, $new))
             continue;
-        if (trim($old_value) != '')
+        if (trim($old_value) != '' && array_key_exists($key, $fields))
             $diff[] = array('key'=>$key, 'new'=>'', 'old'=>$old_value);
     }
     return $diff;
 }
 
 /**
-  * Построение diff-а двух объектов в шаблон html
+  * Build a diff message of two objects in html format.
+  * @return HTML-message or empty string if objects are equal.
   **/
 function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_title)
 {
@@ -42,7 +43,9 @@ function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_ti
     $row_long_diff_template = file_get_contents("$template_root/xsm-row-long-diff.html");
     $row_long_add_template = file_get_contents("$template_root/xsm-row-long-add.html");
 
-    $diff_array = xcms_array_diff($new_object, $old_object);
+    $diff_array = xcms_array_diff($new_object, $old_object, $fields);
+    if (count($diff_array) == 0)
+        return "";
 
     $content = ""; // @@TABLE-CONTENT@
     foreach ($diff_array as $diff)
