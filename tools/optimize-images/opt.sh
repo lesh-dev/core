@@ -14,3 +14,11 @@ for i in *.$ext ; do
 done
 du -bc *.$ext | grep total
 du -bc output/*.$ext | grep total
+mkdir -p backup
+mv *.$ext backup/
+ssh fizlesh.ru <<EOF
+rm -rf opt-images
+mkdir -p opt-images
+EOF
+scp output/*.$ext fizlesh.ru:opt-images/
+ssh -t fizlesh.ru sudo cp opt-images/*.$ext $im_path/
