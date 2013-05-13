@@ -30,6 +30,17 @@ function xcms_html_wrap_ml($html)
     return $html;
 }
 
+
+function xcms_trim_object($obj)
+{
+    $new_obj = array();
+    foreach ($obj as $key=>$value)
+    {
+        $new_obj[$key] = trim($value);
+    }
+    return $new_obj;
+}
+
 /**
   * Canonical way to obtain FIO
   **/

@@ -53,6 +53,7 @@
         $full_name = xsm_fio($person);
 
         $html_content = ""; // @@TABLE-CONTENT@
+        $person = xcms_trim_object($person);
 
         foreach ($person as $key=>$value)
         {
