@@ -83,6 +83,8 @@
         $target = $u->create($config["superuser_name"], $config["superuser_mail"]);
         $target->passwd($config["superuser_password"]);
         $u->add_to_group($target->login(), "admin");
+        $u->add_to_group($target->login(), "ank");
+        $u->add_to_group($target->login(), "editor");
         $f = fopen("settings.php", "a");
         if (!$f)
             return "Cannot open settings.php for append. ";
