@@ -53,7 +53,7 @@ a img {
     padding-top: 20px;
 }
 
-.mainField {
+.main-field {
     background-color: #9ec78b;
     vertical-align: top;
     padding: 20px;
@@ -200,4 +200,10 @@ a.link-button {
 
 span.site-version {
     color: #888888;
+}
+
+a.content-edit {
+    position: absolute;
+    right: 0px;
+    top: 0px;
 }
