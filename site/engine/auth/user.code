@@ -3,7 +3,7 @@
 function xcms_console_create_user($params)
 {
     $su = xcms_user();
-    $su->setSuperuser();
+    $su->set_superuser();
 
     $login = xcms_get_key_or($params, "login");
     $password = xcms_get_key_or($params, "password");
