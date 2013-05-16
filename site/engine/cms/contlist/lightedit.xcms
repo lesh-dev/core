@@ -1,74 +1,111 @@
 <?php
-    if(@$_POST["contlist-create"])
-    {
-        $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid/{$_POST["create-name"]}";
-        $list = array();
-        $list["subheader"] = @$_POST["subheader"];
-        $list["menu-title"] = @$_POST["subheader"];
-        xcms_save_list("$dir/info", $list);
-        // зачем писать в lockmenu, я так и не понял
-        // пока что не будем этого делать
 
-        $npid = str_replace("{$SETTINGS["datadir"]}/cms/pages/", "", $dir);
-        ?>
-        <meta http-equiv="refresh" content="2;URL=?page=<?php echo $npid; ?>&amp;ref=ladmin">
-        <h3>Подождите, сейчас произойдёт перенаправление на страницу администрирования...</h3><?php
+function xcms_create_contlist()
+{
+    global $SETTINGS, $pageid;
+
+    $suffix = xcms_get_key_or($_POST, "name-suffix");
+    $item_id = date('Y.m.d-H.i.s')."-$suffix";
+    $path_prefix = "{$SETTINGS["datadir"]}cms/pages/";
+    $item_pageid = "$pageid/$item_id";
+    $dir = "$path_prefix$item_pageid";
+    mkdir($dir, 0777, true);
+    $list = array();
+    $list["type"] = xcms_get_key_or($_POST, "pagetype");
+    $list["subheader"] = xcms_get_key_or($_POST, "subheader");
+    $list["menu-title"] = xcms_get_key_or($_POST, "subheader");
+    $list["edit"] = "#all";
+
+    // не показывать их в меню
+    //$list["menu-hidden"] = "yes";
+
+    xcms_save_list("$dir/info", $list);
+    // зачем писать в lockmenu, я так и не понял
+    // пока что не будем этого делать
+
+    ?>
+    <meta http-equiv="refresh" content="3;URL=/<# web_prefix #>?<?php echo xcms_url(array('page'=>$item_pageid, 'ref'=>'ladmin'));?>" />
+    <h3>Подождите, сейчас произойдёт перенаправление на страницу администрирования...</h3><?php
+}
+
+/*
+Dead code: not referenced in interface.
+DO NOT DELETE, it's complete section removal code
+*/
+function xcms_delete_contlist()
+{
+    $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid/{$_POST["delete-section-nax"]}";
+    $list = glob("$dir/*", GLOB_ONLYDIR);
+    if($list)
+    {
+        echo '<script>alert("Не могу удалить! Сначала удалите все подразделы!");</script>';
     }
-    /* dead code: not referenced in interface. DO NOT DELETE, it's complete section removal code
-    elseif (@$_POST["delete-section-nax"])
+    else
     {
-        $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid/{$_POST["delete-section-nax"]}";
-        $list = glob("$dir/*", GLOB_ONLYDIR);
-        if($list)
+        $list = glob("$dir/*");
+        if ($list)
         {
-            echo '<script>alert("Не могу удалить! Сначала удалите все подразделы!");</script>';
+            foreach ($list as $key=>$value)
+                unlink($value);
         }
-        else
-        {
-            $list = glob("$dir/*");
-            if ($list)
-            {
-                foreach ($list as $key=>$value)
-                    unlink($value);
-            }
-            rmdir($dir);
-        }
-    } */
-    elseif (@$_GET["vtype"]=="")
-    {?>
-        <h3>Добавить раздел содержания</h3>
-        <form method="post">
-            <!-- мы вроде как договорились, что мы против автогенерённых имён -->
-            <input type="text" name="create-name" value="<?php echo time(); ?>">
+        rmdir($dir);
+    }
+}
 
-        <table>
-            <tr>
-                <td>Заголовок<br />
-                    <font size="-1">То есть тот текст, который (может быть) появится где-нибудь на странице.</font></td>
-                <td><input type="text" name="subheader" /></td><?php
+function xcms_draw_contlist_create()
+{
+    global $SETTINGS, $INFO;
+    $header = $INFO["header"];
 
-        $list = glob("{$SETTINGS["engine_dir"]}cms/*.pagetype");
-        echo "<tr><td>Тип содержания<td><select name=\"create-pagetype\">";
-        foreach ($list as $key=>$value)
-        {
-            $value = str_replace("{$SETTINGS["engine_dir"]}cms/","",$value);
-            $value = str_replace(".pagetype","",$value);
-            echo "<option name=\"$value\" value=\"$value\">$value</option>";
-        }
-        foreach($group as $g)
-        {
-            $ch = "checked";
-            if($g == "#all") $ch = "";
-            if($g == "#registered") $ch = "";
-            echo "<tr><td>Право редактирования для $g<td><input type=\"checkbox\" name=\"edit_$g\" $ch>";
-        }?>
+    ?><h3>Добавить раздел содержания</h3>
+    <form method="post">
+
+    <table>
         <tr>
-            <td>Право просмотра для #all</td>
-            <td><input type="checkbox" name="viewForAll" checked="checked" /></td>
-        </table>
-        <input type="hidden" name="header" value="<?php echo htmlspecialchars(@$INFO["header"]); ?>" />
-        <input type="submit" name="contlist-create" value="Добавить...">
-        </form>
-        <?php
+            <td>Суффикс пути (необязательно)</td>
+            <td><input type="text" name="name-suffix" /></td>
+        </tr>
+        <tr>
+            <td>Заголовок</td>
+            <td><input type="text" name="subheader" /></td>
+        </tr>
+        <tr>
+            <td>Тип содержимого</td>
+            <td>
+                <select name="pagetype"><?php
+    $list = glob("{$SETTINGS["engine_dir"]}cms/*.pagetype");
+    foreach ($list as $key=>$value)
+    {
+        $value = str_replace("{$SETTINGS["engine_dir"]}cms/", "", $value);
+        $value = str_replace(".pagetype", "", $value);
+        echo "<option name=\"$value\" value=\"$value\">$value</option>";
     }
+
+    foreach($group as $g)
+    {
+        $ch = "checked";
+        if ($g == "#all") $ch = "";
+        if ($g == "#registered") $ch = "";
+        echo "<tr><td>Право редактирования для $g</td><td><input type=\"checkbox\" name=\"edit_$g\" $ch></td></tr>";
+    }?>
+    <tr>
+        <td>Право просмотра для #all</td>
+        <td><input type="checkbox" name="viewForAll" checked="checked" /></td>
+    </table>
+    <input type="text" readonly="readonly" name="header" value="<?php echo htmlspecialchars($header); ?>" />
+    <input type="submit" name="contlist-create" value="Добавить">
+    </form>
+    <?php
+}
+
+
+
+// main
+if(@$_POST["contlist-create"])
+    xcms_create_contlist();
+elseif (@$_POST["delete-section-nax"])
+    xcms_delete_contlist();
+// vtype was here, it is not used
+else
+    xcms_draw_contlist_create();
 ?>
