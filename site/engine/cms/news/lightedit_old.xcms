@@ -1,0 +1,3 @@
+<?php
+    include(translate("<! var editfile {$SETTINGS["datadir"]}cms/pages/$pageid/content !><! edit/file xz -h !>"));
+?>
