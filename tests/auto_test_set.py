@@ -31,3 +31,7 @@ def getTests(baseUrl, args): return {
     "xcms_xsm_anketa_fill.py": xcms_xsm_anketa_fill.XcmsXsmAnketaFill(baseUrl, args),
     "xcms_xsm_anketa_wrong_fill.py": xcms_xsm_anketa_wrong_fill.XcmsXsmAnketaWrongFill(baseUrl, args),
 }
+
+#import sys
+#print "Test set should not be run directly. Use test-suite.py <test-set-name> <url> ..."
+#sys.exit(1)

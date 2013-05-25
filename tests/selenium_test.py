@@ -98,7 +98,7 @@ class SeleniumTest:
 		
 	def init(self):
 		self.m_baseUrl = self.fixBaseUrl(self.getBaseUrl())
-		self.m_driver = webdriver.Firefox() # executable_path="/home/vdm/bin/firefox/firefox"
+		self.m_driver = webdriver.Firefox() #executable_path="/usr/bin/firefox")
 		self.maximizeWindow()
 	
 	def getName(self):
@@ -143,12 +143,12 @@ class SeleniumTest:
 		self.shutdown(2)
 				
 	def handleTestFail(self, exc):
-		self.m_driver.execute_script("alert('Test failed! See console log for details. ');")
+		#self.m_driver.execute_script("alert('Test failed! See console log for details. ');")
 		print "TEST " + self.getName() + " FAILED:", toUnicode(exc.message)
 		self.shutdown(1)
 
 	def handleTestFatal(self, exc):
-		self.m_driver.execute_script("alert('Test fataled! See logs and check your test/environment. ');")
+		#self.m_driver.execute_script("alert('Test fataled! See logs and check your test/environment. ');")
 		print "TEST " + self.getName() + " FATALED:", toUnicode(exc.message)
 		self.shutdown(2)
 
@@ -240,6 +240,10 @@ class SeleniumTest:
 		except ItemNotFound:
 			pass
 	
+	def wait(self, seconds):
+		self.logAdd("Waiting for " + userSerialize(seconds) + "' seconds. ")
+		time.sleep(seconds)
+		
 	def drv(self):
 		return self.m_driver;
 
@@ -377,7 +381,7 @@ class SeleniumTest:
 			except StaleElementReferenceException:
 				self.logAdd("Cache problem in checkTextPresent(" + xpath + ", " + userSerialize(text) + "), trying again. ")
 				count += 1
-				time.sleep(1)
+				self.wait(1.0)
 				continue
 		self.failTest("Unsolvable cache problem in checkTextPresent(" + xpath + ", " + userSerialize(text) + "), trying again. ")
 		
