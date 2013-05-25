@@ -53,17 +53,28 @@ def RunTest(test):
 	try:
 		test.init()
 		test.run()
+		return 0
 	except TestFatal as e:
 #		test.printActionLog()
 		test.handleTestFatal(e)
+		return 2
 	except TestError as e:
-		print "Test action log:"
-		test.printActionLog()
 		test.handleTestFail(e)
+		print "Test " + test.getName() + " action log:"
+		test.printActionLog()
+		return 1
 	except TestShutdown as e:
 		test.handleShutdown(e)
+		return 0
 	except Exception as e:
 		test.handleException(e)
+		return 2
+		
+def DecodeRunResult(result):
+	if result == 0: return "PASSED"
+	elif result == 1: return "FAILED"
+	elif result == 2: return "FATAL"
+	else: return "UNKNOWN"
 	
 #main API wrapper for Webdriver.
 class SeleniumTest:
