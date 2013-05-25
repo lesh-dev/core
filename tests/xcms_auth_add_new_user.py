@@ -50,13 +50,14 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		
 #		self.assertBodyTextPresent(u"Пароль всё ещё неверный"); already checked inside
 
-# and now, test bug with remaining cookies:
+		# and now, test bug with remaining cookies:
 		# we navigate to root page, and see auth panel!
 		print "logging again as created user. "
 		if not xtest_common.performLogin(self, inpLogin, inpPass):
 			raise selenium_test.TestError("Cannot login again as newly created user. ")
-
-		xtest_common.gotoAdminPanel(self)
+		
+		self.setPhpErrorsAsWarnings(True)
+		xtest_common.gotoCabinet(self)
 		
 		# let's try to change password.
 		self.gotoUrlByLinkText(u"Сменить пароль")
@@ -85,7 +86,7 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		if not xtest_common.performLogin(self, inpLogin, newPass):
 			raise selenium_test.TestError("Cannot login again for profile info change. ")
 
-		xtest_common.gotoAdminPanel(self)
+		xtest_common.gotoCabinet(self)
 		# navigate to user profile which is just user login
 		# TODO: BUG, make separate links
 		
@@ -120,7 +121,7 @@ class XcmsAuthAddNewUser(SeleniumTest):
 		if not xtest_common.performLogin(self, inpLogin, newPass):
 			raise selenium_test.TestError("Cannot login after profile info change. ")
 		
-		xtest_common.gotoAdminPanel(self)
+		xtest_common.gotoCabinet(self)
 		# navigate to user profile which is just user login
 		self.gotoUrlByLinkText(inpLogin)
 		self.assertBodyTextPresent(u"Привет, " + inpLogin)

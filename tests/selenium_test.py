@@ -250,7 +250,14 @@ class SeleniumTest:
 			raise TestError(exceptionMessage)
 		except ItemNotFound:
 			pass
-	
+
+	def assertUrlPresent(self, linkName, reason = ""):
+		try:
+			self.getUrlByLinkText(linkName)
+		except ItemNotFound:
+			exceptionMessage = "Required URL is not found on the page in assertUrlPresent: '" + userSerialize(linkName) + "'. " + self.displayReason(reason)
+			raise TestError(exceptionMessage)
+
 	def wait(self, seconds):
 		self.logAdd("Waiting for " + userSerialize(seconds) + "' seconds. ")
 		time.sleep(seconds)
