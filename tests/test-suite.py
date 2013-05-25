@@ -40,7 +40,7 @@ TEST OPTIONS could be test-dependent. Commonly supported options are:
 def printStats(stats):
 	print "Run overall statistics:"
 	for result, testList in stats.iteritems():
-		print DecodeRunResult(result) + ":", len(testList)," tests"
+		print DecodeRunResult(result) + ":", len(testList),"tests"
 	
 args = sys.argv[1:] # exclude program name
 

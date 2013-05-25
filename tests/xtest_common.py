@@ -117,10 +117,8 @@ def createNewUser(test, conf, login, email, password, name, auxParams = []):
 	#	test.gotoRoot()
 	gotoAdminPanel(test)
 	
-	# navigate to users CP
-	print "goto user list."
-	test.gotoUrlByLinkText(u"Пользователи")
-	test.assertBodyTextPresent(u"Администрирование пользователей")
+	gotoUserList(test)
+	
 	test.gotoUrlByLinkText(["Create user", u"Создать пользователя"])
 	
 	inpLogin = test.fillElementById("login", login)
@@ -217,7 +215,13 @@ def setTestNotifications(test, emailString, adminLogin, adminPass):
 	
 	test.clickElementById("editTag")
 	performLogout(test)
-	
+
+
+def gotoUserList(test):
+	test.logAdd("Navigating to user list from admin CP. ")
+	test.gotoUrlByLinkText(u"Пользователи")
+	test.assertBodyTextPresent(u"Администрирование пользователей")
+
 	
 	
 

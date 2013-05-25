@@ -20,6 +20,11 @@ def userSerialize(text):
 		return "|".join(text)
 	if isString(text):
 		return text
+	if isBool(text):
+		if text:
+			return "TRUE"
+		else:
+			return "FALSE"
 	return str(text)
 
 def isList(x):
@@ -27,6 +32,9 @@ def isList(x):
 
 def isString(x):
 	return type(x) == type("string") or type(x) == type(u"string")
+
+def isBool(x):
+	return type(x) == type(True)
 
 def isEqual(x, y):
 	if isString(x) and isString(y):

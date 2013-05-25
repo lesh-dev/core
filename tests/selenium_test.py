@@ -180,7 +180,7 @@ class SeleniumTest:
 			#indicate that log was already created
 			self.m_logStarted = True
 		except IOError:
-			raise RuntimeError("Cannot create log file '" + m_logFile + "'. ")
+			raise RuntimeError("Cannot create log file '" + self.m_logFile + "'. ")
 			
 	def setCloseOnExit(self, flag):
 		self.m_closeOnExit = flag;
@@ -278,6 +278,31 @@ class SeleniumTest:
 		except NoSuchElementException:
 			self.logAdd("getElementById failed for id '" + eleId + "':\n" + traceback.format_exc())
 			raise TestError(u"Cannot get element by id '" + eleId + "'. ")
+		
+	def checkboxIsValid(self, value):
+		return value == "checked" or value == "true"
+				
+	def checkCheckboxValueById(self, eleId, boolValue = True):
+		self.checkEmptyParam(eleId, "checkCheckboxValueById")
+		value = self.getElementById(eleId).get_attribute("checked")
+#		print "value: ", value
+		if value and not self.checkboxIsValid(value):
+			msg = "Strange value for checkbox '" + eleId + "': " + userSerialize(value)
+			self.logAdd(msg)
+			raise TestError(msg)
+		
+		if boolValue: # check if it is 'checked'
+			if value and self.checkboxIsValid(value):
+				return True
+			return False
+		else: # check if it is unchecked
+			if value and self.checkboxIsValid(value):
+				return False
+			return True
+				
+	def assertCheckboxValueById(self, eleId, boolValue = True):
+		if not self.checkCheckboxValueById(eleId, boolValue):
+			raise TestError(u"Checkbox with id '" + eleId + "' has improper value, expected '" + userSerialize(boolValue) + "'. ")
 			
 	def fillElementByName(self, name, text, clear = True):
 		self.checkEmptyParam(name, "fillElementByName")

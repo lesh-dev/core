@@ -6,6 +6,7 @@ import xcms_auth_add_new_user
 import xcms_auth_check_dup_email
 import xcms_auth_check_dup_login
 import xcms_auth_root_login
+import xcms_auth_change_user_by_admin
 import xcms_download_lectures
 import xcms_metrics_check
 import xcms_open_all_pages
@@ -21,6 +22,7 @@ def getTests(baseUrl, args): return {
     "xcms_auth_check_dup_email.py": xcms_auth_check_dup_email.XcmsAuthCheckDupEmail(baseUrl, args),
     "xcms_auth_check_dup_login.py": xcms_auth_check_dup_login.XcmsAuthCheckDupLogin(baseUrl, args),
     "xcms_auth_root_login.py": xcms_auth_root_login.XcmsAuthRootLogin(baseUrl, args),
+    "xcms_auth_change_user_by_admin.py": xcms_auth_change_user_by_admin.XcmsAuthChangeUserByAdmin(baseUrl, args),
     "xcms_download_lectures.py": xcms_download_lectures.XcmsDownloadLectures(baseUrl, args),
     "xcms_metrics_check.py": xcms_metrics_check.XcmsMetricsCheck(baseUrl, args),
     "xcms_open_all_pages.py": xcms_open_all_pages.XcmsOverallOpenPages(baseUrl, args),
