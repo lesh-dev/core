@@ -87,8 +87,8 @@ try:
 		sys.exit(1)
 		
 	tests = testSetModule.getTests(baseUrl, args)
-	for fileName in tests:
-		test = tests[fileName]
+	while tests:
+		fileName, test = tests.popitem()
 		if specTest:
 			if specTest.endswith(".py"): # it is a filename
 				if fileName != specTest:
