@@ -1,4 +1,6 @@
+<# auth/format #>
 <?php
+require_once("${engine_dir}/sys/groups.php");
 
 function xcms_create_contlist()
 {
@@ -9,6 +11,8 @@ function xcms_create_contlist()
     $path_prefix = "{$SETTINGS["datadir"]}cms/pages/";
     $item_pageid = "$pageid/$item_id";
     $dir = "$path_prefix$item_pageid";
+    if (file_exists($dir))
+        return "Блок с таким служебным именем уже существует. ";
     mkdir($dir, 0777, true);
     $list = array();
     $list["type"] = xcms_get_key_or($_POST, "pagetype");
@@ -20,12 +24,16 @@ function xcms_create_contlist()
     //$list["menu-hidden"] = "yes";
 
     xcms_save_list("$dir/info", $list);
+    $f = fopen("$dir/content", "w");
+    fwrite($f, $_POST["content"]);
+    fclose($f);
     // зачем писать в lockmenu, я так и не понял
     // пока что не будем этого делать
 
     ?>
     <meta http-equiv="refresh" content="3;URL=/<# web_prefix #>?<?php echo xcms_url(array('page'=>$item_pageid, 'ref'=>'ladmin'));?>" />
     <h3>Подождите, сейчас произойдёт перенаправление на страницу администрирования...</h3><?php
+    return true;
 }
 
 /*
@@ -52,47 +60,69 @@ function xcms_delete_contlist()
     }
 }
 
-function xcms_draw_contlist_create()
+function xcms_draw_contlist_create($result = true)
 {
     global $SETTINGS, $INFO;
     $header = $INFO["header"];
 
-    ?><h3>Добавить раздел содержания</h3>
+    ?><h3>Добавить блок</h3>
     <form method="post">
 
     <table>
         <tr>
-            <td>Суффикс пути (необязательно)</td>
-            <td><input type="text" name="name-suffix" /></td>
+            <td>Служебное имя</td>
+            <td><input <?php echo xcmst_input_attrs_from_post("name-suffix", "new-info-block"); ?> /></td>
         </tr>
         <tr>
             <td>Заголовок</td>
-            <td><input type="text" name="subheader" /></td>
+            <td><input <?php echo xcmst_input_attrs_from_post("subheader", "Подзаголовок"); ?> /></td>
         </tr>
         <tr>
-            <td>Тип содержимого</td>
+            <td>Тип блока</td>
             <td>
                 <select name="pagetype"><?php
     $list = glob("{$SETTINGS["engine_dir"]}cms/*.pagetype");
-    foreach ($list as $key=>$value)
+    foreach ($list as $value)
     {
         $value = str_replace("{$SETTINGS["engine_dir"]}cms/", "", $value);
         $value = str_replace(".pagetype", "", $value);
-        echo "<option name=\"$value\" value=\"$value\">$value</option>";
-    }
+        $attrs = ($value == "news") ? "selected=\"selected\" " : "";
+        echo "<option name=\"$value\" value=\"$value\" $attrs>$value</option>";
+    }?>
+            </td>
+        </tr>
+        <tr>
+            <td>Содержимое блока</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea name="content" id="content" rows="5" cols="70"><?php
+                // AJAX should be here
+                $pagetype = "news";
+                echo htmlspecialchars(file_get_contents(
+                    $SETTINGS["engine_dir"]."/cms/$pagetype/template")); ?></textarea>
+            </td>
+        </tr>
 
-    foreach($group as $g)
+    <?php
+
+    $groups = xcms_all_groups();
+    foreach ($groups as $g)
     {
         $ch = "checked";
         if ($g == "#all") $ch = "";
         if ($g == "#registered") $ch = "";
         echo "<tr><td>Право редактирования для $g</td><td><input type=\"checkbox\" name=\"edit_$g\" $ch></td></tr>";
     }?>
-    <tr>
-        <td>Право просмотра для #all</td>
-        <td><input type="checkbox" name="viewForAll" checked="checked" /></td>
+        <tr>
+            <td>Право просмотра для #all</td>
+            <td><input type="checkbox" name="viewForAll" checked="checked" /></td>
+        </tr>
     </table>
-    <input type="text" readonly="readonly" name="header" value="<?php echo htmlspecialchars($header); ?>" />
+    <div>
+        Заголовок:
+        <input type="text" readonly="readonly" name="header" value="<?php echo htmlspecialchars($header); ?>" />
+    </div>
     <input type="submit" name="contlist-create" value="Добавить">
     </form>
     <?php
@@ -101,11 +131,14 @@ function xcms_draw_contlist_create()
 
 
 // main
-if(@$_POST["contlist-create"])
-    xcms_create_contlist();
+if (@$_POST["contlist-create"])
+{
+    $result = xcms_create_contlist();
+    if ($result !== true)
+        xcms_draw_contlist_create($result);
+}
 elseif (@$_POST["delete-section-nax"])
     xcms_delete_contlist();
-// vtype was here, it is not used
 else
     xcms_draw_contlist_create();
 ?>
