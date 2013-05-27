@@ -2,6 +2,9 @@
 <?php
 require_once("${engine_dir}/sys/groups.php");
 
+# TODO: dynamic loading
+require_once("${engine_dir}/cms/news/get_template.xcms");
+
 function xcms_create_contlist()
 {
     global $SETTINGS, $pageid;
@@ -99,8 +102,10 @@ function xcms_draw_contlist_create($result = true)
                 <textarea name="content" id="content" rows="5" cols="70"><?php
                 // AJAX should be here
                 $pagetype = "news";
-                echo htmlspecialchars(file_get_contents(
-                    $SETTINGS["engine_dir"]."/cms/$pagetype/template")); ?></textarea>
+                $f_get_template = "xcms_${pagetype}_get_template";
+                if (function_exists($f_get_template))
+                    echo htmlspecialchars($f_get_template());
+                ?></textarea>
             </td>
         </tr>
 
