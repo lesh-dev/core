@@ -40,7 +40,7 @@
 <?php
     echo '<tr><td colspan="2"><h3>Матрица доступа</h3><table><tr><td>Группа<td>Может смотреть<td>Может изменять';
     include_once("$engine_dir/sys/groups.php");
-    foreach(all_groups() as $g=>$translation)
+    foreach (xcms_all_groups() as $g=>$translation)
     {
         if(!strlen($translation)) continue;
         $chv = "";

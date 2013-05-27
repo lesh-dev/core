@@ -14,9 +14,4 @@
             $ans[$k] = $v;
         return $ans;
     }
-    /// Deprecated! Use xcms_all_groups instead!
-    function all_groups()
-    {
-        return xcms_all_groups();
-    }
 ?>

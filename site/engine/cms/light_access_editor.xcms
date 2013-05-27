@@ -37,7 +37,7 @@
         $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
         xcms_save_list("$dir/info", $INFO);
     }
-    $ag = all_groups();
+    $ag = xcms_all_groups();
     $view = explode(" ",trim($INFO["view"]));
     foreach ($view as $key=>$value)
     {
@@ -49,7 +49,7 @@
     }
     echo "Добавить: <select name=\"add-view\" >";
     echo "<option value=\"\">(не добавлять)</option>";
-    foreach(all_groups() as $k=>$v)
+    foreach ($ag as $k=>$v)
     {
         if(!strlen($v)) continue;
         echo "<option value=\"$k\">$v</option>";
@@ -68,7 +68,7 @@
     }
     echo "Добавить: <select name=\"add-edit\" >";
     echo "<option value=\"\">(не добавлять)</option>";
-    foreach(all_groups() as $k=>$v)
+    foreach ($ag as $k=>$v)
     {
         if(!strlen($v)) continue;
         echo "<option value=\"$k\">$v</option>";
