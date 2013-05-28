@@ -110,12 +110,9 @@ def performLoginAsAdmin(test, login, password):
 def createNewUser(test, conf, login, email, password, name, auxParams = []):
 	print "createNewUser(" + login + ", " + email + ", " + password + ", " + name + ")"
 	
-	performLoginAsAdmin(test, conf.getAdminLogin(), conf.getAdminPass())
-	
-	print "go to user creation panel"
-	
-	#	test.gotoRoot()
-	gotoAdminPanel(test)
+	if not "do_not_login_as_admin" in auxParams:
+		performLoginAsAdmin(test, conf.getAdminLogin(), conf.getAdminPass())
+		gotoAdminPanel(test)
 	
 	gotoUserList(test)
 	
@@ -173,7 +170,8 @@ def createNewUser(test, conf, login, email, password, name, auxParams = []):
 	test.assertElementValueById("email-input", inpEMail)
 	
 	#logoff root
-	performLogout(test)
+	if not "do_not_logout_admin" in auxParams:
+		performLogout(test)
 	
 	return inpLogin, inpEMail, inpPass, inpName
 	
