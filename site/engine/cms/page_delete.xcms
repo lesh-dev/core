@@ -1,0 +1,20 @@
+<div class="admin-widget">
+    <h3>Удаление страницы</h3>
+<?php
+    $sec_name = xcms_get_key_or($INFO, "header");
+    if (!$sec_name)
+        $sec_name = xcms_get_key_or($INFO, "subheader");
+    $sec_name = htmlspecialchars($sec_name);
+
+    $menu_title = xcms_get_key_or($INFO, "menu-title");
+    if ($menu_title)
+        $menu_title = htmlspecialchars(" [$menu_title]");
+    ?>
+    <h3 style="color: red;">Предупреждение</h3>
+    <p>Вы собираетесь удалить текущий раздел <b><?php echo "$sec_name$menu_title"; ?></b>.
+    Вы <b>точно</b> уверены, что хотите это сделать?</p>
+    <form method="post">
+        <input type="hidden" id="delete-section" name="delete-section" value="true" />
+        <input class="delete" type="submit" value="Таки да, удалить!" />
+    </form>
+</div>

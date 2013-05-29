@@ -29,7 +29,6 @@
             rmdir($dir);
             echo '<script>alert("Удалено");</script>';
             translate("<! redir ladmin 0!>");
-            //die();
             $pageid="index";
             for($i=strlen($pageid)-1;$i>=0; $i--)
             {
@@ -107,19 +106,7 @@
     }
     else if(@$_GET["mode"]=="cleanprec") include(translate("<! cleanprec !>"));
     else if(@$_GET["mode"]=="delete")
-    {
-        $sec_name = htmlspecialchars(@$INFO["header"]);
-        $menu_title = htmlspecialchars(@$INFO["menu-title"]);
-        ?>
-        <h3 style="color: red;">Предупреждение</h3>
-        Вы хотите удалить текущий раздел <b><?php echo "[$menu_title] $sec_name"; ?></b>.<br />
-        Вы <b>точно</b> уверены, что хотите это сделать?
-        <form method="post">
-            <input type="hidden" name="delete-section" value="true">
-            <input type="submit" value="Да, я точно уверен, что следует
-                удалить раздел <?php echo "[$menu_title] $sec_name"; ?>">
-        </form><?php
-    }
+        include(translate("<! cms/page_delete !>"));
     else if(@$_GET["mode"]=="edit_alias")
         include(translate("<! cms/page_alias !>"));
     else if(@$_GET["mode"]=="edit_header")

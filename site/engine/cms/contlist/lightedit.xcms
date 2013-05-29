@@ -24,7 +24,7 @@ function xcms_create_contlist()
     $list["edit"] = "#all";
 
     // не показывать их в меню
-    //$list["menu-hidden"] = "yes";
+    $list["menu-hidden"] = "yes";
 
     xcms_save_list("$dir/info", $list);
     $f = fopen("$dir/content", "w");
