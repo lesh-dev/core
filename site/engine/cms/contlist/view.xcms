@@ -1,11 +1,9 @@
 <?php
-  $list = glob("{$SETTINGS["datadir"]}cms/pages/$pageid/*",GLOB_ONLYDIR);
-  foreach($list as $value)
-  {
-  	$source = "$value/content";
-  	$pg = str_replace("{$SETTINGS["datadir"]}/cms/pages/","",$value);
-  	include(translate("<! cms/readtext --markdown --limit=220 --next-link=index.php?page=$pg --next-text=[подробнее...] !>"));
-  }
-
+    $list = glob("{$SETTINGS["datadir"]}cms/pages/$pageid/*", GLOB_ONLYDIR);
+    foreach($list as $value)
+    {
+        $source = "$value/content";
+        $pg = str_replace("{$SETTINGS["datadir"]}/cms/pages/", "", $value);
+        include(translate("<! cms/readtext --markdown --limit=220 --next-link=index.php?page=$pg --next-text=[подробнее...] !>"));
+    }
 ?>
-
