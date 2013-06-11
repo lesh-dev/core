@@ -41,15 +41,17 @@ class XcmsAuthSetDuplicateEmailByAdmin(SeleniumTest):
 
 		inpLogin2, inpEMail2, inpPass2, inpName2 = xtest_common.createNewUser(self, conf, inpLogin2, inpEMail2, inpPass2, inpName2, ["do_not_login_as_admin"])
 		
-		#xtest_common.performLogoutFromAdminPanel(self)
-
 		print "logging as created first user. "
 		if not xtest_common.performLogin(self, inpLogin1, inpPass1):
 			raise selenium_test.TestError("Cannot login as newly created user One. ")
+		
+		xtest_common.performLogoutFromSite(self)		
 
 		print "logging as created second user. "
 		if not xtest_common.performLogin(self, inpLogin2, inpPass2):
 			raise selenium_test.TestError("Cannot login as newly created user Two. ")
+
+		xtest_common.performLogoutFromSite(self)		
 
 		# login as admin, enter user profile and change some fields.
 		
