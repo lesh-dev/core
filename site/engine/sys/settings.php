@@ -12,7 +12,7 @@
     $SETTINGS["design_dir"] = $design_dir;
     $SETTINGS["datadir"] = $content_dir;
     $SETTINGS["precdir"] = ".prec/";
-    $SETTINGS["code_begin"] = '<?php unset($argv);unset($keys);unset($param);';
+    $SETTINGS["code_begin"] = '<?php unset($argv);unset($param);';
     $SETTINGS["code_end"] = '?>';
     $SETTINGS["mailer_enabled"] = $mailer_enabled;
     // auth session lifetime in seconds

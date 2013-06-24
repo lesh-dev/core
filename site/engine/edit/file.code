@@ -108,7 +108,7 @@
         elseif (@$text) {}
         else $text = "$dtext";
 
-        if(!@$keys["-h"]) echo "<$tag>edit: $ename</$tag>";
+        if(!@$param["-h"]) echo "<$tag>edit: $ename</$tag>";
         $ty = "submit";
 
         $vlist = '<option value="">HEAD</option>';
