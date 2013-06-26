@@ -7,10 +7,10 @@ require_once("${engine_dir}/cms/news/get_template.xcms");
 
 function xcms_create_contlist()
 {
-    global $SETTINGS, $pageid;
+    global $SETTINGS, $INFO, $pageid;
 
     $suffix = xcms_get_key_or($_POST, "name-suffix");
-    $item_id = date('Y.m.d-H.i.s')."-$suffix";
+    $item_id = date('Y.m.d-H.i')."-$suffix";
     $path_prefix = "{$SETTINGS["datadir"]}cms/pages/";
     $item_pageid = "$pageid/$item_id";
     $dir = "$path_prefix$item_pageid";
@@ -21,20 +21,21 @@ function xcms_create_contlist()
     $list["type"] = xcms_get_key_or($_POST, "pagetype");
     $list["subheader"] = xcms_get_key_or($_POST, "subheader");
     $list["menu-title"] = xcms_get_key_or($_POST, "subheader");
-    $list["edit"] = "#all";
+    $list["edit"] = "#editor";
+    $list["alias"] = $INFO["alias"]."/$item_id";
 
     // не показывать их в меню
     $list["menu-hidden"] = "yes";
+    // не показывать их в системном меню
+    $list["menu-locked"] = "yes";
 
     xcms_save_list("$dir/info", $list);
     $f = fopen("$dir/content", "w");
     fwrite($f, $_POST["content"]);
     fclose($f);
-    // зачем писать в lockmenu, я так и не понял
-    // пока что не будем этого делать
 
     ?>
-    <meta http-equiv="refresh" content="3;URL=/<# web_prefix #>?<?php echo xcms_url(array('page'=>$item_pageid, 'ref'=>'ladmin'));?>" />
+    <meta http-equiv="refresh" content="2;URL=/<# web_prefix #>?<?php echo xcms_url(array('page'=>$item_pageid, 'ref'=>'ladmin'));?>" />
     <h3>Подождите, сейчас произойдёт перенаправление на страницу администрирования...</h3><?php
     return true;
 }
@@ -65,10 +66,11 @@ function xcms_delete_contlist()
 
 function xcms_draw_contlist_create($result = true)
 {
-    global $SETTINGS, $INFO;
+    global $SETTINGS, $INFO, $pageid;
     $header = $INFO["header"];
 
-    ?><h3>Добавить блок</h3>
+    ?><div class="admin-widget">
+    <h3>Добавить блок</h3>
     <form method="post">
 
     <table>
@@ -130,6 +132,22 @@ function xcms_draw_contlist_create($result = true)
     </div>
     <input type="submit" name="contlist-create" value="Добавить">
     </form>
+    </div>
+    <div class="admin-widget">
+        <h3>Список блоков</h3>
+        <div class="menu-contlist">
+        <?php
+        $template_file = "{$SETTINGS["engine_dir"]}/cms/menu/menulinks.dat";
+        xcms_menu(
+            "{$SETTINGS["datadir"]}cms/pages/$pageid",
+            file($template_file),
+            1,
+            xcms_url(array('ref' =>$_GET["ref"])),
+            array("devel"=>true, "show"=>"all"),
+            0, 999);
+        ?>
+        </div>
+    </div>
     <?php
 }
 
@@ -146,4 +164,6 @@ elseif (@$_POST["delete-section-nax"])
     xcms_delete_contlist();
 else
     xcms_draw_contlist_create();
+
+
 ?>

@@ -58,6 +58,11 @@ div.menu {
     font-size: 11pt;
 }
 
+div.menu-contlist {
+    font-family: monospace;
+    font-size: 10pt;
+}
+
 div.content {
     margin-left: 320px;
 }

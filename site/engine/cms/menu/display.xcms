@@ -12,8 +12,9 @@
     if (@$param["end"]) $end = $param["end"];
 
     $add_href_params = "";
-    if (@$_GET["ref"] != "index")
-        $add_href_params = "ref={$_GET["ref"]}";
+    $ref_value = xcms_get_key_or($_GET, "ref");
+    if ($ref_value != "index")
+        $add_href_params = "&ref=$ref_value";
 
     xcms_menu(
         "{$SETTINGS["datadir"]}cms/pages",
