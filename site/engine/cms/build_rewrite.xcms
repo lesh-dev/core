@@ -1,5 +1,4 @@
 <?php
-    include_once("$engine_dir/cms/page_alias_func.php");
     global $full_design_dir;
     global $content_dir;
 

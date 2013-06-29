@@ -1,6 +1,3 @@
-<?php
-    include_once("$engine_dir/cms/page_alias_func.php");
-?>
 <div class="admin-widget">
     <h3>Alias</h3>
     <form method="post">
