@@ -7,13 +7,14 @@
 <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
 
 <?php
-    if(!file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/content"))
+    $source = xcms_get_page_content_name();
+    if (!file_exists($source))
     {
-        echo "<h1>Раздел не заполнен.</h1>";
+        echo "<h1>Раздел не заполнен</h1>";
         if(xcms_user()->login() != "anonymous")
             echo "<h3><a href=\"?ref=ladmin&amp;page=$pageid\">Вы можете это исправить!</a></h3>";
     }
-    if(@$_POST["submit-anketa"])
+    if (@$_POST["submit-anketa"])
     {
         $template_root = "{$SETTINGS['engine_dir']}templates";
         $mail_msg = file_get_contents("$template_root/anketa_mail.html");
@@ -167,7 +168,7 @@
 
     else
     {
-        $text = file_get_contents( "{$SETTINGS["datadir"]}cms/pages/$pageid/content" );
+        $text = file_get_contents($source);
         $source  = "";
         include(translate("<! cms/readtext --markdown --text !>"));
     }

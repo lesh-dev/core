@@ -131,7 +131,7 @@
     }
     else if(@$_GET["mode"]=="configuration")
     {
-        $editfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/info";
+        $editfile = xcms_get_page_info_name();
         include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
     }
     else if(@$_GET["mode"]=="mailer" )
