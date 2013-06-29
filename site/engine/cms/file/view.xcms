@@ -12,5 +12,5 @@
     }
 ?>
 <form method="post">
-    <input type="submit" name="download-file" value="Download...">
+    <input type="submit" name="download-file" value="Download..." />
 </form>

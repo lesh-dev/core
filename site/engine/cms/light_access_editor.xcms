@@ -10,13 +10,13 @@
         $nedit = "";
         foreach ($_POST as $key=>$value)
         {
-            if(substr($key,0,5)=="edit-")
+            if (substr($key, 0, 5)=="edit-")
             {
-                $nedit = substr($key,5)." ".$nedit;
+                $nedit = substr($key, 5)." ".$nedit;
             }
-            if(substr($key,0,5)=="view-")
+            if (substr($key, 0, 5)=="view-")
             {
-                $nview = substr($key,5)." ".$nview;
+                $nview = substr($key, 5)." ".$nview;
             }
         }
         if(@$_POST["add-edit"])
@@ -24,20 +24,20 @@
         if(@$_POST["add-view"])
             $nview = $_POST["add-view"]." ".$nview;
 
-        $nvarr = array_unique(explode(" ",trim($nview)));
+        $nvarr = array_unique(explode(" ", trim($nview)));
         sort($nvarr);
-        $nearr = array_unique(explode(" ",trim($nedit)));
+        $nearr = array_unique(explode(" ", trim($nedit)));
         sort($nearr);
 
-        $nview = implode(" ",$nvarr);
-        $nedit = implode(" ",$nearr);
+        $nview = implode(" ", $nvarr);
+        $nedit = implode(" ", $nearr);
 
         $INFO["view"] = $nview;
         $INFO["edit"] = $nedit;
         xcms_save_list(xcms_get_info_file_name(), $INFO);
     }
     $ag = xcms_all_groups();
-    $view = explode(" ",trim($INFO["view"]));
+    $view = explode(" ", trim($INFO["view"]));
     foreach ($view as $key=>$value)
     {
         if($value)
@@ -56,7 +56,7 @@
     echo "</select>";
 
     echo "<td width=\"5\"><td valign=\"top\">";
-    $view = explode(" ",trim($INFO["edit"]));
+    $view = explode(" ", trim($INFO["edit"]));
     foreach ($view as $key=>$value)
     {
         if ($value)
