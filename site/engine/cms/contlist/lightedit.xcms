@@ -11,7 +11,7 @@ function xcms_create_contlist()
 
     $suffix = xcms_get_key_or($_POST, "name-suffix");
     $item_id = date('Y.m.d-H.i')."-$suffix";
-    $path_prefix = "{$SETTINGS["datadir"]}cms/pages/";
+    $path_prefix = xcms_get_page_prefix(true);
     $item_pageid = "$pageid/$item_id";
     $dir = "$path_prefix$item_pageid";
     if (file_exists($dir))

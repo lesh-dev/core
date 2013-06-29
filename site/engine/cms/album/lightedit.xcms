@@ -1,118 +1,126 @@
-              <?php
-                $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
-                if($_POST["Album-Upload-image"]||$_POST["Album-S-Upload-image"])
-                {
-                  $LIST["name"] = @$_POST["image-name"];
-                  $LIST["comment"] = @$_POST["image-comment"];
-                  $LIST["cat"] = @$_POST["image-cat"];
-                  if(!$LIST["cat"])$LIST["cat"]="none";
-                  $name = $LIST["cat"].'-'.time();
-                }
-                if(@$_POST["Album-Upload-image"])
-                {
-                  $lpic = "$dir/$name.pic";
-                  $bpic = "$dir/$name.jpeg";
-                  $spic = "$dir/$name-preview.jpeg";
-                  @make640($_FILES["image"]["tmp_name"],$bpic);
-                  @preview($_FILES["image"]["tmp_name"],$spic);
-                }
-                if(@$_POST["Album-S-Upload-image"])
-                {
-                  $lpic = "$dir/$name.pic";
-                  $bpic = "$dir/$name.jpeg";
-                  $spic = "$dir/$name-preview.jpeg";
-                  copy($_FILES["big-image"]["tmp_name"],$bpic);
-                  copy($_FILES["small-image"]["tmp_name"],$spic);
-                }
-                if($_POST["Album-Upload-image"]||$_POST["Album-S-Upload-image"])
-                {
-                  @$LIST["picname"] = $bpic;
-                  $LIST["prename"] = $spic;
-                  $LIST["owner"] = xcms_user()->login();
-                  if(!file_exists("$dir/{$LIST["cat"]}.cat"))
-                  {
-                    $f = fopen("$dir/{$LIST["cat"]}.cat","w");
-                    fputs($f," ");
-                    fclose($f);
-                  }
-                  saveList($LIST,$lpic);
-                }
-                if(@$_POST["Album-Delete-image"])
-                {
-                  $name = stripslashes(@$_POST["name"]);
-                  $dlst = getList($name);
-                  @unlink($name);
-                  @unlink($dlst["picname"]);
-                  @unlink($dlst["prename"]);
-                }
-                if(@$_POST["album-cat"])
-                {
-                  foreach(@$_POST as $key=>$value)
-                  {
-                    if(strstr($key, "album-chcat-"))
-                    {
-                      $rcat = str_replace("album-chcat-","",$key);
-                      $f = fopen("$dir/$rcat.cat","w");
-                      fputs($f,$value);
-                      fclose($f);
-                      if($value == "__FORGET") unlink("$dir/$rcat.cat");
-                    }
-                  }
-                }
+<?php
+    $dir = xcms_get_page_path();
 
-                $catlist = glob("$dir/*.cat");
-                echo "<h3>Категории</h3><form method=\"post\">";
-                echo "<font size=\"-2\">* Для удаления категории введите имя \"__FORGET\"</font>";
-                echo "<table cellspacing=0 cellpadding=0>";
-                foreach($catlist as $value)
-                {
-                  $caption = file_get_contents($value);
-                  $cat = str_replace(".cat","",$value);
-                  $cat = str_replace("$dir/","",$cat);
-                  echo "<tr><td>$cat<td><input name=\"album-chcat-$cat\" value=\"$caption\">";
-                }
-                echo "</table><input name=\"album-cat\" type=\"submit\" value=\"Изменить\"></form>";
-                $piclist = glob("$dir/*.pic");
-                echo '<h3>Фотографии</h3><table>';
-                foreach ($piclist as $key=>$value)
-                {
-                  $lst = getList($value);
-                  $imgv = str_replace(".pic","",$value);
-                  $imgv = str_replace("$dir/","",$imgv);
-                	echo "<tr>
-                    <td valign=\"top\"><b><a target=\"_blank\" href=\"?page=$pageid&amp;ref=showphoto&amp;img=$imgv\">{$lst["name"]}</a></b>
-                    <td><i>{$lst["comment"]}</i>
-                    <td><u>{$lst["cat"]}</u>
-                    <td><input value=\"{$lst["picname"]}\">
-                    <td><input value=\"{$lst["prename"]}\">
+    if ($_POST["Album-Upload-image"] || $_POST["Album-S-Upload-image"])
+    {
+        $LIST["name"] = @$_POST["image-name"];
+        $LIST["comment"] = @$_POST["image-comment"];
+        $LIST["cat"] = @$_POST["image-cat"];
+        if(!$LIST["cat"])$LIST["cat"]="none";
+        $name = $LIST["cat"].'-'.time();
+    }
 
-                    <td>
-                      <form method=\"post\">
-                        <input type=\"hidden\" name=\"name\" value=\"$value\">
-                        <input type=\"submit\" name=\"Album-Delete-image\" value=\"Удалить\">
-                      </form>
-                  ";
-                }
-                echo '</table>';
-              ?>
-              <h4>Добавить картинку</h4>
-              <form enctype="multipart/form-data" method="post">
-               <table>
-                <tr><td>Имя<td><input name="image-name">
-                <tr><td>Комментарий<td><input name="image-comment">
-                <tr><td>Категория<td><input name="image-cat">
-                <tr><td>Файл<td><input type="file" accept="image/*" name="image">
-               </table>
-                <input type="submit" name="Album-Upload-image" value="Загрузить">
-              </form>
-	      Если Вы не доверяете автоматической пережимке - укажите preview самостоятельно
-              <form enctype="multipart/form-data" method="post">
-               <table>
-                <tr><td>Имя<td><input name="image-name">
-                <tr><td>Комментарий<td><input name="image-comment">
-                <tr><td>Категория<td><input name="image-cat">
-                <tr><td>Картинка<td><input type="file" accept="image/*" name="big-image">
-                <tr><td>Маленькая картинка<td><input type="file" accept="image/*" name="small-image">
-               </table>
-                <input type="submit" name="Album-S-Upload-image" value="Загрузить">
-              </form>
+    if (@$_POST["Album-Upload-image"])
+    {
+        $lpic = "$dir/$name.pic";
+        $bpic = "$dir/$name.jpeg";
+        $spic = "$dir/$name-preview.jpeg";
+        @make640($_FILES["image"]["tmp_name"], $bpic);
+        @preview($_FILES["image"]["tmp_name"], $spic);
+    }
+
+    if (@$_POST["Album-S-Upload-image"])
+    {
+        $lpic = "$dir/$name.pic";
+        $bpic = "$dir/$name.jpeg";
+        $spic = "$dir/$name-preview.jpeg";
+        copy($_FILES["big-image"]["tmp_name"], $bpic);
+        copy($_FILES["small-image"]["tmp_name"], $spic);
+    }
+
+    if($_POST["Album-Upload-image"] || $_POST["Album-S-Upload-image"])
+    {
+        @$LIST["picname"] = $bpic;
+        $LIST["prename"] = $spic;
+        $LIST["owner"] = xcms_user()->login();
+        if(!file_exists("$dir/{$LIST["cat"]}.cat"))
+        {
+            $f = fopen("$dir/{$LIST["cat"]}.cat", "w");
+            fputs($f, " ");
+            fclose($f);
+        }
+        saveList($LIST, $lpic);
+    }
+
+    if(@$_POST["Album-Delete-image"])
+    {
+        $name = stripslashes(@$_POST["name"]);
+        $dlst = getList($name);
+        @unlink($name);
+        @unlink($dlst["picname"]);
+        @unlink($dlst["prename"]);
+    }
+
+    if(@$_POST["album-cat"])
+    {
+        foreach(@$_POST as $key=>$value)
+        {
+            if(strstr($key, "album-chcat-"))
+            {
+                $rcat = str_replace("album-chcat-", "", $key);
+                $f = fopen("$dir/$rcat.cat", "w");
+                fputs($f, $value);
+                fclose($f);
+                if ($value == "__FORGET") unlink("$dir/$rcat.cat");
+            }
+        }
+    }
+
+    $catlist = glob("$dir/*.cat");
+    echo "<h3>Категории</h3><form method=\"post\">";
+    echo "<font size=\"-2\">* Для удаления категории введите имя \"__FORGET\"</font>";
+    echo "<table cellspacing=\"0\" cellpadding=\"0\">";
+    foreach ($catlist as $value)
+    {
+        $caption = file_get_contents($value);
+        $cat = str_replace(".cat", "", $value);
+        $cat = str_replace("$dir/", "", $cat);
+        echo "<tr><td>$cat<td><input name=\"album-chcat-$cat\" value=\"$caption\">";
+    }
+    echo "</table><input name=\"album-cat\" type=\"submit\" value=\"Изменить\"></form>";
+    $piclist = glob("$dir/*.pic");
+    echo '<h3>Фотографии</h3><table>';
+    foreach ($piclist as $key=>$value)
+    {
+        $lst = getList($value);
+        $imgv = str_replace(".pic", "", $value);
+        $imgv = str_replace("$dir/", "", $imgv);
+        echo "<tr>
+            <td valign=\"top\"><b><a target=\"_blank\" href=\"?page=$pageid&amp;ref=showphoto&amp;img=$imgv\">{$lst["name"]}</a></b></td>
+            <td><i>{$lst["comment"]}</i></td>
+            <td><u>{$lst["cat"]}</u></td>
+            <td><input value=\"{$lst["picname"]}\"></td>
+            <td><input value=\"{$lst["prename"]}\"></td>
+
+            <td>
+                <form method=\"post\">
+                    <input type=\"hidden\" name=\"name\" value=\"$value\" />
+                    <input type=\"submit\" name=\"Album-Delete-image\" value=\"Удалить\" />
+                </form>
+            </td>";
+    }
+    echo '</table>';
+?>
+
+<h4>Добавить картинку</h4>
+<form enctype="multipart/form-data" method="post">
+    <table>
+        <tr><td>Имя</td> <td><input name="image-name" /></td></tr>
+        <tr><td>Комментарий</td> <td><input name="image-comment" /></td></tr>
+        <tr><td>Категория</td> <td><input name="image-cat" /></td></tr>
+        <tr><td>Файл</td> <td><input type="file" accept="image/*" name="image" /></td></tr>
+    </table>
+    <input type="submit" name="Album-Upload-image" value="Загрузить" />
+</form>
+
+Если Вы не доверяете автоматической пережимке - укажите preview самостоятельно
+<form enctype="multipart/form-data" method="post">
+    <table>
+        <tr><td>Имя</td> <td><input name="image-name" /></td></tr>
+        <tr><td>Комментарий</td> <td><input name="image-comment" /></td></tr>
+        <tr><td>Категория</td> <td><input name="image-cat" /></td></tr>
+        <tr><td>Картинка</td> <td><input type="file" accept="image/*" name="big-image" /></td></tr>
+        <tr><td>Маленькая картинка</td> <td><input type="file" accept="image/*" name="small-image" /></td></tr>
+    </table>
+    <input type="submit" name="Album-S-Upload-image" value="Загрузить" />
+</form>
