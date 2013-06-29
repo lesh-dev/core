@@ -29,6 +29,16 @@ function xcms_get_page_path()
   * Retrieve current page directory
   * Assumes @name pageid and @name SETTINGS are defined
   **/
+function xcms_get_page_prefix($need_slash = true)
+{
+    global $SETTINGS;
+    return "{$SETTINGS["datadir"]}cms/pages" . ($need_slash ? "/" : "");
+}
+
+/**
+  * Retrieve current page directory
+  * Assumes @name pageid and @name SETTINGS are defined
+  **/
 function xcms_get_page_menu_icon()
 {
     global $SETTINGS;

@@ -17,7 +17,7 @@
         $add_href_params = "&ref=$ref_value";
 
     xcms_menu(
-        "{$SETTINGS["datadir"]}cms/pages",
+        xcms_get_page_prefix(false),
         file($template_file),
         0,
         $add_href_params,
