@@ -1,88 +1,87 @@
 <?php
-  $datadir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
-  $cat = @$_GET["cat"];
-  $piclist = glob("$datadir/$cat*.pic");  
-  $qs = "";
-  $qsm = "";
-  
-  $photono = @$_GET["photono"];
-  if(!$photono)$photono=0;
-  
-  $photoh = @$_GET["photoH"];
-  if(!$photoH)$photoH=5;
-  
-  $onPage = @$_GET["onPage"];
-  if(!$onPage)$onPage=15;
-  
-  foreach (@$_GET as $key=>$value)
-  {
-    if($key=="cat") continue;
-    if($key=="img") continue;
-    if($key=="photono") continue;
-    if($key=="ref") $qsm = $qsm."$key=showphoto&amp;";
-    else            $qsm = $qsm."$key=$value&amp;";
-    $qs = $qs."$key=$value&amp;";
-  }
+    $datadir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
+    $cat = @$_GET["cat"];
+    $piclist = glob("$datadir/$cat*.pic");
+    $qs = "";
+    $qsm = "";
 
-  $catlist = glob("$datadir/*.cat");
-  //echo "<table width=\"100%\"><tr>";
-  //echo "<td align=\"left\">";
-  $plus = $photono-1;
-  if($photono!=0) echo "<a href=\"?{$qs}photono=s$plus\"><==</a>";    
-  //echo "<td>";
-  //echo "<table><td><p class=\"text\">Категории: <a href=\"?{$qs}\">Все</a></p>";
-  echo "<p class=\"extern_link\">Категории: <a href=\"?{$qs}\">Все</a>";
-  foreach($catlist as $key=>$value)
-  {
-    $catname = file_get_contents($value);
-    $value = str_replace($datadir."/","",$value);
-    $value = str_replace(".cat","",$value);
-    if($value=="none") continue;
-    if($catname=="") $catname=$value;
-    if($catname==" ")$catname=$value; 
-    echo " <a href=\"?{$qs}cat=$value\">$catname</a>";
-  }  
-  //echo "</p></td></table>";
-  echo "</p>";
-  //echo "<td align=\"right\">";
-  $plus = $photono+1;
-  if(count($piclist)>($photono+1)*$onPage) echo "<a href=\"?{$qs}photono=$plus\">==></a>";
-  //echo "</table>";
-  if(@$_GET["img"])
-  {
-    $list = getList("$datadir/{$_GET["img"]}.pic");
-    $name = $list["name"];
-    $comment = $list["comment"];
-    echo "<center><div><b>$name</b></div><img src=\"$datadir/{$_GET["img"]}.jpeg\"><i>$c  omment</i></center>";
-    @$list["views"]++;
-    saveList($list,"$datadir/{$_GET["img"]}.pic");    
-  }
-  else
-  {
+    $photono = @$_GET["photono"];
+    if(!$photono)$photono=0;
 
-    $lineBreaker = 5;
-    $picnumber=0;
-    $i=5;
-    echo "<table width=\"100%\">";
-    foreach($piclist as $key=>$value)
+    $photoh = @$_GET["photoH"];
+    if(!$photoH)$photoH=5;
+
+    $onPage = @$_GET["onPage"];
+    if(!$onPage)$onPage=15;
+
+    foreach (@$_GET as $key=>$value)
     {
-      $picnumber++;    
-      if($picnumber<=$photono*$onPage) continue;
-      if($picnumber>($photono+1)*($onPage)) break;
-      
-      $list = getList($value);
-      //$pre = $list["prename"];
-      $pic = $list["picname"];
-      $value = str_replace(".pic","",$value);
-      $pre = "$value-preview.jpeg";
-      $value = str_replace("$datadir/","",$value);      
-      if($i>=5) {echo "<tr>";$i=0;}
-      $title = $list["name"];
-      $views = $list["views"];
-      if(!$views)$views=0;
-      echo "<td align=\"center\" valign=\"top\">&nbsp;<br><a  target=\"_blank\" class=\"photolink\" href=\"?{$qsm}img=$value\"><img border=\"0\" src=\"$pre\" alt=\" \"><br>$title<br><font size=\"-2\">$views просмотров</font></a>";
-      $i++;
+        if($key=="cat") continue;
+        if($key=="img") continue;
+        if($key=="photono") continue;
+        if($key=="ref") $qsm = $qsm."$key=showphoto&amp;";
+        else $qsm = $qsm."$key=$value&amp;";
+        $qs = $qs."$key=$value&amp;";
     }
-    echo "</table>";
-  }
+
+    $catlist = glob("$datadir/*.cat");
+    $plus = $photono - 1;
+    if ($photono)
+        echo "<a href=\"?{$qs}photono=s$plus\"><==</a>";
+    echo "<p class=\"extern_link\">Категории: <a href=\"?{$qs}\">Все</a>";
+    foreach($catlist as $key=>$value)
+    {
+        $catname = file_get_contents($value);
+        $value = str_replace($datadir."/", "", $value);
+        $value = str_replace(".cat", "", $value);
+        if ($value=="none") continue;
+        if ($catname=="") $catname=$value;
+        if ($catname==" ") $catname=$value;
+        echo " <a href=\"?{$qs}cat=$value\">$catname</a>";
+    }
+    echo "</p>";
+    $plus = $photono+1;
+    if (count($piclist) > ($photono+1)*$onPage)
+        echo "<a href=\"?{$qs}photono=$plus\">==></a>";
+
+    if(@$_GET["img"])
+    {
+        $list = getList("$datadir/{$_GET["img"]}.pic");
+        $name = $list["name"];
+        $comment = $list["comment"];
+        echo "<center><div><b>$name</b></div><img src=\"$datadir/{$_GET["img"]}.jpeg\"><i>$c  omment</i></center>";
+        @$list["views"]++;
+        saveList($list, "$datadir/{$_GET["img"]}.pic");
+    }
+    else
+    {
+        $lineBreaker = 5;
+        $picnumber = 0;
+        $i = 5;
+        echo "<table width=\"100%\">";
+        foreach($piclist as $key=>$value)
+        {
+            $picnumber++;
+            if ($picnumber<=$photono*$onPage)
+                continue;
+            if ($picnumber>($photono+1)*($onPage))
+                break;
+
+            $list = getList($value);
+            //$pre = $list["prename"];
+            $pic = $list["picname"];
+            $value = str_replace(".pic", "", $value);
+            $pre = "$value-preview.jpeg";
+            $value = str_replace("$datadir/", "", $value);
+            if($i>=5) {echo "<tr>";$i=0;}
+            $title = $list["name"];
+            $views = $list["views"];
+            if(!$views)$views=0;
+            echo "<td align=\"center\" valign=\"top\">&nbsp;<br />".
+                "<a target=\"_blank\" class=\"photolink\" href=\"?{$qsm}img=$value\">".
+                "<img border=\"0\" src=\"$pre\" alt=\" \"><br />$title<br><font size=\"-2\">$views просмотров</font></a>";
+            $i++;
+        }
+        echo "</table>";
+    }
 ?>

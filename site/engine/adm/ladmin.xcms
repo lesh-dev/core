@@ -13,28 +13,29 @@
 <?php
     if(@$_POST["delete-section"])
     {
-        $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
+        $dir = xcms_get_page_path($pageid);
         $list = glob("$dir/*", GLOB_ONLYDIR);
-        if($list)
+        if ($list)
         {
             echo '<script>alert("Не могу удалить! Сначала удалите все подразделы!");</script>';
         }
         else
         {
             $list = glob("$dir/*");
-            if($list) foreach ($list as $key=>$value)
+            if ($list)
             {
-                unlink($value);
+                foreach ($list as $key=>$value)
+                    unlink($value);
             }
             rmdir($dir);
             echo '<script>alert("Удалено");</script>';
             translate("<! redir ladmin 0!>");
-            $pageid="index";
-            for($i=strlen($pageid)-1;$i>=0; $i--)
+            $pageid = "index";
+            for ($i = strlen($pageid) - 1; $i >= 0; $i--)
             {
-                if($pageid[$i]=='/')
+                if ($pageid[$i]=='/')
                 {
-                    $pageid[$i]=substr($pageid, 0, $i-1);
+                    $pageid[$i] = substr($pageid, 0, $i - 1);
                     break;
                 }
             }
@@ -121,8 +122,7 @@
         include(translate("<! cms/light_icon_editor !>"));
     else if(@$_GET["mode"]=="obsolete_settings")
     {
-        // TODO: rewrite keys shmatrix
-        $editfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/info";
+        $editfile = xcms_get_page_info_name();
         include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
     }
     else if(@$_GET["mode"]=="img_edit" )
