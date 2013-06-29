@@ -1,17 +1,5 @@
 <?php
 /**
-  * Retrieve current page content location
-  * Assumes @name pageid and @name SETTINGS are defined
-  * TODO: Should be placed in the proper file (cms-related)
-  **/
-function xcms_get_info_file_name()
-{
-    global $SETTINGS;
-    global $pageid;
-    return "{$SETTINGS["datadir"]}cms/pages/$pageid/info";
-}
-
-/**
   * Makes checkbox checked attribute with proper generic value
   **/
 function xcms_checkbox_attr($val)

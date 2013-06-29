@@ -5,11 +5,10 @@
             href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'ladmin', 'page'=>$pageid)); ?>">Редактировать</a><?php
     }
 
-    $list = glob("{$SETTINGS["datadir"]}cms/pages/$pageid/*", GLOB_ONLYDIR);
-    foreach($list as $value)
+    $list = xcms_get_subpages($pageid);
+    foreach ($list as $subpage_id)
     {
-        $source = "$value/content";
-        $pg = str_replace("{$SETTINGS["datadir"]}/cms/pages/", "", $value);
-        include(translate("<! cms/readtext --markdown --limit=220 --next-link=index.php?page=$pg --next-text=[подробнее...] !>"));
+        $source = xcms_get_page_content_name($subpage_id);
+        include(translate("<! cms/readtext --markdown --limit=220 --next-link=index.php?page=$subpage_id --next-text=[подробнее...] !>"));
     }
 ?>

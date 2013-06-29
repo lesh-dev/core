@@ -34,8 +34,7 @@
 
         $INFO["view"] = $nview;
         $INFO["edit"] = $nedit;
-        $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
-        xcms_save_list("$dir/info", $INFO);
+        xcms_save_list(xcms_get_info_file_name(), $INFO);
     }
     $ag = xcms_all_groups();
     $view = explode(" ",trim($INFO["view"]));

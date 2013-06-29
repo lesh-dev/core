@@ -1,13 +1,7 @@
 <?php
-    // Есть основательное подозрение, что этот тип content-а не используется по-существу
+    // Есть подозрение, что этот тип content-а не используется по-существу
     // Выпиливать пока не надо, но нужно иметь это ввиду.
-    if(@$_GET["vtype"]=="")
-    {
-        include(translate("<! var editfile {$SETTINGS["datadir"]}cms/pages/$pageid/content !><! edit/file xz -h !>"));
-    }
-?>
-<?php
+    $source = xcms_get_page_content_name($pageid);
+    include(translate("<! var editfile $source !><! edit/file xz -h !>"));
     $editfile = "$content_dir/cms/pages/$pageid/tags";
 ?>
-
-
