@@ -119,7 +119,7 @@ function getTagList($file)
                 continue;
             }
             $arr = explode("=", $value);
-            $taglist[$arr[0]] = $arr[1];
+            $taglist[trim($arr[0])] = trim($arr[1]);
         }
         return $taglist;
     }
@@ -127,7 +127,7 @@ function getTagList($file)
     {
         $taglist = array();
         include($file);
-        $taglist["_NAME"]=$tagname;
+        $taglist["_NAME"] = $tagname;
         return $taglist;
     }
 }

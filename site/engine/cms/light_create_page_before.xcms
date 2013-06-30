@@ -10,9 +10,9 @@
         }
 
         if (@$_POST["global"])
-            $dir = "{$SETTINGS["datadir"]}cms/pages/{$_POST["create-name"]}";
+            $dir = xcms_get_page_path($_POST["create-name"]);
         else
-        $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid/{$_POST["create-name"]}";
+            $dir = xcms_get_page_path("$pageid/".$_POST["create-name"]);
 
         mkdir($dir);
         @$LIST["owner"] = xcms_user()->login();
@@ -26,10 +26,10 @@
         @$LIST["view"] = "";
         foreach($_POST as $key=>$value)
         {
-            if (substr($key,0,5)=="edit_")
-                $LIST["edit"] = $LIST["edit"]. " " . substr($key,5);
-            if(substr($key,0,5)=="view_")
-                $LIST["view"] = $LIST["view"]. " " . substr($key,5);
+            if (substr($key, 0, 5)=="edit_")
+                $LIST["edit"] = $LIST["edit"]. " " . substr($key, 5);
+            if(substr($key, 0, 5)=="view_")
+                $LIST["view"] = $LIST["view"]. " " . substr($key, 5);
         }
 
         if (@$_POST["menu-title"])

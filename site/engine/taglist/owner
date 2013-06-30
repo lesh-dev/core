@@ -1,11 +1,12 @@
 <?php
-  global $SETTINGS;
-  $taglistt = glob("{$SETTINGS["datadir"]}auth/usr/*.usr");
-  foreach($taglistt as $key=>$value)
-  {
-    $value = str_replace("{$SETTINGS["datadir"]}auth/usr/","",$value);
-    $value = str_replace(".usr","",$value);
-    $taglist[$value]=$value;
-  }
-  $tagname = "Владелец раздела";
+    global $SETTINGS;
+    $usr_prefix = "{$SETTINGS["datadir"]}auth/usr/";
+    $list = glob("$usr_prefix*.usr");
+    foreach ($list as $key=>$value)
+    {
+        $value = str_replace($usr_prefix, "", $value);
+        $value = str_replace(".usr", "", $value);
+        $taglist[$value] = $value;
+    }
+    $tagname = "Владелец раздела";
 ?>
