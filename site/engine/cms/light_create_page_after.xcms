@@ -14,9 +14,6 @@
 </tr>
 <?php
     $list = getTagList("{$SETTINGS["engine_dir"]}taglist/type");
-    echo "<pre>";
-    print_r($list);
-    echo "</pre>";
     echo "<tr><td>Тип содержимого<td><select name=\"create-pagetype\">";
     foreach ($list as $key=>$value)
     {
