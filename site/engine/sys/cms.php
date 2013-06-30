@@ -15,21 +15,27 @@ function xcms_get_info_file_name()
 }
 
 /**
-  * Retrieve current page directory
-  * Assumes @name pageid and @name SETTINGS are defined
+  * Retrieve page directory (current page by default)
+  * Assumes @name SETTINGS (and @name pageid in case of no arguments) are defined
+  * @param $page_id page identifier in case of non-current page
+  * @return complete page path
   **/
-function xcms_get_page_path()
+function xcms_get_page_path($page_id = false)
 {
     global $SETTINGS;
-    global $pageid;
-    return "{$SETTINGS["datadir"]}cms/pages/$pageid";
+    if ($page_id === false)
+    {
+        global $pageid;
+        $page_id = $pageid;
+    }
+    return "{$SETTINGS["datadir"]}cms/pages/$page_id";
 }
 
 /**
   * Retrieve current page directory
   * Assumes @name pageid and @name SETTINGS are defined
   **/
-function xcms_get_page_prefix($need_slash = true)
+function xcms_get_page_root($need_slash = true)
 {
     global $SETTINGS;
     return "{$SETTINGS["datadir"]}cms/pages" . ($need_slash ? "/" : "");

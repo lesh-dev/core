@@ -3,7 +3,7 @@
     {
         global $SETTINGS, $pageid, $web_prefix;
 
-        $page_prefix = xcms_get_page_prefix(true);
+        $page_prefix = xcms_get_page_root(true);
         $pageiid = str_replace($page_prefix, "", $init_path);
         $aux_class = "";
         $flags = "";
