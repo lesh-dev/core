@@ -12,18 +12,25 @@
     </td>
     <td><input name="create-name" value="" /></td>
 </tr>
+<tr>
+    <td>Тип содержимого</td>
+    <td>
 <?php
-    $list = getTagList("{$SETTINGS["engine_dir"]}taglist/type");
-    echo "<tr><td>Тип содержимого<td><select name=\"create-pagetype\">";
+    $list = xcms_get_tag_list("type");
+    echo "<select name=\"create-pagetype\">";
     foreach ($list as $key=>$value)
     {
-        if($key == "_NAME") continue;
+        if ($key == "_NAME") continue;
         $s = ($value == "content" || $key == "content") ? 'selected="selected" checked="checked" ' : '';
         echo "<option name=\"$value\" $s value=\"$value\">$key</option>";
     }
+?>
+    </td>
+</tr>
+<tr>
+<?php
     $chk_hidden = xcms_checkbox_attr("no");
 ?>
-<tr>
     <td>Скрытый раздел</td>
     <td><input type="checkbox" <?php echo $chk_hidden; ?> name="menu-hidden"/>
 <tr>

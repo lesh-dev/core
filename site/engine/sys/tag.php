@@ -104,8 +104,15 @@ function xcms_convert_multiline($value)
 }
 
 
-function getTagList($file)
+function xcms_tag_exists($tag_name)
 {
+    $file = "{$SETTINGS["engine_dir"]}taglist/$tag_name";
+    return file_exists($file);
+}
+
+function xcms_get_tag_list($tag_name)
+{
+    $file = "{$SETTINGS["engine_dir"]}taglist/$tag_name";
     $filec = file_get_contents($file);
     $filec = str_replace("\r", "", $filec);
     if(substr($filec, 0, 5) != "<?php")
@@ -234,9 +241,9 @@ function xcms_editlist_form($file, $skip_params = "", $flags = "")
             continue;
 
         $id = "edtg_$key";
-        if (file_exists("{$SETTINGS["engine_dir"]}taglist/$key"))
+        if (xcms_tag_exists($key))
         {
-            $taglist = getTagList("{$SETTINGS["engine_dir"]}taglist/$key"); ?>
+            $taglist = xcms_get_tag_list($key); ?>
 
             <tr><td><?php echo $taglist["_NAME"]; ?></td><td><?php
 
