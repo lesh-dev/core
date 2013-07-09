@@ -120,10 +120,7 @@
             $string = str_replace("!>", "#>", $string);
             xcms_parse_string($string, $f);
             fclose($f);
-            $btname = "$fname.backtrace";
-            $f = fopen($btname, "w");
-            fputs($f, $string);
-            fclose($f);
+            xcms_write("$fname.backtrace", $string);
         }
         return($fname);
     }

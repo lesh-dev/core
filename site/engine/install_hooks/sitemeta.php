@@ -67,16 +67,15 @@
       **/
     function install($config)
     {
-        $f = fopen("settings.php", "a+");
-        if (!$f)
+        $result = xcms_append("settings.php",
+            "\n<?php /* This block was inserted by installer -- sitemeta.php.".
+            "\nYou may edit it, but it can be regenerated. */".
+            "\n   \$meta_site_name = '".$config["site_name"]."';".
+            "\n   \$meta_site_url = '".$config["site_url"]."';".
+            "\n   \$meta_site_mail = '".$config["webmaster_mail"]."';".
+            "\n/* --- */ ?>\n");
+        if (!$result)
             return "Cannot open 'settings.php' for append. ";
-
-        fputs($f, "\n<?php /* This block was inserted by installer -- sitemeta.php.");
-        fputs($f, "\nYou may edit it, but it can be regenerated. */");
-        fputs($f, "\n   \$meta_site_name = '".$config["site_name"]."';");
-        fputs($f, "\n   \$meta_site_url = '".$config["site_url"]."';");
-        fputs($f, "\n   \$meta_site_mail = '".$config["webmaster_mail"]."';");
-        fputs($f, "\n/* --- */ ?>\n");
         return true;
     }
     } // class

@@ -85,12 +85,10 @@
         $u->add_to_group($target->login(), "admin");
         $u->add_to_group($target->login(), "ank");
         $u->add_to_group($target->login(), "editor");
-        $f = fopen("settings.php", "a");
-        if (!$f)
+        if (!xcms_append("settings.php",
+            "<?php \$auth_vk_id=\"${config['vk_id']}\"; ?>\n".
+            "<?php \$auth_vk_rights=\"${config['vk_rights']}\"; ?>\n"))
             return "Cannot open settings.php for append. ";
-        fputs($f, "<?php \$auth_vk_id=\"${config['vk_id']}\"; ?>\n");
-        fputs($f, "<?php \$auth_vk_rights=\"${config['vk_rights']}\"; ?>\n");
-        fclose($f);
         return true;
     }
     } // class AuthInstallHook

@@ -1,9 +1,5 @@
 <?php
-  $LIST["installed"] = "ok";
-  $LIST["immidiate"] = "false";
-  
-  $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu","w");
-  fputs($f,"true");
-  fclose($f);
-  
+    $LIST["installed"] = "ok";
+    $LIST["immidiate"] = "false";
+    xcms_write("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu", "true");
 ?>

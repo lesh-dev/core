@@ -155,9 +155,7 @@ if ($need)
         }
         $text = $text."<a href=\"$nextlink\">$nexttext</a>";
     }
-    $f = fopen($compiled, "w");
-    fputs($f, $text);
-    fclose($f);
+    xcms_write($compiled, $text);
 }
 
 include($compiled);

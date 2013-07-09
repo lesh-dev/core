@@ -64,34 +64,10 @@
             return "Apache 'mod_rewrite' module is not enabled. Please enable it in your Apache webserver configuration.";
 
         @mkdir(".prec", 0777);
-        if($f = @fopen(".prec/.htaccess", "a"))
-        {
-            fputs($f, "deny from all");
-            $PERM["prec"] = true;
-            fclose($f);
-        }
-        else $PERM["prec"] = false;
-
-        if($f = @fopen(".htaccess", "a"))
-        {
-            $PERM["htaccess"] = true;
-            fclose($f);
-        }
-        else $PERM["htaccess"] = false;
-
-        if($f = @fopen("install.php", "a"))
-        {
-            $PERM["install"] = true;
-            fclose($f);
-        }
-        else $PERM["install"] = false;
-
-        if($f = @fopen("settings.php", "a"))
-        {
-            $PERM["settings"] = true;
-            fclose($f);
-        }
-        else $PERM["settings"] = false;
+        $PERM["prec"] = xcms_append(".prec/.htaccess", "deny from all");
+        $PERM["htaccess"] = xcms_append(".htaccess", "");
+        $PERM["install"] = xcms_append("install.php", "");
+        $PERM["settings"] = xcms_append("settings.php", "");
 
         if(!$PERM["htaccess"])
         {

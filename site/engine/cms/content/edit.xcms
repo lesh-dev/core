@@ -23,10 +23,8 @@
         <?php
         if (@$_POST["change-template"])
         {
-            $f = fopen($source, "w");
             $template_name = xcms_get_template_name($_POST["change-template"]);
-            fputs($f, @file_get_contents($template_name));
-            fclose($f);
+            xcms_write($source, @file_get_contents($template_name));
             echo "Заменено: <tt>$source</tt> на <tt>$template_name</tt>";
         }
         ?>

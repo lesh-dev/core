@@ -33,12 +33,8 @@
         @$LIST["picname"] = $bpic;
         $LIST["prename"] = $spic;
         $LIST["owner"] = xcms_user()->login();
-        if(!file_exists("$dir/{$LIST["cat"]}.cat"))
-        {
-            $f = fopen("$dir/{$LIST["cat"]}.cat", "w");
-            fputs($f, " ");
-            fclose($f);
-        }
+        if (!file_exists("$dir/{$LIST["cat"]}.cat"))
+            xcms_write("$dir/{$LIST["cat"]}.cat", " ");
         saveList($LIST, $lpic);
     }
 
@@ -58,9 +54,7 @@
             if(strstr($key, "album-chcat-"))
             {
                 $rcat = str_replace("album-chcat-", "", $key);
-                $f = fopen("$dir/$rcat.cat", "w");
-                fputs($f, $value);
-                fclose($f);
+                xcms_write("$dir/$rcat.cat", $value);
                 if ($value == "__FORGET") unlink("$dir/$rcat.cat");
             }
         }

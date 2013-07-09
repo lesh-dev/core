@@ -13,21 +13,13 @@
         }
         else
         {
-            $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/ftype","w");
-            fputs($f,@$_FILES["upload"]["type"]);
-            fclose($f);
-            $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/fname","w");
-            fputs($f,@$_FILES["upload"]["name"]);
-            fclose($f);
-            copy(@$_FILES["upload"]["tmp_name"],"{$SETTINGS["datadir"]}cms/pages/$pageid/stream");
+            xcms_write("{$SETTINGS["datadir"]}cms/pages/$pageid/ftype", @$_FILES["upload"]["type"]);
+            xcms_write("{$SETTINGS["datadir"]}cms/pages/$pageid/fname", @$_FILES["upload"]["name"]);
+            copy(@$_FILES["upload"]["tmp_name"], "{$SETTINGS["datadir"]}cms/pages/$pageid/stream");
             if(@$_POST["mlock-section"])
-            @unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu");
+                @unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu");
             else
-            {
-                $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu","w");
-                fputs($f," ");
-                fclose($f);
-            }
+                xcms_write("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu", " ");
             if(@$_POST["immidiate-file"])
                 $INFO["immidiate"] = "true";
             else

@@ -1,11 +1,8 @@
 <# auth/ #admin #>
 <?php
     if (@$_POST["taglist-new"])
-    {
-        $f = fopen("{$SETTINGS["engine_dir"]}taglist/".@$_POST["taglist-source"], "w");
-        fputs($f, "");
-        fclose($f);
-    }
+        xcms_write("{$SETTINGS["engine_dir"]}taglist/".@$_POST["taglist-source"], "");
+
     $tagfiles = glob("{$SETTINGS["engine_dir"]}taglist/*");
     foreach ($tagfiles as $value)
     {

@@ -30,9 +30,7 @@ function xcms_create_contlist()
     $list["menu-locked"] = "yes";
 
     xcms_save_list("$dir/info", $list);
-    $f = fopen("$dir/content", "w");
-    fwrite($f, $_POST["content"]);
-    fclose($f);
+    xcms_write("$dir/content", $_POST["content"]);
 
     ?>
     <meta http-equiv="refresh" content="2;URL=/<# web_prefix #>?<?php echo xcms_url(array('page'=>$item_pageid, 'ref'=>'ladmin'));?>" />

@@ -6,17 +6,12 @@
 
     xcms_save_list(xcms_get_info_file_name(), $INFO);
     $template_name = "{$SETTINGS["datadir"]}cms/pages/$pageid/template";
-    $f = fopen($template_name, "w");
-    if ($f)
+    if (!xcms_write(
+        $template_name,
+        '<div class="newstitle">@@DATE@. Заголовок новости</div>'."\n".
+        '<p class="text">Текст новости</p>'."\n".
+        '<div class="signature">@@AUTHOR@</div>')
     {
-        fputs($f,
-            '<div class="newstitle">@@DATE@. Заголовок новости</div>'."\n".
-            '<p class="text">Текст новости</p>'."\n".
-            '<div class="signature">@@AUTHOR@</div>');
-        fclose($f);
-    }
-    else
-    {
-        xcms_log(0, "[NEWS INSTALLER]: Cannot find template file '$template_name'");
+        xcms_log(0, "[NEWS INSTALLER]: Cannot write template file '$template_name'");
     }
 ?>

@@ -28,9 +28,7 @@
     function xcms_log($log_level, $message)
     {
         global $engine_dir;
-        $f = fopen(xcms_log_filename(), "a+");
-        fwrite($f, "[".date('Y.m.d H:i:s')."]: $message\n");
-        fclose($f);
+        xcms_append(xcms_log_filename(), "[".date('Y.m.d H:i:s')."]: $message\n");
     }
 
     /**

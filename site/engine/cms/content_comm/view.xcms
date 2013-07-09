@@ -5,15 +5,12 @@
     {
         $auth_noaccess = 'Вы можете добавлять комментарии, только зарегистрировавшись.';
         include(translate('<! auth/ #registered !>'));
-        $f = fopen($commfile, "a");
         $date = time();
         $name = @$_POST["commentator"];
         $html = @$_POST["comment"];
-        $html = stripslashes($html);
         include(translate("<! bbcode b,i,u !>"));
         $name = str_replace(" ", "_", $name);
-        fputs($f, "\n$date $name $html");
-        fclose($f);
+        xcms_append($commfile, "\n$date $name $html");
         echo "<h3>Успешно</h3>Комментарий добавлен. Подождите.";
         echo "<meta http-equiv=\"Refresh\" content=\"0; URL=?page=$pageid\">";
     }
