@@ -18,9 +18,11 @@ function xcms_write($file_name, $contents)
     $f = fopen($file_name, "wb");
     if (!$f)
         return false;
-    fwrite($f, $contents);
-    fclose($f);
-    return true;
+    $result = true;
+    if (false === fwrite($f, $contents))
+        $result = false;
+    @fclose($f);
+    return $result;
 }
 
 function xcms_append($file_name, $contents)
@@ -28,9 +30,11 @@ function xcms_append($file_name, $contents)
     $f = fopen($file_name, "a+b");
     if (!$f)
         return false;
-    fwrite($f, $contents);
-    fclose($f);
-    return true;
+    $result = true;
+    if (false === fwrite($f, $contents))
+        $result = false;
+    @fclose($f);
+    return $result;
 }
 
 ?>
