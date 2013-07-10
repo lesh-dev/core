@@ -33,13 +33,8 @@
             return "Engine directory (\$engine_dir global variable) not specified. ";
 
         require_once "${engine_dir}sys/logger.php";
-        $f = fopen(xcms_log_filename(), "a+");
-        if(!$f)
-        {
-            @fclose($f);
+        if (!xcms_append(xcms_log_filename(), ""))
             return "Logger file '".xcms_log_filename()."' is not writeable. ";
-        }
-        fclose($f);
         return true;
     }
     /**

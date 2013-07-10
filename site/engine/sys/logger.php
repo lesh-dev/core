@@ -27,7 +27,6 @@
       **/
     function xcms_log($log_level, $message)
     {
-        global $engine_dir;
         xcms_append(xcms_log_filename(), "[".date('Y.m.d H:i:s')."]: $message\n");
     }
 
@@ -39,11 +38,9 @@
       **/
     function xcms_log_array($log_level, $name, $array)
     {
-        global $engine_dir;
-        $f = fopen(xcms_log_filename(), "a+");
-        fwrite($f, "[".date('Y.m.d H:i:s')."]: ARRAY $name DUMP\n");
+        $output = "[".date('Y.m.d H:i:s')."]: ARRAY $name DUMP\n";
         foreach ($array as $key => $value)
-            fwrite($f, "    '$key' => '$value'\n");
-        fclose($f);
+            $output .= "    '$key' => '$value'\n";
+        xcms_append(xcms_log_filename(), $output);
     }
 ?>

@@ -142,24 +142,22 @@
             'mailer_enabled'
         );
 
-        $f = fopen("settings.php", "a");
-        if (!$f)
-            return "Cannot open 'settings.php' for append. ";
-        fputs($f, "<?php\n");
+        $output = "<?php\n";
         foreach ($string_settings as $k)
         {
             $val = $config[$k];
             $val = str_replace('"', '\"', $val);
-            fputs($f, "\x20\x20\x20\x20\$$k = \"$val\";\n");
+            $output .= "\x20\x20\x20\x20\$$k = \"$val\";\n";
         }
         foreach($bool_settings as $k)
         {
             $v = $config[$k] ? "true" : "false";
-            fputs($f, "\x20\x20\x20\x20\$$k = $v;\n");
+            $output .= "\x20\x20\x20\x20\$$k = $v;\n";
         }
+        $output .= "\n?>";
+        if (!xcms_append("settings.php", $output))
+            return "Cannot append settings to 'settings.php'. ";
 
-        fputs($f, "\n?>");
-        fclose($f);
         include("settings.php");
         include("$engine_dir/sys/settings.php");
         include_once("$engine_dir/sys/tag.php");

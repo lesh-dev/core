@@ -48,12 +48,7 @@ function xcms_get_list($file)
   **/
 function xcms_save_list($file, $keys)
 {
-    $f = @fopen($file, "w");
-    if (!$f)
-    {
-        xcms_log(0, "Cannot open list file '$file' for writing");
-        return false;
-    }
+    $output = "";
     foreach ($keys as $key => $value)
     {
         // keys are cleaned from non-printing chars
@@ -64,16 +59,18 @@ function xcms_save_list($file, $keys)
         $value = str_replace("\r", " ", $value);
         $value = str_replace("\n", " ", $value);
         $value = trim($value);
-
-        // TODO: write error handling
-        fwrite($f, "$key:$value\n");
+        $output .= "$key:$value\n";
     }
-    fclose($f);
+    if (!xcms_write($file, $output))
+    {
+        xcms_log(0, "Cannot open list file '$file' for writing");
+        return false;
+    }
     return true;
 }
 
 /**
-  * Gey key value from list or return default value
+  * Get key value from list or return default value
   **/
 function xcms_get_key_or($list, $key, $def_value = '')
 {
