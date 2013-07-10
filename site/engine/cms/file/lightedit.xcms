@@ -1,10 +1,7 @@
 <?php
-    if(@$_FILES)
+    if (@$_FILES)
     {
-        //echo @$_FILES["upload"]["tmp_name"];
-        //echo @$_FILES["upload"]["type"];
-        //echo @$_FILES["upload"]["error"];
-        if(@$_FILES["upload"]["error"])
+        if (@$_FILES["upload"]["error"])
         {
             echo "<h3>Загрузка не удалась.</h3>";
             @unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/ftype");
@@ -16,37 +13,27 @@
             xcms_write("{$SETTINGS["datadir"]}cms/pages/$pageid/ftype", @$_FILES["upload"]["type"]);
             xcms_write("{$SETTINGS["datadir"]}cms/pages/$pageid/fname", @$_FILES["upload"]["name"]);
             copy(@$_FILES["upload"]["tmp_name"], "{$SETTINGS["datadir"]}cms/pages/$pageid/stream");
-            if(@$_POST["mlock-section"])
-                @unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu");
-            else
-                xcms_write("{$SETTINGS["datadir"]}cms/pages/$pageid/lockmenu", " ");
-            if(@$_POST["immidiate-file"])
-                $INFO["immidiate"] = "true";
-            else
-                $INFO["immidiate"] = "false";
-
+            $INFO["menu-locked"] = (@$_POST["menu-lock-section"]) ? "yes" : "no";
+            $INFO["immediate"] = (@$_POST["immediate-file"]) ? "yes" : "no";
             xcms_save_list(xcms_get_info_file_name(), $INFO);
         }
     }
-    if(file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/fname"))
+    if (file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/fname"))
     {
         echo "<h3>".@file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/fname")."</h3>";
         $sz = filesize("{$SETTINGS["datadir"]}cms/pages/$pageid/stream");
         echo "Размер: $sz<br>";
-        echo "";
-
     }
 ?>
 <h3>Загрузка</h3>
 <form method="POST" enctype="multipart/form-data">
-<table>
-<tr><td>Немедленная загрузка <td><input type="checkbox" name="immidiate-file">
-<tr><td>Показывать в меню<td><input type="checkbox" name="mlock-section">
-</table>
-<br>
-<input type="file" name="upload">
-<input type="submit">
-
+    <table>
+        <tr><td>Немедленная загрузка</td><td><input type="checkbox" name="immediate-file" /></td></tr>
+        <tr><td>Не показывать в меню</td><td><input type="checkbox" name="menu-lock-section" checked="checked"/></td></tr>
+    </table>
+    <br />
+    <input type="file" name="upload" />
+    <input type="submit" />
 </form>
 <h3>Описание</h3>
 <?php
