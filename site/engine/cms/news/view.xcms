@@ -1,34 +1,18 @@
 <?php
-    $prefix = xcms_get_page_path();
-    $alias = $INFO["alias"];
-    $news_date = xcms_get_key_or($_GET, "aparam");
+    if (xcms_user()->check_rights("editor", false) || xcms_user()->check_rights("admin", false))
+    {?>
+        <a class="link-button content-edit"
+            href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'ladmin', 'page'=>$pageid)); ?>">Редактировать</a><?php
+    }
 
-    $news_file_name = "$prefix/$news_date.news";
-    if (strlen($news_date) && file_exists($news_file_name))
-    {
-        $source = $news_file_name;
-        $text = file_get_contents($source);
-        include(translate("<! cms/readtext --text --markdown !>"));
+    $page_path = xcms_get_page_content_name($pageid);
+    if (!file_exists($page_path))
+    {?>
+        <h1>Раздел не заполнен</h1><?php
     }
     else
     {
-        $list = glob("$prefix/*.news");
-        $n = count($list);
-        $count = 0;
-        if (!isset($max_news))
-            $max_news = (integer)xcms_get_key_or($INFO, "maxNews", 10);
-        for ($i = $n-1; $i>=0; $i--)
-        {
-            $source = $list[$i];
-            $text = file_get_contents($source);
-            $odd = ($i % 2) ? "odd" : "even";
-            ?><div class="news-block <?php echo $odd; ?>"><?php
-            include(translate("<! cms/readtext --markdown --text !>"));
-            ?>
-            </div><!-- news-block odd-even-div -->
-            <?php
-            $count++;
-            if ($count >= $max_news) break;
-        }
+        $source = $page_path;
+        include(translate("<! cms/readtext --markdown !>"));
     }
 ?>

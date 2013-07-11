@@ -13,16 +13,3 @@
     text-align: right;
     margin-right: 20px;
 }
-
-div.news-block {
-    padding: 10px;
-    border-radius: 5px;
-}
-
-div.news-block.even {
-    background-color: #9ec78b;
-}
-
-div.news-block.odd {
-    background-color: #8db67a;
-}

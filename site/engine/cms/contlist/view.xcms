@@ -8,9 +8,11 @@
 
     $list = xcms_get_subpages($pageid);
     $list = array_reverse($list);
+    $i = 0;
     foreach ($list as $subpage_id)
-    {?>
-        <div class="contlist-block"><?php
+    {
+        $odd = ($i % 2) ? "odd" : "even"; ?>
+        <div class="contlist-block <?php echo $odd; ?>"><?php
         $source = xcms_get_page_content_name($subpage_id);
         if ($editable)
         {?>
@@ -20,5 +22,6 @@
         include(translate("<! cms/readtext --markdown --limit=220 --next-link=index.php?page=$subpage_id --next-text=[подробнее...] !>"));
         ?>
         </div><?php
+        $i++;
     }
 ?>

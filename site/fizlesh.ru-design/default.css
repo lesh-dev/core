@@ -208,15 +208,26 @@ a.content-edit {
     top: 0px;
 }
 
-div.contlist-block {
-    position: relative;
-}
-
 a.contlist-edit {
     font-size: 12px;
     height: 16px;
     line-height: 16px;
     position: absolute;
-    right: 0px;
-    top: 0px;
+    right: 5px;
+    top: 5px;
 }
+
+div.contlist-block {
+    position: relative;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+div.contlist-block.even {
+    background-color: #9ec78b;
+}
+
+div.contlist-block.odd {
+    background-color: #8db67a;
+}
+
