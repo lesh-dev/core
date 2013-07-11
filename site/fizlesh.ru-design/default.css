@@ -207,3 +207,16 @@ a.content-edit {
     right: 0px;
     top: 0px;
 }
+
+div.contlist-block {
+    position: relative;
+}
+
+a.contlist-edit {
+    font-size: 12px;
+    height: 16px;
+    line-height: 16px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}

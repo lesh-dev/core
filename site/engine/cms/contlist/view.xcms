@@ -1,14 +1,24 @@
 <?php
-    if (xcms_user()->check_rights("editor", false) || xcms_user()->check_rights("admin", false))
+    $editable = xcms_user()->check_rights("editor", false) || xcms_user()->check_rights("admin", false);
+    if ($editable)
     {?>
         <a class="link-button content-edit"
-            href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'ladmin', 'page'=>$pageid)); ?>">Редактировать</a><?php
+            href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'ladmin', 'page'=>$pageid)); ?>">Редактиировать список</a><?php
     }
 
     $list = xcms_get_subpages($pageid);
+    $list = array_reverse($list);
     foreach ($list as $subpage_id)
-    {
+    {?>
+        <div class="contlist-block"><?php
         $source = xcms_get_page_content_name($subpage_id);
+        if ($editable)
+        {?>
+            <a class="link-button contlist-edit"
+                href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'ladmin', 'page'=>$subpage_id)); ?>">Редактировать</a><?php
+        }
         include(translate("<! cms/readtext --markdown --limit=220 --next-link=index.php?page=$subpage_id --next-text=[подробнее...] !>"));
+        ?>
+        </div><?php
     }
 ?>

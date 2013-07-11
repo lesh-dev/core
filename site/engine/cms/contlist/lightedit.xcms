@@ -10,17 +10,25 @@ function xcms_create_contlist()
     global $SETTINGS, $INFO, $pageid;
 
     $suffix = xcms_get_key_or($_POST, "name-suffix");
-    $item_id = date('Y.m.d-H.i')."-$suffix";
+    $date = date('Y.m.d');
     $path_prefix = xcms_get_page_root(true);
+    $glob_dir = "$path_prefix$pageid/$date";
+    $count = count(glob("$glob_dir*", GLOB_ONLYDIR));
+    $item_id = "$date-$count";
+    if ($suffix)
+        $item_id .= "-$suffix";
     $item_pageid = "$pageid/$item_id";
     $dir = "$path_prefix$item_pageid";
+    // this should not happen, but concurrent blocks addition can lead to such behaviour
     if (file_exists($dir))
         return "Блок с таким служебным именем уже существует. ";
+
     mkdir($dir, 0777, true);
     $list = array();
     $list["type"] = xcms_get_key_or($_POST, "pagetype");
     $list["subheader"] = xcms_get_key_or($_POST, "subheader");
     $list["menu-title"] = xcms_get_key_or($_POST, "subheader");
+    $list["view"] = "#all";
     $list["edit"] = "#editor";
     $list["alias"] = $INFO["alias"]."/$item_id";
 
