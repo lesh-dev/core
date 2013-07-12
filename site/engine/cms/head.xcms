@@ -9,11 +9,11 @@
 <meta name="keywords" content="<?php echo htmlspecialchars($keywords); ?>" />
 <meta name="description" content="<?php echo htmlspecialchars($description); ?>" />
 <title><?php
-    // TODO: now we take these from INFO array, but all metainfo using another mechanism
-    // they will be merged so $INFO will contain all proper information
-    $title = "ФизЛЭШ"; // TODO: fizlesh.ru spike
-    $append = xcms_get_key_or($INFO, "menu-title");
-    if (!empty($append))
-        $title = "$append :: $title";
+    $title = $meta_site_name; // from settings
+    if (isset($pageid) && strlen($pageid)) {
+        $append = xcms_get_key_or($list, "menu-title");
+        if (!empty($append))
+            $title = "$append :: $title";
+    }
     echo htmlspecialchars($title);
 ?></title>
