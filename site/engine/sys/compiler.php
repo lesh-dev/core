@@ -10,11 +10,12 @@
             fputs($outputStream, "@\$argv[] = \"$value\";");
             if($key!=0)
             {
-                //@$KEYLISTER[$value] = true;
-                @fputs($outputStream, "@\$keys[\"$value\"] = true;");
+                // singular value is a boolean switch
                 $a = explode("=", $value);
-                @fputs($outputStream, "@\$param[\"{$a[0]}\"] = \"{$a[1]}\";");
-                //@$PARAM[$key][$a[0]]=$a[1];
+                if (count($a) >= 2)
+                    @fputs($outputStream, "@\$param[\"{$a[0]}\"] = \"{$a[1]}\";");
+                else
+                    @fputs($outputStream, "@\$param[\"{$a[0]}\"] = true;");
             }
         }
         fputs($outputStream, $SETTINGS["code_end"]);
@@ -119,10 +120,7 @@
             $string = str_replace("!>", "#>", $string);
             xcms_parse_string($string, $f);
             fclose($f);
-            $btname = "$fname.backtrace";
-            $f = fopen($btname, "w");
-            fputs($f, $string);
-            fclose($f);
+            xcms_write("$fname.backtrace", $string);
         }
         return($fname);
     }

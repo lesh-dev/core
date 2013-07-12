@@ -31,9 +31,7 @@
             if (file_exists($ename)) @chmod($ename, 0666); // see bug #64
             @rename($ename, $target_name);
             $new_text = @$_POST["edit-text"];
-            $f = fopen($ename, "w");
-            fputs($f, $new_text);
-            fclose($f);
+            xcms_write($ename, $new_text);
             chmod($ename, 0666);
             $current_version = "";
             // FIXME: this should be deleted at all.
@@ -108,7 +106,7 @@
         elseif (@$text) {}
         else $text = "$dtext";
 
-        if(!@$keys["-h"]) echo "<$tag>edit: $ename</$tag>";
+        if(!@$param["-h"]) echo "<$tag>edit: $ename</$tag>";
         $ty = "submit";
 
         $vlist = '<option value="">HEAD</option>';

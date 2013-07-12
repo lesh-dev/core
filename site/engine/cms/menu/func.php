@@ -3,21 +3,27 @@
     {
         global $SETTINGS, $pageid, $web_prefix;
 
-        $page_prefix = "{$SETTINGS["datadir"]}cms/pages/";
+        $page_prefix = xcms_get_page_root(true);
         $pageiid = str_replace($page_prefix, "", $init_path);
         $aux_class = "";
         $flags = "";
         $page_info = "$init_path/info";
         $text = "";
-        if (!file_exists($page_info)) return;
+        if (!file_exists($page_info))
+            return;
+
         $INFO = xcms_get_list($page_info);
-        if (xcms_get_key_or($options, "display_all"))
+        $show = xcms_get_key_or($options, "show");
+        if ($show != "")
         {
             $text = "{unnamed}";
             if (xcms_get_key_or($INFO, "menu-title"))
-            {
                 $text = htmlspecialchars($INFO["menu-title"]);
-            }
+
+            // skip locked items in not-locked mode
+            if ($show == "not-locked" && xcms_get_key_or($INFO, "menu-locked") == "yes")
+                return;
+
             if (xcms_get_key_or($INFO, "menu-hidden") == "yes")
             {
                 $aux_class .= "menuitem-hidden ";
@@ -85,7 +91,7 @@
         {
             if (!file_exists("$value/info")) continue;
             $without_prefix = str_replace($page_prefix, "", $value);
-            if (xcms_get_key_or($options, "display_all") || strstr($pageid, $without_prefix))
+            if (xcms_get_key_or($options, "show") != "" || strstr($pageid, $without_prefix))
                 xcms_menu($value, $MENUTEMPLATES, $menu_level+1, $add_href_params, $options, $start_level, $end_level);
             else
             {

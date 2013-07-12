@@ -1,17 +1,5 @@
 <?php
 /**
-  * Retrieve current page content location
-  * Assumes @name pageid and @name SETTINGS are defined
-  * TODO: Should be placed in the proper file (cms-related)
-  **/
-function xcms_get_info_file_name()
-{
-    global $SETTINGS;
-    global $pageid;
-    return "{$SETTINGS["datadir"]}cms/pages/$pageid/info";
-}
-
-/**
   * Makes checkbox checked attribute with proper generic value
   **/
 function xcms_checkbox_attr($val)
@@ -60,12 +48,7 @@ function xcms_get_list($file)
   **/
 function xcms_save_list($file, $keys)
 {
-    $f = @fopen($file, "w");
-    if (!$f)
-    {
-        xcms_log(0, "Cannot open list file '$file' for writing");
-        return false;
-    }
+    $output = "";
     foreach ($keys as $key => $value)
     {
         // keys are cleaned from non-printing chars
@@ -76,16 +59,18 @@ function xcms_save_list($file, $keys)
         $value = str_replace("\r", " ", $value);
         $value = str_replace("\n", " ", $value);
         $value = trim($value);
-
-        // TODO: write error handling
-        fwrite($f, "$key:$value\n");
+        $output .= "$key:$value\n";
     }
-    fclose($f);
+    if (!xcms_write($file, $output))
+    {
+        xcms_log(0, "Cannot open list file '$file' for writing");
+        return false;
+    }
     return true;
 }
 
 /**
-  * Gey key value from list or return default value
+  * Get key value from list or return default value
   **/
 function xcms_get_key_or($list, $key, $def_value = '')
 {
@@ -116,8 +101,15 @@ function xcms_convert_multiline($value)
 }
 
 
-function getTagList($file)
+function xcms_tag_exists($tag_name)
 {
+    $file = "{$SETTINGS["engine_dir"]}taglist/$tag_name";
+    return file_exists($file);
+}
+
+function xcms_get_tag_list($tag_name)
+{
+    $file = "{$SETTINGS["engine_dir"]}taglist/$tag_name";
     $filec = file_get_contents($file);
     $filec = str_replace("\r", "", $filec);
     if(substr($filec, 0, 5) != "<?php")
@@ -131,7 +123,7 @@ function getTagList($file)
                 continue;
             }
             $arr = explode("=", $value);
-            $taglist[$arr[0]] = $arr[1];
+            $taglist[trim($arr[0])] = trim($arr[1]);
         }
         return $taglist;
     }
@@ -139,7 +131,7 @@ function getTagList($file)
     {
         $taglist = array();
         include($file);
-        $taglist["_NAME"]=$tagname;
+        $taglist["_NAME"] = $tagname;
         return $taglist;
     }
 }
@@ -246,9 +238,9 @@ function xcms_editlist_form($file, $skip_params = "", $flags = "")
             continue;
 
         $id = "edtg_$key";
-        if (file_exists("{$SETTINGS["engine_dir"]}taglist/$key"))
+        if (xcms_tag_exists($key))
         {
-            $taglist = getTagList("{$SETTINGS["engine_dir"]}taglist/$key"); ?>
+            $taglist = xcms_get_tag_list($key); ?>
 
             <tr><td><?php echo $taglist["_NAME"]; ?></td><td><?php
 

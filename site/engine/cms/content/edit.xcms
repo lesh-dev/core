@@ -1,42 +1,42 @@
-        <dt>Редактировать текст</dt>
-        <dd>
-            <div class="reducer">
-              <# var editfile {$SETTINGS["datadir"]}cms/pages/$pageid/content #>
-              <# edit/file xz -h #>
-            </div>
-        </dd>        
+<?php
+    $source = xcms_get_page_content_name($pageid);
+?>
+<dt>Редактировать текст</dt>
+<dd>
+    <div class="reducer">
+        <# var editfile $source #>
+        <# edit/file xz -h #>
+    </div>
+</dd>
 
- 
-        <dt>Шаблоны</dt>
-        <dd>
-            <div class="reducer">
-              <h4>Заменить содержание на шаблон: </h4>
-              Если вы заменяете содержание на шаблон, то все содержание данной страницы будет безвозвранно утрачено!
-       По этой причине, пожалуйста, будьте аккуратны с использованием этой возможности.<br /> 
-              Для того, чтобы изменить шаблон, надо воспользоваться формой два раза: нажать на кнопку, страница перезагрузится безо всяких изменений, потом надо нажать еще раз.
-              <?php
-                if(@$_POST["changeTemplate"])
-                {
-                  $f = fopen("{$SETTINGS["datadir"]}cms/pages/$pageid/content","w");
-                  fputs($f,@file_get_contents("{$SETTINGS["engine_dir"]}cms/content/{$_POST["changeTemplate"]}.template"));
-                  fclose($f);
-                  echo "Заменил : "."{$SETTINGS["datadir"]}cms/pages/$pageid/content". 
-                  " на "."{$SETTINGS["engine_dir"]}cms/content/{$_POST["changeTemplate"]}.template" ;
-                }
-              ?>
-              <form method="post">
-              <SELECT name="changeTemplate">
-              <?php
-                $list = glob("{$SETTINGS["engine_dir"]}cms/content/*.template");
-                foreach ($list as $key=>$value) 
-                {
-                  $value = str_replace("{$SETTINGS["engine_dir"]}cms/content/","",$value);
-                  $value = str_replace(".template","",$value);
-                	echo "<OPTION name=\"$value\" value=\"$value\">$value</OPTION>";
-                }                               
-              ?>
-              <input type="submit" value="Заменить! ">
-              </SELECT> 
-              </form>
-            </div>
-        </dd>        
+<dt>Шаблоны</dt>
+<dd>
+    <div class="reducer">
+        <h4>Заменить содержимое на шаблон</h4>
+        Если вы заменяете содержимое на шаблон, то всё содержимое данной страницы
+        будет безвозвранно утрачено! По этой причине, пожалуйста, будьте аккуратны
+        с использованием этой возможности.<br />
+        Для того, чтобы изменить шаблон, надо воспользоваться формой два раза:
+        нажать на кнопку, страница перезагрузится безо всяких изменений,
+        потом надо нажать еще раз.
+
+        <?php
+        if (@$_POST["change-template"])
+        {
+            $template_name = xcms_get_template_name($_POST["change-template"]);
+            xcms_write($source, @file_get_contents($template_name));
+            echo "Заменено: <tt>$source</tt> на <tt>$template_name</tt>";
+        }
+        ?>
+        <form method="post">
+            <select name="change-template">
+            <?php
+                $template_list = xcms_get_templates();
+                foreach ($template_list as $value)
+                    echo "<option name=\"$value\" value=\"$value\">$value</option>\n";
+            ?>
+            </select>
+            <input type="submit" value="Заменить! " />
+        </form>
+    </div>
+</dd>

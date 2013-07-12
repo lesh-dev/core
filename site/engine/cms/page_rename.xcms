@@ -14,8 +14,8 @@
         }
         else
         {
-            $old_path = "${content_dir}cms/pages/$pageid";
-            $new_path = "${content_dir}cms/pages/$new_pageid";
+            $old_path = xcms_get_page_path($pageid);
+            $new_path = xcms_get_page_path($new_pageid);
             if (!@rename($old_path, $new_path))
             {?>
                 <div class="error">Не удалось переименовать страницу, проверьте корректность путей файлов:</div>

@@ -13,29 +13,29 @@
 <?php
     if(@$_POST["delete-section"])
     {
-        $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid";
+        $dir = xcms_get_page_path($pageid);
         $list = glob("$dir/*", GLOB_ONLYDIR);
-        if($list)
+        if ($list)
         {
             echo '<script>alert("Не могу удалить! Сначала удалите все подразделы!");</script>';
         }
         else
         {
             $list = glob("$dir/*");
-            if($list) foreach ($list as $key=>$value)
+            if ($list)
             {
-                unlink($value);
+                foreach ($list as $key=>$value)
+                    unlink($value);
             }
             rmdir($dir);
             echo '<script>alert("Удалено");</script>';
             translate("<! redir ladmin 0!>");
-            //die();
-            $pageid="index";
-            for($i=strlen($pageid)-1;$i>=0; $i--)
+            $pageid = "index";
+            for ($i = strlen($pageid) - 1; $i >= 0; $i--)
             {
-                if($pageid[$i]=='/')
+                if ($pageid[$i]=='/')
                 {
-                    $pageid[$i]=substr($pageid, 0, $i-1);
+                    $pageid[$i] = substr($pageid, 0, $i - 1);
                     break;
                 }
             }
@@ -94,7 +94,7 @@
                     }
                 ?>
                 <b>Menu</b>
-                <# cms/menu/display display_all devel start=1 end=5 #>
+                <# cms/menu/display show=not-locked devel start=1 end=5 #>
             </div>
             <div class="content">
             <?php
@@ -107,19 +107,7 @@
     }
     else if(@$_GET["mode"]=="cleanprec") include(translate("<! cleanprec !>"));
     else if(@$_GET["mode"]=="delete")
-    {
-        $sec_name = htmlspecialchars(@$INFO["header"]);
-        $menu_title = htmlspecialchars(@$INFO["menu-title"]);
-        ?>
-        <h3 style="color: red;">Предупреждение</h3>
-        Вы хотите удалить текущий раздел <b><?php echo "[$menu_title] $sec_name"; ?></b>.<br />
-        Вы <b>точно</b> уверены, что хотите это сделать?
-        <form method="post">
-            <input type="hidden" name="delete-section" value="true">
-            <input type="submit" value="Да, я точно уверен, что следует
-                удалить раздел <?php echo "[$menu_title] $sec_name"; ?>">
-        </form><?php
-    }
+        include(translate("<! cms/page_delete !>"));
     else if(@$_GET["mode"]=="edit_alias")
         include(translate("<! cms/page_alias !>"));
     else if(@$_GET["mode"]=="edit_header")
@@ -134,18 +122,12 @@
         include(translate("<! cms/light_icon_editor !>"));
     else if(@$_GET["mode"]=="obsolete_settings")
     {
-        // TODO: rewrite keys shmatrix
-        $editfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/info";
+        $editfile = xcms_get_page_info_name();
         include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
     }
     else if(@$_GET["mode"]=="img_edit" )
     {
         include(translate("<! cms/light_image_editor !>"));
-    }
-    else if(@$_GET["mode"]=="configuration")
-    {
-        $editfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/info";
-        include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
     }
     else if(@$_GET["mode"]=="mailer" )
     {

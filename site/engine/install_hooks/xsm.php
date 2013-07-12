@@ -60,14 +60,14 @@
       **/
     function install($config)
     {
-        $f = fopen("settings.php", "a+");
-        if (!$f)
+        $result = xcms_append("settings.php",
+            // TODO: привет кавычкам
+            "\n<?php /* This block was inserted by installer -- xsm.php.".
+            "\nYou may edit it, but it can be regenerated. */".
+            "\n   \$xsm_db_name = '".$config["xsm_db_name"]."';".
+            "\n/* --- */ ?>\n");
+        if (!$result)
             return "Cannot open 'settings.php' for append. ";
-        // TODO: привет кавычкам
-        fputs($f, "\n<?php /* This block was inserted by installer -- xsm.php.");
-        fputs($f, "\nYou may edit it, but it can be regenerated. */");
-        fputs($f, "\n   \$xsm_db_name = '".$config["xsm_db_name"]."';");
-        fputs($f, "\n/* --- */ ?>\n");
         return true;
     }
     } // class

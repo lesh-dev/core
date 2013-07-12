@@ -2,6 +2,7 @@
 set -xe
 
 # oim = google image optimizer
+ln -sf ~/local/page-speed-1.9/out/Release/optimize_image_bin oim
 
 im_path="$1"
 ext="$2"

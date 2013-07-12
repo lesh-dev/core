@@ -1,5 +1,4 @@
 <?php
-    include_once("$engine_dir/cms/page_alias_func.php");
     $aliases = xcms_collect_aliases();
     xcms_save_aliases($aliases);
 ?>

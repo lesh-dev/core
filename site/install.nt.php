@@ -14,6 +14,7 @@
     require_once("${engine_dir}sys/tag.php");
     require_once("${engine_dir}sys/logger.php");
     require_once("${engine_dir}sys/string.php");
+    require_once("${engine_dir}sys/util.php");
 
     function display_error($err)
     {

@@ -64,34 +64,10 @@
             return "Apache 'mod_rewrite' module is not enabled. Please enable it in your Apache webserver configuration.";
 
         @mkdir(".prec", 0777);
-        if($f = @fopen(".prec/.htaccess", "a"))
-        {
-            fputs($f, "deny from all");
-            $PERM["prec"] = true;
-            fclose($f);
-        }
-        else $PERM["prec"] = false;
-
-        if($f = @fopen(".htaccess", "a"))
-        {
-            $PERM["htaccess"] = true;
-            fclose($f);
-        }
-        else $PERM["htaccess"] = false;
-
-        if($f = @fopen("install.php", "a"))
-        {
-            $PERM["install"] = true;
-            fclose($f);
-        }
-        else $PERM["install"] = false;
-
-        if($f = @fopen("settings.php", "a"))
-        {
-            $PERM["settings"] = true;
-            fclose($f);
-        }
-        else $PERM["settings"] = false;
+        $PERM["prec"] = xcms_append(".prec/.htaccess", "deny from all");
+        $PERM["htaccess"] = xcms_append(".htaccess", "");
+        $PERM["install"] = xcms_append("install.php", "");
+        $PERM["settings"] = xcms_append("settings.php", "");
 
         if(!$PERM["htaccess"])
         {
@@ -166,28 +142,26 @@
             'mailer_enabled'
         );
 
-        $f = fopen("settings.php", "a");
-        if (!$f)
-            return "Cannot open 'settings.php' for append. ";
-        fputs($f, "<?php\n");
+        $output = "<?php\n";
         foreach ($string_settings as $k)
         {
             $val = $config[$k];
             $val = str_replace('"', '\"', $val);
-            fputs($f, "\x20\x20\x20\x20\$$k = \"$val\";\n");
+            $output .= "\x20\x20\x20\x20\$$k = \"$val\";\n";
         }
         foreach($bool_settings as $k)
         {
             $v = $config[$k] ? "true" : "false";
-            fputs($f, "\x20\x20\x20\x20\$$k = $v;\n");
+            $output .= "\x20\x20\x20\x20\$$k = $v;\n";
         }
+        $output .= "\n?>";
+        if (!xcms_append("settings.php", $output))
+            return "Cannot append settings to 'settings.php'. ";
 
-        fputs($f, "\n?>");
-        fclose($f);
         include("settings.php");
         include("$engine_dir/sys/settings.php");
         include_once("$engine_dir/sys/tag.php");
-        include_once("$engine_dir/cms/page_alias_func.php");
+        include_once("$engine_dir/sys/cms.php");
         include("$engine_dir/cms/rebuild_alias.xcms");
         include("$engine_dir/cms/build_rewrite.xcms");
 

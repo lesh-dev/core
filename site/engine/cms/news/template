@@ -1,0 +1,3 @@
+<div class="newstitle">@@DATE@. Заголовок новости</div>
+<p class="text">Текст новости</p>
+<div class="signature">@@AUTHOR@</div>

@@ -1,5 +1,4 @@
 <?php
-    include_once("$engine_dir/cms/page_alias_func.php");
     global $full_design_dir;
     global $content_dir;
 
@@ -66,17 +65,8 @@
     }
     $listing = array_reverse($listing);
     $rewrite_text .= join($listing);
-    $f = @fopen(".htaccess", "w");
-    if (!$f)
+    if (!xcms_write(".htaccess", $rewrite_text))
     {?>
-        <div>Cannot open .htaccess for writing!</div><?php
-    }
-    else
-    {
-        if (false === @fwrite($f, $rewrite_text))
-        {?>
-            <div>Rewrite rules writing failed!</div><?php
-        }
-        fclose($f);
+        <div>Rewrite rules writing failed!</div><?php
     }
 ?>

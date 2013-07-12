@@ -1,11 +1,12 @@
 <?php
-  global $SETTINGS;
-  $taglistt = glob("{$SETTINGS["engine_dir"]}cms/*.pagetype");
-  foreach($taglistt as $key=>$value)
-  {
-    $v = str_replace("{$SETTINGS["engine_dir"]}cms/","",$value);
-    $v = str_replace(".pagetype","",$v);
-    $taglist[file_get_contents($value)]=$v;
-  }
-  $tagname = "Тип раздела";
+    global $SETTINGS;
+    $pt_prefix = "{$SETTINGS["engine_dir"]}cms/";
+    $list = glob("$pt_prefix*.pagetype");
+    foreach ($list as $key=>$value)
+    {
+        $v = str_replace($pt_prefix, "", $value);
+        $v = str_replace(".pagetype", "", $v);
+        $taglist[trim(file_get_contents($value))] = trim($v);
+    }
+    $tagname = "Тип раздела";
 ?>

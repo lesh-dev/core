@@ -1,5 +1,6 @@
 <?php
-    $include_file_name = $SETTINGS["datadir"]."cms/pages/".@$pageid."/".@$argv[1];
+    $dir = xcms_get_page_path();
+    $include_file_name = "$dir/".@$argv[1];
     if (file_exists($include_file_name))
         include($include_file_name);
     else

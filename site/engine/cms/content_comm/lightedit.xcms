@@ -1,12 +1,9 @@
 <?php
-  if(@$_GET["vtype"]=="")
-  {
-    $commfile = "{$SETTINGS["datadir"]}cms/pages/$pageid/comments";
-    include(translate("<! var editfile {$SETTINGS["datadir"]}cms/pages/$pageid/content !><! edit/file xz -h !>"));
-    if(@$_POST["clcomments"])
-    {
-    	@unlink($commfile);
-    }
-    echo '<form method="post"> <input type="submit" name="clcomments" value="Очистить комментарии"> </form>';
-  }
+    $comm_file = xcms_get_page_comments_name($pageid);
+    include(translate("<! var editfile $comm_file !><! edit/file xz -h !>"));
+    if (@$_POST["clear-comments"])
+        @unlink($comm_file);
 ?>
+<form method="post">
+    <input type="submit" name="clear-comments" value="Очистить комментарии" />
+</form>
