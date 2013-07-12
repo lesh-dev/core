@@ -30,7 +30,7 @@ function xsm_get_avatar($social_profile)
     preg_match("/[0-9]+/", $social_profile, $match);
     if (!count($match))
     {
-        // match aliase
+        // match alias
         preg_match("/.*vk.com\/([a-z._]+)/", $social_profile, $match);
         if (!count($match))
             return $av;
@@ -57,7 +57,9 @@ function xsm_get_avatar($social_profile)
     if (!array_key_exists('response', $json))
         return $av;
     $response = $json['response'];
-    $av = $response[0]['photo'];
+    // VK returns empty array on invalid uid
+    if (count($response) > 0)
+        $av = $response[0]['photo'];
     return $av;
 }
 
