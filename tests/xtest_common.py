@@ -16,10 +16,16 @@ def assertNoInstallerPage(test):
 
 
 def gotoAuthLink(test):
+	test.logAdd("xtest_common.gotoAuthLink: going to authenticate. ")
 	test.gotoUrlByLinkText(u"Авторизация")
 
 def gotoAdminPanel(test):
+	test.logAdd("xtest_common.gotoAdminPanel: going to admin control panel. ")
 	test.gotoUrlByLinkText(u"Админка")
+
+def gotoCabinet(test):
+	test.logAdd("xtest_common.gotoCabinet: going to user control panel (cabinet). ")
+	test.gotoUrlByLinkText(u"Личный кабинет")
 
 def getAuthLink(test):
 	return test.getUrlByLinkText(u"Авторизация")
@@ -50,12 +56,13 @@ def performLogin(test, login, password):
 	test.addAction("user-login", login + " / " + password)
 #	test.logAdd("performLogin(" + login + ", " + password + ")")
 
-	print "goto root"
+	print "performLogin(): goto root"
 	
 	test.gotoRoot()
 	
 	# assert we have no shit cookies here
 	test.assertUrlNotPresent(u"Админка", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
+	test.assertUrlNotPresent(u"Личный кабинет", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
 	
 	gotoAuthLink(test)
 	
@@ -71,12 +78,18 @@ def performLogin(test, login, password):
 	test.clickElementById("auth-submit")
 	
 	wrongAuth = test.checkSourceTextPresent([u"Пароль всё ещё неверный", "Wrong password"])
-	return not wrongAuth
+	if wrongAuth:
+		return False
 	
-	#test.getUrlByLinkText(u"Админка")
-	    
+	# now let's check that Cabinet link and Exit link are present. if not - it's a bug.
+
+	test.assertUrlPresent(u"Выход", "Here should be logout link after successful authorization. ")
+	test.assertUrlPresent(u"Личный кабинет", "Here should be Cabinet link after successful authorization. ")
+	
+	return True
+		    
 def performLogout(test):
-	print "logout..."
+	print "performLogout()"
 	test.addAction("user-logout")
 	test.gotoPage("/?&mode=logout&ref=ladmin")
 	
@@ -86,7 +99,7 @@ def performLoginAsAdmin(test, login, password):
 		print "Admin authorization failed"
 		raise selenium_test.TestError("Cannot perform Admin authorization as " + login + "/" + password)
 		
-	print "checking admin panel link"
+	print "performLoginAsAdmin(): checking admin panel link"
 	
 	#check that we have entered the CP.
 	# just chech that link exists.
@@ -97,17 +110,12 @@ def performLoginAsAdmin(test, login, password):
 def createNewUser(test, conf, login, email, password, name, auxParams = []):
 	print "createNewUser(" + login + ", " + email + ", " + password + ", " + name + ")"
 	
-	performLoginAsAdmin(test, conf.getAdminLogin(), conf.getAdminPass())
+	if not "do_not_login_as_admin" in auxParams:
+		performLoginAsAdmin(test, conf.getAdminLogin(), conf.getAdminPass())
+		gotoAdminPanel(test)
 	
-	print "go to user creation panel"
+	gotoUserList(test)
 	
-	#	test.gotoRoot()
-	gotoAdminPanel(test)
-	
-	# navigate to users CP
-	print "goto user list."
-	test.gotoUrlByLinkText(u"Пользователи")
-	test.assertBodyTextPresent(u"Администрирование пользователей")
 	test.gotoUrlByLinkText(["Create user", u"Создать пользователя"])
 	
 	inpLogin = test.fillElementById("login", login)
@@ -162,7 +170,8 @@ def createNewUser(test, conf, login, email, password, name, auxParams = []):
 	test.assertElementValueById("email-input", inpEMail)
 	
 	#logoff root
-	performLogout(test)
+	if not "do_not_logout_admin" in auxParams:
+		performLogout(test)
 	
 	return inpLogin, inpEMail, inpPass, inpName
 	
@@ -204,7 +213,13 @@ def setTestNotifications(test, emailString, adminLogin, adminPass):
 	
 	test.clickElementById("editTag")
 	performLogout(test)
-	
+
+
+def gotoUserList(test):
+	test.logAdd("Navigating to user list from admin CP. ")
+	test.gotoUrlByLinkText(u"Пользователи")
+	test.assertBodyTextPresent(u"Администрирование пользователей")
+
 	
 	
 

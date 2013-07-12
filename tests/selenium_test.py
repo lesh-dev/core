@@ -53,17 +53,28 @@ def RunTest(test):
 	try:
 		test.init()
 		test.run()
+		return 0
 	except TestFatal as e:
 #		test.printActionLog()
 		test.handleTestFatal(e)
+		return 2
 	except TestError as e:
-		print "Test action log:"
-		test.printActionLog()
 		test.handleTestFail(e)
+		print "Test " + test.getName() + " action log:"
+		test.printActionLog()
+		return 1
 	except TestShutdown as e:
 		test.handleShutdown(e)
+		return 0
 	except Exception as e:
 		test.handleException(e)
+		return 2
+		
+def DecodeRunResult(result):
+	if result == 0: return "PASSED"
+	elif result == 1: return "FAILED"
+	elif result == 2: return "FATAL"
+	else: return "UNKNOWN"
 	
 #main API wrapper for Webdriver.
 class SeleniumTest:
@@ -98,7 +109,7 @@ class SeleniumTest:
 		
 	def init(self):
 		self.m_baseUrl = self.fixBaseUrl(self.getBaseUrl())
-		self.m_driver = webdriver.Firefox() # executable_path="/home/vdm/bin/firefox/firefox"
+		self.m_driver = webdriver.Firefox() #executable_path="/usr/bin/firefox")
 		self.maximizeWindow()
 	
 	def getName(self):
@@ -143,12 +154,12 @@ class SeleniumTest:
 		self.shutdown(2)
 				
 	def handleTestFail(self, exc):
-		self.m_driver.execute_script("alert('Test failed! See console log for details. ');")
+		#self.m_driver.execute_script("alert('Test failed! See console log for details. ');")
 		print "TEST " + self.getName() + " FAILED:", toUnicode(exc.message)
 		self.shutdown(1)
 
 	def handleTestFatal(self, exc):
-		self.m_driver.execute_script("alert('Test fataled! See logs and check your test/environment. ');")
+		#self.m_driver.execute_script("alert('Test fataled! See logs and check your test/environment. ');")
 		print "TEST " + self.getName() + " FATALED:", toUnicode(exc.message)
 		self.shutdown(2)
 
@@ -169,7 +180,7 @@ class SeleniumTest:
 			#indicate that log was already created
 			self.m_logStarted = True
 		except IOError:
-			raise RuntimeError("Cannot create log file '" + m_logFile + "'. ")
+			raise RuntimeError("Cannot create log file '" + self.m_logFile + "'. ")
 			
 	def setCloseOnExit(self, flag):
 		self.m_closeOnExit = flag;
@@ -239,7 +250,18 @@ class SeleniumTest:
 			raise TestError(exceptionMessage)
 		except ItemNotFound:
 			pass
-	
+
+	def assertUrlPresent(self, linkName, reason = ""):
+		try:
+			self.getUrlByLinkText(linkName)
+		except ItemNotFound:
+			exceptionMessage = "Required URL is not found on the page in assertUrlPresent: '" + userSerialize(linkName) + "'. " + self.displayReason(reason)
+			raise TestError(exceptionMessage)
+
+	def wait(self, seconds):
+		self.logAdd("Waiting for " + userSerialize(seconds) + "' seconds. ")
+		time.sleep(seconds)
+		
 	def drv(self):
 		return self.m_driver;
 
@@ -256,6 +278,31 @@ class SeleniumTest:
 		except NoSuchElementException:
 			self.logAdd("getElementById failed for id '" + eleId + "':\n" + traceback.format_exc())
 			raise TestError(u"Cannot get element by id '" + eleId + "'. ")
+		
+	def checkboxIsValid(self, value):
+		return value == "checked" or value == "true"
+				
+	def checkCheckboxValueById(self, eleId, boolValue = True):
+		self.checkEmptyParam(eleId, "checkCheckboxValueById")
+		value = self.getElementById(eleId).get_attribute("checked")
+#		print "value: ", value
+		if value and not self.checkboxIsValid(value):
+			msg = "Strange value for checkbox '" + eleId + "': " + userSerialize(value)
+			self.logAdd(msg)
+			raise TestError(msg)
+		
+		if boolValue: # check if it is 'checked'
+			if value and self.checkboxIsValid(value):
+				return True
+			return False
+		else: # check if it is unchecked
+			if value and self.checkboxIsValid(value):
+				return False
+			return True
+				
+	def assertCheckboxValueById(self, eleId, boolValue = True):
+		if not self.checkCheckboxValueById(eleId, boolValue):
+			raise TestError(u"Checkbox with id '" + eleId + "' has improper value, expected '" + userSerialize(boolValue) + "'. ")
 			
 	def fillElementByName(self, name, text, clear = True):
 		self.checkEmptyParam(name, "fillElementByName")
@@ -377,7 +424,7 @@ class SeleniumTest:
 			except StaleElementReferenceException:
 				self.logAdd("Cache problem in checkTextPresent(" + xpath + ", " + userSerialize(text) + "), trying again. ")
 				count += 1
-				time.sleep(1)
+				self.wait(1.0)
 				continue
 		self.failTest("Unsolvable cache problem in checkTextPresent(" + xpath + ", " + userSerialize(text) + "), trying again. ")
 		

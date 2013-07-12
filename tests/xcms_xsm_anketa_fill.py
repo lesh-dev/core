@@ -161,6 +161,8 @@ class XcmsXsmAnketaFill(SeleniumTest):
 		self.assertBodyTextPresent(inpEmail)
 		self.assertBodyTextPresent(inpSkype)
 		self.assertBodyTextPresent(inpSocial)
+		self.clickElementById("show-extra-person-info")
+		self.wait(1)
 		self.assertBodyTextPresent(inpFav)
 		self.assertBodyTextPresent(inpAch)
 		self.assertBodyTextPresent(inpHob)

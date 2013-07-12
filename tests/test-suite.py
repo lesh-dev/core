@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-from selenium_test import RunTest, TestShutdown
+from selenium_test import RunTest, TestShutdown, DecodeRunResult
 import test_xcms_installer
 import sys
 
@@ -35,6 +35,12 @@ TEST OPTIONS could be test-dependent. Commonly supported options are:
   -p, --preserve\tLeave browser window after test finish/fail
   -d, --doc\t\tDisplay test documentation
 """.format(script = fileBaseName(sys.argv[0]))
+
+
+def printStats(stats):
+	print "Run overall statistics:"
+	for result, testList in stats.iteritems():
+		print DecodeRunResult(result) + ":", len(testList),"tests"
 	
 args = sys.argv[1:] # exclude program name
 
@@ -80,6 +86,8 @@ if testSet:
 	setModuleName = testSet.replace(".py", "")
 
 try:
+	testStats = {}
+	
 	testSetModule = __import__(setModuleName, [])	
 	
 	if not testSetModule.getTests:
@@ -87,8 +95,8 @@ try:
 		sys.exit(1)
 		
 	tests = testSetModule.getTests(baseUrl, args)
-	for fileName in tests:
-		test = tests[fileName]
+	while tests:
+		fileName, test = tests.popitem()
 		if specTest:
 			if specTest.endswith(".py"): # it is a filename
 				if fileName != specTest:
@@ -106,7 +114,13 @@ try:
 		else:
 			print "Running test", test.getName()
 			print test.getDoc()
-			RunTest(test)
+			result = RunTest(test)
+			if result not in testStats: # add new list
+				testStats[result] = [test.getName()]
+			else:
+				testStats[result].append(test.getName())
+	
+	printStats(testStats)
 
 except TestShutdown as e:
 	pass
