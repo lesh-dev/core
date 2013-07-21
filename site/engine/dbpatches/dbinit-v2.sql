@@ -51,13 +51,20 @@ create table course (
     course_title text, -- название курса
     school_id integer not null, -- ссылка на школу, на которой читали курс
     course_cycle text,  -- цикл, на котором читался курс
-    course_teacher_id integer not null, -- ссылка на препода
+    course_teacher_item integer, -- ссылка на преподов (все записи с данным id -- преподы курса)
     target_class text, -- диапазон классов, на которые рассчитан курс
     course_desc text,  -- описание курса
     course_comment text, -- комментарий к курсу (чатик пока не делаем)
     course_created text, -- utc timestamp
     course_modified text, -- utc timestamp
-    foreign key(course_teacher_id) references person(person_id)
+    -- foreign key(course_teacher_id) references person(person_id)
+);
+
+/* Преподы курсов */
+create table course_teacher (
+    course_teacher_id primary key autoincrement,
+    course_teacher_item integer not null,
+    teacher_id not null, -- fk
 );
 
 /* Зачёт */
@@ -89,12 +96,10 @@ create table school (
 /*
 Связка "Бытие участника на школе"
 
-Роль человека на школе по умолчанию копируется из
+Роли человека на школе по умолчанию копируется из его профиля.
 
 Именно в этой связке должна быть проставлена роль участника на школе
 (на одной школе он был школьником, на школе следующей он был уже преподом)
-Таким образом, статусы is_student, is_teacher, curatorship участника
-переезжают сюда.
 
 TODO добавить место проведения школы
 */
