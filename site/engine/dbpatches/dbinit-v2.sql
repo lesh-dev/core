@@ -51,20 +51,20 @@ create table course (
     course_title text, -- название курса
     school_id integer not null, -- ссылка на школу, на которой читали курс
     course_cycle text,  -- цикл, на котором читался курс
-    course_teacher_item integer, -- ссылка на преподов (все записи с данным id -- преподы курса)
     target_class text, -- диапазон классов, на которые рассчитан курс
     course_desc text,  -- описание курса
     course_comment text, -- комментарий к курсу (чатик пока не делаем)
     course_created text, -- utc timestamp
-    course_modified text, -- utc timestamp
-    -- foreign key(course_teacher_id) references person(person_id)
+    course_modified text -- utc timestamp
 );
 
 /* Преподы курсов */
-create table course_teacher (
-    course_teacher_id primary key autoincrement,
-    course_teacher_item integer not null,
-    teacher_id not null, -- fk
+create table course_teachers (
+    course_teachers_id integer primary key autoincrement,
+    course_id integer not null, -- fk
+    course_teacher_id integer not null, -- fk
+    foreign key (course_id) references course(course_id),
+    foreign key (course_teacher_id) references person(person_id)
 );
 
 /* Зачёт */
