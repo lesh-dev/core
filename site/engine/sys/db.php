@@ -40,7 +40,7 @@
 
     /**
       * Inserts or updates DB record
-      * @param $table_name Table name to update/insert into
+      * @param $table_name table name to update/insert into
       * @param $primary_keys KV-array of table primary keys
       * @note If PK value has the special value XDB_NEW, the insertion is performed
       * and table should have AI key
@@ -48,8 +48,6 @@
       * @param $allowed_keys only these keys will be taken from $values
       * @return true on successful update, false on error
       * and autoincremented field id on insertion
-      *
-      * TODO: Unhardcode database location ("$content_dir/ank/fizlesh.sqlite3")
       **/
     function xdb_insert_or_update($table_name, $primary_keys, $values, $allowed_keys)
     {
@@ -68,17 +66,18 @@
       * @param $pk_name primary key name (autoincrement)
       * @param $keys_values KV-array of row values
       * @param $allowed_keys only these keys will be taken from $values
-      * @param $override_ts do not override timestamps
-      * @param @ignore_ai ignore autoincrement keys, use value from @keys_values
+      * @param $override_ts override timestamps (true by default)
+      * @param $ignore_ai ignore autoincrement keys, use value from $keys_values
+      * @param $outer_db use given external database (not used by default)
       *
       * Two special fields, ${table_name}_created and ${table_name}_modifed
       * are filled using current UTC time value in human-readable form
       * (that can be converted back to timestamp, though)
       * so they should always present in any table
       **/
-    function xdb_insert_ai($table_name, $pk_name, $keys_values, $allowed_keys, $override_ts = XDB_OVERRIDE_TS, $use_ai = XDB_USE_AI)
+    function xdb_insert_ai($table_name, $pk_name, $keys_values, $allowed_keys, $override_ts = XDB_OVERRIDE_TS, $use_ai = XDB_USE_AI, $outer_db = NULL)
     {
-        $db = xdb_get_write();
+        $db = ($outer_db === NULL) ? xdb_get_write() : $outer_db;
         $keys = "";
         $values = "";
 
@@ -113,7 +112,8 @@
             $result = false;
             xcms_log(0, "[DB:ERROR] $query");
         }
-        $db->close();
+        if ($outer_db === NULL)
+            $db->close();
         return $result;
     }
 
@@ -124,15 +124,17 @@
       * @param $primary_keys KV-array of table primary keys
       * @param $keys_values KV-array of row values
       * @param $allowed_keys only these keys will be taken from $values
+      * @param $override_ts override timestamps (true by default)
+      * @param $outer_db use given external database (not used by default)
       *
       * A special field, ${table_name}_modified, will be updated
       * using current UTC time value in human-readable form
       * @sa xdb_insert_ai
       * @return true in case of success, false otherwise
       **/
-    function xdb_update($table_name, $primary_keys, $keys_values, $allowed_keys, $override_ts = XDB_OVERRIDE_TS)
+    function xdb_update($table_name, $primary_keys, $keys_values, $allowed_keys, $override_ts = XDB_OVERRIDE_TS, $outer_db = NULL)
     {
-        $db = xdb_get_write();
+        $db = ($outer_db === NULL) ? xdb_get_write() : $outer_db;
         $values = "";
         if ($override_ts)
         {
@@ -168,7 +170,8 @@
             xcms_log(0, "[DB] $query");
         else
             xcms_log(0, "[DB:ERROR] $query");
-        $db->close();
+        if ($outer_db === NULL)
+            $db->close();
         return $result ? true : false;
     }
 
@@ -221,6 +224,7 @@
       * Deletes record with the given ID from table.
       * @param $table_name Table name to delete data from
       * @param $id primary key value (compound keys are not supported)
+      * @param $outer_db use given external database (not used by default)
       * @return operation result (BUG: db-specific!)
       *
       * A convention states that primary keys in our tables have
@@ -229,9 +233,9 @@
       * If the $id has the magic value XDB_NEW, the empty record is
       * returned
       **/
-    function xdb_delete($table_name, $key_value)
+    function xdb_delete($table_name, $key_value, $outer_db = NULL)
     {
-        $db = xdb_get_write();
+        $db = ($outer_db === NULL) ? xdb_get_write() : $outer_db;
         $cond = "${table_name}_id = '".$db->escapeString($key_value)."'";
         $query = "DELETE FROM $table_name WHERE $cond";
         $result = $db->exec($query);
@@ -239,7 +243,8 @@
             xcms_log(0, "[DB] $query");
         else
             xcms_log(0, "[DB:ERROR] $query");
-        $db->close();
+        if ($outer_db === NULL)
+            $db->close();
         return $result;
     }
 
