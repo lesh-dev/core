@@ -71,21 +71,52 @@ function xsm_get_person_school_id($db, $school_id, $person_id)
 }
 
 /**
+  * Отдаёт пачку ссылок на преподов текущего курса
+  * Формально $school_id можно вытащить из course_id,
+  * но так проще жить.
+  * @param $course_teacher_id фильтр
+  **/
+function xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id_filter)
+{
+    $teachers_query =
+        "SELECT
+        tp.first_name, tp.last_name,
+        ct.course_teacher_id
+        FROM course_teachers ct, person tp WHERE
+        (ct.course_id = $course_id) AND
+        (tp.person_id = ct.course_teacher_id)
+        ORDER BY tp.last_name, tp.first_name";
+    $teachers_sel = $db->query($teachers_query);
+    $teachers_ht = "";
+    $filtered = ($course_teacher_id_filter == "all");
+    while ($teachers_data = $teachers_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $teacher_fi = htmlspecialchars(xsm_fi($teachers_data));
+        $course_teacher_id = $teachers_data['course_teacher_id'];
+        if ($course_teacher_id == $course_teacher_id_filter)
+            $filtered = true;
+        $teacher_url = "view-person".xcms_url(array(
+            'person_id'=>$course_teacher_id,
+            'school_id'=>$school_id));
+        $teachers_ht .= "<a href=\"$teacher_url\">$teacher_fi</a> ";
+    }
+    if (!$filtered)
+        return false;
+    return $teachers_ht;
+}
+
+/**
   * Печаталка таблицы курсов (общая для списка курсов на школе и одного препода)
   **/
 function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = "all")
 {
     $pers = ($course_teacher_id != "all");
 
-    $where = "(c.school_id = $school_id)";
-    if ($pers)
-        $where .= " AND (c.course_teacher_id = $course_teacher_id)";
     $query =
     "SELECT *
-    FROM course c LEFT JOIN person p
-    ON c.course_teacher_id = p.person_id
-    WHERE $where
-    ORDER BY last_name, first_name, course_title";
+    FROM course c
+    WHERE (c.school_id = $school_id)
+    ORDER BY course_title";
 
     $course_sel = $db->query($query);
     $course_aux_param = $pers
@@ -124,17 +155,17 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
         </thead>
     <?php
 
-    while ($course_and_teacher = $course_sel->fetchArray(SQLITE3_ASSOC)) {
+    while ($course = $course_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $course_id = htmlspecialchars($course["course_id"]);
+        $course_title = htmlspecialchars($course["course_title"]);
+        $target_class = htmlspecialchars($course["target_class"]);
+        $course_cycle = htmlspecialchars($course["course_cycle"]);
+        $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id);
+        if ($teachers_ht === false) // filter not passed
+            continue;
 
-        $course_id = htmlspecialchars($course_and_teacher["course_id"]);
-        $course_title = htmlspecialchars($course_and_teacher["course_title"]);
-        $target_class = htmlspecialchars($course_and_teacher["target_class"]);
-        $course_cycle = htmlspecialchars($course_and_teacher["course_cycle"]);
-        $course_teacher_id = xcms_get_key_or($course_and_teacher, "course_teacher_id", XDB_NEW);
-
-        $teacher_fi = htmlspecialchars(xsm_fi($course_and_teacher));
-
-        // ахтунг, тут будет N SELECT-ов
+        // ахтунг, тут будет 3*N SELECT-ов
         // до кучи посчитаем количество сдавших
         $exam_passed_sel = $db->query(
             "SELECT
@@ -156,14 +187,10 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
         if ($exam_total_data = $exam_total_sel->fetchArray(SQLITE3_ASSOC))
             $exam_total_count = $exam_total_data['total_count'];
         $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
-        $teacher_url = "view-person".xcms_url(array(
-            'person_id'=>$course_teacher_id,
-            'school_id'=>$school_id));
         ?>
         <tr>
             <?php if (!$pers) {?>
-            <td class="ankList"><a href="<?php echo $teacher_url; ?>"><?php
-                echo "$teacher_fi"; ?></a></td>
+            <td class="ankList"><?php echo $teachers_ht; ?></td>
             <?php } ?>
             <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
                 echo "$course_title"; ?></a></td>
