@@ -5,7 +5,6 @@
 $course_fields = array(
     "course_title"=>"Название курса",
     "target_class"=>"Уровень (диапазон классов)",
-    "course_teacher_id"=>"Препод курса",
     "school_id"=>"Школа, на которой читался курс",
     "course_cycle"=>"Цикл, на котором читался курс",
     "course_desc"=>"Описание",
@@ -14,20 +13,32 @@ $course_fields = array(
     "course_modified"=>"Последняя модификация"
 );
 
+$course_teachers_fields = array(
+    "course_id"=>"Курс",
+    "course_teacher_id"=>"Препод курса",
+    "course_teachers_created"=>"Время создания",
+    "course_teachers_modified"=>"Последняя модификация"
+);
+
 function xsm_edit_course()
 {
     global $course_fields;
 
     $course_id = xcms_get_key_or($_GET, 'course_id', '-1'); // invalid key
     $course = xdb_get_entity_by_id('course', $course_id);
-    $course_teacher_id = -1;
+    // По умолчанию надо создавать связку course_teacher,
+    // если задан хоть какой-нибудь course_teacher_id извне
+    // или ничего не делать, если он не задан. Остальных редактировать
+    // через интерфейс добавления/удаления преподов данного курса
+    // методов крестика или галочки (его пока не будет)
+
+    $course_teacher_id = NULL;
     $school_id = -1;
     if ($course_id == XDB_NEW)
     {
         // prefill teacher
         $course_teacher_id = xcms_get_key_or($_GET, 'course_teacher_id');
-        if (strlen($course_teacher_id))
-            $course['course_teacher_id'] = $course_teacher_id;
+        $course['course_teacher_id'] = strlen($course_teacher_id) ? $course_teacher_id : NULL;
 
         // prefill school
         $school_id = xcms_get_key_or($_GET, 'school_id');
@@ -37,10 +48,9 @@ function xsm_edit_course()
     else
     {
         $school_id = $course['school_id'];
-        $course_teacher_id = $course['course_teacher_id'];
+        $course_teacher_id = 'all';
     }
 
-    $teacher = xdb_get_entity_by_id('person', $course_teacher_id);
     $school = xdb_get_entity_by_id('school', $school_id);
 
     $field_types = array(
@@ -71,8 +81,7 @@ function xsm_edit_course()
                     $key == "course_modified")
                     $attr = 'readonly="readonly"';
                 // selectors cannot be readonly
-                if ($key == "school_id" ||
-                    $key == "course_teacher_id")
+                if ($key == "school_id")
                     $attr = 'disabled="disabled"'; ?>
                 <tr><td class="ankList"><span class="ankEditField"><?php echo $course_fields[$key]; ?></span>
                 <?php
@@ -81,8 +90,13 @@ function xsm_edit_course()
                     <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
                         echo htmlspecialchars($value); ?></textarea><?php
                 }
-                elseif ($key == 'course_teacher_id')
+                /*
+                elseif ($key == 'course_teacher_item')
                 {
+                    $teachers = xsm_get_teacher_ids_by_item($course_teacher_item);
+                    print_r($teachers);
+                    // make selector from list
+                    //echo "Cannot render selector (not impl)";
                     echo xsm_make_selector_ext('person_id', $key, xcms_get_key_or($course, $key, "-1"),
                         "@@last_name@ @@first_name@",
                         "SELECT
@@ -93,6 +107,7 @@ function xsm_edit_course()
                         ORDER BY last_name, first_name",
                         $attr);
                 }
+                */
                 elseif ($key == 'school_id')
                 {
                     echo xsm_make_selector('school', 'school_id', xcms_get_key_or($course, $key, "-1"),
@@ -105,6 +120,10 @@ function xsm_edit_course()
                 </td></tr>
                 <?php
             }?>
+            <tr><td class="ankList"><span class="ankEditField">Преподы</span><?php
+                if ($course_id != XDB_NEW)
+                    echo xsm_get_course_teachers(xdb_get(), $course_id, $school_id, 'all');
+            ?></td></tr>
         </table><?php
         xsm_edit_operations_listmode('course', $course_id, 'Вернуться к списку курсов',
             xcms_url(array('school_id'=>$school_id)));
@@ -118,6 +137,19 @@ if (@$_POST["update-course"])
     $school_id = xcms_get_key_or($_POST, 'school_id', '-1');
     $aux_param = xcms_url(array('school_id'=>$school_id));
     xsm_update_entity_listmode('course', 'course', 'Курс', $course_fields, $aux_param);
+    if ($_POST['course_id'] == XDB_NEW)
+    {
+        $course_teachers = array(
+            'course_id'=>$_POST['course_id'],
+            'course_teacher_id'=>$_POST['course_teacher_id']
+        );
+        // TODO: Add some error handling
+        $res = xdb_insert_or_update(
+            'course_teachers',
+            array('course_teachers_id'=>XDB_NEW),
+            $course_teachers,
+            $course_teachers_fields);
+    }
 }
 elseif (@$_POST["delete-course"])
 {
@@ -127,6 +159,7 @@ elseif (@$_POST["delete-course"])
 }
 elseif (@$_POST["confirm-delete-course"])
 {
+    // TODO: delete links?
     $school_id = xcms_get_key_or($_GET, 'school_id', '-1');
     $aux_param = xcms_url(array('school_id'=>$school_id));
     xsm_delete_entity_listmode('course', 'course', 'Курс', $aux_param);

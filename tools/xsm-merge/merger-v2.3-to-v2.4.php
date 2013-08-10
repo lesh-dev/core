@@ -73,6 +73,8 @@
         "course_teachers_id integer primary key autoincrement, ".
         "course_id integer not null, ".
         "course_teacher_id integer not null, ".
+        "course_teachers_created text, ".
+        "course_teachers_modified text, ".
         "foreign key (course_id) references course(course_id), ".
         "foreign key (course_teacher_id) references person(person_id) ".
         ");");
