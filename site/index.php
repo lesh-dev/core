@@ -1,6 +1,6 @@
 <?php
     session_set_cookie_params(14 * 24 * 3600); // 2 weeks
-    session_start();
+    $session_result = @session_start();
     if (file_exists("install.php"))
     {
         header("Location: install.php");
@@ -19,6 +19,8 @@
     require_once ("$engine_dir/sys/compiler.php");
     require_once ("$engine_dir/sys/mailer.php");
     require_once ("$engine_dir/sys/resample.php");
+    if (!$session_result)
+        xcms_log("Session start failed");
 
     $main_ref_file = "";
     $main_ref_name = "";
