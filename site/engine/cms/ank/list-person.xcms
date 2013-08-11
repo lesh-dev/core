@@ -73,6 +73,7 @@ function xsm_show_person_list($school_id)
         "SELECT
         p.person_id,
         p.last_name, p.first_name, p.patronymic,
+        p.birth_date,
         p.phone, p.cellular,
         p.person_created, p.person_modified,
         ps.curatorship, ps.is_teacher, ps.is_student,
@@ -96,12 +97,14 @@ function xsm_show_person_list($school_id)
             <!--<col width="5%" />-->
             <col width="25%" />
             <col width="30px" />
+            <col width="50px" />
             <col width="25%" />
         </colgroup>
         <thead>
             <!--<th class="ankList">ID</th>-->
             <th class="ankList">Фамилия, имя</th>
             <th class="ankList">Кл.</th>
+            <th class="ankList">ДР</th>
             <th class="ankList">Контакты</th>
         </thead>
     <?php
@@ -116,6 +119,10 @@ function xsm_show_person_list($school_id)
         $school_city = htmlspecialchars($person["school_city"]);*/
         // класс на данной школе
         $current_class = htmlspecialchars($person["current_class"]);
+
+        $birth_date = htmlspecialchars($person["birth_date"]);
+        $birth_date = str_replace(".07.", "<b>.07.</b>", $birth_date);
+        $birth_date = str_replace(".08.", "<b>.08.</b>", $birth_date);
 
         $phone = htmlspecialchars($person["phone"]);
         $cellular = htmlspecialchars($person["cellular"]);
@@ -142,7 +149,8 @@ function xsm_show_person_list($school_id)
                 <a name="<?php echo "person$person_id"; ?>"></a>
                 <a href="<?php echo "view-person&amp;person_id=$person_id&amp;school_id=$school_id"; ?>"
                     title="<?php echo $fio; ?>"><?php echo $fi; ?></a></td>
-            <td class="ankList"><?php echo $current_class; ?></a></td>
+            <td class="ankList"><?php echo $current_class; ?></td>
+            <td class="ankList"><?php echo $birth_date; ?></td>
             <td class="ankList"><?php
                 echo $cellular;
                 if ($cellular && $phone)
