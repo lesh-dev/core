@@ -120,10 +120,20 @@ class XcmsXsmAnketaWrongFill(SeleniumTest):
 		# fill it again.
 		inpLastName = self.fillElementById("last_name-input", inpLastName)
 
+		self.fillElementById("hobby-text", "")
+
+		self.tryWrongSubmit("Hobbies were erased")
+		self.assertBodyTextPresent(u"Если Вы уверены, что не хотите указывать эту информацию")
+		# no erase achievements.
+		self.fillElementById("achievements-text", "")
+		self.tryWrongSubmit("Enter confirmation mode with erased field 'A' and remove another field 'B'. Revalidation check after bug #529")
+
+		inpHob = self.fillElementById("hobby-text", inpHob)
+		inpAch = self.fillElementById("achievements-text", inpAch)
+
 		# at last, it should work.
 		self.clickElementById("submit-anketa-button")
 		self.assertBodyTextPresent(u"Спасибо, Ваша анкета принята!")
-		
 			
 		# now login as admin
 	
@@ -156,6 +166,8 @@ class XcmsXsmAnketaWrongFill(SeleniumTest):
 		self.assertBodyTextPresent(inpEmail)
 		self.assertBodyTextPresent(inpSkype)
 		self.assertBodyTextPresent(inpSocial)
+		self.clickElementById("show-extra-person-info")
+		self.wait(1)
 		self.assertBodyTextPresent(inpFav)
 		self.assertBodyTextPresent(inpAch)
 		self.assertBodyTextPresent(inpHob)
