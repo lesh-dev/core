@@ -80,8 +80,16 @@ function m_strlen($s) {
 	return mb_strlen($s, 'UTF-8');
 }
 
+function m_strpos($haystack, $needle, $offset = 0) {
+	return mb_strpos($haystack, $needle, $offset, 'UTF-8');
+}
+
 function m_substr($str, $start, $length) {
 	return mb_substr($str, $start, $length, 'UTF-8');
+}
+
+function m_end($str, $start) {
+	return mb_substr($str, $start, mb_strlen($str) - $start, 'UTF-8');
 }
 
 function m_split($str) {
@@ -317,7 +325,7 @@ class FineDiff {
 		while ( $opcodes_offset <  $opcodes_len ) {
 			$opcode = m_substr($opcodes, $opcodes_offset, 1);
 			$opcodes_offset++;
-			$n = intval(m_substr($opcodes, $opcodes_offset));
+			$n = intval(m_end($opcodes, $opcodes_offset));
 			if ( $n ) {
 				$opcodes_offset += m_strlen(strval($n));
 				}
