@@ -112,7 +112,7 @@ try:
 			print test.getDoc()
 			print;
 		else:
-			print "Running test", test.getName()
+			print "Running test", test.getName(), "on site", baseUrl
 			print test.getDoc()
 			result = RunTest(test)
 			if result not in testStats: # add new list
