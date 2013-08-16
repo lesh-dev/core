@@ -89,12 +89,28 @@ function m_substr($str, $start, $length) {
 }
 
 function m_end($str, $start) {
-	return mb_substr($str, $start, mb_strlen($str) - $start, 'UTF-8');
+	return mb_substr($str, $start, m_strlen($str) - $start, 'UTF-8');
 }
 
 function m_split($str) {
 	return preg_split("//u", $str, -1, PREG_SPLIT_NO_EMPTY);
 }
+
+function m_strspn($str, $pattern, $start = 0) {
+	$pos = 0;
+	while (true) {
+		$sym = m_substr($str, $start + $pos, 1);
+		if ($sym == "")
+			break;
+		if (m_strpos($pattern, $sym) === false)
+			break;
+		$pos++;
+	}
+	return $pos;
+}
+
+if (m_strspn("альфаКу", "афьл", 1) != 4)
+	die("FAIL");
 
 abstract class FineDiffOp {
 	abstract public function getFromLen();
@@ -670,7 +686,7 @@ class FineDiff {
 		$start = $end = 0;
 		for (;;) {
 			$end += strcspn($text, $delimiters, $end);
-			$end += strspn($text, $delimiters, $end);
+			$end += m_strspn($text, $delimiters, $end);
 			if ( $end === $start ) {
 				break;
 				}

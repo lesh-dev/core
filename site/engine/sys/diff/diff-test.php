@@ -18,8 +18,8 @@
     //$from_text = mb_convert_encoding($from_text, 'HTML-ENTITIES', 'UTF-8');
     //$to_text = mb_convert_encoding($to_text, 'HTML-ENTITIES', 'UTF-8');
 
-    $opcodes = FineDiff::getDiffOpcodes($from_text, $to_text, FineDiff::$wordGranularity);
-    //$opcodes = FineDiff::getDiffOpcodes($from_text, $to_text, FineDiff::$characterGranularity);
+    //$opcodes = FineDiff::getDiffOpcodes($from_text, $to_text, FineDiff::$wordGranularity);
+    $opcodes = FineDiff::getDiffOpcodes($from_text, $to_text, FineDiff::$characterGranularity);
 
     print_r("codes|||$opcodes|||\n");
     $diff_html = FineDiff::renderDiffToHTMLFromOpcodes($from_text, $opcodes);
