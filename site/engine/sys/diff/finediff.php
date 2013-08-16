@@ -109,8 +109,31 @@ function m_strspn($str, $pattern, $start = 0) {
 	return $pos;
 }
 
+function m_strcspn($str, $pattern, $start = 0) {
+	$pos = 0;
+	while (true) {
+		$sym = m_substr($str, $start + $pos, 1);
+		if ($sym == "")
+			break;
+		if (m_strpos($pattern, $sym) !== false)
+			break;
+		$pos++;
+	}
+	return $pos;
+}
+
+
 if (m_strspn("альфаКу", "афьл", 1) != 4)
 	die("FAIL");
+
+if (m_strcspn('abcd',  'apple') != 0)
+	die("FAIL m_strcspn 1");
+if (m_strcspn('abcd',  'banana') != 0)
+	die("FAIL m_strcspn 2");
+if (m_strcspn('heЛЛo', 'Л') != 2)
+	die("FAIL m_strcspn 3");
+if (m_strcspn('heЛЛo', 'ДworЛЛd') != 2)
+	die("FAIL m_strcspn 4");
 
 abstract class FineDiffOp {
 	abstract public function getFromLen();
@@ -685,7 +708,7 @@ class FineDiff {
 		$fragments = array();
 		$start = $end = 0;
 		for (;;) {
-			$end += strcspn($text, $delimiters, $end);
+			$end += m_strcspn($text, $delimiters, $end);
 			$end += m_strspn($text, $delimiters, $end);
 			if ( $end === $start ) {
 				break;
@@ -712,7 +735,7 @@ class FineDiff {
 			}
 		else if ( $opcode === 'd' ) {
 			$deletion = m_substr($from, $from_offset, $from_len);
-			if ( strcspn($deletion, " \n\r") === 0 ) {
+			if ( m_strcspn($deletion, " \n\r") === 0 ) {
 				$deletion = str_replace(array("\n","\r"), array('\n','\r'), $deletion);
 				}
 			echo '<del>', htmlentities(htmlentities($deletion)), '</del>';
