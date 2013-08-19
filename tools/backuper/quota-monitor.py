@@ -3,13 +3,24 @@
 
 import os, sys, re, commands, string
 
-def getPercent(realSize, maxSize):
+QuotaThresholdPercent = 95
+
+def bQuotaExceeded(realSize, maxSize):
+    if maxSize == 0:
+        return False
+    perc = (realSize * 100 / maxSize)
+    if perc > QuotaThresholdPercent:
+        return True
+    return False
+    
+    
+def getExceedPercent(realSize, maxSize):
     if maxSize == 0:
         return 0
     perc = (realSize * 100 / maxSize) - 100.0
     return "{0}%".format(round(perc, 1))
     
-def bQuotaExceeded(line):
+def bQuotaExceededForLine(line):
     m = re.search("(\S+)\s+(\d+)\s*(\w)", line)
     if not m:
         return False
@@ -31,8 +42,8 @@ def bQuotaExceeded(line):
     
     realSize = int(commands.getoutput("du -sb " + path).strip().split()[0])
     #print "max size for ", line, ": ", maxSize, " real size: ", realSize
-    if realSize > maxSize:
-        print "Quota exceeded for path " + path + " for", getPercent(realSize, maxSize)
+    if bQuotaExceeded(realSize, maxSize):
+        print "Quota exceeded for path " + path + " by " + getExceedPercent(realSize, maxSize)
         return True
     return False
     
@@ -40,7 +51,7 @@ def monitor(fileList):
     quotaExceeded = False
     for line in open(fileList):
         try:
-            if bQuotaExceeded(line.strip()):
+            if bQuotaExceededForLine(line.strip()):
                 quotaExceeded = True
         except ValueError:
             print "Something is wrong on line " + line
@@ -52,7 +63,7 @@ def monitor(fileList):
 
 if len(sys.argv) < 2:
     print "Parameters not set. Syntax: quota-monitor.py <directory-list>"
-    os.exit(2)
+    sys.exit(2)
 
 fileList = sys.argv[1]
 
