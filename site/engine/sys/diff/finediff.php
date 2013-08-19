@@ -125,7 +125,6 @@ function m_strcspn($str, $pattern, $start = 0) {
 
 if (m_strspn("альфаКу", "афьл", 1) != 4)
 	die("FAIL");
-
 if (m_strcspn('abcd',  'apple') != 0)
 	die("FAIL m_strcspn 1");
 if (m_strcspn('abcd',  'banana') != 0)
@@ -731,17 +730,17 @@ class FineDiff {
 
 	private static function renderDiffToHTMLFromOpcode($opcode, $from, $from_offset, $from_len) {
 		if ( $opcode === 'c' ) {
-			echo htmlentities(htmlentities(m_substr($from, $from_offset, $from_len)));
+			echo htmlspecialchars(m_substr($from, $from_offset, $from_len));
 			}
 		else if ( $opcode === 'd' ) {
 			$deletion = m_substr($from, $from_offset, $from_len);
 			if ( m_strcspn($deletion, " \n\r") === 0 ) {
 				$deletion = str_replace(array("\n","\r"), array('\n','\r'), $deletion);
 				}
-			echo '<del>', htmlentities(htmlentities($deletion)), '</del>';
+			echo '<del>', htmlspecialchars($deletion), '</del>';
 			}
 		else /* if ( $opcode === 'i' ) */ {
- 			echo '<ins>', htmlentities(htmlentities(m_substr($from, $from_offset, $from_len))), '</ins>';
+ 			echo '<ins>', htmlspecialchars(m_substr($from, $from_offset, $from_len)), '</ins>';
 			}
 		}
 	}

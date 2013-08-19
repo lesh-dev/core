@@ -12,26 +12,25 @@
 
     }
 
-    $from_text = "проверка utf8";
-    $to_text = "проверка   не Utf8";
+    $from_text = file_get_contents("text.html");
+    $to_text = file_get_contents("newtext.html");
 
     //$from_text = mb_convert_encoding($from_text, 'HTML-ENTITIES', 'UTF-8');
     //$to_text = mb_convert_encoding($to_text, 'HTML-ENTITIES', 'UTF-8');
 
     //$opcodes = FineDiff::getDiffOpcodes($from_text, $to_text, FineDiff::$wordGranularity);
-    $opcodes = FineDiff::getDiffOpcodes($from_text, $to_text, FineDiff::$characterGranularity);
+    $opcodes = FineDiff::getDiffOpcodes($from_text, $to_text, FineDiff::$wordGranularity);
 
-    print_r("codes|||$opcodes|||\n");
+    //print_r("codes|||$opcodes|||\n");
     $diff_html = FineDiff::renderDiffToHTMLFromOpcodes($from_text, $opcodes);
+    echo "<style>
+        ins {
+            color: #009f00;
+            text-decoration: none;
+        }
+        del {
+            color: #9f0000;
+        }
+    </style>";
     echo $diff_html;
-
-    //$from_text = mb_convert_encoding($from_text_utf8, 'HTML-ENTITIES', 'UTF-8');
-    //$to_text = mb_convert_encoding($to_text_utf8, 'HTML-ENTITIES', 'UTF-8');
-    //print(mb_convert_encoding($diffHTML, 'UTF-8', 'HTML-ENTITIES'));
-
-
-    //FineDiff::renderFromOpcodes($from_text, $opcodes, "callbackFunc");
-
-    //print_r(mb_convert_encoding($opcodes, 'UTF-8', 'HTML-ENTITIES')."\n");
-
 ?>
