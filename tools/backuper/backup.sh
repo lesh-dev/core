@@ -7,6 +7,24 @@
 # Instead, edit <git-repo-root>/tools/backuper/backup.sh and then deploy it
 # to /srv/tools/backup.sh
 
+
+# quota monitoring.
+# backup may fail if no space is left, so let's begin with quotas.
+
+my_dir="`dirname $0`"
+quota_script="$my_dir/quota-monitor.py"
+
+quota_settings="$my_dir/quota.txt"
+
+if ! [ -r "$quota_settings" ]; then
+    echo "Error: no quota settings '$quota_settings' found. "
+    exit 1
+fi
+
+$quota_script "$my_dir/quota.txt"
+
+# let's now backup.
+
 backup_folder=/backup
 status_file=/tmp/backup-status
 

@@ -1,15 +1,57 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-import os, sys, re, commands, string
+import os, sys, re, subprocess, commands, string
 
-def getPercent(realSize, maxSize):
+QuotaThresholdPercent = 95
+
+def isList(x):
+    return type(x) == type(list())
+
+# python 2.7+
+#def getCommandOutput(command):
+    #if not isList(command):
+        #command = command.split()
+    #try:
+        #output = subprocess.check_call(command)
+        #return 0, output
+    #except subprocess.CalledProcessError as e:
+        #return e.returncode, e.output
+
+# we have python 2.6 only.
+def getCommandOutput(command):
+    if isList(command):
+        command = " ".join(command)
+    return 0, commands.getoutput(command)
+
+def bQuotaExceeded(realSize, maxSize):
+    if maxSize == 0:
+        return False
+    perc = (realSize * 100 / maxSize)
+    if perc > QuotaThresholdPercent:
+        return True
+    return False
+    
+    
+def getExceedPercent(realSize, maxSize):
     if maxSize == 0:
         return 0
     perc = (realSize * 100 / maxSize) - 100.0
-    return "{0}%".format(round(perc, 1))
+    return "{0}%".format(decimal(perc))
+
+def decimal(n):
+    return round(n, 1)
+
+def getHumanValue(number):
+    k = 1024
+    if number < k**1: return str(number)
+    if number < k**2: return str(decimal(number/k**1)) + "K"
+    if number < k**3: return str(decimal(number/k**2)) + "M"
+    if number < k**4: return str(decimal(number/k**3)) + "G"
+    if number < k**5: return str(decimal(number/k**4)) + "T"
+    return str(decimal(number/k**5)) + "P"
     
-def bQuotaExceeded(line):
+def bQuotaExceededForLine(line):
     m = re.search("(\S+)\s+(\d+)\s*(\w)", line)
     if not m:
         return False
@@ -17,22 +59,27 @@ def bQuotaExceeded(line):
     path = m.group(1).strip()
     sizeLog = int(m.group(2))
     scaleLog = m.group(3).upper().strip()
+    k = 1024
     scales = {
-        "": 1,
-        "K": 1024,
-        "M": 1024*1024,
-        "G": 1024*1024*1024,
-        "T": 1024*1024*1024*1024,
-        "P": 1024*1024*1024*1024*1024
+         "": k**0,
+        "K": k**1,
+        "M": k**2,
+        "G": k**3,
+        "T": k**4,
+        "P": k**5
         }
     if scaleLog not in scales:
         raise RuntimeError("Incorrect size format for line '" + line + "'. ")
     maxSize = sizeLog * scales[scaleLog];
     
-    realSize = int(commands.getoutput("du -sb " + path).strip().split()[0])
+    res, output = getCommandOutput(["du", "-sb", path]);
+    if res != 0:
+        raise RuntimeError("Error occured on getting disk usage for line '" + line + "'. ")
+        
+    realSize = int(output.strip().split()[0])
     #print "max size for ", line, ": ", maxSize, " real size: ", realSize
-    if realSize > maxSize:
-        print "Quota exceeded for path " + path + " for", getPercent(realSize, maxSize)
+    if bQuotaExceeded(realSize, maxSize):
+        print "Quota " + getHumanValue(maxSize) + " exceeded for path " + path + " by " + getExceedPercent(realSize, maxSize)
         return True
     return False
     
@@ -40,10 +87,13 @@ def monitor(fileList):
     quotaExceeded = False
     for line in open(fileList):
         try:
-            if bQuotaExceeded(line.strip()):
+            if bQuotaExceededForLine(line.strip()):
                 quotaExceeded = True
         except ValueError:
             print "Something is wrong on line " + line
+            return 2
+        except RuntimeError as e:
+            print e
             return 2
             
     if quotaExceeded:
@@ -52,7 +102,7 @@ def monitor(fileList):
 
 if len(sys.argv) < 2:
     print "Parameters not set. Syntax: quota-monitor.py <directory-list>"
-    os.exit(2)
+    sys.exit(2)
 
 fileList = sys.argv[1]
 
