@@ -76,63 +76,10 @@
 *   be done as a postprocessing method (->optimize()?)
 */
 
-function m_strlen($s) {
-	return mb_strlen($s, 'UTF-8');
-}
-
-function m_strpos($haystack, $needle, $offset = 0) {
-	return mb_strpos($haystack, $needle, $offset, 'UTF-8');
-}
-
-function m_substr($str, $start, $length) {
-	return mb_substr($str, $start, $length, 'UTF-8');
-}
-
-function m_end($str, $start) {
-	return mb_substr($str, $start, m_strlen($str) - $start, 'UTF-8');
-}
-
-function m_split($str) {
-	return preg_split("//u", $str, -1, PREG_SPLIT_NO_EMPTY);
-}
-
-function m_strspn($str, $pattern, $start = 0) {
-	$pos = 0;
-	while (true) {
-		$sym = m_substr($str, $start + $pos, 1);
-		if ($sym == "")
-			break;
-		if (m_strpos($pattern, $sym) === false)
-			break;
-		$pos++;
-	}
-	return $pos;
-}
-
-function m_strcspn($str, $pattern, $start = 0) {
-	$pos = 0;
-	while (true) {
-		$sym = m_substr($str, $start + $pos, 1);
-		if ($sym == "")
-			break;
-		if (m_strpos($pattern, $sym) !== false)
-			break;
-		$pos++;
-	}
-	return $pos;
-}
-
-
-if (m_strspn("альфаКу", "афьл", 1) != 4)
-	die("FAIL");
-if (m_strcspn('abcd',  'apple') != 0)
-	die("FAIL m_strcspn 1");
-if (m_strcspn('abcd',  'banana') != 0)
-	die("FAIL m_strcspn 2");
-if (m_strcspn('heЛЛo', 'Л') != 2)
-	die("FAIL m_strcspn 3");
-if (m_strcspn('heЛЛo', 'ДworЛЛd') != 2)
-	die("FAIL m_strcspn 4");
+if (isset($engine_dir))
+	require_once("$engine_dir/sys/string.php");
+else
+	require_once("../string.php");
 
 abstract class FineDiffOp {
 	abstract public function getFromLen();
@@ -166,13 +113,13 @@ class FineDiffInsertOp extends FineDiffOp {
 		return 0;
 		}
 	public function getToLen() {
-		return m_strlen($this->text);
+		return xu_len($this->text);
 		}
 	public function getText() {
 		return $this->text;
 		}
 	public function getOpcode() {
-		$to_len = m_strlen($this->text);
+		$to_len = xu_len($this->text);
 		if ( $to_len === 1 ) {
 			return "i:{$this->text}";
 			}
@@ -189,7 +136,7 @@ class FineDiffReplaceOp extends FineDiffOp {
 		return $this->fromLen;
 		}
 	public function getToLen() {
-		return m_strlen($this->text);
+		return xu_len($this->text);
 		}
 	public function getText() {
 		return $this->text;
@@ -201,7 +148,7 @@ class FineDiffReplaceOp extends FineDiffOp {
 		else {
 			$del_opcode = "d{$this->fromLen}";
 			}
-		$to_len = m_strlen($this->text);
+		$to_len = xu_len($this->text);
 		if ( $to_len === 1 ) {
 			return "{$del_opcode}i:{$this->text}";
 			}
@@ -244,7 +191,7 @@ class FineDiffOps {
 			$edits[] = new FineDiffDeleteOp($from_len);
 			}
 		else /* if ( $opcode === 'i' ) */ {
-			$edits[] = new FineDiffInsertOp(m_substr($from, $from_offset, $from_len));
+			$edits[] = new FineDiffInsertOp(xu_substr($from, $from_offset, $from_len));
 			}
 		}
 	public $edits = array();
@@ -358,14 +305,14 @@ class FineDiff {
 		if ( !is_callable($callback) ) {
 			return;
 			}
-		$opcodes_len = m_strlen($opcodes);
+		$opcodes_len = xu_len($opcodes);
 		$from_offset = $opcodes_offset = 0;
 		while ( $opcodes_offset <  $opcodes_len ) {
-			$opcode = m_substr($opcodes, $opcodes_offset, 1);
+			$opcode = xu_substr($opcodes, $opcodes_offset, 1);
 			$opcodes_offset++;
-			$n = intval(m_end($opcodes, $opcodes_offset));
+			$n = intval(xu_end($opcodes, $opcodes_offset));
 			if ( $n ) {
-				$opcodes_offset += m_strlen(strval($n));
+				$opcodes_offset += xu_len(strval($n));
 				}
 			else {
 				$n = 1;
@@ -453,7 +400,7 @@ class FineDiff {
 			// increase granularity
 			if ( $fragment_edit instanceof fineDiffReplaceOp && $has_next_stage ) {
 				$this->_processGranularity(
-					m_substr($this->from_text, $this->from_offset, $fragment_edit->getFromLen()),
+					xu_substr($this->from_text, $this->from_offset, $fragment_edit->getFromLen()),
 					$fragment_edit->getText()
 					);
 				}
@@ -491,8 +438,8 @@ class FineDiff {
 		$result = array();
 
 		// fragment-level diffing
-		$from_text_len = m_strlen($from_text);
-		$to_text_len = m_strlen($to_text);
+		$from_text_len = xu_len($from_text);
+		$to_text_len = xu_len($to_text);
 		$from_fragments = FineDiff::extractFragments($from_text, $delimiters);
 		$to_fragments = FineDiff::extractFragments($to_text, $delimiters);
 
@@ -513,7 +460,7 @@ class FineDiff {
 					$result[$from_segment_start * 4] = new fineDiffDeleteOp($from_segment_length);
 					}
 				else if ( $to_segment_length ) {
-					$result[$from_segment_start * 4 + 1] = new fineDiffInsertOp(m_substr($to_text, $to_segment_start, $to_segment_length));
+					$result[$from_segment_start * 4 + 1] = new fineDiffInsertOp(xu_substr($to_text, $to_segment_start, $to_segment_length));
 					}
 				continue;
 				}
@@ -527,7 +474,7 @@ class FineDiff {
 
 			while ( $from_base_fragment_index < $from_segment_end ) {
 				$from_base_fragment = $from_fragments[$from_base_fragment_index];
-				$from_base_fragment_length = m_strlen($from_base_fragment);
+				$from_base_fragment_length = xu_len($from_base_fragment);
 				// performance boost: cache array keys
 				if ( !isset($cached_array_keys_for_current_segment[$from_base_fragment]) ) {
 					if ( !isset($cached_array_keys[$from_base_fragment]) ) {
@@ -569,7 +516,7 @@ class FineDiff {
 						if ( $from_fragments[$fragment_from_index] !== $to_fragments[$fragment_to_index] ) {
 							break;
 							}
-						$fragment_length = m_strlen($from_fragments[$fragment_from_index]);
+						$fragment_length = xu_len($from_fragments[$fragment_from_index]);
 						$fragment_index_offset += $fragment_length;
 						}
 					if ( $fragment_index_offset > $best_copy_length ) {
@@ -578,7 +525,7 @@ class FineDiff {
 						$best_to_start = $to_base_fragment_index;
 						}
 					}
-				$from_base_fragment_index += m_strlen($from_base_fragment);
+				$from_base_fragment_index += xu_len($from_base_fragment);
 				// If match is larger than half segment size, no point trying to find better
 				// TODO: Really?
 				if ( $best_copy_length >= $from_segment_length / 2) {
@@ -597,7 +544,7 @@ class FineDiff {
 				$jobs[] = array($best_from_start + $best_copy_length, $from_segment_end, $best_to_start + $best_copy_length, $to_segment_end);
 				}
 			else {
-				$result[$from_segment_start * 4 ] = new fineDiffReplaceOp($from_segment_length, m_substr($to_text, $to_segment_start, $to_segment_length));
+				$result[$from_segment_start * 4 ] = new fineDiffReplaceOp($from_segment_length, xu_substr($to_text, $to_segment_start, $to_segment_length));
 				}
 			}
 
@@ -623,7 +570,7 @@ class FineDiff {
 	*/
 	private static function doCharDiff($from_text, $to_text) {
 		$result = array();
-		$jobs = array(array(0, m_strlen($from_text), 0, m_strlen($to_text)));
+		$jobs = array(array(0, xu_len($from_text), 0, xu_len($to_text)));
 		while ( $job = array_pop($jobs) ) {
 			// get the segments which must be diff'ed
 			list($from_segment_start, $from_segment_end, $to_segment_start, $to_segment_end) = $job;
@@ -636,7 +583,7 @@ class FineDiff {
 					$result[$from_segment_start * 4 + 0] = new fineDiffDeleteOp($from_segment_len);
 					}
 				else if ( $to_segment_len ) {
-					$result[$from_segment_start * 4 + 1] = new fineDiffInsertOp(m_substr($to_text, $to_segment_start, $to_segment_len));
+					$result[$from_segment_start * 4 + 1] = new fineDiffInsertOp(xu_substr($to_text, $to_segment_start, $to_segment_len));
 					}
 				continue;
 				}
@@ -646,7 +593,7 @@ class FineDiff {
 					$to_copy_start = $to_segment_start;
 					$to_copy_start_max = $to_segment_end - $copy_len;
 					while ( $to_copy_start <= $to_copy_start_max ) {
-						$from_copy_start = m_strpos(m_substr($from_text, $from_segment_start, $from_segment_len), m_substr($to_text, $to_copy_start, $copy_len));
+						$from_copy_start = m_strpos(xu_substr($from_text, $from_segment_start, $from_segment_len), xu_substr($to_text, $to_copy_start, $copy_len));
 						if ( $from_copy_start !== false ) {
 							$from_copy_start += $from_segment_start;
 							break 2;
@@ -662,7 +609,7 @@ class FineDiff {
 					$from_copy_start = $from_segment_start;
 					$from_copy_start_max = $from_segment_end - $copy_len;
 					while ( $from_copy_start <= $from_copy_start_max ) {
-						$to_copy_start = m_strpos(m_substr($to_text, $to_segment_start, $to_segment_len), m_substr($from_text, $from_copy_start, $copy_len));
+						$to_copy_start = m_strpos(xu_substr($to_text, $to_segment_start, $to_segment_len), xu_substr($from_text, $from_copy_start, $copy_len));
 						if ( $to_copy_start !== false ) {
 							$to_copy_start += $to_segment_start;
 							break 2;
@@ -680,7 +627,7 @@ class FineDiff {
 				}
 			// no match,  so delete all, insert all
 			else {
-				$result[$from_segment_start * 4] = new FineDiffReplaceOp($from_segment_len, m_substr($to_text, $to_segment_start, $to_segment_len));
+				$result[$from_segment_start * 4] = new FineDiffReplaceOp($from_segment_len, xu_substr($to_text, $to_segment_start, $to_segment_len));
 				}
 			}
 		ksort($result, SORT_NUMERIC);
@@ -701,18 +648,18 @@ class FineDiff {
 		// special case: split into characters
 		if ( empty($delimiters) ) {
 			$chars = m_split($text);
-			$chars[m_strlen($text)] = '';
+			$chars[xu_len($text)] = '';
 			return $chars;
 			}
 		$fragments = array();
 		$start = $end = 0;
 		for (;;) {
-			$end += m_strcspn($text, $delimiters, $end);
-			$end += m_strspn($text, $delimiters, $end);
+			$end += xu_strcspn($text, $delimiters, $end);
+			$end += xu_strspn($text, $delimiters, $end);
 			if ( $end === $start ) {
 				break;
 				}
-			$fragments[$start] = m_substr($text, $start, $end - $start);
+			$fragments[$start] = xu_substr($text, $start, $end - $start);
 			$start = $end;
 			}
 		$fragments[$start] = '';
@@ -724,23 +671,23 @@ class FineDiff {
 	*/
 	private static function renderToTextFromOpcode($opcode, $from, $from_offset, $from_len) {
 		if ( $opcode === 'c' || $opcode === 'i' ) {
-			echo m_substr($from, $from_offset, $from_len);
+			echo xu_substr($from, $from_offset, $from_len);
 			}
 		}
 
 	private static function renderDiffToHTMLFromOpcode($opcode, $from, $from_offset, $from_len) {
 		if ( $opcode === 'c' ) {
-			echo htmlspecialchars(m_substr($from, $from_offset, $from_len));
+			echo htmlspecialchars(xu_substr($from, $from_offset, $from_len));
 			}
 		else if ( $opcode === 'd' ) {
-			$deletion = m_substr($from, $from_offset, $from_len);
-			if ( m_strcspn($deletion, " \n\r") === 0 ) {
+			$deletion = xu_substr($from, $from_offset, $from_len);
+			if ( xu_strcspn($deletion, " \n\r") === 0 ) {
 				$deletion = str_replace(array("\n","\r"), array('\n','\r'), $deletion);
 				}
 			echo '<del>', htmlspecialchars($deletion), '</del>';
 			}
 		else /* if ( $opcode === 'i' ) */ {
- 			echo '<ins>', htmlspecialchars(m_substr($from, $from_offset, $from_len)), '</ins>';
+ 			echo '<ins>', htmlspecialchars(xu_substr($from, $from_offset, $from_len)), '</ins>';
 			}
 		}
 	}

@@ -39,7 +39,7 @@
       * Returns length in UTF-8 characters
       * It's just a simple wrapper around mb_strlen
       **/
-    function xcms_len($string)
+    function xu_len($string)
     {
         return mb_strlen($string, 'UTF-8');
     }
@@ -47,19 +47,67 @@
     /**
       * Cuts a substring from UTF-8 string
       * It's just a simple wrapper around mb_substr
+      * @sa xcms_end
       **/
-    function xcms_substr($string, $start, $length)
+    function xu_substr($string, $start, $length)
     {
         return mb_substr($string, $start, $length, 'UTF-8');
     }
 
     /**
-      * Returns char-based substring position (UTF-8)
-      * It's just a simple wrapper around mb_strpos
+      * Cuts a substring from UTF-8 string up to the end
+      * It's just a simple wrapper around mb_substr
+      * @sa xu_substr
       **/
-    function xcms_strpos($haystack, $needle, $offset)
+    function xu_end($str, $start) {
+        return mb_substr($str, $start, xu_len($str) - $start, 'UTF-8');
+    }
+
+    /**
+      * Returns char-based substring position (UTF-8)
+      * It's just a simple wrapper around @c mb_strpos
+      **/
+    function xu_strpos($haystack, $needle, $offset = 0)
     {
         return mb_strpos($haystack, $needle, $offset, 'UTF-8');
+    }
+
+    /**
+      * Split string to array of UTF-8 characters
+      **/
+    function xu_split($str)
+    {
+        return preg_split("//u", $str, -1, PREG_SPLIT_NO_EMPTY);
+    }
+
+    function xu_strspn($str, $pattern, $start = 0)
+    {
+        $pos = 0;
+        while (true)
+        {
+            $sym = xu_substr($str, $start + $pos, 1);
+            if (!strlen($sym))
+                break;
+            if (xu_strpos($pattern, $sym) === false)
+                break;
+            ++$pos;
+        }
+        return $pos;
+    }
+
+    function xu_strcspn($str, $pattern, $start = 0)
+    {
+        $pos = 0;
+        while (true)
+        {
+            $sym = xu_substr($str, $start + $pos, 1);
+            if (!strlen($sym))
+                break;
+            if (xu_strpos($pattern, $sym) !== false)
+                break;
+            ++$pos;
+        }
+        return $pos;
     }
 
     /**
@@ -106,9 +154,17 @@
         xut_begin("xcms_string");
         xut_check(xcms_check_password("123@#$%^&abcABC bla\xFE\xFF"), "Check valid password");
         xut_check(!xcms_check_password("\n\taa\rbb\0\\'qqq'+\"zzz"), "Check invalid password");
-        xut_check(xcms_len("Привет000") == 9, "Check xcms_len");
-        xut_check(xcms_strpos("Привет000", "т00", 0) == 5, "Check xcms_strpos");
-        xut_check(xcms_substr("Привет000", 3, 3) == "вет", "Check xcms_substr");
+
+        xut_check(xu_len("Привет000") == 9, "Check xu_len");
+        xut_check(xu_strpos("Привет000", "т00", 0) == 5, "Check xu_strpos");
+        xut_check(xu_substr("Привет000", 3, 3) == "вет", "Check xu_substr");
+
+        xut_check(xu_strspn("альфаКу", "афьл", 1) === 4, "Check xu_strspn");
+        xut_check(xu_strcspn('abcd', 'apple') === 0, "Check xu_strcspn one");
+        xut_check(xu_strcspn('abcd', 'banana') === 0, "Check xu_strcspn two");
+        xut_check(xu_strcspn('heЛЛo', 'Л') === 2, "Check xu_strcspn three");
+        xut_check(xu_strcspn('heЛЛo', 'ДworЛЛd') === 2, "Check xu_strcspn four");
+
         xut_check(xcms_transliterate("Вельтищев Михаил") == "Veltischev Mihail", "Check xcms_transliterate");
         xut_end();
     }
