@@ -11,6 +11,9 @@
 # quota monitoring.
 # backup may fail if no space is left, so let's begin with quotas.
 
+backup_status_file=/tmp/backup-status
+quota_status_file=/tmp/quota-status
+
 my_dir="`dirname $0`"
 quota_script="$my_dir/quota-monitor.py"
 
@@ -21,12 +24,17 @@ if ! [ -r "$quota_settings" ]; then
     exit 1
 fi
 
-$quota_script "$my_dir/quota.txt"
+if ! $quota_script "$my_dir/quota.txt"; then
+    echo "Quota exceeded."
+    echo "QUOTA_FAILED " > $quota_status_file
+else
+    echo "Quotas are OK. "
+    echo "OK" > $quota_status_file
+fi
 
 # let's now backup.
 
 backup_folder=/backup
-status_file=/tmp/backup-status
 
 rm -rf "$backup_folder"
 mkdir -p "$backup_folder"
@@ -75,7 +83,7 @@ back_date="`date +%Y-%m-%d`"
 
 if plan_a ; then
     echo "Backing to primary host $dest_host succeeded" 1>&2
-    echo "OK" > $status_file
+    echo "OK" > $backup_status_file
     exit 0
 else
     echo "Backing to primary host $dest_host failed" 1>&2
@@ -83,8 +91,12 @@ fi
 
 if plan_b ; then
     echo "Backing to secondary host $dest_host succeeded" 1>&2
-    echo "OK" > $status_file
+    echo "OK" > $backup_status_file
     exit 0
 else
     echo "Backing to secondary host $dest_host failed" 1>&2
 fi
+
+# if we're here, backup failed.
+
+echo "BACKUP_FAILED" > $backup_status_file
