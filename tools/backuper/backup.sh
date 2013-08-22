@@ -24,8 +24,10 @@ if ! [ -r "$quota_settings" ]; then
     exit 1
 fi
 
+echo "Checking quotas. "
+
 if ! $quota_script "$my_dir/quota.txt"; then
-    echo "Quota exceeded."
+    echo "ERROR: Quota exceeded."
     echo "QUOTA_FAILED " > $quota_status_file
 else
     echo "Quotas are OK. "
@@ -34,6 +36,8 @@ fi
 
 # let's now backup.
 
+echo "Performing backup. "
+
 backup_folder=/backup
 
 rm -rf "$backup_folder"
@@ -41,7 +45,7 @@ mkdir -p "$backup_folder"
 
 backup_db()
 {
-    echo "dumping database $1"
+    echo "Dumping database $1"
     db_encoding=utf8
     if ! [ -z "$3" ]; then
         db_encoding=$3
@@ -64,15 +68,16 @@ tar czf "$backup_folder/attach.tgz"  /srv/www/clones/forum/attachments
 
 plan_a()
 {
+    echo "Performing backup plan A. "
     dest_host=doctor@doctor.dtdns.net
     rsync -avz "$backup_folder" "$dest_host:/data/backup/lesh/$back_date/"
 }
 
 plan_b()
 {
+    echo "Performing backup plan B. "
     dest_host=mvel@mvel.dtdns.net
     chown -R mvel:mvel $backup_folder
-    # reverse scp-ing works!
     dest_folder=backup/lesh/$back_date/
     ssh $dest_host mkdir -p $dest_folder
     # reverse scp-ying works!
@@ -82,21 +87,21 @@ plan_b()
 back_date="`date +%Y-%m-%d`"
 
 if plan_a ; then
-    echo "Backing to primary host $dest_host succeeded" 1>&2
+    echo "Backing to primary host $dest_host succeeded"
     echo "OK" > $backup_status_file
     exit 0
 else
-    echo "Backing to primary host $dest_host failed" 1>&2
+    echo "Backing to primary host $dest_host failed"
 fi
 
 if plan_b ; then
-    echo "Backing to secondary host $dest_host succeeded" 1>&2
+    echo "Backing to secondary host $dest_host succeeded"
     echo "OK" > $backup_status_file
     exit 0
 else
-    echo "Backing to secondary host $dest_host failed" 1>&2
+    echo "Backing to secondary host $dest_host failed"
 fi
 
 # if we're here, backup failed.
-
+echo "ERROR: Backup failed. "
 echo "BACKUP_FAILED" > $backup_status_file
