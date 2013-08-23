@@ -20,7 +20,7 @@ rm -f $backup_status_file $quota_status_file
 rm -f $out_log $out_log.gz
 
 echo -en "Backup report for fizlesh.ru\\n---------------------------------------\\n" > $letter_file
-/srv/tools/backup.sh 2>&1 | tee $out_log
+/srv/tools/backup.sh > $out_log 2>&1
 echo -en "Last $last_lines lines of log:\\n\\n" >> $letter_file
 tail -n "$last_lines" $out_log >> $letter_file
 gzip $out_log
