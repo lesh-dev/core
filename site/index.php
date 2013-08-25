@@ -12,6 +12,7 @@
     require_once ("$engine_dir/sys/string.php");
     require_once ("$engine_dir/sys/tag.php");
     require_once ("$engine_dir/sys/cms.php");
+    require_once ("$engine_dir/sys/file.php");
     require_once ("$engine_dir/sys/util.php");
     require_once ("$engine_dir/sys/unittest.php");
     require_once ("$engine_dir/sys/auth.php");

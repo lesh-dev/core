@@ -1,5 +1,6 @@
 <?php
     include_once("$engine_dir/sys/phpmailer/class.phpmailer.php");
+    include_once("$engine_dir/sys/file.php");
     include_once("$engine_dir/sys/util.php");
     include_once("$engine_dir/sys/db.php");
 

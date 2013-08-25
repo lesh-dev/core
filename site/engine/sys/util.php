@@ -1,6 +1,7 @@
 <?php
 
 include_once("$engine_dir/sys/tag.php");
+include_once("$engine_dir/sys/file.php");
 
 function xcms_hostname()
 {
@@ -11,30 +12,6 @@ function xcms_hostname()
         $host = trim($host);
     }
     return $host;
-}
-
-function xcms_write($file_name, $contents)
-{
-    $f = fopen($file_name, "wb");
-    if (!$f)
-        return false;
-    $result = true;
-    if (false === fwrite($f, $contents))
-        $result = false;
-    @fclose($f);
-    return $result;
-}
-
-function xcms_append($file_name, $contents)
-{
-    $f = fopen($file_name, "a+b");
-    if (!$f)
-        return false;
-    $result = true;
-    if (false === fwrite($f, $contents))
-        $result = false;
-    @fclose($f);
-    return $result;
 }
 
 ?>

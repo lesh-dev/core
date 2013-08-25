@@ -142,19 +142,17 @@ function xcms_get_tag_list($tag_name)
 function saveList($list, $filename)
 {
     global $tag_php_delim;
-    $f = fopen($filename, "w");
+    $output = "";
 
-    $rez = "_defend".$tag_php_delim."<?php die(); ?".'>'."\n";
-    fputs($f, $rez);
+    $output .= "_defend".$tag_php_delim."<?php die(); ?".'>'."\n";
 
     foreach ($list as $key=>$value)
     {
-        if($key=="") continue;
-        if($key[0]=='_') continue;
-        $rez = $key.$tag_php_delim.$value."\n";
-        fputs($f, $rez);
+        if ($key=="") continue;
+        if ($key[0]=='_') continue;
+        $output .= $key.$tag_php_delim.$value."\n";
     }
-    fclose($f);
+    xcms_write($filename, $output);
 }
 
 /**

@@ -6,6 +6,7 @@
     require_once("settings.php");
     require_once("${engine_dir}sys/settings.php");
     require_once("${engine_dir}sys/unittest.php");
+    require_once("${engine_dir}sys/file.php");
     require_once("${engine_dir}sys/util.php");
     require_once("${engine_dir}sys/auth.php");
     require_once("${engine_dir}sys/db.php");
