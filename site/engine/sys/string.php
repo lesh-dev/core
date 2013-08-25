@@ -146,6 +146,48 @@
         return $string;
     }
 
+    define('MAX_LENGTH_DEFAULT', 80);
+
+    function xcms_wrap_long_lines($text, $max_length = MAX_LENGTH_DEFAULT)
+    {
+        $lines = explode("\n", $text);
+        $new_lines = array();
+        foreach ($lines as $ln)
+        {
+            $ln = str_replace("\r", "", $ln);
+            if (xu_len($ln) < $max_length)
+            {
+                $new_lines[] = $ln;
+                continue;
+            }
+            // split long line into short lines
+            while (xu_len($ln) >= $max_length)
+            {
+                $pos = $max_length - 1;
+                while ($pos)
+                {
+                    if (xu_substr($ln, $pos, 1) != ' ')
+                    {
+                        $pos--;
+                        continue;
+                    }
+                    break;
+                }
+
+                if (!$pos) // cannot split
+                    break;
+
+                // split char found
+                $cut = trim(xu_substr($ln, 0, $pos));
+                $new_lines[] = $cut;
+                $ln = trim(xu_end($ln, $pos));
+            }
+            // add rest of line
+            $new_lines[] = $ln;
+        }
+        return implode("\n", $new_lines);
+    }
+
     /**
       * String library unit test
       **/
@@ -164,6 +206,9 @@
         xut_check(xu_strcspn('abcd', 'banana') === 0, "Check xu_strcspn two");
         xut_check(xu_strcspn('heЛЛo', 'Л') === 2, "Check xu_strcspn three");
         xut_check(xu_strcspn('heЛЛo', 'ДworЛЛd') === 2, "Check xu_strcspn four");
+
+        xut_check(xcms_wrap_long_lines('Очень длинный текст, который надо перенести', 20) ===
+            "Очень длинный\nтекст, который надо\nперенести", "Check xcms_wrap_long_lines");
 
         xut_check(xcms_transliterate("Вельтищев Михаил") == "Veltischev Mihail", "Check xcms_transliterate");
         xut_end();
