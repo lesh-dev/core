@@ -1,30 +1,30 @@
 <?php
     require_once("$engine_dir/sys/diff/diff-utils.php");
 
-    if(!@$counter) $counter = 0;
+    if (!@$counter) $counter = 0;
     $counter ++;
 
-    @$dtext = $param["dtext"]; if(!@$dtext) @$dtext = "no file here.";
-    @$multiId = $param["id"]; if(!@$multiId) @$multiId = $counter;
-    @$cols = $param["cols"]; if(!@$cols) @$cols = 120;
-    @$rows = $param["rows"]; if(!@$rows) @$rows = 40;
-    @$tag = $param["tag"]; if(!@$tag) @$tag = "h3";
-    @$submitVal = $param["submitVal"]; if(!@$submitVal) @$submitVal = "Сохранить";
-    @$resetVal = $param["resetVal"]; if(!@$resetVal) @$resetVal = "Отмена";
+    @$dtext = $param["dtext"]; if (!@$dtext) @$dtext = "no file here.";
+    @$multi_id = $param["id"]; if (!@$multi_id) @$multi_id = $counter;
+    @$cols = $param["cols"]; if (!@$cols) @$cols = 120;
+    @$rows = $param["rows"]; if (!@$rows) @$rows = 40;
+    @$tag = $param["tag"]; if (!@$tag) @$tag = "h3";
+    @$submit_val = $param["submit_val"]; if (!@$submit_val) @$submit_val = "Сохранить";
+    @$reset_val = $param["reset_val"]; if (!@$reset_val) @$reset_val = "Отмена";
 
     $pathv = @$argv[1];
-    if(!$pathv) $pathv = "edit-file";
+    if (!$pathv) $pathv = "edit-file";
 
     $ename = $editfile;
-    if(!$ename) $ename = @$_POST[$pathv];
-    if(!$ename) $ename = @$_GET[$pathv];
-    if(!$ename)
+    if (!$ename) $ename = @$_POST[$pathv];
+    if (!$ename) $ename = @$_GET[$pathv];
+    if (!$ename)
     {
         echo "<h4>Illegal filename.</h4>";
     }
     else
     {
-        if(@$_POST["edit-submit"] && @$_POST["multi-id"] == @$multiId)
+        if (@$_POST["edit-submit"] && @$_POST["multi-id"] == @$multi_id)
         {
             $time = time();
             $target_name = "$ename-version-$time";
@@ -71,9 +71,9 @@
         }
         else $current_version = @$_POST["versions"];
 
-        if(file_exists($ename))
+        if (file_exists($ename))
         {
-            if(strpos($current_version, ".gz") )
+            if (strpos($current_version, ".gz"))
             {
                 $f = gzopen($ename.$current_version, "r");
                 $text = gzread($f, 10000000);
@@ -84,7 +84,7 @@
         elseif (@$text) {}
         else $text = "$dtext";
 
-        if(!@$param["-h"]) echo "<$tag>edit: $ename</$tag>";
+        if (!@$param["-h"]) echo "<$tag>edit: $ename</$tag>";
         $ty = "submit";
 
         $vlist = '<option value="">HEAD</option>';
@@ -95,12 +95,12 @@
             $version_time = date("d.m.Y H:i", $timestamp);
             $version_suffix = str_replace("$ename", "", $v);
             $selected = "";
-            if($version_suffix == $current_version) $selected = "selected";
+            if ($version_suffix == $current_version) $selected = "selected";
             $vlist .= "<option $selected value=\"$version_suffix\">$version_time</option>";
         }
         $text = htmlspecialchars($text);
 
-        if(@$_POST["edit-preview"])
+        if (@$_POST["edit-preview"])
         {
             $text = @$_POST["edit-text"];
         }
@@ -108,9 +108,9 @@
     ?>
 <form method="post" enctype="multipart/form-data">
     <input type="hidden" name="<?php echo $pathv; ?>" value="<?php echo $ename;?>" />
-    <input type="hidden" name="multi-id" value="<?php echo $multiId; ?>" />
+    <input type="hidden" name="multi-id" value="<?php echo $multi_id; ?>" />
     <div style="padding-top: 15px;">
-        <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-sumbit-top" value="<?php echo $submitVal; ?>" />
+        <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-sumbit-top" value="<?php echo $submit_val; ?>" />
         <input type="submit" name="edit-preview" id="edit-preview-top" value="Предпросмотр" />
         <a <?php echo xcms_href(array('page'=>$pageid, 'ref'=>'index')); ?> class="submit">Свернуть реактор</a>
         Версия:
@@ -121,7 +121,7 @@
     <textarea class="editor" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
         name="edit-text" id="edit-text"><?php echo $text; ?></textarea>
     <div>
-        <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-sumbit-top" value="<?php echo $submitVal; ?>" />
+        <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-sumbit-top" value="<?php echo $submit_val; ?>" />
         <input type="submit" name="edit-preview" id="edit-preview-bottom" value="Предпросмотр" />
         Версия:
         <select name="versions" id="versions-bottom"><?php echo $vlist; ?></select>
@@ -129,7 +129,7 @@
     </div>
 </form>
 <?php
-        if(@$_POST["edit-preview"])
+        if (@$_POST["edit-preview"])
         {
             include(translate("<! cms/readtext --markdown --text !>"));
         }
