@@ -34,6 +34,7 @@
             if ($show[$i])
             {
                 $ln = str_replace("\n", "", $ln);
+                $ln = str_replace("\r", "", $ln);
                 $output .= "<div>$ln</div>\n";
                 $dots = false;
             }
@@ -58,6 +59,7 @@
         $opcodes = FineDiff::getDiffOpcodes($from_text, $to_text, FineDiff::$wordGranularity /* FineDiff::$characterGranularity */);
         $diff_html = FineDiff::renderDiffToHTMLFromOpcodes($from_text, $opcodes);
         $diff_html = xcms_diff_postprocess($diff_html);
+        return $diff_html;
     }
 
     // Test

@@ -1,4 +1,6 @@
 <?php
+    require_once("$engine_dir/sys/diff/diff-utils.php");
+
     if(!@$counter) $counter = 0;
     $counter ++;
 
@@ -22,44 +24,23 @@
     }
     else
     {
-        if(@$_POST["edit-submit"]&&@$_POST["multi-id"]==@$multiId)
+        if(@$_POST["edit-submit"] && @$_POST["multi-id"] == @$multiId)
         {
             $time = time();
             $target_name = "$ename-version-$time";
-            $diff_name = "$ename-$time.diff";
-            $diff_name_html = "$ename-$time.diff.html";
-            if (file_exists($ename)) @chmod($ename, 0666); // see bug #64
+
+            if (file_exists($ename))
+                @chmod($ename, 0666); // see bug #64
             @rename($ename, $target_name);
+            $old_text = file_get_contents($target_name);
             $new_text = @$_POST["edit-text"];
             xcms_write($ename, $new_text);
             chmod($ename, 0666);
             $current_version = "";
-            // FIXME: this should be deleted at all.
-            // include_once("{$SETTINGS["engine_dir"]}cms/addrssfeed.php");
-            // addrssfeed("Изменения в разделе", "сабж", " ", "");
-            $diff_name_err = "$diff_name.err";
-            $diff_cmd = "diff -ub $target_name $ename > $diff_name 2>$diff_name_err ";
-            system($diff_cmd, $diff_result);
+            $diff_result = ($new_text != $old_text);
             if ($diff_result) // send notifications on non-empty diffs
             {
-                $diff_name_html_err = "$diff_name_html.err";
-                $diff_html_cmd =
-                    "cat $diff_name | ".
-                    "tail -n+2 | ".
-                    "(bash {$SETTINGS["engine_dir"]}bin/diff2html.sh) ".
-                    "> $diff_name_html 2>$diff_name_html_err ";
-                system($diff_html_cmd, $diff_html_result);
-                $lf = "\r\n";
-                $body_plain =
-                    "Была произведена правка страницы. Изменения:$lf".
-                    "============================================$lf".
-                    file_get_contents($diff_name).$lf.
-                    "============================================$lf".
-                    "Теперь содержание страницы следующее:$lf".
-                    "============================================$lf".
-                    file_get_contents($ename).$lf.
-                    "============================================$lf";
-
+                $diff_html = xcms_diff_html($old_text, $new_text);
                 $login = xcms_user()->login();
                 $ifn = xcms_get_info_file_name();
                 $page_info = xcms_get_list($ifn);
@@ -74,21 +55,18 @@
                 $body_html = str_replace('@@PAGE-ID@', $pageid, $body_html);
                 $body_html = str_replace('@@PAGE-URL@', $page_url, $body_html);
                 $body_html = str_replace('@@PAGE-ALIAS@', $url_name, $body_html);
-                $body_html = str_replace('@@DIFF@', file_get_contents($diff_name_html), $body_html);
-                $body_html = str_replace('@@NEW-TEXT@', htmlspecialchars($new_text), $body_html);
+                $body_html = str_replace('@@DIFF@', $diff_html, $body_html);
+                // disable full page text
+                //$body_html = str_replace('@@NEW-TEXT@', htmlspecialchars($new_text), $body_html);
                 xcms_send_notification(
                     "content-change",
                     NULL,
                     "cont",
                     "Пользователь $login изменил страницу $id",
-                    $body_plain,
+                    "",
                     $body_html
                 );
-                unlink($diff_name_html);
-                unlink($diff_name_html_err);
             }
-            unlink($diff_name);
-            unlink($diff_name_err);
             system("gzip $target_name");
         }
         else $current_version = @$_POST["versions"];
@@ -155,7 +133,5 @@
         {
             include(translate("<! cms/readtext --markdown --text !>"));
         }
-?>
-<?php
     }
 ?>
