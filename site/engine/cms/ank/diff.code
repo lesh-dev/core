@@ -1,5 +1,7 @@
 <?php
 
+include_once "$engine_dir/sys/diff/diff-utils.php";
+
 /**
   * Построение разности двух key-массивов
   **/
@@ -36,9 +38,7 @@ function xcms_array_diff($new, $old, $fields)
 function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_title)
 {
     $mail_msg = xcms_get_html_template("xsm-diff-message");
-    $row_template = xcms_get_html_template("xsm-row-diff");
-    $row_long_diff_template = xcms_get_html_template("xsm-row-long-diff");
-    $row_long_add_template = xcms_get_html_template("xsm-row-long-add");
+    $row_template = xcms_get_html_template("xsm-row-finediff");
 
     $diff_array = xcms_array_diff($new_object, $old_object, $fields);
     if (count($diff_array) == 0)
@@ -71,13 +71,9 @@ function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_ti
             $old_value = $anketa_statuses[$old_value];
             $new_value = $anketa_statuses[$new_value];
         }
-        if ($type == "textarea")
-        {
-            $cur_row = (strlen($old_value) > 0) ? $row_long_diff_template : $row_long_add_template;
-        }
         $cur_row = str_replace("@@KEY@", $key_title, $cur_row);
-        $cur_row = str_replace("@@OLD-VALUE@", htmlspecialchars($old_value), $cur_row);
-        $cur_row = str_replace("@@NEW-VALUE@", htmlspecialchars($new_value), $cur_row);
+        $diff_html = xcms_diff_html($old_value, $new_value);
+        $cur_row = str_replace("@@DIFF@", $diff_html, $cur_row);
         $content .=  $cur_row;
     }
 
