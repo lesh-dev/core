@@ -94,7 +94,7 @@
         if (empty($subject))
             $subject = "Уведомления [$mail_group] за $notification_time";
 
-        $body_html = file_get_contents("{$SETTINGS['engine_dir']}templates/notification-template.html");
+        $body_html = xcms_get_html_template("notification-template");
         $body_html = str_replace('@@NOTIFICATION-BODY@', $notification_body, $body_html);
         $body_html = str_replace('@@SUBJECT@', $subject, $body_html);
 
@@ -157,7 +157,7 @@
 
         if (!empty($mail_text_html))
         {
-            $body_html = file_get_contents("{$SETTINGS['engine_dir']}templates/notification-body.html");
+            $body_html = xcms_get_html_template("notification-body");
             $body_html = str_replace('@@MESSAGE@', $mail_text_html, $body_html);
             $body_html = str_replace('@@HOST@', $host, $body_html);
             $body_html = str_replace('@@REFERER@', $_SERVER['HTTP_REFERER'], $body_html);

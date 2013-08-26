@@ -30,10 +30,9 @@ function xcms_console_create_user($params)
 
 function xcms_user_create_notify($email, $login, $password)
 {
-    global $SETTINGS;
     global $meta_site_name, $meta_site_url, $meta_site_mail;
 
-    $body_html = file_get_contents("{$SETTINGS['engine_dir']}templates/new_user.html");
+    $body_html = xcms_get_html_template("new_user");
     $body_html = str_replace('@@SITE@', htmlspecialchars($meta_site_name), $body_html);
     $body_html = str_replace('@@SITE-URL@', htmlspecialchars($meta_site_url), $body_html);
     $body_html = str_replace('@@LOGIN@', $login, $body_html);

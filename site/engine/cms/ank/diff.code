@@ -35,13 +35,10 @@ function xcms_array_diff($new, $old, $fields)
   **/
 function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_title)
 {
-    global $SETTINGS;
-    // some common stuff
-    $template_root = "{$SETTINGS['engine_dir']}templates";
-    $mail_msg = file_get_contents("$template_root/xsm-diff-message.html");
-    $row_template = file_get_contents("$template_root/xsm-row-diff.html");
-    $row_long_diff_template = file_get_contents("$template_root/xsm-row-long-diff.html");
-    $row_long_add_template = file_get_contents("$template_root/xsm-row-long-add.html");
+    $mail_msg = xcms_get_html_template("xsm-diff-message");
+    $row_template = xcms_get_html_template("xsm-row-diff");
+    $row_long_diff_template = xcms_get_html_template("xsm-row-long-diff");
+    $row_long_add_template = xcms_get_html_template("xsm-row-long-add");
 
     $diff_array = xcms_array_diff($new_object, $old_object, $fields);
     if (count($diff_array) == 0)

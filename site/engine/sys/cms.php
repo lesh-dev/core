@@ -58,13 +58,13 @@ function xcms_get_page_content_name($page_id)
     return "{$SETTINGS["datadir"]}cms/pages/$page_id/content";
 }
 
-function xcms_get_template_name($name)
+function xcms_get_page_template_name($name)
 {
     global $SETTINGS;
     return "{$SETTINGS["engine_dir"]}cms/content/$name.template";
 }
 
-function xcms_get_templates()
+function xcms_get_page_templates()
 {
     $prefix = "{$SETTINGS["engine_dir"]}cms/content/";
     $ext = ".template";

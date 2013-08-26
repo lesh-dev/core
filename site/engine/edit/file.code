@@ -51,7 +51,7 @@
                 $id = $page_alias;
                 if (!strlen($id))
                     $id = $pageid;
-                $body_html = file_get_contents("{$SETTINGS["engine_dir"]}templates/content-change.html");
+                $body_html = xcms_get_html_template("content-change");
                 $body_html = str_replace('@@LOGIN@', $login, $body_html);
                 $body_html = str_replace('@@PAGE-ID@', $pageid, $body_html);
                 $body_html = str_replace('@@PAGE-URL@', $page_url, $body_html);

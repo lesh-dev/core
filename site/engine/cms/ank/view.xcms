@@ -16,11 +16,10 @@
     }
     if (@$_POST["submit-anketa"])
     {
-        $template_root = "{$SETTINGS['engine_dir']}templates";
-        $mail_msg = file_get_contents("$template_root/anketa_mail.html");
-        $reply_link = file_get_contents("$template_root/anketa_reply_link.html");
-        $reply_body = file_get_contents("$template_root/anketa_reply_body.html");
-        $row_template = file_get_contents("$template_root/anketa_mail_one_row.html");
+        $mail_msg = xcms_get_html_template("anketa_mail");
+        $reply_link = xcms_get_html_template("anketa_reply_link");
+        $reply_body = xcms_get_html_template("anketa_reply_body");
+        $row_template = xcms_get_html_template("anketa_mail_one_row");
         $unix_time = time();
         $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
 

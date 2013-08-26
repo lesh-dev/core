@@ -23,7 +23,7 @@
         <?php
         if (@$_POST["change-template"])
         {
-            $template_name = xcms_get_template_name($_POST["change-template"]);
+            $template_name = xcms_get_page_template_name($_POST["change-template"]);
             xcms_write($source, @file_get_contents($template_name));
             echo "Заменено: <tt>$source</tt> на <tt>$template_name</tt>";
         }
@@ -31,7 +31,7 @@
         <form method="post">
             <select name="change-template">
             <?php
-                $template_list = xcms_get_templates();
+                $template_list = xcms_get_page_templates();
                 foreach ($template_list as $value)
                     echo "<option name=\"$value\" value=\"$value\">$value</option>\n";
             ?>
