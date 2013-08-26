@@ -61,7 +61,7 @@ def bQuotaExceededForLine(line):
     scaleLog = m.group(3).upper().strip()
     k = 1024
     scales = {
-         "": k**0,
+        "" : k**0,
         "K": k**1,
         "M": k**2,
         "G": k**3,
