@@ -165,4 +165,4 @@ sudo cp -f $VERBOSE_COPY ./tools/xcms_console_tools/root_root_user $DEST/$DEST_C
 
 sudo chown -R $HTTPD_USER:$HTTPD_USER "$DEST"
 
-echo "XCMS installed to http://localhost/site"
+echo "XCMS installed to http://localhost/$DEST_NAME"
