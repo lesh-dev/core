@@ -77,7 +77,8 @@ function xsm_show_person_list($school_id)
         p.phone, p.cellular,
         p.person_created, p.person_modified,
         ps.curatorship, ps.is_teacher, ps.is_student,
-        ps.current_class
+        ps.current_class,
+        ps.courses_needed
         FROM person p, person_school ps
         WHERE (ps.member_person_id == p.person_id)
         AND (ps.school_id == $school_id)";
@@ -90,12 +91,12 @@ function xsm_show_person_list($school_id)
 
     xsm_print_schools($db, $school_id);
 
-    //xsm_view_operations('person', 'person', 'участника');
     ?>
     <table summary="Участники" class="ankList">
         <colgroup>
             <!--<col width="5%" />-->
             <col width="25%" />
+            <col width="35px" />
             <col width="30px" />
             <col width="50px" />
             <col width="25%" />
@@ -103,6 +104,7 @@ function xsm_show_person_list($school_id)
         <thead>
             <!--<th class="ankList">ID</th>-->
             <th class="ankList">Фамилия, имя</th>
+            <th class="ankList">Зач.</th>
             <th class="ankList">Кл.</th>
             <th class="ankList">ДР</th>
             <th class="ankList">Контакты</th>
@@ -115,8 +117,6 @@ function xsm_show_person_list($school_id)
         $fi = htmlspecialchars(xsm_fi($person));
         $fio = htmlspecialchars(xsm_fio($person));
 
-        /*$school = htmlspecialchars($person["school"]);
-        $school_city = htmlspecialchars($person["school_city"]);*/
         // класс на данной школе
         $current_class = htmlspecialchars($person["current_class"]);
 
@@ -130,14 +130,39 @@ function xsm_show_person_list($school_id)
         $is_teacher = $person["is_teacher"];
         $is_student = $person["is_student"];
         $curatorship = $person["curatorship"];
+        $courses_needed = ($person["courses_needed"]);
 
         $person_created = xsm_ymdhm($person["person_created"]);
         $person_modified = xsm_ymdhm($person["person_modified"]);
 
-        /* TODO: enable
-        $person_school_created = xsm_ymdhm($person["person_school_created"]);
-        $person_school_modified = xsm_ymdhm($person["person_school_modified"]);
-        */
+        $exam_passed_sel = $db->query("SELECT
+            COUNT(*) AS courses_passed
+            FROM exam e, course c
+            WHERE
+            (e.student_person_id = $person_id) AND
+            (c.school_id = $school_id) AND
+            (e.course_id = c.course_id) AND
+            (e.exam_status = 'passed')"
+        );
+        $courses_passed = 0;
+        if ($exam_pass_data = $exam_passed_sel->fetchArray(SQLITE3_ASSOC))
+            $courses_passed = $exam_pass_data['courses_passed'];
+
+        $course_ratio = ($courses_needed > 0) ? ($courses_passed / $courses_needed) : -1;
+
+        $hr_course_progress = "$courses_passed&nbsp;/&nbsp;$courses_needed";
+        if ($course_ratio < -0.5)
+            $hr_course_progress = "&#8212;";
+
+        $course_style = "undef";
+        if ($course_ratio >= -0.001 && $course_ratio < 0.333)
+            $course_style = "low";
+        elseif ($course_ratio >= 0.333 && $course_ratio < 0.666)
+            $course_style = "medium";
+        elseif ($course_ratio >= 0.666 && $course_ratio < 0.999)
+            $course_style = "high";
+        elseif ($course_ratio >= 0.999)
+            $course_style = "all";
 
         $hr_teacher = ($is_teacher == "teacher" ? "Препод, " : "");
         $hr_student = ($is_student == "student" ? "Школьник, " : "");
@@ -149,42 +174,19 @@ function xsm_show_person_list($school_id)
                 <a name="<?php echo "person$person_id"; ?>"></a>
                 <a href="<?php echo "view-person&amp;person_id=$person_id&amp;school_id=$school_id"; ?>"
                     title="<?php echo $fio; ?>"><?php echo $fi; ?></a></td>
+            <td class="ankList"><span class="course-progress <?php echo $course_style; ?>"><?php echo $hr_course_progress; ?></span></td>
             <td class="ankList"><?php echo $current_class; ?></td>
             <td class="ankList"><?php echo $birth_date; ?></td>
             <td class="ankList"><?php
                 echo $cellular;
                 if ($cellular && $phone)
                     echo ", $phone"; ?></a></td>
-            <?php /*
-            <td class="ankList">
-                <a class="link-oper-list"
-                    href="view-exam&amp;student_person_id=<?php echo $person_id; ?>">Зачёты</a>
-                <?php
-                if ($is_teacher == "teacher") {?>
-                    <a class="link-oper-list"
-                        href="edit-course&amp;course_id=new&amp;course_teacher_id=<?php
-                            echo $person_id; ?>">Добавить курс</a><?php
-                } ?>
-                <?php echo $hr_student; ?>
-                <?php echo $hr_teacher; ?>
-            </td>
-            <td class="ankListRowTitle">
-                <span style="float: right">
-                <img class="link-oper-list" src="<# full_design_dir #>pic/mozillafirefox.png"
-                    style="vertical-align: middle;" title="<?php echo "$user_agent"; ?>" />
-                <span class="ankListField next">Статус</span>:
-                    <span class="anketa-status <?php echo $anketa_status; ?>"><?php echo $hr_status; ?></span><?php
-                xsm_edit_delete_info('person', 'person', $person_id, $person_created, $person_modified); ?>
-                </span>
-            </td>*/ ?>
         </tr>
         <?php
     }
     ?>
     </table>
     <?php
-    // TODO: перенести это в список участников
-    //xsm_view_operations('person', 'person', 'участника');
 }
 
     xsm_show_person_list($school_id);

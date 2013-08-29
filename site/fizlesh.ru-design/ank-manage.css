@@ -285,6 +285,25 @@ div.line {
     padding-bottom: 5px;
 }
 
+span.course-progress {
+    font-weight: bold;
+}
+span.course-progress.undef {
+    color: #7f7f7f;
+}
+span.course-progress.low {
+    color: #cf0000;
+}
+span.course-progress.medium {
+    color: #ffff00;
+}
+span.course-progress.high {
+    color: #3fcf00;
+}
+span.course-progress.all {
+    color: #007f00;
+}
+
 a.popup-link {
     text-decoration: none;
     border-bottom: 1px dotted;
