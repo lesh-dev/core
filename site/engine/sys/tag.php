@@ -103,18 +103,25 @@ function xcms_convert_multiline($value)
 
 function xcms_tag_exists($tag_name)
 {
+    global $SETTINGS;
     $file = "{$SETTINGS["engine_dir"]}taglist/$tag_name";
     return file_exists($file);
 }
 
-function xcms_get_tag_list($tag_name)
+function xcms_get_tag($tag_name)
 {
+    global $SETTINGS;
     $file = "{$SETTINGS["engine_dir"]}taglist/$tag_name";
     $filec = file_get_contents($file);
-    $filec = str_replace("\r", "", $filec);
-    if(substr($filec, 0, 5) != "<?php")
+    return str_replace("\r", "", $filec);
+}
+
+function xcms_get_tag_list($tag_name)
+{
+    $tag_text = xcms_get_tag($tag_name);
+    if (substr($tag_text, 0, 5) != "<?php")
     {
-        $rez = explode("\n", $filec);
+        $rez = explode("\n", $tag_text);
         foreach($rez as $key=>$value)
         {
             if(!$key)
@@ -201,7 +208,6 @@ function xcms_draw_text_tag($id, $value, $is_longtext, $placeholder = "")
   **/
 function xcms_editlist_form($file, $skip_params = "", $flags = "")
 {
-    global $SETTINGS;
     $list = xcms_get_list($file);
 
     if (@$_POST["editTag"])
