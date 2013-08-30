@@ -122,9 +122,11 @@ function xsm_edit_operations($entity, $table_name, $id, $title, $aux_param = '')
     ?>
     <div style="white-space: nowrap">
         <input type="submit" name="update-<?php echo $entity; ?>"
+            id="update-<?php echo $entity; ?>-submit"
             value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
         if (!$is_new) {?>
             <input type="submit" name="delete-<?php echo $entity; ?>"
+                id="delete-<?php echo $entity; ?>-submit"
                 value="Удалить" class="delete-button"/><?php
         }?>
         <a class="link-button" href="view-<?php
@@ -141,9 +143,11 @@ function NEW_xsm_edit_operations($table_name, $id, $title, $aux_param = '')
     ?>
     <div style="white-space: nowrap">
         <input type="submit" name="update-<?php echo $table_name; ?>"
+            id="update-<?php echo $table_name; ?>-submit"
             value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
         if (!$is_new) {?>
             <input type="submit" name="delete-<?php echo $table_name; ?>"
+                id="delete-<?php echo $table_name; ?>-submit"
                 value="Удалить" class="delete-button"/><?php
         }?>
         <a class="link-button" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
