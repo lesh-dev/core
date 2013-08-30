@@ -44,9 +44,7 @@
             // don't show inaccessible menu items
             if (xcms_get_key_or($INFO, "menu-auth-only") == "yes")
             {
-                include(translate("<! auth/lauth {$INFO['view']} !>"));
-                // TODO: OMFG global var reading...
-                if (!$access)
+                if (!xcms_user()->check_rights("registered", false))
                     return;
             }
         }

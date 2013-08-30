@@ -104,6 +104,7 @@ function xsm_edit_exam()
 
     $exam_id = xcms_get_key_or($_GET, 'exam_id', '-1'); // invalid key
     $exam = xdb_get_entity_by_id('exam', $exam_id);
+    $db = xdb_get();
     $course = array();
     $student = array();
     if ($exam_id == XDB_NEW)
@@ -181,24 +182,23 @@ function xsm_edit_exam()
                 } elseif ($key == 'course_id') {
                     if ($exam_id == XDB_NEW)
                     {
+                        // TODO: REGRESSION: lost course author names here
+                        echo xsm_make_selector('course', 'course_id', xcms_get_key_or($exam, $key, "-1"),
+                            array('course_title'),
+                            "(school_id = $school_id) ORDER BY course_title", $attr);
+                        /*
                         echo xsm_make_selector_ext($key, $key, xcms_get_key_or($exam, $key, "-1"),
                             "@@last_name@ @@first_name@ &#8212; @@course_title@",
                             "SELECT
                             course_id, last_name, first_name, course_title
                             FROM course c LEFT JOIN person p ON p.person_id = c.course_teacher_id
                             WHERE c.school_id = '$school_id' ORDER BY last_name, first_name, course_title",
-                            $attr);
-
+                            $attr);*/
                     }
                     else
                     {
-                        $course_teacher_id = $course['course_teacher_id'];
-                        $teacher = xdb_get_entity_by_id('person', $course_teacher_id);
-                        $teacher_fi = htmlspecialchars(xsm_fi($teacher));
-                        ?>
-                        <input type="text" class="ankEdit" value="<?php
-                            echo "$teacher_fi &#8212; ".htmlspecialchars($course['course_title']); ?>"
-                            readonly="readonly" /><?php
+                        $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, "all");
+                        echo "$teachers_ht &#8212; ".htmlspecialchars($course['course_title']);
                     }
                 }
                 else {?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
