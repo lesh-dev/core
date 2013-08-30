@@ -36,6 +36,8 @@
             $LIST["menu-title"] = $_POST["menu-title"];
         if (@$_POST["menu-hidden"])
             $LIST["menu-hidden"] = $_POST["menu-hidden"];
+        if (@$_POST["menu-auth-only"])
+            $LIST["menu-auth-only"] = $_POST["menu-auth-only"];
 
         if (file_exists("{$SETTINGS["engine_dir"]}cms/{$_POST["create-pagetype"]}/install.php"))
         {

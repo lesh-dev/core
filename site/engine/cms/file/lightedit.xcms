@@ -13,8 +13,8 @@
             xcms_write("{$SETTINGS["datadir"]}cms/pages/$pageid/ftype", @$_FILES["upload"]["type"]);
             xcms_write("{$SETTINGS["datadir"]}cms/pages/$pageid/fname", @$_FILES["upload"]["name"]);
             copy(@$_FILES["upload"]["tmp_name"], "{$SETTINGS["datadir"]}cms/pages/$pageid/stream");
-            $INFO["menu-locked"] = (@$_POST["menu-lock-section"]) ? "yes" : "no";
-            $INFO["immediate"] = (@$_POST["immediate-file"]) ? "yes" : "no";
+            $INFO["menu-locked"] = (@$_POST["menu-lock-section"]) ? YES : NO;
+            $INFO["immediate"] = (@$_POST["immediate-file"]) ? YES : NO;
             xcms_save_list(xcms_get_info_file_name(), $INFO);
         }
     }

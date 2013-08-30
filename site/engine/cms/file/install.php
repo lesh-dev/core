@@ -1,5 +1,5 @@
 <?php
     $LIST["installed"] = "ok";
-    $LIST["immediate"] = "no";
-    $LIST["menu-locked"] = "yes";
+    $LIST["immediate"] = NO;
+    $LIST["menu-locked"] = YES;
 ?>
