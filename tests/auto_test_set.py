@@ -17,6 +17,7 @@ import xcms_unittests
 import xcms_version_check
 import xcms_xsm_anketa_fill
 import xcms_xsm_anketa_wrong_fill
+import xcms_xsm_avatar
 
 def getTests(baseUrl, args): return {
     "xcms_auth_add_new_user.py": xcms_auth_add_new_user.XcmsAuthAddNewUser(baseUrl, args),
@@ -34,4 +35,5 @@ def getTests(baseUrl, args): return {
     "xcms_version_check.py": xcms_version_check.XcmsVersionCheck(baseUrl, args),
     "xcms_xsm_anketa_fill.py": xcms_xsm_anketa_fill.XcmsXsmAnketaFill(baseUrl, args),
     "xcms_xsm_anketa_wrong_fill.py": xcms_xsm_anketa_wrong_fill.XcmsXsmAnketaWrongFill(baseUrl, args),
+    "xcms_xsm_avatar.py": xcms_xsm_avatar.XcmsXsmAvatar(baseUrl, args),
 }

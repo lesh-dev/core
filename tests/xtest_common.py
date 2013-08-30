@@ -27,11 +27,21 @@ def gotoCabinet(test):
 	test.logAdd("xtest_common.gotoCabinet: going to user control panel (cabinet). ")
 	test.gotoUrlByLinkText(u"Личный кабинет")
 
+def gotoAllPeople(test):
+    test.logAdd("xtest_common.gotoAllPeople: going to 'All People' menu. ")
+    test.gotoUrlByLinkText(u"Все люди")
+
 def getAuthLink(test):
 	return test.getUrlByLinkText(u"Авторизация")
 
 def gotoBackToAnketaView(test):
 	test.gotoUrlByLinkText(u"Вернуться к просмотру участника")
+
+def gotoBackToPersonView(test):
+    test.gotoUrlByLinkText(u"Вернуться к просмотру участника")
+
+def gotoEditPerson(test):
+    test.gotoUrlByLinkText(u"Редактировать анкетные данные")
 
 def gotoBackAfterComment(test):
 	#test.gotoUrlByLinkText(u"Вернуться к списку комментов") # older variant

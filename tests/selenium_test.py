@@ -235,7 +235,10 @@ class SeleniumTest:
     def gotoUrlByLinkId(self, linkId):
         href = self.getElementById(linkId).get_attribute("href")
         self.gotoSite(href, linkId)
-        
+
+    def getImageSrcById(self, imageId):
+        return self.getElementById(imageId).get_attribute("src")
+
     def displayReason(self, reason):
         if isVoid(reason):
             return ""
