@@ -108,17 +108,13 @@ function xcms_tag_exists($tag_name)
     return file_exists($file);
 }
 
-function xcms_get_tag($tag_name)
-{
-    global $SETTINGS;
-    $file = "{$SETTINGS["engine_dir"]}taglist/$tag_name";
-    $filec = file_get_contents($file);
-    return str_replace("\r", "", $filec);
-}
-
 function xcms_get_tag_list($tag_name)
 {
-    $tag_text = xcms_get_tag($tag_name);
+    global $SETTINGS;
+    $tag_file_name = "{$SETTINGS["engine_dir"]}taglist/$tag_name";
+    $tag_text = file_get_contents($tag_file_name);
+    $tag_text = str_replace("\r", "", $tag_text);
+
     if (substr($tag_text, 0, 5) != "<?php")
     {
         $rez = explode("\n", $tag_text);
@@ -137,7 +133,7 @@ function xcms_get_tag_list($tag_name)
     else
     {
         $taglist = array();
-        include($file);
+        include($tag_file_name);
         $taglist["_NAME"] = $tagname;
         return $taglist;
     }
