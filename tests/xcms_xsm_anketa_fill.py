@@ -18,7 +18,7 @@ class XcmsXsmAnketaFill(SeleniumTest):
     * checks if all enetered data match screen form.
     * adds 3 comments to this new person
     * edits 2 of 3 comments
-    * TODO: change person status incrementally
+    * changes person status incrementally
     * TODO: change personal data
     * TODO: make 'active'
     * TODO: check presence in active list
@@ -65,15 +65,14 @@ class XcmsXsmAnketaFill(SeleniumTest):
     def run(self):
         # anketa fill positive test:
         # all fields are filled with correct values.
-
-        self.setAutoPhpErrorChecking(True)
-        xtest_common.assertNoInstallerPage(self)
-
         conf = XcmsTestConfig()
+
+        self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
+        xtest_common.assertNoInstallerPage(self)
         
         testMailPrefix = conf.getAnketaNamePrefix()
         
-        xtest_common.setTestNotifications(self, "vdm-photo@ya.ru", conf.getAdminLogin(), conf.getAdminPass())
+        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
             
         self.gotoRoot()
         
