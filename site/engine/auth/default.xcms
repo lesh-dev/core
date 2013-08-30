@@ -1,11 +1,12 @@
 <?php
     $u = xcms_user();
     $ag = false;
-    foreach($argv as $k=>$v)
+    foreach ($argv as $k=>$v)
     {
-        if ($k == 0) continue;
+        if ($k == 0) continue; // $argv[0] is a template name
         if ($v[0] == "#")
         {
+            // this is a group
             if ($u->check_rights(substr($v, 1), false))
             {
                 $ag = true;
