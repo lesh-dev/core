@@ -46,6 +46,7 @@
             {
                 if (!xcms_user()->check_rights("registered", false))
                     return;
+                $aux_class .= " menuitem-auth";
             }
         }
         // render menu item
