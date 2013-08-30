@@ -148,7 +148,7 @@ function xsm_print_person_header($db, $person, $school_id)
         ?>
         <div class="person-portrait"><img id="avatar" class="person-portrait"
             src="<?php echo $av; ?>" /></div>
-        <div class="person-title"><?php echo "$last_name $first_name $patronymic"; ?></div><?php
+        <div class="person-title" id="person-title"><?php echo "$last_name $first_name $patronymic"; ?></div><?php
         xsm_draw_person_textval('top', 'Статус анкеты', $hr_status); ?>
         <div style="clear: both;"></div><?php
         xsm_draw_person_textval('top', 'Почта', $email);
