@@ -9,7 +9,7 @@ function xcms_console_create_user($params)
     $password = xcms_get_key_or($params, "password");
     $email = xcms_get_key_or($params, "email");
     $groups = explode(',', xcms_get_key_or($params, "groups"));
-    $notify = (xcms_get_key_or($params, $notify, "yes") == "no");
+    $notify = (xcms_get_key_or($params, $notify, YES) == NO);
 
     $su->create($login, $email);
     foreach ($groups as $group)

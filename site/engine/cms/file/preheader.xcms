@@ -1,6 +1,6 @@
 <# auth/ {$INFO['view']} #>
 <?php
-    if (@$_POST["download-file"] || $INFO["immediate"] == "yes")
+    if (@$_POST["download-file"] || $INFO["immediate"] == YES)
     {
         header("Content-Type: ".file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/ftype"));
         header("Attachment: ".file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/fname"));

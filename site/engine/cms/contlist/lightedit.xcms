@@ -33,9 +33,9 @@ function xcms_create_contlist()
     $list["alias"] = $INFO["alias"]."/$item_id";
 
     // не показывать их в меню
-    $list["menu-hidden"] = "yes";
+    $list["menu-hidden"] = YES;
     // не показывать их в системном меню
-    $list["menu-locked"] = "yes";
+    $list["menu-locked"] = YES;
 
     xcms_save_list("$dir/info", $list);
     xcms_write("$dir/content", $_POST["content"]);

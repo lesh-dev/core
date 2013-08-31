@@ -2,10 +2,14 @@
 /**
   * Makes checkbox checked attribute with proper generic value
   **/
+
+define('YES', "yes");
+define('NO', "no");
+
 function xcms_checkbox_attr($val)
 {
-    $attr = ' value="yes" ';
-    if ($val == "yes")
+    $attr = ' value="'.YES.'" ';
+    if ($val == YES)
         $attr .= ' checked="checked" ';
     return $attr;
 }

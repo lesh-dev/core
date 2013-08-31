@@ -136,11 +136,11 @@ if (@$_POST["update-course"])
 {
     $school_id = xcms_get_key_or($_POST, 'school_id', '-1');
     $aux_param = xcms_url(array('school_id'=>$school_id));
-    xsm_update_entity_listmode('course', 'course', 'Курс', $course_fields, $aux_param);
+    $new_course_id = xsm_update_entity_listmode('course', 'course', 'Курс', $course_fields, $aux_param);
     if ($_POST['course_id'] == XDB_NEW)
     {
         $course_teachers = array(
-            'course_id'=>$_POST['course_id'],
+            'course_id'=>$new_course_id,
             'course_teacher_id'=>$_POST['course_teacher_id']
         );
         // TODO: Add some error handling

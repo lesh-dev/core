@@ -20,22 +20,28 @@
         @$LIST["view"] = xcms_user()->login();
         @$LIST["header"] = $_POST["header"];
         @$LIST["subheader"] = $_POST["subheader"];
-        if(@$_POST["viewForAll"]) $LIST["view"] = $LIST["view"]. " " . "#all";
+
+        // set view/edit rights
+        // creator always has access
+        @$LIST["view"] = xcms_user()->login();
         @$LIST["edit"] = xcms_user()->login();
-        @$LIST["edit"] = "";
-        @$LIST["view"] = "";
-        foreach($_POST as $key=>$value)
+        if (@$_POST["viewForAll"])
+            $LIST["view"] .= " #all";
+
+        foreach ($_POST as $key=>$value)
         {
-            if (substr($key, 0, 5)=="edit_")
-                $LIST["edit"] = $LIST["edit"]. " " . substr($key, 5);
-            if(substr($key, 0, 5)=="view_")
-                $LIST["view"] = $LIST["view"]. " " . substr($key, 5);
+            if (substr($key, 0, 5) == "edit_")
+                $LIST["edit"] .= " ".substr($key, 5);
+            if (substr($key, 0, 5) == "view_")
+                $LIST["view"] .= " ".substr($key, 5);
         }
 
         if (@$_POST["menu-title"])
             $LIST["menu-title"] = $_POST["menu-title"];
         if (@$_POST["menu-hidden"])
             $LIST["menu-hidden"] = $_POST["menu-hidden"];
+        if (@$_POST["menu-auth-only"])
+            $LIST["menu-auth-only"] = $_POST["menu-auth-only"];
 
         if (file_exists("{$SETTINGS["engine_dir"]}cms/{$_POST["create-pagetype"]}/install.php"))
         {

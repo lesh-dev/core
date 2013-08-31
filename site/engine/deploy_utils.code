@@ -5,7 +5,7 @@ function xcms_is_production()
         return false;
 
     $rel_info = xcms_get_list("INFO");
-    if (xcms_get_key_or($rel_info, "release-date", "no") == "no")
+    if (xcms_get_key_or($rel_info, "release-date", NO) == NO)
         return false;
 
     return (xcms_get_key_or($rel_info, "release-status") == "accepted");

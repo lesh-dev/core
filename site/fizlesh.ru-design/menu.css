@@ -88,3 +88,8 @@ a.menu-passive:hover {
 a.menu-passive:active {
     color: #000000;
 }
+
+a.menuitem-auth {
+    background-color: #a5b991 !important;
+}
+

@@ -298,10 +298,10 @@ span.course-progress.medium {
     color: #9f6f00;
 }
 span.course-progress.high {
-    color: #3fcf00;
+    color: #0f7f00;
 }
 span.course-progress.all {
-    color: #007f00;
+    color: #5f5f5f;
 }
 
 a.popup-link {
