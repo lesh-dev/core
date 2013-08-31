@@ -7,7 +7,7 @@ class XcmsTestConfig:
         self.m_adminPass = "root"
         self.m_notifyEmail = "vdm-photo@ya.ru"
         self.m_testAnketaSend = True
-        self.m_phpErrorCheckFlag = False #TODO: change!
+        self.m_phpErrorCheckFlag = True
         
     def getAdminLogin(self):
         return self.m_adminLogin
