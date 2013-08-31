@@ -61,7 +61,7 @@
         if (!array_key_exists($level, $listing))
             $listing[$level] = "";
         $listing[$level] .= "RewriteRule ^$alias$ index.php?page=$path\n";
-        $listing[$level] .= "RewriteRule ^$alias/(.*)$ index.php?page=$path&aparam=$1\n";
+        $listing[$level] .= "RewriteRule ^$alias/((.|\\r|\\n)*)$ index.php?page=$path&aparam=$1\n";
     }
     $listing = array_reverse($listing);
     $rewrite_text .= join($listing);
