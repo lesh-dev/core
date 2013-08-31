@@ -13,13 +13,21 @@ class XcmsXsmAvatar(SeleniumTest):
     * enter 'all people list'
     * add new person
     * check person's avatar.
+    * change avatar to xyz100
+    * check person's avatar.
+    * change avatar to idNNN
+    * check person's avatar.
+    * change avatar to default
+    * check person's avatar (stalin50).
+    * change avatar to non-existing VK page
+    * check person's avatar
     """
 
     def run(self):
-        self.setAutoPhpErrorChecking(False) #TODO: fix this
+        conf = XcmsTestConfig()
+        self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
         xtest_common.assertNoInstallerPage(self)
 
-        conf = XcmsTestConfig()
 
         testMailPrefix = conf.getAnketaNamePrefix()
 
@@ -84,4 +92,33 @@ class XcmsXsmAvatar(SeleniumTest):
         print "Avatar Source: ", avatarSrc
         if "stalin50" in avatarSrc:
             self.failTest("Wrong (default) avatar detected, expected custom image. VK ID: " + inpSocial);
+            
+        # ok, now let's test default avatar.
+        xtest_common.gotoEditPerson(self)
+        
+        inpSocial = ""
+        inpSocial = self.fillElementById("social_profile-input", inpSocial)
+        
+        self.clickElementByName("update-person")
+        xtest_common.gotoBackToPersonView(self)
+
+        avatarSrc = self.getImageSrcById("avatar")
+        print "Avatar Source: ", avatarSrc
+        if "stalin50" not in avatarSrc:
+            self.failTest("Default avatar expected. Current src: " + avatarSrc);
+
+        # ok, now let's test non-existing VK page.
+        xtest_common.gotoEditPerson(self)
+        
+        inpSocial = "http://vk.com/id12345678901234567890"
+        inpSocial = self.fillElementById("social_profile-input", inpSocial)
+        
+        self.clickElementByName("update-person")
+        xtest_common.gotoBackToPersonView(self)
+
+        avatarSrc = self.getImageSrcById("avatar")
+        print "Avatar Source: ", avatarSrc
+        if "stalin50" not in avatarSrc:
+            self.failTest("Default avatar expected. Current src: " + avatarSrc);
+
 

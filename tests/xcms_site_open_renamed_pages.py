@@ -5,7 +5,7 @@ import selenium_test, xtest_common, random_crap
 from xtest_config import XcmsTestConfig
 from selenium_test import SeleniumTest
 
-class XcmsOpenRenamedPages(SeleniumTest):
+class XcmsSiteOpenRenamedPages(SeleniumTest):
 	"""
 	This test checks renamed pages (rewrite rules)
 	It does following steps:

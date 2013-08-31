@@ -5,7 +5,7 @@ import selenium_test, xtest_common, random_crap
 from xtest_config import XcmsTestConfig
 from selenium_test import SeleniumTest
 
-class XcmsOverallOpenPages(SeleniumTest):
+class XcmsSiteOpenAllPages(SeleniumTest):
 	"""
 	This test checks overall site content.
 	It does following steps:
@@ -31,7 +31,7 @@ class XcmsOverallOpenPages(SeleniumTest):
 		self.assertBodyTextPresent(u"Официальная информация")
 		self.assertBodyTextPresent(u"Летняя Экологическая Школа (ЛЭШ) существует с 1990 года")
 
-		self.gotoUrlByLinkText(u"Набор на Школу - 2013")
+		self.gotoUrlByPartialLinkText(u"Набор на Школу - 201")
 
 		self.gotoUrlByLinkText(u"О нас")
 		self.assertBodyTextPresent(u"О нас")
