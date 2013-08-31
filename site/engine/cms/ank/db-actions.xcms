@@ -37,6 +37,7 @@ function xsm_update_entity_listmode($entity, $table_name, $title, $fields, $aux_
     ?>
     <a href="view-<?php echo $redir; ?>">Вернуться к просмотру<?php
         if (strlen($return_title)) echo " $return_title"; ?></a></p><?php
+    return $id;
 }
 
 function xsm_warn_delete_entity($entity, $table_name, $title, $aux_param = '')
