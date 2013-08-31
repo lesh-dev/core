@@ -19,7 +19,7 @@ class XcmsTestConfig:
         return self.m_notifyEmail
 
     def getPhpErrorCheckFlag(self):
-        return m_phpErrorCheckFlag
+        return self.m_phpErrorCheckFlag
 
     def getAnketaNamePrefix(self):
         if self.m_testAnketaSend:
