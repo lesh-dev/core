@@ -25,9 +25,6 @@
         $item_id = "$date-$count";
 
         $contents = file_get_contents("news/$file");
-        mkdir("new-news/$item_id", 0755, true);
-        xcms_write("new-news/$item_id/content", $contents);
-        print_r("  :Write to new-news/$item_id/content\n");
         $r = array();
         preg_match("/newstitle\".[0-9.]+(.*?)</s", $contents, $r);
         $title = "";
@@ -38,10 +35,14 @@
             $title_tr = strtr(strtolower(xcms_transliterate($title)), " _/", "---");
             $title_tr = preg_replace("/[^0-9a-zA-Z-]/", "", $title_tr);
             $title_tr = preg_replace("/[-]{2,}/", "-", $title_tr);
-            print_r("  :$title\n");
-            print_r("  :$title_tr\n");
+            $title_tr = substr($title_tr, 0, 50);
             $suffix = "-$title_tr";
         }
+        $folder = "$item_id$suffix";
+        mkdir("new-news/$folder", 0755, true);
+        print_r("$folder\n");
+        xcms_write("new-news/$folder/content", $contents);
+        print_r("  :Write to new-news/$folder/content\n");
 
         $info_contents =
 "type:content
@@ -53,15 +54,26 @@ alias:news/$item_id$suffix
 menu-hidden:yes
 menu-locked:yes
 ";
-
+        xcms_write("new-news/$folder/info", $info_contents);
     }
+
+$info_contents_root =
+"owner:root
+type:contlist
+view:#all
+header:Новости
+subheader:
+edit:#editor
+menu-title:Новости
+menu-hidden:
+menu-auth-only:
+";
 
     if ($argc < 2)
         die ("Usage: ".$argv[0]." <news-list>");
 
     $list = file($argv[1]);
     foreach ($list as $name)
-    {
         xconv_convert_one(trim($name));
-    }
+    xcms_write("new-news/info", $info_contents_root);
 ?>
