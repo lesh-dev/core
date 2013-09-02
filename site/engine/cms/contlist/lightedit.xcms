@@ -23,6 +23,10 @@ function xcms_create_contlist()
     if (file_exists($dir))
         return "Блок с таким служебным именем уже существует. ";
 
+    $root_alias = xcms_get_key_or($INFO, "alias");
+    if (!strlen($root_alias))
+        return "Не задан alias у списка блоков";
+
     mkdir($dir, 0777, true);
     $list = array();
     $list["type"] = xcms_get_key_or($_POST, "pagetype");
@@ -30,7 +34,7 @@ function xcms_create_contlist()
     $list["menu-title"] = xcms_get_key_or($_POST, "subheader");
     $list["view"] = "#all";
     $list["edit"] = "#editor";
-    $list["alias"] = $INFO["alias"]."/$item_id";
+    $list["alias"] = $root_alias."/$item_id";
 
     // не показывать их в меню
     $list["menu-hidden"] = YES;
@@ -73,9 +77,13 @@ function xcms_delete_contlist()
 function xcms_draw_contlist_create($result = true)
 {
     global $SETTINGS, $INFO, $pageid;
-    $header = $INFO["header"];
+    $header = xcms_get_key_or($INFO, "header");
 
-    ?><div class="admin-widget">
+    ?><div class="admin-widget"><?php
+    if ($result !== true)
+    {?>
+        <div class="error"><?php echo htmlspecialchars($result); ?></div><?php
+    }?>
     <h3>Добавить блок</h3>
     <form method="post">
 

@@ -51,6 +51,7 @@ menu-title:
 view:#all
 edit:#editor
 alias:news/$item_id$suffix
+menu-title:$title
 menu-hidden:yes
 menu-locked:yes
 ";
