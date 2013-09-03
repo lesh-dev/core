@@ -32,13 +32,24 @@ function xsm_edit_course()
     // через интерфейс добавления/удаления преподов данного курса
     // методов крестика или галочки (его пока не будет)
 
+    $db = xdb_get();
+
     $course_teacher_id = NULL;
     $school_id = -1;
+    $teachers_ht = "";
     if ($course_id == XDB_NEW)
     {
         // prefill teacher
         $course_teacher_id = xcms_get_key_or($_GET, 'course_teacher_id');
         $course['course_teacher_id'] = strlen($course_teacher_id) ? $course_teacher_id : NULL;
+
+        // code from common function
+        $teacher = xdb_get_entity_by_id('person', $course_teacher_id);
+        $teacher_fi = htmlspecialchars(xsm_fi($teacher));
+        $teacher_url = "view-person".xcms_url(array(
+            'person_id'=>$course_teacher_id,
+            'school_id'=>$school_id));
+        $teachers_ht = "<a href=\"$teacher_url\">$teacher_fi</a> ";
 
         // prefill school
         $school_id = xcms_get_key_or($_GET, 'school_id');
@@ -49,6 +60,7 @@ function xsm_edit_course()
     {
         $school_id = $course['school_id'];
         $course_teacher_id = 'all';
+        $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id);
     }
 
     $school = xdb_get_entity_by_id('school', $school_id);
@@ -65,12 +77,22 @@ function xsm_edit_course()
         ?>
         <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" />
         <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
-        <input type="hidden" name="course_teacher_id" value="<?php echo $course_teacher_id; ?>" />
+        <?php
+        if ($course_teacher_id != 'all')
+        {
+            // render course_teacher_id only when new course added
+            ?><input type="hidden" name="course_teacher_id" value="<?php echo $course_teacher_id; ?>" />
+        <?php
+        }?>
 
         <table summary="Курс" class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Курс</td>
             </tr>
+            <tr><td class="ankList">
+                <span class="ankEditField">Преподы</span>
+                <?php echo $teachers_ht; ?>
+            </td></tr>
             <?php
             foreach ($course_fields as $key=>$field_title)
             {
