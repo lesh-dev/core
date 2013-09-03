@@ -106,6 +106,44 @@ function xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id
 }
 
 /**
+  * Отдаёт список из курсов текущей школы и связанных с ними объектов.
+  * @param $school_id ID школы
+  **/
+function xsm_get_all_course_info($db, $school_id)
+{
+    $courses_query = "SELECT
+        course_id, course_title
+        FROM course WHERE school_id = '$school_id'
+        ORDER BY course_title";
+    $courses_sel = $db->query($courses_query);
+    $courses = array();
+    while ($course = $courses_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $course_id = $course['course_id'];
+        $course['teachers'] = array();
+        $courses[$course_id] = $course;
+    }
+
+    $teachers_query =
+        "SELECT
+        ct.course_id, ct.course_teacher_id,
+        tp.first_name, tp.last_name
+        FROM course_teachers ct, person tp, course c WHERE
+        (tp.person_id = ct.course_teacher_id) AND
+        (c.school_id = '$school_id') AND
+        (ct.course_id = c.course_id)
+        ORDER BY tp.last_name, tp.first_name";
+    $teachers_sel = $db->query($teachers_query);
+    while ($teachers_data = $teachers_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $course_id = $teachers_data['course_id'];
+        $course_teacher_id = $teachers_data['course_teacher_id'];
+        $courses[$course_id]['teachers'][$course_teacher_id] = $teachers_data;
+    }
+    return $courses;
+}
+
+/**
   * Печаталка таблицы курсов (общая для списка курсов на школе и одного препода)
   **/
 function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = "all")

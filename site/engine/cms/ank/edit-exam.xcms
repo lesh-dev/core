@@ -98,6 +98,35 @@ function xsm_delete_exam($table_name, $title)
     <a href="<?php echo $redir ?>">Вернуться к просмотру участника</a></p><?php
 }
 
+/**
+  * @param $name имя идентификатора объекта (курса)
+  * @param $value значение идентификатора объекта (курса)
+  * @param $db хэндл базы данных
+  * @param $school_id идентификатор школы
+  **/
+function xsm_make_course_selector($name, $value, $db, $school_id)
+{
+    $courses = xsm_get_all_course_info($db, $school_id);
+    $html = "<select name=\"$name\" id=\"$name-selector\">\n";
+    foreach ($courses as $key => $course)
+    {
+        $sel = ($key == $value) ? ' selected="selected" ' : '';
+        $title = htmlspecialchars($course['course_title']);
+        $title .= " &#8212; ";
+        $next = false;
+        foreach ($course['teachers'] as $course_teacher_id => $person)
+        {
+            if ($next)
+                $title .= ', ';
+            $title .= xsm_fi($person);
+            $next = true;
+        }
+        $html .= "<option $sel value=\"$key\">$title</option>\n";
+    }
+    $html .= "</select>";
+    return $html;
+}
+
 function xsm_edit_exam()
 {
     global $exam_fields;
@@ -182,18 +211,7 @@ function xsm_edit_exam()
                 } elseif ($key == 'course_id') {
                     if ($exam_id == XDB_NEW)
                     {
-                        // TODO: REGRESSION: lost course author names here
-                        echo xsm_make_selector('course', 'course_id', xcms_get_key_or($exam, $key, "-1"),
-                            array('course_title'),
-                            "(school_id = $school_id) ORDER BY course_title", $attr);
-                        /*
-                        echo xsm_make_selector_ext($key, $key, xcms_get_key_or($exam, $key, "-1"),
-                            "@@last_name@ @@first_name@ &#8212; @@course_title@",
-                            "SELECT
-                            course_id, last_name, first_name, course_title
-                            FROM course c LEFT JOIN person p ON p.person_id = c.course_teacher_id
-                            WHERE c.school_id = '$school_id' ORDER BY last_name, first_name, course_title",
-                            $attr);*/
+                        echo xsm_make_course_selector('course_id', xcms_get_key_or($exam, $key, "-1"), $db, $school_id);
                     }
                     else
                     {
