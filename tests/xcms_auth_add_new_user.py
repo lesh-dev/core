@@ -61,7 +61,6 @@ class XcmsAuthAddNewUser(SeleniumTest):
         if not xtest_common.performLogin(self, inpLogin, inpPass):
             raise selenium_test.TestError("Cannot login again as newly created user. ")
         
-        self.setPhpErrorsAsWarnings(True)
         xtest_common.gotoCabinet(self)
         
         # let's try to change password.
