@@ -3,7 +3,7 @@
       * News to contlist migration script (2.3 to 2.4)
       **/
 
-    $engine_dir = "../../site/engine/";
+    require_once("settings.php");
     date_default_timezone_set('Europe/Moscow');
     require_once("${engine_dir}sys/file.php");
     require_once("${engine_dir}sys/string.php");

@@ -27,7 +27,8 @@ ls $news_path
 sudo cp -r "$news_path" "$news_path.backup"
 sudo rm -f "$news_path"/*.gz
 sudo bash -xe <<EOF
-    ls -1 $news_path/*.news > news-list.txt
+    cd $news_path
+    ls -1 *.news > $wd/news-list.txt
 EOF
 sudo bash -xe <<EOF
     cat > $news_path/info <<INFO
