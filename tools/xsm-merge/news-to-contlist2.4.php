@@ -15,17 +15,20 @@
         xcms_log(XLOG_INFO, "Converting $file");
         global $dir_name;
         $dir_name = dirname($file);
-        $ts = str_replace(".news", "", $file);
+        $ts = basename($file);
+        $ts = str_replace(".news", "", $ts);
         $ts = (integer)$ts;
 
         $date = date('Y.m.d', $ts);
         $glob_dir = "$dir_name/$date";
-        $dir_list = glob("./$glob_dir-*", GLOB_ONLYDIR);
-        //print_r($dir_list);
+        $dir_list = glob("$glob_dir-*", GLOB_ONLYDIR);
         $count = count($dir_list);
+        $item_id = $date;
         if ($count > 0)
-            print_r("!!! More news !!!\n");
-        $item_id = "$date-$count";
+        {
+            xcms_log(XLOG_INFO, "Multiple news detected");
+            $item_id .= '.'.chr(97 + $count - 1);
+        }
 
         $contents = file_get_contents($file);
         $r = array();
