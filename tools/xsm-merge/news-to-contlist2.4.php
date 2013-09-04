@@ -2,21 +2,24 @@
     /**
       * News to contlist migration script (2.3 to 2.4)
       **/
-
-    require_once("settings.php");
     date_default_timezone_set('Europe/Moscow');
+    require_once("settings.php");
+    require_once("${engine_dir}sys/settings.php");
     require_once("${engine_dir}sys/file.php");
+    require_once("${engine_dir}sys/logger.php");
     require_once("${engine_dir}sys/string.php");
     header("Content-Type: text/html; charset=utf-8");
 
-    function xconv_convert_one($file)
+    function xconv_convert_news_file($file)
     {
-        print_r("Converting $file\n");
+        xcms_log(XLOG_INFO, "Converting $file");
+        global $dir_name;
+        $dir_name = dirname($file);
         $ts = str_replace(".news", "", $file);
         $ts = (integer)$ts;
 
         $date = date('Y.m.d', $ts);
-        $glob_dir = "new-news/$date";
+        $glob_dir = "$dir_name/$date";
         $dir_list = glob("./$glob_dir-*", GLOB_ONLYDIR);
         //print_r($dir_list);
         $count = count($dir_list);
@@ -24,7 +27,7 @@
             print_r("!!! More news !!!\n");
         $item_id = "$date-$count";
 
-        $contents = file_get_contents("news/$file");
+        $contents = file_get_contents($file);
         $r = array();
         preg_match("/newstitle\".[0-9.]+(.*?)</s", $contents, $r);
         $title = "";
@@ -39,10 +42,10 @@
             $suffix = "-$title_tr";
         }
         $folder = "$item_id$suffix";
-        mkdir("new-news/$folder", 0755, true);
-        print_r("$folder\n");
-        xcms_write("new-news/$folder/content", $contents);
-        print_r("  :Write to new-news/$folder/content\n");
+        mkdir("$dir_name/$folder", 0755, true);
+        xcms_log(XLOG_INFO, "$folder");
+        xcms_write("$dir_name/$folder/content", $contents);
+        xcms_log(XLOG_INFO, "Write content to $dir_name/$folder/content");
 
         $info_contents =
 "type:content
@@ -55,7 +58,7 @@ menu-title:$title
 menu-hidden:yes
 menu-locked:yes
 ";
-        xcms_write("new-news/$folder/info", $info_contents);
+        xcms_write("$dir_name/$folder/info", $info_contents);
     }
 
 $info_contents_root =
@@ -75,6 +78,6 @@ menu-auth-only:
 
     $list = file($argv[1]);
     foreach ($list as $name)
-        xconv_convert_one(trim($name));
-    xcms_write("new-news/info", $info_contents_root);
+        xconv_convert_news_file(trim($name));
+    xcms_write("$dir_name/info", $info_contents_root);
 ?>

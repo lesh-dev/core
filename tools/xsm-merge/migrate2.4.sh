@@ -27,23 +27,12 @@ ls $news_path
 sudo cp -r "$news_path" "$news_path.backup"
 sudo rm -f "$news_path"/*.gz
 sudo bash -xe <<EOF
-    cd $news_path
-    ls -1 *.news > $wd/news-list.txt
+    ls -1 $news_path/*.news > news-list.txt
 EOF
 sudo bash -xe <<EOF
-    cat > $news_path/info <<INFO
-owner:root
-type:contlist
-view:#all
-header:Новости
-subheader:
-edit:#editor
-menu-title:Новости
-menu-hidden:
-menu-auth-only:
-INFO
     # remove old metainfo
     rm -f $news_path/_*
     # remove unused template
     rm -f $news_path/template
 EOF
+sudo php news-to-contlist2.4.php news-list.txt
