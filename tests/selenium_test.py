@@ -341,6 +341,13 @@ class SeleniumTest:
             self.logAdd("setOptionValueById failed for id '" + eleId + "':\n" + traceback.format_exc())
             raise TestError(u"Cannot get drop-down (select) element by id '" + eleId + "'. ")
 
+    def getOptionValueById(self, eleId):
+        try:
+            self.getElementById(eleId).find_element_by_xpath(u"//option[@selected='selected']").click()
+        except NoSuchElementException:
+            self.logAdd("getOptionValueById failed for id '" + eleId + "':\n" + traceback.format_exc())
+            raise TestError(u"Cannot get drop-down (select) element by id '" + eleId + "'. ")
+
     def getElementValueById(self, eleId):
         self.checkEmptyParam(eleId, "getElementValueById")
         self.addAction("get-value", "element id: '" + eleId + "'")

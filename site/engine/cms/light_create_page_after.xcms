@@ -84,7 +84,7 @@
     </td>
 </tr>
 </table>
-<input type="submit" value="Создать раздел" />
+<input id="create-submit" type="submit" value="Создать раздел" />
 </form>
 <?php
     xcms_save_list(xcms_get_info_file_name(), $INFO);
