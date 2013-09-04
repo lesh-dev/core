@@ -8,6 +8,7 @@ import xcms_auth_check_dup_email
 import xcms_auth_check_dup_login
 import xcms_auth_root_login
 import xcms_auth_set_dup_email_by_admin
+import xcms_content_add_page
 import xcms_download_lectures
 import xcms_metrics_check
 import xcms_open_non_existing
@@ -26,6 +27,7 @@ def getTests(baseUrl, args): return {
     "xcms_auth_check_dup_login.py": xcms_auth_check_dup_login.XcmsAuthCheckDupLogin(baseUrl, args),
     "xcms_auth_root_login.py": xcms_auth_root_login.XcmsAuthRootLogin(baseUrl, args),
     "xcms_auth_set_dup_email_by_admin.py": xcms_auth_set_dup_email_by_admin.XcmsAuthSetDuplicateEmailByAdmin(baseUrl, args),
+    "xcms_content_add_page.py": xcms_content_add_page.XcmsContentAddPage(baseUrl, args),
     "xcms_download_lectures.py": xcms_download_lectures.XcmsDownloadLectures(baseUrl, args),
     "xcms_metrics_check.py": xcms_metrics_check.XcmsMetricsCheck(baseUrl, args),
     "xcms_open_non_existing.py": xcms_open_non_existing.XcmsOpenNonExisting(baseUrl, args),

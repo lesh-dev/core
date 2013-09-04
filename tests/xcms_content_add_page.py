@@ -23,7 +23,7 @@ class XcmsContentAddPage(SeleniumTest):
             
         xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
         
-        xtest_common.gotoAdminPanel()
+        xtest_common.gotoAdminPanel(self)
         
         self.gotoUrlByLinkText(u"Главная")
         self.gotoUrlByLinkText(u"Подстраница")
@@ -38,9 +38,14 @@ class XcmsContentAddPage(SeleniumTest):
         inpPageTitle = self.fillElementByName("header", inpPageTitle);
         inpPageSubheader = self.fillElementByName("subheader", inpPageSubheader);
 
-        if self.getOptionValueById("create-pagetype") != "content":
-            self.failTest("Default selected page type is not 'content'. ")
+        defaultPageType = self.getOptionValueByName("create-pagetype")
+        
+        if defaultPageType != "content":
+            self.failTest("Default selected page type is not 'content': " + defaultPageType)
         
         self.clickElementById("create-submit")
+        
+        # edit page - click on menu
+        self.gotoUrlByLinkText(inpMenuTitle)
         
 

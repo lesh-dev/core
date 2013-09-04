@@ -7,8 +7,8 @@ from selenium.common.exceptions import NoSuchWindowException
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import InvalidElementStateException
 
-import urllib2
 from urllib2 import URLError
+from httplib import HTTPException
 
 from selenium.webdriver.remote.webdriver import WebElement
 
@@ -74,7 +74,10 @@ def RunTest(test):
         print "Seems like browser window have been closed. "
         return 2
     except URLError as e:
-        print "Seems like browser connection error occured (window has been closed, etc). "
+        print "URL error occured. Seems like browser connection error occured (window has been closed, etc). "
+        return 2
+    except HTTPException as e:
+        print "HTTP error occured. Seems like browser connection error occured (window has been closed, etc). "
         return 2
     except Exception as e:
         test.handleException(e)
@@ -85,6 +88,9 @@ def DecodeRunResult(result):
     elif result == 1: return "FAILED"
     elif result == 2: return "FATAL"
     else: return "UNKNOWN"
+    
+def getValue(ele):
+    return ele.get_attribute('value')
     
 #main API wrapper for Webdriver.
 class SeleniumTest:
@@ -323,7 +329,7 @@ class SeleniumTest:
             self.getElementByName(name).clear()
         self.addAction("fill", "element name: '" + name + "', text: '" + text + "'")
         self.getElementByName(name).send_keys(text)
-        return self.getElementByName(name).get_attribute('value')
+        return getValue(self.getElementByName(name))
         
     def fillElementById(self, eleId, text, clear = True):
         try:
@@ -338,7 +344,7 @@ class SeleniumTest:
             #print "got element "
             #print "dir", dir(ele)
             ele.send_keys(text)
-            return self.getElementById(eleId).get_attribute('value')
+            return getValue(self.getElementById(eleId))
         except InvalidElementStateException as e:
             self.logAdd("fillElementById failed for id '" + eleId + "':\n" + traceback.format_exc())
             raise TestError(u"Cannot set element value by id '" + eleId + "', possibly element is read-only.")
@@ -351,9 +357,16 @@ class SeleniumTest:
             self.logAdd("setOptionValueById failed for id '" + eleId + "':\n" + traceback.format_exc())
             raise TestError(u"Cannot get drop-down (select) element by id '" + eleId + "'. ")
 
+    def getOptionValueByName(self, eleName):
+        try:
+            return getValue(self.getElementByName(eleName).find_element_by_xpath("//option[@selected='selected']"))
+        except NoSuchElementException:
+            self.logAdd("getOptionValueByName failed for name '" + eleName + "':\n" + traceback.format_exc())
+            raise TestError(u"Cannot get drop-down (select) element by name '" + eleName + "'. ")
+        
     def getOptionValueById(self, eleId):
         try:
-            self.getElementById(eleId).find_element_by_xpath(u"//option[@selected='selected']").click()
+            return getValue(self.getElementById(eleId).find_element_by_xpath(u"//option[@selected='selected']"))
         except NoSuchElementException:
             self.logAdd("getOptionValueById failed for id '" + eleId + "':\n" + traceback.format_exc())
             raise TestError(u"Cannot get drop-down (select) element by id '" + eleId + "'. ")
@@ -361,17 +374,17 @@ class SeleniumTest:
     def getElementValueById(self, eleId):
         self.checkEmptyParam(eleId, "getElementValueById")
         self.addAction("get-value", "element id: '" + eleId + "'")
-        return self.getElementById(eleId).get_attribute('value')
+        return getValue(self.getElementById(eleId))
 
     def getElementValueByName(self, eleName):
         self.checkEmptyParam(eleName, "getElementValueByName")
         self.addAction("get-value", "element name: '" + eleName + "'")
-        return self.getElementByName(eleName).get_attribute('value')
+        return getValue(self.getElementByName(eleName))
 
     def checkElementValueById(self, eleId, text):
         self.checkEmptyParam(eleId, "checkElementValueById")
         self.addAction("check-value", "element id: '" + eleId + "', expected: '" + text + "'. ")
-        eleValue = self.getElementById(eleId).get_attribute('value')
+        eleValue = getValue(self.getElementById(eleId))
         if isEqual(eleValue, text):
             return True
         return False
@@ -387,7 +400,7 @@ class SeleniumTest:
     def checkElementValueByName(self, name, text):
         self.checkEmptyParam(name, "checkElementValueByName")
         self.addAction("check-value", "element name: '" + name + "', expected: '" + text + "'. ")
-        eleValue = self.getElementByName(name).get_attribute('value')
+        eleValue = getValue(self.getElementByName(name))
         if isEqual(eleValue, text):
             return True
         return False
