@@ -3,8 +3,12 @@
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchWindowException 
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import InvalidElementStateException
+
+import urllib2
+from urllib2 import URLError
 
 from selenium.webdriver.remote.webdriver import WebElement
 
@@ -66,6 +70,12 @@ def RunTest(test):
     except TestShutdown as e:
         test.handleShutdown(e)
         return 0
+    except NoSuchWindowException as e:
+        print "Seems like browser window have been closed. "
+        return 2
+    except URLError as e:
+        print "Seems like browser connection error occured (window has been closed, etc). "
+        return 2
     except Exception as e:
         test.handleException(e)
         return 2
@@ -122,10 +132,10 @@ class SeleniumTest:
             self.m_driver.maximize_window()     
             
     def __del__(self):
-#       print "Destructing SeleniumTest"
+#        print "Destructing SeleniumTest"
         if hasattr(self, 'm_driver'):
             if self.m_closeOnExit:
-#               print "closing driver"
+#                print "Closing driver"
                 self.m_driver.close()
 
     def getBaseUrl(self):
