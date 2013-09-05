@@ -38,7 +38,7 @@ class XcmsContentAddPage(SeleniumTest):
         inpPageTitle = self.fillElementByName("header", inpPageTitle);
         inpPageSubheader = self.fillElementByName("subheader", inpPageSubheader);
 
-        defaultPageType = self.getOptionValueByName("create-pagetype")
+        defaultPageType = self.getOptionValueById("create-pagetype")
         
         if defaultPageType != "content":
             self.failTest("Default selected page type is not 'content': " + defaultPageType)

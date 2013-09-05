@@ -17,7 +17,7 @@
     <td>
 <?php
     $list = xcms_get_tag_list("type");
-    echo "<select id=\"create-pagetype\" name=\"create-pagetype\">";
+    echo "<select id=\"create-pagetype-selector\" name=\"create-pagetype\">";
     foreach ($list as $key=>$value)
     {
         if ($key == "_NAME") continue;
