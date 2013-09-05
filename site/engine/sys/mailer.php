@@ -139,6 +139,7 @@
     {
         global $SETTINGS;
         $login = xcms_user()->login();
+        $real_name = xcms_user()->param("name");
         $enabled = xcms_get_key_or($SETTINGS, "mailer_enabled", true);
         if (!$enabled) return;
 
@@ -150,7 +151,7 @@
             "$mail_text\r\n".
             "--\r\n".
             "Это уведомление сгенерировано автоматически. Отвечать на него не нужно\r\n".
-            "Пользователь    : $login\r\n".
+            "Пользователь    : $login ($real_name)\r\n".
             "Имя хоста       : $host\r\n".
             "Обратная ссылка : {$_SERVER['HTTP_REFERER']}\r\n";
             "Дата и время    : $hr_timestamp\r\n";
@@ -162,6 +163,7 @@
             $body_html = str_replace('@@HOST@', $host, $body_html);
             $body_html = str_replace('@@REFERER@', $_SERVER['HTTP_REFERER'], $body_html);
             $body_html = str_replace('@@LOGIN@', $login, $body_html);
+            $body_html = str_replace('@@REAL-NAME@', $real_name, $body_html);
             $body_html = str_replace('@@TIMESTAMP@', $hr_timestamp, $body_html);
         }
         if ($immediate)
