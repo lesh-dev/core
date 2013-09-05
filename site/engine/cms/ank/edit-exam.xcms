@@ -1,17 +1,7 @@
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
+<# cms/ank/diff #>
 <?php
-
-$exam_fields = array(
-    "student_person_id"=>"Школьник",
-    "course_id"=>"Курс",
-    "exam_status"=>"Состояние",
-    "deadline_date"=>"Дедлайн",
-    "is_prac"=>"Прак?",
-    "exam_comment"=>"Комментарий к зачёту",
-    "exam_created"=>"Время создания",
-    "exam_modified"=>"Последняя модификация"
-);
 
 function xsm_edit_exam_operations($school_id, $student_person_id, $id)
 {
@@ -77,7 +67,6 @@ function xsm_warn_delete_exam($table_name, $title)
 
 function xsm_delete_exam($table_name, $title)
 {
-    global $exam_fields;
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
     $exam = xdb_get_entity_by_id($table_name, $id);
@@ -127,10 +116,40 @@ function xsm_make_course_selector($name, $value, $db, $school_id)
     return $html;
 }
 
+function xsm_notify_exam_edit($exam)
+{
+    $exam_id = $exam['exam_id'];
+    $old_exam = ($exam_id != XDB_NEW) ? xdb_get_entity_by_id('exam', $exam_id) : array();
+
+    $exam_status = xsm_check_enum_key('exam_status', $exam['exam_status']);
+    $student_person_id = $exam['student_person_id'];
+    $student = xdb_get_entity_by_id('person', $student_person_id);
+
+    $course_id = $exam['course_id'];
+    $course = xdb_get_entity_by_id('course', $course_id);
+    $course_title = $course['course_title'];
+
+    $student_fi = xsm_fi($student);
+    $table_title = 'Изменён зачёт школьника <a'.
+        xcms_ext_href('view-person', array('person_id'=>$student_person_id)).'>'.
+        htmlspecialchars($student_fi).'</a>';
+
+    $exam_statuses = xsm_get_enum("exam_status", $exam_status);
+    $hr_exam_status = $exam_statuses[$exam_status];
+
+    $mail_msg = xsm_build_diff_msg(
+        $exam,
+        $old_exam,
+        xsm_get_exam_fields(),
+        xsm_get_exam_field_types(),
+        $table_title);
+
+    $subject = "Зачёт шк. $student_fi по к. $course_title [$hr_exam_status]";
+    xcms_send_notification("reg", NULL, "db", $subject, "This message is in HTML format.\r\n", $mail_msg);
+}
+
 function xsm_edit_exam()
 {
-    global $exam_fields;
-
     $exam_id = xcms_get_key_or($_GET, 'exam_id', '-1'); // invalid key
     $exam = xdb_get_entity_by_id('exam', $exam_id);
     $db = xdb_get();
@@ -159,11 +178,8 @@ function xsm_edit_exam()
     $school = xdb_get_entity_by_id('school', $school_id);
     $school_title = $school['school_title'];
 
-    $field_types = array(
-        "exam_comment"=>"textarea",
-        "exam_status"=>"enum",
-        "is_prac"=>"checkbox"
-    );
+    $exam_fields = xsm_get_exam_fields();
+    $field_types = xsm_get_exam_field_types();
 
     ?>
     <form method="post" action="edit-exam"><?php
@@ -171,7 +187,10 @@ function xsm_edit_exam()
         ?>
         <input type="hidden" name="exam_id" value="<?php echo $exam_id; ?>" />
         <input type="hidden" name="student_person_id" value="<?php echo $student_person_id; ?>" />
-        <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+        <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" /><?php
+        if ($exam_id != XDB_NEW) {?>
+            <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" /><?php
+        }?>
         <table summary="Зачёт" class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Зачёт</td>
@@ -210,9 +229,7 @@ function xsm_edit_exam()
                         readonly="readonly" /><?php
                 } elseif ($key == 'course_id') {
                     if ($exam_id == XDB_NEW)
-                    {
                         echo xsm_make_course_selector('course_id', xcms_get_key_or($exam, $key, "-1"), $db, $school_id);
-                    }
                     else
                     {
                         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, "all");
@@ -233,7 +250,8 @@ function xsm_edit_exam()
 
 if (@$_POST["update-exam"])
 {
-    xsm_update_exam('exam', 'Зачёт', $exam_fields);
+    xsm_notify_exam_edit($_POST);
+    xsm_update_exam('exam', 'Зачёт', xsm_get_exam_fields());
 }
 elseif (@$_POST["delete-exam"])
 {

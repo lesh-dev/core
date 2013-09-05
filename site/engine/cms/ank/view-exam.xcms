@@ -3,6 +3,7 @@
 
 <?php
 
+// SEEMS ORPHANED CODE
 function xsm_print_exam()
 {
     $student_person_id = xcms_get_key_or($_GET, 'student_person_id', 'invalid');
