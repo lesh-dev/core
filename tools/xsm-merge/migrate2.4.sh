@@ -23,8 +23,8 @@ sudo php merger-v2.3-to-v2.4.php
 sudo cp fizlesh.sqlite3 $target_db
 
 news_path="$site_root/$content_dir/cms/pages/z01News"
-ls $news_path
-sudo cp -r "$news_path" "$news_path.backup"
+back_path="$news_path.backup"
+sudo cp -r "$news_path" "$back_path"
 sudo rm -f "$news_path"/*.gz
 sudo bash -xe <<EOF
     ls -1 $news_path/*.news > news-list.txt
@@ -36,3 +36,6 @@ sudo bash -xe <<EOF
     rm -f $news_path/template
 EOF
 sudo php news-to-contlist2.4.php news-list.txt
+echo "Conversion done"
+echo "Removing news backup"
+sudo rm -rf "$back_path"
