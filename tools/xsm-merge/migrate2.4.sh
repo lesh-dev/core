@@ -11,7 +11,12 @@ cd $site_root
 content_dir="$( ls -d *content )"
 cd "$wd"
 
-echo "Site root is $site_root"
+httpd_user="www-data"
+if grep -q apache /etc/passwd ; then
+    httpd_user="apache"
+fi
+
+echo "Site root is $site_root, httpd user is $httpd_user"
 
 target_db="$site_root/$content_dir/ank/fizlesh.sqlite3"
 sudo cp $target_db .
@@ -37,5 +42,9 @@ sudo bash -xe <<EOF
 EOF
 sudo php news-to-contlist2.4.php news-list.txt
 echo "Conversion done"
+
 echo "Removing news backup"
 sudo rm -rf "$back_path"
+
+echo "Setting user rights back"
+sudo chown -R $httpd_user:$httpd_user "$site_root"
