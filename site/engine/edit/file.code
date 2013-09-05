@@ -29,10 +29,13 @@
             $time = time();
             $target_name = "$ename-version-$time";
 
+            $old_text = "";
             if (file_exists($ename))
+            {
                 @chmod($ename, 0666); // see bug #64
-            @rename($ename, $target_name);
-            $old_text = file_get_contents($target_name);
+                rename($ename, $target_name);
+                $old_text = file_get_contents($target_name);
+            }
             $new_text = @$_POST["edit-text"];
             $new_text = xcms_wrap_long_lines($new_text);
             xcms_write($ename, $new_text);
