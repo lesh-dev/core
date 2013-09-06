@@ -60,24 +60,14 @@ function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_ti
             $old_value = strlen($old_value) ? "Да" : "Нет";
             $new_value = strlen($new_value) ? "Да" : "Нет";
         }
-        // TODO: generic enum handling here in diff-er, remove them using field-desc API
-        elseif ($key == "anketa_status")
+        if (xsm_enum_exists($key))
         {
             if (!strlen($old_value))
-                $old_value = "new";
+                $old_value = xsm_get_enum_default_value($key);
 
-            $anketa_statuses = xsm_get_enum("anketa_status");
-            $old_value = $anketa_statuses[$old_value];
-            $new_value = $anketa_statuses[$new_value];
-        }
-        elseif ($key == "exam_status")
-        {
-            if (!strlen($old_value))
-                $old_value = "passed";
-
-            $exam_statuses = xsm_get_enum("exam_status");
-            $old_value = $exam_statuses[$old_value];
-            $new_value = $exam_statuses[$new_value];
+            $enum_items = xsm_get_enum($key);
+            $old_value = $enum_items[$old_value];
+            $new_value = $enum_items[$new_value];
         }
 
         $cur_row = str_replace("@@KEY@", $key_title, $cur_row);
