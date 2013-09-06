@@ -184,11 +184,12 @@ $XSM_ENUMS = array(
     // Зачёт
     "exam_status"=>array(
         "values"=>array(
+            "listen"=>"Прослушан",
             "passed"=>"Сдан",
             "notpassed"=>"Не сдан",
             "almost"=>"Почти сдан",
             "other"=>"Иное"),
-        "default"=>"passed")
+        "default"=>"listen")
 );
 
 // Enum API
@@ -202,6 +203,12 @@ function xsm_get_enum_default_value($enum_type)
 {
     global $XSM_ENUMS;
     return $XSM_ENUMS[$enum_type]["default"];
+}
+
+function xsm_enum_exists($enum_type)
+{
+    global $XSM_ENUMS;
+    return array_key_exists($enum_type, $XSM_ENUMS);
 }
 
 function xsm_check_enum_key($enum_type, $key)
