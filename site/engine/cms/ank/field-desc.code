@@ -86,6 +86,31 @@ function xsm_get_person_comment_field_types()
     );
 }
 
+// Exam
+function xsm_get_exam_fields()
+{
+    return array(
+        "student_person_id"=>"Школьник",
+        "course_id"=>"Курс",
+        "exam_status"=>"Состояние",
+        "deadline_date"=>"Дедлайн",
+        "is_prac"=>"Прак?",
+        "exam_comment"=>"Комментарий к зачёту",
+        "exam_created"=>"Время создания",
+        "exam_modified"=>"Последняя модификация"
+    );
+}
+
+function xsm_get_exam_field_types()
+{
+    return array(
+        "exam_comment"=>"textarea",
+        "exam_status"=>"enum",
+        "is_prac"=>"checkbox"
+    );
+}
+
+
 $XSM_ENUMS = array(
     // статус анкеты (значения в базе)
     "anketa_status"=>array(
@@ -159,11 +184,12 @@ $XSM_ENUMS = array(
     // Зачёт
     "exam_status"=>array(
         "values"=>array(
+            "listen"=>"Прослушан",
             "passed"=>"Сдан",
             "notpassed"=>"Не сдан",
             "almost"=>"Почти сдан",
             "other"=>"Иное"),
-        "default"=>"passed")
+        "default"=>"listen")
 );
 
 // Enum API
@@ -177,6 +203,12 @@ function xsm_get_enum_default_value($enum_type)
 {
     global $XSM_ENUMS;
     return $XSM_ENUMS[$enum_type]["default"];
+}
+
+function xsm_enum_exists($enum_type)
+{
+    global $XSM_ENUMS;
+    return array_key_exists($enum_type, $XSM_ENUMS);
 }
 
 function xsm_check_enum_key($enum_type, $key)

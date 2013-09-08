@@ -156,6 +156,7 @@
             "Обратная ссылка : {$_SERVER['HTTP_REFERER']}\r\n";
             "Дата и время    : $hr_timestamp\r\n";
 
+        $body_html = "";
         if (!empty($mail_text_html))
         {
             $body_html = xcms_get_html_template("notification-body");
