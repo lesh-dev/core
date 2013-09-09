@@ -73,6 +73,7 @@ $info_contents_root =
 type:contlist
 view:#all
 header:Новости
+alias:news
 subheader:
 edit:#editor
 menu-title:Новости
