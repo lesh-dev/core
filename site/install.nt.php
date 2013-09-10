@@ -11,9 +11,9 @@
         <h1>Установка XCMS 2.0</h1>
 <?php
     $engine_dir = "engine/"; // some initial hardcode. TODO: make autodetection
+    require_once("${engine_dir}sys/string.php");
     require_once("${engine_dir}sys/tag.php");
     require_once("${engine_dir}sys/logger.php");
-    require_once("${engine_dir}sys/string.php");
     require_once("${engine_dir}sys/file.php");
     require_once("${engine_dir}sys/util.php");
 

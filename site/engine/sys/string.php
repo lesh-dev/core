@@ -8,6 +8,9 @@
     define('EXP_CR', "\r");
     define('EXP_CRLF', "\r\n");
 
+    define('EXP_SP', ' ');
+    define('EXP_EQ', '=');
+
     /**
       * Checks if user name is valid
       * @return true if user name is valid, false otherwise
@@ -189,7 +192,7 @@
             // add rest of line
             $new_lines[] = $ln;
         }
-        return implode("\n", $new_lines);
+        return implode(EXP_LF, $new_lines);
     }
 
     /**

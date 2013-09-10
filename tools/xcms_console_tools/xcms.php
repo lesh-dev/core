@@ -42,6 +42,7 @@
     date_default_timezone_set('Europe/Moscow');
     require_once ("settings.php");
     require_once ("$engine_dir/sys/settings.php");
+    require_once ("$engine_dir/sys/string.php");
     require_once ("$engine_dir/sys/tag.php");
     require_once ("$engine_dir/sys/auth.php");
     require_once ("$engine_dir/sys/logger.php");

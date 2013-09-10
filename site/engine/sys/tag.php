@@ -121,7 +121,7 @@ function xcms_get_tag_list($tag_name)
 
     if (substr($tag_text, 0, 5) != "<?php")
     {
-        $rez = explode("\n", $tag_text);
+        $rez = explode(EXP_LF, $tag_text);
         foreach($rez as $key=>$value)
         {
             if(!$key)
@@ -129,7 +129,7 @@ function xcms_get_tag_list($tag_name)
                 $taglist["_NAME"]=$value;
                 continue;
             }
-            $arr = explode("=", $value);
+            $arr = explode(EXP_EQ, $value);
             $taglist[trim($arr[0])] = trim($arr[1]);
         }
         return $taglist;
