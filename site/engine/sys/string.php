@@ -4,6 +4,10 @@
       * Maintainer: mvel@
       **/
 
+    define('EXP_LF', "\n");
+    define('EXP_CR', "\r");
+    define('EXP_CRLF', "\r\n");
+
     /**
       * Checks if user name is valid
       * @return true if user name is valid, false otherwise
@@ -150,11 +154,11 @@
 
     function xcms_wrap_long_lines($text, $max_length = MAX_LENGTH_DEFAULT)
     {
-        $lines = explode("\n", $text);
+        $lines = explode(EXP_LF, $text);
         $new_lines = array();
         foreach ($lines as $ln)
         {
-            $ln = str_replace("\r", "", $ln);
+            $ln = str_replace(EXP_CR, "", $ln);
             if (xu_len($ln) < $max_length)
             {
                 $new_lines[] = $ln;
