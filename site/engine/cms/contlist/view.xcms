@@ -8,7 +8,7 @@
             $no_pager = true;
         elseif (strpos($arg, "=") !== false)
         {
-            $arr = explode('=', $arg, 2);
+            $arr = explode(EXP_EQ, $arg, 2);
             if ($arr[0] == "count")
                 $block_show_count = (integer)($arr[1]);
         }

@@ -24,7 +24,7 @@
                 $line = trim($line);
                 if (!strlen($line))
                     continue;
-                $from_to = explode(' ', $line);
+                $from_to = explode(EXP_SP, $line);
                 if (count($from_to) != 2)
                 {
                     xcms_log(XLOG_WARNING, "Line '$line' does not match rewrite rules");
