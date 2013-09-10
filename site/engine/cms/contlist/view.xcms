@@ -1,4 +1,19 @@
 <?php
+
+    $block_show_count = 10;
+    $no_pager = false;
+    foreach ($argv as $arg)
+    {
+        if (strpos($arg, "no-pager") !== false)
+            $no_pager = true;
+        elseif (strpos($arg, "=") !== false)
+        {
+            $arr = explode('=', $arg, 2);
+            if ($arr[0] == "count")
+                $block_show_count = (integer)($arr[1]);
+        }
+    }
+
     $editable = xcms_user()->check_rights("editor", false) || xcms_user()->check_rights("admin", false);
     if ($editable)
     {?>
@@ -7,15 +22,17 @@
             ?>">Редактировать список</a><?php
     }
     $pg = (integer)(xcms_get_key_or($_GET, "pg", 0));
+    // force first page if no pager
+    if ($no_pager)
+        $pg = 0;
 
     $list = xcms_get_subpages($pageid);
     $list = array_reverse($list);
     $i = 0;
-    define('NEWS_PER_PAGE', 10);
     foreach ($list as $subpage_id)
     {
         $odd = ($i % 2) ? "odd" : "even";
-        if ($i >= $pg * NEWS_PER_PAGE && $i < ($pg + 1) * NEWS_PER_PAGE)
+        if ($i >= $pg * $block_show_count && $i < ($pg + 1) * $block_show_count)
         {?>
             <div class="contlist-block <?php echo $odd; ?>"><?php
             $source = xcms_get_page_content_name($subpage_id);
@@ -30,15 +47,18 @@
         }
         $i++;
     }
-    $block_count = $i; ?>
-    <div style="margin-top: 12px;"><?php
-    if ($pg > 0) {?>
-        <a href="/<# web_prefix #>?<?php
-            echo xcms_url(array('page'=>$pageid, 'pg'=>$pg - 1)); ?>">Новые новости</a><?php
+    $block_count = $i;
+    if (!$no_pager)
+    {?>
+        <div style="margin-top: 12px;"><?php
+        if ($pg > 0) {?>
+            <a href="/<# web_prefix #>?<?php
+                echo xcms_url(array('page'=>$pageid, 'pg'=>$pg - 1)); ?>">Новые новости</a><?php
+        }
+        if ($block_count >= ($pg + 1) * $block_show_count) {?>
+            <a style="float: right;" href="/<# web_prefix #>?<?php
+                echo xcms_url(array('page'=>$pageid, 'pg'=>$pg + 1)); ?>">Старые новости</a><?php
+        }?>
+        </div><?php
     }
-    if ($block_count >= ($pg + 1) * NEWS_PER_PAGE) {?>
-        <a style="float: right;" href="/<# web_prefix #>?<?php
-            echo xcms_url(array('page'=>$pageid, 'pg'=>$pg + 1)); ?>">Старые новости</a><?php
-    }?>
-    </div><?php
 ?>
