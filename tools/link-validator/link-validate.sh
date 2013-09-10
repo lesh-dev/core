@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # (c) fizlesh.ru dev team
 # maintainer: vdm (vdm-photo@ya.ru)
