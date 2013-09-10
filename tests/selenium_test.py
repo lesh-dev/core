@@ -277,7 +277,7 @@ class SeleniumTest:
             raise TestError(exceptionMessage)
 
     def wait(self, seconds):
-        self.logAdd("Waiting for " + userSerialize(seconds) + "' seconds. ")
+        self.logAdd("Waiting for '" + userSerialize(seconds) + "' seconds. ")
         time.sleep(seconds)
         
     def drv(self):
@@ -385,24 +385,37 @@ class SeleniumTest:
         self.checkEmptyParam(eleId, "checkElementValueById")
         self.addAction("check-value", "element id: '" + eleId + "', expected: '" + text + "'. ")
         eleValue = getValue(self.getElementById(eleId))
+        if not eleValue:
+            self.logAdd("None 'value' in element id '" + eleId + "'. Maybe it has no attribute 'value'?", "warning")
+            return False
         if isEqual(eleValue, text):
+            self.logAdd("check-value:ok, element id: '" + eleId + "', expected: '" + text + "'. ")
             return True
+        self.logAdd("check-value:fail, element id: '" + eleId + "', expected: '" + text + "', actual: '" + eleValue + "'. ")
         return False
 
+    # checkElementContentById
     def checkElementTextById(self, eleId, text):
         self.checkEmptyParam(eleId, "checkElementTextById")
         self.addAction("check-text", "element id: '" + eleId + "', expected: '" + text + "'. ")
         eleText = self.getElementById(eleId).text
         if isEqual(eleText, text):
+            self.logAdd("check-text:ok, element id: '" + eleId + "', expected: '" + text + "'. ")
             return True
+        self.addAction("check-text:fail, element id: '" + eleId + "', expected: '" + text + "', actual: '" + eleText + "'. ")
         return False
 
     def checkElementValueByName(self, name, text):
         self.checkEmptyParam(name, "checkElementValueByName")
         self.addAction("check-value", "element name: '" + name + "', expected: '" + text + "'. ")
         eleValue = getValue(self.getElementByName(name))
+        if not eleValue:
+            self.logAdd("None 'value' in element name '" + name + "'. Maybe it has no attribute 'value'?", "warning")
+            return False
         if isEqual(eleValue, text):
+            self.logAdd("check-value:ok, element name: '" + name + "', expected: '" + text + "'. ")
             return True
+        self.logAdd("check-value:fail, element name: '" + name + "', expected: '" + text + "', actual: '" + eleText + "'. ")
         return False
 
     def assertElementTextById(self, eleId, text):
@@ -556,7 +569,7 @@ class SeleniumTest:
             self.failTestWithItemNotFound(msg)
 
             
-    def logAdd(self, text):
+    def logAdd(self, text, logLevel = "debug"):
         try:
             if not self.m_logStarted:
                 self.logStart()
@@ -564,13 +577,14 @@ class SeleniumTest:
             logFile = open(self.m_logFile, 'a')
             fullLogText = text + u"\n"
             logFile.write(fullLogText.encode('UTF-8'))
+            print "LOG[" + logLevel + "]: " + fullLogText
             logFile.close()
         except IOError:
             raise RuntimeError("Cannot write message to log file '" + m_logFile + "'. ")
         
     
     def getPageSource(self):
-        return self.m_driver.page_source;
+        return self.m_driver.page_source
         
     def checkPhpErrors(self):
         #print dir(self.m_driver);
