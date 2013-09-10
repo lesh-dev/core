@@ -389,7 +389,9 @@ class SeleniumTest:
             self.logAdd("None 'value' in element id '" + eleId + "'. Maybe it has no attribute 'value'?", "warning")
             return False
         if isEqual(eleValue, text):
+            self.logAdd("check-value:ok, element id: '" + eleId + "', expected: '" + text + "'. ")
             return True
+        self.logAdd("check-value:fail, element id: '" + eleId + "', expected: '" + text + "', actual: '" + eleValue + "'. ")
         return False
 
     # checkElementContentById
@@ -582,7 +584,7 @@ class SeleniumTest:
         
     
     def getPageSource(self):
-        return self.m_driver.page_source;
+        return self.m_driver.page_source
         
     def checkPhpErrors(self):
         #print dir(self.m_driver);
