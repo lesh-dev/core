@@ -18,9 +18,9 @@
     foreach ($_SERVER["argv"] as $i=>$cmd)
     {
         if ($i == 0) continue;
-        if (strpos($cmd, EXP_EQ) !== false)
+        if (strpos($cmd, '=') !== false)
         {
-            $arr = explode(EXP_EQ, $cmd, 2);
+            $arr = explode('=', $cmd, 2);
             $params[$arr[0]] = $arr[1];
         }
         else
