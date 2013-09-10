@@ -10,7 +10,7 @@
     {
         $output = "";
 
-        $ad = explode("\n", $diff);
+        $ad = explode(EXP_LF, $diff);
         $show = array();
         for ($i = 0; $i < count($ad); ++$i)
             $show[$i] = false;

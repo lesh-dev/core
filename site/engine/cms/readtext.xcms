@@ -33,7 +33,7 @@ if ($need)
             $text_defined = true;
         elseif (strpos($arg, "="))
         {
-            $arr = explode($arg, "=", 1);
+            $arr = explode(EXP_EQ, $arg, 2);
             if($arr[0] == "--limit")
                 $limit = $arr[1];
             if($arr[0] == "--next-link")
@@ -82,7 +82,7 @@ if ($need)
             $target = substr($text, $p, $l-$p);
             $target = substr($target, strlen($name)+3);
             if(strlen($target))
-                $uargs = explode(":", $target);
+                $uargs = explode(EXP_COL, $target);
             else
                 $uargs = array();
             $idata = "";

@@ -107,7 +107,7 @@
           **/
         function groups()
         {
-            return explode(",", @$this->dict["groups"]);
+            return explode(EXP_COM, @$this->dict["groups"]);
         }
         function check_rights($group, $throw_exception=true)
         {

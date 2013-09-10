@@ -2,7 +2,7 @@
     function xcms_set_args($code, $outputStream)
     {
         global $SETTINGS;
-        $argv = explode(" ", $code);
+        $argv = explode(EXP_SP, $code);
         fputs($outputStream, $SETTINGS["code_begin"]);
         foreach ($argv as $key=>$value)
         {
@@ -11,7 +11,7 @@
             if($key!=0)
             {
                 // singular value is a boolean switch
-                $a = explode("=", $value);
+                $a = explode(EXP_EQ, $value);
                 if (count($a) >= 2)
                     @fputs($outputStream, "@\$param[\"{$a[0]}\"] = \"{$a[1]}\";");
                 else
@@ -40,7 +40,7 @@
         $code = substr($code, 0, strlen($code)-strlen($close)-strlen($SETTINGS["closebracket"]));
 
         $code = trim($code);
-        $argv = explode(' ', $code);
+        $argv = explode(EXP_SP, $code);
 
         $name = $argv[0];
         $elem_full_name = $SETTINGS["engine_dir"].$name;

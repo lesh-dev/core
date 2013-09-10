@@ -55,7 +55,7 @@
             xcms_log(XLOG_ERROR, "[MAILER] Mail group '$mail_group' not found or empty, skipped");
             return false;
         }
-        $mails = explode('|', $ml);
+        $mails = explode(EXP_PIPE, $ml);
         $added_some = false;
         foreach ($mails as $addr)
         {

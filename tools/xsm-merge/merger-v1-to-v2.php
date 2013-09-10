@@ -3,7 +3,7 @@
       * Migration/merge script v1 to v2
       **/
     date_default_timezone_set('Europe/Moscow');
-    require_once("settings.php");
+    require_once("settings2.php");
     require_once("${engine_dir}sys/settings.php");
     require_once("${engine_dir}sys/unittest.php");
     require_once("${engine_dir}sys/file.php");

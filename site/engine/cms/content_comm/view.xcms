@@ -32,9 +32,9 @@
                 $comments = file($commfile);
                 foreach ($comments as $value)
                 {
-                    $value = str_replace("\n", "", $value);
-                    $value = str_replace("\r", "", $value);
-                    $arr = explode(" ", $value, 3);
+                    $value = str_replace(EXP_LF, '', $value);
+                    $value = str_replace(EXP_CR, '', $value);
+                    $arr = explode(EXP_SP, $value, 3);
                     if (!@$arr[2]) continue;
                     echo '<table width="100%">
                         <tr><td class="comment-name">'.$arr[1].
