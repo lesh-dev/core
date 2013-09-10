@@ -1,9 +1,7 @@
 <?php
-    $input = explode("//", $code);
+    $input = explode(EXP_SL2, $code);
     foreach ($input as $key=>$value)
-    {
-        $input[$key] = str_replace("//", "", $value);
-    }
+        $input[$key] = str_replace(EXP_SL2, '', $value);
 
     $cond = $input[1];
     $then = $input[2];

@@ -9,6 +9,7 @@
     define('EXP_CRLF', "\r\n");
 
     define('EXP_SP', ' ');
+    define('EXP_SL2', '//');
     define('EXP_EQ', '=');
 
     /**
