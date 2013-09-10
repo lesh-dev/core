@@ -248,10 +248,10 @@ function xsm_person_name_filter($db, $show_name_filter)
 {
     $show_name_filter = trim($show_name_filter);
     if (!strlen($show_name_filter))
-        return "";
+        return '';
 
-    $words = explode(' ', $show_name_filter);
-    $cond = "";
+    $words = explode(EXP_SP, $show_name_filter);
+    $cond = '';
     foreach ($words as $word)
     {
         $w = trim($word);
@@ -267,7 +267,7 @@ function xsm_person_name_filter($db, $show_name_filter)
             "(patronymic LIKE '%$esc_word%'))";
     }
     if (!strlen($cond))
-        return "";
+        return '';
     return "($cond)";
 }
 ?>

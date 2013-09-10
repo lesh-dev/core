@@ -82,7 +82,7 @@ if ($need)
             $target = substr($text, $p, $l-$p);
             $target = substr($target, strlen($name)+3);
             if(strlen($target))
-                $uargs = explode(":", $target);
+                $uargs = explode(EXP_COL, $target);
             else
                 $uargs = array();
             $idata = "";

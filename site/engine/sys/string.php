@@ -11,6 +11,9 @@
     define('EXP_SP', ' ');
     define('EXP_SL2', '//');
     define('EXP_EQ', '=');
+    define('EXP_COL', ':');
+    define('EXP_PIPE', '|');
+    define('EXP_COM', ',');
 
     /**
       * Checks if user name is valid
