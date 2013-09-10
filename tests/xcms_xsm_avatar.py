@@ -52,7 +52,7 @@ class XcmsXsmAvatar(SeleniumTest):
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
         
-        self.clickElementByName("update-person")
+        self.clickElementById("update-person-submit")
         
         xtest_common.gotoBackToPersonView(self)
 
@@ -71,7 +71,7 @@ class XcmsXsmAvatar(SeleniumTest):
         inpSocial = "http://vk.com/vasya10"
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
         
-        self.clickElementByName("update-person")
+        self.clickElementById("update-person-submit")
         xtest_common.gotoBackToPersonView(self)
 
         avatarSrc = self.getImageSrcById("avatar")
@@ -85,7 +85,7 @@ class XcmsXsmAvatar(SeleniumTest):
         inpSocial = "http://vk.com/id777314"
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
         
-        self.clickElementByName("update-person")
+        self.clickElementById("update-person-submit")
         xtest_common.gotoBackToPersonView(self)
 
         avatarSrc = self.getImageSrcById("avatar")
@@ -99,7 +99,7 @@ class XcmsXsmAvatar(SeleniumTest):
         inpSocial = ""
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
         
-        self.clickElementByName("update-person")
+        self.clickElementById("update-person-submit")
         xtest_common.gotoBackToPersonView(self)
 
         avatarSrc = self.getImageSrcById("avatar")
@@ -113,7 +113,7 @@ class XcmsXsmAvatar(SeleniumTest):
         inpSocial = "http://vk.com/id12345678901234567890"
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
         
-        self.clickElementByName("update-person")
+        self.clickElementById("update-person-submit")
         xtest_common.gotoBackToPersonView(self)
 
         avatarSrc = self.getImageSrcById("avatar")

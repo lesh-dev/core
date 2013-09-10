@@ -199,7 +199,7 @@ class XcmsXsmAnketaFill(SeleniumTest):
         
         self.setOptionValueById("anketa_status-selector", "progress")
         
-        self.clickElementByName("update-person")
+        self.clickElementById("update-person-submit")
         
         self.assertBodyTextPresent(u"Участник успешно сохранён")
         xtest_common.gotoBackToAnketaView(self)
