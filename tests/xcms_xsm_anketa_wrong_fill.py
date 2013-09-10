@@ -147,9 +147,10 @@ class XcmsXsmAnketaWrongFill(SeleniumTest):
             
         self.gotoUrlByLinkText(u"Анкеты")
         
-        fullAlias = inpLastName + " " + inpFirstName
+        shortAlias = inpLastName + " " + inpFirstName
+        fullAlias = shortAlias + " " + inpMidName
 
-        anketaUrlName = fullAlias.strip()
+        anketaUrlName = shortAlias.strip()
         # try to drill-down into table with new anketa.
 
         self.gotoUrlByLinkText(anketaUrlName)
@@ -157,7 +158,7 @@ class XcmsXsmAnketaWrongFill(SeleniumTest):
     # just check text is on the page.
         print "Checking that all filled fields are displayed on the page. "
         
-        self.assertBodyTextPresent(fullAlias)
+        self.assertElementTextById("person-title", fullAlias)
         self.assertBodyTextPresent(inpBirthDate)
         self.assertBodyTextPresent(inpSchool)
         self.assertBodyTextPresent(inpSchoolCity)
