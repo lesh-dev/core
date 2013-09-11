@@ -157,7 +157,7 @@
         return $string;
     }
 
-    define('MAX_LENGTH_DEFAULT', 80);
+    define('MAX_LENGTH_DEFAULT', 160);
 
     function xcms_wrap_long_lines($text, $max_length = MAX_LENGTH_DEFAULT)
     {
