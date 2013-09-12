@@ -48,4 +48,9 @@ class XcmsContentAddPage(SeleniumTest):
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle)
         
+        pageText = random_crap.randomText(100)
+        
+        pageText = self.fillElementById("edit-text", pageText)
+        self.clickElementById("edit-submit-top")
+        
 
