@@ -116,7 +116,7 @@
     <input type="hidden" name="<?php echo $pathv; ?>" value="<?php echo $ename;?>" />
     <input type="hidden" name="multi-id" value="<?php echo $multi_id; ?>" />
     <div style="padding-top: 15px;">
-        <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-sumbit-top" value="<?php echo $submit_val; ?>" />
+        <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-submit-top" value="<?php echo $submit_val; ?>" />
         <input type="submit" name="edit-preview" id="edit-preview-top" value="Предпросмотр" />
         <a <?php echo xcms_href(array('page'=>$pageid, 'ref'=>'index')); ?> class="submit">Свернуть реактор</a>
         Версия:
@@ -127,7 +127,7 @@
     <textarea class="editor" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
         name="edit-text" id="edit-text"><?php echo $text; ?></textarea>
     <div>
-        <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-sumbit-top" value="<?php echo $submit_val; ?>" />
+        <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-submit-bottom" value="<?php echo $submit_val; ?>" />
         <input type="submit" name="edit-preview" id="edit-preview-bottom" value="Предпросмотр" />
         Версия:
         <select name="versions" id="versions-bottom"><?php echo $vlist; ?></select>
