@@ -165,7 +165,7 @@
         $new_lines = array();
         foreach ($lines as $ln)
         {
-            $ln = str_replace(EXP_CR, "", $ln);
+            $ln = str_replace(EXP_CR, '', $ln);
             if (xu_len($ln) < $max_length)
             {
                 $new_lines[] = $ln;
@@ -204,7 +204,7 @@
       **/
     function xcms_string_unit_test()
     {
-        xut_begin("xcms_string");
+        xut_begin("string");
         xut_check(xcms_check_password("123@#$%^&abcABC bla\xFE\xFF"), "Check valid password");
         xut_check(!xcms_check_password("\n\taa\rbb\0\\'qqq'+\"zzz"), "Check invalid password");
 

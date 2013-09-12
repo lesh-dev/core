@@ -27,7 +27,7 @@
         return $diff_html;
     }
 
-    // Test
+    // Test with long text
     function xcms_diff_test()
     {
         global $engine_dir;
@@ -37,6 +37,7 @@
         echo $diff_html;
     }
 
+    // Unittest
     function xcms_finediff_unit_test()
     {
         xut_begin("finediff");
@@ -49,6 +50,12 @@
 
         $diff = xcms_diff_html("", "abc", false);
         xut_check($diff === "<ins>abc</ins>", "Simple insertion");
+
+        $diff = xcms_diff_html("abcdefgh aaa", "xyz abcdefgh aaa\ntuv", false);
+        xut_check($diff === "<ins>xyz </ins>abcdefgh <del>aaa</del><ins>aaa\ntuv</ins>", "Multiline insertion");
+
+        $diff = xcms_diff_html("abcdefgh aaa\n", "xyz abcdefgh aaa\ntuv", false);
+        xut_check($diff === "<ins>xyz </ins>abcdefgh aaa\n<ins>tuv</ins>", "Multiline insertion with newline");
 
         //echo "|".htmlspecialchars($diff)."|";
         xut_end();
