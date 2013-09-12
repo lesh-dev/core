@@ -18,11 +18,12 @@
     /**
       * Make html-based diff from text
       **/
-    function xcms_diff_html($from_text, $to_text)
+    function xcms_diff_html($from_text, $to_text, $post_process = true)
     {
         $opcodes = FineDiff::getDiffOpcodes($from_text, $to_text, FineDiff::$wordGranularity /* FineDiff::$characterGranularity */);
         $diff_html = FineDiff::renderDiffToHTMLFromOpcodesContext($from_text, $opcodes);
-        $diff_html = xcms_diff_postprocess($diff_html);
+        if ($post_process)
+            $diff_html = xcms_diff_postprocess($diff_html);
         return $diff_html;
     }
 
@@ -35,4 +36,22 @@
         $diff_html = xcms_diff_html($from_text, $to_text);
         echo $diff_html;
     }
+
+    function xcms_finediff_unit_test()
+    {
+        xut_begin("finediff");
+
+        $diff = xcms_diff_html("", "", false);
+        xut_check($diff === "", "Empty equal text");
+
+        $diff = xcms_diff_html("abc", "", false);
+        xut_check($diff === "<del>abc</del>", "Simple deletion");
+
+        $diff = xcms_diff_html("", "abc", false);
+        xut_check($diff === "<ins>abc</ins>", "Simple insertion");
+
+        //echo "|".htmlspecialchars($diff)."|";
+        xut_end();
+    }
+
 ?>
