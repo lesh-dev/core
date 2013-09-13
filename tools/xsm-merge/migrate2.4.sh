@@ -18,6 +18,12 @@ fi
 
 echo "Site root is $site_root, httpd user is $httpd_user"
 
+news_path="$site_root/$content_dir/cms/pages/z01News"
+if grep "contlist" "$news_path/info"; then
+    echo "Migration is already done"
+    exit 1
+fi
+
 # disable sudo-ing
 sudo_cmd=""
 
@@ -30,7 +36,6 @@ $sudo_cmd sed -i -e "s/@@CONTENT@/$content_dir/" settings.php
 $sudo_cmd php merger-v2.3-to-v2.4.php
 $sudo_cmd cp fizlesh.sqlite3 $target_db
 
-news_path="$site_root/$content_dir/cms/pages/z01News"
 back_path="$news_path.backup"
 $sudo_cmd cp -r "$news_path" "$back_path"
 $sudo_cmd rm -f "$news_path"/*.gz
