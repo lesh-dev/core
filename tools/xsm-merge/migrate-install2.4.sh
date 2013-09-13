@@ -11,6 +11,6 @@ fi
 
 mig_root="$site_root/migrate2.4"
 
-sudo mkdir -p "$mig_root"
-sudo cp *2.4* "$mig_root/"
-sudo rm -f "$mig_root/migrate-install2.4.sh"
+mkdir -p "$mig_root"
+cp *2.4* "$mig_root/"
+rm -f "$mig_root/migrate-install2.4.sh"
