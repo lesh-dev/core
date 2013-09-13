@@ -18,6 +18,12 @@ fi
 
 echo "Site root is $site_root, httpd user is $httpd_user"
 
+news_path="$site_root/$content_dir/cms/pages/z01News"
+if grep "contlist" "$news_path/info"; then
+    echo "Migration is already done"
+    exit 1
+fi
+
 target_db="$site_root/$content_dir/ank/fizlesh.sqlite3"
 sudo cp $target_db .
 
@@ -27,7 +33,6 @@ sudo sed -i -e "s/@@CONTENT@/$content_dir/" settings.php
 sudo php merger-v2.3-to-v2.4.php
 sudo cp fizlesh.sqlite3 $target_db
 
-news_path="$site_root/$content_dir/cms/pages/z01News"
 back_path="$news_path.backup"
 sudo cp -r "$news_path" "$back_path"
 sudo rm -f "$news_path"/*.gz
