@@ -298,6 +298,15 @@ class FineDiff {
 		}
 
 	/**------------------------------------------------------------------------
+	* Render the diff to an HTML string skipping context
+	*/
+	public static function renderDiffToHTMLFromOpcodesContext($from, $opcodes) {
+		ob_start();
+		FineDiff::renderFromOpcodes($from, $opcodes, array('FineDiff','renderDiffToHTMLFromOpcodeContext'));
+		return ob_get_clean();
+		}
+
+	/**------------------------------------------------------------------------
 	* Generic opcodes parser, user must supply callback for handling
 	* single opcode
 	*/
@@ -690,5 +699,39 @@ class FineDiff {
  			echo '<ins>', htmlspecialchars(xu_substr($from, $from_offset, $from_len)), '</ins>';
 			}
 		}
-	}
 
+	/**
+	 * Cut copied blocks skipping much context
+	 **/
+	private static function renderDiffToHTMLFromOpcodeContext($opcode, $from, $from_offset, $from_len) {
+		if ( $opcode === 'c' ) {
+			$text = htmlspecialchars(xu_substr($from, $from_offset, $from_len));
+			$text = str_replace("\r\n", "\n", $text);
+			$text = str_replace("\r", "\n", $text);
+			$lines = explode(EXP_LF, $text);
+			$c = count($lines);
+			if ($c > 4)
+			{
+				$new_lines = array();
+				$new_lines[] = $lines[0];
+				$new_lines[] = $lines[1];
+				$new_lines[] = '<skip/>';
+				$new_lines[] = $lines[$c - 2];
+				$new_lines[] = $lines[$c - 1];
+				$lines = $new_lines;
+			}
+			$text = implode(EXP_LF, $lines);
+			echo $text;
+			}
+		else if ( $opcode === 'd' ) {
+			$deletion = xu_substr($from, $from_offset, $from_len);
+			if ( xu_strcspn($deletion, " \n\r") === 0 ) {
+				$deletion = str_replace(array("\n","\r"), array('\n','\r'), $deletion);
+				}
+			echo '<del>', htmlspecialchars($deletion), '</del>';
+			}
+		else /* if ( $opcode === 'i' ) */ {
+ 			echo '<ins>', htmlspecialchars(xu_substr($from, $from_offset, $from_len)), '</ins>';
+			}
+		}
+	}
