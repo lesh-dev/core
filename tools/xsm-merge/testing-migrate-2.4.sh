@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+set -xe
 
 #if [ "`id -u`" != "0" ]; then
 #	echo "You're not root to perform migration. "
