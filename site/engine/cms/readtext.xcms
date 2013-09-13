@@ -140,20 +140,19 @@ if ($need)
     $text = str_replace("~", "&nbsp;", $text);
 
     //// Обработка сокращенного наименования
-    // TODO: fix UNICODE bug here!!!
-    if($limit > 0 && strlen($text) > $limit)
+    if ($limit > 0 && xu_len($text) > $limit)
     {
-        $text = substr($text, 0, $limit);
-        $n = strlen($text);
-        for($i = $n-1; $i>=0; $i--)
+        $text = xu_substr($text, 0, $limit);
+        $n = xu_len($text);
+        for ($i = $n-1; $i>=0; $i--)
         {
             if
             (
                 ($text[$i]==' ')
             )
-            { $text = substr($text, 0, $i); break; }
+            { $text = xu_substr($text, 0, $i); break; }
         }
-        $text = $text."<a href=\"$nextlink\">$nexttext</a>";
+        $text = $text."...&nbsp;[<a href=\"$nextlink\">$nexttext</a>]";
     }
     xcms_write($compiled, $text);
 }
