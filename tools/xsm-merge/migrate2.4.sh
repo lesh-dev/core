@@ -2,6 +2,12 @@
 
 set -xe
 
+uid="$(id -u)"
+if [ "$1" != "--sudo" ] && [ "$uid" != "0" ] ; then
+    echo "Migration should be run under root user"
+    exit 1
+fi
+
 # Migration script to 2.4 site version
 # Place this script into $SITE_ROOT/migrate2.4/ folder
 
@@ -26,6 +32,9 @@ fi
 
 # disable sudo-ing
 sudo_cmd=""
+if [ "$1" == "--sudo" ] ; then
+    sudo_cmd="sudo"
+fi
 
 target_db="$site_root/$content_dir/ank/fizlesh.sqlite3"
 $sudo_cmd cp $target_db .
