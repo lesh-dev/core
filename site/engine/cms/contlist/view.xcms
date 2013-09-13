@@ -28,17 +28,17 @@
 
     $list = xcms_get_subpages($pageid);
     $list = array_reverse($list);
-    $i = 0;
+    $contlist_block_iter = 0;
     foreach ($list as $subpage_id)
     {
-        $odd = ($i % 2) ? "odd" : "even";
-        if ($i >= $pg * $block_show_count && $i < ($pg + 1) * $block_show_count)
+        $odd = ($contlist_block_iter % 2) ? "odd" : "even";
+        if ($contlist_block_iter >= $pg * $block_show_count && $contlist_block_iter < ($pg + 1) * $block_show_count)
         {?>
             <div class="contlist-block <?php echo $odd; ?>"><?php
             $source = xcms_get_page_content_name($subpage_id);
             if ($editable)
             {?>
-                <a id="contlist-item-<?php echo $i; ?>" class="link-button contlist-edit"
+                <a id="contlist-item-<?php echo $contlist_block_iter; ?>" class="link-button contlist-edit"
                     href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'ladmin', 'page'=>$subpage_id)); ?>">Редактировать</a><?php
             }
             //include(translate("<! cms/readtext --markdown --limit=220 --next-link=index.php?page=$subpage_id --next-text=подробнее !>"));
@@ -46,9 +46,9 @@
             ?>
             </div><?php
         }
-        $i++;
+        $contlist_block_iter++;
     }
-    $block_count = $i;
+    $block_count = $contlist_block_iter;
     if (!$no_pager)
     {?>
         <div style="margin-top: 12px;"><?php
