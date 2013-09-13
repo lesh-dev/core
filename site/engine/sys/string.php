@@ -157,6 +157,27 @@
         return $string;
     }
 
+    function xcms_truncate_text($text, $limit, $trail)
+    {
+        if ($limit > 0 && xu_len($text) > $limit)
+        {
+            $text = xu_substr($text, 0, $limit);
+            $n = xu_len($text);
+            for ($i = $n-1; $i>=0; $i--)
+            {
+                if (
+                    ($text[$i]==EXP_SP)
+                )
+                {
+                    $text = xu_substr($text, 0, $i);
+                    break;
+                }
+            }
+            $text = $text.$trail;
+        }
+        return $text;
+    }
+
     define('MAX_LENGTH_DEFAULT', 160);
 
     function xcms_wrap_long_lines($text, $max_length = MAX_LENGTH_DEFAULT)

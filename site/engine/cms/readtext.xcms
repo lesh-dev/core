@@ -140,20 +140,8 @@ if ($need)
     $text = str_replace("~", "&nbsp;", $text);
 
     //// Обработка сокращенного наименования
-    if ($limit > 0 && xu_len($text) > $limit)
-    {
-        $text = xu_substr($text, 0, $limit);
-        $n = xu_len($text);
-        for ($i = $n-1; $i>=0; $i--)
-        {
-            if
-            (
-                ($text[$i]==' ')
-            )
-            { $text = xu_substr($text, 0, $i); break; }
-        }
-        $text = $text."...&nbsp;[<a href=\"$nextlink\">$nexttext</a>]";
-    }
+    $text = xcms_truncate_text($text, $limit, "...&nbsp;[<a href=\"$nextlink\">$nexttext</a>]");
+
     xcms_write($compiled, $text);
 }
 
