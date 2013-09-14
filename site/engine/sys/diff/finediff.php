@@ -713,11 +713,17 @@ class FineDiff {
 			if ($c > 4)
 			{
 				$new_lines = array();
-				$new_lines[] = $lines[0];
-				$new_lines[] = $lines[1];
+				if ($from_offset != 0)
+				{
+					$new_lines[] = $lines[0];
+					$new_lines[] = $lines[1];
+				}
 				$new_lines[] = '<skip/>';
-				$new_lines[] = $lines[$c - 2];
-				$new_lines[] = $lines[$c - 1];
+				if (xu_len($from) != $from_offset + $from_len)
+				{
+					$new_lines[] = $lines[$c - 2];
+					$new_lines[] = $lines[$c - 1];
+				}
 				$lines = $new_lines;
 			}
 			$text = implode(EXP_LF, $lines);

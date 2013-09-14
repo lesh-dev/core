@@ -35,6 +35,7 @@
                 @chmod($ename, 0666); // see bug #64
                 rename($ename, $target_name);
                 $old_text = file_get_contents($target_name);
+                $old_text = xcms_wrap_long_lines($old_text);
             }
             $new_text = @$_POST["edit-text"];
             $new_text = xcms_wrap_long_lines($new_text);
