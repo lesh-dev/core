@@ -52,5 +52,11 @@ class XcmsContentAddPage(SeleniumTest):
         
         pageText = self.fillElementById("edit-text", pageText)
         self.clickElementById("edit-submit-top")
+
+        self.clickElementById("edit-preview-top")
+        
+        self.assertTextPresent("/html/body/div/div[@class='content']", pageText)
+
+
         
 
