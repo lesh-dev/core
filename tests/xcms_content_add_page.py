@@ -48,15 +48,45 @@ class XcmsContentAddPage(SeleniumTest):
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle)
         
-        pageText = random_crap.randomCrap(30, ["multiline"])
+        pageText = random_crap.randomCrap(10)
         
         pageText = self.fillElementById("edit-text", pageText)
         self.clickElementById("edit-submit-top")
 
         self.clickElementById("edit-preview-top")
-        
-        self.assertTextPresent("/html/body/div/div[@class='content']", pageText)
 
-
+        contentDiv = "/html/body/div/div[@class='content']"
         
+        print "DIV CONTENT:"
+        print self.getElementContent(contentDiv)
+        print "DIV CONTENT END"
+
+        self.assertTextPresent(contentDiv, pageText, "preview text does not match entered text. ")
+        
+        # add second line
+        newPageText = pageText + "\n" + random_crap.randomCrap(10)
+        
+        newpageText = self.fillElementById("edit-text", newPageText)
+
+        self.clickElementById("edit-submit-top")
+        self.clickElementById("edit-preview-top")
+        
+        print "DIV CONTENT:"
+        print self.getElementContent(contentDiv)
+        print "DIV CONTENT END"
+        
+        newPageTextForCheck = newPageText.replace("\n", " ")
+
+        self.assertTextPresent(contentDiv, newPageTextForCheck, "preview text on text change does not match entered text. ")
+
+        self.gotoUrlByLinkText(u"Свернуть реактор")
+        
+        self.assertBodyTextPresent(u"Личный кабинет")
+        # click on menu.
+        self.gotoUrlByLinkText(inpMenuTitle)
+
+        self.assertBodyTextPresent(newPageTextForCheck, "page text on text change does not match entered text. ")
+        print "page title: '", self.getElementContent("/html/head/title"), "'"
+        self.assertTextPresent("/html/head/title", inpMenuTitle, "page title (= menu title) does not match entered text. ") # WTF?? TODO: why Menu title, not page title?
+        self.assertBodyTextPresent(inpPageSubheader, "page subheader does not match entered text. ")
 
