@@ -5,13 +5,12 @@ set -e
 # set this to -v to add some verbosity
 VERBOSE_COPY=""
 
+# default site location
 DEST_NAME="site"
-if [ "$HOSTNAME" == "blackbox" ] ; then
-    DEST_NAME="lesh"
+if [ "$( whoami )" == "mvel" ] ; then
+    DEST_NAME="fizlesh.ru"
 fi
 
-# site root
-DEST="/var/www/html/$DEST_NAME"
 # name of the folder with content repo
 REPO_NAME="content-fizlesh.ru"
 # content path
@@ -33,6 +32,7 @@ function print_usage()
     echo "                   original      Save original database (default)"
     echo "                   empty         Init fresh database using dbinit"
     echo "                   merged        Install merged database"
+    echo "          [-p|--path] <name>     Change destination to <name>"
     echo "          [-h|--help]            This help"
     exit 1
 }
@@ -70,9 +70,15 @@ while [ -n "$1" ]; do
         DB_MODE="$1"
     elif [ "$ARG" = "-i" ] || [ "$ARG" = "--installer" ]; then
         PREPARE_INSTALLER="yes"
+    elif [ "$ARG" = "-p" ] || [ "$ARG" = "--path" ]; then
+        shift || true
+        DEST_NAME="$1"
     fi
     shift || true
 done
+
+# site root
+DEST="/var/www/html/$DEST_NAME"
 
 # check SQLite3 presence
 if ! which sqlite3 > /dev/null; then
