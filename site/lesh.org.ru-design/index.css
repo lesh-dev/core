@@ -5,8 +5,8 @@ html, body {
     background-image: url(pict/use_your_illusion.png);
     background-color: black;
     background-position: center;
-    background-repeat:repeat;
-    color: white;
+    background-repeat: repeat;
+    color: #ff0000;
     overflow: auto;
 }
 
@@ -39,6 +39,10 @@ body {
     min-height: 100%;
     position: absolute;
     font-family: "Trebuchet MS", "Helvetica CY", "Luxi Sans", sans-serif;
+}
+
+h1, h2 {
+    font-size: 18px;
 }
 
 .indent_form a,
@@ -662,3 +666,50 @@ input[type="submit"] {
     background-repeat: no-repeat;
     margin-top: 5px;
 }
+
+.menu-level1 {
+    padding-left: 14px;
+}
+.menu-level2 {
+    padding-left: 14px;
+}
+.menu-level3 {
+    padding-left: 14px;
+}
+
+a.menu-item {
+    background-image: url(pict/gr.gif);
+    background-repeat: no-repeat;
+    background-position: 0px 50%;
+}
+
+a.menu-sys {
+    padding-left: 3px;
+    background-color: #a5b991;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+a.menu-active:link {
+}
+a.menu-active:visited {
+}
+a.menu-active:hover {
+}
+a.menu-active:active {
+}
+
+a.menu-passive:link {
+}
+a.menu-passive:visited {
+}
+a.menu-passive:hover {
+}
+a.menu-passive:active {
+}
+
+a.menuitem-auth {
+    background-color: #a5b991 !important;
+}
+

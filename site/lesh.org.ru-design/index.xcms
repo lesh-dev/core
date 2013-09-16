@@ -23,10 +23,7 @@
 
     <div class="sidebar_top">
         <ul>
-            <li class="big_green_word">ЛЭШ</li>
-            <li><img src="<# full_design_dir #>pict/gr.gif" /><a href="reception.html">поступление</a></li>
-            <li><img src="<# full_design_dir #>pict/gr.gif" /><a href="target.html">задачи школы</a></li>
-            <li><img src="<# full_design_dir #>pict/gr.gif" /><a href="">олимпиады</a></li>
+            <# cms/menu/display start=1 end=5 #>
         </ul>
     </div>
 
@@ -44,7 +41,6 @@
             <li><a href="aboutus.html">О нас пишут</a></li>
             <li><a href="">Ссылки</a></li>
             <li><a href="">Форум</a></li>
-            <X cms/menu/display start=1 end=5 X><!-- TODO: fix here -->
             <a class="menu-item menu-level1 menu-passive menu-passive-level1" href="http://forum.fizlesh.ru">Форум</a>
         </ul>
         <img src="<# full_design_dir #>pict/green.gif" />
