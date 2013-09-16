@@ -7,7 +7,7 @@ set -e
 
 # ignore list (contrib files whose code style
 # we don't want to verify
-ignore_list_files="class.phpmailer.php"
+ignore_list_files="class.phpmailer.php finediff.php"
 ignore_list_dirs="/forum/"
 
 # some settings that you don't need to touch
