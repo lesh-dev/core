@@ -182,6 +182,10 @@
 
     function xcms_wrap_long_lines($text, $max_length = MAX_LENGTH_DEFAULT)
     {
+        $text = trim($text);
+        if (strlen($text))
+            $text .= EXP_LF;
+
         $lines = explode(EXP_LF, $text);
         $new_lines = array();
         foreach ($lines as $ln)
@@ -239,8 +243,8 @@
         xut_check(xu_strcspn('heЛЛo', 'Л') === 2, "Check xu_strcspn three");
         xut_check(xu_strcspn('heЛЛo', 'ДworЛЛd') === 2, "Check xu_strcspn four");
 
-        xut_check(xcms_wrap_long_lines('Очень длинный текст, который надо перенести', 20) ===
-            "Очень длинный\nтекст, который надо\nперенести", "Check xcms_wrap_long_lines");
+        xut_check(xcms_wrap_long_lines("  Очень длинный текст, который надо перенести\n\n\n", 20) ===
+            "Очень длинный\nтекст, который надо\nперенести\n", "Check xcms_wrap_long_lines");
 
         xut_check(xcms_transliterate("Вельтищев Михаил") == "Veltischev Mihail", "Check xcms_transliterate");
         xut_end();
