@@ -1,0 +1,114 @@
+<# cms/linit #>
+<# cms/init #>
+<# url #>
+<# deploy_utils #>
+<# locale #>
+<!DOCTYPE HTML>
+<?php
+    $xcms_version = xcms_get_list("INFO");
+?>
+<html>
+<head>
+    <# cms/head #>
+    <link rel="stylesheet" type="text/css" href="<# full_design_dir #>reset.css" />
+    <link rel="stylesheet" type="text/css" href="<# full_design_dir #>index.css" />
+    <!--<link rel="stylesheet" type="text/css" href="<# full_design_dir #>news.css" />-->
+</head>
+<body>
+<div id="main">
+    <div class="header">
+        <div class="picture_logo"> </div>
+        <div class="picture_title"> </div>
+    </div>
+
+    <div class="sidebar_top">
+        <ul>
+            <li class="big_green_word">ЛЭШ</li>
+            <li><img src="<# full_design_dir #>pict/gr.gif" /><a href="reception.html">поступление</a></li>
+            <li><img src="<# full_design_dir #>pict/gr.gif" /><a href="target.html">задачи школы</a></li>
+            <li><img src="<# full_design_dir #>pict/gr.gif" /><a href="">олимпиады</a></li>
+        </ul>
+    </div>
+
+    <div class="sidebar_bottom">
+        <ul>
+            <li><a class="small_green_word" href="">вход</a>&nbsp;/</li>
+            <li><a href="">регистрация</a>&nbsp;/</li>
+            <li><a href="">карта сайта</a></li>
+        </ul>
+    </div>
+
+    <div class="sidebar_left">
+        <ul>
+            <li> <a href="">Фотоальбом</a></li>
+            <li><a href="aboutus.html">О нас пишут</a></li>
+            <li><a href="">Ссылки</a></li>
+            <li><a href="">Форум</a></li>
+            <X cms/menu/display start=1 end=5 X><!-- TODO: fix here -->
+            <a class="menu-item menu-level1 menu-passive menu-passive-level1" href="http://forum.fizlesh.ru">Форум</a>
+        </ul>
+        <img src="<# full_design_dir #>pict/green.gif" />
+    </div>
+
+    <div class="main_text">
+        <span> Здравствуйте!</span>
+
+        <p class="nowrap">Приветствуем Вас на сайте Летней Экологической Школы </p>
+
+        <p class="heading">Что такое летняя школа? </p>
+
+        <p>Летняя Экологическая Школа (ЛЭШ)&nbsp;-&nbsp;мероприятие, позволяющее
+            школьнику во&nbsp;время летних </p>
+
+        <p>На Школе есть <a href="">Биологическое</a>, Математическое, <a href="">Физическое</a>,
+            Гуманитарное, <a href="">ФМБио</a>, <a href="">Медицинское Отделения</a>
+            и <a href="">Отделение Лабораторно-полевой биологии</a>, ведущие активную
+            совместную деятельность&nbsp;-&nbsp;межотделенческий семинар, курсы
+            и факультативы.</p>
+
+        <?php
+            $hdr = xcms_get_key_or($INFO, "header");
+            if (!strlen($hdr) ||
+                (xcms_get_key_or($INFO, "alias") == "register" &&
+                strlen(xcms_get_key_or($_GET, "aparam")))) {
+                // little spike: skip header display
+                // in case of special pages (XSM manager for now)
+            } else {?>
+                <h2><?php echo $hdr; ?></h2><?php
+            }?>
+            <# if //!@$_GET["usr"]//cms/ #>
+
+    </div>
+
+    <div class="text_left">
+        <div class="text_left_top">
+            <p class="word_left_top">подробнее</p>
+            <p class="indent"> Школа проводится с 23 июля по 24 августа на базе местной сельской
+                школы, в здании которой проводятся занятия и располагаются необходимые помещения
+                (медпункт, библиотека, лаборатории, и т.п.).....<a href="">далее</a></p>
+
+            <p class="text_left_middle"><a href=""> документы и снаряжение</a></p>
+        </div>
+        <div class="text_left_bottom">
+            <p class="word_left_top">история</p>
+            <p class="indent">Традиция летних школ зародилась в конце пятидесятых – начале
+                шестидесятых годов двадцатого века, когда прошли первые летние семинары
+                и школы по вторичным моделирующим системам и семиотике.....<a href="history.html">далее</a></p>
+        </div>
+        <img src="<# full_design_dir #>pict/white.gif" />
+    </div>
+
+    <div class="footer">
+        <a href=""><img src="<# full_design_dir #>pict/facebook.png" /></a>
+        <a href="http://vk.com/club279809" alt="Вконтакте"><img src="<# full_design_dir #>pict/vkontakte.png" /></a>
+    </div>
+
+    <form>
+        <div class="searchform">
+            <input type="search" name="q">
+            <input type="submit" value="">
+        </div>
+    </form>
+</div>
+</body>
+</html>
