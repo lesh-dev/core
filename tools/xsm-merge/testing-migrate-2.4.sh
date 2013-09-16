@@ -2,7 +2,7 @@
 set -xe
 
 #if [ "`id -u`" != "0" ]; then
-#	echo "You're not root to perform migration. "
+#    echo "You're not root to perform migration. "
 #fi
 
 echo "Migrating test installation..."
