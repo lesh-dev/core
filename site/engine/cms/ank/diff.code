@@ -3,29 +3,43 @@
 include_once "$engine_dir/sys/diff/diff-utils.php";
 
 /**
+  * Нормализация и прочистка массивов перед сравнением
+  **/
+function xcms_normalize_array($arr, $fields)
+{
+    $anew = array();
+    foreach ($arr as $key => $value)
+        if (array_key_exists($key, $fields))
+            $anew[$key] = trim($value);
+    return $anew;
+}
+
+/**
   * Построение разности двух key-массивов
   **/
 function xcms_array_diff($new, $old, $fields)
 {
+    $new = xcms_normalize_array($new, $fields);
+    $old = xcms_normalize_array($old, $fields);
+
     $diff = array();
-    // assume key
     foreach ($new as $key => $value)
     {
         if (!array_key_exists($key, $old))
         {
-            if (trim($value) != '' && array_key_exists($key, $fields))
+            if (strlen($value))
                 $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>'');
             continue;
         }
         // key exists in both arrays
-        if (trim($old[$key]) != trim($value) && array_key_exists($key, $fields))
+        if ($old[$key] != $value)
             $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>$old[$key]);
     }
     foreach ($old as $key => $old_value)
     {
         if (array_key_exists($key, $new))
             continue;
-        if (trim($old_value) != '' && array_key_exists($key, $fields))
+        if (strlen($old_value))
             $diff[] = array('key'=>$key, 'new'=>'', 'old'=>$old_value);
     }
     return $diff;
