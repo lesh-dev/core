@@ -178,13 +178,14 @@ h1, h2 {
     _margin-right: 0px;
 }
 
-.sidebar_left a{
+.sidebar_left a {
     text-decoration: none;
     font-size: 14px;
     color: #555;
+    padding: 3px 5px 3px 5px;
 }
 
-.sidebar_left a:hover{
+.sidebar_left a:hover {
     text-decoration: none;
     background-color: #7AA643;
     color: white;

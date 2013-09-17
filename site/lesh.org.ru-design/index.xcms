@@ -23,7 +23,7 @@
 
     <div class="sidebar_top">
         <ul>
-            <# cms/menu/display start=1 end=5 #>
+            <# cms/menu/display start=1 end=1 #>
         </ul>
     </div>
 
