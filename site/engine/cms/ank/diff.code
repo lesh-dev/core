@@ -9,8 +9,15 @@ function xcms_normalize_array($arr, $fields)
 {
     $anew = array();
     foreach ($arr as $key => $value)
+    {
         if (array_key_exists($key, $fields))
-            $anew[$key] = trim($value);
+        {
+            $value = trim($value);
+            $value = str_replace(EXP_CRLF, EXP_LF, $value);
+            $value = str_replace(EXP_CR, EXP_LF, $value);
+            $anew[$key] = $value;
+        }
+    }
     return $anew;
 }
 
@@ -62,8 +69,6 @@ function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_ti
     foreach ($diff_array as $diff)
     {
         $key = $diff['key'];
-        if (!array_key_exists($key, $fields))
-            continue;
         $key_title = $fields[$key];
         $type = xcms_get_key_or($types, $key);
         $old_value = $diff['old'];
@@ -85,6 +90,12 @@ function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_ti
         }
 
         $cur_row = str_replace("@@KEY@", $key_title, $cur_row);
+        if (strpos($old_value, EXP_LF) !== false || strpos($new_value, EXP_LF) !== false)
+        {
+            // newlines detected, should be compared as multiline
+            $old_value .= EXP_LF;
+            $new_value .= EXP_LF;
+        }
         $diff_html = xcms_diff_html($old_value, $new_value);
         $cur_row = str_replace("@@DIFF@", $diff_html, $cur_row);
         $content .=  $cur_row;
