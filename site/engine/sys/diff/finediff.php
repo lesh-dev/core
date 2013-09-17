@@ -349,28 +349,21 @@ class FineDiff {
 	public static $paragraphGranularity = array(
 		FineDiff::paragraphDelimiters
 		);
-	const sentenceDelimiters = ".\n\r";
-	public static $sentenceGranularity = array(
-		FineDiff::paragraphDelimiters,
-		FineDiff::sentenceDelimiters
-		);
-	const wordDelimiters = " \t.\n\r";
+	const wordDelimiters = " \t\n\r";
 	public static $wordGranularity = array(
 		FineDiff::paragraphDelimiters,
-		FineDiff::sentenceDelimiters,
 		FineDiff::wordDelimiters
 		);
 	const characterDelimiters = "";
 	public static $characterGranularity = array(
 		FineDiff::paragraphDelimiters,
-		FineDiff::sentenceDelimiters,
 		FineDiff::wordDelimiters,
 		FineDiff::characterDelimiters
 		);
 
 	public static $textStack = array(
-		".",
-		" \t.\n\r",
+		"",
+		" \t\n\r",
 		""
 		);
 
