@@ -22,8 +22,11 @@
     </div>
 
     <div class="sidebar_top">
-        <ul>
+        <ul class="menu">
             <# cms/menu/display start=1 end=1 #>
+        </ul>
+        <ul class="menu">
+            <# cms/menu/display start=2 end=2 #>
         </ul>
     </div>
 

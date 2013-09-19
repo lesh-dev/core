@@ -138,9 +138,8 @@ h1, h2 {
     padding-right: 3px;
 }
 
-.sidebar_top a{
+.sidebar_top a {
     text-decoration: none;
-    font-size: 14px;
     color: black;
 }
 
@@ -668,14 +667,24 @@ input[type="submit"] {
     margin-top: 5px;
 }
 
+ul.menu {
+    margin-bottom: 7px;
+}
+ul.menu li {
+    white-space: nowrap;
+}
+
 .menu-level1 {
     padding-left: 14px;
+    font-size: 13px;
 }
 .menu-level2 {
     padding-left: 14px;
+    font-size: 11px;
 }
 .menu-level3 {
     padding-left: 14px;
+    font-size: 10px;
 }
 
 a.menu-item {
