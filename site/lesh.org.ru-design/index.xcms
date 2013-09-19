@@ -44,6 +44,7 @@
             <li><a href="aboutus.html">О нас пишут</a></li>
             <li><a href="">Ссылки</a></li>
             <li><a href="">Форум</a></li>
+            <li><a href="?&amp;page=index&amp;ref=ladmin">Админка</a></li>
             <a class="menu-item menu-level1 menu-passive menu-passive-level1" href="http://forum.fizlesh.ru">Форум</a>
         </ul>
         <img src="<# full_design_dir #>pict/green.gif" />
