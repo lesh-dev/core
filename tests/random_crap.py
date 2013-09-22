@@ -41,12 +41,12 @@ def randomWord(length):
     
     for i in range(0, length):
         if enLang:
-            rs = rs + random.choice(engAlphaSmall)
+            rs += random.choice(engAlphaSmall)
         else:
-            rs = rs + random.choice(rusAlphaSmall)
+            rs += random.choice(rusAlphaSmall)
         
     if random.choice(range(0,20)) < 3:
-        rs = rs + random.choice('.,!?;:"<>-==@%$^&*()')
+        rs += random.choice('.,!?;:"<>-==@%$^&*()')
             
     return rs   
         
@@ -59,11 +59,12 @@ def randomDigits(length):
 def randomCrap(wordNumber, crapOptions = []):
     rs = ""
     for i in range(0, wordNumber):
-        if rs != "":
-            rs = rs + " "
-        wordLen = random.randint(3,10)
-        rs = rs + randomWord(wordLen)
+        separator = " "
         if "multiline" in crapOptions:
             if random.random() < 0.2:
-                rs = rs + "\n"
+                separator = "\n"
+        if rs != "":
+            rs += separator
+        wordLen = random.randint(3,10)
+        rs += randomWord(wordLen)
     return rs

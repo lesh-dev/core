@@ -311,10 +311,12 @@ class SeleniumTest:
         
         if boolValue: # check if it is 'checked'
             if value and self.checkboxIsValid(value):
+                self.logAdd("check-box:true, element id: '" + eleId + "'. ")
                 return True
             return False
         else: # check if it is unchecked
             if value and self.checkboxIsValid(value):
+                self.logAdd("check-box:false, element id: '" + eleId + "'. ")
                 return False
             return True
                 
@@ -388,6 +390,7 @@ class SeleniumTest:
         if not eleValue:
             self.logAdd("None 'value' in element id '" + eleId + "'. Maybe it has no attribute 'value'?", "warning")
             return False
+        self.logAdd("checkElementValueById: current element '" + eleId + "' value is '" + userSerialize(eleValue) + "'. ")
         if isEqual(eleValue, text):
             self.logAdd("check-value:ok, element id: '" + eleId + "', expected: '" + text + "'. ")
             return True
@@ -399,19 +402,37 @@ class SeleniumTest:
         self.checkEmptyParam(eleId, "checkElementTextById")
         self.addAction("check-text", "element id: '" + eleId + "', expected: '" + text + "'. ")
         eleText = self.getElementById(eleId).text
+        self.logAdd("checkElementTextById: current element '" + eleId + "' text is '" + userSerialize(eleText) + "'. ")
         if isEqual(eleText, text):
             self.logAdd("check-text:ok, element id: '" + eleId + "', expected: '" + text + "'. ")
             return True
         self.addAction("check-text:fail, element id: '" + eleId + "', expected: '" + text + "', actual: '" + eleText + "'. ")
         return False
 
+    # checks if element eleId contains text 'text'.
+    def checkElementSubTextById(self, eleId, text):
+        self.checkEmptyParam(eleId, "checkElementSubTextById")
+        self.addAction("check-text", "element id: '" + eleId + "', expected: '" + text + "'. ")
+        eleText = self.getElementById(eleId).text
+        self.logAdd("checkElementSubTextById: current element '" + eleId + "' text is '" + userSerialize(eleText) + "'. ")
+        if text in eleText:
+            self.logAdd("check-subtext:ok, element id: '" + eleId + "', expected: '" + text + "'. ")
+            return True
+        self.addAction("check-subtext:fail, element id: '" + eleId + "', expected: '" + text + "', actual: '" + eleText + "'. ")
+        return False
+
+    def assertElementSubTextById(self, eleId, text):
+        if not self.checkElementSubTextById(eleId, text):
+            raise TestError("Element with id '" + eleId + "' text does not contain expected: '" + text + "'. ")
+
     def checkElementValueByName(self, name, text):
         self.checkEmptyParam(name, "checkElementValueByName")
         self.addAction("check-value", "element name: '" + name + "', expected: '" + text + "'. ")
         eleValue = getValue(self.getElementByName(name))
         if not eleValue:
-            self.logAdd("None 'value' in element name '" + name + "'. Maybe it has no attribute 'value'?", "warning")
+            self.logAdd("None 'value' in element named '" + name + "'. Maybe it has no attribute 'value'?", "warning")
             return False
+        self.logAdd("checkElementValueByName: current element named '" + name + "' has value '" + userSerialize(eleValue) + "'. ")
         if isEqual(eleValue, text):
             self.logAdd("check-value:ok, element name: '" + name + "', expected: '" + text + "'. ")
             return True
@@ -456,13 +477,15 @@ class SeleniumTest:
         count = 0
         while count < 3:
             try:
+                eleText = self.m_driver.find_element_by_xpath(xpath).text
+                self.logAdd("checkTextPresent: current element by path '" + xpath + "' text is '" + userSerialize(text) + "'. ")
                 if isList(text):
                     for phrase in text:
-                        if phrase in self.m_driver.find_element_by_xpath(xpath).text:
+                        if phrase in eleText:
                             return True
                     return False
                 else:
-                    return text in self.m_driver.find_element_by_xpath(xpath).text
+                    return text in eleText
             except NoSuchElementException:
                 #self.logAdd("checkTextPresent does not found xpath '" + xpath + "':\n" + traceback.format_exc())
                 return False
@@ -471,7 +494,7 @@ class SeleniumTest:
                 count += 1
                 self.wait(1.0)
                 continue
-        self.failTest("Unsolvable cache problem in checkTextPresent(" + xpath + ", " + userSerialize(text) + "), trying again. ")
+        self.failTest("Unsolvable cache problem in checkTextPresent(" + xpath + ", " + userSerialize(text) + "). ")
         
     def checkSourceTextPresent(self, text):
         return self.checkTextPresent("//*", text)

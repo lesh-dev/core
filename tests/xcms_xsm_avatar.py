@@ -58,10 +58,11 @@ class XcmsXsmAvatar(SeleniumTest):
 
         fullAlias = inpLastName + " " + inpFirstName + " " + inpMidName
         # check if person alias is present (person saved correctly)
-        self.assertBodyTextPresent(fullAlias)
+        self.assertElementValueById("person-title", fullAlias)
         # check avatar
         avatarSrc = self.getImageSrcById("avatar")
         print "Avatar Source: ", avatarSrc
+        
         if "stalin50" in avatarSrc:
             self.failTest("Wrong (default) avatar detected, expected custom image. VK ID: " + inpSocial);
         

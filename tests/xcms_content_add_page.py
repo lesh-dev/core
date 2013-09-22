@@ -79,7 +79,7 @@ class XcmsContentAddPage(SeleniumTest):
 
         self.assertTextPresent(contentDiv, newPageTextForCheck, "preview text on text change does not match entered text. ")
 
-        self.gotoUrlByLinkText(u"Свернуть реактор")
+        self.gotoUrlByLinkText(u"Свернуть редактор")
         
         self.assertBodyTextPresent(u"Личный кабинет")
         # click on menu.

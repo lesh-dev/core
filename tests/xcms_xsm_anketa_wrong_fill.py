@@ -156,7 +156,7 @@ class XcmsXsmAnketaWrongFill(SeleniumTest):
         self.gotoUrlByLinkText(anketaUrlName)
 
     # just check text is on the page.
-        print "Checking that all filled fields are displayed on the page. "
+        self.logAdd("Checking that all filled fields are displayed on the page. ")
         
         self.assertElementTextById("person-title", fullAlias)
         self.assertBodyTextPresent(inpBirthDate)
@@ -170,6 +170,7 @@ class XcmsXsmAnketaWrongFill(SeleniumTest):
         self.assertBodyTextPresent(inpSocial)
         self.clickElementById("show-extra-person-info")
         self.wait(1)
-        self.assertBodyTextPresent(inpFav)
-        self.assertBodyTextPresent(inpAch)
-        self.assertBodyTextPresent(inpHob)
+        self.assertElementSubTextById("extra-person-info", inpFav)
+        self.assertElementSubTextById("extra-person-info", inpAch)
+        self.assertElementSubTextById("extra-person-info", inpHob)
+        self.assertElementSubTextById("extra-person-info", inpSource)
