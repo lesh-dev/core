@@ -2,6 +2,7 @@
 # -*- coding: utf8 -*-
 
 from selenium import webdriver
+from selenium.common.exceptions import InvalidSelectorException
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoSuchWindowException 
 from selenium.common.exceptions import StaleElementReferenceException
@@ -265,7 +266,7 @@ class SeleniumTest:
         try:
             self.getUrlByLinkText(linkName)
             exceptionMessage = "Forbidden URL is found on the page in assertUrlNotPresent: '" + userSerialize(linkName) + "'. " + self.displayReason(forbidReason)
-            raise TestError(exceptionMessage)
+            self.failTest(exceptionMessage)
         except ItemNotFound:
             pass
 
@@ -274,7 +275,7 @@ class SeleniumTest:
             self.getUrlByLinkText(linkName)
         except ItemNotFound:
             exceptionMessage = "Required URL is not found on the page in assertUrlPresent: '" + userSerialize(linkName) + "'. " + self.displayReason(reason)
-            raise TestError(exceptionMessage)
+            self.failTest(exceptionMessage)
 
     def wait(self, seconds):
         self.logAdd("Waiting for '" + userSerialize(seconds) + "' seconds. ")
@@ -287,15 +288,13 @@ class SeleniumTest:
         try:
             return self.m_driver.find_element_by_name(name)
         except NoSuchElementException:
-            self.logAdd("getElementByName failed for name '" + name + "':\n" + traceback.format_exc())
-            raise TestError(u"Cannot get element by name '" + name + "'. ")
+            self.failTest(u"Cannot get element by name '" + name + "'. ")
 
     def getElementById(self, eleId):
         try:
             return self.m_driver.find_element_by_id(eleId)
         except NoSuchElementException:
-            self.logAdd("getElementById failed for id '" + eleId + "':\n" + traceback.format_exc())
-            raise TestError(u"Cannot get element by id '" + eleId + "'. ")
+            self.failTest(u"Cannot get element by id '" + eleId + "'. ")
         
     def checkboxIsValid(self, value):
         return value == "checked" or value == "true"
@@ -306,8 +305,7 @@ class SeleniumTest:
 #       print "value: ", value
         if value and not self.checkboxIsValid(value):
             msg = "Strange value for checkbox '" + eleId + "': " + userSerialize(value)
-            self.logAdd(msg)
-            raise TestError(msg)
+            self.failTest(msg)
         
         if boolValue: # check if it is 'checked'
             if value and self.checkboxIsValid(value):
@@ -322,7 +320,7 @@ class SeleniumTest:
                 
     def assertCheckboxValueById(self, eleId, boolValue = True):
         if not self.checkCheckboxValueById(eleId, boolValue):
-            raise TestError(u"Checkbox with id '" + eleId + "' has improper value, expected '" + userSerialize(boolValue) + "'. ")
+            self.failTest(u"Checkbox with id '" + eleId + "' has improper value, expected '" + userSerialize(boolValue) + "'. ")
             
     def fillElementByName(self, name, text, clear = True):
         self.checkEmptyParam(name, "fillElementByName")
@@ -348,30 +346,26 @@ class SeleniumTest:
             ele.send_keys(text)
             return getValue(self.getElementById(eleId))
         except InvalidElementStateException as e:
-            self.logAdd("fillElementById failed for id '" + eleId + "':\n" + traceback.format_exc())
-            raise TestError(u"Cannot set element value by id '" + eleId + "', possibly element is read-only.")
+            self.failTest(u"Cannot set element value by id '" + eleId + "', possibly element is read-only.")
             
     
     def setOptionValueById(self, eleId, optValue):
         try:
             self.getElementById(eleId).find_element_by_xpath(u"//option[@value='" + optValue + "']").click()
         except NoSuchElementException:
-            self.logAdd("setOptionValueById failed for id '" + eleId + "':\n" + traceback.format_exc())
-            raise TestError(u"Cannot get drop-down (select) element by id '" + eleId + "'. ")
+            self.failTest(u"Cannot get drop-down (select) element by id '" + eleId + "'. ")
 
     def getOptionValueByName(self, eleName):
         try:
             return getValue(self.getElementByName(eleName).find_element_by_xpath("//option[@selected='selected']"))
         except NoSuchElementException:
-            self.logAdd("getOptionValueByName failed for name '" + eleName + "':\n" + traceback.format_exc())
-            raise TestError(u"Cannot get drop-down (select) element by name '" + eleName + "'. ")
+            self.failTest(u"Cannot get drop-down (select) element by name '" + eleName + "'. ")
         
     def getOptionValueById(self, eleId):
         try:
             return getValue(self.getElementById(eleId).find_element_by_xpath(u"//option[@selected='selected']"))
         except NoSuchElementException:
-            self.logAdd("getOptionValueById failed for id '" + eleId + "':\n" + traceback.format_exc())
-            raise TestError(u"Cannot get drop-down (select) element by id '" + eleId + "'. ")
+            self.failTest(u"Cannot get drop-down (select) element by id '" + eleId + "'. ")
 
     def getElementValueById(self, eleId):
         self.checkEmptyParam(eleId, "getElementValueById")
@@ -423,7 +417,7 @@ class SeleniumTest:
 
     def assertElementSubTextById(self, eleId, text):
         if not self.checkElementSubTextById(eleId, text):
-            raise TestError("Element with id '" + eleId + "' text does not contain expected: '" + text + "'. ")
+            self.failTest("Element with id '" + eleId + "' text does not contain expected: '" + text + "'. ")
 
     def checkElementValueByName(self, name, text):
         self.checkEmptyParam(name, "checkElementValueByName")
@@ -441,15 +435,15 @@ class SeleniumTest:
 
     def assertElementTextById(self, eleId, text):
         if not self.checkElementTextById(eleId, text):
-            raise TestError("Element with id '" + eleId + "' text does not match expected: '" + text + "'. ")
+            self.failTest("Element with id '" + eleId + "' text does not match expected: '" + text + "'. ")
 
     def assertElementValueById(self, eleId, text):
         if not self.checkElementValueById(eleId, text):
-            raise TestError("Element with id '" + eleId + "' value does not match expected: '" + text + "'. ")
+            self.failTest("Element with id '" + eleId + "' value does not match expected: '" + text + "'. ")
 
     def assertElementValueByName(self, name, text):
         if not self.checkElementValueByName(name, text):
-            raise TestError("Element with name '" + name + "' value does not match expected: '" + text + "'. ")
+            self.failTest("Element with name '" + name + "' value does not match expected: '" + text + "'. ")
 
     def addAction(self, name, details = ""):
         self.m_actionLog.append(TestAction(name, details))      
@@ -468,8 +462,15 @@ class SeleniumTest:
     
     # getElementText
     def getElementContent(self, xpath):
-        return self.m_driver.find_element_by_xpath(xpath).text
+        try:
+            return self.m_driver.find_element_by_xpath(xpath).text
+        except NoSuchElementException:
+            self.failTest("getElementContent does not found xpath '" + xpath + "'. ")
 
+    # getPageTitle
+    def getPageTitle(self):
+        return self.m_driver.title
+        
     def checkTextPresent(self, xpath, text):
         self.checkEmptyParam(xpath, "checkTextPresent")
         self.checkEmptyParam(text, "checkTextPresent")
@@ -486,8 +487,10 @@ class SeleniumTest:
                     return False
                 else:
                     return text in eleText
+            except InvalidSelectorException:
+                self.failTest("Invalid XPATH expression in checkTextPresent: '" + xpath + "'. ")
             except NoSuchElementException:
-                #self.logAdd("checkTextPresent does not found xpath '" + xpath + "':\n" + traceback.format_exc())
+                self.logAdd("checkTextPresent does not found xpath '" + xpath + "'. ")
                 return False
             except StaleElementReferenceException:
                 self.logAdd("Cache problem in checkTextPresent(" + xpath + ", " + userSerialize(text) + "), trying again. ")
@@ -626,7 +629,7 @@ class SeleniumTest:
         checkResult, suspWord = self.checkPhpErrors()
         if checkResult:
             logMsg = "PHP error '" + suspWord + "' detected on the page '" + self.curUrl() + "'"
-            self.logAdd(logMsg)
+            self.logAdd(logMsg, "warning")
             if not self.m_errorsAsWarnings:
                 raise TestError(logMsg)
     
