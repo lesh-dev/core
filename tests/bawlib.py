@@ -20,17 +20,17 @@ def userSerialize(text, options = []):
         return "|".join([userSerialize(x) for x in text])
     if isString(text):
         if "cut_strings" in options or "cut_string" in options:
-            maxLen = 200
+            maxLen = 100
             if len(text) > maxLen:
-                return "'" + toUnicode(text[:maxLen]) + "...'"
+                return "'" + text[:maxLen] + "...'"
             else:
-                return "'" + toUnicode(text) + "'"
-        return toUnicode(text)
+                return "'" + text + "'"
+        return "'" + text + "'"
     if isBool(text):
         if text:
-            return u"TRUE"
+            return "TRUE"
         else:
-            return u"FALSE"
+            return "FALSE"
     return str(text)
 
 def isList(x):
@@ -47,9 +47,6 @@ def isEqual(x, y):
         return (x.strip() == y.strip())
     else:
         raise RuntimeError("Cannot compare anything except strings, sorry. Type of X is " + str(type(x)) + ", and type of Y is " + str(type(y)) + ".")
-
-def toUnicode(s):
-    return unicode(s).encode("utf-8")
     
 def isVoid(x):
     if isList(x):
