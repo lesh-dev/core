@@ -5,6 +5,9 @@ import selenium_test, xtest_common, random_crap, time
 from xtest_config import XcmsTestConfig
 from selenium_test import SeleniumTest
 
+def paragraph(x):
+    return "<p>" + x + "</p>"
+
 class XcmsContentAddPage(SeleniumTest):
     """
     This test checks user add functional.
@@ -82,7 +85,7 @@ class XcmsContentAddPage(SeleniumTest):
         # add second line
         newPageText = pageText + "\n" + random_crap.randomCrap(10)
         
-        newpageText = self.fillElementById("edit-text", newPageText)
+        newPageText = self.fillElementById("edit-text", newPageText)
 
         self.clickElementById("edit-submit-top")
         self.clickElementById("edit-preview-top")
@@ -107,4 +110,39 @@ class XcmsContentAddPage(SeleniumTest):
             self.failTest("Menu title text does not appear in page title. ") # WTF?? TODO: why Menu title, not page title?
 
         #self.assertBodyTextPresent(inpPageSubheader, "page subheader does not match entered text. ")
+
+        self.gotoUrlByLinkText(u"Редактировать")
+        
+        diffLines = [paragraph(random_crap.randomCrap(7)) for x in xrange(0,12)]
+        
+        diffPageText = "\n".join(diffLines)
+
+        diffPageText = self.fillElementById("edit-text", diffPageText)
+        self.clickElementById("edit-submit-top")
+        
+        diffLines = diffLines[:3] + [paragraph(random_crap.randomCrap(5))] + diffLines[3:6] + diffLines[7:]
+        diffPageText = "\n".join(diffLines)
+
+        diffPageText = self.fillElementById("edit-text", diffPageText)
+        self.clickElementById("edit-submit-top")
+
+        diffLines = diffLines[:-1]
+        diffPageText = "\n".join(diffLines)
+
+        diffPageText = self.fillElementById("edit-text", diffPageText)
+        self.clickElementById("edit-submit-top")
+        
+        pageWords = diffPageText.split()
+        
+        sampleWords = pageWords[5:8] + pageWords[24:27] + pageWords[30:32]
+        for sample in sampleWords:
+            diffPageText = diffPageText.replace(sample, random_crap.randomCrap(2))
+        
+        diffPageText = self.fillElementById("edit-text", diffPageText)
+        self.clickElementById("edit-submit-top")
+        
+        self.gotoUrlByLinkText(u"Свернуть редактор")
+        
+    
+
 
