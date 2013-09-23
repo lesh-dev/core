@@ -58,7 +58,7 @@ class XcmsXsmAvatar(SeleniumTest):
 
         fullAlias = inpLastName + " " + inpFirstName + " " + inpMidName
         # check if person alias is present (person saved correctly)
-        self.assertElementValueById("person-title", fullAlias)
+        self.assertElementTextById("person-title", fullAlias)
         # check avatar
         avatarSrc = self.getImageSrcById("avatar")
         print "Avatar Source: ", avatarSrc

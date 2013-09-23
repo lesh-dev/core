@@ -173,4 +173,3 @@ class XcmsXsmAnketaWrongFill(SeleniumTest):
         self.assertElementSubTextById("extra-person-info", inpFav)
         self.assertElementSubTextById("extra-person-info", inpAch)
         self.assertElementSubTextById("extra-person-info", inpHob)
-        self.assertElementSubTextById("extra-person-info", inpSource)
