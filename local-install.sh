@@ -80,6 +80,11 @@ done
 # site root
 DEST="/var/www/html/$DEST_NAME"
 
+# fix content path
+if [ "$DEST_NAME" == "lesh.org.ru" ] ; then
+    CONT_DIR="../content-lesh.org.ru/content"
+fi
+
 # check SQLite3 presence
 if ! which sqlite3 > /dev/null; then
     echo "Please install SQLite v.3 on your machine. "
