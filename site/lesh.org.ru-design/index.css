@@ -96,9 +96,10 @@ h1, h2 {
 }
 
 .sidebar_top, .sidebar_bottom{
-    width: 400px;
+    width: 300px;
     float: left;
     padding-left: 50px;
+    display: inline-block;
 }
 
 .sidebar_top ul{
@@ -148,23 +149,24 @@ h1, h2 {
     color: #7AA643;
 }
 
-.sidebar_left{
+.sidebar-right {
     width: 240px;
     float: right;
     margin-top: -20px;
+    display: inline-block;
 }
 
-.sidebar_left ul{
+.sidebar-right ul{
     font-size: 14px;
-    font-family: "Trebuchet MS", "Helvetica CY", "Arial", sans-serif;
+    font-family: "Trebuchet MS", "Helvetica CY", "Arial", "Lucida Sans", sans-serif;
 }
 
-.sidebar_left ul li{
+.sidebar-right ul li{
     display: block;
     line-height:22px;
 }
 
-.sidebar_left img{
+.sidebar-right img{
     width: 69px;
     height: 85px;
     float: right;
@@ -177,21 +179,22 @@ h1, h2 {
     _margin-right: 0px;
 }
 
-.sidebar_left a {
+.sidebar-right a {
     text-decoration: none;
     font-size: 14px;
     color: #555;
     padding: 3px 5px 3px 5px;
 }
 
-.sidebar_left a:hover {
+.sidebar-right a:hover {
     text-decoration: none;
     background-color: #7AA643;
     color: white;
     padding: 3px 5px 3px 5px;
 }
 
-.main_text{
+.main_text {
+    position: relative; /* to position edit buttons */
     width: 370px;
     float: left;
     padding-left: 50px;
@@ -203,7 +206,7 @@ h1, h2 {
     _margin-top: -50px;
 }
 
-.main_text span, .length_of_text span{
+.main_text h1, .length_of_text h1 {
     font-size: 18px;
     color: black;
     font-weight: bold;
