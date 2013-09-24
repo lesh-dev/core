@@ -522,12 +522,17 @@ class FineDiff {
 						$fragment_index_offset += $fragment_length;
 						}
 					if ( $fragment_index_offset > $best_copy_length ) {
-						$best_copy_length = $fragment_index_offset;
-						$best_from_start = $from_base_fragment_index;
-						$best_to_start = $to_base_fragment_index;
+						// if the matching string is just made up of delimiters then don't count it as a match. This prevents an
+						// excessive number of whitespaces being seen as matches and therefore breaking up a long replace segment
+						// to no useful purpose.
+						if ($fragment_index_offset > $from_base_fragment_length || xu_strspn($from_base_fragment, $delimiters, 0) === 0) {
+							$best_copy_length = $fragment_index_offset;
+							$best_from_start = $from_base_fragment_index;
+							$best_to_start = $to_base_fragment_index;
+							}
 						}
 					}
-				$from_base_fragment_index += xu_len($from_base_fragment);
+				$from_base_fragment_index += $from_base_fragment_length;
 				// If match is larger than half segment size, no point trying to find better
 				// TODO: Really?
 				if ( $best_copy_length >= $from_segment_length / 2) {
