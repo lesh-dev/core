@@ -25,7 +25,7 @@ function xsm_notify_person_edit($person)
         return;
 
     $subject = "Изменения: $full_name";
-    xcms_send_notification("reg", NULL, "db", $subject, "This message is in HTML format.\r\n", $mail_msg);
+    xcms_send_notification("reg", NULL, "db", $subject, "This message is in HTML format.".EXP_CRLF, $mail_msg);
 }
 
 function xsm_edit_person()

@@ -8,7 +8,7 @@
       **/
     function xcms_diff_postprocess($diff)
     {
-        $output = str_replace(EXP_LF, "<br/>\n", $diff);
+        $output = str_replace(EXP_LF, '<br/>'.EXP_LF, $diff);
         $output = str_replace('<skip/>', '<span style="color: #7f7f7f;">***</span>', $output);
         $output = str_replace('<ins>', '<ins style="color: #009f00; text-decoration: none;">', $output);
         $output = str_replace('<del>', '<del style="color: #9f0000;">', $output);

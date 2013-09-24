@@ -689,9 +689,11 @@ class FineDiff {
 			}
 		else if ( $opcode === 'd' ) {
 			$deletion = xu_substr($from, $from_offset, $from_len);
+			/* // Very strange code here
 			if ( xu_strcspn($deletion, " \n\r") === 0 ) {
 				$deletion = str_replace(array("\n","\r"), array('\n','\r'), $deletion);
 				}
+			*/
 			echo '<del>', htmlspecialchars($deletion), '</del>';
 			}
 		else /* if ( $opcode === 'i' ) */ {
@@ -705,8 +707,8 @@ class FineDiff {
 	private static function renderDiffToHTMLFromOpcodeContext($opcode, $from, $from_offset, $from_len) {
 		if ( $opcode === 'c' ) {
 			$text = htmlspecialchars(xu_substr($from, $from_offset, $from_len));
-			$text = str_replace("\r\n", "\n", $text);
-			$text = str_replace("\r", "\n", $text);
+			$text = str_replace(EXP_CRLF, EXP_LF, $text);
+			$text = str_replace(EXP_CR, EXP_LF, $text);
 			$lines = explode(EXP_LF, $text);
 			$c = count($lines);
 			if ($c > 4)
@@ -730,9 +732,11 @@ class FineDiff {
 			}
 		else if ( $opcode === 'd' ) {
 			$deletion = xu_substr($from, $from_offset, $from_len);
+			/* // Very strange code here
 			if ( xu_strcspn($deletion, " \n\r") === 0 ) {
 				$deletion = str_replace(array("\n","\r"), array('\n','\r'), $deletion);
 				}
+			*/
 			echo '<del>', htmlspecialchars($deletion), '</del>';
 			}
 		else /* if ( $opcode === 'i' ) */ {
