@@ -2,6 +2,7 @@
 # -*- coding: utf8 -*-
 
 from selenium import webdriver
+from selenium.common.exceptions import InvalidSelectorException
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoSuchWindowException 
 from selenium.common.exceptions import StaleElementReferenceException
@@ -16,7 +17,7 @@ import random, traceback, sys
 from datetime import datetime
 import time
 
-from bawlib import isVoid, isList, isString, isEqual, getSingleOption, userSerialize, toUnicode
+from bawlib import isVoid, isList, isString, isEqual, getSingleOption, userSerialize
 
 #['_unwrap_value', '_wrap_value', 'add_cookie',
 #'back', 'binary', 'capabilities', 'close', 'command_executor', 'create_web_element', 'current_window_handle',
@@ -50,7 +51,7 @@ class TestAction:
         self.m_details = details
         
     def printAction(self):
-        print toUnicode(self.m_action + " " + self.m_details)
+        print self.m_action + " " + self.m_details
 
 # generic function to run any test.
 def RunTest(test):
@@ -164,18 +165,18 @@ class SeleniumTest:
         self.shutdown(0)
         
     def handleException(self, exc):
-        print "TEST " + self.getName() + " ERROR:", toUnicode(exc.message)
+        print "TEST " + self.getName() + " ERROR: " + exc.message
         traceback.print_exc()
         self.shutdown(2)
                 
     def handleTestFail(self, exc):
         #self.m_driver.execute_script("alert('Test failed! See console log for details. ');")
-        print "TEST " + self.getName() + " FAILED:", toUnicode(exc.message)
+        print "TEST " + self.getName() + " FAILED: " + exc.message
         self.shutdown(1)
 
     def handleTestFatal(self, exc):
         #self.m_driver.execute_script("alert('Test fataled! See logs and check your test/environment. ');")
-        print "TEST " + self.getName() + " FATALED:", toUnicode(exc.message)
+        print "TEST " + self.getName() + " FATALED: " + exc.message
         self.shutdown(2)
 
     def getActionLog(self):
@@ -190,12 +191,12 @@ class SeleniumTest:
         try:
             logFile = open(self.m_logFile, "w")
             logText = "[" + self.m_testName + " log start on " + self.m_baseUrl + "]\n"
-            logFile.write(toUnicode(logText))
+            logFile.write(logText.encode("UTF-8"))
             logFile.close()
             #indicate that log was already created
             self.m_logStarted = True
         except IOError:
-            raise RuntimeError("Cannot create log file '" + self.m_logFile + "'. ")
+            raise RuntimeError("Cannot create log file " + userSerialize(self.m_logFile) + ". ")
             
     def setCloseOnExit(self, flag):
         self.m_closeOnExit = flag;
@@ -226,9 +227,9 @@ class SeleniumTest:
     
     # @comment usually means link name (or id), which we used to navigate to this URL.
     def gotoSite(self, fullUrl, comment = ""):
-        actionMsg = u"Link: '" + userSerialize(fullUrl);
+        actionMsg = "Link: " + userSerialize(fullUrl);
         if not isVoid(comment):
-            actionMsg +=  (u"' comment: '" + userSerialize(comment) + "'")
+            actionMsg +=  (" comment: " + userSerialize(comment) + " ")
         self.addAction("navigate", actionMsg)
         self.m_driver.get(fullUrl)
         if self.m_checkErrors:
@@ -239,14 +240,14 @@ class SeleniumTest:
             link = self.getUrlByLinkText(linkName)
             self.gotoSite(link, linkName)
         except NoSuchElementException:
-            self.failTest(u"Cannot find URL with name '" + userSerialize(linkName) + "'. ")
+            self.failTest("Cannot find URL with name " + userSerialize(linkName) + ". ")
 
     def gotoUrlByPartialLinkText(self, linkName):
         try:
             link = self.getUrlByLinkText(linkName, ["partial"])
             self.gotoSite(link, linkName)
         except NoSuchElementException:
-            self.failTest(u"Cannot find URL with name '" + userSerialize(linkName) + "'. ")
+            self.failTest("Cannot find URL with name " + userSerialize(linkName) + ". ")
 
     def gotoUrlByLinkId(self, linkId):
         href = self.getElementById(linkId).get_attribute("href")
@@ -259,13 +260,13 @@ class SeleniumTest:
         if isVoid(reason):
             return ""
         else:
-            return "Reason: '" + reason + "'. "
+            return "Reason: " + userSerialize(reason) + ". "
 
     def assertUrlNotPresent(self, linkName, forbidReason = ""):
         try:
             self.getUrlByLinkText(linkName)
-            exceptionMessage = "Forbidden URL is found on the page in assertUrlNotPresent: '" + userSerialize(linkName) + "'. " + self.displayReason(forbidReason)
-            raise TestError(exceptionMessage)
+            exceptionMessage = "Forbidden URL is found on the page in assertUrlNotPresent: " + userSerialize(linkName) + ". " + self.displayReason(forbidReason)
+            self.failTest(exceptionMessage)
         except ItemNotFound:
             pass
 
@@ -273,11 +274,11 @@ class SeleniumTest:
         try:
             self.getUrlByLinkText(linkName)
         except ItemNotFound:
-            exceptionMessage = "Required URL is not found on the page in assertUrlPresent: '" + userSerialize(linkName) + "'. " + self.displayReason(reason)
-            raise TestError(exceptionMessage)
+            exceptionMessage = "Required URL is not found on the page in assertUrlPresent: " + userSerialize(linkName) + ". " + self.displayReason(reason)
+            self.failTest(exceptionMessage)
 
     def wait(self, seconds):
-        self.logAdd("Waiting for '" + userSerialize(seconds) + "' seconds. ")
+        self.logAdd("Waiting for " + userSerialize(seconds) + " seconds. ")
         time.sleep(seconds)
         
     def drv(self):
@@ -287,15 +288,13 @@ class SeleniumTest:
         try:
             return self.m_driver.find_element_by_name(name)
         except NoSuchElementException:
-            self.logAdd("getElementByName failed for name '" + name + "':\n" + traceback.format_exc())
-            raise TestError(u"Cannot get element by name '" + name + "'. ")
+            self.failTest("Cannot get element by name " + userSerialize(name) + ". ")
 
     def getElementById(self, eleId):
         try:
             return self.m_driver.find_element_by_id(eleId)
         except NoSuchElementException:
-            self.logAdd("getElementById failed for id '" + eleId + "':\n" + traceback.format_exc())
-            raise TestError(u"Cannot get element by id '" + eleId + "'. ")
+            self.failTest("Cannot get element by id '" + eleId + "'. ")
         
     def checkboxIsValid(self, value):
         return value == "checked" or value == "true"
@@ -306,28 +305,29 @@ class SeleniumTest:
 #       print "value: ", value
         if value and not self.checkboxIsValid(value):
             msg = "Strange value for checkbox '" + eleId + "': " + userSerialize(value)
-            self.logAdd(msg)
-            raise TestError(msg)
+            self.failTest(msg)
         
         if boolValue: # check if it is 'checked'
             if value and self.checkboxIsValid(value):
+                self.logAdd("check-box:true, element id: '" + eleId + "'. ")
                 return True
             return False
         else: # check if it is unchecked
             if value and self.checkboxIsValid(value):
+                self.logAdd("check-box:false, element id: '" + eleId + "'. ")
                 return False
             return True
                 
     def assertCheckboxValueById(self, eleId, boolValue = True):
         if not self.checkCheckboxValueById(eleId, boolValue):
-            raise TestError(u"Checkbox with id '" + eleId + "' has improper value, expected '" + userSerialize(boolValue) + "'. ")
+            self.failTest("Checkbox with id '" + eleId + "' has improper value, expected " + userSerialize(boolValue) + ". ")
             
     def fillElementByName(self, name, text, clear = True):
         self.checkEmptyParam(name, "fillElementByName")
         if clear:
-            self.addAction("clear", "element name: '" + name + "'")
+            self.addAction("clear", "element name: " + userSerialize(name) + " ")
             self.getElementByName(name).clear()
-        self.addAction("fill", "element name: '" + name + "', text: '" + text + "'")
+        self.addAction("fill", "element name: " + userSerialize(name) + ", text: " + userSerialize(text) + " ")
         self.getElementByName(name).send_keys(text)
         return getValue(self.getElementByName(name))
         
@@ -338,7 +338,7 @@ class SeleniumTest:
                 self.addAction("clear", "element id: '" + eleId + "'")
                 self.getElementById(eleId).clear()
 
-            self.addAction("fill", "element id: '" + eleId + "', text: '" + text + "'")
+            self.addAction("fill", "element id: '" + eleId + "', text: " + userSerialize(text) + " ")
             #print "sending keys" , text
             ele = self.getElementById(eleId)
             #print "got element "
@@ -346,30 +346,26 @@ class SeleniumTest:
             ele.send_keys(text)
             return getValue(self.getElementById(eleId))
         except InvalidElementStateException as e:
-            self.logAdd("fillElementById failed for id '" + eleId + "':\n" + traceback.format_exc())
-            raise TestError(u"Cannot set element value by id '" + eleId + "', possibly element is read-only.")
+            self.failTest("Cannot set element value by id '" + eleId + "', possibly element is read-only.")
             
     
     def setOptionValueById(self, eleId, optValue):
         try:
-            self.getElementById(eleId).find_element_by_xpath(u"//option[@value='" + optValue + "']").click()
+            self.getElementById(eleId).find_element_by_xpath("//option[@value='" + optValue + "']").click()
         except NoSuchElementException:
-            self.logAdd("setOptionValueById failed for id '" + eleId + "':\n" + traceback.format_exc())
-            raise TestError(u"Cannot get drop-down (select) element by id '" + eleId + "'. ")
+            self.failTest("Cannot get drop-down (select) element by id '" + eleId + "'. ")
 
     def getOptionValueByName(self, eleName):
         try:
             return getValue(self.getElementByName(eleName).find_element_by_xpath("//option[@selected='selected']"))
         except NoSuchElementException:
-            self.logAdd("getOptionValueByName failed for name '" + eleName + "':\n" + traceback.format_exc())
-            raise TestError(u"Cannot get drop-down (select) element by name '" + eleName + "'. ")
+            self.failTest("Cannot get drop-down (select) element by name " + userSerialize(eleName) + ". ")
         
     def getOptionValueById(self, eleId):
         try:
-            return getValue(self.getElementById(eleId).find_element_by_xpath(u"//option[@selected='selected']"))
+            return getValue(self.getElementById(eleId).find_element_by_xpath("//option[@selected='selected']"))
         except NoSuchElementException:
-            self.logAdd("getOptionValueById failed for id '" + eleId + "':\n" + traceback.format_exc())
-            raise TestError(u"Cannot get drop-down (select) element by id '" + eleId + "'. ")
+            self.failTest("Cannot get drop-down (select) element by id '" + eleId + "'. ")
 
     def getElementValueById(self, eleId):
         self.checkEmptyParam(eleId, "getElementValueById")
@@ -378,63 +374,82 @@ class SeleniumTest:
 
     def getElementValueByName(self, eleName):
         self.checkEmptyParam(eleName, "getElementValueByName")
-        self.addAction("get-value", "element name: '" + eleName + "'")
+        self.addAction("get-value", "element name: " + userSerialize(eleName) + " ")
         return getValue(self.getElementByName(eleName))
 
     def checkElementValueById(self, eleId, text):
         self.checkEmptyParam(eleId, "checkElementValueById")
-        self.addAction("check-value", "element id: '" + eleId + "', expected: '" + text + "'. ")
+        self.addAction("check-value", "element id: '" + eleId + "', expected: " + userSerialize(text) + ". ")
         eleValue = getValue(self.getElementById(eleId))
         if not eleValue:
             self.logAdd("None 'value' in element id '" + eleId + "'. Maybe it has no attribute 'value'?", "warning")
             return False
+        self.logAdd("checkElementValueById: current element '" + eleId + "' value is " + userSerialize(eleValue) + ". ")
         if isEqual(eleValue, text):
-            self.logAdd("check-value:ok, element id: '" + eleId + "', expected: '" + text + "'. ")
+            self.logAdd("check-value:ok, element id: '" + eleId + "', expected: " + userSerialize(text) + ". ")
             return True
-        self.logAdd("check-value:fail, element id: '" + eleId + "', expected: '" + text + "', actual: '" + eleValue + "'. ")
+        self.logAdd("check-value:fail, element id: '" + eleId + "', expected: " + userSerialize(text) + ", actual: " + userSerialize(eleValue) + ". ")
         return False
 
     # checkElementContentById
     def checkElementTextById(self, eleId, text):
         self.checkEmptyParam(eleId, "checkElementTextById")
-        self.addAction("check-text", "element id: '" + eleId + "', expected: '" + text + "'. ")
+        self.addAction("check-text", "element id: '" + eleId + "', expected: " + userSerialize(text) + ". ")
         eleText = self.getElementById(eleId).text
+        self.logAdd("checkElementTextById: current element '" + eleId + "', text is " + userSerialize(eleText) + ". ")
         if isEqual(eleText, text):
-            self.logAdd("check-text:ok, element id: '" + eleId + "', expected: '" + text + "'. ")
+            self.logAdd("check-text:ok, element id: '" + eleId + "', expected: " + userSerialize(text) + "'. ")
             return True
-        self.addAction("check-text:fail, element id: '" + eleId + "', expected: '" + text + "', actual: '" + eleText + "'. ")
+        self.addAction("check-text:fail, element id: '" + eleId + "', expected: " + userSerialize(text) + ", actual: " + userSerialize(eleText) + ". ")
         return False
+
+    # checks if element eleId contains text 'text'.
+    def checkElementSubTextById(self, eleId, text):
+        self.checkEmptyParam(eleId, "checkElementSubTextById")
+        self.addAction("check-text", "element id: '" + eleId + "', expected: " + userSerialize(text) + ". ")
+        eleText = self.getElementById(eleId).text
+        self.logAdd("checkElementSubTextById: current element '" + eleId + "', text is " + userSerialize(eleText) + ". ")
+        if text in eleText:
+            self.logAdd("check-subtext:ok, element id: '" + eleId + "', expected: " + userSerialize(text) + ". ")
+            return True
+        self.addAction("check-subtext:fail, element id: '" + eleId + "', expected: " + userSerialize(text) + ", actual: " + userSerialize(eleText) + ". ")
+        return False
+
+    def assertElementSubTextById(self, eleId, text):
+        if not self.checkElementSubTextById(eleId, text):
+            self.failTest("Element with id '" + eleId + "' text does not contain expected: " + userSerialize(text) + ". ")
 
     def checkElementValueByName(self, name, text):
         self.checkEmptyParam(name, "checkElementValueByName")
-        self.addAction("check-value", "element name: '" + name + "', expected: '" + text + "'. ")
+        self.addAction("check-value", "element name: '" + name + "', expected: " + userSerialize(text) + ". ")
         eleValue = getValue(self.getElementByName(name))
         if not eleValue:
-            self.logAdd("None 'value' in element name '" + name + "'. Maybe it has no attribute 'value'?", "warning")
+            self.logAdd("None 'value' in element named '" + name + "'. Maybe it has no attribute 'value'?", "warning")
             return False
+        self.logAdd("checkElementValueByName: current element named '" + name + "' has value '" + userSerialize(eleValue) + "'. ")
         if isEqual(eleValue, text):
-            self.logAdd("check-value:ok, element name: '" + name + "', expected: '" + text + "'. ")
+            self.logAdd("check-value:ok, element name: '" + name + "', expected: " + userSerialize(text) + ". ")
             return True
-        self.logAdd("check-value:fail, element name: '" + name + "', expected: '" + text + "', actual: '" + eleText + "'. ")
+        self.logAdd("check-value:fail, element name: '" + name + "', expected: " + userSerialize(text) + ", actual: " + userSerialize(eleText) + ". ")
         return False
 
     def assertElementTextById(self, eleId, text):
         if not self.checkElementTextById(eleId, text):
-            raise TestError("Element with id '" + eleId + "' text does not match expected: '" + text + "'. ")
+            self.failTest("Element with id '" + eleId + "' text does not match expected: " + userSerialize(text) + ". ")
 
     def assertElementValueById(self, eleId, text):
         if not self.checkElementValueById(eleId, text):
-            raise TestError("Element with id '" + eleId + "' value does not match expected: '" + text + "'. ")
+            self.failTest("Element with id '" + eleId + "' value does not match expected: " + userSerialize(text) + ". ")
 
     def assertElementValueByName(self, name, text):
         if not self.checkElementValueByName(name, text):
-            raise TestError("Element with name '" + name + "' value does not match expected: '" + text + "'. ")
+            self.failTest("Element with name '" + userSerialize(name) + " value does not match expected: " + userSerialize(text) + ". ")
 
     def addAction(self, name, details = ""):
         self.m_actionLog.append(TestAction(name, details))      
     
     def clickElementByName(self, name):
-        self.addAction("click", "element name: '" + name + "'")
+        self.addAction("click", "element name: " + userSerialize(name) + " ")
         self.getElementByName(name).click()
         if self.m_checkErrors:
             self.assertPhpErrors();
@@ -447,8 +462,15 @@ class SeleniumTest:
     
     # getElementText
     def getElementContent(self, xpath):
-        return self.m_driver.find_element_by_xpath(xpath).text
+        try:
+            return self.m_driver.find_element_by_xpath(xpath).text
+        except NoSuchElementException:
+            self.failTest("getElementContent does not found xpath " + userSerialize(xpath) + ". ")
 
+    # getPageTitle
+    def getPageTitle(self):
+        return self.m_driver.title
+        
     def checkTextPresent(self, xpath, text):
         self.checkEmptyParam(xpath, "checkTextPresent")
         self.checkEmptyParam(text, "checkTextPresent")
@@ -456,22 +478,29 @@ class SeleniumTest:
         count = 0
         while count < 3:
             try:
+                eleText = self.m_driver.find_element_by_xpath(xpath).text
+                serOpt = []
+                if xpath in ["/html/body", "//*"]: # too large
+                    serOpt = ["cut_strings"]
+                self.logAdd("checkTextPresent: current element by path " + userSerialize(xpath) + ", text is " + userSerialize(eleText, serOpt) + ". ")
                 if isList(text):
                     for phrase in text:
-                        if phrase in self.m_driver.find_element_by_xpath(xpath).text:
+                        if phrase in eleText:
                             return True
                     return False
                 else:
-                    return text in self.m_driver.find_element_by_xpath(xpath).text
+                    return text in eleText
+            except InvalidSelectorException:
+                self.failTest("Invalid XPath expression in checkTextPresent: " + userSerialize(xpath) + ". ")
             except NoSuchElementException:
-                #self.logAdd("checkTextPresent does not found xpath '" + xpath + "':\n" + traceback.format_exc())
+                self.logAdd("checkTextPresent does not found XPath " + userSerialize(xpath) + ". ")
                 return False
             except StaleElementReferenceException:
-                self.logAdd("Cache problem in checkTextPresent(" + xpath + ", " + userSerialize(text) + "), trying again. ")
+                self.logAdd("Cache problem in checkTextPresent. XPath: " + userSerialize(xpath) + ", text: " + userSerialize(text) + ". Trying again. ")
                 count += 1
                 self.wait(1.0)
                 continue
-        self.failTest("Unsolvable cache problem in checkTextPresent(" + xpath + ", " + userSerialize(text) + "), trying again. ")
+        self.failTest("Unsolvable cache problem in checkTextPresent. XPath: " + userSerialize(xpath) + ", text: " + userSerialize(text) + ". ")
         
     def checkSourceTextPresent(self, text):
         return self.checkTextPresent("//*", text)
@@ -489,11 +518,11 @@ class SeleniumTest:
 
     def assertTextPresent(self, xpath, text, reason = ""):
         if not self.checkTextPresent(xpath, text):
-            self.failTest("Text '" + userSerialize(text) + "' not found on page '" + self.curUrl() + "' in element '" + xpath + "'. " + self.displayReason(reason))
+            self.failTest("Text " + userSerialize(text) + " not found on page " + userSerialize(self.curUrl()) + ", element " + userSerialize(xpath) + ". " + self.displayReason(reason))
 
     def assertTextNotPresent(self, xpath, text, forbidReason = ""):
         if self.checkTextPresent(xpath, text):
-            errText = "Forbidden text '" + userSerialize(text) + "' found on page '" + self.curUrl() + "' in element '" + xpath + "'. " + self.displayReason(forbidReason)
+            errText = "Forbidden text " + userSerialize(text) + " found on page " + userSerialize(self.curUrl()) + ", element " + userSerialize(xpath) + ". " + self.displayReason(forbidReason)
             self.failTest(errText)
 
     def assertBodyTextPresent(self, text, reason = ""):
@@ -523,7 +552,7 @@ class SeleniumTest:
         self.checkEmptyParam(urlText, "getUrlByLinkText");
         searchMethod = self.m_driver.find_element_by_link_text
         if "partial" in optionList:
-            self.logAdd(u"Search for partial link text '" + userSerialize(urlText) + "'. ")
+            self.logAdd("Search for partial link text " + userSerialize(urlText) + ". ")
             searchMethod = self.m_driver.find_element_by_partial_link_text
         
         if isList(urlText):
@@ -532,12 +561,12 @@ class SeleniumTest:
                     url = searchMethod(urlName)
                     return url.get_attribute("href");
                 except NoSuchElementException:
-                    self.logAdd("Tried to find url by name '" + urlName + "', not found. ")
+                    self.logAdd("Tried to find url by name " + userSerialize(urlName) + ", not found. ")
                     pass
             else:
                 # loop ended, found nothing
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
-                msg = u"Cannot find URL by link texts: '" + userSerialize(urlText) + "' on page '" + self.curUrl() + "'. "
+                msg = "Cannot find URL by link texts: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". "
                 self.failTestWithItemNotFound(msg)
         else: # single link
             try:
@@ -545,7 +574,7 @@ class SeleniumTest:
                 return url.get_attribute("href");
             except NoSuchElementException:
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
-                msg = u"Cannot find URL by link text: '" + userSerialize(urlText) + "' on page '" + self.curUrl() + "'. "
+                msg = "Cannot find URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". "
                 self.failTestWithItemNotFound(msg)
 
     def gotoIndexedUrlByLinkText(self, urlText, index):
@@ -560,12 +589,12 @@ class SeleniumTest:
                     self.logAdd("Found URL with index " + userSerialize(index) + ": " + href)
                     self.gotoSite(href)
                 else:
-                    self.failTest(u"No index in URL array with link text '" + userSerialize(urlText) + "' on page '" + self.curUrl() + "'. ")
+                    self.failTest("No index in URL array with link text " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". ")
             else:
                 raise RuntimeError("Something bad retrieved from find_elements_by_xpath: it's not a list of WebElement. ")
         except NoSuchElementException:
             # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
-            msg = u"Cannot find no one URL by link text: '" + userSerialize(urlText) + "' on page '" + self.curUrl() + "'. "
+            msg = "Cannot find no one URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". "
             self.failTestWithItemNotFound(msg)
 
             
@@ -575,12 +604,12 @@ class SeleniumTest:
                 self.logStart()
                 
             logFile = open(self.m_logFile, 'a')
-            fullLogText = text + u"\n"
-            logFile.write(fullLogText.encode('UTF-8'))
+            fullLogText = text + "\n"
+            logFile.write(fullLogText.encode("UTF-8"))
             print "LOG[" + logLevel + "]: " + fullLogText
             logFile.close()
         except IOError:
-            raise RuntimeError("Cannot write message to log file '" + m_logFile + "'. ")
+            raise RuntimeError("Cannot write message to log file " + userSerialize(self.m_logFile) + ". ")
         
     
     def getPageSource(self):
@@ -592,7 +621,7 @@ class SeleniumTest:
         susp = ["Notice:", "Error:", "Warning:", "Fatal error:", "Parse error:"];
         for word in susp:
             if (word in pageText) and (" on line " in pageText):
-                self.logAdd("PHP ERROR '" + word + "' detected on page '" + self.curUrl() + "':")
+                self.logAdd("PHP ERROR " + userSerialize(word) + " detected on page " + userSerialize(self.curUrl()) + ": ")
                 self.logAdd("ERROR_PAGE_BEGIN =================")
                 self.logAdd(pageText)
                 self.logAdd("ERROR_PAGE_END ===================")
@@ -602,8 +631,8 @@ class SeleniumTest:
     def assertPhpErrors(self):
         checkResult, suspWord = self.checkPhpErrors()
         if checkResult:
-            logMsg = "PHP error '" + suspWord + "' detected on the page '" + self.curUrl() + "'"
-            self.logAdd(logMsg)
+            logMsg = "PHP error " + userSerialize(suspWord) + " detected on the page " + userSerialize(self.curUrl()) + ". "
+            self.logAdd(logMsg, "warning")
             if not self.m_errorsAsWarnings:
                 raise TestError(logMsg)
     
