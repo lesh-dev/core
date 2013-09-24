@@ -1,1 +1,1 @@
-<p class="heading"><?php echo $_0; ?>
+<p class="heading"><?php echo $_0; ?></p>
