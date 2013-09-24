@@ -657,6 +657,12 @@ class FineDiff {
 		$start = $end = 0;
 		for (;;) {
 			$end += xu_strcspn($text, $delimiters, $end);
+			if ( $end === $start ) {
+				break;
+				}
+			$fragments[$start] = xu_substr($text, $start, $end - $start);
+			$start = $end;
+
 			$end += xu_strspn($text, $delimiters, $end);
 			if ( $end === $start ) {
 				break;
