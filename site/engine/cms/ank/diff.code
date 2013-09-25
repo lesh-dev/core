@@ -90,12 +90,6 @@ function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_ti
         }
 
         $cur_row = str_replace("@@KEY@", $key_title, $cur_row);
-        if (strpos($old_value, EXP_LF) !== false || strpos($new_value, EXP_LF) !== false)
-        {
-            // newlines detected, should be compared as multiline
-            $old_value .= EXP_LF;
-            $new_value .= EXP_LF;
-        }
         $diff_html = xcms_diff_html($old_value, $new_value);
         $cur_row = str_replace("@@DIFF@", $diff_html, $cur_row);
         $content .=  $cur_row;
