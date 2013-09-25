@@ -473,9 +473,9 @@ class FineDiff {
 
 				// Verify that fragment has non-zero length, otherwise this loop will hang
 				if (0 == $from_base_fragment_length) {
-					xcms_log(XLOG_ERROR, "Diff fragmentation error at index $from_base_fragment_index");
+					xcms_log(XLOG_ERROR, "[DIFF] Diff fragmentation error at index $from_base_fragment_index");
 					break;
-				}
+					}
 
 				// performance boost: cache array keys
 				if ( !isset($cached_array_keys_for_current_segment[$from_base_fragment]) ) {
