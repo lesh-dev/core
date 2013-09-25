@@ -30,6 +30,18 @@
         </ul>
     </div>
 
+    <div class="sidebar-right">
+        <ul>
+            <li><a href="photo">Фотоальбом</a></li>
+            <li><a href="about">О нас пишут</a></li>
+            <li><a href="people">Кто мы</a></li>
+            <li><a href="links">Ссылки</a></li>
+            <li><a href="http://forum.fizlesh.ru">Форум</a></li>
+            <li><a href="?&amp;page=index&amp;ref=ladmin">Админка</a></li>
+        </ul>
+        <img src="<# full_design_dir #>pict/green.gif" />
+    </div>
+
     <div class="sidebar_bottom">
         <ul>
             <li><a class="small_green_word" href="">вход</a>&nbsp;/</li>
@@ -38,17 +50,6 @@
         </ul>
     </div>
 
-    <div class="sidebar-right">
-        <ul>
-            <li> <a href="">Фотоальбом</a></li>
-            <li><a href="aboutus.html">О нас пишут</a></li>
-            <li><a href="">Ссылки</a></li>
-            <li><a href="">Форум</a></li>
-            <li><a href="?&amp;page=index&amp;ref=ladmin">Админка</a></li>
-            <a class="menu-item menu-level1 menu-passive menu-passive-level1" href="http://forum.fizlesh.ru">Форум</a>
-        </ul>
-        <img src="<# full_design_dir #>pict/green.gif" />
-    </div>
 
     <div class="main_text">
         <?php

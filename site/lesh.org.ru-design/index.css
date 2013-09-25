@@ -74,12 +74,12 @@ h1, h2 {
 
 .header{
     margin: 0;
-    height: 150px;
+    height: 130px;
 }
 
 .header .picture_logo{
-    padding-left: 50px;
-    background-image: url(pict/hh.gif);
+    padding-left: 70px;
+    background-image: url(pict/lesh-logo-100.png);
     background-repeat: no-repeat;
     background-position: center;
     width: 120px;
@@ -91,15 +91,14 @@ h1, h2 {
     background-image: url(pict/lesh.gif);
     background-repeat: no-repeat;
     width: 500px;
-    height: 150px;
+    height: 130px;
     float: right;
 }
 
-.sidebar_top, .sidebar_bottom{
+.sidebar_top {
     width: 300px;
     float: left;
     padding-left: 50px;
-    display: inline-block;
 }
 
 .sidebar_top ul{
@@ -152,8 +151,6 @@ h1, h2 {
 .sidebar-right {
     width: 240px;
     float: right;
-    margin-top: -20px;
-    display: inline-block;
 }
 
 .sidebar-right ul{
@@ -182,8 +179,11 @@ h1, h2 {
 .sidebar-right a {
     text-decoration: none;
     font-size: 14px;
+    line-height: 13px;
     color: #555;
     padding: 3px 5px 3px 5px;
+    display: inline-block;
+    width: 100px;
 }
 
 .sidebar-right a:hover {
@@ -191,6 +191,11 @@ h1, h2 {
     background-color: #7AA643;
     color: white;
     padding: 3px 5px 3px 5px;
+}
+
+.sidebar_bottom {
+    padding-left: 50px;
+    clear: both;
 }
 
 .main_text {
