@@ -345,24 +345,17 @@ class FineDiff {
 	* Stock granularity stacks and delimiters
 	*/
 
-	const paragraphDelimiters = "\n\r";
-	public static $paragraphGranularity = array(
-		FineDiff::paragraphDelimiters
-		);
 	const wordDelimiters = " \t\n\r";
 	public static $wordGranularity = array(
-		FineDiff::paragraphDelimiters,
 		FineDiff::wordDelimiters
 		);
 	const characterDelimiters = "";
 	public static $characterGranularity = array(
-		FineDiff::paragraphDelimiters,
 		FineDiff::wordDelimiters,
 		FineDiff::characterDelimiters
 		);
 
 	public static $textStack = array(
-		"",
 		" \t\n\r",
 		""
 		);
@@ -654,28 +647,24 @@ class FineDiff {
 	private static function extractFragments($text, $delimiters) {
 		// special case: split into characters
 		if ( empty($delimiters) ) {
-			$chars = m_split($text);
-			$chars[xu_len($text)] = '';
+			$chars = xu_split($text);
+			$chars[] = '';
 			return $chars;
 			}
 		$fragments = array();
-		$start = $end = 0;
-		for (;;) {
-			$end += xu_strcspn($text, $delimiters, $end);
-			if ( $end === $start ) {
-				break;
-				}
-			$fragments[$start] = xu_substr($text, $start, $end - $start);
-			$start = $end;
+		$offset = 0;
 
-			$end += xu_strspn($text, $delimiters, $end);
-			if ( $end === $start ) {
-				break;
-				}
-			$fragments[$start] = xu_substr($text, $start, $end - $start);
-			$start = $end;
-			}
-		$fragments[$start] = '';
+		$split = preg_split(
+			'/([' . preg_quote($delimiters, '/') . ']+)/u',
+			$text,
+			null,
+			PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+
+		foreach($split as $m) {
+			$fragments[$offset] = $m;
+			$offset += xu_len($m);
+		}
+		$fragments[$offset] = '';
 		return $fragments;
 		}
 

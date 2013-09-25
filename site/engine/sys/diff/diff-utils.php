@@ -51,6 +51,12 @@
         $diff = xcms_diff_html("", "abc", false);
         xut_check($diff === "<ins>abc</ins>", "Simple insertion");
 
+        $diff = xcms_diff_html("abc def ghi", "abc ghi", false);
+        xut_check($diff === "<del>def</del>", "First pbagnall@ patch");
+
+        $diff = xcms_diff_html("\n", "тарам-парам\nпарам-парам\n", false);
+        xut_check($diff === "<ins>тарам-парам\nпарам-парам</ins>", "Diff lockup test");
+
         $diff = xcms_diff_html("abcdefgh aaa", "xyz abcdefgh aaa\ntuv", false);
         xut_check($diff === "<ins>xyz </ins>abcdefgh <del>aaa</del><ins>aaa\ntuv</ins>", "Multiline insertion");
 
