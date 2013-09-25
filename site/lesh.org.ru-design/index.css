@@ -691,7 +691,7 @@ ul.menu li {
 }
 
 a.menu-item {
-    background-image: url(pict/gr.gif);
+    background-image: url('pict/dot7.png');
     background-repeat: no-repeat;
     background-position: 0px 50%;
 }
