@@ -55,12 +55,20 @@
         xut_equal($diff, "abc <del>def </del>ghi", "First pbagnall@ patch");
 
         $diff = xcms_diff_html("\n", "тарам-парам\nпарам-парам\n", false);
-        xut_equal($diff, "<del>\n</del><ins>тарам-парам\nпарам-парам\n</ins>", "Diff lockup test");
+        xut_equal($diff, "<del>\n</del><ins>тарам-парам\nпарам-парам\n</ins>", "Diff lockup");
         // I wish it should be, but it does not want to look forward so much
         //xut_equal($diff, "<ins>тарам-парам\nпарам-парам</ins>\n", "Diff lockup test");
 
         $diff = xcms_diff_html("", "тарам-парам\nпарам-парам\n", false);
         xut_equal($diff, "<ins>тарам-парам\nпарам-парам\n</ins>", "Another multiline insertion");
+
+        $diff = xcms_diff_html("тарам-парам", "тарам-парам zyxel\nпарам-парам\n", false);
+        xut_equal($diff, "тарам-парам<ins> zyxel\nпарам-парам\n</ins>", "Half-line multiline insertion");
+
+        // Following test covers the difference between original FineDiff behavior
+        // that assumes dot is a sentence end. We don't need such precision in levels
+        $diff = xcms_diff_html("http://vk.com?bla=value", "https://vk.com?bla=value", false);
+        xut_equal($diff, "<del>http://vk.com?bla=value</del><ins>https://vk.com?bla=value</ins>", "URL diff");
 
         $diff = xcms_diff_html("abcdefgh aaa", "xyz abcdefgh aaa\ntuv", false);
         xut_equal($diff, "<ins>xyz </ins>abcdefgh aaa<ins>\ntuv</ins>", "Multiline insertion");
