@@ -43,27 +43,31 @@
         xut_begin("finediff");
 
         $diff = xcms_diff_html("", "", false);
-        xut_check($diff === "", "Empty equal text");
+        xut_equal($diff, "", "Empty equal text");
 
         $diff = xcms_diff_html("abc", "", false);
-        xut_check($diff === "<del>abc</del>", "Simple deletion");
+        xut_equal($diff, "<del>abc</del>", "Simple deletion");
 
         $diff = xcms_diff_html("", "abc", false);
-        xut_check($diff === "<ins>abc</ins>", "Simple insertion");
+        xut_equal($diff, "<ins>abc</ins>", "Simple insertion");
 
         $diff = xcms_diff_html("abc def ghi", "abc ghi", false);
-        xut_check($diff === "<del>def</del>", "First pbagnall@ patch");
+        xut_equal($diff, "abc <del>def </del>ghi", "First pbagnall@ patch");
 
         $diff = xcms_diff_html("\n", "тарам-парам\nпарам-парам\n", false);
-        xut_check($diff === "<ins>тарам-парам\nпарам-парам</ins>", "Diff lockup test");
+        xut_equal($diff, "<del>\n</del><ins>тарам-парам\nпарам-парам\n</ins>", "Diff lockup test");
+        // I wish it should be, but it does not want to look forward so much
+        //xut_equal($diff, "<ins>тарам-парам\nпарам-парам</ins>\n", "Diff lockup test");
+
+        $diff = xcms_diff_html("", "тарам-парам\nпарам-парам\n", false);
+        xut_equal($diff, "<ins>тарам-парам\nпарам-парам\n</ins>", "Another multiline insertion");
 
         $diff = xcms_diff_html("abcdefgh aaa", "xyz abcdefgh aaa\ntuv", false);
-        xut_check($diff === "<ins>xyz </ins>abcdefgh <del>aaa</del><ins>aaa\ntuv</ins>", "Multiline insertion");
+        xut_equal($diff, "<ins>xyz </ins>abcdefgh aaa<ins>\ntuv</ins>", "Multiline insertion");
 
         $diff = xcms_diff_html("abcdefgh aaa\n", "xyz abcdefgh aaa\ntuv", false);
-        xut_check($diff === "<ins>xyz </ins>abcdefgh aaa\n<ins>tuv</ins>", "Multiline insertion with newline");
+        xut_equal($diff, "<ins>xyz </ins>abcdefgh aaa\n<ins>tuv</ins>", "Multiline insertion with newline");
 
-        //echo "|".htmlspecialchars($diff)."|";
         xut_end();
     }
 

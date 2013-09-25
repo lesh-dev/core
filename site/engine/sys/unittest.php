@@ -41,6 +41,20 @@
         xut_report($message);
     }
 
+    function xut_equal($left, $right, $message)
+    {
+        global $xut_check_success_count;
+        if ($left === $right)
+        {
+            $xut_check_success_count++;
+            return;
+        }
+
+        xut_report("$message: '<span style=\"color: #007f00;\">".
+            htmlspecialchars($left)."</span>' === '<span style=\"color: #7f0000;\">".
+            htmlspecialchars($right)."</span>' failed");
+    }
+
     function xut_finalize()
     {
         global $xut_fail_count;
