@@ -470,6 +470,13 @@ class FineDiff {
 			while ( $from_base_fragment_index < $from_segment_end ) {
 				$from_base_fragment = $from_fragments[$from_base_fragment_index];
 				$from_base_fragment_length = xu_len($from_base_fragment);
+
+				// Verify that fragment has non-zero length, otherwise this loop will hang
+				if (0 == $from_base_fragment_length) {
+					xcms_log(XLOG_ERROR, "Diff fragmentation error at index $from_base_fragment_index");
+					break;
+				}
+
 				// performance boost: cache array keys
 				if ( !isset($cached_array_keys_for_current_segment[$from_base_fragment]) ) {
 					if ( !isset($cached_array_keys[$from_base_fragment]) ) {
