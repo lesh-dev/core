@@ -97,7 +97,10 @@
                     src="<# full_design_dir #>pic/valid-html401-green.gif"
                     alt="Valid HTML 4.01 Transitional" height="31" width="88"></a-->
                 </td>
-                <td class="main-field roundBorders"><div style="position: relative;"><?php
+                <td class="main-field roundBorders">
+                    <div style="position: relative;">
+                    <# cms/edit-button #>
+                    <div id="content-header"><?php
                     $hdr = xcms_get_key_or($INFO, "header");
                     if (!strlen($hdr) ||
                         (xcms_get_key_or($INFO, "alias") == "register" &&
@@ -107,7 +110,8 @@
                     } else {?>
                         <h2><?php echo $hdr; ?></h2><?php
                     }?>
-                    <# if //!@$_GET["usr"]//cms/ #>
+                    </div>
+                    <div id="content-text"><# if //!@$_GET["usr"]//cms/ #></div>
                     <hr />
                     <div style="font-size: 8pt; text-align: center; height: 15px;">
                         <span>&copy; ФизЛЭШ, 2005&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>

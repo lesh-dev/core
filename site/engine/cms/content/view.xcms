@@ -1,10 +1,4 @@
 <?php
-    if (xcms_user()->check_rights("editor", false) || xcms_user()->check_rights("admin", false))
-    {?>
-        <a class="link-button content-edit"
-            href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'ladmin', 'page'=>$pageid)); ?>">Редактировать</a><?php
-    }
-
     $page_path = xcms_get_page_content_name($pageid);
     if (!file_exists($page_path))
     {?>
