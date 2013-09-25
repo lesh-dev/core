@@ -302,15 +302,15 @@ function xcms_keyvalue_unit_test()
     $obj["another"] = "test string";
     $obj["empty"] = "";
 
-    xut_check(1 === xcms_get_key_or($obj, "super"), "Invalid 'super' key");
-    xut_check(false === xcms_get_key_or($obj, "pupper", true), "Invalid 'pupper' key");
-    xut_check(0 === xcms_get_key_or($obj, "zero-value"), "Invalid 'zero-value' key");
-    xut_check("test string" === xcms_get_key_or($obj, "another"), "Invalid 'another' key");
-    xut_check("" === xcms_get_key_or($obj, "empty"), "Invalid 'empty' key");
-    xut_check("some" === xcms_get_key_or($obj, "empty", "some"), "Failed empty value key test");
-    xut_check("" === xcms_get_key_or($obj, "missing"), "Failed missing key test");
-    xut_check(true === xcms_get_key_or($obj, "missing-bool", true), "Failed missing bool key");
-    xut_check(false === xcms_get_key_or($obj, "pupper", true), "Failed existing bool key");
+    xut_equal(xcms_get_key_or($obj, "super"), 1, "Invalid 'super' key");
+    xut_equal(xcms_get_key_or($obj, "pupper", true), false, "Invalid 'pupper' key");
+    xut_equal(xcms_get_key_or($obj, "zero-value"), 0, "Invalid 'zero-value' key");
+    xut_equal(xcms_get_key_or($obj, "another"), "test string", "Invalid 'another' key");
+    xut_equal(xcms_get_key_or($obj, "empty"), "", "Invalid 'empty' key");
+    xut_equal(xcms_get_key_or($obj, "empty", "some"), "some", "Failed empty value key test");
+    xut_equal(xcms_get_key_or($obj, "missing"), "", "Failed missing key test");
+    xut_equal(xcms_get_key_or($obj, "missing-bool", true), true, "Failed missing bool key");
+    xut_equal(xcms_get_key_or($obj, "pupper", true), false, "Failed existing bool key");
 
     $values = array();
     $values["key1"] = " value 1\n\r";
@@ -336,7 +336,7 @@ function xcms_keyvalue_unit_test()
     {
         $cv = xcms_get_key_or($check, $key, "INVALID");
         xut_check($cv != "INVALID", "Invalid value received");
-        xut_check($value == $cv, "Values do not match");
+        xut_equal($value, $cv, "Values do not match");
     }
 
     xut_end();
