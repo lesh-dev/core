@@ -230,20 +230,23 @@
         xut_check(xcms_check_password("123@#$%^&abcABC bla\xFE\xFF"), "Check valid password");
         xut_check(!xcms_check_password("\n\taa\rbb\0\\'qqq'+\"zzz"), "Check invalid password");
 
-        xut_check(xu_len("Привет000") == 9, "Check xu_len");
-        xut_check(xu_strpos("Привет000", "т00", 0) == 5, "Check xu_strpos");
-        xut_check(xu_substr("Привет000", 3, 3) == "вет", "Check xu_substr");
+        xut_equal(xu_len("Привет000"), 9, "Check xu_len");
+        xut_equal(xu_strpos("Привет000", "т00", 0), 5, "Check xu_strpos");
+        xut_equal(xu_substr("Привет000", 3, 3), "вет", "Check xu_substr");
 
-        xut_check(xu_strspn("альфаКу", "афьл", 1) === 4, "Check xu_strspn");
-        xut_check(xu_strcspn('abcd', 'apple') === 0, "Check xu_strcspn one");
-        xut_check(xu_strcspn('abcd', 'banana') === 0, "Check xu_strcspn two");
-        xut_check(xu_strcspn('heЛЛo', 'Л') === 2, "Check xu_strcspn three");
-        xut_check(xu_strcspn('heЛЛo', 'ДworЛЛd') === 2, "Check xu_strcspn four");
+        xut_equal(xu_strspn("альфаКу", "афьл", 1), 4, "Check xu_strspn");
+        xut_equal(xu_strcspn('abcd', 'apple'), 0, "Check xu_strcspn one");
+        xut_equal(xu_strcspn('abcd', 'banana'), 0, "Check xu_strcspn two");
+        xut_equal(xu_strcspn('heЛЛo', 'Л'), 2, "Check xu_strcspn three");
+        xut_equal(xu_strcspn('heЛЛo', 'ДworЛЛd'), 2, "Check xu_strcspn four");
 
-        xut_check(xcms_wrap_long_lines("  Очень длинный текст, который надо перенести\n\n\n", 20) ===
+        xut_equal(xcms_wrap_long_lines("  Очень длинный текст, который надо перенести\n\n\n", 20),
             "Очень длинный\nтекст, который надо\nперенести", "Check xcms_wrap_long_lines");
 
-        xut_check(xcms_transliterate("Вельтищев Михаил") == "Veltischev Mihail", "Check xcms_transliterate");
+        xut_equal(xcms_wrap_long_lines("  Очень длинный текст, который надо перенести\n\nне\nсмотря\nни\nна что", 20),
+            "Очень длинный\nтекст, который надо\nперенести\n\nне\nсмотря\nни\nна что", "Check xcms_wrap_long_lines");
+
+        xut_equal(xcms_transliterate("Вельтищев Михаил"), "Veltischev Mihail", "Check xcms_transliterate");
         xut_end();
     }
 ?>
