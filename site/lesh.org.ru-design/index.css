@@ -478,14 +478,14 @@ p.grey_fond{
 
 #main p.heading{
     background-color: #D0C4A3;
-    width:450px;
-    height:20px;
+    width: 395px;
+    height: 20px;
     padding: 2px 0px 2px 7px;
     margin-top: 15px;
-    _background-color: transparent;
-    _width:300px;
-    _height:0px;
-    _padding: 0px;
+    /*_background-color: transparent;
+    _width: 300px;
+    _height: 0px;
+    _padding: 0px;*/
 }
 
 .text_left{
