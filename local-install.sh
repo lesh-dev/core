@@ -22,6 +22,8 @@ HTTPD_USER="apache"
 # database file name
 XSM_DB="fizlesh.sqlite3"
 
+DB_MODE="original"
+
 function print_usage()
 {
     echo "Install XCMS to local www root."
@@ -147,9 +149,14 @@ if [ "$DB_MODE" == "merged" ] ; then
     sudo cp $VERBOSE_COPY tools/xsm-merge/new*sqlite3 $DEST_DB
 elif [ "$DB_MODE" == "empty" ] ; then
     install_fresh_db
-elif [ "$DB_MODE" == "original" ] || [ -r "$TEMP_DB" ] ; then
-    echo "Database backup found, installing..."
-    sudo mv $TEMP_DB "$DEST_DB"
+elif [ "$DB_MODE" == "original" ] ; then
+    # if saved database exists, restore it,
+    # otherwise database stored in original content
+    # will be used
+    if [ -r "$TEMP_DB" ] ; then
+        echo "Database backup found, installing..."
+        sudo mv $TEMP_DB "$DEST_DB"
+    fi
 else
     print_usage
 fi
