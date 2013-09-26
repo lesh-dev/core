@@ -735,3 +735,58 @@ a.menuitem-auth {
     background-color: #a5b991 !important;
 }
 
+a.link-button {
+    display: inline-block;
+    background-color: rgb(189, 216, 202);
+    border-radius: 5px;
+    padding: 3px 6px;
+    text-decoration: none;
+    border: 1px solid rgb(147, 187, 160);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+    height: 16px;
+    line-height: 16px;
+}
+
+a.contlist-edit {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    padding: 2px 5px;
+    font-size: 11px;
+}
+
+div.contlist-block {
+    position: relative;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+div.contlist-block.odd {
+    background-color: rgb(211, 248, 193);
+}
+
+p.text {
+    padding-top: 0px;
+    margin-top: 6px;
+    font-size: 12px;
+}
+
+/* from news */
+.newstitle {
+    color: #2f8f4f;
+    font-family: sans-serif;
+    font-size: 11pt;
+    font-weight: bolder;
+    text-indent: 0px;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+.signature {
+    color: #000000;
+    font-size: 12px;
+    font-style: italic;
+    text-align: right;
+    margin-right: 0px;
+}
