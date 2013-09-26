@@ -32,10 +32,10 @@
 
     <div class="sidebar-right">
         <ul>
-            <li><a href="photo">Фотоальбом</a></li>
+            <li><a href="/<# web_prefix #>photo">Фотоальбом</a></li>
             <li><a href="about">О нас пишут</a></li>
-            <li><a href="people">Кто мы</a></li>
-            <li><a href="links">Ссылки</a></li>
+            <li><a href="/<# web_prefix #>people">Кто мы</a></li>
+            <li><a href="/<# web_prefix #>links">Ссылки</a></li>
             <li><a href="http://forum.fizlesh.ru">Форум</a></li>
             <li><a href="?&amp;page=index&amp;ref=ladmin">Админка</a></li>
         </ul>
@@ -52,17 +52,18 @@
 
 
     <div class="main_text">
-        <?php
+        <div id="content-header"><?php
             $hdr = xcms_get_key_or($INFO, "header");
             if (!strlen($hdr) ||
                 (xcms_get_key_or($INFO, "alias") == "register" &&
                 strlen(xcms_get_key_or($_GET, "aparam")))) {
                 // little spike: skip header display
                 // in case of special pages (XSM manager for now)
-            } else {?>
-                <h2><?php echo $hdr; ?></h2><?php
-            }?>
-            <# if //!@$_GET["usr"]//cms/ #>
+            } else
+            {?>
+                <?php echo $hdr; ?><?php
+            }?></div>
+            <div id="content-text"><# if //!@$_GET["usr"]//cms/ #></div>
     </div>
 
     <div class="text_left">

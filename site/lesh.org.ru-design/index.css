@@ -41,8 +41,18 @@ body {
     font-family: "Trebuchet MS", "Helvetica CY", "Luxi Sans", sans-serif;
 }
 
-h1, h2 {
+div#content-header {
     font-size: 18px;
+    font-weight: bold;
+    color: #4f4f4f;
+}
+
+h1 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #4f4f4f;
+    margin-top: 18px;
+    margin-bottom: 0px;
 }
 
 .indent_form a,
@@ -209,12 +219,6 @@ h1, h2 {
     line-height: 18px;
     _padding-top: 0px;
     _margin-top: -50px;
-}
-
-.main_text h1, .length_of_text h1 {
-    font-size: 18px;
-    color: black;
-    font-weight: bold;
 }
 
 .main_text p, .bottom_text p,
