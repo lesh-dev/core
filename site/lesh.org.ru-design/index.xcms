@@ -37,7 +37,8 @@
             <li><a href="/<# web_prefix #>people">Кто мы</a></li>
             <li><a href="/<# web_prefix #>links">Ссылки</a></li>
             <li><a href="http://forum.fizlesh.ru">Форум</a></li>
-            <li><a href="?&amp;page=index&amp;ref=ladmin">Админка</a></li>
+            <li><a href="/<# web_prefix #>?<?php
+                echo xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>">Админка</a></li>
         </ul>
         <img src="<# full_design_dir #>pict/green.gif" />
     </div>
@@ -69,6 +70,11 @@
     <div class="text_left">
         <div class="text_left_top">
             <p class="word_left_top">подробнее</p>
+            <!-- experimental page embedding -->
+            <p class="indent">
+            <?php $pageid = "z08Contact"; ?>
+            <# if //!@$_GET["usr"]//cms/ #>
+            </p>
             <p class="indent"> Школа проводится с 23 июля по 24 августа на базе местной сельской
                 школы, в здании которой проводятся занятия и располагаются необходимые помещения
                 (медпункт, библиотека, лаборатории, и т.п.).....<a href="">далее</a></p>
