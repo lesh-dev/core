@@ -1,0 +1,10 @@
+<?php
+    if (file_exists("INFO") && xcms_user()->check_rights("admin", false))
+    {?>
+        <pre class="site-info"><?php
+        $rel_info = xcms_get_list("INFO");
+        foreach ($rel_info as $key => $value)
+            echo "$key: <b>$value</b>".EXP_LF;
+        ?></pre><?php
+    }
+?>
