@@ -47,10 +47,10 @@ function xsm_print_course()
 
     <table summary="Зачёты по курсу <?php echo $course_id; ?>" class="ankList">
         <colgroup>
-            <col width="15%" />
-            <col width="40%" />
-            <col width="10%" />
-            <col width="15%" />
+            <col width="8%" />
+            <col width="13%" />
+            <col width="71%" />
+            <col width="8%" />
         </colgroup>
         <thead>
             <th class="ankList">Статус</th>
