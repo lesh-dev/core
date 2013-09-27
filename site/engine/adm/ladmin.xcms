@@ -56,15 +56,23 @@
         <script language="javascript" type="text/javascript">
             AddSlider('editor-help', 'show-editor-help');
         </script>
+        <?php $is_editor = xcms_user()->check_rights("editor", false); ?>
+        <?php $is_admin = xcms_user()->check_rights("admin", false); ?>
         <div style="padding-bottom: 7px;">
+            <?php if ($is_editor) {?>
             <a <?php echo xcms_href(array('mode'=>'create_page', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Подстраница</a>
-            <a <?php echo xcms_href(array('mode'=>'delete', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Удалить</a>
+            <a <?php echo xcms_href(array('mode'=>'delete', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Удалить</a><?php
+            }?>
+
             <a <?php echo xcms_href(array('mode'=>'cleanprec', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Очистить кэш</a>
             <a <?php echo xcms_href(array('mode'=>'rebuild_alias', 'ref'=>'ladmin')); ?> class="h-menu-link">Перестроить alias-ы</a>
+
+            <?php if ($is_admin) {?>
             <span class="top-menu-div">&nbsp;</span>
             <a <?php echo xcms_href(array('mode'=>'userlist', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Пользователи</a>
             <a <?php echo xcms_href(array('mode'=>'group_admin', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Группы</a>
-            <a <?php echo xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Уведомления</a>
+            <a <?php echo xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Уведомления</a><?php
+            }?>
 
             <span style="display:none;">
                 <a <?php echo xcms_href(array('mode'=>'__convert', 'page'=>$pageid, 'ref'=>'ladmin')); ?>
@@ -184,7 +192,17 @@
     }
     elseif(@$_GET["mode"]=="create_page")
         include(translate("<! cms/light_create_page_after !>"));
-    else include(translate('<! cms/light_edit_table !>'));
+    else
+    {
+        if ($is_editor)
+            include(translate('<! cms/light_edit_table !>'));
+        else
+        {?>
+            <div class="admin-widget">У вас нет прав для редактирования содержимого.<br/>
+                Обратитесь к <a href="mailto:support@fizlesh.ru">администраторам сайта</a>
+                для выдачи прав доступа</div><?php
+        }
+    }
 ?>
             </div><!-- content -->
         </div><!-- containter -->
