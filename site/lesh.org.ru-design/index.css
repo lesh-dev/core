@@ -535,7 +535,7 @@ p.grey_fond{
     vertical-align: middle;
 }
 
-.text_left img{
+img.white-leaf {
     width: 58px;
     height: 55px;
     padding-top: 20px;
@@ -566,6 +566,7 @@ p.grey_fond{
     line-height: 18px;
     margin-top: -15px\9;
     _margin-top: -2px;
+    position: relative;
 }
 
 .text_left_top , x:-moz-any-link{
@@ -613,12 +614,12 @@ p.grey_fond{
     padding-bottom: 30px; /* Для Safari*/
 }
 
-.text_left_top img{
+img.arrow {
     width: 30px;
     height: 11px;
-    float: right;
-    margin-right: -10px;
-    margin-top: -77px;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
 }
 
 .text_left_bottom{
