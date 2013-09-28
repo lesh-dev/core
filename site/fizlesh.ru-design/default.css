@@ -128,13 +128,6 @@ a.stealthLink:hover {
     color: #a24f0c;
 }
 
-.photo-name {
-    font-family: sans-serif;
-    font-size: 12pt;
-    font-weight: bolder;
-    margin-left: 2ex;
-}
-
 textarea, input {
     border: 1px solid #8faf6f;
     background-color: #eeffee;
@@ -221,13 +214,16 @@ div.contlist-block {
     position: relative;
     padding: 10px;
     border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 3px;
 }
 
 div.contlist-block.even {
-    background-color: #9ec78b;
+    background-color: #8db67a;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 div.contlist-block.odd {
-    background-color: #8db67a;
+    background-color: #9ec78b;
 }
 
