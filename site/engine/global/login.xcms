@@ -34,7 +34,7 @@
 
             $password = trim(@shell_exec("mkpasswd")).trim(@shell_exec("mkpasswd"));
             $su->su($target_login)->passwd($password);
-            $res = xcms_user_create_notify($email, $target_login, $password);
+            $res = xcms_user_password_reset_notify($email, $target_login, $password);
             if ($res)
             {
                 xcms_log(XLOG_ERROR, "[AUTH] Cannot send email to $email while resetting password for $target_login");

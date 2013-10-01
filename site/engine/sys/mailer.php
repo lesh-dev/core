@@ -32,6 +32,8 @@
     define('XMAIL_DESTMODE_TO', 'to');
     define('XMAIL_DESTMODE_CC', 'cc');
     define('XMAIL_DESTMODE_BCC', 'bcc');
+    define('XMAIL_IMMEDIATE', true);
+    define('XMAIL_DEFERRED', false);
 
     function xcms_get_notification_fields()
     {
@@ -133,9 +135,10 @@
       * @param subject Тема уведомления
       * @param mail_text Тело уведомления (в формате plain text)
       * @param mail_text_html Тело уведомления (в формате html)
-      * @param immediate Послать письмо немедленно, не складывая в очередь
+      * @param immediate Если значение равно XMAIL_IMMEDIATE, письмо будет послано немедленно.
+      *        По умолчанию равно XMAIL_DEFERRED, и письмо складывается в очередь для отправки.
       **/
-    function xcms_send_notification($mail_group, $addr_list, $prefix, $subject, $mail_text, $mail_text_html, $immediate = false)
+    function xcms_send_notification($mail_group, $addr_list, $prefix, $subject, $mail_text, $mail_text_html, $immediate = XMAIL_DEFERRED)
     {
         global $SETTINGS;
         $login = xcms_user()->login();
