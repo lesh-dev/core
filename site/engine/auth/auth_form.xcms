@@ -9,13 +9,21 @@
         padding-bottom: 3px;
         width: 600px;
         background-color: #dddcae;
+        font-family: sans-serif;
+        font-size: 12px;
     }
-    input {
+    div.auth-widget td {
+        font-family: sans-serif;
+        font-size: 12px;
+    }
+
+    div.auth-widget input {
         border: 1px solid #7f7f7f;
         padding-left: 2px;
         padding-right: 2px;
     }
-    input[type="submit"] {
+
+    div.auth-widget input[type="submit"] {
         border: 2px solid #7f7f7f;
         border-radius: 2px;
         padding-left: 5px;
