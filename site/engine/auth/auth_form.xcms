@@ -26,30 +26,36 @@
 </style>
 
 <?php
-    if(isset($AuthReason))
-    {
-        // nothing
-    }
-    else
-    {
+    if (!isset($AuthReason))
         $AuthReason = "Заполните, пожалуйста, логин и пароль.";
-    }
 ?>
 <div class="auth-widget">
     <h2><?php echo $AuthReason; ?></h2>
-        <form method="post">
-            <table>
-                <tr>
-                    <td>Логин:</td>
-                    <td><input type="text" name="auth-login" id="auth-login" /></td>
-                </tr>
-                <tr>
-                    <td>Пароль:</td>
-                    <td><input type="password" name="auth-password" id="auth-password" /></td>
-                </tr>
-            </table>
-            <input type="submit" value="Войти" name="auth-submit" id="auth-submit" />
-        </form>
+    <form method="post">
+        <table>
+            <tr>
+                <td>Логин:</td>
+                <td><input type="text" name="auth-login" id="auth-login" /></td>
+            </tr>
+            <tr>
+                <td>Пароль:</td>
+                <td><input type="password" name="auth-password" id="auth-password" /></td>
+            </tr>
+        </table>
+        <input type="submit" value="Войти" name="auth-submit" id="auth-submit" />
+    </form>
+    <form method="post">
+        <div>Забыли пароль? Укажите Ваш email:</div>
+        <table>
+            <tr>
+                <td>E-Mail:</td>
+                <td><input type="text" name="reset-email" id="reset-email" /></td>
+            </tr>
+            <tr>
+                <td>В чём измеряется сила тока?</td>
+                <td><input type="text" name="question" id="question" /></td>
+            </tr>
+        </table>
+        <input type="submit" value="Восстановить пароль" name="reset-submit" id="reset-submit" />
+    </form>
 </div>
-
-

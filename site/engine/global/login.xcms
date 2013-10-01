@@ -1,3 +1,4 @@
+<# auth/user #>
 <?php
     /**
       * Универсальный обработчик логина -- глобальный шаблон login.xcms.
@@ -19,10 +20,40 @@
             ?><# auth/auth_form #><?php
         }
     }
-    if (@$_POST)
+
+    function password_reset_handler()
     {
-        login_handler();
+        try
+        {
+            $su = xcms_user();
+            $su->set_superuser();
+            $email = xcms_get_key_or($_POST, "reset-email");
+            $target_login = $su->find_by_email($email);
+            if ($target_login === NULL)
+                throw new Exception("Не найдено пользователя с таким e-mail. ");
+
+            $password = trim(@shell_exec("mkpasswd")).trim(@shell_exec("mkpasswd"));
+            $su->su($target_login)->passwd($password);
+            $res = xcms_user_create_notify($email, $target_login, $password);
+            if ($res)
+            {
+                xcms_log(XLOG_ERROR, "[AUTH] Cannot send email to $email while resetting password for $target_login");
+                throw new Exception("Не удалось послать письмо, попробуйте через некоторое время. ".
+                    "Если проблема сохраняется, обратитесь к администрации сайта. ");
+            }
+        }
+        catch(Exception $e)
+        {
+            $AuthReason = $e->getMessage();
+            ?><# auth/auth_form #><?php
+        }
     }
+
+
+    if (strlen(xcms_get_key_or($_POST, "auth-login")))
+        login_handler();
+    elseif (strlen(xcms_get_key_or($_POST, "reset-email")))
+        password_reset_handler();
     else
     {
         $AuthReason = "Требуется аутентификация";
@@ -30,7 +61,5 @@
             $AuthReason =  $Exception->getMessage();
 
         ?><# auth/auth_form #><?php
-
     }
-
 ?>
