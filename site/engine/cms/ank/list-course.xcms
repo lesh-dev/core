@@ -31,9 +31,6 @@ function xsm_print_courses()
 {
     $db = xdb_get();
 
-    //$person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
-    //$person = xdb_get_entity_by_id('person', $person_id);
-
     $default_school_id = xsm_get_default_school();
     $school_id = xcms_get_key_or($_GET, 'school_id', $default_school_id);
 

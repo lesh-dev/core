@@ -160,18 +160,9 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
     $course_aux_param = $pers
         ? "&amp;course_teacher_id=$course_teacher_id&amp;school_id=$school_id"
         : "&amp;school_id=$school_id";
-
-    if ($pers)
-    {?>
-        <h3>Курсы</h3><?php
-        xsm_view_operations('course', 'course', 'курс', $course_aux_param);
-    }
-    else
-    {?>
-        Чтобы создать курс, зайдите в карточку нужного <b>Препода</b>, выберите нужную вам <b>Школу</b>
-        и нажимите кнопку &laquo;Добавить курс&raquo;.<br />Это временный костыль, потом мы сделаем
-        более удобно.
-    <?php } ?>
+    ?>
+    <h3>Курсы</h3><?php
+    xsm_view_operations('course', 'course', 'курс', $course_aux_param); ?>
     <table summary="Курсы" class="ankList">
         <colgroup>
             <?php if (!$pers) {?>
