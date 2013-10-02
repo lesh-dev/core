@@ -171,13 +171,15 @@ function xsm_print_person_header($db, $person, $school_id)
 
 function xsm_print_person_schools($db, $person_id, $current_school_id)
 {
-    // надо получать заранее информацию о всех предыдущих школах,
-    // но мы пока что будем отображать список из N последних
     $school_count = 5;
-    $query = "SELECT * FROM school ORDER BY school_date_start DESC LIMIT $school_count";
+    $query = "SELECT s.school_id, s.school_title, ps.member_person_id
+        FROM school s
+        LEFT JOIN person_school ps
+        ON (s.school_id = ps.school_id) AND (ps.member_person_id = '$person_id')
+        ORDER BY school_date_start DESC LIMIT $school_count";
     $school_sel = $db->query($query);
     $href_ank = "view-person&amp;person_id=$person_id&amp;school_id=".SCHOOL_ANK_ID;
-    $active_ank = (SCHOOL_ANK_ID == $current_school_id) ? "current" : "";
+    $active_ank = (SCHOOL_ANK_ID == $current_school_id) ? 'current' : '';
     ?>
     <table class="ankList"><tr>
         <td class="school-selection <?php echo $active_ank; ?>"><a
@@ -185,11 +187,16 @@ function xsm_print_person_schools($db, $person_id, $current_school_id)
         <?php
         while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
         {
-            $href = "view-person&amp;person_id=$person_id&amp;school_id=${school['school_id']}";
+            $school_id = $school['school_id'];
+            $href = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
             $title = htmlspecialchars($school['school_title']);
-            $active = ($school['school_id'] == $current_school_id) ? "current" : ""; ?>
+            $active = ($school_id == $current_school_id) ? 'current' : '';
+            $present = '';
+            if (!empty(xcms_get_key_or($school, 'member_person_id')))
+                $present = '<span class="present">&#8730;</span>';
+            ?>
             <td class="school-selection <?php echo $active; ?>"><a
-                href="<?php echo $href; ?>"><?php echo $title; ?></a></td>
+                href="<?php echo $href; ?>"><?php echo $title.$present; ?></a></td>
             <?php
         }?>
     </tr></table>

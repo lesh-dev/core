@@ -312,3 +312,8 @@ a.popup-link {
     text-decoration: none;
     border-bottom: 1px dotted;
 }
+
+span.present {
+    float: right;
+    margin-right: 3px;
+}
