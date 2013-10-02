@@ -6,12 +6,21 @@
         margin-bottom: 10px;
         padding-left: 5px;
         padding-right: 5px;
-        padding-bottom: 3px;
-        width: 600px;
+        padding-bottom: 6px;
+        width: 460px;
         background-color: #dddcae;
         font-family: sans-serif;
         font-size: 12px;
     }
+    div.auth-widget table {
+        table-layout: fixed;
+    }
+
+    div.auth-widget h2 {
+        margin-top: 3px;
+        margin-bottom: 2px;
+    }
+
     div.auth-widget td {
         font-family: sans-serif;
         font-size: 12px;
@@ -21,6 +30,7 @@
         border: 1px solid #7f7f7f;
         padding-left: 2px;
         padding-right: 2px;
+        width: 200px;
     }
 
     div.auth-widget input[type="submit"] {
@@ -28,7 +38,7 @@
         border-radius: 2px;
         padding-left: 5px;
         padding-right: 5px;
-        min-width: 70px;
+        min-width: 200px;
     }
 
 </style>
@@ -38,32 +48,41 @@
         $AuthReason = "Заполните, пожалуйста, логин и пароль.";
 ?>
 <div class="auth-widget">
-    <h2><?php echo $AuthReason; ?></h2>
+    <table>
+        <col width="250" />
+        <col width="210" />
+
+        <tr>
+            <td colspan="2"><h2><?php echo $AuthReason; ?></h2></td>
+        </tr>
     <form method="post">
-        <table>
-            <tr>
-                <td>Логин:</td>
-                <td><input type="text" name="auth-login" id="auth-login" /></td>
-            </tr>
-            <tr>
-                <td>Пароль:</td>
-                <td><input type="password" name="auth-password" id="auth-password" /></td>
-            </tr>
-        </table>
-        <input type="submit" value="Войти" name="auth-submit" id="auth-submit" />
+        <tr>
+            <td>Логин:</td>
+            <td><input type="text" name="auth-login" id="auth-login" /></td>
+        </tr>
+        <tr>
+            <td>Пароль:</td>
+            <td><input type="password" name="auth-password" id="auth-password" /></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td><td><input type="submit" value="Войти" name="auth-submit" id="auth-submit" /></td>
+        </tr>
     </form>
     <form method="post">
-        <div>Забыли пароль? Укажите Ваш email:</div>
-        <table>
-            <tr>
-                <td>E-Mail:</td>
-                <td><input type="text" name="reset-email" id="reset-email" /></td>
-            </tr>
-            <tr>
-                <td>В чём измеряется сила тока?</td>
-                <td><input type="text" name="question" id="question" /></td>
-            </tr>
-        </table>
-        <input type="submit" value="Восстановить пароль" name="reset-submit" id="reset-submit" />
+        <tr>
+            <td colspan="2"><h2>Забыли пароль?</h2></td>
+        </tr>
+        <tr>
+            <td>E-Mail:</td>
+            <td><input type="text" name="reset-email" id="reset-email" /></td>
+        </tr>
+        <tr>
+            <td>В чём измеряется сила тока?</td>
+            <td><input type="text" name="question" id="question" /></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td><td><input type="submit" value="Восстановить пароль" name="reset-submit" id="reset-submit" /></td>
+        </tr>
     </form>
+    </table>
 </div>

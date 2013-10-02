@@ -12,7 +12,6 @@
     <# cms/head #>
     <link rel="stylesheet" type="text/css" href="<# full_design_dir #>reset.css" />
     <link rel="stylesheet" type="text/css" href="<# full_design_dir #>index.css" />
-    <!--<link rel="stylesheet" type="text/css" href="<# full_design_dir #>news.css" />-->
 </head>
 <body>
 <div id="main">
