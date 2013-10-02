@@ -169,7 +169,7 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
             <col width="30%" /><?php
             } ?>
             <col width="40%" />
-            <col width="10%" />
+            <col width="40" />
             <col width="10%" />
             <col width="15%" />
         </colgroup>
@@ -223,7 +223,7 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
             <?php } ?>
             <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
                 echo "$course_title"; ?></a></td>
-            <td class="ankList"><?php echo $course_cycle; ?></td>
+            <td class="ankList c"><?php echo $course_cycle; ?></td>
             <td class="ankList"><?php echo $target_class; ?></td>
             <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
                 echo "Сдало <b>$exam_pass_count</b> из <b>$exam_total_count</b>"; ?></a></td>

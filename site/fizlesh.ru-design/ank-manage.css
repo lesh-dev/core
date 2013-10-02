@@ -26,6 +26,10 @@ td.ankList, th.ankList {
     text-align: left;
 }
 
+td.ankList.c {
+    text-align: center;
+}
+
 td.ankListRowTitle, th.ankList {
     background-color: #9fdf8f;
 }
