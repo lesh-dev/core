@@ -86,6 +86,30 @@ function xsm_get_person_comment_field_types()
     );
 }
 
+function xsm_get_course_fields()
+{
+    return array(
+        "course_title"=>"Название курса",
+        "target_class"=>"Уровень (диапазон классов)",
+        "school_id"=>"Школа, на которой читался курс",
+        "course_cycle"=>"Цикл, на котором читался курс",
+        "course_desc"=>"Описание",
+        "course_comment"=>"Комментарий",
+        "course_created"=>"Время создания",
+        "course_modified"=>"Последняя модификация"
+    );
+}
+
+function xsm_get_course_teachers_fields()
+{
+    return array(
+        "course_id"=>"Курс",
+        "course_teacher_id"=>"Препод курса",
+        "course_teachers_created"=>"Время создания",
+        "course_teachers_modified"=>"Последняя модификация"
+    );
+}
+
 // Exam
 function xsm_get_exam_fields()
 {

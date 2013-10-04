@@ -2,27 +2,9 @@
 <# cms/ank/style #>
 <?php
 
-$course_fields = array(
-    "course_title"=>"Название курса",
-    "target_class"=>"Уровень (диапазон классов)",
-    "school_id"=>"Школа, на которой читался курс",
-    "course_cycle"=>"Цикл, на котором читался курс",
-    "course_desc"=>"Описание",
-    "course_comment"=>"Комментарий",
-    "course_created"=>"Время создания",
-    "course_modified"=>"Последняя модификация"
-);
-
-$course_teachers_fields = array(
-    "course_id"=>"Курс",
-    "course_teacher_id"=>"Препод курса",
-    "course_teachers_created"=>"Время создания",
-    "course_teachers_modified"=>"Последняя модификация"
-);
-
 function xsm_edit_course()
 {
-    global $course_fields;
+    $course_fields = xsm_get_course_fields();
 
     $course_id = xcms_get_key_or($_GET, 'course_id', '-1'); // invalid key
     $course = xdb_get_entity_by_id('course', $course_id);
@@ -161,7 +143,7 @@ if (@$_POST["update-course"])
 {
     $school_id = xcms_get_key_or($_POST, 'school_id', '-1');
     $aux_param = xcms_url(array('school_id'=>$school_id));
-    $new_course_id = xsm_update_entity_listmode('course', 'course', 'Курс', $course_fields, $aux_param);
+    $new_course_id = xsm_update_entity_listmode('course', 'course', 'Курс', xsm_get_course_fields(), $aux_param);
     if ($_POST['course_id'] == XDB_NEW && xcms_get_key_or($_POST, 'course_teacher_id', NULL) != NULL)
     {
         $course_teachers = array(
@@ -173,7 +155,7 @@ if (@$_POST["update-course"])
             'course_teachers',
             array('course_teachers_id'=>XDB_NEW),
             $course_teachers,
-            $course_teachers_fields);
+            $xsm_get_course_teachers_fields());
     }
 }
 elseif (@$_POST["delete-course"])
