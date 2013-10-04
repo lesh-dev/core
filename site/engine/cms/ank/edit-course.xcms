@@ -56,6 +56,8 @@ function xsm_edit_course()
         "course_desc"=>"textarea"
     );
 
+    $teachers_edit_url = xcms_url(array('school_id'=>$school_id, 'course_id'=>$course_id));
+
     ?>
     <form method="post" action="edit-course"><?php
         xsm_edit_operations_listmode('course', $course_id, 'Вернуться к списку курсов',
@@ -77,6 +79,7 @@ function xsm_edit_course()
             <tr><td class="ankList">
                 <span class="ankEditField">Преподы</span>
                 <?php echo $teachers_ht; ?>
+                    <a href="edit-teachers<?php echo $teachers_edit_url; ?>">Редактировать преподов</a>
             </td></tr>
             <?php
             foreach ($course_fields as $key=>$field_title)

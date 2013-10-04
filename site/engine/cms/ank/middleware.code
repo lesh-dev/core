@@ -106,6 +106,29 @@ function xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id
 }
 
 /**
+  * Same as previous function, but returns list
+  **/
+function xsm_get_course_teachers_list($db, $course_id, $school_id)
+{
+    $teachers_query =
+        "SELECT
+        tp.first_name, tp.last_name,
+        ct.course_teachers_id, ct.course_teacher_id
+        FROM course_teachers ct, person tp WHERE
+        (ct.course_id = $course_id) AND
+        (tp.person_id = ct.course_teacher_id)
+        ORDER BY tp.last_name, tp.first_name";
+    $teachers_sel = $db->query($teachers_query);
+    $course_teachers = array();
+    while ($teacher_data = $teachers_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $course_teachers_id = $teacher_data['course_teachers_id'];
+        $course_teachers[$course_teachers_id] = $teacher_data;
+    }
+    return $course_teachers;
+}
+
+/**
   * Отдаёт список из курсов текущей школы и связанных с ними объектов.
   * @param $school_id ID школы
   **/

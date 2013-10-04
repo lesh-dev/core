@@ -1,0 +1,97 @@
+<# auth/ #admin #ank #>
+<# cms/ank/style #>
+<?php
+
+function xsm_edit_course_teachers()
+{
+
+    $course_id = xcms_get_key_or($_GET, 'course_id', '-1'); // invalid key
+    $course = xdb_get_entity_by_id('course', $course_id);
+    $school_id = $course['school_id'];
+
+    $db = xdb_get();
+    $course_teachers = xsm_get_course_teachers_list($db, $course_id, $school_id);
+
+    ?>
+    <table summary="Преподы курса" class="ankEdit">
+        <tr>
+            <td class="ankListRowTitle">Преподы курса</td>
+        </tr><?php
+
+    foreach ($course_teachers as $course_teachers_id => $teacher_data)
+    {
+        $course_teacher_id = $teacher_data['course_teacher_id'];
+        $teacher_fi = htmlspecialchars(xsm_fi($teacher_data));
+        $teacher_url = "view-person".xcms_url(array(
+            'person_id'=>$course_teacher_id,
+            'school_id'=>$school_id));
+        $teachers_ht = "<a href=\"$teacher_url\">$teacher_fi</a> ";
+
+        ?>
+        <form method="post" action="edit-course"><tr>
+            <td class="ankList"><span class="ankEditField"><?php echo $teachers_ht; ?></span>
+                <input type="submit" class="delete-button" value="Удалить" /></td>
+        </tr></form>
+        <?php
+    }
+    ?>
+
+    <form method="post" action="edit-course">
+        <tr>
+            <td class="ankList"><span class="ankEditField">Добавить препода</span><?php
+    $attr = '';
+    echo xsm_make_selector_ext('person_id', 'course_teacher_id', -1,
+        "@@last_name@ @@first_name@",
+        "SELECT
+        person_id, last_name, first_name
+        FROM person_school ps LEFT JOIN person p ON p.person_id = ps.member_person_id
+        WHERE
+        ps.school_id = $school_id AND ps.is_teacher = 'teacher'
+        ORDER BY last_name, first_name",
+        $attr);
+
+        ?>
+        <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" />
+        <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
+            </td>
+        </tr>
+    </form>
+    </table>
+    <?php
+}
+
+if (@$_POST["update-course"])
+{
+    $school_id = xcms_get_key_or($_POST, 'school_id', '-1');
+    $aux_param = xcms_url(array('school_id'=>$school_id));
+    $new_course_id = xsm_update_entity_listmode('course', 'course', 'Курс', $course_fields, $aux_param);
+    if ($_POST['course_id'] == XDB_NEW && xcms_get_key_or($_POST, 'course_teacher_id', NULL) != NULL)
+    {
+        $course_teachers = array(
+            'course_id'=>$new_course_id,
+            'course_teacher_id'=>$_POST['course_teacher_id']
+        );
+        // TODO: Add some error handling
+        $res = xdb_insert_or_update(
+            'course_teachers',
+            array('course_teachers_id'=>XDB_NEW),
+            $course_teachers,
+            $course_teachers_fields);
+    }
+}
+elseif (@$_POST["delete-course"])
+{
+    $school_id = xcms_get_key_or($_POST, 'school_id', '-1');
+    $aux_param = xcms_url(array('school_id'=>$school_id));
+    xsm_warn_delete_entity_listmode('course', 'course', 'курс', $aux_param);
+}
+elseif (@$_POST["confirm-delete-course"])
+{
+    // TODO: delete links?
+    $school_id = xcms_get_key_or($_GET, 'school_id', '-1');
+    $aux_param = xcms_url(array('school_id'=>$school_id));
+    xsm_delete_entity_listmode('course', 'course', 'Курс', $aux_param);
+}
+else
+    xsm_edit_course_teachers();
+?>

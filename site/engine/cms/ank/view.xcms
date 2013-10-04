@@ -159,6 +159,8 @@
         include(translate('<! cms/ank/view-course !>'));
     else if(@$_GET["aparam"] == "edit-course")
         include(translate('<! cms/ank/edit-course !>'));
+    else if(@$_GET["aparam"] == "edit-teachers")
+        include(translate('<! cms/ank/edit-teachers !>'));
 
     else if(@$_GET["aparam"] == "view-exam")
         include(translate('<! cms/ank/view-exam !>'));
