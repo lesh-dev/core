@@ -81,6 +81,9 @@ done
 
 # site root
 DEST="/var/www/html/$DEST_NAME"
+if [ "$( whoami )" == "mvel" ] ; then
+    DEST="/var/www/vhosts/$DEST_NAME"
+fi
 
 # fix content path
 if [ "$DEST_NAME" == "lesh.org.ru" ] ; then
