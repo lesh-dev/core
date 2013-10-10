@@ -62,12 +62,6 @@ tr.far-city td.ankList {
     background-color: #7fcfff;
 }
 
-/* ank-notes
-td.ankList.notes {
-    background-color: #85cf6f;
-}
-*/
-
 span.ankListField {
     font-weight: bold;
 }
@@ -81,6 +75,13 @@ span.ankEditField {
     display: inline-block;
     width: 20%;
     vertical-align: top;
+}
+
+span.ank-edit-item {
+    font-weight: normal;
+    display: inline-block;
+    width: 30%;
+    vertical-align: middle;
 }
 
 input.ankEdit {
@@ -221,6 +222,11 @@ input.delete-button {
     background-repeat: no-repeat;
     padding-left: 22px;
     background-position: 2px 50%;
+}
+
+input.delete-button.item {
+    margin-top: 1px;
+    margin-bottom: 1px;
 }
 
 div.delete-warning {

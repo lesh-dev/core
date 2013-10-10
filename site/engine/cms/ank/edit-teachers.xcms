@@ -30,10 +30,10 @@ function xsm_edit_course_teachers()
 
             ?>
             <form method="post" action="edit-teachers"><tr>
-                <td class="ankList"><span class="ankEditField"><?php echo $teachers_ht; ?></span>
+                <td class="ankList"><span class="ank-edit-item"><?php echo $teachers_ht; ?></span>
                     <input type="hidden" name="course_teachers_id" value="<?php echo $course_teachers_id; ?>" />
                     <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" />
-                    <input type="submit" name="delete-teacher" class="delete-button" value="Удалить" /></td>
+                    <input type="submit" name="delete-teacher" class="delete-button item" value="Удалить" /></td>
             </tr></form>
             <?php
         }
