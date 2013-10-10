@@ -15,9 +15,12 @@ function xsm_edit_course_teachers()
     $db = xdb_get();
     $course_teachers = xsm_get_course_teachers_list($db, $course_id, $school_id);
 
+    $course_title = htmlspecialchars(xcms_get_key_or($course, 'course_title'));
+    $course_href = "view-course".xcms_url(array('course_id'=>$course_id));
     ?>
     <table summary="Преподы курса" class="ankEdit">
-        <tr><td class="ankListRowTitle">Преподы курса</td></tr><?php
+        <tr><td class="ankListRowTitle">Преподы курса
+            <a href="<?php echo $course_href; ?>"><?php echo $course_title; ?></a></td></tr><?php
 
         foreach ($course_teachers as $course_teachers_id => $teacher_data)
         {
@@ -36,11 +39,9 @@ function xsm_edit_course_teachers()
                     <input type="submit" name="delete-teacher" class="delete-button item" value="Удалить" /></td>
             </tr></form>
             <?php
-        }
-    ?>
-
+        }?>
         <form method="post" action="edit-teachers">
-        <tr><td class="ankList"><span class="ankEditField">Добавить препода</span><?php
+        <tr><td class="ankList"><span class="ank-edit-item action">Добавить препода</span><?php
             $attr = '';
             echo xsm_make_selector_ext('person_id', 'course_teacher_id', -1,
                 "@@last_name@ @@first_name@",

@@ -84,6 +84,10 @@ span.ank-edit-item {
     vertical-align: middle;
 }
 
+span.ank-edit-item.action {
+    font-weight: bold;
+}
+
 input.ankEdit {
     width: 75%;
 }
