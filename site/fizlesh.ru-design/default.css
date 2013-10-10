@@ -7,10 +7,12 @@ body {
     background-image: url("pic/cells.png");
     font-family: Tahoma, Verdana, Arial, sans-serif;
     font-size: 10pt;
+    color: #203720;
 }
 
 table {
     font-size: 10pt;
+    color: #203720;
 }
 
 div.monospace-outer {
@@ -54,6 +56,7 @@ a img {
 }
 
 .main-field {
+    background-image: none;
     background-color: #9ec78b;
     vertical-align: top;
     padding: 20px;
