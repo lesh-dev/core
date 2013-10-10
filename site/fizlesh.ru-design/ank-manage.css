@@ -77,6 +77,10 @@ span.ankEditField {
     vertical-align: top;
 }
 
+span.ankEditField.mid {
+    vertical-align: middle;
+}
+
 span.ank-edit-item {
     font-weight: normal;
     display: inline-block;
@@ -113,6 +117,10 @@ table.ankEdit {
     table-layout: fixed;
     border: 0px solid #8faf6f;
     font-size: 9pt;
+}
+
+a.link-button.ank {
+    vertical-align: middle;
 }
 
 /* forest status */

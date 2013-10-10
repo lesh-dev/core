@@ -77,9 +77,10 @@ function xsm_edit_course()
                 <td class="ankListRowTitle">Курс</td>
             </tr>
             <tr><td class="ankList">
-                <span class="ankEditField">Преподы</span>
+                <span class="ankEditField mid">Преподы</span>
                 <?php echo $teachers_ht; ?>
-                    <a href="edit-teachers<?php echo $teachers_edit_url; ?>">Редактировать преподов</a>
+                <a class="link-button ank" href="edit-teachers<?php
+                    echo $teachers_edit_url; ?>">Редактировать преподов</a>
             </td></tr>
             <?php
             foreach ($course_fields as $key=>$field_title)
