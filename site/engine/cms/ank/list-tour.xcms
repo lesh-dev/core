@@ -1,7 +1,6 @@
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
 <?php
-    global $show_forest_num;
     $show_forest_num = xsm_get_persistent_enum_key("list-tour", "show_forest_num", "show_forest_num");
 ?>
 <p>В этом списке показываются активные и принятые или полупринятые школьники и преподы.</p>
