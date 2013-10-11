@@ -192,7 +192,7 @@ function xsm_print_person_schools($db, $person_id, $current_school_id)
             $title = htmlspecialchars($school['school_title']);
             $active = ($school_id == $current_school_id) ? 'current' : '';
             $present = '';
-            if (!empty(xcms_get_key_or($school, 'member_person_id')))
+            if (strlen(xcms_get_key_or($school, 'member_person_id')))
                 $present = '<span class="present">&#8730;</span>';
             ?>
             <td class="school-selection <?php echo $active; ?>"><a
