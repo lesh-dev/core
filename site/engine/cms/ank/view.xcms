@@ -135,15 +135,14 @@
         include(translate('<! cms/ank/list-ank !>'));
     else if(@$_GET["aparam"] == "list-tour")
         include(translate('<! cms/ank/list-tour !>'));
-    else if(@$_GET["aparam"] == "list-members")
+    else if(@$_GET["aparam"] == "list-person")
         include(translate('<! cms/ank/list-person !>'));
     else if(@$_GET["aparam"] == "list-person-locator")
         include(translate('<! cms/ank/list-person-locator !>'));
 
     else if(@$_GET["aparam"] == "view")
         include(translate('<! cms/ank/list-person !>'));
-    else if(@$_GET["aparam"] == "list-person")
-        include(translate('<! cms/ank/list-person !>'));
+
     else if(@$_GET["aparam"] == "view-person")
         include(translate('<! cms/ank/view-person !>'));
     else if(@$_GET["aparam"] == "edit-person_school")
