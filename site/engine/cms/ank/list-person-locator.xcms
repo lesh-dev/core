@@ -1,6 +1,9 @@
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
 <?php
+    global $show_anketa_status;
+    global $show_is_teacher;
+    global $show_is_student;
     $show_anketa_status = xsm_get_persistent_enum_key("list-person-locator", "show_anketa_status", "show_anketa_status_locator");
     $show_is_teacher = xcms_get_persistent_key("list-person-locator", "show_is_teacher");
     $show_is_student = xcms_get_persistent_key("list-person-locator", "show_is_student");
