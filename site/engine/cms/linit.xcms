@@ -11,7 +11,7 @@
     if(!file_exists($page_info))
     {
         xcms_log(0, "Page info '$page_info' not found");
-        include(translate('<# 404 #>'));
+        include(translate('<! 404 !>'));
         die();
     }
     $INFO = @xcms_get_list($page_info);

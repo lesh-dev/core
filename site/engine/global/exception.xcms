@@ -4,7 +4,7 @@
         || $Exception->getCode() == XE_ACCESS_DENIED
     )
     {
-        include(translate('<# global/login #>'));
+        include(translate('<! global/login !>'));
     }
     else
     {
