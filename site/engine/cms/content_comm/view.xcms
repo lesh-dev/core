@@ -8,7 +8,6 @@
         $date = time();
         $name = @$_POST["commentator"];
         $html = @$_POST["comment"];
-        include(translate("<! bbcode b,i,u !>"));
         $name = str_replace(" ", "_", $name);
         xcms_append($commfile, EXP_LF."$date $name $html");
         echo "<h3>Успешно</h3>Комментарий добавлен. Подождите.";
