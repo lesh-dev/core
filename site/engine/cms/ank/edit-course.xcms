@@ -21,15 +21,14 @@ function xsm_edit_course()
     $teachers_ht = "";
     if ($course_id == XDB_NEW)
     {
-        // prefill teacher
+        // prefill teacher if specified
         $course_teacher_id = xcms_get_key_or($_GET, 'course_teacher_id', NULL);
-        $course['course_teacher_id'] = $course_teacher_id;// ? $course_teacher_id : NULL;
+        $course['course_teacher_id'] = $course_teacher_id;
 
         // code from common function
-        $teacher = xdb_get_entity_by_id('person', $course_teacher_id);
-        $teacher_ht = "";
         if ($course_teacher_id !== NULL)
         {
+            $teacher = xdb_get_entity_by_id('person', $course_teacher_id);
             $teacher_fi = htmlspecialchars(xsm_fi($teacher));
             $teacher_url = "view-person".xcms_url(array(
                 'person_id'=>$course_teacher_id,
@@ -77,10 +76,12 @@ function xsm_edit_course()
                 <td class="ankListRowTitle">Курс</td>
             </tr>
             <tr><td class="ankList">
-                <span class="ankEditField mid">Преподы</span>
-                <?php echo $teachers_ht; ?>
+                <span class="ankEditField mid">Преподы</span><?php
+                echo $teachers_ht;
+                if ($course_id != XDB_NEW) {?>
                 <a class="link-button ank" href="edit-teachers<?php
-                    echo $teachers_edit_url; ?>">Редактировать преподов</a>
+                    echo $teachers_edit_url; ?>">Редактировать преподов</a><?php
+                }?>
             </td></tr>
             <?php
             foreach ($course_fields as $key=>$field_title)
@@ -101,24 +102,6 @@ function xsm_edit_course()
                     <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
                         echo htmlspecialchars($value); ?></textarea><?php
                 }
-                /*
-                elseif ($key == 'course_teacher_item')
-                {
-                    $teachers = xsm_get_teacher_ids_by_item($course_teacher_item);
-                    print_r($teachers);
-                    // make selector from list
-                    //echo "Cannot render selector (not impl)";
-                    echo xsm_make_selector_ext('person_id', $key, xcms_get_key_or($course, $key, "-1"),
-                        "@@last_name@ @@first_name@",
-                        "SELECT
-                        person_id, last_name, first_name
-                        FROM person_school ps LEFT JOIN person p ON p.person_id = ps.member_person_id
-                        WHERE
-                        ps.school_id = $school_id AND ps.is_teacher = 'teacher'
-                        ORDER BY last_name, first_name",
-                        $attr);
-                }
-                */
                 elseif ($key == 'school_id')
                 {
                     echo xsm_make_selector('school', 'school_id', xcms_get_key_or($course, $key, "-1"),
@@ -131,10 +114,6 @@ function xsm_edit_course()
                 </td></tr>
                 <?php
             }?>
-            <tr><td class="ankList"><span class="ankEditField">Преподы</span><?php
-                if ($course_id != XDB_NEW)
-                    echo xsm_get_course_teachers(xdb_get(), $course_id, $school_id, 'all');
-            ?></td></tr>
         </table><?php
         xsm_edit_operations_listmode('course', $course_id, 'Вернуться к списку курсов',
             xcms_url(array('school_id'=>$school_id)));
@@ -159,7 +138,7 @@ if (@$_POST["update-course"])
             'course_teachers',
             array('course_teachers_id'=>XDB_NEW),
             $course_teachers,
-            $xsm_get_course_teachers_fields());
+            xsm_get_course_teachers_fields());
     }
 }
 elseif (@$_POST["delete-course"])
