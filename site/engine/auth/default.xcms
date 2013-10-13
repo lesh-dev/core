@@ -1,23 +1,5 @@
 <?php
-    $u = xcms_user();
-    $ag = false;
-    foreach ($argv as $k=>$v)
-    {
-        if ($k == 0) continue; // $argv[0] is a template name
-        if ($v[0] == "#")
-        {
-            // this is a group
-            if ($u->check_rights(substr($v, 1), false))
-            {
-                $ag = true;
-            }
-        }
-        else
-            if ($u->login() == $v)
-            {
-                $ag = true;
-            }
-    }
-    if (!$ag)
+    // $argv[0] is a template name
+    if (!xcms_check_rights(array_slice($argv, 1)))
         throw new Exception("Доступ запрещён. ", XE_ACCESS_DENIED);
 ?>

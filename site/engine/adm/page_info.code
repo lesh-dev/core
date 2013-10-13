@@ -30,7 +30,6 @@ function xcmst_page_info($INFO, $pageid)
                     echo htmlspecialchars(xcms_get_key_or($INFO, "menu-title", "<menu-title не задан>"));
                     $flags = "";
                     $flags .= ((xcms_get_key_or($INFO, "menu-hidden", NO) == YES) ? "[Hid]" : "[Vis]");
-                    $flags .= ((xcms_get_key_or($INFO, "menu-auth-only", NO) == YES) ? "[Auth]" : "[All]");
                     echo "<sup>$flags</sup>";
                 ?></tt></a>
             </span>

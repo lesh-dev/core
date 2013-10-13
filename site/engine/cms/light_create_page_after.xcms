@@ -35,13 +35,6 @@
     <td><input type="checkbox" <?php echo $chk_hidden; ?> name="menu-hidden"/></td>
 </tr>
 <tr>
-<?php
-    $chk_auth = xcms_checkbox_attr(NO);
-?>
-    <td>Только для авторизованных</td>
-    <td><input type="checkbox" <?php echo $chk_auth; ?> name="menu-auth-only"/></td>
-</tr>
-<tr>
     <td>Имя в меню<br><font size="-1">То есть тот текст, что появится в меню.</font></td>
     <td><input type="text" name="menu-title" /></td>
 </tr>

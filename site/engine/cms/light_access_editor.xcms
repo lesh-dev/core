@@ -40,10 +40,10 @@
     $view = explode(EXP_SP, trim($INFO["view"]));
     foreach ($view as $key=>$value)
     {
-        if($value)
+        if ($value)
         {
             $t = @$ag[$value];
-            echo "<input type=\"checkbox\" name=\"view-$value\" checked>$t ($value)<br />";
+            echo "<input type=\"checkbox\" name=\"view-$value\" checked=\"checked\">$t ($value)<br />";
         }
     }
     echo "Добавить: <select name=\"add-view\" >";

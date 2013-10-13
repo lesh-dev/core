@@ -41,13 +41,13 @@
             // don't show hidden items
             if (xcms_get_key_or($INFO, "menu-hidden") == YES)
                 return;
+            /*
             // don't show inaccessible menu items
-            if (xcms_get_key_or($INFO, "menu-auth-only") == YES)
-            {
-                if (!xcms_user()->check_rights("registered", false))
-                    return;
+            if (!xcms_user()->check_rights("registered", false))
+                return;
+            if (!xcms_user()->check_rights("all", false))
                 $aux_class .= " menuitem-auth";
-            }
+            */
         }
         // render menu item
         $html = $MENUTEMPLATES[$menu_level];

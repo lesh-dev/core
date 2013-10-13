@@ -431,4 +431,30 @@
         $u->check_session();
         return $u;
     }
+
+    /**
+      * Checks current user access to groups
+      * @param $groups groups/users ACL
+      * @return true if access granted, false otherwise
+      **/
+    function xcms_check_rights($groups)
+    {
+        $u = xcms_user();
+        $access_granted = false;
+        foreach ($groups as $k=>$v)
+        {
+            if ($v[0] == "#")
+            {
+                // this is a group
+                if ($u->check_rights(substr($v, 1), false))
+                    $access_granted = true;
+            }
+            else
+            {
+                if ($u->login() == $v)
+                    $access_granted = true;
+            }
+        }
+        return $access_granted;
+    }
 ?>
