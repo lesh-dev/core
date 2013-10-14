@@ -1,106 +1,99 @@
 <?php
 
-function xcmst_upload_image($page_prefix)
+function xcmst_upload_page_attach($page_prefix)
 {
-    $name = xcms_get_key_or($_POST, "image-target");
+    $name = xcms_get_key_or($_POST, "attach-target");
     $name = preg_replace('/[^A-Za-z.0-9_-]/', '', $name);
     if(!strlen($name))
     {
-        echo "<h3>Wrong or empty image name</h3>";
+        echo "<h3>Wrong or empty attachment name</h3>";
         return;
     }
-    $lpic = "$page_prefix/$name.pic";
-    $bpic = "$page_prefix/$name.jpg";
-    $spic = "$page_prefix/$name-preview.jpg";
-    copy($_FILES["big-image"]["tmp_name"], $bpic);
-    copy($_FILES["small-image"]["tmp_name"], $spic);
+    $attach_info = "$page_prefix/$name.attach";
+    $attach_target_name = "$page_prefix/$name";
+    copy($_FILES["attachment"]["tmp_name"], $attach_target_name);
 
-    $LIST = array();
-    $LIST["pic-name"] = "$name.jpg";
-    $LIST["preview-name"] = "$name-preview.jpg";
-    $LIST["name"] = xcms_get_key_or($_POST, "image-name");
-    $LIST["comment"] = xcms_get_key_or($_POST, "image-comment");
-    $LIST["owner"] = xcms_user()->login();
+    $info = array();
+    $info["file-name"] = $name;
+    $info["title"] = xcms_get_key_or($_POST, "attach-title");
+    $info["comment"] = xcms_get_key_or($_POST, "attach-comment");
+    $info["owner"] = xcms_user()->login();
 
-    xcms_save_list($lpic, $LIST);
+    xcms_save_list($attach_info, $info);
 }
 
-function xcmst_delete_image($page_prefix)
+function xcmst_delete_attach($page_prefix)
 {
     $name = xcms_get_key_or($_POST, "name");
     if (strlen($name) == 0)
         return;
-    $dlst = xcms_get_list($name);
+    $info = xcms_get_list($name);
     @unlink($name);
-    @unlink("$page_prefix/".$dlst["pic-name"]);
-    @unlink("$page_prefix/".$dlst["preview-name"]);
+    @unlink("$page_prefix/".$info["file-name"]);
 }
 
-function xcmst_show_images($page_prefix)
+function xcmst_show_attachments($page_prefix)
 {
     ?>
     <div class="admin-widget">
         <form enctype="multipart/form-data" method="post">
-        <h3>Добавить картинку</h3>
+        <h3>Добавить файл</h3>
         <table>
-            <input name="image-name" value="auto-uploaded" type="hidden" />
-            <input name="image-comment" value="" type="hidden" />
+            <input name="attach-comment" type="hidden" />
             <tr>
                 <td>Наименование<br/><font size="-1">Выберите имя файла &#8212; английское, без пробелов</font></td>
-                <td><input name="image-target" /></td>
+                <td><input name="attach-target" /></td>
             </tr>
             <tr>
-                <td>Картинка</td>
-                <td><input type="file" size="60" accept="image/*" name="big-image" />
-                <tr>
-                    <td>Маленькая картинка</td>
-                    <td><input size="60" type="file" accept="image/*" name="small-image" /></td>
+                <td>Комментарий<br/><font size="-1">Комментарий к загружаемому файлу</font></td>
+                <td><input name="attach-comment" /></td>
+            </tr>
+            <tr>
+                <td>Файл</td>
+                <td><input type="file" size="60" name="attachment" /></td>
             </tr>
         </table>
-        <input type="submit" name="upload-image" value="Добавить">
+        <input type="submit" name="upload-attach" value="Добавить">
         </form>
     </div>
     <?php
 
-    $piclist = glob("$page_prefix/*.pic");
-    if (empty($piclist))
+    $attach_list = glob("$page_prefix/*.attach");
+    if (!count($attach_list))
     {?>
-        <h4>Картинок пока нет</h4><?php
+        <h4>Файлов пока нет</h4><?php
         return;
     }
-    // show images
-    $pic_counter = 0;
-    foreach ($piclist as $key=>$value)
+    // show files
+    $attach_counter = 0;
+    foreach ($attach_list as $key=>$value)
     {
         $lst = xcms_get_list($value);
-        $pre_src = "$page_prefix/{$lst["preview-name"]}";
-        $pic_src = "$page_prefix/{$lst["pic-name"]}";
-        $aux_style = ($pic_counter % 2) ? "odd" : "even";
+        $attach_src = "$page_prefix/{$lst["file-name"]}";
+        $aux_style = ($attach_counter % 2) ? "odd" : "even";
         ?>
         <div class="floating-box news-block <?php echo $aux_style; ?>">
-            <a class="image-link" href="<?php echo $pic_src; ?>"><img
-                class="image-link" src="<?php echo $pre_src; ?>" /></a>
+            <a class="attach-link" href="<?php echo $attach_src; ?>"><?php echo $lst["file-name"]; ?></a>
             <div class="right-image-box">
-                <span style="padding-left: 5px;">Picture: <tt>${prefix}/<?php echo $lst["pic-name"]; ?></tt></span><br />
-                <span style="padding-left: 5px;">Preview: <tt>${prefix}<?php echo $lst["preview-name"]; ?></tt></span>
+                <span style="padding-left: 5px;">Link: <tt>${prefix}/<?php echo $lst["file-name"]; ?></tt></span><br />
                 <form method="post">
                     <input type="hidden" name="name" value="<?php echo $value; ?>" />
-                    <input type="submit" name="delete-image" value="Удалить" />
+                    <input type="submit" name="delete-attach" value="Удалить" />
                 </form>
             </div>
         </div>
         <?php
-        $pic_counter++;
+        $attach_counter++;
     }
 }
 
     $page_prefix = xcms_get_page_path();
 
-    if(@$_POST["upload-image"])
-        xcmst_upload_image($page_prefix);
+    if(@$_POST["upload-attach"])
+        xcmst_upload_page_attach($page_prefix);
 
-    if(@$_POST["delete-image"])
-        xcmst_delete_image($page_prefix);
+    if(@$_POST["delete-attach"])
+        xcmst_delete_attach($page_prefix);
 
-    xcmst_show_images($page_prefix);
+    xcmst_show_attachments($page_prefix);
 ?>
