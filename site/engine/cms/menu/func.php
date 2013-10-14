@@ -14,6 +14,9 @@
 
         $INFO = xcms_get_list($page_info);
         $show = xcms_get_key_or($options, "show");
+        $view = trim(xcms_get_key_or($INFO, "view"));
+        $acl = explode(EXP_SP, $view);
+        $access_granted = empty($view) || xcms_check_rights($acl);
         if ($show != "")
         {
             $text = "{unnamed}";
@@ -41,13 +44,15 @@
             // don't show hidden items
             if (xcms_get_key_or($INFO, "menu-hidden") == YES)
                 return;
-            /*
-            // don't show inaccessible menu items
-            if (!xcms_user()->check_rights("registered", false))
+            if (!$access_granted)
                 return;
-            if (!xcms_user()->check_rights("all", false))
+
+            $reg_only = true;
+            foreach ($acl as $acl_item)
+                if ($acl_item == "#all")
+                    $reg_only = false;
+            if ($reg_only)
                 $aux_class .= " menuitem-auth";
-            */
         }
         // render menu item
         $html = $MENUTEMPLATES[$menu_level];
