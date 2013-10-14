@@ -42,6 +42,25 @@ function xcmst_checkbox_attrs_from_post($key)
         xcms_checkbox_attr(xcms_get_key_or($_POST, $key));
 }
 
+function xcmst_print_acl($all_groups, $list, $mode)
+{
+    $acl = explode(EXP_SP, trim($list[$mode]));
+    foreach ($acl as $key=>$value)
+    {
+        if (!$value)
+            continue;
 
+        $t = xcms_get_key_or($all_groups, $value);
+        echo "<div><input type=\"checkbox\" name=\"$mode-$value\" checked=\"checked\">$t ($value)<div/>";
+    }
+    echo "Добавить: <select name=\"add-$mode\" id=\"add-$mode\">";
+    echo "<option value=\"\">(не добавлять)</option>";
+    foreach ($all_groups as $k=>$v)
+    {
+        if(!strlen($v)) continue;
+        echo "<option value=\"$k\">$v</option>";
+    }
+    echo "</select></div>";
+}
 
 ?>
