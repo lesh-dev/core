@@ -124,10 +124,8 @@
         $editfile = xcms_get_info_file_name();
         include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
     }
-    else if(@$_GET["mode"]=="img_edit" )
-    {
-        include(translate("<! cms/light_image_editor !>"));
-    }
+    else if(@$_GET["mode"]=="edit_attach")
+        include(translate("<! cms/edit_page_attachments !>"));
     else if(@$_GET["mode"]=="mailer" )
     {
         $editfile = "{$SETTINGS["datadir"]}cms/mailer.conf";

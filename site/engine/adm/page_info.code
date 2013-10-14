@@ -5,7 +5,7 @@ function xcmst_page_info($INFO, $pageid)
     $mode = xcms_get_key_or($_GET, "mode");
     if ($mode != "" &&
         $mode != "obsolete_settings" &&
-        $mode != "img_edit" &&
+        $mode != "edit_attach" &&
         $mode != "access")
         return;
     ?>
@@ -60,7 +60,7 @@ function xcmst_page_info($INFO, $pageid)
     </div><?php
     echo '
         <a'.xcms_href(array('page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Контент</a>
-        <a'.xcms_href(array('mode'=>'img_edit', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Файлы</a>
+        <a'.xcms_href(array('mode'=>'edit_attach', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Файлы</a>
         <a'.xcms_href(array('mode'=>'edit_icon', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Иконка меню</a>
         <a'.xcms_href(array('mode'=>'access', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Доступ</a>
         <a'.xcms_href(array('mode'=>'obsolete_settings', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Настройки (будет выпилено)</a>';
