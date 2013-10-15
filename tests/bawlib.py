@@ -42,6 +42,9 @@ def isString(x):
 def isBool(x):
     return type(x) == type(True)
 
+def isNumber(x):
+    return type(x) == type(0) or type(x) == type(long(0))
+
 def isEqual(x, y):
     if isString(x) and isString(y):
         return (x.strip() == y.strip())

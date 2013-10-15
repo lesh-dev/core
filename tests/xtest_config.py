@@ -22,9 +22,10 @@ class XcmsTestConfig:
         return self.m_phpErrorCheckFlag
 
     def getAnketaNamePrefix(self):
-        if self.m_testAnketaSend:
-            return "TEST"
-        else:
-            return "NO-MAIL-TEST"
+        return ""
+        #if self.m_testAnketaSend:
+            #return "TEST"
+        #else:
+            #return "NO-MAIL-TEST"
                 
     

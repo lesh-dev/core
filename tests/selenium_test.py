@@ -17,7 +17,7 @@ import random, traceback, sys
 from datetime import datetime
 import time
 
-from bawlib import isVoid, isList, isString, isEqual, getSingleOption, userSerialize
+from bawlib import isVoid, isList, isString, isNumber, isEqual, getSingleOption, userSerialize
 
 #['_unwrap_value', '_wrap_value', 'add_cookie',
 #'back', 'binary', 'capabilities', 'close', 'command_executor', 'create_web_element', 'current_window_handle',
@@ -351,6 +351,9 @@ class SeleniumTest:
     
     def setOptionValueById(self, eleId, optValue):
         try:
+            if isNumber(optValue):
+                optValue = str(optValue)
+                
             self.getElementById(eleId).find_element_by_xpath("//option[@value='" + optValue + "']").click()
         except NoSuchElementException:
             self.failTest("Cannot get drop-down (select) element by id '" + eleId + "'. ")
