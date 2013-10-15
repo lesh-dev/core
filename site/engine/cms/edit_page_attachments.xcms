@@ -3,18 +3,26 @@
 function xcmst_upload_page_attach($page_prefix)
 {
     $name = xcms_get_key_or($_POST, "attach-target");
-    $name = preg_replace('/[^A-Za-z.0-9_-]/', '', $name);
+    $name = preg_replace('/[^A-Za-z.,0-9_-]/', '', $name);
     if(!strlen($name))
-    {
-        echo "<h3>Wrong or empty attachment name</h3>";
+    {?>
+        <div class="error">Wrong or empty attachment name.
+            It can only contain following characters:
+            <b>A-Z a-z 0-9 . , _ -</b></div><?php
         return;
     }
+    // extract extension
+    $tmp_name = $_FILES["attachment"]["tmp_name"];
+    $original_name = $_FILES["attachment"]["name"];
+    $ext = preg_replace('/.*\./', '', $original_name);
+    // if nothing replaced, assume ext is empty
+    $ext = ($ext == $original_name) ? '' : ".$ext";
     $attach_info = "$page_prefix/$name.attach";
-    $attach_target_name = "$page_prefix/$name";
-    copy($_FILES["attachment"]["tmp_name"], $attach_target_name);
+    $attach_target_name = "$page_prefix/$name$ext";
+    copy($tmp_name, $attach_target_name);
 
     $info = array();
-    $info["file-name"] = $name;
+    $info["file-name"] = $name.$ext;
     $info["title"] = xcms_get_key_or($_POST, "attach-title");
     $info["comment"] = xcms_get_key_or($_POST, "attach-comment");
     $info["owner"] = xcms_user()->login();
@@ -33,29 +41,26 @@ function xcmst_delete_attach($page_prefix)
 }
 
 function xcmst_show_attachments($page_prefix)
-{
-    ?>
-    <div class="admin-widget">
-        <form enctype="multipart/form-data" method="post">
-        <h3>Добавить файл</h3>
-        <table>
-            <input name="attach-comment" type="hidden" />
-            <tr>
-                <td>Наименование<br/><font size="-1">Выберите имя файла &#8212; английское, без пробелов</font></td>
-                <td><input name="attach-target" /></td>
-            </tr>
-            <tr>
-                <td>Комментарий<br/><font size="-1">Комментарий к загружаемому файлу</font></td>
-                <td><input name="attach-comment" /></td>
-            </tr>
-            <tr>
-                <td>Файл</td>
-                <td><input type="file" size="60" name="attachment" /></td>
-            </tr>
-        </table>
-        <input type="submit" name="upload-attach" value="Добавить">
-        </form>
-    </div>
+{?>
+    <form enctype="multipart/form-data" method="post">
+    <h3>Добавить файл</h3>
+    <table>
+        <input name="attach-comment" type="hidden" />
+        <tr>
+            <td>Наименование<br/><font size="-1">Выберите имя файла &#8212; английское, без пробелов</font></td>
+            <td><input name="attach-target" /></td>
+        </tr>
+        <tr>
+            <td>Комментарий<br/><font size="-1">Комментарий к загружаемому файлу</font></td>
+            <td><input name="attach-comment" /></td>
+        </tr>
+        <tr>
+            <td>Файл</td>
+            <td><input type="file" size="60" name="attachment" /></td>
+        </tr>
+    </table>
+    <input type="submit" name="upload-attach" value="Добавить">
+    </form>
     <?php
 
     $attach_list = glob("$page_prefix/*.attach");
@@ -85,8 +90,8 @@ function xcmst_show_attachments($page_prefix)
         <?php
         $attach_counter++;
     }
-}
-
+}?>
+<div class="admin-widget"><?php
     $page_prefix = xcms_get_page_path();
 
     if(@$_POST["upload-attach"])
@@ -96,4 +101,4 @@ function xcmst_show_attachments($page_prefix)
         xcmst_delete_attach($page_prefix);
 
     xcmst_show_attachments($page_prefix);
-?>
+?></div>
