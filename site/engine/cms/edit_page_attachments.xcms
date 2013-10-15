@@ -47,7 +47,10 @@ function xcmst_show_attachments($page_prefix)
     <table>
         <input name="attach-comment" type="hidden" />
         <tr>
-            <td>Наименование<br/><font size="-1">Выберите имя файла &#8212; английское, без пробелов</font></td>
+            <td>Наименование<br/>
+                <font size="-1">Выберите имя файла &#8212; английское, без пробелов<br />
+                Пример: <i>2013-Phys.prac-Alexander.Nikolsky</i>
+                </font></td>
             <td><input name="attach-target" /></td>
         </tr>
         <tr>
