@@ -8,6 +8,6 @@ if [ -z "$repo" ] ; then
 fi
 
 sudo git init --bare "$repo"
-sudo chgrp -R lesh "$repo"
-find -type d "$repo" | xargs sudo chmod g+ws
+sudo chgrp lesh -R "$repo"
+find "$repo" -type d | xargs sudo chmod g+ws
 echo "Repo '$repo' initialized successfully"
