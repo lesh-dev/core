@@ -71,25 +71,33 @@ a img {
 p {
     font-size: 10pt;
     text-align: justify;
-    padding: 0px 0px 0px 0px;
+    padding: 0px;
     text-decoration: none;
     text-indent: 5mm;
-    margin-top: 3pt;
-    margin-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    color: #203720;
 }
+ol, ul {
+    margin-left: 5mm;
+}
+
 li {
     font-size: 10pt;
+    color: #203720;
     text-align: justify;
-    padding: 0px 0px 0px 0px;
+    padding: 0px;
     text-decoration: none;
 }
 h1 {
     font-size: 26pt;
+    color: #203720;
     font-weight: normal;
     text-indent: 0mm;
 }
 h2 {
     font-size: 15pt;
+    color: #203720;
     font-weight: bold;
     text-indent: 5mm;
     margin-top: 10pt;
@@ -97,7 +105,7 @@ h2 {
 }
 h3 {
     font: normal normal 12pt/12pt sans-serif;
-    color: #000020;
+    color: #203720;
     font-weight: bold;
     text-indent: 5mm;
     margin-top: 10pt;
@@ -105,7 +113,7 @@ h3 {
 }
 h4 {
     font: normal normal 12pt/12pt sans-serif;
-    color:#000020;
+    color: #203720;
     text-indent: 5mm;
     margin-top: 10pt;
     margin-bottom: 3pt;
