@@ -2,6 +2,7 @@
 <head>
     <title>Contest</title>
     <link href="<# full_design_dir #>/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="<# full_design_dir #>/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
     <link href="<# full_design_dir #>/contest.css" rel="stylesheet" media="screen">
 </head>
 <body>
@@ -296,11 +297,18 @@
             $wid = $line["contestant_id"];
             $works2[$wid]["p$pid"] = $line["resolution_mark"];
         }
-        echo "<h3>Непроверенные</h3><table border='1'><tr><td>Ученик<td>Класс<td>Работа";
+        echo "
+        <h3>Непроверенные</h3>
+        <table class='table table-striped table-bordered table-condensed table-hover'>
+        <thead><tr>
+            <th>Ученик</th>
+            <th>Класс</th>
+            <th>Работа</th>";
         $done = array();
         $undone = array();
         $done_balls = array();
-        foreach($probs as $value) echo "<td>".substr($value["problem_name"], 0, 3);
+        foreach($probs as $value) echo "<th>".substr($value["problem_name"], 0, 3);
+        echo "</tr></thead>\n";
         foreach($works2 as $line)
         {
             $id = @$line["contestants_id"];
@@ -328,9 +336,17 @@
         }
         foreach($undone as $l) echo "<tr>$l";
         echo "</table>";
-        echo "<h3>Проверенные</h3><table border='1'><tr><td>№<td>Ученик<td>Класс<td>Работа";
-        foreach($probs as $value) echo "<td>".substr($value["problem_name"], 0, 3);
-        echo "<td>Итоговый балл";
+
+        echo "
+        <h3>Проверенные</h3>
+        <table class='table table-striped table-bordered table-condensed table-hover'>
+        <thead>
+            <th>№</th>
+            <th>Ученик</th>
+            <th>Класс</th>
+            <th>Работа</th>";
+        foreach($probs as $value) echo "<th>".substr($value["problem_name"], 0, 3)."</th>";
+        echo "<th colspan='2'>Итоговый балл</th></thead>";
         rsort($done_balls);
         $i=1;
         foreach($done_balls as $id)
