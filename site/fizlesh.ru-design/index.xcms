@@ -64,6 +64,10 @@
 
                         include(translate('<a href="/<# web_prefix #>register/list-course'.
                             '" class="menu-item menu-sys">Курсы</a>'));
+
+                        include(translate('<a href="/<# web_prefix #>?'.
+                            xcms_url(array('ref'=>'contest')).
+                            '" class="menu-item menu-sys">Проверка олимпиады</a>'));
                     }
 
                     if (xcms_user()->check_rights("registered", false))
