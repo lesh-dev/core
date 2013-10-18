@@ -18,6 +18,7 @@ def grab_director(city, school_num, redir_url = None):
         return None
 
     if city:
+        city = city.replace(u'г.', '').strip()
         url = 'http://www.proshkolu.ru/org/' + city + '-' + school_num + '/'
     else:
         url = redir_url
@@ -45,14 +46,12 @@ def grab_director(city, school_num, redir_url = None):
     res = boss_re.search(contents)
     if res:
         boss = res.group(1).decode('cp1251')
-        #print boss
         return boss
     else:
-        #print ' ### BOSS NOT FOUND'
         return None
 
 
-def grab_director_schoolup(city, school_num, redir_url = None):
+def grab_director_schoolup(city, school_num):
     """
     Extract school head name by given data
     Supports schoolup.ru domain only
@@ -60,11 +59,12 @@ def grab_director_schoolup(city, school_num, redir_url = None):
     if school_num and not re.match('[0-9]+', school_num):
         return None
 
-    if city:
-        url = 'http://www.schoolup.ru/%D0%9F%D0%BE%D0%B8%D1%81%D0%BA/' \
-            + school_num + '%20' + urllib.quote(city.encode('utf-8'))
-    else:
-        url = redir_url
+    if not city:
+        raise Exception("City not set. ")
+
+    city = city.replace(u'г.', '').strip()
+    url = 'http://www.schoolup.ru/%D0%9F%D0%BE%D0%B8%D1%81%D0%BA/' \
+        + school_num + '%20' + urllib.quote(city.encode('utf-8'))
 
     school_link_re = re.compile(u'href="(.+?)" title="')
     serp_page = urllib.urlopen(url)
@@ -78,7 +78,14 @@ def grab_director_schoolup(city, school_num, redir_url = None):
         school_url = 'http://www.schoolup.ru' + match
         school_page = urllib.urlopen(school_url)
         school_contents = school_page.read().decode('utf-8')
-        if not u'Средняя' in school_contents:
+
+        if not city in school_contents:
+            print 'CITY not found'
+            continue
+
+        if not u'СРЕДНЯЯ' in school_contents and \
+            not u'Гимназия' in school_contents and \
+            not u'Лицей' in school_contents:
             continue
 
         boss_re = re.compile(u'Директор школы:</strong><span>(.*?)</span>')
