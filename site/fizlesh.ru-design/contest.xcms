@@ -286,19 +286,20 @@
 
 <div id="container">
 <?php
+    $FILTER = "( contest_year = \"$CONTEST_CURRENT_YEAR\" )";
     $mode = @$_GET["mode"];
     if ($mode == "problems")
     {
-        echo ctx_show_tasty_list("problems", NULL, NULL,
+        echo ctx_show_tasty_list("problems", NULL, $FILTER,
             "<b>Задача <a href='{#view}'>{problem_name}</a></b>, проверяют: {people}<br />");
         echo "<a href='?ref=$ref&amp;mode=edit&amp;table=problems'>Добавить еще одну задачу</a><br/>";
     }
 
     if ($mode == "works")
     {
-        $works = xdb_get_table("contestants", NULL, NULL);
-        $sols = xdb_get_table("solutions", NULL, NULL);
-        $probs = xdb_get_table("problems", NULL, NULL);
+        $works = xdb_get_table("contestants", NULL, $FILTER);
+        $sols = xdb_get_table("solutions", NULL, $FILTER);
+        $probs = xdb_get_table("problems", NULL, $FILTER);
         $works2 = array();
         foreach($works as $work)
         {
@@ -419,8 +420,8 @@
         if ($table == "contestants")
         {
             echo '<ul class="nav nav-pills">';
-            $problems_table = xdb_get_table("problems", NULL, NULL);
-            $solutions_table = xdb_get_table("solutions", NULL, NULL);
+            $problems_table = xdb_get_table("problems", NULL, $FILTER);
+            $solutions_table = xdb_get_table("solutions", NULL, $FILTER);
             if (!@$_GET["pid"]) $activeness = "class='active'";
             else $activeness = "";
             echo "<li $activeness ><a
