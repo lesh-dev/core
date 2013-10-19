@@ -10,7 +10,7 @@
     <script src="<# full_design_dir #>/bootstrap/js/bootstrap.min.js"></script>
 <?php
     require_once("$engine_dir/sys/db.php");
-    $current_year = "2013";
+    $CONTEST_CURRENT_YEAR = "2013";
 
     function ctx_create_structure()
     {
@@ -102,7 +102,7 @@
 
     function ctx_custom_form($table_name, $pk, $item_template)
     {
-        global $CTX_META, $content_dir;
+        global $CTX_META, $content_dir, $CONTEST_CURRENT_YEAR;
         $ans = "";
         if(@$_POST["ctx_custom_$table_name"])
         {
@@ -122,6 +122,7 @@
             }
             $pkv = $values["$table_name"."_id"];
             unset($values["$table_name"."_id"]);
+            $values["contest_year"] = $CONTEST_CURRENT_YEAR; // year sharding
             xdb_insert_or_update($table_name, array("$table_name"."_id" => $pkv), $values, $values);
             $ans .= "Запись добавлена. ";
             if($return)
@@ -145,7 +146,7 @@
 
     function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid="x", $defvalues=array())
     {
-        global $CTX_META, $content_dir;
+        global $CTX_META, $content_dir, $CONTEST_CURRENT_YEAR;
         $show_form = true;
         if(@$_POST["ctx_add_or_edit_form_$table_name"."_$fid"])
         {
@@ -171,6 +172,7 @@
             }
             $pkv = $values["$table_name"."_id"];
             unset($values["$table_name"."_id"]);
+            $values["contest_year"] = $CONTEST_CURRENT_YEAR; // year sharding
             xdb_insert_or_update($table_name, array("$table_name"."_id" => $pkv), $values, $values);
             if($return == "stay")
                 $show_form = true;
@@ -393,7 +395,7 @@
         {
             $table = @$_GET["table"];
             $id = @$_GET["id"];
-            xdb_get_write()->exec("DELETE FROM $table WHERE ".$table."_id = '$id';");
+            xdb_get_write()->exec("DELETE FROM $table WHERE ${table}_id = '$id';");
         }
         echo "<h3>Запрос на удаление</h3>";
         echo "<h1>СТОЙ!!! ПОДУМАЙ, ЧТО ТЫ ДЕЛАЕШЬ!!!!</h1>";
