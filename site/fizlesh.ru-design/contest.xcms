@@ -131,14 +131,16 @@
         else
         {
 
-            $ans .= "<form enctype='multipart/form-data'  method=\"POST\"><input type='hidden' name='MAX_FILE_SIZE' value='15000000' />";
+            $ans .= "<form enctype='multipart/form-data'
+                method=\"POST\"><input type='hidden' name='MAX_FILE_SIZE' value='15000000' />";
 
             $values = xdb_get_entity_by_id($table_name, $pk);
             foreach($values as $k=>$v)
                 $item_template = str_replace("{".$k."}", $v, $item_template);
             $item_template = str_replace(
                 "{#submit}",
-                "<input class='btn btn-primary' type='submit' name='ctx_add_or_edit_form_$table_name' value='Добавить / изменить' />",
+                "<input class='btn btn-primary' type='submit'
+                    name='ctx_add_or_edit_form_$table_name' value='Добавить / Изменить' />",
                 $item_template);
             $ans .= "</form>";
         }
@@ -273,7 +275,7 @@
 ?>
 <div class="navbar navbar-inverse">
     <div class="navbar-inner">
-        <a class="brand" href="?ref=contest">Проверка олимпиады</a>
+        <a class="brand" href="?ref=contest">Проверка олимпиады &mdash; <?php echo $CONTEST_CURRENT_YEAR; ?></a>
         <ul class="nav">
             <li><a href="?ref=contest&amp;mode=problems" >Список задач</a></li>
             <li><a href="?ref=contest&amp;mode=works" >Список работ</a></li>
@@ -322,27 +324,29 @@
         $done = array();
         $undone = array();
         $done_balls = array();
-        foreach($probs as $value) echo "<th>".substr($value["problem_name"], 0, 3);
+        foreach ($probs as $value)
+            echo "<th>".xu_substr($value["problem_name"], 0, 2);
         echo "</tr></thead>\n";
         foreach($works2 as $line)
         {
             $id = @$line["contestants_id"];
             if (!$id) continue;
             $ans = "";
-            $ans .= "<td><a href='?ref=$ref&mode=view&table=contestants&id=$id'>{$line['name']}</a><td>{$line['level']}<td><a href='{$line['work']}'>Скачать</a>";
-            $isDone = true;
+            $ans .= "<td><a href='?ref=$ref&mode=view&table=contestants&id=$id'>{$line['name']}</a>
+                <td>{$line['level']}<td><a href='{$line['work']}'>Скачать</a>";
+            $is_done = true;
             $sum = 0;
-            foreach($probs as $value)
+            foreach ($probs as $value)
             {
                 $ans .= "<td>";
                 $val = @$line["p".$value["problems_id"]];
-                if(!$val) { $val = "???"; $isDone = false;}
+                if(!$val) { $val = "???"; $is_done = false;}
                 $ans .= $val;
                 $sum += (int)$val;
             }
-            if($isDone)$ans .= "<td>$sum";
+            if ($is_done) $ans .= "<td>$sum";
             $ans .= "<td><a href='?ref=$ref&mode=delete&table=contestants&id=$id'>Удалить</a>";
-            if($isDone)
+            if ($is_done)
             {
                 @$done[$sum][]= $ans;
                 $done_balls[$sum] = $sum;
@@ -360,7 +364,8 @@
             <th>Ученик</th>
             <th>Класс</th>
             <th>Работа</th>";
-        foreach($probs as $value) echo "<th>".substr($value["problem_name"], 0, 3)."</th>";
+        foreach ($probs as $value)
+            echo "<th>".xu_substr($value["problem_name"], 0, 2)."</th>";
         echo "<th colspan='2'>Итоговый балл</th></thead>";
         rsort($done_balls);
         $i=1;
