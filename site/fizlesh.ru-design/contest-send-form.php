@@ -24,16 +24,19 @@
       echo "<font color=\"red\">Ошибка отправки решения.</font>";
     else {
       @mkdir("$content_dir/contest/");
-      $folder = "$content_dir/contest/".mktime();
+      $folder = "$content_dir/contest/".time();
       mkdir("$folder");
       $error = false;
-      if(!copy($tmp_name, $folder."/".$file_name)) $error = true;
-      $f = fopen("$folder/config.ini", "w");
-      fputs($f,"sender : ".@$_SERVER["REMOTE_ADDR"]. "(".@$_SERVER["REMOTE_HOST"].")\n");
-      fputs($f,"date : ".mktime()."\n");
-      fputs($f,"attachment : $file_name\n");
-      fputs($f,"mail : ${_POST['mail']}\n");
-      fclose($f);
+      if(!copy($tmp_name, "$folder/$file_name"))
+        $error = true;
+
+      $data = array(
+        "sender" => @$_SERVER["REMOTE_ADDR"]." (".@$_SERVER["REMOTE_HOST"].")",
+        "date" => time(),
+        "attachment" => $file_name,
+        "mail" => $_POST["mail"]
+      );
+      xcms_save_list("$folder/config.ini", $data);
 
       if ($error)
         echo "<font color=\"red\">Ошибка отправки решения.</font>";
@@ -51,8 +54,7 @@
 
     }
   }
-?>
-<?php if (!$need_send) { ?>
+  if (!$need_send) { ?>
 
 <p>
   Решение должно представлять из себя архив не более чем 5~МБ.
@@ -76,8 +78,8 @@
 <form enctype="multipart/form-data" method="post">
   <input type="hidden" name="MAX_FILE_SIZE" value="6000000">
   <table>
-    <tr><td>Архив с решением:</td><td><input name="solution" type="file" /></td></tr>
-    <tr><td>Электронная почта:</td><td><input name="mail" type="input"/></td></tr>
+    <tr><td>Архив с решением:</td><td><input name="solution" type="file"/></td></tr>
+    <tr><td>Электронная почта:</td><td><input name="mail" type="text"/></td></tr>
   </table>
   <input type="submit" name="send-contest" value="Отправить" />
 </form>
