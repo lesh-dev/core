@@ -69,7 +69,7 @@
         "contestants_id" => array("name"=>"", "type"=>"pk")
         ,"name" => array("name"=>"Ф.И.О. ученика", "type"=>"text")
         ,"mail" => array("name"=>"Электропочта", "type"=>"text")
-        ,"phone" => array("name"=>"Телефон (и др. конакты)", "type"=>"text")
+        ,"phone" => array("name"=>"Телефон (и др. контакты)", "type"=>"text")
         ,"parents" => array("name"=>"Родители", "type"=>"text")
         ,"address" => array("name"=>"Адрес проживания", "type"=>"text")
         ,"school" => array("name"=>"Школа", "type"=>"text")
@@ -178,11 +178,13 @@
 
         if ($show_form)
         {
-            echo "<form enctype='multipart/form-data'  method=\"POST\"><input type='hidden' name='MAX_FILE_SIZE' value='15000000' />";
+            echo "<form enctype='multipart/form-data' method=\"POST\">
+                <input type='hidden' name='MAX_FILE_SIZE' value='15000000' />";
             echo "<table>\n";
             $values = array();
             if($pk !== NULL)
-            $values = xdb_get_entity_by_id($table_name, $pk);
+                $values = xdb_get_entity_by_id($table_name, $pk);
+
             foreach($CTX_META[$table_name] as $id=>$arr)
             {
                 $name = $arr["name"];
@@ -198,16 +200,19 @@
                     }
                     if($type == "text")
                     {
-                        echo "<tr><td>$name</td><td><input name='$id' value='{$value}'/></td>\n";
+                        echo "<tr><td>$name</td>
+                            <td><input type='text' placeholder='$name' name='$id' value='{$value}'/></td>\n";
                     }
                     if($type == "file")
                     {
-                        echo "<tr><td>$name</td><td><input name='$id' type=\"file\" value=\"$value\"/></td>\n";
+                        echo "<tr><td>$name</td>
+                            <td><input name='$id' type=\"file\" value=\"$value\"/></td>\n";
                     }
                     if($type == "large")
                     {
-                        echo "<tr><td colspan=2>$name:</td>";
-                        echo "<tr><td colspan=2><textarea class='field span12' rows=10 name='$id'>$value</textarea></td>\n";
+                        echo "<tr><td colspan='2'>$name:</td>
+                            <tr><td colspan='2'>
+                                <textarea class='field span12' rows='10' name='$id'>$value</textarea></td>\n";
                     }
                 }
                 if($operation == "view")
@@ -268,7 +273,7 @@
     </div>
 </div>
 
-<div class="SiteBody">
+<div class="site-body">
 
 <div id="container">
 <?php
