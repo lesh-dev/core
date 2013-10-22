@@ -19,7 +19,7 @@ class XcmsVersionCheck(SeleniumTest):
 		# frontend 
 		feVerXpath = "//span[@class='site-version']"
 		self.assertTextPresent(feVerXpath, "rev.");
-		siteVersion = self.getElementContent(feVerXpath);
+		siteVersion = self.getElementText(feVerXpath);
 		print "XCMS version: ", siteVersion
 		
 		# master-2.1 rev. 848
@@ -37,7 +37,7 @@ class XcmsVersionCheck(SeleniumTest):
 		# backend
 		beVerXpath = "//pre[@class='site-info']"
 		self.assertTextPresent(beVerXpath, "rev.");
-		cpVersion = self.getElementContent(beVerXpath);
+		cpVersion = self.getElementText(beVerXpath);
 		print "XCMS version in CP: ", cpVersion
 		m = re.search(versionRegexp, cpVersion)
 		if not m:
