@@ -335,3 +335,11 @@ span.present {
     float: right;
     margin-right: 3px;
 }
+
+col.id {
+    width: 35px;
+}
+
+col.ank-status {
+    width: 90px;
+}

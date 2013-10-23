@@ -69,7 +69,7 @@ function xsm_show_all_person_list()
 
     $query = "SELECT ".
         "p.person_id, p.last_name, p.first_name, ".
-        "p.school, p.school_city, ".
+        "p.school, p.school_city, p.current_class, ".
         "p.phone, p.cellular, p.anketa_status, p.is_student, p.is_teacher ".
         "FROM person p";
 
@@ -85,14 +85,16 @@ function xsm_show_all_person_list()
     ?>
     <table summary="Участники" class="ankList">
         <colgroup>
-            <col width="30px" />
+            <col width="30" class="id" />
             <col width="30%" />
-            <col width="35%" />
-            <col width="20%" />
+            <col width="15%" />
+            <col width="55%" />
+            <col width="90" class="ank-status" />
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
             <th class="ankList">Фамилия, имя</th>
+            <th class="ankList">Кл.</th>
             <th class="ankList">Контакты</th>
             <th class="ankList">Info</th>
         </thead>
@@ -110,8 +112,7 @@ function xsm_show_all_person_list()
             "ps.is_teacher, ps.is_student, ps.curatorship, ps. p.person_id, p.last_name, p.first_name, p.phone, p.cellular, p.anketa_status ".
             "FROM person p";*/
 
-        // класс на данной школе
-        //$current_class = htmlspecialchars($person["current_class"]);
+        $current_class = htmlspecialchars($person["current_class"]);
 
         $phone = htmlspecialchars($person["phone"]);
         $cellular = htmlspecialchars($person["cellular"]);
@@ -132,12 +133,14 @@ function xsm_show_all_person_list()
         $hr_teacher = ($is_teacher == "teacher" ? "Препод, " : "");
         $hr_student = ($is_student == "student" ? "Школьник, " : "");
         */
-        $row_class = ($is_teacher == "teacher" ? "teacher" : "");
+        $row_class = xsm_get_city_class($school_city);
+        $row_class .= " ".($is_teacher == "teacher" ? "teacher" : "");
         ?>
         <tr class="<?php echo $row_class; ?>">
             <td class="ankList "><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
             <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"><?php
                 echo $fi; ?></a></td>
+            <td class="ankList"><?php echo $current_class; ?></td>
             <td class="ankList"><?php
                 echo $cellular;
                 if ($cellular && $phone)
