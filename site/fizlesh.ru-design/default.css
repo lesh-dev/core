@@ -5,7 +5,7 @@ html {
 body {
     background-color: #c0d2ab;
     background-image: url("pic/cells.png");
-    font-family: Tahoma, Verdana, Arial, sans-serif;
+    font-family: Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
     font-size: 10pt;
     color: #203720;
 }
@@ -104,7 +104,7 @@ h2 {
     margin-bottom: 3pt;
 }
 h3 {
-    font: normal normal 12pt/12pt sans-serif;
+    font: normal normal 12pt/12pt Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
     color: #203720;
     font-weight: bold;
     text-indent: 5mm;
@@ -112,7 +112,7 @@ h3 {
     margin-bottom: 3pt;
 }
 h4 {
-    font: normal normal 12pt/12pt sans-serif;
+    font: normal normal 12pt/12pt Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
     color: #203720;
     text-indent: 5mm;
     margin-top: 10pt;

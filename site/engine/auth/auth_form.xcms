@@ -9,7 +9,7 @@
         padding-bottom: 6px;
         width: 460px;
         background-color: #dddcae;
-        font-family: sans-serif;
+        font-family: Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
         font-size: 12px;
     }
     div.auth-widget table {
@@ -22,7 +22,7 @@
     }
 
     div.auth-widget td {
-        font-family: sans-serif;
+        font-family: Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
         font-size: 12px;
     }
 
