@@ -69,7 +69,7 @@
         ,"problem_name" => array("name"=>"Название задачи", "type"=>"text")
         ,"people" => array("name"=>"Проверяющие", "type"=>"text")
         ,"problem_html" => array("name"=>"Текст задачи", "type"=>"large")
-        ,"criteria" => array("name"=>"Критетий", "type"=>"large")
+        ,"criteria" => array("name"=>"Критерий", "type"=>"large")
     );
 
     $CTX_META["contestants"] = array(
