@@ -186,7 +186,10 @@
         {
             echo "<form enctype='multipart/form-data' method=\"POST\">
                 <input type='hidden' name='MAX_FILE_SIZE' value='15000000' />";
-            echo "<table>\n";
+            $cls = "table-condensed";
+            if ($operation == "view")
+                $cls .= " table table-bordered table-hover";
+            echo "<table class='$cls'>\n";
             $values = array();
             if($pk !== NULL)
                 $values = xdb_get_entity_by_id($table_name, $pk);
@@ -206,7 +209,7 @@
                     }
                     if($type == "text")
                     {
-                        echo "<tr><td>$name</td>
+                        echo "<tr><td class='font-wieght: bold;'>$name</td>
                             <td><input type='text' placeholder='$name' name='$id' value='{$value}'/></td>\n";
                     }
                     if($type == "file")
@@ -229,15 +232,15 @@
                     }
                     if($type == "file")
                     {
-                        echo "<tr><td>$name</td><td><a class='btn btn-success' href='$value'>Скачать</a></td>\n";
+                        echo "<tr><th>$name</th><td><a class='btn btn-success' href='$value'>Скачать</a></td>\n";
                     }
                     if($type == "text")
                     {
-                        echo "<tr><td>$name</td><td>$value</td>\n";
+                        echo "<tr><th>$name</th><td>$value</td>\n";
                     }
                     if($type == "large")
                     {
-                        echo "<tr><td colspan=2>$name:</td>";
+                        echo "<tr><th colspan=2>$name:</th>";
                         echo "<tr><td colspan=2>$value</td>\n";
                     }
                 }
