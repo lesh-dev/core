@@ -394,11 +394,10 @@ class SeleniumTest:
         self.logAdd("check-value:fail, element id: '" + eleId + "', expected: " + userSerialize(text) + ", actual: " + userSerialize(eleValue) + ". ")
         return False
 
-    # checkElementContentById
     def checkElementTextById(self, eleId, text):
         self.checkEmptyParam(eleId, "checkElementTextById")
         self.addAction("check-text", "element id: '" + eleId + "', expected: " + userSerialize(text) + ". ")
-        eleText = self.getElementById(eleId).text
+        eleText = self.getElementTextById(eleId)
         self.logAdd("checkElementTextById: current element '" + eleId + "', text is " + userSerialize(eleText) + ". ")
         if isEqual(eleText, text):
             self.logAdd("check-text:ok, element id: '" + eleId + "', expected: " + userSerialize(text) + "'. ")
@@ -410,7 +409,7 @@ class SeleniumTest:
     def checkElementSubTextById(self, eleId, text):
         self.checkEmptyParam(eleId, "checkElementSubTextById")
         self.addAction("check-text", "element id: '" + eleId + "', expected: " + userSerialize(text) + ". ")
-        eleText = self.getElementById(eleId).text
+        eleText = self.getElementTextById(eleId)
         self.logAdd("checkElementSubTextById: current element '" + eleId + "', text is " + userSerialize(eleText) + ". ")
         if text in eleText:
             self.logAdd("check-subtext:ok, element id: '" + eleId + "', expected: " + userSerialize(text) + ". ")
@@ -436,13 +435,13 @@ class SeleniumTest:
         self.logAdd("check-value:fail, element name: '" + name + "', expected: " + userSerialize(text) + ", actual: " + userSerialize(eleText) + ". ")
         return False
 
-    def assertElementTextById(self, eleId, text):
+    def assertElementTextById(self, eleId, text, reason = ""):
         if not self.checkElementTextById(eleId, text):
-            self.failTest("Element with id '" + eleId + "' text does not match expected: " + userSerialize(text) + ". ")
+            self.failTest("Element with id '" + eleId + "' text does not match expected: " + userSerialize(text) + ". " + self.displayReason(reason))
 
-    def assertElementValueById(self, eleId, text):
+    def assertElementValueById(self, eleId, text, reason = ""):
         if not self.checkElementValueById(eleId, text):
-            self.failTest("Element with id '" + eleId + "' value does not match expected: " + userSerialize(text) + ". ")
+            self.failTest("Element with id '" + eleId + "' value does not match expected: " + userSerialize(text) + ". " + self.displayReason(reason))
 
     def assertElementValueByName(self, name, text):
         if not self.checkElementValueByName(name, text):
@@ -463,12 +462,15 @@ class SeleniumTest:
         if self.m_checkErrors:
             self.assertPhpErrors();
     
-    # getElementText
-    def getElementContent(self, xpath):
+    def getElementText(self, xpath):
         try:
             return self.m_driver.find_element_by_xpath(xpath).text
         except NoSuchElementException:
-            self.failTest("getElementContent does not found xpath " + userSerialize(xpath) + ". ")
+            self.failTest("getElementText does not found xpath " + userSerialize(xpath) + ". ")
+    
+    def getElementTextById(self, eleId):
+        self.checkEmptyParam(eleId, "getElementTextById")
+        return self.getElementById(eleId).text
 
     # getPageTitle
     def getPageTitle(self):
