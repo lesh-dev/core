@@ -36,10 +36,14 @@ function xcmst_input_attrs_from_user($user, $key, $read_only = false, $placehold
         htmlspecialchars($user->param($key))."\"";
 }
 
-function xcmst_checkbox_attrs_from_post($key)
+function xcmst_checkbox_attrs_from_post($key, $def_value = NO)
 {
+    $value = $def_value;
+    if (array_key_exists($key, $_POST))
+        $value = $_POST[$key];
+
     echo "id=\"$key-checkbox\" name=\"$key\" ".
-        xcms_checkbox_attr(xcms_get_key_or($_POST, $key));
+        xcms_checkbox_attr($value);
 }
 
 function xcmst_print_acl($all_groups, $list, $mode)
