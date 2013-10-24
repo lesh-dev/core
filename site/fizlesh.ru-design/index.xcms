@@ -94,7 +94,7 @@
                     {
                         include(translate('<a href="/<# web_prefix#>?'.
                             xcms_url(array('page'=>$pageid, 'ref'=>'login', 'return'=>'?ref=index')).
-                            '" class="menu-item menu-level1 stealthLink">Авторизация</a>'));
+                            '" class="menu-item menu-level1 menu-sys">Авторизация</a>'));
                     }
                 ?>
                 <!--a href="http://validator.w3.org/check?uri=referer"><img
