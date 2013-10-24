@@ -122,17 +122,18 @@
       **/
     function xcmst_create_user($u)
     {
-        $login = @$_POST["login"];
-        $password = @$_POST["password"];
-        if ($password != @$_POST["password_confirm"])
+        $login = xcms_get_key_or($_POST, "login");
+        $password = xcms_get_key_or($_POST, "password");
+        if ($password != xcms_get_key_or($_POST, "password_confirm"))
             return array("Пароли не совпадают. ", null, null);
 
-        $email = @$_POST["email"];
+        $email = xcms_get_key_or($_POST, "email");
+        $name = xcms_get_key_or($_POST, "name");
         try
         {
             $tu = $u->create($login, $email);
             $tu->passwd($password);
-            $tu->set_param("name", xcms_get_key_or($_POST, "name"));
+            $tu->set_param("name", $name);
             foreach (xcms_all_groups() as $group=>$title)
             {
                 if (@$_POST["group_$group"])
@@ -145,9 +146,9 @@
         }
         $warn = null;
         if (@$_POST["notify_user"])
-            $warn = xcms_user_create_notify($email, $login, $password);
+            $warn = xcms_user_create_notify($email, $login, $password, $name);
 
-        return array(null, $warn, "Пользователь успешно создан. ");
+        return array(null, $warn, "Пользователь '$login' успешно создан. ");
     }
 
 
