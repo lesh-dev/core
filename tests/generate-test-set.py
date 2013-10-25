@@ -20,7 +20,7 @@ for fn in py_files:
     if not classLineList:
         continue
     classLine = classLineList.pop().strip()
-    r = re.match("class ([\w]+)\(SeleniumTest\):", classLine)
+    r = re.match(r"class ([\w]+)\(SeleniumTest\):", classLine)
     if not r:
         #print "Cannot match in ", cl
         continue
