@@ -171,7 +171,7 @@
     }
     elseif(@$_GET["mode"]=="access")
     {
-        include(translate("<! cms/light_access_editor !>"));
+        include(translate("<! cms/access_edit !>"));
     }
     elseif(@$_GET["mode"]=="group_admin")
     {
