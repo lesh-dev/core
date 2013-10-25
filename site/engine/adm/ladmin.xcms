@@ -8,7 +8,7 @@
     $INFO = xcms_get_list(xcms_get_info_file_name());
     include(translate("<! auth/ #editor #admin {$INFO["edit"]} !>"));
 ?>
-<# cms/light_create_page_before #>
+<# cms/create_page_before #>
 <# auth/ #admin #editor #>
 <?php
     if(@$_POST["delete-section"])
@@ -189,7 +189,7 @@
         include(translate("<! auth/myprofile !>"));
     }
     elseif(@$_GET["mode"]=="create_page")
-        include(translate("<! cms/light_create_page_after !>"));
+        include(translate("<! cms/create_page_after !>"));
     else
     {
         if ($is_editor)
