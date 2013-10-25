@@ -106,17 +106,17 @@
     }
     else if(@$_GET["mode"]=="cleanprec") include(translate("<! cleanprec !>"));
     else if(@$_GET["mode"]=="delete")
-        include(translate("<! cms/page_delete !>"));
+        include(translate("<! cms/page/delete_page !>"));
     else if(@$_GET["mode"]=="edit_alias")
-        include(translate("<! cms/page_alias !>"));
+        include(translate("<! cms/page/alias !>"));
     else if(@$_GET["mode"]=="edit_header")
-        include(translate("<! cms/page_header !>"));
+        include(translate("<! cms/page/header !>"));
     else if(@$_GET["mode"]=="edit_meta")
         include(translate("<! cms/edit_meta_tags !>"));
     else if(@$_GET["mode"]=="edit_menu")
-        include(translate("<! cms/edit_menu !>"));
+        include(translate("<! cms/menu/edit_menu !>"));
     else if(@$_GET["mode"]=="page_rename")
-        include(translate("<! cms/page_rename !>"));
+        include(translate("<! cms/page/rename_page !>"));
     else if(@$_GET["mode"]=="edit_icon")
         include(translate("<! cms/light_icon_editor !>"));
     else if(@$_GET["mode"]=="obsolete_settings")
