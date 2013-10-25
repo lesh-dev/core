@@ -1,38 +1,45 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Generates test suite execution script
+"""
 
 import re
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile
 
-pyFiles = sorted([ f for f in listdir('.') if isfile(f) and f[-3:] == '.py' ])
+py_files = sorted([ f for f in listdir('.') if isfile(f) and f[-3:] == '.py' ])
 
-imp = []
-main = []
+imports = []
+calls = []
 
-for fn in pyFiles:
-	moduleName = fn[:-3]
+for fn in py_files:
+    moduleName = fn[:-3]
 
-	classLineList = filter(lambda x: "class Xcms" in x, [line for line in open(fn, 'r')])
-	if not classLineList:
-		continue
-	classLine = classLineList.pop().strip()
-	r = re.match("class ([\w]+)\(SeleniumTest\):", classLine)
-	if not r:
-		#print "Cannot match in ", cl
-		continue
+    classLineList = [line for line in open(fn, 'r') if "class Xcms" in line]
+    if not classLineList:
+        continue
+    classLine = classLineList.pop().strip()
+    r = re.match("class ([\w]+)\(SeleniumTest\):", classLine)
+    if not r:
+        #print "Cannot match in ", cl
+        continue
 
-	imp.append(moduleName)
-	main.append( '"%s": %s.%s(baseUrl, args),' % (fn, moduleName, r.group(1)))
+    imports.append(moduleName)
+    calls.append( '"%s": %s.%s(baseUrl, args),' % (fn, moduleName, r.group(1)))
 
-print '#!/usr/bin/python'
+print '#!/usr/bin/env python'
+print '# -*- coding: utf-8 -*-'
+print '"""'
+print "This file is AUTO-GENERATED"
+print "Do not edit it, fix generator instead"
+print '"""'
 print
-print "# This file is AUTO-GENERATED. Do not edit it directly, edit generator instead"
-print
-for i in imp:
-	print 'import', i
+for i in imports:
+    print 'import', i
 print
 
 print 'def getTests(baseUrl, args): return {'
-for i in main:
-	print '    ' + i
+for i in calls:
+    print '    ' + i
 print '}'
