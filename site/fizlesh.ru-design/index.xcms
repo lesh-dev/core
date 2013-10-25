@@ -118,7 +118,7 @@
                     </div><?php
                     if (!$in_xsm)
                     {?>
-                        <# cms/edit-button #><?php
+                        <# cms/page/edit_button #><?php
                     }?>
                     <div id="content-text"><# if //!@$_GET["usr"]//cms/ #></div>
                     <hr />
