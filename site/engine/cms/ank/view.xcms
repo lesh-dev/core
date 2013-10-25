@@ -133,11 +133,15 @@
         echo $meta;
     }
     else if ($ap == "view")
+    {
+        include(translate('<! cms/ank/menu !>'));
         include(translate('<! cms/ank/list-person !>'));
+    }
     else if (substr($ap, 0, 5) == "list-" ||
         substr($ap, 0, 5) == "view-" ||
         substr($ap, 0, 5) == "edit-")
     {
+        include(translate('<! cms/ank/menu !>'));
         include(translate("<! cms/ank/$ap !>"));
     }
     else

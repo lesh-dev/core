@@ -1,5 +1,3 @@
-<# auth/ #admin #ank #>
-<# cms/ank/style #>
 <?php
 
 $person_school_fields = array(

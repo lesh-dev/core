@@ -1,6 +1,3 @@
-<# auth/ #admin #ank #>
-<# cms/ank/style #>
-
 <?php
 
 define('SCHOOL_ANK_ID', 'ank');

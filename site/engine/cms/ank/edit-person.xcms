@@ -1,7 +1,4 @@
-<# auth/ #admin #ank #>
-<# cms/ank/style #>
 <# cms/ank/diff #>
-
 <?php
 
 function xsm_notify_person_edit($person)

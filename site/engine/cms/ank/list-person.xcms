@@ -1,5 +1,3 @@
-<# auth/ #admin #ank #>
-<# cms/ank/style #>
 <?php
     $show_is_teacher = xcms_get_persistent_key("list-person", "show_is_teacher");
     $show_is_student = xcms_get_persistent_key("list-person", "show_is_student");
