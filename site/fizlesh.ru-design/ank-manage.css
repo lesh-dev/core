@@ -345,6 +345,7 @@ a.popup-link {
 span.present {
     float: right;
     margin-right: 3px;
+    font-weight: bold;
 }
 
 col.id {

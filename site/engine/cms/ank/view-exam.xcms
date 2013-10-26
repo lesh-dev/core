@@ -29,7 +29,7 @@ function xsm_print_exam()
             echo "$student_first_name $student_last_name"; ?></a>:
     </h3>
     <?php xsm_view_operations('exam', 'exam', 'зачёт', $aux_param); ?>
-    <table summary="Зачёты школьника $student_person_id" class="ankList">
+    <table class="ankList">
     <?php
     while ($exam_data = $exam_sel->fetchArray(SQLITE3_ASSOC)) {?>
         <tr><td class="ankListRowDiv">&nbsp;</td></tr>

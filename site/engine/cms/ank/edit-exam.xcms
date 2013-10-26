@@ -189,7 +189,7 @@ function xsm_edit_exam()
         if ($exam_id != XDB_NEW) {?>
             <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" /><?php
         }?>
-        <table summary="Зачёт" class="ankEdit">
+        <table class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Зачёт</td>
             </tr>

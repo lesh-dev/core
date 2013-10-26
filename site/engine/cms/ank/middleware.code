@@ -190,7 +190,7 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
     ?>
     <h3>Курсы</h3><?php
     xsm_view_operations('course', 'course', 'курс', $course_aux_param); ?>
-    <table summary="Курсы" class="ankList">
+    <table class="ankList">
         <colgroup>
             <?php if (!$pers) {?>
             <col width="30%" /><?php

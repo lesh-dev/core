@@ -16,7 +16,7 @@ function xsm_edit_course_teachers()
     $course_title = htmlspecialchars(xcms_get_key_or($course, 'course_title'));
     $course_href = "view-course".xcms_url(array('course_id'=>$course_id));
     ?>
-    <table summary="Преподы курса" class="ankEdit">
+    <table class="ankEdit">
         <tr><td class="ankListRowTitle">Преподы курса
             <a href="<?php echo $course_href; ?>"><?php echo $course_title; ?></a></td></tr><?php
 

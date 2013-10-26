@@ -84,7 +84,7 @@ function xsm_show_all_person_list()
 
     xsm_view_operations('person', 'person', 'участника', '&amp;anketa_status=cont');
     ?>
-    <table summary="Участники" class="ankList">
+    <table class="ankList">
         <colgroup>
             <col width="30" class="id" />
             <col width="30%" />

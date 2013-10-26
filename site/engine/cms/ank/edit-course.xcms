@@ -69,7 +69,7 @@ function xsm_edit_course()
             <input type="hidden" name="course_teacher_id" value="<?php echo $course_teacher_id; ?>" /><?php
         }?>
 
-        <table summary="Курс" class="ankEdit">
+        <table class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Курс</td>
             </tr>
