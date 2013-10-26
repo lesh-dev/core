@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-from selenium import webdriver
-import os, sys, traceback, time
+#from selenium import webdriver
+import sys, time
 
 import selenium_test, random_crap
 
@@ -46,7 +46,7 @@ def gotoEditPerson(test):
 def gotoBackAfterComment(test):
 	#test.gotoUrlByLinkText(u"Вернуться к списку комментов") # older variant
 	gotoBackToAnketaView(test)
-	
+
 def getAdminPanelLink(test):
 	return test.getUrlByLinkText(u"Админка")
 
@@ -62,77 +62,77 @@ def performLogin(test, login, password):
 	"""
 	if test is None:
 		raise RuntimeError("Wrong webdriver parameter passed to performLogin. ")
-	
+
 	test.addAction("user-login", login + " / " + password)
 #	test.logAdd("performLogin(" + login + ", " + password + ")")
 
 	print "performLogin(): goto root"
-	
+
 	test.gotoRoot()
-	
+
 	# assert we have no shit cookies here
 	test.assertUrlNotPresent(u"Админка", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
 	test.assertUrlNotPresent(u"Личный кабинет", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
-	
+
 	gotoAuthLink(test)
-	
+
 	test.assertSourceTextPresent(u"Логин")
 	test.assertSourceTextPresent(u"Пароль")
 	test.assertSourceTextPresent(u"Требуется аутентификация")
-	
+
 	#<input type="text" name="auth-login" />
 	#ele = test.drv().find_element_by_name("auth-login")
 	test.fillElementById("auth-login", login)
 	test.fillElementById("auth-password", password)
-	
+
 	test.clickElementById("auth-submit")
-	
+
 	wrongAuth = test.checkSourceTextPresent([u"Пароль всё ещё неверный", "Wrong password"])
 	if wrongAuth:
 		return False
-	
+
 	# now let's check that Cabinet link and Exit link are present. if not - it's a bug.
 
 	test.assertUrlPresent(u"Выход", "Here should be logout link after successful authorization. ")
 	test.assertUrlPresent(u"Личный кабинет", "Here should be Cabinet link after successful authorization. ")
-	
+
 	return True
-		    
+
 def performLogout(test):
 	print "performLogout()"
 	test.addAction("user-logout")
 	test.gotoPage("/?&mode=logout&ref=ladmin")
-	
+
 def performLoginAsAdmin(test, login, password):
 	print "performLoginAsAdmin(" + login + ", " + password + ")"
 	if not performLogin(test, login, password):
 		print "Admin authorization failed"
 		raise selenium_test.TestError("Cannot perform Admin authorization as " + login + "/" + password)
-		
+
 	print "performLoginAsAdmin(): checking admin panel link"
-	
+
 	#check that we have entered the CP.
 	# just chech that link exists.
 	cpUrl = getAdminPanelLink(test)
 	#test.gotoSite(cpUrl)
-	
-	
+
+
 def createNewUser(test, conf, login, email, password, name, auxParams = []):
 	print "createNewUser(" + login + ", " + email + ", " + password + ", " + name + ")"
-	
+
 	if not "do_not_login_as_admin" in auxParams:
 		performLoginAsAdmin(test, conf.getAdminLogin(), conf.getAdminPass())
 		gotoAdminPanel(test)
-	
+
 	gotoUserList(test)
-	
+
 	test.gotoUrlByLinkText(["Create user", u"Создать пользователя"])
-	
+
 	inpLogin = test.fillElementById("login", login)
 	print "login = '" + inpLogin + "'"
 	if inpLogin == "":
 		raise RuntimeError("Filled login value is empty!")
-	
+
 	inpEMail = test.fillElementById("email", email)
 	inpPass1 = test.fillElementById("password", password)
 	print "original pass: '" + password + "'"
@@ -141,29 +141,29 @@ def createNewUser(test, conf, login, email, password, name, auxParams = []):
 		raise RuntimeError("Unpredicted input behavior on password entering")
 	inpPass = inpPass1
 	print "actual pass: '" + inpPass + "'"
-	
+
 	inpName = test.fillElementById("name", name)
-	
+
 	# set notify checkbox.
-	test.clickElementByName("notify_user")
+	# test.clickElementById("notify_user-checkbox")
 	# send form
-	
+
 	test.clickElementByName("create_user")
-	
-	
+
+
 	if "do_not_validate" in auxParams:
 		print "not validating created user, just click create button and shut up. "
 		return inpLogin, inpEMail, inpPass, inpName
 
 	print "user created, going to user list again to refresh. "
-		
-	test.assertBodyTextPresent(u"Пользователь успешно создан")
+
+	test.assertBodyTextPresent(u"Пользователь '" + inpLogin + u"' успешно создан")
 	# refresh user list
 	test.gotoUrlByLinkText(u"Пользователи")
-	
+
 	# enter user profile
 	print "entering user profile. "
-	
+
 	profileLink = inpLogin
 	# TODO, SITE BUG: make two separate links
 	test.gotoUrlByPartialLinkText(profileLink)
@@ -178,25 +178,25 @@ def createNewUser(test, conf, login, email, password, name, auxParams = []):
 	test.assertTextPresent("//div[@class='user-ops']", conf.getAdminLogin())
 	test.assertElementValueById("name-input", inpName)
 	test.assertElementValueById("email-input", inpEMail)
-	
+
 	#logoff root
 	if not "do_not_logout_admin" in auxParams:
 		performLogout(test)
-	
+
 	return inpLogin, inpEMail, inpPass, inpName
-	
+
 
 def addCommentToPerson(test):
 	test.gotoUrlByLinkText(u"Добавить комментарий")
 	commentText = random_crap.randomText(40) + "\n" + random_crap.randomText(50) + "\n" + random_crap.randomText(30)
-	
+
 	commentText = test.fillElementByName("comment_text", commentText)
 
 	test.clickElementByName("update-person_comment")
 	test.assertBodyTextPresent(u"Комментарий успешно сохранён")
 	gotoBackToAnketaView(test)
 	return commentText
-	
+
 def editCommentToPerson(test, commentLinkId):
 	test.gotoUrlByLinkId("comment-edit-1")
 	oldCommentText = test.getElementValueByName("comment_text")
@@ -220,7 +220,7 @@ def setTestNotifications(test, emailString, adminLogin, adminPass):
 	test.fillElementById("edtg_reg-test", emailString);
 	test.fillElementById("edtg_reg-managers", emailString);
 	test.fillElementById("edtg_reg-managers-test", emailString);
-	
+
 	test.clickElementById("editTag")
 	performLogout(test)
 
@@ -229,11 +229,3 @@ def gotoUserList(test):
 	test.logAdd("Navigating to user list from admin CP. ")
 	test.gotoUrlByLinkText(u"Пользователи")
 	test.assertBodyTextPresent(u"Администрирование пользователей")
-
-	
-	
-
-
-	
-
-

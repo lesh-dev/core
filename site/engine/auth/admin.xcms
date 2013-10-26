@@ -50,7 +50,7 @@
             <div><span class="user-label">EMail</span>
                 <input <?php xcmst_input_attrs_from_post("email", "user@example.com"); ?> /></div>
             <div><span class="user-label">Оповестить пользователя</span>
-                <input type="hidden" name="notify_user" value="" /><!--
+                <input type="hidden" name="notify_user" id="notify_user-fake" value="" /><!--
                 prepend fake input with empty value to submit it as checkbox 'unchecked' value
                 See http://iamcam.wordpress.com/2008/01/15/unchecked-checkbox-values/ -->
                 <input type="checkbox" <?php xcmst_checkbox_attrs_from_post("notify_user", YES); ?> /></div>
