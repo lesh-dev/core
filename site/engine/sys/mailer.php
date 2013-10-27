@@ -88,13 +88,13 @@
       * Баги: Знает про fizlesh.ru, вместо того, чтобы брать эти настройки
       * из конфигурационного файла.
       **/
-    function xcms_deliver_mail_int($mail_group, $addr_list, $prefix, $notification_body, $subject = '')
+    function xcms_deliver_mail_int($mail_group, $addr_list, $notification_body, $subject = '')
     {
         global $SETTINGS;
         $notification_time = date("d.m.Y");
 
         if (empty($subject))
-            $subject = "Уведомления [$mail_group] за $notification_time";
+            $subject = "Уведомления за $notification_time";
 
         $body_html = xcms_get_html_template("notification-template");
         $body_html = str_replace('@@NOTIFICATION-BODY@', $notification_body, $body_html);
@@ -121,7 +121,7 @@
         }
 
         $host = xcms_hostname();
-        return xcms_mailer_send($mailer, "[xcms-$prefix] ($host) $subject", $body_html);
+        return xcms_mailer_send($mailer, "[$mail_group] ($host) $subject", $body_html);
     }
 
 
@@ -171,7 +171,7 @@
             $body_html = str_replace('@@TIMESTAMP@', $hr_timestamp, $body_html);
         }
         if ($immediate)
-            return xcms_deliver_mail_int($mail_group, $addr_list, $mail_group, $body_html, $subject);
+            return xcms_deliver_mail_int($mail_group, $addr_list, $body_html, $subject);
 
         // In case of delayed sending, subject and prefix are lost
         $values = array(
@@ -201,7 +201,7 @@
         if (empty($notification_body)) // nothing was added
             return true;
 
-        if (!xcms_deliver_mail_int($mail_group, null, $mail_group, $notification_body))
+        if (!xcms_deliver_mail_int($mail_group, null, $notification_body))
             return false;
 
         // purge notifications in case of success
