@@ -224,6 +224,11 @@ def setTestNotifications(test, emailString, adminLogin, adminPass):
 	test.clickElementById("editTag")
 	performLogout(test)
 
+def shortAlias(last, first):
+    return (last + " " + first).strip()
+
+def fullAlias(last, first, mid):
+    return (last + " " + first + " " + mid).strip()
 
 def gotoUserList(test):
 	test.logAdd("Navigating to user list from admin CP. ")
