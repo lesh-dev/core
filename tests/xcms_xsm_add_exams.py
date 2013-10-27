@@ -84,4 +84,17 @@ class XcmsXsmAddExams(SeleniumTest):
         
         self.addExamsById([95, 119, 91, 134, 73, 107, 130, 133])
         
+        self.gotoUrlByLinkText(u"Базовое электричество")
+        self.setOptionValueById("exam_status-selector", "passed")
+        
+        examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
+        self.fillElementByName("exam_comment", examComment)
+        self.clickElementByName("update-exam")
+        xtest_common.gotoBackToPersonView(self)
+        
+        self.assertBodyTextPresent(u"Сдан")
+        
+        
+        
+        
 
