@@ -1,3 +1,24 @@
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
-<div></div>
+<?php
+function xsm_menu_item($view, $aux_url, $title, $first = false)
+{
+    global $web_prefix;
+    global $aparam;
+    $url = "/${web_prefix}register/$view";
+    $aux_class = "";
+    if ($first)
+        $aux_class .= "first ";
+    if ($view == $aparam)
+        $aux_class .= "current ";
+    ?><a class="xsm-menu-item <?php echo $aux_class; ?>"
+        href="<?php echo $url.$aux_url; ?>"><?php echo $title; ?></a><?php
+}?>
+<div class="xsm-navbar"><?php
+    xsm_menu_item('list-ank', '', 'Анкеты', true);
+    xsm_menu_item('list-person-locator', xcms_url(array('show_anketa_status'=>'all')), 'Все люди');
+    xsm_menu_item('list-tour', '', 'Выходы в лес');
+    xsm_menu_item('list-person-locator', xcms_url(array('show_anketa_status'=>'active')), 'Актив отделения');
+    xsm_menu_item('list-person', '', 'Участники школ');
+    xsm_menu_item('list-course', '', 'Курсы');
+?></div>

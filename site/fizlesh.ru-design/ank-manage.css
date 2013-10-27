@@ -371,3 +371,27 @@ div.help-widget {
     -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
+
+div.xsm-navbar {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+a.xsm-menu-item {
+    vertical-align: middle;
+    background-color: rgb(202, 235, 98);
+    border: 1px solid #8faf6f;
+    border-left: none;
+    padding: 3px;
+    width: 15%;
+    text-align: center;
+    display: inline-block;
+}
+
+a.xsm-menu-item.first {
+    border-left: 1px solid #8faf6f;
+}
+
+a.xsm-menu-item.current {
+    background-color: #ffee99;
+}
