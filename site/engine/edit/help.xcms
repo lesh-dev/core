@@ -9,6 +9,7 @@
     <div><span class="help-left"><b>&lt;h2&gt;</b>Название главы<b>&lt;/h2&gt;</b></span> заголовок главы на странице</div>
     <div><span class="help-left"><b>&lt;h3&gt;</b>Название параграфа<b>&lt;/h3&gt;</b></span> заголовок параграфа на странице</div>
     <div><span class="help-left"><b>[[</b>текст<b>:</b>/sect/subsect<b>]]</b></span> ссылка на раздел сайта</div>
+    <div><span class="help-left"><b>((</b>http://site.com/url текст<b>))</b></span> ссылка на внешний сайт</div>
     <div><span class="help-left"><b>&lt;code&gt;</b>some monotyped code<b>&lt;code/&gt;</b></span> код (моноширинный шрифт)</div>
     <div><span class="help-left"><b>${prefix}</b></span> путь до текущей страницы</div>
     <div><span class="help-left"><b>${content_prefix}</b></span> путь до каталога с контентом</div>
