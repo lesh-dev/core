@@ -14,6 +14,7 @@
     <div><span class="help-left"><b>${prefix}</b></span> путь до текущей страницы</div>
     <div><span class="help-left"><b>${content_prefix}</b></span> путь до каталога с контентом</div>
     <div><span class="help-left"><b>${email:</b>name<b>}</b></span> $-плагин для email-ов</div>
+    <div><span class="help-left"><b>${phone:</b>телефон<b>}</b></span> $-плагин для телефонов</div>
     <div><span class="help-left"><b>${staffimg:</b>name<b>:</b>title<b>}</b></span> $-плагин для списка людей</div>
 </div>
 </span>
