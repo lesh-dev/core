@@ -4,7 +4,7 @@
 import re
 import selenium_test, xtest_common, random_crap
 from xtest_config import XcmsTestConfig
-from selenium_test import SeleniumTest
+from selenium_test import SeleniumTest, TestError
 
 class XcmsVersionCheck(SeleniumTest):
 	"""
@@ -26,7 +26,7 @@ class XcmsVersionCheck(SeleniumTest):
 		versionRegexp = "[\w\d_]+\-[\d\.]+ rev\. [\d]+"
 		m = re.search(versionRegexp, siteVersion)
 		if not m:
-			raise selenium_test.TestError("Site version does not match expected regexp. ");
+			raise TestError("Site version does not match expected regexp. ");
 		
 		conf = XcmsTestConfig()
 		
@@ -41,5 +41,5 @@ class XcmsVersionCheck(SeleniumTest):
 		print "XCMS version in CP: ", cpVersion
 		m = re.search(versionRegexp, cpVersion)
 		if not m:
-			raise selenium_test.TestError("Site version in admin CP does not match expected regexp. ");
+			raise TestError("Site version in admin CP does not match expected regexp. ");
     

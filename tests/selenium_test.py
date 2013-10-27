@@ -15,7 +15,7 @@ from selenium.webdriver.remote.webdriver import WebElement
 
 import random, traceback, sys
 from datetime import datetime
-import time
+import time, os
 
 from bawlib import isVoid, isList, isString, isNumber, isEqual, getSingleOption, userSerialize
 
@@ -125,7 +125,14 @@ class SeleniumTest:
         
     def init(self):
         self.m_baseUrl = self.fixBaseUrl(self.getBaseUrl())
-        self.m_driver = webdriver.Firefox() #executable_path="/usr/bin/firefox")
+        if self.useChrome():
+            chromePath = "/usr/bin/chromedriver"
+            if not os.path.exists(chromePath):
+                self.failTest("Chrome Driver is not installed. Please obtain latest version from\nhttp://chromedriver.storage.googleapis.com/index.html ")
+            self.m_driver = webdriver.Chrome("/usr/bin/chromedriver")
+        else:
+            self.m_driver = webdriver.Firefox()
+            
         self.maximizeWindow()
     
     def getName(self):
@@ -149,6 +156,10 @@ class SeleniumTest:
         if isVoid(self.m_baseUrl):
             self.failTest("Base URL for test '" + self.getName() + "' is not set. ")
         return self.m_baseUrl
+    
+    def useChrome(self):
+        chromeFlag, _ = getSingleOption(["-c", "--chrome"], self.m_params)
+        return chromeFlag
     
     def needDoc(self):
         opt, _ = getSingleOption(["-d", "--doc"], self.m_params)
@@ -400,7 +411,7 @@ class SeleniumTest:
         eleText = self.getElementTextById(eleId)
         self.logAdd("checkElementTextById: current element '" + eleId + "', text is " + userSerialize(eleText) + ". ")
         if isEqual(eleText, text):
-            self.logAdd("check-text:ok, element id: '" + eleId + "', expected: " + userSerialize(text) + "'. ")
+            self.logAdd("check-text:ok, element id: '" + eleId + "', expected: " + userSerialize(text) + ". ")
             return True
         self.addAction("check-text:fail, element id: '" + eleId + "', expected: " + userSerialize(text) + ", actual: " + userSerialize(eleText) + ". ")
         return False
@@ -428,7 +439,7 @@ class SeleniumTest:
         if not eleValue:
             self.logAdd("None 'value' in element named '" + name + "'. Maybe it has no attribute 'value'?", "warning")
             return False
-        self.logAdd("checkElementValueByName: current element named '" + name + "' has value '" + userSerialize(eleValue) + "'. ")
+        self.logAdd("checkElementValueByName: current element named '" + name + "' has value '" + userSerialize(eleValue) + ". ")
         if isEqual(eleValue, text):
             self.logAdd("check-value:ok, element name: '" + name + "', expected: " + userSerialize(text) + ". ")
             return True
