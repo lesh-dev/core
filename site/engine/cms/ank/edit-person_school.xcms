@@ -154,7 +154,7 @@ function xsm_edit_person_school()
         <input type="hidden" name="person_school_id" value="<?php echo $person_school_id; ?>" />
         <input type="hidden" name="member_person_id" value="<?php echo $member_person_id; ?>" />
         <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
-        <table summary="Участие на школе" class="ankEdit">
+        <table class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Роли на этой школе</td>
             </tr>

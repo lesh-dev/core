@@ -13,6 +13,7 @@
     xut_initialize();
 
     // put your unit test function call here
+    xcms_util_unit_test();
     xcms_string_unit_test();
     xcms_keyvalue_unit_test();
     xcms_finediff_unit_test();

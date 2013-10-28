@@ -89,7 +89,7 @@ function xsm_show_ank_list()
 
     NEW_xsm_view_operations('person', 'участника');
     ?>
-    <table summary="Участники" class="ankList">
+    <table class="ankList">
         <colgroup>
             <col width="30px" />
             <col width="13%" />

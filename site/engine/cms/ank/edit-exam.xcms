@@ -128,12 +128,14 @@ function xsm_notify_exam_edit($exam)
     $course_title = $course['course_title'];
 
     $student_fi = xsm_fi($student);
+    $exam_statuses = xsm_get_enum("exam_status");
+    $hr_exam_status = $exam_statuses[$exam_status];
+
     $table_title = 'Изменён зачёт школьника <a'.
         xcms_ext_href('view-person', array('person_id'=>$student_person_id)).'>'.
-        htmlspecialchars($student_fi).'</a>';
-
-    $exam_statuses = xsm_get_enum("exam_status", $exam_status);
-    $hr_exam_status = $exam_statuses[$exam_status];
+        htmlspecialchars($student_fi).'</a> по курсу <a'.
+        xcms_ext_href('view-course', array('course_id'=>$course_id)).'>'.
+        htmlspecialchars($course_title)."</a> [$hr_exam_status]";
 
     $mail_msg = xsm_build_diff_msg(
         $exam,
@@ -189,7 +191,7 @@ function xsm_edit_exam()
         if ($exam_id != XDB_NEW) {?>
             <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" /><?php
         }?>
-        <table summary="Зачёт" class="ankEdit">
+        <table class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Зачёт</td>
             </tr>

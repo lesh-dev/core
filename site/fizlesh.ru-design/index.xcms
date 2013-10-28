@@ -16,7 +16,7 @@
 </head>
 <body>
     <div id="fullHeight">
-        <table cellspacing="0" cellpadding="0" class="topTable roundBorders" summary="Page Top">
+        <table cellspacing="0" cellpadding="0" class="topTable roundBorders">
             <tr>
                 <td class="logoCell menuWidth">
                     <a href="/<# web_prefix #>" title="ФизЛЭШ"><img
@@ -36,7 +36,7 @@
                 </td>
             </tr>
         </table>
-        <table cellspacing="0" cellpadding="0" class="bottomTable" summary="Page Bottom">
+        <table cellspacing="0" cellpadding="0" class="bottomTable">
             <tr>
                 <td class="menu-field menu-width roundBorders">
                     <# cms/menu/display start=1 end=5 #>

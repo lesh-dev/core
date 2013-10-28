@@ -44,7 +44,7 @@ function xsm_edit_person()
     <form method="post" action="edit-person"><?php
         NEW_xsm_edit_operations('person', $person_id, 'Вернуться к просмотру участника');?>
         <input type="hidden" id="person_id-input" name="person_id" value="<?php echo $person_id; ?>" />
-        <table summary="Участник" class="ankEdit">
+        <table class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Участник</td>
             </tr>

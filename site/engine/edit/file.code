@@ -95,22 +95,22 @@
         $ty = "submit";
 
         $vlist = '<option value="">HEAD</option>';
-        foreach(glob("$ename-version-*") as $k=>$v )
+        $vfiles_list = array_reverse(glob("$ename-version-*"));
+        foreach ($vfiles_list as $k=>$v)
         {
             $timestamp_gz = str_replace("$ename-version-", "", $v);
             $timestamp = str_replace(".gz", "", $timestamp_gz);
-            $version_time = date("d.m.Y H:i", $timestamp);
+            $version_time = date("d.m.Y H:i:s", $timestamp);
             $version_suffix = str_replace("$ename", "", $v);
             $selected = "";
-            if ($version_suffix == $current_version) $selected = "selected";
+            if ($version_suffix == $current_version)
+                $selected = "selected";
             $vlist .= "<option $selected value=\"$version_suffix\">$version_time</option>";
         }
         $text = htmlspecialchars($text);
 
         if (@$_POST["edit-preview"])
-        {
             $text = @$_POST["edit-text"];
-        }
 
     ?>
 <form method="post" enctype="multipart/form-data">
@@ -122,7 +122,7 @@
         <a <?php echo xcms_href(array('page'=>$pageid, 'ref'=>'index')); ?> class="submit">Свернуть редактор</a>
         Версия:
         <select name="versions" id="versions-top"><?php echo $vlist; ?></select>
-        <input type="submit" name="set-version" id="set-version-top" value="Смотреть версию"/>
+        <input type="submit" name="set-version" value="Смотреть версию"/>
         <?php include(translate('<! edit/help !>')); ?>
     </div>
     <textarea class="editor" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
@@ -130,9 +130,7 @@
     <div>
         <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-submit-bottom" value="<?php echo $submit_val; ?>" />
         <input type="submit" name="edit-preview" id="edit-preview-bottom" value="Предпросмотр" />
-        Версия:
-        <select name="versions" id="versions-bottom"><?php echo $vlist; ?></select>
-        <input type="submit" name="set-version" id="set-version-bottom" value="Смотреть версию"/>
+        <!-- Version info cannot be easily duplicated here, so we remove it -->
     </div>
 </form>
 <div id="content-text-preview"><?php
