@@ -112,7 +112,10 @@ class XcmsContentAddPage(SeleniumTest):
         
         diffPageText = "\n".join(diffLines)
 
+        print "before fill"
+        
         diffPageText = self.fillElementById("edit-text", diffPageText)
+        print "after fill"
         self.clickElementById("edit-submit-top")
         
         diffLines = diffLines[:3] + [htmlParagraph(random_crap.randomCrap(5))] + diffLines[3:6] + diffLines[7:]
@@ -138,17 +141,17 @@ class XcmsContentAddPage(SeleniumTest):
         
         self.gotoUrlByLinkText(u"Свернуть редактор")
 
-        print "-"*20, "before:"
-        print diffPageText
-        print "-"*20
+        #print "-"*20, "before:"
+        #print diffPageText
+        #print "-"*20
         diffPageTextForCheck = diffPageText.replace("<p>", "").replace("\n", " ").replace("</p> ", "\n").replace("</p>", "\n").strip()
-        print "-" * 20
-        print diffPageTextForCheck
-        print "-" * 20, "actual:"
-        print self.getElementTextById("content-text")
-        print "-" * 20
+        #print "-" * 20
+        #print diffPageTextForCheck
+        #print "-" * 20, "actual:"
+        #print self.getElementTextById("content-text")
+        #print "-" * 20
         
-#        self.assertElementTextById("content-text", diffPageTextForCheck, "real page text does not match entered text. ")
+        self.assertElementTextById("content-text", diffPageTextForCheck, "real page text does not match entered text. ")
         
     
 
