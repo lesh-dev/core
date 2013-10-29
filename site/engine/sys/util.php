@@ -21,6 +21,26 @@ function xcms_hostname()
     return $host;
 }
 
+function xcms_mkpasswd()
+{
+    $pass = trim(@shell_exec("mkpasswd")).trim(@shell_exec("mkpasswd"));
+    $pass = preg_replace("/[^A-Za-z0-9_-]/", "@", $pass);
+    $pass = substr($pass, 0, 12);
+    if (empty($pass))
+    {
+        $table = array();
+        for ($i = 0; $i < 26; $i++)
+            $table[] = chr($i + 65);
+        $table[] = '@';
+        $table[] = '-';
+        $table[] = '_';
+        $size = count($table);
+        for ($i = 0; $i < 12; $i++)
+            $pass .= $table[rand($i * $i) % $size];
+    }
+    return $pass;
+}
+
 function xcms_get_html_template($template_name)
 {
     global $SETTINGS;
