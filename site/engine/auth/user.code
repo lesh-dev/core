@@ -52,16 +52,21 @@ function xcms_user_operation_notify($template_name, $email, $login, $password, $
     $body_html = str_replace('@@SITE-URL@', htmlspecialchars($meta_site_url), $body_html);
     $body_html = str_replace('@@LOGIN@', $login, $body_html);
     $body_html = str_replace('@@REAL-NAME@', $name, $body_html);
-    $body_html = str_replace('@@PASSWORD@', htmlspecialchars($password), $body_html);
-    $body_html = str_replace('@@SUPPORT@', "support@fizlesh.ru", $body_html);
+    $body_html = str_replace('@@SUPPORT@', $meta_site_mail, $body_html);
 
-    $notify_result = xcms_send_notification(
+    // do not send private info to [user-change] subscribers
+    $body_html_user = str_replace('@@PASSWORD@', htmlspecialchars($password), $body_html);
+    $body_html_notify = str_replace('@@PASSWORD@', '***', $body_html);
+
+    $notify_result = xcms_deliver_mail_int(NULL, array($email), $body_html_user, $subject);
+
+    $notify_result_aux = xcms_send_notification(
         "user-change",
-        array($email),
-        "auth",
+        NULL,
+        "auth", // not used anymore
         $subject,
         "This message is in HTML format".EXP_CRLF,
-        $body_html,
+        $body_html_notify,
         XMAIL_IMMEDIATE
     );
 
