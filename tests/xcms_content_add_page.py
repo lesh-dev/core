@@ -19,6 +19,12 @@ class XcmsContentAddPage(SeleniumTest):
     """
             
     def run(self):
+
+        # avoid spontaneous HTML tags
+        specChars = random_crap.specialCharsWoAngle # without <>
+        #TODO: BUG: remove this spike for Chrome
+        wordOptions = ["english"]
+        
         conf = XcmsTestConfig()
         self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
         xtest_common.assertNoInstallerPage(self)
@@ -68,9 +74,11 @@ class XcmsContentAddPage(SeleniumTest):
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle)
         
-        pageText = random_crap.randomCrap(10)
+        pageText = random_crap.randomCrap(10, wordOptions, specialChars = specChars)
+        print "Generated page text: '" + pageText + "'"
         
         pageText = self.fillElementById("edit-text", pageText)
+        print "After ins page text: '" + pageText + "'"
         self.clickElementById("edit-submit-top")
 
         self.clickElementById("edit-preview-top")
@@ -79,14 +87,15 @@ class XcmsContentAddPage(SeleniumTest):
         self.assertElementTextById(previewElement, pageText, "preview text does not match entered page text. ")
         
         # add second line
-        newPageText = pageText + "\n" + random_crap.randomCrap(10)
+        newPageText = pageText + "\n" + random_crap.randomCrap(10, wordOptions, specialChars = specChars)
         
         newPageText = self.fillElementById("edit-text", newPageText)
+        print "Generated 2-line page text: '" + newPageText + "'"
 
         self.clickElementById("edit-submit-top")
         self.clickElementById("edit-preview-top")
              
-        newPageTextForCheck = newPageText.replace("\n", " ")
+        newPageTextForCheck = newPageText.replace("\n", " ").replace("  ", " ").replace(">>", u"»").replace("<<", u"«").strip()
 
         self.assertElementTextById(previewElement, newPageTextForCheck, "preview text on text change does not match entered text. ")
 
@@ -108,14 +117,17 @@ class XcmsContentAddPage(SeleniumTest):
 
         self.gotoUrlByLinkText(u"Редактировать")
         
-        diffLines = [htmlParagraph(random_crap.randomCrap(7)) for x in xrange(0,12)]
+        diffLines = [htmlParagraph(random_crap.randomCrap(7, wordOptions, specialChars = specChars)) for x in xrange(0,12)]
         
         diffPageText = "\n".join(diffLines)
 
+        print "before fill"
+        
         diffPageText = self.fillElementById("edit-text", diffPageText)
+        print "after fill"
         self.clickElementById("edit-submit-top")
         
-        diffLines = diffLines[:3] + [htmlParagraph(random_crap.randomCrap(5))] + diffLines[3:6] + diffLines[7:]
+        diffLines = diffLines[:3] + [htmlParagraph(random_crap.randomCrap(5, wordOptions, specialChars = specChars))] + diffLines[3:6] + diffLines[7:]
         diffPageText = "\n".join(diffLines)
 
         diffPageText = self.fillElementById("edit-text", diffPageText)
@@ -131,24 +143,24 @@ class XcmsContentAddPage(SeleniumTest):
         
         sampleWords = pageWords[5:8] + pageWords[24:27] + pageWords[30:32]
         for sample in sampleWords:
-            diffPageText = diffPageText.replace(sample, random_crap.randomCrap(2))
+            diffPageText = diffPageText.replace(sample, random_crap.randomCrap(2, wordOptions, specialChars = specChars))
         
         diffPageText = self.fillElementById("edit-text", diffPageText)
         self.clickElementById("edit-submit-top")
         
         self.gotoUrlByLinkText(u"Свернуть редактор")
 
-        print "-"*20, "before:"
-        print diffPageText
-        print "-"*20
+        #print "-"*20, "before:"
+        #print diffPageText
+        #print "-"*20
         diffPageTextForCheck = diffPageText.replace("<p>", "").replace("\n", " ").replace("</p> ", "\n").replace("</p>", "\n").strip()
-        print "-" * 20
-        print diffPageTextForCheck
-        print "-" * 20, "actual:"
-        print self.getElementTextById("content-text")
-        print "-" * 20
+        #print "-" * 20
+        #print diffPageTextForCheck
+        #print "-" * 20, "actual:"
+        #print self.getElementTextById("content-text")
+        #print "-" * 20
         
-#        self.assertElementTextById("content-text", diffPageTextForCheck, "real page text does not match entered text. ")
+        self.assertElementTextById("content-text", diffPageTextForCheck, "real page text does not match entered text. ")
         
     
 
