@@ -3,7 +3,7 @@
 <# cms/ank/middleware #>
 <# cms/ank/db-actions #>
 <# cms/ank/format #>
-<script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/jquery-1.7.1.min.js"; ?>"></script>
+<# cms/jquery #>
 <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
 
 <?php

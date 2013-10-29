@@ -1,13 +1,12 @@
+<!DOCTYPE html>
 <# auth/ root administrator ank admin editor #ank #admin #editor #>
-<head>
+<html><head>
     <title>Contest</title>
-    <link href="<# full_design_dir #>/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="<# full_design_dir #>/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+    <# cms/bootstrap #>
+    <# cms/jquery #>
     <link href="<# full_design_dir #>/contest.css" rel="stylesheet" media="screen">
 </head>
 <body>
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="<# full_design_dir #>/bootstrap/js/bootstrap.min.js"></script>
 <?php
     require_once("$engine_dir/sys/db.php");
     $CONTEST_CURRENT_YEAR = "2013";
@@ -516,4 +515,4 @@
 ?>
 </div>
 </div>
-</body>
+</body></html>
