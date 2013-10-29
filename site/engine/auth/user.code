@@ -60,15 +60,8 @@ function xcms_user_operation_notify($template_name, $email, $login, $password, $
 
     $notify_result = xcms_deliver_mail_int(NULL, array($email), $body_html_user, $subject);
 
-    $notify_result_aux = xcms_send_notification(
-        "user-change",
-        NULL,
-        "auth", // not used anymore
-        $subject,
-        "This message is in HTML format".EXP_CRLF,
-        $body_html_notify,
-        XMAIL_IMMEDIATE
-    );
+    // ignore result here, this is not so important
+    xcms_send_notification("user-change", NULL, $body_html_notify, $subject, XMAIL_IMMEDIATE);
 
     return $notify_result ? null : "Не удалось послать оповещение пользователю. ";
 }

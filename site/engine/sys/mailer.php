@@ -88,12 +88,12 @@
       * Баги: Знает про fizlesh.ru, вместо того, чтобы брать эти настройки
       * из конфигурационного файла.
       **/
-    function xcms_deliver_mail_int($mail_group, $addr_list, $notification_body, $subject = '')
+    function xcms_deliver_mail_int($mail_group, $addr_list, $notification_body, $subject = NULL)
     {
         global $SETTINGS;
         $notification_time = date("d.m.Y");
 
-        if (empty($subject))
+        if ($subject === NULL)
             $subject = "Уведомления за $notification_time";
 
         $body_html = xcms_get_html_template("notification-template");
@@ -127,18 +127,19 @@
 
     /**
       * Ставит почтовое уведомление в очередь
-      * @param mail_group Группа рассылки из списка mailer.conf (или NULL)
+      * @param mail_group Группа рассылки из списка mailer.conf (или NULL),
+      *        она же префикс в теме.
       * @param addr_list Список адресов помимо группы рассылки (или NULL).
       *        Если указан одновременно и адрес, и группа рассылки, то письмо отправляется
       *        по указанному адресу, а адресаты из группы рассылки ставятся в BCC.
-      * @param prefix Префикс для удобной фильтрации писем: [xcms-<prefix>]
-      * @param subject Тема уведомления
-      * @param mail_text Тело уведомления (в формате plain text)
       * @param mail_text_html Тело уведомления (в формате html)
+      * @param subject Тема уведомления (не имеет смысла в случае отложенной отправки)
       * @param immediate Если значение равно XMAIL_IMMEDIATE, письмо будет послано немедленно.
       *        По умолчанию равно XMAIL_DEFERRED, и письмо складывается в очередь для отправки.
+      * @param mail_text Тело уведомления (в формате plain text), есть подозрения, что оно
+      *        никогда не будет использоваться
       **/
-    function xcms_send_notification($mail_group, $addr_list, $prefix, $subject, $mail_text, $mail_text_html, $immediate = XMAIL_DEFERRED)
+    function xcms_send_notification($mail_group, $addr_list, $mail_text_html, $subject = NULL, $immediate = XMAIL_DEFERRED, $mail_text = NULL)
     {
         global $SETTINGS;
         $login = xcms_user()->login();
@@ -173,7 +174,7 @@
         if ($immediate)
             return xcms_deliver_mail_int($mail_group, $addr_list, $body_html, $subject);
 
-        // In case of delayed sending, subject and prefix are lost
+        // In case of delayed sending, subject will be lost
         $values = array(
             "mail_group"=>$mail_group,
             "notification_text"=>$body_text,
@@ -185,8 +186,6 @@
 
     /**
       * Доставляет накопленные почтовые уведомления
-      * Баги: Знает про fizlesh.ru, вместо того, чтобы брать эти настройки
-      * из конфигурационного файла.
       * @param mail_group Группа рассылки из списка mailer.conf (или NULL)
       **/
     function xcms_deliver_notifications($mail_group)

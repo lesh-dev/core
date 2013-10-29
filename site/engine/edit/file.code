@@ -65,14 +65,7 @@
                 $body_html = str_replace('@@DIFF@', $diff_html, $body_html);
                 // disable full page text
                 //$body_html = str_replace('@@NEW-TEXT@', htmlspecialchars($new_text), $body_html);
-                xcms_send_notification(
-                    "content-change",
-                    NULL,
-                    "cont",
-                    "Пользователь $login изменил страницу $id",
-                    "",
-                    $body_html
-                );
+                xcms_send_notification("content-change", NULL, $body_html);
             }
             system("gzip $target_name");
         }

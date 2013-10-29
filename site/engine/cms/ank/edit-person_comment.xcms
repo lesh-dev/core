@@ -109,8 +109,7 @@ function xsm_notify_person_comment_edit($person_comment)
         xsm_get_person_comment_field_types(),
         $table_title);
 
-    $subject = "Комментарий: $full_name";
-    xcms_send_notification("reg", NULL, "db", $subject, "This message is in HTML format.\r\n", $mail_msg);
+    xcms_send_notification("reg", NULL, $mail_msg);
 }
 
 
