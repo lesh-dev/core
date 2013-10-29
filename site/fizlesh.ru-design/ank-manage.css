@@ -375,6 +375,7 @@ div.help-widget {
 div.xsm-navbar {
     width: 100%;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 a.xsm-menu-item {
@@ -382,8 +383,8 @@ a.xsm-menu-item {
     background-color: rgb(202, 235, 98);
     border: 1px solid #8faf6f;
     border-left: none;
-    padding: 3px;
-    width: 15%;
+    padding: 3px 0px 3px 0px;
+    width: 14%;
     text-align: center;
     display: inline-block;
 }
