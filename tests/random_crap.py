@@ -11,6 +11,10 @@ rusAlphaCap = u"АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮ
 engAlphaSmall = "abcdefgiklmnopqrstuvwxyz"
 engAlphaCap = "ABCDEFGHIKLMNOPQRSTUVWZYZ"
 
+specialCharsDefault = '.,!?;:"<>-=@%$^&*()\''
+specialCharsWoAngle = '.,!?;:"-=@%$^&*()\''
+
+
 def randomText(length):
     rs = ""
     for i in range(0, length):
@@ -23,10 +27,13 @@ def randomEmail():
 def randomVkontakte():
     return "http://vk.com/id" + randomDigits(10)
     
-def randomWord(length):
+def randomWord(length, wordOptions = [], specialChars = specialCharsDefault):
     rs = ""
     
-    enLang = (random.randint(0,10) < 7)
+    if "english" in wordOptions:
+        enLang = True
+    else:
+        enLang = (random.randint(0,10) < 7)
     
     if random.randint(0,10) < 3:
         if enLang:
@@ -46,7 +53,7 @@ def randomWord(length):
             rs += random.choice(rusAlphaSmall)
         
     if random.choice(range(0,20)) < 3:
-        rs += random.choice('.,!?;:"<>-==@%$^&*()')
+        rs += random.choice(specialChars)
             
     return rs   
         
@@ -56,7 +63,7 @@ def randomDigits(length):
         rs = rs + str(random.choice('0123456789'))
     return rs
 
-def randomCrap(wordNumber, crapOptions = []):
+def randomCrap(wordNumber, crapOptions = [], specialChars = specialCharsDefault):
     rs = ""
     for i in range(0, wordNumber):
         separator = " "
@@ -66,5 +73,5 @@ def randomCrap(wordNumber, crapOptions = []):
         if rs != "":
             rs += separator
         wordLen = random.randint(3,10)
-        rs += randomWord(wordLen)
+        rs += randomWord(wordLen, crapOptions, specialChars)
     return rs
