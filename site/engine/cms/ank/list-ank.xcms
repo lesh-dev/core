@@ -83,7 +83,18 @@ function xsm_show_ank_list()
 
     if (strlen($cond))
         $query .= " $cond";
-    $query .= " ORDER BY person_created DESC";
+    $query .= " ORDER BY
+        CASE anketa_status
+            WHEN 'new' THEN 0
+            WHEN 'progress' THEN 1
+            WHEN 'less' THEN 2
+            WHEN 'nextyear' THEN 3
+            WHEN 'processed' THEN 4
+            WHEN 'declined' THEN 5
+            WHEN 'old' THEN 6
+            WHEN 'duplicate' THEN 7
+        END,
+        person_created DESC";
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
     $person_sel = $db->query($query);
 
