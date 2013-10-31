@@ -21,9 +21,9 @@ class XcmsContentAddPage(SeleniumTest):
     def run(self):
 
         # avoid spontaneous HTML tags
-        specChars = random_crap.specialCharsWoAngle # without <>
+        self.specChars = random_crap.specialCharsWoAngle # without <>
         #TODO: BUG: remove this spike for Chrome
-        wordOptions = ["english"]
+        self.wordOptions = ["english"]
         
         conf = XcmsTestConfig()
         self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
@@ -74,7 +74,7 @@ class XcmsContentAddPage(SeleniumTest):
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle)
         
-        pageText = random_crap.randomCrap(10, wordOptions, specialChars = specChars)
+        pageText = random_crap.randomCrap(10, self.wordOptions, specialChars = self.specChars)
         print "Generated page text: '" + pageText + "'"
         
         pageText = self.fillElementById("edit-text", pageText)
@@ -87,7 +87,7 @@ class XcmsContentAddPage(SeleniumTest):
         self.assertElementTextById(previewElement, pageText, "preview text does not match entered page text. ")
         
         # add second line
-        newPageText = pageText + "\n" + random_crap.randomCrap(10, wordOptions, specialChars = specChars)
+        newPageText = pageText + "\n" + random_crap.randomCrap(10, self.wordOptions, specialChars = self.specChars)
         
         newPageText = self.fillElementById("edit-text", newPageText)
         print "Generated 2-line page text: '" + newPageText + "'"
@@ -117,17 +117,56 @@ class XcmsContentAddPage(SeleniumTest):
 
         self.gotoUrlByLinkText(u"Редактировать")
         
-        diffLines = [htmlParagraph(random_crap.randomCrap(7, wordOptions, specialChars = specChars)) for x in xrange(0,12)]
-        
-        diffPageText = "\n".join(diffLines)
-
-        print "before fill"
-        
-        diffPageText = self.fillElementById("edit-text", diffPageText)
-        print "after fill"
+        self.testVersions()
+                
+        self.testDiffAndLongText()
+    
+    def testVersions(self):
+        versionUnoText = "version_0001"
+        versionUnoText = self.fillElementById("edit-text", versionUnoText)
         self.clickElementById("edit-submit-top")
         
-        diffLines = diffLines[:3] + [htmlParagraph(random_crap.randomCrap(5, wordOptions, specialChars = specChars))] + diffLines[3:6] + diffLines[7:]
+        versionDosText = "version_0002"
+        versionDosText = self.fillElementById("edit-text", versionDosText)
+        self.clickElementById("edit-submit-top")
+
+        versionTresText = "version_0003"
+        versionTresText = self.fillElementById("edit-text", versionTresText)
+        self.clickElementById("edit-submit-top")
+        
+        self.setOptionValueByIdAndIndex("versions-top", 3)
+        self.clickElementByName("set-version") # Смотреть версию
+        self.wait(1)
+        self.assertElementTextById("edit-text", versionUnoText)
+
+        self.setOptionValueByIdAndIndex("versions-top", 1)
+        self.clickElementByName("set-version") # Смотреть версию
+        self.wait(1)
+        self.assertElementTextById("edit-text", versionTresText)
+        
+        self.setOptionValueByIdAndIndex("versions-top", 2)
+        self.clickElementByName("set-version") # Смотреть версию
+        self.wait(1)
+        self.assertElementTextById("edit-text", versionDosText)
+        
+
+    def testDiffAndLongText(self):
+        
+        wordNumber = 6
+        totalLines = 8
+        
+        diffLines = [htmlParagraph(random_crap.randomCrap(wordNumber, self.wordOptions, specialChars = self.specChars)) for x in xrange(0,totalLines)]
+        
+        diffPageText = "\n".join(diffLines)
+        
+        diffPageText = self.fillElementById("edit-text", diffPageText)
+
+        self.clickElementById("edit-submit-top")
+        
+        # insert one line 
+        insLine = htmlParagraph(random_crap.randomCrap(5, self.wordOptions, specialChars = self.specChars))
+        
+        diffLines = diffLines[:3] + [insLine] + diffLines[3:5] + diffLines[7:]
         diffPageText = "\n".join(diffLines)
 
         diffPageText = self.fillElementById("edit-text", diffPageText)
@@ -143,7 +182,8 @@ class XcmsContentAddPage(SeleniumTest):
         
         sampleWords = pageWords[5:8] + pageWords[24:27] + pageWords[30:32]
         for sample in sampleWords:
-            diffPageText = diffPageText.replace(sample, random_crap.randomCrap(2, wordOptions, specialChars = specChars))
+            replacement = htmlParagraph(random_crap.randomCrap(5, self.wordOptions, specialChars = self.specChars))
+            diffPageText = diffPageText.replace(sample, replacement)
         
         diffPageText = self.fillElementById("edit-text", diffPageText)
         self.clickElementById("edit-submit-top")
@@ -161,7 +201,7 @@ class XcmsContentAddPage(SeleniumTest):
         #print "-" * 20
         
         self.assertElementTextById("content-text", diffPageTextForCheck, "real page text does not match entered text. ")
-        
+
     
 
 
