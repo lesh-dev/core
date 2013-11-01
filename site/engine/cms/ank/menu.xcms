@@ -1,11 +1,12 @@
 <# auth/ #admin #ank #>
 <# cms/ank/style #>
 <?php
+
 function xsm_menu_item($view, $aux_url, $title, $first = false)
 {
     global $web_prefix, $aparam;
 
-    $url = "/${web_prefix}register/$view";
+    $url = "$view";
     $aux_class = "";
     if ($first)
         $aux_class .= "first ";

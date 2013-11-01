@@ -15,7 +15,7 @@
 <table style="width: 100%"><tr><td class="main-field roundBorders"><div style="position: relative;">
 <?php
     $ap = xcms_get_key_or($_GET, "aparam");
-    if ($ap == "view")
+    if (empty($ap) || $ap == "view")
     {
         include(translate('<! cms/ank/menu !>'));
         include(translate('<! cms/ank/list-person !>'));
