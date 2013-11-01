@@ -1,40 +1,40 @@
 <?php
-    function xcms_set_args($code, $outputStream)
+    function xcms_set_args($code, $output_stream)
     {
         global $SETTINGS;
         $argv = explode(EXP_SP, $code);
-        fputs($outputStream, $SETTINGS["code_begin"]);
+        fputs($output_stream, $SETTINGS["code_begin"]);
         foreach ($argv as $key=>$value)
         {
-            fputs($outputStream, "\$code=\"$code\";");
-            fputs($outputStream, "@\$argv[] = \"$value\";");
+            fputs($output_stream, "\$code=\"$code\";");
+            fputs($output_stream, "@\$argv[] = \"$value\";");
             if($key!=0)
             {
                 // singular value is a boolean switch
                 $a = explode(EXP_EQ, $value);
                 if (count($a) >= 2)
-                    @fputs($outputStream, "@\$param[\"{$a[0]}\"] = \"{$a[1]}\";");
+                    @fputs($output_stream, "@\$param[\"{$a[0]}\"] = \"{$a[1]}\";");
                 else
-                    @fputs($outputStream, "@\$param[\"{$a[0]}\"] = true;");
+                    @fputs($output_stream, "@\$param[\"{$a[0]}\"] = true;");
             }
         }
-        fputs($outputStream, $SETTINGS["code_end"]);
+        fputs($output_stream, $SETTINGS["code_end"]);
     }
 
-    function xcms_parse_string($s, $outputStream)
+    function xcms_parse_string($s, $output_stream)
     {
         global $SETTINGS;
         $open = stristr($s, $SETTINGS["openbracket"]);
         if(!$open)
         {
-            fputs($outputStream, $s);
+            fputs($output_stream, $s);
             return;
         }
         $close = stristr($s, $SETTINGS["closebracket"]);
         $close = substr($close, strlen($SETTINGS["closebracket"]));
         $before = substr($s, 0, strlen($s) - strlen($open));
 
-        fputs($outputStream, $before);
+        fputs($output_stream, $before);
 
         $code = substr($open, strlen($SETTINGS["openbracket"])  );
         $code = substr($code, 0, strlen($code)-strlen($close)-strlen($SETTINGS["closebracket"]));
@@ -52,7 +52,7 @@
         }
         else
         {
-            xcms_set_args($code, $outputStream);
+            xcms_set_args($code, $output_stream);
             $full_name = "$elem_full_name.xcms";
             if (!file_exists($full_name))
                 $full_name = "${elem_full_name}default.xcms";
@@ -65,23 +65,23 @@
                 $newS = preg_replace('/%[0-9]/', '', $newS);
                 // replace wildcarded arguments
                 $newS = str_replace("%*", $code, $newS);
-                xcms_parse_string($newS, $outputStream);
+                xcms_parse_string($newS, $output_stream);
             }
             elseif(file_exists("$elem_full_name.code"))
             {
-                fputs($outputStream, file_get_contents("$elem_full_name.code"));
+                fputs($output_stream, file_get_contents("$elem_full_name.code"));
             }
             elseif(file_exists($template_full_name))
             {
-                fputs($outputStream, file_get_contents($template_full_name));
+                fputs($output_stream, file_get_contents($template_full_name));
             }
             else
             {
                 xcms_log(0, "name is '$name', nopagecode: ".$SETTINGS["nopagecode"]);
-                fputs($outputStream, file_get_contents("{$SETTINGS["engine_dir"]}{$SETTINGS["nopagecode"]}.code"));
+                fputs($output_stream, file_get_contents("{$SETTINGS["engine_dir"]}{$SETTINGS["nopagecode"]}.code"));
             }
         }
-        xcms_parse_string($close, $outputStream);
+        xcms_parse_string($close, $output_stream);
     }
 
     function xcms_compile($filename, $destination)
