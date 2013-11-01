@@ -12,6 +12,7 @@ from urllib2 import URLError
 from httplib import HTTPException
 
 from selenium.webdriver.remote.webdriver import WebElement
+from selenium.webdriver.support.ui import Select
 
 import random, traceback, sys
 from datetime import datetime
@@ -359,25 +360,36 @@ class SeleniumTest:
         except InvalidElementStateException as e:
             self.failTest("Cannot set element value by id '" + eleId + "', possibly element is read-only.")
             
-    
-    def setOptionValueById(self, eleId, optValue):
+    def setOptionValueByIdAndValue(self, eleId, optValue):
         try:
             if isNumber(optValue):
                 optValue = str(optValue)
+            self.addAction("set-option-by-value", "element id: '" + eleId + "', value: " + userSerialize(optValue))
                 
-            self.getElementById(eleId).find_element_by_xpath("//option[@value='" + optValue + "']").click()
+            self.getElementById(eleId).find_element_by_xpath("option[@value='" + optValue + "']").click()
         except NoSuchElementException:
             self.failTest("Cannot get drop-down (select) element by id '" + eleId + "'. ")
 
+    def setOptionValueByIdAndIndex(self, eleId, index):
+        """
+        element index is started with 1, not 0.
+        """
+        if index < 1:
+            self.failTest("Invalid index in setOptionValueByIdAndIndex for element " + eleId + ". Index should be positive (1 and above). ")
+        self.addAction("set-option-by-index", "element id: '" + eleId + "', index: " + userSerialize(index))
+        selEle = self.getElementById(eleId)
+        optionValue = getValue(selEle.find_element_by_xpath("option[" + userSerialize(index) + "]"))
+        self.setOptionValueByIdAndValue(eleId, optionValue)
+
     def getOptionValueByName(self, eleName):
         try:
-            return getValue(self.getElementByName(eleName).find_element_by_xpath("//option[@selected='selected']"))
+            return getValue(self.getElementByName(eleName).find_element_by_xpath("option[@selected='selected']"))
         except NoSuchElementException:
             self.failTest("Cannot get drop-down (select) element by name " + userSerialize(eleName) + ". ")
         
     def getOptionValueById(self, eleId):
         try:
-            return getValue(self.getElementById(eleId).find_element_by_xpath("//option[@selected='selected']"))
+            return getValue(self.getElementById(eleId).find_element_by_xpath("option[@selected='selected']"))
         except NoSuchElementException:
             self.failTest("Cannot get drop-down (select) element by id '" + eleId + "'. ")
 
@@ -592,7 +604,7 @@ class SeleniumTest:
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
                 msg = "Cannot find URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". "
                 self.failTestWithItemNotFound(msg)
-
+                
     def gotoIndexedUrlByLinkText(self, urlText, index):
         try:
             urls = self.m_driver.find_elements_by_xpath("//a[text()='" + urlText + "']")

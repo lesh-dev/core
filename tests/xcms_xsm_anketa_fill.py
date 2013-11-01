@@ -197,7 +197,7 @@ class XcmsXsmAnketaFill(SeleniumTest):
         self.assertElementValueById("anketa_status-selector", "new")
         # change anketa status and save it.
         
-        self.setOptionValueById("anketa_status-selector", "progress")
+        self.setOptionValueByIdAndValue("anketa_status-selector", "progress")
         
         self.clickElementById("update-person-submit")
         
