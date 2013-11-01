@@ -10,4 +10,4 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)/$ @@WEB-PREFIX@$1 [R=301,L]
 
 RewriteRule ^xsm/(.*)$ /?ref=xsm&aparam=$1
-RewriteRule ^xsm$ /?ref=xsm&aparam=view
+RewriteRule ^xsm$ /?ref=xsm&aparam=root

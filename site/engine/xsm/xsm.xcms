@@ -15,7 +15,15 @@
 <table style="width: 100%"><tr><td class="main-field roundBorders"><div style="position: relative;">
 <?php
     $ap = xcms_get_key_or($_GET, "aparam");
-    if (empty($ap) || $ap == "view")
+    if ($ap == "root")
+    {
+        $url = $_SERVER["REQUEST_URI"];
+        if (substr($url, strlen($url) - 4) == "/xsm")
+        {?>
+            <meta http-equiv="refresh" content="0;URL=/<# web_prefix #>xsm/view" /><?php
+        }
+    }
+    elseif ($ap == "view")
     {
         include(translate('<! cms/ank/menu !>'));
         include(translate('<! cms/ank/list-person !>'));
