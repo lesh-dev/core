@@ -58,14 +58,14 @@
                 $full_name = "${elem_full_name}default.xcms";
             if (file_exists($full_name))
             {
-                $newS = file_get_contents($full_name);
+                $new_contents = file_get_contents($full_name);
                 foreach ($argv as $key=>$value)
-                    $newS = str_replace("%$key", $value, $newS);
+                    $new_contents = str_replace("%$key", $value, $new_contents);
                 // replace all unused parameters with empty strings
-                $newS = preg_replace('/%[0-9]/', '', $newS);
+                $new_contents = preg_replace('/%[0-9]/', '', $new_contents);
                 // replace wildcarded arguments
-                $newS = str_replace("%*", $code, $newS);
-                xcms_parse_string($newS, $output_stream);
+                $new_contents = str_replace("%*", $code, $new_contents);
+                xcms_parse_string($new_contents, $output_stream);
             }
             elseif(file_exists("$elem_full_name.code"))
             {
