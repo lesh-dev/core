@@ -97,7 +97,7 @@
             $version_suffix = str_replace("$ename", "", $v);
             $selected = "";
             if ($version_suffix == $current_version)
-                $selected = "selected";
+                $selected = 'selected="selected"';
             $vlist .= "<option $selected value=\"$version_suffix\">$version_time</option>";
         }
         $text = htmlspecialchars($text);
