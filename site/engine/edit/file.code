@@ -115,7 +115,7 @@
         <a <?php echo xcms_href(array('page'=>$pageid, 'ref'=>'index')); ?> class="submit">Свернуть редактор</a>
         Версия:
         <select name="versions" id="versions-top"><?php echo $vlist; ?></select>
-        <input type="submit" name="set-version" value="Смотреть версию"/>
+        <input type="submit" name="set-version" id="set-version-top" value="Смотреть версию"/>
         <?php include(translate('<! edit/help !>')); ?>
     </div>
     <textarea class="editor" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
