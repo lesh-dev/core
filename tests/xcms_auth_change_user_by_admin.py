@@ -108,7 +108,12 @@ class XcmsAuthChangeUserByAdmin(SeleniumTest):
         self.assertUrlPresent(u"Админка", "Now our user should have no Admin rights, but Editor uses admin panel. ")
         self.assertUrlNotPresent(u"Анкеты", "Our user still have no Manager rights. ")
         self.assertUrlPresent(u"Редактировать", "Now our user should have Editor rights. ")
-        xtest_common.performLogoutFromSite(self)
+        
+        xtest_common.gotoAdminPanel(self)
+        self.assertUrlNotPresent(u"Пользователи")
+        self.assertUrlNotPresent(u"Группы")
+        
+        xtest_common.performLogoutFromAdminPanel(self)
 
         # -------------------------------------- 3 stage: anketa manager
         xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
