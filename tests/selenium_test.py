@@ -177,18 +177,18 @@ class SeleniumTest:
         self.shutdown(0)
         
     def handleException(self, exc):
-        print "TEST " + self.getName() + " ERROR: " + exc.message
+        print "TEST " + self.getName() + " ERROR: " + userSerialize(exc.message)
         traceback.print_exc()
         self.shutdown(2)
                 
     def handleTestFail(self, exc):
         #self.m_driver.execute_script("alert('Test failed! See console log for details. ');")
-        print "TEST " + self.getName() + " FAILED: " + exc.message
+        print "TEST " + self.getName() + " FAILED: " + userSerialize(exc.message)
         self.shutdown(1)
 
     def handleTestFatal(self, exc):
         #self.m_driver.execute_script("alert('Test fataled! See logs and check your test/environment. ');")
-        print "TEST " + self.getName() + " FATALED: " + exc.message
+        print "TEST " + self.getName() + " FATALED: " + userSerialize(exc.message)
         self.shutdown(2)
 
     def getActionLog(self):
