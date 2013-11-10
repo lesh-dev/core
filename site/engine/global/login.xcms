@@ -1,9 +1,9 @@
-<# auth/user #>
 <?php
     /**
       * Универсальный обработчик логина -- глобальный шаблон login.xcms.
       * Непонятно, как его можно сдизайнить универсальным образом.
       **/
+    require_once("${engine_dir}auth/user.php");
 
     function login_handler()
     {
