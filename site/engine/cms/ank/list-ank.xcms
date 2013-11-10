@@ -6,8 +6,9 @@
 <div id="status-help" class="admin-widget help-widget">
 <p>
     По умолчанию здесь видны <b>свежие заявки</b>.
-    Цветами фона выделены жители <b class="not-msk-city">Подмосковья</b> и
-    жители <b class="far-city">более далёких областей</b>.
+    Цветами фона выделены жители <b class="not-msk-city">Подмосковья</b>
+    (город содержит в названии слово &laquo;Моск&raquo; или &laquo;МО&raquo;)
+    и жители <b class="far-city">более далёких областей</b>.
 </p>
 <p>
     Когда приходит анкета, она получает статус
@@ -109,7 +110,7 @@ function xsm_show_ank_list()
             <col width="17%" />
             <col width="23%" />
             <col width="11%" />
-            <col width="55px" />
+            <col width="70px" />
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
