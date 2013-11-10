@@ -50,7 +50,7 @@
     function xcms_add_mail_group($mailer, $mail_group, $mode = XMAIL_DESTMODE_TO)
     {
         global $SETTINGS;
-        $mail_groups = xcms_get_list("{$SETTINGS["datadir"]}cms/mailer.conf");
+        $mail_groups = xcms_get_list("{$SETTINGS["content_dir"]}cms/mailer.conf");
         $ml = xcms_get_key_or($mail_groups, $mail_group);
         if (empty($ml))
         {

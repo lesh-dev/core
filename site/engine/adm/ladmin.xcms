@@ -128,7 +128,7 @@
         include(translate("<! cms/edit_page_attachments !>"));
     else if(@$_GET["mode"]=="mailer" )
     {
-        $editfile = "{$SETTINGS["datadir"]}cms/mailer.conf";
+        $editfile = "{$SETTINGS["content_dir"]}cms/mailer.conf";
         include(translate('<! edit/tag `edit`,`view`,`installed` `longtext` !>'));
     }
     else if(@$_GET["mode"]=="rebuild_alias")
@@ -175,7 +175,7 @@
     }
     elseif(@$_GET["mode"]=="group_admin")
     {
-        $editfile = "{$SETTINGS["datadir"]}groups";
+        $editfile = "{$SETTINGS["content_dir"]}groups";
         include(translate("<! edit/tag !>"));
     }
     elseif(@$_GET["mode"]=="userlist")
