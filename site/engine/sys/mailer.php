@@ -121,7 +121,10 @@
         }
 
         $host = xcms_hostname();
-        return xcms_mailer_send($mailer, "[$mail_group] ($host) $subject", $body_html);
+        $subject = "($host) $subject";
+        if ($mail_group !== NULL)
+            $subject = "[$mail_group] $subject";
+        return xcms_mailer_send($mailer, $subject, $body_html);
     }
 
 
