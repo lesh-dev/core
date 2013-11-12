@@ -203,7 +203,8 @@ function xsm_edit_exam()
                 <?php
                 $ft = xcms_get_key_or($field_types, $key);
                 if ($ft == "textarea") {?>
-                    <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
+                    <textarea class="ankEdit" name="<?php echo $key; ?>"
+                        id="<?php echo $key;?>-text"><?php
                         echo htmlspecialchars($value); ?></textarea><?php
                 } elseif ($ft == "checkbox") {
                     // КОСТЫЛЬ! checkbox-овое поле должно начинаться со слова 'is_'
@@ -227,7 +228,7 @@ function xsm_edit_exam()
                     }
                 }
                 else {?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
-                        name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
+                        name="<?php echo $key; ?>" id="<?php echo $key; ?>-input" <?php echo $attr; ?> /><?php
                 } ?>
                 </td></tr>
                 <?php
