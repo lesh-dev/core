@@ -110,8 +110,16 @@ class XcmsAuthChangeUserByAdmin(SeleniumTest):
         self.assertUrlPresent(u"Редактировать", "Now our user should have Editor rights. ")
         
         xtest_common.gotoAdminPanel(self)
-        self.assertUrlNotPresent(u"Пользователи")
-        self.assertUrlNotPresent(u"Группы")
+        self.assertUrlNotPresent(u"Пользователи", "Editor should not see 'Users' menu. ")
+        
+        accessDeniedMsg = u"Доступ запрещён"
+        
+        self.gotoPage("/?&mode=userlist&page=index&ref=ladmin")
+        self.assertBodyTextPresent(accessDeniedMsg, "Hack of 'users' hidden link succeeded. ")
+        
+        self.assertUrlNotPresent(u"Группы", "Editor should not see 'Groups' menu. ")
+        self.gotoPage("/?&mode=group_admin&page=index&ref=ladmin")
+        self.assertBodyTextPresent(accessDeniedMsg, "Hack of 'groups' hidden link succeeded. ")        
         
         xtest_common.performLogoutFromAdminPanel(self)
 
