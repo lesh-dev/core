@@ -2,21 +2,12 @@
 <?php
 
 // Специфическая функция для данной таблицы (можно объединить с person_school)
-function xsm_person_comment_edit_operations($entity, $table_name, $id, $title, /*$school_id, */$member_person_id)
+function xsm_person_comment_edit_operations($table_name, $id, $ret_title, $member_person_id, $place)
 {
     $school_id = "ank";
     $is_new = ($id == XDB_NEW);
     $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$member_person_id));
-    ?>
-    <div style="white-space: nowrap">
-        <input type="submit" name="update-<?php echo $entity; ?>"
-            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
-        if (!$is_new) {?>
-            <input type="submit" name="delete-<?php echo $entity; ?>"
-                value="Удалить комментарий" class="delete-button"/><?php
-        }?>
-        <a class="link-button" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
-    </div><?php
+    xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title, "Удалить комментарий");
 }
 
 /**
@@ -135,7 +126,7 @@ function xsm_edit_person_comment()
 
     ?>
     <form method="post" action="edit-person_comment"><?php
-        xsm_person_comment_edit_operations('person_comment', 'person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id);?>
+        xsm_person_comment_edit_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id, 'top');?>
         <input type="hidden" name="person_comment_id" value="<?php echo $person_comment_id; ?>" />
         <input type="hidden" name="blamed_person_id" value="<?php echo $blamed_person_id; ?>" />
         <table class="ankEdit">
@@ -175,7 +166,7 @@ function xsm_edit_person_comment()
                 <?php
             }?>
         </table><?php
-        xsm_person_comment_edit_operations('person_comment', 'person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id);?>
+        xsm_person_comment_edit_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id, 'bottom');?>
     </form>
     <?php
 }
