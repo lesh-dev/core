@@ -60,6 +60,7 @@ function xsm_show_ank_list()
             " AND ( (anketa_status = 'new')".
             " OR (anketa_status = 'progress')".
             " OR (anketa_status = 'less')".
+            " OR (anketa_status = 'discuss')".
             " OR (anketa_status = 'nextyear')".
             " OR (anketa_status = 'declined') )";
     elseif ($show_anketa_status == "all")
@@ -88,12 +89,13 @@ function xsm_show_ank_list()
         CASE anketa_status
             WHEN 'new' THEN 0
             WHEN 'progress' THEN 1
-            WHEN 'less' THEN 2
-            WHEN 'nextyear' THEN 3
-            WHEN 'processed' THEN 4
-            WHEN 'declined' THEN 5
-            WHEN 'old' THEN 6
-            WHEN 'duplicate' THEN 7
+            WHEN 'discuss' THEN 2
+            WHEN 'less' THEN 3
+            WHEN 'nextyear' THEN 4
+            WHEN 'processed' THEN 5
+            WHEN 'declined' THEN 6
+            WHEN 'old' THEN 7
+            WHEN 'duplicate' THEN 8
         END,
         person_created DESC";
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
@@ -110,7 +112,7 @@ function xsm_show_ank_list()
             <col width="17%" />
             <col width="23%" />
             <col width="11%" />
-            <col width="70px" />
+            <col width="75px" />
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
