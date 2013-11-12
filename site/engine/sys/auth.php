@@ -12,7 +12,7 @@
         private function _file_name($login)
         {
             global $SETTINGS, $content_dir;
-            $cd = $SETTINGS["datadir"];
+            $cd = $SETTINGS["content_dir"];
             if (empty($cd)) $cd = $content_dir;
             if (empty($cd))
                 throw new Exception ("Content directory is not set in SETTINGS. ");

@@ -1,7 +1,7 @@
 <?php
-    $datadir = xcms_get_page_path();
+    $page_path = xcms_get_page_path();
     $cat = @$_GET["cat"];
-    $piclist = glob("$datadir/$cat*.pic");
+    $piclist = glob("$page_path/$cat*.pic");
     $qs = "";
     $qsm = "";
 
@@ -24,7 +24,7 @@
         $qs = $qs."$key=$value&amp;";
     }
 
-    $catlist = glob("$datadir/*.cat");
+    $catlist = glob("$page_path/*.cat");
     $plus = $photono - 1;
     if ($photono)
         echo "<a href=\"?{$qs}photono=s$plus\"><==</a>";
@@ -32,7 +32,7 @@
     foreach($catlist as $key=>$value)
     {
         $catname = file_get_contents($value);
-        $value = str_replace("$datadir/", "", $value);
+        $value = str_replace("$page_path/", "", $value);
         $value = str_replace(".cat", "", $value);
         if ($value=="none") continue;
         if ($catname=="") $catname=$value;
@@ -46,12 +46,12 @@
 
     if(@$_GET["img"])
     {
-        $list = getList("$datadir/{$_GET["img"]}.pic");
+        $list = getList("$page_path/{$_GET["img"]}.pic");
         $name = $list["name"];
         $comment = $list["comment"];
-        echo "<center><div><b>$name</b></div><img src=\"$datadir/{$_GET["img"]}.jpeg\"><i>$c  omment</i></center>";
+        echo "<center><div><b>$name</b></div><img src=\"$page_path/{$_GET["img"]}.jpeg\"><i>$comment</i></center>";
         @$list["views"]++;
-        saveList($list, "$datadir/{$_GET["img"]}.pic");
+        saveList($list, "$page_path/{$_GET["img"]}.pic");
     }
     else
     {
@@ -72,7 +72,7 @@
             $pic = $list["picname"];
             $value = str_replace(".pic", "", $value);
             $pre = "$value-preview.jpeg";
-            $value = str_replace("$datadir/", "", $value);
+            $value = str_replace("$page_path/", "", $value);
             if($i>=5) {echo "<tr>";$i=0;}
             $title = $list["name"];
             $views = $list["views"];

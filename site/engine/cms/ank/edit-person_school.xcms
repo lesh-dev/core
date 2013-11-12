@@ -41,20 +41,11 @@ function xsm_update_person_school($title, $fields)
 }
 
 // Специфическая функция для данной таблицы
-function xsm_person_school_edit_operations($entity, $table_name, $id, $title, $school_id, $member_person_id)
+function xsm_person_school_edit_operations($table_name, $id, $ret_title, $school_id, $member_person_id, $place)
 {
     $is_new = ($id == XDB_NEW);
     $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$member_person_id));
-    ?>
-    <div style="white-space: nowrap">
-        <input type="submit" name="update-<?php echo $entity; ?>"
-            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
-        if (!$is_new) {?>
-            <input type="submit" name="delete-<?php echo $entity; ?>"
-                value="Отчислить со школы" class="delete-button"/><?php
-        }?>
-        <a class="link-button" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
-    </div><?php
+    xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title, "Отчислить со школы");
 }
 
 /* Ещё одна специфическая функция -- возврат на редактирование, а не на просмотр,
@@ -150,7 +141,7 @@ function xsm_edit_person_school()
 
     ?>
     <form method="post" action="edit-person_school"><?php
-        xsm_person_school_edit_operations('person_school', 'person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id);?>
+        xsm_person_school_edit_operations('person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id, 'top');?>
         <input type="hidden" name="person_school_id" value="<?php echo $person_school_id; ?>" />
         <input type="hidden" name="member_person_id" value="<?php echo $member_person_id; ?>" />
         <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
@@ -199,7 +190,7 @@ function xsm_edit_person_school()
                 <?php
             }?>
         </table><?php
-        xsm_person_school_edit_operations('person_school', 'person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id);?>
+        xsm_person_school_edit_operations('person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id, 'bottom');?>
     </form>
     <?php
 }

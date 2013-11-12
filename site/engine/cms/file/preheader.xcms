@@ -2,9 +2,9 @@
 <?php
     if (@$_POST["download-file"] || $INFO["immediate"] == YES)
     {
-        header("Content-Type: ".file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/ftype"));
-        header("Attachment: ".file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/fname"));
-        echo file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/stream");
+        header("Content-Type: ".file_get_contents("{$SETTINGS["content_dir"]}cms/pages/$pageid/ftype"));
+        header("Attachment: ".file_get_contents("{$SETTINGS["content_dir"]}cms/pages/$pageid/fname"));
+        echo file_get_contents("{$SETTINGS["content_dir"]}cms/pages/$pageid/stream");
         die();
     }
 ?>

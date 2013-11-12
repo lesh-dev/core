@@ -1,7 +1,8 @@
-<# if //@$_GET['mode']=='logout'//auth/logout//#>
-<# locale #>
-<# url #>
-<# auth/ #registered #>
+<# if //@$_GET['mode']=='logout'//auth/logout//#><?php
+?><# locale #><?php
+?><# url #><?php
+?><# auth/ #registered #><?php
+?><!DOCTYPE html>
 <html>
     <head>
         <# cms/head #>

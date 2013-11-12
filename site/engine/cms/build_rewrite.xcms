@@ -13,7 +13,7 @@
     $rewrite_text = str_replace('@@WEB-PREFIX@', "/$web_prefix", $rewrite_text);
     $rewrite_text .= "\n";
 
-    $custom_rewrite_fn = "{$SETTINGS["datadir"]}cms/moved-pages";
+    $custom_rewrite_fn = "{$SETTINGS["content_dir"]}cms/moved-pages";
     if (file_exists($custom_rewrite_fn))
     {
         $rewrite_text .= "# Moved pages rules\n";
@@ -41,7 +41,7 @@
     }
 
 
-    $custom_htaccess_fn = "{$SETTINGS["datadir"]}cms/custom-htaccess";
+    $custom_htaccess_fn = "{$SETTINGS["content_dir"]}cms/custom-htaccess";
     if (file_exists($custom_htaccess_fn))
     {
         $custom_contents = @file_get_contents($custom_htaccess_fn);

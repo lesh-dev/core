@@ -11,7 +11,7 @@ function xcms_get_info_file_name()
 {
     global $SETTINGS;
     global $pageid;
-    return "{$SETTINGS["datadir"]}cms/pages/$pageid/info";
+    return "{$SETTINGS["content_dir"]}cms/pages/$pageid/info";
 }
 
 /**
@@ -28,7 +28,7 @@ function xcms_get_page_path($page_id = false)
         global $pageid;
         $page_id = $pageid;
     }
-    return "{$SETTINGS["datadir"]}cms/pages/$page_id";
+    return "{$SETTINGS["content_dir"]}cms/pages/$page_id";
 }
 
 /**
@@ -38,7 +38,7 @@ function xcms_get_page_path($page_id = false)
 function xcms_get_page_root($need_slash = true)
 {
     global $SETTINGS;
-    return "{$SETTINGS["datadir"]}cms/pages" . ($need_slash ? "/" : "");
+    return "{$SETTINGS["content_dir"]}cms/pages" . ($need_slash ? "/" : "");
 }
 
 /**
@@ -49,13 +49,13 @@ function xcms_get_page_menu_icon()
 {
     global $SETTINGS;
     global $pageid;
-    return "{$SETTINGS["datadir"]}cms/pages/$pageid/menu-icon.png";
+    return "{$SETTINGS["content_dir"]}cms/pages/$pageid/menu-icon.png";
 }
 
 function xcms_get_page_content_name($page_id)
 {
     global $SETTINGS;
-    return "{$SETTINGS["datadir"]}cms/pages/$page_id/content";
+    return "{$SETTINGS["content_dir"]}cms/pages/$page_id/content";
 }
 
 function xcms_get_page_template_name($name)
@@ -82,7 +82,7 @@ function xcms_get_page_comments_name()
 {
     global $SETTINGS;
     global $pageid;
-    return "{$SETTINGS["datadir"]}cms/pages/$pageid/comments";
+    return "{$SETTINGS["content_dir"]}cms/pages/$pageid/comments";
 }
 
 /**
@@ -93,7 +93,7 @@ function xcms_get_page_comments_name()
 function xcms_get_subpages($page_id)
 {
     global $SETTINGS;
-    $path_prefix = "{$SETTINGS["datadir"]}cms/pages/";
+    $path_prefix = "{$SETTINGS["content_dir"]}cms/pages/";
     $list = glob("${path_prefix}$page_id/*", GLOB_ONLYDIR);
     $page_ids = array();
     foreach ($list as $subpage_id)
@@ -155,7 +155,7 @@ function xcms_collect_aliases_int(&$aliases, $dir, $root_len)
 function xcms_collect_aliases()
 {
     global $SETTINGS;
-    $root = "{$SETTINGS["datadir"]}cms/pages";
+    $root = "{$SETTINGS["content_dir"]}cms/pages";
     $aliases = array();
     xcms_collect_aliases_int($aliases, $root, strlen($root));
     return $aliases;

@@ -4,24 +4,24 @@
         if (@$_FILES["upload"]["error"])
         {
             echo "<h3>Загрузка не удалась.</h3>";
-            @unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/ftype");
-            @unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/fname");
-            @unlink("{$SETTINGS["datadir"]}cms/pages/$pageid/stream");
+            @unlink("{$SETTINGS["content_dir"]}cms/pages/$pageid/ftype");
+            @unlink("{$SETTINGS["content_dir"]}cms/pages/$pageid/fname");
+            @unlink("{$SETTINGS["content_dir"]}cms/pages/$pageid/stream");
         }
         else
         {
-            xcms_write("{$SETTINGS["datadir"]}cms/pages/$pageid/ftype", @$_FILES["upload"]["type"]);
-            xcms_write("{$SETTINGS["datadir"]}cms/pages/$pageid/fname", @$_FILES["upload"]["name"]);
-            copy(@$_FILES["upload"]["tmp_name"], "{$SETTINGS["datadir"]}cms/pages/$pageid/stream");
+            xcms_write("{$SETTINGS["content_dir"]}cms/pages/$pageid/ftype", @$_FILES["upload"]["type"]);
+            xcms_write("{$SETTINGS["content_dir"]}cms/pages/$pageid/fname", @$_FILES["upload"]["name"]);
+            copy(@$_FILES["upload"]["tmp_name"], "{$SETTINGS["content_dir"]}cms/pages/$pageid/stream");
             $INFO["menu-locked"] = (@$_POST["menu-lock-section"]) ? YES : NO;
             $INFO["immediate"] = (@$_POST["immediate-file"]) ? YES : NO;
             xcms_save_list(xcms_get_info_file_name(), $INFO);
         }
     }
-    if (file_exists("{$SETTINGS["datadir"]}cms/pages/$pageid/fname"))
+    if (file_exists("{$SETTINGS["content_dir"]}cms/pages/$pageid/fname"))
     {
-        echo "<h3>".@file_get_contents("{$SETTINGS["datadir"]}cms/pages/$pageid/fname")."</h3>";
-        $sz = filesize("{$SETTINGS["datadir"]}cms/pages/$pageid/stream");
+        echo "<h3>".@file_get_contents("{$SETTINGS["content_dir"]}cms/pages/$pageid/fname")."</h3>";
+        $sz = filesize("{$SETTINGS["content_dir"]}cms/pages/$pageid/stream");
         echo "Размер: $sz<br>";
     }
 ?>
@@ -37,5 +37,5 @@
 </form>
 <h3>Описание</h3>
 <?php
-    include(translate("<! var editfile {$SETTINGS["datadir"]}cms/pages/$pageid/content !><! edit/file rows=8 xz -h !>"));
+    include(translate("<! var editfile {$SETTINGS["content_dir"]}cms/pages/$pageid/content !><! edit/file rows=8 xz -h !>"));
 ?>

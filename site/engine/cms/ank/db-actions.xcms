@@ -115,6 +115,21 @@ function xsm_delete_entity_listmode($entity, $table_name, $title, $aux_param = '
     <a href="list-<?php echo $redir ?>">Вернуться к просмотру списка</a></p><?php
 }
 
+function xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title, $del_title = "Удалить") {?>
+    <div style="white-space: nowrap">
+        <input type="submit" name="update-<?php echo $table_name; ?>"
+            id="update-<?php echo "$table_name-submit-$place"; ?>"
+            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
+        if (!$is_new) {?>
+            <input type="submit" name="delete-<?php echo $table_name; ?>"
+                id="delete-<?php echo "$table_name-$place-submit"; ?>"
+                value="<?php echo $del_title; ?>" class="delete-button"/><?php
+        }?>
+        <a class="link-button" id="return-<?php echo $place; ?>"
+            href="<?php echo $redir; ?>"><?php echo $ret_title; ?></a>
+    </div><?php
+}
+
 // Here entity should be equal to table name, but...
 function xsm_edit_operations($entity, $table_name, $id, $title, $aux_param = '')
 {
@@ -134,6 +149,8 @@ function xsm_edit_operations($entity, $table_name, $id, $title, $aux_param = '')
             echo $redir; ?>"><?php echo $title; ?></a>
     </div><?php
 }
+
+
 
 // Kosher function for person
 function NEW_xsm_edit_operations($table_name, $id, $title, $aux_param = '')
