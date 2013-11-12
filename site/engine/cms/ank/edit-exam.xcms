@@ -1,22 +1,13 @@
 <# cms/ank/diff #>
 <?php
 
-function xsm_edit_exam_operations($school_id, $student_person_id, $id)
+function xsm_edit_exam_operations($school_id, $student_person_id, $id, $place)
 {
     $is_new = ($id == XDB_NEW);
     $table_name = "exam";
-    $title = "Вернуться к просмотру участника";
+    $ret_title = "Вернуться к просмотру участника";
     $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$student_person_id));
-    ?>
-    <div style="white-space: nowrap">
-        <input type="submit" name="update-<?php echo $table_name; ?>"
-            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
-        if (!$is_new) {?>
-            <input type="submit" name="delete-<?php echo $table_name; ?>"
-                value="Удалить" class="delete-button"/><?php
-        }?>
-        <a class="link-button" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
-    </div><?php
+    xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title);
 }
 
 /**
@@ -182,7 +173,7 @@ function xsm_edit_exam()
 
     ?>
     <form method="post" action="edit-exam"><?php
-        xsm_edit_exam_operations($school_id, $student_person_id, $exam_id);
+        xsm_edit_exam_operations($school_id, $student_person_id, $exam_id, "top");
         ?>
         <input type="hidden" name="exam_id" value="<?php echo $exam_id; ?>" />
         <input type="hidden" name="student_person_id" value="<?php echo $student_person_id; ?>" />
@@ -242,7 +233,7 @@ function xsm_edit_exam()
                 <?php
             }?>
         </table><?php
-        xsm_edit_exam_operations($school_id, $student_person_id, $exam_id); ?>
+        xsm_edit_exam_operations($school_id, $student_person_id, $exam_id, "bottom"); ?>
     </form>
     <?php
 }
