@@ -50,7 +50,7 @@ function xsm_person_school_edit_operations($table_name, $id, $ret_title, $school
 
 /* Ещё одна специфическая функция -- возврат на редактирование, а не на просмотр,
 т.к. просмотра отдельно не существует) */
-function xsm_warn_delete_person_school($entity, $table_name, $title, $aux_param = '')
+function xsm_warn_delete_person_school($table_name, $title, $aux_param = '')
 {
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
@@ -62,13 +62,13 @@ function xsm_warn_delete_person_school($entity, $table_name, $title, $aux_param 
     $first_name = xcms_get_key_or($person, 'first_name');
     $last_name = xcms_get_key_or($person, 'last_name');
     $school_title = xcms_get_key_or($school, 'school_title');
-    $redir = "$entity$aux_param".xcms_url(array($key_name=>$id)); ?>
+    $redir = "$table_name$aux_param".xcms_url(array($key_name=>$id)); ?>
     <div class="delete-warning">
         Вы действительно хотите отчислить участника <b><?php echo "$first_name $last_name"; ?></b>
         со школы <b><?php echo $school_title; ?></b>?</div>
-    <div><form method="post" action="edit-<?php echo "$entity$aux_param"; ?>">
+    <div><form method="post" action="edit-<?php echo "$table_name$aux_param"; ?>">
         <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
-        <input type="submit" name="confirm-delete-<?php echo $entity; ?>"
+        <input type="submit" name="confirm-delete-<?php echo $table_name; ?>"
             value="Таки да, удалить!" class="delete-button"/>
         <a class="link-button"
             href="edit-<?php echo $redir ?>">Вернуться к редактированию</a>
@@ -76,7 +76,7 @@ function xsm_warn_delete_person_school($entity, $table_name, $title, $aux_param 
     <?php
 }
 
-function xsm_delete_person_school($entity, $table_name, $title, $aux_param = '')
+function xsm_delete_person_school($table_name, $title, $aux_param = '')
 {
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
@@ -198,9 +198,9 @@ function xsm_edit_person_school()
 if (@$_POST["update-person_school"])
     xsm_update_person_school('Участник-на-Школе', $person_school_fields);
 elseif (@$_POST["delete-person_school"])
-    xsm_warn_delete_person_school('person_school', 'person_school', 'Участник-на-Школе');
+    xsm_warn_delete_person_school('person_school', 'Участник-на-Школе');
 elseif (@$_POST["confirm-delete-person_school"])
-    xsm_delete_person_school('person_school', 'person_school', 'Участник-на-Школе');
+    xsm_delete_person_school('person_school', 'Участник-на-Школе');
 else
     xsm_edit_person_school();
 ?>
