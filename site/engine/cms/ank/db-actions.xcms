@@ -130,6 +130,19 @@ function xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title, $del_tit
     </div><?php
 }
 
+function xsm_warn_delete_ops($table_name, $key_name, $id, $redir, $entity_name, $object_str = '', $aux_param = '') {?>
+    <div class="delete-warning">Вы действительно хотите удалить
+        <?php echo $entity_name.' '.$object_str ; ?> [<b><?php echo $id; ?></b>]?</div>
+    <div><form method="post" action="edit-<?php echo $table_name.$aux_param; ?>">
+        <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
+        <input type="submit" name="confirm-delete-<?php echo $table_name; ?>"
+            id="confirm-delete-<?php echo $table_name; ?>-submit"
+            value="Таки да, удалить!" class="delete-button"/>
+        <a class="link-button" id="return"
+            href="edit-<?php echo $redir ?>">Вернуться к редактированию</a>
+    </form></div><?php
+}
+
 // Here entity should be equal to table name, but...
 function xsm_edit_operations($entity, $table_name, $id, $title, $aux_param = '')
 {
