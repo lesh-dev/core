@@ -42,16 +42,8 @@ function xsm_warn_delete_exam($table_name, $title)
 {
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-    $redir = $table_name.xcms_url(array($key_name=>$id)); ?>
-    <div class="delete-warning">Вы действительно хотите удалить зачёт [<?php echo $id; ?>]?</div>
-    <div><form method="post" action="edit-<?php echo $table_name; ?>">
-        <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
-        <input type="submit" name="confirm-delete-<?php echo $table_name; ?>"
-            value="Таки да, удалить!" class="delete-button"/>
-        <a class="link-button"
-            href="edit-<?php echo $redir ?>">Вернуться к редактированию</a>
-    </form></div>
-    <?php
+    $redir = $table_name.xcms_url(array($key_name=>$id));
+    xsm_warn_delete_ops($table_name, $key_name, $id, $redir, "зачёт");
 }
 
 function xsm_delete_exam($table_name, $title)
