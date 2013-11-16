@@ -62,18 +62,9 @@ function xsm_warn_delete_person_school($table_name, $title, $aux_param = '')
     $first_name = xcms_get_key_or($person, 'first_name');
     $last_name = xcms_get_key_or($person, 'last_name');
     $school_title = xcms_get_key_or($school, 'school_title');
-    $redir = "$table_name$aux_param".xcms_url(array($key_name=>$id)); ?>
-    <div class="delete-warning">
-        Вы действительно хотите отчислить участника <b><?php echo "$first_name $last_name"; ?></b>
-        со школы <b><?php echo $school_title; ?></b>?</div>
-    <div><form method="post" action="edit-<?php echo "$table_name$aux_param"; ?>">
-        <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
-        <input type="submit" name="confirm-delete-<?php echo $table_name; ?>"
-            value="Таки да, удалить!" class="delete-button"/>
-        <a class="link-button"
-            href="edit-<?php echo $redir ?>">Вернуться к редактированию</a>
-    </form></div>
-    <?php
+    $redir = "$table_name$aux_param".xcms_url(array($key_name=>$id));
+    xsm_warn_delete_ops($table_name, $key_name, $id, $redir, "участника",
+        "<b>$first_name $last_name</b> со школы <b>$school_title</b>", $aux_param);
 }
 
 function xsm_delete_person_school($table_name, $title, $aux_param = '')
