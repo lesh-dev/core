@@ -10,20 +10,42 @@
  * Alias страницы: contest/send
  **/
 $need_send = false;
-if(@$_POST["send-contest"])
+$max_solution_size = 20 * 1024 * 1024;
+
+if (@$_POST["send-contest"])
 {
     $file_name = @$_FILES["solution"]["name"];
     $tmp_name = @$_FILES["solution"]["tmp_name"];
     $size = @$_FILES["solution"]["size"];
     $error = @$_FILES["solution"]["error"];
-    if ($size > 6000000)
-        echo "<font color=\"red\">Ошибка отправки решения:
-            файл слишком большой</font>";
-    else if ($file_name == "")
-        echo "<font color=\"red\">Ошибка отправки решения:
-            не выбран файл</font>";
-    else if ($error !== 0)
-        echo "<font color=\"red\">Ошибка отправки решения.</font>";
+    $email = xcms_get_key_or($_POST, "mail");
+
+    if ($size > $max_solution_size ||
+        $error == UPLOAD_ERR_INI_SIZE ||
+        $error == UPLOAD_ERR_FORM_SIZE)
+    {
+        xcms_log(XLOG_ERROR, "[CONTEST] File too large. Error: $error, size: $size");
+        ?>
+        <font color="red"><b>Ошибка отправки решения</b>:
+            файл слишком большой. Максимальный размер файла:
+            <b>15&nbsp;МБ</b></font><?php
+    }
+    elseif (!strlen($file_name))
+    {
+        xcms_log(XLOG_ERROR, "[CONTEST] File name not set");
+        ?>
+        <font color="red"><b>Ошибка отправки решения</b>:
+            не выбран файл!</font><?php
+    }
+    elseif ($error !== 0)
+    {
+        xcms_log(XLOG_ERROR, "[CONTEST] Unknown file upload error: $error");
+        ?>
+        <font color="red"><b>Ошибка отправки решения.</b>.
+            Попробуйте ещё раз. Если эта ошибка повторяется,
+            пожалуйста, отправьте решение на адрес
+            <b>contest@fizlesh.ru</b>.</font><?php
+    }
     else
     {
         @mkdir("$content_dir/contest/");
@@ -37,27 +59,22 @@ if(@$_POST["send-contest"])
             "sender" => @$_SERVER["REMOTE_ADDR"]." (".@$_SERVER["REMOTE_HOST"].")",
             "date" => time(),
             "attachment" => $file_name,
-            "mail" => $_POST["mail"]
+            "mail" => $email
         );
         xcms_save_list("$folder/config.ini", $data);
 
-        if ($error)
-            echo "<font color=\"red\">Ошибка отправки решения.</font>";
-        else
-        {
-            $need_send = true;
-            ?>
-            <h3>Спасибо, Ваше решение принято!</h3>
-            Мы свяжемся с Вами в течении трёх дней. Если за этот срок Вам на почту
-            не придёт уведомления,
-            отправьте, пожалуйста, решение еще раз
-            <?php
-        }
+        $need_send = true;
+        ?>
+        <h3>Спасибо, Ваше решение принято!</h3>
+        Мы свяжемся с Вами в течении трёх дней. Если за этот срок
+        Вам на почту не придёт уведомления,
+        отправьте, пожалуйста, решение еще раз.
+        <?php
     }
 }
 if (!$need_send) { ?>
 <p>
-    Решение должно представлять из себя архив не более чем 5~МБ.
+    Решение должно представлять из себя архив не более чем 15~МБ.
     Вложите в архив любые файлы, которые сочтёте нужным~---
     отсканированные тексты, фотографии экспериментальных установок и~т.п.
 </p>
@@ -76,7 +93,8 @@ if (!$need_send) { ?>
 
 <h3>Отправить решение</h3>
 <form enctype="multipart/form-data" method="post">
-    <input type="hidden" name="MAX_FILE_SIZE" value="6000000">
+    <input type="hidden" name="MAX_FILE_SIZE"
+        value="<?php echo $max_solution_size; ?>">
     <table>
         <tr>
             <td>Архив с решением:</td>
