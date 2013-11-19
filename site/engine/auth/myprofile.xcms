@@ -14,7 +14,11 @@
         {
             foreach(array("name", "email") as $form_name)
                 $user->set_param($form_name, @$_POST[$form_name]);
-        } catch (Exception $e) {?>
+
+            ?><div class="notice">Данные обновлены успешно</div><?php
+
+        } catch (Exception $e)
+        {?>
             <div class="error"><?php echo $e->getMessage(); ?></div><?php
         }
     }
