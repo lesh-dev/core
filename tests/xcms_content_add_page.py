@@ -8,6 +8,9 @@ from selenium_test import SeleniumTest
 def htmlParagraph(x):
     return "<p>" + x + "</p>"
 
+def linesToHtml(lineArray):
+    return "\n".join([htmlParagraph(x) for x in lineArray])
+
 class XcmsContentAddPage(SeleniumTest):
     """
     This test checks user add functional.
@@ -29,29 +32,25 @@ class XcmsContentAddPage(SeleniumTest):
         self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
         xtest_common.assertNoInstallerPage(self)
 
-        #self.gotoRoot()
-        #self.wait(1)
-        #print "func: ", self.m_driver.title;
-
-        #print "page title by tag: ", self.getPageTitle()
-        #print self.getPageSource()
-        #print "tag: ", self.m_driver.find_element_by_xpath("/html/head").find_elements_by_xpath("*")[4].tag_name
-        #print "text: ", self.m_driver.find_element_by_xpath("/html/head").find_elements_by_xpath("*")[4].find_elements_by_xpath("*")[0].text
-        #print "page title: ", self.getElementText("/html/head")
-        #self.failTest("stop")
-
         xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
+        
+        self.testBaseEditing()
 
+        self.testVersions()
 
+        self.testDiffAndLongText()
+        
+    def testBaseEditing(self):
+        conf = XcmsTestConfig()
 
         xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
 
         xtest_common.gotoAdminPanel(self)
+        
+        
+        self.parentPage = u"Главная"
 
-
-        parentPage = u"Главная"
-
-        self.gotoUrlByLinkText(parentPage)
+        self.gotoUrlByLinkText(self.parentPage)
         self.gotoUrlByLinkText(u"Подстраница")
 
         inpPageDir = "test_page_" + random_crap.randomText(8);
@@ -70,6 +69,8 @@ class XcmsContentAddPage(SeleniumTest):
             self.failTest("Default selected page type is not 'content': " + defaultPageType)
 
         self.clickElementById("create-submit")
+        
+        self.testPageMenuTitle = inpMenuTitle
 
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle)
@@ -104,7 +105,7 @@ class XcmsContentAddPage(SeleniumTest):
         self.assertBodyTextPresent(u"Личный кабинет")
         # click on menu.
 
-        self.gotoUrlByLinkText(parentPage)
+        self.gotoUrlByLinkText(self.parentPage)
         self.gotoUrlByLinkText(inpMenuTitle)
 
         self.assertElementTextById("content-text", newPageTextForCheck, "page text after reopening editor does not match entered text. ")
@@ -115,13 +116,12 @@ class XcmsContentAddPage(SeleniumTest):
 
         #self.assertBodyTextPresent(inpPageSubheader, "page subheader does not match entered text. ")
 
-        self.gotoUrlByLinkText(u"Редактировать")
-
-        self.testVersions()
-
-        self.testDiffAndLongText()
-
     def testVersions(self):
+        self.gotoUrlByLinkText(self.parentPage)
+        self.gotoUrlByLinkText(self.testPageMenuTitle)
+        
+        self.gotoUrlByLinkText(u"Редактировать")
+                        
         versionUnoText = "version_0001"
         versionUnoText = self.fillElementById("edit-text", versionUnoText)
         self.clickElementById("edit-submit-top")
@@ -151,60 +151,75 @@ class XcmsContentAddPage(SeleniumTest):
         self.clickElementByName("set-version") # Смотреть версию
         self.wait(1)
         self.assertElementTextById("edit-text", versionDosText)
-
-
+    
     def testDiffAndLongText(self):
 
-        wordNumber = 6
+        print "test diff engine."
+        self.wait(10)
+        
+        wordNumber = 7
         totalLines = 8
 
-        diffLines = [htmlParagraph(random_crap.randomCrap(wordNumber, self.wordOptions, specialChars = self.specChars)) for x in xrange(0,totalLines)]
+        origLines = [random_crap.randomCrap(wordNumber, self.wordOptions, specialChars = self.specChars) for x in xrange(0, totalLines)]
 
-        diffPageText = "\n".join(diffLines)
+        pageText = linesToHtml(origLines)
 
-        diffPageText = self.fillElementById("edit-text", diffPageText)
+        pageText = self.fillElementById("edit-text", pageText)
+
+        print "diff test page text original: "
+        print pageText
+        print "-" * 30
 
         self.clickElementById("edit-submit-top")
 
         # insert one line
-        insLine = htmlParagraph(random_crap.randomCrap(5, self.wordOptions, specialChars = self.specChars))
+        insLine = random_crap.randomCrap(wordNumber, self.wordOptions, specialChars = self.specChars)
 
-        diffLines = diffLines[:3] + [insLine] + diffLines[3:5] + diffLines[7:]
-        diffPageText = "\n".join(diffLines)
+        # remove some lines inside
+        newLines = origLines[:3] + [insLine] + origLines[3:5] + origLines[7:]
+        pageText = linesToHtml(newLines)
 
-        diffPageText = self.fillElementById("edit-text", diffPageText)
+        pageText = self.fillElementById("edit-text", pageText)
+        
+        print "diff test page new text: "
+        print pageText
+        print "-" * 30
+
         self.clickElementById("edit-submit-top")
 
-        diffLines = diffLines[:-1]
-        diffPageText = "\n".join(diffLines)
+        # cut last line
+        newLines = newLines[:-1]
+        
+        pageText = linesToHtml(newLines)
 
-        diffPageText = self.fillElementById("edit-text", diffPageText)
+        pageText = self.fillElementById("edit-text", pageText)
         self.clickElementById("edit-submit-top")
 
-        pageWords = diffPageText.split()
+        pageWords = (" ".join(newLines)).split()
+        
+        print "word count ", len(pageWords)
 
-        sampleWords = pageWords[5:8] + pageWords[24:27] + pageWords[30:32]
+        sampleWords = pageWords[5:9] + pageWords[24:27] + pageWords[30:32]
         for sample in sampleWords:
-            replacement = htmlParagraph(random_crap.randomCrap(5, self.wordOptions, specialChars = self.specChars))
-            diffPageText = diffPageText.replace(sample, replacement)
+            print "replacing word: ", sample
+            replacement = random_crap.randomCrap(4, self.wordOptions, specialChars = self.specChars)
+            print "replacement: ", replacement
+            pageText = pageText.replace(sample, replacement)
 
-        diffPageText = self.fillElementById("edit-text", diffPageText)
+        print "diff test page new text after word-replacement: "
+        print pageText
+        print "-" * 30
+
+        pageText = self.fillElementById("edit-text", pageText)
+        
         self.clickElementById("edit-submit-top")
 
         self.gotoUrlByLinkText(u"Свернуть редактор")
 
-        #print "-"*20, "before:"
-        #print diffPageText
-        #print "-"*20
-        diffPageTextForCheck = diffPageText.replace("<p>", "").replace("\n", " ").replace("</p> ", "\n").replace("</p>", "\n").strip()
-        #print "-" * 20
-        #print diffPageTextForCheck
-        #print "-" * 20, "actual:"
-        #print self.getElementTextById("content-text")
-        #print "-" * 20
+        realPageText = pageText.replace("<p>", "").replace("\n", " ").replace("</p> ", "\n").replace("</p>", "\n").strip()
 
-        self.assertElementTextById("content-text", diffPageTextForCheck, "real page text does not match entered text. ")
+        print "real page text: "
+        print realPageText
+        print "-" * 30
 
-
-
-
+        self.assertElementTextById("content-text", realPageText, "real page text does not match entered text. ")

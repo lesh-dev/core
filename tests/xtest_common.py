@@ -104,7 +104,7 @@ def performLogout(test):
 	test.gotoPage("/?&mode=logout&ref=ladmin")
 
 def performLoginAsAdmin(test, login, password):
-	print "performLoginAsAdmin(" + login + ", " + password + ")"
+	print "performLoginAsAdmin( login: " + login + ", password: " + password + " )"
 	if not performLogin(test, login, password):
 		print "Admin authorization failed"
 		raise selenium_test.TestError("Cannot perform Admin authorization as " + login + "/" + password)
@@ -118,7 +118,7 @@ def performLoginAsAdmin(test, login, password):
 
 
 def createNewUser(test, conf, login, email, password, name, auxParams = []):
-	print "createNewUser(" + login + ", " + email + ", " + password + ", " + name + ")"
+	print "createNewUser( login: " + login + "', email: " + email + ", password: " + password + ", name: " + name + " )"
 
 	if not "do_not_login_as_admin" in auxParams:
 		performLoginAsAdmin(test, conf.getAdminLogin(), conf.getAdminPass())
