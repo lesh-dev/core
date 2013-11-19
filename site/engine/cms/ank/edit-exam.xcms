@@ -115,9 +115,9 @@ function xsm_notify_exam_edit($exam)
     $hr_exam_status = $exam_statuses[$exam_status];
 
     $table_title = 'Изменён зачёт школьника <a'.
-        xcms_ext_href('view-person', array('person_id'=>$student_person_id)).'>'.
+        xsm_ext_href('view-person', array('person_id'=>$student_person_id)).'>'.
         htmlspecialchars($student_fi).'</a> по курсу <a'.
-        xcms_ext_href('view-course', array('course_id'=>$course_id)).'>'.
+        xsm_ext_href('view-course', array('course_id'=>$course_id)).'>'.
         htmlspecialchars($course_title)."</a> [$hr_exam_status]";
 
     $mail_msg = xsm_build_diff_msg(

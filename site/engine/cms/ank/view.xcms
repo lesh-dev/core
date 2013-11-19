@@ -72,7 +72,7 @@
         @mkdir($ank_dir, 0777);
         $person_id = xdb_insert_or_update('person', array('person_id'=>XDB_NEW), $person, $person_fields);
         $table_title = 'Анкета: <a'.
-            xcms_ext_href('view-person', array('person_id'=>$person_id)).'>'.
+            xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
             htmlspecialchars($full_name)."</a> ($hr_timestamp)";
         $write_success = ($person_id != false);
         $mail_msg = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg);

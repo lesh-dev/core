@@ -6,10 +6,10 @@ function xsm_notify_person_edit($person)
     $person_id = $person['person_id'];
     $old_person = ($person_id != XDB_NEW) ? xdb_get_entity_by_id('person', $person_id) : array();
 
-    $full_name = xsm_fio($person);
+    $full_name = xsm_fio_enc($person);
     $table_title = 'Изменения в анкете: <a'.
-        xcms_ext_href('view-person', array('person_id'=>$person_id)).'>'.
-        htmlspecialchars($full_name).'</a>';
+        xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
+        $full_name.'</a>';
 
     $mail_msg = xsm_build_diff_msg(
         $person,
