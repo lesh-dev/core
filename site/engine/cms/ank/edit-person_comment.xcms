@@ -47,7 +47,7 @@ function xsm_warn_delete_person_comment($table_name, $title, $aux_param = '')
     xsm_warn_delete_ops($table_name, $key_name, $id, $redir, "комментарий", $aux_param);
 }
 
-function xsm_delete_person_comment($entity, $table_name, $title, $aux_param = '')
+function xsm_delete_person_comment($table_name, $title, $aux_param = '')
 {
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
@@ -170,7 +170,7 @@ if (@$_POST["update-person_comment"])
 elseif (@$_POST["delete-person_comment"])
     xsm_warn_delete_person_comment('person_comment', 'комментарий');
 elseif (@$_POST["confirm-delete-person_comment"])
-    xsm_delete_person_comment('person_comment', 'person_comment', 'Комментарий');
+    xsm_delete_person_comment('person_comment', 'Комментарий');
 else
     xsm_edit_person_comment();
 ?>
