@@ -2,7 +2,8 @@
     require_once("$engine_dir/sys/auth.php");
     require_once("$engine_dir/sys/groups.php");
     require_once("$engine_dir/auth/user.php");
-?><# auth/ #admin #><# auth/format #><?php
+?><# auth/ #admin #><?php
+?><# auth/format #><?php
 
     $u = xcms_user();
     $target_user = xcms_get_key_or($_GET, "user");
