@@ -1,6 +1,7 @@
 <# if //@$_GET['mode']=='logout'//auth/logout//#><?php
 
-if(!@$_GET["page"])$_GET["page"]="index";
+if (!@$_GET["page"])
+    $_GET["page"] = "index";
 
 ?><# cms/linit #><?php
 ?><# locale #><?php
