@@ -175,8 +175,7 @@
     }
     elseif(@$_GET["mode"]=="group_admin")
     {
-        $editfile = "{$SETTINGS["content_dir"]}groups";
-        include(translate("<! edit/tag !>"));
+        include(translate("<! auth/group !>"));
     }
     elseif(@$_GET["mode"]=="userlist")
     {

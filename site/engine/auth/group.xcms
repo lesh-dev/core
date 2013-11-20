@@ -1,0 +1,5 @@
+<# auth/ #admin #><div class="admin-widget floating-box">
+    <h3>Группы</h3><?php
+    $editfile = "{$SETTINGS["content_dir"]}groups";
+    include(translate("<! edit/tag !>"));
+?></div>
