@@ -1,4 +1,3 @@
-<!# auth/ {$INFO['edit']} #!>
 <?php
     if(@$_POST["create-name"])
     {
@@ -19,7 +18,9 @@
         @$LIST["type"] = @$_POST["create-pagetype"];
         @$LIST["view"] = xcms_user()->login();
         @$LIST["header"] = $_POST["header"];
-        @$LIST["subheader"] = $_POST["subheader"];
+        @$LIST["alias"] = $_POST["alias"];
+
+        //@$LIST["subheader"] = $_POST["subheader"];
 
         // set view/edit rights
         // creator always has access
