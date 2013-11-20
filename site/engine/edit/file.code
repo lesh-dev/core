@@ -51,8 +51,12 @@
                 $ifn = xcms_get_info_file_name();
                 $page_info = xcms_get_list($ifn);
                 $page_alias = xcms_get_key_or($page_info, 'alias');
-                $url_name = $_SERVER["HTTP_HOST"]."/${web_prefix}$page_alias";
-                $page_url = "http://$url_name";
+                $url_name = $_SERVER["HTTP_HOST"]."/$web_prefix";
+                $page_url = 'http://';
+                $url_name .= (strlen($page_alias))
+                    ? $page_alias
+                    : '?'.xcms_url(array('page'=>$pageid));
+                $page_url .= $url_name;
                 $id = $page_alias;
                 if (!strlen($id))
                     $id = $pageid;
