@@ -56,12 +56,10 @@ class XcmsContentAddPage(SeleniumTest):
         inpPageDir = "test_page_" + random_crap.randomText(8);
         inpMenuTitle = "menu_title_" + random_crap.randomText(8);
         inpPageTitle = "page_title_" + random_crap.randomText(8);
-        inpPageSubheader = "page_sub_header_" + random_crap.randomText(8);
 
         inpPageDir = self.fillElementByName("create-name", inpPageDir);
         inpMenuTitle = self.fillElementByName("menu-title", inpMenuTitle);
         inpPageTitle = self.fillElementByName("header", inpPageTitle);
-        inpPageSubheader = self.fillElementByName("subheader", inpPageSubheader);
 
         defaultPageType = self.getOptionValueById("create-pagetype-selector")
 
@@ -113,8 +111,6 @@ class XcmsContentAddPage(SeleniumTest):
         pageTitle = self.getPageTitle()
         if inpMenuTitle not in pageTitle:
             self.failTest("Menu title text does not appear in page title. ") # WTF?? TODO: why Menu title, not page title?
-
-        #self.assertBodyTextPresent(inpPageSubheader, "page subheader does not match entered text. ")
 
     def testVersions(self):
         self.gotoUrlByLinkText(self.parentPage)

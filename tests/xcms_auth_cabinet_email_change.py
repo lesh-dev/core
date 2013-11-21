@@ -43,7 +43,7 @@ class XcmsAuthCabinetEmailChange(SeleniumTest):
         xtest_common.gotoCabinet(self)
 
         print "test good email"
-        newGoodEMail = "veltishev.dmitry@gmail.com"
+        newGoodEMail = "testsite002@fizlesh.ru"
         
         newGoodEMail = self.fillElementById("email-input", newGoodEMail)
         self.clickElementById("update_me")
