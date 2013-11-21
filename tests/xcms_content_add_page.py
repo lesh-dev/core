@@ -138,17 +138,17 @@ class XcmsContentAddPage(SeleniumTest):
         self.wait(2)
 
         self.setOptionValueByIdAndIndex("versions-top", 3)
-        self.clickElementByName("set-version") # Смотреть версию
+        self.clickElementById("set-version-top") # Смотреть версию
         self.wait(1)
         self.assertElementTextById("edit-text", versionUnoText)
 
         self.setOptionValueByIdAndIndex("versions-top", 1)
-        self.clickElementByName("set-version") # Смотреть версию
+        self.clickElementById("set-version-top") # Смотреть версию
         self.wait(1)
         self.assertElementTextById("edit-text", versionTresText)
 
         self.setOptionValueByIdAndIndex("versions-top", 2)
-        self.clickElementByName("set-version") # Смотреть версию
+        self.clickElementById("set-version-top") # Смотреть версию
         self.wait(1)
         self.assertElementTextById("edit-text", versionDosText)
     
