@@ -10,6 +10,7 @@ import xcms_auth_cabinet_email_change
 import xcms_auth_change_user_by_admin
 import xcms_auth_check_dup_email
 import xcms_auth_check_dup_login
+import xcms_auth_forgot_password
 import xcms_auth_root_login
 import xcms_auth_set_dup_email_by_admin
 import xcms_content_add_page
@@ -32,6 +33,7 @@ def getTests(baseUrl, args): return {
     "xcms_auth_change_user_by_admin.py": xcms_auth_change_user_by_admin.XcmsAuthChangeUserByAdmin(baseUrl, args),
     "xcms_auth_check_dup_email.py": xcms_auth_check_dup_email.XcmsAuthCheckDupEmail(baseUrl, args),
     "xcms_auth_check_dup_login.py": xcms_auth_check_dup_login.XcmsAuthCheckDupLogin(baseUrl, args),
+    "xcms_auth_forgot_password.py": xcms_auth_forgot_password.XcmsAuthForgotPassword(baseUrl, args),
     "xcms_auth_root_login.py": xcms_auth_root_login.XcmsAuthRootLogin(baseUrl, args),
     "xcms_auth_set_dup_email_by_admin.py": xcms_auth_set_dup_email_by_admin.XcmsAuthSetDuplicateEmailByAdmin(baseUrl, args),
     "xcms_content_add_page.py": xcms_content_add_page.XcmsContentAddPage(baseUrl, args),

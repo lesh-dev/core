@@ -185,6 +185,27 @@ def createNewUser(test, conf, login, email, password, name, auxParams = []):
 
 	return inpLogin, inpEMail, inpPass, inpName
 
+# set email to user (by admin panel)
+def setUserEmailByAdmin(test, conf, login, email, auxParams = []):
+    print "setEmailToUserByAdmin( login: " + login + "', email: " + email + " )"
+    
+    test.logAdd("xtest_common.setUserEmailByAdmin: updating email for user '" + login + "' to '" + email + ". ")
+
+    if not "do_not_login_as_admin" in auxParams:
+        performLoginAsAdmin(test, conf.getAdminLogin(), conf.getAdminPass())
+        gotoAdminPanel(test)
+
+    gotoUserList(test)
+
+    test.gotoUrlByPartialLinkText(login)
+
+    inpEMail = test.fillElementById("email-input", email)
+    test.clickElementByName("update_user")
+
+    #logoff root
+    if not "do_not_logout_admin" in auxParams:
+        performLogout(test)
+
 
 def addCommentToPerson(test):
 	test.gotoUrlByLinkText(u"Добавить комментарий")

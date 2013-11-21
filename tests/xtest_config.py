@@ -27,5 +27,7 @@ class XcmsTestConfig:
             #return "TEST"
         #else:
             #return "NO-MAIL-TEST"
+    def getForgottenPasswordCaptcha(self):
+        return u"ампер"
                 
     

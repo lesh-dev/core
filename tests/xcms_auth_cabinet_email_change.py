@@ -8,7 +8,7 @@ from selenium_test import SeleniumTest
 class XcmsAuthCabinetEmailChange(SeleniumTest):
     """
     add two users with different e-mails
-    enter cabinet and change e-mail
+    enter cabinet and change e-mail to another good email
     test notification in mailbox (manually)
     set user2's e-mail to user1
     check if user1's email was not changed actually
@@ -48,9 +48,12 @@ class XcmsAuthCabinetEmailChange(SeleniumTest):
         newGoodEMail = self.fillElementById("email-input", newGoodEMail)
         self.clickElementById("update_me")
 
-        # TODO: site BUG #645: here should be more user-friendly error
+        badMailMsg = u"пользователь с такой почтой"
+        dataUpdatedMsg = u"Данные обновлены успешно"
+        
+        self.assertBodyTextNotPresent(badMailMsg)
         self.assertBodyTextNotPresent("exception")
-        # TODO: check OK message
+        self.assertBodyTextPresent(dataUpdatedMsg)
         
         print "Ok. Please check your mailbox for notification. "
 
@@ -60,8 +63,9 @@ class XcmsAuthCabinetEmailChange(SeleniumTest):
         newGoodEMail = self.fillElementById("email-input", newGoodEMail)
         self.clickElementById("update_me")
 
-        # TODO: site BUG #645: here should be more user-friendly error
+        self.assertBodyTextNotPresent(badMailMsg)
         self.assertBodyTextNotPresent("exception")
+        self.assertBodyTextPresent(dataUpdatedMsg)
     
         print "And now test bad e-mail. "
         
@@ -70,10 +74,9 @@ class XcmsAuthCabinetEmailChange(SeleniumTest):
         newBadEMail = self.fillElementById("email-input", newBadEMail)
         self.clickElementById("update_me")
         
-        # TODO: site BUG #645: here should be more user-friendly error
-        
+        self.assertBodyTextPresent(badMailMsg)
         self.assertBodyTextNotPresent("exception")
-        # TODO: check FAIL message 
+        self.assertBodyTextNotPresent(dataUpdatedMsg)
 
         xtest_common.performLogoutFromAdminPanel(self)
         
