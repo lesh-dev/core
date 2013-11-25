@@ -204,6 +204,11 @@ function assemble_git
     rm -rf $TEMP_REPO
 }
 
+function sym_suffix_to_date
+{
+    echo -n "$sym_suffix" | sed -e 's/^-//' | sed -e 's/--/ /' | sed -e 's/-/./g' )
+}
+
 function assemble
 {
     RECEIPE=$1

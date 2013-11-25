@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Generated from template on Mon Sep 17 20:34:42 MSK 2012
 # Please don't forget to commit all changes to repo
 target=/srv/www/clones/preprod
@@ -8,7 +8,7 @@ branch=master
 # This will be executed while publishing component begin
 function hook_begin
 {
-    echo "Preproduction receipe invoked. Your copy will be located at /srv/www/clones/preprod"
+    echo "Preproduction receipe invoked. Your copy will be located at $target"
     echo -en  # Add something useful is you want
 }
 
@@ -28,7 +28,8 @@ function hook_git
 function hook_end
 {
 
-    echo "rc-date : ${sym_suffix}" >> INFO
+    rc_date="$( sym_suffix_to_date )"
+    echo "rc-date : $rc_date" >> INFO
     # echo "branch  : $branch " >> INFO
     echo "version : $branch-$(cat VERSION) rev. $git_revision" >> INFO
     mv install.nt.php install.php
