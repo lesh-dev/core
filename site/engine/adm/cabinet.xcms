@@ -1,12 +1,13 @@
-<# if //@$_GET['mode']=='logout'//auth/logout//#>
-<# locale #>
-<# url #>
-<# auth/ #registered #>
+<# if //@$_GET['mode']=='logout'//auth/logout//#><?php
+?><# locale #><?php
+?><# url #><?php
+?><# auth/ #registered #><?php
+?><!DOCTYPE html>
 <html>
     <head>
         <# cms/head #>
+        <# cms/jquery #>
         <link rel="stylesheet" type="text/css" href="<?php echo "${full_engine_pub}css/admin.css"; ?>" />
-        <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/jquery-1.7.1.min.js"; ?>"></script>
         <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
     </head>
     <body>

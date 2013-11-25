@@ -139,8 +139,8 @@ class XcmsXsmAnketaFill(SeleniumTest):
             
         self.gotoUrlByLinkText(u"Анкеты")
         
-        shortAlias = inpLastName + " " + inpFirstName
-        fullAlias = shortAlias + " " + inpMidName
+        shortAlias = xtest_common.shortAlias(inpLastName, inpFirstName)
+        fullAlias = xtest_common.fullAlias(inpLastName, inpFirstName, inpMidName)
         #print "Full student alias:", fullAlias.encode("utf-8")
         anketaUrlName = shortAlias.strip()
         # try to drill-down into table with new anketa.
@@ -197,7 +197,7 @@ class XcmsXsmAnketaFill(SeleniumTest):
         self.assertElementValueById("anketa_status-selector", "new")
         # change anketa status and save it.
         
-        self.setOptionValueById("anketa_status-selector", "progress")
+        self.setOptionValueByIdAndValue("anketa_status-selector", "progress")
         
         self.clickElementById("update-person-submit")
         

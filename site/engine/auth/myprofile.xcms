@@ -1,18 +1,26 @@
 <# auth/format #>
-
 <?php
     require_once("$engine_dir/sys/auth.php");
     require_once("$engine_dir/sys/groups.php");
-
     $user = xcms_user();
 ?>
-<h3>Привет, <?php echo $user->login(); ?>!</h3>
+<div class="admin-widget">
+<h3>Привет‎, <?php echo $user->login(); ?>!</h3>
 
 <?php
-    if(@$_POST["update_me"])
+    if (@$_POST["update_me"])
     {
-        foreach(array("name", "email") as $form_name)
-            $user->set_param($form_name, @$_POST[$form_name]);
+        try
+        {
+            foreach(array("name", "email") as $form_name)
+                $user->set_param($form_name, @$_POST[$form_name]);
+
+            ?><div class="notice">Данные обновлены успешно</div><?php
+
+        } catch (Exception $e)
+        {?>
+            <div class="error"><?php echo $e->getMessage(); ?></div><?php
+        }
     }
     ?>
     <form method="post">
@@ -26,3 +34,4 @@
     <?php
     xcmst_draw_privileges($user, true);
 ?>
+</div>

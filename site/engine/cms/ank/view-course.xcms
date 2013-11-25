@@ -1,6 +1,3 @@
-<# auth/ #admin #ank #>
-<# cms/ank/style #>
-
 <?php
 
 function xsm_print_course()
@@ -13,7 +10,7 @@ function xsm_print_course()
     $school = xdb_get_entity_by_id('school', $school_id);
     $href_courses = "list-course".xcms_url(array('school_id'=>$school_id));
     ?>
-    <table summary="Курс" class="ankList">
+    <table class="ankList">
     <?php
         $school_title = htmlspecialchars($school["school_title"]);
         $course_title = htmlspecialchars($course["course_title"]);
@@ -45,7 +42,7 @@ function xsm_print_course()
             <?php echo xcms_html_wrap_by_crlf($course_comment); ?></td></tr>
     </table>
 
-    <table summary="Зачёты по курсу <?php echo $course_id; ?>" class="ankList">
+    <table class="ankList">
         <colgroup>
             <col width="8%" />
             <col width="13%" />

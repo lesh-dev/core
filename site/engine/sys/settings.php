@@ -10,7 +10,7 @@
     $SETTINGS["engine_pub"] = $engine_pub;
     $SETTINGS["documentsdir"] = $design_dir;
     $SETTINGS["design_dir"] = $design_dir;
-    $SETTINGS["datadir"] = $content_dir;
+    $SETTINGS["content_dir"] = $content_dir;
     $SETTINGS["precdir"] = ".prec/";
     $SETTINGS["code_begin"] = '<?php unset($argv);unset($param);';
     $SETTINGS["code_end"] = '?>';

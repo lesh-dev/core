@@ -1,6 +1,3 @@
-<# auth/ #admin #ank #>
-<# cms/ank/style #>
-
 <?php
 
 define('SCHOOL_ANK_ID', 'ank');
@@ -205,6 +202,32 @@ function xsm_print_person_schools($db, $person_id, $current_school_id)
 
 }
 
+function xsm_highlight_links($text)
+{
+    $result = "";
+    $cur_pos = 0;
+    while (true)
+    {
+        $p = strpos($text, "http://", $cur_pos);
+        if ($p === false)
+            break;
+
+        $result .= htmlspecialchars(substr($text, $cur_pos, $p - $cur_pos));
+        $link_length = strcspn($text, "\r\n\t, ", $p);
+        $link = substr($text, $p, $link_length);
+        // cut a dot if it is a link trail (more likely it is a sentence end)
+        if (substr($link, $link_length - 1) == ".")
+        {
+            $link_length--;
+            $link = substr($link, 0, $link_length);
+        }
+        $result .= "<a href=\"$link\">$link</a>";
+        $cur_pos = $p + $link_length;
+    }
+    $result .= htmlspecialchars(substr($text, $cur_pos));
+    return $result;
+}
+
 function xsm_draw_person_comments($db, $person_id)
 {?>
     <div style="height: 10px;"></div><?php
@@ -218,7 +241,7 @@ function xsm_draw_person_comments($db, $person_id)
     $comment_sel = $db->query($query);
     ?>
 
-    <table summary="Комментарии" class="ankList">
+    <table class="ankList">
         <colgroup>
             <col width="10%" />
             <col width="75%" />
@@ -238,7 +261,7 @@ function xsm_draw_person_comments($db, $person_id)
 
         $comment_id = htmlspecialchars($comment_data["person_comment_id"]);
         $owner_login = htmlspecialchars($comment_data["owner_login"]);
-        $comment_text = xcms_html_wrap_by_crlf(htmlspecialchars($comment_data["comment_text"]));
+        $comment_text = xcms_html_wrap_by_crlf(xsm_highlight_links($comment_data["comment_text"]));
         $person_comment_created = xsm_ymdhm($comment_data["person_comment_created"]);
         $person_comment_modified = xsm_ymdhm($comment_data["person_comment_modified"]);
         $comment_num++;
@@ -373,7 +396,7 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
     <div class="line">
         Всего нужно сдать <a href="<?php echo $need_href; ?>"><?php echo $need; ?> зачётов</a>.
     </div>
-    <table summary="Зачёты школьника <?php echo $person_id; ?>" class="ankList">
+    <table class="ankList">
         <colgroup>
             <col width="15%" />
             <col width="25%" />

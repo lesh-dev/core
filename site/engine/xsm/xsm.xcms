@@ -1,0 +1,40 @@
+<# cms/linit #><# cms/init #><# url #><# deploy_utils #><# locale #><!DOCTYPE html>
+<html><!-- HTML5 compatible -->
+<head>
+    <# cms/head #>
+    <link rel="stylesheet" type="text/css" href="<# full_design_dir #>default.css" />
+    <# cms/jquery #>
+    <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
+</head>
+<body>
+<# cms/ank/pss #>
+<# cms/ank/field-desc #>
+<# cms/ank/middleware #>
+<# cms/ank/db-actions #>
+<# cms/ank/format #>
+<table style="width: 100%"><tr><td class="main-field roundBorders"><div style="position: relative;">
+<?php
+    $ap = xcms_get_key_or($_GET, "aparam");
+    if ($ap == "root")
+    {
+        $url = $_SERVER["REQUEST_URI"];
+        if (substr($url, strlen($url) - 4) == "/xsm")
+        {?>
+            <meta http-equiv="refresh" content="0;URL=/<# web_prefix #>xsm/view" /><?php
+        }
+    }
+    elseif ($ap == "view")
+    {
+        include(translate('<! cms/ank/menu !>'));
+        include(translate('<! cms/ank/list-person !>'));
+    }
+    else if (substr($ap, 0, 5) == "list-" ||
+        substr($ap, 0, 5) == "view-" ||
+        substr($ap, 0, 5) == "edit-")
+    {
+        include(translate('<! cms/ank/menu !>'));
+        include(translate("<! cms/ank/$ap !>"));
+    }?>
+</div></td></tr></table>
+</body>
+</html>

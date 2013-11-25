@@ -30,7 +30,7 @@ class SelfTest(SeleniumTest):
 			print "text: '" +  i.text + "'"
 		
 		
-		#self.setOptionValueById("anketa_status-selector", "progress")
+		#self.setOptionValueByIdAndValue("anketa_status-selector", "progress")
 
 		
 

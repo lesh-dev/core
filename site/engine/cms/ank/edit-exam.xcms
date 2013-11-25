@@ -1,24 +1,13 @@
-<# auth/ #admin #ank #>
-<# cms/ank/style #>
 <# cms/ank/diff #>
 <?php
 
-function xsm_edit_exam_operations($school_id, $student_person_id, $id)
+function xsm_edit_exam_operations($school_id, $student_person_id, $id, $place)
 {
     $is_new = ($id == XDB_NEW);
     $table_name = "exam";
-    $title = "Вернуться к просмотру участника";
+    $ret_title = "Вернуться к просмотру участника";
     $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$student_person_id));
-    ?>
-    <div style="white-space: nowrap">
-        <input type="submit" name="update-<?php echo $table_name; ?>"
-            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
-        if (!$is_new) {?>
-            <input type="submit" name="delete-<?php echo $table_name; ?>"
-                value="Удалить" class="delete-button"/><?php
-        }?>
-        <a class="link-button" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
-    </div><?php
+    xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title);
 }
 
 /**
@@ -53,16 +42,8 @@ function xsm_warn_delete_exam($table_name, $title)
 {
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-    $redir = $table_name.xcms_url(array($key_name=>$id)); ?>
-    <div class="delete-warning">Вы действительно хотите удалить зачёт [<?php echo $id; ?>]?</div>
-    <div><form method="post" action="edit-<?php echo $table_name; ?>">
-        <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
-        <input type="submit" name="confirm-delete-<?php echo $table_name; ?>"
-            value="Таки да, удалить!" class="delete-button"/>
-        <a class="link-button"
-            href="edit-<?php echo $redir ?>">Вернуться к редактированию</a>
-    </form></div>
-    <?php
+    $redir = $table_name.xcms_url(array($key_name=>$id));
+    xsm_warn_delete_ops($table_name, $key_name, $id, $redir, "зачёт");
 }
 
 function xsm_delete_exam($table_name, $title)
@@ -130,12 +111,14 @@ function xsm_notify_exam_edit($exam)
     $course_title = $course['course_title'];
 
     $student_fi = xsm_fi($student);
-    $table_title = 'Изменён зачёт школьника <a'.
-        xcms_ext_href('view-person', array('person_id'=>$student_person_id)).'>'.
-        htmlspecialchars($student_fi).'</a>';
-
-    $exam_statuses = xsm_get_enum("exam_status", $exam_status);
+    $exam_statuses = xsm_get_enum("exam_status");
     $hr_exam_status = $exam_statuses[$exam_status];
+
+    $table_title = 'Изменён зачёт школьника <a'.
+        xsm_ext_href('view-person', array('person_id'=>$student_person_id)).'>'.
+        htmlspecialchars($student_fi).'</a> по курсу <a'.
+        xsm_ext_href('view-course', array('course_id'=>$course_id)).'>'.
+        htmlspecialchars($course_title)."</a> [$hr_exam_status]";
 
     $mail_msg = xsm_build_diff_msg(
         $exam,
@@ -144,8 +127,7 @@ function xsm_notify_exam_edit($exam)
         xsm_get_exam_field_types(),
         $table_title);
 
-    $subject = "Зачёт шк. $student_fi по к. $course_title [$hr_exam_status]";
-    xcms_send_notification("reg", NULL, "db", $subject, "This message is in HTML format.\r\n", $mail_msg);
+    xcms_send_notification("reg", NULL, $mail_msg);
 }
 
 function xsm_edit_exam()
@@ -183,7 +165,7 @@ function xsm_edit_exam()
 
     ?>
     <form method="post" action="edit-exam"><?php
-        xsm_edit_exam_operations($school_id, $student_person_id, $exam_id);
+        xsm_edit_exam_operations($school_id, $student_person_id, $exam_id, "top");
         ?>
         <input type="hidden" name="exam_id" value="<?php echo $exam_id; ?>" />
         <input type="hidden" name="student_person_id" value="<?php echo $student_person_id; ?>" />
@@ -191,7 +173,7 @@ function xsm_edit_exam()
         if ($exam_id != XDB_NEW) {?>
             <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" /><?php
         }?>
-        <table summary="Зачёт" class="ankEdit">
+        <table class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Зачёт</td>
             </tr>
@@ -213,7 +195,8 @@ function xsm_edit_exam()
                 <?php
                 $ft = xcms_get_key_or($field_types, $key);
                 if ($ft == "textarea") {?>
-                    <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
+                    <textarea class="ankEdit" name="<?php echo $key; ?>"
+                        id="<?php echo $key;?>-text"><?php
                         echo htmlspecialchars($value); ?></textarea><?php
                 } elseif ($ft == "checkbox") {
                     // КОСТЫЛЬ! checkbox-овое поле должно начинаться со слова 'is_'
@@ -237,13 +220,13 @@ function xsm_edit_exam()
                     }
                 }
                 else {?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
-                        name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
+                        name="<?php echo $key; ?>" id="<?php echo $key; ?>-input" <?php echo $attr; ?> /><?php
                 } ?>
                 </td></tr>
                 <?php
             }?>
         </table><?php
-        xsm_edit_exam_operations($school_id, $student_person_id, $exam_id); ?>
+        xsm_edit_exam_operations($school_id, $student_person_id, $exam_id, "bottom"); ?>
     </form>
     <?php
 }

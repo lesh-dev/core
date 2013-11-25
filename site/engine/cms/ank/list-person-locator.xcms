@@ -1,17 +1,28 @@
-<# auth/ #admin #ank #>
-<# cms/ank/style #>
 <?php
     $show_anketa_status = xsm_get_persistent_enum_key("list-person-locator", "show_anketa_status", "show_anketa_status_locator");
     $show_is_teacher = xcms_get_persistent_key("list-person-locator", "show_is_teacher");
     $show_is_student = xcms_get_persistent_key("list-person-locator", "show_is_student");
 ?>
-<p>В этом списке по умолчанию показываются люди, с которыми идёт (или недавно шло) взаимодействие.
-    Преподаватели выделены <b>жёлтым цветом</b>.
-    Для школьников и преподов, которые стабильно <b>не ездят</b> на школы уже 2-3&nbsp;года, осмысленно выставлять статус
-    <span class="anketa-status old">Архив</span>. В&nbsp;этот же статус
-    можно переводить через 1-2 года тех, кому по результатам собеседования был проставлен статус
-    <span class="anketa-status declined">Отклонён</span> (сразу этого делать не следует).
+<span style="position: relative; float: right;">
+<a href="#" id="show-status-help" class="popup-link">Легенда</a>
+<div id="status-help" class="admin-widget help-widget">
+<p>По умолчанию показываются люди, с которыми идёт (или недавно шло) взаимодействие.
+    Цветами фона выделены <b class="teacher">Преподаватели</b>,
+    жители <b class="not-msk-city">Подмосковья</b> и
+    жители <b class="far-city">более далёких областей</b>.
 </p>
+<p>
+    В&nbsp;<span class="anketa-status old">Архив</span> можно переводить через 1-2 года тех,
+    кому по результатам собеседования был проставлен статус
+    <span class="anketa-status declined">Отклонён</span> (сразу не надо!).
+    Туда же можно переводить людей, которые перестали ездить на Школы.
+</p>
+</div>
+</span>
+<script language="javascript" type="text/javascript">
+    AddSlider('status-help', 'show-status-help');
+</script>
+
 <form method="post" action="list-person-locator" style="margin-bottom: 2px"><span>
     <span class="ankListField">Статус</span>: <?php
     echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_locator");
@@ -23,7 +34,6 @@
     <input type="submit" name="show-person" value="Показать" />
 </span></form>
 <?php
-
 
 // вывод активных участников
 function xsm_show_all_person_list()
@@ -69,7 +79,7 @@ function xsm_show_all_person_list()
 
     $query = "SELECT ".
         "p.person_id, p.last_name, p.first_name, ".
-        "p.school, p.school_city, ".
+        "p.school, p.school_city, p.current_class, ".
         "p.phone, p.cellular, p.anketa_status, p.is_student, p.is_teacher ".
         "FROM person p";
 
@@ -83,16 +93,18 @@ function xsm_show_all_person_list()
 
     xsm_view_operations('person', 'person', 'участника', '&amp;anketa_status=cont');
     ?>
-    <table summary="Участники" class="ankList">
+    <table class="ankList">
         <colgroup>
-            <col width="30px" />
+            <col width="30" class="id" />
             <col width="30%" />
-            <col width="35%" />
-            <col width="20%" />
+            <col width="15%" />
+            <col width="55%" />
+            <col width="90" class="ank-status" />
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
             <th class="ankList">Фамилия, имя</th>
+            <th class="ankList">Кл.</th>
             <th class="ankList">Контакты</th>
             <th class="ankList">Info</th>
         </thead>
@@ -110,8 +122,7 @@ function xsm_show_all_person_list()
             "ps.is_teacher, ps.is_student, ps.curatorship, ps. p.person_id, p.last_name, p.first_name, p.phone, p.cellular, p.anketa_status ".
             "FROM person p";*/
 
-        // класс на данной школе
-        //$current_class = htmlspecialchars($person["current_class"]);
+        $current_class = htmlspecialchars($person["current_class"]);
 
         $phone = htmlspecialchars($person["phone"]);
         $cellular = htmlspecialchars($person["cellular"]);
@@ -132,12 +143,14 @@ function xsm_show_all_person_list()
         $hr_teacher = ($is_teacher == "teacher" ? "Препод, " : "");
         $hr_student = ($is_student == "student" ? "Школьник, " : "");
         */
-        $row_class = ($is_teacher == "teacher" ? "teacher" : "");
+        $row_class = xsm_get_city_class($school_city);
+        $row_class .= " ".($is_teacher == "teacher" ? "teacher" : "");
         ?>
         <tr class="<?php echo $row_class; ?>">
             <td class="ankList "><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
             <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"><?php
                 echo $fi; ?></a></td>
+            <td class="ankList"><?php echo $current_class; ?></td>
             <td class="ankList"><?php
                 echo $cellular;
                 if ($cellular && $phone)

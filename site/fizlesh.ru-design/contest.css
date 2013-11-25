@@ -1,4 +1,15 @@
-.SiteBody {
+.site-body {
     margin-left: 15px;
     margin-right: 15px;
+}
+
+table.table {
+    font-size: 14px;
+}
+table.table td {
+    font-size: 14px;
+}
+
+input, textarea, .uneditable-input {
+    width: 506px;
 }

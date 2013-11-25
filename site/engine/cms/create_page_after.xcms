@@ -1,16 +1,25 @@
 <?php
     $INFO = xcms_get_list(xcms_get_info_file_name());
-    if(!$INFO) $pageid = "";
-?>
-<!# auth/ {$INFO['edit']} #!>
+    if (!$INFO)
+        $pageid = "";
+?><div class="admin-widget">
 <form method="post">
-<table>
-<tr><td><h3>Настройки</h3>
+<table class="create-page">
+<tr><td><h3>Новая страница</h3>
 <tr>
-    <td>Служебное имя <br />
-        <font size="=-1">Выберите красивое, удобочитаемое, английское имя без пробелов.</font>
+    <td>Физическое имя<br />
+        <font>Выберите удобочитаемое имя без пробелов.<br />
+            Например, <b>school-courses</b></font>
     </td>
-    <td><input name="create-name" value="" /></td>
+    <td><input name="create-name" id="create-name-input" /></td>
+</tr>
+<tr>
+    <td>Alias<br />
+        <font>URL, по которому будет доступна
+            страница, с учётом иерархии.<br />
+            Например, <b>gear/other</b></font>
+    </td>
+    <td><input name="alias" id="alias-input"/></td>
 </tr>
 <tr>
     <td>Тип содержимого</td>
@@ -32,21 +41,32 @@
     $chk_hidden = xcms_checkbox_attr(NO);
 ?>
     <td>Скрытый раздел</td>
-    <td><input type="checkbox" <?php echo $chk_hidden; ?> name="menu-hidden"/></td>
+    <td><input type="checkbox" <?php echo $chk_hidden; ?>
+        name="menu-hidden" id="menu-hidden-checkbox" /></td>
 </tr>
 <tr>
-    <td>Имя в меню<br><font size="-1">То есть тот текст, что появится в меню.</font></td>
-    <td><input type="text" name="menu-title" /></td>
+<?php
+    $chk_global = xcms_checkbox_attr(NO);
+?>
+    <td>Корневая страница</td>
+    <td><input type="checkbox" <?php echo $chk_global; ?>
+        name="global" id="global-checkbox" /></td>
 </tr>
 <tr>
-    <td>Заголовок<br><font size="-1">То есть тот текст, что появится в окне браузера.</font></td>
-    <td><input type="text" name="header" /></td>
+    <td>Имя в меню<br />
+        <font>Этот текст появится в меню и title браузера</font></td>
+    <td><input name="menu-title" id="menu-title-input" /></td>
 </tr>
 <tr>
+    <td>Заголовок<br />
+        <font>Этот текст появится наверху страницы</font></td>
+    <td><input name="header" id="header-input" /></td>
+</tr>
+<!--<tr>
     <td>Подзаголовок<br><font size="-1">То есть тот текст, который (может быть)
         появится где-нибудь на странице.</font></td>
     <td><input type="text" name="subheader" /></td>
-</tr>
+</tr>-->
 <tr>
     <td colspan="2">
         <h3>Матрица доступа</h3>
@@ -73,12 +93,14 @@
             "</tr>";
     }
 ?>
-    </table>
+        </table>
     </td>
 </tr>
 </table>
-<input id="create-submit" type="submit" value="Создать раздел" />
+<input name="create" id="create-submit"
+    type="submit" value="Создать раздел" />
 </form>
+</div><!-- admin-widget -->
 <?php
     xcms_save_list(xcms_get_info_file_name(), $INFO);
 ?>

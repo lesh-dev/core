@@ -24,7 +24,7 @@ class XcmsXsmAddExams(SeleniumTest):
     def addExamById(self, exam):
         self.gotoUrlByLinkText(u"Добавить зачёт")
 
-        self.setOptionValueById("course_id-selector", exam)
+        self.setOptionValueByIdAndValue("course_id-selector", exam)
         self.clickElementByName("update-exam")
         xtest_common.gotoBackToPersonView(self)
 
@@ -83,5 +83,18 @@ class XcmsXsmAddExams(SeleniumTest):
         self.assertBodyTextPresent(u"Зачёты")
         
         self.addExamsById([95, 119, 91, 134, 73, 107, 130, 133])
+        
+        self.gotoUrlByLinkText(u"Базовое электричество")
+        self.setOptionValueByIdAndValue("exam_status-selector", "passed")
+        
+        examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
+        self.fillElementByName("exam_comment", examComment)
+        self.clickElementByName("update-exam")
+        xtest_common.gotoBackToPersonView(self)
+        
+        self.assertBodyTextPresent(u"Сдан")
+        
+        
+        
         
 

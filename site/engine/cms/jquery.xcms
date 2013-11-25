@@ -1,0 +1,1 @@
+<script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}jquery/jquery-1.7.1.min.js"; ?>"></script>

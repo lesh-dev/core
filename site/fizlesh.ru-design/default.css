@@ -5,7 +5,7 @@ html {
 body {
     background-color: #c0d2ab;
     background-image: url("pic/cells.png");
-    font-family: Tahoma, Verdana, Arial, sans-serif;
+    font-family: Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
     font-size: 10pt;
     color: #203720;
 }
@@ -71,41 +71,49 @@ a img {
 p {
     font-size: 10pt;
     text-align: justify;
-    padding: 0px 0px 0px 0px;
+    padding: 0px;
     text-decoration: none;
     text-indent: 5mm;
-    margin-top: 3pt;
-    margin-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    color: #203720;
 }
+ol, ul {
+    margin-left: 5mm;
+}
+
 li {
     font-size: 10pt;
+    color: #203720;
     text-align: justify;
-    padding: 0px 0px 0px 0px;
+    padding: 0px;
     text-decoration: none;
 }
 h1 {
     font-size: 26pt;
+    color: #203720;
     font-weight: normal;
     text-indent: 0mm;
 }
 h2 {
     font-size: 15pt;
+    color: #203720;
     font-weight: bold;
     text-indent: 5mm;
     margin-top: 10pt;
     margin-bottom: 3pt;
 }
 h3 {
-    font: normal normal 12pt/12pt sans-serif;
-    color: #000020;
+    font: normal normal 12pt/12pt Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+    color: #203720;
     font-weight: bold;
     text-indent: 5mm;
     margin-top: 10pt;
     margin-bottom: 3pt;
 }
 h4 {
-    font: normal normal 12pt/12pt sans-serif;
-    color:#000020;
+    font: normal normal 12pt/12pt Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+    color: #203720;
     text-indent: 5mm;
     margin-top: 10pt;
     margin-bottom: 3pt;
@@ -224,6 +232,8 @@ div.contlist-block {
 div.contlist-block.even {
     background-color: #8db67a;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 div.contlist-block.odd {

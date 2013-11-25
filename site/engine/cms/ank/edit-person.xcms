@@ -1,7 +1,4 @@
-<# auth/ #admin #ank #>
-<# cms/ank/style #>
 <# cms/ank/diff #>
-
 <?php
 
 function xsm_notify_person_edit($person)
@@ -9,10 +6,10 @@ function xsm_notify_person_edit($person)
     $person_id = $person['person_id'];
     $old_person = ($person_id != XDB_NEW) ? xdb_get_entity_by_id('person', $person_id) : array();
 
-    $full_name = xsm_fio($person);
+    $full_name = xsm_fio_enc($person);
     $table_title = 'Изменения в анкете: <a'.
-        xcms_ext_href('view-person', array('person_id'=>$person_id)).'>'.
-        htmlspecialchars($full_name).'</a>';
+        xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
+        $full_name.'</a>';
 
     $mail_msg = xsm_build_diff_msg(
         $person,
@@ -24,8 +21,7 @@ function xsm_notify_person_edit($person)
     if (empty($mail_msg)) // do not send empty diffs
         return;
 
-    $subject = "Изменения: $full_name";
-    xcms_send_notification("reg", NULL, "db", $subject, "This message is in HTML format.".EXP_CRLF, $mail_msg);
+    xcms_send_notification("reg", NULL, $mail_msg);
 }
 
 function xsm_edit_person()
@@ -47,7 +43,7 @@ function xsm_edit_person()
     <form method="post" action="edit-person"><?php
         NEW_xsm_edit_operations('person', $person_id, 'Вернуться к просмотру участника');?>
         <input type="hidden" id="person_id-input" name="person_id" value="<?php echo $person_id; ?>" />
-        <table summary="Участник" class="ankEdit">
+        <table class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Участник</td>
             </tr>

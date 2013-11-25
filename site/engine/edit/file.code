@@ -1,11 +1,7 @@
 <?php
-    require_once("$engine_dir/sys/diff/diff-utils.php");
+    require_once("$engine_dir/edit/page_diff.php");
 
-    if (!@$counter) $counter = 0;
-    $counter ++;
-
-    @$dtext = $param["dtext"]; if (!@$dtext) @$dtext = "no file here.";
-    @$multi_id = $param["id"]; if (!@$multi_id) @$multi_id = $counter;
+    $default_text = xcms_get_key_or($param, "def-text");
     @$cols = $param["cols"]; if (!@$cols) @$cols = 120;
     @$rows = $param["rows"]; if (!@$rows) @$rows = 40;
     @$tag = $param["tag"]; if (!@$tag) @$tag = "h3";
@@ -24,7 +20,7 @@
     }
     else
     {
-        if (@$_POST["edit-submit"] && @$_POST["multi-id"] == @$multi_id)
+        if (@$_POST["edit-submit"])
         {
             $time = time();
             $target_name = "$ename-version-$time";
@@ -42,41 +38,11 @@
             xcms_write($ename, $new_text);
             chmod($ename, 0666);
             $current_version = "";
-            $diff_result = ($new_text != $old_text);
-            if ($diff_result) // send notifications on non-empty diffs
-            {
-                $diff_html = xcms_diff_html($old_text, $new_text);
-                $login = xcms_user()->login();
-                $real_name = xcms_user()->param("name");
-                $ifn = xcms_get_info_file_name();
-                $page_info = xcms_get_list($ifn);
-                $page_alias = xcms_get_key_or($page_info, 'alias');
-                $url_name = $_SERVER["HTTP_HOST"]."/${web_prefix}$page_alias";
-                $page_url = "http://$url_name";
-                $id = $page_alias;
-                if (!strlen($id))
-                    $id = $pageid;
-                $body_html = xcms_get_html_template("content-change");
-                $body_html = str_replace('@@LOGIN@', $login, $body_html);
-                $body_html = str_replace('@@REAL-NAME@', $real_name, $body_html);
-                $body_html = str_replace('@@PAGE-ID@', $pageid, $body_html);
-                $body_html = str_replace('@@PAGE-URL@', $page_url, $body_html);
-                $body_html = str_replace('@@PAGE-ALIAS@', $url_name, $body_html);
-                $body_html = str_replace('@@DIFF@', $diff_html, $body_html);
-                // disable full page text
-                //$body_html = str_replace('@@NEW-TEXT@', htmlspecialchars($new_text), $body_html);
-                xcms_send_notification(
-                    "content-change",
-                    NULL,
-                    "cont",
-                    "Пользователь $login изменил страницу $id",
-                    "",
-                    $body_html
-                );
-            }
+            xcms_process_page_diff($old_text, $new_text);
             system("gzip $target_name");
         }
-        else $current_version = @$_POST["versions"];
+        else
+            $current_version = @$_POST["versions"];
 
         if (file_exists($ename))
         {
@@ -86,36 +52,36 @@
                 $text = gzread($f, 10000000);
                 fclose($f);
             }
-            else $text = file_get_contents($ename.$current_version);
+            else
+                $text = file_get_contents($ename.$current_version);
         }
-        elseif (@$text) {}
-        else $text = "$dtext";
+        elseif (@$text) { /* do nothing */ }
+        else $text = $default_text;
 
         if (!@$param["-h"]) echo "<$tag>edit: $ename</$tag>";
         $ty = "submit";
 
         $vlist = '<option value="">HEAD</option>';
-        foreach(glob("$ename-version-*") as $k=>$v )
+        $vfiles_list = array_reverse(glob("$ename-version-*"));
+        foreach ($vfiles_list as $k=>$v)
         {
             $timestamp_gz = str_replace("$ename-version-", "", $v);
             $timestamp = str_replace(".gz", "", $timestamp_gz);
-            $version_time = date("d.m.Y H:i", $timestamp);
+            $version_time = date("d.m.Y H:i:s", $timestamp);
             $version_suffix = str_replace("$ename", "", $v);
             $selected = "";
-            if ($version_suffix == $current_version) $selected = "selected";
+            if ($version_suffix == $current_version)
+                $selected = 'selected="selected"';
             $vlist .= "<option $selected value=\"$version_suffix\">$version_time</option>";
         }
         $text = htmlspecialchars($text);
 
         if (@$_POST["edit-preview"])
-        {
             $text = @$_POST["edit-text"];
-        }
 
     ?>
 <form method="post" enctype="multipart/form-data">
     <input type="hidden" name="<?php echo $pathv; ?>" value="<?php echo $ename;?>" />
-    <input type="hidden" name="multi-id" value="<?php echo $multi_id; ?>" />
     <div style="padding-top: 15px;">
         <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-submit-top" value="<?php echo $submit_val; ?>" />
         <input type="submit" name="edit-preview" id="edit-preview-top" value="Предпросмотр" />
@@ -130,9 +96,7 @@
     <div>
         <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-submit-bottom" value="<?php echo $submit_val; ?>" />
         <input type="submit" name="edit-preview" id="edit-preview-bottom" value="Предпросмотр" />
-        Версия:
-        <select name="versions" id="versions-bottom"><?php echo $vlist; ?></select>
-        <input type="submit" name="set-version" id="set-version-bottom" value="Смотреть версию"/>
+        <!-- Version info cannot be easily duplicated here, so we remove it -->
     </div>
 </form>
 <div id="content-text-preview"><?php

@@ -1,5 +1,3 @@
-<# auth/ #admin #ank #>
-<# cms/ank/style #>
 <?php
     $show_forest_num = xsm_get_persistent_enum_key("list-tour", "show_forest_num", "show_forest_num");
 ?>
@@ -57,7 +55,7 @@ function xsm_show_tour_list()
 
     NEW_xsm_view_operations('person', 'участника');
     ?>
-    <table summary="Участники" class="ankList">
+    <table class="ankList">
         <colgroup>
             <col width="13%" />
             <col width="45px" />

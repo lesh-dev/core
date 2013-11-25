@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Generated from template on Mon Sep 17 21:10:44 MSK 2012
 # Please don't forget to commit all changes to repo
 components="preprod_copy content_symlink"
@@ -16,7 +16,7 @@ function hook_begin
 # This will be executed while publishing component content_symlink
 function hook_content_symlink
 {
-    echo "Symlink_done"
+    echo "Symlink done"
     echo -en  # Add something useful is you want
 }
 
@@ -24,16 +24,15 @@ function hook_content_symlink
 function hook_preprod_copy
 {
     rm -rf content
-    echo "Preprod Copied"
+    echo "Preprod copied"
     echo -en  # Add something useful is you want
 }
 
 # This will be executed while publishing component end
 function hook_end
 {
-    #mkdir -p .prec
-    #chown $owner .prec
-    echo "release-date : ${sym_suffix}" >> INFO
+    release_date="$( sym_suffix_to_date )"
+    echo "release-date : $release_date" >> INFO
     apachectl -k graceful
     echo " *** Last chance to quit ***"
     echo " Now, please, move your ass to:"

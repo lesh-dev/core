@@ -14,7 +14,12 @@ class CliParamError(BawError):
 
 def fileBaseName(fileName):
     return os.path.basename(fileName)
-    
+
+def wrapIfLong(text):
+    if len(text) > 80:
+        return "\n" + text
+    return text
+
 def userSerialize(text, options = []):
     if isList(text):
         return "|".join([userSerialize(x) for x in text])

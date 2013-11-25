@@ -1,5 +1,3 @@
-/* CSS for anketa manager: view/edit */
-
 table.ankList {
     width: 100%;
     border-spacing: 0px;
@@ -50,16 +48,29 @@ td.school-selection a {
     display: block;
 }
 
-tr.teacher td.ankList {
+tr.teacher td.ankList,
+b.teacher {
     background-color: #b5b16f;
 }
 
-tr.not-msk-city td.ankList {
+tr.teacher a {
+    color: #004f00;
+}
+
+tr.not-msk-city td.ankList,
+b.not-msk-city {
     background-color: #7fffaf;
 }
 
-tr.far-city td.ankList {
+tr.far-city td.ankList,
+b.far-city {
     background-color: #7fcfff;
+}
+
+b.far-city,
+b.not-msk-city,
+b.teacher {
+    padding: 1px 3px 1px 3px;
 }
 
 span.ankListField {
@@ -334,4 +345,54 @@ a.popup-link {
 span.present {
     float: right;
     margin-right: 3px;
+    font-weight: bold;
+}
+
+col.id {
+    width: 35px;
+}
+
+col.ank-status {
+    width: 90px;
+}
+
+div.help-widget {
+    border: 1px solid #005f00;
+    border-radius: 3px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 5px;
+    position: absolute;
+    width: 600px;
+    top: 20px;
+    right: -5px;
+    background-color: rgb(187, 213, 175);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+div.xsm-navbar {
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+a.xsm-menu-item {
+    vertical-align: middle;
+    background-color: rgb(202, 235, 98);
+    border: 1px solid #8faf6f;
+    border-left: none;
+    padding: 3px 0px 3px 0px;
+    width: 14%;
+    text-align: center;
+    display: inline-block;
+}
+
+a.xsm-menu-item.first {
+    border-left: 1px solid #8faf6f;
+}
+
+a.xsm-menu-item.current {
+    background-color: #ffee99;
 }

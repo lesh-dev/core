@@ -26,7 +26,11 @@ function xsm_send_anketa($mail_group, $mail_msg, $full_name, $email, $manager_mo
 function xsm_get_city_class($school_city)
 {
     $class = "";
-    if (strpos($school_city, "Моск") === false)
+    if (empty($school_city))
+        $class = "";
+    elseif (strpos($school_city, "МО") !== false)
+        $class = "not-msk-city";
+    elseif (strpos($school_city, "Моск") === false)
         $class = "far-city";
     elseif (strpos($school_city, "Москва") === false)
         $class = "not-msk-city";
@@ -186,7 +190,7 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
     ?>
     <h3>Курсы</h3><?php
     xsm_view_operations('course', 'course', 'курс', $course_aux_param); ?>
-    <table summary="Курсы" class="ankList">
+    <table class="ankList">
         <colgroup>
             <?php if (!$pers) {?>
             <col width="30%" /><?php

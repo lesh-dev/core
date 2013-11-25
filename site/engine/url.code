@@ -28,17 +28,17 @@ function xcms_href($args_list)
 }
 
 /**
-  * External link to aliased page
-  * @param suffix tail after alias (interpreted as aparam after rewrite)
+  * External link to XSM view
+  * @param url_prefix (interpreted as aparam after rewrite)
   * @param args_list array of arguments to encode
   * @return complete link with scheme and server name to use as link
   * on (external to site) pages, e.g. in-mail links, etc
   **/
-function xcms_ext_href($suffix, $args_list)
+function xsm_ext_href($url_prefix, $args_list)
 {
-    global $INFO, $web_prefix;
-    $alias = xcms_get_key_or($INFO, "alias");
-    $url = 'http://'.$_SERVER["HTTP_HOST"]."/${web_prefix}$alias/$suffix".xcms_url($args_list);
+    global $web_prefix;
+    $url = 'http://'.$_SERVER["HTTP_HOST"].
+        "/${web_prefix}xsm/$url_prefix".xcms_url($args_list);
     return " href=\"$url\" ";
 }
 ?>

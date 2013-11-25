@@ -3,10 +3,11 @@
 <# cms/ank/middleware #>
 <# cms/ank/db-actions #>
 <# cms/ank/format #>
-<script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/jquery-1.7.1.min.js"; ?>"></script>
+<# cms/jquery #>
 <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
 
 <?php
+    $ap = xcms_get_key_or($_GET, "aparam");
     $source = xcms_get_page_content_name($pageid);
     if (!file_exists($source))
     {
@@ -71,7 +72,7 @@
         @mkdir($ank_dir, 0777);
         $person_id = xdb_insert_or_update('person', array('person_id'=>XDB_NEW), $person, $person_fields);
         $table_title = 'Анкета: <a'.
-            xcms_ext_href('view-person', array('person_id'=>$person_id)).'>'.
+            xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
             htmlspecialchars($full_name)."</a> ($hr_timestamp)";
         $write_success = ($person_id != false);
         $mail_msg = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg);
@@ -131,41 +132,18 @@
         echo $message;
         echo $meta;
     }
-    else if(@$_GET["aparam"] == "list-ank")
-        include(translate('<! cms/ank/list-ank !>'));
-    else if(@$_GET["aparam"] == "list-tour")
-        include(translate('<! cms/ank/list-tour !>'));
-    else if(@$_GET["aparam"] == "list-person")
+    else if ($ap == "view")
+    {
+        include(translate('<! cms/ank/menu !>'));
         include(translate('<! cms/ank/list-person !>'));
-    else if(@$_GET["aparam"] == "list-person-locator")
-        include(translate('<! cms/ank/list-person-locator !>'));
-
-    else if(@$_GET["aparam"] == "view")
-        include(translate('<! cms/ank/list-person !>'));
-
-    else if(@$_GET["aparam"] == "view-person")
-        include(translate('<! cms/ank/view-person !>'));
-    else if(@$_GET["aparam"] == "edit-person_school")
-        include(translate('<! cms/ank/edit-person_school !>'));
-    else if(@$_GET["aparam"] == "edit-person")
-        include(translate('<! cms/ank/edit-person !>'));
-    else if(@$_GET["aparam"] == "edit-person_comment")
-        include(translate('<! cms/ank/edit-person_comment !>'));
-
-    else if(@$_GET["aparam"] == "list-course")
-        include(translate('<! cms/ank/list-course !>'));
-    else if(@$_GET["aparam"] == "view-course")
-        include(translate('<! cms/ank/view-course !>'));
-    else if(@$_GET["aparam"] == "edit-course")
-        include(translate('<! cms/ank/edit-course !>'));
-    else if(@$_GET["aparam"] == "edit-teachers")
-        include(translate('<! cms/ank/edit-teachers !>'));
-
-    else if(@$_GET["aparam"] == "view-exam")
-        include(translate('<! cms/ank/view-exam !>'));
-    else if(@$_GET["aparam"] == "edit-exam")
-        include(translate('<! cms/ank/edit-exam !>'));
-
+    }
+    else if (substr($ap, 0, 5) == "list-" ||
+        substr($ap, 0, 5) == "view-" ||
+        substr($ap, 0, 5) == "edit-")
+    {
+        include(translate('<! cms/ank/menu !>'));
+        include(translate("<! cms/ank/$ap !>"));
+    }
     else
     {
         $text = file_get_contents($source);

@@ -94,6 +94,7 @@ function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_ti
         $cur_row = str_replace("@@DIFF@", $diff_html, $cur_row);
         $content .=  $cur_row;
     }
+    $content = xcms_wrap_long_lines($content);
 
     $mail_msg = str_replace("@@TABLE-CONTENT@", $content, $mail_msg);
     $mail_msg = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg);

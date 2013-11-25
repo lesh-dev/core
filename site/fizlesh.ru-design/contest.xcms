@@ -1,30 +1,66 @@
+<!DOCTYPE html>
 <# auth/ root administrator ank admin editor #ank #admin #editor #>
-<head>
+<html><head>
     <title>Contest</title>
-    <link href="<# full_design_dir #>/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <# cms/bootstrap #>
+    <# cms/jquery #>
     <link href="<# full_design_dir #>/contest.css" rel="stylesheet" media="screen">
 </head>
 <body>
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="<# full_design_dir #>/bootstrap/js/bootstrap.min.js"></script>
 <?php
     require_once("$engine_dir/sys/db.php");
+    $CONTEST_CURRENT_YEAR = "2013";
 
     function ctx_create_structure()
     {
         $db = xdb_get_write();
         $db->exec("DROP TABLE contestants;");
-        $db->exec("CREATE TABLE contestants(contestants_id integer PRIMARY KEY AUTOINCREMENT,
-            name TEXT, mail TEXT, phone TEXT, parents TEXT, address TEXT, school TEXT, level TEXT, teacher_name TEXT, work TEXT, status TEXT);");
+        $db->exec("CREATE TABLE contestants(
+            contestants_id integer PRIMARY KEY AUTOINCREMENT,
+            name text,
+            mail text,
+            phone text,
+            parents text,
+            address text,
+            school text,
+            level text,
+            teacher_name text,
+            work text,
+            status text,
+            contest_year text
+            );");
+
         $db->exec("DROP TABLE problems;");
-        $db->exec("CREATE TABLE problems(problems_id integer PRIMARY KEY AUTOINCREMENT,
-            problem_name, problem_html, people TEXT, criteria TEXT);");
+        $db->exec("CREATE TABLE problems(
+            problems_id integer PRIMARY KEY AUTOINCREMENT,
+            problem_name text,
+            problem_html text,
+            people text,
+            criteria text,
+            contest_year text
+            );");
+
         $db->exec("DROP TABLE solutions;");
-        $db->exec("CREATE TABLE solutions(solutions_id integer PRIMARY KEY AUTOINCREMENT,
-            problem_id, contestant_id integer, resolution_text, resolution_author, resolution_mark);");
+        $db->exec("CREATE TABLE solutions(
+            solutions_id integer PRIMARY KEY AUTOINCREMENT,
+            problem_id,
+            contestant_id integer,
+            resolution_text text,
+            resolution_author text,
+            resolution_mark text,
+            contest_year text
+            );");
+
+        /*
         $db->exec("DROP TABLE sol_discussion;");
-        $db->exec("CREATE TABLE sol_discussion(sol_discussion_id integer PRIMARY KEY AUTOINCREMENT,
-            problem_id,  contestant_id, author, comment);");
+        $db->exec("CREATE TABLE sol_discussion(
+            sol_discussion_id integer PRIMARY KEY AUTOINCREMENT,
+            problem_id,
+            contestant_id,
+            author text,
+            comment text,
+            contest_year text
+            );");*/
     }
 
     $CTX_META["problems"] = array(
@@ -32,15 +68,14 @@
         ,"problem_name" => array("name"=>"Название задачи", "type"=>"text")
         ,"people" => array("name"=>"Проверяющие", "type"=>"text")
         ,"problem_html" => array("name"=>"Текст задачи", "type"=>"large")
-        ,"criteria" => array("name"=>"Критетий", "type"=>"large")
+        ,"criteria" => array("name"=>"Критерий", "type"=>"large")
     );
 
-    // TEXT,  TEXT,  TEXT, school TEXT, level TEXT, teacher_name TEXT, work TEXT, status=TEXT);");
     $CTX_META["contestants"] = array(
         "contestants_id" => array("name"=>"", "type"=>"pk")
         ,"name" => array("name"=>"Ф.И.О. ученика", "type"=>"text")
         ,"mail" => array("name"=>"Электропочта", "type"=>"text")
-        ,"phone" => array("name"=>"Телефон (и др. конакты)", "type"=>"text")
+        ,"phone" => array("name"=>"Телефон (и др. контакты)", "type"=>"text")
         ,"parents" => array("name"=>"Родители", "type"=>"text")
         ,"address" => array("name"=>"Адрес проживания", "type"=>"text")
         ,"school" => array("name"=>"Школа", "type"=>"text")
@@ -50,7 +85,6 @@
         ,"status" => array("name"=>"Комментарии", "type"=>"large")
     );
 
-    //solutions_id integer PRIMARY KEY AUTOINCREMENT , problem_id, contestant_id integer, resolution_text, resolution_author, resolution_mark
     $CTX_META["solutions"] = array(
         "solutions_id" => array("name"=>"pk", "type"=>"pk")
         ,"problem_id" => array("name"=>"Идентификатор проблемы", "type"=>"pk")
@@ -60,14 +94,9 @@
         ,"resolution_mark" => array("name"=>"Итоговая оценка", "type"=>"text")
     );
 
-    function ctx_widget()
-    {
-
-    }
-
     function ctx_custom_form($table_name, $pk, $item_template)
     {
-        global $CTX_META, $_GET, $_POST, $content_dir;
+        global $CTX_META, $content_dir, $CONTEST_CURRENT_YEAR;
         $ans = "";
         if(@$_POST["ctx_custom_$table_name"])
         {
@@ -77,7 +106,7 @@
                 $values[$id] = @$_POST[$id];
                 if(@$_FILES["$id"])
                 {
-                    $home = "$content_dir/contest/attach/$table_name/".mktime();
+                    $home = "$content_dir/contest/attach/$table_name/".time();
                     $new_name = "$home/".$_FILES["$id"]["name"];
                     @mkdir("$home", 0777, true);
                     if(!copy($_FILES["$id"]["tmp_name"], $new_name))
@@ -87,6 +116,7 @@
             }
             $pkv = $values["$table_name"."_id"];
             unset($values["$table_name"."_id"]);
+            $values["contest_year"] = $CONTEST_CURRENT_YEAR; // year sharding
             xdb_insert_or_update($table_name, array("$table_name"."_id" => $pkv), $values, $values);
             $ans .= "Запись добавлена. ";
             if($return)
@@ -95,14 +125,16 @@
         else
         {
 
-            $ans .= "<form enctype='multipart/form-data'  method=\"POST\"><input type='hidden' name='MAX_FILE_SIZE' value='15000000' />";
+            $ans .= "<form enctype='multipart/form-data'
+                method=\"POST\"><input type='hidden' name='MAX_FILE_SIZE' value='15000000' />";
 
             $values = xdb_get_entity_by_id($table_name, $pk);
             foreach($values as $k=>$v)
                 $item_template = str_replace("{".$k."}", $v, $item_template);
             $item_template = str_replace(
                 "{#submit}",
-                "<input class='btn btn-primary' type='submit' name='ctx_add_or_edit_form_$table_name' value='Добавить / изменить' />",
+                "<input class='btn btn-primary' type='submit'
+                    name='ctx_add_or_edit_form_$table_name' value='Добавить / Изменить' />",
                 $item_template);
             $ans .= "</form>";
         }
@@ -110,13 +142,14 @@
 
     function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid="x", $defvalues=array())
     {
-        global $CTX_META, $_GET, $_POST, $content_dir;
+        global $CTX_META, $content_dir, $CONTEST_CURRENT_YEAR;
         $show_form = true;
         if(@$_POST["ctx_add_or_edit_form_$table_name"."_$fid"])
         {
             $show_form = false;
             if($pk!= "" && $pk != 'new')
                 $values = xdb_get_entity_by_id($table_name, $pk);
+
             foreach($CTX_META[$table_name] as $id=>$arr)
             {
                 $values[$id] = @$_POST[$id];
@@ -124,7 +157,7 @@
                 {
                     if($_FILES["$id"]["tmp_name"] != "")
                     {
-                        $home = "$content_dir/contest/attach/$table_name/".mktime();
+                        $home = "$content_dir/contest/attach/$table_name/".time();
                         $new_name = "$home/".$_FILES["$id"]["name"];
                         @mkdir("$home", 0777, true);
                         if(!copy($_FILES["$id"]["tmp_name"], $new_name))
@@ -135,6 +168,7 @@
             }
             $pkv = $values["$table_name"."_id"];
             unset($values["$table_name"."_id"]);
+            $values["contest_year"] = $CONTEST_CURRENT_YEAR; // year sharding
             xdb_insert_or_update($table_name, array("$table_name"."_id" => $pkv), $values, $values);
             if($return == "stay")
                 $show_form = true;
@@ -146,13 +180,19 @@
                 else "<meta http-equiv=\"refresh\" content=\"0\"></meta>";
             }
         }
+
         if ($show_form)
         {
-            echo "<form enctype='multipart/form-data'  method=\"POST\"><input type='hidden' name='MAX_FILE_SIZE' value='15000000' />";
-            echo "<table>\n";
+            echo "<form enctype='multipart/form-data' method=\"POST\">
+                <input type='hidden' name='MAX_FILE_SIZE' value='15000000' />";
+            $cls = "table-condensed";
+            if ($operation == "view")
+                $cls .= " table table-bordered table-hover";
+            echo "<table class='$cls'>\n";
             $values = array();
             if($pk !== NULL)
-            $values = xdb_get_entity_by_id($table_name, $pk);
+                $values = xdb_get_entity_by_id($table_name, $pk);
+
             foreach($CTX_META[$table_name] as $id=>$arr)
             {
                 $name = $arr["name"];
@@ -168,16 +208,19 @@
                     }
                     if($type == "text")
                     {
-                        echo "<tr><td>$name</td><td><input name='$id' value='{$value}'/></td>\n";
+                        echo "<tr><td class='font-wieght: bold;'>$name</td>
+                            <td><input type='text' placeholder='$name' name='$id' value='{$value}'/></td>\n";
                     }
                     if($type == "file")
                     {
-                        echo "<tr><td>$name</td><td><input name='$id' type=\"file\" value=\"$value\"/></td>\n";
+                        echo "<tr><td>$name</td>
+                            <td><input name='$id' type=\"file\" value=\"$value\"/></td>\n";
                     }
                     if($type == "large")
                     {
-                        echo "<tr><td colspan=2>$name:</td>";
-                        echo "<tr><td colspan=2><textarea class='field span12' rows=10 name='$id'>$value</textarea></td>\n";
+                        echo "<tr><td colspan='2'>$name:</td>
+                            <tr><td colspan='2'>
+                                <textarea class='field span12' rows='10' name='$id'>$value</textarea></td>\n";
                     }
                 }
                 if($operation == "view")
@@ -188,15 +231,15 @@
                     }
                     if($type == "file")
                     {
-                        echo "<tr><td>$name</td><td><a class='btn btn-success' href='$value'>Скачать</a></td>\n";
+                        echo "<tr><th>$name</th><td><a class='btn btn-success' href='$value'>Скачать</a></td>\n";
                     }
                     if($type == "text")
                     {
-                        echo "<tr><td>$name</td><td>$value</td>\n";
+                        echo "<tr><th>$name</th><td>$value</td>\n";
                     }
                     if($type == "large")
                     {
-                        echo "<tr><td colspan=2>$name:</td>";
+                        echo "<tr><th colspan=2>$name:</th>";
                         echo "<tr><td colspan=2>$value</td>\n";
                     }
                 }
@@ -207,11 +250,13 @@
             echo "</form>";
         }
     }
+
     function ctx_show_tasty_list($table_name, $order, $filter, $row_template)
     {
         global $CTX_META, $ref;
         $ans = "";
-        foreach(xdb_get_table($table_name, $order, $filter) as $line)
+        $rows = xdb_get_table($table_name, $order, $filter);
+        foreach ($rows as $line)
         {
             $template = $row_template;
             foreach($line as $field=>$value)
@@ -219,39 +264,74 @@
                 $template = str_replace("{".$field."}", $value, $template);
             }
             $pk = $line["$table_name"."_id"];
-            $template = str_replace("{#edit}", "href='?ref=$ref&mode=edit&table=$table_name&id=$pk'", $template);
-            $template = str_replace("{#view}", "?ref=$ref&mode=view&table=$table_name&id=$pk", $template);
+            $template = str_replace("{#edit}", "href='?ref=$ref&amp;mode=edit&amp;table=$table_name&amp;id=$pk'", $template);
+            $template = str_replace("{#view}", "?ref=$ref&amp;mode=view&amp;table=$table_name&amp;id=$pk", $template);
             $ans .= $template;
         }
         return $ans;
     }
+
+    function ctx_show_submitted()
+    {
+        global $content_dir;
+        $items = glob("${content_dir}contest/[0-9]*", GLOB_ONLYDIR); ?>
+        <table class="table table-striped table-bordered table-condensed table-hover">
+        <thead><tr>
+            <th>Дата</th>
+            <th>EMail</th>
+            <th>Файл</th>
+        </tr></thead><tbody><?php
+        foreach ($items as $item)
+        {
+            $timestamp = (int)(preg_replace('#.*/#', '', $item));
+            $date = date("d.m.Y H:i", $timestamp);
+            $list = xcms_get_list("$item/config.ini");
+            ?>
+            <tr>
+                <td><?php echo $date; ?></td>
+                <td><?php echo $list['mail']; ?></td>
+                <td><a href="<?php echo "$item/".$list["attachment"]; ?>"><?php echo $list["attachment"]; ?></a></td>
+            </tr>
+            <?php
+        }
+        ?>
+        </tbody></table><?php
+    }
+
 ?>
 <div class="navbar navbar-inverse">
     <div class="navbar-inner">
-        <a class="brand" href="?ref=contest">Проверка олимпиады</a>
+        <a class="brand" href="?ref=contest">Проверка олимпиады &mdash; <?php echo $CONTEST_CURRENT_YEAR; ?></a>
         <ul class="nav">
-            <li><a href="?ref=contest&amp;mode=problems" >Список задач</a></li>
-            <li><a href="?ref=contest&amp;mode=works" >Список работ</a></li>
+            <li><a href="?ref=contest&amp;mode=problems" >Задачи</a></li>
+            <li><a href="?ref=contest&amp;mode=submitted" >Присланное</a></li>
+            <li><a href="?ref=contest&amp;mode=works" >Работы</a></li>
             <li><a href="?ref=contest&amp;mode=edit&amp;table=contestants" >Добавить работу</a></li>
         </ul>
     </div>
 </div>
 
-<div class="SiteBody">
+<div class="site-body">
 
 <div id="container">
 <?php
+    $FILTER = "( contest_year = \"$CONTEST_CURRENT_YEAR\" )";
     $mode = @$_GET["mode"];
-    if($mode == "problems")
+    if ($mode == "problems")
     {
-        echo ctx_show_tasty_list("problems", NULL, NULL, "<b>Задача <a href='{#view}'>{problem_name}</a></b>, проверяют: {people}<br />");
-        echo "<a href='?ref=$ref&mode=edit&table=problems'>Добавить еще одну задачу</a><br/>";
+        echo ctx_show_tasty_list("problems", NULL, $FILTER,
+            "<b>Задача <a href='{#view}'>{problem_name}</a></b>, проверяют: {people}<br />");
+        echo "<a href='?ref=$ref&amp;mode=edit&amp;table=problems'>Добавить еще одну задачу</a><br/>";
     }
-    if($mode == "works")
+
+    if ($mode == "submitted")
+        ctx_show_submitted();
+
+    if ($mode == "works")
     {
-        $works = xdb_get_table("contestants", NULL, NULL);
-        $sols = xdb_get_table("solutions", NULL, NULL);
-        $probs = xdb_get_table("problems", NULL, NULL);
+        $works = xdb_get_table("contestants", NULL, $FILTER);
+        $sols = xdb_get_table("solutions", NULL, $FILTER);
+        $probs = xdb_get_table("problems", NULL, $FILTER);
         $works2 = array();
         foreach($works as $work)
         {
@@ -264,30 +344,39 @@
             $wid = $line["contestant_id"];
             $works2[$wid]["p$pid"] = $line["resolution_mark"];
         }
-        echo "<h3>Непроверенные</h3><table border='1'><tr><td>Ученик<td>Класс<td>Работа";
+        echo "
+        <h3>Непроверенные</h3>
+        <table class='table table-striped table-bordered table-condensed table-hover'>
+        <thead><tr>
+            <th>Ученик</th>
+            <th>Класс</th>
+            <th>Работа</th>";
         $done = array();
         $undone = array();
         $done_balls = array();
-        foreach($probs as $value) echo "<td>".substr($value["problem_name"], 0, 3);
+        foreach ($probs as $value)
+            echo "<th>".xu_substr($value["problem_name"], 0, 2);
+        echo "</tr></thead>\n";
         foreach($works2 as $line)
         {
             $id = @$line["contestants_id"];
             if (!$id) continue;
             $ans = "";
-            $ans .= "<td><a href='?ref=$ref&mode=view&table=contestants&id=$id'>{$line['name']}</a><td>{$line['level']}<td><a href='{$line['work']}'>Скачать</a>";
-            $isDone = true;
+            $ans .= "<td><a href='?ref=$ref&mode=view&table=contestants&id=$id'>{$line['name']}</a>
+                <td>{$line['level']}<td><a href='{$line['work']}'>Скачать</a>";
+            $is_done = true;
             $sum = 0;
-            foreach($probs as $value)
+            foreach ($probs as $value)
             {
                 $ans .= "<td>";
                 $val = @$line["p".$value["problems_id"]];
-                if(!$val) { $val = "???"; $isDone = false;}
+                if(!$val) { $val = "???"; $is_done = false;}
                 $ans .= $val;
                 $sum += (int)$val;
             }
-            if($isDone)$ans .= "<td>$sum";
+            if ($is_done) $ans .= "<td>$sum";
             $ans .= "<td><a href='?ref=$ref&mode=delete&table=contestants&id=$id'>Удалить</a>";
-            if($isDone)
+            if ($is_done)
             {
                 @$done[$sum][]= $ans;
                 $done_balls[$sum] = $sum;
@@ -296,9 +385,18 @@
         }
         foreach($undone as $l) echo "<tr>$l";
         echo "</table>";
-        echo "<h3>Проверенные</h3><table border='1'><tr><td>№<td>Ученик<td>Класс<td>Работа";
-        foreach($probs as $value) echo "<td>".substr($value["problem_name"], 0, 3);
-        echo "<td>Итоговый балл";
+
+        echo "
+        <h3>Проверенные</h3>
+        <table class='table table-striped table-bordered table-condensed table-hover'>
+        <thead>
+            <th>№</th>
+            <th>Ученик</th>
+            <th>Класс</th>
+            <th>Работа</th>";
+        foreach ($probs as $value)
+            echo "<th>".xu_substr($value["problem_name"], 0, 2)."</th>";
+        echo "<th colspan='2'>Итоговый балл</th></thead>";
         rsort($done_balls);
         $i=1;
         foreach($done_balls as $id)
@@ -306,12 +404,16 @@
         echo "</table>";
 
     }
-    if($mode == "edit")
+
+    if ($mode == "edit")
     {
-        if($_GET["table"] == "contestants" && @$_GET["id"] != "") unset($CTX_META["contestants"]["work"]);
+        if ($_GET["table"] == "contestants" && @$_GET["id"] != "")
+            unset($CTX_META["contestants"]["work"]);
+
         ctx_add_or_edit_form(@$_GET["table"], @$_GET["id"], "edit", @$_SERVER["HTTP_REFERER"]);
     }
-    if($mode == "structure")
+
+    if ($mode == "structure")
     {
         if(@$_POST)
         {
@@ -319,15 +421,17 @@
         }
         echo "<h3>Запрос на удаление</h3>";
         echo "<h1>СТОЙ!!! ПОДУМАЙ, ЧТО ТЫ ДЕЛАЕШЬ!!!!</h1>";
-        echo "<form method='post'><input name='delete' value='ОЧИСТИТЬ ВООБЩЕ ВСЮ БАЗУ' class='btn btn-danger' type=\"submit\"></form>";
+        echo "<form method='post'><input name='delete'
+            value='ОЧИСТИТЬ ВООБЩЕ ВСЮ БАЗУ' class='btn btn-danger' type=\"submit\"></form>";
     }
+
     if($mode == "delete")
     {
         if(@$_POST)
         {
             $table = @$_GET["table"];
             $id = @$_GET["id"];
-            xdb_get_write()->exec("DELETE FROM $table WHERE ".$table."_id = '$id';");
+            xdb_get_write()->exec("DELETE FROM $table WHERE ${table}_id = '$id';");
         }
         echo "<h3>Запрос на удаление</h3>";
         echo "<h1>СТОЙ!!! ПОДУМАЙ, ЧТО ТЫ ДЕЛАЕШЬ!!!!</h1>";
@@ -340,35 +444,43 @@
         {
             echo "<tr><td>$k<td>$v";
         }
-        echo "</table><form method='post'><input name='delete' value='УДАЛИТЬ ЗАПИСЬ ОКОНЧАТЕЛЬНО' class='btn btn-danger' type=\"submit\"></form>";
+        echo "</table><form method='post'><input name='delete'
+            value='УДАЛИТЬ ЗАПИСЬ ОКОНЧАТЕЛЬНО' class='btn btn-danger' type=\"submit\"></form>";
     }
+
     if($mode == "view")
     {
-
         $table = $_GET["table"];
-        if($table == "contestants")
+
+        if ($table == "contestants")
         {
             echo '<ul class="nav nav-pills">';
-            $problems_table = xdb_get_table("problems", NULL, NULL);
-            $solutions_table = xdb_get_table("solutions", NULL, NULL);
-            if(!@$_GET["pid"]) $activeness = "class='active'";
+            $problems_table = xdb_get_table("problems", NULL, $FILTER);
+            $solutions_table = xdb_get_table("solutions", NULL, $FILTER);
+            if (!@$_GET["pid"]) $activeness = "class='active'";
             else $activeness = "";
-            echo "<li $activeness ><a href='?ref=$ref&mode=view&table=contestants&id={$_GET['id']}' >Информация</a></li>";
+            echo "<li $activeness ><a
+                href='?ref=$ref&mode=view&table=contestants&id={$_GET['id']}' >Информация</a></li>";
+
             foreach($problems_table as $problem)
             {
                 if(@$_GET["pid"] == $problem["problems_id"]) $activeness = "class='active'";
                 else $activeness = "";;
-                echo "<li $activeness><a  href='?ref=$ref&mode=view&table=contestants&id={$_GET['id']}&pid={$problem["problems_id"]}' >".$problem["problem_name"]."</a></li>";
+                echo "<li $activeness><a
+                    href='?ref=$ref&mode=view&table=contestants&id={$_GET['id']}&pid={$problem["problems_id"]}' >".
+                    $problem["problem_name"]."</a></li>";
             }
             echo "</ul>";
-            if(!@$_GET["pid"])
+
+            if (!@$_GET["pid"])
             {
                 echo '<div class="tab-pane active" id="def">';
                 ctx_add_or_edit_form(@$_GET["table"], @$_GET["id"], "view", @$_SERVER["HTTP_REFERER"]);
                 echo "<a class='btn btn-warning' href='?ref=$ref&mode=edit&id={$_GET['id']}&table=$table'>Правка</a>";
                 echo '</div>';
             }
-            foreach($problems_table as $problem)
+
+            foreach ($problems_table as $problem)
             {
                 $c_id = $_GET["id"];
                 $p_id = $problem["problems_id"];
@@ -385,7 +497,8 @@
                 echo "<h3>".$problem["problem_name"]."</h3>";
                 if($sid == 'new') $retur = FALSE;
                 else $retur = 'stay';
-                ctx_add_or_edit_form("solutions", $sid, "edit", $retur, $c_id.$p_id, array("problem_id"=>$p_id, "contestant_id"=>$c_id));
+                ctx_add_or_edit_form("solutions", $sid, "edit", $retur, $c_id.$p_id,
+                    array("problem_id"=>$p_id, "contestant_id"=>$c_id));
                 //ctx_add_or_edit_form("problems", $_GET["id"]);
                 echo "</div>";
             }
@@ -402,4 +515,4 @@
 ?>
 </div>
 </div>
-</body>
+</body></html>

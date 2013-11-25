@@ -23,12 +23,12 @@
     if (@$else && $else != "NULL")
         xcms_compile($else_source, $else_dest);
 
-    xcms_set_args(@$input[4], $outputStream);
-    fputs($outputStream,
+    xcms_set_args(@$input[4], $output_stream);
+    fputs($output_stream,
         '<'.'?php '.
         "if($cond) { include('$then_dest'); } ");
     if (@$else && $else !="NULL")
-        fputs($outputStream, "else { include('$else_dest'); }");
+        fputs($output_stream, "else { include('$else_dest'); }");
 
-    fputs($outputStream, '?'.'>');
+    fputs($output_stream, '?'.'>');
 ?>

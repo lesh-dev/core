@@ -1,5 +1,3 @@
-<# auth/ #admin #ank #>
-<# cms/ank/style #>
 <?php
 
 function xsm_print_course_schools($db, $current_school_id)

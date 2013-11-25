@@ -1,16 +1,16 @@
-<# if //@$_GET['mode']=='logout'//auth/logout//#>
-<?php if(!@$_GET["page"])$_GET["page"]="index";?>
-<# cms/linit #>
-<# locale #>
-<# url #>
-<# adm/page_info #>
-<?php
+<# if //@$_GET['mode']=='logout'//auth/logout//#><?php
+
+if (!@$_GET["page"])
+    $_GET["page"] = "index";
+
+?><# cms/linit #><?php
+?><# locale #><?php
+?><# url #><?php
+?><# adm/page_info #><?php
     $INFO = xcms_get_list(xcms_get_info_file_name());
     include(translate("<! auth/ #editor #admin {$INFO["edit"]} !>"));
-?>
-<# cms/light_create_page_before #>
-<# auth/ #admin #editor #>
-<?php
+?><# cms/create_page_before #><?php
+?><# auth/ #admin #editor #><?php
     if(@$_POST["delete-section"])
     {
         $dir = xcms_get_page_path($pageid);
@@ -44,12 +44,11 @@
             @$_GET["mode"]="";
         }
     }
-?>
-<html>
+?><html>
     <head>
         <# cms/head #>
+        <# cms/jquery #>
         <link rel="stylesheet" type="text/css" href="<?php echo "${full_engine_pub}css/admin.css"; ?>" />
-        <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/jquery-1.7.1.min.js"; ?>"></script>
         <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
     </head>
     <body>
@@ -106,17 +105,17 @@
     }
     else if(@$_GET["mode"]=="cleanprec") include(translate("<! cleanprec !>"));
     else if(@$_GET["mode"]=="delete")
-        include(translate("<! cms/page_delete !>"));
+        include(translate("<! cms/page/delete_page !>"));
     else if(@$_GET["mode"]=="edit_alias")
-        include(translate("<! cms/page_alias !>"));
+        include(translate("<! cms/page/alias !>"));
     else if(@$_GET["mode"]=="edit_header")
-        include(translate("<! cms/page_header !>"));
+        include(translate("<! cms/page/header !>"));
     else if(@$_GET["mode"]=="edit_meta")
         include(translate("<! cms/edit_meta_tags !>"));
     else if(@$_GET["mode"]=="edit_menu")
-        include(translate("<! cms/edit_menu !>"));
+        include(translate("<! cms/menu/edit_menu !>"));
     else if(@$_GET["mode"]=="page_rename")
-        include(translate("<! cms/page_rename !>"));
+        include(translate("<! cms/page/rename_page !>"));
     else if(@$_GET["mode"]=="edit_icon")
         include(translate("<! cms/light_icon_editor !>"));
     else if(@$_GET["mode"]=="obsolete_settings")
@@ -128,7 +127,7 @@
         include(translate("<! cms/edit_page_attachments !>"));
     else if(@$_GET["mode"]=="mailer" )
     {
-        $editfile = "{$SETTINGS["datadir"]}cms/mailer.conf";
+        $editfile = "{$SETTINGS["content_dir"]}cms/mailer.conf";
         include(translate('<! edit/tag `edit`,`view`,`installed` `longtext` !>'));
     }
     else if(@$_GET["mode"]=="rebuild_alias")
@@ -171,12 +170,11 @@
     }
     elseif(@$_GET["mode"]=="access")
     {
-        include(translate("<! cms/light_access_editor !>"));
+        include(translate("<! cms/access_edit !>"));
     }
     elseif(@$_GET["mode"]=="group_admin")
     {
-        $editfile = "{$SETTINGS["datadir"]}groups";
-        include(translate("<! edit/tag !>"));
+        include(translate("<! auth/group !>"));
     }
     elseif(@$_GET["mode"]=="userlist")
     {
@@ -189,7 +187,7 @@
         include(translate("<! auth/myprofile !>"));
     }
     elseif(@$_GET["mode"]=="create_page")
-        include(translate("<! cms/light_create_page_after !>"));
+        include(translate("<! cms/create_page_after !>"));
     else
     {
         if ($is_editor)

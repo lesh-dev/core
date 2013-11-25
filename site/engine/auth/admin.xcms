@@ -1,10 +1,10 @@
-<# auth/ #admin #>
-<# auth/user #>
-<# auth/format #>
-
 <?php
     require_once("$engine_dir/sys/auth.php");
     require_once("$engine_dir/sys/groups.php");
+    require_once("$engine_dir/auth/user.php");
+?><# auth/ #admin #><?php
+?><# auth/format #><?php
+
     $u = xcms_user();
     $target_user = xcms_get_key_or($_GET, "user");
 
@@ -50,7 +50,10 @@
             <div><span class="user-label">EMail</span>
                 <input <?php xcmst_input_attrs_from_post("email", "user@example.com"); ?> /></div>
             <div><span class="user-label">Оповестить пользователя</span>
-                <input type="checkbox" <?php xcmst_checkbox_attrs_from_post("notify_user"); ?> /></div>
+                <input type="hidden" name="notify_user" id="notify_user-fake" value="" /><!--
+                prepend fake input with empty value to submit it as checkbox 'unchecked' value
+                See http://iamcam.wordpress.com/2008/01/15/unchecked-checkbox-values/ -->
+                <input type="checkbox" <?php xcmst_checkbox_attrs_from_post("notify_user", YES); ?> /></div>
             <?php
             xcmst_draw_privileges(NULL);
             ?>
@@ -119,17 +122,18 @@
       **/
     function xcmst_create_user($u)
     {
-        $login = @$_POST["login"];
-        $password = @$_POST["password"];
-        if ($password != @$_POST["password_confirm"])
+        $login = xcms_get_key_or($_POST, "login");
+        $password = xcms_get_key_or($_POST, "password");
+        if ($password != xcms_get_key_or($_POST, "password_confirm"))
             return array("Пароли не совпадают. ", null, null);
 
-        $email = @$_POST["email"];
+        $email = xcms_get_key_or($_POST, "email");
+        $name = xcms_get_key_or($_POST, "name");
         try
         {
             $tu = $u->create($login, $email);
             $tu->passwd($password);
-            $tu->set_param("name", xcms_get_key_or($_POST, "name"));
+            $tu->set_param("name", $name);
             foreach (xcms_all_groups() as $group=>$title)
             {
                 if (@$_POST["group_$group"])
@@ -142,9 +146,9 @@
         }
         $warn = null;
         if (@$_POST["notify_user"])
-            $warn = xcms_user_create_notify($email, $login, $password);
+            $warn = xcms_user_create_notify($email, $login, $password, $name);
 
-        return array(null, $warn, "Пользователь успешно создан. ");
+        return array(null, $warn, "Пользователь '$login' успешно создан. ");
     }
 
 

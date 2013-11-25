@@ -1,0 +1,1 @@
+<span style="white-space: nowrap; font-weight: bold;"><?php echo $_0; ?></span>

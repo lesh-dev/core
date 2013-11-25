@@ -60,7 +60,7 @@ DO NOT DELETE, it's complete section removal code
 */
 function xcms_delete_contlist()
 {
-    $dir = "{$SETTINGS["datadir"]}cms/pages/$pageid/{$_POST["delete-section-nax"]}";
+    $dir = "{$SETTINGS["content_dir"]}cms/pages/$pageid/{$_POST["delete-section-nax"]}";
     $list = glob("$dir/*", GLOB_ONLYDIR);
     if($list)
     {
@@ -157,7 +157,7 @@ function xcms_draw_contlist_create($result = true)
         <?php
         $template_file = "{$SETTINGS["engine_dir"]}/cms/menu/menulinks.dat";
         xcms_menu(
-            "{$SETTINGS["datadir"]}cms/pages/$pageid",
+            "{$SETTINGS["content_dir"]}cms/pages/$pageid",
             file($template_file),
             1,
             xcms_url(array('ref' =>$_GET["ref"])),

@@ -115,6 +115,34 @@ function xsm_delete_entity_listmode($entity, $table_name, $title, $aux_param = '
     <a href="list-<?php echo $redir ?>">Вернуться к просмотру списка</a></p><?php
 }
 
+function xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title, $del_title = "Удалить") {?>
+    <div style="white-space: nowrap">
+        <input type="submit" name="update-<?php echo $table_name; ?>"
+            id="update-<?php echo "$table_name-submit-$place"; ?>"
+            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
+        if (!$is_new) {?>
+            <input type="submit" name="delete-<?php echo $table_name; ?>"
+                id="delete-<?php echo "$table_name-$place-submit"; ?>"
+                value="<?php echo $del_title; ?>" class="delete-button"/><?php
+        }?>
+        <a class="link-button" id="return-<?php echo $place; ?>"
+            href="<?php echo $redir; ?>"><?php echo $ret_title; ?></a>
+    </div><?php
+}
+
+function xsm_warn_delete_ops($table_name, $key_name, $id, $redir, $entity_name, $object_str = '', $aux_param = '') {?>
+    <div class="delete-warning">Вы действительно хотите удалить
+        <?php echo $entity_name.' '.$object_str ; ?> [<b><?php echo $id; ?></b>]?</div>
+    <div><form method="post" action="edit-<?php echo $table_name.$aux_param; ?>">
+        <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
+        <input type="submit" name="confirm-delete-<?php echo $table_name; ?>"
+            id="confirm-delete-<?php echo $table_name; ?>-submit"
+            value="Таки да, удалить!" class="delete-button"/>
+        <a class="link-button" id="return"
+            href="edit-<?php echo $redir ?>">Вернуться к редактированию</a>
+    </form></div><?php
+}
+
 // Here entity should be equal to table name, but...
 function xsm_edit_operations($entity, $table_name, $id, $title, $aux_param = '')
 {
@@ -134,6 +162,8 @@ function xsm_edit_operations($entity, $table_name, $id, $title, $aux_param = '')
             echo $redir; ?>"><?php echo $title; ?></a>
     </div><?php
 }
+
+
 
 // Kosher function for person
 function NEW_xsm_edit_operations($table_name, $id, $title, $aux_param = '')

@@ -1,5 +1,3 @@
-<# auth/ #admin #ank #>
-<# cms/ank/style #>
 <?php
 
 $person_school_fields = array(
@@ -43,25 +41,16 @@ function xsm_update_person_school($title, $fields)
 }
 
 // Специфическая функция для данной таблицы
-function xsm_person_school_edit_operations($entity, $table_name, $id, $title, $school_id, $member_person_id)
+function xsm_person_school_edit_operations($table_name, $id, $ret_title, $school_id, $member_person_id, $place)
 {
     $is_new = ($id == XDB_NEW);
     $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$member_person_id));
-    ?>
-    <div style="white-space: nowrap">
-        <input type="submit" name="update-<?php echo $entity; ?>"
-            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
-        if (!$is_new) {?>
-            <input type="submit" name="delete-<?php echo $entity; ?>"
-                value="Отчислить со школы" class="delete-button"/><?php
-        }?>
-        <a class="link-button" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
-    </div><?php
+    xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title, "Отчислить со школы");
 }
 
 /* Ещё одна специфическая функция -- возврат на редактирование, а не на просмотр,
 т.к. просмотра отдельно не существует) */
-function xsm_warn_delete_person_school($entity, $table_name, $title, $aux_param = '')
+function xsm_warn_delete_person_school($table_name, $title, $aux_param = '')
 {
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
@@ -73,21 +62,12 @@ function xsm_warn_delete_person_school($entity, $table_name, $title, $aux_param 
     $first_name = xcms_get_key_or($person, 'first_name');
     $last_name = xcms_get_key_or($person, 'last_name');
     $school_title = xcms_get_key_or($school, 'school_title');
-    $redir = "$entity$aux_param".xcms_url(array($key_name=>$id)); ?>
-    <div class="delete-warning">
-        Вы действительно хотите отчислить участника <b><?php echo "$first_name $last_name"; ?></b>
-        со школы <b><?php echo $school_title; ?></b>?</div>
-    <div><form method="post" action="edit-<?php echo "$entity$aux_param"; ?>">
-        <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
-        <input type="submit" name="confirm-delete-<?php echo $entity; ?>"
-            value="Таки да, удалить!" class="delete-button"/>
-        <a class="link-button"
-            href="edit-<?php echo $redir ?>">Вернуться к редактированию</a>
-    </form></div>
-    <?php
+    $redir = "$table_name$aux_param".xcms_url(array($key_name=>$id));
+    xsm_warn_delete_ops($table_name, $key_name, $id, $redir, "участника",
+        "<b>$first_name $last_name</b> со школы <b>$school_title</b>", $aux_param);
 }
 
-function xsm_delete_person_school($entity, $table_name, $title, $aux_param = '')
+function xsm_delete_person_school($table_name, $title, $aux_param = '')
 {
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
@@ -152,11 +132,11 @@ function xsm_edit_person_school()
 
     ?>
     <form method="post" action="edit-person_school"><?php
-        xsm_person_school_edit_operations('person_school', 'person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id);?>
+        xsm_person_school_edit_operations('person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id, 'top');?>
         <input type="hidden" name="person_school_id" value="<?php echo $person_school_id; ?>" />
         <input type="hidden" name="member_person_id" value="<?php echo $member_person_id; ?>" />
         <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
-        <table summary="Участие на школе" class="ankEdit">
+        <table class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Роли на этой школе</td>
             </tr>
@@ -201,7 +181,7 @@ function xsm_edit_person_school()
                 <?php
             }?>
         </table><?php
-        xsm_person_school_edit_operations('person_school', 'person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id);?>
+        xsm_person_school_edit_operations('person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id, 'bottom');?>
     </form>
     <?php
 }
@@ -209,9 +189,9 @@ function xsm_edit_person_school()
 if (@$_POST["update-person_school"])
     xsm_update_person_school('Участник-на-Школе', $person_school_fields);
 elseif (@$_POST["delete-person_school"])
-    xsm_warn_delete_person_school('person_school', 'person_school', 'Участник-на-Школе');
+    xsm_warn_delete_person_school('person_school', 'Участник-на-Школе');
 elseif (@$_POST["confirm-delete-person_school"])
-    xsm_delete_person_school('person_school', 'person_school', 'Участник-на-Школе');
+    xsm_delete_person_school('person_school', 'Участник-на-Школе');
 else
     xsm_edit_person_school();
 ?>

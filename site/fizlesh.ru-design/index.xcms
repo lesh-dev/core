@@ -16,7 +16,7 @@
 </head>
 <body>
     <div id="fullHeight">
-        <table cellspacing="0" cellpadding="0" class="topTable roundBorders" summary="Page Top">
+        <table cellspacing="0" cellpadding="0" class="topTable roundBorders">
             <tr>
                 <td class="logoCell menuWidth">
                     <a href="/<# web_prefix #>" title="ФизЛЭШ"><img
@@ -36,7 +36,7 @@
                 </td>
             </tr>
         </table>
-        <table cellspacing="0" cellpadding="0" class="bottomTable" summary="Page Bottom">
+        <table cellspacing="0" cellpadding="0" class="bottomTable">
             <tr>
                 <td class="menu-field menu-width roundBorders">
                     <# cms/menu/display start=1 end=5 #>
@@ -64,6 +64,10 @@
 
                         include(translate('<a href="/<# web_prefix #>register/list-course'.
                             '" class="menu-item menu-sys">Курсы</a>'));
+
+                        include(translate('<a href="/<# web_prefix #>?'.
+                            xcms_url(array('ref'=>'contest')).
+                            '" class="menu-item menu-sys">Проверка олимпиады</a>'));
                     }
 
                     if (xcms_user()->check_rights("registered", false))
@@ -90,7 +94,7 @@
                     {
                         include(translate('<a href="/<# web_prefix#>?'.
                             xcms_url(array('page'=>$pageid, 'ref'=>'login', 'return'=>'?ref=index')).
-                            '" class="menu-item menu-level1 stealthLink">Авторизация</a>'));
+                            '" class="menu-item menu-level1 menu-sys">Авторизация</a>'));
                     }
                 ?>
                 <!--a href="http://validator.w3.org/check?uri=referer"><img
@@ -114,7 +118,7 @@
                     </div><?php
                     if (!$in_xsm)
                     {?>
-                        <# cms/edit-button #><?php
+                        <# cms/page/edit_button #><?php
                     }?>
                     <div id="content-text"><# if //!@$_GET["usr"]//cms/ #></div>
                     <hr />

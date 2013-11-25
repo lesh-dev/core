@@ -5,7 +5,7 @@
     $INFO["maxNews"] = 10;
 
     xcms_save_list(xcms_get_info_file_name(), $INFO);
-    $template_name = "{$SETTINGS["datadir"]}cms/pages/$pageid/template";
+    $template_name = "{$SETTINGS["content_dir"]}cms/pages/$pageid/template";
     if (!xcms_write(
         $template_name,
         '<div class="newstitle">@@DATE@. Заголовок новости</div>'.EXP_LF.

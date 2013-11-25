@@ -21,7 +21,10 @@
         if (strpos($cmd, '=') !== false)
         {
             $arr = explode('=', $cmd, 2);
-            $params[$arr[0]] = $arr[1];
+            $value = $arr[1];
+            if (substr($value, 0, 1) == "'")
+                $value = substr($value, 1, strlen($value) - 2);
+            $params[$arr[0]] = $value;
         }
         else
             $args[] = $cmd;
