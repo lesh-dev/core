@@ -1,11 +1,7 @@
 <?php
     require_once("$engine_dir/sys/diff/diff-utils.php");
 
-    if (!@$counter) $counter = 0;
-    $counter ++;
-
     $default_text = xcms_get_key_or($param, "def-text");
-    @$multi_id = $param["id"]; if (!@$multi_id) @$multi_id = $counter;
     @$cols = $param["cols"]; if (!@$cols) @$cols = 120;
     @$rows = $param["rows"]; if (!@$rows) @$rows = 40;
     @$tag = $param["tag"]; if (!@$tag) @$tag = "h3";
@@ -24,7 +20,7 @@
     }
     else
     {
-        if (@$_POST["edit-submit"] && @$_POST["multi-id"] == @$multi_id)
+        if (@$_POST["edit-submit"])
         {
             $time = time();
             $target_name = "$ename-version-$time";
@@ -112,7 +108,6 @@
     ?>
 <form method="post" enctype="multipart/form-data">
     <input type="hidden" name="<?php echo $pathv; ?>" value="<?php echo $ename;?>" />
-    <input type="hidden" name="multi-id" value="<?php echo $multi_id; ?>" />
     <div style="padding-top: 15px;">
         <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-submit-top" value="<?php echo $submit_val; ?>" />
         <input type="submit" name="edit-preview" id="edit-preview-top" value="Предпросмотр" />
