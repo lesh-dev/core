@@ -1,0 +1,31 @@
+#!/bin/bash
+# Generated from template on Fri May  3 19:33:09 MSK 2013
+# Please don't forget to commit all changes to repo
+target=/srv/www/clones/demo
+sympolicy=none
+components=" demo_folder"
+branch=master
+# This will be executed while publishing component begin
+function hook_begin
+{
+    rm -rf /srv/www/clones/demo/
+    mkdir -p /srv/www/clones/demo
+    echo -en  # Add something useful is you want
+}
+
+# This will be executed while publishing component demo_folder
+function hook_demo_folder
+{
+    echo -en  # Add something useful is you want
+}
+
+# This will be executed while publishing component end
+function hook_end
+{
+    mv content content_orig
+    mkdir content
+    cp -rf content_orig/. content/
+    echo -en  # Add something useful is you want
+    rm content/usr/*
+    apachectl  -k graceful
+}

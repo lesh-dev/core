@@ -1,0 +1,7 @@
+#!/bin/bash
+# Component generated from template on Fri May  3 19:31:02 MSK 2013
+# Please don't forget to commit all changes to repo
+
+type=folder
+location=/srv/www/clones/production
+local_target=./
