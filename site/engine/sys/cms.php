@@ -4,19 +4,26 @@
   **/
 
 /**
-  * Retrieve current page content location
-  * Assumes @name pageid and @name SETTINGS are defined
+  * Retrieve page info location
+  * Assumes @name SETTINGS (and @name pageid
+  * in case of no arguments) are defined
+  * @param $page_id page identifier in case of non-current page
   **/
-function xcms_get_info_file_name()
+function xcms_get_info_file_name($page_id = false)
 {
     global $SETTINGS;
-    global $pageid;
-    return "{$SETTINGS["content_dir"]}cms/pages/$pageid/info";
+    if ($page_id === false)
+    {
+        global $pageid;
+        $page_id = $pageid;
+    }
+    return "{$SETTINGS["content_dir"]}cms/pages/$page_id/info";
 }
 
 /**
   * Retrieve page directory (current page by default)
-  * Assumes @name SETTINGS (and @name pageid in case of no arguments) are defined
+  * Assumes @name SETTINGS (and @name pageid
+  * in case of no arguments) are defined
   * @param $page_id page identifier in case of non-current page
   * @return complete page path
   **/
