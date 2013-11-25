@@ -69,7 +69,8 @@
             }
             system("gzip $target_name");
         }
-        else $current_version = @$_POST["versions"];
+        else
+            $current_version = @$_POST["versions"];
 
         if (file_exists($ename))
         {
@@ -79,9 +80,10 @@
                 $text = gzread($f, 10000000);
                 fclose($f);
             }
-            else $text = file_get_contents($ename.$current_version);
+            else
+                $text = file_get_contents($ename.$current_version);
         }
-        elseif (@$text) {}
+        elseif (@$text) { /* do nothing */ }
         else $text = $default_text;
 
         if (!@$param["-h"]) echo "<$tag>edit: $ename</$tag>";
