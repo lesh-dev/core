@@ -4,7 +4,7 @@
     if (!@$counter) $counter = 0;
     $counter ++;
 
-    @$dtext = $param["dtext"]; if (!@$dtext) @$dtext = "no file here.";
+    $default_text = xcms_get_key_or($param, "def-text");
     @$multi_id = $param["id"]; if (!@$multi_id) @$multi_id = $counter;
     @$cols = $param["cols"]; if (!@$cols) @$cols = 120;
     @$rows = $param["rows"]; if (!@$rows) @$rows = 40;
@@ -86,7 +86,7 @@
             else $text = file_get_contents($ename.$current_version);
         }
         elseif (@$text) {}
-        else $text = "$dtext";
+        else $text = $default_text;
 
         if (!@$param["-h"]) echo "<$tag>edit: $ename</$tag>";
         $ty = "submit";
