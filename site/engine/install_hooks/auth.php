@@ -85,9 +85,12 @@
         $u->add_to_group($target->login(), "admin");
         $u->add_to_group($target->login(), "ank");
         $u->add_to_group($target->login(), "editor");
-        if (!xcms_append("settings.php",
-            "<?php \$auth_vk_id=\"${config['vk_id']}\"; ?>\n".
-            "<?php \$auth_vk_rights=\"${config['vk_rights']}\"; ?>\n"))
+        $result = xcms_append("settings.php",
+            "<?php\n".
+            "\$auth_vk_id=\"${config['vk_id']}\";\n".
+            "\$auth_vk_rights=\"${config['vk_rights']}\";\n".
+            "?>");
+        if (!$result)
             return "Cannot open settings.php for append. ";
         return true;
     }

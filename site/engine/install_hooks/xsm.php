@@ -62,10 +62,10 @@
     {
         $result = xcms_append("settings.php",
             // TODO: привет кавычкам
-            "\n<?php /* This block was inserted by installer -- xsm.php.".
+            "<?php\n/* This block was inserted by installer -- xsm.php.".
             "\nYou may edit it, but it can be regenerated. */".
             "\n   \$xsm_db_name = '".$config["xsm_db_name"]."';".
-            "\n/* --- */ ?>\n");
+            "\n/* --- */\n?>");
         if (!$result)
             return "Cannot open 'settings.php' for append. ";
         return true;

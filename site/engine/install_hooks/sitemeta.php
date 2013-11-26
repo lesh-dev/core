@@ -68,12 +68,12 @@
     function install($config)
     {
         $result = xcms_append("settings.php",
-            "\n<?php /* This block was inserted by installer -- sitemeta.php.".
+            "<?php\n/* This block was inserted by installer -- sitemeta.php.".
             "\nYou may edit it, but it can be regenerated. */".
             "\n   \$meta_site_name = '".$config["site_name"]."';".
             "\n   \$meta_site_url = '".$config["site_url"]."';".
             "\n   \$meta_site_mail = '".$config["webmaster_mail"]."';".
-            "\n/* --- */ ?>\n");
+            "\n/* --- */\n?>");
         if (!$result)
             return "Cannot open 'settings.php' for append. ";
         return true;
