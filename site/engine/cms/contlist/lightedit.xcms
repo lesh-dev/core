@@ -1,9 +1,10 @@
-<# auth/format #>
-<?php
-require_once("${engine_dir}/sys/groups.php");
+<# auth/format #><?php
+
+require_once("${engine_dir}sys/groups.php");
+require_once("${engine_dir}edit/page_diff.php");
 
 # TODO: dynamic loading
-require_once("${engine_dir}/cms/news/get_template.xcms");
+require_once("${engine_dir}cms/news/get_template.xcms");
 
 function xcms_create_contlist()
 {
@@ -45,9 +46,13 @@ function xcms_create_contlist()
     // не показывать их в системном меню
     $list["menu-locked"] = YES;
 
-    xcms_save_list("$dir/info", $list);
-    xcms_write("$dir/content", $_POST["content"]);
+    $content = $_POST["content"];
+    $content = xcms_wrap_long_lines($content);
 
+    xcms_save_list("$dir/info", $list);
+    xcms_write("$dir/content", $content);
+
+    xcms_process_page_diff("", $content, $item_pageid);
     ?>
     <meta http-equiv="refresh" content="2;URL=/<# web_prefix #>?<?php echo xcms_url(array('page'=>$item_pageid, 'ref'=>'ladmin'));?>" />
     <h3>Подождите, сейчас произойдёт перенаправление на страницу администрирования...</h3><?php
