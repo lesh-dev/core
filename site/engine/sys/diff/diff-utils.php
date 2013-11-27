@@ -46,16 +46,16 @@
         xut_equal($diff, "", "Empty equal text");
 
         $diff = xcms_diff_html("abc", "", false);
-        xut_equal($diff, "<del>abc</del>", "Simple deletion");
+        xut_equal($diff, "<del>abc</del> ", "Simple deletion");
 
         $diff = xcms_diff_html("", "abc", false);
         xut_equal($diff, "<ins>abc</ins>", "Simple insertion");
 
         $diff = xcms_diff_html("abc def ghi", "abc ghi", false);
-        xut_equal($diff, "abc <del>def </del>ghi", "First pbagnall@ patch");
+        xut_equal($diff, "abc <del>def </del> ghi", "First pbagnall@ patch");
 
         $diff = xcms_diff_html("\n", "тарам-парам\nпарам-парам\n", false);
-        xut_equal($diff, "<del>\n</del><ins>тарам-парам\nпарам-парам\n</ins>", "Diff lockup");
+        xut_equal($diff, "<del>\n</del> <ins>тарам-парам\nпарам-парам\n</ins>", "Diff lockup");
         // I wish it should be, but it does not want to look forward so much
         //xut_equal($diff, "<ins>тарам-парам\nпарам-парам</ins>\n", "Diff lockup test");
 
@@ -68,7 +68,7 @@
         // Following test covers the difference between original FineDiff behavior
         // that assumes dot is a sentence end. We don't need such precision in levels
         $diff = xcms_diff_html("http://vk.com?bla=value", "https://vk.com?bla=value", false);
-        xut_equal($diff, "<del>http://vk.com?bla=value</del><ins>https://vk.com?bla=value</ins>", "URL diff");
+        xut_equal($diff, "<del>http://vk.com?bla=value</del> <ins>https://vk.com?bla=value</ins>", "URL diff");
 
         $diff = xcms_diff_html("abcdefgh aaa", "xyz abcdefgh aaa\ntuv", false);
         xut_equal($diff, "<ins>xyz </ins>abcdefgh aaa<ins>\ntuv</ins>", "Multiline insertion");
@@ -78,10 +78,10 @@
 
         // Test diffs with html chunks
         $diff = xcms_diff_html("<span>Проверка того</span>", "<span>Замена того</span>", false);
-        xut_equal($diff, "&lt;span&gt;<del>Проверка</del><ins>Замена</ins> того&lt;/span&gt;", "HTML word dividers 1");
+        xut_equal($diff, "&lt;span&gt;<del>Проверка</del> <ins>Замена</ins> того&lt;/span&gt;", "HTML word dividers 1");
 
         $diff = xcms_diff_html("составляет 10<sup>15</sup> калорий", "составляет 9.5<sup>15</sup> калорий", false);
-        xut_equal($diff, "составляет <del>10</del><ins>9.5</ins>&lt;sup&gt;15&lt;/sup&gt; калорий", "HTML word dividers 2");
+        xut_equal($diff, "составляет <del>10</del> <ins>9.5</ins>&lt;sup&gt;15&lt;/sup&gt; калорий", "HTML word dividers 2");
 
 
         xut_end();

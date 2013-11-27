@@ -738,7 +738,7 @@ class FineDiff {
 				$deletion = str_replace(array("\n","\r"), array('\n','\r'), $deletion);
 				}
 			*/
-			echo '<del>', htmlspecialchars($deletion), '</del>';
+			echo '<del>', htmlspecialchars($deletion), '</del> ';
 			}
 		else /* if ( $opcode === 'i' ) */ {
  			echo '<ins>', htmlspecialchars(xu_substr($from, $from_offset, $from_len)), '</ins>';
