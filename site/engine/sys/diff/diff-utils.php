@@ -76,6 +76,14 @@
         $diff = xcms_diff_html("abcdefgh aaa\n", "xyz abcdefgh aaa\ntuv", false);
         xut_equal($diff, "<ins>xyz </ins>abcdefgh aaa\n<ins>tuv</ins>", "Multiline insertion with newline");
 
+        // Test diffs with html chunks
+        $diff = xcms_diff_html("<span>Проверка того</span>", "<span>Замена того</span>", false);
+        xut_equal($diff, "&lt;span&gt;<del>Проверка</del><ins>Замена</ins> того&lt;/span&gt;", "HTML word dividers 1");
+
+        $diff = xcms_diff_html("составляет 10<sup>15</sup> калорий", "составляет 9.5<sup>15</sup> калорий", false);
+        xut_equal($diff, "составляет <del>10</del><ins>9.5</ins>&lt;sup&gt;15&lt;/sup&gt; калорий", "HTML word dividers 2");
+
+
         xut_end();
     }
 

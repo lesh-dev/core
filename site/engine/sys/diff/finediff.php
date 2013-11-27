@@ -345,7 +345,7 @@ class FineDiff {
 	* Stock granularity stacks and delimiters
 	*/
 
-	const wordDelimiters = " \t\n\r";
+	const wordDelimiters = " \t\n\r<>";
 	public static $wordGranularity = array(
 		FineDiff::wordDelimiters
 		);
