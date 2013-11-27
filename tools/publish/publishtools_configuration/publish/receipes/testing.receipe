@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Generated from template on Tue Oct  9 22:33:23 MSK 2012
 # Please don't forget to commit all changes to repo
 
@@ -53,6 +53,11 @@ function hook_end
         git init
         hook_commit
     fi
+    # create robots.txt to prevent indexing (#426)
+    cat > robots.txt <<EOF
+User-Agent: *
+Disallow: /
+EOF
     echo -en  # Add something useful is you want
     apachectl -k graceful
 }
