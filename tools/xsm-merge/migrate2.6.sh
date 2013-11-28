@@ -45,7 +45,7 @@ $sudo_cmd sed -i -e "s/@@CONTENT@/$content_dir/" settings.php
 back_path="$news_path.backup"
 $sudo_cmd cp -r "$news_path" "$back_path"
 $sudo_cmd bash -xe <<EOF
-    ls -1 $news_path | /bin/grep '^2' > news-list.txt
+    ls -1 -d $news_path/* | /bin/grep '20' > news-list.txt
 EOF
 $sudo_cmd php contlist-to-2.6.php news-list.txt
 echo "Conversion done"

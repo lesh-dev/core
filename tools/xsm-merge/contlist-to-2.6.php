@@ -10,13 +10,13 @@
     require_once("${engine_dir}sys/string.php");
     header("Content-Type: text/html; charset=utf-8");
 
-    function xconv_convert_news_file($file)
+    function xconv_convert_contlist_item($file)
     {
         xcms_log(XLOG_INFO, "Converting item $file");
         $content_name = "$file/content";
         $info_name = "$file/info";
 
-        $contents = file_get_contents($file);
+        $contents = file_get_contents($content_name);
         $r = array();
         preg_match("/newstitle\".([0-9.]+)(.*?)</s", $contents, $r);
         $title = "";
@@ -24,9 +24,11 @@
         if ($r)
         {
             $date = substr($r[1], 0, 8);
+            $date = '20'.substr($date, 6, 2).'-'.substr($date, 3, 2).'-'.substr($date, 0, 2);
             $title = trim($r[2]);
         }
-        echo "$date $title";
+        $ts = strtotime($date);
+        echo "$date $ts $title\n";
         /*$folder = "$item_id$suffix";
         mkdir("$dir_name/$folder", 0755, true);
         xcms_log(XLOG_INFO, "$folder");
