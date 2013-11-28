@@ -12,6 +12,8 @@ function xcms_create_contlist()
 
     $suffix = xcms_get_key_or($_POST, "name-suffix");
     $date = date('Y.m.d');
+    $timestamp = time();
+    $date_hr = date("Y.m.d-H.i.s");
     $path_prefix = xcms_get_page_root(true);
     $glob_dir = "$path_prefix$pageid/$date";
     $count = count(glob("$glob_dir*", GLOB_ONLYDIR));
@@ -35,8 +37,11 @@ function xcms_create_contlist()
     mkdir($dir, 0777, true);
     $list = array();
     $list["type"] = xcms_get_key_or($_POST, "pagetype");
-    $list["subheader"] = xcms_get_key_or($_POST, "subheader");
+    $list["header"] = xcms_get_key_or($_POST, "header");
     $list["menu-title"] = xcms_get_key_or($_POST, "subheader");
+    $list["owner"] = xcms_user()->login();
+    $list["timestamp"] = $timestamp;
+    $list["datetime"] = $date_hr;
     $list["view"] = "#all";
     $list["edit"] = "#editor";
     $list["alias"] = $root_alias."/$item_id";
@@ -54,8 +59,10 @@ function xcms_create_contlist()
 
     xcms_process_page_diff("", $content, $item_pageid);
     ?>
-    <meta http-equiv="refresh" content="2;URL=/<# web_prefix #>?<?php echo xcms_url(array('page'=>$item_pageid, 'ref'=>'ladmin'));?>" />
-    <h3>Подождите, сейчас произойдёт перенаправление на страницу администрирования...</h3><?php
+    <meta http-equiv="refresh" content="2;URL=/<# web_prefix #>?<?php
+        echo xcms_url(array('page'=>$item_pageid, 'ref'=>'ladmin'));?>" />
+    <h3>Подождите, сейчас произойдёт перенаправление
+        на страницу администрирования...</h3><?php
     return true;
 }
 
@@ -99,11 +106,13 @@ function xcms_draw_contlist_create($result = true)
     <table>
         <tr>
             <td>Служебное имя</td>
-            <td><input <?php echo xcmst_input_attrs_from_post("name-suffix", "new-info-block"); ?> /></td>
+            <td><input <?php echo xcmst_input_attrs_from_post("name-suffix",
+                "new-info-block"); ?> /></td>
         </tr>
         <tr>
             <td>Заголовок</td>
-            <td><input <?php echo xcmst_input_attrs_from_post("subheader", "Подзаголовок"); ?> /></td>
+            <td><input <?php echo xcmst_input_attrs_from_post("header",
+                "Это заголовок новости, напишите его!"); ?> /></td>
         </tr>
         <tr>
             <td>Тип блока</td>
@@ -149,10 +158,6 @@ function xcms_draw_contlist_create($result = true)
             <td><input type="checkbox" name="viewForAll" checked="checked" /></td>
         </tr>
     </table>
-    <div>
-        Заголовок:
-        <input type="text" readonly="readonly" name="header" value="<?php echo htmlspecialchars($header); ?>" />
-    </div>
     <input type="submit" name="contlist-create" value="Добавить">
     </form>
     </div>
@@ -173,7 +178,6 @@ function xcms_draw_contlist_create($result = true)
     </div>
     <?php
 }
-
 
 
 // main
