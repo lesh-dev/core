@@ -36,14 +36,31 @@
         {?>
             <div class="contlist-block <?php echo $odd; ?>"><?php
             $source = xcms_get_page_content_name($subpage_id);
+            $info = xcms_get_page_info($subpage_id);
             if ($editable)
             {?>
                 <a id="contlist-item-<?php echo $contlist_block_iter; ?>" class="link-button contlist-edit"
                     href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'ladmin', 'page'=>$subpage_id)); ?>">Редактировать</a><?php
             }
-            //include(translate("<! cms/readtext --markdown --limit=220 --next-link=index.php?page=$subpage_id --next-text=подробнее !>"));
-            include(translate("<! cms/readtext --markdown !>"));
+            $date = xcms_get_key_or($info, "datetime");
+            $date = substr($date, 0, 10);
             ?>
+            <h3><?php echo "$date &ndash; ".htmlspecialchars(xcms_get_key_or($info, "header")); ?></h3><?php
+            // include(translate("<! cms/readtext --markdown --limit=220
+            //  --next-link=index.php?page=$subpage_id --next-text=подробнее !>"));
+            include(translate("<! cms/readtext --markdown !>"));
+            $login = xcms_get_key_or($info, "owner");
+
+            // TODO: fix this trash. We need 4 lines to get another user name here
+            // It's not an API, it's a bullshit
+            $su = xcms_user();
+            $su->set_superuser();
+            $u = $su->su($login);
+            $name = trim($u->param("name"));
+            if (!strlen($name))
+                $name = $u->login();
+            ?>
+            <div class="signature"><?php echo htmlspecialchars($name); ?></div>
             </div><?php
         }
         $contlist_block_iter++;

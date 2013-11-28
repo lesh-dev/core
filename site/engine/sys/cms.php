@@ -20,6 +20,19 @@ function xcms_get_info_file_name($page_id = false)
     return "{$SETTINGS["content_dir"]}cms/pages/$page_id/info";
 }
 
+function xcms_get_page_info($page_id = false)
+{
+    global $SETTINGS;
+    if ($page_id === false)
+    {
+        global $pageid;
+        $page_id = $pageid;
+    }
+    $info_name = "{$SETTINGS["content_dir"]}cms/pages/$page_id/info";
+    // TODO: check file existance
+    return xcms_get_list($info_name);
+}
+
 /**
   * Retrieve page directory (current page by default)
   * Assumes @name SETTINGS (and @name pageid
