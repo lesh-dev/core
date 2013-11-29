@@ -103,31 +103,10 @@
         $info["header"] = $title;
         $info["menu-title"] = $title;
         $info["owner"] = $signature;
-        echo "$date $ts $title\n";
+        $info["timestamp"] = date("Y-m-d H:i:s", $ts);
+        //echo "$date $ts $title\n";
         print_r($info);
-        /*$folder = "$item_id$suffix";
-        mkdir("$dir_name/$folder", 0755, true);
-        xcms_log(XLOG_INFO, "$folder");
-        if (!xcms_write("$dir_name/$folder/content", $contents))
-            die("Migration failed: cannot write content");
-        xcms_log(XLOG_INFO, "Write content to $dir_name/$folder/content");
-
-        $info_contents =
-"type:content
-subheader:
-menu-title:
-view:#all
-edit:#editor
-alias:news/$item_id$suffix
-menu-title:$title
-menu-hidden:yes
-menu-locked:yes
-";
-        if (!xcms_write("$dir_name/$folder/info", $info_contents))
-            die("Migration failed: cannot write info");
-        // remove old news file
-        unlink($file);
-        */
+        //xcms_save_list($info_name, $info);
     }
 
     if ($argc < 2)
