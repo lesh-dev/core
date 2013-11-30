@@ -113,7 +113,7 @@
             {
                 if ($date == "2011-07-23")
                 {
-                    preg_match(":</div>(.*?):s", $contents, $r);
+                    preg_match(":</div>(.*):s", $contents, $r);
                     if ($r)
                     {
                         $news_text = $r[1];
