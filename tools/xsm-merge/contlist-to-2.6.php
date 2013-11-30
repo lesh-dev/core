@@ -95,6 +95,24 @@
         global $A;
         $A[$signature] = $signature;
 
+        $r = array();
+        preg_match(":(<p.*</p>):s", $contents, $r);
+        $news_text = "";
+        if ($r)
+        {
+            $news_text = $r[1];
+        }
+        else
+        {
+            preg_match(":</div>(.*?)<div:s", $contents, $r);
+            if ($r)
+            {
+                $news_text = $r[1];
+            }
+            else
+                die("Cannot extract content: $contents");
+        }
+
         $ts = strtotime($date);
 
         $info = xcms_get_list($info_name);
@@ -104,9 +122,10 @@
         $info["menu-title"] = $title;
         $info["owner"] = $signature;
         $info["timestamp"] = date("Y-m-d H:i:s", $ts);
-        //echo "$date $ts $title\n";
-        print_r($info);
-        //xcms_save_list($info_name, $info);
+        echo "$date $ts $title\n$news_text\n\n";
+        //print_r($info);
+        xcms_write($content_name, $news_text);
+        xcms_save_list($info_name, $info);
     }
 
     if ($argc < 2)
