@@ -110,7 +110,20 @@
                 $news_text = $r[1];
             }
             else
-                die("Cannot extract content: $contents");
+            {
+                if ($date == "2011-07-23")
+                {
+                    preg_match(":</div>(.*?):s", $contents, $r);
+                    if ($r)
+                    {
+                        $news_text = $r[1];
+                    }
+                    else
+                        die("Cannot extract SERGE content: $contents");
+                }
+                else
+                    die("Cannot extract content: $contents");
+            }
         }
 
         $ts = strtotime($date);
