@@ -69,7 +69,7 @@
             return;
         }
         $user = $u->su($target_user);
-        $creation_date = xcms_ts_to_datetime($user->param('creation_date'));
+        $creation_date = xcms_datetime($user->param('creation_date'));
         $read_only = ($u->login() == $user->login());
         ?>
         <form method="post">

@@ -91,10 +91,10 @@
     function xcms_deliver_mail_int($mail_group, $addr_list, $notification_body, $subject = NULL)
     {
         global $SETTINGS;
-        $notification_time = date("d.m.Y");
+        $notification_date = xcms_rus_date();
 
         if ($subject === NULL)
-            $subject = "Уведомления за $notification_time";
+            $subject = "Уведомления за $notification_date";
 
         $body_html = xcms_get_html_template("notification-template");
         $body_html = str_replace('@@NOTIFICATION-BODY@', $notification_body, $body_html);

@@ -44,25 +44,37 @@ function xcms_mkpasswd()
 /**
   * YYYY-MM-DD HH:MM:SS
   **/
-function xcms_ts_to_datetime($timestamp)
+function xcms_datetime($timestamp = false)
 {
+    if ($timestamp === false)
+        return date("Y-m-d H:i:s");
+    if (empty($timestamp))
+        return "";
     return date("Y-m-d H:i:s", $timestamp);
 }
 
-function xcms_ts_to_date($timestamp)
+function xcms_date($timestamp = false)
 {
+    if ($timestamp === false)
+        return date("Y-m-d");
+    if (empty($timestamp))
+        return "";
     return date("Y-m-d", $timestamp);
 }
 
-function xcms_ts_to_rus_date($timestamp)
+function xcms_rus_date($timestamp = false)
 {
+    if ($timestamp === false)
+        return date("d.m.Y");
+    if (empty($timestamp))
+        return "";
     return date("d.m.Y", $timestamp);
 }
 
-// Reverse to xcms_ts_to_datetime
-function xcms_datetime_to_ts($timestamp)
+// Reverse to xcms_datetime
+function xcms_datetime_to_ts($date_time)
 {
-    return strtotime($date);
+    return strtotime($date_time);
 }
 
 function xcms_get_html_template($template_name)
