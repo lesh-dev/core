@@ -150,8 +150,7 @@
         $enabled = xcms_get_key_or($SETTINGS, "mailer_enabled", true);
         if (!$enabled) return;
 
-        $unix_time = time();
-        $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
+        $hr_timestamp = xcms_datetime();
 
         $host = xcms_hostname();
         $body_text =
