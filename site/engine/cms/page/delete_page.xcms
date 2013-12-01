@@ -2,8 +2,6 @@
     <h3>Удаление страницы</h3>
 <?php
     $sec_name = xcms_get_key_or($INFO, "header");
-    if (!$sec_name)
-        $sec_name = xcms_get_key_or($INFO, "subheader");
     $sec_name = htmlspecialchars($sec_name);
 
     $menu_title = xcms_get_key_or($INFO, "menu-title");

@@ -37,11 +37,7 @@ function xcmst_page_info($INFO, $pageid)
             <span class="td2">
                 <span class="info-label">Физический путь</span>
                 <a <?php echo xcms_href(array('mode'=>'page_rename', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
-                <tt><?php echo htmlspecialchars($pageid); ?></tt></a><!--
-
-                <span class="info-label">Подзаголовок</span>
-                <a <?php echo xcms_href(array('mode'=>'edit_header', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
-                <tt><?php echo htmlspecialchars(xcms_get_key_or($INFO, "subheader", "<subheader не задан>")); ?></tt></a>-->
+                <tt><?php echo htmlspecialchars($pageid); ?></tt></a>
             </span>
         </div>
 

@@ -62,11 +62,6 @@
         <font>Этот текст появится наверху страницы</font></td>
     <td><input name="header" id="header-input" /></td>
 </tr>
-<!--<tr>
-    <td>Подзаголовок<br><font size="-1">То есть тот текст, который (может быть)
-        появится где-нибудь на странице.</font></td>
-    <td><input type="text" name="subheader" /></td>
-</tr>-->
 <tr>
     <td colspan="2">
         <h3>Матрица доступа</h3>
