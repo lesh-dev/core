@@ -27,7 +27,7 @@
       **/
     function xcms_log($log_level, $message)
     {
-        xcms_append(xcms_log_filename(), "[".date('Y.m.d H:i:s')."]: $message\n");
+        xcms_append(xcms_log_filename(), "[".xcms_datetime()."]: $message\n");
     }
 
     /**
@@ -38,7 +38,7 @@
       **/
     function xcms_log_array($log_level, $name, $array)
     {
-        $output = "[".date('Y.m.d H:i:s')."]: ARRAY $name DUMP\n";
+        $output = "[".xcms_datetime()."]: ARRAY $name DUMP\n";
         foreach ($array as $key => $value)
             $output .= "    '$key' => '$value'\n";
         xcms_append(xcms_log_filename(), $output);

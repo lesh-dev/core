@@ -284,7 +284,7 @@
         foreach ($items as $item)
         {
             $timestamp = (int)(preg_replace('#.*/#', '', $item));
-            $date = date("d.m.Y H:i", $timestamp);
+            $date_time = xcms_datetime($timestamp);
             $list = xcms_get_list("$item/config.ini");
             ?>
             <tr>

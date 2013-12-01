@@ -13,7 +13,7 @@ function xcms_create_contlist()
     $suffix = xcms_get_key_or($_POST, "name-suffix");
     $date = date('Y.m.d');
     $timestamp = time();
-    $date_hr = date("Y.m.d-H.i.s");
+    $datetime = xcms_datetime($timestamp);
     $path_prefix = xcms_get_page_root(true);
     $glob_dir = "$path_prefix$pageid/$date";
     $count = count(glob("$glob_dir*", GLOB_ONLYDIR));
@@ -40,8 +40,8 @@ function xcms_create_contlist()
     $list["header"] = xcms_get_key_or($_POST, "header");
     $list["menu-title"] = xcms_get_key_or($_POST, "header");
     $list["owner"] = xcms_user()->login();
-    $list["timestamp"] = $timestamp;
-    $list["datetime"] = $date_hr;
+    $list["timestamp-created"] = $timestamp;
+    $list["datetime-created"] = $datetime;
     $list["view"] = "#all";
     $list["edit"] = "#editor";
     $list["alias"] = $root_alias."/$item_id";
