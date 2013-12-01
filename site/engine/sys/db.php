@@ -83,9 +83,7 @@
 
         if ($override_ts)
         {
-            $unix_time = time();
-            $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
-            $keys_values["${table_name}_created"] = $hr_timestamp;
+            $keys_values["${table_name}_created"] = xcms_datetime();
             $keys_values["${table_name}_modified"] = '';
         }
 
@@ -137,12 +135,8 @@
         $db = ($outer_db === NULL) ? xdb_get_write() : $outer_db;
         $values = "";
         if ($override_ts)
-        {
-            // update '<table-name>-modified' timestamp
-            $unix_time = time();
-            $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
-            $keys_values["${table_name}_modified"] = $hr_timestamp;
-        }
+            $keys_values["${table_name}_modified"] = xcms_datetime();
+
         foreach ($keys_values as $key => $value)
         {
             if (!array_key_exists($key, $allowed_keys))
