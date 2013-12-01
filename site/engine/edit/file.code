@@ -67,7 +67,7 @@
         {
             $timestamp_gz = str_replace("$ename-version-", "", $v);
             $timestamp = str_replace(".gz", "", $timestamp_gz);
-            $version_time = date("d.m.Y H:i:s", $timestamp);
+            $version_time = xcms_ts_to_datetime($timestamp);
             $version_suffix = str_replace("$ename", "", $v);
             $selected = "";
             if ($version_suffix == $current_version)

@@ -41,6 +41,30 @@ function xcms_mkpasswd()
     return $pass;
 }
 
+/**
+  * YYYY-MM-DD HH:MM:SS
+  **/
+function xcms_ts_to_datetime($timestamp)
+{
+    return date("Y-m-d H:i:s", $timestamp);
+}
+
+function xcms_ts_to_date($timestamp)
+{
+    return date("Y-m-d", $timestamp);
+}
+
+function xcms_ts_to_rus_date($timestamp)
+{
+    return date("d.m.Y", $timestamp);
+}
+
+// Reverse to xcms_ts_to_datetime
+function xcms_datetime_to_ts($timestamp)
+{
+    return strtotime($date);
+}
+
 function xcms_get_html_template($template_name)
 {
     global $SETTINGS;

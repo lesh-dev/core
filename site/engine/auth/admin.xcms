@@ -69,14 +69,14 @@
             return;
         }
         $user = $u->su($target_user);
-        $cd = date('d.m.Y, H:i:s', $user->param('creation_date'));
+        $creation_date = xcms_ts_to_datetime($user->param('creation_date'));
         $read_only = ($u->login() == $user->login());
         ?>
         <form method="post">
         <h3>Учётные данные</h3>
 
         <div><span class="user-label">Логин</span><span id="login-span"><?php echo $user->login(); ?></span></div>
-        <div><span class="user-label">Создал</span><?php echo $user->param('creator').", $cd"; ?></div>
+        <div><span class="user-label">Создал</span><?php echo $user->param('creator').", $creation_date"; ?></div>
 
         <div><span class="user-label">Настоящее имя</span><input
             <?php xcmst_input_attrs_from_user($user, 'name', $read_only, "Вася Пупкин"); ?> /></div>

@@ -42,8 +42,8 @@
                 <a id="contlist-item-<?php echo $contlist_block_iter; ?>" class="link-button contlist-edit"
                     href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'ladmin', 'page'=>$subpage_id)); ?>">Редактировать</a><?php
             }
-            $date = xcms_get_key_or($info, "datetime");
-            $date = substr($date, 0, 10);
+            $timestamp = xcms_get_key_or($info, "timestamp-created");
+            $date = xcms_ts_to_rus_date($timestamp);
             ?>
             <h3><?php echo "$date &ndash; ".htmlspecialchars(xcms_get_key_or($info, "header")); ?></h3><?php
             // include(translate("<! cms/readtext --markdown --limit=220

@@ -134,7 +134,9 @@
         $info["header"] = $title;
         $info["menu-title"] = $title;
         $info["owner"] = $signature;
-        $info["timestamp"] = date("Y-m-d H:i:s", $ts);
+        $info["datetime-created"] = date("Y-m-d H:i:s", $ts);
+        $info["timestamp-created"] = $ts;
+
         echo "$date $ts $title\n$news_text\n\n";
         //print_r($info);
         xcms_write($content_name, $news_text);
