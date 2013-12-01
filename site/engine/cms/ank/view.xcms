@@ -22,7 +22,7 @@
         $reply_body = xcms_get_html_template("anketa_reply_body");
         $row_template = xcms_get_html_template("anketa_mail_one_row");
         $unix_time = time();
-        $hr_timestamp = date("Y.m.d H:i:s", $unix_time);
+        $hr_timestamp = xcms_ts_to_datetime($unix_time);
 
         $person = $_POST; // get all values here (_POST should not be spoiled)
         // set some generic fields that cannot be overridden

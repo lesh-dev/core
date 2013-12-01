@@ -3,14 +3,7 @@
 function xcms_news_get_template()
 {
     global $engine_dir;
-
-    $text = file_get_contents("${engine_dir}cms/news/template");
-    $text = str_replace("@@DATE@", date("d.m.y", time()), $text);
-    $author = xcms_user()->param("name");
-    if (!strlen($author))
-        $author = xcms_user()->login();
-    $text = str_replace("@@AUTHOR@", $author, $text);
-    return $text;
+    return file_get_contents("${engine_dir}cms/news/template");
 }
 
 ?>
