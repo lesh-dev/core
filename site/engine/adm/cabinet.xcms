@@ -24,7 +24,7 @@
             </span>
         </div>
         <div class="container">
-            <div class="admin-widget content-cabinet">
+            <div class="content-cabinet">
 <?php
     if(@$_GET["mode"] == "change_passwd")
     {

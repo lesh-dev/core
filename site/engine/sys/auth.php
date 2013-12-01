@@ -211,13 +211,21 @@
           * Задает новый пароль пользователю
           * TODO: Зачем хранить plaintext_password? Очень непонятное поведение,
           * скорее всего небезопасное.
+          * @param password новый пароль
+          * @param old_password старый пароль (если передаётся, то сначала проверяется
+          * на соответствие старому паролю
           **/
-        function passwd($password)
+        function passwd($password, $old_password = false)
         {
             if (!strlen($password))
                 return $this->set_error("Пароль не должен быть пустым. ");
             if (!xcms_check_password($password))
                 throw new Exception("Password contains invalid characters. ");
+            if ($old_password !== false)
+            {
+                if ($this->dict["password"] != $this->_hash($old_password))
+                return $this->set_error("Старый пароль указан неверно. ");
+            }
             $this->dict["password"] = $this->_hash($password);
             $this->plaintext_password = $password;
             $this->_save();

@@ -1,40 +1,40 @@
+<div class="admin-widget">
 <h3>Сменить пароль</h3>
-
 <?php
     $user = xcms_user();
     $done = false;
-    if(@$_POST['chpass_me'])
+    if (@$_POST["change_my_password"])
     {
-        if(@$_POST["pass1"] != @$_POST["pass2"])
-        {
-            echo "<b>Пароли не совпадают</b>";
+        $new_passwd = xcms_get_key_or($_POST, "new_passwd");
+        if ($new_passwd != @$_POST["new_passwd_confirm"])
+        {?>
+            <div class="error">Пароли не совпадают</div><?php
         }
-        else if(@$_POST["pass1"] == "")
-        {
-            echo "<b>Пароль -- пустой</b>";
+        elseif (!strlen($new_passwd))
+        {?>
+            <div class="error">Пароль не может быть пустым</div><?php
         }
         else
         {
-            $user->passwd($_POST["pass1"]);
-            $user->create_session($_POST["pass1"]);
+            $user->passwd($new_passwd, xcms_get_key_or($_POST, "old_passwd"));
+            $user->create_session($new_passwd);
             $done = true;
         }
     }
-    if(!$done)
-    {
-        ?>
-            <form method='post'>
-            <table>
-                <tr><td>Новый пароль<td><input name="pass1" type="password" />
-                <tr><td>Новый пароль  (еще раз)<td><input name="pass2" type="password" />
-            </table>
-            <input type='submit' value='Сменить пароль' name='chpass_me' />
-            </form>
+    if (!$done)
+    {?>
+        <form method="post">
+        <table>
+            <tr><td>Старый пароль<td><input name="old_passwd" id="old_passwd-input" type="password" />
+            <tr><td>Новый пароль<td><input name="new_passwd" id="new_passwd-input" type="password" />
+            <tr><td>Новый пароль (ещё раз)<td><input name="new_passwd_confirm" id="new_passw_confirm-input" type="password" />
+        </table>
+        <input type="submit" value="Сменить пароль" name="change_my_password" id="change_my_password-input"/>
+        </form>
         <?php
     }
     else
-    {
-        echo '<b>Пароль успешно изменен.</b>';
-        
+    {?>
+        <div class="info">Пароль успешно изменён</div><?php
     }
-?>
+?></div>
