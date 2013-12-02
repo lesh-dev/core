@@ -124,8 +124,13 @@ function xsm_show_all_person_list()
 
         $current_class = htmlspecialchars($person["current_class"]);
 
-        $phone = htmlspecialchars($person["phone"]);
-        $cellular = htmlspecialchars($person["cellular"]);
+        $phones = xsm_format_phones($person["phone"]);
+        $phone = implode(', ', $phones["phones"]);
+        $phone = htmlspecialchars($phone).' '.xcms_get_key_or($phones, "hint");
+
+        $cellular_phones = xsm_format_phones($person["cellular"]);
+        $cellular = implode(', ', $cellular_phones["phones"]);
+        $cellular = htmlspecialchars($cellular).' '.xcms_get_key_or($cellular_phones, "hint");
 
         $is_teacher = $person["is_teacher"];
         $is_student = $person["is_student"];
