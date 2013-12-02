@@ -28,6 +28,7 @@ if (@$_POST["change_my_password"])
     {?>
         <div class="info">Пароль успешно изменён</div><?php
     }
+    else
     {?>
         <div class="error"><?php echo $result; ?></div><?php
     }
@@ -36,9 +37,12 @@ if ($result !== true)
 {?>
     <form method="post">
     <table>
-        <tr><td>Старый пароль<td><input name="old_passwd" id="old_passwd-input" type="password" />
-        <tr><td>Новый пароль<td><input name="new_passwd" id="new_passwd-input" type="password" />
-        <tr><td>Новый пароль (ещё раз)<td><input name="new_passwd_confirm" id="new_passw_confirm-input" type="password" />
+        <tr><td>Старый пароль</td><td><input name="old_passwd" id="old_passwd-input"
+            type="password" value="<?php echo htmlspecialchars($old_passwd); ?>" /></td></tr>
+        <tr><td>Новый пароль</td><td><input name="new_passwd" id="new_passwd-input"
+            type="password" value="<?php echo htmlspecialchars($new_passwd); ?>" /></td></tr>
+        <tr><td>Новый пароль (ещё раз)</td><td><input name="new_passwd_confirm" id="new_passw_confirm-input"
+            type="password" value="<?php echo htmlspecialchars($new_passwd); ?>" /></td></tr>
     </table>
     <input type="submit" value="Сменить пароль" name="change_my_password" id="change_my_password-input"/>
     </form><?php
