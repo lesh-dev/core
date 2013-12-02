@@ -3,6 +3,9 @@
     define('XE_WRONG_PASSWORD',       1000);
     define('XE_ACCESS_DENIED',        1001);
 
+    define('XAUTH_THROW', true);
+    define('XAUTH_NO_THROW', false);
+
     require_once("${engine_dir}sys/logger.php");
     require_once("${engine_dir}sys/tag.php");
     require_once("${engine_dir}sys/string.php");
@@ -109,7 +112,8 @@
         {
             return explode(EXP_COM, @$this->dict["groups"]);
         }
-        function check_rights($group, $throw_exception=true)
+
+        function check_rights($group, $throw_exception = XAUTH_THROW)
         {
             $group = str_replace("#", "", $group);
             if ($group == "all") return true;
@@ -120,6 +124,7 @@
                 throw new Exception("User doesn't belong to group $group to perform this action");
             return false;
         }
+
         /**
           * Возвращает true, если пользователь кривой.
           **/
@@ -194,16 +199,17 @@
           * а уж ловить их, или перехватывать только в глобальном обработчике -- дело
           * шаблона
           **/
-        function set_error($error)
+        function set_error($error, $throw_exception = XAUTH_THROW)
         {
             $this->error = $error;
-            throw new Exception($error);
+            if ($throw_exception)
+                throw new Exception($error);
             return $error;
         }
         /**
           * Возвращает последнюю ошибку
           **/
-        function error()
+        function get_last_error()
         {
             return $this->error;
         }
@@ -215,20 +221,24 @@
           * @param old_password старый пароль (если передаётся, то сначала проверяется
           * на соответствие старому паролю
           **/
-        function passwd($password, $old_password = false)
+        function passwd($password, $old_password = false, $throw_exception = XAUTH_THROW)
         {
             if (!strlen($password))
-                return $this->set_error("Пароль не должен быть пустым. ");
+                return $this->set_error("Пароль не должен быть пустым. ", $throw_exception);
+
             if (!xcms_check_password($password))
-                throw new Exception("Password contains invalid characters. ");
+                return $this->set_error("Password contains invalid characters. ", $throw_exception);
+
             if ($old_password !== false)
             {
                 if ($this->dict["password"] != $this->_hash($old_password))
-                return $this->set_error("Старый пароль указан неверно. ");
+                    return $this->set_error("Старый пароль указан неверно. ", $throw_exception);
             }
+
             $this->dict["password"] = $this->_hash($password);
             $this->plaintext_password = $password;
             $this->_save();
+            return true;
         }
         /**
           * Создает нового пользователя

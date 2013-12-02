@@ -1,40 +1,46 @@
-<div class="admin-widget">
-<h3>Сменить пароль</h3>
 <?php
+function xcms_change_password($new_passwd, $new_passwd_confirm, $old_passwd)
+{
+    if ($new_passwd != $new_passwd_confirm)
+        return "Пароли не совпадают. ";
+
     $user = xcms_user();
-    $done = false;
-    if (@$_POST["change_my_password"])
-    {
-        $new_passwd = xcms_get_key_or($_POST, "new_passwd");
-        if ($new_passwd != @$_POST["new_passwd_confirm"])
-        {?>
-            <div class="error">Пароли не совпадают</div><?php
-        }
-        elseif (!strlen($new_passwd))
-        {?>
-            <div class="error">Пароль не может быть пустым</div><?php
-        }
-        else
-        {
-            $user->passwd($new_passwd, xcms_get_key_or($_POST, "old_passwd"));
-            $user->create_session($new_passwd);
-            $done = true;
-        }
-    }
-    if (!$done)
-    {?>
-        <form method="post">
-        <table>
-            <tr><td>Старый пароль<td><input name="old_passwd" id="old_passwd-input" type="password" />
-            <tr><td>Новый пароль<td><input name="new_passwd" id="new_passwd-input" type="password" />
-            <tr><td>Новый пароль (ещё раз)<td><input name="new_passwd_confirm" id="new_passw_confirm-input" type="password" />
-        </table>
-        <input type="submit" value="Сменить пароль" name="change_my_password" id="change_my_password-input"/>
-        </form>
-        <?php
-    }
-    else
+    $result = $user->passwd($new_passwd, $old_passwd, XAUTH_NO_THROW);
+    if ($result !== true)
+        return $user->get_last_error();
+
+    $user->create_session($new_passwd);
+    return true;
+}
+
+?><div class="admin-widget">
+<h3>Сменить пароль</h3><?php
+
+$new_passwd = xcms_get_key_or($_POST, "new_passwd");
+$new_passwd_confirm = xcms_get_key_or($_POST, "new_passwd_confirm");
+$old_passwd = xcms_get_key_or($_POST, "old_passwd");
+
+$result = false;
+if (@$_POST["change_my_password"])
+{
+    $result = xcms_change_password($new_passwd, $new_passwd_confirm, $old_passwd);
+    if ($result === true)
     {?>
         <div class="info">Пароль успешно изменён</div><?php
     }
+    {?>
+        <div class="error"><?php echo $result; ?></div><?php
+    }
+}
+if ($result !== true)
+{?>
+    <form method="post">
+    <table>
+        <tr><td>Старый пароль<td><input name="old_passwd" id="old_passwd-input" type="password" />
+        <tr><td>Новый пароль<td><input name="new_passwd" id="new_passwd-input" type="password" />
+        <tr><td>Новый пароль (ещё раз)<td><input name="new_passwd_confirm" id="new_passw_confirm-input" type="password" />
+    </table>
+    <input type="submit" value="Сменить пароль" name="change_my_password" id="change_my_password-input"/>
+    </form><?php
+}
 ?></div>
