@@ -26,7 +26,7 @@ if (@$_POST["change_my_password"])
     $result = xcms_change_password($new_passwd, $new_passwd_confirm, $old_passwd);
     if ($result === true)
     {?>
-        <div class="info">Пароль успешно изменён</div><?php
+        <div class="notice">Пароль успешно изменён</div><?php
     }
     else
     {?>
@@ -41,10 +41,10 @@ if ($result !== true)
             type="password" value="<?php echo htmlspecialchars($old_passwd); ?>" /></td></tr>
         <tr><td>Новый пароль</td><td><input name="new_passwd" id="new_passwd-input"
             type="password" value="<?php echo htmlspecialchars($new_passwd); ?>" /></td></tr>
-        <tr><td>Новый пароль (ещё раз)</td><td><input name="new_passwd_confirm" id="new_passw_confirm-input"
+        <tr><td>Новый пароль (ещё раз)</td><td><input name="new_passwd_confirm" id="new_passwd_confirm-input"
             type="password" value="<?php echo htmlspecialchars($new_passwd); ?>" /></td></tr>
     </table>
-    <input type="submit" value="Сменить пароль" name="change_my_password" id="change_my_password-input"/>
+    <input type="submit" value="Сменить пароль" name="change_my_password" id="change_my_password-submit"/>
     </form><?php
 }
 ?></div>
