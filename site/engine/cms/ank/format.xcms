@@ -158,13 +158,11 @@ function xsm_make_phone($phones_str)
         $class = "";
         if (!$valid)
             $class = "error";
-        elseif (!empty($hint))
-            $class = "warning";
 
         if (!empty($result))
             $result .= ", ";
 
-        $result .= "<span class=\"$class\" title=\"$hint\">$phone</span>";
+        $result .= "<span class=\"phone $class\" title=\"$hint\">$phone</span>";
     }
     return $result;
 }

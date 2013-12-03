@@ -396,3 +396,7 @@ a.xsm-menu-item.first {
 a.xsm-menu-item.current {
     background-color: #ffee99;
 }
+
+span.phone.error {
+    border-bottom: 1px dotted #ff7f00;
+}
