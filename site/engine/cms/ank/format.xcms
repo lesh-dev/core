@@ -133,11 +133,34 @@ function xsm_format_phones($phones_str)
         if ($digits[0] == "7")
             $digits[0] = "8"; // fix country code
 
-        // TODO: invalid formatting for other cities
-        $phone = substr($digits, 0, 1).'('.substr($digits, 1, 3).')'.
-            substr($digits, 4, 3).'-'.substr($digits, 7, 2).'-'.substr($digits, 9, 2);
+        $r = array();
+        if (!preg_match("/\([0-9]+\)/", $phone, $r))
+        {
+            // cannot parse code
+            $item["hint"] = "Код города должен быть обрамлён скобками. ";
+            $item["valid"] = false;
+            $result[] = $item;
+            continue;
+        }
+        $cl = strlen($r[0]) - 2;
+        if ($cl < 3 || $cl > 5)
+        {
+            // invalid area code
+            $item["hint"] = "Код города должен содержать от 3 до 5 цифр. ";
+            $item["valid"] = false;
+            $result[] = $item;
+            continue;
+        }
+        $phone = substr($digits, 0, 1).'<span class="pb">(</span>'.substr($digits, 1, $cl).'<span class="pb">)</span>';
+        if ($cl == 3)
+            $phone .= substr($digits, 4, 3).'-'.substr($digits, 7, 2).'-'.substr($digits, 9, 2);
+        elseif ($cl == 4)
+            $phone .= substr($digits, 5, 2).'-'.substr($digits, 7, 2).'-'.substr($digits, 9, 2);
+        else // ($cl == 5)
+            $phone .= substr($digits, 6, 2).'-'.substr($digits, 8, 3);
 
         $item["phone"] = $phone;
+        $item["hint"] = $phones[$i];
         $result[] = $item;
     }
     return $result;
@@ -152,13 +175,15 @@ function xsm_make_phone($phones_str)
     $result = "";
     foreach ($items as $item)
     {
-        $phone = htmlspecialchars($item["phone"]);
         $hint = $item["hint"];
         $valid = $item["valid"];
+        $phone = $item["phone"];
         $class = "";
         if (!$valid)
+        {
             $class = "error";
-
+            $phone = htmlspecialchars($phone);
+        }
         if (!empty($result))
             $result .= ", ";
 
