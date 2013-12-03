@@ -88,57 +88,86 @@ function xsm_ymdhm($timestamp)
 
 function xsm_format_phones($phones_str)
 {
-    $result = array();
-    if (empty($phones_str))
-    {
-        $result["phones"] = array();
-        $result["valid"] = true;
-        $result["hint"] = '';
-        return $result;
-    }
-
     $phones_str = str_replace("\r", " ", $phones_str);
     $phones_str = str_replace("\n", " ", $phones_str);
     $phones_str = str_replace("\t", " ", $phones_str);
+    $phones_str = trim($phones_str);
+
+    $result = array();
+    if (empty($phones_str))
+        return $result;
 
     if (preg_match("/[^0-9()+, -]/", $phones_str))
     {
         // something strange here, cannot format
-        $result["phones"] = array($phones_str);
-        $result["hint"] = "В телефонах допустимы только символы 0-9 ( ) + - и пробел. ";
-        $result["valid"] = false;
+        $item = array(
+            "phone"=>$phones_str,
+            "hint"=>"В телефонах допустимы только символы 0-9 ( ) + - и пробел. ",
+            "valid"=>false
+        );
+        $result[] = $item;
         return $result;
     }
 
-    $result["valid"] = true;
     $phones = explode(',', $phones_str);
     for ($i = 0; $i < count($phones); ++$i)
     {
         $phone = trim($phones[$i]);
+        $item = array(
+            "valid"=>true,
+            "hint"=>"",
+            "phone"=>$phone
+        );
+
         // check digit count
         $digits = preg_replace("/[^0-9]/", "", $phone);
         if (strlen($digits) != 11)
         {
-            $result["hint"] = "Телефон должен содержать 11 цифр. ";
-            $phones_result[] = $phone;
-            $result["valid"] = false;
             // don't know how to format this
+            $item["hint"] = "Телефон должен содержать 11 цифр. ";
+            $item["valid"] = false;
+            $result[] = $item;
             continue;
         }
 
         if ($digits[0] == "7")
             $digits[0] = "8"; // fix country code
 
+        // TODO: invalid formatting for other cities
         $phone = substr($digits, 0, 1).'('.substr($digits, 1, 3).')'.
             substr($digits, 4, 3).'-'.substr($digits, 7, 2).'-'.substr($digits, 9, 2);
 
-        $phones_result[] = $phone;
+        $item["phone"] = $phone;
+        $result[] = $item;
     }
-
-    $result["phones"] = $phones_result;
     return $result;
 }
 
+function xsm_make_phone($phones_str)
+{
+    $items = xsm_format_phones($phones_str);
+    if (!count($items))
+        return "";
+
+    $result = "";
+    foreach ($items as $item)
+    {
+        $phone = htmlspecialchars($item["phone"]);
+        $hint = $item["hint"];
+        $valid = $item["valid"];
+        $class = "";
+        if (!$valid)
+            $class = "error";
+        elseif (!empty($hint))
+            $class = "warning";
+
+        if (!empty($result))
+            $result .= ", ";
+
+        $result .= "<span class=\"$class\" title=\"$hint\">$phone</span>";
+    }
+    return $result;
+}
 
 function xsm_prepare_social_profile($social_profile)
 {

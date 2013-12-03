@@ -124,13 +124,13 @@ function xsm_show_all_person_list()
 
         $current_class = htmlspecialchars($person["current_class"]);
 
-        $phones = xsm_format_phones($person["phone"]);
-        $phone = implode(', ', $phones["phones"]);
-        $phone = htmlspecialchars($phone).' '.xcms_get_key_or($phones, "hint");
-
-        $cellular_phones = xsm_format_phones($person["cellular"]);
-        $cellular = implode(', ', $cellular_phones["phones"]);
-        $cellular = htmlspecialchars($cellular).' '.xcms_get_key_or($cellular_phones, "hint");
+        $phone = xsm_make_phone($person["phone"]);
+        $cellular = xsm_make_phone($person["cellular"]);
+        $all_phones = array();
+        if ($cellular)
+            $all_phones[] = $cellular;
+        if ($phone)
+            $all_phones[] = $phone;
 
         $is_teacher = $person["is_teacher"];
         $is_student = $person["is_student"];
@@ -157,10 +157,7 @@ function xsm_show_all_person_list()
                 echo $fi; ?></a></td>
             <td class="ankList"><?php echo $current_class; ?></td>
             <td class="ankList"><?php
-                echo $cellular;
-                if ($cellular && $phone)
-                    echo ", $phone"; ?></a></td>
-            </td>
+                echo implode(', ', $all_phones); ?></td>
             <td class="ankList"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php
