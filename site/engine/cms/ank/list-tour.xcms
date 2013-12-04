@@ -89,8 +89,7 @@ function xsm_show_tour_list()
 
         $current_class = htmlspecialchars($person["current_class"]);
 
-        $phone = htmlspecialchars($person["phone"]);
-        $cellular = htmlspecialchars($person["cellular"]);
+        $all_phones = xsm_format_person_phones($person);
 
         $tent_capacity = htmlspecialchars($person["tent_capacity"]);
         $tour_requisites = htmlspecialchars($person["tour_requisites"]);
@@ -112,13 +111,7 @@ function xsm_show_tour_list()
             <td class="ankList c"><?php echo xsm_make_forest_enum($person, 3); ?></td>
             <td class="ankList"><?php echo $tent_capacity; ?></td>
             <td class="ankList"><?php echo $tour_requisites; ?></td>
-            <td class="ankList">
-            <?php
-                if ($cellular) echo $cellular;
-                if ($cellular && $phone) echo ", ";
-                if ($phone) echo $phone;
-            ?>
-            </td>
+            <td class="ankList"><?php echo implode(', ', $all_phones); ?></td>
             <td class="ankList"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php
