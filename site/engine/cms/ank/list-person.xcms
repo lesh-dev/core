@@ -122,8 +122,7 @@ function xsm_show_person_list($school_id)
         $birth_date = str_replace(".07.", "<b>.07.</b>", $birth_date);
         $birth_date = str_replace(".08.", "<b>.08.</b>", $birth_date);
 
-        $phone = htmlspecialchars($person["phone"]);
-        $cellular = htmlspecialchars($person["cellular"]);
+        $all_phones = xsm_format_person_phones($person);
 
         $is_teacher = $person["is_teacher"];
         $is_student = $person["is_student"];
@@ -175,10 +174,7 @@ function xsm_show_person_list($school_id)
             <td class="ankList"><span class="course-progress <?php echo $course_style; ?>"><?php echo $hr_course_progress; ?></span></td>
             <td class="ankList"><?php echo $current_class; ?></td>
             <td class="ankList"><?php echo $birth_date; ?></td>
-            <td class="ankList"><?php
-                echo $cellular;
-                if ($cellular && $phone)
-                    echo ", $phone"; ?></a></td>
+            <td class="ankList"><?php echo implode(', ', $all_phones); ?></td>
         </tr>
         <?php
     }
