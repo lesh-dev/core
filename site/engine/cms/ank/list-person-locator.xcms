@@ -124,13 +124,7 @@ function xsm_show_all_person_list()
 
         $current_class = htmlspecialchars($person["current_class"]);
 
-        $phone = xsm_make_phone($person["phone"]);
-        $cellular = xsm_make_phone($person["cellular"]);
-        $all_phones = array();
-        if ($cellular)
-            $all_phones[] = $cellular;
-        if ($phone)
-            $all_phones[] = $phone;
+        $all_phones = xsm_format_person_phones($person);
 
         $is_teacher = $person["is_teacher"];
         $is_student = $person["is_student"];

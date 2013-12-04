@@ -398,10 +398,11 @@ a.xsm-menu-item.current {
 }
 
 span.phone.error {
+    color: #7f0000;
     border-bottom: 1px dotted #ff7f00;
 }
 
 span.pb {
-    padding: 0px 1px;
+    padding: 0px 2px;
     color: #9f0000;
 }

@@ -192,6 +192,18 @@ function xsm_make_phone($phones_str)
     return $result;
 }
 
+function xsm_format_person_phones($person)
+{
+    $phone = xsm_make_phone($person["phone"]);
+    $cellular = xsm_make_phone($person["cellular"]);
+    $all_phones = array();
+    if ($cellular)
+        $all_phones[] = $cellular;
+    if ($phone)
+        $all_phones[] = $phone;
+    return $all_phones;
+}
+
 function xsm_prepare_social_profile($social_profile)
 {
     // make it valid URL if it was it form example.com/name
