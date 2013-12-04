@@ -150,8 +150,7 @@ function xsm_show_all_person_list()
             <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"><?php
                 echo $fi; ?></a></td>
             <td class="ankList"><?php echo $current_class; ?></td>
-            <td class="ankList"><?php
-                echo implode(', ', $all_phones); ?></td>
+            <td class="ankList"><?php echo implode(', ', $all_phones); ?></td>
             <td class="ankList"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php
