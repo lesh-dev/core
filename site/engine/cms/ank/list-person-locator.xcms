@@ -23,7 +23,7 @@
     AddSlider('status-help', 'show-status-help');
 </script>
 
-<form method="post" action="list-person-locator" style="margin-bottom: 2px"><span>
+<form method="post" name="filter" id="filter-form" action="list-person-locator"><span>
     <span class="ankListField">Статус</span>: <?php
     echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_locator");
     echo xsm_make_checkbox('show_is_teacher', $show_is_teacher, "teacher");
@@ -33,6 +33,9 @@
         xsm_draw_fio_filter(); ?>
     <input type="submit" name="show-person" value="Показать" />
 </span></form>
+<script type="text/javascript">
+    FilterFormAutoSubmit();
+</script>
 <?php
 
 // вывод активных участников

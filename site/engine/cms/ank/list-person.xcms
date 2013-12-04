@@ -4,9 +4,10 @@
 
     $default_school_id = xsm_get_default_school();
     $school_id = xcms_get_key_or($_GET, 'school_id', $default_school_id);
-
+    $form_action = xcms_url(array('school_id'=>$school_id));
 ?>
-<form method="post" action="list-person&amp;school_id=<?php echo $school_id; ?>" style="margin-bottom: 2px"><span><?php
+<form method="post" name="filter" id="filter-form"
+    action="list-person<?php echo $form_action; ?>" ><span><?php
         echo xsm_make_checkbox('show_is_teacher', $show_is_teacher, "teacher");
     ?><span class="ankListField">Только преподы</span>&nbsp;&nbsp;<?php
         echo xsm_make_checkbox('show_is_student', $show_is_student, "student");
@@ -14,6 +15,9 @@
         xsm_draw_fio_filter(); ?>
     <input type="submit" name="show-person" value="Показать" />
 </span></form>
+<script type="text/javascript">
+    FilterFormAutoSubmit();
+</script>
 <?php
 
 /**

@@ -406,3 +406,7 @@ span.pb {
     padding: 0px 2px;
     color: #9f0000;
 }
+
+form#filter-form {
+    margin-bottom: 2px;
+}

@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="<# full_design_dir #>default.css" />
     <# cms/jquery #>
     <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
+    <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/xsm.js"; ?>"></script>
 </head>
 <body>
 <# cms/ank/pss #>
