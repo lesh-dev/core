@@ -410,3 +410,8 @@ span.pb {
 form#filter-form {
     margin-bottom: 2px;
 }
+
+a.person-to-list {
+    font-size: 12px;
+    font-weight: normal;
+}
