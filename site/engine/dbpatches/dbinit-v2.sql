@@ -1,9 +1,3 @@
-drop table if exists exam;
-drop table if exists course;
-drop table if exists person_school;
-drop table if exists person;
-drop table if exists school;
-
 /* Участник (препод, куратор, школьник...) */
 create table person (
     person_id integer primary key autoincrement,
