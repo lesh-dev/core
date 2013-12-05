@@ -115,7 +115,7 @@ function xsm_show_all_person_list()
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
     {
         $person_id = htmlspecialchars($person["person_id"]);
-        $fi = htmlspecialchars(xsm_fi($person));
+        $fi = xsm_fi_enc($person);
 
         $school = htmlspecialchars($person["school"]);
         $school_city = htmlspecialchars($person["school_city"]);

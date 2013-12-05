@@ -23,7 +23,7 @@ function xsm_edit_course_teachers()
         foreach ($course_teachers as $course_teachers_id => $teacher_data)
         {
             $course_teacher_id = $teacher_data['course_teacher_id'];
-            $teacher_fi = htmlspecialchars(xsm_fi($teacher_data));
+            $teacher_fi = xsm_fi_enc($teacher_data);
             $teacher_url = "view-person".xcms_url(array(
                 'person_id'=>$course_teacher_id,
                 'school_id'=>$school_id));

@@ -63,8 +63,9 @@ function xsm_print_course()
         {
             $student_person_id = $exam['student_person_id'];
             $student = xdb_get_entity_by_id('person', $student_person_id);
-            $student_fi = htmlspecialchars(xsm_fi($student));
-            $student_url = "view-person".xcms_url(array('person_id'=>$student['person_id'], 'school_id'=>$school_id));
+            $student_fi = xsm_fi_enc($student);
+            $student_url = "view-person".
+                xcms_url(array('person_id'=>$student['person_id'], 'school_id'=>$school_id));
 
             // enum
             $exam_status = htmlspecialchars($exam["exam_status"]);

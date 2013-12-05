@@ -130,8 +130,8 @@ function xsm_show_ank_list()
     <?php
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC)) {
         $person_id = htmlspecialchars($person["person_id"]);
-        $fi = htmlspecialchars(xsm_fi($person));
-        $fio = htmlspecialchars(xsm_fio($person));
+        $fi = xsm_fi_enc($person);
+        $fio = xsm_fio_enc($person);
 
         $birth_date = htmlspecialchars($person["birth_date"]);
         // not shown now

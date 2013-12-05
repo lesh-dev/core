@@ -27,7 +27,7 @@ function xsm_edit_course()
         if ($course_teacher_id !== NULL)
         {
             $teacher = xdb_get_entity_by_id('person', $course_teacher_id);
-            $teacher_fi = htmlspecialchars(xsm_fi($teacher));
+            $teacher_fi = xsm_fi_enc($teacher);
             $teacher_url = "view-person".xcms_url(array(
                 'person_id'=>$course_teacher_id,
                 'school_id'=>$school_id));

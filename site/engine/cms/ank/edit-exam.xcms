@@ -208,7 +208,7 @@ function xsm_edit_exam()
                 } elseif ($key == 'student_person_id')
                 {?>
                     <input type="text" class="ankEdit" value="<?php
-                        echo htmlspecialchars(xsm_fi($student)); ?>"
+                        echo xsm_fi_enc($student); ?>"
                         readonly="readonly" /><?php
                 } elseif ($key == 'course_id') {
                     if ($exam_id == XDB_NEW)

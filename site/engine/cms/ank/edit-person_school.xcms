@@ -162,7 +162,7 @@ function xsm_edit_person_school()
                 }
                 elseif ($key == 'member_person_id')
                 {
-                    $fio = htmlspecialchars(xsm_fio($member));
+                    $fio = xsm_fio_enc($member);
                     ?>
                     <input type="text" class="ankEdit" value="<?php echo $fio; ?>"
                         readonly="readonly" /><?php

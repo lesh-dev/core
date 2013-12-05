@@ -95,7 +95,7 @@ function xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id
     $filtered = ($course_teacher_id_filter == "all");
     while ($teachers_data = $teachers_sel->fetchArray(SQLITE3_ASSOC))
     {
-        $teacher_fi = htmlspecialchars(xsm_fi($teachers_data));
+        $teacher_fi = xsm_fi_enc($teachers_data);
         $course_teacher_id = $teachers_data['course_teacher_id'];
         if ($course_teacher_id == $course_teacher_id_filter)
             $filtered = true;
