@@ -173,7 +173,7 @@ function xsm_get_all_course_info($db, $school_id)
 /**
   * Печаталка таблицы курсов (общая для списка курсов на школе и одного препода)
   **/
-function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = "all")
+function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = "all", $simple_view = false)
 {
     $pers = ($course_teacher_id != "all");
 
@@ -187,7 +187,9 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
     $course_aux_param = $pers
         ? "&amp;course_teacher_id=$course_teacher_id&amp;school_id=$school_id"
         : "&amp;school_id=$school_id";
-    ?>
+
+    if (!$simple_view)
+    {?>
     <h3>Курсы</h3><?php
     xsm_view_operations('course', 'course', 'курс', $course_aux_param); ?>
     <table class="ankList">
@@ -210,6 +212,7 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
             <th class="ankList">Успехи</th>
         </thead>
     <?php
+    } else {?><ul><?php }
 
     while ($course = $course_sel->fetchArray(SQLITE3_ASSOC))
     {
@@ -220,6 +223,19 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id);
         if ($teachers_ht === false) // filter not passed
             continue;
+
+        $simple_teachers_ht = "";
+        if ($simple_view)
+        {
+            $simple_ct = xsm_get_course_teachers_list($db, $course_id, $school_id);
+            foreach ($simple_ct as $ct_id => $teacher_data)
+            {
+                $teacher_fi = xsm_fi_enc($teacher_data);
+                if (!empty($simple_teachers_ht))
+                    $simple_teachers_ht .= ", ";
+                $simple_teachers_ht .= $teacher_fi;
+            }
+        }
 
         // ахтунг, тут будет 3*N SELECT-ов
         // до кучи посчитаем количество сдавших
@@ -243,22 +259,28 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
         if ($exam_total_data = $exam_total_sel->fetchArray(SQLITE3_ASSOC))
             $exam_total_count = $exam_total_data['total_count'];
         $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
-        ?>
+
+        if (!$simple_view)
+        {?>
         <tr>
             <?php if (!$pers) {?>
             <td class="ankList"><?php echo $teachers_ht; ?></td>
             <?php } ?>
             <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
-                echo "$course_title"; ?></a></td>
+                echo $course_title; ?></a></td>
             <td class="ankList c"><?php echo $course_cycle; ?></td>
             <td class="ankList"><?php echo $target_class; ?></td>
             <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
                 echo "Сдало <b>$exam_pass_count</b> из <b>$exam_total_count</b>"; ?></a></td>
         </tr><?php
+        } else
+        {?>
+            <li><?php echo $course_title; ?>&nbsp;&ndash;&nbsp;<?php echo $simple_teachers_ht; ?></li><?php
         }
-    ?>
-    </table>
-    <?php
+    }
+    if (!$simple_view)
+    {?></table><?php }
+    else {?></ul><?php }
 }
 
 
