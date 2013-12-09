@@ -245,6 +245,8 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
             $simple_ct = xsm_get_course_teachers_list($db, $course_id, $school_id);
             foreach ($simple_ct as $ct_id => $teacher_data)
             {
+                if ($teacher_data['course_teacher_id'] == 13) // Преподаватель Другого Отделения
+                    continue;
                 $teacher_fi = xsm_fi_enc($teacher_data);
                 if (!empty($simple_teachers_ht))
                     $simple_teachers_ht .= ", ";
@@ -289,8 +291,15 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
                 echo "Сдало <b>$exam_pass_count</b> из <b>$exam_total_count</b>"; ?></a></td>
         </tr><?php
         } else
-        {?>
-            <li><?php echo $course_title; ?>&nbsp;&ndash;&nbsp;<?php echo $simple_teachers_ht; ?></li><?php
+        {
+            // пока что не показывать курсы
+            // преподов других отделений. Как только у нас будет разделение по отделениям,
+            // мы сразу это запилим правильно (а это будет уже довольно скоро)
+            if (strlen($simple_teachers_ht))
+            {?>
+                <li><?php echo $course_title; ?>&nbsp;&ndash;&nbsp;<i><?php
+                    echo $simple_teachers_ht; ?></i></li><?php
+            }
         }
     }
     if (!$simple_view)
