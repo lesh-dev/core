@@ -92,11 +92,12 @@ function xsm_show_person_list($school_id)
     $person_sel = $db->query($query);
 
     xsm_print_schools($db, $school_id);
-
+    $student_count = 0;
+    $teacher_count = 0;
     ?>
     <table class="ankList">
         <colgroup>
-            <!--<col width="5%" />-->
+            <col width="16px" />
             <col width="25%" />
             <col width="35px" />
             <col width="30px" />
@@ -104,7 +105,7 @@ function xsm_show_person_list($school_id)
             <col width="25%" />
         </colgroup>
         <thead>
-            <!--<th class="ankList">ID</th>-->
+            <th class="ankList">#</th>
             <th class="ankList">Фамилия, имя</th>
             <th class="ankList">Зач.</th>
             <th class="ankList">Кл.</th>
@@ -165,12 +166,22 @@ function xsm_show_person_list($school_id)
         elseif ($course_ratio >= 0.999)
             $course_style = "all";
 
-        $hr_teacher = ($is_teacher == "teacher" ? "Препод, " : "");
-        $hr_student = ($is_student == "student" ? "Школьник, " : "");
+        $num = "";
+        if ($is_student == "student")
+        {
+            $student_count++;
+            $num = $student_count;
+        }
+        elseif ($is_teacher == "teacher")
+        {
+            $teacher_count++;
+            $num = $teacher_count;
+        }
 
         $row_class = ($is_teacher == "teacher" ? "teacher" : "");
         ?>
         <tr class="<?php echo $row_class; ?>">
+            <td class="ankList"><?php echo $num; ?></td>
             <td class="ankList">
                 <a name="<?php echo "person$person_id"; ?>"></a>
                 <a href="<?php echo "view-person&amp;person_id=$person_id&amp;school_id=$school_id"; ?>"
