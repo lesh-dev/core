@@ -401,7 +401,8 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
         xsm_view_operations('exam', 'exam', 'зачёт', $exam_aux_param);
     ?>
     <div class="line">
-        Всего нужно сдать <a href="<?php echo $need_href; ?>"><?php echo $need; ?> зачётов</a>.
+        Всего нужно сдать <a href="<?php echo $need_href; ?>"><?php
+            echo $need.'&nbsp;'.xcms_plural($need, 'зачёт'); ?></a>.
     </div>
     <table class="ankList">
         <colgroup>

@@ -42,6 +42,20 @@ function xcms_trim_object($obj)
 }
 
 /**
+  * Plural form for nouns
+  **/
+function xcms_plural($n, $word)
+{
+    if ($n  % 10 == 1)
+        return "${word}";
+
+    if ($n  % 10 >= 2 && $n % 10 <= 4)
+        return "${word}а";
+
+    return "${word}ов";
+}
+
+/**
   * Canonical way to obtain FIO
   **/
 function xsm_fio($person)
