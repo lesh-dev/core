@@ -10,6 +10,7 @@
 <html>
 <head>
     <# cms/head #>
+    <link rel="yandex-tableau-widget" href="<# full_design_dir #>tableau.json" />
     <link rel="stylesheet" type="text/css" href="<# full_design_dir #>menu.css" />
     <link rel="stylesheet" type="text/css" href="<# full_design_dir #>default.css" />
     <link rel="stylesheet" type="text/css" href="<# full_design_dir #>news.css" />

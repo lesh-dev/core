@@ -1,0 +1,11 @@
+{
+    "version": "0.1",
+    "api_version": 1,
+
+    "layout": {
+        "logo": "/fizlesh.ru-design/pic/fizlesh-logo-small.png",
+        "color": "#c0d2ab",
+        "show_title": true
+    }
+
+}
