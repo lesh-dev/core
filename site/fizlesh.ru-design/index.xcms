@@ -114,7 +114,7 @@
                     <div id="content-header"><?php
                     if (strlen($hdr) && !$in_xsm)
                     {?>
-                        <h2><?php echo $hdr; ?></h2><?php
+                        <h1><?php echo $hdr; ?></h1><?php
                     }?>
                     </div><?php
                     if (!$in_xsm)

@@ -90,12 +90,7 @@ li {
     text-decoration: none;
 }
 h1 {
-    font-size: 26pt;
-    color: #203720;
-    font-weight: normal;
-    text-indent: 0mm;
-}
-h2 {
+    font: Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
     font-size: 15pt;
     color: #203720;
     font-weight: bold;
@@ -103,7 +98,7 @@ h2 {
     margin-top: 10pt;
     margin-bottom: 3pt;
 }
-h3 {
+h2 {
     font: normal normal 12pt/12pt Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
     color: #203720;
     font-weight: bold;
@@ -111,12 +106,20 @@ h3 {
     margin-top: 10pt;
     margin-bottom: 3pt;
 }
+h3 {
+    font: normal normal 11pt/11pt Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+    color: #203720;
+    font-weight: bold;
+    text-indent: 5mm;
+    margin-top: 8pt;
+    margin-bottom: 2pt;
+}
 h4 {
-    font: normal normal 12pt/12pt Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+    font: normal normal 10pt/10pt Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
     color: #203720;
     text-indent: 5mm;
-    margin-top: 10pt;
-    margin-bottom: 3pt;
+    margin-top: 6pt;
+    margin-bottom: 2pt;
 }
 
 a, a:link {
