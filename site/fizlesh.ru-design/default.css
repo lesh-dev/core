@@ -90,7 +90,7 @@ li {
     text-decoration: none;
 }
 h1 {
-    font: Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+    font-family: Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
     font-size: 15pt;
     color: #203720;
     font-weight: bold;
