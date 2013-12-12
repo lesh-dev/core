@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-import os, sys, re, subprocess, commands, string
+import sys, re, commands
 
 QuotaThresholdPercent = 95
 
@@ -22,7 +22,7 @@ def isList(x):
 def getCommandOutput(command):
     if isList(command):
         command = " ".join(command)
-    return 0, commands.getoutput(command)
+    return commands.getstatusoutput(command)
 
 def bQuotaExceeded(realSize, maxSize):
     if maxSize == 0:
@@ -31,8 +31,8 @@ def bQuotaExceeded(realSize, maxSize):
     if perc > QuotaThresholdPercent:
         return True
     return False
-    
-    
+
+
 def getExceedPercent(realSize, maxSize):
     if maxSize == 0:
         return 0
@@ -50,12 +50,12 @@ def getHumanValue(number):
     if number < k**4: return str(decimal(number/k**3)) + "G"
     if number < k**5: return str(decimal(number/k**4)) + "T"
     return str(decimal(number/k**5)) + "P"
-    
+
 def bQuotaExceededForLine(line):
     m = re.search("(\S+)\s+(\d+)\s*(\w)", line)
     if not m:
         return False
-    
+
     path = m.group(1).strip()
     sizeLog = int(m.group(2))
     scaleLog = m.group(3).upper().strip()
@@ -71,18 +71,18 @@ def bQuotaExceededForLine(line):
     if scaleLog not in scales:
         raise RuntimeError("Incorrect size format for line '" + line + "'. ")
     maxSize = sizeLog * scales[scaleLog];
-    
+
     res, output = getCommandOutput(["du", "-sb", path]);
     if res != 0:
         raise RuntimeError("Error occured on getting disk usage for line '" + line + "'. ")
-        
+
     realSize = int(output.strip().split()[0])
     #print "max size for ", line, ": ", maxSize, " real size: ", realSize
     if bQuotaExceeded(realSize, maxSize):
         print "Quota " + getHumanValue(maxSize) + " exceeded for path " + path + " by " + getExceedPercent(realSize, maxSize)
         return True
     return False
-    
+
 def monitor(fileList):
     quotaExceeded = False
     for line in open(fileList):
@@ -95,7 +95,7 @@ def monitor(fileList):
         except RuntimeError as e:
             print e
             return 2
-            
+
     if quotaExceeded:
         return 1
     return 0;
