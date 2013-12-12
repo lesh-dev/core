@@ -25,14 +25,11 @@
             }
             else
             {
-                $login = xcms_user()->login();
-                $real_name = xcms_user()->param("name");
-                $body_html = xcms_get_html_template("page_rename");
-                $body_html = str_replace('@@LOGIN@', $login, $body_html);
-                $body_html = str_replace('@@REAL-NAME@', $real_name, $body_html);
+                $body_html = xcms_prepare_html_template("page_rename");
                 $body_html = str_replace('@@OLD-PAGE-ID@', $pageid, $body_html);
                 $body_html = str_replace('@@NEW-PAGE-ID@', $new_pageid, $body_html);
                 xcms_send_notification("content-change", NULL, $body_html);
+
                 $pageid = $new_pageid;
                 $redirect = true;
                 ?>
