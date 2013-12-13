@@ -26,6 +26,32 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         self.setOptionValueByIdAndValue("course_id-selector", exam)
         self.clickElementByName("update-exam")
         xtest_common.gotoBackToPersonView(self)
+        
+    def setExamPassed(self, examLineList):
+        for examLine in examLineList:            
+            self.gotoIndexedUrlByLinkText(u"Прослушан", examLine)
+            self.setOptionValueByIdAndValue("exam_status-selector", "passed")
+            
+            examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
+            self.fillElementByName("exam_comment", examComment)
+            self.clickElementByName("update-exam")
+            xtest_common.gotoBackToPersonView(self)
+            
+        self.assertBodyTextPresent(u"Сдан")
+            
+
+    def setExamNotPassed(self, examLineList):
+        for examLine in examLineList:            
+            self.gotoIndexedUrlByLinkText(u"Прослушан", examLine)
+            self.setOptionValueByIdAndValue("exam_status-selector", "notpassed")
+            
+            examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
+            self.fillElementByName("exam_comment", examComment)
+            self.clickElementByName("update-exam")
+            xtest_common.gotoBackToPersonView(self)
+            
+        self.assertBodyTextPresent(u"Не сдан")
+
 
     def run(self):
         conf = XcmsTestConfig()
@@ -62,7 +88,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
 
         fullAlias = inpLastName + " " + inpFirstName + " " + inpMidName
         # check if person alias is present (person saved correctly)
-        self.assertElementTextById("person-title", fullAlias)
+        xtest_common.checkPersonAliasInPersonView(self, fullAlias)
         
         self.gotoUrlByLinkText(u"ЛЭШ-2013")
         self.assertBodyTextPresent(u"На данной школе не присутствовал")
@@ -83,16 +109,9 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         
         self.addExamsById([95, 119, 91, 134, 73, 107, 130, 133])
         
-        self.gotoUrlByLinkText(u"Базовое электричество")
-        self.setOptionValueByIdAndValue("exam_status-selector", "passed")
-        
-        examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
-        self.fillElementByName("exam_comment", examComment)
-        self.clickElementByName("update-exam")
-        xtest_common.gotoBackToPersonView(self)
-        
-        self.assertBodyTextPresent(u"Сдан")
-        
+        self.setExamPassed([1, 3, 5])
+        self.setExamNotPassed([1, 2, 4])
+                
         
         
         

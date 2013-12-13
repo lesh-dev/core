@@ -57,7 +57,8 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
 
         fullAlias = inpLastName + " " + inpFirstName + " " + inpMidName
         # check if person alias is present (person saved correctly)
-        self.assertElementTextById("person-title", fullAlias)
+        
+        xtest_common.checkPersonAliasInPersonView(self, fullAlias)
         # check avatar
         avatarSrc = self.getImageSrcById("avatar")
         print "Avatar Source: ", avatarSrc

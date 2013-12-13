@@ -59,6 +59,7 @@ def RunTest(test):
     try:
         test.init()
         test.run()
+        print "Test " + test.getName() + " passed"
         return 0
     except TestFatal as e:
 #       test.printActionLog()
@@ -82,14 +83,15 @@ def RunTest(test):
         print "HTTP error occured. Seems like browser connection error occured (window has been closed, etc). "
         return 2
     except Exception as e:
+        print "Generic test exception: ", e
         test.handleException(e)
         return 2
         
 def DecodeRunResult(result):
     if result == 0: return "PASSED"
     elif result == 1: return "FAILED"
-    elif result == 2: return "FATAL"
-    else: return "UNKNOWN"
+    elif result == 2: return "FATAL ERROR"
+    else: return "n/a"
     
 def getValue(ele):
     return ele.get_attribute('value')
@@ -618,13 +620,14 @@ class SeleniumTest(object):
 
             #print "Type = ", type(urls)
             if isList(urls):
+                print "Urls list size:", len(urls)
                 if index < len(urls):
                     url = urls[index]
                     href = url.get_attribute("href")
                     self.logAdd("Found URL with index " + userSerialize(index) + ": " + href)
                     self.gotoSite(href)
                 else:
-                    self.failTest("No index in URL array with link text " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". ")
+                    self.failTest("No index '" + userSerialize(index) + "' in URL array with link text " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". ")
             else:
                 raise RuntimeError("Something bad retrieved from find_elements_by_xpath: it's not a list of WebElement. ")
         except NoSuchElementException:

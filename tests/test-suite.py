@@ -31,7 +31,7 @@ ALL OPTIONS:
   -l, --list\t\tList all tests in test set
   -f, --full-list\t\tList all tests in test set with descriptions
   -s, --set\t\tSpecify test set to run (instead of default auto_test_set.py)
-  -b, --break\t\tBreak test suite running on fatal errors
+  -b, --break\t\tBreak test suite on fatal errors
 
 TEST OPTIONS could be test-dependent. Commonly supported options are: 
   -p, --preserve\tLeave browser window after test finish/fail
@@ -40,13 +40,19 @@ TEST OPTIONS could be test-dependent. Commonly supported options are:
 """.format(script = fileBaseName(sys.argv[0]))
 
 
-def printStats(stats):
+def printStats(stats, detailed):
     if not stats:
         print "No tests were run"
         return
+    
     print "Run overall statistics:"
     for result, testList in stats.iteritems():
-        print DecodeRunResult(result) + ":", len(testList),"tests"
+        print DecodeRunResult(result) + ":", len(testList), "tests"
+
+    print "Run detailed statistics:"
+    for testName, result in detailed.iteritems():
+        print "  " + testName + ": " + DecodeRunResult(result)
+        
     
 args = sys.argv[1:] # exclude program name
 
@@ -97,6 +103,7 @@ if testSet:
 
 try:
     testStats = {}
+    testDetailedStats = {}
     
     testSetModule = __import__(setModuleName, [])   
     
@@ -106,6 +113,11 @@ try:
         
     tests = testSetModule.getTests(baseUrl, args)
     specTestFound = False
+    
+    # init detailed stats
+    for fileName, test in tests.iteritems():
+        testDetailedStats[test.getName()] = None
+        
     while tests:
         fileName, test = tests.popitem()
         if specTest:
@@ -113,34 +125,40 @@ try:
                 if fileName != specTest:
                     continue
             else: # it is a test class name
-                if test.getName() != specTest:
+                if not test.getName().startswith(specTest):
                     continue
         if doList:
             print fileName, test.getName()
         elif doFullList:
-            print "=" * 30;
+            print "=" * 30
             print test.getName()
             print test.getDoc()
-            print;
+            print
         else:
             if specTest:
                 specTestFound = True
             print "Running test", test.getName(), "on site", baseUrl
             print test.getDoc()
             result = RunTest(test)
-            if breakOnFatals and result == 2:
-                print "Fatal error detected, stopping test suite."
-                break
                 
             if result not in testStats: # add new list
                 testStats[result] = [test.getName()]
             else:
                 testStats[result].append(test.getName())
+                
+            testDetailedStats[test.getName()] = result
+
+            if breakOnFatals and result == 2:
+                print "Fatal error detected, stopping test suite."
+                break
+            #if breakOnErrors and result == 1:
+                #print "Fatal error detected, stopping test suite."
+                #break
     
     if specTest and not specTestFound:
         print "Specified test was not found in test suite. "
         
-    printStats(testStats)
+    printStats(testStats, testDetailedStats)
 
 except TestShutdown as e:
     pass

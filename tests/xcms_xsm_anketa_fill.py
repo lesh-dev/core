@@ -149,7 +149,8 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     # just check text is on the page.
         print "Checking that all filled fields are displayed on the page. "
         
-        self.assertElementTextById("person-title", fullAlias)
+        xtest_common.checkPersonAliasInPersonView(self, fullAlias)
+
         self.assertBodyTextPresent(inpBirthDate)
         self.assertBodyTextPresent(inpSchool)
         self.assertBodyTextPresent(inpSchoolCity)
