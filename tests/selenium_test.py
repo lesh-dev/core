@@ -95,7 +95,7 @@ def getValue(ele):
     return ele.get_attribute('value')
     
 #main API wrapper for Webdriver.
-class SeleniumTest:
+class SeleniumTest(object):
     def __init__(self, baseUrl, params = []):
 #       print "Init SeleniumTest"
         self.m_testName = self.__class__.__name__
@@ -248,8 +248,12 @@ class SeleniumTest:
             actionMsg +=  (" comment: " + userSerialize(comment) + " ")
         self.addAction("navigate", actionMsg)
         self.m_driver.get(fullUrl)
+        
+        self.checkPageErrors()
+
+    def checkPageErrors(self):
         if self.m_checkErrors:
-            self.assertPhpErrors();
+            self.assertPhpErrors()
             
     def gotoUrlByLinkText(self, linkName):
         try:
@@ -371,6 +375,7 @@ class SeleniumTest:
             self.addAction("set-option-by-value", "element id: '" + eleId + "', value: " + userSerialize(optValue))
                 
             self.getElementById(eleId).find_element_by_xpath("option[@value='" + optValue + "']").click()
+            self.checkPageErrors()
         except NoSuchElementException:
             self.failTest("Cannot get drop-down (select) element by id '" + eleId + "'. ")
 
@@ -480,14 +485,12 @@ class SeleniumTest:
     def clickElementByName(self, name):
         self.addAction("click", "element name: " + userSerialize(name) + " ")
         self.getElementByName(name).click()
-        if self.m_checkErrors:
-            self.assertPhpErrors();
+        self.checkPageErrors()
 
     def clickElementById(self, eleId):
         self.addAction("click", "element id: '" + eleId + "'")
         self.getElementById(eleId).click()
-        if self.m_checkErrors:
-            self.assertPhpErrors();
+        self.checkPageErrors()
     
     def getElementText(self, xpath):
         try:
@@ -649,7 +652,7 @@ class SeleniumTest:
         
     def checkPhpErrors(self):
         #print dir(self.m_driver);
-        pageText = self.m_driver.page_source
+        pageText = self.getPageSource()
         susp = ["Notice:", "Error:", "Warning:", "Fatal error:", "Parse error:"];
         for word in susp:
             if (word in pageText) and (" on line " in pageText):

@@ -6,14 +6,24 @@ import sys, time
 
 import selenium_test, random_crap
 
+class XcmsTest(selenium_test.SeleniumTest):
+    # override base error-checking method
+    def checkPageErrors(self):
+        super(XcmsTest, self).checkPageErrors()
+        print "custom error checking "
+        source = self.getPageSource()
+        stoppers = ["<!#"]
+        for stopper in stoppers:
+            if stopper in source:
+                self.failTest("Forbidden text '" + stopper + "' found on page. ")
+    
 def isInstallerPage(test):
 	return test.curUrl().endswith("install.php")
 
 def assertNoInstallerPage(test):
 	test.gotoRoot()
 	if isInstallerPage(test):
-		raise selenium_test.TestFatal("Installer page detected, while we did not expected it. You should run this test on installed XCMS. ")
-
+		test.failTest("Installer page detected, while we did not expected it. You should run this test on installed XCMS. ")
 
 def gotoAuthLink(test):
 	test.logAdd("xtest_common.gotoAuthLink: going to authenticate. ")
