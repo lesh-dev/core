@@ -101,9 +101,20 @@ def bQuotaExceededForLine(line):
 
     res, output = getCommandOutput(["du", "-sb", path]);
     if res != 0:
-        raise RuntimeError("Error occured on getting disk usage for line '" + line + "'. ")
+        raise RuntimeError("Error occured on getting disk usage for line '" + line + "':\n" + output)
 
-    realSize = int(output.strip().split()[0])
+    outList = output.strip().split()
+    if outList:
+        try:
+            realSize = int(outList[0])
+        except ValueError as e:
+            print "DiskUsage utility returned crap as datasize: '" + outList[0] + " for line '" + line + "'. Exception: "
+            print e
+            print "Full 'du -sb' output:\n" + output
+            raise
+    else:
+        raise RuntimeError("DiskUsage returned success code, but empty output for line '" + line + "'. ")
+    
     #print "max size for ", line, ": ", maxSize, " real size: ", realSize
     if bQuotaExceeded(realSize, maxSize):
         print "Quota " + getHumanValue(maxSize) + " exceeded for path " + path + " by " + getExceedPercent(realSize, maxSize)
@@ -117,7 +128,7 @@ def monitor(fileList):
             if bQuotaExceededForLine(line.strip()):
                 quotaExceeded = True
         except ValueError as e:
-            print "Checking aborted: syntax error on line " + line
+            print "Checking aborted: shit happens on line " + line
             return 2
         except RuntimeError as e:
             print e
