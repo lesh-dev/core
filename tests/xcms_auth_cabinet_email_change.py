@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-import selenium_test, xtest_common, random_crap
+import xtest_common, random_crap
 from xtest_config import XcmsTestConfig
-from selenium_test import SeleniumTest
 
-class XcmsAuthCabinetEmailChange(SeleniumTest):
+class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
     """
     add two users with different e-mails
     enter cabinet and change e-mail to another good email

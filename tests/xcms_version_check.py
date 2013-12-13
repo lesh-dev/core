@@ -2,11 +2,10 @@
 # -*- coding: utf8 -*-
 
 import re
-import selenium_test, xtest_common, random_crap
+import xtest_common, random_crap
 from xtest_config import XcmsTestConfig
-from selenium_test import SeleniumTest, TestError
 
-class XcmsVersionCheck(SeleniumTest):
+class XcmsVersionCheck(xtest_common.XcmsTest):
 	"""
 	This test checks if version is displayed on main page and in admin panel.
 	"""
@@ -26,7 +25,7 @@ class XcmsVersionCheck(SeleniumTest):
 		versionRegexp = "[\w\d_]+\-[\d\.]+ rev\. [\d]+"
 		m = re.search(versionRegexp, siteVersion)
 		if not m:
-			raise TestError("Site version does not match expected regexp. ");
+            self.failTest("Site version does not match expected regexp. ");
 		
 		conf = XcmsTestConfig()
 		
@@ -41,5 +40,5 @@ class XcmsVersionCheck(SeleniumTest):
 		print "XCMS version in CP: ", cpVersion
 		m = re.search(versionRegexp, cpVersion)
 		if not m:
-			raise TestError("Site version in admin CP does not match expected regexp. ");
+            self.failTest("Site version in admin CP does not match expected regexp. ");
     

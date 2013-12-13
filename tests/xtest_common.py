@@ -10,12 +10,11 @@ class XcmsTest(selenium_test.SeleniumTest):
     # override base error-checking method
     def checkPageErrors(self):
         super(XcmsTest, self).checkPageErrors()
-        print "custom error checking "
         source = self.getPageSource()
-        stoppers = ["<!#"]
+        stoppers = ["<!#", "#!>"]
         for stopper in stoppers:
             if stopper in source:
-                self.failTest("Forbidden text '" + stopper + "' found on page. ")
+                self.failTest("Forbidden crap '" + stopper + "' found on page. ")
     
 def isInstallerPage(test):
 	return test.curUrl().endswith("install.php")
