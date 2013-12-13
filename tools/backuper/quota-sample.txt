@@ -1,3 +1,4 @@
+/_srv.obsolete 30M
 /tmp 300M
 
 

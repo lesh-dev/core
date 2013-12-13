@@ -6,7 +6,10 @@ import sys, re, commands
 QuotaThresholdPercent = 95
 
 def isList(x):
-    return type(x) == type(list())
+    return (type(x) == type(list()))
+
+def isVoid(x):
+    return (x.strip() == "")
 
 # python 2.7+
 #def getCommandOutput(command):
@@ -52,21 +55,45 @@ def getHumanValue(number):
     return str(decimal(number/k**5)) + "P"
 
 def bQuotaExceededForLine(line):
-    m = re.search("(\S+)\s+(\d+)\s*(\w)", line)
+    line = line.strip()
+    # skip commented lines
+    if line[0:1] == "#":
+        return False
+    
+    m = re.search("(\S+)\s+(\d+)\s*(\w+)", line)
     if not m:
+        if not isVoid(line):
+            print "Line " + line + " has incorrect format. "
         return False
 
     path = m.group(1).strip()
-    sizeLog = int(m.group(2))
+    try:
+        sizeLog = int(m.group(2).strip())
+    except ValueError as e:
+        print "Something is wrong on line '" + line + "': " 
+        print e
+        raise
+
     scaleLog = m.group(3).upper().strip()
     k = 1024
     scales = {
-        "" : k**0,
-        "K": k**1,
-        "M": k**2,
-        "G": k**3,
-        "T": k**4,
-        "P": k**5
+        "" :  k**0,
+        "B":  k**0,
+
+        "K":  k**1,
+        "KB": k**1,
+
+        "M":  k**2,
+        "MB":  k**2,
+
+        "G":  k**3,
+        "GB":  k**3,
+
+        "T":  k**4,
+        "TB":  k**4,
+
+        "P":  k**5,
+        "PB":  k**5
         }
     if scaleLog not in scales:
         raise RuntimeError("Incorrect size format for line '" + line + "'. ")
@@ -89,8 +116,8 @@ def monitor(fileList):
         try:
             if bQuotaExceededForLine(line.strip()):
                 quotaExceeded = True
-        except ValueError:
-            print "Something is wrong on line " + line
+        except ValueError as e:
+            print "Checking aborted: syntax error on line " + line
             return 2
         except RuntimeError as e:
             print e
