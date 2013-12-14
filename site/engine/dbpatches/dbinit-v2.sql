@@ -1,3 +1,11 @@
+/* Отделение */
+create table department (
+    department_id integer primary key autoincrement,
+    department_title text,
+    department_created text, -- utc timestamp
+    department_modified text -- utc timestamp
+);
+
 /* Участник (препод, куратор, школьник...) */
 create table person (
     person_id integer primary key autoincrement,
@@ -35,8 +43,12 @@ create table person (
 
     user_agent text,    -- идентификатор браузера, с которого была подана анкета
 
+    department_id integer not null, -- ссылка на отделение
+
     person_created text, -- utc timestamp
-    person_modified text -- utc timestamp
+    person_modified text, -- utc timestamp
+
+    foreign key (department_id) references department(department_id)
 );
 
 /* Курс */
@@ -58,7 +70,7 @@ create table course_teachers (
     course_id integer not null, -- fk
     course_teacher_id integer not null, -- fk
     course_teachers_created text, -- utc timestamp
-    course_teachers_modified text -- utc timestamp
+    course_teachers_modified text, -- utc timestamp
     foreign key (course_id) references course(course_id),
     foreign key (course_teacher_id) references person(person_id)
 );
@@ -85,6 +97,7 @@ create table school (
     school_type text, -- enum:(летняя, зимняя)
     school_date_start text, -- дата начала
     school_date_end text, -- дата конца
+    school_location text, -- место проведения
     school_created text, -- utc timestamp
     school_modified text -- utc timestamp
 );
@@ -92,16 +105,20 @@ create table school (
 /*
 Связка "Бытие участника на школе"
 
-Роли человека на школе по умолчанию копируется из его профиля.
+Роли человека на школе и его принадлежность к отделению
+по умолчанию копируются из его профиля.
 
-Именно в этой связке должна быть проставлена роль участника на школе
-(на одной школе он был школьником, на школе следующей он был уже преподом)
+Именно в этой связке должна быть проставлена роль участника
+на данной школе (на одной школе он был школьником,
+а на следующей школе он был уже преподом и куратором).
 
-TODO добавить место проведения школы
+В этой же таблице хранится принадлежность препода к отделению
+относительно данной школы.
 */
 create table person_school (
     person_school_id integer primary key autoincrement,
     member_person_id integer not null, -- fk person
+    member_department_id integer not null, -- fk department
     school_id integer not null, -- fk school
     is_student text, -- является ли школьником на данной школе
     is_teacher text, -- является ли преподом на данной школе
@@ -113,6 +130,7 @@ create table person_school (
     person_school_created text, -- utc timestamp
     person_school_modified text, -- utc timestamp
     foreign key (member_person_id) references person(person_id),
+    foreign key (member_department_id) references department(department_id),
     foreign key (school_id) references school(school_id)
 );
 
