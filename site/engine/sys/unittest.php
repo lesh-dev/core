@@ -50,9 +50,9 @@
             return;
         }
 
-        xut_report("$message: '<span style=\"color: #007f00;\">".
-            htmlspecialchars($left)."</span>' === '<span style=\"color: #7f0000;\">".
-            htmlspecialchars($right)."</span>' failed");
+        xut_report("$message:<br>'<span style=\"color: #007f00;\">".
+            htmlspecialchars($left)."</span>'<br>===<br>'<span style=\"color: #7f0000;\">".
+            htmlspecialchars($right)."</span>'</br>failed");
     }
 
     function xut_finalize()
