@@ -440,7 +440,7 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, "all");
 
         $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
-        $hr_exam_status = xsm_make_enum($exam_data, "exam_status");
+        $hr_exam_status = xsm_make_enum($exam_data, "exam_status", "exam$exam_id");
         $exam_url = "edit-exam".xcms_url(array('exam_id'=>$exam_id));
         ?>
         <tr>
