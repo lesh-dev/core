@@ -1,11 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import selenium_test, xtest_common, random_crap
+import xtest_common, random_crap
 from xtest_config import XcmsTestConfig
-from selenium_test import SeleniumTest
 
-class XcmsXsmAddExams(SeleniumTest):
+class XcmsXsmAddExams(xtest_common.XcmsTest):
     """
     This test checks exam add functional.
     It does following:
@@ -27,6 +26,32 @@ class XcmsXsmAddExams(SeleniumTest):
         self.setOptionValueByIdAndValue("course_id-selector", exam)
         self.clickElementByName("update-exam")
         xtest_common.gotoBackToPersonView(self)
+        
+    def setExamPassed(self, examLineList):
+        for examLine in examLineList:            
+            self.gotoIndexedUrlByLinkText(u"Прослушан", examLine)
+            self.setOptionValueByIdAndValue("exam_status-selector", "passed")
+            
+            examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
+            self.fillElementByName("exam_comment", examComment)
+            self.clickElementByName("update-exam")
+            xtest_common.gotoBackToPersonView(self)
+            
+        self.assertBodyTextPresent(u"Сдан")
+            
+
+    def setExamNotPassed(self, examLineList):
+        for examLine in examLineList:            
+            self.gotoIndexedUrlByLinkText(u"Прослушан", examLine)
+            self.setOptionValueByIdAndValue("exam_status-selector", "notpassed")
+            
+            examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
+            self.fillElementByName("exam_comment", examComment)
+            self.clickElementByName("update-exam")
+            xtest_common.gotoBackToPersonView(self)
+            
+        self.assertBodyTextPresent(u"Не сдан")
+
 
     def run(self):
         conf = XcmsTestConfig()
@@ -63,7 +88,7 @@ class XcmsXsmAddExams(SeleniumTest):
 
         fullAlias = inpLastName + " " + inpFirstName + " " + inpMidName
         # check if person alias is present (person saved correctly)
-        self.assertElementTextById("person-title", fullAlias)
+        xtest_common.checkPersonAliasInPersonView(self, fullAlias)
         
         self.gotoUrlByLinkText(u"ЛЭШ-2013")
         self.assertBodyTextPresent(u"На данной школе не присутствовал")
@@ -84,16 +109,9 @@ class XcmsXsmAddExams(SeleniumTest):
         
         self.addExamsById([95, 119, 91, 134, 73, 107, 130, 133])
         
-        self.gotoUrlByLinkText(u"Базовое электричество")
-        self.setOptionValueByIdAndValue("exam_status-selector", "passed")
-        
-        examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
-        self.fillElementByName("exam_comment", examComment)
-        self.clickElementByName("update-exam")
-        xtest_common.gotoBackToPersonView(self)
-        
-        self.assertBodyTextPresent(u"Сдан")
-        
+        self.setExamPassed([1, 3, 5])
+        self.setExamNotPassed([1, 2, 4])
+                
         
         
         

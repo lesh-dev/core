@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-import selenium_test, xtest_common, random_crap
+import xtest_common, random_crap
 from xtest_config import XcmsTestConfig
-from selenium_test import SeleniumTest
 
-class XcmsAuthCheckDupEmail(SeleniumTest):
+class XcmsAuthCheckDupEmail(xtest_common.XcmsTest):
     """
     add two users with identical e-mails.
     """
