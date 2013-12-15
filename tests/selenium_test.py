@@ -613,28 +613,34 @@ class SeleniumTest(object):
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
                 msg = "Cannot find URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". "
                 self.failTestWithItemNotFound(msg)
-                
-    def gotoIndexedUrlByLinkText(self, urlText, index):
+
+    def gotoIndexedUrlByLinkText(self, urlText, index, sibling = ""):
+        # case: <a><span>text</span></a> is not captured by internal of 'gotoUrlByLinkText'
         try:
-            urls = self.m_driver.find_elements_by_xpath("//a[text()='" + urlText + "']")
+            if isVoid(sibling):
+                sibling="text()"
+                
+            xpath = "//a[" + sibling + "='" + urlText + "']"
+            urls = self.m_driver.find_elements_by_xpath(xpath)
 
             #print "Type = ", type(urls)
-            if isList(urls):
-                print "Urls list size:", len(urls)
-                if index < len(urls):
-                    url = urls[index]
-                    href = url.get_attribute("href")
-                    self.logAdd("Found URL with index " + userSerialize(index) + ": " + href)
-                    self.gotoSite(href)
-                else:
-                    self.failTest("No index '" + userSerialize(index) + "' in URL array with link text " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". ")
+            if not isList(urls):
+                raise RuntimeError("clickIndexedElementByText(): Something bad retrieved from find_elements_by_xpath: it's not a list of WebElement. ")
+                
+            print "Urls list size:", len(urls)
+            if index < len(urls):
+                url = urls[index]
+                href = url.get_attribute("href")
+                self.logAdd("Found URL with index " + userSerialize(index) + ": " + href)
+                if isVoid(href):
+                    raise RuntimeError("clickIndexedElementByText(): empty 'href' attribute of a-element with index " + userSerialize(index) )                    
+                self.gotoSite(href)
             else:
-                raise RuntimeError("Something bad retrieved from find_elements_by_xpath: it's not a list of WebElement. ")
+                self.failTest("No index '" + userSerialize(index) + "' in URL array with link text " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". ")
         except NoSuchElementException:
             # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
             msg = "Cannot find no one URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". "
             self.failTestWithItemNotFound(msg)
-
             
     def logAdd(self, text, logLevel = "debug"):
         try:

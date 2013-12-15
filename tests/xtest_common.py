@@ -266,6 +266,5 @@ def gotoUserList(test):
     test.assertBodyTextPresent(u"Администрирование пользователей")
 
 def checkPersonAliasInPersonView(test, personAlias):
-    # TODO: broken by #670
-    test.assertElementTextById("person-title", personAlias + u" К списку анкет")
+    test.assertElementTextById("person-title", personAlias)
 
