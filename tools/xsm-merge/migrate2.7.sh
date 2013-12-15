@@ -24,12 +24,6 @@ fi
 
 echo "Site root is $site_root, httpd user is $httpd_user"
 
-news_path="$site_root/$content_dir/cms/pages/z01News"
-if grep "contlist" "$news_path/info"; then
-    echo "Migration is already done"
-    exit 1
-fi
-
 # disable sudo-ing
 sudo_cmd=""
 if [ "$1" == "--sudo" ] ; then

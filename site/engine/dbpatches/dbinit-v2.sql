@@ -1,4 +1,4 @@
-/* Отделение */
+/* Отделение (2.7+) */
 create table department (
     department_id integer primary key autoincrement,
     department_title text,
@@ -35,15 +35,21 @@ create table person (
     achievements text,   -- достижения
     hobby text,          -- хобби
 
-    tent_capacity text,   -- количество мест в палатке (0 = палатки нет)
-    tour_requisites text, -- имеющиеся предметы туристского обихода
+    lesh_ref text,       -- откуда узнали о школе (2.1+)
+
+    forest_1 text,       -- 1-й выход в лес (2.3a+)
+    forest_2 text,       -- 2-й выход в лес (2.3a+)
+    forest_3 text,       -- 3-й выход в лес (2.3a+)
+
+    tent_capacity text,   -- количество мест в палатке (0 = палатки нет) (2.2+)
+    tour_requisites text, -- имеющиеся предметы туристского обихода (2.2+)
 
     anketa_status text, -- former activity_status
         -- enum:(new, processed, declined, taken, duplicated, spam)
 
     user_agent text,    -- идентификатор браузера, с которого была подана анкета
 
-    department_id integer not null, -- ссылка на отделение
+    department_id integer not null, -- ссылка на отделение (2.7+)
 
     person_created text, -- utc timestamp
     person_modified text, -- utc timestamp
@@ -64,7 +70,7 @@ create table course (
     course_modified text -- utc timestamp
 );
 
-/* Преподы курсов */
+/* Преподы курсов (2.4+) */
 create table course_teachers (
     course_teachers_id integer primary key autoincrement,
     course_id integer not null, -- fk
@@ -97,7 +103,7 @@ create table school (
     school_type text, -- enum:(летняя, зимняя)
     school_date_start text, -- дата начала
     school_date_end text, -- дата конца
-    school_location text, -- место проведения
+    school_location text, -- место проведения (2.7+)
     school_created text, -- utc timestamp
     school_modified text -- utc timestamp
 );

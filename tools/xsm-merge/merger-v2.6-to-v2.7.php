@@ -38,6 +38,19 @@
     $db = xmerger_open_db_write("$path/fizlesh.sqlite3");
     $courses = 0;
 
+    // Create department table
+    $db->exec(
+        "CREATE TABLE department (
+        department_id integer primary key autoincrement,
+        department_title text,
+        department_created text, -- utc timestamp
+        department_modified text -- utc timestamp
+        ");
+
+    // Create departments
+    $db->exec("INSERT INTO department (department_title, department_created) VALUES ('Физическое', '2005.08.23 01:02:03')");
+    $db->exec("INSERT INTO department (department_title, department_created) VALUES ('Другое', '1990.01.01 01:02:03')");
+
     // first of all, incorporate all existing data from current database
     $db->exec(
         "CREATE TABLE person_new (
@@ -68,8 +81,14 @@
         achievements text,   -- достижения
         hobby text,          -- хобби
 
-        tent_capacity text,   -- количество мест в палатке (0 = палатки нет)
-        tour_requisites text, -- имеющиеся предметы туристского обихода
+        lesh_ref text,       -- откуда узнали о школе (2.1+)
+
+        forest_1 text,       -- 1-й выход в лес (2.3a+)
+        forest_2 text,       -- 2-й выход в лес (2.3a+)
+        forest_3 text,       -- 3-й выход в лес (2.3a+)
+
+        tent_capacity text,   -- количество мест в палатке (0 = палатки нет) (2.2+)
+        tour_requisites text, -- имеющиеся предметы туристского обихода (2.2+)
 
         anketa_status text, -- former activity_status
             -- enum:(new, processed, declined, taken, duplicated, spam)
