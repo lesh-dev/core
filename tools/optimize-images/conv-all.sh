@@ -32,7 +32,8 @@ convert_files_in_dir()
     fi
     rm -rf lq
     rm -f "$rar_name"
-    zip "$rar_name.zip" *.jpg *.JPG
+    rar a "$rar_name" *.jpg *.JPG
+    rm -f *.jpg *.JPG
 }
 
 for d in 1* ; do
