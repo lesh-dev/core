@@ -42,6 +42,20 @@ function xcms_trim_object($obj)
 }
 
 /**
+  * Plural form for nouns
+  **/
+function xcms_plural($n, $word)
+{
+    if ($n  % 10 == 1)
+        return "${word}";
+
+    if ($n  % 10 >= 2 && $n % 10 <= 4)
+        return "${word}а";
+
+    return "${word}ов";
+}
+
+/**
   * Canonical way to obtain FIO
   **/
 function xsm_fio($person)
@@ -214,13 +228,17 @@ function xsm_prepare_social_profile($social_profile)
     return $social_profile;
 }
 
-function xsm_make_enum($object, $key)
+/**
+  * id is added for testability reasons
+  **/
+function xsm_make_enum($object, $key, $id = false)
 {
     $enum_value = xsm_check_enum_key($key, $object[$key]);
     $css_class = str_replace('_', '-', $key);
     $values = xsm_get_enum($key);
     $title = $values[$enum_value];
-    return "<span class=\"$css_class $enum_value\" id=\"$key-span\">$title</span>";
+    $id = ($id !== false) ? "$id-" : "";
+    return "<span class=\"$css_class $enum_value\" id=\"$id$key-span\">$title</span>";
 }
 
 // TODO: non-generic function!

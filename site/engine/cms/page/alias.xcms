@@ -22,6 +22,12 @@
         }
         else
         {
+            $body_html = xcms_prepare_html_template("page_alias_change");
+            $body_html = str_replace('@@PAGE-ID@', $pageid, $body_html);
+            $body_html = str_replace('@@OLD-PAGE-ALIAS@', $old_alias, $body_html);
+            $body_html = str_replace('@@NEW-PAGE-ALIAS@', $new_alias, $body_html);
+            xcms_send_notification("content-change", NULL, $body_html);
+
             $info["alias"] = $new_alias;
             xcms_save_list(xcms_get_info_file_name(), $info);
             foreach ($aliases as $alias=>$value)

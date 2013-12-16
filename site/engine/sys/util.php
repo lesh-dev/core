@@ -77,6 +77,9 @@ function xcms_datetime_to_ts($date_time)
     return strtotime($date_time);
 }
 
+/**
+  * Get template contents by name
+  **/
 function xcms_get_html_template($template_name)
 {
     global $SETTINGS;
@@ -87,6 +90,19 @@ function xcms_get_html_template($template_name)
         return "";
     }
     return @file_get_contents($full_name);
+}
+
+/**
+  * Get template and replace common things there
+  **/
+function xcms_prepare_html_template($template_name)
+{
+    $body_html = xcms_get_html_template($template_name);
+    $login = xcms_user()->login();
+    $real_name = xcms_user()->param("name");
+    $body_html = str_replace('@@LOGIN@', $login, $body_html);
+    $body_html = str_replace('@@REAL-NAME@', $real_name, $body_html);
+    return $body_html;
 }
 
 function xcms_util_unit_test()

@@ -1,9 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import selenium_test, xtest_common, random_crap, time
+import xtest_common, random_crap, time
 from xtest_config import XcmsTestConfig
-from selenium_test import SeleniumTest
 
 def htmlParagraph(x):
     return "<p>" + x + "</p>"
@@ -11,7 +10,7 @@ def htmlParagraph(x):
 def linesToHtml(lineArray):
     return "\n".join([htmlParagraph(x) for x in lineArray])
 
-class XcmsContentAddPage(SeleniumTest):
+class XcmsContentAddPage(xtest_common.XcmsTest):
     """
     This test checks user add functional.
     It does following steps:
@@ -20,7 +19,7 @@ class XcmsContentAddPage(SeleniumTest):
     * edit new subpage some times
     * load previous version
     """
-
+        
     def run(self):
 
         # avoid spontaneous HTML tags

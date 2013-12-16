@@ -59,6 +59,7 @@ def RunTest(test):
     try:
         test.init()
         test.run()
+        print "Test " + test.getName() + " passed"
         return 0
     except TestFatal as e:
 #       test.printActionLog()
@@ -82,20 +83,21 @@ def RunTest(test):
         print "HTTP error occured. Seems like browser connection error occured (window has been closed, etc). "
         return 2
     except Exception as e:
+        print "Generic test exception: ", e
         test.handleException(e)
         return 2
         
 def DecodeRunResult(result):
     if result == 0: return "PASSED"
     elif result == 1: return "FAILED"
-    elif result == 2: return "FATAL"
-    else: return "UNKNOWN"
+    elif result == 2: return "FATAL ERROR"
+    else: return "n/a"
     
 def getValue(ele):
     return ele.get_attribute('value')
     
 #main API wrapper for Webdriver.
-class SeleniumTest:
+class SeleniumTest(object):
     def __init__(self, baseUrl, params = []):
 #       print "Init SeleniumTest"
         self.m_testName = self.__class__.__name__
@@ -248,8 +250,12 @@ class SeleniumTest:
             actionMsg +=  (" comment: " + userSerialize(comment) + " ")
         self.addAction("navigate", actionMsg)
         self.m_driver.get(fullUrl)
+        
+        self.checkPageErrors()
+
+    def checkPageErrors(self):
         if self.m_checkErrors:
-            self.assertPhpErrors();
+            self.assertPhpErrors()
             
     def gotoUrlByLinkText(self, linkName):
         try:
@@ -371,6 +377,7 @@ class SeleniumTest:
             self.addAction("set-option-by-value", "element id: '" + eleId + "', value: " + userSerialize(optValue))
                 
             self.getElementById(eleId).find_element_by_xpath("option[@value='" + optValue + "']").click()
+            self.checkPageErrors()
         except NoSuchElementException:
             self.failTest("Cannot get drop-down (select) element by id '" + eleId + "'. ")
 
@@ -480,14 +487,12 @@ class SeleniumTest:
     def clickElementByName(self, name):
         self.addAction("click", "element name: " + userSerialize(name) + " ")
         self.getElementByName(name).click()
-        if self.m_checkErrors:
-            self.assertPhpErrors();
+        self.checkPageErrors()
 
     def clickElementById(self, eleId):
         self.addAction("click", "element id: '" + eleId + "'")
         self.getElementById(eleId).click()
-        if self.m_checkErrors:
-            self.assertPhpErrors();
+        self.checkPageErrors()
     
     def getElementText(self, xpath):
         try:
@@ -608,27 +613,34 @@ class SeleniumTest:
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
                 msg = "Cannot find URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". "
                 self.failTestWithItemNotFound(msg)
-                
-    def gotoIndexedUrlByLinkText(self, urlText, index):
+
+    def gotoIndexedUrlByLinkText(self, urlText, index, sibling = ""):
+        # case: <a><span>text</span></a> is not captured by internal of 'gotoUrlByLinkText'
         try:
-            urls = self.m_driver.find_elements_by_xpath("//a[text()='" + urlText + "']")
+            if isVoid(sibling):
+                sibling="text()"
+                
+            xpath = "//a[" + sibling + "='" + urlText + "']"
+            urls = self.m_driver.find_elements_by_xpath(xpath)
 
             #print "Type = ", type(urls)
-            if isList(urls):
-                if index < len(urls):
-                    url = urls[index]
-                    href = url.get_attribute("href")
-                    self.logAdd("Found URL with index " + userSerialize(index) + ": " + href)
-                    self.gotoSite(href)
-                else:
-                    self.failTest("No index in URL array with link text " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". ")
+            if not isList(urls):
+                raise RuntimeError("clickIndexedElementByText(): Something bad retrieved from find_elements_by_xpath: it's not a list of WebElement. ")
+                
+            print "Urls list size:", len(urls)
+            if index < len(urls):
+                url = urls[index]
+                href = url.get_attribute("href")
+                self.logAdd("Found URL with index " + userSerialize(index) + ": " + href)
+                if isVoid(href):
+                    raise RuntimeError("clickIndexedElementByText(): empty 'href' attribute of a-element with index " + userSerialize(index) )                    
+                self.gotoSite(href)
             else:
-                raise RuntimeError("Something bad retrieved from find_elements_by_xpath: it's not a list of WebElement. ")
+                self.failTest("No index '" + userSerialize(index) + "' in URL array with link text " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". ")
         except NoSuchElementException:
             # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
             msg = "Cannot find no one URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". "
             self.failTestWithItemNotFound(msg)
-
             
     def logAdd(self, text, logLevel = "debug"):
         try:
@@ -649,7 +661,7 @@ class SeleniumTest:
         
     def checkPhpErrors(self):
         #print dir(self.m_driver);
-        pageText = self.m_driver.page_source
+        pageText = self.getPageSource()
         susp = ["Notice:", "Error:", "Warning:", "Fatal error:", "Parse error:"];
         for word in susp:
             if (word in pageText) and (" on line " in pageText):

@@ -141,6 +141,8 @@ if ($need)
     $text = str_replace(">>", "&raquo;", $text);
     //// Обработка тире и неразрывных пробелов
     $text = str_replace("---", "&#8212;", $text);
+    // Попытка что-то сделать с #617
+    $text = str_replace(" - ", "&nbsp;&#8212; ", $text);
     // avoid HTML comments replacing here
     $text = preg_replace('/([^!])--([^>])/', '\1&#8211;\2', $text);
     $text = str_replace("~", "&nbsp;", $text);

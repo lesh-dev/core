@@ -19,12 +19,17 @@
             if (!@rename($old_path, $new_path))
             {?>
                 <div class="error">Не удалось переименовать страницу, проверьте корректность путей файлов:</div>
-                <div>Исходный путь: <span style="font-family: Monospace;"><?php echo $old_path; ?></span></div>
-                <div>Новый путь: <span style="font-family: Monospace;"><?php echo $new_path; ?></span></div>
+                <div>Исходный путь: <pre><?php echo $old_path; ?></pre></div>
+                <div>Новый путь: <pre><?php echo $new_path; ?></pre></div>
                 <?php
             }
             else
             {
+                $body_html = xcms_prepare_html_template("page_rename");
+                $body_html = str_replace('@@OLD-PAGE-ID@', $pageid, $body_html);
+                $body_html = str_replace('@@NEW-PAGE-ID@', $new_pageid, $body_html);
+                xcms_send_notification("content-change", NULL, $body_html);
+
                 $pageid = $new_pageid;
                 $redirect = true;
                 ?>

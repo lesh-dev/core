@@ -83,6 +83,25 @@
         $diff = xcms_diff_html("составляет 10<sup>15</sup> калорий", "составляет 9.5<sup>15</sup> калорий", false);
         xut_equal($diff, "составляет <del>10</del> <ins>9.5</ins>&lt;sup&gt;15&lt;/sup&gt; калорий", "HTML word dividers 2");
 
+        $diff = xcms_diff_html(
+            "<p>paragraph One</p>\n".
+            "<p>to be inserted before this text Three</p>\n".
+            "<p>this is the end of text Four</p>",
+
+            "<p>paragraph One</p>\n".
+            "<p>inserted line number Two</p>\n".
+            "<p>to be inserted before this text Three</p>\n".
+            "<p>this is the end of text Four</p>",
+
+            false);
+        xut_equal(
+            $diff,
+            "&lt;p&gt;paragraph One<ins>&lt;/p&gt;\n".
+            "&lt;p&gt;inserted line number Two</ins>&lt;/p&gt;\n".
+            "&lt;p&gt;to be inserted before this text Three&lt;/p&gt;\n".
+            "&lt;p&gt;this is the end of text Four&lt;/p&gt;",
+
+            "HTML insert line with similar endings");
 
         xut_end();
     }

@@ -10,8 +10,6 @@ function xcms_process_page_diff($old_text, $new_text, $page_id = false)
         return;
 
     $diff_html = xcms_diff_html($old_text, $new_text);
-    $login = xcms_user()->login();
-    $real_name = xcms_user()->param("name");
     $ifn = xcms_get_info_file_name($page_id);
     $page_info = xcms_get_list($ifn);
     $page_alias = xcms_get_key_or($page_info, 'alias');
@@ -29,9 +27,8 @@ function xcms_process_page_diff($old_text, $new_text, $page_id = false)
     $id = $page_alias;
     if (!strlen($id))
         $id = $page_id;
-    $body_html = xcms_get_html_template("content-change");
-    $body_html = str_replace('@@LOGIN@', $login, $body_html);
-    $body_html = str_replace('@@REAL-NAME@', $real_name, $body_html);
+
+    $body_html = xcms_prepare_html_template("content-change");
     $body_html = str_replace('@@PAGE-ID@', $page_id, $body_html);
     $body_html = str_replace('@@PAGE-URL@', $page_url, $body_html);
     $body_html = str_replace('@@PAGE-ALIAS@', $url_name, $body_html);

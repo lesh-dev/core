@@ -10,12 +10,26 @@
 <html>
 <head>
     <# cms/head #>
+    <link rel="yandex-tableau-widget" href="<# full_design_dir #>tableau.json" />
     <link rel="stylesheet" type="text/css" href="<# full_design_dir #>menu.css" />
     <link rel="stylesheet" type="text/css" href="<# full_design_dir #>default.css" />
     <link rel="stylesheet" type="text/css" href="<# full_design_dir #>news.css" />
 </head>
 <body>
     <div id="fullHeight">
+        <?php
+        if (xcms_user()->check_rights("admin", false)) {?>
+        <a href="<?php echo "/$web_prefix?".xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>"
+            style="position: absolute; top: 16px; right: 13px;"><img
+            src="<?php echo $full_engine_pub; ?>img/key.png" alt="Admin CPL" style="padding: 3px"/></a><?php
+        }
+        if (xcms_user()->check_rights("ank", false)) {
+            global $web_prefix; ?>
+        <a href="<?php echo "/${web_prefix}xsm"; ?>"
+            style="position: absolute; top: 13px; right: 36px; line-height: 32px;"><img
+            src="<?php echo $full_engine_pub; ?>img/study.png" alt="XSM"/></a><?php
+        }
+        ?>
         <table cellspacing="0" cellpadding="0" class="topTable roundBorders">
             <tr>
                 <td class="logoCell menuWidth">
@@ -113,7 +127,7 @@
                     <div id="content-header"><?php
                     if (strlen($hdr) && !$in_xsm)
                     {?>
-                        <h2><?php echo $hdr; ?></h2><?php
+                        <h1><?php echo $hdr; ?></h1><?php
                     }?>
                     </div><?php
                     if (!$in_xsm)

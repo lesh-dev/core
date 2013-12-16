@@ -1,11 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import selenium_test, xtest_common, random_crap
+import xtest_common, random_crap
 from xtest_config import XcmsTestConfig
-from selenium_test import SeleniumTest
 
-class XcmsOpenNonExisting(SeleniumTest):
+class XcmsOpenNonExisting(xtest_common.XcmsTest):
 	"""
 	This test checks '404 page' handling in XCMS functional
 	Steps:

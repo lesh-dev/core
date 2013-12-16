@@ -1,11 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import selenium_test, xtest_common, random_crap, time
+import xtest_common, random_crap, time
 from xtest_config import XcmsTestConfig
-from selenium_test import SeleniumTest
 
-class XcmsAuthCheckDupLogin(SeleniumTest):
+class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
     """
     add two users with identical logins.
     """
