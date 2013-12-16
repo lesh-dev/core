@@ -43,6 +43,7 @@
                 а также дефис (-), подчёркивание (_), точка (.) и собака (@)</span></div>
             <div><span class="user-label">Пароль</span>
                 <input type="password" <?php xcmst_input_attrs_from_post("password", 'Sup3r-P@ssw0rd'); ?>/></div>
+            <div><span class="user-help-label">Если не указан, будет сгенерирован автоматически</span></div>
             <div><span class="user-label">Пароль (ещё раз)</span>
                 <input type="password" <?php xcmst_input_attrs_from_post("password_confirm"); ?> /></div>
             <div><span class="user-label">Настоящее имя</span>
@@ -126,6 +127,9 @@
         $password = xcms_get_key_or($_POST, "password");
         if ($password != xcms_get_key_or($_POST, "password_confirm"))
             return array("Пароли не совпадают. ", null, null);
+
+        if (!strlen($password))
+            $password = xcms_mkpasswd();
 
         $email = xcms_get_key_or($_POST, "email");
         $name = xcms_get_key_or($_POST, "name");
