@@ -121,6 +121,8 @@
     $db->exec("ALTER TABLE person_new RENAME TO person");
     xcms_log(XLOG_INFO, "persons processed: $persons");
 
+    $db->exec("ALTER TABLE `school` ADD COLUMN `school_location` text;");
+
     $db->exec("VACUUM");
     xcms_log(XLOG_INFO, "Database vacuumed");
 ?>
