@@ -29,7 +29,8 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         
     def setExamPassed(self, examLineList):
         for examLine in examLineList:            
-            self.gotoIndexedUrlByLinkText(u"Прослушан", examLine)
+            # <a><span>Прослушан</span></a>
+            self.gotoIndexedUrlByLinkText(u"Прослушан", examLine, "span")
             self.setOptionValueByIdAndValue("exam_status-selector", "passed")
             
             examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
@@ -42,7 +43,8 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
 
     def setExamNotPassed(self, examLineList):
         for examLine in examLineList:            
-            self.gotoIndexedUrlByLinkText(u"Прослушан", examLine)
+            # <a><span>Прослушан</span></a>
+            self.gotoIndexedUrlByLinkText(u"Прослушан", examLine, "span")
             self.setOptionValueByIdAndValue("exam_status-selector", "notpassed")
             
             examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
@@ -109,8 +111,8 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         
         self.addExamsById([95, 119, 91, 134, 73, 107, 130, 133])
         
-        self.setExamPassed([1, 3, 5])
-        self.setExamNotPassed([1, 2, 4])
+        self.setExamPassed([1, 2, 2])
+        self.setExamNotPassed([1, 2, 2])
                 
         
         
