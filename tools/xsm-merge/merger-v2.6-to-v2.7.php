@@ -45,11 +45,11 @@
         department_title text,
         department_created text, -- utc timestamp
         department_modified text -- utc timestamp
-        ");
+        );");
 
     // Create departments
-    $db->exec("INSERT INTO department (department_title, department_created) VALUES ('Физическое', '2005.08.23 01:02:03')");
-    $db->exec("INSERT INTO department (department_title, department_created) VALUES ('Другое', '1990.01.01 01:02:03')");
+    $db->exec("INSERT INTO department (department_title, department_created) VALUES ('Физическое', '2005.08.23 01:02:03');");
+    $db->exec("INSERT INTO department (department_title, department_created) VALUES ('Другое', '1990.01.01 01:02:03');");
 
     // first of all, incorporate all existing data from current database
     $db->exec(
@@ -100,8 +100,8 @@
         person_created text, -- utc timestamp
         person_modified text, -- utc timestamp
 
-        foreign key (department_id) references department(department_id)"
-    );
+        foreign key (department_id) references department(department_id)
+    );");
 
     // course: move teacher info into separate course_teacher table
     xcms_log(XLOG_INFO, "Processing persons");
@@ -111,7 +111,7 @@
     {
         $person_id = $person["person_id"];
         $person["department_id"] = 1;
-        xdb_insert_ai("person_new", "person_id", $person, $person, XDB_OVERRIDE_TS, XDB_USE_AI, $db);
+        xdb_insert_ai("person_new", "person_id", $person, $person, XDB_OVERRIDE_TS, XDB_NO_USE_AI, $db);
         ++$persons;
     }
 
