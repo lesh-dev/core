@@ -39,6 +39,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.testDiffAndLongText()
         
+        self.testAlias()
+        
     def testBaseEditing(self):
         conf = XcmsTestConfig()
 
@@ -55,10 +57,14 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         inpPageDir = "test_page_" + random_crap.randomText(8);
         inpMenuTitle = "menu_title_" + random_crap.randomText(8);
         inpPageTitle = "page_title_" + random_crap.randomText(8);
+        inpAlias = "new/page/alias/" + random_crap.randomText(8);
 
-        inpPageDir = self.fillElementByName("create-name", inpPageDir);
-        inpMenuTitle = self.fillElementByName("menu-title", inpMenuTitle);
-        inpPageTitle = self.fillElementByName("header", inpPageTitle);
+        inpPageDir = self.fillElementById("create-name-input", inpPageDir);
+        inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle);
+        inpPageTitle = self.fillElementById("header-input", inpPageTitle);
+        inpAlias = self.fillElementById("alias-input", inpAlias);
+        
+        self.pageAlias = inpAlias
 
         defaultPageType = self.getOptionValueById("create-pagetype-selector")
 
@@ -218,3 +224,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         print "-" * 30
 
         self.assertElementTextById("content-text", realPageText, "real page text does not match entered text. ")
+    
+    def testAlias(self):
+        self.gotoUrlByLinkText(u"Перестроить алиасы")
+        self.gotoPage(self.pageAlias)
+        
