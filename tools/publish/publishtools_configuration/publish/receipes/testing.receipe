@@ -52,7 +52,7 @@ function xsm_clear_notifications
     if ! [ -w "$db" ] ; then
         return
     fi
-    echo 'delete * from notification;' | sqlite3 "$db"
+    echo 'DELETE FROM notification;' | sqlite3 "$db"
     echo "Notifications cleared successfully"
 }
 
