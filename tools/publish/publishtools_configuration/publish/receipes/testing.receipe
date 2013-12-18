@@ -49,11 +49,25 @@ function hook_reset
 function xsm_clear_notifications
 {
     db="content/ank/fizlesh.sqlite3"
-    if ! [ -w "$db" ] ; then
-        return
+    if [ -w "$db" ] ; then
+        echo 'DELETE FROM notification;' | sqlite3 "$db"
+        echo "Notifications table cleared successfully"
     fi
-    echo 'DELETE FROM notification;' | sqlite3 "$db"
-    echo "Notifications cleared successfully"
+
+    mc="content/cms/mailer.conf"
+    if [ -w "$mc" ] ; then
+        mail_test="vdm-photo@ya.ru"
+        cat > "$mc" <<EOF
+user-change:$mail_test
+content-change:$mail_test
+reg:$mail_test
+reg-managers:$mail_test
+reg-test:$mail_test
+reg-managers-test:$mail_test
+EOF
+        echo "Mailer config was reset to '$mail_test' address for each notification handler"
+    fi
+
 }
 
 function hook_end
