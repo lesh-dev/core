@@ -44,12 +44,25 @@ function hook_reset
     fi
 }
 
+# Some fizlesh.ru spikes
+# TODO: unhardcode fizlesh.sqlite name
+function xsm_clear_notifications
+{
+    db="content/ank/fizlesh.sqlite3"
+    if ! [ -w "$db" ] ; then
+        return
+    fi
+    echo 'delete * from notification;' | sqlite3 "$db"
+    echo "Notifications cleared successfully"
+}
+
 function hook_end
 {
     cd $target
     if [ $(pwd) != $target ]; then
         echo " *** ERROR *** Can't create save state"
     else
+        xsm_clear_notifications
         git init
         hook_commit
     fi
