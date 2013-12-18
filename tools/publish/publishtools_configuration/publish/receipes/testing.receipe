@@ -11,13 +11,13 @@ sympolicy=none
 function hook_begin
 {
     rm -rf $target
-    echo -en  # Add something useful is you want
+    echo -en  # Add something useful if you want
 }
 
 # This will be executed while publishing component preprod_copy
 function hook_preprod_copy
 {
-    echo -en  # Add something useful is you want
+    echo -en  # Add something useful if you want
 }
 
 # This will be executed while publishing component end
@@ -58,6 +58,5 @@ function hook_end
 User-Agent: *
 Disallow: /
 EOF
-    echo -en  # Add something useful is you want
     apachectl -k graceful
 }
