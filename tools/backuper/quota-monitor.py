@@ -39,7 +39,7 @@ def bQuotaExceeded(realSize, maxSize):
 def getExceedPercent(realSize, maxSize):
     if maxSize == 0:
         return 0
-    perc = (realSize * 100 / maxSize) - 100.0
+    perc = (realSize * 100 / maxSize) - QuotaThresholdPercent
     return "{0}%".format(decimal(perc))
 
 def decimal(n):
