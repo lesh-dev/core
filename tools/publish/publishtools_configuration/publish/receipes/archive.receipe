@@ -75,4 +75,7 @@ function hook_end
         tar czf "$DIR_NAME/arc-$ARC_NAME.tgz" "$i"
         rm -rf "$i"
     done
+
+    echo "Total space used by clones:"
+    du -hs $CLONE_DIR
 }
