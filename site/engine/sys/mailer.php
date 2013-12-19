@@ -168,7 +168,7 @@
             $body_html = xcms_prepare_html_template("notification-body");
             $body_html = str_replace('@@MESSAGE@', $mail_text_html, $body_html);
             $body_html = str_replace('@@HOST@', $host, $body_html);
-            $body_html = str_replace('@@REFERER@', $_SERVER['HTTP_REFERER'], $body_html);
+            $body_html = str_replace('@@REFERER@', htmlspecialchars($_SERVER['HTTP_REFERER']), $body_html);
             $body_html = str_replace('@@TIMESTAMP@', $hr_timestamp, $body_html);
         }
         if ($immediate)
