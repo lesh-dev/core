@@ -39,8 +39,11 @@ def bQuotaExceeded(realSize, maxSize):
 def getExceedPercent(realSize, maxSize):
     if maxSize == 0:
         return 0
-    perc = (realSize * 100 / maxSize) - QuotaThresholdPercent
+    return (realSize * 100 / maxSize) - 100.0
+
+def formatExceedPercent(perc):
     return "{0}%".format(decimal(perc))
+
 
 def decimal(n):
     return round(n, 1)
@@ -117,7 +120,11 @@ def bQuotaExceededForLine(line):
     
     #print "max size for ", line, ": ", maxSize, " real size: ", realSize
     if bQuotaExceeded(realSize, maxSize):
-        print "Quota " + getHumanValue(maxSize) + " exceeded for path " + path + " by " + getExceedPercent(realSize, maxSize)
+        perc = getExceedPercent(realSize, maxSize)
+        if perc < 0.0:
+            print "Quota " + getHumanValue(maxSize) + " is about to be exceeded for path " + path + ". Remaining quota: " + formatExceedPercent(-perc)
+        else:
+            print "Quota " + getHumanValue(maxSize) + " is exceeded for path " + path + " by " + formatExceedPercent(perc)
         return True
     return False
 
