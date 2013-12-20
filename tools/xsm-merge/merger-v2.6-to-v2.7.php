@@ -148,7 +148,7 @@
     while ($person_school = $sel->fetchArray(SQLITE3_ASSOC))
     {
         $person_school_id = $person["person_school_id"];
-        $person["member_department_id"] = 1;
+        $person_school["member_department_id"] = 1;
         xdb_insert_ai("person_school_new", "person_school_id", $person_school, $person_school, XDB_OVERRIDE_TS, XDB_NO_USE_AI, $db);
         ++$person_schools;
     }
