@@ -22,7 +22,7 @@ class XcmsAuthSetDuplicateEmailByAdmin(xtest_common.XcmsTest):
         inpPass1 = random_crap.randomText(10)
         inpName1 = u"Вася Тестов" + random_crap.randomText(6)
         
-        inpLogin1, inpEMail1, inpPass1, inpName1 = xtest_common.createNewUser(self, conf, inpLogin1, inpEMail1, inpPass1, inpName1, ["do_not_logout_admin"])
+        inpLogin1, inpEMail1, inpPass1, inpName1 = xtest_common.createNewUser(self, self.m_conf, inpLogin1, inpEMail1, inpPass1, inpName1, ["do_not_logout_admin"])
         
         # step 2: create another user
         inpLogin2 = "dup_mail2_" + random_crap.randomText(8)
@@ -32,7 +32,7 @@ class XcmsAuthSetDuplicateEmailByAdmin(xtest_common.XcmsTest):
         
         # create second user without re-login Admin
         
-        inpLogin2, inpEMail2, inpPass2, inpName2 = xtest_common.createNewUser(self, conf, inpLogin2, inpEMail2, inpPass2, inpName2, ["do_not_login_as_admin"])
+        inpLogin2, inpEMail2, inpPass2, inpName2 = xtest_common.createNewUser(self, self.m_conf, inpLogin2, inpEMail2, inpPass2, inpName2, ["do_not_login_as_admin"])
         
         print "logging as created first user. "
         if not xtest_common.performLogin(self, inpLogin1, inpPass1):
