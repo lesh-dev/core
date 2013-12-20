@@ -4,6 +4,8 @@
 function xsm_get_person_fields()
 {
     return array(
+        "department_id"=>"Отделение",
+
         "anketa_status"=>"Статус",
 
         "last_name"=>"Фамилия",

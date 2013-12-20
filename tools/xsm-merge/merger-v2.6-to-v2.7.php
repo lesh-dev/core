@@ -103,7 +103,7 @@
         foreign key (department_id) references department(department_id)
     );");
 
-    // course: move teacher info into separate course_teacher table
+    // person: add department_id fk
     xcms_log(XLOG_INFO, "Processing persons");
     $sel = xmerger_get_selector($db, "person");
     $persons = 0;
@@ -120,6 +120,44 @@
 
     $db->exec("ALTER TABLE person_new RENAME TO person");
     xcms_log(XLOG_INFO, "persons processed: $persons");
+
+    // person_school: add department_id fk
+    $db->exec(
+        "CREATE TABLE person_school_new (
+        person_school_id integer primary key autoincrement,
+        member_person_id integer not null, -- fk person
+        member_department_id integer not null, -- fk department
+        school_id integer not null, -- fk school
+        is_student text, -- является ли школьником на данной школе
+        is_teacher text, -- является ли преподом на данной школе
+        curatorship text, -- кураторство на данной школе enum:(никто, помкур, куратор)
+        current_class text, -- класс, в котором находится школьник
+            -- (для Летней школы надо договориться, какой именно класс мы ставим,
+            -- будущий или прошедший
+        courses_needed integer, -- потребное кол-во курсов для сдачи на школе
+        person_school_created text, -- utc timestamp
+        person_school_modified text, -- utc timestamp
+        foreign key (member_person_id) references person(person_id),
+        foreign key (member_department_id) references department(department_id),
+        foreign key (school_id) references school(school_id)
+        );");
+
+
+    $sel = xmerger_get_selector($db, "person_school");
+    $person_schools = 0;
+    while ($person_school = $sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $person_school_id = $person["person_school_id"];
+        $person["member_department_id"] = 1;
+        xdb_insert_ai("person_school_new", "person_school_id", $person_school, $person_school, XDB_OVERRIDE_TS, XDB_NO_USE_AI, $db);
+        ++$person_schools;
+    }
+
+    // rename table
+    $db->exec("DROP TABLE person_school");
+
+    $db->exec("ALTER TABLE person_school_new RENAME TO person_school");
+    xcms_log(XLOG_INFO, "person_schools processed: $person_schools");
 
     $db->exec("ALTER TABLE `school` ADD COLUMN `school_location` text;");
 

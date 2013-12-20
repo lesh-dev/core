@@ -3,6 +3,7 @@
 $person_school_fields = array(
     "member_person_id"=>"Участник",
     "school_id"=>"Школа",
+    "member_department_id"=>"Отделение",
     "is_student"=>"Школьник",
     "current_class"=>"Класс",
     "courses_needed"=>"Потребное кол-во зачётов",
@@ -171,6 +172,12 @@ function xsm_edit_person_school()
                 {?>
                     <input type="text" class="ankEdit" value="<?php echo htmlspecialchars($school['school_title']); ?>"
                         readonly="readonly" /><?php
+                }
+                elseif ($key == 'member_department_id')
+                {
+                    echo xsm_make_selector('department', 'department_id', $value,
+                        array('department_title'),
+                        "(1 = 1) ORDER BY department_id", $attr);
                 }
                 else
                 {?>
