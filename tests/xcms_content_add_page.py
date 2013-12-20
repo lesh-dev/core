@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap, time
-from xtest_config import XcmsTestConfig
 
 def htmlParagraph(x):
     return "<p>" + x + "</p>"
@@ -26,12 +25,6 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.specChars = random_crap.specialCharsWoAngle # without <>
         #TODO: BUG: remove this spike for Chrome
         self.wordOptions = ["english"]
-
-        conf = XcmsTestConfig()
-        self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
-        xtest_common.assertNoInstallerPage(self)
-
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
         
         self.testBaseEditing()
 
@@ -42,9 +35,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.testAlias()
         
     def testBaseEditing(self):
-        conf = XcmsTestConfig()
 
-        xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
+        xtest_common.performLoginAsAdmin(self, self.getAdminLogin(), self.getAdminPass())
 
         xtest_common.gotoAdminPanel(self)
         

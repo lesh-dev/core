@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap, time
-from xtest_config import XcmsTestConfig
 
 class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
     """
@@ -10,12 +9,6 @@ class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
     """
 
     def run(self):
-        self.setAutoPhpErrorChecking(True)
-
-        xtest_common.assertNoInstallerPage(self)
-
-        conf = XcmsTestConfig()
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
 
         # first, login as admin
         inpLogin = "dup_user_" + random_crap.randomText(8)
@@ -26,9 +19,9 @@ class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
         inpName1 = u"Вася " + random_crap.randomText(6)
         inpName2 = u"Петя " + random_crap.randomText(6)
 
-        inpLogin, inpEMail1, inpPass1, inpName1 = xtest_common.createNewUser(self, conf, inpLogin, inpEMail1, inpPass1, inpName1)
+        inpLogin, inpEMail1, inpPass1, inpName1 = xtest_common.createNewUser(self, self.m_conf, inpLogin, inpEMail1, inpPass1, inpName1)
 
-        inpLogin, inpEMail2, inpPass2, inpName2 = xtest_common.createNewUser(self, conf, inpLogin, inpEMail2, inpPass2, inpName2, ["do_not_validate"])
+        inpLogin, inpEMail2, inpPass2, inpName2 = xtest_common.createNewUser(self, self.m_conf, inpLogin, inpEMail2, inpPass2, inpName2, ["do_not_validate"])
 
         self.assertBodyTextNotPresent(u"Пользователь '" + inpLogin + u"' успешно создан")
 

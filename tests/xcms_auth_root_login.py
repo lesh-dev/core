@@ -4,7 +4,7 @@
 import xtest_common, random_crap
 from xtest_config import XcmsTestConfig
 
-class XcmsAuthRootLogin(xtest_common.XcmsTest):
+class XcmsAuthRootLogin(xtest_common.XcmsBaseTest):
 	"""
 	This test checks root login functional.
 	It does following steps:

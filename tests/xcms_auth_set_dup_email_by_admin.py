@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap, time
-from xtest_config import XcmsTestConfig
 
 class XcmsAuthSetDuplicateEmailByAdmin(xtest_common.XcmsTest):
     """
@@ -16,13 +15,7 @@ class XcmsAuthSetDuplicateEmailByAdmin(xtest_common.XcmsTest):
     """
     
     def run(self):
-        self.setAutoPhpErrorChecking(True)
-        
-        xtest_common.assertNoInstallerPage(self)
-        
-        conf = XcmsTestConfig()
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
-        
+       
         # step one: create first user
         inpLogin1 = "dup_mail1_" + random_crap.randomText(8)
         inpEMail1 = random_crap.randomEmail()
@@ -55,7 +48,7 @@ class XcmsAuthSetDuplicateEmailByAdmin(xtest_common.XcmsTest):
         
         # login as admin, enter user profile and change some fields.
         
-        xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
+        xtest_common.performLoginAsAdmin(self, self.getAdminLogin(), self.getAdminPass())
         
         xtest_common.gotoAdminPanel(self)
         xtest_common.gotoUserList(self)

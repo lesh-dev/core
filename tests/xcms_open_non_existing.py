@@ -2,9 +2,8 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
 
-class XcmsOpenNonExisting(xtest_common.XcmsTest):
+class XcmsOpenNonExisting(xtest_common.XcmsBaseTest):
 	"""
 	This test checks '404 page' handling in XCMS functional
 	Steps:

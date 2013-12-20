@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
 
 class XcmsSiteOpenRenamedPages(xtest_common.XcmsTest):
 	"""

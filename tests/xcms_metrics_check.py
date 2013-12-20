@@ -2,9 +2,8 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
 
-class XcmsMetricsCheck(xtest_common.XcmsTest):
+class XcmsMetricsCheck(xtest_common.XcmsBaseTest):
 	"""
 	This test checks if metrics counter successfully wiped off from test website.
 	"""

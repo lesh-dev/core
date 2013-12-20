@@ -56,16 +56,10 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
 
 
     def run(self):
-        conf = XcmsTestConfig()
-        self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
-        xtest_common.assertNoInstallerPage(self)
+        
+        adminLogin = self.getAdminLogin()
+        adminPass = self.getAdminPass()
 
-        testMailPrefix = conf.getAnketaNamePrefix()
-
-        adminLogin = conf.getAdminLogin()
-        adminPass = conf.getAdminPass()
-
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), adminLogin, adminPass)
         xtest_common.performLoginAsAdmin(self, adminLogin, adminPass)
 
         xtest_common.gotoAllPeople(self)
@@ -73,7 +67,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(u"Добавить участника")
 
         # generate
-        inpLastName = testMailPrefix + u"Зачётов" + random_crap.randomText(5);
+        inpLastName = u"Зачётов" + random_crap.randomText(5);
         inpFirstName = u"Андрей_" + random_crap.randomText(3)
         inpMidName = u"Михалыч_" + random_crap.randomText(3)
 

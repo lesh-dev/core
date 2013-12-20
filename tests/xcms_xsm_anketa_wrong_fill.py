@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
 
 class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
     """
@@ -22,14 +21,8 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
     
     def run(self):
         # anketa fill negative test:
-        
-        self.setAutoPhpErrorChecking(True)
-        xtest_common.assertNoInstallerPage(self)
-
-        conf = XcmsTestConfig()
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
-        
-        testMailPrefix = conf.getAnketaNamePrefix()
+                
+        testMailPrefix = self.m_conf.getAnketaNamePrefix()
             
         self.gotoRoot()
         
@@ -137,8 +130,8 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
             
         # now login as admin
     
-        adminLogin = conf.getAdminLogin()
-        adminPass = conf.getAdminPass()
+        adminLogin = self.getAdminLogin()
+        adminPass = self.getAdminPass()
 
         xtest_common.performLoginAsAdmin(self, adminLogin, adminPass)
         

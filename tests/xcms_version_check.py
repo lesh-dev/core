@@ -11,8 +11,6 @@ class XcmsVersionCheck(xtest_common.XcmsTest):
     """
     def run(self):
         
-        xtest_common.assertNoInstallerPage(self)
-
         self.gotoRoot()
 
         # frontend 
@@ -27,10 +25,7 @@ class XcmsVersionCheck(xtest_common.XcmsTest):
         if not m:
             self.failTest("Site version does not match expected regexp. ");
         
-        conf = XcmsTestConfig()
-        
-        xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
-        
+        xtest_common.performLoginAsAdmin(self, self.getAdminLogin(), self.getAdminPass())
         xtest_common.gotoAdminPanel(self)
         
         # backend

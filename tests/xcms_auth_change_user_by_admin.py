@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap, time
-from xtest_config import XcmsTestConfig
 
 class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
     """
@@ -12,20 +11,13 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
     """
             
     def run(self):
-        conf = XcmsTestConfig()
-        self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
-        
-        xtest_common.assertNoInstallerPage(self)
-        
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
-        
         # first, login as admin
         inpLogin = "priv_user_" + random_crap.randomText(8)
         inpEMail = random_crap.randomEmail()
         inpPass = random_crap.randomText(10)
         inpName = u"Саша Тестов" + random_crap.randomText(6)
 
-        inpLogin, inpEMail, inpPass, inpName = xtest_common.createNewUser(self, conf, inpLogin, inpEMail, inpPass, inpName)
+        inpLogin, inpEMail, inpPass, inpName = xtest_common.createNewUser(self, self.m_conf, inpLogin, inpEMail, inpPass, inpName)
         
         print "logging as created user. "
         if not xtest_common.performLogin(self, inpLogin, inpPass):
@@ -41,7 +33,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
 
         # login as admin, enter user profile and change some fields.
         
-        xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
+        xtest_common.performLoginAsAdmin(self, self.getAdminLogin(), self.getAdminPass())
     
         xtest_common.gotoAdminPanel(self)
         xtest_common.gotoUserList(self)
@@ -77,7 +69,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         
         # ---------------------- 2nd stage: Editor
         
-        xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
+        xtest_common.performLoginAsAdmin(self, self.getAdminLogin(), self.getAdminPass())
         
         xtest_common.gotoAdminPanel(self)
         xtest_common.gotoUserList(self)
@@ -123,7 +115,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         xtest_common.performLogoutFromAdminPanel(self)
 
         # -------------------------------------- 3 stage: anketa manager
-        xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
+        xtest_common.performLoginAsAdmin(self, self.getAdminLogin(), self.getAdminPass())
         
         xtest_common.gotoAdminPanel(self)
         xtest_common.gotoUserList(self)

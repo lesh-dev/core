@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
 
 class XcmsSiteOpenAllPages(xtest_common.XcmsTest):
 	"""
@@ -11,10 +10,6 @@ class XcmsSiteOpenAllPages(xtest_common.XcmsTest):
 	* navigates to all current pages and checks some specific content on each page plus PHP errors.
 	"""
 	def run(self):
-		self.setAutoPhpErrorChecking(True)
-		
-		xtest_common.assertNoInstallerPage(self)
-
 		self.gotoRoot()
 		
 		self.gotoUrlByLinkText(u"Главная")

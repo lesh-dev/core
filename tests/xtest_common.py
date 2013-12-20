@@ -5,8 +5,9 @@
 import sys, time
 
 import selenium_test, random_crap
+from xtest_config import XcmsTestConfig
 
-class XcmsTest(selenium_test.SeleniumTest):
+class XcmsBaseTest(selenium_test.SeleniumTest):
     # override base error-checking method
     def checkPageErrors(self):
         super(XcmsTest, self).checkPageErrors()
@@ -15,6 +16,22 @@ class XcmsTest(selenium_test.SeleniumTest):
         for stopper in stoppers:
             if stopper in source:
                 self.failTest("Forbidden crap '" + stopper + "' found on page. ")
+    
+class XcmsTest(XcmsBaseTest):
+    def init(self):
+        super(XcmsTest, self).init()
+
+        self.m_conf = XcmsTestConfig()
+        self.setAutoPhpErrorChecking(self.m_conf.getPhpErrorCheckFlag())
+        xtest_common.assertNoInstallerPage(self)
+        #xtest_common.setTestNotifications(self, self.m_conf.getNotifyEmail(), self.m_conf.getAdminLogin(), self.m_conf.getAdminPass())
+        
+    def getAdminLogin(self):
+        return self.m_conf.getAdminLogin()
+
+    def getAdminPass(self):
+        return self.m_conf.getAdminPass()
+        
     
 def isInstallerPage(test):
     return test.curUrl().endswith("install.php")

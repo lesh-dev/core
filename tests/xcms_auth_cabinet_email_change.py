@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
 
 class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
     """
@@ -15,12 +14,6 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
     """
 
     def run(self):
-        self.setAutoPhpErrorChecking(True)
-
-        xtest_common.assertNoInstallerPage(self)
-
-        conf = XcmsTestConfig()
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
 
         inpLogin1 = "cab_email_" + random_crap.randomText(6)
         inpLogin2 = "cab_email_" + random_crap.randomText(6)
@@ -31,9 +24,9 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         inpName1 = u"Вася " + random_crap.randomText(6)
         inpName2 = u"Петя " + random_crap.randomText(6)
 
-        inpLogin1, inpEMail1, inpPass1, inpName1 = xtest_common.createNewUser(self, conf, inpLogin1, inpEMail1, inpPass1, inpName1)
+        inpLogin1, inpEMail1, inpPass1, inpName1 = xtest_common.createNewUser(self, self.m_conf, inpLogin1, inpEMail1, inpPass1, inpName1)
 
-        inpLogin2, inpEMail2, inpPass2, inpName2 = xtest_common.createNewUser(self, conf, inpLogin2, inpEMail2, inpPass2, inpName2)
+        inpLogin2, inpEMail2, inpPass2, inpName2 = xtest_common.createNewUser(self, self.m_conf, inpLogin2, inpEMail2, inpPass2, inpName2)
 
         print "logging as first created user. "
         if not xtest_common.performLogin(self, inpLogin1, inpPass1):

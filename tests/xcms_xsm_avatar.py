@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
 
 class XcmsXsmAvatar(xtest_common.XcmsTest):
     """
@@ -23,17 +22,12 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
     """
 
     def run(self):
-        conf = XcmsTestConfig()
-        self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
-        xtest_common.assertNoInstallerPage(self)
 
+        testMailPrefix = self.m_conf.getAnketaNamePrefix()
 
-        testMailPrefix = conf.getAnketaNamePrefix()
+        adminLogin = self.getAdminLogin()
+        adminPass = self.getAdminPass()
 
-        adminLogin = conf.getAdminLogin()
-        adminPass = conf.getAdminPass()
-
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), adminLogin, adminPass)
         xtest_common.performLoginAsAdmin(self, adminLogin, adminPass)
 
         xtest_common.gotoAllPeople(self)

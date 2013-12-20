@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
 
 class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     """
@@ -64,15 +63,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     def run(self):
         # anketa fill positive test:
         # all fields are filled with correct values.
-        conf = XcmsTestConfig()
-
-        self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
-        xtest_common.assertNoInstallerPage(self)
-        
-        testMailPrefix = conf.getAnketaNamePrefix()
-        
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
-            
+                       
         self.gotoRoot()
         
         #navigate to anketas
@@ -82,7 +73,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         self.assertBodyTextPresent(u"Регистрационная анкета")
             
         # generate
-        inpLastName = testMailPrefix + u"Чапаев" + random_crap.randomText(5);
+        inpLastName = u"Чапаев" + random_crap.randomText(5);
         inpFirstName = u"Василий" + random_crap.randomText(3)
         inpMidName = u"Иваныч" + random_crap.randomText(3)
         
@@ -129,8 +120,8 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
             
     # now login as admin
     
-        adminLogin = conf.getAdminLogin()
-        adminPass = conf.getAdminPass()
+        adminLogin = self.getAdminLogin()
+        adminPass = self.getAdminPass()
     
         xtest_common.performLoginAsAdmin(self, adminLogin, adminPass)
         

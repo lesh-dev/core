@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap, time
-from xtest_config import XcmsTestConfig
 
 class XcmsAuthAddNewUser(xtest_common.XcmsTest):
     """
@@ -20,17 +19,7 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
     """
 
     def run(self):
-#       self.drv().getEval("window.resizeTo(X, Y); window.moveTo(0,0);")
-        conf = XcmsTestConfig()
-        self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
-
-        xtest_common.assertNoInstallerPage(self)
-
-
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
-
         self.gotoRoot()
-
 
         # first, login as admin
         inpLogin = "an_test_user_" + random_crap.randomText(8)
@@ -38,7 +27,7 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         inpPass = random_crap.randomText(10)
         inpName = u"Вася Пупкин" + random_crap.randomText(6)
 
-        inpLogin, inpEMail, inpPass, inpName = xtest_common.createNewUser(self, conf, inpLogin, inpEMail, inpPass, inpName)
+        inpLogin, inpEMail, inpPass, inpName = xtest_common.createNewUser(self, self.m_conf, inpLogin, inpEMail, inpPass, inpName)
 
         print "logging as created user. "
         if not xtest_common.performLogin(self, inpLogin, inpPass):
