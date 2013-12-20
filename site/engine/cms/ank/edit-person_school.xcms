@@ -175,7 +175,7 @@ function xsm_edit_person_school()
                 }
                 elseif ($key == 'member_department_id')
                 {
-                    echo xsm_make_selector('department', 'department_id', $value,
+                    echo xsm_make_selector('department', 'member_department_id', $value,
                         array('department_title'),
                         "(1 = 1) ORDER BY department_id", $attr);
                 }

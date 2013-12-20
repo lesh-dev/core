@@ -262,6 +262,14 @@ function xsm_draw_fio_filter()
         и Богдана Немихульского, но НЕ найдёт Мишу Данилкина (имена условны)" /><?php
 }
 
+/**
+  * @param table_name Table to fetch from
+  * @param name HTML element name (and post key)
+  * @param current_key Current vey value (pre-selected)
+  * @param title_keys What keys use to form element titles
+  * @param aux_cond Condition to pass in WHERE clause
+  * @param attr HTML attributes for SELECT element
+  **/
 function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_cond = '', $attr = '')
 {
     $db = xdb_get();
