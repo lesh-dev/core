@@ -14,10 +14,10 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
     * correct all errors and finally submit form.
     """
     
-    def trySubmit(self, forbidReason = None):        
+    def trySubmit(self, reason = None):        
         self.clickElementById("submit-anketa-button")
-        if forbidReason:
-            self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage(), forbidReason)
+        if reason:
+            self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage(), reason)
     
     def run(self):
         # anketa fill negative test:
