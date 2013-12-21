@@ -1,8 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import selenium_test, random_crap
+import selenium_test, random_crap, re
 from xtest_config import XcmsTestConfig
+from bawlib import isVoid
 
 class XcmsBaseTest(selenium_test.SeleniumTest):
     """
@@ -22,6 +23,21 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         for stopper in stoppers:
             if stopper in source:
                 self.failTest("Forbidden crap '" + stopper + "' found on page. ")
+        
+        self.checkDocType()
+    
+    def checkDocType(self):
+        firstLine = self.getPageSourceFirstLine()
+        if not "<!DOCTYPE" in firstLine:
+            if self.checkSourceTextPresent("Требуется аутентификация"):
+                self.logAdd("THIS WAS AUTH PAGE")
+            self.failTest("DOCTYPE directive not found on page " + self.curUrl());
+    
+    def getPageSourceFirstLine(self):
+        source = self.getPageSource()
+        newlinePos = source.find("\n")
+        return source[0:newlinePos]
+        
                 
     def isInstallerPage(self):
         return self.curUrl().endswith("install.php")
@@ -60,7 +76,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def gotoCreatePage(self, reason = ""):
         self.gotoUrlByLinkText(u"Подстраница", reason)
         
-    def getAnketaPageHeader(self)
+    def getAnketaPageHeader(self):
         return u"Регистрационная анкета"
     
     
@@ -185,7 +201,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         return u"Админка"
     
     def getAnketaSuccessSubmitMessage(self):
-        return = u"Спасибо, Ваша анкета принята!"
+        return u"Спасибо, Ваша анкета принята!"
     
     def getAdminPanelLink(self):
         return self.getUrlByLinkText(self.getAdminPanelLinkName())
