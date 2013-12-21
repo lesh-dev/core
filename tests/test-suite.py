@@ -64,7 +64,7 @@ try:
     testSet, args = getOption(["-s", "--set"], args)
     doList, args = getSingleOption(["-l", "--list"], args)
     doFullList, args = getSingleOption(["-f", "--full-list"], args)
-    breakOnFatals, args = getSingleOption(["-b", "--break"], args)
+    breakOnErrors, args = getSingleOption(["-b", "--break"], args)
     
 except CliParamError as e:
     print "Option syntax error: ", e
@@ -94,7 +94,10 @@ else:
 
 if doInstallerTest:
     print "Running installer test. "
-    RunTest(test_xcms_installer.TestXcmsInstaller(baseUrl, args))
+    result = RunTest(test_xcms_installer.TestXcmsInstaller(baseUrl, args))
+    if result != 0:
+        print "Installer test not succeded, stopping suite. "
+        sys.exit(result)
  
 setModuleName = "auto_test_set"
 
@@ -148,12 +151,14 @@ try:
                 
             testDetailedStats[test.getName()] = result
 
-            if breakOnFatals and result == 2:
+            if result == 2:
                 print "Fatal error detected, stopping test suite."
                 break
-            #if breakOnErrors and result == 1:
-                #print "Fatal error detected, stopping test suite."
-                #break
+            if breakOnErrors and result == 1:
+                print "Test error detected, stopping test suite."
+                break
+    
+    # test loop end ------------------
     
     if specTest and not specTestFound:
         print "Specified test was not found in test suite. "

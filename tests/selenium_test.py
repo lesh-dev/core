@@ -59,7 +59,7 @@ def RunTest(test):
     try:
         test.init()
         test.run()
-        print "Test " + test.getName() + " passed"
+        test.logAdd("TEST PASSED", "action")
         return 0
     except TestFatal as e:
 #       test.printActionLog()
@@ -74,13 +74,13 @@ def RunTest(test):
         test.handleShutdown(e)
         return 0
     except NoSuchWindowException as e:
-        print "Seems like browser window have been closed. "
+        test.logAdd("Seems like browser window have been closed. ", "error")
         return 2
     except URLError as e:
-        print "URL error occured. Seems like browser connection error occured (window has been closed, etc). "
+        test.logAdd("URL error occured. Seems like browser connection error occured (window has been closed, etc). ", "error")
         return 2
     except HTTPException as e:
-        print "HTTP error occured. Seems like browser connection error occured (window has been closed, etc). "
+        test.logAdd("HTTP error occured. Seems like browser connection error occured (window has been closed, etc). ", "error")
         return 2
     except Exception as e:
         print "Generic test exception: ", e
@@ -99,7 +99,6 @@ def getValue(ele):
 #main API wrapper for Webdriver.
 class SeleniumTest(object):
     def __init__(self, baseUrl, params = []):
-#       print "Init SeleniumTest"
         self.m_testName = self.__class__.__name__
         self.m_baseUrl = baseUrl
         self.m_params = params
@@ -133,7 +132,7 @@ class SeleniumTest(object):
         if self.useChrome():
             chromePath = "/usr/bin/chromedriver"
             if not os.path.exists(chromePath):
-                self.failTest("Chrome Driver is not installed. Please obtain latest version from\nhttp://chromedriver.storage.googleapis.com/index.html ")
+                self.fatalTest("Chrome Driver is not installed. Please obtain latest version from\nhttp://chromedriver.storage.googleapis.com/index.html ")
             self.m_driver = webdriver.Chrome("/usr/bin/chromedriver")
         else:
             profileDir = "./test_profile"
@@ -155,10 +154,9 @@ class SeleniumTest(object):
             self.m_driver.maximize_window()     
             
     def __del__(self):
-#        print "Destructing SeleniumTest"
         if hasattr(self, 'm_driver'):
             if self.m_closeOnExit:
-#                print "Closing driver"
+                self.logAdd("Closing webdriver. ")
                 self.m_driver.quit()
 
     def getBaseUrl(self):
@@ -179,25 +177,26 @@ class SeleniumTest(object):
         return opt
             
     def shutdown(self, exitCode = 0):
-        sys.exit(exitCode)
+        return exitCode # sys.exit(exitCode)
         
     def handleShutdown(self, exc):
-        self.shutdown(0)
+        return self.shutdown(0)
         
     def handleException(self, exc):
-        print "TEST " + self.getName() + " ERROR: " + userSerialize(exc.message)
+        self.logAdd("TEST ERROR: " + userSerialize(exc.message), "error")
         traceback.print_exc()
-        self.shutdown(2)
+        return self.shutdown(2)
                 
     def handleTestFail(self, exc):
         #self.m_driver.execute_script("alert('Test failed! See console log for details. ');")
-        print "TEST " + self.getName() + " FAILED: " + userSerialize(exc.message)
-        self.shutdown(1)
+        self.logAdd("TEST FAILED: " + userSerialize(exc.message), "error")
+        return self.shutdown(1)
 
     def handleTestFatal(self, exc):
         #self.m_driver.execute_script("alert('Test fataled! See logs and check your test/environment. ');")
-        print "TEST " + self.getName() + " FATALED: " + userSerialize(exc.message)
-        self.shutdown(2)
+        self.logAdd("TEST FATALED: " + userSerialize(exc.message), "fatal")
+        traceback.print_exc()
+        return self.shutdown(2)
 
     def getActionLog(self):
         # return copy of navigation log
@@ -216,7 +215,7 @@ class SeleniumTest(object):
             #indicate that log was already created
             self.m_logStarted = True
         except IOError:
-            raise RuntimeError("Cannot create log file " + userSerialize(self.m_logFile) + ". ")
+            self.fatalTest("Cannot create log file " + userSerialize(self.m_logFile) + ". ")
             
     def setCloseOnExit(self, flag):
         self.m_closeOnExit = flag;
@@ -383,10 +382,8 @@ class SeleniumTest(object):
                 self.getElementById(eleId).clear()
 
             self.addAction("fill", "element id: '" + eleId + "', text: " + wrapIfLong(userSerialize(text)) + " ")
-            #print "sending keys" , text
             ele = self.getElementById(eleId)
-            #print "got element "
-            #print "dir", dir(ele)
+            self.logAdd("Sending text to element '" + eleId + "'")
             ele.send_keys(text)
             return getValue(self.getElementById(eleId))
         except InvalidElementStateException as e:
@@ -568,13 +565,17 @@ class SeleniumTest(object):
         
     def checkBodyTextPresent(self, text):
         return self.checkTextPresent("/html/body", text)
+
+    def fatalTest(self, errorText):
+        self.logAdd("TEST FATALED: " + errorText, "fatal")
+        raise TestError(errorText)
         
     def failTest(self, errorText):
-        self.logAdd(errorText)
+        self.logAdd("TEST FAILED: " + errorText, "error")
         raise TestError(errorText)
 
     def failTestWithItemNotFound(self, errorText):
-        self.logAdd(errorText)
+        self.logAdd("TEST FAILED: " + errorText, "error")
         raise ItemNotFound(errorText)
 
     def assertTextPresent(self, xpath, text, reason = ""):
@@ -601,13 +602,13 @@ class SeleniumTest(object):
     def checkEmptyParam(self, stringOrList, methodName):
         if isList(stringOrList):
             if len(stringOrList) == 0:
-                raise RuntimeError("Empty list passed to " + methodName)
+                self.fatalTest("Empty list passed to " + methodName)
             for text in stringOrList:
                 if isVoid(text):
-                    raise RuntimeError("Empty string passed in the list to " + methodName)
+                    self.fatalTest("Empty string passed in the list to " + methodName)
         else:       
             if isVoid(stringOrList):
-                raise RuntimeError("Empty param passed to " + methodName)
+                self.fatalTest("Empty param passed to " + methodName)
 
     def getUrlByLinkText(self, urlText, optionList = [], reason = ""):
         
@@ -648,17 +649,16 @@ class SeleniumTest(object):
             xpath = "//a[" + sibling + "='" + urlText + "']"
             urls = self.m_driver.find_elements_by_xpath(xpath)
 
-            #print "Type = ", type(urls)
             if not isList(urls):
-                raise RuntimeError("clickIndexedElementByText(): Something bad retrieved from find_elements_by_xpath: it's not a list of WebElement. ")
+                self.fatalTest("clickIndexedElementByText(): Something bad retrieved from find_elements_by_xpath: it's not a list of WebElement. ")
                 
-            print "Urls list size:", len(urls)
+            self.logAdd("Urls list size: " + userSerialize(len(urls)))
             if index < len(urls):
                 url = urls[index]
                 href = url.get_attribute("href")
                 self.logAdd("Found URL with index " + userSerialize(index) + ": " + href)
                 if isVoid(href):
-                    raise RuntimeError("clickIndexedElementByText(): empty 'href' attribute of a-element with index " + userSerialize(index) )                    
+                    self.fatalTest("clickIndexedElementByText(): empty 'href' attribute of a-element with index " + userSerialize(index) )                    
                 self.gotoSite(href)
             else:
                 self.failTest("No index '" + userSerialize(index) + "' in URL array with link text " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". ")
@@ -672,20 +672,19 @@ class SeleniumTest(object):
             if not self.m_logStarted:
                 self.logStart()
                 
-            logFile = open(self.m_logFile, 'a')
             fullLogText = self.getName() + "[" + logLevel + "]: " + text + "\n"
+            print fullLogText.strip()
+            logFile = open(self.m_logFile, 'a')
             logFile.write(fullLogText.encode("UTF-8"))
-            print fullLogText
             logFile.close()
         except IOError:
-            raise RuntimeError("Cannot write message to log file " + userSerialize(self.m_logFile) + ". ")
+            self.fatalTest("Cannot write message to log file " + userSerialize(self.m_logFile) + ". ")
         
     
     def getPageSource(self):
         return self.m_driver.page_source
         
     def checkPhpErrors(self):
-        #print dir(self.m_driver);
         pageText = self.getPageSource()
         susp = ["Notice:", "Error:", "Warning:", "Fatal error:", "Parse error:"];
         for word in susp:

@@ -29,7 +29,7 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
 
         self.gotoAllPeople()
         self.gotoAddPerson()
-
+        
         # generate
         inpLastName = testMailPrefix + u"Аватаров" + random_crap.randomText(5);
         inpFirstName = u"Петр_" + random_crap.randomText(3)
