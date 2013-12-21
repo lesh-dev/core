@@ -30,7 +30,7 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
 
         print "logging as created user. "
-        if not xtest_common.performLogin(self, inpLogin, inpPass):
+        if not self.performLogin(inpLogin, inpPass):
             self.failTest("Cannot login as newly created user. ")
 
         # logout self

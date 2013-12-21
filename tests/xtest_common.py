@@ -13,7 +13,7 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
     """
     # override base error-checking method
     def checkPageErrors(self):
-        super(XcmsTest, self).checkPageErrors()
+        super(XcmsBaseTest, self).checkPageErrors()
         source = self.getPageSource()
         stoppers = ["<!#", "#!>"]
         for stopper in stoppers:
@@ -40,42 +40,64 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.m_conf = XcmsTestConfig()
         self.setAutoPhpErrorChecking(self.m_conf.getPhpErrorCheckFlag())
         self.maximizeWindow()
-    
-class XcmsTest(XcmsTestWithConfig):
-    """
-        generic Xcms test
-    """
-    def init(self):
-        print "XcmsTest init"
-        super(XcmsTest, self).init()
-        # 
-        self.assertNoInstallerPage()
-        #xtest_common.setTestNotifications(self, self.m_conf.getNotifyEmail(), self.m_conf.getAdminLogin(), self.m_conf.getAdminPass())
         
-    def getAdminLogin(self):
-        return self.m_conf.getAdminLogin()
+    def setTestNotifications(self):
+        
+        emailString = self.m_conf.getNotifyEmail()
+        
+        self.performLoginAsAdmin()
+        self.gotoAdminPanel()
+        self.gotoUrlByLinkText(u"Уведомления")
 
-    def getAdminPass(self):
-        return self.m_conf.getAdminPass()
-    
-    def performLogout(self):
-        self.logAdd("performLogout")
-        self.addAction("user-logout")
-        self.gotoPage("/?&mode=logout&ref=ladmin")
+        self.fillElementById("edtg_user-change", emailString);
+        self.fillElementById("edtg_content-change", emailString);
 
+        self.fillElementById("edtg_reg", emailString);
+
+        self.fillElementById("edtg_reg-test", emailString);
+        self.fillElementById("edtg_reg-managers", emailString);
+        self.fillElementById("edtg_reg-managers-test", emailString);
+
+        self.clickElementById("editTag")
+        self.performLogout()
+
+    def checkTestNotifications(self):
+        """
+            check if test notification is set properly (it's done by 'publish testing' script).
+        """
+        
+        emailString = self.m_conf.getNotifyEmail()
+        
+        self.performLoginAsAdmin()
+        self.gotoAdminPanel()
+        self.gotoUrlByLinkText(u"Уведомления")
+
+        reason = "Notifications were not set properly. "
+        
+        self.assertElementValueById("edtg_user-change", emailString, reason)
+        self.assertElementValueById("edtg_content-change", emailString, reason)
+
+        self.assertElementValueById("edtg_reg", emailString, reason)
+
+        self.assertElementValueById("edtg_reg-test", emailString, reason)
+        self.assertElementValueById("edtg_reg-managers", emailString, reason)
+        self.assertElementValueById("edtg_reg-managers-test", emailString, reason)
+
+        self.performLogout()
+        
     def performLoginAsAdmin(self):
         login = self.getAdminLogin()
         password = self.getAdminPass()
         self.logAdd("performLoginAsAdmin")
-        if not performLogin(test, login, password):
+        if not self.performLogin(login, password):
             self.logAdd("Admin authorization failed")
-            raise selenium_test.TestError("Cannot perform Admin authorization as " + login + "/" + password)
+            self.failTest("Cannot perform Admin authorization as " + login + "/" + password)
 
         self.logAdd("performLoginAsAdmin(): checking admin panel link")
 
         #check that we have entered the CP.
         # just chech that link exists.
-        cpUrl = getAdminPanelLink(test)
+        cpUrl = self.getAdminPanelLink()
         #test.gotoSite(cpUrl)
     
     def performLogin(self, login, password):
@@ -117,9 +139,45 @@ class XcmsTest(XcmsTestWithConfig):
 
         return True
     
+    def getAdminLogin(self):
+        return self.m_conf.getAdminLogin()
+
+    def getAdminPass(self):
+        return self.m_conf.getAdminPass()
+    
+    def performLogout(self):
+        self.logAdd("performLogout")
+        self.addAction("user-logout")
+        self.gotoPage("/?&mode=logout&ref=ladmin")
+
+    
     def getAdminPanelLink(self):
         return self.getUrlByLinkText(u"Админка")
     
+    def gotoAuthLink(self):
+        self.logAdd("gotoAuthLink: going to authenticate. ")
+        self.gotoUrlByLinkText(u"Авторизация")
+
+    def getAuthLink(self):
+        return self.getUrlByLinkText(u"Авторизация")
+
+    def gotoAdminPanel(self):
+        self.logAdd("gotoAdminPanel: going to admin control panel. ")
+        self.gotoUrlByLinkText(u"Админка")
+        
+        
+    
+class XcmsTest(XcmsTestWithConfig):
+    """
+        generic Xcms test
+    """
+    def init(self):
+        print "XcmsTest init"
+        super(XcmsTest, self).init()
+        # 
+        self.assertNoInstallerPage()
+        #xtest_common.setTestNotifications(self, self.m_conf.getNotifyEmail(), self.m_conf.getAdminLogin(), self.m_conf.getAdminPass())
+            
     def createNewUser(self, login, email, password, name, auxParams = []):
         self.logAdd("createNewUser( login: " + login + "', email: " + email + ", password: " + password + ", name: " + name + " )")
 
@@ -209,14 +267,6 @@ class XcmsTest(XcmsTestWithConfig):
         if not "do_not_logout_admin" in auxParams:
             self.performLogout()
     
-    def gotoAuthLink(self):
-        self.logAdd("gotoAuthLink: going to authenticate. ")
-        self.gotoUrlByLinkText(u"Авторизация")
-
-    def gotoAdminPanel(self):
-        self.logAdd("gotoAdminPanel: going to admin control panel. ")
-        self.gotoUrlByLinkText(u"Админка")
-
     def gotoCabinet(self):
         self.logAdd("gotoCabinet: going to user control panel (cabinet). ")
         self.gotoUrlByLinkText(u"Личный кабинет")
@@ -225,8 +275,6 @@ class XcmsTest(XcmsTestWithConfig):
         self.logAdd("gotoAllPeople: going to 'All People' menu. ")
         self.gotoUrlByLinkText(u"Все люди")
 
-    def getAuthLink(self):
-        return self.getUrlByLinkText(u"Авторизация")
 
     def gotoBackToAnketaView(self):
         self.gotoUrlByLinkText(u"Вернуться к просмотру участника")
@@ -267,50 +315,6 @@ class XcmsTest(XcmsTestWithConfig):
         self.assertBodyTextPresent(u"Комментарий успешно сохранён")
         self.gotoBackToAnketaView()
         return newCommentText
-
-    def setTestNotifications(self):
-        
-        emailString = self.m_conf.getNotifyEmail()
-        
-        self.performLoginAsAdmin()
-        self.gotoAdminPanel()
-        self.gotoUrlByLinkText(u"Уведомления")
-
-        self.fillElementById("edtg_user-change", emailString);
-        self.fillElementById("edtg_content-change", emailString);
-
-        self.fillElementById("edtg_reg", emailString);
-
-        self.fillElementById("edtg_reg-test", emailString);
-        self.fillElementById("edtg_reg-managers", emailString);
-        self.fillElementById("edtg_reg-managers-test", emailString);
-
-        self.clickElementById("editTag")
-        self.performLogout()
-
-    def checkTestNotifications(self):
-        """
-            check if test notification is set properly (it's done by 'publish testing' script).
-        """
-        
-        emailString = self.m_conf.getNotifyEmail()
-        
-        self.performLoginAsAdmin()
-        self.gotoAdminPanel()
-        self.gotoUrlByLinkText(u"Уведомления")
-
-        reason = "Notifications were not set properly. "
-        
-        self.assertElementValueById("edtg_user-change", emailString, reason)
-        self.assertElementValueById("edtg_content-change", emailString, reason)
-
-        self.assertElementValueById("edtg_reg", emailString, reason)
-
-        self.assertElementValueById("edtg_reg-test", emailString, reason)
-        self.assertElementValueById("edtg_reg-managers", emailString, reason)
-        self.assertElementValueById("edtg_reg-managers-test", emailString, reason)
-
-        self.performLogout()
 
     def gotoUserList(self):
         self.logAdd("Navigating to user list from admin CP. ")
