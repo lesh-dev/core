@@ -29,8 +29,12 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
     def checkDocType(self):
         firstLine = self.getPageSourceFirstLine()
         if not "<!DOCTYPE" in firstLine:
-            if self.checkSourceTextPresent("Требуется аутентификация"):
-                self.logAdd("THIS WAS AUTH PAGE")
+            if self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный"]):
+                self.logAdd("DOCTYPE not detected, but this page seems to be Auth panel. ", "warning")
+                return
+            if self.checkSourceTextPresent(u"Сменить пароль"):
+                self.logAdd("DOCTYPE not detected, but this page seems to be Admin panel. ", "warning")
+                return
             self.failTest("DOCTYPE directive not found on page " + self.curUrl());
     
     def getPageSourceFirstLine(self):
@@ -79,6 +83,8 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def getAnketaPageHeader(self):
         return u"Регистрационная анкета"
     
+    def getUserListLinkName(self):
+        return u"Пользователи"         
     
     def setTestNotifications(self):
         
@@ -381,9 +387,6 @@ class XcmsTest(XcmsTestWithConfig):
         
     def getEditPageInPlaceLinkName(self):
         return u"Редактировать"        
-
-    def getUserListLinkName(self):
-        return u"Пользователи"        
 
     def getEntranceLinkName(self):
         return u"Поступление"        

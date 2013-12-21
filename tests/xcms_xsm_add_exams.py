@@ -16,8 +16,6 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     * add some courses
     * set exam status
     """
-    listenedStatus = u"Прослушан"
-
     def addExamsById(self, examIdList):
         for exam in examIdList:
             self.addExamById(exam)
@@ -32,7 +30,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     def setExamPassed(self, examLineList):
         for examLine in examLineList:            
             # <a><span>Прослушан</span></a>
-            self.gotoIndexedUrlByLinkText(listenedStatus, examLine, "span")
+            self.gotoIndexedUrlByLinkText(self.m_listenedStatus, examLine, "span")
             self.setOptionValueByIdAndValue("exam_status-selector", "passed")
             
             examComment = u"Коммент к сданному зачёту: " + random_crap.randomText(6)
@@ -46,7 +44,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     def setExamNotPassed(self, examLineList):
         for examLine in examLineList:            
             # <a><span>Прослушан</span></a>
-            self.gotoIndexedUrlByLinkText(listenedStatus, examLine, "span")
+            self.gotoIndexedUrlByLinkText(self.m_listenedStatus, examLine, "span")
             self.setOptionValueByIdAndValue("exam_status-selector", "notpassed")
             
             examComment = u"Коммент к несданному зачёту: " + random_crap.randomText(6)
@@ -59,9 +57,8 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
 
     def run(self):
         
-        adminLogin = self.getAdminLogin()
-        adminPass = self.getAdminPass()
-
+        self.m_listenedStatus = u"Прослушан"
+        
         self.performLoginAsManager()
         self.gotoAllPeople()
 
