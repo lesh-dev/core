@@ -229,7 +229,7 @@ class SeleniumTest(object):
         if value:
             self.logAdd("Enabling 404 checking. ")
         else:
-            self.logadd("Disabling 404 checking. ")
+            self.logAdd("Disabling 404 checking. ")
         self.m_doCheck404 = value
 
     def setPhpErrorsAsWarnings(self, errorsAsWarnings = True):
