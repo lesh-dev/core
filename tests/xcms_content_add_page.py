@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap, time
+import xtest_common, random_crap
 
 def htmlParagraph(x):
     return "<p>" + x + "</p>"
@@ -11,12 +11,14 @@ def linesToHtml(lineArray):
 
 class XcmsContentAddPage(xtest_common.XcmsTest):
     """
-    This test checks user add functional.
+    This test checks content editing - page add/edit functional.
     It does following steps:
     * login as root user (in future - site editor)
     * add new subpage
     * edit new subpage some times
     * load previous version
+    * sets and changes page alias
+    * tests diff engine
     """
         
     def run(self):
@@ -44,7 +46,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.m_parentPage = u"Главная"
 
         self.gotoUrlByLinkText(self.m_parentPage)
-        self.gotoUrlByLinkText(u"Подстраница")
+        self.gotoCreatePage()
 
         inpPageDir = "test_page_" + random_crap.randomText(8);
         inpMenuTitle = "menu_title_" + random_crap.randomText(8);
@@ -68,7 +70,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         #TODO: wait for fixing of bug with automatic alias rebuildAliases
 
         self.logAdd("Rebuilding aliases for first time to w/a bug ")
-        self.rebuildAliases()
+        self.gotoRebuildAliases()
         #self.wait(2)
 
         #self.logAdd("Opening editor again after redirection. ")
@@ -105,7 +107,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.assertElementTextById(previewElement, newPageTextForCheck, "preview text on text change does not match entered text. ")
 
-        self.gotoUrlByLinkText(u"Свернуть редактор")
+        self.gotoCloseEditor()
 
         self.assertBodyTextPresent(u"Личный кабинет")
         # click on menu.
@@ -255,7 +257,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         
         self.updateAliases()
         
-        # self.rebuildAliases()
+        # self.gotoRebuildAliases()
         self.gotoAlias(self.m_pageAlias)
 
         if self.m_menuTitle not in self.getPageTitle():
@@ -281,5 +283,5 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         #self.gotoCloseEditor()
                 
         self.gotoAdminPanel()
-        self.assertUrlPresent(u"Подстраница", "We should successfully enter admin panel, but we cannot see button to create new subpage. ")
+        self.gotoCreatePage(reason = "We should successfully enter admin panel, but we cannot see button to create new subpage. ")
         

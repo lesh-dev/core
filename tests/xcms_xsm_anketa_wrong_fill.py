@@ -14,10 +14,10 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
     * correct all errors and finally submit form.
     """
     
-    def tryWrongSubmit(self, forbidReason):
-        submitOkMsg = u"Спасибо, Ваша анкета принята!"
+    def trySubmit(self, forbidReason = None):        
         self.clickElementById("submit-anketa-button")
-        self.assertBodyTextNotPresent(submitOkMsg, forbidReason)
+        if forbidReason:
+            self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage(), forbidReason)
     
     def run(self):
         # anketa fill negative test:
@@ -28,13 +28,17 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         
         #navigate to anketas
         
-        self.gotoUrlByLinkText(u"Поступление")
-        self.gotoUrlByLinkText(u"Анкета")
-        self.assertBodyTextPresent(u"Регистрационная анкета")
+        self.gotoUrlByLinkText(self.getEntranceLinkName())
+        self.gotoAnketa()
+        
+        self.assertBodyTextPresent(self.getAnketaPageHeader())
             
         # try to submit empty form.
         self.tryWrongSubmit("Empty form should not be submitted. ")
-        self.assertBodyTextPresent(u"Поле 'Фамилия' слишком короткое")
+        
+        lastNameTooShort = u"Поле 'Фамилия' слишком короткое"
+        
+        self.assertBodyTextPresent(lastNameTooShort)
 
         # generate some text
         inpLastName = testMailPrefix + u"Криворучкин" + random_crap.randomText(5);
@@ -90,16 +94,18 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         inpSkype = self.fillElementById("skype-input", inpSkype)
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
 
+        areYouSure = u"Если Вы уверены, что не хотите указывать эту информацию"
+        
         self.tryWrongSubmit("Favourites were not filled")
-        self.assertBodyTextPresent(u"Если Вы уверены, что не хотите указывать эту информацию")
+        self.assertBodyTextPresent(areYouSure)
 
         inpFav = self.fillElementById("favourites-text", inpFav)
         self.tryWrongSubmit("Achievements were not filled")
-        self.assertBodyTextPresent(u"Если Вы уверены, что не хотите указывать эту информацию")
+        self.assertBodyTextPresent(areYouSure)
 
         inpAch = self.fillElementById("achievements-text", inpAch)
         self.tryWrongSubmit("Hobbies were not filled")
-        self.assertBodyTextPresent(u"Если Вы уверены, что не хотите указывать эту информацию")
+        self.assertBodyTextPresent(areYouSure)
 
         inpHob = self.fillElementById("hobby-text", inpHob)
         
@@ -108,7 +114,7 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         self.fillElementById("last_name-input", "")
         
         self.tryWrongSubmit("Empty last name is not allowed. ")
-        self.assertBodyTextPresent(u"Поле 'Фамилия' слишком короткое")
+        self.assertBodyTextPresent(lastNameTooShort)
 
         # fill it again.
         inpLastName = self.fillElementById("last_name-input", inpLastName)
@@ -116,7 +122,7 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         self.fillElementById("hobby-text", "")
 
         self.tryWrongSubmit("Hobbies were erased")
-        self.assertBodyTextPresent(u"Если Вы уверены, что не хотите указывать эту информацию")
+        self.assertBodyTextPresent(areYouSure)
         # no erase achievements.
         self.fillElementById("achievements-text", "")
         self.tryWrongSubmit("Enter confirmation mode with erased field 'A' and remove another field 'B'. Revalidation check after bug #529")
@@ -125,19 +131,18 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         inpAch = self.fillElementById("achievements-text", inpAch)
 
         # at last, it should work.
-        self.clickElementById("submit-anketa-button")
-        self.assertBodyTextPresent(u"Спасибо, Ваша анкета принята!")
+        self.trySubmit()
             
         # now login as admin
     
         adminLogin = self.getAdminLogin()
         adminPass = self.getAdminPass()
 
-        self.performLoginAsAdmin() # TODO: manager
+        self.performLoginAsManager()
         
         self.gotoRoot()
             
-        self.gotoUrlByLinkText(u"Анкеты")
+        self.gotoUrlByLinkText(self.getAnketaListMenuName())
         
         shortAlias = inpLastName + " " + inpFirstName
         fullAlias = shortAlias + " " + inpMidName

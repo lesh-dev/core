@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap, time
+import xtest_common, random_crap
 
 class XcmsAuthAddNewUser(xtest_common.XcmsTest):
     """
@@ -84,7 +84,8 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         # TODO: BUG, make separate links
 
         self.gotoUrlByPartialLinkText(inpLogin)
-        self.assertBodyTextPresent(u"Привет, " + inpLogin)
+        
+        self.assertBodyTextPresent(self.getWelcomeMessage(inpLogin))
 
         nameEle = "name-input"
         emailEle = "email-input"

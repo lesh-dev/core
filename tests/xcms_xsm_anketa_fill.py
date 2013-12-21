@@ -68,9 +68,9 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         
         #navigate to anketas
         
-        self.gotoUrlByLinkText(u"Поступление")
-        self.gotoUrlByLinkText(u"Анкета")
-        self.assertBodyTextPresent(u"Регистрационная анкета")
+        self.gotoUrlByLinkText(self.getEntranceLinkName())
+        self.gotoAnketa()
+        self.assertBodyTextPresent(self.getAnketaPageHeader())
             
         # generate
         inpLastName = u"Чапаев" + random_crap.randomText(5);
@@ -115,19 +115,15 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         
         self.clickElementById("submit-anketa-button")
         
-        self.assertBodyTextPresent(u"Спасибо, Ваша анкета принята!")
-        
+        self.assertBodyTextPresent(self.getAnketaSuccessSubmitMessage())
             
-    # now login as admin
-    
-        adminLogin = self.getAdminLogin()
-        adminPass = self.getAdminPass()
-    
-        self.performLoginAsAdmin()
+        # now login as admin
+        
+        self.performLoginAsManager()
         
         self.gotoRoot()
             
-        self.gotoUrlByLinkText(u"Анкеты")
+        self.gotoUrlByLinkText(self.getAnketaListMenuName())
         
         shortAlias = xtest_common.shortAlias(inpLastName, inpFirstName)
         fullAlias = xtest_common.fullAlias(inpLastName, inpFirstName, inpMidName)

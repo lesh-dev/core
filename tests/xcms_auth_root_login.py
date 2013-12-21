@@ -20,6 +20,6 @@ class XcmsAuthRootLogin(xtest_common.XcmsTestWithConfig):
 		self.performLoginAsAdmin()
 		self.gotoAdminPanel()
 		
-		self.assertBodyTextPresent(u"Пользователи")
+		self.assertBodyTextPresent(self.getUserListLinkName())
 		self.assertBodyTextPresent(u"Очистить кэш")
 	

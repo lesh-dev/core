@@ -20,6 +20,7 @@ class TestXcmsInstaller(xtest_common.XcmsTestWithConfig):
         self.assertSourceTextPresent(u"Установка завершена!")
         self.gotoUrlByLinkText(u"Перейти к сайту")
                
+        self.setTestNotifications()
         self.checkTestNotifications()
 
         

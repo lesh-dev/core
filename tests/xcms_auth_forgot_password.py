@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap, time
+import xtest_common, random_crap
 
 class XcmsAuthForgotPassword(xtest_common.XcmsTest):
     """

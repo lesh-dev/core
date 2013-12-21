@@ -35,5 +35,8 @@ class XcmsTestConfig:
     
     def getValidEmail2(self):
         return "testsite002@fizlesh.ru"
+    
+    def getTestSchoolName(self):
+        return u"ЛЭШ-2013"
                 
     

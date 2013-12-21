@@ -276,12 +276,15 @@ class SeleniumTest(object):
     def set404Text(self, text):
         self.m_textOnPage404 = text
         
-    def gotoUrlByLinkText(self, linkName):
+    def gotoUrlByLinkText(self, linkName, reason = ""):
+        """
+        reason is custom comment helping to understand why this link is vital for test pass.
+        """
         try:
             link = self.getUrlByLinkText(linkName)
             self.gotoSite(link, linkName)                            
         except NoSuchElementException:
-            self.failTest("Cannot find URL with name " + userSerialize(linkName) + ". ")
+            self.failTest("Cannot find URL with name " + userSerialize(linkName) + ". " + self.displayReason(reason))
 
     def gotoUrlByPartialLinkText(self, linkName):
         try:

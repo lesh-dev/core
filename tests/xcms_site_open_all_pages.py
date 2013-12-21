@@ -11,15 +11,17 @@ class XcmsSiteOpenAllPages(xtest_common.XcmsTest):
 	"""
 	def run(self):
 		self.gotoRoot()
+		mainPage = u"Главная"
 		
-		self.gotoUrlByLinkText(u"Главная")
+		self.gotoUrlByLinkText(mainPage)
 		self.assertBodyTextPresent(u"Приветствуем Вас на сайте Физического отделения Летней Экологической Школы");
 
 		self.gotoUrlByLinkText(u"История ЛЭШ")
 		self.assertBodyTextPresent(u"Школа существует достаточно давно")
 
-		self.gotoUrlByLinkText(u"Новости")
-		self.assertBodyTextPresent(u"Новости")
+        news = u"Новости"
+		self.gotoUrlByLinkText(news)
+		self.assertBodyTextPresent(news)
 
 		self.gotoUrlByLinkText(u"Официально о ЛЭШ")
 		self.assertBodyTextPresent(u"Официальная информация")
@@ -27,11 +29,14 @@ class XcmsSiteOpenAllPages(xtest_common.XcmsTest):
 
 		self.gotoUrlByPartialLinkText(u"Набор на Школу - 201")
 
-		self.gotoUrlByLinkText(u"О нас")
-		self.assertBodyTextPresent(u"О нас")
+        about = u"О нас"
+		self.gotoUrlByLinkText(about)
+		self.assertBodyTextPresent(about)
 
-		self.gotoUrlByLinkText(u"Жизнь на ЛЭШ")
-		self.assertBodyTextPresent(u"Жизнь на ЛЭШ")
+        life = u"Жизнь на ЛЭШ"
+		self.gotoUrlByLinkText(life)
+		self.assertBodyTextPresent(life)
+		self.assertBodyTextPresent(u"Мы живем в палаточном лагере")
 
 		self.gotoUrlByLinkText(u"Список вещей")
 		self.gotoPage("/gear")
@@ -39,17 +44,20 @@ class XcmsSiteOpenAllPages(xtest_common.XcmsTest):
 		self.assertBodyTextPresent(u"Снаряжение")
 
 		self.gotoUrlByLinkText(u"Снаряжение")
-		self.assertBodyTextPresent(u"Туристическое снаряжение на ЛЭШ")
+		gear = u"Туристическое снаряжение на ЛЭШ"
+		self.assertBodyTextPresent(gear)
 		self.assertBodyTextPresent(u"Спальник")
 		self.gotoPage("/gear/equipment")
-		self.assertBodyTextPresent(u"Туристическое снаряжение на ЛЭШ")
+		self.assertBodyTextPresent(gear)
 		self.assertBodyTextPresent(u"Палатка")
 		
-		self.gotoUrlByLinkText(u"Личные вещи и одежда")
-		self.assertBodyTextPresent(u"Личные вещи и одежда")
+		wear = u"Личные вещи и одежда"
+		self.gotoUrlByLinkText(wear)
+		self.assertBodyTextPresent(wear)
+		
 		self.gotoPage("/gear/wear")
 		self.assertBodyTextPresent(u"Кружка, Ложка, Миска, Нож.")
-		
+		self.assertBodyTextPresent(u"КЛМН")
 		
 		self.gotoUrlByLinkText(u"Документы")
 		self.assertBodyTextPresent(u"Полис ОМС")
@@ -79,12 +87,12 @@ class XcmsSiteOpenAllPages(xtest_common.XcmsTest):
 		self.gotoPage("/join")
 		self.assertBodyTextPresent(u"Собеседование на Физическое Отделение")
 		self.gotoPage("/register")
-		self.assertBodyTextPresent(u"Регистрационная анкета")
+		self.assertBodyTextPresent(self.getAnketaPageHeader())
 		self.gotoPage("/photo")
 		self.gotoPage("/fun")
 		self.gotoPage("/links")
 		self.gotoPage("/contacts")
 		
-		self.gotoUrlByLinkText(u"Главная")
+		self.gotoUrlByLinkText(mainPage)
 		
     

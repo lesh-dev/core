@@ -3,6 +3,8 @@
 
 import xtest_common, random_crap
 
+
+
 class XcmsXsmAddExams(xtest_common.XcmsTest):
     """
     This test checks exam add functional.
@@ -14,6 +16,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     * add some courses
     * set exam status
     """
+    listenedStatus = u"Прослушан"
 
     def addExamsById(self, examIdList):
         for exam in examIdList:
@@ -29,10 +32,10 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     def setExamPassed(self, examLineList):
         for examLine in examLineList:            
             # <a><span>Прослушан</span></a>
-            self.gotoIndexedUrlByLinkText(u"Прослушан", examLine, "span")
+            self.gotoIndexedUrlByLinkText(listenedStatus, examLine, "span")
             self.setOptionValueByIdAndValue("exam_status-selector", "passed")
             
-            examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
+            examComment = u"Коммент к сданному зачёту: " + random_crap.randomText(6)
             self.fillElementByName("exam_comment", examComment)
             self.clickElementByName("update-exam")
             self.gotoBackToPersonView()
@@ -43,10 +46,10 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     def setExamNotPassed(self, examLineList):
         for examLine in examLineList:            
             # <a><span>Прослушан</span></a>
-            self.gotoIndexedUrlByLinkText(u"Прослушан", examLine, "span")
+            self.gotoIndexedUrlByLinkText(listenedStatus, examLine, "span")
             self.setOptionValueByIdAndValue("exam_status-selector", "notpassed")
             
-            examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
+            examComment = u"Коммент к несданному зачёту: " + random_crap.randomText(6)
             self.fillElementByName("exam_comment", examComment)
             self.clickElementByName("update-exam")
             self.gotoBackToPersonView()
@@ -59,10 +62,10 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         adminLogin = self.getAdminLogin()
         adminPass = self.getAdminPass()
 
-        self.performLoginAsAdmin()
+        self.performLoginAsManager()
         self.gotoAllPeople()
 
-        self.gotoUrlByLinkText(u"Добавить участника")
+        self.gotoAddPerson()
 
         # generate
         inpLastName = u"Зачётов" + random_crap.randomText(5);
@@ -84,8 +87,8 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         # check if person alias is present (person saved correctly)
         self.checkPersonAliasInPersonView(fullAlias)
         
-        self.gotoUrlByLinkText(u"ЛЭШ-2013")
-        self.assertBodyTextPresent(u"На данной школе не присутствовал")
+        self.gotoUrlByLinkText(self.m_conf.getTestSchoolName())
+        self.assertBodyTextPresent(self.getPersonAbsenceMessage())
         self.gotoUrlByLinkText(u"Зачислить")
         self.clickElementByName("update-person_school")
         self.gotoBackToPersonView()

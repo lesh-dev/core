@@ -70,6 +70,8 @@ def randomCrap(wordNumber, crapOptions = [], specialChars = specialCharsDefault)
     rs = ""
     for i in range(0, wordNumber):
         separator = " "
+        if not crapOptions:
+            crapOptions = []
         if "multiline" in crapOptions:
             if random.random() < 0.2:
                 separator = "\n"

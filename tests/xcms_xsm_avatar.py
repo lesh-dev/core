@@ -25,11 +25,10 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
 
         testMailPrefix = self.m_conf.getAnketaNamePrefix()
 
-        self.performLoginAsAdmin()
+        self.performLoginAsManager()
 
         self.gotoAllPeople()
-
-        self.gotoUrlByLinkText(u"Добавить участника")
+        self.gotoAddPerson()
 
         # generate
         inpLastName = testMailPrefix + u"Аватаров" + random_crap.randomText(5);

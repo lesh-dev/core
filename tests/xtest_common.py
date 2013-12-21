@@ -1,9 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-#from selenium import webdriver
-import sys, time
-
 import selenium_test, random_crap
 from xtest_config import XcmsTestConfig
 
@@ -45,19 +42,35 @@ class XcmsTestWithConfig(XcmsBaseTest):
         super(XcmsTestWithConfig, self).init()
         self.m_conf = XcmsTestConfig()
         self.setAutoPhpErrorChecking(self.m_conf.getPhpErrorCheckFlag())
-        self.maximizeWindow()
+        #self.maximizeWindow()
         
-    def rebuildAliases(self):
+    def gotoRebuildAliases(self):
         self.logAdd("Rebuilding aliases. ")
         self.gotoUrlByLinkText(u"Перестроить alias-ы")
+
+    def gotoAnketa(self):
+        self.gotoUrlByLinkText(u"Анкета")
+
+    def gotoAddPerson(self):
+        self.gotoUrlByLinkText(u"Добавить участника")
+
+    def gotoNotificationPage(self):
+        self.gotoUrlByLinkText(u"Уведомления")
+
+    def gotoCreatePage(self, reason = ""):
+        self.gotoUrlByLinkText(u"Подстраница", reason)
         
+    def getAnketaPageHeader(self)
+        return u"Регистрационная анкета"
+    
+    
     def setTestNotifications(self):
         
         emailString = self.m_conf.getNotifyEmail()
         
         self.performLoginAsAdmin()
         self.gotoAdminPanel()
-        self.gotoUrlByLinkText(u"Уведомления")
+        self.gotoNotificationsPage()
 
         self.fillElementById("edtg_user-change", emailString);
         self.fillElementById("edtg_content-change", emailString);
@@ -80,7 +93,6 @@ class XcmsTestWithConfig(XcmsBaseTest):
         
         self.performLoginAsAdmin()
         self.gotoAdminPanel()
-        self.gotoUrlByLinkText(u"Уведомления")
 
         reason = "Notifications were not set properly. "
         
@@ -95,6 +107,12 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
         self.performLogout()
         
+    def performLoginAsEditor(self):
+        return self.performLoginAsAdmin()
+
+    def performLoginAsManager(self):
+        return self.performLoginAsAdmin()
+    
     def performLoginAsAdmin(self):
         login = self.getAdminLogin()
         password = self.getAdminPass()
@@ -160,9 +178,17 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.addAction("user-logout")
         self.gotoPage("/?&mode=logout&ref=ladmin")
 
+    def getWelcomeMessage(self, login):
+        return u"Привет, " + login
+    
+    def getAdminPanelLinkName(self):
+        return u"Админка"
+    
+    def getAnketaSuccessSubmitMessage(self):
+        return = u"Спасибо, Ваша анкета принята!"
     
     def getAdminPanelLink(self):
-        return self.getUrlByLinkText(u"Админка")
+        return self.getUrlByLinkText(self.getAdminPanelLinkName())
     
     def gotoAuthLink(self):
         self.logAdd("gotoAuthLink: going to authenticate. ")
@@ -173,8 +199,10 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
     def gotoAdminPanel(self):
         self.logAdd("gotoAdminPanel: going to admin control panel. ")
-        self.gotoUrlByLinkText(u"Админка")
+        self.gotoUrlByLinkText(self.getAdminPanelLinkName())
         
+    def getPersonAbsenceMessage(self):
+        return u"На данной школе не присутствовал"
         
     
 class XcmsTest(XcmsTestWithConfig):
@@ -229,8 +257,9 @@ class XcmsTest(XcmsTestWithConfig):
         print "user created, going to user list again to refresh. "
 
         self.assertBodyTextPresent(u"Пользователь '" + inpLogin + u"' успешно создан")
-        # refresh user list
-        self.gotoUrlByLinkText(u"Пользователи")
+        
+        # refresh user list (re-navigate to user list)
+        self.gotoUserList()
 
         # enter user profile
         print "entering user profile. "
@@ -328,17 +357,29 @@ class XcmsTest(XcmsTestWithConfig):
 
     def gotoUserList(self):
         self.logAdd("Navigating to user list from admin CP. ")
-        self.gotoUrlByLinkText(u"Пользователи")
+        self.gotoUrlByLinkText(self.getUserListLinkName())
         self.assertBodyTextPresent(u"Администрирование пользователей")
 
     def checkPersonAliasInPersonView(self, personAlias):
         self.assertElementTextById("person-title", personAlias)
         
+    def getEditPageInPlaceLinkName(self):
+        return u"Редактировать"        
+
+    def getUserListLinkName(self):
+        return u"Пользователи"        
+
+    def getEntranceLinkName(self):
+        return u"Поступление"        
+    
     def gotoEditPageInPlace(self):
-        self.gotoUrlByLinkText(u"Редактировать")
+        self.gotoUrlByLinkText(self.getEditPageInPlaceLinkName())
         
     def gotoCloseEditor(self):
         self.gotoUrlByLinkText(u"Свернуть редактор")
+        
+    def getAnketaListMenuName(self):
+        return u"Анкеты"
 
 
 def shortAlias(last, first):
