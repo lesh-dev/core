@@ -35,7 +35,7 @@ class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
         self.performLogout()
 
         print "try logging as created second user. "
-        if self.performLogin(self, inpLogin, inpPass2):
+        if self.performLogin(inpLogin, inpPass2):
             self.failTest("I am able to login as 'second' user with duplicate login and new password. ")
 
 
