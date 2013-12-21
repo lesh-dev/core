@@ -30,6 +30,9 @@ def randomVkontakte():
 def randomWord(length, wordOptions = [], specialChars = specialCharsDefault):
     rs = ""
     
+    if not wordOptions:
+        wordOptions = []
+        
     if "english" in wordOptions:
         enLang = True
     else:

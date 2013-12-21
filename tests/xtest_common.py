@@ -12,6 +12,12 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         Base test class wth advanced error checking"
     """
     # override base error-checking method
+    def init(self):
+        print "XcmsBaseTest init"
+        
+        super(XcmsBaseTest, self).init()
+        self.set404Text(u"Нет такой страницы")
+        
     def checkPageErrors(self):
         super(XcmsBaseTest, self).checkPageErrors()
         source = self.getPageSource()
@@ -40,6 +46,10 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.m_conf = XcmsTestConfig()
         self.setAutoPhpErrorChecking(self.m_conf.getPhpErrorCheckFlag())
         self.maximizeWindow()
+        
+    def rebuildAliases(self):
+        self.logAdd("Rebuilding aliases. ")
+        self.gotoUrlByLinkText(u"Перестроить alias-ы")
         
     def setTestNotifications(self):
         
@@ -323,6 +333,13 @@ class XcmsTest(XcmsTestWithConfig):
 
     def checkPersonAliasInPersonView(self, personAlias):
         self.assertElementTextById("person-title", personAlias)
+        
+    def gotoEditPageInPlace(self):
+        self.gotoUrlByLinkText(u"Редактировать")
+        
+    def gotoCloseEditor(self):
+        self.gotoUrlByLinkText(u"Свернуть редактор")
+
 
 def shortAlias(last, first):
     return (last + " " + first).strip()

@@ -35,7 +35,7 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         self.gotoCabinet()
 
         print "test good email"
-        newGoodEMail = "testsite002@fizlesh.ru"
+        newGoodEMail = self.m_conf.getValidEmail2()
         
         newGoodEMail = self.fillElementById("email-input", newGoodEMail)
         self.clickElementById("update_me")

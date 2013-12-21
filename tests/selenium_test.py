@@ -51,8 +51,8 @@ class TestAction:
         self.m_action = action
         self.m_details = details
         
-    def printAction(self):
-        print self.m_action + " " + self.m_details
+    def serializeAction(self):
+        return self.m_action + " " + self.m_details
 
 # generic function to run any test.
 def RunTest(test):
@@ -122,6 +122,8 @@ class SeleniumTest(object):
         self.m_closeOnExit = True
         self.m_logStarted = False
         self.m_errorsAsWarnings = False
+        self.m_doCheck404 = True
+        self.m_textOnPage404 = "Page not found"
         
         self.m_logFile = self.m_testName + ".log" #"_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") +
         self.m_actionLog = []
@@ -203,7 +205,7 @@ class SeleniumTest(object):
     
     def printActionLog(self):
         for act in self.m_actionLog:
-            act.printAction()
+            print act.serializeAction()
         
     def logStart(self):
         try:
@@ -222,6 +224,13 @@ class SeleniumTest(object):
     # PHP errors auto-check toggle
     def setAutoPhpErrorChecking(self, checkErrors = True):
         self.m_checkErrors = checkErrors
+    
+    def set404Checking(self, value = True):
+        if value:
+            self.logAdd("Enabling 404 checking. ")
+        else:
+            self.logadd("Disabling 404 checking. ")
+        self.m_doCheck404 = value
 
     def setPhpErrorsAsWarnings(self, errorsAsWarnings = True):
         self.m_errorsAsWarnings = errorsAsWarnings
@@ -252,15 +261,25 @@ class SeleniumTest(object):
         self.m_driver.get(fullUrl)
         
         self.checkPageErrors()
+        self.check404()
 
     def checkPageErrors(self):
         if self.m_checkErrors:
             self.assertPhpErrors()
             
+    def check404(self):
+        if not self.m_doCheck404:
+            return
+        if self.checkSourceTextPresent(self.m_textOnPage404):
+            self.failTest("Requested URL '" + userSerialize(self.curUrl()) + "' leads to non-existing page (404). ")
+    
+    def set404Text(self, text):
+        self.m_textOnPage404 = text
+        
     def gotoUrlByLinkText(self, linkName):
         try:
             link = self.getUrlByLinkText(linkName)
-            self.gotoSite(link, linkName)
+            self.gotoSite(link, linkName)                            
         except NoSuchElementException:
             self.failTest("Cannot find URL with name " + userSerialize(linkName) + ". ")
 
@@ -299,8 +318,8 @@ class SeleniumTest(object):
             exceptionMessage = "Required URL is not found on the page in assertUrlPresent: " + userSerialize(linkName) + ". " + self.displayReason(reason)
             self.failTest(exceptionMessage)
 
-    def wait(self, seconds):
-        self.logAdd("Waiting for " + userSerialize(seconds) + " seconds. ")
+    def wait(self, seconds, comment = ""):
+        self.logAdd("Waiting for " + userSerialize(seconds) + " seconds. Comment: " + userSerialize(comment))
         time.sleep(seconds)
         
     def drv(self):
@@ -482,7 +501,9 @@ class SeleniumTest(object):
             self.failTest("Element with name '" + userSerialize(name) + " value does not match expected: " + wrapIfLong(userSerialize(text)) + ". ")
 
     def addAction(self, name, details = ""):
-        self.m_actionLog.append(TestAction(name, details))      
+        testAction = TestAction(name, details)
+        self.m_actionLog.append(TestAction(name, details))
+        self.logAdd(testAction.serializeAction(), "action")
     
     def clickElementByName(self, name):
         self.addAction("click", "element name: " + userSerialize(name) + " ")
@@ -648,9 +669,9 @@ class SeleniumTest(object):
                 self.logStart()
                 
             logFile = open(self.m_logFile, 'a')
-            fullLogText = text + "\n"
+            fullLogText = self.getName() + "[" + logLevel + "]: " + text + "\n"
             logFile.write(fullLogText.encode("UTF-8"))
-            print "LOG[" + logLevel + "]: " + fullLogText
+            print fullLogText
             logFile.close()
         except IOError:
             raise RuntimeError("Cannot write message to log file " + userSerialize(self.m_logFile) + ". ")

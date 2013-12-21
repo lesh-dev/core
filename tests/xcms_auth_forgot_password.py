@@ -50,7 +50,7 @@ class XcmsAuthForgotPassword(xtest_common.XcmsTest):
             self.failTest("Password was not reset. Old password works fine. ")
 
         # set random email to user to avoid problems with duplicate email (may occur only if test fails)
-        self.setUserEmailByAdmin(self, self.m_conf, inpLogin, random_crap.randomEmail())
+        self.setUserEmailByAdmin(inpLogin, random_crap.randomEmail())
 
 
         

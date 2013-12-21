@@ -34,6 +34,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         
         self.testAlias()
         
+        self.testBadAlias()
+        
     def testBaseEditing(self):
 
         self.performLoginAsAdmin()
@@ -46,12 +48,12 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         inpPageDir = "test_page_" + random_crap.randomText(8);
         inpMenuTitle = "menu_title_" + random_crap.randomText(8);
-        inpPageTitle = "page_title_" + random_crap.randomText(8);
+        inpPageHeader = "page_header_" + random_crap.randomText(8);
         inpAlias = "new/page/alias/" + random_crap.randomText(8);
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir);
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle);
-        inpPageTitle = self.fillElementById("header-input", inpPageTitle);
+        inpPageHeader = self.fillElementById("header-input", inpPageHeader);
         inpAlias = self.fillElementById("alias-input", inpAlias);
         
         self.m_pageAlias = inpAlias
@@ -63,9 +65,18 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.clickElementById("create-submit")
         
-        self.m_testPageMenuTitle = inpMenuTitle
-        self.m_pageTitle = inpPageTitle
+        #TODO: wait for fixing of bug with automatic alias rebuildAliases
 
+        self.logAdd("Rebuilding aliases for first time to w/a bug ")
+        self.rebuildAliases()
+        #self.wait(2)
+
+        #self.logAdd("Opening editor again after redirection. ")
+        #self.gotoEditPageInPlace()
+
+        self.m_menuTitle = inpMenuTitle
+        self.m_pageHeader = inpPageHeader
+        
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle)
 
@@ -99,21 +110,22 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.assertBodyTextPresent(u"Личный кабинет")
         # click on menu.
 
+        self.logAdd("Clicking on parent menu item. ")
         self.gotoUrlByLinkText(self.m_parentPage)
-        self.logAdd("Clicking on menu item with page name (going to the page via menu)")
+        self.logAdd("Clicking on new page menu item. ")
         self.gotoUrlByLinkText(inpMenuTitle)
 
         self.assertElementTextById("content-text", newPageTextForCheck, "page text after reopening editor does not match entered text. ")
+        self.assertElementTextById("content-header", self.m_pageHeader, "page header does not match entered header. ")
 
-        pageTitle = self.getPageTitle()
-        if inpMenuTitle not in pageTitle:
+        if inpMenuTitle not in self.getPageTitle():
             self.failTest("Menu title text does not appear in page title after going to the page by menu. ")
 
     def testVersions(self):
         self.gotoUrlByLinkText(self.m_parentPage)
-        self.gotoUrlByLinkText(self.m_testPageMenuTitle)
+        self.gotoUrlByLinkText(self.m_menuTitle)
         
-        self.gotoUrlByLinkText(u"Редактировать")
+        self.gotoEditPageInPlace()
                         
         versionUnoText = "version_0001"
         versionUnoText = self.fillElementById("edit-text", versionUnoText)
@@ -147,8 +159,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
     
     def testDiffAndLongText(self):
 
-        print "test diff engine."
-        self.wait(10)
+        self.logAdd("test diff engine. ")
+        self.wait(2)
         
         wordNumber = 7
         totalLines = 8
@@ -207,7 +219,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         
         self.clickElementById("edit-submit-top")
 
-        self.gotoUrlByLinkText(u"Свернуть редактор")
+        self.gotoCloseEditor()
 
         realPageText = pageText.replace("<p>", "").replace("\n", " ").replace("</p> ", "\n").replace("</p>", "\n").strip()
 
@@ -216,14 +228,58 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         print "-" * 30
 
         self.assertElementTextById("content-text", realPageText, "real page text does not match entered text. ")
-    
+
+    def updateAliases(self):
+        self.logAdd("Updating aliases. ")
+        self.clickElementByName("change-alias")
+        self.assertBodyTextPresent(u"Список alias-ов обновлён")
+        self.wait(2, "wait for redirection")
+        
+    def gotoAlias(self, alias):
+        self.logAdd("Going to the page via alias " + alias)
+        self.gotoPage("/" + alias)
+        
     def testAlias(self):
-        self.logAdd("Rebuilding aliases. ")
-        self.gotoUrlByLinkText(u"Перестроить алиасы")
-        self.logAdd("Going to the page via alias. ")
-        self.gotoPage(self.m_pageAlias)
+        self.logAdd("test aliases")
+        
+        self.gotoEditPageInPlace()
+        
+        # edit alias
+        self.gotoUrlByLinkText(self.m_pageAlias)
+        self.assertBodyTextPresent("Alias")
+        
+        inpAlias = "changed/newpage/alias/" + random_crap.randomText(8);
 
-        if self.m_pageTitle not in self.getPageTitle():
-            self.failTest("Page title text does not appear in page title after going to page by alias. ")
+        inpAlias = self.fillElementByName("alias", inpAlias)
+        self.m_pageAlias = inpAlias
+        
+        self.updateAliases()
+        
+        # self.rebuildAliases()
+        self.gotoAlias(self.m_pageAlias)
 
+        if self.m_menuTitle not in self.getPageTitle():
+            self.failTest("Page/menu title text does not appear in page title after going to page by alias after alias change. ")
+        
+        self.assertElementTextById("content-header", self.m_pageHeader, "page header does not match entered header. ")
+        
+    def testBadAlias(self):
+
+        self.logAdd("test bad aliases")
+        self.gotoEditPageInPlace()
+
+        self.gotoUrlByLinkText(self.m_pageAlias)
+        self.assertBodyTextPresent("Alias")
+        
+        inpAlias = "    " # evil hack
+        
+        inpAlias = self.fillElementByName("alias", inpAlias)
+        self.m_pageAlias = inpAlias
+
+        self.updateAliases()
+            
+        #self.gotoCloseEditor()
+                
+        self.gotoAdminPanel()
+        self.assertUrlPresent(u"Подстраница", "We should successfully enter admin panel, but we cannot see button to create new subpage. ")
         

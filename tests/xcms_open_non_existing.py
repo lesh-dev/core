@@ -16,6 +16,8 @@ class XcmsOpenNonExisting(xtest_common.XcmsBaseTest):
 		
 		self.assertNoInstallerPage()
 		
+		self.set404Checking(False)
+		
 		self.gotoPage("/qqq");
 		self.assertTextPresent("//div[@class='error-widget']", u"Нет такой страницы")
 		homeHref = self.getUrlByLinkText(u"этой ссылке")
