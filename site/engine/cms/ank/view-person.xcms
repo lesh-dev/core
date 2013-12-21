@@ -129,6 +129,9 @@ function xsm_print_person_header($db, $person, $school_id)
     global $full_engine_pub;
 
     $person_id = $person['person_id'];
+    $department_id = $person['department_id'];
+    $department = xdb_get_entity_by_id('department', $department_id);
+    $department_title = $department['department_title'];
 
     $person_fio = xsm_fio_enc($person);
 
@@ -158,7 +161,8 @@ function xsm_print_person_header($db, $person, $school_id)
             echo $person_fio; ?></span> <sup><?php
             xsm_draw_list_link($person_id, $school_id); ?></sup></div>
         <?php
-        xsm_draw_person_textval('top', 'Статус анкеты', $hr_status); ?>
+        xsm_draw_person_textval('top', 'Статус анкеты', $hr_status);
+        xsm_draw_person_textval('top', 'Отделение', $department_title); ?>
         <div style="clear: both;"></div><?php
         xsm_draw_person_textval('top', 'Почта', $email);
         xsm_draw_person_textval('top', 'Мобильный', $cellular);
