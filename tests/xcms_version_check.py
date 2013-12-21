@@ -2,8 +2,7 @@
 # -*- coding: utf8 -*-
 
 import re
-import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
+import xtest_common
 
 class XcmsVersionCheck(xtest_common.XcmsTest):
     """
@@ -25,8 +24,8 @@ class XcmsVersionCheck(xtest_common.XcmsTest):
         if not m:
             self.failTest("Site version does not match expected regexp. ");
         
-        xtest_common.performLoginAsAdmin(self, self.getAdminLogin(), self.getAdminPass())
-        xtest_common.gotoAdminPanel(self)
+        self.performLoginAsAdmin()
+        self.gotoAdminPanel()
         
         # backend
         beVerXpath = "//pre[@class='site-info']"

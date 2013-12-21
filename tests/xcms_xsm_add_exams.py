@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
 
 class XcmsXsmAddExams(xtest_common.XcmsTest):
     """
@@ -25,7 +24,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
 
         self.setOptionValueByIdAndValue("course_id-selector", exam)
         self.clickElementByName("update-exam")
-        xtest_common.gotoBackToPersonView(self)
+        self.gotoBackToPersonView()
         
     def setExamPassed(self, examLineList):
         for examLine in examLineList:            
@@ -36,7 +35,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
             examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
             self.fillElementByName("exam_comment", examComment)
             self.clickElementByName("update-exam")
-            xtest_common.gotoBackToPersonView(self)
+            self.gotoBackToPersonView()
             
         self.assertBodyTextPresent(u"Сдан")
             
@@ -50,7 +49,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
             examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
             self.fillElementByName("exam_comment", examComment)
             self.clickElementByName("update-exam")
-            xtest_common.gotoBackToPersonView(self)
+            self.gotoBackToPersonView()
             
         self.assertBodyTextPresent(u"Не сдан")
 
@@ -60,9 +59,8 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         adminLogin = self.getAdminLogin()
         adminPass = self.getAdminPass()
 
-        xtest_common.performLoginAsAdmin(self, adminLogin, adminPass)
-
-        xtest_common.gotoAllPeople(self)
+        self.performLoginAsAdmin()
+        self.gotoAllPeople()
 
         self.gotoUrlByLinkText(u"Добавить участника")
 
@@ -80,17 +78,17 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         
         self.clickElementById("update-person-submit")
         
-        xtest_common.gotoBackToPersonView(self)
+        self.gotoBackToPersonView()
 
         fullAlias = inpLastName + " " + inpFirstName + " " + inpMidName
         # check if person alias is present (person saved correctly)
-        xtest_common.checkPersonAliasInPersonView(self, fullAlias)
+        self.checkPersonAliasInPersonView(fullAlias)
         
         self.gotoUrlByLinkText(u"ЛЭШ-2013")
         self.assertBodyTextPresent(u"На данной школе не присутствовал")
         self.gotoUrlByLinkText(u"Зачислить")
         self.clickElementByName("update-person_school")
-        xtest_common.gotoBackToPersonView(self)
+        self.gotoBackToPersonView()
 
         #<option  value="95">Базовое электричество &#8212; Тараненко Сергей</option>
         #<option  value="134">Биомеханика &#8212; Преподаватель Другого</option>

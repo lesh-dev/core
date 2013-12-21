@@ -8,6 +8,9 @@ import selenium_test, random_crap
 from xtest_config import XcmsTestConfig
 
 class XcmsBaseTest(selenium_test.SeleniumTest):
+    """
+        Base test class wth advanced error checking"
+    """
     # override base error-checking method
     def checkPageErrors(self):
         super(XcmsTest, self).checkPageErrors()
@@ -16,14 +19,37 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         for stopper in stoppers:
             if stopper in source:
                 self.failTest("Forbidden crap '" + stopper + "' found on page. ")
-    
-class XcmsTest(XcmsBaseTest):
-    def init(self):
-        super(XcmsTest, self).init()
+                
+    def isInstallerPage(self):
+        return self.curUrl().endswith("install.php")
 
+    def assertNoInstallerPage(self):
+        self.gotoRoot()
+        if self.isInstallerPage():
+            self.failTest("Installer page detected, while we did not expected it. You should run this test on installed XCMS. ")
+                
+
+class XcmsTestWithConfig(XcmsBaseTest):
+    """
+        generic Xcms test with config
+    """
+    def init(self):
+        print "XcmsTestWithConfig init"
+        
+        super(XcmsTestWithConfig, self).init()
         self.m_conf = XcmsTestConfig()
         self.setAutoPhpErrorChecking(self.m_conf.getPhpErrorCheckFlag())
-        xtest_common.assertNoInstallerPage(self)
+        self.maximizeWindow()
+    
+class XcmsTest(XcmsTestWithConfig):
+    """
+        generic Xcms test
+    """
+    def init(self):
+        print "XcmsTest init"
+        super(XcmsTest, self).init()
+        # 
+        self.assertNoInstallerPage()
         #xtest_common.setTestNotifications(self, self.m_conf.getNotifyEmail(), self.m_conf.getAdminLogin(), self.m_conf.getAdminPass())
         
     def getAdminLogin(self):
@@ -31,245 +57,268 @@ class XcmsTest(XcmsBaseTest):
 
     def getAdminPass(self):
         return self.m_conf.getAdminPass()
-        
     
-def isInstallerPage(test):
-    return test.curUrl().endswith("install.php")
+    def performLogout(self):
+        self.logAdd("performLogout")
+        self.addAction("user-logout")
+        self.gotoPage("/?&mode=logout&ref=ladmin")
 
-def assertNoInstallerPage(test):
-    test.gotoRoot()
-    if isInstallerPage(test):
-        test.failTest("Installer page detected, while we did not expected it. You should run this test on installed XCMS. ")
+    def performLoginAsAdmin(self):
+        login = self.getAdminLogin()
+        password = self.getAdminPass()
+        self.logAdd("performLoginAsAdmin")
+        if not performLogin(test, login, password):
+            self.logAdd("Admin authorization failed")
+            raise selenium_test.TestError("Cannot perform Admin authorization as " + login + "/" + password)
 
-def gotoAuthLink(test):
-    test.logAdd("xtest_common.gotoAuthLink: going to authenticate. ")
-    test.gotoUrlByLinkText(u"Авторизация")
+        self.logAdd("performLoginAsAdmin(): checking admin panel link")
 
-def gotoAdminPanel(test):
-    test.logAdd("xtest_common.gotoAdminPanel: going to admin control panel. ")
-    test.gotoUrlByLinkText(u"Админка")
+        #check that we have entered the CP.
+        # just chech that link exists.
+        cpUrl = getAdminPanelLink(test)
+        #test.gotoSite(cpUrl)
+    
+    def performLogin(self, login, password):
+        """
+        returns True if login was successful
+        """
+        self.addAction("user-login", login + " / " + password)
+    #   test.logAdd("performLogin(" + login + ", " + password + ")")
 
-def gotoCabinet(test):
-    test.logAdd("xtest_common.gotoCabinet: going to user control panel (cabinet). ")
-    test.gotoUrlByLinkText(u"Личный кабинет")
+        print "performLogin(): goto root"
 
-def gotoAllPeople(test):
-    test.logAdd("xtest_common.gotoAllPeople: going to 'All People' menu. ")
-    test.gotoUrlByLinkText(u"Все люди")
+        self.gotoRoot()
 
-def getAuthLink(test):
-    return test.getUrlByLinkText(u"Авторизация")
+        # assert we have no shit cookies here
+        self.assertUrlNotPresent(u"Админка", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
+        self.assertUrlNotPresent(u"Личный кабинет", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
 
-def gotoBackToAnketaView(test):
-    test.gotoUrlByLinkText(u"Вернуться к просмотру участника")
+        self.gotoAuthLink()
 
-def gotoBackToPersonView(test):
-    test.gotoUrlByLinkText(u"Вернуться к просмотру участника")
+        self.assertSourceTextPresent(u"Логин")
+        self.assertSourceTextPresent(u"Пароль")
+        self.assertSourceTextPresent(u"Требуется аутентификация")
 
-def gotoEditPerson(test):
-    test.gotoUrlByLinkText(u"Редактировать анкетные данные")
+        #<input type="text" name="auth-login" />
+        #ele = test.drv().find_element_by_name("auth-login")
+        self.fillElementById("auth-login", login)
+        self.fillElementById("auth-password", password)
 
-def gotoBackAfterComment(test):
-    #test.gotoUrlByLinkText(u"Вернуться к списку комментов") # older variant
-    gotoBackToAnketaView(test)
+        self.clickElementById("auth-submit")
 
-def getAdminPanelLink(test):
-    return test.getUrlByLinkText(u"Админка")
+        wrongAuth = self.checkSourceTextPresent([u"Пароль всё ещё неверный", "Wrong password"])
+        if wrongAuth:
+            return False
 
-def performLogoutFromSite(test):
-    test.gotoUrlByLinkText(u"Выход")
+        # now let's check that Cabinet link and Exit link are present. if not - it's a bug.
 
-def performLogoutFromAdminPanel(test):
-    test.gotoUrlByLinkText(u"Выйти")
+        self.assertUrlPresent(u"Выход", "Here should be logout link after successful authorization. ")
+        self.assertUrlPresent(u"Личный кабинет", "Here should be Cabinet link after successful authorization. ")
 
-def performLogin(test, login, password):
-    """
-    returns True if login was successful
-    """
-    if test is None:
-        raise RuntimeError("Wrong webdriver parameter passed to performLogin. ")
+        return True
+    
+    def getAdminPanelLink(self):
+        return self.getUrlByLinkText(u"Админка")
+    
+    def createNewUser(self, login, email, password, name, auxParams = []):
+        self.logAdd("createNewUser( login: " + login + "', email: " + email + ", password: " + password + ", name: " + name + " )")
 
-    test.addAction("user-login", login + " / " + password)
-#   test.logAdd("performLogin(" + login + ", " + password + ")")
+        if not "do_not_login_as_admin" in auxParams:
+            self.performLoginAsAdmin()
+            self.gotoAdminPanel()
 
-    print "performLogin(): goto root"
+        self.gotoUserList()
 
-    test.gotoRoot()
+        self.gotoUrlByLinkText(["Create user", u"Создать пользователя"])
 
-    # assert we have no shit cookies here
-    test.assertUrlNotPresent(u"Админка", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
-    test.assertUrlNotPresent(u"Личный кабинет", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
+        inpLogin = self.fillElementById("login", login)
+        print "login = '" + inpLogin + "'"
+        if inpLogin == "":
+            raise RuntimeError("Filled login value is empty!")
 
-    gotoAuthLink(test)
+        inpEMail = self.fillElementById("email", email)
+        inpPass1 = self.fillElementById("password", password)
+        print "original pass: '" + password + "'"
+        inpPass2 = self.fillElementById("password_confirm", password)
+        if inpPass1 != inpPass2:
+            raise RuntimeError("Unpredicted input behavior on password entering")
+        inpPass = inpPass1
+        print "actual pass: '" + inpPass + "'"
 
-    test.assertSourceTextPresent(u"Логин")
-    test.assertSourceTextPresent(u"Пароль")
-    test.assertSourceTextPresent(u"Требуется аутентификация")
+        inpName = self.fillElementById("name", name)
 
-    #<input type="text" name="auth-login" />
-    #ele = test.drv().find_element_by_name("auth-login")
-    test.fillElementById("auth-login", login)
-    test.fillElementById("auth-password", password)
+        # set notify checkbox.
+        # self.clickElementById("notify_user-checkbox")
+        # send form
 
-    test.clickElementById("auth-submit")
-
-    wrongAuth = test.checkSourceTextPresent([u"Пароль всё ещё неверный", "Wrong password"])
-    if wrongAuth:
-        return False
-
-    # now let's check that Cabinet link and Exit link are present. if not - it's a bug.
-
-    test.assertUrlPresent(u"Выход", "Here should be logout link after successful authorization. ")
-    test.assertUrlPresent(u"Личный кабинет", "Here should be Cabinet link after successful authorization. ")
-
-    return True
-
-def performLogout(test):
-    print "performLogout()"
-    test.addAction("user-logout")
-    test.gotoPage("/?&mode=logout&ref=ladmin")
-
-def performLoginAsAdmin(test, login, password):
-    print "performLoginAsAdmin( login: " + login + ", password: " + password + " )"
-    if not performLogin(test, login, password):
-        print "Admin authorization failed"
-        raise selenium_test.TestError("Cannot perform Admin authorization as " + login + "/" + password)
-
-    print "performLoginAsAdmin(): checking admin panel link"
-
-    #check that we have entered the CP.
-    # just chech that link exists.
-    cpUrl = getAdminPanelLink(test)
-    #test.gotoSite(cpUrl)
+        self.clickElementByName("create_user")
 
 
-def createNewUser(test, conf, login, email, password, name, auxParams = []):
-    print "createNewUser( login: " + login + "', email: " + email + ", password: " + password + ", name: " + name + " )"
+        if "do_not_validate" in auxParams:
+            print "not validating created user, just click create button and shut up. "
+            return inpLogin, inpEMail, inpPass, inpName
 
-    if not "do_not_login_as_admin" in auxParams:
-        performLoginAsAdmin(test, conf.getAdminLogin(), conf.getAdminPass())
-        gotoAdminPanel(test)
+        print "user created, going to user list again to refresh. "
 
-    gotoUserList(test)
+        self.assertBodyTextPresent(u"Пользователь '" + inpLogin + u"' успешно создан")
+        # refresh user list
+        self.gotoUrlByLinkText(u"Пользователи")
 
-    test.gotoUrlByLinkText(["Create user", u"Создать пользователя"])
+        # enter user profile
+        print "entering user profile. "
 
-    inpLogin = test.fillElementById("login", login)
-    print "login = '" + inpLogin + "'"
-    if inpLogin == "":
-        raise RuntimeError("Filled login value is empty!")
+        profileLink = inpLogin
+        # TODO, SITE BUG: make two separate links
+        self.gotoUrlByPartialLinkText(profileLink)
 
-    inpEMail = test.fillElementById("email", email)
-    inpPass1 = test.fillElementById("password", password)
-    print "original pass: '" + password + "'"
-    inpPass2 = test.fillElementById("password_confirm", password)
-    if inpPass1 != inpPass2:
-        raise RuntimeError("Unpredicted input behavior on password entering")
-    inpPass = inpPass1
-    print "actual pass: '" + inpPass + "'"
+        self.assertBodyTextPresent(u"Учётные данные")
+        self.assertBodyTextPresent(u"Привилегии")
 
-    inpName = test.fillElementById("name", name)
+        # temporary check method
+        # test user login
+        self.assertTextPresent("//div[@class='user-ops']", inpLogin)
+        # test user creator (root)
+        self.assertTextPresent("//div[@class='user-ops']", self.m_conf.getAdminLogin())
+        self.assertElementValueById("name-input", inpName)
+        self.assertElementValueById("email-input", inpEMail)
 
-    # set notify checkbox.
-    # test.clickElementById("notify_user-checkbox")
-    # send form
+        #logoff root
+        if not "do_not_logout_admin" in auxParams:
+            self.performLogout()
 
-    test.clickElementByName("create_user")
-
-
-    if "do_not_validate" in auxParams:
-        print "not validating created user, just click create button and shut up. "
         return inpLogin, inpEMail, inpPass, inpName
 
-    print "user created, going to user list again to refresh. "
+    # set email to user (by admin panel)
+    def setUserEmailByAdmin(self, login, email, auxParams = []):
+        print "setEmailToUserByAdmin( login: " + login + "', email: " + email + " )"
+        
+        self.logAdd("setUserEmailByAdmin: updating email for user '" + login + "' to '" + email + ". ")
 
-    test.assertBodyTextPresent(u"Пользователь '" + inpLogin + u"' успешно создан")
-    # refresh user list
-    test.gotoUrlByLinkText(u"Пользователи")
+        if not "do_not_login_as_admin" in auxParams:
+            self.performLoginAsAdmin()
+            self.gotoAdminPanel()
 
-    # enter user profile
-    print "entering user profile. "
+        self.gotoUserList()
 
-    profileLink = inpLogin
-    # TODO, SITE BUG: make two separate links
-    test.gotoUrlByPartialLinkText(profileLink)
+        self.gotoUrlByPartialLinkText(login)
 
-    test.assertBodyTextPresent(u"Учётные данные")
-    test.assertBodyTextPresent(u"Привилегии")
+        inpEMail = self.fillElementById("email-input", email)
+        self.clickElementByName("update_user")
 
-    # temporary check method
-    # test user login
-    test.assertTextPresent("//div[@class='user-ops']", inpLogin)
-    # test user creator (root)
-    test.assertTextPresent("//div[@class='user-ops']", conf.getAdminLogin())
-    test.assertElementValueById("name-input", inpName)
-    test.assertElementValueById("email-input", inpEMail)
-
-    #logoff root
-    if not "do_not_logout_admin" in auxParams:
-        performLogout(test)
-
-    return inpLogin, inpEMail, inpPass, inpName
-
-# set email to user (by admin panel)
-def setUserEmailByAdmin(test, conf, login, email, auxParams = []):
-    print "setEmailToUserByAdmin( login: " + login + "', email: " + email + " )"
+        #logoff root
+        if not "do_not_logout_admin" in auxParams:
+            self.performLogout()
     
-    test.logAdd("xtest_common.setUserEmailByAdmin: updating email for user '" + login + "' to '" + email + ". ")
+    def gotoAuthLink(self):
+        self.logAdd("gotoAuthLink: going to authenticate. ")
+        self.gotoUrlByLinkText(u"Авторизация")
 
-    if not "do_not_login_as_admin" in auxParams:
-        performLoginAsAdmin(test, conf.getAdminLogin(), conf.getAdminPass())
-        gotoAdminPanel(test)
+    def gotoAdminPanel(self):
+        self.logAdd("gotoAdminPanel: going to admin control panel. ")
+        self.gotoUrlByLinkText(u"Админка")
 
-    gotoUserList(test)
+    def gotoCabinet(self):
+        self.logAdd("gotoCabinet: going to user control panel (cabinet). ")
+        self.gotoUrlByLinkText(u"Личный кабинет")
 
-    test.gotoUrlByPartialLinkText(login)
+    def gotoAllPeople(self):
+        self.logAdd("gotoAllPeople: going to 'All People' menu. ")
+        self.gotoUrlByLinkText(u"Все люди")
 
-    inpEMail = test.fillElementById("email-input", email)
-    test.clickElementByName("update_user")
+    def getAuthLink(self):
+        return self.getUrlByLinkText(u"Авторизация")
 
-    #logoff root
-    if not "do_not_logout_admin" in auxParams:
-        performLogout(test)
+    def gotoBackToAnketaView(self):
+        self.gotoUrlByLinkText(u"Вернуться к просмотру участника")
 
+    def gotoBackToPersonView(self):
+        self.gotoUrlByLinkText(u"Вернуться к просмотру участника")
 
-def addCommentToPerson(test):
-    test.gotoUrlByLinkText(u"Добавить комментарий")
-    commentText = random_crap.randomText(40) + "\n" + random_crap.randomText(50) + "\n" + random_crap.randomText(30)
+    def gotoEditPerson(self):
+        self.gotoUrlByLinkText(u"Редактировать анкетные данные")
 
-    commentText = test.fillElementByName("comment_text", commentText)
+    def gotoBackAfterComment(self):
+        #self.gotoUrlByLinkText(u"Вернуться к списку комментов") # older variant
+        self.gotoBackToAnketaView()
 
-    test.clickElementByName("update-person_comment")
-    test.assertBodyTextPresent(u"Комментарий успешно сохранён")
-    gotoBackToAnketaView(test)
-    return commentText
+    def performLogoutFromSite(self):
+        self.gotoUrlByLinkText(u"Выход")
 
-def editCommentToPerson(test, commentLinkId):
-    test.gotoUrlByLinkId("comment-edit-1")
-    oldCommentText = test.getElementValueByName("comment_text")
-    newCommentText =  random_crap.randomText(10) + "\n" + oldCommentText + "\n" + random_crap.randomText(6)
-    newCommentText = test.fillElementByName("comment_text", newCommentText)
-    test.clickElementByName("update-person_comment")
-    test.assertBodyTextPresent(u"Комментарий успешно сохранён")
-    gotoBackToAnketaView(test)
-    return newCommentText
+    def performLogoutFromAdminPanel(self):
+        self.gotoUrlByLinkText(u"Выйти")
 
-def setTestNotifications(test, emailString, adminLogin, adminPass):
-    performLoginAsAdmin(test, adminLogin, adminPass)
-    gotoAdminPanel(test)
-    test.gotoUrlByLinkText(u"Уведомления")
+    def addCommentToPerson(self):
+        self.gotoUrlByLinkText(u"Добавить комментарий")
+        commentText = random_crap.randomText(40) + "\n" + random_crap.randomText(50) + "\n" + random_crap.randomText(30)
 
-    test.fillElementById("edtg_user-change", emailString);
-    test.fillElementById("edtg_content-change", emailString);
+        commentText = self.fillElementByName("comment_text", commentText)
 
-    test.fillElementById("edtg_reg", emailString);
+        self.clickElementByName("update-person_comment")
+        self.assertBodyTextPresent(u"Комментарий успешно сохранён")
+        self.gotoBackToAnketaView()
+        return commentText
 
-    test.fillElementById("edtg_reg-test", emailString);
-    test.fillElementById("edtg_reg-managers", emailString);
-    test.fillElementById("edtg_reg-managers-test", emailString);
+    def editCommentToPerson(self, commentLinkId):
+        self.gotoUrlByLinkId("comment-edit-1")
+        oldCommentText = self.getElementValueByName("comment_text")
+        newCommentText =  random_crap.randomText(10) + "\n" + oldCommentText + "\n" + random_crap.randomText(6)
+        newCommentText = self.fillElementByName("comment_text", newCommentText)
+        self.clickElementByName("update-person_comment")
+        self.assertBodyTextPresent(u"Комментарий успешно сохранён")
+        self.gotoBackToAnketaView()
+        return newCommentText
 
-    test.clickElementById("editTag")
-    performLogout(test)
+    def setTestNotifications(self):
+        
+        emailString = self.m_conf.getNotifyEmail()
+        
+        self.performLoginAsAdmin()
+        self.gotoAdminPanel()
+        self.gotoUrlByLinkText(u"Уведомления")
+
+        self.fillElementById("edtg_user-change", emailString);
+        self.fillElementById("edtg_content-change", emailString);
+
+        self.fillElementById("edtg_reg", emailString);
+
+        self.fillElementById("edtg_reg-test", emailString);
+        self.fillElementById("edtg_reg-managers", emailString);
+        self.fillElementById("edtg_reg-managers-test", emailString);
+
+        self.clickElementById("editTag")
+        self.performLogout()
+
+    def checkTestNotifications(self):
+        """
+            check if test notification is set properly (it's done by 'publish testing' script).
+        """
+        
+        emailString = self.m_conf.getNotifyEmail()
+        
+        self.performLoginAsAdmin()
+        self.gotoAdminPanel()
+        self.gotoUrlByLinkText(u"Уведомления")
+
+        reason = "Notifications were not set properly. "
+        
+        self.assertElementValueById("edtg_user-change", emailString, reason)
+        self.assertElementValueById("edtg_content-change", emailString, reason)
+
+        self.assertElementValueById("edtg_reg", emailString, reason)
+
+        self.assertElementValueById("edtg_reg-test", emailString, reason)
+        self.assertElementValueById("edtg_reg-managers", emailString, reason)
+        self.assertElementValueById("edtg_reg-managers-test", emailString, reason)
+
+        self.performLogout()
+
+    def gotoUserList(self):
+        self.logAdd("Navigating to user list from admin CP. ")
+        self.gotoUrlByLinkText(u"Пользователи")
+        self.assertBodyTextPresent(u"Администрирование пользователей")
+
+    def checkPersonAliasInPersonView(self, personAlias):
+        self.assertElementTextById("person-title", personAlias)
 
 def shortAlias(last, first):
     return (last + " " + first).strip()
@@ -277,11 +326,4 @@ def shortAlias(last, first):
 def fullAlias(last, first, mid):
     return (last + " " + first + " " + mid).strip()
 
-def gotoUserList(test):
-    test.logAdd("Navigating to user list from admin CP. ")
-    test.gotoUrlByLinkText(u"Пользователи")
-    test.assertBodyTextPresent(u"Администрирование пользователей")
-
-def checkPersonAliasInPersonView(test, personAlias):
-    test.assertElementTextById("person-title", personAlias)
 

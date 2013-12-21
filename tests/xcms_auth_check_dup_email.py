@@ -18,22 +18,22 @@ class XcmsAuthCheckDupEmail(xtest_common.XcmsTest):
         inpName1 = u"Вася " + random_crap.randomText(6)
         inpName2 = u"Петя " + random_crap.randomText(6)
 
-        inpLogin1, inpEMail, inpPass1, inpName1 = xtest_common.createNewUser(self, self.m_conf, inpLogin1, inpEMail, inpPass1, inpName1)
+        inpLogin1, inpEMail, inpPass1, inpName1 = self.createNewUser(inpLogin1, inpEMail, inpPass1, inpName1)
 
-        inpLogin2, inpEMail, inpPass2, inpName2 = xtest_common.createNewUser(self, self.m_conf, inpLogin2, inpEMail, inpPass2, inpName2, ["do_not_validate"])
+        inpLogin2, inpEMail, inpPass2, inpName2 = self.createNewUser(inpLogin2, inpEMail, inpPass2, inpName2, ["do_not_validate"])
 
         self.assertBodyTextNotPresent(u"Пользователь '" + inpLogin2 + u"' успешно создан", "We should get error about duplicate e-mails. ")
 
-        xtest_common.performLogout(self)
+        self.performLogout()
 
         print "logging as first created user. "
-        if not xtest_common.performLogin(self, inpLogin1, inpPass1):
-            raise selenium_test.TestError("Cannot login as newly created first user. ")
+        if not self.performLogin(inpLogin1, inpPass1):
+            self.failTest("Cannot login as newly created first user. ")
 
-        xtest_common.performLogout(self)
+        self.performLogout()
 
         print "try logging as second created user. "
-        if xtest_common.performLogin(self, inpLogin2, inpPass2):
-            raise selenium_test.TestError("I was able to login as second user with duplicate e-mail. ")
+        if self.performLogin(inpLogin2, inpPass2):
+            self.failTest("I was able to login as second user with duplicate e-mail. ")
 
 

@@ -36,14 +36,12 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         
     def testBaseEditing(self):
 
-        xtest_common.performLoginAsAdmin(self, self.getAdminLogin(), self.getAdminPass())
-
-        xtest_common.gotoAdminPanel(self)
+        self.performLoginAsAdmin()
+        self.gotoAdminPanel()
         
-        
-        self.parentPage = u"Главная"
+        self.m_parentPage = u"Главная"
 
-        self.gotoUrlByLinkText(self.parentPage)
+        self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoUrlByLinkText(u"Подстраница")
 
         inpPageDir = "test_page_" + random_crap.randomText(8);
@@ -56,7 +54,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         inpPageTitle = self.fillElementById("header-input", inpPageTitle);
         inpAlias = self.fillElementById("alias-input", inpAlias);
         
-        self.pageAlias = inpAlias
+        self.m_pageAlias = inpAlias
 
         defaultPageType = self.getOptionValueById("create-pagetype-selector")
 
@@ -65,7 +63,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.clickElementById("create-submit")
         
-        self.testPageMenuTitle = inpMenuTitle
+        self.m_testPageMenuTitle = inpMenuTitle
+        self.m_pageTitle = inpPageTitle
 
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle)
@@ -100,18 +99,19 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.assertBodyTextPresent(u"Личный кабинет")
         # click on menu.
 
-        self.gotoUrlByLinkText(self.parentPage)
+        self.gotoUrlByLinkText(self.m_parentPage)
+        self.logAdd("Clicking on menu item with page name (going to the page via menu)")
         self.gotoUrlByLinkText(inpMenuTitle)
 
         self.assertElementTextById("content-text", newPageTextForCheck, "page text after reopening editor does not match entered text. ")
 
         pageTitle = self.getPageTitle()
         if inpMenuTitle not in pageTitle:
-            self.failTest("Menu title text does not appear in page title. ") # WTF?? TODO: why Menu title, not page title?
+            self.failTest("Menu title text does not appear in page title after going to the page by menu. ")
 
     def testVersions(self):
-        self.gotoUrlByLinkText(self.parentPage)
-        self.gotoUrlByLinkText(self.testPageMenuTitle)
+        self.gotoUrlByLinkText(self.m_parentPage)
+        self.gotoUrlByLinkText(self.m_testPageMenuTitle)
         
         self.gotoUrlByLinkText(u"Редактировать")
                         
@@ -218,6 +218,12 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.assertElementTextById("content-text", realPageText, "real page text does not match entered text. ")
     
     def testAlias(self):
+        self.logAdd("Rebuilding aliases. ")
         self.gotoUrlByLinkText(u"Перестроить алиасы")
-        self.gotoPage(self.pageAlias)
+        self.logAdd("Going to the page via alias. ")
+        self.gotoPage(self.m_pageAlias)
+
+        if self.m_pageTitle not in self.getPageTitle():
+            self.failTest("Page title text does not appear in page title after going to page by alias. ")
+
         

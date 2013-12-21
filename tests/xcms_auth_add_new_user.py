@@ -27,29 +27,29 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         inpPass = random_crap.randomText(10)
         inpName = u"Вася Пупкин" + random_crap.randomText(6)
 
-        inpLogin, inpEMail, inpPass, inpName = xtest_common.createNewUser(self, self.m_conf, inpLogin, inpEMail, inpPass, inpName)
+        inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
 
         print "logging as created user. "
         if not xtest_common.performLogin(self, inpLogin, inpPass):
-            raise selenium_test.TestError("Cannot login as newly created user. ")
+            self.failTest("Cannot login as newly created user. ")
 
         # logout self
-        xtest_common.performLogoutFromSite(self)
+        self.performLogoutFromSite()
 
         # test wrong auth
         print "logging as created user with incorrect password "
-        if xtest_common.performLogin(self, inpLogin, "wrong_pass" + inpPass):
-            raise selenium_test.TestError("I'm able to login with incorrect password. Auth is broken. ")
+        if self.performLogin(inpLogin, "wrong_pass" + inpPass):
+            self.failTest("I'm able to login with incorrect password. Auth is broken. ")
 
 #       self.assertBodyTextPresent(u"Пароль всё ещё неверный"); already checked inside
 
         # and now, test bug with remaining cookies:
         # we navigate to root page, and see auth panel!
         print "logging again as created user. "
-        if not xtest_common.performLogin(self, inpLogin, inpPass):
-            raise selenium_test.TestError("Cannot login again as newly created user. ")
+        if not self.performLogin(inpLogin, inpPass):
+            self.failTest("Cannot login again as newly created user. ")
 
-        xtest_common.gotoCabinet(self)
+        self.gotoCabinet()
 
         # let's try to change password.
         self.gotoUrlByLinkText(u"Сменить пароль")
@@ -64,22 +64,22 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         self.clickElementByName("change_my_password")
         self.assertBodyTextPresent(u"Пароль успешно изменён")
 
-        xtest_common.performLogoutFromAdminPanel(self)
+        self.performLogoutFromAdminPanel()
 
         print "logging again as created user with new password"
-        if not xtest_common.performLogin(self, inpLogin, newPass):
-            raise selenium_test.TestError("Cannot login again as newly created user with changed password. ")
+        if not self.performLogin(inpLogin, newPass):
+            self.failTest("Cannot login again as newly created user with changed password. ")
 
         # logout self
-        xtest_common.performLogoutFromSite(self)
+        self.performLogoutFromSite()
 
         # and now let's edit user profile.
 
         print "now let's edit profile. Logging 3-rd time with new password"
-        if not xtest_common.performLogin(self, inpLogin, newPass):
-            raise selenium_test.TestError("Cannot login again for profile info change. ")
+        if not self.performLogin(inpLogin, newPass):
+            self.failTest("Cannot login again for profile info change. ")
 
-        xtest_common.gotoCabinet(self)
+        self.gotoCabinet()
         # navigate to user profile which is just user login
         # TODO: BUG, make separate links
 
@@ -91,11 +91,11 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
 
         currentDisplayName = self.getElementValueById(nameEle)
         if currentDisplayName != inpName:
-            raise selenium_test.TestError("Display name in user profile does not match name entered on user creation. Expected: '" + inpName + "', got '" + currentDisplayName + "'. ")
+            self.failTest("Display name in user profile does not match name entered on user creation. Expected: '" + inpName + "', got '" + currentDisplayName + "'. ")
 
         currentEMail = self.getElementValueById(emailEle)
         if currentEMail != inpEMail:
-            raise selenium_test.TestError("User e-mail in user profile does not match e-mail entered on user creation. Expected: '" + inpEMail + "', got '" + currentEMail + "'. ")
+            self.failTest("User e-mail in user profile does not match e-mail entered on user creation. Expected: '" + inpEMail + "', got '" + currentEMail + "'. ")
 
         newName = u"Петя Иванов" + random_crap.randomText(6)
         newEMail = random_crap.randomEmail()
@@ -108,24 +108,24 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
 
         self.clickElementByName("update_me")
 
-        xtest_common.performLogoutFromAdminPanel(self)
+        self.performLogoutFromAdminPanel()
 
         print "now let's login again and see updated profile."
-        if not xtest_common.performLogin(self, inpLogin, newPass):
-            raise selenium_test.TestError("Cannot login after profile info change. ")
+        if not self.performLogin(inpLogin, newPass):
+            self.failTest("Cannot login after profile info change. ")
 
-        xtest_common.gotoCabinet(self)
+        self.gotoCabinet()
         # navigate to user profile which is just user login
         self.gotoUrlByLinkText(inpLogin)
         self.assertBodyTextPresent(u"Привет, " + inpLogin)
 
         currentDisplayName = self.getElementValueById(nameEle)
         if currentDisplayName != newName:
-            raise selenium_test.TestError("Display name in user profile does not match changed user name. Expected: '" + newName + "', got '" + currentDisplayName + "'. ")
+            self.failTest("Display name in user profile does not match changed user name. Expected: '" + newName + "', got '" + currentDisplayName + "'. ")
 
         currentEMail = self.getElementValueById(emailEle)
         if currentEMail != newEMail:
-            raise selenium_test.TestError("User e-mail in user profile does not match changed user e-mail. Expected: '" + newEMail + "', got '" + currentEMail + "'. ")
+            self.failTest("User e-mail in user profile does not match changed user e-mail. Expected: '" + newEMail + "', got '" + currentEMail + "'. ")
 
 
 

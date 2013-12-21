@@ -10,9 +10,7 @@ class XcmsSiteOpenRenamedPages(xtest_common.XcmsTest):
 	* navigates to all current pages and checks some specific content on each page plus PHP errors.
 	"""
 	def run(self):
-		
-		xtest_common.assertNoInstallerPage(self)
-		
+				
 		self.gotoRoot()
 		
 		self.gotoPage("/?page=index/doctor-1170556276") # index/history

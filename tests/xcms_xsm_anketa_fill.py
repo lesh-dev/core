@@ -25,32 +25,32 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     """
     
     def addCommentsToPerson(self):
-        commentText1 = xtest_common.addCommentToPerson(self)
+        commentText1 = self.addCommentToPerson()
         print "Added first comment: ", commentText1
         self.assertBodyTextPresent(commentText1)
 
-        commentText2 = xtest_common.addCommentToPerson(self)
+        commentText2 = self.addCommentToPerson()
         print "Added second comment: ", commentText2
         self.assertBodyTextPresent(commentText2)
 
-        commentText3 = xtest_common.addCommentToPerson(self)
+        commentText3 = self.addCommentToPerson()
         print "Added third comment: ", commentText3
         self.assertBodyTextPresent(commentText3)
 
         # and now let's edit one of them.
 
         self.gotoIndexedUrlByLinkText(u"Правка", 0)
-        xtest_common.gotoBackAfterComment(self)
+        self.gotoBackAfterComment()
 
         self.gotoIndexedUrlByLinkText(u"Правка", 1)
-        xtest_common.gotoBackAfterComment(self)
+        self.gotoBackAfterComment()
 
         # oh, no! we want to use comment link ids!
 
-        commentTextNew1 = xtest_common.editCommentToPerson(self, "comment-edit-1")
+        commentTextNew1 = self.editCommentToPerson("comment-edit-1")
         self.assertBodyTextPresent(commentTextNew1)
 
-        commentTextNew3 = xtest_common.editCommentToPerson(self, "comment-edit-3")
+        commentTextNew3 = self.editCommentToPerson("comment-edit-3")
         self.assertBodyTextPresent(commentTextNew3)
 
         # check if all new comments are present here, and 2-nd comment left unchanged
@@ -123,7 +123,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         adminLogin = self.getAdminLogin()
         adminPass = self.getAdminPass()
     
-        xtest_common.performLoginAsAdmin(self, adminLogin, adminPass)
+        self.performLoginAsAdmin()
         
         self.gotoRoot()
             
@@ -140,7 +140,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     # just check text is on the page.
         print "Checking that all filled fields are displayed on the page. "
         
-        xtest_common.checkPersonAliasInPersonView(self, fullAlias)
+        self.checkPersonAliasInPersonView(fullAlias)
 
         self.assertBodyTextPresent(inpBirthDate)
         self.assertBodyTextPresent(inpSchool)
@@ -193,6 +193,6 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         self.clickElementById("update-person-submit")
         
         self.assertBodyTextPresent(u"Участник успешно сохранён")
-        xtest_common.gotoBackToAnketaView(self)
+        self.gotoBackToAnketaView()
         
         self.assertElementTextById("anketa_status-span", u"Ждёт собес.")

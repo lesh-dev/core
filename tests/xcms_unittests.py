@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
+import xtest_common
 
 class XcmsUnitTests(xtest_common.XcmsBaseTest):
 	"""
@@ -10,7 +9,7 @@ class XcmsUnitTests(xtest_common.XcmsBaseTest):
 	"""
 	def run(self):
 
-		xtest_common.assertNoInstallerPage(self)
+		self.assertNoInstallerPage()
 
 		self.gotoPage("/unittest.php")
 		self.assertSourceTextPresent(u"UNIT TESTS PASSED OK");

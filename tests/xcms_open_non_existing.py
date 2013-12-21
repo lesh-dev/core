@@ -14,7 +14,7 @@ class XcmsOpenNonExisting(xtest_common.XcmsBaseTest):
 	def run(self):
 		self.setAutoPhpErrorChecking(True)
 		
-		xtest_common.assertNoInstallerPage(self)
+		self.assertNoInstallerPage()
 		
 		self.gotoPage("/qqq");
 		self.assertTextPresent("//div[@class='error-widget']", u"Нет такой страницы")

@@ -133,7 +133,7 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         adminLogin = self.getAdminLogin()
         adminPass = self.getAdminPass()
 
-        xtest_common.performLoginAsAdmin(self, adminLogin, adminPass)
+        self.performLoginAsAdmin() # TODO: manager
         
         self.gotoRoot()
             
@@ -150,7 +150,7 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
     # just check text is on the page.
         self.logAdd("Checking that all filled fields are displayed on the page. ")
         
-        xtest_common.checkPersonAliasInPersonView(self, fullAlias)
+        self.checkPersonAliasInPersonView(fullAlias)
 
         self.assertBodyTextPresent(inpBirthDate)
         self.assertBodyTextPresent(inpSchool)
