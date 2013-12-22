@@ -29,7 +29,7 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
     def checkDocType(self):
         firstLine = self.getPageSourceFirstLine()
         if not "<!DOCTYPE" in firstLine:
-            if self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный"]):
+            if self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"]):
                 self.logAdd("DOCTYPE not detected, but this page seems to be Auth page. ", "warning")
                 return
             # TODO: FIXME: wait for fixing of bug 678
@@ -209,6 +209,9 @@ class XcmsTestWithConfig(XcmsBaseTest):
     
     def getAdminPanelLinkName(self):
         return u"Админка"
+
+    def getNewsLinkName(self):
+        return u"Новости"
     
     def getAnketaSuccessSubmitMessage(self):
         return u"Спасибо, Ваша анкета принята!"

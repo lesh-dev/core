@@ -314,6 +314,7 @@ class SeleniumTest(object):
             exceptionMessage = "Forbidden URL is found on the page in assertUrlNotPresent: " + userSerialize(linkName) + ". " + self.displayReason(reason)
             self.failTest(exceptionMessage)
         except ItemNotFound:
+            self.logAdd("URL " + userSerialize(linkName) + " is really not present (ItemNotFound exception raised). ")
             pass
 
     def assertUrlPresent(self, linkName, reason = ""):
@@ -345,13 +346,13 @@ class SeleniumTest(object):
     def checkboxIsValid(self, value):
         return value == "checked" or value == "true"
                 
-    def checkCheckboxValueById(self, eleId, boolValue = True):
+    def checkCheckboxValueById(self, eleId, boolValue = True, reason = ""):
         self.checkEmptyParam(eleId, "checkCheckboxValueById")
         value = self.getElementById(eleId).get_attribute("checked")
 #       print "value: ", value
         if value and not self.checkboxIsValid(value):
             msg = "Strange value for checkbox '" + eleId + "': " + userSerialize(value)
-            self.failTest(msg)
+            self.failTest(msg + self.displayReason(reason))
         
         if boolValue: # check if it is 'checked'
             if value and self.checkboxIsValid(value):
@@ -363,10 +364,33 @@ class SeleniumTest(object):
                 self.logAdd("check-box:false, element id: '" + eleId + "'. ")
                 return False
             return True
+
+    def checkCheckboxValueByName(self, eleName, boolValue = True, reason = ""):
+        self.checkEmptyParam(eleName, "checkCheckboxValueByName")
+        value = self.getElementByName(eleName).get_attribute("checked")
+#       print "value: ", value
+        if value and not self.checkboxIsValid(value):
+            msg = "Strange value for checkbox " + userSerialize(eleName) + ": " + userSerialize(value)
+            self.failTest(msg + self.displayReason(reason))
+        
+        if boolValue: # check if it is 'checked'
+            if value and self.checkboxIsValid(value):
+                self.logAdd("check-box:true, element name: " + userSerialize(eleName) + ". ")
+                return True
+            return False
+        else: # check if it is unchecked
+            if value and self.checkboxIsValid(value):
+                self.logAdd("check-box:false, element name: " + userSerialize(eleName) + ". ")
+                return False
+            return True
                 
-    def assertCheckboxValueById(self, eleId, boolValue = True):
-        if not self.checkCheckboxValueById(eleId, boolValue):
-            self.failTest("Checkbox with id '" + eleId + "' has improper value, expected " + userSerialize(boolValue) + ". ")
+    def assertCheckboxValueById(self, eleId, boolValue = True, reason = ""):
+        if not self.checkCheckboxValueById(eleId, boolValue, reason):
+            self.failTest("Checkbox with id '" + eleId + "' has improper value, expected " + userSerialize(boolValue) + ". " + self.displayReason(reason))
+
+    def assertCheckboxValueByName(self, eleName, boolValue = True, reason = ""):
+        if not self.checkCheckboxValueByName(eleName, boolValue, reason):
+            self.failTest("Checkbox with name " + userSerialize(eleName) + " has improper value, expected " + userSerialize(boolValue) + ". " + self.displayReason(reason))
             
     def fillElementByName(self, name, text, clear = True):
         self.checkEmptyParam(name, "fillElementByName")
@@ -605,8 +629,8 @@ class SeleniumTest(object):
     def assertBodyTextNotPresent(self, text, reason = ""):
         return self.assertTextNotPresent("/html/body", text, reason)
 
-    def assertSourceTextPresent(self, text):
-        return self.assertTextPresent("//*", text)
+    def assertSourceTextPresent(self, text, reason = ""):
+        return self.assertTextPresent("//*", text, reason)
 
     def assertSourceTextNotPresent(self, text, reason = ""):
         return self.assertTextNotPresent("//*", text, reason)

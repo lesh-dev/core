@@ -45,13 +45,13 @@ def printStats(stats, detailed):
         print "No tests were run"
         return
     
-    print "Run overall statistics:"
-    for result, testList in stats.iteritems():
-        print DecodeRunResult(result) + ":", len(testList), "tests"
-
-    print "Run detailed statistics:"
+    print "===== TEST SUITE DETAILED STATS: ====="
     for testName, result in detailed.iteritems():
         print "  " + testName + ": " + DecodeRunResult(result)
+
+    print "===== TEST SUITE OVERALL STATS: ====="
+    for result, testList in stats.iteritems():
+        print DecodeRunResult(result) + ":", len(testList), "tests"
         
     
 args = sys.argv[1:] # exclude program name
