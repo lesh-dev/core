@@ -23,5 +23,9 @@ class TestXcmsInstaller(xtest_common.XcmsTestWithConfig):
         self.setTestNotifications()
         self.checkTestNotifications()
 
+    def checkDocType(self):
+        self.logAdd("DOCTYPE checking disabled for installer test. ", "warning")
+        
+
         
     

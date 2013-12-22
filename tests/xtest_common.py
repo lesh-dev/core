@@ -78,7 +78,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def gotoAddPerson(self):
         self.gotoUrlByLinkText(u"Добавить участника")
 
-    def gotoNotificationPage(self):
+    def gotoNotificationsPage(self):
         self.gotoUrlByLinkText(u"Уведомления")
 
     def gotoCreatePage(self, reason = ""):
