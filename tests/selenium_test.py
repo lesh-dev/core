@@ -81,6 +81,10 @@ def RunTest(test):
     except HTTPException as e:
         test.logAdd("HTTP error occured. Seems like browser connection error occured (window has been closed, etc). ", "error")
         return 2
+    except KeyboardInterrupt as e:
+        test.logAdd("Keyboard interrupt received, stopping test suite. ")
+        test.handleException(e)
+        return 2
     except Exception as e:
         print "Generic test exception: ", e
         test.handleException(e)

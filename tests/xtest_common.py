@@ -119,6 +119,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         
         self.performLoginAsAdmin()
         self.gotoAdminPanel()
+        self.gotoNotificationsPage()
 
         reason = "Notifications were not set properly. "
         
