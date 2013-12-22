@@ -2,9 +2,8 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
 
-class XcmsOpenNonExisting(xtest_common.XcmsTest):
+class XcmsOpenNonExisting(xtest_common.XcmsBaseTest):
 	"""
 	This test checks '404 page' handling in XCMS functional
 	Steps:
@@ -15,7 +14,9 @@ class XcmsOpenNonExisting(xtest_common.XcmsTest):
 	def run(self):
 		self.setAutoPhpErrorChecking(True)
 		
-		xtest_common.assertNoInstallerPage(self)
+		self.assertNoInstallerPage()
+		
+		self.set404Checking(False)
 		
 		self.gotoPage("/qqq");
 		self.assertTextPresent("//div[@class='error-widget']", u"Нет такой страницы")

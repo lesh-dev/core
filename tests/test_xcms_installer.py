@@ -1,11 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import selenium_test, xtest_common, random_crap
-from xtest_config import XcmsTestConfig
-from selenium_test import SeleniumTest
+import random_crap, xtest_common
 
-class TestXcmsInstaller(SeleniumTest):
+class TestXcmsInstaller(xtest_common.XcmsTestWithConfig):
     """
     This test checks XCMS installator.
     It does following steps:
@@ -16,16 +14,18 @@ class TestXcmsInstaller(SeleniumTest):
     
     def run(self):
         self.gotoRoot()
+
         self.assertSourceTextPresent(["XCMS installer", u"Установка XCMS"])
-        # very meaningful name...
         self.clickElementByName("submit_variables")
         self.assertSourceTextPresent(u"Установка завершена!")
         self.gotoUrlByLinkText(u"Перейти к сайту")
+               
+        self.setTestNotifications()
+        self.checkTestNotifications()
+
+    def checkDocType(self):
+        self.logAdd("DOCTYPE checking disabled for installer test. ", "warning")
         
-        # set notifications - once for all tests to avoid broadcast notifications to all production server admins.
-        
-        conf = XcmsTestConfig()
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
 
         
     

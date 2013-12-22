@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
 
 class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
     """
@@ -15,33 +14,31 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
     * correct all errors and finally submit form.
     """
     
-    def tryWrongSubmit(self, forbidReason):
-        submitOkMsg = u"Спасибо, Ваша анкета принята!"
+    def trySubmit(self, reason = None):        
         self.clickElementById("submit-anketa-button")
-        self.assertBodyTextNotPresent(submitOkMsg, forbidReason)
+        if reason:
+            self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage(), reason)
     
     def run(self):
         # anketa fill negative test:
-        
-        self.setAutoPhpErrorChecking(True)
-        xtest_common.assertNoInstallerPage(self)
-
-        conf = XcmsTestConfig()
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
-        
-        testMailPrefix = conf.getAnketaNamePrefix()
+                
+        testMailPrefix = self.m_conf.getAnketaNamePrefix()
             
         self.gotoRoot()
         
         #navigate to anketas
         
-        self.gotoUrlByLinkText(u"Поступление")
-        self.gotoUrlByLinkText(u"Анкета")
-        self.assertBodyTextPresent(u"Регистрационная анкета")
+        self.gotoUrlByLinkText(self.getEntranceLinkName())
+        self.gotoAnketa()
+        
+        self.assertBodyTextPresent(self.getAnketaPageHeader())
             
         # try to submit empty form.
-        self.tryWrongSubmit("Empty form should not be submitted. ")
-        self.assertBodyTextPresent(u"Поле 'Фамилия' слишком короткое")
+        self.trySubmit("Empty form should not be submitted. ")
+        
+        lastNameTooShort = u"Поле 'Фамилия' слишком короткое"
+        
+        self.assertBodyTextPresent(lastNameTooShort)
 
         # generate some text
         inpLastName = testMailPrefix + u"Криворучкин" + random_crap.randomText(5);
@@ -68,17 +65,17 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         # try fill only surname 
         inpLastName = self.fillElementById("last_name-input", inpLastName)
         
-        self.tryWrongSubmit("Only Last name was filled. ")
+        self.trySubmit("Only Last name was filled. ")
         self.assertBodyTextPresent(u"Поле 'Имя' слишком короткое")
         
         inpFirstName = self.fillElementById("first_name-input", inpFirstName)
         
-        self.tryWrongSubmit("Only Last name and First name was filled. ")
+        self.trySubmit("Only Last name and First name was filled. ")
         self.assertBodyTextPresent(u"Поле 'Отчество' слишком короткое")
 
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
 
-        self.tryWrongSubmit("Only FIO values were filled. ")
+        self.trySubmit("Only FIO values were filled. ")
         self.assertBodyTextPresent(u"Класс не указан")
         
         inpBirthDate = self.fillElementById("birth_date-input", inpBirthDate)
@@ -87,7 +84,7 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         
         inpClass = self.fillElementById("current_class-input", inpClass)
 
-        self.tryWrongSubmit("Phone fields were not filled. ")
+        self.trySubmit("Phone fields were not filled. ")
         self.assertBodyTextPresent(u"Укажите правильно хотя бы один из телефонов")
 
         inpPhone = self.fillElementById("phone-input",inpPhone)
@@ -97,16 +94,18 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         inpSkype = self.fillElementById("skype-input", inpSkype)
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
 
-        self.tryWrongSubmit("Favourites were not filled")
-        self.assertBodyTextPresent(u"Если Вы уверены, что не хотите указывать эту информацию")
+        areYouSure = u"Если Вы уверены, что не хотите указывать эту информацию"
+        
+        self.trySubmit("Favourites were not filled")
+        self.assertBodyTextPresent(areYouSure)
 
         inpFav = self.fillElementById("favourites-text", inpFav)
-        self.tryWrongSubmit("Achievements were not filled")
-        self.assertBodyTextPresent(u"Если Вы уверены, что не хотите указывать эту информацию")
+        self.trySubmit("Achievements were not filled")
+        self.assertBodyTextPresent(areYouSure)
 
         inpAch = self.fillElementById("achievements-text", inpAch)
-        self.tryWrongSubmit("Hobbies were not filled")
-        self.assertBodyTextPresent(u"Если Вы уверены, что не хотите указывать эту информацию")
+        self.trySubmit("Hobbies were not filled")
+        self.assertBodyTextPresent(areYouSure)
 
         inpHob = self.fillElementById("hobby-text", inpHob)
         
@@ -114,37 +113,32 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         
         self.fillElementById("last_name-input", "")
         
-        self.tryWrongSubmit("Empty last name is not allowed. ")
-        self.assertBodyTextPresent(u"Поле 'Фамилия' слишком короткое")
+        self.trySubmit("Empty last name is not allowed. ")
+        self.assertBodyTextPresent(lastNameTooShort)
 
         # fill it again.
         inpLastName = self.fillElementById("last_name-input", inpLastName)
 
         self.fillElementById("hobby-text", "")
 
-        self.tryWrongSubmit("Hobbies were erased")
-        self.assertBodyTextPresent(u"Если Вы уверены, что не хотите указывать эту информацию")
+        self.trySubmit("Hobbies were erased")
+        self.assertBodyTextPresent(areYouSure)
         # no erase achievements.
         self.fillElementById("achievements-text", "")
-        self.tryWrongSubmit("Enter confirmation mode with erased field 'A' and remove another field 'B'. Revalidation check after bug #529")
+        self.trySubmit("Enter confirmation mode with erased field 'A' and remove another field 'B'. Revalidation check after bug #529")
 
         inpHob = self.fillElementById("hobby-text", inpHob)
         inpAch = self.fillElementById("achievements-text", inpAch)
 
         # at last, it should work.
-        self.clickElementById("submit-anketa-button")
-        self.assertBodyTextPresent(u"Спасибо, Ваша анкета принята!")
+        self.trySubmit()
             
-        # now login as admin
-    
-        adminLogin = conf.getAdminLogin()
-        adminPass = conf.getAdminPass()
-
-        xtest_common.performLoginAsAdmin(self, adminLogin, adminPass)
+        # now login as manager
+        self.performLoginAsManager()
         
         self.gotoRoot()
             
-        self.gotoUrlByLinkText(u"Анкеты")
+        self.gotoUrlByLinkText(self.getAnketaListMenuName())
         
         shortAlias = inpLastName + " " + inpFirstName
         fullAlias = shortAlias + " " + inpMidName
@@ -157,7 +151,7 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
     # just check text is on the page.
         self.logAdd("Checking that all filled fields are displayed on the page. ")
         
-        xtest_common.checkPersonAliasInPersonView(self, fullAlias)
+        self.checkPersonAliasInPersonView(fullAlias)
 
         self.assertBodyTextPresent(inpBirthDate)
         self.assertBodyTextPresent(inpSchool)

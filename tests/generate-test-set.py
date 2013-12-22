@@ -8,7 +8,7 @@ import re
 from os import listdir
 from os.path import isfile
 
-py_files = sorted([ f for f in listdir('.') if isfile(f) and f[-3:] == '.py' ])
+py_files = sorted([ f for f in listdir('.') if isfile(f) and f[0:5] == "xcms_" and f[-3:] == '.py' ])
 
 imports = []
 calls = []
@@ -20,7 +20,7 @@ for fn in py_files:
     if not classLineList:
         continue
     classLine = classLineList.pop().strip()
-    r = re.match(r"class ([\w]+)\([\w_.]+Test\):", classLine)
+    r = re.match(r"class ([\w_]+)\([\w_.]+\):", classLine)
     if not r:
         #print "Cannot match in ", cl
         continue

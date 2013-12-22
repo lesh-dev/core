@@ -29,5 +29,14 @@ class XcmsTestConfig:
             #return "NO-MAIL-TEST"
     def getForgottenPasswordCaptcha(self):
         return u"ампер"
+    
+    def getValidEmail1(self):
+        return "testsite001@fizlesh.ru"
+    
+    def getValidEmail2(self):
+        return "testsite002@fizlesh.ru"
+    
+    def getTestSchoolName(self):
+        return u"ЛЭШ-2013"
                 
     

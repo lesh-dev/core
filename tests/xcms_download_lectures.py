@@ -2,9 +2,8 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
 
-class XcmsDownloadLectures(xtest_common.XcmsTest):
+class XcmsDownloadLectures(xtest_common.XcmsBaseTest):
     """
     This test checks /lectures folder (check it is not confused by rewrite rules)
     It does following steps:
@@ -12,8 +11,15 @@ class XcmsDownloadLectures(xtest_common.XcmsTest):
     * downloads some files from this folder.
     """
     def run(self):
-        self.gotoPage("/")
+        self.gotoRoot()
         self.gotoPage("/lectures")
+        
+        self.logAdd("Downloading lectures")
+        
         self.gotoPage("/lectures/iext.pdf")
         self.gotoPage("/lectures/iext-by-an.pdf")
         self.gotoPage("/lectures/prak")
+        
+    def checkDocType(self):
+        self.logAdd("DOCTYPE checking is disabled for this test. ", "warning")
+        

@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
 from xtest_config import XcmsTestConfig
 
-class XcmsAuthRootLogin(xtest_common.XcmsTest):
+class XcmsAuthRootLogin(xtest_common.XcmsTestWithConfig):
 	"""
 	This test checks root login functional.
 	It does following steps:
@@ -16,14 +16,10 @@ class XcmsAuthRootLogin(xtest_common.XcmsTest):
 	
 	def run(self):
 		self.setAutoPhpErrorChecking(True)
-		self.maximizeWindow()
 		
-		conf = XcmsTestConfig()
+		self.performLoginAsAdmin()
+		self.gotoAdminPanel()
 		
-		xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
-		
-		xtest_common.gotoAdminPanel(self)
-		
-		self.assertBodyTextPresent(u"Пользователи")
+		self.assertBodyTextPresent(self.getUserListLinkName())
 		self.assertBodyTextPresent(u"Очистить кэш")
 	

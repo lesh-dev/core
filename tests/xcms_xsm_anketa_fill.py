@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
 
 class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     """
@@ -14,7 +13,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     * login as admin (root)
     * naviagates to anketa list
     * clicks on new anketa
-    * checks if all enetered data match screen form.
+    * checks if all entered data match screen form.
     * adds 3 comments to this new person
     * edits 2 of 3 comments
     * changes person status incrementally
@@ -26,32 +25,32 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     """
     
     def addCommentsToPerson(self):
-        commentText1 = xtest_common.addCommentToPerson(self)
+        commentText1 = self.addCommentToPerson()
         print "Added first comment: ", commentText1
         self.assertBodyTextPresent(commentText1)
 
-        commentText2 = xtest_common.addCommentToPerson(self)
+        commentText2 = self.addCommentToPerson()
         print "Added second comment: ", commentText2
         self.assertBodyTextPresent(commentText2)
 
-        commentText3 = xtest_common.addCommentToPerson(self)
+        commentText3 = self.addCommentToPerson()
         print "Added third comment: ", commentText3
         self.assertBodyTextPresent(commentText3)
 
         # and now let's edit one of them.
 
         self.gotoIndexedUrlByLinkText(u"Правка", 0)
-        xtest_common.gotoBackAfterComment(self)
+        self.gotoBackAfterComment()
 
         self.gotoIndexedUrlByLinkText(u"Правка", 1)
-        xtest_common.gotoBackAfterComment(self)
+        self.gotoBackAfterComment()
 
         # oh, no! we want to use comment link ids!
 
-        commentTextNew1 = xtest_common.editCommentToPerson(self, "comment-edit-1")
+        commentTextNew1 = self.editCommentToPerson("comment-edit-1")
         self.assertBodyTextPresent(commentTextNew1)
 
-        commentTextNew3 = xtest_common.editCommentToPerson(self, "comment-edit-3")
+        commentTextNew3 = self.editCommentToPerson("comment-edit-3")
         self.assertBodyTextPresent(commentTextNew3)
 
         # check if all new comments are present here, and 2-nd comment left unchanged
@@ -64,25 +63,17 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     def run(self):
         # anketa fill positive test:
         # all fields are filled with correct values.
-        conf = XcmsTestConfig()
-
-        self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
-        xtest_common.assertNoInstallerPage(self)
-        
-        testMailPrefix = conf.getAnketaNamePrefix()
-        
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
-            
+                       
         self.gotoRoot()
         
         #navigate to anketas
         
-        self.gotoUrlByLinkText(u"Поступление")
-        self.gotoUrlByLinkText(u"Анкета")
-        self.assertBodyTextPresent(u"Регистрационная анкета")
+        self.gotoUrlByLinkText(self.getEntranceLinkName())
+        self.gotoAnketa()
+        self.assertBodyTextPresent(self.getAnketaPageHeader())
             
         # generate
-        inpLastName = testMailPrefix + u"Чапаев" + random_crap.randomText(5);
+        inpLastName = u"Чапаев" + random_crap.randomText(5);
         inpFirstName = u"Василий" + random_crap.randomText(3)
         inpMidName = u"Иваныч" + random_crap.randomText(3)
         
@@ -124,19 +115,15 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         
         self.clickElementById("submit-anketa-button")
         
-        self.assertBodyTextPresent(u"Спасибо, Ваша анкета принята!")
-        
+        self.assertBodyTextPresent(self.getAnketaSuccessSubmitMessage())
             
-    # now login as admin
-    
-        adminLogin = conf.getAdminLogin()
-        adminPass = conf.getAdminPass()
-    
-        xtest_common.performLoginAsAdmin(self, adminLogin, adminPass)
+        # now login as admin
+        
+        self.performLoginAsManager()
         
         self.gotoRoot()
             
-        self.gotoUrlByLinkText(u"Анкеты")
+        self.gotoUrlByLinkText(self.getAnketaListMenuName())
         
         shortAlias = xtest_common.shortAlias(inpLastName, inpFirstName)
         fullAlias = xtest_common.fullAlias(inpLastName, inpFirstName, inpMidName)
@@ -149,7 +136,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     # just check text is on the page.
         print "Checking that all filled fields are displayed on the page. "
         
-        xtest_common.checkPersonAliasInPersonView(self, fullAlias)
+        self.checkPersonAliasInPersonView(fullAlias)
 
         self.assertBodyTextPresent(inpBirthDate)
         self.assertBodyTextPresent(inpSchool)
@@ -202,6 +189,6 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         self.clickElementById("update-person-submit")
         
         self.assertBodyTextPresent(u"Участник успешно сохранён")
-        xtest_common.gotoBackToAnketaView(self)
+        self.gotoBackToAnketaView()
         
         self.assertElementTextById("anketa_status-span", u"Ждёт собес.")

@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap, time
-from xtest_config import XcmsTestConfig
+import xtest_common, random_crap
 
 class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
     """
@@ -10,12 +9,6 @@ class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
     """
 
     def run(self):
-        self.setAutoPhpErrorChecking(True)
-
-        xtest_common.assertNoInstallerPage(self)
-
-        conf = XcmsTestConfig()
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
 
         # first, login as admin
         inpLogin = "dup_user_" + random_crap.randomText(8)
@@ -26,24 +19,24 @@ class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
         inpName1 = u"Вася " + random_crap.randomText(6)
         inpName2 = u"Петя " + random_crap.randomText(6)
 
-        inpLogin, inpEMail1, inpPass1, inpName1 = xtest_common.createNewUser(self, conf, inpLogin, inpEMail1, inpPass1, inpName1)
+        inpLogin, inpEMail1, inpPass1, inpName1 = self.createNewUser(inpLogin, inpEMail1, inpPass1, inpName1)
 
-        inpLogin, inpEMail2, inpPass2, inpName2 = xtest_common.createNewUser(self, conf, inpLogin, inpEMail2, inpPass2, inpName2, ["do_not_validate"])
+        inpLogin, inpEMail2, inpPass2, inpName2 = self.createNewUser(inpLogin, inpEMail2, inpPass2, inpName2, ["do_not_validate"])
 
         self.assertBodyTextNotPresent(u"Пользователь '" + inpLogin + u"' успешно создан")
 
-        xtest_common.performLogout(self)
+        self.performLogout()
 
-        print "logging as created first user. "
-        if not xtest_common.performLogin(self, inpLogin, inpPass1):
-            raise selenium_test.TestError("Cannot login as newly created user. ")
+        self.logAdd("logging as created first user. ")
+        if not self.performLogin(inpLogin, inpPass1):
+            self.failTest("Cannot login as newly created user. ")
 
         # logout self
-        self.gotoUrlByLinkText(u"Выход")
+        self.performLogout()
 
         print "try logging as created second user. "
-        if xtest_common.performLogin(self, inpLogin, inpPass2):
-            raise selenium_test.TestError("I am able to login as 'second' user with duplicate login and new password. ")
+        if self.performLogin(inpLogin, inpPass2):
+            self.failTest("I am able to login as 'second' user with duplicate login and new password. ")
 
 
 

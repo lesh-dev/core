@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
 
 class XcmsXsmAvatar(xtest_common.XcmsTest):
     """
@@ -23,23 +22,14 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
     """
 
     def run(self):
-        conf = XcmsTestConfig()
-        self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
-        xtest_common.assertNoInstallerPage(self)
 
+        testMailPrefix = self.m_conf.getAnketaNamePrefix()
 
-        testMailPrefix = conf.getAnketaNamePrefix()
+        self.performLoginAsManager()
 
-        adminLogin = conf.getAdminLogin()
-        adminPass = conf.getAdminPass()
-
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), adminLogin, adminPass)
-        xtest_common.performLoginAsAdmin(self, adminLogin, adminPass)
-
-        xtest_common.gotoAllPeople(self)
-
-        self.gotoUrlByLinkText(u"Добавить участника")
-
+        self.gotoAllPeople()
+        self.gotoAddPerson()
+        
         # generate
         inpLastName = testMailPrefix + u"Аватаров" + random_crap.randomText(5);
         inpFirstName = u"Петр_" + random_crap.randomText(3)
@@ -53,12 +43,12 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
         
         self.clickElementById("update-person-submit")
         
-        xtest_common.gotoBackToPersonView(self)
+        self.gotoBackToPersonView()
 
         fullAlias = inpLastName + " " + inpFirstName + " " + inpMidName
         # check if person alias is present (person saved correctly)
         
-        xtest_common.checkPersonAliasInPersonView(self, fullAlias)
+        self.checkPersonAliasInPersonView(fullAlias)
         # check avatar
         avatarSrc = self.getImageSrcById("avatar")
         print "Avatar Source: ", avatarSrc
@@ -67,13 +57,13 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
             self.failTest("Wrong (default) avatar detected, expected custom image. VK ID: " + inpSocial);
         
         # ok, now let's test xyz100 avatar.
-        xtest_common.gotoEditPerson(self)
+        self.gotoEditPerson()
         
         inpSocial = "http://vk.com/vasya10"
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
         
         self.clickElementById("update-person-submit")
-        xtest_common.gotoBackToPersonView(self)
+        self.gotoBackToPersonView()
 
         avatarSrc = self.getImageSrcById("avatar")
         print "Avatar Source: ", avatarSrc
@@ -81,13 +71,13 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
             self.failTest("Wrong (default) avatar detected, expected custom image. VK ID: " + inpSocial);
             
         # ok, now let's test id123456 avatar.
-        xtest_common.gotoEditPerson(self)
+        self.gotoEditPerson()
         
         inpSocial = "http://vk.com/id777314"
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
         
         self.clickElementById("update-person-submit")
-        xtest_common.gotoBackToPersonView(self)
+        self.gotoBackToPersonView()
 
         avatarSrc = self.getImageSrcById("avatar")
         print "Avatar Source: ", avatarSrc
@@ -95,13 +85,13 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
             self.failTest("Wrong (default) avatar detected, expected custom image. VK ID: " + inpSocial);
             
         # ok, now let's test default avatar.
-        xtest_common.gotoEditPerson(self)
+        self.gotoEditPerson()
         
         inpSocial = ""
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
         
         self.clickElementById("update-person-submit")
-        xtest_common.gotoBackToPersonView(self)
+        self.gotoBackToPersonView()
 
         avatarSrc = self.getImageSrcById("avatar")
         print "Avatar Source: ", avatarSrc
@@ -109,13 +99,13 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
             self.failTest("Default avatar expected. Current src: " + avatarSrc);
 
         # ok, now let's test non-existing VK page.
-        xtest_common.gotoEditPerson(self)
+        self.gotoEditPerson()
         
         inpSocial = "http://vk.com/id12345678901234567890"
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
         
         self.clickElementById("update-person-submit")
-        xtest_common.gotoBackToPersonView(self)
+        self.gotoBackToPersonView()
 
         avatarSrc = self.getImageSrcById("avatar")
         print "Avatar Source: ", avatarSrc

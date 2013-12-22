@@ -2,7 +2,8 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
+
+
 
 class XcmsXsmAddExams(xtest_common.XcmsTest):
     """
@@ -15,7 +16,6 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     * add some courses
     * set exam status
     """
-
     def addExamsById(self, examIdList):
         for exam in examIdList:
             self.addExamById(exam)
@@ -25,18 +25,18 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
 
         self.setOptionValueByIdAndValue("course_id-selector", exam)
         self.clickElementByName("update-exam")
-        xtest_common.gotoBackToPersonView(self)
+        self.gotoBackToPersonView()
         
     def setExamPassed(self, examLineList):
         for examLine in examLineList:            
             # <a><span>Прослушан</span></a>
-            self.gotoIndexedUrlByLinkText(u"Прослушан", examLine, "span")
+            self.gotoIndexedUrlByLinkText(self.m_listenedStatus, examLine, "span")
             self.setOptionValueByIdAndValue("exam_status-selector", "passed")
             
-            examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
+            examComment = u"Коммент к сданному зачёту: " + random_crap.randomText(6)
             self.fillElementByName("exam_comment", examComment)
             self.clickElementByName("update-exam")
-            xtest_common.gotoBackToPersonView(self)
+            self.gotoBackToPersonView()
             
         self.assertBodyTextPresent(u"Сдан")
             
@@ -44,36 +44,28 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     def setExamNotPassed(self, examLineList):
         for examLine in examLineList:            
             # <a><span>Прослушан</span></a>
-            self.gotoIndexedUrlByLinkText(u"Прослушан", examLine, "span")
+            self.gotoIndexedUrlByLinkText(self.m_listenedStatus, examLine, "span")
             self.setOptionValueByIdAndValue("exam_status-selector", "notpassed")
             
-            examComment = u"Коммент к зачёту: " + random_crap.randomText(4)
+            examComment = u"Коммент к несданному зачёту: " + random_crap.randomText(6)
             self.fillElementByName("exam_comment", examComment)
             self.clickElementByName("update-exam")
-            xtest_common.gotoBackToPersonView(self)
+            self.gotoBackToPersonView()
             
         self.assertBodyTextPresent(u"Не сдан")
 
 
     def run(self):
-        conf = XcmsTestConfig()
-        self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
-        xtest_common.assertNoInstallerPage(self)
+        
+        self.m_listenedStatus = u"Прослушан"
+        
+        self.performLoginAsManager()
+        self.gotoAllPeople()
 
-        testMailPrefix = conf.getAnketaNamePrefix()
-
-        adminLogin = conf.getAdminLogin()
-        adminPass = conf.getAdminPass()
-
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), adminLogin, adminPass)
-        xtest_common.performLoginAsAdmin(self, adminLogin, adminPass)
-
-        xtest_common.gotoAllPeople(self)
-
-        self.gotoUrlByLinkText(u"Добавить участника")
+        self.gotoAddPerson()
 
         # generate
-        inpLastName = testMailPrefix + u"Зачётов" + random_crap.randomText(5);
+        inpLastName = u"Зачётов" + random_crap.randomText(5);
         inpFirstName = u"Андрей_" + random_crap.randomText(3)
         inpMidName = u"Михалыч_" + random_crap.randomText(3)
 
@@ -86,17 +78,17 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         
         self.clickElementById("update-person-submit")
         
-        xtest_common.gotoBackToPersonView(self)
+        self.gotoBackToPersonView()
 
         fullAlias = inpLastName + " " + inpFirstName + " " + inpMidName
         # check if person alias is present (person saved correctly)
-        xtest_common.checkPersonAliasInPersonView(self, fullAlias)
+        self.checkPersonAliasInPersonView(fullAlias)
         
-        self.gotoUrlByLinkText(u"ЛЭШ-2013")
-        self.assertBodyTextPresent(u"На данной школе не присутствовал")
+        self.gotoUrlByLinkText(self.m_conf.getTestSchoolName())
+        self.assertBodyTextPresent(self.getPersonAbsenceMessage())
         self.gotoUrlByLinkText(u"Зачислить")
         self.clickElementByName("update-person_school")
-        xtest_common.gotoBackToPersonView(self)
+        self.gotoBackToPersonView()
 
         #<option  value="95">Базовое электричество &#8212; Тараненко Сергей</option>
         #<option  value="134">Биомеханика &#8212; Преподаватель Другого</option>

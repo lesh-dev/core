@@ -30,6 +30,9 @@ def randomVkontakte():
 def randomWord(length, wordOptions = [], specialChars = specialCharsDefault):
     rs = ""
     
+    if not wordOptions:
+        wordOptions = []
+        
     if "english" in wordOptions:
         enLang = True
     else:
@@ -67,6 +70,8 @@ def randomCrap(wordNumber, crapOptions = [], specialChars = specialCharsDefault)
     rs = ""
     for i in range(0, wordNumber):
         separator = " "
+        if not crapOptions:
+            crapOptions = []
         if "multiline" in crapOptions:
             if random.random() < 0.2:
                 separator = "\n"

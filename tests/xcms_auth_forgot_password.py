@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap, time
-from xtest_config import XcmsTestConfig
+import xtest_common, random_crap
 
 class XcmsAuthForgotPassword(xtest_common.XcmsTest):
     """
@@ -20,43 +19,38 @@ class XcmsAuthForgotPassword(xtest_common.XcmsTest):
     """
             
     def run(self):
-        conf = XcmsTestConfig()
-        self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
-        
-        xtest_common.assertNoInstallerPage(self)
-        
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
-            
         self.gotoRoot()
         
         # create new user with ruined memory
         inpLogin = "oblivion_" + random_crap.randomText(6)
-        inpEMail = "testsite001@fizlesh.ru"
+        
+        inpEMail = self.m_conf.getValidEmail1()
+        
         inpPass = random_crap.randomText(10)
         inpName = u"Ruined_Memory_" + random_crap.randomText(6)
 
-        inpLogin, inpEMail, inpPass, inpName = xtest_common.createNewUser(self, conf, inpLogin, inpEMail, inpPass, inpName)
+        inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
         
         print "logging as created user. "
-        if not xtest_common.performLogin(self, inpLogin, inpPass):
-            raise selenium_test.TestError("Cannot login as newly created user. ")
+        if not self.performLogin(inpLogin, inpPass):
+            self.failTest("Cannot login as newly created user. ")
         
         # logout self 
-        xtest_common.performLogoutFromSite(self)
+        self.performLogoutFromSite()
 
         # we navigate to root page, and see auth panel!
-        print "login again and press 'forgot password' button "
-        xtest_common.gotoAuthLink(self)
+        self.logAdd("login again and press 'forgot password' button ")
+        self.gotoAuthLink()
         
         self.fillElementById("reset-email", inpEMail)
-        self.fillElementById("question", conf.getForgottenPasswordCaptcha())
+        self.fillElementById("question", self.m_conf.getForgottenPasswordCaptcha())
         self.clickElementById("reset-submit")
         
-        if xtest_common.performLogin(self, inpLogin, inpPass):
-            raise selenium_test.TestError("Password was not reset. Old password works. ")
+        if self.performLogin(inpLogin, inpPass):
+            self.failTest("Password was not reset. Old password works fine. ")
 
         # set random email to user to avoid problems with duplicate email (may occur only if test fails)
-        xtest_common.setUserEmailByAdmin(self, conf, inpLogin, random_crap.randomEmail())
+        self.setUserEmailByAdmin(inpLogin, random_crap.randomEmail())
 
 
         

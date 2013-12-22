@@ -2,9 +2,8 @@
 # -*- coding: utf8 -*-
 
 import xtest_common, random_crap
-from xtest_config import XcmsTestConfig
 
-class XcmsMetricsCheck(xtest_common.XcmsTest):
+class XcmsMetricsCheck(xtest_common.XcmsBaseTest):
 	"""
 	This test checks if metrics counter successfully wiped off from test website.
 	"""
@@ -12,9 +11,9 @@ class XcmsMetricsCheck(xtest_common.XcmsTest):
 
 		self.setAutoPhpErrorChecking(True)
 		
-		xtest_common.assertNoInstallerPage(self)
+		self.assertNoInstallerPage()
 		
-		self.gotoRoot();
-		self.assertSourceTextNotPresent("Metrika");
+		self.gotoRoot()
+		self.assertSourceTextNotPresent("Metrika")
 		
     

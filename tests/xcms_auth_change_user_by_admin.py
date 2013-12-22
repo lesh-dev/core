@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap, time
-from xtest_config import XcmsTestConfig
+import xtest_common, random_crap
 
 class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
     """
@@ -12,39 +11,33 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
     """
             
     def run(self):
-        conf = XcmsTestConfig()
-        self.setAutoPhpErrorChecking(conf.getPhpErrorCheckFlag())
-        
-        xtest_common.assertNoInstallerPage(self)
-        
-        xtest_common.setTestNotifications(self, conf.getNotifyEmail(), conf.getAdminLogin(), conf.getAdminPass())
-        
         # first, login as admin
         inpLogin = "priv_user_" + random_crap.randomText(8)
         inpEMail = random_crap.randomEmail()
         inpPass = random_crap.randomText(10)
         inpName = u"Саша Тестов" + random_crap.randomText(6)
 
-        inpLogin, inpEMail, inpPass, inpName = xtest_common.createNewUser(self, conf, inpLogin, inpEMail, inpPass, inpName)
+        inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
         
         print "logging as created user. "
-        if not xtest_common.performLogin(self, inpLogin, inpPass):
-            raise selenium_test.TestError("Cannot login as newly created user. ")
+        if not self.performLogin(inpLogin, inpPass):
+            self.failTest("Cannot login as newly created user. ")
         
-        self.assertUrlNotPresent(u"Админка", "default created user should have no Admin rights. ")
-        self.assertUrlNotPresent(u"Редактировать", "default created user should have no Editor rights. ")
-        self.assertUrlNotPresent(u"Анкеты", "default created user should have no Manager rights. ")
+        
+        self.assertUrlNotPresent(self.getAdminPanelLinkName(), "default created user should have no Admin rights. ")
+        self.assertUrlNotPresent(self.getEditPageInPlaceLinkName(), "default created user should have no Editor rights. ")
+        self.assertUrlNotPresent(self.getAnketaListMenuName(), "default created user should have no Manager rights. ")
         print "Okay, no we see that default user is not Admin and not Editor. "
         
         # logout self 
-        xtest_common.performLogoutFromSite(self)
+        self.performLogoutFromSite()
 
         # login as admin, enter user profile and change some fields.
         
-        xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
+        self.performLoginAsAdmin()
     
-        xtest_common.gotoAdminPanel(self)
-        xtest_common.gotoUserList(self)
+        self.gotoAdminPanel()
+        self.gotoUserList()
             
         print "enter user profile in admin CP"
 
@@ -66,21 +59,21 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
 
         self.clickElementById("update_user")
         
-        xtest_common.performLogoutFromAdminPanel(self)
+        self.performLogoutFromAdminPanel()
         
         print "logging as new user with changed permissions. now he is Admin. "
-        if not xtest_common.performLogin(self, inpLogin, inpPass):
-            raise selenium_test.TestError("Cannot login again as newly created user (with admin privs). ")
+        if not self.performLogin(inpLogin, inpPass):
+            self.failTest("Cannot login again as newly created user (with admin privs). ")
         
-        self.assertUrlPresent(u"Админка", "Now user should have Admin priviledges. ")
-        xtest_common.performLogoutFromSite(self)
+        self.assertUrlPresent(self.getAdminPanelLinkName(), "Now user should have Admin priviledges. ")
+        self.performLogoutFromSite()
         
         # ---------------------- 2nd stage: Editor
         
-        xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
+        self.performLoginAsAdmin()
         
-        xtest_common.gotoAdminPanel(self)
-        xtest_common.gotoUserList(self)
+        self.gotoAdminPanel()
+        self.gotoUserList()
             
         print "goto user profile in admin CP"
 
@@ -98,18 +91,18 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         
         self.clickElementById("update_user")
         
-        xtest_common.performLogoutFromAdminPanel(self)
+        self.performLogoutFromAdminPanel()
         
         print "logging as new user with 2-nd time changed permissions. now he is Editor. "
-        if not xtest_common.performLogin(self, inpLogin, inpPass):
-            raise selenium_test.TestError("Cannot login again as newly created user (with Editor privs). ")
+        if not self.performLogin(inpLogin, inpPass):
+            self.failTest("Cannot login again as newly created user (with Editor privs). ")
         
-        self.assertUrlPresent(u"Админка", "Now our user should have no Admin rights, but Editor uses admin panel. ")
-        self.assertUrlNotPresent(u"Анкеты", "Our user still have no Manager rights. ")
-        self.assertUrlPresent(u"Редактировать", "Now our user should have Editor rights. ")
+        self.assertUrlPresent(self.getAdminPanelLinkName(), "Now our user should have no Admin rights, but Editor uses admin panel. ")
+        self.assertUrlNotPresent(self.getAnketaListMenuName(), "Our user still have no Manager rights. ")
+        self.assertUrlPresent(self.getEditPageInPlaceLinkName(), "Now our user should have Editor rights. ")
         
-        xtest_common.gotoAdminPanel(self)
-        self.assertUrlNotPresent(u"Пользователи", "Editor should not see 'Users' menu. ")
+        self.gotoAdminPanel()
+        self.assertUrlNotPresent(self.getUserListLinkName(), "Editor should not see 'Users' menu. ")
         
         accessDeniedMsg = u"Доступ запрещён"
         
@@ -120,13 +113,13 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.gotoPage("/?&mode=group_admin&page=index&ref=ladmin")
         self.assertBodyTextPresent(accessDeniedMsg, "Hack of 'groups' hidden link succeeded. ")        
         
-        xtest_common.performLogoutFromAdminPanel(self)
+        self.performLogoutFromAdminPanel()
 
         # -------------------------------------- 3 stage: anketa manager
-        xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
+        self.performLoginAsAdmin()
         
-        xtest_common.gotoAdminPanel(self)
-        xtest_common.gotoUserList(self)
+        self.gotoAdminPanel()
+        self.gotoUserList()
             
         print "goto user profile in admin CP"
 
@@ -146,14 +139,14 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         
         self.clickElementById("update_user")
         
-        xtest_common.performLogoutFromAdminPanel(self)
+        self.performLogoutFromAdminPanel()
         
         print "logging as new user with 3-rd time changed permissions. now he is Manager. "
-        if not xtest_common.performLogin(self, inpLogin, inpPass):
-            raise selenium_test.TestError("Cannot login again as newly created user (with Manager privs). ")
+        if not self.performLogin(inpLogin, inpPass):
+            self.failTest("Cannot login again as newly created user (with Manager privs). ")
         
-        self.assertUrlNotPresent(u"Админка", "Now our user should have no access to Admin panel. ")
-        self.assertUrlPresent(u"Анкеты", "Our user should now obtain Manager rights. ")
-        self.assertUrlNotPresent(u"Редактировать", "On third stage, our user should have no Editor rights. ")
-        xtest_common.performLogoutFromSite(self)
+        self.assertUrlNotPresent(self.getAdminPanelLinkName(), "Now our user should have no access to Admin panel. ")
+        self.assertUrlPresent(self.getAnketaListMenuName(), "Our user should now obtain Manager rights. ")
+        self.assertUrlNotPresent(self.getEditPageInPlaceLinkName(), "On third stage, our user should have no Editor rights. ")
+        self.performLogoutFromSite()
         
