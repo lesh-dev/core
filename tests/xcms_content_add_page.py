@@ -25,8 +25,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         # avoid spontaneous HTML tags
         self.specChars = random_crap.specialCharsWoAngle # without <>
-        #TODO: BUG: remove this spike for Chrome
-        self.wordOptions = ["english"]
+        # here was spike for old version of Chrome - to enter only english words.
+        self.wordOptions = []
         
         self.testBaseEditing()
 

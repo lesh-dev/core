@@ -13,7 +13,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     * login as admin (root)
     * naviagates to anketa list
     * clicks on new anketa
-    * checks if all enetered data match screen form.
+    * checks if all entered data match screen form.
     * adds 3 comments to this new person
     * edits 2 of 3 comments
     * changes person status incrementally

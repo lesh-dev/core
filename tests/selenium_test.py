@@ -390,7 +390,8 @@ class SeleniumTest(object):
             ele.send_keys(text)
             return getValue(self.getElementById(eleId))
         except InvalidElementStateException as e:
-            self.failTest("Cannot set element value by id '" + eleId + "', possibly element is read-only.")
+            #print "Exception (InvalidElementStateException): ", e
+            self.fatalTest("Cannot set element value by id '" + eleId + "', possibly element is read-only.")
             
     def setOptionValueByIdAndValue(self, eleId, optValue):
         try:
@@ -408,7 +409,7 @@ class SeleniumTest(object):
         element index is started with 1, not 0.
         """
         if index < 1:
-            self.failTest("Invalid index in setOptionValueByIdAndIndex for element " + eleId + ". Index should be positive (1 and above). ")
+            self.fatalTest("Invalid index in setOptionValueByIdAndIndex for element " + eleId + ". Index should be positive (1 and above). ")
         self.addAction("set-option-by-index", "element id: '" + eleId + "', index: " + userSerialize(index))
         selEle = self.getElementById(eleId)
         optionValue = getValue(selEle.find_element_by_xpath("option[" + userSerialize(index) + "]"))
@@ -543,7 +544,7 @@ class SeleniumTest(object):
                 serOpt = []
                 if xpath in ["/html/body", "//*"]: # too large
                     serOpt = ["cut_strings"]
-                self.logAdd("checkTextPresent: current element by path " + userSerialize(xpath) + ", text: " + wrapIfLong(userSerialize(eleText, serOpt)) + ". ")
+                self.logAdd("checkTextPresent: element " + userSerialize(xpath) + " text: " + wrapIfLong(userSerialize(eleText, serOpt)) + ". ")
                 if isList(text):
                     for phrase in text:
                         if phrase in eleText:
@@ -552,7 +553,7 @@ class SeleniumTest(object):
                 else:
                     return text in eleText
             except InvalidSelectorException:
-                self.failTest("Invalid XPath expression in checkTextPresent: " + userSerialize(xpath) + ". ")
+                self.fatalTest("Invalid XPath expression in checkTextPresent: " + userSerialize(xpath) + ". ")
             except NoSuchElementException:
                 self.logAdd("checkTextPresent does not found XPath " + userSerialize(xpath) + ". ")
                 return False
