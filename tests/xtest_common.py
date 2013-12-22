@@ -30,10 +30,13 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         firstLine = self.getPageSourceFirstLine()
         if not "<!DOCTYPE" in firstLine:
             if self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный"]):
-                self.logAdd("DOCTYPE not detected, but this page seems to be Auth panel. ", "warning")
+                self.logAdd("DOCTYPE not detected, but this page seems to be Auth page. ", "warning")
                 return
             if self.checkSourceTextPresent(u"Сменить пароль"):
                 self.logAdd("DOCTYPE not detected, but this page seems to be Admin panel. ", "warning")
+                return
+            if self.curUrl().endswith("unittest.php"):
+                self.logAdd("DOCTYPE not detected, but this page seems to be Unit-tests page. ", "warning")
                 return
             self.failTest("DOCTYPE directive not found on page " + self.curUrl());
     

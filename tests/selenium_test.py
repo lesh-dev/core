@@ -59,7 +59,7 @@ def RunTest(test):
     try:
         test.init()
         test.run()
-        test.logAdd("TEST PASSED", "action")
+        test.logAdd(test.getName() + " TEST PASSED", "action")
         return 0
     except TestFatal as e:
 #       test.printActionLog()
@@ -156,7 +156,7 @@ class SeleniumTest(object):
     def __del__(self):
         if hasattr(self, 'm_driver'):
             if self.m_closeOnExit:
-                self.logAdd("Closing webdriver. ")
+                #self.logAdd("Closing webdriver. ")
                 self.m_driver.quit()
 
     def getBaseUrl(self):
@@ -183,18 +183,20 @@ class SeleniumTest(object):
         return self.shutdown(0)
         
     def handleException(self, exc):
-        self.logAdd("TEST ERROR: " + userSerialize(exc.message), "error")
+        self.logAdd(self.getName() + " TEST GENERIC ERROR: " + userSerialize(exc.message), "error")
+        print "Traceback: "
         traceback.print_exc()
         return self.shutdown(2)
                 
     def handleTestFail(self, exc):
         #self.m_driver.execute_script("alert('Test failed! See console log for details. ');")
-        self.logAdd("TEST FAILED: " + userSerialize(exc.message), "error")
+        self.logAdd(self.getName() + " TEST FAILED: " + userSerialize(exc.message), "error")
         return self.shutdown(1)
 
     def handleTestFatal(self, exc):
         #self.m_driver.execute_script("alert('Test fataled! See logs and check your test/environment. ');")
-        self.logAdd("TEST FATALED: " + userSerialize(exc.message), "fatal")
+        self.logAdd(self.getName() + " TEST FATAL ERROR: " + userSerialize(exc.message), "fatal")
+        print "Traceback: "
         traceback.print_exc()
         return self.shutdown(2)
 
@@ -567,15 +569,15 @@ class SeleniumTest(object):
         return self.checkTextPresent("/html/body", text)
 
     def fatalTest(self, errorText):
-        self.logAdd("TEST FATALED: " + errorText, "fatal")
+        self.logAdd("TEST FATAL ERROR: " + userSerialize(errorText), "fatal")
         raise TestError(errorText)
         
     def failTest(self, errorText):
-        self.logAdd("TEST FAILED: " + errorText, "error")
+        self.logAdd("TEST FAILED: " + userSerialize(errorText), "error")
         raise TestError(errorText)
 
     def failTestWithItemNotFound(self, errorText):
-        self.logAdd("TEST FAILED: " + errorText, "error")
+        self.logAdd("TEST FAILED (Item-Not-Found): " + userSerialize(errorText), "error")
         raise ItemNotFound(errorText)
 
     def assertTextPresent(self, xpath, text, reason = ""):
