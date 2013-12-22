@@ -120,7 +120,10 @@ try:
     # init detailed stats
     for fileName, test in tests.iteritems():
         testDetailedStats[test.getName()] = None
-        
+     
+    testsDone = 0
+    testsNumber = len(tests)
+    
     while tests:
         fileName, test = tests.popitem()
         if specTest:
@@ -150,6 +153,9 @@ try:
                 testStats[result].append(test.getName())
                 
             testDetailedStats[test.getName()] = result
+            
+            testsDone += 1
+            print "PROGRESS: Done", testsDone, "of", testsNumber, "tests. "
 
             if result == 2:
                 print "Fatal error detected, stopping test suite."
