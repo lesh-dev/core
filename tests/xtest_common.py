@@ -39,9 +39,6 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
             if self.checkSourceTextPresent(u"Сменить пароль"):
                 self.logAdd("DOCTYPE not detected, but this page seems to be Admin panel. ", "warning")
                 return
-            if self.curUrl().endswith("unittest.php"):
-                self.logAdd("DOCTYPE not detected, but this page seems to be Unit-tests page. ", "warning")
-                return
             self.failTest("DOCTYPE directive not found on page " + self.curUrl());
     
     def getPageSourceFirstLine(self):

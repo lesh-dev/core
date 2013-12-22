@@ -14,4 +14,8 @@ class XcmsUnitTests(xtest_common.XcmsBaseTest):
 		self.gotoPage("/unittest.php")
 		self.assertSourceTextPresent(u"UNIT TESTS PASSED OK");
 		
+    def checkDocType(self):
+        self.logAdd("DOCTYPE check is disabled for Unit-tests page. ", "warning")
+
+		
     

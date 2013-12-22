@@ -19,3 +19,7 @@ class XcmsDownloadLectures(xtest_common.XcmsBaseTest):
         self.gotoPage("/lectures/iext.pdf")
         self.gotoPage("/lectures/iext-by-an.pdf")
         self.gotoPage("/lectures/prak")
+        
+    def checkDocType(self):
+        self.logAdd("DOCTYPE checking is disabled for this test. ", "warning")
+        

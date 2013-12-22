@@ -548,10 +548,18 @@ class SeleniumTest(object):
                 if isList(text):
                     for phrase in text:
                         if phrase in eleText:
+                            self.logAdd("checkTextPresent: found phrase " + userSerialize(phrase) + " in element with xpath " + userSerialize(xpath) + ". ")
                             return True
+                    self.logAdd("checkTextPresent: NOT found any of " + userSerialize(text) + " in element with xpath " + userSerialize(xpath) + ". ")
                     return False
                 else:
-                    return text in eleText
+                    if text in eleText:
+                        self.logAdd("checkTextPresent: found text " + userSerialize(text) + " in element with xpath " + userSerialize(xpath) + ". ")
+                        return True
+                    else:
+                        self.logAdd("checkTextPresent: NOT found text " + userSerialize(text) + " in element with xpath " + userSerialize(xpath) + ". ")
+                        return False
+                        
             except InvalidSelectorException:
                 self.fatalTest("Invalid XPath expression in checkTextPresent: " + userSerialize(xpath) + ". ")
             except NoSuchElementException:
