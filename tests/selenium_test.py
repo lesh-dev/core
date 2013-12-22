@@ -67,7 +67,6 @@ def RunTest(test):
         return 2
     except TestError as e:
         test.handleTestFail(e)
-        print "Test " + test.getName() + " action log:"
         test.printActionLog()
         return 1
     except TestShutdown as e:
@@ -205,8 +204,10 @@ class SeleniumTest(object):
         return self.m_actionLog[:]
     
     def printActionLog(self):
+        print "====== TEST " + self.getName() + " ACTION LOG: ======"
         for act in self.m_actionLog:
-            print act.serializeAction()
+            print "    " + act.serializeAction()
+        print "=" * 20
         
     def logStart(self):
         try:

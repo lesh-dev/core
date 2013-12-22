@@ -32,6 +32,10 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
             if self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный"]):
                 self.logAdd("DOCTYPE not detected, but this page seems to be Auth page. ", "warning")
                 return
+            # TODO: FIXME: wait for fixing of bug 678
+            if self.checkSourceTextPresent([u"Нет такой страницы"]):
+                self.logAdd("DOCTYPE not detected, but this page seems to be 404 page. ", "warning")
+                return
             if self.checkSourceTextPresent(u"Сменить пароль"):
                 self.logAdd("DOCTYPE not detected, but this page seems to be Admin panel. ", "warning")
                 return

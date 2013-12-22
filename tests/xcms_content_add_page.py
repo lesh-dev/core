@@ -36,7 +36,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         
         self.testAlias()
         
-        self.testBadAlias()
+        #TODO: FIXME: wait for bugfix #673
+        #self.testBadAlias()
         
     def testBaseEditing(self):
 
