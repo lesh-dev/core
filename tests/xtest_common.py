@@ -12,10 +12,10 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
     # override base error-checking method
     def init(self):
         print "XcmsBaseTest init"
-        
+
         super(XcmsBaseTest, self).init()
         self.set404Text(u"Нет такой страницы")
-        
+
     def checkPageErrors(self):
         super(XcmsBaseTest, self).checkPageErrors()
         source = self.getPageSource()
@@ -23,9 +23,9 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         for stopper in stoppers:
             if stopper in source:
                 self.failTest("Forbidden crap '" + stopper + "' found on page. ")
-        
+
         self.checkDocType()
-    
+
     def checkDocType(self):
         firstLine = self.getPageSourceFirstLine()
         if not "<!DOCTYPE" in firstLine:
@@ -40,13 +40,13 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
                 self.logAdd("DOCTYPE not detected, but this page seems to be Admin panel. ", "warning")
                 return
             self.failTest("DOCTYPE directive not found on page " + self.curUrl());
-    
+
     def getPageSourceFirstLine(self):
         source = self.getPageSource()
         newlinePos = source.find("\n")
         return source[0:newlinePos]
-        
-                
+
+
     def isInstallerPage(self):
         return self.curUrl().endswith("install.php")
 
@@ -54,7 +54,7 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         self.gotoRoot()
         if self.isInstallerPage():
             self.failTest("Installer page detected, while we did not expected it. You should run this test on installed XCMS. ")
-                
+
 
 class XcmsTestWithConfig(XcmsBaseTest):
     """
@@ -62,12 +62,12 @@ class XcmsTestWithConfig(XcmsBaseTest):
     """
     def init(self):
         print "XcmsTestWithConfig init"
-        
+
         super(XcmsTestWithConfig, self).init()
         self.m_conf = XcmsTestConfig()
         self.setAutoPhpErrorChecking(self.m_conf.getPhpErrorCheckFlag())
         #self.maximizeWindow()
-        
+
     def gotoRebuildAliases(self):
         self.logAdd("Rebuilding aliases. ")
         self.gotoUrlByLinkText(u"Перестроить alias-ы")
@@ -83,17 +83,17 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
     def gotoCreatePage(self, reason = ""):
         self.gotoUrlByLinkText(u"Подстраница", reason)
-        
+
     def getAnketaPageHeader(self):
         return u"Регистрационная анкета"
-    
+
     def getUserListLinkName(self):
-        return u"Пользователи"         
-    
+        return u"Пользователи"
+
     def setTestNotifications(self):
-        
+
         emailString = self.m_conf.getNotifyEmail()
-        
+
         self.performLoginAsAdmin()
         self.gotoAdminPanel()
         self.gotoNotificationsPage()
@@ -114,15 +114,15 @@ class XcmsTestWithConfig(XcmsBaseTest):
         """
             check if test notification is set properly (it's done by 'publish testing' script).
         """
-        
+
         emailString = self.m_conf.getNotifyEmail()
-        
+
         self.performLoginAsAdmin()
         self.gotoAdminPanel()
         self.gotoNotificationsPage()
 
         reason = "Notifications were not set properly. "
-        
+
         self.assertElementValueById("edtg_user-change", emailString, reason)
         self.assertElementValueById("edtg_content-change", emailString, reason)
 
@@ -133,13 +133,13 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.assertElementValueById("edtg_reg-managers-test", emailString, reason)
 
         self.performLogout()
-        
+
     def performLoginAsEditor(self):
         return self.performLoginAsAdmin()
 
     def performLoginAsManager(self):
         return self.performLoginAsAdmin()
-    
+
     def performLoginAsAdmin(self):
         login = self.getAdminLogin()
         password = self.getAdminPass()
@@ -154,7 +154,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         # just chech that link exists.
         cpUrl = self.getAdminPanelLink()
         #test.gotoSite(cpUrl)
-    
+
     def performLogin(self, login, password):
         """
         returns True if login was successful
@@ -193,13 +193,13 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.assertUrlPresent(u"Личный кабинет", "Here should be Cabinet link after successful authorization. ")
 
         return True
-    
+
     def getAdminLogin(self):
         return self.m_conf.getAdminLogin()
 
     def getAdminPass(self):
         return self.m_conf.getAdminPass()
-    
+
     def performLogout(self):
         self.logAdd("performLogout")
         self.addAction("user-logout")
@@ -207,19 +207,19 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
     def getWelcomeMessage(self, login):
         return u"Привет, " + login
-    
+
     def getAdminPanelLinkName(self):
         return u"Админка"
 
     def getNewsLinkName(self):
         return u"Новости"
-    
+
     def getAnketaSuccessSubmitMessage(self):
         return u"Спасибо, Ваша анкета принята!"
-    
+
     def getAdminPanelLink(self):
         return self.getUrlByLinkText(self.getAdminPanelLinkName())
-    
+
     def gotoAuthLink(self):
         self.logAdd("gotoAuthLink: going to authenticate. ")
         self.gotoUrlByLinkText(u"Авторизация")
@@ -230,11 +230,11 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def gotoAdminPanel(self):
         self.logAdd("gotoAdminPanel: going to admin control panel. ")
         self.gotoUrlByLinkText(self.getAdminPanelLinkName())
-        
+
     def getPersonAbsenceMessage(self):
         return u"На данной школе не присутствовал"
-        
-    
+
+
 class XcmsTest(XcmsTestWithConfig):
     """
         generic Xcms test
@@ -242,10 +242,10 @@ class XcmsTest(XcmsTestWithConfig):
     def init(self):
         print "XcmsTest init"
         super(XcmsTest, self).init()
-        # 
+        #
         self.assertNoInstallerPage()
         #xtest_common.setTestNotifications(self, self.m_conf.getNotifyEmail(), self.m_conf.getAdminLogin(), self.m_conf.getAdminPass())
-            
+
     def createNewUser(self, login, email, password, name, auxParams = []):
         self.logAdd("createNewUser( login: " + login + "', email: " + email + ", password: " + password + ", name: " + name + " )")
 
@@ -257,21 +257,21 @@ class XcmsTest(XcmsTestWithConfig):
 
         self.gotoUrlByLinkText(["Create user", u"Создать пользователя"])
 
-        inpLogin = self.fillElementById("login", login)
+        inpLogin = self.fillElementById("login-input", login)
         print "login = '" + inpLogin + "'"
         if inpLogin == "":
             raise RuntimeError("Filled login value is empty!")
 
-        inpEMail = self.fillElementById("email", email)
-        inpPass1 = self.fillElementById("password", password)
+        inpEMail = self.fillElementById("email-input", email)
+        inpPass1 = self.fillElementById("password-input", password)
         print "original pass: '" + password + "'"
-        inpPass2 = self.fillElementById("password_confirm", password)
+        inpPass2 = self.fillElementById("password_confirm-input", password)
         if inpPass1 != inpPass2:
             raise RuntimeError("Unpredicted input behavior on password entering")
         inpPass = inpPass1
         print "actual pass: '" + inpPass + "'"
 
-        inpName = self.fillElementById("name", name)
+        inpName = self.fillElementById("name-input", name)
 
         # set notify checkbox.
         # self.clickElementById("notify_user-checkbox")
@@ -287,7 +287,7 @@ class XcmsTest(XcmsTestWithConfig):
         print "user created, going to user list again to refresh. "
 
         self.assertBodyTextPresent(u"Пользователь '" + inpLogin + u"' успешно создан")
-        
+
         # refresh user list (re-navigate to user list)
         self.gotoUserList()
 
@@ -318,7 +318,7 @@ class XcmsTest(XcmsTestWithConfig):
     # set email to user (by admin panel)
     def setUserEmailByAdmin(self, login, email, auxParams = []):
         print "setEmailToUserByAdmin( login: " + login + "', email: " + email + " )"
-        
+
         self.logAdd("setUserEmailByAdmin: updating email for user '" + login + "' to '" + email + ". ")
 
         if not "do_not_login_as_admin" in auxParams:
@@ -335,7 +335,7 @@ class XcmsTest(XcmsTestWithConfig):
         #logoff root
         if not "do_not_logout_admin" in auxParams:
             self.performLogout()
-    
+
     def gotoCabinet(self):
         self.logAdd("gotoCabinet: going to user control panel (cabinet). ")
         self.gotoUrlByLinkText(u"Личный кабинет")
@@ -392,19 +392,19 @@ class XcmsTest(XcmsTestWithConfig):
 
     def checkPersonAliasInPersonView(self, personAlias):
         self.assertElementTextById("person-title", personAlias)
-        
+
     def getEditPageInPlaceLinkName(self):
-        return u"Редактировать"        
+        return u"Редактировать"
 
     def getEntranceLinkName(self):
-        return u"Поступление"        
-    
+        return u"Поступление"
+
     def gotoEditPageInPlace(self):
         self.gotoUrlByLinkText(self.getEditPageInPlaceLinkName())
-        
+
     def gotoCloseEditor(self):
         self.gotoUrlByLinkText(u"Свернуть редактор")
-        
+
     def getAnketaListMenuName(self):
         return u"Анкеты"
 
