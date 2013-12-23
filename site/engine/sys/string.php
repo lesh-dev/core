@@ -27,6 +27,17 @@
     }
 
     /**
+      * Checks whether page alias is valid
+      * @return true if alias is valid, false otherwise
+      **/
+    function xcms_check_page_alias($alias)
+    {
+        // everything should be replaced if OK
+        $bad = preg_replace("/[a-zA-Z0-9._-]+/i", "", $alias);
+        return empty($bad);
+    }
+
+    /**
       * Checks if password consists of valid characters
       * @param password to check
       * @return true if valid, false otherwise
