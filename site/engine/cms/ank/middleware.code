@@ -132,10 +132,15 @@ function xsm_get_course_teachers_list($db, $course_id, $school_id)
     $teachers_query =
         "SELECT
         tp.first_name, tp.last_name,
-        ct.course_teachers_id, ct.course_teacher_id
-        FROM course_teachers ct, person tp WHERE
+        ct.course_teachers_id, ct.course_teacher_id,
+        ps.member_department_id, d.department_title
+        FROM course_teachers ct, person tp, person_school ps, department d
+        WHERE
         (ct.course_id = $course_id) AND
-        (tp.person_id = ct.course_teacher_id)
+        (tp.person_id = ct.course_teacher_id) AND
+        (ps.member_person_id = ct.course_teacher_id) AND
+        (ps.person_school_id = $school_id) AND
+        (d.department_id = ps.member_department_id)
         ORDER BY tp.last_name, tp.first_name";
     $teachers_sel = $db->query($teachers_query);
     $course_teachers = array();
