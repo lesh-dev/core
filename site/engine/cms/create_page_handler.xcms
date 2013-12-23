@@ -58,6 +58,8 @@ function xcms_create_page()
     }
     xcms_save_list("$dir/info", $info);
     xcms_rebuild_aliases();
+    foreach ($_POST as $key => $value)
+        unset($_POST[$key]);
     return "";
 }
 ?>
