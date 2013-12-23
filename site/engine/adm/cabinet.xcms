@@ -13,6 +13,7 @@
     <body>
         <div style="padding-bottom: 7px;">
             <span style="float: right">
+            <b id="screen">Личный кабинет</b>
             <a <?php echo xcms_href(array('mode'=>'myprofile', 'ref'=>$ref)); ?>
                 class="h-menu-link"><b><?php echo xcms_user()->login(); ?></b></a>
             <a <?php echo xcms_href(array('mode'=>'change_passwd', 'ref'=>$ref)); ?>

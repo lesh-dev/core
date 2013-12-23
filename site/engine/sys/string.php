@@ -27,6 +27,38 @@
     }
 
     /**
+      * Checks whether page id is valid
+      * @return true if page id is valid, false otherwise
+      **/
+    function xcms_check_page_id($page_id)
+    {
+        // everything should be replaced if OK
+        $bad = preg_replace("#[a-z/A-Z.0-9_-]+#", "", $page_id);
+        if (!empty($bad))
+            return false;
+
+        // forbid duplicated dots
+        if (strpos($page_id, "..") !== false)
+            return false;
+
+        if (empty($page_id))
+            return false;
+
+        return true;
+    }
+
+    /**
+      * Checks whether page alias is valid
+      * @return true if alias is valid, false otherwise
+      **/
+    function xcms_check_page_alias($alias)
+    {
+        // everything should be replaced if OK
+        $bad = preg_replace("/[a-zA-Z0-9._-]+/i", "", $alias);
+        return empty($bad);
+    }
+
+    /**
       * Checks if password consists of valid characters
       * @param password to check
       * @return true if valid, false otherwise
