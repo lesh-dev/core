@@ -2,8 +2,9 @@
     $INFO = xcms_get_list(xcms_get_info_file_name());
     if (!$INFO)
         $pageid = "";
-?><div class="admin-widget">
-<form method="post">
+?><div class="admin-widget"><?php
+    echo $page_creation_result;
+?><form method="post">
 <table class="create-page">
 <tr><td><h3>Новая страница</h3>
 <tr>
