@@ -9,7 +9,7 @@ if (!@$_GET["page"])
 ?><# adm/page_info #><?php
     $INFO = xcms_get_list(xcms_get_info_file_name());
     include(translate("<! auth/ #editor #admin {$INFO["edit"]} !>"));
-?><# cms/create_page_before #><?php
+?><# cms/create_page_handler #><?php
 ?><# auth/ #admin #editor #><?php
     if(@$_POST["delete-section"])
     {
@@ -188,7 +188,7 @@ if (!@$_GET["page"])
         include(translate("<! auth/myprofile !>"));
     }
     elseif(@$_GET["mode"]=="create_page")
-        include(translate("<! cms/create_page_after !>"));
+        include(translate("<! cms/create_page_form !>"));
     else
     {
         if ($is_editor)

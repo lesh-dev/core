@@ -1,4 +1,3 @@
 <?php
-    $aliases = xcms_collect_aliases();
-    xcms_save_aliases($aliases);
+    xcms_rebuild_aliases();
 ?>

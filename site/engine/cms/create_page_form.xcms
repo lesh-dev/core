@@ -96,6 +96,3 @@
     type="submit" value="Создать раздел" />
 </form>
 </div><!-- admin-widget -->
-<?php
-    xcms_save_list(xcms_get_info_file_name(), $INFO);
-?>

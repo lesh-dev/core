@@ -181,4 +181,10 @@ function xcms_collect_aliases()
     return $aliases;
 }
 
+function xcms_rebuild_aliases()
+{
+    $aliases = xcms_collect_aliases();
+    xcms_save_aliases($aliases);
+}
+
 ?>
