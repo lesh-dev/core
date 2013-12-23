@@ -1,4 +1,4 @@
-<?php
+<# auth/format #><?php
     $INFO = xcms_get_list(xcms_get_info_file_name());
     if (!$INFO)
         $pageid = "";
@@ -12,7 +12,7 @@
         <font>Выберите удобочитаемое имя без пробелов.<br />
             Например, <b>school-courses</b></font>
     </td>
-    <td><input name="create-name" id="create-name-input" /></td>
+    <td><input <?php xcmst_input_attrs_from_post('create-name', 'page-path'); ?> /></td>
 </tr>
 <tr>
     <td>Alias<br />
@@ -20,7 +20,7 @@
             страница, с учётом иерархии.<br />
             Например, <b>gear/other</b></font>
     </td>
-    <td><input name="alias" id="alias-input"/></td>
+    <td><input <?php xcmst_input_attrs_from_post("alias", "section/page-alias");?> /></td>
 </tr>
 <tr>
     <td>Тип содержимого</td>
@@ -56,12 +56,12 @@
 <tr>
     <td>Имя в меню<br />
         <font>Этот текст появится в меню и title браузера</font></td>
-    <td><input name="menu-title" id="menu-title-input" /></td>
+    <td><input <?php xcmst_input_attrs_from_post("menu-title", "Имя в меню"); ?> /></td>
 </tr>
 <tr>
     <td>Заголовок<br />
         <font>Этот текст появится наверху страницы</font></td>
-    <td><input name="header" id="header-input" /></td>
+    <td><input <?php xcmst_input_attrs_from_post("header", "Заголовок"); ?> /></td>
 </tr>
 <tr>
     <td colspan="2">

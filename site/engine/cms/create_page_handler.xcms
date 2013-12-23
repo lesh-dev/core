@@ -5,7 +5,11 @@ function xcms_create_page()
 
     $loc_name = xcms_get_key_or($_POST, "create-name");
     if (!xcms_check_page_id($loc_name))
-        return "<div class=\"error\">Задано недопустимое имя страницы</div>";
+        return "<div class=\"error\">Недопустимый физический путь страницы</div>";
+
+    $alias = xcms_get_key_or($_POST, "alias");
+    if (!xcms_check_page_alias($alias))
+        return "<div class=\"error\">Недопустимый alias страницы</div>";
 
     if (@$_POST["global"])
         $dir = xcms_get_page_path($loc_name);
@@ -19,8 +23,8 @@ function xcms_create_page()
     $info["owner"] = xcms_user()->login();
     $info["type"] = $page_type;
     $info["view"] = xcms_user()->login();
-    $info["header"] = $_POST["header"];
-    $info["alias"] = $_POST["alias"];
+    $info["header"] = xcms_get_key_or($_POST, "header");
+    $info["alias"] = $alias;
 
     // set view/edit rights
     // creator always has access

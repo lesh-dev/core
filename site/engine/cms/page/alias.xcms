@@ -13,7 +13,7 @@ function xcmst_check_alias($info)
     $prev_page_id = xcms_get_key_or($aliases, $new_alias);
     if (!empty($prev_page_id))
     {
-        if ($old_alias != $new_alias)
+        if ($prev_page_id != $pageid)
         {
             echo "<div class=\"error\">Такой alias уже существует на странице <tt>$prev_page_id</tt></div>";
             return false;

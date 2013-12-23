@@ -54,7 +54,7 @@
     function xcms_check_page_alias($alias)
     {
         // everything should be replaced if OK
-        $bad = preg_replace("/[a-zA-Z0-9._-]+/i", "", $alias);
+        $bad = preg_replace("#[a-z/A-Z.0-9_-]+#i", "", $alias);
         return empty($bad);
     }
 
