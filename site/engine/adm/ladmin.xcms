@@ -189,6 +189,7 @@ if (!@$_GET["page"])
     }
     elseif(@$_GET["mode"]=="create_page")
     {
+        $page_creation_result = "";
         if (@$_POST["create-page"])
             $page_creation_result = xcms_create_page();
         include(translate("<! cms/create_page_form !>"));
