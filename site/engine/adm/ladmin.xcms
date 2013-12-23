@@ -78,6 +78,7 @@ if (!@$_GET["page"])
                 class="h-menu-link">Convert [DoNotPush]</a></span>
 
             <span style="float: right">
+            <b id="screen">Админка</b>
             <a <?php echo xcms_href(array('mode'=>'myprofile', 'page'=>$pageid, 'ref'=>'ladmin')); ?>
                 class="h-menu-link"><b><?php echo xcms_user()->login(); ?></b></a>
             <a <?php echo xcms_href(array('mode'=>'change_passwd', 'page'=>$pageid, 'ref'=>'ladmin')); ?>
