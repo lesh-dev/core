@@ -15,16 +15,16 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
     * login as normal user
     * check menu
     * check alias
-    * check page content 
+    * check page content
     """
-        
+
     def run(self):
 
         self.performLoginAsEditor()
         self.gotoAdminPanel()
 
         parentPage = u"Главная"
-        
+
         self.gotoUrlByLinkText(parentPage)
 
         self.gotoCreatePage()
@@ -38,19 +38,19 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle);
         pageHeader = self.fillElementById("header-input", pageHeader);
         inpAlias = self.fillElementById("alias-input", inpAlias);
-        
+
         self.assertCheckboxValueByName("view_#all", True)
         self.assertCheckboxValueByName("view_#registered", False)
-        
+
         self.clickElementByName("view_#all")
         self.clickElementByName("view_#registered")
-        
+
         defaultPageType = self.getOptionValueById("create-pagetype-selector")
         if defaultPageType != "content":
             self.failTest("Default selected page type is not 'content': " + defaultPageType)
 
-        self.clickElementById("create-submit")
-        
+        self.clickElementById("create-page-submit")
+
         #TODO: wait for fixing of bug with automatic alias rebuildAliases
         self.logAdd("Rebuilding aliases for first time to w/a bug ")
         self.gotoRebuildAliases()
@@ -70,21 +70,21 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
 
         self.logAdd("Clicking on parent menu item. ")
         self.gotoUrlByLinkText(parentPage)
-        
+
         self.logAdd("Checking new page menu item, it should NOT be visible")
         self.assertUrlNotPresent(inpMenuTitle)
         self.logAdd("Alias should NOT work too, we should see access denied page")
         self.gotoPage("/" + inpAlias)
-        
+
         self.logAdd("We should NOT see page text at all")
         self.assertSourceTextNotPresent(pageText, "we should not see page text without authorization. ")
         self.assertSourceTextNotPresent(pageHeader, "we should not see page header without authorization. ")
-        
+
         if inpMenuTitle in self.getPageTitle():
             self.failTest("Menu title text appears in page title after going to the page by site menu without authorization. ")
-        
+
         self.assertSourceTextPresent([u"Доступ запрещён", "Access denied"], "we should see auth page")
-            
+
         inpLogin = "AuthPageUser_" + random_crap.randomText(6)
         inpEMail = random_crap.randomEmail()
         inpPass = random_crap.randomText(8)
@@ -94,13 +94,13 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
 
         if not self.performLogin(inpLogin, inpPass):
             self.failTest("Cannot login as auth-page-test user. ")
-            
+
         self.logAdd("Clicking on parent menu item. ")
         self.gotoUrlByLinkText(parentPage)
-        
+
         self.logAdd("Checking new page menu item, it should be visible")
         self.gotoUrlByLinkText(inpMenuTitle)
-        
+
         self.assertElementTextById("content-text", pageText, "menu check: page text does not match entered text (under auth). ")
         self.assertElementTextById("content-header", pageHeader, "menu check: page header does not match entered header (under auth). ")
 
@@ -109,7 +109,7 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
 
         self.logAdd("Clicking on some other menu item. ")
         self.gotoUrlByLinkText(self.getNewsLinkName())
-        
+
         self.logAdd("Alias should work now, and we should NOT see access denied page")
         self.gotoPage("/" + inpAlias)
 
@@ -120,8 +120,7 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
             self.failTest("Menu title text does not appear in page title after going to the page by site menu (under auth). ")
 
         self.assertSourceTextNotPresent([u"Доступ запрещён", "Access denied"])
-        
 
-            
-                
-        
+
+
+

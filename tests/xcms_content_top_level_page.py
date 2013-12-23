@@ -10,12 +10,12 @@ class XcmsContentTopLevelPage(xtest_common.XcmsTest):
     * login as root user (in future - site editor)
     * add new top-level page
     """
-        
+
     def run(self):
 
         self.performLoginAsEditor()
         self.gotoAdminPanel()
-        
+
         self.gotoCreatePage()
 
         inpPageDir = "topLevelPage_" + random_crap.randomText(6);
@@ -27,15 +27,15 @@ class XcmsContentTopLevelPage(xtest_common.XcmsTest):
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle);
         inpPageHeader = self.fillElementById("header-input", inpPageHeader);
         inpAlias = self.fillElementById("alias-input", inpAlias);
-        
+
         self.clickElementById("global-checkbox")
-        
+
         defaultPageType = self.getOptionValueById("create-pagetype-selector")
         if defaultPageType != "content":
             self.failTest("Default selected page type is not 'content': " + defaultPageType)
 
-        self.clickElementById("create-submit")
-        
+        self.clickElementById("create-page-submit")
+
         #TODO: wait for fixing of bug with automatic alias rebuildAliases
         self.logAdd("Rebuilding aliases for first time to w/a bug ")
         self.gotoRebuildAliases()
@@ -57,7 +57,7 @@ class XcmsContentTopLevelPage(xtest_common.XcmsTest):
 
         self.logAdd("Clicking on some other menu item. ")
         self.gotoUrlByLinkText(self.getNewsLinkName())
-        
+
         self.logAdd("Clicking on new top-level page menu item, it should be visible")
         self.gotoUrlByLinkText(inpMenuTitle)
 
@@ -66,5 +66,4 @@ class XcmsContentTopLevelPage(xtest_common.XcmsTest):
 
         if inpMenuTitle not in self.getPageTitle():
             self.failTest("Menu title text does not appear in page title after going to the page by site menu. ")
-                
-        
+

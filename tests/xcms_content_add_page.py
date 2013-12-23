@@ -20,30 +20,30 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
     * sets and changes page alias
     * tests diff engine
     """
-        
+
     def run(self):
 
         # avoid spontaneous HTML tags
         self.specChars = random_crap.specialCharsWoAngle # without <>
         # here was spike for old version of Chrome - to enter only english words.
         self.wordOptions = []
-        
+
         self.testBaseEditing()
 
         self.testVersions()
 
         self.testDiffAndLongText()
-        
+
         self.testAlias()
-        
+
         #TODO: FIXME: wait for bugfix #673
         #self.testBadAlias()
-        
+
     def testBaseEditing(self):
 
         self.performLoginAsAdmin()
         self.gotoAdminPanel()
-        
+
         self.m_parentPage = u"Главная"
 
         self.gotoUrlByLinkText(self.m_parentPage)
@@ -58,7 +58,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle);
         inpPageHeader = self.fillElementById("header-input", inpPageHeader);
         inpAlias = self.fillElementById("alias-input", inpAlias);
-        
+
         self.m_pageAlias = inpAlias
 
         defaultPageType = self.getOptionValueById("create-pagetype-selector")
@@ -66,8 +66,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         if defaultPageType != "content":
             self.failTest("Default selected page type is not 'content': " + defaultPageType)
 
-        self.clickElementById("create-submit")
-        
+        self.clickElementById("create-page-submit")
+
         #TODO: wait for fixing of bug with automatic alias rebuildAliases
 
         self.logAdd("Rebuilding aliases for first time to w/a bug ")
@@ -79,7 +79,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.m_menuTitle = inpMenuTitle
         self.m_pageHeader = inpPageHeader
-        
+
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle)
 
@@ -127,9 +127,9 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
     def testVersions(self):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoUrlByLinkText(self.m_menuTitle)
-        
+
         self.gotoEditPageInPlace()
-                        
+
         versionUnoText = "version_0001"
         versionUnoText = self.fillElementById("edit-text", versionUnoText)
         self.clickElementById("edit-submit-top")
@@ -159,12 +159,12 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.clickElementById("set-version-top") # Смотреть версию
         self.wait(1)
         self.assertElementTextById("edit-text", versionDosText)
-    
+
     def testDiffAndLongText(self):
 
         self.logAdd("test diff engine. ")
         self.wait(2)
-        
+
         wordNumber = 7
         totalLines = 8
 
@@ -188,7 +188,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         pageText = linesToHtml(newLines)
 
         pageText = self.fillElementById("edit-text", pageText)
-        
+
         print "diff test page new text: "
         print pageText
         print "-" * 30
@@ -197,14 +197,14 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         # cut last line
         newLines = newLines[:-1]
-        
+
         pageText = linesToHtml(newLines)
 
         pageText = self.fillElementById("edit-text", pageText)
         self.clickElementById("edit-submit-top")
 
         pageWords = (" ".join(newLines)).split()
-        
+
         print "word count ", len(pageWords)
 
         sampleWords = pageWords[5:9] + pageWords[24:27] + pageWords[30:32]
@@ -219,7 +219,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         print "-" * 30
 
         pageText = self.fillElementById("edit-text", pageText)
-        
+
         self.clickElementById("edit-submit-top")
 
         self.gotoCloseEditor()
@@ -237,35 +237,35 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.clickElementByName("change-alias")
         self.assertBodyTextPresent(u"Список alias-ов обновлён")
         self.wait(2, "wait for redirection")
-        
+
     def gotoAlias(self, alias):
         self.logAdd("Going to the page via alias " + alias)
         self.gotoPage("/" + alias)
-        
+
     def testAlias(self):
         self.logAdd("test aliases")
-        
+
         self.gotoEditPageInPlace()
-        
+
         # edit alias
         self.gotoUrlByLinkText(self.m_pageAlias)
         self.assertBodyTextPresent("Alias")
-        
+
         inpAlias = "changed/newpage/alias/" + random_crap.randomText(8);
 
         inpAlias = self.fillElementByName("alias", inpAlias)
         self.m_pageAlias = inpAlias
-        
+
         self.updateAliases()
-        
+
         # self.gotoRebuildAliases()
         self.gotoAlias(self.m_pageAlias)
 
         if self.m_menuTitle not in self.getPageTitle():
             self.failTest("Page/menu title text does not appear in page title after going to page by alias after alias change. ")
-        
+
         self.assertElementTextById("content-header", self.m_pageHeader, "page header does not match entered header. ")
-        
+
     def testBadAlias(self):
 
         self.logAdd("test bad aliases")
@@ -273,16 +273,16 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.gotoUrlByLinkText(self.m_pageAlias)
         self.assertBodyTextPresent("Alias")
-        
+
         inpAlias = "    " # evil hack
-        
+
         inpAlias = self.fillElementByName("alias", inpAlias)
         self.m_pageAlias = inpAlias
 
         self.updateAliases()
-            
+
         #self.gotoCloseEditor()
-                
+
         self.gotoAdminPanel()
         self.gotoCreatePage(reason = "We should successfully enter admin panel, but we cannot see button to create new subpage. ")
-        
+
