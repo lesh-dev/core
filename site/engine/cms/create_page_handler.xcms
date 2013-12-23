@@ -1,56 +1,64 @@
 <?php
-    if (@$_POST["create-name"])
-    {
-        if (!file_exists(xcms_get_info_file_name()))
-        {
-            // TODO: и чё тогда тут за путь получится? это бага!
-            $pageid = "";
-        }
+function xcms_create_page()
+{
+    global $SETTINGS, $pageid;
 
-        if (@$_POST["global"])
-            $dir = xcms_get_page_path($_POST["create-name"]);
-        else
-            $dir = xcms_get_page_path("$pageid/".$_POST["create-name"]);
-
-        mkdir($dir);
-        $info = array();
-        $info["owner"] = xcms_user()->login();
-        $info["type"] = xcms_get_key_or($_POST, "create-pagetype");
-        $info["view"] = xcms_user()->login();
-        $info["header"] = $_POST["header"];
-        $info["alias"] = $_POST["alias"];
-
-        // set view/edit rights
-        // creator always has access
-        $info["view"] = xcms_user()->login();
-        $info["edit"] = xcms_user()->login();
-        if (@$_POST["viewForAll"])
-            $info["view"] .= " #all";
-
-        foreach ($_POST as $key=>$value)
-        {
-            if (substr($key, 0, 5) == "edit_")
-                $info["edit"] .= " ".substr($key, 5);
-            if (substr($key, 0, 5) == "view_")
-                $info["view"] .= " ".substr($key, 5);
-        }
-
-        if (@$_POST["menu-title"])
-            $info["menu-title"] = $_POST["menu-title"];
-        if (@$_POST["menu-hidden"])
-            $info["menu-hidden"] = $_POST["menu-hidden"];
-
-        if (file_exists("{$SETTINGS["engine_dir"]}cms/{$_POST["create-pagetype"]}/install.php"))
-        {
-            $opageid = $pageid;
-            if(@$_POST["global"])
-                $pageid = "{$_POST["create-name"]}";
-            else
-                $pageid = "$pageid/{$_POST["create-name"]}";
-            include("{$SETTINGS["engine_dir"]}cms/{$_POST["create-pagetype"]}/install.php");
-            $pageid = $opageid;
-        }
-        xcms_save_list("$dir/info", $info);
-        xcms_rebuild_aliases();
+    $loc_name = xcms_get_key_or($_POST, "create-name");
+    if (!xcms_check_page_id($loc_name))
+    {?>
+        <div class="error">Задано недопустимое имя страницы</div><?php
+        return;
     }
+
+    if (@$_POST["global"])
+        $dir = xcms_get_page_path($loc_name);
+    else
+        $dir = xcms_get_page_path("$pageid/$loc_name");
+
+    $page_type = xcms_get_key_or($_POST, "create-pagetype");
+
+    mkdir($dir);
+    $info = array();
+    $info["owner"] = xcms_user()->login();
+    $info["type"] = $page_type;
+    $info["view"] = xcms_user()->login();
+    $info["header"] = $_POST["header"];
+    $info["alias"] = $_POST["alias"];
+
+    // set view/edit rights
+    // creator always has access
+    $info["view"] = xcms_user()->login();
+    $info["edit"] = xcms_user()->login();
+    if (@$_POST["viewForAll"])
+        $info["view"] .= " #all";
+
+    foreach ($_POST as $key=>$value)
+    {
+        if (substr($key, 0, 5) == "edit_")
+            $info["edit"] .= " ".substr($key, 5);
+        if (substr($key, 0, 5) == "view_")
+            $info["view"] .= " ".substr($key, 5);
+    }
+
+    if (@$_POST["menu-title"])
+        $info["menu-title"] = $_POST["menu-title"];
+    if (@$_POST["menu-hidden"])
+        $info["menu-hidden"] = $_POST["menu-hidden"];
+
+    if (file_exists("{$SETTINGS["engine_dir"]}cms/$page_type/install.php"))
+    {
+        $opageid = $pageid;
+        if (@$_POST["global"])
+            $pageid = $loc_name;
+        else
+            $pageid = "$pageid/$loc_name";
+        include("{$SETTINGS["engine_dir"]}cms/$page_type/install.php");
+        $pageid = $opageid;
+    }
+    xcms_save_list("$dir/info", $info);
+    xcms_rebuild_aliases();
+}
+
+if (@$_POST["create-page"])
+    xcms_create_page();
 ?>

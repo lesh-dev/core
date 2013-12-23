@@ -27,6 +27,27 @@
     }
 
     /**
+      * Checks whether page id is valid
+      * @return true if page id is valid, false otherwise
+      **/
+    function xcms_check_page_id($page_id)
+    {
+        // everything should be replaced if OK
+        $bad = preg_replace("#[a-z/A-Z.0-9_-]+#", "", $page_id);
+        if (!empty($bad))
+            return false;
+
+        // forbid duplicated dots
+        if (strpos($page_id, "..") !== false)
+            return false;
+
+        if (empty($page_id))
+            return false;
+
+        return true;
+    }
+
+    /**
       * Checks whether page alias is valid
       * @return true if alias is valid, false otherwise
       **/
