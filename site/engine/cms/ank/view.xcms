@@ -28,6 +28,7 @@
         // set some generic fields that cannot be overridden
         $person["anketa_status"] = "new";
         $person["is_student"] = "student";
+        $person["department_id"] = 1;
         $user_agent = $person["user_agent"] = $_SERVER["HTTP_USER_AGENT"];
         // extract some values to check
         $last_name = xcms_get_key_or($person, "last_name");
