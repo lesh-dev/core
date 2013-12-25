@@ -51,33 +51,16 @@ function ctx_custom_form($table_name, $pk, $item_template)
 {
     global $CTX_META, $content_dir, $CONTEST_CURRENT_YEAR;
     $ans = "";
-    if(@$_POST["ctx_custom_$table_name"])
+    if (@$_POST["ctx_custom_$table_name"])
     {
         $values = array();
-        foreach($CTX_META[$table_name] as $id=>$arr)
-        {
-            $values[$id] = @$_POST[$id];
-            if(@$_FILES["$id"])
-            {
-                $home = "$content_dir/contest/attach/$table_name/".time();
-                $new_name = "$home/".$_FILES["$id"]["name"];
-                @mkdir("$home", 0777, true);
-                if(!copy($_FILES["$id"]["tmp_name"], $new_name))
-                    die("Can't upload file");
-                $values[$id] = $new_name;
-            }
-        }
-        $pkv = $values["$table_name"."_id"];
-        unset($values["$table_name"."_id"]);
-        $values["contest_year"] = $CONTEST_CURRENT_YEAR; // year sharding
-        xdb_insert_or_update($table_name, array("$table_name"."_id" => $pkv), $values, $values);
+        ctx_update_object($table_name, $values);
         $ans .= "Запись добавлена. ";
-        if($return)
+        if ($return)
             $ans .= "<a href='$return'>Вернуться.</a>";
     }
     else
     {
-
         $ans .= "<form enctype='multipart/form-data'
             method=\"POST\"><input type='hidden' name='MAX_FILE_SIZE' value='15000000' />";
 
@@ -97,33 +80,15 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid="x", $
 {
     global $CTX_META, $content_dir, $CONTEST_CURRENT_YEAR;
     $show_form = true;
-    if(@$_POST["ctx_add_or_edit_form_$table_name"."_$fid"])
+    if (@$_POST["ctx_add_or_edit_form_${table_name}_$fid"])
     {
         $show_form = false;
-        if($pk!= "" && $pk != 'new')
+        $values = array();
+        if (!empty($pk) && $pk != XDB_NEW)
             $values = xdb_get_entity_by_id($table_name, $pk);
 
-        foreach($CTX_META[$table_name] as $id=>$arr)
-        {
-            $values[$id] = @$_POST[$id];
-            if (@$_FILES["$id"])
-            {
-                if($_FILES["$id"]["tmp_name"] != "")
-                {
-                    $home = "$content_dir/contest/attach/$table_name/".time();
-                    $new_name = "$home/".$_FILES["$id"]["name"];
-                    @mkdir("$home", 0777, true);
-                    if(!copy($_FILES["$id"]["tmp_name"], $new_name))
-                        die("Can't upload file");
-                    $values[$id] = $new_name;
-                }
-            }
-        }
-        $pkv = $values["$table_name"."_id"];
-        unset($values["$table_name"."_id"]);
-        $values["contest_year"] = $CONTEST_CURRENT_YEAR; // year sharding
-        xdb_insert_or_update($table_name, array("$table_name"."_id" => $pkv), $values, $values);
-        if($return == "stay")
+        ctx_update_object($table_name, $values);
+        if ($return == "stay")
             $show_form = true;
         else
         {
@@ -143,7 +108,7 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid="x", $
             $cls .= " table table-bordered table-hover";
         echo "<table class='$cls'>\n";
         $values = array();
-        if($pk !== NULL)
+        if ($pk)
             $values = xdb_get_entity_by_id($table_name, $pk);
 
         foreach($CTX_META[$table_name] as $id=>$arr)
@@ -160,7 +125,7 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid="x", $
         }
         echo "</table>\n";
         if ($operation == "edit")
-            echo "<input type='submit' class='btn btn-primary' name='ctx_add_or_edit_form_$table_name"."_$fid' value='Добавить / изменить' />";
+            echo "<input type='submit' class='btn btn-primary' name='ctx_add_or_edit_form_${table_name}_$fid' value='Добавить / изменить' />";
         echo "</form>";
     }
 }
@@ -177,7 +142,7 @@ function ctx_show_tasty_list($table_name, $order, $filter, $row_template)
         {
             $template = str_replace("{".$field."}", $value, $template);
         }
-        $pk = $line["$table_name"."_id"];
+        $pk = $line["${table_name}_id"];
         $template = str_replace("{#edit}", "href='?ref=$ref&amp;mode=edit&amp;table=$table_name&amp;id=$pk'", $template);
         $template = str_replace("{#view}", "?ref=$ref&amp;mode=view&amp;table=$table_name&amp;id=$pk", $template);
         $ans .= $template;
@@ -379,7 +344,7 @@ function ctx_show_submitted()
             {
                 $c_id = $_GET["id"];
                 $p_id = $problem["problems_id"];
-                $sid = "new";
+                $sid = XDB_NEW;
                 if($p_id != @$_GET["pid"]) continue;
                 echo '<div class="tab-pane" id="pr_'.$problem["problems_id"].'">';
                 foreach($solutions_table as $line)
@@ -390,8 +355,7 @@ function ctx_show_submitted()
 
                 }
                 echo "<h3>".$problem["problem_name"]."</h3>";
-                if($sid == 'new') $retur = FALSE;
-                else $retur = 'stay';
+                $return = ($sid == XDB_NEW) ? false : 'stay';
                 ctx_add_or_edit_form("solutions", $sid, "edit", $retur, $c_id.$p_id,
                     array("problem_id"=>$p_id, "contestant_id"=>$c_id));
                 //ctx_add_or_edit_form("problems", $_GET["id"]);

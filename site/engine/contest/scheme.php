@@ -51,3 +51,33 @@ function ctx_create_structure()
         contest_year text
         );");*/
 }
+
+function ctx_update_object($table_name, $values)
+{
+    global $CTX_META;
+    global $CONTEST_CURRENT_YEAR;
+    global $content_dir;
+
+    foreach($CTX_META[$table_name] as $id=>$arr)
+    {
+        $values[$id] = @$_POST[$id];
+        if (!@$_FILES[$id])
+            continue;
+
+        if (empty($_FILES[$id]["tmp_name"]))
+            continue;
+
+        $home = "$content_dir/contest/attach/$table_name/".time();
+        $new_name = "$home/".$_FILES[$id]["name"];
+        @mkdir("$home", 0777, true);
+        if (!copy($_FILES[$id]["tmp_name"], $new_name))
+            die("Cannot upload file. ");
+        $values[$id] = $new_name;
+    }
+
+    $key_name = "${table_name}_id";
+    $pkv = $values[$key_name];
+    unset($values[$key_name]);
+    $values["contest_year"] = $CONTEST_CURRENT_YEAR; // year sharding
+    xdb_insert_or_update($table_name, array($key_name => $pkv), $values, $values);
+}
