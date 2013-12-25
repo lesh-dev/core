@@ -4,6 +4,9 @@
   **/
 function xsm_send_anketa($mail_group, $mail_msg, $full_name, $email, $manager_mode = false)
 {
+    if (!xcms_mailer_enabled()) // disabled mailer is not an error
+        return true;
+
     $host = xcms_hostname();
     $subject = "[xcms-ank] ($host) Новая анкета: $full_name";
 
