@@ -5,14 +5,19 @@
       **/
     require_once("${engine_dir}auth/user.php");
 
-    function login_handler()
+    function xcmst_do_auth_redirect()
+    {
+            $return = xcms_get_key_or($_GET, "return");
+            $location = strlen($return) ? $return : $_SERVER["REQUEST_URI"]; ?>
+            <meta http-equiv="refresh" content="0;URL=<?php echo $location; ?>" /><?php
+    }
+
+    function xcmst_login_handler()
     {
         try
         {
             xcms_user(@$_POST["auth-login"], @$_POST["auth-password"]);
-            $return = xcms_get_key_or($_GET, "return");
-            $location = strlen($return) ? $return : $_SERVER["REQUEST_URI"]; ?>
-            <meta http-equiv="refresh" content="0;URL=<?php echo $location; ?>" /><?php
+            xcmst_do_auth_redirect();
         }
         catch(Exception $e)
         {
@@ -21,7 +26,7 @@
         }
     }
 
-    function password_reset_handler()
+    function xcmst_password_reset_handler()
     {
         try
         {
@@ -42,6 +47,7 @@
                 throw new Exception("Не удалось послать письмо, попробуйте через некоторое время. ".
                     "Если проблема сохраняется, обратитесь к администрации сайта. ");
             }
+            xcmst_do_auth_redirect();
         }
         catch(Exception $e)
         {
@@ -52,9 +58,9 @@
 
 
     if (strlen(xcms_get_key_or($_POST, "auth-login")))
-        login_handler();
+        xcmst_login_handler();
     elseif (strlen(xcms_get_key_or($_POST, "reset-email")))
-        password_reset_handler();
+        xcmst_password_reset_handler();
     else
     {
         $AuthReason = "Требуется аутентификация";
