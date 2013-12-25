@@ -1,6 +1,8 @@
 <?php
 function xcmst_check_alias($info)
 {
+    global $pageid;
+
     $new_alias = xcms_get_key_or($_POST, "alias");
     if (!xcms_check_page_alias($new_alias))
     {

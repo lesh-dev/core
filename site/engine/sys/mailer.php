@@ -45,6 +45,15 @@
     }
 
     /**
+      * Checks whether mailer is enabled in configuration
+      **/
+    function xcms_mailer_enabled()
+    {
+        global $SETTINGS;
+        return xcms_get_key_or($SETTINGS, "mailer_enabled", true);
+    }
+
+    /**
       * For internal usage only
       **/
     function xcms_add_mail_group($mailer, $mail_group, $mode = XMAIL_DESTMODE_TO)
@@ -90,7 +99,9 @@
       **/
     function xcms_deliver_mail_int($mail_group, $addr_list, $notification_body, $subject = NULL)
     {
-        global $SETTINGS;
+        if (!xcms_mailer_enabled()) // disabled mailer should produce no errors
+            return true;
+
         $notification_date = xcms_rus_date();
 
         if ($subject === NULL)
@@ -144,14 +155,12 @@
       **/
     function xcms_send_notification($mail_group, $addr_list, $mail_text_html, $subject = NULL, $immediate = XMAIL_DEFERRED, $mail_text = NULL)
     {
-        global $SETTINGS;
+        if (!xcms_mailer_enabled()) // disabled mailer should produce no errors
+            return true;
+
         $login = xcms_user()->login();
         $real_name = xcms_user()->param("name");
-        $enabled = xcms_get_key_or($SETTINGS, "mailer_enabled", true);
-        if (!$enabled) return;
-
         $hr_timestamp = xcms_datetime();
-
         $host = xcms_hostname();
         $body_text =
             "$mail_text\r\n".
