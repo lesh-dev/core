@@ -249,35 +249,35 @@ function ctx_show_submitted()
             if (!$id)
                 continue;
 
-            $ans = "";
-            $ans .= "<td><a href='?ref=$ref&mode=view&table=contestants&id=$id'>{$line['name']}</a>
+            $row = "";
+            $row .= "<td><a href='?ref=$ref&mode=view&table=contestants&id=$id'>{$line['name']}</a>
                 <td>{$line['level']}<td><a href='{$line['work']}'>Скачать</a>";
             $is_done = true;
             $sum = 0;
             foreach ($probs as $value)
             {
-                $ans .= "<td>";
+                $row .= "<td>";
                 $val = @$line["p".$value["problems_id"]];
                 if(!$val)
                 {
                     $val = "???";
                     $is_done = false;
                 }
-                $ans .= $val;
+                $row .= $val;
                 $sum += (int)$val;
             }
             if ($is_done)
-                $ans .= "<td>$sum</td>";
-            $ans .= "<td><a href='?ref=$ref&mode=delete&table=contestants&id=$id'>Удалить</a></td>";
+                $row .= "<td>$sum</td>";
+            $row .= "<td><a href='?ref=$ref&mode=delete&table=contestants&id=$id'>Удалить</a></td>";
             if ($is_done)
             {
-                @$done[$sum][]= $ans;
+                @$done[$sum][]= $row;
                 $done_balls[$sum] = $sum;
             }
-            else $undone[] = $ans;
+            else $undone[] = $row;
         }
-        foreach ($undone as $l)
-            echo "<tr>$l</tr>";
+        foreach ($undone as $line)
+            echo "<tr>$line</tr>\n";
 
         ?>
         </table>
@@ -300,7 +300,7 @@ function ctx_show_submitted()
         foreach ($done_balls as $id)
             foreach ($done[$id] as $line)
             {
-                echo "<tr><td>$i</td>$line</tr>";
+                echo "<tr><td>$i</td>$line</tr>\n";
                 $i++;
             }
         echo "</table>";
