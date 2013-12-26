@@ -209,35 +209,40 @@ function ctx_show_submitted()
 
     if ($mode == "works")
     {
-        $works = xdb_get_table("contestants", NULL, $FILTER);
+        $works_list = xdb_get_table("contestants", NULL, $FILTER);
         $sols = xdb_get_table("solutions", NULL, $FILTER);
         $probs = xdb_get_table("problems", NULL, $FILTER);
-        $works2 = array();
-        foreach($works as $work)
+
+        $works = array();
+        foreach ($works_list as $work)
         {
             $id = $work["contestants_id"];
-            $works2[$id] = $work;
+            $works[$id] = $work;
         }
-        foreach($sols as $line)
+        foreach ($sols as $line)
         {
             $pid = $line["problem_id"];
             $wid = $line["contestant_id"];
-            $works2[$wid]["p$pid"] = $line["resolution_mark"];
+            $works[$wid]["p$pid"] = $line["resolution_mark"];
         }
-        echo "
+
+        // header
+        ?>
         <h3>Непроверенные</h3>
-        <table class='table table-striped table-bordered table-condensed table-hover'>
+        <table class="table table-striped table-bordered table-condensed table-hover">
         <thead><tr>
             <th>Ученик</th>
             <th>Класс</th>
-            <th>Работа</th>";
-        $done = array();
-        $undone = array();
-        $done_balls = array();
+            <th>Работа</th>
+        <?php
         foreach ($probs as $value)
             echo "<th>".xu_substr($value["problem_name"], 0, 2);
         echo "</tr></thead>\n";
-        foreach($works2 as $line)
+
+        $done = array();
+        $undone = array();
+        $done_balls = array();
+        foreach ($works as $line)
         {
             $id = @$line["contestants_id"];
             if (!$id) continue;
@@ -264,20 +269,25 @@ function ctx_show_submitted()
             }
             else $undone[] = $ans;
         }
-        foreach($undone as $l) echo "<tr>$l";
-        echo "</table>";
+        foreach ($undone as $l)
+            echo "<tr>$l</tr>";
 
-        echo "
+        ?>
+        </table>
+
         <h3>Проверенные</h3>
         <table class='table table-striped table-bordered table-condensed table-hover'>
         <thead>
             <th>№</th>
             <th>Ученик</th>
             <th>Класс</th>
-            <th>Работа</th>";
+            <th>Работа</th>
+        <?php
+        // header
         foreach ($probs as $value)
             echo "<th>".xu_substr($value["problem_name"], 0, 2)."</th>";
         echo "<th colspan='2'>Итоговый балл</th></thead>";
+
         rsort($done_balls);
         $i = 1;
         foreach ($done_balls as $id)
