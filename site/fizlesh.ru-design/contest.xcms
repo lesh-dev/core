@@ -209,10 +209,11 @@ function ctx_show_submitted()
 
     if ($mode == "works")
     {
-        $works_list = xdb_get_table("contestants", NULL, $FILTER);
         $sols = xdb_get_table("solutions", NULL, $FILTER);
         $probs = xdb_get_table("problems", NULL, $FILTER);
 
+        // store works by contestant_id
+        $works_list = xdb_get_table("contestants", NULL, $FILTER);
         $works = array();
         foreach ($works_list as $work)
         {
@@ -245,7 +246,9 @@ function ctx_show_submitted()
         foreach ($works as $line)
         {
             $id = @$line["contestants_id"];
-            if (!$id) continue;
+            if (!$id)
+                continue;
+
             $ans = "";
             $ans .= "<td><a href='?ref=$ref&mode=view&table=contestants&id=$id'>{$line['name']}</a>
                 <td>{$line['level']}<td><a href='{$line['work']}'>Скачать</a>";
@@ -255,7 +258,11 @@ function ctx_show_submitted()
             {
                 $ans .= "<td>";
                 $val = @$line["p".$value["problems_id"]];
-                if(!$val) { $val = "???"; $is_done = false;}
+                if(!$val)
+                {
+                    $val = "???";
+                    $is_done = false;
+                }
                 $ans .= $val;
                 $sum += (int)$val;
             }
