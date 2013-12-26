@@ -209,23 +209,14 @@ function ctx_show_submitted()
 
     if ($mode == "works")
     {
-        $sols = xdb_get_table("solutions", NULL, $FILTER);
         $probs = xdb_get_table("problems", NULL, $FILTER);
+        $works = ctx_get_works();
 
-        // store works by contestant_id
-        $works_list = xdb_get_table("contestants", NULL, $FILTER);
-        $works = array();
-        foreach ($works_list as $work)
-        {
-            $id = $work["contestants_id"];
-            $works[$id] = $work;
-        }
-        foreach ($sols as $line)
-        {
-            $pid = $line["problem_id"];
-            $wid = $line["contestant_id"];
-            $works[$wid]["p$pid"] = $line["resolution_mark"];
-        }
+        $results = ctx_calculate_results($works, $probs);
+
+        $undone = $results['undone'];
+        $done = $results['done'];
+        $done_sum = $results['done_sum'];
 
         // header
         ?>
@@ -240,45 +231,8 @@ function ctx_show_submitted()
             echo "<th>".xu_substr($value["problem_name"], 0, 2);
         echo "</tr></thead>\n";
 
-        $done = array();
-        $undone = array();
-        $done_balls = array();
-        foreach ($works as $line)
-        {
-            $id = @$line["contestants_id"];
-            if (!$id)
-                continue;
-
-            $row = "";
-            $row .= "<td><a href='?ref=$ref&mode=view&table=contestants&id=$id'>{$line['name']}</a>
-                <td>{$line['level']}<td><a href='{$line['work']}'>Скачать</a>";
-            $is_done = true;
-            $sum = 0;
-            foreach ($probs as $value)
-            {
-                $row .= "<td>";
-                $val = @$line["p".$value["problems_id"]];
-                if(!$val)
-                {
-                    $val = "???";
-                    $is_done = false;
-                }
-                $row .= $val;
-                $sum += (int)$val;
-            }
-            if ($is_done)
-                $row .= "<td>$sum</td>";
-            $row .= "<td><a href='?ref=$ref&mode=delete&table=contestants&id=$id'>Удалить</a></td>";
-            if ($is_done)
-            {
-                @$done[$sum][]= $row;
-                $done_balls[$sum] = $sum;
-            }
-            else $undone[] = $row;
-        }
         foreach ($undone as $line)
             echo "<tr>$line</tr>\n";
-
         ?>
         </table>
 
@@ -295,16 +249,14 @@ function ctx_show_submitted()
             echo "<th>".xu_substr($value["problem_name"], 0, 2)."</th>";
         echo "<th colspan='2'>Итоговый балл</th></thead>";
 
-        rsort($done_balls);
         $i = 1;
-        foreach ($done_balls as $id)
-            foreach ($done[$id] as $line)
+        foreach ($done_sum as $sum)
+            foreach ($done[$sum] as $line)
             {
                 echo "<tr><td>$i</td>$line</tr>\n";
                 $i++;
             }
-        echo "</table>";
-
+        ?></table><?php
     }
 
     if ($mode == "edit")

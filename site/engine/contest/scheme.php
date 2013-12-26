@@ -81,3 +81,75 @@ function ctx_update_object($table_name, $values)
     $values["contest_year"] = $CONTEST_CURRENT_YEAR; // year sharding
     xdb_insert_or_update($table_name, array($key_name => $pkv), $values, $values);
 }
+
+function ctx_get_works()
+{
+    global $FILTER;
+
+    // store works by contestant_id
+    $works_list = xdb_get_table("contestants", NULL, $FILTER);
+    $works = array();
+    foreach ($works_list as $work)
+    {
+        $id = $work["contestants_id"];
+        $works[$id] = $work;
+    }
+
+    // join with solutions
+    $sols = xdb_get_table("solutions", NULL, $FILTER);
+    foreach ($sols as $sol)
+    {
+        $pid = $sol["problem_id"];
+        $wid = $sol["contestant_id"];
+        $works[$wid]["p$pid"] = $sol["resolution_mark"];
+    }
+    return $works;
+}
+
+function ctx_calculate_results($works, $probs)
+{
+    global $ref;
+
+    $done = array();
+    $undone = array();
+    $done_sum = array();
+    foreach ($works as $work)
+    {
+        $id = @$work["contestants_id"];
+        if (!$id)
+            continue;
+
+        $row = "";
+        $row .= "<td><a href='?ref=$ref&mode=view&table=contestants&id=$id'>{$work['name']}</a>
+            <td>{$work['level']}<td><a href='{$work['work']}'>Скачать</a>";
+        $is_done = true;
+        $sum = 0;
+        foreach ($probs as $value)
+        {
+            $row .= "<td>";
+            $val = @$work["p".$value["problems_id"]];
+            if(!$val)
+            {
+                $val = "???";
+                $is_done = false;
+            }
+            $row .= $val;
+            $row .= "</td>";
+
+            $sum += (int)$val;
+        }
+        if ($is_done)
+            $row .= "<td>$sum</td>";
+
+        $row .= "<td><a href='?ref=$ref&mode=delete&table=contestants&id=$id'>Удалить</a></td>";
+        if ($is_done)
+        {
+            @$done[$sum][]= $row;
+            $done_sum[$sum] = $sum;
+        }
+        else $undone[] = $row;
+    }
+    rsort($done_sum);
+
+    return array('done'=>$done, 'done_sum'=>$done_sum, 'undone'=>$undone);
+}
