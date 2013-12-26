@@ -254,8 +254,9 @@ function ctx_show_submitted()
                 $ans .= $val;
                 $sum += (int)$val;
             }
-            if ($is_done) $ans .= "<td>$sum";
-            $ans .= "<td><a href='?ref=$ref&mode=delete&table=contestants&id=$id'>Удалить</a>";
+            if ($is_done)
+                $ans .= "<td>$sum</td>";
+            $ans .= "<td><a href='?ref=$ref&mode=delete&table=contestants&id=$id'>Удалить</a></td>";
             if ($is_done)
             {
                 @$done[$sum][]= $ans;
@@ -278,9 +279,13 @@ function ctx_show_submitted()
             echo "<th>".xu_substr($value["problem_name"], 0, 2)."</th>";
         echo "<th colspan='2'>Итоговый балл</th></thead>";
         rsort($done_balls);
-        $i=1;
-        foreach($done_balls as $id)
-            foreach($done[$id] as $l) { echo "<tr><td>$i$l"; $i++;}
+        $i = 1;
+        foreach ($done_balls as $id)
+            foreach ($done[$id] as $line)
+            {
+                echo "<tr><td>$i$line</td></tr>";
+                $i++;
+            }
         echo "</table>";
 
     }
@@ -355,7 +360,7 @@ function ctx_show_submitted()
 
                 }
                 echo "<h3>".$problem["problem_name"]."</h3>";
-                $return = ($sid == XDB_NEW) ? false : 'stay';
+                $retur = ($sid == XDB_NEW) ? false : 'stay';
                 ctx_add_or_edit_form("solutions", $sid, "edit", $retur, $c_id.$p_id,
                     array("problem_id"=>$p_id, "contestant_id"=>$c_id));
                 //ctx_add_or_edit_form("problems", $_GET["id"]);
