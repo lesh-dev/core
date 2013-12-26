@@ -283,7 +283,7 @@ function ctx_show_submitted()
         foreach ($done_balls as $id)
             foreach ($done[$id] as $line)
             {
-                echo "<tr><td>$i$line</td></tr>";
+                echo "<tr><td>$i</td>$line</tr>";
                 $i++;
             }
         echo "</table>";
