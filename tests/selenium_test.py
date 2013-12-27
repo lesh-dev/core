@@ -86,7 +86,7 @@ def RunTest(test):
         test.handleException(e)
         return 2
     except Exception as e:
-        print "Generic test exception: ", e
+        test.logAdd("Generic test exception: " + str(e))
         test.handleException(e)
         return 2
         
@@ -110,7 +110,7 @@ class SeleniumTest(object):
         
         if self.needDoc():
             print self.m_testName, "test info:"
-            print self.getDoc()
+            print self.getDoc().encode("UTF-8")
             raise TestShutdown("Display doc")
             
         if self.needLeaveBrowserOpen():
@@ -187,8 +187,7 @@ class SeleniumTest(object):
         
     def handleException(self, exc):
         self.logAdd(self.getName() + " TEST GENERIC ERROR: " + userSerialize(exc.message), "error")
-        print "Traceback: "
-        traceback.print_exc()
+        self.logAdd("Traceback:\n" + traceback.format_exc())
         return self.shutdown(2)
                 
     def handleTestFail(self, exc):
@@ -199,8 +198,7 @@ class SeleniumTest(object):
     def handleTestFatal(self, exc):
         #self.m_driver.execute_script("alert('Test fataled! See logs and check your test/environment. ');")
         self.logAdd(self.getName() + " TEST FATAL ERROR: " + userSerialize(exc.message), "fatal")
-        print "Traceback: "
-        traceback.print_exc()
+        self.logAdd("Traceback:\n" + traceback.format_exc())
         return self.shutdown(2)
 
     def getActionLog(self):
@@ -208,10 +206,10 @@ class SeleniumTest(object):
         return self.m_actionLog[:]
     
     def printActionLog(self):
-        print "====== TEST " + self.getName() + " ACTION LOG: ======"
+        self.logAdd("====== TEST " + self.getName() + " ACTION LOG: ======")
         for act in self.m_actionLog:
-            print "    " + act.serializeAction()
-        print "=" * 20
+            self.logAdd("    " + act.serializeAction())
+        self.logAdd("=" * 20)
         
     def logStart(self):
         try:
@@ -353,7 +351,6 @@ class SeleniumTest(object):
     def checkCheckboxValueById(self, eleId, boolValue = True, reason = ""):
         self.checkEmptyParam(eleId, "checkCheckboxValueById")
         value = self.getElementById(eleId).get_attribute("checked")
-#       print "value: ", value
         if value and not self.checkboxIsValid(value):
             msg = "Strange value for checkbox '" + eleId + "': " + userSerialize(value)
             self.failTest(msg + self.displayReason(reason))
@@ -372,7 +369,6 @@ class SeleniumTest(object):
     def checkCheckboxValueByName(self, eleName, boolValue = True, reason = ""):
         self.checkEmptyParam(eleName, "checkCheckboxValueByName")
         value = self.getElementByName(eleName).get_attribute("checked")
-#       print "value: ", value
         if value and not self.checkboxIsValid(value):
             msg = "Strange value for checkbox " + userSerialize(eleName) + ": " + userSerialize(value)
             self.failTest(msg + self.displayReason(reason))
@@ -418,7 +414,6 @@ class SeleniumTest(object):
             ele.send_keys(text)
             return getValue(self.getElementById(eleId))
         except InvalidElementStateException as e:
-            #print "Exception (InvalidElementStateException): ", e
             self.fatalTest("Cannot set element value by id '" + eleId + "', possibly element is read-only.")
             
     def setOptionValueByIdAndValue(self, eleId, optValue):
@@ -713,7 +708,7 @@ class SeleniumTest(object):
                 self.logStart()
                 
             fullLogText = self.getName() + "[" + logLevel + "]: " + text + "\n"
-            print fullLogText.strip()
+            print fullLogText.strip().encode("UTF-8")
             logFile = open(self.m_logFile, 'a')
             logFile.write(fullLogText.encode("UTF-8"))
             logFile.close()
