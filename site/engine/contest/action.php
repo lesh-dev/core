@@ -28,3 +28,42 @@ function xcmst_contest_delete_entity()
         <input name="delete" value="Удалить запись окончательно" class="btn btn-danger" type="submit" />
     </form><?php
 }
+
+function ctx_print_result_row($work, $probs, $simple = false)
+{
+    global $ref;
+    $id = $work["contestants_id"];
+    $row = "";
+    if ($simple)
+    {
+        $row .= "<td>".$work['name']."</td>";
+    }
+    else
+    {
+        $row .=
+            "<td><a ".xcms_href(array(
+                'ref'=>$ref, 'mode'=>'view', 'table'=>'contestants', 'id'=>$id)).">{$work['name']}</a></td>".
+            "<td>{$work['level']}</td>".
+            "<td><a href=\"{$work['work']}\">Скачать</a></td>";
+
+        foreach ($probs as $prob)
+        {
+            $pid = $prob["problems_id"];
+            $row .= "<td>";
+            $mark = $work["p${pid}val"];
+            $row .= $mark;
+            $row .= "</td>";
+        }
+    }
+    $sum = @$work['sum'];
+    if ($sum)
+        $row .= "<td>$sum</td>";
+
+    if (!$simple)
+    {
+        $row .= "<td><a ".xcms_href(array(
+            'ref'=>$ref, 'mode'=>'delete', 'table'=>'contestants', 'id'=>$id)).">Удалить</a></td>";
+    }
+    return $row;
+}
+

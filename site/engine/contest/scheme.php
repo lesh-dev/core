@@ -1,5 +1,38 @@
 <?php
 
+$CONTEST_CURRENT_YEAR = "2013";
+
+$CTX_META["problems"] = array(
+    "problems_id" => array("name"=>"ID", "type"=>"pk")
+    ,"problem_name" => array("name"=>"Название задачи", "type"=>"text")
+    ,"people" => array("name"=>"Проверяющие", "type"=>"text")
+    ,"problem_html" => array("name"=>"Текст задачи", "type"=>"large")
+    ,"criteria" => array("name"=>"Критерий", "type"=>"large")
+);
+
+$CTX_META["contestants"] = array(
+    "contestants_id" => array("name"=>"", "type"=>"pk")
+    ,"name" => array("name"=>"Ф.И.О. ученика", "type"=>"text")
+    ,"mail" => array("name"=>"Электропочта", "type"=>"text")
+    ,"phone" => array("name"=>"Телефон (и др. контакты)", "type"=>"text")
+    ,"parents" => array("name"=>"Родители", "type"=>"text")
+    ,"address" => array("name"=>"Адрес проживания", "type"=>"text")
+    ,"school" => array("name"=>"Школа", "type"=>"text")
+    ,"level" => array("name"=>"Класс", "type"=>"text")
+    ,"teacher_name" => array("name"=>"Преподаватель", "type"=>"text")
+    ,"work" => array("name"=>"Работа", "type"=>"file")
+    ,"status" => array("name"=>"Комментарии", "type"=>"large")
+);
+
+$CTX_META["solutions"] = array(
+    "solutions_id" => array("name"=>"pk", "type"=>"pk")
+    ,"problem_id" => array("name"=>"Идентификатор проблемы", "type"=>"pk")
+    ,"contestant_id" => array("name"=>"Идентификатор работы", "type"=>"pk")
+    ,"resolution_text" => array("name"=>"Текст резолюции", "type"=>"large")
+    ,"resolution_author" => array("name"=>"Проверяющий", "type"=>"text")
+    ,"resolution_mark" => array("name"=>"Итоговая оценка", "type"=>"text")
+);
+
 function ctx_create_structure()
 {
     $db = xdb_get_write();
@@ -146,32 +179,4 @@ function ctx_calculate_results(&$works, $probs)
     rsort($done_sum);
 
     return array('done'=>$done, 'done_sum'=>$done_sum, 'undone'=>$undone);
-}
-
-function ctx_print_result_row($work, $probs)
-{
-    global $ref;
-    $id = $work["contestants_id"];
-    $row =
-        "<td><a ".xcms_href(array(
-            'ref'=>$ref, 'mode'=>'view', 'table'=>'contestants', 'id'=>$id)).">{$work['name']}</a></td>".
-        "<td>{$work['level']}</td>".
-        "<td><a href=\"{$work['work']}\">Скачать</a></td>";
-
-    foreach ($probs as $prob)
-    {
-        $pid = $prob["problems_id"];
-        $row .= "<td>";
-        $mark = $work["p${pid}val"];
-        $row .= $mark;
-        $row .= "</td>";
-    }
-    $sum = @$work['sum'];
-    if ($sum)
-        $row .= "<td>$sum</td>";
-
-    $row .= "<td><a ".xcms_href(array(
-        'ref'=>$ref, 'mode'=>'delete', 'table'=>'contestants', 'id'=>$id)).">Удалить</a></td>";
-
-    return $row;
 }
