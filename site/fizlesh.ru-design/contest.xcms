@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<# auth/ root administrator ank admin editor #ank #admin #editor #>
 <html><head>
     <title>Contest</title>
     <# cms/bootstrap #>
@@ -7,6 +6,8 @@
     <link href="<# full_design_dir #>/contest.css" rel="stylesheet" media="screen">
 </head>
 <body>
+<# url #>
+<# auth/ #ank #admin #editor #>
 <?php
 
 require_once("${engine_dir}sys/db.php");
@@ -231,8 +232,8 @@ function ctx_show_submitted()
             echo "<th>".xu_substr($value["problem_name"], 0, 2);
         echo "</tr></thead>\n";
 
-        foreach ($undone as $line)
-            echo "<tr>$line</tr>\n";
+        foreach ($undone as $work)
+            echo "<tr>".ctx_print_result_row($work, $probs)."</tr>\n";
         ?>
         </table>
 
@@ -251,9 +252,9 @@ function ctx_show_submitted()
 
         $i = 1;
         foreach ($done_sum as $sum)
-            foreach ($done[$sum] as $line)
+            foreach ($done[$sum] as $work)
             {
-                echo "<tr><td>$i</td>$line</tr>\n";
+                echo "<tr><td>$i</td>".ctx_print_result_row($work, $probs)."</tr>\n";
                 $i++;
             }
         ?></table><?php

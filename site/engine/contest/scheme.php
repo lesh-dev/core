@@ -106,50 +106,72 @@ function ctx_get_works()
     return $works;
 }
 
-function ctx_calculate_results($works, $probs)
+function ctx_calculate_results(&$works, $probs)
 {
     global $ref;
 
     $done = array();
     $undone = array();
     $done_sum = array();
-    foreach ($works as $work)
+    foreach ($works as &$work)
     {
         $id = @$work["contestants_id"];
         if (!$id)
             continue;
 
-        $row = "";
-        $row .= "<td><a href='?ref=$ref&mode=view&table=contestants&id=$id'>{$work['name']}</a>
-            <td>{$work['level']}<td><a href='{$work['work']}'>Скачать</a>";
         $is_done = true;
         $sum = 0;
-        foreach ($probs as $value)
+        foreach ($probs as $prob)
         {
-            $row .= "<td>";
-            $val = @$work["p".$value["problems_id"]];
-            if(!$val)
+            $pid = $prob["problems_id"];
+            $val = @$work["p$pid"];
+            if (!$val)
             {
-                $val = "???";
+                $val = "?";
                 $is_done = false;
             }
-            $row .= $val;
-            $row .= "</td>";
-
-            $sum += (int)$val;
+            $work["p${pid}val"] = $val;
+            $sum += (integer)$val;
         }
         if ($is_done)
-            $row .= "<td>$sum</td>";
+            $work["sum"] = $sum;
 
-        $row .= "<td><a href='?ref=$ref&mode=delete&table=contestants&id=$id'>Удалить</a></td>";
         if ($is_done)
         {
-            @$done[$sum][]= $row;
+            @$done[$sum][] = $work;
             $done_sum[$sum] = $sum;
         }
-        else $undone[] = $row;
+        else $undone[] = $work;
     }
     rsort($done_sum);
 
     return array('done'=>$done, 'done_sum'=>$done_sum, 'undone'=>$undone);
+}
+
+function ctx_print_result_row($work, $probs)
+{
+    global $ref;
+    $id = $work["contestants_id"];
+    $row =
+        "<td><a ".xcms_href(array(
+            'ref'=>$ref, 'mode'=>'view', 'table'=>'contestants', 'id'=>$id)).">{$work['name']}</a></td>".
+        "<td>{$work['level']}</td>".
+        "<td><a href=\"{$work['work']}\">Скачать</a></td>";
+
+    foreach ($probs as $prob)
+    {
+        $pid = $prob["problems_id"];
+        $row .= "<td>";
+        $mark = $work["p${pid}val"];
+        $row .= $mark;
+        $row .= "</td>";
+    }
+    $sum = @$work['sum'];
+    if ($sum)
+        $row .= "<td>$sum</td>";
+
+    $row .= "<td><a ".xcms_href(array(
+        'ref'=>$ref, 'mode'=>'delete', 'table'=>'contestants', 'id'=>$id)).">Удалить</a></td>";
+
+    return $row;
 }
