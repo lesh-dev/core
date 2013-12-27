@@ -14,11 +14,9 @@ $results = ctx_calculate_results($works, $probs);
 $done = $results['done'];
 $done_sum = $results['done_sum'];
 
-echo count($done);
-
 ?>
-<table>
-<thead><tr><tr><th>#</th><th>Имя</th><th>Результат</th></tr>
+<table class="contest-results">
+<thead><tr><th>#</th><th>Имя</th><th>Результат</th></tr></thead>
 <?php
 $i = 1;
 foreach ($done_sum as $sum)

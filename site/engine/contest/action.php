@@ -57,7 +57,7 @@ function ctx_print_result_row($work, $probs, $simple = false)
     }
     $sum = @$work['sum'];
     if ($sum)
-        $row .= "<td>$sum</td>";
+        $row .= "<td class=\"sum\">$sum</td>";
 
     if (!$simple)
     {
