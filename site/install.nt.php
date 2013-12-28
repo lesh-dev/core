@@ -1,14 +1,15 @@
 <?php
     header("Content-type: text/html; charset=UTF-8;");
+    $target_version = @file_get_contents("VERSION");
 ?>
 <html>
     <head>
-        <title>XCMS Installer 2.0</title>
+        <title>XCMS Installer <?php echo $target_version; ?></title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
     <body>
         <style><?php echo "\n".@file_get_contents('install.css')."\n"; ?></style>
-        <h1>Установка XCMS 2.0</h1>
+        <h1>Установка XCMS <?php echo $target_version; ?></h1>
 <?php
     $engine_dir = "engine/"; // some initial hardcode. TODO: make autodetection
     require_once("${engine_dir}sys/string.php");
