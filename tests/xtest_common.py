@@ -32,9 +32,6 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
             if self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"]):
                 self.logAdd("DOCTYPE not detected, but this page seems to be Auth page. ", "warning")
                 return
-            if self.checkSourceTextPresent(u"Сменить пароль"):
-                self.logAdd("DOCTYPE not detected, but this page seems to be Admin panel. ", "warning")
-                return
             self.failTest("DOCTYPE directive not found on page " + self.curUrl());
 
     def getPageSourceFirstLine(self):
