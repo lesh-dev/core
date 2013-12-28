@@ -159,10 +159,10 @@
             return "Cannot append settings to 'settings.php'. ";
 
         include("settings.php");
-        include("$engine_dir/sys/settings.php");
-        include_once("$engine_dir/sys/tag.php");
-        include_once("$engine_dir/sys/cms.php");
-        include("$engine_dir/cms/build_rewrite.xcms");
+        include("${engine_dir}sys/settings.php");
+        include_once("${engine_dir}sys/tag.php");
+        include_once("${engine_dir}sys/cms.php");
+        include("${engine_dir}cms/build_rewrite.php");
 
         return true;
     }

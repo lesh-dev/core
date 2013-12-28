@@ -1,6 +1,8 @@
 <?php
     global $full_design_dir;
     global $content_dir;
+    global $engine_dir;
+    global $web_prefix;
 
     $rewrite_header_fn = "$engine_dir/cms/header.htaccess";
     if (!file_exists($rewrite_header_fn))
