@@ -57,7 +57,7 @@ function xcms_create_page()
         $pageid = $opageid;
     }
     xcms_save_list("$dir/info", $info);
-    xcms_rebuild_aliases();
+    xcmst_rebuild_aliases_and_rewrite();
     foreach ($_POST as $key => $value)
         unset($_POST[$key]);
     return "";

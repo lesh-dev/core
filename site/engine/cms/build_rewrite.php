@@ -1,10 +1,12 @@
 <?php
+function xcmst_build_rewrite()
+{
     global $full_design_dir;
     global $content_dir;
     global $engine_dir;
     global $web_prefix;
 
-    $rewrite_header_fn = "$engine_dir/cms/header.htaccess";
+    $rewrite_header_fn = "${engine_dir}cms/header.htaccess";
     if (!file_exists($rewrite_header_fn))
     {
         die("Cannot find rewrite template header, alias translation will not work.");
@@ -15,7 +17,7 @@
     $rewrite_text = str_replace('@@WEB-PREFIX@', "/$web_prefix", $rewrite_text);
     $rewrite_text .= "\n";
 
-    $custom_rewrite_fn = "{$SETTINGS["content_dir"]}cms/moved-pages";
+    $custom_rewrite_fn = "${content_dir}cms/moved-pages";
     if (file_exists($custom_rewrite_fn))
     {
         $rewrite_text .= "# Moved pages rules\n";
@@ -42,8 +44,7 @@
         $rewrite_text .= "# End of moved pages rules\n\n";
     }
 
-
-    $custom_htaccess_fn = "{$SETTINGS["content_dir"]}cms/custom-htaccess";
+    $custom_htaccess_fn = "${content_dir}cms/custom-htaccess";
     if (file_exists($custom_htaccess_fn))
     {
         $custom_contents = @file_get_contents($custom_htaccess_fn);
@@ -71,4 +72,14 @@
     {?>
         <div class="error">Rewrite rules writing failed!</div><?php
     }
+}
+
+/**
+  * Main method for rewrite rewrite rules after alias changes
+  **/
+function xcmst_rebuild_aliases_and_rewrite()
+{
+    xcms_rebuild_aliases();
+    xcmst_build_rewrite();
+}
 ?>

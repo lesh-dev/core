@@ -32,10 +32,8 @@
 
                 $pageid = $new_pageid;
                 $redirect = true;
-                xcms_rebuild_aliases();
-                ?>
-                <# cms/build_rewrite #>
-                <div class="notice">Путь успешно изменён!</div><?php
+                xcmst_rebuild_aliases_and_rewrite();
+                ?><div class="notice">Путь успешно изменён!</div><?php
             }
         }
     }

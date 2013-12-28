@@ -7,6 +7,7 @@ if (!@$_GET["page"])
 ?><# locale #><?php
 ?><# url #><?php
 ?><# adm/page_info #><?php
+    include_once("${engine_dir}cms/build_rewrite.php");
     $INFO = xcms_get_list(xcms_get_info_file_name());
     include(translate("<! auth/ #editor #admin {$INFO["edit"]} !>"));
 ?><# cms/create_page_handler #><?php
@@ -138,9 +139,8 @@ if (!@$_GET["page"])
     else if(@$_GET["mode"]=="rebuild_alias")
     {?>
         <div class="admin-widget"><?php
-            xcms_rebuild_aliases();
-            include(translate('<! cms/build_rewrite !>')); ?>
-            <div class="notice">Список alias-ов успешно обновлён</div>
+            xcmst_rebuild_aliases_and_rewrite();
+            ?><div class="notice">Список alias-ов успешно обновлён</div>
         </div><?php
     }
     else if(@$_GET["mode"]=="__convert")

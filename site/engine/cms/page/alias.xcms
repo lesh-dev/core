@@ -52,7 +52,7 @@ function xcmst_check_alias($info)
     if (@$_POST["change-alias"])
     {
         $redirect = xcmst_check_alias($info);
-        include(translate('<! cms/build_rewrite !>'));
+        xcmst_rebuild_aliases_and_rewrite();
         if ($redirect)
             include(translate("<! redir_msg ladmin 2 !>"));
     }
