@@ -60,6 +60,32 @@ function install_fresh_db()
     sudo cp $VERBOSE_COPY $TEMP_DB $DEST_DB
 }
 
+# Copy-pasted from testing.receipe
+function xsm_clear_notifications()
+{
+    db="$DEST/$DEST_CONT/ank/fizlesh.sqlite3"
+    if [ -w "$db" ] ; then
+        echo 'DELETE FROM notification;' | sudo sqlite3 "$db"
+        echo "Notifications table cleared successfully"
+    fi
+
+    mc="$DEST/$DEST_CONT/cms/mailer.conf"
+    if [ -w "$mc" ] ; then
+        mail_test="vdm-photo@ya.ru"
+        cat > "$mc" <<EOF
+user-change:$mail_test
+content-change:$mail_test
+reg:$mail_test
+reg-managers:$mail_test
+reg-test:$mail_test
+reg-managers-test:$mail_test
+EOF
+        echo "Mailer config was reset to '$mail_test' address for each notification handler"
+    fi
+
+}
+
+
 # read options
 while [ -n "$1" ]; do
     ARG="$1"
@@ -179,6 +205,8 @@ fi
 if [ "$PREPARE_INSTALLER" = "yes" ] ; then
     do_prepare_installer "$DEST"
 fi
+
+xsm_clear_notifications
 
 echo "Changing root password to 'root'..."
 # change root password to 'root'

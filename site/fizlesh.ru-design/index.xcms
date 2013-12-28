@@ -21,13 +21,15 @@
         if (xcms_user()->check_rights("admin", false)) {?>
         <a href="<?php echo "/$web_prefix?".xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>"
             style="position: absolute; top: 16px; right: 13px;"><img
-            src="<?php echo $full_engine_pub; ?>img/key.png" alt="Admin CPL" style="padding: 3px"/></a><?php
+            src="<?php echo $full_engine_pub; ?>img/key.png" alt="Admin CPL"
+            height="16" width="16" style="padding: 3px"/></a><?php
         }
         if (xcms_user()->check_rights("ank", false)) {
             global $web_prefix; ?>
         <a href="<?php echo "/${web_prefix}xsm"; ?>"
             style="position: absolute; top: 13px; right: 36px; line-height: 32px;"><img
-            src="<?php echo $full_engine_pub; ?>img/study.png" alt="XSM"/></a><?php
+            src="<?php echo $full_engine_pub; ?>img/study.png"
+            height="32" width="32" alt="XSM"/></a><?php
         }
         ?>
         <table cellspacing="0" cellpadding="0" class="topTable roundBorders">

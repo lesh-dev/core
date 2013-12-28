@@ -47,11 +47,12 @@ if (!@$_GET["page"])
             @$_GET["mode"]="";
         }
     }
-?><html>
+?><!DOCTYPE html>
+<html>
     <head>
         <# cms/head #>
-        <# cms/jquery #>
         <link rel="stylesheet" type="text/css" href="<?php echo "${full_engine_pub}css/admin.css"; ?>" />
+        <# cms/jquery #>
         <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
     </head>
     <body>
