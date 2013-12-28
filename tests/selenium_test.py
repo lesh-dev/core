@@ -609,8 +609,8 @@ class SeleniumTest(object):
         self.logAdd("TEST FAILED: " + userSerialize(errorText), "error")
         raise TestError(errorText)
 
-    def failTestWithItemNotFound(self, errorText):
-        self.logAdd("TEST FAILED (Item-Not-Found): " + userSerialize(errorText), "error")
+    def throwItemNotFound(self, errorText):
+        self.logAdd("Item-Not-Found: " + userSerialize(errorText))
         raise ItemNotFound(errorText)
 
     def assertTextPresent(self, xpath, text, reason = ""):
@@ -665,7 +665,7 @@ class SeleniumTest(object):
                 # loop ended, found nothing
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
                 msg = "Cannot find URL by link texts: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". " + self.displayReason(reason)
-                self.failTestWithItemNotFound(msg)
+                self.throwItemNotFound(msg)
         else: # single link
             try:
                 url = searchMethod(urlText)
@@ -673,7 +673,7 @@ class SeleniumTest(object):
             except NoSuchElementException:
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
                 msg = "Cannot find URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". " + self.displayReason(reason)
-                self.failTestWithItemNotFound(msg)
+                self.throwItemNotFound(msg)
 
     def gotoIndexedUrlByLinkText(self, urlText, index, sibling = ""):
         # case: <a><span>text</span></a> is not captured by internal of 'gotoUrlByLinkText'
@@ -700,7 +700,7 @@ class SeleniumTest(object):
         except NoSuchElementException:
             # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
             msg = "Cannot find no one URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". "
-            self.failTestWithItemNotFound(msg)
+            self.throwItemNotFound(msg)
             
     def logAdd(self, text, logLevel = "debug"):
         try:
@@ -721,7 +721,7 @@ class SeleniumTest(object):
         
     def checkPhpErrors(self):
         pageText = self.getPageSource()
-        susp = ["Notice:", "Error:", "Warning:", "Fatal error:", "Parse error:"];
+        susp = ["Notice:", "Error:", "Warning:", "Fatal error:", "Parse error:"]
         for word in susp:
             if (word in pageText) and (" on line " in pageText):
                 self.logAdd("PHP ERROR " + userSerialize(word) + " detected on page " + userSerialize(self.curUrl()) + ": ")

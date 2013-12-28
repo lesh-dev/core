@@ -35,9 +35,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.testDiffAndLongText()
 
         self.testAlias()
-
-        #TODO: FIXME: wait for bugfix #673
-        #self.testBadAlias()
+        self.testBadAlias()
 
     def testBaseEditing(self):
 
@@ -110,7 +108,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.gotoCloseEditor()
 
-        self.assertBodyTextPresent(u"Личный кабинет")
+        self.assertUrlPresent(u"Личный кабинет")
         # click on menu.
 
         self.logAdd("Clicking on parent menu item. ")
@@ -123,8 +121,9 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         if inpMenuTitle not in self.getPageTitle():
             self.failTest("Menu title text does not appear in page title after going to the page by menu. ")
-
+        
     def testVersions(self):
+        
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoUrlByLinkText(self.m_menuTitle)
 
@@ -235,16 +234,19 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
     def updateAliases(self):
         self.logAdd("Updating aliases. ")
         self.clickElementByName("change-alias")
-        self.assertBodyTextPresent(u"Список alias-ов обновлён")
-        self.wait(2, "wait for redirection")
 
     def gotoAlias(self, alias):
         self.logAdd("Going to the page via alias " + alias)
         self.gotoPage("/" + alias)
 
     def testAlias(self):
+
         self.logAdd("test aliases")
 
+        self.assertUrlPresent(u"Личный кабинет")
+        
+        self.gotoUrlByLinkText(self.m_parentPage)
+        self.gotoUrlByLinkText(self.m_menuTitle)
         self.gotoEditPageInPlace()
 
         # edit alias
@@ -257,6 +259,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.m_pageAlias = inpAlias
 
         self.updateAliases()
+        self.assertBodyTextPresent(u"Список alias-ов обновлён")
+        self.wait(3, "wait for redirection")
 
         # self.gotoRebuildAliases()
         self.gotoAlias(self.m_pageAlias)
@@ -274,14 +278,19 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_pageAlias)
         self.assertBodyTextPresent("Alias")
 
-        inpAlias = "    " # evil hack
+        inpAlias = "    ../root/alias~" # evil hack
 
         inpAlias = self.fillElementByName("alias", inpAlias)
         self.m_pageAlias = inpAlias
 
         self.updateAliases()
+        self.assertBodyTextPresent(u"Alias может содержать только символы")
+        self.m_pageAlias = "/good/alias/" + random_crap.randomText(6);
+        self.updateAliases()
+        self.assertBodyTextPresent(u"Список alias-ов обновлён")
+        self.wait(3, "wait for redirection after fixing alias")
 
-        #self.gotoCloseEditor()
+        self.gotoCloseEditor()
 
         self.gotoAdminPanel()
         self.gotoCreatePage(reason = "We should successfully enter admin panel, but we cannot see button to create new subpage. ")
