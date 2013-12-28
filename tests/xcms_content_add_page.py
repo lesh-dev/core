@@ -66,12 +66,6 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.clickElementById("create-page-submit")
 
-        #TODO: wait for fixing of bug with automatic alias rebuildAliases
-
-        self.logAdd("Rebuilding aliases for first time to w/a bug ")
-        self.gotoRebuildAliases()
-        #self.wait(2)
-
         #self.logAdd("Opening editor again after redirection. ")
         #self.gotoEditPageInPlace()
 
