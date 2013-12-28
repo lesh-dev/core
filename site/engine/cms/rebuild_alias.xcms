@@ -1,3 +1,0 @@
-<?php
-    xcms_rebuild_aliases();
-?>

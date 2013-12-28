@@ -67,6 +67,6 @@
     $rewrite_text .= join($listing);
     if (!xcms_write(".htaccess", $rewrite_text))
     {?>
-        <div>Rewrite rules writing failed!</div><?php
+        <div class="error">Rewrite rules writing failed!</div><?php
     }
 ?>

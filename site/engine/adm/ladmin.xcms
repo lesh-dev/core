@@ -136,11 +136,10 @@ if (!@$_GET["page"])
         include(translate('<! edit/tag `edit`,`view`,`installed` `longtext` !>'));
     }
     else if(@$_GET["mode"]=="rebuild_alias")
-    {
-        include(translate('<! cms/rebuild_alias !>'));
-        include(translate('<! cms/build_rewrite !>'));
-        ?>
-        <div class="admin-widget">
+    {?>
+        <div class="admin-widget"><?php
+            xcms_rebuild_aliases();
+            include(translate('<! cms/build_rewrite !>')); ?>
             <div class="notice">Список alias-ов успешно обновлён</div>
         </div><?php
     }
