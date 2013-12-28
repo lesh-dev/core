@@ -403,8 +403,8 @@ span.phone.error {
 }
 
 span.pb {
-    padding: 0px 2px;
-    color: #9f0000;
+    padding: 0px 1px;
+    color: #646464;
 }
 
 form#filter-form {
