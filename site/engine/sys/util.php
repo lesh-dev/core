@@ -36,7 +36,7 @@ function xcms_mkpasswd()
         $table[] = '_';
         $size = count($table);
         for ($i = 0; $i < 12; $i++)
-            $pass .= $table[rand($i * $i) % $size];
+            $pass .= $table[mt_rand(0, $i * $i) % $size];
     }
     return $pass;
 }
