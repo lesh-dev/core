@@ -100,6 +100,10 @@ function xsm_ymdhm($timestamp)
     return $timestamp;
 }
 
+/**
+  * Parses phones string (allowed format is comma-separated)
+  * Returns list of parsed items (one item on parse error)
+  **/
 function xsm_format_phones($phones_str)
 {
     $phones_str = str_replace("\r", " ", $phones_str);
@@ -180,6 +184,10 @@ function xsm_format_phones($phones_str)
     return $result;
 }
 
+/**
+  * Format phone string using @c xsm_format_phones
+  * to HTML output
+  **/
 function xsm_make_phone($phones_str)
 {
     $items = xsm_format_phones($phones_str);
@@ -199,13 +207,16 @@ function xsm_make_phone($phones_str)
             $phone = htmlspecialchars($phone);
         }
         if (!empty($result))
-            $result .= ", ";
+            $result .= ",&nbsp;&nbsp;nbsp;";
 
         $result .= "<span class=\"phone $class\" title=\"$hint\">$phone</span>";
     }
     return $result;
 }
 
+/**
+  * Final formatting for all person phones into one HTML string
+  **/
 function xsm_format_person_phones($person)
 {
     $phone = xsm_make_phone($person["phone"]);
@@ -215,7 +226,7 @@ function xsm_format_person_phones($person)
         $all_phones[] = $cellular;
     if ($phone)
         $all_phones[] = $phone;
-    return $all_phones;
+    return implode(",&nbsp;&nbsp;&nbsp;", $all_phones);
 }
 
 function xsm_prepare_social_profile($social_profile)
