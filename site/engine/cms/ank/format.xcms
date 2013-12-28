@@ -207,7 +207,7 @@ function xsm_make_phone($phones_str)
             $phone = htmlspecialchars($phone);
         }
         if (!empty($result))
-            $result .= ",&nbsp;&nbsp;nbsp;";
+            $result .= ",&nbsp;&nbsp;&nbsp;";
 
         $result .= "<span class=\"phone $class\" title=\"$hint\">$phone</span>";
     }
