@@ -163,6 +163,7 @@
         include_once("${engine_dir}sys/tag.php");
         include_once("${engine_dir}sys/cms.php");
         include("${engine_dir}cms/build_rewrite.php");
+        xcmst_rebuild_aliases_and_rewrite();
 
         return true;
     }
