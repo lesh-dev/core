@@ -5,73 +5,73 @@
 ?><div class="admin-widget"><?php
     echo $page_creation_result;
 ?><form method="post">
-<table class="create-page">
-<tr><td><h3>Новая страница</h3>
-<tr>
-    <td>Физическое имя<br />
-        <font>Выберите удобочитаемое имя без пробелов.<br />
-            Например, <b>school-courses</b></font>
-    </td>
-    <td><input <?php xcmst_input_attrs_from_post('create-name', 'page-path'); ?> /></td>
-</tr>
-<tr>
-    <td>Alias<br />
-        <font>URL, по которому будет доступна
-            страница, с учётом иерархии.<br />
-            Например, <b>gear/other</b></font>
-    </td>
-    <td><input <?php xcmst_input_attrs_from_post("alias", "section/page-alias");?> /></td>
-</tr>
-<tr>
-    <td>Тип содержимого</td>
-    <td>
-<?php
+<h3>Новая страница</h3>
+
+<div>
+    <span class="user-label">Физическое имя</span>
+    <input <?php xcmst_input_attrs_from_post('create-name', 'page-path'); ?> />
+</div>
+<div class="user-descr">Выберите удобочитаемое имя без пробелов.
+    Например, <b>school-courses</b></div>
+
+<div>
+    <span class="user-label">Alias</span>
+    <input <?php xcmst_input_attrs_from_post("alias", "section/page-alias");?> />
+</div>
+
+<div class="user-descr">URL, по которому будет доступна страница, с учётом иерархии.
+    Например, <b>gear/other</b></div>
+<div>
+    <span class="user-label">Тип содержимого</span>
+    <select id="create-pagetype-selector" name="create-pagetype"><?php
     $list = xcms_get_tag_list("type");
-    echo "<select id=\"create-pagetype-selector\" name=\"create-pagetype\">";
     foreach ($list as $key=>$value)
     {
-        if ($key == "_NAME") continue;
-        $s = ($value == "content" || $key == "content") ? 'selected="selected" checked="checked" ' : '';
+        if ($key == "_NAME")
+            continue;
+        $s = ($value == "content" || $key == "content")
+            ? 'selected="selected" checked="checked" '
+            : '';
         echo "<option name=\"$value\" $s value=\"$value\">$key</option>";
     }
-?>
-    </td>
-</tr>
-<tr>
-<?php
-    $chk_hidden = xcms_checkbox_attr(NO);
-?>
-    <td>Скрытый раздел</td>
-    <td><input type="checkbox" <?php echo $chk_hidden; ?>
-        name="menu-hidden" id="menu-hidden-checkbox" /></td>
-</tr>
-<tr>
-<?php
-    $chk_global = xcms_checkbox_attr(NO);
-?>
-    <td>Корневая страница</td>
-    <td><input type="checkbox" <?php echo $chk_global; ?>
-        name="global" id="global-checkbox" /></td>
-</tr>
-<tr>
-    <td>Имя в меню<br />
-        <font>Этот текст появится в меню и title браузера</font></td>
-    <td><input <?php xcmst_input_attrs_from_post("menu-title", "Имя в меню"); ?> /></td>
-</tr>
-<tr>
-    <td>Заголовок<br />
-        <font>Этот текст появится наверху страницы</font></td>
-    <td><input <?php xcmst_input_attrs_from_post("header", "Заголовок"); ?> /></td>
-</tr>
-<tr>
-    <td colspan="2">
-        <h3>Матрица доступа</h3>
-        <table>
-            <tr>
-                <td>Группа</td>
-                <td>Может смотреть</td>
-                <td>Может изменять</td>
-            </tr>
+?></select></div>
+
+<div>
+    <span class="user-label"><?php
+    $chk_hidden = xcms_checkbox_attr(NO); ?>
+    Скрытый раздел</span>
+    <input type="checkbox" <?php echo $chk_hidden; ?>
+        name="menu-hidden" id="menu-hidden-checkbox" />
+</div>
+
+<div>
+    <span class="user-label"><?php
+    $chk_global = xcms_checkbox_attr(NO); ?>
+    Корневая страница</span>
+    <input type="checkbox" <?php echo $chk_global; ?>
+        name="global" id="global-checkbox" />
+</div>
+
+<div>
+    <span class="user-label">Имя в меню</span>
+    <input <?php xcmst_input_attrs_from_post("menu-title", "Имя в меню"); ?> />
+</div>
+<div class="user-descr">Этот текст появится в меню и title браузера</div>
+
+<div>
+    <span class="user-label">Заголовок</span>
+    <input <?php xcmst_input_attrs_from_post("header", "Заголовок"); ?> />
+</div>
+<div class="user-descr">Этот текст появится наверху страницы</div>
+
+<h3>Матрица доступа</h3>
+
+<table class="access-matrix">
+    <tr>
+        <th>Группа</th>
+        <th>Может смотреть</th>
+        <th>Может изменять</th>
+    </tr>
 <?php
     include_once("$engine_dir/sys/groups.php");
     foreach (xcms_all_groups() as $g=>$translation)
@@ -84,14 +84,11 @@
         if ($g == "#admin") { $che = "checked"; }
         echo
             "<tr><td>$translation</td>".
-            "<td><input type=\"checkbox\" name=\"view_$g\" $chv /></td>".
-            "<td><input type=\"checkbox\" name=\"edit_$g\" $che /></td>".
+            "<td><input type=\"checkbox\" name=\"view_$g\" id=\"view_$g-checkbox\" $chv /></td>".
+            "<td><input type=\"checkbox\" name=\"edit_$g\" id=\"edit_$g-checkbox\" $che /></td>".
             "</tr>";
     }
 ?>
-        </table>
-    </td>
-</tr>
 </table>
 <input name="create-page" id="create-page-submit"
     type="submit" value="Создать раздел" />

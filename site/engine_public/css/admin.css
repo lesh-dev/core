@@ -250,6 +250,17 @@ span.user-label {
     line-height: 16px;
     color: #5f4f00;
 }
+div.user-descr {
+    padding-left: 223px;
+    font-size: 12px;
+    padding-bottom: 5px;
+}
+table.access-matrix {
+    width: 400px;
+}
+table.access-matrix th {
+    text-align: left;
+}
 
 div.td1 {
     line-height: 18px;
