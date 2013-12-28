@@ -39,22 +39,17 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
         pageHeader = self.fillElementById("header-input", pageHeader);
         inpAlias = self.fillElementById("alias-input", inpAlias);
 
-        self.assertCheckboxValueByName("view_#all", True)
-        self.assertCheckboxValueByName("view_#registered", False)
+        self.assertCheckboxValueById("view_#all-checkbox", True)
+        self.assertCheckboxValueById("view_#registered-checkbox", False)
 
-        self.clickElementByName("view_#all")
-        self.clickElementByName("view_#registered")
+        self.clickElementById("view_#all-checkbox")
+        self.clickElementById("view_#registered-checkbox")
 
         defaultPageType = self.getOptionValueById("create-pagetype-selector")
         if defaultPageType != "content":
             self.failTest("Default selected page type is not 'content': " + defaultPageType)
 
         self.clickElementById("create-page-submit")
-
-        #TODO: wait for fixing of bug with automatic alias rebuildAliases
-        self.logAdd("Rebuilding aliases for first time to w/a bug ")
-        self.gotoRebuildAliases()
-        #self.wait(2)
 
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle)
