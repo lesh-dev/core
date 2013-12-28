@@ -47,7 +47,8 @@ if (!@$_GET["page"])
             @$_GET["mode"]="";
         }
     }
-?><html>
+?><!DOCTYPE html>
+<html>
     <head>
         <# cms/head #>
         <# cms/jquery #>
