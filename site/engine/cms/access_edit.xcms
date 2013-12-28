@@ -2,7 +2,10 @@
 <div class="admin-widget">
 <form method="post">
 <table class="access-editor">
-    <tr><th>Чтение</th><th>Запись</th></tr>
+    <tr>
+        <th>Чтение</th>
+        <th>Запись</th>
+    </tr>
     <tr><td>
 <?php
     include_once("$engine_dir/sys/groups.php");

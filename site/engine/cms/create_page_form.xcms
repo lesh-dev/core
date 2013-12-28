@@ -66,11 +66,11 @@
 
 <h3>Матрица доступа</h3>
 
-<table class="access-matrix">
+<table class="access-editor">
     <tr>
         <th>Группа</th>
-        <th>Может смотреть</th>
-        <th>Может изменять</th>
+        <th>Чтение</th>
+        <th>Запись</th>
     </tr>
 <?php
     include_once("$engine_dir/sys/groups.php");
