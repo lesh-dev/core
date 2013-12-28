@@ -9,7 +9,13 @@
     require_once("${engine_dir}sys/diff/diff-utils.php");
 
     header("Content-Type: text/html; charset=utf-8");
-
+?><!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>XCMS Unit Tests</title>
+</head>
+<body><?php
     xut_initialize();
 
     // put your unit test function call here
@@ -20,4 +26,4 @@
     XcmsUser::unit_test();
 
     xut_finalize();
-?>
+?></body></html>
