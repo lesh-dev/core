@@ -19,17 +19,21 @@
     <div id="fullHeight">
         <?php
         if (xcms_user()->check_rights("admin", false)) {?>
-        <a href="<?php echo "/$web_prefix?".xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>"
-            style="position: absolute; top: 16px; right: 13px;"><img
-            src="<?php echo $full_engine_pub; ?>img/key.png" alt="Admin CPL"
-            height="16" width="16" style="padding: 3px"/></a><?php
+        <a title="Админка"
+            href="<?php echo "/$web_prefix?".xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>"
+            class="top-icon" style="top: 16px; right: 13px; height: 16px; width: 16px;
+            background-image: url('<?php echo $full_engine_pub; ?>img/key.png');">&nbsp;</a><?php
         }
-        if (xcms_user()->check_rights("ank", false)) {
-            global $web_prefix; ?>
-        <a href="<?php echo "/${web_prefix}xsm"; ?>"
-            style="position: absolute; top: 13px; right: 36px; line-height: 32px;"><img
-            src="<?php echo $full_engine_pub; ?>img/study.png"
-            height="32" width="32" alt="XSM"/></a><?php
+        if (xcms_user()->check_rights("ank", false)) {?>
+        <a title="XSM" href="<?php echo "/${web_prefix}xsm"; ?>"
+            class="top-icon" style="top: 9px; right: 36px; height: 32px; width: 32px;
+            background-image: url('<?php echo $full_engine_pub; ?>img/study.png');">&nbsp;</a><?php
+        }
+
+        if (xcms_user()->check_rights("registered", false)) {?>
+        <a title="Личный кабинет" href="<?php echo "/$web_prefix?".xcms_url(array('page'=>$pageid, 'ref'=>'cabinet')); ?>"
+            class="top-icon" style="top: 13px; right: 77px; height: 24px; width: 24px;
+            background-image: url('<?php echo $full_engine_pub; ?>img/cabinet.png');">&nbsp;</a><?php
         }
         ?>
         <table cellspacing="0" cellpadding="0" class="topTable roundBorders">

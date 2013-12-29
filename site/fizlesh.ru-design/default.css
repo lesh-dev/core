@@ -264,4 +264,9 @@ table.contest-results td.sum {
     text-align: center;
 }
 
+a.top-icon {
+    position: absolute;
+    z-index: 2;
+    text-indent: -9999px;
+}
 
