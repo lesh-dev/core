@@ -29,7 +29,8 @@
                 <a class="user-list <?php echo $activeness.' '.$oddity; ?>" href="?user=<?php echo $login.$preface; ?>"><span
                     class="user-login" id="uid-<?php echo $uid; ?>"><?php echo $login; ?></span><span
                     class="user-login" id="uname-<?php echo $uid; ?>"><?php echo $name; ?></span><span
-                    id="uemail-<?php echo $uid; ?>"><?php echo $email; ?></span>
+                    class="user-login" id="uemail-<?php echo $uid; ?>"><?php echo $email; ?></span><span
+                    id="urights-<?php echo $uid; ?>"><?php xcmst_draw_privileges($user, XDP_COMPACT); ?></span>
                     </a><?php
                 $uid++;
             }
@@ -90,7 +91,7 @@
         <div><span class="user-label">EMail</span><input
             <?php xcmst_input_attrs_from_user($user, 'email', $read_only, "user@example.com"); ?> /></div>
         <?php
-        xcmst_draw_privileges($user, $read_only);
+        xcmst_draw_privileges($user, $read_only ? XDP_READONLY : XDP_NORMAL);
         if ($read_only)
         {?>
             <div style="padding-top: 10px">Свой собственный профиль Вы можете отредактировать

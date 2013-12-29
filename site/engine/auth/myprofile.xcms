@@ -32,6 +32,6 @@
         <input type="submit" name='update_me' id="update_me" value="Обновить мои данные" />
     </form>
     <?php
-    xcmst_draw_privileges($user, true);
+    xcmst_draw_privileges($user, XDP_READONLY);
 ?>
 </div>
