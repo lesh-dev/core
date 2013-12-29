@@ -73,7 +73,7 @@ if (!@$_GET["page"])
 
             <?php if ($is_admin) {?>
             <span class="top-menu-div">&nbsp;</span>
-            <a <?php echo xcms_href(array('mode'=>'userlist', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Пользователи</a>
+            <a <?php echo xcms_href(array('mode'=>'user_manage', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Пользователи</a>
             <a <?php echo xcms_href(array('mode'=>'group_admin', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Группы</a>
             <a <?php echo xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Уведомления</a><?php
             }?>
@@ -180,9 +180,9 @@ if (!@$_GET["page"])
     {
         include(translate("<! auth/group !>"));
     }
-    elseif(@$_GET["mode"]=="userlist")
+    elseif(@$_GET["mode"]=="user_manage")
     {
-        $preface = xcms_url(array('ref'=>'ladmin', 'mode'=>'userlist', 'page'=>$pageid));
+        $preface = xcms_url(array('ref'=>'ladmin', 'mode'=>'user_manage', 'page'=>$pageid));
         include(translate("<! auth/admin !>"));
     }
     elseif(@$_GET["mode"]=="myprofile")

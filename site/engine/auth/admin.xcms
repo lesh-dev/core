@@ -106,17 +106,6 @@
         </form><?php
     }
 
-    function xcmst_redir_userlist($message, $target_user)
-    {
-        global $preface;
-        $suffix = empty($target_user) ? "" : "&amp;user=$target_user";
-        ?>
-        <div class="notice" id="before-redirect-notice"><?php echo $message; ?>
-            Вы будете перенаправлены через 2 сек...</div>
-        <script>$('#before-redirect-notice').fadeTo(1450, 0).delay(500);</script>
-        <meta http-equiv="refresh" content="2;URL=?<?php echo "$preface$suffix"; ?>" /><?php
-    }
-
     /**
       * @param $u operator (user)
       * @return array of (error, warning, notice) messages
