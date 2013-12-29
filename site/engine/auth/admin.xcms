@@ -21,11 +21,16 @@
             foreach($u->user_list() as $login)
             {
                 $activeness = ($login == $target_user) ? "menu-active" : "";
+                $oddity = ($uid % 2 != 0) ? "odd" : "";
                 $user = $u->su($login);
-                $name = htmlspecialchars($user->param("name")); ?>
-                <a class="user-list <?php echo $activeness; ?>" href="?user=<?php echo $login.$preface; ?>"><span
+                $name = htmlspecialchars($user->param("name"));
+                $email = htmlspecialchars($user->param("email"));
+                ?>
+                <a class="user-list <?php echo $activeness.' '.$oddity; ?>" href="?user=<?php echo $login.$preface; ?>"><span
                     class="user-login" id="uid-<?php echo $uid; ?>"><?php echo $login; ?></span><span
-                    id="uname-<?php echo $uid; ?>"><?php echo $name; ?></span></a><?php
+                    class="user-login" id="uname-<?php echo $uid; ?>"><?php echo $name; ?></span><span
+                    id="uemail-<?php echo $uid; ?>"><?php echo $email; ?></span>
+                    </a><?php
                 $uid++;
             }
         ?>
@@ -199,7 +204,7 @@
       **/
     function xcmst_draw_user_forms($u, $target_user, $messages = null)
     {?>
-        <div class="user-list">
+        <div>
             <?php xcmst_draw_user_list($u, $target_user); ?>
         </div>
         <div class="user-ops"><?php
@@ -237,7 +242,7 @@
     }
 ?>
 
-<div class="admin-widget floating-box">
+<div class="admin-widget user-manage">
     <h3>Администрирование пользователей</h3><?php
     if (@$_POST["create_user"])
     {

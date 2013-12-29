@@ -148,9 +148,8 @@ a.user-list {
     line-height: 17px;
 }
 
-div.user-list {
-    float: left;
-    width: 35%;
+a.user-list.odd {
+    background-color: #deeeae;
 }
 
 span.user-login {
@@ -159,8 +158,15 @@ span.user-login {
 }
 
 div.user-ops {
-    float: right;
-    width: 63%;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 500px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border: 1px solid #cfcf7f;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #eefebe;
 }
 
 div.menuitem-hidden a {
@@ -191,6 +197,10 @@ div.admin-widget h3 {
     font-size: 12pt;
     margin-top: 3px;
     margin-bottom: 3px;
+}
+
+div.admin-widget.user-manage {
+    position: relative;
 }
 
 div.admin-widget div.error {
