@@ -71,7 +71,7 @@
     {
         if (empty($target_user))
         {
-            echo "<h3>Выберите пользователя в меню слева</h3>";
+            echo "<b>Выберите пользователя в меню слева</b>";
             return;
         }
         $user = $u->su($target_user);
