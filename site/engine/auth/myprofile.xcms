@@ -1,7 +1,7 @@
-<# auth/format #>
 <?php
-    require_once("$engine_dir/sys/auth.php");
-    require_once("$engine_dir/sys/groups.php");
+    require_once("${engine_dir}sys/auth.php");
+    require_once("${engine_dir}sys/groups.php");
+    require_once("${engine_dir}auth/format.php");
     $user = xcms_user();
 ?>
 <div class="admin-widget">

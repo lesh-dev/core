@@ -4,6 +4,7 @@
       * Непонятно, как его можно сдизайнить универсальным образом.
       **/
     require_once("${engine_dir}auth/user.php");
+    require_once("${engine_dir}auth/format.php");
 
     function xcmst_do_auth_redirect()
     {

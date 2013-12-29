@@ -58,11 +58,11 @@
     <form method="post">
         <tr>
             <td>Логин:</td>
-            <td><input type="text" name="auth-login" id="auth-login" /></td>
+            <td><input type="text" <?php xcmst_input_attrs_from_post("auth-login", "Имя пользователя"); ?> /></td>
         </tr>
         <tr>
             <td>Пароль:</td>
-            <td><input type="password" name="auth-password" id="auth-password" /></td>
+            <td><input type="password" <?php xcmst_input_attrs_from_post("auth-password", "Пароль"); ?> /></td>
         </tr>
         <tr>
             <td>&nbsp;</td><td><input type="submit" value="Войти" name="auth-submit" id="auth-submit" /></td>
@@ -74,11 +74,11 @@
         </tr>
         <tr>
             <td>E-Mail:</td>
-            <td><input type="text" name="reset-email" id="reset-email" /></td>
+            <td><input type="text" <?php xcmst_input_attrs_from_post("reset-email", "Электронная почта"); ?> /></td>
         </tr>
         <tr>
             <td>В чём измеряется сила тока?</td>
-            <td><input type="text" name="question" id="question" /></td>
+            <td><input type="text" <?php xcmst_input_attrs_from_post("question", "Защита от нелюдей"); ?> /></td>
         </tr>
         <tr>
             <td>&nbsp;</td><td><input type="submit" value="Восстановить пароль" name="reset-submit" id="reset-submit" /></td>
