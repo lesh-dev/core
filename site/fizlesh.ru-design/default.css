@@ -49,6 +49,8 @@ a img {
 
 .bottomTable {
     width: 100%;
+    padding: 0px;
+    border-spacing: 0px;
 }
 
 .logoCell {
