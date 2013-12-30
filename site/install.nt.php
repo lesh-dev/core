@@ -1,7 +1,7 @@
 <?php
     header("Content-type: text/html; charset=UTF-8;");
     $target_version = @file_get_contents("VERSION");
-?>
+?><!DOCTYPE html>
 <html>
     <head>
         <title>XCMS Installer <?php echo $target_version; ?></title>
