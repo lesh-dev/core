@@ -36,7 +36,7 @@
             background-image: url('<?php echo $full_engine_pub; ?>img/cabinet.png');">&nbsp;</a><?php
         }
         ?>
-        <table cellspacing="0" cellpadding="0" class="topTable roundBorders">
+        <table class="topTable roundBorders">
             <tr>
                 <td class="logoCell menuWidth">
                     <a href="/<# web_prefix #>" title="ФизЛЭШ"><img
