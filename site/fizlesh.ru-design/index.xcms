@@ -4,9 +4,6 @@
 <# deploy_utils #>
 <# locale #>
 <!DOCTYPE html>
-<?php
-    $xcms_version = xcms_get_list("INFO");
-?>
 <html>
 <head>
     <# cms/head #>
@@ -18,6 +15,8 @@
 <body>
     <div id="fullHeight">
         <?php
+        $xcms_version = xcms_get_list("INFO");
+
         if (xcms_user()->check_rights("admin", false)) {?>
         <a title="Админка"
             href="<?php echo "/$web_prefix?".xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>"
