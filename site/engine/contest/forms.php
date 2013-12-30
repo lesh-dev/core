@@ -4,7 +4,8 @@ function xcmst_draw_contest_form_field($type, $name, $value, $id)
 {
     if($type == "pk")
     {
-        if(!$value) $value = "new";
+        if(!$value)
+            $value = XDB_NEW;
         echo "<input type='hidden' name='$id' value='$value' />";
     }
     if($type == "text")
