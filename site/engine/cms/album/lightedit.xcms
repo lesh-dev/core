@@ -63,7 +63,7 @@
     $catlist = glob("$dir/*.cat");
     echo "<h3>Категории</h3><form method=\"post\">";
     echo "<font size=\"-2\">* Для удаления категории введите имя \"__FORGET\"</font>";
-    echo "<table cellspacing=\"0\" cellpadding=\"0\">";
+    echo "<table>";
     foreach ($catlist as $value)
     {
         $caption = file_get_contents($value);
