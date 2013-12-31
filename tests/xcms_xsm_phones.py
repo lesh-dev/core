@@ -30,6 +30,8 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
         inpPhone = self.fillElementById("cellular-input", inpPhone)
         
+        inpPhone = inpPhone.replace("+7", "8")
+        
         self.clickElementById("update-person-submit")
         
         self.gotoBackToPersonView()
