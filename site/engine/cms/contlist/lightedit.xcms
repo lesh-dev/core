@@ -1,5 +1,4 @@
 <?php
-require_once("${engine_dir}auth/format.php");
 require_once("${engine_dir}sys/groups.php");
 require_once("${engine_dir}edit/page_diff.php");
 

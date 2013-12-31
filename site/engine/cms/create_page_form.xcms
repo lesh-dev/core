@@ -1,6 +1,4 @@
 <?php
-    require_once("${engine_dir}auth/format.php");
-
     $INFO = xcms_get_list(xcms_get_info_file_name());
     if (!$INFO)
         $pageid = "";

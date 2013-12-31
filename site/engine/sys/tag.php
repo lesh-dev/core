@@ -6,14 +6,6 @@
 define('YES', "yes");
 define('NO', "no");
 
-function xcms_checkbox_attr($val)
-{
-    $attr = ' value="'.YES.'" ';
-    if ($val == YES)
-        $attr .= ' checked="checked" ';
-    return $attr;
-}
-
 /**
   * Retrieves key-value-stored list from file
   * @param file file name to read from
@@ -88,6 +80,43 @@ function xcms_get_key_or($list, $key, $def_value = '')
     if (!strlen($value))
         return $def_value;
     return $value;
+}
+
+/**
+  * Return proper checkbox attributes
+  * for KV storage item
+  **/
+function xcms_checkbox_attr($val)
+{
+    $attr = ' value="'.YES.'" ';
+    if ($val == YES)
+        $attr .= ' checked="checked" ';
+    return $attr;
+}
+
+/** Generic text input attributes generator
+  * including value taken from POST request
+  **/
+function xcmst_input_attrs_from_post($key, $placeholder = "")
+{
+    $attrs = "class=\"admin-medium\" id=\"$key-input\" name=\"$key\" value=\"".
+        htmlspecialchars(xcms_get_key_or($_POST, $key))."\"";
+    if (!empty($placeholder))
+        $attrs .= " placeholder=\"".htmlspecialchars($placeholder)."\" ";
+    echo $attrs;
+}
+
+/**
+  * Same as previous function, but for checkboxes
+  **/
+function xcmst_checkbox_attrs_from_post($key, $def_value = NO)
+{
+    $value = $def_value;
+    if (array_key_exists($key, $_POST))
+        $value = $_POST[$key];
+
+    echo "id=\"$key-checkbox\" name=\"$key\" ".
+        xcms_checkbox_attr($value);
 }
 
 /**

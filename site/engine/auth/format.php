@@ -29,15 +29,10 @@ function xcmst_draw_privileges($user, $mode = XDP_NORMAL)
     }
 }
 
-function xcmst_input_attrs_from_post($key, $placeholder = "")
-{
-    $attrs = "class=\"admin-medium\" id=\"$key-input\" name=\"$key\" value=\"".
-        htmlspecialchars(xcms_get_key_or($_POST, $key))."\"";
-    if (!empty($placeholder))
-        $attrs .= " placeholder=\"$placeholder\" ";
-    echo $attrs;
-}
-
+/**
+  * See also sys/tag.php for xcmst_input_attrs_from_post,
+  * it is almost a copy specialized for user
+  **/
 function xcmst_input_attrs_from_user($user, $key, $read_only = false, $placeholder = "")
 {
     $attrs = "";
@@ -47,16 +42,6 @@ function xcmst_input_attrs_from_user($user, $key, $read_only = false, $placehold
         $attrs .= " placeholder=\"".htmlspecialchars($placeholder)."\" ";
     echo "class=\"admin-medium\" id=\"$key-input\" name=\"$key\" $attrs value=\"".
         htmlspecialchars($user->param($key))."\"";
-}
-
-function xcmst_checkbox_attrs_from_post($key, $def_value = NO)
-{
-    $value = $def_value;
-    if (array_key_exists($key, $_POST))
-        $value = $_POST[$key];
-
-    echo "id=\"$key-checkbox\" name=\"$key\" ".
-        xcms_checkbox_attr($value);
 }
 
 function xcmst_print_acl($all_groups, $list, $mode)
