@@ -79,7 +79,7 @@ if (!defined('SMF'))
 			hotmail_fix = false)
 		- prepare text strings for sending as email.
 		- in case there are higher ASCII characters in the given string, this
-		  function will attempt the transport method 'quoted-printable'. 
+		  function will attempt the transport method 'quoted-printable'.
 		  Otherwise the transport method '7bit' is used.
 		- with hotmail_fix set all higher ASCII characters are converted to
 		  HTML entities to assure proper display of the mail.
@@ -706,7 +706,7 @@ function sendpm($recipients, $subject, $message, $store_outbox = false, $from = 
 	// Integrated PMs
 	if (isset($modSettings['integrate_personal_message']) && function_exists($modSettings['integrate_personal_message']))
 		$modSettings['integrate_personal_message']($recipients, $from['username'], $subject, $message);
-	
+
 	// Get a list of usernames and convert them to IDs.
 	$usernames = array();
 	foreach ($recipients as $rec_type => $rec)
@@ -715,7 +715,7 @@ function sendpm($recipients, $subject, $message, $store_outbox = false, $from = 
 		{
 			if (!is_numeric($recipients[$rec_type][$id]))
 			{
-				$recipients[$rec_type][$id] = $func['strtolower'](trim(preg_replace('/[<>&"\'=\\\]/', '', $recipients[$rec_type][$id])));
+				$recipients[$rec_type][$id] = $func['strtolower'](trim(preg_replace("/[<>&\"'=\\\]/", '', $recipients[$rec_type][$id])));
 				$usernames[$recipients[$rec_type][$id]] = 0;
 			}
 		}
@@ -1868,7 +1868,7 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	if (isset($msgOptions['body']))
 	{
 		$messages_columns[] = "body = '$msgOptions[body]'";
-		
+
 		if (!empty($modSettings['search_custom_index_config']))
 		{
 			$request = db_query("
