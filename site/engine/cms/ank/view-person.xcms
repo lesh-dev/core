@@ -383,6 +383,8 @@ function xsm_print_add_person_to_school($db, $school_id, $person)
     $is_teacher_typical = $person['is_teacher'];
     $is_student_typical = $person['is_student'];
     $current_class = $person['current_class'];
+    $school = xdb_get_entity_by_id('school', $school_id);
+    $school_title_enc = htmlspecialchars($school['school_title']);
     $add_href = "edit-person_school".
         xcms_url(array(
             'person_school_id'=>XDB_NEW,
@@ -393,7 +395,8 @@ function xsm_print_add_person_to_school($db, $school_id, $person)
             'is_student'=>$is_student_typical
             ));
     ?>
-    На данной школе не присутствовал. <a href="<?php echo $add_href; ?>">Зачислить</a><?php
+    На <b><?php echo $school_title_enc; ?></b> не присутствовал.
+    <a href="<?php echo $add_href; ?>">Зачислить на <?php echo $school_title_enc; ?></a><?php
 }
 
 function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
