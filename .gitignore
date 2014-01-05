@@ -11,3 +11,5 @@ site/install.php
 site/engine.log
 tests/*.pyc
 tools/optimize-images/oim
+*.sublime-project
+*.sublime-workspace

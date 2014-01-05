@@ -2,6 +2,8 @@
 
 define('SCHOOL_ANK_ID', 'ank');
 
+include_once("${engine_dir}cms/ank/person_school.php");
+
 function xsm_draw_person_textval($class, $text, $value)
 {?>
     <div><span class="person-key <?php echo $class; ?>"><?php echo "$text:"; ?></span>
@@ -91,22 +93,32 @@ function xsm_draw_person_school_panel($db, $school_id, $person_id)
     if ($person_school_id == NULL)
         return;
 
-    xsm_edit_link('person_school', $person_school_id, '', 'Редактировать роли и статусы');
+    $school = xdb_get_entity_by_id('school', $school_id);
+    $school_title = $school['school_title'];
+
+    ?><div><?php
+    xsm_edit_link('person_school', $person_school_id, xcms_url(array('action'=>'delete')), "Отчислить с $school_title");?>
+    </div><?php
+
+    ?><div><?php
+    xsm_edit_link('person_school', $person_school_id, '', "Редактировать роли и статусы на $school_title");
+    ?></div><?php
+
     $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
 
     if ($person_school['is_student'] != 'student')
     {?>
-        <div class="line">
-            <?php xsm_edit_link('person_school', $person_school_id, '&amp;is_student=student', 'Добавить роль Школьника');?>
-            (можно ставить зачёты)
+        <div>
+            <?php xsm_edit_link('person_school', $person_school_id, xcms_url(array('is_student'=>'student')),
+                "Добавить роль Школьника на $school_title");?> (можно ставить зачёты)
         </div><?php
     }
 
     if ($person_school['is_teacher'] != 'teacher')
     {?>
-        <div class="line">
-            <?php xsm_edit_link('person_school', $person_school_id, '&amp;is_teacher=teacher', 'Добавить роль Препода');?>
-            (можно добавлять курсы)
+        <div>
+            <?php xsm_edit_link('person_school', $person_school_id, xcms_url(array('is_teacher'=>'teacher')),
+            "Добавить роль Препода на $school_title");?> (можно добавлять курсы)
         </div><?php
     }
 }
@@ -172,9 +184,11 @@ function xsm_print_person_header($db, $person, $school_id)
         ?>
     </div>
     <div class="person-topright"><?php
-        xsm_edit_link('person', $person_id, '', 'Редактировать анкетные данные');
         xsm_draw_person_textval('top', 'Создана', $person_created);
         xsm_draw_person_textval('top', 'Исправлена', $person_modified);
+        ?><div style="padding-bottom: 10px;"><?php
+        xsm_edit_link('person', $person_id, '', 'Редактировать анкетные данные');
+        ?></div><?php
         xsm_draw_person_school_panel($db, $school_id, $person_id)
         ?>
     </div>
