@@ -169,10 +169,8 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.assertSourceTextPresent(u"Пароль")
         self.assertSourceTextPresent(u"Требуется аутентификация")
 
-        #<input type="text" name="auth-login" />
-        #ele = test.drv().find_element_by_name("auth-login")
-        self.fillElementById("auth-login", login)
-        self.fillElementById("auth-password", password)
+        self.fillElementById("auth-login-input", login)
+        self.fillElementById("auth-password-input", password)
 
         self.clickElementById("auth-submit")
 
