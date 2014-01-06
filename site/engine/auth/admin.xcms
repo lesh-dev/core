@@ -7,6 +7,11 @@
 
     $u = xcms_user();
     $target_user = xcms_get_key_or($_GET, "user");
+    if (@$_POST["create_user"])
+    {
+        // switch to user modification form
+        $target_user = $_POST["login"];
+    }
 
     function xcmst_draw_user_list($u, $target_user)
     {
@@ -231,8 +236,6 @@
         }
         elseif (@$_POST["create_user"])
         {
-            // switch to user modification form
-            $target_user = $_POST["login"];
             xcmst_draw_user_modify_form($u, $target_user);
         }
         else
