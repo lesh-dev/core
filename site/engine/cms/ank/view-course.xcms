@@ -70,9 +70,6 @@ function xsm_print_course()
             $student_url = "view-person".
                 xcms_url(array('person_id'=>$student['person_id'], 'school_id'=>$school_id));
 
-            // enum
-            $exam_status = htmlspecialchars($exam["exam_status"]);
-
             $exam_comment = htmlspecialchars($exam["exam_comment"]);
             $deadline_date = htmlspecialchars($exam["deadline_date"]);
 

@@ -10,6 +10,20 @@ function xsm_get_department_fields()
     );
 }
 
+// School (indeed, it can be all major events)
+function xsm_get_school_fields()
+{
+    return array(
+        "school_title"=>"Название",
+        "school_type"=>"Тип",
+        "school_date_start"=>"Дата начала",
+        "school_date_end"=>"Дата окончания",
+        "school_location"=>"Место проведения",
+        "school_created"=>"Время создания",
+        "school_modified"=>"Последняя модификация"
+    );
+}
+
 // Person
 function xsm_get_person_fields()
 {
@@ -227,7 +241,15 @@ $XSM_ENUMS = array(
             "notpassed"=>"Не сдан",
             "almost"=>"Почти сдан",
             "other"=>"Иное"),
-        "default"=>"listen")
+        "default"=>"listen"),
+
+    // Тип школы
+    "school_type"=>array(
+        "values"=>array(
+            "lesh"=>"Летняя",
+            "zesh"=>"Зимняя",
+            "vesh"=>"Весеннняя"),
+        "default"=>"lesh")
 );
 
 // Enum API

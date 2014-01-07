@@ -1,0 +1,45 @@
+<?php
+
+function xsm_print_school()
+{
+    $db = xdb_get();
+    xsm_view_operations('school', 'school', 'школа');
+    $school_id = xcms_get_key_or($_GET, 'school_id', "-1");
+    $school = xdb_get_entity_by_id('school', $school_id);
+    $href_schools = "list-school";
+    ?>
+    <table class="ankList">
+    <?php
+        $school_title = htmlspecialchars($school["school_title"]);
+        $school_date_start = htmlspecialchars($school["school_date_start"]);
+        $school_date_end = htmlspecialchars($school["school_date_end"]);
+        $school_location = htmlspecialchars($school["school_location"]);
+        $school_created = xsm_ymdhm($school["school_created"]);
+        $school_modified = xsm_ymdhm($school["school_modified"]);
+        ?>
+        <tr>
+            <td class="ankListRowTitle">Отделение <b><?php echo $school_title; ?></b>
+                <span style="float: right"><?php
+                xsm_edit_delete_info('school', 'school', $school_id, $school_created, $school_modified); ?>
+                </span>
+            </td>
+        </tr>
+
+        <tr><td class="ankList"><span class="ankListField">Тип школы</span>:
+            <?php echo xsm_make_enum($school, "school_type"); ?></td></tr>
+
+        <tr><td class="ankList"><span class="ankListField">Дата начала</span>:
+            <?php echo $school_date_start; ?></td></tr>
+
+        <tr><td class="ankList"><span class="ankListField">Дата окончания</span>:
+            <?php echo $school_date_end; ?></td></tr>
+
+    </table>
+    <?php
+    // Тут может быть инфа про преподов данного отделения
+
+    //xsm_view_operations('school', 'school', 'курс');
+}
+
+xsm_print_school();
+?>

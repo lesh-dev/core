@@ -1,0 +1,43 @@
+<?php
+
+function xsm_print_schools()
+{
+    $db = xdb_get();
+
+    $query =
+    "SELECT *
+    FROM school s
+    ORDER BY school_id DESC";
+
+    $school_sel = $db->query($query);
+    ?>
+
+    <h3>Школы</h3><?php
+    xsm_view_operations('school', 'school', 'школу'); ?>
+    <table class="ankList">
+        <colgroup>
+            <col width="60" />
+            <col width="100%" />
+        </colgroup>
+        <thead>
+            <th class="ankList">ID</th>
+            <th class="ankList">Название</th>
+        </thead>
+    <?php
+    while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $school_id = htmlspecialchars($school["school_id"]);
+        $school_title = htmlspecialchars($school["school_title"]);
+        $school_url = "view-school".xcms_url(array('school_id'=>$school_id));
+        ?>
+        <tr>
+            <td class="ankList"><?php echo $school_id; ?></td>
+            <td class="ankList"><a href="<?php echo $school_url; ?>"><?php
+                echo $school_title; ?></a></td>
+        </tr><?php
+    }
+    ?></table><?php
+}
+
+xsm_print_schools();
+?>

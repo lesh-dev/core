@@ -32,4 +32,5 @@ function xsm_menu_item($view, $aux_url, $title, $first = false)
     xsm_menu_item('list-person', '', 'Участники школ');
     xsm_menu_item('list-course', '', 'Курсы');
     xsm_menu_item('list-department', '', 'Отделения');
+    xsm_menu_item('list-school', '', 'Школы');
 ?></div>
