@@ -1,0 +1,32 @@
+<?php
+
+function xsm_print_department()
+{
+    $db = xdb_get();
+    //xsm_view_operations('department', 'department', 'курс');
+    $department_id = xcms_get_key_or($_GET, 'department_id', "-1");
+    $department = xdb_get_entity_by_id('department', $department_id);
+    $href_departments = "list-department";
+    ?>
+    <table class="ankList">
+    <?php
+        $department_title = htmlspecialchars($department["department_title"]);
+        $department_created = xsm_ymdhm($department["department_created"]);
+        $department_modified = xsm_ymdhm($department["department_modified"]);
+        ?>
+        <tr>
+            <td class="ankListRowTitle">Отделение <b><?php echo $department_title; ?></b>
+                <span style="float: right"><?php
+                xsm_edit_delete_info('department', 'department', $department_id, $department_created, $department_modified); ?>
+                </span>
+            </td>
+        </tr>
+    </table>
+    <?php
+    // Тут может быть инфа про преподов данного отделения
+
+    //xsm_view_operations('department', 'department', 'курс');
+}
+
+xsm_print_department();
+?>

@@ -1,0 +1,44 @@
+<?php
+
+function xsm_print_departments()
+{
+    $db = xdb_get();
+
+    $query =
+    "SELECT *
+    FROM department d
+    ORDER BY department_id";
+
+    $department_sel = $db->query($query);
+    ?>
+
+    <h3>Отделения</h3><?php
+    xsm_view_operations('department', 'department', 'отделение'); ?>
+    <table class="ankList">
+        <colgroup>
+            <col width="70" />
+            <col width="100%" />
+        </colgroup>
+        <thead>
+            <th class="ankList">ID</th>
+            <th class="ankList">Название</th>
+        </thead>
+    <?php
+    while ($department = $department_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $department_id = htmlspecialchars($department["department_id"]);
+        $department_title = htmlspecialchars($department["department_title"]);
+
+        $department_url = "edit-department".xcms_url(array('department_id'=>$department_id));
+        ?>
+        <tr>
+            <td class="ankList"><?php echo $department_id; ?></td>
+            <td class="ankList"><a href="<?php echo $department_url; ?>"><?php
+                echo $department_title; ?></a></td>
+        </tr><?php
+    }
+    ?></table><?php
+}
+
+xsm_print_departments();
+?>

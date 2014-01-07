@@ -1,5 +1,13 @@
 <?php
 
+// Department
+function xsm_get_department_fields()
+{
+    return array(
+        "department_title"=>"Название"
+    );
+}
+
 // Person
 function xsm_get_person_fields()
 {
