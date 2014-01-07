@@ -16,7 +16,7 @@ function xsm_print_departments()
     xsm_view_operations('department', 'department', 'отделение'); ?>
     <table class="ankList">
         <colgroup>
-            <col width="70" />
+            <col width="60" />
             <col width="100%" />
         </colgroup>
         <thead>
@@ -28,8 +28,7 @@ function xsm_print_departments()
     {
         $department_id = htmlspecialchars($department["department_id"]);
         $department_title = htmlspecialchars($department["department_title"]);
-
-        $department_url = "edit-department".xcms_url(array('department_id'=>$department_id));
+        $department_url = "view-department".xcms_url(array('department_id'=>$department_id));
         ?>
         <tr>
             <td class="ankList"><?php echo $department_id; ?></td>
