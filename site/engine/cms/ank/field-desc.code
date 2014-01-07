@@ -4,7 +4,9 @@
 function xsm_get_department_fields()
 {
     return array(
-        "department_title"=>"Название"
+        "department_title"=>"Название",
+        "department_created"=>"Время создания",
+        "department_modified"=>"Последняя модификация"
     );
 }
 
