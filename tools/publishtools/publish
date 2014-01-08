@@ -12,12 +12,15 @@ declare -A RECEIPE_DESCRIPTIONS
 
 if [ -f $CONFIGFILE ]; then
     source $CONFIGFILE
+    echo "Loaded publish.conf from '$CONFIGFILE'"
 elif [ -f $GCONFIGFILE ]; then
-    echo "Used global publish.conf file and copied it to local storage for futher."
     cp $GCONFIGFILE $CONFIGFILE
     source $CONFIGFILE
+    echo "Used global publish.conf at '$GCONFIGFILE'"
+    echo "and copied it to local storage for futher ops"
 else
-    echo "Can't file $CONFIGFILE or $GCONFIGFILE . Aborted."
+    echo "Can't file '$CONFIGFILE'"
+    echo "or '$GCONFIGFILE'."
 fi
 
 REALM_CONFIG=$PUBLISH_REALM/realm.conf
@@ -32,25 +35,34 @@ fi
 function do_help()
 {
     TAB="\\r\\t\\t\\t"
-    echo "Commands are:"
-    for var in $RECEIPE_LIST; do
-        echo -e "\\t$var${TAB}${RECEIPE_DESCRIPTIONS["$var"]}"
-    done
-    echo "Internals are: "
+    if [ -n "RECEIPE_LIST" ] ; then
+        echo "Commands are:"
+        for var in $RECEIPE_LIST; do
+            echo -e "\\t$var${TAB}${RECEIPE_DESCRIPTIONS["$var"]}"
+        done
+    else
+        echo "Receipe (command) list is empty."
+    fi
+    echo "Internals are:"
     echo -e "\\tadd_component${TAB}adds new component via pretty non-gui form"
     echo -e "\\tadd_receipe${TAB}adds new build receipe"
     echo -e "\\tadd_variable${TAB}adds new variable"
-    echo "Options can be:"
-    for var in $PUBLISH_VARIABLES; do
-        # echo $var -- ${PUBLISH_DESCRIPTIONS[ownera]}
-    echo -e \\t--${var}${TAB}${PUBLISH_DESCRIPTIONS["$var"]}
-    done
+
+    if [ -n "$PUBLISH_VARIABLES" ] ; then
+        echo "Options can be:"
+        for var in $PUBLISH_VARIABLES; do
+            # echo $var -- ${PUBLISH_DESCRIPTIONS[ownera]}
+            echo -e \\t--${var}${TAB}${PUBLISH_DESCRIPTIONS["$var"]}
+        done
+    else
+        echo "No options declared yet."
+    fi
 }
 
 function add_component
 {
     TEMP_CONFIG=/tmp/publishtools.newcomponent.$RANDOM
-    echo "#!/bin/bash" >> $TEMP_CONFIG
+    echo "#!/usr/bin/env bash" >> $TEMP_CONFIG
     echo "# Component generated from template on $(date)" >> $TEMP_CONFIG
     echo "# Please don't forget to commit all changes to repo" >> $TEMP_CONFIG
     echo >> $TEMP_CONFIG
@@ -280,10 +292,6 @@ function main
     while [ true ]; do
         ARG=$1
         NEXT=$2
-        if [ "$ARG." == "." ]; then
-            do_help
-            exit 0
-        fi
         shift
         if [ "$ARG." == "--help." ]; then
             do_help
@@ -325,5 +333,10 @@ function main
         exit 1
     done
 }
+
+if [ $# -eq 0 ] ; then
+    do_help
+    exit 0
+fi
 
 main $*
