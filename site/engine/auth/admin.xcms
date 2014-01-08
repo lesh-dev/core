@@ -209,11 +209,15 @@
       * @param $messages array with error, warning and notice messages or null
       **/
     function xcmst_draw_user_forms($u, $target_user, $messages = null)
-    {?>
+    {
+        global $ref, $pageid;
+        ?>
         <div>
             <?php xcmst_draw_user_list($u, $target_user); ?>
         </div>
-        <div class="user-ops"><?php
+        <div class="user-ops">
+        <a class="user-ops-close" <?php echo xcms_href(array('ref'=>$ref, 'mode'=>'user_manage', 'page'=>$pageid)); ?> >&nbsp;</a>
+        <?php
         if ($messages !== null)
         {
             if ($messages[0])
