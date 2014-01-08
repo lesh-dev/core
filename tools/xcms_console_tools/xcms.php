@@ -35,7 +35,7 @@
         throw new Exception("Can't change directory to basedir. ");
     if (!file_exists("index.php"))
         throw new Exception("No index.php found. ");
-    if (file_exists("install.php"))
+    if (file_exists("install.php") && filesize("install.php") > 0)
         throw new Exception("Installer detected, this installation is not configured yet. ");
     if (!file_exists("settings.php"))
         throw new Exception("No 'settings.php' detected, this installation is not configured yet. ");

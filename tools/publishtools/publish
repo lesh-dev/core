@@ -209,6 +209,18 @@ function sym_suffix_to_date
     echo -n "$sym_suffix" | sed -e 's/^-//' | sed -e 's/--/ /' | sed -e 's/-/./g'
 }
 
+function valid_installer
+{
+    if ! [ -f install.php ] ; then
+        return 1
+    fi
+    sz="$( cat install.php | du -b )"
+    if [ "$sz" -eq "0" ] ; then
+        return 1
+    fi
+    return 0
+}
+
 function assemble
 {
     RECEIPE=$1

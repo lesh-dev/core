@@ -1,7 +1,7 @@
 <?php
     session_set_cookie_params(14 * 24 * 3600); // 2 weeks
     $session_result = @session_start();
-    if (file_exists("install.php"))
+    if (file_exists("install.php") && filesize("install.php") > 0)
     {
         header("Location: install.php");
         exit(0);

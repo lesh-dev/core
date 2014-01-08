@@ -89,7 +89,8 @@
             display_error($ans);
             die();
         }
-        unlink("install.php");
+        $fi = @fopen("install.php", "w");
+        fclose($fi);
         ?>
         <h3>Установка завершена!</h3>
         <a href="index.php">Перейти к сайту</a>

@@ -43,7 +43,7 @@ function hook_end
     echo "press 'yes' and production copy will be created. "
     echo ""
 
-    if [ -f install.php ]; then
+    if valid_installer ; then
         echo "                   *** ERROR ***"
         echo "YOU'RE DOING COMPLETELY WRONG!"
         echo "You should make xcms installation on preproduction copy (rc.fizlesh.ru)"
@@ -61,7 +61,7 @@ function hook_end
             break
         fi
     done
-    if [ -f install.php ]; then
+    if valid_installer ; then
         echo "                   *** ERROR ***"
         echo "Your production copy is UNUSABLE because it contains install.php"
         echo "You can fix it at final.fizlesh.ru, but no production will be generated!"
