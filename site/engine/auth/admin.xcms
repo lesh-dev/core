@@ -270,4 +270,4 @@
     else
         xcmst_draw_user_forms($u, $target_user);
 ?>
-</div><!-- floating-box->
+</div><!-- floating-box -->
