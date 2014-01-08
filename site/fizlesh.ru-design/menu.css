@@ -3,7 +3,7 @@
 }
 
 .menu-width {
-    width: 20%;
+    width: 25%;
 }
 
 .menu-passive-level1 {
@@ -30,13 +30,13 @@
 }
 
 .menu-level1 {
-    padding-left: 3pt;
+    padding-left: 8px;
 }
 .menu-level2 {
-    padding-left: 15pt;
+    padding-left: 22px;
 }
 .menu-level3 {
-    padding-left: 27pt;
+    padding-left: 36px;
 }
 
 a.menu-item {
@@ -54,7 +54,7 @@ a.menu-item {
 }
 
 a.menu-sys {
-    padding-left: 3px;
+    padding-left: 8px;
     background-color: #a5b991;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
