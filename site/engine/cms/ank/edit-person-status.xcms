@@ -85,6 +85,7 @@ function xsm_change_person_status()
     $person_comment['owner_login'] = xcms_user()->login();
     $blamed_person_id = xcms_get_key_or($_GET, 'blamed_person_id');
     $person = xdb_get_entity_by_id('person', $blamed_person_id);
+    $full_name = xsm_fi_enc($person);
 
     $comm_field_types = xsm_get_person_comment_field_types();
 
@@ -95,7 +96,9 @@ function xsm_change_person_status()
         <input type="hidden" name="blamed_person_id" value="<?php echo $blamed_person_id; ?>" />
         <table class="ankEdit">
             <tr>
-                <td class="ankListRowTitle">Изменить статус</td>
+                <td class="ankListRowTitle">Изменить статус участника
+                    <a href="view-person<?php echo xcms_url(array('person_id'=>$blamed_person_id)); ?>"><?php
+                    echo $full_name; ?></a></td>
             </tr>
             <tr><td class="ankList"><span class="ankEditField">Статус</span><?php
                 $value = xcms_get_key_or($person, "anketa_status");
