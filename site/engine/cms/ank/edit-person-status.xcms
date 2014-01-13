@@ -23,8 +23,9 @@ function xsm_person_change_status_operations($table_name, $id, $ret_title, $memb
   **/
 function xsm_update_person_status()
 {
-    $res = xdb_insert_or_update('person_comment', array('person_comment_id'=>XDB_NEW), $_POST, xsm_get_person_comment_fields());
     ?><p><?php
+    $res = xdb_insert_or_update('person_comment', array('person_comment_id'=>XDB_NEW), $_POST, xsm_get_person_comment_fields());
+
     if ($res)
     {?>
         Комментарий успешно сохранён. <?php
@@ -36,7 +37,6 @@ function xsm_update_person_status()
 
     $person_id = xcms_get_key_or($_POST, 'blamed_person_id', 'invalid'); // invalid key
     $res = xdb_insert_or_update("person", array("person_id"=>$person_id), $_POST, xsm_get_person_fields());
-    ?><p><?php
     if ($res)
     {?>
         Статус участника успешно сохранён. <?php
@@ -56,17 +56,17 @@ function xsm_notify_person_status_change()
     $person_comment_id = $_POST['person_comment_id'];
     $old_person_comment = array();
 
-    $person_id = $person_comment['blamed_person_id'];
+    $person_id = $_POST['blamed_person_id'];
     $person = xdb_get_entity_by_id('person', $person_id);
 
     $full_name = xsm_fio_enc($person);
-    $table_title = 'Добавлен комментарий к участнику: <a'.
+    $table_title = 'Изменён статус участника: <a'.
         xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
         $full_name.'</a>';
 
     // FIXME: no status info here
     $mail_msg = xsm_build_diff_msg(
-        $person_comment,
+        $_POST,
         $old_person_comment,
         xsm_get_person_comment_fields(),
         xsm_get_person_comment_field_types(),
@@ -89,7 +89,7 @@ function xsm_change_person_status()
     $comm_field_types = xsm_get_person_comment_field_types();
 
     ?>
-    <form method="post" action="change-person-status"><?php
+    <form method="post" action="edit-person-status"><?php
         xsm_person_change_status_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id, 'top');?>
         <input type="hidden" name="person_comment_id" value="<?php echo $person_comment_id; ?>" />
         <input type="hidden" name="blamed_person_id" value="<?php echo $blamed_person_id; ?>" />
@@ -140,9 +140,9 @@ function xsm_change_person_status()
     <?php
 }
 
-if (@$_POST["change-person-status"])
+if (@$_POST["update-person_comment"])
 {
-    xsm_notify_person_comment_edit($_POST);
+    xsm_notify_person_status_change();
     xsm_update_person_status();
 }
 else
