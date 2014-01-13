@@ -172,8 +172,11 @@ function xsm_print_person_header($db, $person, $school_id)
         <div class="person-title"><span id="person-title"><?php
             echo $person_fio; ?></span> <sup><?php
             xsm_draw_list_link($person_id, $school_id); ?></sup></div>
-        <?php
-        xsm_draw_person_textval('top', 'Статус анкеты', $hr_status);
+        <div>
+            <span class="person-key top">Статус анкеты</span>
+            <span class="person-value"><?php echo $hr_status; ?></span><?php
+            xsm_edit_link_generic('edit-person-status'.xcms_url(array('person_id'=>$person_id)));
+            ?></div><?php
         xsm_draw_person_textval('top', 'Отделение', $department_title); ?>
         <div style="clear: both;"></div><?php
         xsm_draw_person_textval('top', 'Почта', $email);

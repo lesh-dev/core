@@ -1,0 +1,150 @@
+<# cms/ank/diff #><?php
+
+/**
+ * Изрядная часть этого модуля скопирована с edit-person_comment,
+ * но как обернуть его в функции, чтобы копипасту убрать, пока
+ * не очень понятно.
+ *
+ * Большая задача -- так спроектировать RDBMS, чтобы можно было подобные штуки
+ * собирать без копипасты
+ **/
+
+// Специфическая функция для данной таблицы (можно объединить с person_school)
+function xsm_person_change_status_operations($table_name, $id, $ret_title, $member_person_id, $place)
+{
+    $school_id = "ank";
+    $is_new = ($id == XDB_NEW);
+    $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$member_person_id));
+    xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title, "Удалить комментарий");
+}
+
+/**
+  * Сплав из update-ов двух таблиц. По-человечески не обобщается, можно только распилить на 2 части.
+  **/
+function xsm_update_person_status()
+{
+    $res = xdb_insert_or_update('person_comment', array('person_comment_id'=>XDB_NEW), $_POST, xsm_get_person_comment_fields());
+    ?><p><?php
+    if ($res)
+    {?>
+        Комментарий успешно сохранён. <?php
+    }
+    else
+    {?>
+        Не удалось добавить комментарий. <?php
+    }
+
+    $person_id = xcms_get_key_or($_POST, 'blamed_person_id', 'invalid'); // invalid key
+    $res = xdb_insert_or_update("person", array("person_id"=>$person_id), $_POST, xsm_get_person_fields());
+    ?><p><?php
+    if ($res)
+    {?>
+        Статус участника успешно сохранён. <?php
+    }
+    else
+    {?>
+        Не удалось обновить статус участника. <?php
+    }
+    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>'ank'));
+    ?>
+    <a href="<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
+}
+
+
+function xsm_notify_person_status_change()
+{
+    $person_comment_id = $_POST['person_comment_id'];
+    $old_person_comment = array();
+
+    $person_id = $person_comment['blamed_person_id'];
+    $person = xdb_get_entity_by_id('person', $person_id);
+
+    $full_name = xsm_fio_enc($person);
+    $table_title = 'Добавлен комментарий к участнику: <a'.
+        xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
+        $full_name.'</a>';
+
+    // FIXME: no status info here
+    $mail_msg = xsm_build_diff_msg(
+        $person_comment,
+        $old_person_comment,
+        xsm_get_person_comment_fields(),
+        xsm_get_person_comment_field_types(),
+        $table_title);
+
+    xcms_send_notification("reg", NULL, $mail_msg);
+}
+
+
+function xsm_change_person_status()
+{
+    $person_comment_fields = xsm_get_person_comment_fields();
+    $person_comment_id = XDB_NEW;
+    $person_comment = array();
+    // prefill
+    $person_comment['owner_login'] = xcms_user()->login();
+    $blamed_person_id = xcms_get_key_or($_GET, 'blamed_person_id');
+    $person = xdb_get_entity_by_id('person', $blamed_person_id);
+
+    $comm_field_types = xsm_get_person_comment_field_types();
+
+    ?>
+    <form method="post" action="change-person-status"><?php
+        xsm_person_change_status_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id, 'top');?>
+        <input type="hidden" name="person_comment_id" value="<?php echo $person_comment_id; ?>" />
+        <input type="hidden" name="blamed_person_id" value="<?php echo $blamed_person_id; ?>" />
+        <table class="ankEdit">
+            <tr>
+                <td class="ankListRowTitle">Изменить статус</td>
+            </tr>
+            <tr><td class="ankList"><span class="ankEditField">Статус</span><?php
+                $value = xcms_get_key_or($person, "anketa_status");
+                echo xsm_make_enum_by_type("anketa_status", $value, "anketa_status");
+            ?></td></tr>
+            <?php
+            foreach ($person_comment_fields as $key=>$field_title)
+            {
+                $value = xcms_get_key_or($person_comment, $key);
+                $attr = "";
+                if ($key == "person_comment_deleted")
+                    continue;
+                // handle readonly fields
+                if ($key == "owner_login" ||
+                    $key == "blamed_person_id" ||
+                    $key == "person_comment_created" ||
+                    $key == "person_comment_modified")
+                    $attr = 'readonly="readonly"'; ?>
+                <tr><td class="ankList"><span class="ankEditField"><?php echo $person_comment_fields[$key]; ?></span>
+                <?php
+                $cft = xcms_get_key_or($comm_field_types, $key);
+                if ($cft == "textarea")
+                {?>
+                    <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
+                        echo htmlspecialchars($value); ?></textarea><?php
+                }
+                elseif ($key == 'blamed_person_id')
+                {?>
+                    <input type="text" class="ankEdit" value="<?php
+                        echo htmlspecialchars($person['last_name'].' '.$person['first_name']); ?>"
+                        <?php echo $attr; ?> /><?php
+                }
+                else {?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
+                        name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
+                } ?>
+                </td></tr>
+                <?php
+            }?>
+        </table><?php
+        xsm_person_change_status_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id, 'bottom');?>
+    </form>
+    <?php
+}
+
+if (@$_POST["change-person-status"])
+{
+    xsm_notify_person_comment_edit($_POST);
+    xsm_update_person_status();
+}
+else
+    xsm_change_person_status();
+?>
