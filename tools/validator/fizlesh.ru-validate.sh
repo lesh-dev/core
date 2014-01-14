@@ -1,13 +1,13 @@
-#!/bin/bash
-set -e 
-VALIDATOR="python site-validate.py -v" 
+#!/usr/bin/env bash
+set -e
+VALIDATOR="python site-validate.py -v"
 
 BASE="http://fizlesh.ru"
 
 function validate()
 {
-	$VALIDATOR "${BASE}$1"
-	sleep 10
+    $VALIDATOR "${BASE}$1"
+    sleep 10
 }
 
 validate ""
@@ -35,4 +35,3 @@ validate "/?page=z065Photoalbum"
 validate "/?page=z066Humor"
 validate "/?page=z07Links"
 validate "/?page=z08Contact"
-
