@@ -22,15 +22,16 @@ function xsm_is_too_small_text(id)
 
 function xsm_toggle_element(id, enabled)
 {
+    var node = $(id);
     if (enabled)
     {
-        $(id).removeAttr('disabled')
-        $(id).removeClass('input-disabled');
+        node.removeAttr('disabled')
+        node.removeClass('input-disabled');
     }
     else
     {
-        $(id).attr('disabled', 'disabled');
-        $(id).addClass('input-disabled');
+        node.attr('disabled', 'disabled');
+        node.addClass('input-disabled');
     }
 }
 

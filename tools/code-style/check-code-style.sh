@@ -7,8 +7,8 @@ set -e
 
 # ignore list (contrib files whose code style
 # we don't want to verify
-ignore_list_files="class.phpmailer.php finediff.php"
-ignore_list_dirs="/forum/"
+ignore_list_files="class.phpmailer.php finediff.php jquery-1.7.1.min.js"
+ignore_list_dirs="/forum/ /bootstrap/"
 
 # some settings that you don't need to touch
 path="."
@@ -183,6 +183,7 @@ else
     check_style '*.code'
     check_style '*.html'
     check_style '*.css'
+    check_style '*.js'
     check_style '*.sh'
     check_style '*.py'
 fi
