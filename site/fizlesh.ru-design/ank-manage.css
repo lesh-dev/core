@@ -415,3 +415,7 @@ a.person-to-list {
     font-size: 12px;
     font-weight: normal;
 }
+
+.input-disabled {
+    color: #7e975b !important;
+}

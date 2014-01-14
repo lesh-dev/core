@@ -20,6 +20,19 @@ function xsm_is_too_small_text(id)
     return (val.length < 2);
 }
 
+function xsm_toggle_element(id, enabled)
+{
+    if (enabled)
+    {
+        $(id).removeAttr('disabled')
+        $(id).removeClass('input-disabled');
+    }
+    else
+    {
+        $(id).attr('disabled', 'disabled');
+        $(id).addClass('input-disabled');
+    }
+}
 
 function xsm_check_dependencies(id)
 {
@@ -30,21 +43,14 @@ function xsm_check_dependencies(id)
         return;
     }
 
-    var enable = true;
+    var enabled = true;
     for (var i in deps)
     {
-        dependency_id = deps[i];
         if (xsm_is_too_small_text(deps[i]))
-            enable = false;
+            enabled = false;
     }
-    console.log(enable);
-
-    if (enable)
-        $(id).removeAttr('disabled')
-    else
-        $(id).attr('disabled', 'disabled');
+    xsm_toggle_element(id, enabled);
 }
-
 
 function xsm_set_depends_on(id, dependency_id)
 {
@@ -54,6 +60,11 @@ function xsm_set_depends_on(id, dependency_id)
         deps = [];
 
     deps.push(dependency_id);
-    $(id).data('dependencies', deps);
-    $(dependency_id).change(xsm_check_dependencies.bind(null, id));
+    node.data('dependencies', deps);
+    var dep_node = $(dependency_id);
+    dep_node.change(xsm_check_dependencies.bind(null, id));
+    dep_node.bind('input', xsm_check_dependencies.bind(null, id));
+
+    // check dependencies for the first time (initial state)
+    xsm_check_dependencies(id);
 }
