@@ -142,6 +142,7 @@ function xsm_change_person_status()
     </form>
     <script type="text/javascript">
     $(document).ready(function() {
+        xsm_set_depends_on('#update-person_comment-submit-top', '#comment_text-text');
         xsm_set_depends_on('#update-person_comment-submit-bottom', '#comment_text-text');
     });
     </script>
