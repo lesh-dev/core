@@ -122,7 +122,7 @@ function xsm_change_person_status()
                 $cft = xcms_get_key_or($comm_field_types, $key);
                 if ($cft == "textarea")
                 {?>
-                    <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
+                    <textarea class="ankEdit" name="<?php echo $key; ?>" id="<?php echo $key; ?>-text"><?php
                         echo htmlspecialchars($value); ?></textarea><?php
                 }
                 elseif ($key == 'blamed_person_id')
@@ -140,6 +140,11 @@ function xsm_change_person_status()
         </table><?php
         xsm_person_change_status_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id, 'bottom');?>
     </form>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        xsm_set_depends_on('#update-person_comment-submit-bottom', '#comment_text-text');
+    });
+    </script>
     <?php
 }
 
