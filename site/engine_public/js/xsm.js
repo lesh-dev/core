@@ -1,4 +1,4 @@
-function FilterFormAutoSubmit()
+function xsm_filter_form_autosubmit()
 {
     var form = $('#filter-form');
     var controls = $(form).find('input');
