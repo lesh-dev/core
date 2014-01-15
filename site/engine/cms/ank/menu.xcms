@@ -27,8 +27,8 @@ function xsm_menu_item($view, $aux_url, $title, $first = false)
 <div class="xsm-navbar"><?php
     xsm_menu_item('list-ank', '', 'Анкеты', true);
     xsm_menu_item('list-person-locator', xcms_url(array('show_anketa_status'=>'all')), 'Все люди');
-    xsm_menu_item('list-tour', '', 'Выходы в лес');
-    xsm_menu_item('list-person-locator', xcms_url(array('show_anketa_status'=>'active')), 'Актив отделения');
+    xsm_menu_item('list-tour', '', 'Лес');
+    xsm_menu_item('list-person-locator', xcms_url(array('show_anketa_status'=>'active')), 'Актив');
     xsm_menu_item('list-person', '', 'Участники школ');
     xsm_menu_item('list-course', '', 'Курсы');
     xsm_menu_item('list-department', '', 'Отделения');
