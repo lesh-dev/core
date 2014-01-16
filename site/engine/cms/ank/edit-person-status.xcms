@@ -56,20 +56,33 @@ function xsm_notify_person_status_change()
     $person_comment_id = $_POST['person_comment_id'];
     $old_person_comment = array();
 
+    $statuses = xsm_get_enum("anketa_status");
+    $anketa_status = $_POST["anketa_status"];
+    $hr_status = $statuses[$anketa_status];
+
     $person_id = $_POST['blamed_person_id'];
     $person = xdb_get_entity_by_id('person', $person_id);
 
     $full_name = xsm_fio_enc($person);
-    $table_title = 'Изменён статус участника: <a'.
+    $table_title = 'Статус участника <a'.
         xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
-        $full_name.'</a>';
+        $full_name.'</a> изменён на <b>'.$hr_status.'</b>';
 
-    // FIXME: no status info here
+    $fields = xsm_get_person_comment_fields();
+    $field_types = xsm_get_person_comment_field_types();
+
+    // merge some relevant fields from person
+    $fields["anketa_status"] = "Статус";
+    $field_types["anketa_status"] = "enum";
+
+    // hack the message
+    $_POST["comment_text"] = "Новый статус: $hr_status\n".$_POST["comment_text"];
+
     $mail_msg = xsm_build_diff_msg(
         $_POST,
         $old_person_comment,
-        xsm_get_person_comment_fields(),
-        xsm_get_person_comment_field_types(),
+        $fields,
+        $field_types,
         $table_title);
 
     xcms_send_notification("reg", NULL, $mail_msg);
