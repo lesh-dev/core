@@ -51,6 +51,10 @@ function xsm_update_person_status()
 }
 
 
+/**
+ * Modifies $_POST contents, so it should be called
+ * before database update occurs
+ **/
 function xsm_notify_person_status_change()
 {
     $person_comment_id = $_POST['person_comment_id'];
@@ -155,8 +159,8 @@ function xsm_change_person_status()
     </form>
     <script type="text/javascript">
     $(document).ready(function() {
-        xsm_set_depends_on('#update-person_comment-submit-top', '#comment_text-text');
-        xsm_set_depends_on('#update-person_comment-submit-bottom', '#comment_text-text');
+        xsm_set_depends_on('update-person_comment-submit-top', 'comment_text-text');
+        xsm_set_depends_on('update-person_comment-submit-bottom', 'comment_text-text');
     });
     </script>
     <?php
