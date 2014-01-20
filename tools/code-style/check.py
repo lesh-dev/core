@@ -1,8 +1,9 @@
 #!/usr/bin/python
 
-import os
 import sys
 import re
+
+PHP_FILES = ['php', 'code', 'xcms']
 
 def print_bad_context(lines, bad_lines):
     line_count = len(lines)
@@ -43,7 +44,7 @@ def remove_file_expansions(line):
     return line
 
 
-def check_code_style(lines):
+def check_code_style(lines, file_type):
     line_count = len(lines)
     bad_lines = dict()
 
@@ -103,6 +104,13 @@ def check_code_style(lines):
         if ts:
             add_bad_line(bad_lines, "No trailing spaces allowed", i)
 
+        # forbidden PHP operators
+        if file_type in PHP_FILES:
+            empty_op = re.search('[^a-zA-Z_]empty\(', line)
+            if empty_op:
+                add_bad_line(bad_lines, "Operator 'empty' is forbidden for " +
+                    str(PHP_FILES) + " files", i)
+
     print_bad_context(lines, bad_lines)
     # return 1 if there some errors
     if len(bad_lines):
@@ -112,11 +120,15 @@ def check_code_style(lines):
 
 def check_file(name):
     lines = []
+    ft_match = re.search('\.([a-z]+)$', name)
+    file_type = 'unknown'
+    if ft_match:
+        file_type = ft_match.group(1)
     with open(name) as f:
         for line in f:
             lines.append(line)
 
-    return check_code_style(lines)
+    return check_code_style(lines, file_type)
 
 def print_usage():
     print "Syntax: " + sys.argv[0] + " <file-name-to-check>"
