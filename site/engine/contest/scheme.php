@@ -97,7 +97,7 @@ function ctx_update_object($table_name, $values)
         if (!@$_FILES[$id])
             continue;
 
-        if (empty($_FILES[$id]["tmp_name"]))
+        if (!strlen($_FILES[$id]["tmp_name"]))
             continue;
 
         $home = "$content_dir/contest/attach/$table_name/".time();
@@ -158,7 +158,7 @@ function ctx_calculate_results(&$works, $probs)
         {
             $pid = $prob["problems_id"];
             $val = @$work["p$pid"];
-            if (!$val)
+            if (!strlen($val))
             {
                 $val = "?";
                 $is_done = false;

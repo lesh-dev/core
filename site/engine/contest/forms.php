@@ -2,23 +2,23 @@
 
 function xcmst_draw_contest_form_field($type, $name, $value, $id)
 {
-    if($type == "pk")
+    if ($type == "pk")
     {
         if(!$value)
             $value = XDB_NEW;
         echo "<input type='hidden' name='$id' value='$value' />";
     }
-    if($type == "text")
+    if ($type == "text")
     {
         echo "<tr><td class='font-wieght: bold;'>$name</td>
             <td><input type='text' placeholder='$name' name='$id' value='{$value}'/></td>\n";
     }
-    if($type == "file")
+    if ($type == "file")
     {
         echo "<tr><td>$name</td>
             <td><input name='$id' type=\"file\" value=\"$value\"/></td>\n";
     }
-    if($type == "large")
+    if ($type == "large")
     {
         echo "<tr><td colspan='2'>$name:</td>
             <tr><td colspan='2'>
