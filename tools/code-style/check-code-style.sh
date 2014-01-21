@@ -130,6 +130,7 @@ check_file()
 
 check_style()
 {
+    sep="yes"
     for i in `find $path -type f -name "$1"`; do
         local ignore=""
         # skip ignored files
@@ -152,6 +153,10 @@ check_style()
         if [ "$ignore" == "yes" ] ; then
             #echo "IGNORED: $i by $ignore_reason"
             continue
+        fi
+        if [ -n "$sep" ] ; then
+            echo "---------------------------------------- $1"
+            sep=""
         fi
         # check files
         check_file "$i"
