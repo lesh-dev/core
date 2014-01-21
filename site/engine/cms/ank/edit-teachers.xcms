@@ -20,18 +20,20 @@ function xsm_edit_course_teachers()
         <tr><td class="ankListRowTitle">Преподы курса
             <a href="<?php echo $course_href; ?>"><?php echo $course_title; ?></a></td></tr><?php
 
+        $already_added = array();
         foreach ($course_teachers as $course_teachers_id => $teacher_data)
         {
             $course_teacher_id = $teacher_data['course_teacher_id'];
+            $already_added[$course_teacher_id] = true;
             $teacher_fi = xsm_fi_enc($teacher_data);
             $teacher_url = "view-person".xcms_url(array(
                 'person_id'=>$course_teacher_id,
                 'school_id'=>$school_id));
-            $teachers_ht = "<a href=\"$teacher_url\">$teacher_fi</a> ";
+            $teacher_ht = "<a href=\"$teacher_url\">$teacher_fi</a> ";
 
             ?>
             <form method="post" action="edit-teachers"><tr>
-                <td class="ankList"><span class="ank-edit-item"><?php echo $teachers_ht; ?></span>
+                <td class="ankList"><span class="ank-edit-item"><?php echo $teacher_ht; ?></span>
                     <input type="hidden" name="course_teachers_id" value="<?php echo $course_teachers_id; ?>" />
                     <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" />
                     <input type="submit" name="delete-teacher" class="delete-button item" value="Удалить" /></td>
@@ -49,7 +51,7 @@ function xsm_edit_course_teachers()
                 WHERE
                 ps.school_id = $school_id AND ps.is_teacher = 'teacher'
                 ORDER BY last_name, first_name",
-                $attr);
+                $attr, $already_added);
 
             ?>
             <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" />

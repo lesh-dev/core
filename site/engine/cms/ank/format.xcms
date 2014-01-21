@@ -316,7 +316,7 @@ function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_c
   * @param $query SQL statement to get data
   * @param $attr auxillary attributes passed to SELECT element (empty by default)
   **/
-function xsm_make_selector_ext($list_key, $name, $current_key, $title_pattern, $query, $attr = '')
+function xsm_make_selector_ext($list_key, $name, $current_key, $title_pattern, $query, $attr = '', $exclude_ids = array())
 {
     $db = xdb_get();
     $sel = $db->query($query);
@@ -327,6 +327,8 @@ function xsm_make_selector_ext($list_key, $name, $current_key, $title_pattern, $
         foreach ($object as $key => $value)
             $title = str_replace("@@$key@", htmlspecialchars($value), $title);
         $key = $object[$list_key];
+        if (xcms_get_key_or($exclude_ids, $key))
+            continue;
         $selected = ($key == $current_key) ? 'selected="selected"' : '';
         $html .= "<option $selected value=\"$key\">$title</option>\n";
     }
