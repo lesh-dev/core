@@ -3,6 +3,8 @@
   * Makes checkbox checked attribute with proper generic value
   **/
 
+require_once("${engine_dir}sys/string.php");
+
 define('YES', "yes");
 define('NO', "no");
 
@@ -101,7 +103,7 @@ function xcmst_input_attrs_from_post($key, $placeholder = "")
 {
     $attrs = "class=\"admin-medium\" id=\"$key-input\" name=\"$key\" value=\"".
         htmlspecialchars(xcms_get_key_or($_POST, $key))."\"";
-    if (!empty($placeholder))
+    if (xu_not_empty($placeholder))
         $attrs .= " placeholder=\"".htmlspecialchars($placeholder)."\" ";
     echo $attrs;
 }
