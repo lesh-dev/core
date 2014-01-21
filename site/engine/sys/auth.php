@@ -6,9 +6,9 @@
     define('XAUTH_THROW', true);
     define('XAUTH_NO_THROW', false);
 
+    require_once("${engine_dir}sys/string.php");
     require_once("${engine_dir}sys/logger.php");
     require_once("${engine_dir}sys/tag.php");
-    require_once("${engine_dir}sys/string.php");
 
     class XcmsUser
     {
@@ -16,8 +16,9 @@
         {
             global $SETTINGS, $content_dir;
             $cd = $SETTINGS["content_dir"];
-            if (empty($cd)) $cd = $content_dir;
-            if (empty($cd))
+            if (xu_empty($cd))
+                $cd = $content_dir;
+            if (xu_empty($cd))
                 throw new Exception ("Content directory is not set in SETTINGS. ");
             $fn = "${cd}auth/usr/$login.user";
             return $fn;

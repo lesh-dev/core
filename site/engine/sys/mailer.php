@@ -61,7 +61,7 @@
         global $SETTINGS;
         $mail_groups = xcms_get_list("{$SETTINGS["content_dir"]}cms/mailer.conf");
         $ml = xcms_get_key_or($mail_groups, $mail_group);
-        if (empty($ml))
+        if (xu_empty($ml))
         {
             xcms_log(XLOG_ERROR, "[MAILER] Mail group '$mail_group' not found or empty, skipped");
             return false;
@@ -71,7 +71,7 @@
         foreach ($mails as $addr)
         {
             $mail_addr = trim($addr);
-            if (empty($mail_addr))
+            if (xu_empty($mail_addr))
                 continue;
             if ($mode == XMAIL_DESTMODE_TO)
                 $mailer->AddAddress($mail_addr);
@@ -172,7 +172,7 @@
             "Дата и время    : $hr_timestamp\r\n";
 
         $body_html = "";
-        if (!empty($mail_text_html))
+        if (xu_not_empty($mail_text_html))
         {
             $body_html = xcms_prepare_html_template("notification-body");
             $body_html = str_replace('@@MESSAGE@', $mail_text_html, $body_html);
@@ -206,7 +206,7 @@
         $notification_body = "";
         while ($notification = $notification_sel->fetchArray(SQLITE3_ASSOC))
             $notification_body .= $notification['notification_html'];
-        if (empty($notification_body)) // nothing was added
+        if (xu_empty($notification_body)) // nothing was added
             return true;
 
         if (!xcms_deliver_mail_int($mail_group, null, $notification_body))
