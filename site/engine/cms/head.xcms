@@ -12,7 +12,7 @@
     $title = $meta_site_name; // from settings
     if (isset($pageid) && strlen($pageid)) {
         $append = xcms_get_key_or($list, "menu-title");
-        if (!empty($append))
+        if (xu_not_empty($append))
             $title = "$append :: $title";
     }
     echo htmlspecialchars($title);

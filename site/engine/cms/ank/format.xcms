@@ -112,7 +112,7 @@ function xsm_format_phones($phones_str)
     $phones_str = trim($phones_str);
 
     $result = array();
-    if (empty($phones_str))
+    if (xu_empty($phones_str))
         return $result;
 
     if (preg_match("/[^0-9()+, -]/", $phones_str))
@@ -206,7 +206,7 @@ function xsm_make_phone($phones_str)
             $class = "error";
             $phone = htmlspecialchars($phone);
         }
-        if (!empty($result))
+        if (xu_not_empty($result))
             $result .= ",&nbsp;&nbsp;&nbsp;";
 
         $result .= "<span class=\"phone $class\" title=\"$hint\">$phone</span>";
@@ -232,7 +232,7 @@ function xsm_format_person_phones($person)
 function xsm_prepare_social_profile($social_profile)
 {
     // make it valid URL if it was it form example.com/name
-    if (!empty($social_profile) &&
+    if (xu_not_empty($social_profile) &&
         strpos(substr($social_profile, 0, 8), '://') === false) // http/https scheme not matched
         $social_profile = "http://$social_profile"; // assume http scheme
     $social_profile = htmlspecialchars($social_profile);
