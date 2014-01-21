@@ -16,7 +16,7 @@
     define('EXP_COM', ',');
 
     /**
-      * PHP empty($var) replacement
+      * PHP 'empty' function replacement
       **/
     function xu_empty($string)
     {
@@ -24,7 +24,7 @@
     }
 
     /**
-      * PHP !empty($var) replacement
+      * PHP !empty function replacement
       **/
     function xu_not_empty($string)
     {
@@ -39,7 +39,7 @@
     {
         // everything should be replaced if OK
         $bad = preg_replace("/[a-zA-Z0-9@._-]+/i", "", $user_name);
-        return empty($bad);
+        return xu_empty($bad);
     }
 
     /**
@@ -50,14 +50,14 @@
     {
         // everything should be replaced if OK
         $bad = preg_replace("#[a-z/A-Z.0-9_-]+#", "", $page_id);
-        if (!empty($bad))
+        if (!xu_empty($bad))
             return false;
 
         // forbid duplicated dots
         if (strpos($page_id, "..") !== false)
             return false;
 
-        if (empty($page_id))
+        if (xu_empty($page_id))
             return false;
 
         return true;
@@ -71,7 +71,7 @@
     {
         // everything should be replaced if OK
         $bad = preg_replace("#[a-z/A-Z.0-9_-]+#i", "", $alias);
-        return empty($bad);
+        return xu_empty($bad);
     }
 
     /**
