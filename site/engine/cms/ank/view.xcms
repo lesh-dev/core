@@ -43,10 +43,10 @@
         $person_fields = xsm_get_person_fields();
 
         if (
-            empty($last_name) ||
-            empty($first_name) ||
-            empty($current_class) ||
-            (empty($phone) && empty($cellular))
+            xu_empty($last_name) ||
+            xu_empty($first_name) ||
+            xu_empty($current_class) ||
+            (xu_empty($phone) && xu_empty($cellular))
             )
         {
             // someone hacked the js validator

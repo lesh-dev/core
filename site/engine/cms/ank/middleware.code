@@ -19,7 +19,7 @@ function xsm_send_anketa($mail_group, $mail_msg, $full_name, $email, $manager_mo
         return true;
 
     $full_name_tr = xcms_transliterate($full_name);
-    if ($manager_mode && !empty($email))
+    if ($manager_mode && xu_not_empty($email))
         $mailer->AddReplyTo($email, $full_name_tr);
     else
         $mailer->AddReplyTo($addr_from, $name_from);
@@ -29,7 +29,7 @@ function xsm_send_anketa($mail_group, $mail_msg, $full_name, $email, $manager_mo
 function xsm_get_city_class($school_city)
 {
     $class = "";
-    if (empty($school_city))
+    if (xu_empty($school_city))
         $class = "";
     elseif (strpos($school_city, "МО") !== false)
         $class = "not-msk-city";
@@ -256,7 +256,7 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
                 if ($teacher_data['course_teacher_id'] == 13) // Преподаватель Другого Отделения
                     continue;
                 $teacher_fi = xsm_fi_enc($teacher_data);
-                if (!empty($simple_teachers_ht))
+                if (xu_not_empty($simple_teachers_ht))
                     $simple_teachers_ht .= ", ";
                 $simple_teachers_ht .= $teacher_fi;
             }

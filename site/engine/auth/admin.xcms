@@ -75,7 +75,7 @@
 
     function xcmst_draw_user_modify_form($u, $target_user)
     {
-        if (empty($target_user))
+        if (xu_empty($target_user))
         {
             echo "<b>Выберите пользователя в меню слева</b>";
             return;

@@ -4,7 +4,7 @@ function xsm_edit_course_teachers()
 {
 
     $course_id = xcms_get_key_or($_POST, 'course_id');
-    if (empty($course_id))
+    if (xu_empty($course_id))
         $course_id = xcms_get_key_or($_GET, 'course_id', '-1'); // invalid key
 
     $course = xdb_get_entity_by_id('course', $course_id);

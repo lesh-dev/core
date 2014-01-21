@@ -18,7 +18,7 @@ function xsm_notify_person_edit($person)
         xsm_get_person_field_types(),
         $table_title);
 
-    if (empty($mail_msg)) // do not send empty diffs
+    if (xu_empty($mail_msg)) // do not send empty diffs
         return;
 
     xcms_send_notification("reg", NULL, $mail_msg);

@@ -16,7 +16,7 @@
         $show = xcms_get_key_or($options, "show");
         $view = trim(xcms_get_key_or($INFO, "view"));
         $acl = explode(EXP_SP, $view);
-        $access_granted = empty($view) || xcms_check_rights($acl);
+        $access_granted = xu_empty($view) || xcms_check_rights($acl);
         if ($show != "")
         {
             $text = "{unnamed}";
