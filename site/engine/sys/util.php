@@ -1,7 +1,8 @@
 <?php
 
-include_once("$engine_dir/sys/tag.php");
-include_once("$engine_dir/sys/file.php");
+require_once("${engine_dir}sys/string.php");
+require_once("${engine_dir}sys/tag.php");
+require_once("${engine_dir}sys/file.php");
 
 function xcms_hostname()
 {
@@ -9,7 +10,7 @@ function xcms_hostname()
     if ($meta_site_url)
         $host = preg_replace('#http(s|)://(.*?)(/|$)#', '\2', $meta_site_url);
 
-    if (empty($host))
+    if (xu_empty($host))
         $host = xcms_get_key_or($_SERVER, "HTTP_HOST");
 
     if (empty($host))
@@ -26,7 +27,7 @@ function xcms_mkpasswd()
     $pass = trim(@shell_exec("mkpasswd")).trim(@shell_exec("mkpasswd"));
     $pass = preg_replace("/[^A-Za-z0-9_-]/", "@", $pass);
     $pass = substr($pass, 0, 12);
-    if (empty($pass))
+    if (xu_empty($pass))
     {
         $table = array();
         for ($i = 0; $i < 26; $i++)
@@ -48,7 +49,7 @@ function xcms_datetime($timestamp = false)
 {
     if ($timestamp === false)
         return date("Y-m-d H:i:s");
-    if (empty($timestamp))
+    if (xu_empty($timestamp))
         return "";
     return date("Y-m-d H:i:s", $timestamp);
 }
@@ -57,7 +58,7 @@ function xcms_date($timestamp = false)
 {
     if ($timestamp === false)
         return date("Y-m-d");
-    if (empty($timestamp))
+    if (xu_empty($timestamp))
         return "";
     return date("Y-m-d", $timestamp);
 }
@@ -66,7 +67,7 @@ function xcms_rus_date($timestamp = false)
 {
     if ($timestamp === false)
         return date("d.m.Y");
-    if (empty($timestamp))
+    if (xu_empty($timestamp))
         return "";
     return date("d.m.Y", $timestamp);
 }
