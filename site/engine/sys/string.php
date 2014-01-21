@@ -16,6 +16,22 @@
     define('EXP_COM', ',');
 
     /**
+      * PHP empty($var) replacement
+      **/
+    function xu_empty($string)
+    {
+        return !strlen($string);
+    }
+
+    /**
+      * PHP !empty($var) replacement
+      **/
+    function xu_not_empty($string)
+    {
+        return strlen($string);
+    }
+
+    /**
       * Checks if user name is valid
       * @return true if user name is valid, false otherwise
       **/
@@ -259,6 +275,10 @@
     function xcms_string_unit_test()
     {
         xut_begin("string");
+
+        xut_check(xu_not_empty(0), "Zero is empty");
+        xut_check(xu_empty(""), "Empty string is not empty");
+
         xut_check(xcms_check_password("123@#$%^&abcABC bla\xFE\xFF"), "Check valid password");
         xut_check(!xcms_check_password("\n\taa\rbb\0\\'qqq'+\"zzz"), "Check invalid password");
 
