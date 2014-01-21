@@ -3,6 +3,8 @@
   * TODO: Add pageid regex checking for safety
   **/
 
+require_once("${engine_dir}sys/string.php");
+
 /**
   * Retrieve page info location
   * Assumes @name SETTINGS (and @name pageid
@@ -159,7 +161,7 @@ function xcms_collect_aliases_int(&$aliases, $dir, $root_len)
         $cur_info = xcms_get_list($info_fn);
         $page_id = substr($dir, $root_len + 1);
         $cur_alias = xcms_get_key_or($cur_info, "alias");
-        if (!empty($cur_alias))
+        if (xu_not_empty($cur_alias))
             $aliases[$cur_alias] = $page_id;
     }
     foreach ($subdirs as $subdir)
