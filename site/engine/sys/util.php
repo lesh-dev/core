@@ -13,7 +13,7 @@ function xcms_hostname()
     if (xu_empty($host))
         $host = xcms_get_key_or($_SERVER, "HTTP_HOST");
 
-    if (empty($host))
+    if (xu_empty($host))
     {
         $host = @shell_exec("hostname -f");
         $host = trim($host);
