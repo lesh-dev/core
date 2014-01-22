@@ -19,18 +19,18 @@
 
         if (xcms_user()->check_rights("admin", false)) {?>
         <a title="Админка"
-            href="<?php echo "/$web_prefix?".xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>"
+            href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>"
             class="top-icon" style="top: 16px; right: 13px; height: 16px; width: 16px;
             background-image: url('<?php echo $full_engine_pub; ?>img/key.png');">&nbsp;</a><?php
         }
         if (xcms_user()->check_rights("ank", false)) {?>
-        <a title="XSM" href="<?php echo "/${web_prefix}xsm"; ?>"
+        <a title="XSM" href="<?php echo $meta_site_url_secure; ?>xsm"
             class="top-icon" style="top: 9px; right: 36px; height: 32px; width: 32px;
             background-image: url('<?php echo $full_engine_pub; ?>img/study.png');">&nbsp;</a><?php
         }
 
         if (xcms_user()->check_rights("registered", false)) {?>
-        <a title="Личный кабинет" href="<?php echo "/$web_prefix?".xcms_url(array('page'=>$pageid, 'ref'=>'cabinet')); ?>"
+        <a title="Личный кабинет" href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'cabinet')); ?>"
             class="top-icon" style="top: 13px; right: 77px; height: 24px; width: 24px;
             background-image: url('<?php echo $full_engine_pub; ?>img/cabinet.png');">&nbsp;</a><?php
         }
@@ -90,30 +90,30 @@
                     }
 
                     if (xcms_user()->check_rights("registered", false))
-                    {
-                        include(translate('<a href="/<# web_prefix #>?'.
-                            xcms_url(array('page'=>$pageid, 'ref'=>'cabinet')).
-                            '" class="menu-item menu-sys">Личный кабинет</a>'));
+                    {?>
+                        <a href="<?php echo $meta_site_url_secure.'?'.
+                            xcms_url(array('page'=>$pageid, 'ref'=>'cabinet')); ?>"
+                            class="menu-item menu-sys">Личный кабинет</a><?php
                     }
 
                     if (xcms_user()->check_rights("editor", false) || xcms_user()->check_rights("admin", false))
-                    {
-                        include(translate('<a href="/<# web_prefix #>?'.
-                            xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')).
-                            '" class="menu-item menu-sys">Админка</a>'));
+                    {?>
+                        <a href="<?php echo $meta_site_url_secure.'?'.
+                            xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>"
+                            class="menu-item menu-sys">Админка</a><?php
                     }
 
                     if (xcms_user()->check_rights("registered", false))
-                    {
-                        include(translate('<a href="/<# web_prefix #>?'.
-                            xcms_url(array('page'=>$pageid, 'ref'=>'cabinet', 'mode'=>'logout')).
-                            '" class="menu-item menu-sys">Выход</a>'));
+                    {?>
+                        <a href="<?php echo $meta_site_url_secure.'?'.
+                            xcms_url(array('page'=>$pageid, 'ref'=>'cabinet', 'mode'=>'logout')); ?>"
+                            class="menu-item menu-sys">Выход</a><?php
                     }
                     else
-                    {
-                        include(translate('<a href="/<# web_prefix#>?'.
-                            xcms_url(array('page'=>$pageid, 'ref'=>'login', 'return'=>'?ref=index')).
-                            '" class="menu-item menu-level1 menu-sys">Авторизация</a>'));
+                    {?>
+                        <a href="<?php echo $meta_site_url_secure.'?'.
+                            xcms_url(array('page'=>$pageid, 'ref'=>'login', 'return'=>'?ref=index')); ?>"
+                            class="menu-item menu-level1 menu-sys">Авторизация</a><?php
                     }
                 ?>
                 <!--a href="http://validator.w3.org/check?uri=referer"><img

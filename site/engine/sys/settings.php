@@ -24,6 +24,11 @@
     global $full_content_dir;
     global $full_design_dir;
     global $full_engine_pub;
+
+    global $meta_site_url;
+    global $meta_site_url_secure;
+    $meta_site_url_secure = str_replace("http:", "https:", $meta_site_url);
+
     $full_content_dir = "/$web_prefix${content_dir}";
     $full_design_dir = "/$web_prefix${design_dir}";
     $full_engine_pub = "/${web_prefix}{$SETTINGS["engine_pub"]}";
