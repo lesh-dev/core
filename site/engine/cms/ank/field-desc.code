@@ -1,5 +1,7 @@
 <?php
 
+define('XSM_SCHOOL_ANK_ID', 'ank');
+
 // Department
 function xsm_get_department_fields()
 {

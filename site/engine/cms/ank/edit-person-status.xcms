@@ -12,7 +12,7 @@
 // Специфическая функция для данной таблицы (можно объединить с person_school)
 function xsm_person_change_status_operations($table_name, $id, $ret_title, $member_person_id, $place)
 {
-    $school_id = "ank";
+    $school_id = XSM_SCHOOL_ANK_ID;
     $is_new = ($id == XDB_NEW);
     $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$member_person_id));
     xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title, "Удалить комментарий");
@@ -45,7 +45,7 @@ function xsm_update_person_status()
     {?>
         Не удалось обновить статус участника. <?php
     }
-    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>'ank'));
+    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>XSM_SCHOOL_ANK_ID));
     ?>
     <a href="<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
 }

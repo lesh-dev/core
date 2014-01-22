@@ -4,7 +4,7 @@
 // Специфическая функция для данной таблицы (можно объединить с person_school)
 function xsm_person_comment_edit_operations($table_name, $id, $ret_title, $member_person_id, $place)
 {
-    $school_id = "ank";
+    $school_id = XSM_SCHOOL_ANK_ID;
     $is_new = ($id == XDB_NEW);
     $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$member_person_id));
     xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title, "Удалить комментарий");
@@ -31,7 +31,7 @@ function xsm_update_person_comment($title, $fields)
         <p>Не удалось добавить <?php echo $title; ?>.<?php
     }
     $person_id = xcms_get_key_or($_POST, 'blamed_person_id', -1);
-    $school_id = "ank";
+    $school_id = XSM_SCHOOL_ANK_ID;
     $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
     ?>
     <a href="<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
@@ -53,7 +53,7 @@ function xsm_delete_person_comment($table_name, $title, $aux_param = '')
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
     $person_comment = xdb_get_entity_by_id($table_name, $id);
     $person_id = $person_comment['blamed_person_id'];
-    $school_id = "ank";
+    $school_id = XSM_SCHOOL_ANK_ID;
     $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
     // experimental 'delete as status update'
     $res = xdb_insert_or_update($table_name, array($key_name=>$id),

@@ -1,7 +1,5 @@
 <?php
 
-define('SCHOOL_ANK_ID', 'ank');
-
 include_once("${engine_dir}cms/ank/person_school.php");
 
 function xsm_draw_person_textval($class, $text, $value)
@@ -86,7 +84,7 @@ function xsm_get_avatar($social_profile)
 
 function xsm_draw_person_school_panel($db, $school_id, $person_id)
 {
-    if ($school_id == SCHOOL_ANK_ID)
+    if ($school_id == XSM_SCHOOL_ANK_ID)
         return;
 
     $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
@@ -125,10 +123,10 @@ function xsm_draw_person_school_panel($db, $school_id, $person_id)
 
 function xsm_draw_list_link($person_id, $school_id)
 {
-    $view = ($school_id == SCHOOL_ANK_ID) ? "list-ank" : "list-person";
-    $target = ($school_id == SCHOOL_ANK_ID) ? "анкет" : "школы";
+    $view = ($school_id == XSM_SCHOOL_ANK_ID) ? "list-ank" : "list-person";
+    $target = ($school_id == XSM_SCHOOL_ANK_ID) ? "анкет" : "школы";
     $aux_param = "";
-    if ($school_id != SCHOOL_ANK_ID)
+    if ($school_id != XSM_SCHOOL_ANK_ID)
         $aux_param = xcms_url(array('school_id'=>$school_id));
     $anchor = "#person$person_id";
     $url = $view.$aux_param.$anchor;
@@ -208,8 +206,8 @@ function xsm_print_person_schools($db, $person_id, $current_school_id)
         ON (s.school_id = ps.school_id) AND (ps.member_person_id = '$person_id')
         ORDER BY school_date_start DESC LIMIT $school_count";
     $school_sel = $db->query($query);
-    $href_ank = "view-person&amp;person_id=$person_id&amp;school_id=".SCHOOL_ANK_ID;
-    $active_ank = (SCHOOL_ANK_ID == $current_school_id) ? 'current' : '';
+    $href_ank = "view-person&amp;person_id=$person_id&amp;school_id=".XSM_SCHOOL_ANK_ID;
+    $active_ank = (XSM_SCHOOL_ANK_ID == $current_school_id) ? 'current' : '';
     ?>
     <table class="ankList"><tr>
         <td class="school-selection <?php echo $active_ank; ?>"><a
@@ -507,12 +505,12 @@ function xsm_print_person()
     $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
     $person = xdb_get_entity_by_id('person', $person_id);
 
-    $school_id = xcms_get_key_or($_GET, 'school_id', SCHOOL_ANK_ID);
+    $school_id = xcms_get_key_or($_GET, 'school_id', XSM_SCHOOL_ANK_ID);
 
     xsm_print_person_header($db, $person, $school_id);
     xsm_print_person_schools($db, $person_id, $school_id);
 
-    if ($school_id == SCHOOL_ANK_ID)
+    if ($school_id == XSM_SCHOOL_ANK_ID)
         xsm_print_person_ank_data($db, $person);
     else
         xsm_print_person_selected_school($db, $school_id, $person);

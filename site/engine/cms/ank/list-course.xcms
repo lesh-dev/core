@@ -7,7 +7,6 @@ function xsm_print_course_schools($db, $current_school_id)
     $school_count = 5;
     $query = "SELECT * FROM school ORDER BY school_date_start DESC LIMIT $school_count";
     $school_sel = $db->query($query);
-    //$href_ank = "view-person&amp;person_id=$person_id&amp;school_id=".SCHOOL_ANK_ID;
     ?>
     <table class="ankList"><tr>
         <?php
