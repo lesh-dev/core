@@ -349,17 +349,8 @@ function xsm_make_enum_selector($name, $value, $items)
     return $html;
 }
 
-// TODO: use generic from sys/controls.php
 function xsm_make_checkbox($name, $value, $checked_value)
 {
-    if (strlen($value)) $checked = 'checked="checked"';
-    else $checked = '';
-    // prepend fake input with empty value to submit it as checkbox 'unchecked' value
-    // See http://iamcam.wordpress.com/2008/01/15/unchecked-checkbox-values/
-    $html =
-        "<input type=\"hidden\" name=\"$name\" value=\"\"/>".
-        "<input class=\"ankEdit checkbox\" type=\"checkbox\" name=\"$name\" ".
-            "id=\"$name-checkbox\" value=\"$checked_value\" $checked />";
-    return $html;
+    return xcms_make_checkbox($name, $value, $checked_value, "ankEdit");
 }
 ?>

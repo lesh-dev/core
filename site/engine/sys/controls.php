@@ -15,6 +15,9 @@ function xcms_checkbox_attr($val)
     return $attr;
 }
 
+/**
+  * Generic checkbox generator. Has derivatives in XSM
+  **/
 function xcms_make_checkbox($name, $value, $checked_value, $class)
 {
     if (xu_not_empty($value))
