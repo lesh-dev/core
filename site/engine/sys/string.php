@@ -32,6 +32,23 @@
     }
 
     /**
+      * Get key value from list or return default value
+      **/
+    function xcms_get_key_or($list, $key, $def_value = '')
+    {
+        if (!array_key_exists($key, $list))
+            return $def_value;
+        $value = $list[$key];
+        // special case for bool vars
+        if (is_bool($def_value))
+            return $value;
+
+        if (!strlen($value))
+            return $def_value;
+        return $value;
+    }
+
+    /**
       * Checks if user name is valid
       * @return true if user name is valid, false otherwise
       **/
@@ -61,17 +78,6 @@
             return false;
 
         return true;
-    }
-
-    /**
-      * Checks whether page alias is valid
-      * @return true if alias is valid, false otherwise
-      **/
-    function xcms_check_page_alias($alias)
-    {
-        // everything should be replaced if OK
-        $bad = preg_replace("#[a-z/A-Z.0-9_-]+#i", "", $alias);
-        return xu_empty($bad);
     }
 
     /**
@@ -169,6 +175,7 @@
         return $pos;
     }
 
+    // TODO: rename to xu_transliterate
     /**
       * Replaces Russian UTF-8 symbols to ANSI transliteration
       * @param string string to transliterate
@@ -275,6 +282,24 @@
     function xcms_string_unit_test()
     {
         xut_begin("string");
+
+        // test xcms_get_key_or function
+        $obj = array();
+        $obj["super"] = 1;
+        $obj["pupper"] = false;
+        $obj["zero-value"] = 0;
+        $obj["another"] = "test string";
+        $obj["empty"] = "";
+
+        xut_equal(xcms_get_key_or($obj, "super"), 1, "Invalid 'super' key");
+        xut_equal(xcms_get_key_or($obj, "pupper", true), false, "Invalid 'pupper' key");
+        xut_equal(xcms_get_key_or($obj, "zero-value"), 0, "Invalid 'zero-value' key");
+        xut_equal(xcms_get_key_or($obj, "another"), "test string", "Invalid 'another' key");
+        xut_equal(xcms_get_key_or($obj, "empty"), "", "Invalid 'empty' key");
+        xut_equal(xcms_get_key_or($obj, "empty", "some"), "some", "Failed empty value key test");
+        xut_equal(xcms_get_key_or($obj, "missing"), "", "Failed missing key test");
+        xut_equal(xcms_get_key_or($obj, "missing-bool", true), true, "Failed missing bool key");
+        xut_equal(xcms_get_key_or($obj, "pupper", true), false, "Failed existing bool key");
 
         xut_check(xu_not_empty(0), "Zero is empty");
         xut_check(xu_empty(""), "Empty string is not empty");

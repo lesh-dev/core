@@ -349,7 +349,7 @@ function xsm_make_enum_selector($name, $value, $items)
     return $html;
 }
 
-
+// TODO: use generic from sys/controls.php
 function xsm_make_checkbox($name, $value, $checked_value)
 {
     if (strlen($value)) $checked = 'checked="checked"';

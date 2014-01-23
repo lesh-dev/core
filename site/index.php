@@ -39,6 +39,7 @@
     require_once ("${engine_dir}sys/compiler.php");
     require_once ("${engine_dir}sys/mailer.php");
     require_once ("${engine_dir}sys/resample.php");
+    require_once ("${engine_dir}sys/controls.php");
     if (!$session_result)
         xcms_log("Session start failed");
 
