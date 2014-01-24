@@ -166,8 +166,7 @@ function ctx_calculate_results(&$works, $probs)
             $work["p${pid}val"] = $val;
             $sum += (integer)$val;
         }
-        if ($is_done)
-            $work["sum"] = $sum;
+        $work["sum"] = $sum;
 
         if ($is_done)
         {
