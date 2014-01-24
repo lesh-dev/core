@@ -223,7 +223,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.gotoUrlByLinkText(self.getAdminPanelLinkName())
 
     def getPersonAbsenceMessage(self):
-        return u"На данной школе не присутствовал"
+        return u"На " + self.m_conf.getTestSchoolName() + u" не присутствовал"
 
 
 class XcmsTest(XcmsTestWithConfig):
