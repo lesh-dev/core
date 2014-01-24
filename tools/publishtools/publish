@@ -226,7 +226,7 @@ function valid_installer
     if ! [ -f install.php ] ; then
         return 1
     fi
-    sz="$( cat install.php | du -b )"
+    sz="$( cat install.php | wc --bytes )"
     if [ "$sz" -eq "0" ] ; then
         return 1
     fi
