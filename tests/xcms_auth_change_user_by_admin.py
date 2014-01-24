@@ -52,10 +52,11 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         print "New user name: ", inpName
 
         print "Check if administrator priviledge is off now"
-        self.assertCheckboxValueById("group_#admin", False)
+        self.assertCheckboxValueById("group_admin-checkbox", False)
 
         print "Add administrator priviledge"
-        self.clickElementById("group_#admin")
+        self.clickElementById("group_admin-checkbox")
+        self.assertCheckboxValueById("group_admin-checkbox", True)
 
         self.clickElementById("update_user")
 
@@ -79,15 +80,15 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
 
         self.gotoUrlByPartialLinkText(inpLogin)
 
-        self.assertCheckboxValueById("group_#admin", True)
-        self.assertCheckboxValueById("group_#editor", False)
+        self.assertCheckboxValueById("group_admin-checkbox", True)
+        self.assertCheckboxValueById("group_editor-checkbox", False)
 
         print "Now change priviledges."
 
-        self.clickElementById("group_#admin")
-        self.clickElementById("group_#editor")
-        self.assertCheckboxValueById("group_#admin", False)
-        self.assertCheckboxValueById("group_#editor", True)
+        self.clickElementById("group_admin-checkbox")
+        self.clickElementById("group_editor-checkbox")
+        self.assertCheckboxValueById("group_admin-checkbox", False)
+        self.assertCheckboxValueById("group_editor-checkbox", True)
 
         self.clickElementById("update_user")
 
@@ -125,17 +126,17 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
 
         self.gotoUrlByPartialLinkText(inpLogin)
 
-        self.assertCheckboxValueById("group_#admin", False)
-        self.assertCheckboxValueById("group_#editor", True)
-        self.assertCheckboxValueById("group_#ank", False)
+        self.assertCheckboxValueById("group_admin-checkbox", False)
+        self.assertCheckboxValueById("group_editor-checkbox", True)
+        self.assertCheckboxValueById("group_ank-checkbox", False)
 
         print "Now change priviledges."
 
-        self.clickElementById("group_#ank")
-        self.clickElementById("group_#editor")
-        self.assertCheckboxValueById("group_#admin", False)
-        self.assertCheckboxValueById("group_#editor", False)
-        self.assertCheckboxValueById("group_#ank", True)
+        self.clickElementById("group_ank-checkbox")
+        self.clickElementById("group_editor-checkbox")
+        self.assertCheckboxValueById("group_admin-checkbox", False)
+        self.assertCheckboxValueById("group_editor-checkbox", False)
+        self.assertCheckboxValueById("group_ank-checkbox", True)
 
         self.clickElementById("update_user")
 

@@ -23,7 +23,10 @@ function xcmst_draw_privileges($user, $mode = XDP_NORMAL)
         if ($mode == XDP_READONLY)
             $attrs .= " disabled=\"disabled\" ";
         if ($mode != XDP_COMPACT)
-            echo "<div><input $attrs type=\"checkbox\" name=\"group_$group\" id=\"group_$group\" />$title</div>\n";
+        {
+            $g = substr($group, 1);
+            echo "<div><input $attrs type=\"checkbox\" name=\"group_$g\" id=\"group_$g-checkbox\" />$title</div>\n";
+        }
         elseif ($belongs && ($group != '#all' && $group != '#registered'))
             echo "<span id=\"group_$group\">$group</span> ";
     }

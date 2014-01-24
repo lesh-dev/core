@@ -140,7 +140,8 @@
             $tu->set_param("name", $name);
             foreach (xcms_all_groups() as $group=>$title)
             {
-                if (@$_POST["group_$group"])
+                $g = substr($group, 1);
+                if (@$_POST["group_$g"])
                     $u->add_to_group($login, $group);
             }
         }
@@ -170,7 +171,8 @@
 
             foreach (xcms_all_groups() as $group=>$title)
             {
-                if (@$_POST["group_$group"])
+                $g = substr($group, 1);
+                if (@$_POST["group_$g"])
                     $u->add_to_group($user->login(), $group);
                 else
                     $u->remove_from_group($user->login(), $group);
