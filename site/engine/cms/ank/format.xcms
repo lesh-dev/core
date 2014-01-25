@@ -1,6 +1,8 @@
 <?php
 require_once("$engine_dir/sys/db.php");
 
+define('XSM_PHONE_SEPARATOR', ',&nbsp;&nbsp; ');
+
 /**
   * Replace \n by <br /> with respect to various systems line endings
   **/
@@ -207,7 +209,7 @@ function xsm_make_phone($phones_str)
             $phone = htmlspecialchars($phone);
         }
         if (xu_not_empty($result))
-            $result .= ",&nbsp;&nbsp;&nbsp;";
+            $result .= XSM_PHONE_SEPARATOR;
 
         $result .= "<span class=\"phone $class\" title=\"$hint\">$phone</span>";
     }
@@ -226,7 +228,7 @@ function xsm_format_person_phones($person)
         $all_phones[] = $cellular;
     if ($phone)
         $all_phones[] = $phone;
-    return implode(",&nbsp;&nbsp;&nbsp;", $all_phones);
+    return implode(XSM_PHONE_SEPARATOR, $all_phones);
 }
 
 function xsm_prepare_social_profile($social_profile)
