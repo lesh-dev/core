@@ -15,8 +15,8 @@
 <# cms/ank/format #>
 <table style="width: 100%"><tr><td class="main-field roundBorders"><div style="position: relative;">
 <?php
-    $ap = xcms_get_key_or($_GET, "aparam");
-    if ($ap == "root")
+    $aparam = xcms_get_key_or($_GET, "aparam");
+    if ($aparam == "root")
     {
         $url = $_SERVER["REQUEST_URI"];
         if (substr($url, strlen($url) - 4) == "/xsm")
@@ -24,17 +24,17 @@
             <meta http-equiv="refresh" content="0;URL=/<# web_prefix #>xsm/view" /><?php
         }
     }
-    elseif ($ap == "view")
+    elseif ($aparam == "view")
     {
         include(translate('<! cms/ank/menu !>'));
         include(translate('<! cms/ank/list-person !>'));
     }
-    else if (substr($ap, 0, 5) == "list-" ||
-        substr($ap, 0, 5) == "view-" ||
-        substr($ap, 0, 5) == "edit-")
+    else if (substr($aparam, 0, 5) == "list-" ||
+        substr($aparam, 0, 5) == "view-" ||
+        substr($aparam, 0, 5) == "edit-")
     {
         include(translate('<! cms/ank/menu !>'));
-        include(translate("<! cms/ank/$ap !>"));
+        include(translate("<! cms/ank/$aparam !>"));
     }?>
 </div></td></tr></table>
 </body>

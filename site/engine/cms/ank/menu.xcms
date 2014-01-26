@@ -5,6 +5,8 @@
 function xsm_menu_item($view, $aux_url, $title, $first = false)
 {
     global $web_prefix, $aparam;
+    if (xu_empty($aparam))
+        die("Variable 'aparam' is not set. Something is broken. ");
 
     $url = "$view";
     $aux_class = "";
