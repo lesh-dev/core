@@ -120,31 +120,13 @@ function xsm_show_all_person_list()
         $school = htmlspecialchars($person["school"]);
         $school_city = htmlspecialchars($person["school_city"]);
 
-        // Заготовка на будущее: подзапрос с прочими данными участника для попапов
-        /*$sub_query = "SELECT ".
-            "ps.is_teacher, ps.is_student, ps.curatorship, ps. p.person_id, p.last_name, p.first_name, p.phone, p.cellular, p.anketa_status ".
-            "FROM person p";*/
-
         $current_class = htmlspecialchars($person["current_class"]);
 
         $all_phones = xsm_format_person_phones($person);
 
         $is_teacher = $person["is_teacher"];
         $is_student = $person["is_student"];
-        //$curatorship = $person["curatorship"];
 
-        //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
-
-        //$person_created = xsm_ymdhm($person["person_created"]);
-        //$person_modified = xsm_ymdhm($person["person_modified"]);
-
-        /* TODO: enable
-        $person_school_created = xsm_ymdhm($person["person_school_created"]);
-        $person_school_modified = xsm_ymdhm($person["person_school_modified"]);
-
-        $hr_teacher = ($is_teacher == "teacher" ? "Препод, " : "");
-        $hr_student = ($is_student == "student" ? "Школьник, " : "");
-        */
         $row_class = xsm_get_city_class($school_city);
         $row_class .= " ".($is_teacher == "teacher" ? "teacher" : "");
         ?>
