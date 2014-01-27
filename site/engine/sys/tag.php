@@ -1,8 +1,4 @@
 <?php
-/**
-  * Makes checkbox checked attribute with proper generic value
-  **/
-
 require_once("${engine_dir}sys/string.php");
 
 /**
