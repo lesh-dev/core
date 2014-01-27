@@ -29,7 +29,8 @@ function xcmst_page_info($INFO, $pageid)
                 <tt><?php
                     echo htmlspecialchars(xcms_get_key_or($INFO, "menu-title", "<menu-title не задан>"));
                     $flags = "";
-                    $flags .= ((xcms_get_key_or($INFO, "menu-hidden", NO) == YES) ? "[Hid]" : "[Vis]");
+                    // default menu-hidden: false
+                    $flags .= (xcms_is_enabled_key($INFO, "menu-hidden", false) ? "[Hid]" : "[Vis]");
                     echo "<sup>$flags</sup>";
                 ?></tt></a>
             </span>

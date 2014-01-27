@@ -8,8 +8,8 @@ require_once("${engine_dir}sys/string.php");
   **/
 function xcms_checkbox_attr($val)
 {
-    $attr = ' value="'.YES.'" ';
-    if ($val == YES)
+    $attr = ' value="'.XU_YES.'" ';
+    if ($val == XU_YES)
         $attr .= ' checked="checked" ';
     return $attr;
 }
@@ -48,7 +48,7 @@ function xcmst_input_attrs_from_post($key, $placeholder = "")
 /**
   * Same as previous function, but for checkboxes
   **/
-function xcmst_checkbox_attrs_from_post($key, $def_value = NO)
+function xcmst_checkbox_attrs_from_post($key, $def_value = XU_NO)
 {
     $value = $def_value;
     if (array_key_exists($key, $_POST))

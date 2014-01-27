@@ -38,7 +38,7 @@
 
 <div>
     <span class="user-label"><?php
-    $chk_hidden = xcms_checkbox_attr(NO); ?>
+    $chk_hidden = xcms_checkbox_attr(XU_NO); ?>
     Скрытый раздел</span>
     <input type="checkbox" <?php echo $chk_hidden; ?>
         name="menu-hidden" id="menu-hidden-checkbox" />
@@ -46,7 +46,7 @@
 
 <div>
     <span class="user-label"><?php
-    $chk_global = xcms_checkbox_attr(NO); ?>
+    $chk_global = xcms_checkbox_attr(XU_NO); ?>
     Корневая страница</span>
     <input type="checkbox" <?php echo $chk_global; ?>
         name="global" id="global-checkbox" />

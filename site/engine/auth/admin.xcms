@@ -65,7 +65,7 @@
                 <input type="hidden" name="notify_user" id="notify_user-fake" value="" /><!--
                 prepend fake input with empty value to submit it as checkbox 'unchecked' value
                 See http://iamcam.wordpress.com/2008/01/15/unchecked-checkbox-values/ -->
-                <input type="checkbox" <?php xcmst_checkbox_attrs_from_post("notify_user", YES); ?> /></div>
+                <input type="checkbox" <?php xcmst_checkbox_attrs_from_post("notify_user", XU_YES); ?> /></div>
             <?php
             xcmst_draw_privileges(NULL);
             ?>

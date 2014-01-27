@@ -24,10 +24,10 @@
                 $text = htmlspecialchars($INFO["menu-title"]);
 
             // skip locked items in not-locked mode
-            if ($show == "not-locked" && xcms_get_key_or($INFO, "menu-locked") == YES)
+            if ($show == "not-locked" && xcms_is_enabled_key($INFO, "menu-locked"))
                 return;
 
-            if (xcms_get_key_or($INFO, "menu-hidden") == YES)
+            if (xcms_is_enabled_key($INFO, "menu-hidden", false))
             {
                 $aux_class .= "menuitem-hidden ";
                 $flags .= "H";
@@ -42,7 +42,7 @@
             if (!xcms_get_key_or($INFO, "menu-title")) // no title
                 return;
             // don't show hidden items
-            if (xcms_get_key_or($INFO, "menu-hidden") == YES)
+            if (xcms_is_enabled_key($INFO, "menu-hidden", false))
                 return;
             if (!$access_granted)
                 return;
@@ -100,7 +100,7 @@
             else
             {
                 $new_options = $options;
-                $new_options["stop"] = YES;
+                $new_options["stop"] = true;
                 xcms_menu($value, $MENUTEMPLATES, $menu_level+1, $add_href_params, $new_options, $start_level, $end_level);
             }
         }

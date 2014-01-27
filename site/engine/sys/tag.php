@@ -1,6 +1,36 @@
 <?php
 require_once("${engine_dir}sys/string.php");
 
+// TODO: rename to xkv_
+function xcms_set_bool_key(&$list, $key, $value)
+{
+    $list[$key] = xu_empty($value) ? XU_YES : XU_NO;
+}
+
+function xcms_enable_key(&$list, $key)
+{
+    $list[$key] = XU_YES;
+}
+
+function xcms_disable_key(&$list, $key)
+{
+    $list[$key] = XU_NO;
+}
+
+function xcms_is_enabled_key($list, $key, $default = false)
+{
+    if (!array_key_exists($key, $list))
+        return $default;
+    return ($list[$key] == XU_YES);
+}
+
+function xcms_is_disabled_key($list, $key, $default = false)
+{
+    if (!array_key_exists($key, $list))
+        return $default;
+    return ($list[$key] != XU_YES);
+}
+
 /**
   * Retrieves key-value-stored list from file
   * @param file file name to read from

@@ -1,5 +1,5 @@
 <?php
     $LIST["installed"] = "ok";
-    $LIST["immediate"] = NO;
-    $LIST["menu-locked"] = YES;
+    xcms_disable_key($LIST, "immediate");
+    xcms_enable_key($LIST, "menu-locked");
 ?>

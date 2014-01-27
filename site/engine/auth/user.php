@@ -11,7 +11,7 @@ function xcms_console_create_user($params)
     $name = xcms_get_key_or($params, "name");
 
     $groups = explode(EXP_COM, xcms_get_key_or($params, "groups"));
-    $notify = (xcms_get_key_or($params, $notify, YES) == NO);
+    $notify = xcms_is_enabled_key($params, "notify", true);
 
     $su->create($login, $email);
     foreach ($groups as $group)
