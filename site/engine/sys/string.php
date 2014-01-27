@@ -15,6 +15,9 @@ define('EXP_COL', ':');
 define('EXP_PIPE', '|');
 define('EXP_COM', ',');
 
+define('YES', "yes");
+define('NO', "no");
+
 /**
   * PHP 'empty' function replacement
   **/

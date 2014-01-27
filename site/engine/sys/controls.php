@@ -1,7 +1,6 @@
 <?php
 
-define('YES', "yes");
-define('NO', "no");
+require_once("${engine_dir}sys/string.php");
 
 /**
   * Return proper checkbox attributes
