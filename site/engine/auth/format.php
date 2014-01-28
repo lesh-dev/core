@@ -33,8 +33,7 @@ function xcmst_draw_privileges($user, $mode = XDP_NORMAL)
 }
 
 /**
-  * See also sys/tag.php for xcmst_input_attrs_from_post,
-  * it is almost a copy specialized for user
+  * TODO: refactor using sys/controls.php xcmst_control
   **/
 function xcmst_input_attrs_from_user($user, $key, $read_only = false, $placeholder = "")
 {
