@@ -49,18 +49,19 @@
         ?>
         <form method="post" action="?<?php echo $preface; ?>" >
             <h3>Учётные данные</h3>
-            <div><span class="user-label">Логин</span> <input <?php xcmst_input_attrs_from_post("login", "vasya-pupkin"); ?> /></div>
+            <div><span class="user-label">Логин</span><?php
+                xcmst_control_admin("login", XCMS_FROM_POST, "vasya-pupkin"); ?></div>
             <div><span class="user-help-label">Разрешены латинские буквы, цифры,
                 а также дефис (-), подчёркивание (_), точка (.) и собака (@)</span></div>
-            <div><span class="user-label">Пароль</span>
-                <input type="password" <?php xcmst_input_attrs_from_post("password", 'Sup3r-P@ssw0rd'); ?>/></div>
+            <div><span class="user-label">Пароль</span><?php
+                xcmst_control_admin("password", XCMS_FROM_POST, 'Sup3r-P@ssw0rd', "password"); ?></div>
             <div><span class="user-help-label">Если не указан, будет сгенерирован автоматически</span></div>
-            <div><span class="user-label">Пароль (ещё раз)</span>
-                <input type="password" <?php xcmst_input_attrs_from_post("password_confirm"); ?> /></div>
-            <div><span class="user-label">Настоящее имя</span>
-                <input <?php xcmst_input_attrs_from_post("name", "Вася Пупкин"); ?> /></div>
-            <div><span class="user-label">EMail</span>
-                <input <?php xcmst_input_attrs_from_post("email", "user@example.com"); ?> /></div>
+            <div><span class="user-label">Пароль (ещё раз)</span><?php
+                xcmst_control_admin("password_confirm", XCMS_FROM_POST, '', "password"); ?></div>
+            <div><span class="user-label">Настоящее имя</span><?php
+                xcmst_control_admin("name", XCMS_FROM_POST, "Вася Пупкин"); ?></div>
+            <div><span class="user-label">EMail</span><?php
+                xcmst_control_admin("email", XCMS_FROM_POST, "user@example.com"); ?></div>
             <div><span class="user-label">Оповестить пользователя</span>
                 <input type="hidden" name="notify_user" id="notify_user-fake" value="" /><!--
                 prepend fake input with empty value to submit it as checkbox 'unchecked' value

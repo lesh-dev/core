@@ -66,18 +66,6 @@ function xcmst_control_admin($name, $value, $placeholder, $type = "text")
     xcmst_control($name, $value, $placeholder, "admin-medium", $type);
 }
 
-/** Generic text input attributes generator
-  * including value taken from POST request
-  **/
-function xcmst_input_attrs_from_post($key, $placeholder = "")
-{
-    $attrs = "class=\"admin-medium\" id=\"$key-input\" name=\"$key\" value=\"".
-        htmlspecialchars(xcms_get_key_or($_POST, $key))."\"";
-    if (xu_not_empty($placeholder))
-        $attrs .= " placeholder=\"".htmlspecialchars($placeholder)."\" ";
-    echo $attrs;
-}
-
 /**
   * Same as previous function, but for checkboxes
   **/
