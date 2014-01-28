@@ -2,6 +2,9 @@
 
 require_once("${engine_dir}sys/string.php");
 
+define('XCMS_FROM_POST', '{{{XCMS_FROM_POST}}}');
+define('XCMS_FROM_GET', '{{{XCMS_FROM_GET}}}');
+
 /**
   * Return proper checkbox attributes
   * for KV storage item
@@ -16,6 +19,7 @@ function xcms_checkbox_attr($val)
 
 /**
   * Generic checkbox generator. Has derivatives in XSM
+  * TODO: translate to template
   **/
 function xcms_make_checkbox($name, $value, $checked_value, $class)
 {
@@ -32,6 +36,35 @@ function xcms_make_checkbox($name, $value, $checked_value, $class)
     return $html;
 }
 
+/**
+  * Render generic text control
+  * TODO: Add textarea support here
+  **/
+function xcmst_control($name, $value, $placeholder, $class, $type = "text")
+{
+    if ($value === XCMS_FROM_POST)
+        $value = xcms_get_key_or($_POST, $name);
+    elseif ($value === XCMS_FROM_GET)
+        $value = xcms_get_key_or($_GET, $name);
+
+    $value = htmlspecialchars($value);
+    $placeholder = htmlspecialchars($placeholder);
+
+    $attrs = "";
+    if (xu_not_empty($placeholder))
+        $attrs .= " placeholder=\"$placeholder\" ";
+
+    echo "<input type=\"$type\" name=\"$name\" id=\"$name-input\" ".
+        "value=\"$value\" class=\"$class\" $attrs />";
+}
+
+/**
+  * Specialization for admin-tools
+  **/
+function xcmst_control_admin($name, $value, $placeholder, $type = "text")
+{
+    xcmst_control($name, $value, $placeholder, "admin-medium", $type);
+}
 
 /** Generic text input attributes generator
   * including value taken from POST request

@@ -9,14 +9,14 @@
 
 <div>
     <span class="user-label">Физическое имя</span>
-    <input <?php xcmst_input_attrs_from_post('create-name', 'page-path'); ?> />
+    <?php xcmst_control_admin('create-name', XCMS_FROM_POST, 'page-path'); ?>
 </div>
 <div class="user-descr">Выберите удобочитаемое имя без пробелов.
     Например, <b>school-courses</b></div>
 
 <div>
     <span class="user-label">Alias</span>
-    <input <?php xcmst_input_attrs_from_post("alias", "section/page-alias");?> />
+    <?php xcmst_control_admin("alias", XCMS_FROM_POST, "section/page-alias"); ?>
 </div>
 
 <div class="user-descr">URL, по которому будет доступна страница, с учётом иерархии.
@@ -54,13 +54,13 @@
 
 <div>
     <span class="user-label">Имя в меню</span>
-    <input <?php xcmst_input_attrs_from_post("menu-title", "Имя в меню"); ?> />
+    <?php xcmst_control_admin("menu-title", XCMS_FROM_POST, "Имя в меню"); ?>
 </div>
 <div class="user-descr">Этот текст появится в меню и title браузера</div>
 
 <div>
     <span class="user-label">Заголовок</span>
-    <input <?php xcmst_input_attrs_from_post("header", "Заголовок"); ?> />
+    <?php xcmst_control_admin("header", XCMS_FROM_POST, "Заголовок"); ?>
 </div>
 <div class="user-descr">Этот текст появится наверху страницы</div>
 
