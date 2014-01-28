@@ -105,13 +105,13 @@ function xcms_draw_contlist_create($result = true)
     <table>
         <tr>
             <td>Служебное имя</td>
-            <td><input <?php echo xcmst_input_attrs_from_post("name-suffix",
-                "new-info-block"); ?> /></td>
+            <td><?php xcmst_control_admin("name-suffix", XCMS_FROM_POST,
+                "new-info-block"); ?></td>
         </tr>
         <tr>
             <td>Заголовок</td>
-            <td><input <?php echo xcmst_input_attrs_from_post("header",
-                "Это заголовок новости, напишите его!"); ?> /></td>
+            <td><?php xcmst_control_admin("header", XCMS_FROM_POST,
+                "Это заголовок новости, напишите его!"); ?></td>
         </tr>
         <tr>
             <td>Тип блока</td>
