@@ -62,11 +62,8 @@
                 xcmst_control_admin("name", XCMS_FROM_POST, "Вася Пупкин"); ?></div>
             <div><span class="user-label">EMail</span><?php
                 xcmst_control_admin("email", XCMS_FROM_POST, "user@example.com"); ?></div>
-            <div><span class="user-label">Оповестить пользователя</span>
-                <input type="hidden" name="notify_user" id="notify_user-fake" value="" /><!--
-                prepend fake input with empty value to submit it as checkbox 'unchecked' value
-                See http://iamcam.wordpress.com/2008/01/15/unchecked-checkbox-values/ -->
-                <input type="checkbox" <?php xcmst_checkbox_attrs_from_post("notify_user", XU_YES); ?> /></div>
+            <div><?php xcmst_control_admin("notify_user", XCMS_FROM_POST, "", "checkbox", "", XCMS_CHECKBOX_ENABLED);
+                ?><span class="user-label">Оповестить пользователя</span></div>
             <?php
             xcmst_draw_privileges(NULL);
             ?>

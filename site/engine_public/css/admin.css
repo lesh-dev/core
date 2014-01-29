@@ -133,6 +133,10 @@ input.admin-medium {
     width: 300px;
 }
 
+input.admin-medium.checkbox {
+    width: auto;
+}
+
 input.admin-long {
     width: 700px;
 }

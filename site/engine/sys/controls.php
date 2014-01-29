@@ -4,6 +4,8 @@ require_once("${engine_dir}sys/string.php");
 
 define('XCMS_FROM_POST', '{{{XCMS_FROM_POST}}}');
 define('XCMS_FROM_GET', '{{{XCMS_FROM_GET}}}');
+define('XCMS_CHECKBOX_ENABLED', 'enabled');
+define('XCMS_CHECKBOX_DISABLED', '');
 
 /**
   * Return proper checkbox attributes
@@ -47,12 +49,12 @@ function xcms_make_checkbox($name, $value, $checked_value, $class)
   *     text:     textarea field (TODO: not supported it)
   *     checkbox:
   **/
-function xcmst_control($name, $value, $placeholder, $class, $type = "input", $title = "")
+function xcmst_control($name, $value, $placeholder, $class, $type = "input", $title = "", $def_value = "")
 {
     if ($value === XCMS_FROM_POST)
-        $value = xcms_get_key_or($_POST, $name);
+        $value = xcms_get_key_or($_POST, $name, $def_value);
     elseif ($value === XCMS_FROM_GET)
-        $value = xcms_get_key_or($_GET, $name);
+        $value = xcms_get_key_or($_GET, $name, $def_value);
 
     $value = htmlspecialchars($value);
     $placeholder = htmlspecialchars($placeholder);
@@ -93,9 +95,9 @@ function xcmst_control($name, $value, $placeholder, $class, $type = "input", $ti
 /**
   * Specialization for admin-tools
   **/
-function xcmst_control_admin($name, $value, $placeholder, $type = "text")
+function xcmst_control_admin($name, $value, $placeholder, $type = "input", $title = "", $def_value = "")
 {
-    xcmst_control($name, $value, $placeholder, "admin-medium", $type);
+    xcmst_control($name, $value, $placeholder, "admin-medium", $type, $title, $def_value);
 }
 
 /**
