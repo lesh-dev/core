@@ -51,10 +51,10 @@ function xsm_show_all_person_list()
     $db->createFunction('LIKE', 'xdb_like', 2);
 
     $cond = "(1 = 1)";
-    if ($show_is_teacher == "teacher")
+    if (xcms_checkbox_enabled($show_is_teacher))
         $cond .= " AND ( is_teacher = 'teacher' )";
 
-    if ($show_is_student == "student")
+    if (xcms_checkbox_enabled($show_is_student))
         $cond .= " AND ( is_student = 'student' )";
 
     if ($show_anketa_status == "active")

@@ -17,18 +17,21 @@ function xcms_checkbox_attr($val)
     return $attr;
 }
 
+function xcms_checkbox_enabled($value)
+{
+    return xu_not_empty($value);
+}
+
 /**
   * Generic checkbox generator. Has derivatives in XSM
   * TODO: translate to template
   **/
 function xcms_make_checkbox($name, $value, $checked_value, $class)
 {
-    if (xu_not_empty($value))
+    if (xcms_checkbox_enabled($value))
         $checked = 'checked="checked"';
     else
         $checked = '';
-    // prepend fake input with empty value to submit it as checkbox 'unchecked' value
-    // See http://iamcam.wordpress.com/2008/01/15/unchecked-checkbox-values/
     $html =
         "<input type=\"hidden\" name=\"$name\" value=\"\"/>".
         "<input class=\"$class checkbox\" type=\"checkbox\" name=\"$name\" ".
@@ -38,9 +41,13 @@ function xcms_make_checkbox($name, $value, $checked_value, $class)
 
 /**
   * Render generic text control
-  * TODO: Add textarea support here
+  * Valid types:
+  *     input :   generic input field
+  *     password: password field
+  *     text:     textarea field (TODO: not supported it)
+  *     checkbox:
   **/
-function xcmst_control($name, $value, $placeholder, $class, $type = "text")
+function xcmst_control($name, $value, $placeholder, $class, $type = "input", $title = "")
 {
     if ($value === XCMS_FROM_POST)
         $value = xcms_get_key_or($_POST, $name);
@@ -49,13 +56,38 @@ function xcmst_control($name, $value, $placeholder, $class, $type = "text")
 
     $value = htmlspecialchars($value);
     $placeholder = htmlspecialchars($placeholder);
+    $title = htmlspecialchars($title);
+
+    $type_attr = $type;
+    if ($type == "input")
+        $type_attr = "text";
 
     $attrs = "";
     if (xu_not_empty($placeholder))
         $attrs .= " placeholder=\"$placeholder\" ";
+    if (xu_not_empty($title))
+        $attrs .= " title=\"$title\" ";
 
-    echo "<input type=\"$type\" name=\"$name\" id=\"$name-input\" ".
-        "value=\"$value\" class=\"$class\" $attrs />";
+    if ($type == "input" || $type == "password")
+    {
+        echo "<input type=\"$type_attr\" name=\"$name\" id=\"$name-input\" ".
+            "value=\"$value\" class=\"$class\" $attrs />";
+    }
+    elseif ($type == "checkbox")
+    {
+        if (xcms_checkbox_enabled($value))
+            $attrs .= " checked=\"checked\" ";
+        $value = $name;
+        // prepend fake input with empty value to submit it as checkbox 'unchecked' value
+        // See http://iamcam.wordpress.com/2008/01/15/unchecked-checkbox-values/
+        echo "<input type=\"hidden\" name=\"$name\" value=\"\"/>".
+            "<input type=\"$type_attr\" name=\"$name\" id=\"$name-$type\" ".
+            "value=\"$value\" class=\"$class checkbox\" $attrs />";
+    }
+    else
+    {
+        echo "Not supported yet. ";
+    }
 }
 
 /**
