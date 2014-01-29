@@ -82,7 +82,7 @@ function xsm_edit_person_school()
                 $ft = xcms_get_key_or($field_types, $key);
                 if ($ft == "checkbox")
                 {
-                    echo xsm_make_checkbox($key, $value, substr($key, 3));
+                    xsm_checkbox($key, $value);
                 }
                 elseif ($ft == "enum")
                 {

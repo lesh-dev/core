@@ -351,9 +351,8 @@ function xsm_make_enum_selector($name, $value, $items)
     return $html;
 }
 
-function xsm_make_checkbox($name, $value, $checked_value)
+function xsm_checkbox($name, $value)
 {
     xcmst_control($name, $value, "", "ankEdit", "checkbox", "");
-    return "";
 }
 ?>

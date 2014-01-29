@@ -199,10 +199,7 @@ function xsm_edit_exam()
                         id="<?php echo $key;?>-text"><?php
                         echo htmlspecialchars($value); ?></textarea><?php
                 } elseif ($ft == "checkbox") {
-                    // КОСТЫЛЬ! checkbox-овое поле должно начинаться со слова 'is_'
-                    // и его "установленное" значение (true) соответствует
-                    // остатку названия ключа без префикса 'is_'
-                    echo xsm_make_checkbox($key, $value, substr($key, 3));
+                    xsm_checkbox($key, $value);
                 } elseif ($ft == "enum") {
                     echo xsm_make_enum_by_type($key, $value, $key);
                 } elseif ($key == 'student_person_id')
