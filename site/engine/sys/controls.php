@@ -99,16 +99,3 @@ function xcmst_control_admin($name, $value, $placeholder, $type = "input", $titl
 {
     xcmst_control($name, $value, $placeholder, "admin-medium", $type, $title, $def_value);
 }
-
-/**
-  * Same as previous function, but for checkboxes
-  **/
-function xcmst_checkbox_attrs_from_post($key, $def_value = XU_NO)
-{
-    $value = $def_value;
-    if (array_key_exists($key, $_POST))
-        $value = $_POST[$key];
-
-    echo "id=\"$key-checkbox\" name=\"$key\" ".
-        xcms_checkbox_attr($value);
-}
