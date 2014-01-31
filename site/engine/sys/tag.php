@@ -1,12 +1,6 @@
 <?php
 require_once("${engine_dir}sys/string.php");
 
-// TODO: rename to xkv_
-function xcms_set_bool_key(&$list, $key, $value)
-{
-    $list[$key] = xu_empty($value) ? XU_YES : XU_NO;
-}
-
 function xcms_enable_key(&$list, $key)
 {
     $list[$key] = XU_YES;

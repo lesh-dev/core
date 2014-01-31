@@ -13,8 +13,8 @@
             xcms_write("{$SETTINGS["content_dir"]}cms/pages/$pageid/ftype", @$_FILES["upload"]["type"]);
             xcms_write("{$SETTINGS["content_dir"]}cms/pages/$pageid/fname", @$_FILES["upload"]["name"]);
             copy(@$_FILES["upload"]["tmp_name"], "{$SETTINGS["content_dir"]}cms/pages/$pageid/stream");
-            xcms_set_bool_key($INFO, "menu-locked", @$_POST["menu-lock-section"]);
-            xcms_set_bool_key($INFO, "immediate", @$_POST["immediate-file"]);
+            xcms_set_key_from_checkbox($INFO, "menu-locked", @$_POST["menu-lock-section"]);
+            xcms_set_key_from_checkbox($INFO, "immediate", @$_POST["immediate-file"]);
             xcms_save_list(xcms_get_info_file_name(), $INFO);
         }
     }
@@ -26,12 +26,17 @@
     }
 ?>
 <h3>Загрузка</h3>
-<form method="POST" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
     <table>
-        <tr><td>Немедленная загрузка</td><td><input type="checkbox" name="immediate-file" /></td></tr>
-        <tr><td>Не показывать в меню</td><td><input type="checkbox" name="menu-lock-section" checked="checked"/></td></tr>
+        <tr>
+            <td>Немедленная загрузка</td>
+            <td><?php xcmst_control("immediate-file", XCMS_CHECKBOX_DISABLED, "", "", "checkbox"); ?></td>
+        </tr>
+        <tr>
+            <td>Не показывать в меню</td>
+            <td><?php xcmst_control("menu-lock-section", XCMS_CHECKBOX_ENABLED, "", "", "checkbox"); ?></td>
+        </tr>
     </table>
-    <br />
     <input type="file" name="upload" />
     <input type="submit" />
 </form>

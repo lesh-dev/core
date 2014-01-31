@@ -1,23 +1,12 @@
 <?php
 
 require_once("${engine_dir}sys/string.php");
+require_once("${engine_dir}sys/tag.php");
 
 define('XCMS_FROM_POST', '{{{XCMS_FROM_POST}}}');
 define('XCMS_FROM_GET', '{{{XCMS_FROM_GET}}}');
 define('XCMS_CHECKBOX_ENABLED', 'enabled');
 define('XCMS_CHECKBOX_DISABLED', '');
-
-/**
-  * Return proper checkbox attributes
-  * for KV storage item
-  **/
-function xcms_checkbox_attr($val)
-{
-    $attr = ' value="'.XU_YES.'" ';
-    if ($val == XU_YES)
-        $attr .= ' checked="checked" ';
-    return $attr;
-}
 
 function xcms_checkbox_enabled($value)
 {
@@ -25,21 +14,23 @@ function xcms_checkbox_enabled($value)
 }
 
 /**
-  * Generic checkbox generator. Has derivatives in XSM
-  * TODO: translate to template
+  * Connector between checkbox values and key-value storage:
+  * Set KV-item from checkbox
   **/
-function xcms_make_checkbox($name, $value, $checked_value, $class)
+function xcms_set_key_from_checkbox(&$list, $key, $value)
 {
-    if (xcms_checkbox_enabled($value))
-        $checked = 'checked="checked"';
-    else
-        $checked = '';
-    $html =
-        "<input type=\"hidden\" name=\"$name\" value=\"\"/>".
-        "<input class=\"$class checkbox\" type=\"checkbox\" name=\"$name\" ".
-            "id=\"$name-checkbox\" value=\"$checked_value\" $checked />";
-    return $html;
+    $list[$key] = xcms_checkbox_enabled($value) ? XU_YES : XU_NO;
 }
+/**
+  * Connector between key-value storage and checkbox values.
+  * Set checkbox value from KV-item.
+  **/
+function xcms_get_key_for_checkbox($list, $key)
+{
+    $bool_value = xcms_is_enabled_key($list, $key);
+    return $bool_value ? XCMS_CHECKBOX_ENABLED : XCMS_CHECKBOX_DISABLED;
+}
+
 
 /**
   * Render generic text control
