@@ -23,7 +23,7 @@ define('XU_NO', "no");
   **/
 function xu_empty($string)
 {
-    return !strlen($string);
+    return strlen($string) == 0;
 }
 
 /**
@@ -31,7 +31,7 @@ function xu_empty($string)
   **/
 function xu_not_empty($string)
 {
-    return strlen($string);
+    return strlen($string) > 0;
 }
 
 /**
