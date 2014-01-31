@@ -37,19 +37,13 @@
 ?></select></div>
 
 <div>
-    <span class="user-label"><?php
-    $chk_hidden = xcms_checkbox_attr(XU_NO); ?>
-    Скрытый раздел</span>
-    <input type="checkbox" <?php echo $chk_hidden; ?>
-        name="menu-hidden" id="menu-hidden-checkbox" />
+    <span class="user-label">Скрытый раздел</span>
+    <?php xcmst_control_admin("menu-hidden", XCMS_FROM_POST, '', "checkbox"); ?>
 </div>
 
 <div>
-    <span class="user-label"><?php
-    $chk_global = xcms_checkbox_attr(XU_NO); ?>
-    Корневая страница</span>
-    <input type="checkbox" <?php echo $chk_global; ?>
-        name="global" id="global-checkbox" />
+    <span class="user-label">Корневая страница</span>
+    <?php xcmst_control_admin("global", XCMS_FROM_POST, '', "checkbox"); ?>
 </div>
 
 <div>
