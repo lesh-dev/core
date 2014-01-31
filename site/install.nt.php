@@ -14,6 +14,7 @@
     $engine_dir = "engine/"; // some initial hardcode. TODO: make autodetection
     require_once("${engine_dir}sys/string.php");
     require_once("${engine_dir}sys/tag.php");
+    require_once("${engine_dir}sys/controls.php");
     require_once("${engine_dir}sys/logger.php");
     require_once("${engine_dir}sys/file.php");
     require_once("${engine_dir}sys/util.php");
@@ -117,14 +118,19 @@
                     $type = "string";
                 $def = @$v["default"];
                 $typehack = "";
-                if($type == "bool" || $type == "boolean")
+                if ($type == "bool" || $type == "boolean")
                 {
                     $typehack = "type=\"checkbox\"";
-                    if($def == "true") $typehack .= " checked";
+                    if ($def == "true")
+                        $typehack .= ' checked="checked"';
                 }
-                if($type == "password") $typehack = "type=\"password\"";
-                echo "<tr><td class=\"key\">$name</td>".
-                    "<td><input $typehack name=\"$variable\" id=\"$variable\" value=\"$def\" /></td></tr>\n";
+                if ($type == "password")
+                    $typehack = "type=\"password\"";
+                echo "<tr><td class=\"key\">$name</td><td>";
+                // checkbox hack
+                if ($type == "bool" || $type == "boolean")
+                    echo "<input type=\"hidden\" name=\"$variable\" value=\"\" />";
+                echo "<input $typehack name=\"$variable\" id=\"$variable\" value=\"$def\" /></td></tr>\n";
             }
         }
         ?>
