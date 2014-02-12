@@ -64,24 +64,24 @@
                     <?php
                     if (xcms_user()->check_rights("ank", false))
                     {
-                        include(translate('<a href="/<# web_prefix #>register/list-ank'.
+                        include(translate('<a href="/<# web_prefix #>xsm/list-ank'.
                             '" class="menu-item menu-sys">Анкеты</a>'));
 
-                        include(translate('<a href="/<# web_prefix #>register/list-person-locator'.
+                        include(translate('<a href="/<# web_prefix #>xsm/list-person-locator'.
                             xcms_url(array('show_anketa_status'=>'all')).
                             '" class="menu-item menu-sys">Все люди</a>'));
 
-                        include(translate('<a href="/<# web_prefix #>register/list-tour'.
+                        include(translate('<a href="/<# web_prefix #>xsm/list-tour'.
                             '" class="menu-item menu-sys">Выходы в лес</a>'));
 
-                        include(translate('<a href="/<# web_prefix #>register/list-person-locator'.
+                        include(translate('<a href="/<# web_prefix #>xsm/list-person-locator'.
                             xcms_url(array('show_anketa_status'=>'active')).
                             '" class="menu-item menu-sys">Актив отделения</a>'));
 
-                        include(translate('<a href="/<# web_prefix #>register/list-person'.
+                        include(translate('<a href="/<# web_prefix #>xsm/list-person'.
                             '" class="menu-item menu-sys">Участники школ</a>'));
 
-                        include(translate('<a href="/<# web_prefix #>register/list-course'.
+                        include(translate('<a href="/<# web_prefix #>xsm/list-course'.
                             '" class="menu-item menu-sys">Курсы</a>'));
 
                         include(translate('<a href="/<# web_prefix #>?'.
