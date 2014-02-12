@@ -14,26 +14,6 @@
 </head>
 <body>
     <div id="fullHeight">
-        <?php
-
-        if (xcms_user()->check_rights("admin", false)) {?>
-        <a title="Админка"
-            href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>"
-            class="top-icon" style="top: 16px; right: 13px; height: 16px; width: 16px;
-            background-image: url('<?php echo $full_engine_pub; ?>img/key.png');">&nbsp;</a><?php
-        }
-        if (xcms_user()->check_rights("ank", false)) {?>
-        <a title="XSM" href="<?php echo $meta_site_url_secure; ?>xsm"
-            class="top-icon" style="top: 9px; right: 36px; height: 32px; width: 32px;
-            background-image: url('<?php echo $full_engine_pub; ?>img/study.png');">&nbsp;</a><?php
-        }
-
-        if (xcms_user()->check_rights("registered", false)) {?>
-        <a title="Личный кабинет" href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'cabinet')); ?>"
-            class="top-icon" style="top: 13px; right: 77px; height: 24px; width: 24px;
-            background-image: url('<?php echo $full_engine_pub; ?>img/cabinet.png');">&nbsp;</a><?php
-        }
-        ?>
         <table class="topTable roundBorders">
             <tr>
                 <td class="logoCell menuWidth">
@@ -50,6 +30,25 @@
                             src="<# full_design_dir #>pic/lesh-subheader-wood.png"
                             width="400" height="30"
                             alt="Летняя Экологическая Школа"/></a>
+                        <?php
+                        if (xcms_user()->check_rights("admin", false)) {?>
+                        <a title="Админка"
+                            href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>"
+                            class="top-icon" style="top: -11px; right: 8px; height: 16px; width: 16px;
+                            background-image: url('<?php echo $full_engine_pub; ?>img/key.png');">&nbsp;</a><?php
+                        }
+                        if (xcms_user()->check_rights("ank", false)) {?>
+                        <a title="XSM" href="<?php echo $meta_site_url_secure; ?>xsm"
+                            class="top-icon" style="top: -18px; right: 31px; height: 32px; width: 32px;
+                            background-image: url('<?php echo $full_engine_pub; ?>img/study.png');">&nbsp;</a><?php
+                        }
+
+                        if (xcms_user()->check_rights("registered", false)) {?>
+                        <a title="Личный кабинет" href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'cabinet')); ?>"
+                            class="top-icon" style="top: -14px; right: 72px; height: 24px; width: 24px;
+                            background-image: url('<?php echo $full_engine_pub; ?>img/cabinet.png');">&nbsp;</a><?php
+                        }
+                        ?>
                     </div>
                 </td>
             </tr>
