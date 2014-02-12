@@ -210,10 +210,10 @@ $XSM_ENUMS = array(
     // Статус выхода в лес
     "forest_status"=>array(
         "values"=>array(
-            "undef"=>"Не задано",
+            "undef"=>"&mdash;",
             "notable"=>"Не может",
             "no"=>"Не идёт",
-            "maybe"=>"Под ?",
+            "maybe"=>"ХЗ",
             "able"=>"Может",
             "yes"=>"Идёт"),
         "default"=>"undef"),
