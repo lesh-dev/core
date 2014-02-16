@@ -7,11 +7,8 @@
 
     $u = xcms_user();
     $target_user = xcms_get_key_or($_GET, "user");
-    if (@$_POST["create_user"])
-    {
-        // switch to user modification form
-        $target_user = $_POST["login"];
-    }
+    if (xu_empty($target_user))
+        $target_user = xcms_get_key_or($_POST, "login");
 
     function xcmst_draw_user_list($u, $target_user)
     {
@@ -102,6 +99,7 @@
         }
         else
         {?>
+            <input name="login" type="hidden" value="<?php echo htmlspecialchars($target_user); ?>"/>
             <input name="update_user" id="update_user" value="Обновить данные пользователя" type="submit" />
             <input name="check_delete_user" id="check_delete_user" value="Удалить пользователя"
                 type="submit" class="delete"/><?php
