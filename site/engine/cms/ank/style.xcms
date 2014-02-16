@@ -1,1 +1,2 @@
 <link rel="stylesheet" type="text/css" href="<# full_design_dir #>ank-manage.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $full_engine_pub; ?>css/xsm.css" />

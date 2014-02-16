@@ -1,0 +1,11 @@
+
+a.xsm-close {
+    display: inline-block;
+    position: absolute;
+    top: -13px;
+    right: -11px;
+    width: 16px;
+    height: 16px;
+    background-image: url('../img/close.png');
+    background-repeat: no-repeat;
+}

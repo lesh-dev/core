@@ -14,6 +14,7 @@
 <# cms/ank/db-actions #>
 <# cms/ank/format #>
 <table style="width: 100%"><tr><td class="main-field roundBorders"><div style="position: relative;">
+<a class="xsm-close" href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'index')); ?>">&nbsp;</a>
 <?php
     $aparam = xcms_get_key_or($_GET, "aparam");
     if ($aparam == "root")
