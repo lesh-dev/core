@@ -56,7 +56,7 @@ function xsm_edit_school()
 if (@$_POST["update-school"])
     xsm_update_entity_listmode('school', 'Школа', xsm_get_school_fields());
 elseif (@$_POST["delete-school"])
-    xsm_warn_delete_entity_listmode('school', 'school', 'школу');
+    xsm_warn_delete_entity_listmode('school', 'школу');
 elseif (@$_POST["confirm-delete-school"])
     xsm_delete_entity_listmode('school', 'school', 'Школа');
 else

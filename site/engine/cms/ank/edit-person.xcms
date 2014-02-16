@@ -102,7 +102,7 @@ if (@$_POST["update-person"])
     }
 }
 elseif (@$_POST["delete-person"])
-    xsm_warn_delete_entity_listmode('person', 'person', 'участника');
+    xsm_warn_delete_entity_listmode('person', 'участника');
 elseif (@$_POST["confirm-delete-person"])
     xsm_delete_entity_listmode('person', 'person', 'Участник');
 else

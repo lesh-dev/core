@@ -143,7 +143,7 @@ elseif (@$_POST["delete-course"])
 {
     $school_id = xcms_get_key_or($_POST, 'school_id', '-1');
     $aux_param = xcms_url(array('school_id'=>$school_id));
-    xsm_warn_delete_entity_listmode('course', 'course', 'курс', $aux_param);
+    xsm_warn_delete_entity_listmode('course', 'курс', $aux_param);
 }
 elseif (@$_POST["confirm-delete-course"])
 {

@@ -52,7 +52,7 @@ function xsm_edit_department()
 if (@$_POST["update-department"])
     xsm_update_entity_listmode('department', 'Отделение', xsm_get_department_fields());
 elseif (@$_POST["delete-department"])
-    xsm_warn_delete_entity_listmode('department', 'department', 'отделение');
+    xsm_warn_delete_entity_listmode('department', 'отделение');
 elseif (@$_POST["confirm-delete-department"])
     xsm_delete_entity_listmode('department', 'department', 'Отделение');
 else
