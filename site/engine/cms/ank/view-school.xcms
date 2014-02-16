@@ -18,7 +18,7 @@ function xsm_print_school()
         $school_modified = xsm_ymdhm($school["school_modified"]);
         ?>
         <tr>
-            <td class="ankListRowTitle">Отделение <b><?php echo $school_title; ?></b>
+            <td class="ankListRowTitle">Школа <b><?php echo $school_title; ?></b>
                 <span style="float: right"><?php
                 xsm_edit_delete_info('school', 'school', $school_id, $school_created, $school_modified); ?>
                 </span>
