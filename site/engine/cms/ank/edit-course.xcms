@@ -150,7 +150,7 @@ elseif (@$_POST["confirm-delete-course"])
     // TODO: delete links?
     $school_id = xcms_get_key_or($_GET, 'school_id', '-1');
     $aux_param = xcms_url(array('school_id'=>$school_id));
-    xsm_delete_entity_listmode('course', 'course', 'Курс', $aux_param);
+    xsm_delete_entity_listmode('course', 'Курс', $aux_param);
 }
 else
     xsm_edit_course();
