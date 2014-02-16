@@ -10,6 +10,10 @@ mkdir -p $PUBLISH_REALM
 declare -A PUBLISH_DESCRIPTIONS
 declare -A RECEIPE_DESCRIPTIONS
 
+function print_warning() {
+    echo -e "\033[33mWarning:\x1b[0m $@"
+}
+
 if [ -f $CONFIGFILE ]; then
     source $CONFIGFILE
     echo "Loaded publish.conf from '$CONFIGFILE'"
@@ -17,17 +21,16 @@ elif [ -f $GCONFIGFILE ]; then
     cp $GCONFIGFILE $CONFIGFILE
     source $CONFIGFILE
     echo "Used global publish.conf at '$GCONFIGFILE'"
-    echo "and copied it to local storage for futher ops"
+    echo "and copied it to local storage for further ops"
 else
-    echo "Can't file '$CONFIGFILE'"
-    echo "or '$GCONFIGFILE'."
+    print_warning "No configuration files loaded yet ('$CONFIGFILE' or '$GCONFIGFILE')"
 fi
 
 REALM_CONFIG=$PUBLISH_REALM/realm.conf
 if [ -f  $REALM_CONFIG ]; then
     source $REALM_CONFIG
 else
-    echo "Can't find realm config file. Empty one was created."
+    print_warning "Cannot find realm config file. Empty one was created at '$REALM_CONFIG'"
     touch $REALM_CONFIG
     exit 0
 fi
@@ -35,18 +38,19 @@ fi
 function do_help()
 {
     TAB="\\r\\t\\t\\t"
-    if [ -n "RECEIPE_LIST" ] ; then
-        echo "Commands are:"
+    SP="    "
+    if [ -n "$RECEIPE_LIST" ] ; then
+        echo "Receipe commands are:"
         for var in $RECEIPE_LIST; do
             echo -e "\\t$var${TAB}${RECEIPE_DESCRIPTIONS["$var"]}"
         done
     else
         echo "Receipe (command) list is empty."
     fi
-    echo "Internals are:"
-    echo -e "\\tadd_component${TAB}adds new component via pretty non-gui form"
-    echo -e "\\tadd_receipe${TAB}adds new build receipe"
-    echo -e "\\tadd_variable${TAB}adds new variable"
+    echo "Configuration commands are:"
+    echo -e "${SP}add_component${TAB}adds new component via pretty non-gui form"
+    echo -e "${SP}add_receipe${TAB}adds new build receipe"
+    echo -e "${SP}add_variable${TAB}adds new variable"
 
     if [ -n "$PUBLISH_VARIABLES" ] ; then
         echo "Options can be:"
@@ -55,7 +59,7 @@ function do_help()
             echo -e \\t--${var}${TAB}${PUBLISH_DESCRIPTIONS["$var"]}
         done
     else
-        echo "No options declared yet."
+        echo "No publish variables (options) declared yet."
     fi
 }
 
