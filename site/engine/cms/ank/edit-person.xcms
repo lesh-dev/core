@@ -98,7 +98,7 @@ if (@$_POST["update-person"])
     else
     {
         xsm_notify_person_edit($_POST);
-        xsm_update_entity_listmode('person', 'person', 'Участник', xsm_get_person_fields(), '', 'участника');
+        xsm_update_entity_listmode('person', 'Участник', xsm_get_person_fields(), '', 'участника');
     }
 }
 elseif (@$_POST["delete-person"])

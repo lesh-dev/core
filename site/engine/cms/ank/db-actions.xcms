@@ -17,7 +17,7 @@ function xsm_update_entity($entity, $table_name, $title, $fields, $aux_param = '
     <a href="view-<?php echo $redir; ?>">Вернуться к просмотру</a></p><?php
 }
 
-function xsm_update_entity_listmode($entity, $table_name, $title, $fields, $aux_param = '', $return_title = '')
+function xsm_update_entity_listmode($table_name, $title, $fields, $aux_param = '', $return_title = '')
 {
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
@@ -33,7 +33,7 @@ function xsm_update_entity_listmode($entity, $table_name, $title, $fields, $aux_
     {?>
         <p>Не удалось добавить <?php echo $title; ?>.<?php
     }
-    $redir = "$entity$aux_param&amp;$key_name=$id";
+    $redir = "$table_name$aux_param&amp;$key_name=$id";
     ?>
     <a href="view-<?php echo $redir; ?>">Вернуться к просмотру<?php
         if (strlen($return_title)) echo " $return_title"; ?></a></p><?php
