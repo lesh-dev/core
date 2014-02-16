@@ -27,7 +27,7 @@ function xsm_update_entity_listmode($table_name, $title, $fields, $aux_param = '
         if ($id == XDB_NEW)
             $id = $res;
         ?>
-        <p><?php echo $title; ?> успешно сохранён.<?php
+        <p><?php echo $title; ?> успешно <?php echo xsm_saved_form($table_name); ?>.<?php
     }
     else
     {?>
