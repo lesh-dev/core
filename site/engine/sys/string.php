@@ -52,6 +52,14 @@ function xcms_get_key_or($list, $key, $def_value = '')
 }
 
 /**
+  * Same as @c xcms_get_key_or but with encoding
+  **/
+function xcms_get_key_or_enc($list, $key, $def_value = '')
+{
+    return htmlspecialchars(xcms_get_key_or($list, $key, $def_value));
+}
+
+/**
   * Checks if user name is valid
   * @return true if user name is valid, false otherwise
   **/
@@ -293,6 +301,7 @@ function xcms_string_unit_test()
     $obj["zero-value"] = 0;
     $obj["another"] = "test string";
     $obj["empty"] = "";
+    $obj["need_escaping"] = "&";
 
     xut_equal(xcms_get_key_or($obj, "super"), 1, "Invalid 'super' key");
     xut_equal(xcms_get_key_or($obj, "pupper", true), false, "Invalid 'pupper' key");
@@ -303,6 +312,8 @@ function xcms_string_unit_test()
     xut_equal(xcms_get_key_or($obj, "missing"), "", "Failed missing key test");
     xut_equal(xcms_get_key_or($obj, "missing-bool", true), true, "Failed missing bool key");
     xut_equal(xcms_get_key_or($obj, "pupper", true), false, "Failed existing bool key");
+
+    xut_equal(xcms_get_key_or_enc($obj, "need_escaping"), "&amp;", "Failed get key with escaping");
 
     xut_check(xu_not_empty(0), "Zero is empty");
     xut_check(xu_empty(""), "Empty string is not empty");

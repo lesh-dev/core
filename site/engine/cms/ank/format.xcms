@@ -268,7 +268,7 @@ function xsm_draw_fio_filter()
 {
     ?><span class="ankListField">Фильтр ФИО</span>:
     <input class="ankEdit filter" type="text"
-        value="<?php echo htmlspecialchars(xcms_get_key_or($_POST, 'show_name_filter')); ?>"
+        value="<?php echo xcms_get_key_or_enc($_POST, 'show_name_filter'); ?>"
         name="show_name_filter"
         title="Будут найдены все участники, в ФИО которых (в любом порядке) встречаются слова запроса,
         без учёта регистра. Например, 'дан Мих' найдёт Даниила Михайловича, Михаила Данилевского

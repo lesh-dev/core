@@ -13,7 +13,7 @@ function xsm_edit_course_teachers()
     $db = xdb_get();
     $course_teachers = xsm_get_course_teachers_list($db, $course_id, $school_id);
 
-    $course_title = htmlspecialchars(xcms_get_key_or($course, 'course_title'));
+    $course_title = xcms_get_key_or_enc($course, 'course_title');
     $course_href = "view-course".xcms_url(array('course_id'=>$course_id));
     ?>
     <table class="ankEdit">
