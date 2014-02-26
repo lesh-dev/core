@@ -104,7 +104,7 @@ function xsm_draw_person_school_panel($db, $school_id, $person_id)
 
     $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
 
-    if ($person_school['is_student'] != 'student')
+    if (!xcms_checkbox_enabled($person_school['is_student'])
     {?>
         <div>
             <?php xsm_edit_link('person_school', $person_school_id, xcms_url(array('is_student'=>'student')),
@@ -112,7 +112,7 @@ function xsm_draw_person_school_panel($db, $school_id, $person_id)
         </div><?php
     }
 
-    if ($person_school['is_teacher'] != 'teacher')
+    if (!xcms_checkbox_enabled($person_school['is_teacher']))
     {?>
         <div>
             <?php xsm_edit_link('person_school', $person_school_id, xcms_url(array('is_teacher'=>'teacher')),
@@ -347,8 +347,8 @@ function xsm_print_person_ank_data($db, $person)
     $person_created = xsm_ymdhm($person["person_created"]);
     $person_modified = xsm_ymdhm($person["person_modified"]);
 
-    $hr_teacher = ($is_teacher == "teacher" ? "Препод" : "&#8212;");
-    $hr_student = ($is_student == "student" ? "Школьник" : "&#8212;");
+    $hr_teacher = (xcms_checkbox_enabled($is_teacher) ? "Препод" : "&#8212;");
+    $hr_student = (xcms_checkbox_enabled($is_student) ? "Школьник" : "&#8212;");
 
     xsm_draw_person_textval('main', $fields['birth_date'], $birth_date);
     xsm_draw_person_textval('main', $fields['passport_data'], $passport_data);
@@ -491,10 +491,10 @@ function xsm_print_person_selected_school($db, $school_id, $person)
     }
 
     $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
-    if ($person_school['is_student'] == 'student')
+    if (xcms_checkbox_enabled($person_school['is_student']))
         xsm_print_student_exams($db, $school_id, $person_id, $person_school);
 
-    if ($person_school['is_teacher'] == 'teacher')
+    if (xcms_checkbox_enabled($person_school['is_teacher']))
         xsm_print_course_selected_school($db, $school_id, $person_id);
 }
 

@@ -52,7 +52,7 @@ function xsm_show_tour_list()
 
     if (strlen($cond))
         $query .= " WHERE $cond";
-    $query .= " ORDER BY NOT (p.is_teacher IS NULL OR p.is_teacher = ''), p.last_name, p.first_name";
+    $query .= " ORDER BY NOT (p.is_teacher IS NULL OR LENGTH(p.is_teacher) = 0), p.last_name, p.first_name";
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
     $person_sel = $db->query($query);
 
@@ -101,7 +101,8 @@ function xsm_show_tour_list()
         $person_modified = xsm_ymdhm($person["person_modified"]);
 
         $row_class = xsm_get_city_class($school_city);
-        if ($is_teacher == "teacher")
+        // override city class in case of teacher, it's not so important
+        if (xcms_checkbox_enabled($is_teacher))
             $row_class = "teacher";
         ?>
         <tr class="<?php echo $row_class; ?>">

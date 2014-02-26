@@ -62,10 +62,10 @@ function xsm_show_person_list($school_id)
 
     $cond = "(1 = 1)";
     if (xcms_checkbox_enabled($show_is_teacher))
-        $cond .= " AND ( ps.is_teacher = 'teacher' )";
+        $cond .= " AND ( LENGTH(ps.is_teacher) > 0 )";
 
     if (xcms_checkbox_enabled($show_is_student))
-        $cond .= " AND ( ps.is_student = 'student' )";
+        $cond .= " AND ( LENGTH(ps.is_student) > 0 )";
 
     $name_filter_cond = xsm_person_name_filter($db, $show_name_filter);
     if (strlen($name_filter_cond))
@@ -87,7 +87,7 @@ function xsm_show_person_list($school_id)
 
     if (strlen($cond))
         $query .= " AND $cond";
-    $query .= " ORDER BY NOT (ps.is_teacher IS NULL OR ps.is_teacher = ''), p.last_name, p.first_name";
+    $query .= " ORDER BY NOT (ps.is_teacher IS NULL OR LENGTH(ps.is_teacher) = 0), p.last_name, p.first_name";
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
     $person_sel = $db->query($query);
 
@@ -167,18 +167,18 @@ function xsm_show_person_list($school_id)
             $course_style = "all";
 
         $num = "";
-        if ($is_student == "student")
+        if (xcms_checkbox_enabled($is_student))
         {
             $student_count++;
             $num = $student_count;
         }
-        elseif ($is_teacher == "teacher")
+        elseif (xcms_checkbox_enabled($is_teacher))
         {
             $teacher_count++;
             $num = $teacher_count;
         }
 
-        $row_class = ($is_teacher == "teacher" ? "teacher" : "");
+        $row_class = (xcms_checkbox_enabled($is_teacher) ? "teacher" : "");
         ?>
         <tr class="<?php echo $row_class; ?>">
             <td class="ankList"><?php echo $num; ?></td>

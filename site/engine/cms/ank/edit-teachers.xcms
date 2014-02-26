@@ -49,7 +49,7 @@ function xsm_edit_course_teachers()
                 person_id, last_name, first_name
                 FROM person_school ps LEFT JOIN person p ON p.person_id = ps.member_person_id
                 WHERE
-                ps.school_id = $school_id AND ps.is_teacher = 'teacher'
+                ps.school_id = $school_id AND LENGTH(ps.is_teacher) > 0
                 ORDER BY last_name, first_name",
                 $attr, $already_added);
 

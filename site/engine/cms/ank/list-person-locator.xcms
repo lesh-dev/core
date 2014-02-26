@@ -52,10 +52,10 @@ function xsm_show_all_person_list()
 
     $cond = "(1 = 1)";
     if (xcms_checkbox_enabled($show_is_teacher))
-        $cond .= " AND ( is_teacher = 'teacher' )";
+        $cond .= " AND ( LENGTH(is_teacher) > 0 )";
 
     if (xcms_checkbox_enabled($show_is_student))
-        $cond .= " AND ( is_student = 'student' )";
+        $cond .= " AND ( LENGTH(is_student) > 0 )";
 
     if ($show_anketa_status == "active")
         $cond .=
@@ -89,7 +89,7 @@ function xsm_show_all_person_list()
     if (strlen($cond))
         $query .= " WHERE $cond";
 
-    $query .= " ORDER BY NOT (p.is_teacher IS NULL OR p.is_teacher = ''), p.last_name, p.first_name";
+    $query .= " ORDER BY NOT (p.is_teacher IS NULL OR LENGTH(p.is_teacher) = 0), p.last_name, p.first_name";
 
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
     $person_sel = $db->query($query);
@@ -128,7 +128,7 @@ function xsm_show_all_person_list()
         $is_student = $person["is_student"];
 
         $row_class = xsm_get_city_class($school_city);
-        $row_class .= " ".($is_teacher == "teacher" ? "teacher" : "");
+        $row_class .= " ".(xcms_checkbox_enabled($is_teacher) ? "teacher" : "");
         ?>
         <tr class="<?php echo $row_class; ?>">
             <td class="ankList "><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
