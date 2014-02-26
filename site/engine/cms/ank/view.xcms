@@ -71,8 +71,8 @@
             $cur_row = str_replace("@@ANK-VALUE@", htmlspecialchars($value), $cur_row);
             $html_content .=  $cur_row;
         }
-        $ank_dir = "${content_dir}ank";
-        @mkdir($ank_dir, 0777);
+        $db_dir = "${content_dir}ank";
+        @mkdir($db_dir, 0777);
         $person_id = xdb_insert_or_update('person', array('person_id'=>XDB_NEW), $person, $person_fields);
         $table_title = 'Анкета: <a'.
             xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
