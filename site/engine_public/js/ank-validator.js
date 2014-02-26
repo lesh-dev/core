@@ -10,6 +10,10 @@ function CheckName(aError, sFieldName, sFieldTitle) {
         aError.push("Поле '" + sFieldTitle + "' слишком длинное");
         return;
     }
+    if (/[\/.,?!@#$%&*()_+=~^]/.test(val)) {
+        aError.push("Поле '" + sFieldTitle + "' должно содержать только русские и английские символы");
+        return;
+    }
 }
 
 function OnChange() {

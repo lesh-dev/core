@@ -45,6 +45,8 @@
         if (
             xu_empty($last_name) ||
             xu_empty($first_name) ||
+            preg_match('/[\/.,?!@#$%&*()_+=~^]/', $first_name) ||
+            preg_match('/[\/.,?!@#$%&*()_+=~^]/', $last_name) ||
             xu_empty($current_class) ||
             (xu_empty($phone) && xu_empty($cellular))
             )
