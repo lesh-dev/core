@@ -30,7 +30,9 @@ function xcms_create_page()
     // creator always has access
     $info["view"] = xcms_user()->login();
     $info["edit"] = xcms_user()->login();
-    if (@$_POST["viewForAll"])
+
+    // seems to be contlist-only code if even necessary
+    if (@$_POST["view_for_all"])
         $info["view"] .= " #all";
 
     foreach ($_POST as $key=>$value)
@@ -43,8 +45,7 @@ function xcms_create_page()
 
     if (@$_POST["menu-title"])
         $info["menu-title"] = $_POST["menu-title"];
-    if (@$_POST["menu-hidden"])
-        $info["menu-hidden"] = $_POST["menu-hidden"];
+    xcms_set_key_from_checkbox($info, "menu-hidden", @$_POST["menu-hidden"]);
 
     if (file_exists("{$SETTINGS["engine_dir"]}cms/$page_type/install.php"))
     {

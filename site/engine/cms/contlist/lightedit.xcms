@@ -154,7 +154,7 @@ function xcms_draw_contlist_create($result = true)
     }?>
         <tr>
             <td>Право просмотра для #all</td>
-            <td><input type="checkbox" name="viewForAll" checked="checked" /></td>
+            <td><input type="checkbox" name="view_for_all" checked="checked" /></td>
         </tr>
     </table>
     <input type="submit" name="contlist-create" value="Добавить">
