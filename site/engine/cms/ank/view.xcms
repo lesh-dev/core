@@ -1,5 +1,8 @@
-<# cms/ank/pss #>
-<# cms/ank/field-desc #>
+<?php
+require_once("${engine_dir}cms/ank/pss.php");
+require_once("${engine_dir}cms/ank/field-desc.php");
+require_once("${engine_dir}cms/ank/ank-proc.php");
+?>
 <# cms/ank/middleware #>
 <# cms/ank/db-actions #>
 <# cms/ank/format #>
@@ -18,13 +21,9 @@
     }
     if (@$_POST["submit-anketa"])
     {
-        $mail_msg = xcms_get_html_template("anketa_mail");
-        $reply_link = xcms_get_html_template("anketa_reply_link");
-        $reply_body = xcms_get_html_template("anketa_reply_body");
-        $row_template = xcms_get_html_template("anketa_mail_one_row");
-        $hr_timestamp = xcms_datetime();
-
         $person = $_POST; // get all values here (_POST should not be spoiled)
+        $person = xcms_trim_object($person);
+
         // set some generic fields that cannot be overridden
         $person["anketa_status"] = "new";
         $person["is_student"] = "student";
@@ -40,8 +39,6 @@
         $person['ank_class'] = $current_class;
         $email = xcms_get_key_or($person, "email");
 
-        $person_fields = xsm_get_person_fields();
-
         if (
             xu_empty($last_name) ||
             xu_empty($first_name) ||
@@ -54,72 +51,58 @@
             // someone hacked the js validator
             die("Invalid anketa data. ");
         }
+
+
+        $db = xdb_get();
+
+        $person_id = XDB_NEW;
+        $success = false;
+
+        $person_fields = xsm_get_person_fields();
         $full_name = xsm_fio($person);
 
-        $html_content = ""; // @@TABLE-CONTENT@
-        $person = xcms_trim_object($person);
+        $old_person = xsm_find_person_origin($db, $person);
 
-        foreach ($person as $key=>$value)
+        $html_content = "";
+        $dest_url = 'register/success';
+
+        if ($old_person !== false)
         {
-            $key_title = $key;
-            if (array_key_exists($key, $person_fields))
-                $key_title = $person_fields[$key];
-            if ($key == "submit-anketa")
-                continue;
-            $cur_row = $row_template;
-            $cur_row = str_replace("@@ANK-KEY@", $key_title, $cur_row);
-            $cur_row = str_replace("@@ANK-VALUE@", htmlspecialchars($value), $cur_row);
-            $html_content .=  $cur_row;
+            // merge data and update database, notify managers
+            $person = xsm_merge_persons($old_person, $person);
+            $person_id = $person["person_id"];
+            // update merged data
+            $update_result = xdb_insert_or_update('person', array('person_id'=>$person_id), $person, $person_fields);
+            $write_success = ($update_result === true);
+
+            $html_content = "Обновлённые данные анкеты смотрите по ссылке в XSM.";
+            // override url
+            $dest_url = 'register/already';
         }
-        $db_dir = "${content_dir}ank";
-        @mkdir($db_dir, 0777);
-        $person_id = xdb_insert_or_update('person', array('person_id'=>XDB_NEW), $person, $person_fields);
-        $table_title = 'Анкета: <a'.
-            xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
-            htmlspecialchars($full_name)."</a> ($hr_timestamp)";
-        $write_success = ($person_id != false);
-        $mail_msg = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg);
-        $mail_msg = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg);
-        $mail_msg = str_replace("@@HOST@", xcms_hostname(), $mail_msg);
+        else
+        {
+            // new person arrived
+            $person_id = xdb_insert_or_update('person', array('person_id'=>XDB_NEW), $person, $person_fields);
+            $write_success = ($person_id != false);
+            // fill newly received identifier
+            $person["person_id"] = $person_id;
+            $html_content = xsm_compose_anketa_table($person, $person_fields);
+        }
 
-        // prepare reply_link
-        $reply_body = str_replace("@@NAME@", $first_name, $reply_body);
-        // TODO hardcoded subject
-        $reply_link = str_replace("@@REPLY-SUBJECT@", rawurlencode("ФизЛЭШ: Анкета принята"), $reply_link);
-        $reply_link = str_replace("@@REPLY-BODY@", str_replace("\n", "<br />", $reply_body), $reply_link);
-        $reply_link = str_replace("@@REPLY-BODY-ENC@", rawurlencode($reply_body), $reply_link);
-        $reply_link = str_replace("@@REPLY-TO@", $email, $reply_link);
-
-        // main compose finished
-        if (!strlen($email))
+        $mail_msg = xsm_compose_anketa_mail_msg($person, $html_content);
+        $reply_link = xsm_compose_anketa_reply_link($first_name, $email);
+        if (xu_empty($email))
             $reply_link = "";
         $mail_msg_managers = str_replace("@@REPLY-LINK@", $reply_link, $mail_msg);
 
         // remove unused placeholder in notification letter
         $mail_msg = str_replace("@@REPLY-LINK@", "", $mail_msg);
 
-        // TODO: выпилить режим reg-test* -- вместо этого тест должен
-        // подменять поля уведомления, чтобы не спамить
-
-        $mail_group_notify = "reg";
-        $mail_group_managers = "reg-managers";
-        if (substr($full_name, 0, 12) == "NO-MAIL-TEST") // see bug #264
-        {
-            $mail_group_notify = "";
-            $mail_group_managers = "";
-        }
-        elseif (substr($full_name, 0, 4) == "TEST") // see bug #111
-        {
-            $mail_group_notify = "reg-test";
-            $mail_group_managers = "reg-managers-test";
-        }
-
-        $success_managers = xsm_send_anketa($mail_group_managers, $mail_msg_managers, $full_name, $email, true);
-        $success_notify = xsm_send_anketa($mail_group_notify, $mail_msg, $full_name, $email, false);
+        $success_managers = xsm_send_anketa("reg-managers", $mail_msg_managers, $full_name, $email, true);
+        $success_notify = xsm_send_anketa("reg", $mail_msg, $full_name, $email, false);
 
         $success = ($success_managers || $success_notify) && $write_success;
 
-        $dest_url = 'register/success';
         $zero_redirect_delay = $SETTINGS["zero_redirect_delay"];
         if (!$success)
         {
@@ -133,7 +116,8 @@
             '<a href="/'.$web_prefix.$dest_url.'">сюда</a>, если не хотите ждать.';
         $meta = '<meta http-equiv="refresh" content="'.$zero_redirect_delay.';URL=/'.$web_prefix.$dest_url.'" />';
         echo $message;
-        echo $meta;
+        // TODO: roll it back!
+        //echo $meta;
     }
     else if ($aparam == "view")
     {

@@ -1,5 +1,6 @@
 <?php
-include(translate("<! cms/ank/field-desc !>"));
+global $engine_dir;
+require_once("${engine_dir}cms/ank/field-desc.php");
 include(translate("<! cms/ank/db-actions !>"));
 include(translate("<! cms/ank/middleware !>"));
 include(translate("<! cms/ank/format !>"));

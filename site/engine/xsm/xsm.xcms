@@ -8,8 +8,10 @@
     <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/xsm.js"; ?>"></script>
 </head>
 <body>
-<# cms/ank/pss #>
-<# cms/ank/field-desc #>
+<?php
+require_once("${engine_dir}cms/ank/pss.php");
+require_once("${engine_dir}cms/ank/field-desc.php");
+?>
 <# cms/ank/middleware #>
 <# cms/ank/db-actions #>
 <# cms/ank/format #>
