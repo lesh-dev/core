@@ -86,6 +86,7 @@ function xsm_compose_anketa_table($person)
 {
     $person_fields = xsm_get_person_fields();
     $html_content = ""; // @@TABLE-CONTENT@
+    $row_template = xcms_get_html_template("anketa_mail_one_row");
     foreach ($person as $key=>$value)
     {
         $key_title = $key;
@@ -106,7 +107,6 @@ function xsm_compose_anketa_mail_msg($person, $html_content)
     $person_id = $person["person_id"];
 
     $mail_msg = xcms_get_html_template("anketa_mail");
-    $row_template = xcms_get_html_template("anketa_mail_one_row");
     $hr_timestamp = xcms_datetime();
 
     $full_name_enc = xsm_fio_enc($person);
