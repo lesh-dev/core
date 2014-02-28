@@ -9,6 +9,14 @@ function xsm_find_person_origin($db, $new_person)
     $first_name_esc = xcms_get_key_or($new_person, "first_name");
     $patronymic_esc = xcms_get_key_or($new_person, "patronymic");
 
+    $id_fields = array(
+        "birth_date",
+        "email",
+        "social_profile",
+        "skype",
+        "cellular",
+        "phone");
+
     $query =
         "SELECT * FROM person WHERE
         (last_name = '$last_name_esc') AND
@@ -21,15 +29,23 @@ function xsm_find_person_origin($db, $new_person)
     $matched_person = false;
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
     {
-        if (xu_not_empty($birth_date) && $birth_date == $person['birth_date'])
+        if ($person["anketa_status"] == "duplicate")
+            continue;
+
+        foreach ($id_fields as $id_key)
         {
-            // okay, match definitely found!
-            $matched_person_id = $person['person_id'];
-            $matched_person = $person;
-            break;
+            $value = xcms_get_key_or($new_person, $id_key);
+            if (xu_not_empty($value) && $value == $person[$id_key])
+            {
+                // okay, match definitely found!
+                $matched_person_id = $person['person_id'];
+                $matched_person = $person;
+                return $matched_person;
+            }
         }
+        // TODO: collect suspicious matches here
     }
-    return $matched_person;
+    return false;
 }
 
 
