@@ -47,7 +47,13 @@ function xsm_find_person_origin($db, $new_person)
 }
 
 
-// TODO: test suite
+/**
+  * Performs persons merge
+  * @return: array of keys:
+  *   "person": merged person kv-array
+  *   "state": merge state
+  * @todo: test suite
+  **/
 function xsm_merge_persons($person_dst, $person_src)
 {
     $person_fields = xsm_get_person_fields();
@@ -77,24 +83,35 @@ function xsm_merge_persons($person_dst, $person_src)
             continue;
         }
 
+        if (xu_len($value) == 0)
+        {
+            // nothing to merge
+            continue;
+        }
+
         // keys are equal
         if ($person_dst[$key] == $value)
             continue;
 
+        $key_title = xcms_get_key_or($person_fields, $key);
         // old non-empty value is a prefix of new one
         if (xu_substr($value, 0, xu_len($old_val)) == $old_val)
         {
-            $merge_state .= "[$key]: '$old_val' -> '$value'\n";
+
+            $merge_state .= "[$key_title]: '$old_val' -> '$value'\n";
             $person_dst[$key] = $value;
             continue;
         }
 
         // most generic case: append
-        $merge_state .= "[$key]: '$old_val' ++ '$value'\n";
+        $merge_state .= "[$key_title]: '$old_val' += '$value'\n";
         $person_dst[$key] .= "; $value";
     }
 
-    return $person_dst;
+    return array(
+        "person"=>$person_dst,
+        "state"=>$merge_state,
+        );
 }
 
 function xsm_compose_anketa_table($person)

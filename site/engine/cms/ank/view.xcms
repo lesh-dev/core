@@ -68,8 +68,10 @@ require_once("${engine_dir}cms/ank/ank-proc.php");
 
         if ($old_person !== false)
         {
+            $merge = xsm_merge_persons($old_person, $person);
             // merge data and update database, notify managers
-            $person = xsm_merge_persons($old_person, $person);
+            $person = $merge["person"];
+            $merge_state = $merge["state"];
             $person_id = $person["person_id"];
             // update merged data
             $update_result = xdb_insert_or_update('person', array('person_id'=>$person_id), $person, $person_fields);
