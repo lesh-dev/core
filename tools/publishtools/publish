@@ -1,9 +1,13 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+
+set -e
 
 PUBLISH_CONFIG="$HOME/.config/publishtools"
 CONFIGFILE="$PUBLISH_CONFIG/publish.conf"
 GCONFIGFILE="/etc/publishscripts/publish.conf"
 PUBLISH_REALM="$PUBLISH_CONFIG/$(basename $0)"
+MY_DIR="$(dirname "$(readlink -f $0)")"
+
 mkdir -p $PUBLISH_CONFIG
 mkdir -p $PUBLISH_REALM
 
@@ -13,6 +17,11 @@ declare -A RECEIPE_DESCRIPTIONS
 function print_warning() {
     echo -e "\033[33mWarning:\x1b[0m $@"
 }
+
+version_file="$MY_DIR/../../site/VERSION"
+if [ -r "$version_file" ] ; then
+    echo "PublishTools version $(cat "$version_file")"
+fi
 
 if [ -f $CONFIGFILE ]; then
     source $CONFIGFILE
@@ -27,7 +36,7 @@ else
 fi
 
 REALM_CONFIG=$PUBLISH_REALM/realm.conf
-if [ -f  $REALM_CONFIG ]; then
+if [ -f $REALM_CONFIG ]; then
     source $REALM_CONFIG
 else
     print_warning "Cannot find realm config file. Empty one was created at '$REALM_CONFIG'"

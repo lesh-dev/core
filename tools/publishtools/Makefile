@@ -5,3 +5,4 @@ install:
 	mkdir -p ${TARGET}/publish
 	cp publish.conf ${TARGET}
 	cp realm.conf ${TARGET}/publish
+	echo "`../publish/version.sh`" > ${TARGET}/version
