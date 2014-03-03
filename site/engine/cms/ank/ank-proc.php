@@ -98,13 +98,13 @@ function xsm_merge_persons($person_dst, $person_src)
         if (xu_substr($value, 0, xu_len($old_val)) == $old_val)
         {
 
-            $merge_state .= "[$key_title]: '$old_val' -> '$value'\n";
+            $merge_state .= "$key_title: '$old_val' -> '$value'\n";
             $person_dst[$key] = $value;
             continue;
         }
 
         // most generic case: append
-        $merge_state .= "[$key_title]: '$old_val' += '$value'\n";
+        $merge_state .= "$key_title: '$old_val' += '$value'\n";
         $person_dst[$key] .= "; $value";
     }
 

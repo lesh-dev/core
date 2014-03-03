@@ -75,6 +75,16 @@ require_once("${engine_dir}cms/ank/ank-proc.php");
             $person_id = $person["person_id"];
             // update merged data
             $update_result = xdb_insert_or_update('person', array('person_id'=>$person_id), $person, $person_fields);
+
+            $merge_state = "Получена новая анкета для этого человека. Внесены следующие изменения:\n$merge_state";
+            $person_comment = array(
+                "comment_text"=>$merge_state,
+                "owner_login"=>"anonymous",
+                "blamed_person_id"=>$person_id,
+                );
+            // assume comment addition is not so important, don't check
+            xdb_insert_or_update('person_comment', array('person_comment_id'=>XDB_NEW), $person_comment, xsm_get_person_comment_fields());
+
             $write_success = ($update_result === true);
 
             $html_content = "Обновлённые данные анкеты смотрите по ссылке в XSM.";
@@ -118,8 +128,7 @@ require_once("${engine_dir}cms/ank/ank-proc.php");
             '<a href="/'.$web_prefix.$dest_url.'">сюда</a>, если не хотите ждать.';
         $meta = '<meta http-equiv="refresh" content="'.$zero_redirect_delay.';URL=/'.$web_prefix.$dest_url.'" />';
         echo $message;
-        // TODO: roll it back!
-        //echo $meta;
+        echo $meta;
     }
     else if ($aparam == "view")
     {
