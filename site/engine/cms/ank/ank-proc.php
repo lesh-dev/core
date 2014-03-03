@@ -3,11 +3,9 @@
 
 function xsm_find_person_origin($db, $new_person)
 {
-
-    // TODO: escape here
-    $last_name_esc = xcms_get_key_or($new_person, "last_name");
-    $first_name_esc = xcms_get_key_or($new_person, "first_name");
-    $patronymic_esc = xcms_get_key_or($new_person, "patronymic");
+    $last_name_esc = $db->escapeString(xcms_get_key_or($new_person, "last_name"));
+    $first_name_esc = $db->escapeString(xcms_get_key_or($new_person, "first_name"));
+    $patronymic_esc = $db->escapeString(xcms_get_key_or($new_person, "patronymic"));
 
     $id_fields = array(
         "birth_date",
@@ -53,6 +51,7 @@ function xsm_find_person_origin($db, $new_person)
 function xsm_merge_persons($person_dst, $person_src)
 {
     $person_fields = xsm_get_person_fields();
+    $merge_state = "";
 
     foreach ($person_src as $key => $value)
     {
