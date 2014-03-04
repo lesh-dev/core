@@ -3,7 +3,6 @@
 function xsm_print_school()
 {
     $db = xdb_get();
-    xsm_view_operations('school', 'school', 'школа');
     $school_id = xcms_get_key_or($_GET, 'school_id', "-1");
     $school = xdb_get_entity_by_id('school', $school_id);
     $href_schools = "list-school";
@@ -36,9 +35,6 @@ function xsm_print_school()
 
     </table>
     <?php
-    // Тут может быть инфа про преподов данного отделения
-
-    //xsm_view_operations('school', 'school', 'курс');
 }
 
 xsm_print_school();

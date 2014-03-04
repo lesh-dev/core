@@ -1,4 +1,5 @@
 <?php
+require_once("${engine_dir}cms/ank/edit-format.php");
 
 function xsm_edit_school()
 {
@@ -25,12 +26,10 @@ function xsm_edit_school()
             <?php
             foreach ($school_fields as $key=>$field_title)
             {
+                if (xsm_is_bottom_field($key))
+                    continue;
                 $value = xcms_get_key_or($school, $key);
-                $attr = "";
-                // handle readonly fields
-                if ($key == "school_created" ||
-                    $key == "school_modified")
-                    $attr = 'readonly="readonly"'; ?>
+                $attr = ""; ?>
                 <tr><td class="ankList"><span class="ankEditField"><?php echo $school_fields[$key]; ?></span>
                 <?php
                 $ft = xcms_get_key_or($field_types, $key);
@@ -47,6 +46,7 @@ function xsm_edit_school()
                 <?php
             }?>
         </table><?php
+        xsm_bottom_fields('school', $school);
         xsm_edit_operations_listmode('school', $school_id, 'Вернуться к списку школ');
         ?>
     </form>
