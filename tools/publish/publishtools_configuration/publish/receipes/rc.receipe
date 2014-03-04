@@ -8,7 +8,7 @@ branch=master
 # This will be executed while publishing component begin
 function hook_begin
 {
-    echo "Preproduction receipe invoked. Your copy will be located at $target"
+    echo "Pre-production (rc) receipe invoked. Your copy will be located at $target"
     echo -en  # Add something useful is you want
 }
 
