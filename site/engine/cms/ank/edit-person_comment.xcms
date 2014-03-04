@@ -1,5 +1,6 @@
 <# cms/ank/diff #>
 <?php
+require_once("${engine_dir}cms/ank/edit-format.php");
 
 // Специфическая функция для данной таблицы (можно объединить с person_school)
 function xsm_person_comment_edit_operations($table_name, $id, $ret_title, $member_person_id, $place)
@@ -127,15 +128,13 @@ function xsm_edit_person_comment()
             <?php
             foreach ($person_comment_fields as $key=>$field_title)
             {
+                if (xsm_is_bottom_field($key))
+                    continue;
                 $value = xcms_get_key_or($person_comment, $key);
                 $attr = "";
-                if ($key == "person_comment_deleted")
-                    continue;
                 // handle readonly fields
                 if ($key == "owner_login" ||
-                    $key == "blamed_person_id" ||
-                    $key == "person_comment_created" ||
-                    $key == "person_comment_modified")
+                    $key == "blamed_person_id")
                     $attr = 'readonly="readonly"'; ?>
                 <tr><td class="ankList"><span class="ankEditField"><?php echo $person_comment_fields[$key]; ?></span>
                 <?php
@@ -157,6 +156,7 @@ function xsm_edit_person_comment()
                 <?php
             }?>
         </table><?php
+        xsm_bottom_fields('person_comment', $person_comment);
         xsm_person_comment_edit_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id, 'bottom');?>
     </form>
     <?php
