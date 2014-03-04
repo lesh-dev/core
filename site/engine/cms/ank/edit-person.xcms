@@ -54,7 +54,6 @@ function xsm_edit_person()
             {
                 if (xsm_is_bottom_field($key))
                     continue;
-
                 $value = xcms_get_key_or($person, $key);
                 $attr = "";
                 // handle readonly fields

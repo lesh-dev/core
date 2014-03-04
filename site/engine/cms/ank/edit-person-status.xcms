@@ -1,4 +1,5 @@
 <# cms/ank/diff #><?php
+require_once("${engine_dir}cms/ank/edit-format.php");
 
 /**
  * Изрядная часть этого модуля скопирована с edit-person_comment,
@@ -124,15 +125,13 @@ function xsm_change_person_status()
             <?php
             foreach ($person_comment_fields as $key=>$field_title)
             {
+                if (xsm_is_bottom_field($key))
+                    continue;
                 $value = xcms_get_key_or($person_comment, $key);
                 $attr = "";
-                if ($key == "person_comment_deleted")
-                    continue;
                 // handle readonly fields
                 if ($key == "owner_login" ||
-                    $key == "blamed_person_id" ||
-                    $key == "person_comment_created" ||
-                    $key == "person_comment_modified")
+                    $key == "blamed_person_id")
                     $attr = 'readonly="readonly"'; ?>
                 <tr><td class="ankList"><span class="ankEditField"><?php echo $person_comment_fields[$key]; ?></span>
                 <?php

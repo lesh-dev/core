@@ -1,4 +1,5 @@
 <?php
+require_once("${engine_dir}cms/ank/edit-format.php");
 
 function xsm_edit_course()
 {
@@ -84,12 +85,10 @@ function xsm_edit_course()
             <?php
             foreach ($course_fields as $key=>$field_title)
             {
+                if (xsm_is_bottom_field($key))
+                    continue;
                 $value = xcms_get_key_or($course, $key);
                 $attr = "";
-                // handle readonly fields
-                if ($key == "course_created" ||
-                    $key == "course_modified")
-                    $attr = 'readonly="readonly"';
                 // selectors cannot be readonly
                 if ($key == "school_id")
                     $attr = 'disabled="disabled"'; ?>
@@ -113,6 +112,7 @@ function xsm_edit_course()
                 <?php
             }?>
         </table><?php
+        xsm_bottom_fields('course', $course);
         xsm_edit_operations_listmode('course', $course_id, 'Вернуться к списку курсов',
             xcms_url(array('school_id'=>$school_id)));
         ?>
