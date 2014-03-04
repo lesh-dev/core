@@ -19,7 +19,7 @@ function xsm_bottom_fields($table_name, $object)
             <b>Дата создания</b>: <?php echo $obj_created;
         if (xu_not_empty($obj_modified))
         {?>.
-            <b>Последняя модификация</b>: <?php echo $obj_created;
+            <b>Последняя модификация</b>: <?php echo $obj_modified;
         }?>
         </div><?php
     }

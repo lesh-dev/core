@@ -1,5 +1,6 @@
 <# cms/ank/diff #>
 <?php
+require_once("${engine_dir}cms/ank/edit-format.php");
 
 function xsm_edit_exam_operations($school_id, $student_person_id, $id, $place)
 {
@@ -186,11 +187,10 @@ function xsm_edit_exam()
             <?php
             foreach ($exam_fields as $key=>$field_title)
             {
+                if (xsm_is_bottom_field($key))
+                    continue;
                 $value = xcms_get_key_or($exam, $key);
-                $attr = "";
-                // handle readonly fields
-                if ($key == "exam_created" ||
-                    $key == "exam_modified") $attr = ' readonly="readonly"'?>
+                $attr = ""; ?>
                 <tr><td class="ankList"><span class="ankEditField"><?php echo $exam_fields[$key]; ?></span>
                 <?php
                 $ft = xcms_get_key_or($field_types, $key);
@@ -223,6 +223,7 @@ function xsm_edit_exam()
                 <?php
             }?>
         </table><?php
+        xsm_bottom_fields('exam', $exam);
         xsm_edit_exam_operations($school_id, $student_person_id, $exam_id, "bottom"); ?>
     </form>
     <?php
