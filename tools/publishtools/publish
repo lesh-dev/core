@@ -18,11 +18,14 @@ function print_warning() {
     echo -e "\033[33mWarning:\x1b[0m $@"
 }
 
-version_file="$MY_DIR/../../site/VERSION"
-if [ -r "$version_file" ] ; then
-    echo "PublishTools version $(cat "$version_file")"
-fi
+function print_version() {
+    version_script="$MY_DIR/../publish/version.sh"
+    if [ -r "$version_script" ] ; then
+        echo -e "\033[33mPublishTools\x1b[0m $($SHELL "$version_script")"
+    fi
+}
 
+print_version
 if [ -f $CONFIGFILE ]; then
     source $CONFIGFILE
     echo "Loaded publish.conf from '$CONFIGFILE'"
