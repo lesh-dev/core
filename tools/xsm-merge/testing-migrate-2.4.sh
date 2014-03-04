@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -xe
 
 #if [ "`id -u`" != "0" ]; then

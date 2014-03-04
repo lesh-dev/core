@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Generated from template on Tue Oct  9 22:19:20 MSK 2012
 # Please don't forget to commit all changes to repo
 components=" forum forum_patch"

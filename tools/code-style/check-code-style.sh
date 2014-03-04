@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # We should not ignore any errors, it's better to fail
 # Please do not remove the following line
 set -e

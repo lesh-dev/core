@@ -136,7 +136,7 @@ function add_receipe
     mkdir -p $PUBLISH_REALM/receipes
     read -p "Enter receipe's name        : " name
     read -p "Enter receipe's description : " description
-    echo "#!/bin/bash" >> $TEMP_CONFIG
+    echo "#!/usr/bin/env bash" >> $TEMP_CONFIG
     echo "# Generated from template on $(date)" >> $TEMP_CONFIG
     echo "# Please don't forget to commit all changes to repo" >> $TEMP_CONFIG
     echo >> $TEMP_CONFIG

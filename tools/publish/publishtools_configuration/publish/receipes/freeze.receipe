@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Generated from template on Mon Sep 17 21:49:46 MSK 2012
 # Please don't forget to commit all changes to repo
 components=" production_copy"

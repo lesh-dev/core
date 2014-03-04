@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Generated from template on Fri May  3 19:33:09 MSK 2013
 # Please don't forget to commit all changes to repo
 target=/srv/www/clones/demo

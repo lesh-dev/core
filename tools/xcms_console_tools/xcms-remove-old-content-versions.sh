@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e 
 # This helper script removes all old content versions from specified directory.
 

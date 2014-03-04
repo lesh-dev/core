@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -xe
 cd /var/www/html/lesh
 if [ -d lesh.git ] ; then
