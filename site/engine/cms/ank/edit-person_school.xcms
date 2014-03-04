@@ -1,6 +1,6 @@
 <?php
-
-include_once("${engine_dir}cms/ank/person_school.php");
+require_once("${engine_dir}cms/ank/edit-format.php");
+require_once("${engine_dir}cms/ank/person_school.php");
 
 $person_school_fields = array(
     "member_person_id"=>"Участник",
@@ -71,12 +71,10 @@ function xsm_edit_person_school()
             <?php
             foreach ($person_school_fields as $key=>$field_title)
             {
+                if (xsm_is_bottom_field($key))
+                    continue;
                 $value = xcms_get_key_or($person_school, $key);
-                $attr = "";
-                // handle readonly fields
-                if ($key == "person_school_created" ||
-                    $key == "person_school_modified")
-                    $attr = 'readonly="readonly"'; ?>
+                $attr = ""; ?>
                 <tr><td class="ankList"><span class="ankEditField"><?php echo $person_school_fields[$key]; ?></span>
                 <?php
                 $ft = xcms_get_key_or($field_types, $key);
@@ -115,6 +113,7 @@ function xsm_edit_person_school()
                 <?php
             }?>
         </table><?php
+        xsm_bottom_fields('person_school', $person_school);
         xsm_person_school_edit_operations('person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id, 'bottom');?>
     </form>
     <?php
