@@ -1,5 +1,6 @@
 <# cms/ank/diff #>
 <?php
+require_once("${engine_dir}cms/ank/edit-format.php");
 
 function xsm_notify_person_edit($person)
 {
@@ -51,12 +52,14 @@ function xsm_edit_person()
             <?php
             foreach ($person_fields as $key=>$field_title)
             {
+                if (xsm_is_bottom_field($key))
+                    continue;
+
                 $value = xcms_get_key_or($person, $key);
                 $attr = "";
                 // handle readonly fields
-                if ($key == "user_agent" ||
-                    $key == "person_created" ||
-                    $key == "person_modified") $attr = ' readonly="readonly"'?>
+                if ($key == "user_agent")
+                    $attr = ' readonly="readonly"'; ?>
                 <tr><td class="ankList"><span class="ankEditField"><?php echo $person_fields[$key]; ?></span>
                 <?php
                 $ft = xcms_get_key_or($field_types, $key);
@@ -82,6 +85,7 @@ function xsm_edit_person()
                 <?php
             }?>
         </table><?php
+        xsm_bottom_fields('person', $person);
         NEW_xsm_edit_operations('person', $person_id, 'Вернуться к просмотру участника'); ?>
     </form>
     <?php
