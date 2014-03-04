@@ -1,4 +1,5 @@
 <?php
+require_once("${engine_dir}cms/ank/edit-format.php");
 
 function xsm_edit_department()
 {
@@ -23,12 +24,10 @@ function xsm_edit_department()
             <?php
             foreach ($department_fields as $key=>$field_title)
             {
+                if (xsm_is_bottom_field($key))
+                    continue;
                 $value = xcms_get_key_or($department, $key);
-                $attr = "";
-                // handle readonly fields
-                if ($key == "department_created" ||
-                    $key == "department_modified")
-                    $attr = 'readonly="readonly"'; ?>
+                $attr = ""; ?>
                 <tr><td class="ankList"><span class="ankEditField"><?php echo $department_fields[$key]; ?></span>
                 <?php
                 if (array_key_exists($key, $field_types))
@@ -43,6 +42,7 @@ function xsm_edit_department()
                 <?php
             }?>
         </table><?php
+        xsm_bottom_fields('department', $department);
         xsm_edit_operations_listmode('department', $department_id, 'Вернуться к списку отделений');
         ?>
     </form>
