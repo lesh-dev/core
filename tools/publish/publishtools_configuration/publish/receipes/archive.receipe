@@ -30,7 +30,7 @@ function hook_end
             continue
         fi
         if [ "$(readlink $CLONE_DIR/production.last)" == "$i" ]; then
-            echo "Skipping 'last chance': $i"
+            echo "Skipping 'final': $i"
             continue
         fi
         echo "Archiving $i ..."

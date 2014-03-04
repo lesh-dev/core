@@ -39,14 +39,14 @@ function hook_end
     echo ""
     echo "         http://final.fizlesh.ru"
     echo ""
-    echo "And test all the installation manually. If all OK, you may "
-    echo "press 'yes' and production copy will be created. "
+    echo "And test all the installation manually. If everything is OK, you may"
+    echo "press 'yes' and production copy will be created."
     echo ""
 
     if valid_installer ; then
         echo "                   *** ERROR ***"
         echo "YOU'RE DOING COMPLETELY WRONG!"
-        echo "You should make xcms installation on preproduction copy (rc.fizlesh.ru)"
+        echo "You should make xcms installation on pre-production (rc) copy (rc.fizlesh.ru)"
         echo "Only after it You may make production"
         exit 1
     fi
