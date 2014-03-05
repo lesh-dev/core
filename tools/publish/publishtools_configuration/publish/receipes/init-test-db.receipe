@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Generated from template on Tue Oct  9 22:33:23 MSK 2012
+# Please don't forget to commit all changes to repo
+
+components=""
+branch=master
+target=/srv/www/clones/testing
+sympolicy=none
+
+# This will be executed while publishing component begin
+function hook_begin
+{
+    echo -en  # Add something useful if you want
+}
+
+# Some fizlesh.ru spikes
+# TODO: unhardcode fizlesh.sqlite name
+function xsm_clear_notifications
+{
+    db="content/ank/fizlesh.sqlite3"
+    if [ -w "$db" ] ; then
+        rm -f "$db"
+        sqlite3 "$db" < engine/dbpatches/dbinit-v2.sql
+        echo "Database re-initialized successfully"
+    fi
+}
+
+function hook_end
+{
+    cd $target
+    if [ $(pwd) != $target ]; then
+        echo " *** ERROR *** Can't create save state"
+    else
+        xsm_clear_db
+    fi
+}
