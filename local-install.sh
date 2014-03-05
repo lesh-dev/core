@@ -7,7 +7,7 @@ VERBOSE_COPY=""
 
 # default site location
 DEST_NAME="site"
-if [ "$( whoami )" == "mvel" ] ; then
+if [ "$USERNAME" == "mvel" ] ; then
     DEST_NAME="fizlesh.ru"
 fi
 
@@ -107,7 +107,7 @@ done
 
 # site root
 DEST="/var/www/html/$DEST_NAME"
-if [ "$( whoami )" == "mvel" ] ; then
+if [ "$USERNAME" == "mvel" ] ; then
     DEST="/var/www/vhosts/$DEST_NAME"
 fi
 
