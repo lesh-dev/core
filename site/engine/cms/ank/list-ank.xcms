@@ -54,7 +54,6 @@ function xsm_show_ank_list()
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
 
     $db = xdb_get();
-    $db->createFunction('LIKE', 'xdb_like', 2);
 
     $cond = "";
 

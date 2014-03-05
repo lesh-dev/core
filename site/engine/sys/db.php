@@ -24,7 +24,10 @@
         global $SETTINGS;
         global $content_dir;
         $db_name = xcms_get_key_or($SETTINGS, 'xsm_db_name', $content_dir.XDB_DEFAULT_DB_PATH);
-        return new SQlite3($db_name, SQLITE3_OPEN_READONLY);
+        $db = new SQlite3($db_name, SQLITE3_OPEN_READONLY);
+        // enhance LIKE immediately to obtain proper UTF-8 support
+        $db->createFunction('LIKE', 'xdb_like', 2);
+        return $db;
     }
 
     /**
@@ -245,8 +248,6 @@
     /**
       * UTF8-friendly LIKE operator for SQLite database
       * @note this function is for INTERNAL use only
-      * BUG: It should be pre-loaded for every created DB handle
-      * like this: $db->createFunction('LIKE', 'xdb_like', 2);
       * @param $mask LIKE operator mask
       * @param $value value to match
       * @return matches or not (boolean value)
