@@ -47,6 +47,15 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         self.gotoRoot()
         if self.isInstallerPage():
             self.failTest("Installer page detected, while we did not expected it. You should run this test on installed XCMS. ")
+            
+    def getCurrentPersonId(self):
+        curUrl = self.curUrl()
+        m = re.search("person_id=(\d+)", curUrl)
+        if m and m.groups() >= 1:
+            return str(m.group(1))
+        return None
+        
+        
 
 
 class XcmsTestWithConfig(XcmsBaseTest):

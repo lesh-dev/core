@@ -40,6 +40,13 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
         # check if person alias is present (person saved correctly)
         
         self.checkPersonAliasInPersonView(fullAlias)
-        self.assertBodyTextPresent(inpPhone)
+        
+        personId = self.getCurrentPersonId()
+        personPhoneEleId = "person" + str(personId) + "-cellular"
+        
+        phoneOnSite = self.getElementTextById(personPhoneEleId)
+        self.logAdd("Phone on the site: " + phoneOnSite)
+        if inpPhone != phoneOnSite:
+            raise TestError("Phones on the site don't match entered phones. ")
         
 

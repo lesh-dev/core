@@ -19,7 +19,7 @@ fi
 
 echo "Cleaning versions in $SEARCH_DIR"
 
-function cleanup_dir()
+cleanup_dir()
 {
     if ! [ -r "$DIR/content" ]; then
         echo "Directory $DIR has no content, skipping. "
