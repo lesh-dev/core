@@ -190,7 +190,7 @@ function xsm_format_phones($phones_str)
   * Format phone string using @c xsm_format_phones
   * to HTML output
   **/
-function xsm_make_phone($phones_str)
+function xsm_make_phone($phones_str, $id = '')
 {
     $items = xsm_format_phones($phones_str);
     if (!count($items))
@@ -211,9 +211,17 @@ function xsm_make_phone($phones_str)
         if (xu_not_empty($result))
             $result .= XSM_PHONE_SEPARATOR;
 
-        $result .= "<span class=\"phone $class\" title=\"$hint\">$phone</span>";
+        if (xu_not_empty($id))
+            $id = "id=\"$id\" ";
+        $result .= "<span $id class=\"phone $class\" title=\"$hint\">$phone</span>";
     }
     return $result;
+}
+
+function xsm_make_phone_from_obj($obj, $table_name, $key)
+{
+    $id = xcms_get_key_or($obj, "${table_name}_id");
+    return xsm_make_phone(xcms_get_key_or($obj, $key), "$table_name$id-$key");
 }
 
 /**
@@ -221,8 +229,8 @@ function xsm_make_phone($phones_str)
   **/
 function xsm_format_person_phones($person)
 {
-    $phone = xsm_make_phone($person["phone"]);
-    $cellular = xsm_make_phone($person["cellular"]);
+    $phone = xsm_make_phone_from_obj($person, "person", "phone");
+    $cellular = xsm_make_phone_from_obj($person, "person", "cellular");
     $all_phones = array();
     if ($cellular)
         $all_phones[] = $cellular;

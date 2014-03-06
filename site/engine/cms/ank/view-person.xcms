@@ -150,8 +150,8 @@ function xsm_print_person_header($db, $person, $school_id)
     $school = htmlspecialchars($person["school"]);
     $school_city = htmlspecialchars($person["school_city"]);
 
-    $phone = xsm_make_phone($person["phone"]);
-    $cellular = xsm_make_phone($person["cellular"]);
+    $phone = xsm_make_phone_from_obj($person, "person", "phone");
+    $cellular = xsm_make_phone_from_obj($person, "person", "cellular");
     $email = htmlspecialchars($person["email"]);
     $skype = htmlspecialchars($person["skype"]);
     $social_profile = xsm_prepare_social_profile($person["social_profile"]);
