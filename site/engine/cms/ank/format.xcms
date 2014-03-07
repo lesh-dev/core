@@ -211,9 +211,8 @@ function xsm_make_phone($phones_str, $id = '')
         if (xu_not_empty($result))
             $result .= XSM_PHONE_SEPARATOR;
 
-        if (xu_not_empty($id))
-            $id = "id=\"$id\" ";
-        $result .= "<span $id class=\"phone $class\" title=\"$hint\">$phone</span>";
+        $pid = xu_not_empty($id) ? " id=\"$id\" " : "";
+        $result .= "<span $pid class=\"phone $class\" title=\"$hint\">$phone</span>";
     }
     return $result;
 }
