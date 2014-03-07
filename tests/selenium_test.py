@@ -92,7 +92,7 @@ def RunTest(test):
 
 def colorStrL(string, color):
     """ Colors string using color """
-    return '\x1b[1;%im%s\x1b[0m' % (color, string)
+    return "\x1b[1;{textColor}m{text}\x1b[0m".format(textColor = color, text = string)
 
 
 def DecodeRunResult(result):
@@ -265,7 +265,7 @@ class SeleniumTest(object):
     def gotoSite(self, fullUrl, comment = ""):
         actionMsg = "Link: " + userSerialize(fullUrl);
         if not isVoid(comment):
-            actionMsg +=  (" comment: " + userSerialize(comment) + " ")
+            actionMsg += (" comment: " + userSerialize(comment) + " ")
         self.addAction("navigate", actionMsg)
         self.m_driver.get(fullUrl)
 
