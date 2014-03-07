@@ -43,18 +43,22 @@
     function xcmst_draw_user_create_form()
     {
         global $preface;
+        /* Chrome does not stop from autofilling password and login inputs even when
+           autocomplete="off". But as SO people say, global form autocomplete="off" works
+           as expected. */
         ?>
-        <form method="post" action="?<?php echo $preface; ?>" >
+        <form method="post" action="?<?php echo $preface; ?>" autocomplete="off">
+
             <h3>Учётные данные</h3>
             <div><span class="user-label">Логин</span><?php
-                xcmst_control_admin("login", XCMS_FROM_POST, "vasya-pupkin"); ?></div>
+                xcmst_control_admin("login", XCMS_FROM_POST, "vasya-pupkin", "input", "", "", XCMS_NO_AUTOCOMPLETE); ?></div>
             <div><span class="user-help-label">Разрешены латинские буквы, цифры,
                 а также дефис (-), подчёркивание (_), точка (.) и собака (@)</span></div>
             <div><span class="user-label">Пароль</span><?php
-                xcmst_control_admin("password", XCMS_FROM_POST, 'Sup3r-P@ssw0rd', "password"); ?></div>
+                xcmst_control_admin("password", XCMS_FROM_POST, xcms_mkpasswd(), "password", "", "", XCMS_NO_AUTOCOMPLETE); ?></div>
             <div><span class="user-help-label">Если не указан, будет сгенерирован автоматически</span></div>
             <div><span class="user-label">Пароль (ещё раз)</span><?php
-                xcmst_control_admin("password_confirm", XCMS_FROM_POST, '', "password"); ?></div>
+                xcmst_control_admin("password_confirm", XCMS_FROM_POST, '', "password", "", "", XCMS_NO_AUTOCOMPLETE); ?></div>
             <div><span class="user-label">Настоящее имя</span><?php
                 xcmst_control_admin("name", XCMS_FROM_POST, "Вася Пупкин"); ?></div>
             <div><span class="user-label">EMail</span><?php

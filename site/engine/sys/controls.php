@@ -8,6 +8,10 @@ define('XCMS_FROM_GET', '{{{XCMS_FROM_GET}}}');
 define('XCMS_CHECKBOX_ENABLED', 'enabled');
 define('XCMS_CHECKBOX_DISABLED', '');
 
+define('XCMS_AUTOCOMPLETE_DEFAULT', 'default');
+define('XCMS_AUTOCOMPLETE', 'on');
+define('XCMS_NO_AUTOCOMPLETE', 'off');
+
 function xcms_checkbox_enabled($value)
 {
     return xu_not_empty($value);
@@ -40,7 +44,7 @@ function xcms_get_key_for_checkbox($list, $key)
   *     text:     textarea field (TODO: not supported it)
   *     checkbox:
   **/
-function xcmst_control($name, $value, $placeholder, $class, $type = "input", $title = "", $def_value = "")
+function xcmst_control($name, $value, $placeholder, $class, $type = "input", $title = "", $def_value = "", $autocomplete = XCMS_AUTOCOMPLETE_DEFAULT)
 {
     if ($value === XCMS_FROM_POST)
         $value = xcms_get_key_or($_POST, $name, $def_value);
@@ -63,7 +67,10 @@ function xcmst_control($name, $value, $placeholder, $class, $type = "input", $ti
 
     if ($type == "input" || $type == "password")
     {
-        echo "<input type=\"$type_attr\" name=\"$name\" id=\"$name-input\" ".
+        $au = "";
+        if ($autocomplete != XCMS_AUTOCOMPLETE_DEFAULT)
+            $au = " autocomplete=\"$autocomplete\" ";
+        echo "<input type=\"$type_attr\" name=\"$name\" id=\"$name-input\" $au ".
             "value=\"$value\" class=\"$class\" $attrs />";
     }
     elseif ($type == "checkbox")
@@ -86,7 +93,7 @@ function xcmst_control($name, $value, $placeholder, $class, $type = "input", $ti
 /**
   * Specialization for admin-tools
   **/
-function xcmst_control_admin($name, $value, $placeholder, $type = "input", $title = "", $def_value = "")
+function xcmst_control_admin($name, $value, $placeholder, $type = "input", $title = "", $def_value = "", $autocomplete = XCMS_AUTOCOMPLETE_DEFAULT)
 {
-    xcmst_control($name, $value, $placeholder, "admin-medium", $type, $title, $def_value);
+    xcmst_control($name, $value, $placeholder, "admin-medium", $type, $title, $def_value, $autocomplete);
 }
