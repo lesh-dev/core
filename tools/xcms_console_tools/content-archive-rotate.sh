@@ -11,10 +11,10 @@ SEARCH_DIR="`cd $1; pwd`"
 
 shift
 
-XARGS_COMMAND="| rm -f"
+COMMAND="rm -f"
 
 if [ "$1" == "-n" ] || [ "$1" == "--nothing" ]; then
-    XARGS_COMMAND=""
+    COMMAND="ls -1"
     shift
 fi
 
@@ -28,6 +28,8 @@ echo "Cleaning versions in $SEARCH_DIR"
 
 cleanup_dir()
 {
+    local DIR="$1"
+    
     if ! [ -r "$DIR/content" ]; then
         echo "Directory $DIR has no content file, skipping. "
         return 0
@@ -37,7 +39,10 @@ cleanup_dir()
     fi
     echo "Cleaning version in directory $DIR"
     #ls -1t $DIR/content-version*gz
-    ls -1rt $DIR/content-version*gz | head -n "-$ARC_VERSIONS" $XARGS_COMMAND
+    TO_REMOVE="`ls -1rt $DIR/content-version*gz | head -n "-$ARC_VERSIONS"`"
+    if [ -n "$TO_REMOVE" ]; then
+        $COMMAND $TO_REMOVE 
+    fi
 }
 
 DIRS=`find "$SEARCH_DIR" -type d`
