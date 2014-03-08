@@ -11,10 +11,10 @@ SEARCH_DIR="`cd $1; pwd`"
 
 shift
 
-XARGS_COMMAND="rm -f"
+XARGS_COMMAND="| rm -f"
 
 if [ "$1" == "-n" ] || [ "$1" == "--nothing" ]; then
-    XARGS_COMMAND="ls -l"
+    XARGS_COMMAND=""
     shift
 fi
 
@@ -37,7 +37,7 @@ cleanup_dir()
     fi
     echo "Cleaning version in directory $DIR"
     #ls -1t $DIR/content-version*gz
-    ls -1rt $DIR/content-version*gz | head -n "-$ARC_VERSIONS" | xargs $XARGS_COMMAND
+    ls -1rt $DIR/content-version*gz | head -n "-$ARC_VERSIONS" $XARGS_COMMAND
 }
 
 DIRS=`find "$SEARCH_DIR" -type d`
