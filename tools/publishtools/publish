@@ -40,6 +40,7 @@ fi
 
 REALM_CONFIG=$PUBLISH_REALM/realm.conf
 if [ -f $REALM_CONFIG ]; then
+    echo "Loading '$REALM_CONFIG'"
     source $REALM_CONFIG
 else
     print_warning "Cannot find realm config file. Empty one was created at '$REALM_CONFIG'"

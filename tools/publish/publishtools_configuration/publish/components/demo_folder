@@ -2,6 +2,11 @@
 # Component generated from template on Fri May  3 19:31:02 MSK 2013
 # Please don't forget to commit all changes to repo
 
+if [ -z "$clone_root" ] ; then
+    echo "Clones root is not set"
+    exit 1
+fi
+
 type=folder
-location=/srv/www/clones/production
+location=$clone_root/production
 local_target=./

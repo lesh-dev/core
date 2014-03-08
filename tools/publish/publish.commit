@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
-cd /srv/www/clones/content-fizlesh.ru
+
+if [ -z "$clone_root" ] ; then
+    echo "Clones root is not set"
+    exit 1
+fi
+
+cd $clone_root/content-fizlesh.ru
 git add -A
 git commit --all --message="Robot commit. Reason: $1" --author='FizLesh CommitBot <robot@fizlesh.ru>'
 git push

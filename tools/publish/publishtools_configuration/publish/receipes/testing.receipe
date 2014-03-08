@@ -2,9 +2,14 @@
 # Generated from template on Tue Oct  9 22:33:23 MSK 2012
 # Please don't forget to commit all changes to repo
 
+if [ -z "$clone_root" ] ; then
+    echo "Clones root is not set"
+    exit 1
+fi
+
 components=" preprod_copy"
 branch=master
-target=/srv/www/clones/testing
+target=$clone_root/testing
 sympolicy=none
 
 # This will be executed while publishing component begin

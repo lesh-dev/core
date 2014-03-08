@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 # Generated from template on Mon Sep 17 20:34:42 MSK 2012
 # Please don't forget to commit all changes to repo
-target=/srv/www/clones/preprod
+
+if [ -z "$clone_root" ] ; then
+    echo "Clones root is not set"
+    exit 1
+fi
+
+target=$clone_root/preprod
 components="git content_copy"
 branch=master
 

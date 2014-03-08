@@ -1,15 +1,21 @@
 #!/usr/bin/env bash
 # Generated from template on Fri May  3 19:33:09 MSK 2013
 # Please don't forget to commit all changes to repo
-target=/srv/www/clones/demo
+
+if [ -z "$clone_root" ] ; then
+    echo "Clones root is not set"
+    exit 1
+fi
+
+target=$clone_root/demo
 sympolicy=none
 components=" demo_folder"
 branch=master
 # This will be executed while publishing component begin
 function hook_begin
 {
-    rm -rf /srv/www/clones/demo/
-    mkdir -p /srv/www/clones/demo
+    rm -rf $clone_root/demo/
+    mkdir -p $clone_root/demo
     echo -en  # Add something useful is you want
 }
 
@@ -27,5 +33,5 @@ function hook_end
     cp -rf content_orig/. content/
     echo -en  # Add something useful is you want
     rm content/usr/*
-    apachectl  -k graceful
+    apachectl -k graceful
 }

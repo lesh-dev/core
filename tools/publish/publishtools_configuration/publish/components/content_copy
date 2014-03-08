@@ -2,6 +2,11 @@
 # Component generated from template on Mon Sep 17 20:32:04 MSK 2012
 # Please don't forget to commit all changes to repo
 
+if [ -z "$clone_root" ] ; then
+    echo "Clones root is not set"
+    exit 1
+fi
+
 type=folder
-location=/srv/www/clones/content-fizlesh.ru/content
+location=$clone_root/content-fizlesh.ru/content
 local_target=./content

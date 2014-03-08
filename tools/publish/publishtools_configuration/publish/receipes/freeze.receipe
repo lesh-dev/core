@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 # Generated from template on Mon Sep 17 21:49:46 MSK 2012
 # Please don't forget to commit all changes to repo
+
+if [ -z "$clone_root" ] ; then
+    echo "Clones root is not set"
+    exit 1
+fi
+
 components=" production_copy"
 branch=master
-target=/srv/www/clones/freeze
-final_target=/srv/www/clones/production
-lost_target=/srv/www/clones/production_muted
+target=$clone_root/freeze
+final_target=$clone_root/production
+lost_target=$clone_root/production_muted
 
 # This will be executed while publishing component begin
 function hook_begin

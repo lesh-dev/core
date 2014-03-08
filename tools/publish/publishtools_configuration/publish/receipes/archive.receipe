@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 # Generated from template on Mon Sep 17 22:16:36 MSK 2012
 # Please don't forget to commit all changes to repo
+
+if [ -z "$clone_root" ] ; then
+    echo "Clones root is not set"
+    exit 1
+fi
+
 components=""
 target=/tmp/archive_target
 branch=master
 sympolicy=none
 
 # This will be executed while publishing component begin
-CLONE_DIR=/srv/www/clones
 function hook_begin
 {
     # stupid action to fix #661
@@ -20,16 +25,16 @@ function hook_end
 
     echo "Archiving production copies..."
 
-    for i in $CLONE_DIR/production.last-*; do
-        if [ "$(readlink $CLONE_DIR/production)" == "$i" ]; then
+    for i in $clone_root/production.last-*; do
+        if [ "$(readlink $clone_root/production)" == "$i" ]; then
             echo "Skipping real production: $i"
             continue
         fi
-        if [ "$(readlink $CLONE_DIR/production_muted)" == "$i" ]; then
+        if [ "$(readlink $clone_root/production_muted)" == "$i" ]; then
             echo "Skipping muted production: $i"
             continue
         fi
-        if [ "$(readlink $CLONE_DIR/production.last)" == "$i" ]; then
+        if [ "$(readlink $clone_root/production.last)" == "$i" ]; then
             echo "Skipping 'final': $i"
             continue
         fi
@@ -42,8 +47,8 @@ function hook_end
 
     echo "Archiving pre-production copies..."
 
-    for i in $CLONE_DIR/preprod-*; do
-        if [ "$(readlink $CLONE_DIR/preprod)" == "$i" ]; then
+    for i in $clone_root/preprod-*; do
+        if [ "$(readlink $clone_root/preprod)" == "$i" ]; then
             echo "Skipping preprod: $i"
             continue
         fi
@@ -56,16 +61,16 @@ function hook_end
 
     echo "Archiving frozen copies..."
 
-    for i in $CLONE_DIR/freeze-*; do
-        if [ "$(readlink $CLONE_DIR/production)" == "$i" ]; then
+    for i in $clone_root/freeze-*; do
+        if [ "$(readlink $clone_root/production)" == "$i" ]; then
             echo "Skipping real production's frost: $i"
             continue
         fi
-        if [ "$(readlink $CLONE_DIR/production_muted)" == "$i" ]; then
+        if [ "$(readlink $clone_root/production_muted)" == "$i" ]; then
             echo "Skipping mute production's frost: $i"
             continue
         fi
-        if [ "$(readlink $CLONE_DIR/freeze)" == "$i" ]; then
+        if [ "$(readlink $clone_root/freeze)" == "$i" ]; then
             echo "Skipping current frost: $i"
             continue
         fi
@@ -77,5 +82,5 @@ function hook_end
     done
 
     echo "Total space used by clones:"
-    du -hs $CLONE_DIR
+    du -hs $clone_root
 }
