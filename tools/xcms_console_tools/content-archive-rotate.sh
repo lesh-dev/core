@@ -29,7 +29,7 @@ echo "Cleaning versions in $SEARCH_DIR"
 cleanup_dir()
 {
     local DIR="$1"
-    
+
     if ! [ -r "$DIR/content" ]; then
         echo "Directory $DIR has no content file, skipping. " 1>&2
         return 0
@@ -41,7 +41,7 @@ cleanup_dir()
     #ls -1t $DIR/content-version*gz
     TO_REMOVE="`ls -1rt $DIR/content-version*gz | head -n "-$ARC_VERSIONS"`"
     if [ -n "$TO_REMOVE" ]; then
-        $COMMAND $TO_REMOVE 
+        $COMMAND $TO_REMOVE
     fi
 }
 
@@ -49,3 +49,4 @@ DIRS=`find "$SEARCH_DIR" -type d`
 for DIR in $DIRS; do
     cleanup_dir $DIR
 done
+
