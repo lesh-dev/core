@@ -23,13 +23,16 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
         inpLastName = u"Телефонов_" + random_crap.randomText(4);
         inpFirstName = u"Самсунг_" + random_crap.randomText(3)
         inpMidName = u"Нокиевич_" + random_crap.randomText(3)
-        inpPhone = "+7(900)000-00-00, +7(900)999-99-99"
+        inpCellPhone = "+7(900)000-00-00, +7(900)999-99-99"
+        inpPhone = "8-900-000-00-00, +7-900-999-99-99"
 
         inpLastName = self.fillElementById("last_name-input", inpLastName)
         inpFirstName = self.fillElementById("first_name-input", inpFirstName)
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
-        inpPhone = self.fillElementById("cellular-input", inpPhone)
+        inpCellPhone = self.fillElementById("cellular-input", inpCellPhone)
+        inpPhone = self.fillElementById("phone-input", inpPhone)
         
+        inpCellPhone = inpCellPhone.replace("+7", "8")
         inpPhone = inpPhone.replace("+7", "8")
         
         self.clickElementById("update-person-submit")
@@ -42,11 +45,17 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
         self.checkPersonAliasInPersonView(fullAlias)
         
         personId = self.getCurrentPersonId()
-        personPhoneEleId = "person" + str(personId) + "-cellular"
+        personCellPhoneEleId = "person" + str(personId) + "-cellular"
+        personPhoneEleId = "person" + str(personId) + "-phone"
         
-        phoneOnSite = self.getElementTextById(personPhoneEleId)
-        self.logAdd("Phone on the site: " + phoneOnSite)
-        if inpPhone != phoneOnSite:
-            raise TestError("Phones on the site don't match entered phones. ")
+        siteCellPhone = self.getElementTextById(personCellPhoneEleId)
+        sitePhone = self.getElementTextById(personPhoneEleId)
+        self.logAdd("Cell phone on the site: " + siteCellPhone)
+        self.logAdd("Phone on the site: " + sitePhone)
+        
+        if inpCellPhone != siteCellPhone:
+            self.failTest("Cell phones on the site don't match entered cell phones. ")
+        if inpPhone != sitePhone:
+            self.failTest("Phones on the site don't match entered phones. ")
         
 
