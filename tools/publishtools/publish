@@ -176,7 +176,7 @@ function add_receipe
             break
         fi
         if [ $save. == "n." ]; then
-            break;
+            break
         fi
     done
     rm $TEMP_CONFIG
@@ -194,7 +194,7 @@ function add_variable
             break
         fi
         if [ $save. == "n." ]; then
-            break;
+            break
         fi
     done
 }
@@ -329,10 +329,6 @@ function main
             assemble $ARG $NEXT
             exit 0
         fi
-        #if [ "$ARG." == "assemble." ]; then
-        #    assemble $1
-        #    exit 0
-        #fi
         found=false
         for candidate in $PUBLISH_VARIABLES; do
             if [ $ARG == "--$candidate" ]; then
