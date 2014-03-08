@@ -31,7 +31,7 @@ cleanup_dir()
     local DIR="$1"
     
     if ! [ -r "$DIR/content" ]; then
-        echo "Directory $DIR has no content file, skipping. "
+        echo "Directory $DIR has no content file, skipping. " 1>&2
         return 0
     fi
     if ! ls $DIR/content-version*gz &>/dev/null; then
