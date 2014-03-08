@@ -16,7 +16,7 @@ def fileBaseName(fileName):
     return os.path.basename(fileName)
 
 def wrapIfLong(text):
-    if len(text) > 80:
+    if len(text) > 70:
         return "\n" + text
     return text
 
@@ -25,7 +25,7 @@ def userSerialize(text, options = []):
         return "|".join([userSerialize(x) for x in text])
     if isString(text):
         if "cut_strings" in options or "cut_string" in options:
-            maxLen = 100
+            maxLen = 75
             if len(text) > maxLen:
                 return "'" + text[:maxLen] + "...'"
             else:
