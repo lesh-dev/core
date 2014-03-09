@@ -1,3 +1,4 @@
 <?php
+    global $type;
     include(translate("<! cms/$type/view !>"));
 ?>

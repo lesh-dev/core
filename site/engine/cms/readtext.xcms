@@ -12,6 +12,12 @@
             что в ней находится. Переменная $source (имя файла) по-прежнему
             имеет значение (в смысле кэширования)
 */
+
+global $full_content_dir;
+global $web_prefix;
+global $engine_pub;
+global $engine_dir;
+
 $ARG = implode(",", $argv);
 $compiled = ".prec/cms_readfile_".md5($ARG).md5(@$source).md5(@$text).".dat";
 

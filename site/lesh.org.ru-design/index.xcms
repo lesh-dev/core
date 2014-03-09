@@ -3,8 +3,14 @@
 <# url #>
 <# deploy_utils #>
 <# locale #>
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <?php
+function xcms_print_related_pages()
+{
+    $pageid = "z08Contact";
+    ?><# if //!@$_GET["usr"]//cms/ #><?php
+}
+
     $xcms_version = xcms_get_list("INFO");
 ?>
 <html>
@@ -69,11 +75,8 @@
     <div class="text_left">
         <div class="text_left_top">
             <p class="word_left_top">подробнее</p>
-            <!-- experimental page embedding -->
-            <p class="indent">
-            <?php $pageid = "z08Contact"; ?>
-            <# if //!@$_GET["usr"]//cms/ #>
-            </p>
+            <p class="indent"><?php
+            xcms_print_related_pages(); ?></p>
 
             <p class="indent"> Школа проводится с 23 июля по 24 августа на базе местной сельской
                 школы, в здании которой проводятся занятия и располагаются необходимые помещения
