@@ -48,6 +48,7 @@ function xcms_print_related_pages()
         <img src="<# full_design_dir #>pict/green.gif" />
     </div>
 
+    <!--
     <div class="sidebar_bottom">
         <ul>
             <li><a class="small_green_word" href="">вход</a>&nbsp;/</li>
@@ -55,6 +56,7 @@ function xcms_print_related_pages()
             <li><a href="">карта сайта</a></li>
         </ul>
     </div>
+    -->
 
 
     <div class="main_text">
