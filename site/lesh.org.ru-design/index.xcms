@@ -5,10 +5,18 @@
 <# locale #>
 <!DOCTYPE html>
 <?php
+
 function xcms_print_related_pages()
 {
-    $pageid = "z08Contact";
-    ?><# if //!@$_GET["usr"]//cms/ #><?php
+    // see dollar/related.php
+    global $related_pages;
+    if (!$related_pages)
+        $related_pages = array();
+    foreach ($related_pages as $related)
+    {
+        $pageid = $related;
+        ?><# if //!@$_GET["usr"]//cms/ #><?php
+    }
 }
 
     $xcms_version = xcms_get_list("INFO");
