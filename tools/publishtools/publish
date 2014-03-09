@@ -40,7 +40,7 @@ fi
 
 REALM_CONFIG=$PUBLISH_REALM/realm.conf
 if [ -f $REALM_CONFIG ]; then
-    echo "Loading '$REALM_CONFIG'"
+    echo "Loading realm from '$REALM_CONFIG'"
     source $REALM_CONFIG
 else
     print_warning "Cannot find realm config file. Empty one was created at '$REALM_CONFIG'"
@@ -55,7 +55,7 @@ function do_help()
     if [ -n "$RECEIPE_LIST" ] ; then
         echo "Receipe commands are:"
         for var in $RECEIPE_LIST; do
-            echo -e "\\t$var${TAB}${RECEIPE_DESCRIPTIONS["$var"]}"
+            echo -e "${SP}$var${TAB}${RECEIPE_DESCRIPTIONS["$var"]}"
         done
     else
         echo "Receipe (command) list is empty."
@@ -68,8 +68,7 @@ function do_help()
     if [ -n "$PUBLISH_VARIABLES" ] ; then
         echo "Options can be:"
         for var in $PUBLISH_VARIABLES; do
-            # echo $var -- ${PUBLISH_DESCRIPTIONS[ownera]}
-            echo -e \\t--${var}${TAB}${PUBLISH_DESCRIPTIONS["$var"]}
+            echo -e "${SP}--${var}${TAB}${PUBLISH_DESCRIPTIONS["$var"]}"
         done
     else
         echo "No publish variables (options) declared yet."
@@ -254,13 +253,18 @@ function assemble
 {
     RECEIPE=$1
     COMMAND=$2
+
+    # set variables
+    eval $VARIABLE_HOOKS
+    # little spike not to hardcode site configuration
+    source $PUBLISH_REALM/variable.conf
+
     source $PUBLISH_REALM/receipes/$RECEIPE.receipe
     if [ $COMMAND. != "." ]; then
         hook_$COMMAND
         return 0
     fi
     hook_begin
-    eval $VARIABLE_HOOKS
 
     for variable in $PUBLISH_VARIABLES; do
         value=$(eval echo \$$variable)
