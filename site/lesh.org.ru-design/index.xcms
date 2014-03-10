@@ -1,9 +1,9 @@
-<# cms/linit #>
-<# cms/init #>
-<# url #>
-<# deploy_utils #>
-<# locale #>
-<!DOCTYPE html>
+<# cms/linit #><?php
+?><# cms/init #><?php
+?><# url #><?php
+?><# deploy_utils #><?php
+?><# locale #><?php
+?><!DOCTYPE html>
 <?php
 
 function xcms_print_related_pages()
@@ -78,31 +78,34 @@ function xcms_print_related_pages()
             } else
             {?>
                 <?php echo $hdr; ?><?php
-            }?></div>
-            <div id="content-text"><# if //!@$_GET["usr"]//cms/ #></div>
+            }?>
+        </div>
+        <div id="content-text">
+            <div class="text_left">
+                <div class="text_left_top">
+                    <p class="word_left_top">подробнее</p>
+                    <p class="indent"><?php
+                    xcms_print_related_pages(); ?></p>
+
+                    <p class="indent"> Школа проводится с 23 июля по 24 августа на базе местной сельской
+                        школы, в здании которой проводятся занятия и располагаются необходимые помещения
+                        (медпункт, библиотека, лаборатории, и т.п.).....<a href="">далее</a></p>
+                        <img class="arrow" src="<# full_design_dir #>pict/arrow.png" />
+
+                    <p class="text_left_middle"><a href=""> документы и снаряжение</a></p>
+                </div>
+                <div class="text_left_bottom">
+                    <p class="word_left_top">история</p>
+                    <p class="indent">Традиция летних школ зародилась в конце пятидесятых – начале
+                        шестидесятых годов двадцатого века, когда прошли первые летние семинары
+                        и школы по вторичным моделирующим системам и семиотике.....<a href="history.html">далее</a></p>
+                </div>
+                <img class="white-leaf" src="<# full_design_dir #>pict/white-leaf.gif" />
+            </div>
+            <# if //!@$_GET["usr"]//cms/ #>
+        </div>
     </div>
 
-    <div class="text_left">
-        <div class="text_left_top">
-            <p class="word_left_top">подробнее</p>
-            <p class="indent"><?php
-            xcms_print_related_pages(); ?></p>
-
-            <p class="indent"> Школа проводится с 23 июля по 24 августа на базе местной сельской
-                школы, в здании которой проводятся занятия и располагаются необходимые помещения
-                (медпункт, библиотека, лаборатории, и т.п.).....<a href="">далее</a></p>
-                <img class="arrow" src="<# full_design_dir #>pict/arrow.png" />
-
-            <p class="text_left_middle"><a href=""> документы и снаряжение</a></p>
-        </div>
-        <div class="text_left_bottom">
-            <p class="word_left_top">история</p>
-            <p class="indent">Традиция летних школ зародилась в конце пятидесятых – начале
-                шестидесятых годов двадцатого века, когда прошли первые летние семинары
-                и школы по вторичным моделирующим системам и семиотике.....<a href="history.html">далее</a></p>
-        </div>
-        <img class="white-leaf" src="<# full_design_dir #>pict/white-leaf.gif" />
-    </div>
 
     <div class="footer">
         <a href=""><img src="<# full_design_dir #>pict/facebook.png" /></a>
