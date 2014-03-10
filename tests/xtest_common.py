@@ -227,6 +227,12 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def getAuthLink(self):
         return self.getUrlByLinkText(u"Авторизация")
 
+    def gotoXsm(self):
+        self.gotoPage("/xsm")
+        
+    def gotoXsmSchools(self):
+        self.gotoUrlByLinkText(u"Школы")
+
     def gotoAdminPanel(self):
         self.logAdd("gotoAdminPanel: going to admin control panel. ")
         self.gotoUrlByLinkText(self.getAdminPanelLinkName())
@@ -350,6 +356,9 @@ class XcmsTest(XcmsTestWithConfig):
 
     def gotoBackToPersonView(self):
         self.gotoUrlByLinkText(u"Вернуться к просмотру участника")
+
+    def gotoBackToSchoolView(self):
+        self.gotoUrlByLinkText(u"Вернуться к просмотру")
 
     def gotoEditPerson(self):
         self.gotoUrlByLinkText(u"Редактировать анкетные данные")

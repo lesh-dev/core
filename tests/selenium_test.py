@@ -134,6 +134,7 @@ class SeleniumTest(object):
 
         self.m_logFile = self.m_testName + ".log" #"_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") +
         self.m_actionLog = []
+        self.m_logCheckStopWords = []
 
     def init(self):
         self.m_baseUrl = self.fixBaseUrl(self.getBaseUrl())
@@ -561,6 +562,16 @@ class SeleniumTest(object):
     def getPageTitle(self):
         return self.m_driver.title
 
+    # to filter log for regular messages like '404 not found'.
+    def setLogStopWords(self, stopList):
+        if isList(stopList):
+            self.m_logCheckStopWords = stopList
+        else:
+            self.m_logCheckStopWords = [stopList]
+        
+    def isStopWord(self, text):
+        return text in self.m_logCheckStopWords or text == self.m_textOnPage404
+    
     def checkTextPresent(self, xpath, text):
         self.checkEmptyParam(xpath, "checkTextPresent")
         self.checkEmptyParam(text, "checkTextPresent")
@@ -572,7 +583,10 @@ class SeleniumTest(object):
                 serOpt = []
                 if xpath in ["/html/body", "//*"]: # too large
                     serOpt = ["cut_strings"]
-                self.logAdd("checkTextPresent: element " + userSerialize(xpath) + " text: " + wrapIfLong(userSerialize(eleText, serOpt)) + ". ")
+                    
+                if not self.isStopWord(text):
+                    self.logAdd("checkTextPresent: element " + userSerialize(xpath) + " text: " + wrapIfLong(userSerialize(eleText, serOpt).replace("\n", " ")) + ". ")
+                    
                 if isList(text):
                     for phrase in text:
                         if phrase in eleText:
@@ -581,12 +595,11 @@ class SeleniumTest(object):
                     self.logAdd("checkTextPresent: NOT found any of " + userSerialize(text) + " in element with xpath " + userSerialize(xpath) + ". ")
                     return False
                 else:
-                    if text in eleText:
-                        self.logAdd("checkTextPresent: found text " + userSerialize(text) + " in element with xpath " + userSerialize(xpath) + ". ")
-                        return True
-                    else:
-                        self.logAdd("checkTextPresent: NOT found text " + userSerialize(text) + " in element with xpath " + userSerialize(xpath) + ". ")
-                        return False
+                    bFound = text in eleText
+                    particle = "" if bFound else "NOT "
+                    if not self.isStopWord(text):
+                        self.logAdd("checkTextPresent: " + particle + "found text " + userSerialize(text) + " in element with xpath " + userSerialize(xpath) + ". ")
+                    return bFound
 
             except InvalidSelectorException:
                 self.fatalTest("Invalid XPath expression in checkTextPresent: " + userSerialize(xpath) + ". ")
