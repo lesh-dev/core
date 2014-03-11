@@ -219,11 +219,10 @@ h2 {
 
 .main_text {
     position: relative; /* to position edit buttons */
-    width: 370px;
-    float: left;
+    clear: both;
     padding-left: 50px;
     padding-top: 30px;
-    padding-right: 10px;
+    padding-right: 20px;
     text-align: left;
     line-height: 18px;
     _padding-top: 0px;
@@ -504,6 +503,8 @@ p.grey_fond{
 .text_left{
     background-color:  #D0C4A3;
     margin-top: 50px;
+    margin-left: 20px;
+    margin-bottom: 20px;
     width: 250px;
     float: right;
     line-height: 18px;
