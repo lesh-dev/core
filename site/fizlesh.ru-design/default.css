@@ -129,6 +129,13 @@ h4 {
     margin-bottom: 2pt;
 }
 
+div.signature {
+    font-size: 10pt;
+    font-style: italic;
+    text-align: right;
+    margin-right: 20px;
+}
+
 a, a:link {
     color: #cf5612;
 }

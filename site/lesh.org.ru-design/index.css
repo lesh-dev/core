@@ -794,8 +794,7 @@ p.text {
     font-size: 12px;
 }
 
-/* from news */
-.newstitle {
+.h3 {
     color: #2f8f4f;
     font-family: sans-serif;
     font-size: 11pt;

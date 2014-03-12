@@ -314,11 +314,6 @@ div.signature {
     margin-bottom: 5px;
 }
 
-div.newstitle {
-    font-size: 10pt;
-    font-weight: bolder;
-}
-
 input.delete-news {
     float: right;
     background-color: #ff7f7f;
