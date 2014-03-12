@@ -237,7 +237,7 @@ h2 {
 }
 
 .main_text p {
-    padding-right: 20px;
+    padding-right: 40px;
 }
 
 .bottom_text p.top{
@@ -763,6 +763,12 @@ a.link-button {
     line-height: 16px;
 }
 
+a.content-edit {
+    position: absolute;
+    right: 47px;
+    top: -3px;
+}
+
 a.contlist-edit {
     position: absolute;
     right: 7px;
@@ -775,7 +781,7 @@ div.contlist-block {
     position: relative;
     border-radius: 5px;
     padding: 5px 10px;
-    margin-right: 20px; /* same as paragraph */
+    margin-right: 40px; /* same as paragraph */
 }
 
 div.contlist-block.odd {
