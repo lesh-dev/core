@@ -10,7 +10,7 @@
         $template_name,
         '<div class="newstitle">@@DATE@. Заголовок новости</div>'.EXP_LF.
         '<p class="text">Текст новости</p>'.EXP_LF.
-        '<div class="signature">@@AUTHOR@</div>')
+        '<div class="signature">@@AUTHOR@</div>'))
     {
         xcms_log(0, "[NEWS INSTALLER]: Cannot write template file '$template_name'");
     }
