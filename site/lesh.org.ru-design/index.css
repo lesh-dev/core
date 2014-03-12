@@ -788,13 +788,17 @@ div.contlist-block.odd {
     background-color: rgb(217, 238, 229);
 }
 
+div.contlist-block p {
+    padding-right: 0px;
+}
+
 p.text {
     padding-top: 0px;
     margin-top: 6px;
     font-size: 12px;
 }
 
-.h3 {
+h3 {
     color: #2f8f4f;
     font-family: sans-serif;
     font-size: 11pt;
@@ -804,7 +808,7 @@ p.text {
     margin-bottom: 0px;
 }
 
-.signature {
+div.signature {
     color: #000000;
     font-size: 12px;
     font-style: italic;
