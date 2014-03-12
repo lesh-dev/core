@@ -222,7 +222,7 @@ h2 {
     clear: both;
     padding-left: 50px;
     padding-top: 30px;
-    padding-right: 20px;
+    padding-right: 0px;
     text-align: left;
     line-height: 18px;
     _padding-top: 0px;
@@ -234,6 +234,10 @@ h2 {
     font-size: 14px;
     color: black;
     padding-top: 15px;
+}
+
+.main_text p {
+    padding-right: 20px;
 }
 
 .bottom_text p.top{
@@ -771,10 +775,11 @@ div.contlist-block {
     position: relative;
     border-radius: 5px;
     padding: 5px 10px;
+    margin-right: 20px; /* same as paragraph */
 }
 
 div.contlist-block.odd {
-    background-color: rgb(211, 248, 193);
+    background-color: rgb(217, 238, 229);
 }
 
 p.text {

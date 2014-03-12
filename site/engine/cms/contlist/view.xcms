@@ -45,7 +45,7 @@
             $timestamp = xcms_get_key_or($info, "timestamp-created");
             $date = xcms_rus_date($timestamp);
             ?>
-            <h3><?php echo "$date &ndash; ".xcms_get_key_or_enc($info, "header"); ?></h3><?php
+            <h3 id="<?php echo $subpage_id; ?>"><?php echo "$date &ndash; ".xcms_get_key_or_enc($info, "header"); ?></h3><?php
             // include(translate("<! cms/readtext --markdown --limit=220
             //  --next-link=index.php?page=$subpage_id --next-text=подробнее !>"));
             include(translate("<! cms/readtext --markdown !>"));
