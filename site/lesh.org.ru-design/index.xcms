@@ -67,19 +67,24 @@ function xcms_print_related_pages()
     -->
 
 
-    <div class="main_text">
+    <div class="main_text"><?php
+        $hdr = xcms_get_key_or($INFO, "header");
+        $alias = xcms_get_key_or($INFO, "alias");
+        $aparam = xcms_get_key_or($_GET, "aparam");
+        $in_xsm = ($alias == "register" && strlen($aparam));
+        // little spike: skip header display
+        // in case of special pages (XSM manager for now)
+        ?>
         <div id="content-header"><?php
-            $hdr = xcms_get_key_or($INFO, "header");
-            if (!strlen($hdr) ||
-                (xcms_get_key_or($INFO, "alias") == "register" &&
-                strlen(xcms_get_key_or($_GET, "aparam")))) {
-                // little spike: skip header display
-                // in case of special pages (XSM manager for now)
-            } else
-            {?>
-                <?php echo $hdr; ?><?php
-            }?>
-        </div>
+        if (strlen($hdr) && !$in_xsm)
+        {?>
+            <h1><?php echo $hdr; ?></h1><?php
+        }?>
+        </div><?php
+        if (!$in_xsm)
+        {?>
+            <# cms/page/edit_button #><?php
+        }?>
         <div id="content-text">
             <div class="text_left">
                 <div class="text_left_top">

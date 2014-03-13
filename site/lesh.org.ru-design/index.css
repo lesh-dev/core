@@ -240,6 +240,8 @@ h2 {
     padding-right: 40px;
 }
 
+
+
 .bottom_text p.top{
     font-size: 14px;
     color: black;
@@ -504,7 +506,7 @@ p.grey_fond{
     _padding: 0px;*/
 }
 
-.text_left{
+.text_left {
     background-color:  #D0C4A3;
     margin-top: 50px;
     margin-left: 20px;
@@ -569,9 +571,10 @@ img.white-leaf {
     _padding-left: 0px;
 }
 
-.text_left_top{
+.text_left_top {
     width: 200px;
     background-color:  #83ac9b;
+    color: black;
     padding: 5px 20px 20px 20px;
     margin-left: 10px;
     margin-top: -30px;
@@ -581,9 +584,10 @@ img.white-leaf {
     margin-top: -15px\9;
     _margin-top: -2px;
     position: relative;
+    font-size: 13px;
 }
 
-.text_left_top , x:-moz-any-link{
+.text_left_top, x:-moz-any-link{
     background-color:  #769897;
     padding: 20px;
     padding-top: 1px;
@@ -598,15 +602,17 @@ img.white-leaf {
 }
 
 .text_left_top p.word_left_top,
-.text_left_bottom p.word_left_top{
+.text_left_bottom p.word_left_top {
     font-size: 15px;
     color: black;
     padding-bottom: 10px;
 }
 
-.text_left_top, .text_left_bottom p{
+.text_left_top p,
+.text_left_bottom p {
     font-size: 13px;
     color: black;
+    padding-right: 0px;
 }
 
 .text_left_top p.text_left_middle {
