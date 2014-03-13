@@ -53,7 +53,6 @@ function xcms_print_related_pages()
             <li><a href="/<# web_prefix #>?<?php
                 echo xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>">Админка</a></li>
         </ul>
-        <img src="<# full_design_dir #>pict/green.gif" />
     </div>
 
     <!--
@@ -75,16 +74,6 @@ function xcms_print_related_pages()
         // little spike: skip header display
         // in case of special pages (XSM manager for now)
         ?>
-        <div id="content-header"><?php
-        if (strlen($hdr) && !$in_xsm)
-        {?>
-            <h1><?php echo $hdr; ?></h1><?php
-        }?>
-        </div><?php
-        if (!$in_xsm)
-        {?>
-            <# cms/page/edit_button #><?php
-        }?>
         <div id="content-text">
             <div class="text_left">
                 <div class="text_left_top">
@@ -107,6 +96,16 @@ function xcms_print_related_pages()
                 </div>
                 <img class="white-leaf" src="<# full_design_dir #>pict/white-leaf.gif" />
             </div>
+            <div id="content-header"><?php
+            if (strlen($hdr) && !$in_xsm)
+            {?>
+                <h1><?php echo $hdr; ?></h1><?php
+            }?>
+            </div><?php
+            if (!$in_xsm)
+            {?>
+                <# cms/page/edit_button #><?php
+            }?>
             <# if //!@$_GET["usr"]//cms/ #>
         </div>
     </div>

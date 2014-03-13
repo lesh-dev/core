@@ -170,6 +170,9 @@ h2 {
 .sidebar-right {
     width: 240px;
     float: right;
+    background-image: url(pict/green.gif);
+    background-repeat: no-repeat;
+    background-position: 0px right 0px top;
 }
 
 .sidebar-right ul{
@@ -221,12 +224,10 @@ h2 {
     position: relative; /* to position edit buttons */
     clear: both;
     padding-left: 50px;
-    padding-top: 30px;
+    padding-top: 0px;
     padding-right: 0px;
     text-align: left;
     line-height: 18px;
-    _padding-top: 0px;
-    _margin-top: -50px;
 }
 
 .main_text p, .bottom_text p,
@@ -770,9 +771,7 @@ a.link-button {
 }
 
 a.content-edit {
-    position: absolute;
-    right: 47px;
-    top: -3px;
+    float: right;
 }
 
 a.contlist-edit {
