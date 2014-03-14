@@ -517,7 +517,15 @@ p.grey_fond{
     line-height: 18px;
 }
 
-.right_text{
+.text_left p {
+    padding-top: 0px;
+}
+
+.text_left a {
+    font-size: 13px;
+}
+
+.right_text {
     background-color:  #EBECEC;
     color: black;
     margin-top: 15px;
