@@ -278,7 +278,7 @@ h2 {
 }
 
 .main_text span.only_bold,
-.right_text p.only_bold,
+.right-normal p.only_bold,
 .grey_fond span.only_bold,
 .indent_form span.only_bold,
 .length_of_text p.only_bold{
@@ -332,18 +332,18 @@ p.grey_fond{
 }
 
 .length_of_text p.indent,
-.right_text .indent_form p,
-.right_text .indent_form p,
+.right-normal .indent_form p,
+.right-normal .indent_form p,
 .length_of_text li.indent{
     padding-top: 10px;
 }
 
-.right_text p.indent{
+.right-normal p.indent{
     padding-top: 7px;
 }
 
-.right_text a.after_year,
-.right_text span.after_year{
+.right-normal a.after_year,
+.right-normal span.after_year{
     padding: 7px 0px 0px 10px;
 }
 
@@ -525,7 +525,7 @@ p.grey_fond{
     font-size: 13px;
 }
 
-.right_text {
+.right-normal {
     background-color:  #EBECEC;
     color: black;
     margin-top: 15px;
@@ -536,13 +536,13 @@ p.grey_fond{
     line-height: 18px;
 }
 
-.right_text div.indent_form{
+.right-normal div.indent_form{
     padding-left: 15px;
     padding-right: 20px;
     padding-bottom: 10px;
 }
 
-.right_text span.setting_year{
+.right-normal span.setting_year{
     background: #7A9181;
     color: white;
     width: 250px;
