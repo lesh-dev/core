@@ -81,8 +81,8 @@ function xcms_print_related_pages()
         $main_page = ob_get_clean();
         ?>
         <div id="content-text">
-            <div class="text_left">
-                <div class="text_left_top">
+            <div class="right-inv">
+                <div class="right-inv-top">
                     <p class="word_left_top">подробнее</p>
                     <p class="indent"><?php
                     xcms_print_related_pages(); ?></p>
@@ -92,9 +92,9 @@ function xcms_print_related_pages()
                         (медпункт, библиотека, лаборатории, и т.п.).....<a href="">далее</a></p>
                         <img class="arrow" src="<# full_design_dir #>pict/arrow.png" />
 
-                    <p class="text_left_middle"><a href=""> документы и снаряжение</a></p>
+                    <p class="right-inv-middle"><a href=""> документы и снаряжение</a></p>
                 </div>
-                <div class="text_left_bottom">
+                <div class="right-inv-bottom">
                     <p class="word_left_top">история</p>
                     <p class="indent">Традиция летних школ зародилась в конце пятидесятых – начале
                         шестидесятых годов двадцатого века, когда прошли первые летние семинары

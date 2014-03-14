@@ -72,12 +72,12 @@ h2 {
 }
 
 .indent_form a:hover,.main_text a:hover,
-.text_left_top a:hover, .text_left_bottom a:hover,
+.right-inv-top a:hover, .right-inv-bottom a:hover,
 .bottom_text a:hover, .length_of_text a:hover {
     color: #CD3700;
 }
 
-.text_left_top a, .text_left_bottom a{
+.right-inv-top a, .right-inv-bottom a{
     color: white;
 }
 
@@ -507,7 +507,7 @@ p.grey_fond{
     _padding: 0px;*/
 }
 
-.text_left {
+.right-inv {
     background-color:  #D0C4A3;
     margin-top: 50px;
     margin-left: 20px;
@@ -517,11 +517,11 @@ p.grey_fond{
     line-height: 18px;
 }
 
-.text_left p {
+.right-inv p {
     padding-top: 0px;
 }
 
-.text_left a {
+.right-inv a {
     font-size: 13px;
 }
 
@@ -580,7 +580,7 @@ img.white-leaf {
     _padding-left: 0px;
 }
 
-.text_left_top {
+.right-inv-top {
     width: 200px;
     background-color:  #83ac9b;
     color: black;
@@ -596,7 +596,7 @@ img.white-leaf {
     font-size: 13px;
 }
 
-.text_left_top, x:-moz-any-link{
+.right-inv-top, x:-moz-any-link{
     background-color:  #769897;
     padding: 20px;
     padding-top: 1px;
@@ -610,36 +610,36 @@ img.white-leaf {
     border-bottom: 3px solid white;
 }
 
-.text_left_top p.word_left_top,
-.text_left_bottom p.word_left_top {
+.right-inv-top p.word_left_top,
+.right-inv-bottom p.word_left_top {
     font-size: 15px;
     color: black;
     padding-bottom: 10px;
 }
 
-.text_left_top p,
-.text_left_bottom p {
+.right-inv-top p,
+.right-inv-bottom p {
     font-size: 13px;
     color: black;
     padding-right: 0px;
 }
 
-.text_left_top p.text_left_middle {
+.right-inv-top p.right-inv-middle {
    font-size: 14px;
    color: white;
    padding-top: 20px;
     _padding-bottom: 30px;
 }
 
-@-moz-document url-prefix(){.text_left_top p.text_left_middle{
+@-moz-document url-prefix(){.right-inv-top p.right-inv-middle{
     padding-bottom: 30px; /* Для FireFox*/
 }}
 
-*|html[xmlns*=""].text_left_top p.text_left_middle{
+*|html[xmlns*=""].right-inv-top p.right-inv-middle{
     padding-bottom: 30px; /* Для Opera*/
 }
 
-.text_left_top p.text_left_middle:not(:root:root){
+.right-inv-top p.right-inv-middle:not(:root:root){
     padding-bottom: 30px; /* Для Safari*/
 }
 
@@ -651,7 +651,7 @@ img.arrow {
     right: 5px;
 }
 
-.text_left_bottom{
+.right-inv-bottom{
     width: 200px;
     background-color: #D0C4A3;
     padding: 10px 0px 0px 30px;
