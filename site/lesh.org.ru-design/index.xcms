@@ -73,6 +73,12 @@ function xcms_print_related_pages()
         $in_xsm = ($alias == "register" && strlen($aparam));
         // little spike: skip header display
         // in case of special pages (XSM manager for now)
+
+        ob_start();
+        ?>
+        <# if //!@$_GET["usr"]//cms/ #>
+        <?php
+        $main_page = ob_get_clean();
         ?>
         <div id="content-text">
             <div class="text_left">
@@ -105,8 +111,9 @@ function xcms_print_related_pages()
             if (!$in_xsm)
             {?>
                 <# cms/page/edit_button #><?php
-            }?>
-            <# if //!@$_GET["usr"]//cms/ #>
+            }
+            echo $main_page;
+            ?>
         </div>
     </div>
 
