@@ -40,6 +40,16 @@ function xsm_get_vk_uid($social_profile)
     return false;
 }
 
+
+// see http://habrahabr.ru/post/190816/#comment_6628996
+function xsm_vk_src_to_https($url)
+{
+    $url = str_replace('http://cs', '', $url);
+    $url = str_replace('.vk.me', '', $url);
+    return "https://pp.vk.me/c$url";
+}
+
+
 function xsm_get_avatar($social_profile)
 {
     // TODO: extract first profile (e.g. by spaces)
@@ -77,7 +87,10 @@ function xsm_get_avatar($social_profile)
     $response = $json['response'];
     // VK returns empty array on invalid uid
     if (count($response) > 0)
+    {
         $av = $response[0]['photo'];
+        $av = xsm_vk_src_to_https($av);
+    }
     return $av;
 }
 
