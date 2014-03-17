@@ -84,10 +84,10 @@ function xcms_print_related_pages()
             <div class="right-inv">
                 <div class="right-inv-top">
                     <p class="word_left_top">подробнее</p>
-                    <p class="indent"><?php
+                    <p><?php
                     xcms_print_related_pages(); ?></p>
 
-                    <p class="indent"> Школа проводится с 23 июля по 24 августа на базе местной сельской
+                    <p> Школа проводится с 23 июля по 24 августа на базе местной сельской
                         школы, в здании которой проводятся занятия и располагаются необходимые помещения
                         (медпункт, библиотека, лаборатории, и т.п.).....<a href="">далее</a></p>
                         <img class="arrow" src="<# full_design_dir #>pict/arrow.png" />
@@ -96,7 +96,7 @@ function xcms_print_related_pages()
                 </div>
                 <div class="right-inv-bottom">
                     <p class="word_left_top">история</p>
-                    <p class="indent">Традиция летних школ зародилась в конце пятидесятых – начале
+                    <p>Традиция летних школ зародилась в конце пятидесятых – начале
                         шестидесятых годов двадцатого века, когда прошли первые летние семинары
                         и школы по вторичным моделирующим системам и семиотике.....<a href="history.html">далее</a></p>
                 </div>
