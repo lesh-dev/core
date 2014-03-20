@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # default value
-XCMS_HOME="/srv/www/production"
+XCMS_HOME="/srv/www/fizlesh.ru/production"
 
 if [ -n "$1" ] ; then
     XCMS_HOME="$1"
