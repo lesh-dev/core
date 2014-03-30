@@ -8,5 +8,5 @@ if [ -z "$clone_root" ] ; then
 fi
 
 type=symlink
-location=$clone_root/content-fizlesh.ru/content
+location=$clone_root/content-$site/content
 local_target=./content

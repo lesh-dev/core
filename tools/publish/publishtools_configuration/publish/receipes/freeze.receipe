@@ -40,7 +40,7 @@ function hook_end
     echo " *** Last chance to quit ***"
     echo " Now, please, move your ass to:"
     echo ""
-    echo "         http://freeze.fizlesh.ru"
+    echo "         http://freeze.$site"
     echo ""
     echo "And test all the installation manually. If all OK, you may "
     echo "press 'yes' and production copy will be created. "
@@ -58,7 +58,7 @@ function hook_end
     if valid_installer ; then
         echo "                   *** ERROR ***"
         echo "Your production copy is UNUSABLE because it contains install.php"
-        echo "You can fix it at final.fizlesh.ru, but no production will be generated!"
+        echo "You can fix it at final.$site, but no production will be generated!"
         echo "************************************************************"
     elif [ $ans == "yes" ]; then
         echo "freeeze : accepted" >> INFO
