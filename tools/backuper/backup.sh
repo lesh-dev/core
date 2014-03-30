@@ -66,7 +66,7 @@ backup_db smf "$backup_folder/forum.sql.gz"
 backup_db postfix "$backup_folder/postfix.sql.gz" "latin1"
 
 echo "Taring attachments..."
-tar czf "$backup_folder/attach.tgz"  /srv/www/clones/forum/attachments
+tar czf "$backup_folder/attach.tgz"  /srv/www/fizlesh.ru/forum/attachments
 
 plan_a()
 {
