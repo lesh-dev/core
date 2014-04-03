@@ -1,15 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-import sys, re, commands
+import sys
+import re
+import commands
 
 QuotaThresholdPercent = 95
+
 
 def isList(x):
     return (type(x) == type(list()))
 
+
 def isVoid(x):
     return (x.strip() == "")
+
 
 # python 2.7+
 #def getCommandOutput(command):
@@ -21,11 +26,13 @@ def isVoid(x):
     #except subprocess.CalledProcessError as e:
         #return e.returncode, e.output
 
+
 # we have python 2.6 only.
 def getCommandOutput(command):
     if isList(command):
         command = " ".join(command)
     return commands.getstatusoutput(command)
+
 
 def bQuotaExceeded(realSize, maxSize):
     if maxSize == 0:
@@ -41,6 +48,7 @@ def getExceedPercent(realSize, maxSize):
         return 0
     return (realSize * 100 / maxSize) - 100.0
 
+
 def formatExceedPercent(perc):
     return "{0}%".format(decimal(perc))
 
@@ -48,21 +56,28 @@ def formatExceedPercent(perc):
 def decimal(n):
     return round(n, 1)
 
+
 def getHumanValue(number):
     k = 1024
-    if number < k**1: return str(number)
-    if number < k**2: return str(decimal(number/k**1)) + "K"
-    if number < k**3: return str(decimal(number/k**2)) + "M"
-    if number < k**4: return str(decimal(number/k**3)) + "G"
-    if number < k**5: return str(decimal(number/k**4)) + "T"
+    if number < k**1:
+        return str(number)
+    if number < k**2:
+        return str(decimal(number/k**1)) + "K"
+    if number < k**3:
+        return str(decimal(number/k**2)) + "M"
+    if number < k**4:
+        return str(decimal(number/k**3)) + "G"
+    if number < k**5:
+        return str(decimal(number/k**4)) + "T"
     return str(decimal(number/k**5)) + "P"
+
 
 def bQuotaExceededForLine(line):
     line = line.strip()
     # skip commented lines
     if line[0:1] == "#":
         return False
-    
+
     m = re.search("(\S+)\s+(\d+)\s*(\w+)", line)
     if not m:
         if not isVoid(line):
@@ -73,14 +88,14 @@ def bQuotaExceededForLine(line):
     try:
         sizeLog = int(m.group(2).strip())
     except ValueError as e:
-        print "Something is wrong on line '" + line + "': " 
+        print "Something is wrong on line '" + line + "': "
         print e
         raise
 
     scaleLog = m.group(3).upper().strip()
     k = 1024
     scales = {
-        "" :  k**0,
+        "":  k**0,
         "B":  k**0,
 
         "K":  k**1,
@@ -100,9 +115,9 @@ def bQuotaExceededForLine(line):
         }
     if scaleLog not in scales:
         raise RuntimeError("Incorrect size format for line '" + line + "'. ")
-    maxSize = sizeLog * scales[scaleLog];
+    maxSize = sizeLog * scales[scaleLog]
 
-    res, output = getCommandOutput(["du", "-sb", path]);
+    res, output = getCommandOutput(["du", "-sb", path])
     if res != 0:
         raise RuntimeError("Error occured on getting disk usage for line '" + line + "':\n" + output)
 
@@ -111,22 +126,28 @@ def bQuotaExceededForLine(line):
         try:
             realSize = int(outList[0])
         except ValueError as e:
-            print "DiskUsage utility returned crap as datasize: '" + outList[0] + " for line '" + line + "'. Exception: "
-            print e
+            print "du returned crap as datasize: '" + outList[0] + " for line '" + line + "'."
+            print "Exception:\n", e
             print "Full 'du -sb' output:\n" + output
             raise
     else:
         raise RuntimeError("DiskUsage returned success code, but empty output for line '" + line + "'. ")
-    
+
     #print "max size for ", line, ": ", maxSize, " real size: ", realSize
     if bQuotaExceeded(realSize, maxSize):
         perc = getExceedPercent(realSize, maxSize)
         if perc < 0.0:
-            print "Quota " + getHumanValue(maxSize) + " is about to be exceeded for path " + path + ". Remaining quota: " + formatExceedPercent(-perc)
+            print "Quota " + getHumanValue(maxSize) + " is about to be exceeded for path " + path
+            print "Remaining quota: " + formatExceedPercent(-perc)
         else:
-            print "Quota " + getHumanValue(maxSize) + " is exceeded for path " + path + " by " + formatExceedPercent(perc)
+            print "Quota {quota} exceeded for path {path} by {value}".format(
+                quota=getHumanValue(maxSize),
+                path=path,
+                value=formatExceedPercent(perc)
+                )
         return True
     return False
+
 
 def monitor(fileList):
     quotaExceeded = False
@@ -143,7 +164,8 @@ def monitor(fileList):
 
     if quotaExceeded:
         return 1
-    return 0;
+    return 0
+
 
 if len(sys.argv) < 2:
     print "Parameters not set. Syntax: quota-monitor.py <directory-list>"
