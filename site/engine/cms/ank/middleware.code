@@ -18,7 +18,7 @@ function xsm_send_anketa($mail_group, $mail_msg, $full_name, $email, $manager_mo
     if (!xcms_add_mail_group($mailer, $mail_group))
         return true;
 
-    $full_name_tr = xcms_transliterate($full_name);
+    $full_name_tr = xu_transliterate($full_name);
     if ($manager_mode && xu_not_empty($email))
         $mailer->AddReplyTo($email, $full_name_tr);
     else

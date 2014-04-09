@@ -186,13 +186,12 @@ function xu_strcspn($str, $pattern, $start = 0)
     return $pos;
 }
 
-// TODO: rename to xu_transliterate
 /**
   * Replaces Russian UTF-8 symbols to ANSI transliteration
   * @param string string to transliterate
   * @return transliterated string
   **/
-function xcms_transliterate($string)
+function xu_transliterate($string)
 {
     $converter = array(
         'а' => 'a',   'б' => 'b',   'в' => 'v',
@@ -337,7 +336,7 @@ function xcms_string_unit_test()
     xut_equal(xcms_wrap_long_lines("  Очень длинный текст, который надо перенести\n\nне\nсмотря\nни\nна что", 20),
         "Очень длинный\nтекст, который надо\nперенести\n\nне\nсмотря\nни\nна что", "Check xcms_wrap_long_lines");
 
-    xut_equal(xcms_transliterate("Вельтищев Михаил"), "Veltischev Mihail", "Check xcms_transliterate");
+    xut_equal(xu_transliterate("Вельтищев Михаил"), "Veltischev Mihail", "Check xu_transliterate");
     xut_end();
 }
 ?>
