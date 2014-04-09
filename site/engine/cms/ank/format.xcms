@@ -2,6 +2,7 @@
 require_once("$engine_dir/sys/db.php");
 
 define('XSM_PHONE_SEPARATOR', ',&nbsp;&nbsp; ');
+define('XSM_SCHOOL_COUNT', 7);
 
 /**
   * Replace \n by <br /> with respect to various systems line endings

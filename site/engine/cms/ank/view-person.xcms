@@ -214,7 +214,7 @@ function xsm_print_person_header($db, $person, $school_id)
 
 function xsm_print_person_schools($db, $person_id, $current_school_id)
 {
-    $school_count = 5;
+    $school_count = XSM_SCHOOL_COUNT;
     $query = "SELECT s.school_id, s.school_title, ps.member_person_id
         FROM school s
         LEFT JOIN person_school ps

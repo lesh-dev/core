@@ -28,7 +28,7 @@ function xsm_print_schools($db, $current_school_id)
 {
     // надо получать заранее информацию о всех предыдущих школах,
     // но мы пока что будем отображать список из N последних
-    $school_count = 5;
+    $school_count = XSM_SCHOOL_COUNT;
     $query = "SELECT * FROM school ORDER BY school_date_start DESC LIMIT $school_count";
     $school_sel = $db->query($query);
     ?>
