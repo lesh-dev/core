@@ -33,11 +33,12 @@ function xcms_create_contlist()
     if (!strlen($root_alias))
         return "Не задан alias у списка блоков";
 
+    $header = xcms_get_key_or($_POST, "header");
     mkdir($dir, 0777, true);
     $list = array();
     $list["type"] = xcms_get_key_or($_POST, "pagetype");
-    $list["header"] = xcms_get_key_or($_POST, "header");
-    $list["menu-title"] = xcms_get_key_or($_POST, "header");
+    $list["header"] = $header;
+    $list["menu-title"] = $header;
     $list["owner"] = xcms_user()->login();
     $list["timestamp-created"] = $timestamp;
     $list["datetime-created"] = $datetime;
