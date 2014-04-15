@@ -150,7 +150,7 @@ class SeleniumTest(object):
             fp = webdriver.FirefoxProfile(profileDir)
             self.m_driver = webdriver.Firefox(fp)
 
-        self.maximizeWindow()
+        #self.maximizeWindow()
 
     def getName(self):
         return self.m_testName

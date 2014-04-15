@@ -62,6 +62,7 @@ def isVoid(x):
     else:
         return x is None or x.strip() == ""
     
+
 # simple command line framework
 def argMatchOption(value, optSpec):
     """
@@ -74,6 +75,7 @@ def argMatchOption(value, optSpec):
     else:
         raise RuntimeError("argMatchOption got optSpec parameter, which is neither string list, nor single string. ")
     
+
 def getOption(opt, inArgs):
     """
         gets option list 'args' and option name 'opt' (or list of synonyms).
@@ -92,6 +94,17 @@ def getOption(opt, inArgs):
     if len(inArgs) > 0 and argMatchOption(args[-1], opt):
         raise CliParamError("Option " + userSerialize(opt) + " specified without argument. ")
     return None, args
+
+
+def checkSingleOption(opt, args):
+    """
+        gets option name (or synonym list) and arg list.
+        returns True if found (or False if not) and changed list.
+    """
+    if any(argMatchOption(x, opt) for x in args):
+        return True
+    return False
+    
 
 def getSingleOption(opt, inArgs):
     """

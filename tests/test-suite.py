@@ -35,7 +35,7 @@ ALL OPTIONS:
 
 TEST OPTIONS could be test-dependent. Commonly supported options are: 
   -p, --preserve\tLeave browser window after test finish/fail
-  -c, --chrome\tUse Google Chrome browser instead of Firefox
+  -c, --chrome\t\tUse Google Chrome browser instead of Firefox
   -d, --doc\t\tDisplay test documentation
 """.format(script = fileBaseName(sys.argv[0]))
 

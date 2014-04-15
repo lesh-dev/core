@@ -1,9 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import selenium_test, random_crap, re
+import selenium_test
+import random_crap
+import re
 from xtest_config import XcmsTestConfig
-from bawlib import isVoid
+from bawlib import isVoid, checkSingleOption
 
 class XcmsBaseTest(selenium_test.SeleniumTest):
     """
@@ -15,6 +17,9 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
 
         super(XcmsBaseTest, self).init()
         self.set404Text(u"Нет такой страницы")
+        
+        if not checkSingleOption(["--no-maximize"], self.m_params):
+            self.maximizeWindow()
 
     def checkPageErrors(self):
         super(XcmsBaseTest, self).checkPageErrors()
