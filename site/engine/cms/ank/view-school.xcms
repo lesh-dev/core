@@ -33,6 +33,9 @@ function xsm_print_school()
         <tr><td class="ankList"><span class="ankListField">Дата окончания</span>:
             <?php echo $school_date_end; ?></td></tr>
 
+        <tr><td class="ankList"><span class="ankListField">Место проведения</span>:
+            <?php echo $school_location; ?></td></tr>
+
     </table>
     <?php
 }
