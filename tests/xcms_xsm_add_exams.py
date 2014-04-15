@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
-
+import xtest_common
+import random_crap
 
 
 class XcmsXsmAddExams(xtest_common.XcmsTest):
@@ -40,7 +40,6 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
 
         self.assertBodyTextPresent(u"Сдан")
 
-
     def setExamNotPassed(self, examLineList):
         for examLine in examLineList:
             # <a><span>Прослушан</span></a>
@@ -54,7 +53,6 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
 
         self.assertBodyTextPresent(u"Не сдан")
 
-
     def run(self):
 
         self.m_listenedStatus = u"Прослушан"
@@ -65,7 +63,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         self.gotoAddPerson()
 
         # generate
-        inpLastName = u"Зачётов" + random_crap.randomText(5);
+        inpLastName = u"Зачётов" + random_crap.randomText(5)
         inpFirstName = u"Андрей_" + random_crap.randomText(3)
         inpMidName = u"Михалыч_" + random_crap.randomText(3)
 
