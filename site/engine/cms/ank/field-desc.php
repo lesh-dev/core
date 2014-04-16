@@ -18,8 +18,8 @@ function xsm_get_school_fields()
     return array(
         "school_title"=>"Название",
         "school_type"=>"Тип",
-        "school_date_start"=>"Дата начала",
-        "school_date_end"=>"Дата окончания",
+        "school_date_start"=>"Дата начала (ГГГГ.ММ.ДД)",
+        "school_date_end"=>"Дата окончания (ГГГГ.ММ.ДД)",
         "school_location"=>"Место проведения",
         "school_created"=>"Время создания",
         "school_modified"=>"Последняя модификация"
