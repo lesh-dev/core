@@ -67,6 +67,12 @@ b.far-city {
     background-color: #7fcfff;
 }
 
+tr.not-msk-city td.ankList.status-col,
+tr.far-city td.ankList.status-col,
+td.ankList.status-col {
+    background-color: #9ec78b;
+}
+
 b.far-city,
 b.not-msk-city,
 b.teacher {

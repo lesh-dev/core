@@ -135,7 +135,7 @@ function xsm_show_all_person_list()
                 echo $fi; ?></a></td>
             <td class="ankList"><?php echo $current_class; ?></td>
             <td class="ankList"><?php echo $all_phones; ?></td>
-            <td class="ankList"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
+            <td class="ankList status-col"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php
     }
