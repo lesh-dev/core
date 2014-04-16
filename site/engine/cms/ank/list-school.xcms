@@ -1,13 +1,13 @@
 <?php
 
-function xsm_print_schools()
+function xsm_school_list()
 {
     $db = xdb_get();
 
     $query =
     "SELECT *
     FROM school s
-    ORDER BY school_id DESC";
+    ORDER BY school_date_start DESC, school_id DESC";
 
     $school_sel = $db->query($query);
     ?>
@@ -39,5 +39,5 @@ function xsm_print_schools()
     ?></table><?php
 }
 
-xsm_print_schools();
+xsm_school_list();
 ?>
