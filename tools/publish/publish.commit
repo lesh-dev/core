@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
 
-if [ -z "$clone_root" ] ; then
-    echo "Clones root is not set"
+# TODO: add git error handling?
+
+content_path="$1"
+reason="$2"
+
+if [ -z "$content_path" ] ; then
+    echo "Usage: $0 <content-path> <reason>"
     exit 1
 fi
 
-cd $clone_root/content-fizlesh.ru
+cd $content_path
 git add -A
-git commit --all --message="Robot commit. Reason: $1" --author='FizLesh CommitBot <robot@fizlesh.ru>'
+git commit --all \
+    --message="Robot commit for $(basename "$content_path"). Reason: $reason" \
+    --author='FizLesh CommitBot <robot@fizlesh.ru>'
 git push
