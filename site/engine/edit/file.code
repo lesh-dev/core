@@ -74,10 +74,16 @@
                 $selected = 'selected="selected"';
             $vlist .= "<option $selected value=\"$version_suffix\">$version_time</option>";
         }
-        $text = htmlspecialchars($text);
-
         if (@$_POST["edit-preview"])
+        {
             $text = @$_POST["edit-text"];
+            $preview_text = $text;
+        }
+        /*
+            THIS OPERATION (ESCAPING) SHOULD BE THE LAST ONE!
+            BEWARE OF BUGS LIKE #730
+        */
+        $text = htmlspecialchars($text);
 
     ?>
 <form method="post" enctype="multipart/form-data">
@@ -101,6 +107,9 @@
 </form>
 <div id="content-text-preview"><?php
         if (@$_POST["edit-preview"])
+        {
+            $text = $preview_text;
             include(translate("<! cms/readtext --markdown --text !>"));
+        }
     }?>
 </div>
