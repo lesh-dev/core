@@ -198,6 +198,7 @@ function xsm_make_phone($phones_str, $id = '')
         return "";
 
     $result = "";
+    $count = 0;
     foreach ($items as $item)
     {
         $hint = $item["hint"];
@@ -212,8 +213,9 @@ function xsm_make_phone($phones_str, $id = '')
         if (xu_not_empty($result))
             $result .= XSM_PHONE_SEPARATOR;
 
-        $pid = xu_not_empty($id) ? " id=\"$id\" " : "";
+        $pid = xu_not_empty($id) ? " id=\"$id-$count\" " : "";
         $result .= "<span $pid class=\"phone $class\" title=\"$hint\">$phone</span>";
+        ++$count;
     }
     return $result;
 }
