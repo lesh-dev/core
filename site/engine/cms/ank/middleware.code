@@ -192,6 +192,33 @@ function xsm_get_all_course_info($db, $school_id)
 }
 
 /**
+  * Печать всех школ (селектор сверху)
+  * @sa xsm_print_person_schools
+  **/
+function xsm_print_recent_schools($db, $current_school_id, $table_name)
+{
+    // надо получать заранее информацию о всех предыдущих школах,
+    // но мы пока что будем отображать список из N последних
+    $school_count = XSM_SCHOOL_COUNT;
+    $query = "SELECT * FROM school ORDER BY school_date_start DESC LIMIT $school_count";
+    $school_sel = $db->query($query);
+    ?>
+    <table class="ankList"><tr>
+        <?php
+        while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
+        {
+            $href = "list-$table_name&amp;school_id=${school['school_id']}";
+            $title = htmlspecialchars($school['school_title']);
+            $active = ($school['school_id'] == $current_school_id) ? "current" : ""; ?>
+            <td class="school-selection <?php echo $active; ?>"><a
+                href="<?php echo $href; ?>"><?php echo $title; ?></a></td>
+            <?php
+        }?>
+    </tr></table>
+    <?php
+}
+
+/**
   * Печаталка таблицы курсов (общая для списка курсов на школе и одного препода)
   **/
 function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = "all", $simple_view = false)

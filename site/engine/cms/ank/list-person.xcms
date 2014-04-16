@@ -21,34 +21,6 @@
 <?php
 
 /**
-  * Печать всех школ (селектор сверху)
-  * @sa xsm_print_person_schools
-  **/
-function xsm_print_schools($db, $current_school_id)
-{
-    // надо получать заранее информацию о всех предыдущих школах,
-    // но мы пока что будем отображать список из N последних
-    $school_count = XSM_SCHOOL_COUNT;
-    $query = "SELECT * FROM school ORDER BY school_date_start DESC LIMIT $school_count";
-    $school_sel = $db->query($query);
-    ?>
-    <table class="ankList"><tr>
-        <?php
-        while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
-        {
-            $href = "list-person&amp;school_id=${school['school_id']}";
-            $title = htmlspecialchars($school['school_title']);
-            $active = ($school['school_id'] == $current_school_id) ? "current" : ""; ?>
-            <td class="school-selection <?php echo $active; ?>"><a
-                href="<?php echo $href; ?>"><?php echo $title; ?></a></td>
-            <?php
-        }?>
-    </tr></table>
-    <?php
-}
-
-
-/**
   * Print active persons list
   **/
 function xsm_show_person_list($school_id)
@@ -90,7 +62,7 @@ function xsm_show_person_list($school_id)
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
     $person_sel = $db->query($query);
 
-    xsm_print_schools($db, $school_id);
+    xsm_print_recent_schools($db, $school_id, 'person');
     $student_count = 0;
     $teacher_count = 0;
     ?>
