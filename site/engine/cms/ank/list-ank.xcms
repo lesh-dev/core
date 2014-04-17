@@ -77,7 +77,7 @@ function xsm_show_ank_list()
     $query =
         "SELECT
         p.person_id, p.last_name, p.first_name, p.patronymic, p.birth_date, p.passport_data,
-        p.school, p.school_city, p.ank_class,
+        p.school, p.school_city, p.ank_class, p.current_class,
         p.phone, p.cellular, p.email, p.skype, p.social_profile,
         p.favourites, p.achievements, p.hobby,
         p.anketa_status, p.user_agent, p.person_created, p.person_modified
@@ -141,6 +141,7 @@ function xsm_show_ank_list()
         if (!$school_city)
             $school_city = "город не указан";
         $ank_class = htmlspecialchars($person["ank_class"]);
+        $current_class = htmlspecialchars($person["current_class"]);
 
         $all_phones = xsm_format_person_phones($person);
         $email = htmlspecialchars($person["email"]);
@@ -161,7 +162,7 @@ function xsm_show_ank_list()
             <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"
                 title="<?php echo $fio; ?>"><?php echo $fi; ?></a></td>
             <td class="ankList"><?php echo $birth_date; ?></td>
-            <td class="ankList"><?php echo $ank_class; ?></td>
+            <td class="ankList"><?php echo $current_class; ?></td>
             <td class="ankList"><?php echo "$school ($school_city)"; ?></td>
             <td class="ankList"><?php echo $all_phones; ?></td>
             <td class="ankList"><?php echo $person_created; ?></td>
