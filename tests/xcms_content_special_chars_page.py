@@ -3,7 +3,7 @@
 
 import xtest_common, random_crap
 
-class XcmsContentAddPage(xtest_common.XcmsTest):
+class XcmsContentSpecialCharsPage(xtest_common.XcmsTest):
     """
     This test checks content editing - add page with special characters.
     It does following steps:
