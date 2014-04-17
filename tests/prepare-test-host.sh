@@ -14,13 +14,14 @@ EOF
     exit 1
 fi
 
+site="--site fizlesh.ru"
 tech_ssh="ssh tech@fizlesh.ru"
 
-$tech_ssh "sudo publish rc"
-$tech_ssh "sudo publish testing"
+$tech_ssh "sudo publish $site rc"
+$tech_ssh "sudo publish $site testing"
 
 if [ "$1" = "-c" ] || [ "$1" = "--clear-db" ] ; then
-    $tech_ssh "sudo publish init-test-db"
+    $tech_ssh "sudo publish $site init-test-db"
 fi
 
 echo "Testing prepared successfully"
