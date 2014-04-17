@@ -172,7 +172,8 @@ h2 {
     float: right;
     background-image: url(pict/green.gif);
     background-repeat: no-repeat;
-    background-position: 0px right 0px top;
+    background-position: 90% top;
+    background-size: 100px;
 }
 
 .sidebar-right ul{
