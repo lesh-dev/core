@@ -46,8 +46,7 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
         inpLastName = u"Преподов_" + random_crap.randomText(5)
         inpFirstName = u"Александр_" + random_crap.randomText(3)
         inpMidName = u"Ильич_" + random_crap.randomText(3)
-        self.gotoUrlByLinkText(u"Зачислить на " + self.m_conf.getTestSchoolName())
-
+        
         inpLastName = self.fillElementById("last_name-input", inpLastName)
         inpFirstName = self.fillElementById("first_name-input", inpFirstName)
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
