@@ -7,6 +7,11 @@ if [ -z "$clone_root" ] ; then
     exit 1
 fi
 
+if [ -z "$site" ] ; then
+    echo "Site is not set"
+    exit 1
+fi
+
 type=symlink
 location=$clone_root/content-$site/content
 local_target=./content
