@@ -71,7 +71,7 @@ h2 {
     color: #4F4F4F;
 }
 
-.indent_form a:hover,.main_text a:hover,
+.indent_form a:hover, .main_text a:hover,
 .right-inv-top a:hover, .right-inv-bottom a:hover,
 .bottom_text a:hover, .length_of_text a:hover {
     color: #CD3700;
@@ -626,9 +626,9 @@ img.white-leaf {
 }
 
 .right-inv-top p.right-inv-middle {
-   font-size: 14px;
-   color: white;
-   padding-top: 20px;
+    font-size: 14px;
+    color: white;
+    padding-top: 20px;
     _padding-bottom: 30px;
 }
 
