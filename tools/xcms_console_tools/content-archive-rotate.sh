@@ -31,7 +31,7 @@ fi
 
 if [ "$VERBOSE" == "1" ]; then
     echo "Cleaning versions in $SEARCH_DIR"
-fi    
+fi
 
 cleanup_dir()
 {
@@ -60,4 +60,3 @@ DIRS=`find "$SEARCH_DIR" -type d`
 for DIR in $DIRS; do
     cleanup_dir $DIR
 done
-
