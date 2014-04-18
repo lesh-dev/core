@@ -287,6 +287,19 @@ function xcms_wrap_long_lines($text, $max_length = MAX_LENGTH_DEFAULT)
 }
 
 /**
+  * Translate page title/etc to string that can be used
+  * as page path component or as alias
+  **/
+function xcms_page_id_suffix($title)
+{
+    $title_tr = strtr(strtolower(xu_transliterate($title)), " _/", "---");
+    $title_tr = preg_replace("/[^0-9a-zA-Z-]/", "", $title_tr);
+    $title_tr = preg_replace("/[-]{2,}/", "-", $title_tr);
+    $title_tr = substr($title_tr, 0, 50);
+    return $title_tr;
+}
+
+/**
   * String library unit test
   **/
 function xcms_string_unit_test()
@@ -337,6 +350,12 @@ function xcms_string_unit_test()
         "Очень длинный\nтекст, который надо\nперенести\n\nне\nсмотря\nни\nна что", "Check xcms_wrap_long_lines");
 
     xut_equal(xu_transliterate("Вельтищев Михаил"), "Veltischev Mihail", "Check xu_transliterate");
+
+    xut_equal(
+        xcms_page_id_suffix("26 апреля ЛЭШевцы идут  на озеро!?"),
+        "26-aprelya-leshevcy-idut-na-ozero",
+        "Check xcms_page_id_suffix");
+
     xut_end();
 }
 ?>

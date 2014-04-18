@@ -38,10 +38,7 @@
         if ($r)
         {
             $title = trim($r[1]);
-            $title_tr = strtr(strtolower(xu_transliterate($title)), " _/", "---");
-            $title_tr = preg_replace("/[^0-9a-zA-Z-]/", "", $title_tr);
-            $title_tr = preg_replace("/[-]{2,}/", "-", $title_tr);
-            $title_tr = substr($title_tr, 0, 50);
+            $title_tr = xcms_page_id_suffix($title);
             $suffix = "-$title_tr";
         }
         $folder = "$item_id$suffix";
