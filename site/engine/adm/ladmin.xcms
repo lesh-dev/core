@@ -10,7 +10,8 @@ if (!@$_GET["page"])
     include_once("${engine_dir}cms/alias.php");
     include_once("${engine_dir}cms/build_rewrite.php");
     $INFO = xcms_get_list(xcms_get_info_file_name());
-    include(translate("<! auth/ #editor #admin {$INFO["edit"]} !>"));
+    $aux_edit_groups = xcms_get_key_or($INFO, "edit");
+    include(translate("<! auth/ #editor #admin $aux_edit_groups !>"));
 ?><# cms/create_page_handler #><?php
     $page_creation_result = "";
     if (@$_POST["create-page"])
