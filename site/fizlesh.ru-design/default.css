@@ -279,3 +279,7 @@ a.top-icon {
     text-indent: -9999px;
 }
 
+div.contlist-slider {
+    padding-top: 8px;
+    padding-bottom: 20px;
+}

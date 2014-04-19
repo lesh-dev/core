@@ -68,7 +68,7 @@
     $block_count = $contlist_block_iter;
     if (!$no_pager)
     {?>
-        <div style="padding-top: 8px; padding-bottom: 20px"><?php
+        <div class="contlist-slider"><?php
         if ($pg > 0) {?>
             <a href="/<# web_prefix #>?<?php
                 echo xcms_url(array('page'=>$pageid, 'pg'=>$pg - 1)); ?>">Новые новости</a><?php

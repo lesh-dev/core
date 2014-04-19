@@ -583,7 +583,7 @@ img.white-leaf {
 
 .right-inv-top {
     width: 200px;
-    background-color:  #83ac9b;
+    background-color: #83ac9b;
     color: black;
     padding: 5px 20px 20px 20px;
     margin-left: 10px;
@@ -793,13 +793,15 @@ a.contlist-edit {
 
 div.contlist-block {
     position: relative;
-    border-radius: 5px;
     padding: 5px 10px;
     margin-right: 40px; /* same as paragraph */
 }
 
 div.contlist-block.odd {
-    background-color: rgb(217, 238, 229);
+    border-left: 4px solid #7faf7f;
+    /* background here clashes with side fields,
+    so we avoid it */
+    /*background-color: rgb(217, 238, 229);*/
 }
 
 div.contlist-block p {
@@ -828,4 +830,10 @@ div.signature {
     font-style: italic;
     text-align: right;
     margin-right: 0px;
+}
+
+div.contlist-slider {
+    padding-top: 8px;
+    padding-bottom: 20px;
+    padding-right: 40px;
 }
