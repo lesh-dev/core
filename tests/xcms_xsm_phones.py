@@ -23,17 +23,21 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
         inpLastName = u"Телефонов_" + random_crap.randomText(4);
         inpFirstName = u"Самсунг_" + random_crap.randomText(3)
         inpMidName = u"Нокиевич_" + random_crap.randomText(3)
-        inpCellPhone = "+7(900)000-00-00, +7(900)999-99-99"
-        inpPhone = "8-900-000-00-00, +7-900-999-99-99"
+        inpCellPhones = ["+7(900)000-00-00", "+7(900)999-99-99"]
+        inpCellPhoneLine = ", ".join(inpCellPhones)
+        inpPhones = ["8-900-000-00-00", "+7-900-999-99-99"]
+        inpPhoneLine = ", ".join(inpPhones)
 
         inpLastName = self.fillElementById("last_name-input", inpLastName)
         inpFirstName = self.fillElementById("first_name-input", inpFirstName)
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
-        inpCellPhone = self.fillElementById("cellular-input", inpCellPhone)
-        inpPhone = self.fillElementById("phone-input", inpPhone)
+        inpCellPhoneLine = self.fillElementById("cellular-input", inpCellPhoneLine)
+        inpPhoneLine = self.fillElementById("phone-input", inpPhoneLine)
         
-        inpCellPhone = inpCellPhone.replace("+7", "8")
-        inpPhone = inpPhone.replace("+7", "8")
+        inpCellPhones = [x.replace("+7", "8") for x in inpCellPhones]
+        inpPhone = [x.replace("+7", "8") for x in inpPhones]
+        inpCellPhoneLine = inpCellPhoneLine.replace("+7", "8")
+        inpPhoneLine = inpPhoneLine.replace("+7", "8")
         
         self.clickElementById("update-person-submit")
         
@@ -45,17 +49,18 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
         self.checkPersonAliasInPersonView(fullAlias)
         
         personId = self.getCurrentPersonId()
-        personCellPhoneEleId = "person" + str(personId) + "-cellular"
-        personPhoneEleId = "person" + str(personId) + "-phone"
         
-        siteCellPhone = self.getElementTextById(personCellPhoneEleId)
-        sitePhone = self.getElementTextById(personPhoneEleId)
-        self.logAdd("Cell phone on the site: " + siteCellPhone)
-        self.logAdd("Phone on the site: " + sitePhone)
+        for i in range(0,2):
+            personCellPhoneEleId = "person{0}-cellular-{1}".format(personId, i)
+            personPhoneEleId = "person{0}-phone-{1}".format(personId, i)
+            
+            siteCellPhone = self.getElementTextById(personCellPhoneEleId)
+            sitePhone = self.getElementTextById(personPhoneEleId)
+            self.logAdd("Cell phone #{0} on the site: ".format(i) + siteCellPhone)
+            self.logAdd("Phone #{0} on the site: ".format(i) + sitePhone)
         
-        if inpCellPhone != siteCellPhone:
-            self.failTest("Cell phones on the site don't match entered cell phones. ")
-        if inpPhone != sitePhone:
-            self.failTest("Phones on the site don't match entered phones. ")
+            if inpCellPhones[i] != siteCellPhone:
+                self.failTest("Cell phone #{0} on the site don't match entered cell phones. ".format(i))
+            if inpPhones[i] != sitePhone:
+                self.failTest("Phone #{0} on the site don't match entered phones. ".format(i))
         
-
