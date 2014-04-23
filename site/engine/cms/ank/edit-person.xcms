@@ -2,10 +2,9 @@
 <?php
 require_once("${engine_dir}cms/ank/edit-format.php");
 
-function xsm_notify_person_edit($person)
+function xsm_notify_person_edit($person, $old_person)
 {
     $person_id = $person['person_id'];
-    $old_person = ($person_id != XDB_NEW) ? xdb_get_entity_by_id('person', $person_id) : array();
 
     $full_name = xsm_fio_enc($person);
     $table_title = 'Изменения в анкете: <a'.
@@ -92,7 +91,13 @@ function xsm_edit_person()
 
 if (@$_POST["update-person"])
 {
-    if (!strlen(@$_POST["last_name"]) || !strlen(@$_POST["first_name"]))
+    if (!strlen(@$_POST["person_id"]))
+    {?>
+        <p>Передан неполный запрос. Пожалуйста, напишите на dev@fizlesh.ru о том,
+        как Вы этого добились! Нажмите &laquo;Назад&laquo; (&laquo;Back&raquo;) в браузере,
+        чтобы вернуться к заполнению!</p><?php
+    }
+    elseif (!strlen(@$_POST["last_name"]) || !strlen(@$_POST["first_name"]))
     {?>
         <p>Пожалуйста, укажите хотя бы <b>имя и фамилию</b>!
             Нажмите &laquo;Назад&laquo; (&laquo;Back&raquo;) в браузере,
@@ -100,8 +105,12 @@ if (@$_POST["update-person"])
     }
     else
     {
-        xsm_notify_person_edit($_POST);
-        xsm_update_entity_listmode('person', 'Участник', xsm_get_person_fields(), '', 'участника');
+        $person_id = $_POST["person_id"];
+        $old_person = ($person_id != XDB_NEW) ? xdb_get_entity_by_id('person', $person_id) : array();
+        $result = xsm_update_entity_listmode('person', 'Участник', xsm_get_person_fields(), '', 'участника');
+        if ($person_id == XDB_NEW)
+            $_POST["person_id"] = $result;
+        xsm_notify_person_edit($_POST, $old_person);
     }
 }
 elseif (@$_POST["delete-person"])
