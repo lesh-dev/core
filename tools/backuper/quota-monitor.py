@@ -55,7 +55,7 @@ def formatExceedPercent(perc):
 
 def decimal(n, div=1):
     num = (n * 100 / div) / 100.00
-    return "{:.2f}".format(num)
+    return "{0:.2f}".format(num)
 
 
 def getHumanValue(number):
