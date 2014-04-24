@@ -519,6 +519,8 @@ function xsm_print_person()
 
     $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
     $person = xdb_get_entity_by_id('person', $person_id);
+    if ($person_id == XDB_NEW || is_array($person) && count($person) == 0)
+        throw new Exception("Entity not found", XE_DB_OBJECT_NOT_FOUND);
 
     $school_id = xcms_get_key_or($_GET, 'school_id', XSM_SCHOOL_ANK_ID);
 

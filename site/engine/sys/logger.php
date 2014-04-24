@@ -8,6 +8,13 @@
     define('XLOG_INFO',  1);
     define('XLOG_ERROR', 0);
 
+    // error codes for generic errors
+    define('XE_WRONG_PASSWORD',       1000);
+    define('XE_ACCESS_DENIED',        1001);
+
+    // database errors
+    define('XE_DB_OBJECT_NOT_FOUND',  2000);
+
     /**
       * Get a log file name
       * @return Log file name

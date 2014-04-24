@@ -6,12 +6,34 @@
     {
         include(translate('<! global/login !>'));
     }
-    else
+    elseif ($Exception->getCode() == XE_DB_OBJECT_NOT_FOUND)
     {
-        echo "<h3>Unrecognized exception:</h3>";
-        echo "<p>Code: <b>".$Exception->getCode()."</b></p>";
-        echo "<p>Message: <b>".$Exception->getMessage()."</b></p>";
-        echo "<pre>".$Exception->getTraceAsString()."</pre>";
+        $problem_guid = xcms_uuid();
+        ?>
+        <div class="object-not-found">
+            <h3>Объект не найден</h3>
+
+            <p>Мы тщательно поискали в базе данных, но почему-то не нашли такого объекта.
+            Приносим извинения Вам за то, что Вы увидели эту страничку.</p>
+
+            <p>Наши лучшие инженеры уже получили сообщение об этой проблеме.
+            Они обязательно разберутся, в чём дело.</p>
+
+            <p>Если Вы хотите сообщить дополнительные полезные сведения,
+            не стесняйтесь написать на <a href="mailto:<?php
+            global $meta_site_mail;
+            echo $meta_site_mail; ?>" ><?php echo $meta_site_mail; ?></a>.
+            Пожалуйста, скопируйте в Ваше письмо идентификатор Вашей проблемы:
+            <b><?php echo $problem_guid; ?></b>.</p>
+        </div><?php
+        xcms_log(0, "Requested invalid entity. ID: $problem_guid. Stack: ".$Exception->getTraceAsString());
+    }
+    else
+    {?>
+        <h3>Unrecognized exception:</h3>
+        <p>Code: <b><?php echo $Exception->getCode(); ?></b></p>
+        <p>Message: <b><?php echo $Exception->getMessage(); ?></b></p>
+        <pre><?php echo $Exception->getTraceAsString(); ?></pre><?php
     }
 
 

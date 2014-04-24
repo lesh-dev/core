@@ -1,8 +1,4 @@
 <?php
-    // error codes for generic errors
-    define('XE_WRONG_PASSWORD',       1000);
-    define('XE_ACCESS_DENIED',        1001);
-
     define('XAUTH_THROW', true);
     define('XAUTH_NO_THROW', false);
 
