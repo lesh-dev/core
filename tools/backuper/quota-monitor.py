@@ -53,23 +53,28 @@ def formatExceedPercent(perc):
     return "{0}%".format(decimal(perc))
 
 
-def decimal(n):
-    return round(n, 1)
+def decimal(n, div=1):
+    num = (n * 100 / div) / 100.00
+    return "{:.2f}".format(num)
 
 
 def getHumanValue(number):
     k = 1024
-    if number < k**1:
-        return str(number)
-    if number < k**2:
-        return str(decimal(number/k**1)) + "K"
-    if number < k**3:
-        return str(decimal(number/k**2)) + "M"
-    if number < k**4:
-        return str(decimal(number/k**3)) + "G"
-    if number < k**5:
-        return str(decimal(number/k**4)) + "T"
-    return str(decimal(number/k**5)) + "P"
+    coeff = 1
+    # if value is 10.000, it should be rounded to K, not M.
+    powers = {
+            0:"",
+            1:"K",
+            2:"M",
+            3:"G",
+            4:"T",
+            5:"P"
+            }
+    for power, letter in powers.iteritems():
+        if number < coeff * k ** (power + 1):
+            return decimal(number, k ** power) + letter
+    else:
+        return decimal(number, k**5) + "P"
 
 
 def bQuotaExceededForLine(line):
@@ -140,10 +145,11 @@ def bQuotaExceededForLine(line):
             print "Quota " + getHumanValue(maxSize) + " is about to be exceeded for path " + path
             print "Remaining quota: " + formatExceedPercent(-perc)
         else:
-            print "Quota {quota} exceeded for path {path} by {value}".format(
+            print "Quota {quota} exceeded for path {path} by {value}. Current usage: {usage}".format(
                 quota=getHumanValue(maxSize),
                 path=path,
-                value=formatExceedPercent(perc)
+                value=formatExceedPercent(perc),
+                usage=getHumanValue(realSize)
                 )
         return True
     return False
@@ -166,6 +172,8 @@ def monitor(fileList):
         return 1
     return 0
 
+
+# print [(x, getHumanValue(x)) for x in [1, 100, 1000, 10000, 10**5, 10**6, 10**7, 10**8, 10**9, 10**10, 10**11]]
 
 if len(sys.argv) < 2:
     print "Parameters not set. Syntax: quota-monitor.py <directory-list>"
