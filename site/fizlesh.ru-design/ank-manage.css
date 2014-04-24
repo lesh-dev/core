@@ -48,6 +48,18 @@ td.school-selection a {
     display: block;
 }
 
+td.school-selection div {
+    position: relative;
+}
+
+td.school-selection a.edit-link {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    text-align: left;
+    display: inline-block;
+}
+
 tr.teacher td.ankList,
 b.teacher {
     background-color: #b5b16f;

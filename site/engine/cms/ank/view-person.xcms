@@ -202,9 +202,7 @@ function xsm_print_person_header($db, $person, $school_id)
     <div class="person-topright"><?php
         xsm_draw_person_textval('top', 'Создана', $person_created);
         xsm_draw_person_textval('top', 'Исправлена', $person_modified);
-        ?><div style="padding-bottom: 10px;"><?php
-        xsm_edit_link('person', $person_id, '', 'Редактировать анкетные данные');
-        ?></div><?php
+        ?><div style="padding-bottom: 2px;">&nbsp;</div><?php
         xsm_draw_person_school_panel($db, $school_id, $person_id)
         ?>
     </div>
@@ -225,8 +223,14 @@ function xsm_print_person_schools($db, $person_id, $current_school_id)
     $active_ank = (XSM_SCHOOL_ANK_ID == $current_school_id) ? 'current' : '';
     ?>
     <table class="ankList"><tr>
-        <td class="school-selection <?php echo $active_ank; ?>"><a
-            href="<?php echo $href_ank; ?>">Анкета</a></td>
+        <td class="school-selection <?php echo $active_ank; ?>">
+            <div>
+                <a href="<?php echo $href_ank; ?>">Анкета</a>
+            <?php
+            xsm_edit_link('person', $person_id, '', 'Ред');
+            ?>
+            </div>
+        </td>
         <?php
         while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
         {

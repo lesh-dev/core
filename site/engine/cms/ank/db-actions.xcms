@@ -239,7 +239,7 @@ function xsm_edit_delete_info($entity, $table_name, $id, $created, $modified, $a
 // Produce generic link for editing something
 function xsm_edit_link_generic($url, $custom_title = 'Правка', $custom_hover = 'Редактировать')
 {?>
-    <a href="<?php echo $url; ?>"><img
+    <a class="edit-link" href="<?php echo $url; ?>"><img
         src="<# full_design_dir #>pic/edit.gif" class="edit-icon"
         width="16" height="16"
         title="<?php echo $custom_hover; ?>" /><?php echo $custom_title; ?></a><?php
