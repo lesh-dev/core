@@ -1,9 +1,4 @@
-<# cms/linit #>
-<# cms/init #>
-<# url #>
-<# deploy_utils #>
-<# locale #>
-<!DOCTYPE html>
+<# cms/linit #><# cms/init #><# url #><# deploy_utils #><# locale #><!DOCTYPE html>
 <html>
 <head>
     <# cms/head #>
