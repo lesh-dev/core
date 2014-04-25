@@ -2,6 +2,8 @@
 <# cms/ank/style #>
 <?php
 
+define('XSM_MENU_FIRST', true);
+
 function xsm_menu_item($view, $aux_url, $title, $first = false)
 {
     global $web_prefix, $aparam;
@@ -25,14 +27,28 @@ function xsm_menu_item($view, $aux_url, $title, $first = false)
     }
     ?><a class="xsm-menu-item <?php echo $aux_class; ?>"
         href="<?php echo $url.$aux_url; ?>"><?php echo $title; ?></a><?php
-}?>
+}
+
+$u_locator_all = xcms_url(array('show_anketa_status'=>'all'));
+$a_locator_active = array('show_anketa_status'=>'active');
+$a_cs = array();
+$school_id = xcms_get_key_or($_GET, 'school_id');
+if (xu_not_empty($school_id))
+{
+    $a_locator_active['school_id'] = $school_id;
+    $a_cs['school_id'] = $school_id;
+}
+$u_locator_active = xcms_url($a_locator_active);
+$u_cs = xcms_url($a_cs);
+
+?>
 <div class="xsm-navbar"><?php
-    xsm_menu_item('list-ank', '', 'Анкеты', true);
-    xsm_menu_item('list-person-locator', xcms_url(array('show_anketa_status'=>'all')), 'Все люди');
-    xsm_menu_item('list-tour', '', 'Лес');
-    xsm_menu_item('list-person-locator', xcms_url(array('show_anketa_status'=>'active')), 'Актив');
-    xsm_menu_item('list-person', '', 'Участники школ');
-    xsm_menu_item('list-course', '', 'Курсы');
+    xsm_menu_item('list-ank', '', 'Анкеты', XSM_MENU_FIRST);
+    xsm_menu_item('list-person-locator', $u_locator_all, 'Все люди');
+    xsm_menu_item('list-tour', $u_cs, 'Лес');
+    xsm_menu_item('list-person-locator', $u_locator_active, 'Актив');
+    xsm_menu_item('list-person', $u_cs, 'Участники школ');
+    xsm_menu_item('list-course', $u_cs, 'Курсы');
     xsm_menu_item('list-department', '', 'Отделения');
     xsm_menu_item('list-school', '', 'Школы');
 ?></div>
