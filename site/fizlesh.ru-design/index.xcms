@@ -24,27 +24,45 @@
                             src="<# full_design_dir #>pic/lesh-subheader-wood.png"
                             width="400" height="30"
                             alt="Летняя Экологическая Школа"/></a>
+                        <div class="top-links">
                         <?php
-                        if (xcms_user()->check_rights("registered", false)) {?>
-                        <a title="Личный кабинет" href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'cabinet')); ?>"
-                            class="top-icon" style="top: -14px; right: 8px; height: 24px; width: 24px;
-                            background-image: url('<?php echo $full_engine_pub; ?>img/cabinet.png');">&nbsp;</a><?php
+
+                        if (xcms_user()->check_rights("registered", false))
+                        {?>
+                            <a title="Личный кабинет"
+                                href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'cabinet')); ?>"
+                                ><?php echo xcms_user()->login(); ?></a> | <?php
                         }
 
-                        if (xcms_user()->check_rights("ank", false)) {?>
-                        <a title="XSM" href="<?php echo $meta_site_url_secure; ?>xsm"
-                            class="top-icon" style="top: -18px; right: 31px; height: 32px; width: 32px;
-                            background-image: url('<?php echo $full_engine_pub; ?>img/study.png');">&nbsp;</a><?php
+                        if (xcms_user()->check_rights("ank", false))
+                        {?>
+                            <a title="Система управления школьниками"
+                                href="<?php echo $meta_site_url_secure; ?>xsm"
+                                >XSM</a> | <?php
                         }
 
-                        if (xcms_user()->check_rights("admin", false)) {?>
-                        <a title="Админка"
-                            href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>"
-                            class="top-icon" style="top: -11px; right: 72px; height: 16px; width: 16px;
-                            background-image: url('<?php echo $full_engine_pub; ?>img/key.png');">&nbsp;</a><?php
+                        if (xcms_user()->check_rights("admin", false))
+                        {?>
+                            <a title="Админка"
+                                href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>"
+                                >Админка</a> | <?php
                         }
 
+                        if (xcms_user()->check_rights("registered", false))
+                        {?>
+                            <a title="Выход"
+                                href="<?php echo $meta_site_url_secure.'?'.
+                                xcms_url(array('page'=>$pageid, 'ref'=>'cabinet', 'mode'=>'logout')); ?>"
+                                >Выход</a><?php
+                        }
+                        else
+                        {?>
+                            <a href="<?php echo $meta_site_url_secure.'?'.
+                                xcms_url(array('page'=>$pageid, 'ref'=>'login', 'return'=>'?ref=index')); ?>"
+                                >Авторизация</a><?php
+                        }
                         ?>
+                        </div>
                     </div>
                 </td>
             </tr>

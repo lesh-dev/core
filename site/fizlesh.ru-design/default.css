@@ -273,10 +273,16 @@ table.contest-results td.sum {
     text-align: center;
 }
 
-a.top-icon {
+div.top-links {
     position: absolute;
-    z-index: 2;
-    text-indent: -9999px;
+    top: -20px;
+    right: 3px;
+}
+
+div.top-links a {
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 1px dotted;
 }
 
 div.contlist-slider {
