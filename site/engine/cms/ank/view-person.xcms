@@ -108,10 +108,6 @@ function xsm_draw_person_school_panel($db, $school_id, $person_id)
     $school_title = $school['school_title'];
 
     ?><div><?php
-    xsm_edit_link('person_school', $person_school_id, xcms_url(array('action'=>'delete')), "Отчислить с $school_title");?>
-    </div><?php
-
-    ?><div><?php
     xsm_edit_link('person_school', $person_school_id, '', "Редактировать роли и статусы на $school_title");
     ?></div><?php
 
