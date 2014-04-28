@@ -222,6 +222,9 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def getAnketaSuccessSubmitMessage(self):
         return u"Спасибо, Ваша анкета принята!"
 
+    def getAnketaDuplicateSubmitMessage(self):
+        return u"А мы Вас знаем!"
+
     def getAdminPanelLink(self):
         return self.getUrlByLinkText(self.getAdminPanelLinkName())
 

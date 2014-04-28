@@ -38,8 +38,10 @@ print
 for i in imports:
     print 'import', i
 print
-
-print 'def getTests(baseUrl, args): return {'
+print
+tab = ' ' * 4
+print 'def getTests(baseUrl, args):'
+print tab + 'return {'
 for i in calls:
-    print '    ' + i
-print '}'
+    print tab * 2 + i
+print tab + '}'

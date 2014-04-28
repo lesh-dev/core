@@ -693,6 +693,27 @@ class SeleniumTest(object):
                 msg = "Cannot find URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". " + self.displayReason(reason)
                 self.throwItemNotFound(msg)
 
+    def countIndexedUrlsByLinkText(self, urlText, sibling=""):
+        # case: <a><span>text</span></a> is not captured by internal of 'gotoUrlByLinkText'
+        try:
+            if isVoid(sibling):
+                sibling="text()"
+
+            xpath = "//a[" + sibling + "='" + urlText + "']"
+            urls = self.m_driver.find_elements_by_xpath(xpath)
+
+            if not isList(urls):
+                self.fatalTest("countIndexedUrlsByLinkText(): Something bad retrieved from find_elements_by_xpath: it's not a list of WebElement. ")
+
+            listSize = len(urls)
+            self.logAdd("Urls list size: " + userSerialize(listSize))
+            return listSize
+        except NoSuchElementException:
+            # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
+            msg = "Cannot find no one URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". "
+            self.throwItemNotFound(msg)
+        
+        
     def gotoIndexedUrlByLinkText(self, urlText, index, sibling = ""):
         # case: <a><span>text</span></a> is not captured by internal of 'gotoUrlByLinkText'
         try:
