@@ -21,3 +21,19 @@ div.object-not-found {
     padding: 5px 15px 5px 15px;
     border-radius: 5px;
 }
+
+td.school-selection a.edit-link.add {
+    width: 16px;
+    height: 16px;
+    background-image: url('../img/add.png');
+    background-repeat: no-repeat;
+    text-decoration: none;
+}
+
+td.school-selection a.edit-link.delete {
+    width: 16px;
+    height: 16px;
+    background-image: url('../img/delete.gif');
+    background-repeat: no-repeat;
+    text-decoration: none;
+}
