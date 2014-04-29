@@ -154,23 +154,32 @@ function xsm_format_phones($phones_str)
         if ($digits[0] == "7")
             $digits[0] = "8"; // fix country code
 
-        $r = array();
-        if (!preg_match("/\([0-9]+\)/", $phone, $r))
+        $cl = false;
+        if (substr($digits, 0, 2) == "89" ||
+            substr($digits, 0, 4) == "8495" ||
+            substr($digits, 0, 4) == "8499")
+            $cl = 3;
+        else
         {
-            // cannot parse code
-            $item["hint"] = "Код города должен быть обрамлён скобками. ";
-            $item["valid"] = false;
-            $result[] = $item;
-            continue;
-        }
-        $cl = strlen($r[0]) - 2;
-        if ($cl < 3 || $cl > 5)
-        {
-            // invalid area code
-            $item["hint"] = "Код города должен содержать от 3 до 5 цифр. ";
-            $item["valid"] = false;
-            $result[] = $item;
-            continue;
+            $r = array();
+            if (!preg_match("/\([0-9]+\)/", $phone, $r))
+            {
+                // cannot parse code
+                $item["hint"] = "Код города должен быть обрамлён скобками. ";
+                $item["valid"] = false;
+                $result[] = $item;
+                continue;
+            }
+            $cl = strlen($r[0]) - 2;
+
+            if ($cl < 3 || $cl > 5)
+            {
+                // invalid area code
+                $item["hint"] = "Код города должен содержать от 3 до 5 цифр. ";
+                $item["valid"] = false;
+                $result[] = $item;
+                continue;
+            }
         }
         $phone = substr($digits, 0, 1).'<span class="pb">(</span>'.substr($digits, 1, $cl).'<span class="pb">)</span>';
         if ($cl == 3)
