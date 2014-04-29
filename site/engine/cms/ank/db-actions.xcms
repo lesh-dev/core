@@ -143,9 +143,8 @@ function xsm_warn_delete_ops($table_name, $key_name, $id, $redir, $entity_name, 
     </form></div><?php
 }
 
-
-// Kosher function for person
-function NEW_xsm_edit_operations($table_name, $id, $title, $aux_param = '')
+// Used only for person and contains spikes
+function xsm_edit_operations($table_name, $id, $title, $aux_param = '')
 {
     $is_new = ($id == XDB_NEW);
     // TODO: маленький костылик
