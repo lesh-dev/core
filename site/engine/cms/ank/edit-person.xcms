@@ -14,6 +14,7 @@ function xsm_notify_person_edit($person, $old_person)
     $mail_msg = xsm_build_diff_msg(
         $person,
         $old_person,
+        'person',
         xsm_get_person_fields(),
         xsm_get_person_field_types(),
         $table_title);

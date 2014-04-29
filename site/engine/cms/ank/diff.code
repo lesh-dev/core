@@ -5,18 +5,24 @@ include_once "$engine_dir/sys/diff/diff-utils.php";
 /**
   * Нормализация и прочистка массивов перед сравнением
   **/
-function xcms_normalize_array($arr, $fields)
+function xcms_normalize_array($arr, $table_name, $fields)
 {
     $anew = array();
     foreach ($arr as $key => $value)
     {
-        if (array_key_exists($key, $fields))
-        {
-            $value = trim($value);
-            $value = str_replace(EXP_CRLF, EXP_LF, $value);
-            $value = str_replace(EXP_CR, EXP_LF, $value);
-            $anew[$key] = $value;
-        }
+        if (!array_key_exists($key, $fields))
+            continue;
+
+        if ($key == "${table_name}_created")
+            continue;
+
+        if ($key == "${table_name}_modified")
+            continue;
+
+        $value = trim($value);
+        $value = str_replace(EXP_CRLF, EXP_LF, $value);
+        $value = str_replace(EXP_CR, EXP_LF, $value);
+        $anew[$key] = $value;
     }
     return $anew;
 }
@@ -24,10 +30,10 @@ function xcms_normalize_array($arr, $fields)
 /**
   * Построение разности двух key-массивов
   **/
-function xcms_array_diff($new, $old, $fields)
+function xcms_array_diff($new, $old, $table_name, $fields)
 {
-    $new = xcms_normalize_array($new, $fields);
-    $old = xcms_normalize_array($old, $fields);
+    $new = xcms_normalize_array($new, $table_name, $fields);
+    $old = xcms_normalize_array($old, $table_name, $fields);
 
     $diff = array();
     foreach ($new as $key => $value)
@@ -56,12 +62,12 @@ function xcms_array_diff($new, $old, $fields)
   * Build a diff message of two objects in html format.
   * @return HTML-message or empty string if objects are equal.
   **/
-function xsm_build_diff_msg($new_object, $old_object, $fields, $types, $table_title)
+function xsm_build_diff_msg($new_object, $old_object, $table_name, $fields, $types, $table_title)
 {
     $mail_msg = xcms_get_html_template("xsm-diff-message");
     $row_template = xcms_get_html_template("xsm-row-finediff");
 
-    $diff_array = xcms_array_diff($new_object, $old_object, $fields);
+    $diff_array = xcms_array_diff($new_object, $old_object, $table_name, $fields);
     if (count($diff_array) == 0)
         return "";
 

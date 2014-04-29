@@ -86,6 +86,7 @@ function xsm_notify_person_status_change()
     $mail_msg = xsm_build_diff_msg(
         $_POST,
         $old_person_comment,
+        'person_comment',
         $fields,
         $field_types,
         $table_title);

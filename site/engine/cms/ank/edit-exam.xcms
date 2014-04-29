@@ -124,6 +124,7 @@ function xsm_notify_exam_edit($exam)
     $mail_msg = xsm_build_diff_msg(
         $exam,
         $old_exam,
+        'exam',
         xsm_get_exam_fields(),
         xsm_get_exam_field_types(),
         $table_title);
