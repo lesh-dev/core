@@ -143,27 +143,6 @@ function xsm_warn_delete_ops($table_name, $key_name, $id, $redir, $entity_name, 
     </form></div><?php
 }
 
-// Here entity should be equal to table name, but...
-function xsm_edit_operations($entity, $table_name, $id, $title, $aux_param = '')
-{
-    $is_new = ($id == XDB_NEW);
-    $redir = $is_new ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
-    ?>
-    <div style="white-space: nowrap">
-        <input type="submit" name="update-<?php echo $entity; ?>"
-            id="update-<?php echo $entity; ?>-submit"
-            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
-        if (!$is_new) {?>
-            <input type="submit" name="delete-<?php echo $entity; ?>"
-                id="delete-<?php echo $entity; ?>-submit"
-                value="Удалить" class="delete-button"/><?php
-        }?>
-        <a class="link-button" href="view-<?php
-            echo $redir; ?>"><?php echo $title; ?></a>
-    </div><?php
-}
-
-
 
 // Kosher function for person
 function NEW_xsm_edit_operations($table_name, $id, $title, $aux_param = '')
