@@ -93,7 +93,7 @@ function xsm_show_all_person_list()
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
     $person_sel = $db->query($query);
 
-    xsm_view_operations('person', 'person', 'участника', '&amp;anketa_status=cont');
+    xsm_view_operations('person', 'person', 'участника', xcms_url(array('anketa_status'=>'cont')));
     ?>
     <table class="ankList">
         <colgroup>
@@ -142,7 +142,7 @@ function xsm_show_all_person_list()
     ?>
     </table>
     <?php
-    xsm_view_operations('person', 'person', 'участника', '&amp;anketa_status=cont');
+    xsm_view_operations('person', 'person', 'участника', xcms_url(array('anketa_status'=>'cont')));
 }
 
     xsm_show_all_person_list();
