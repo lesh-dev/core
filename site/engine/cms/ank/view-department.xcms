@@ -3,7 +3,7 @@
 function xsm_print_department()
 {
     $db = xdb_get();
-    //xsm_view_operations('department', 'department', 'курс');
+    xsm_view_operations('department', 'отделение');
     $department_id = xcms_get_key_or($_GET, 'department_id', "-1");
     $department = xdb_get_entity_by_id('department', $department_id);
     $href_departments = "list-department";
@@ -23,9 +23,9 @@ function xsm_print_department()
         </tr>
     </table>
     <?php
-    // Тут может быть инфа про преподов данного отделения
+    xsm_view_operations('department', 'отделение');
 
-    //xsm_view_operations('department', 'department', 'курс');
+    // Тут может быть инфа про преподов данного отделения
 }
 
 xsm_print_department();

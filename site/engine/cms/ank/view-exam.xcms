@@ -27,7 +27,7 @@ function xsm_print_exam()
         <a href="view-person<?php echo xcms_url(array('person_id'=>$student_person_id)); ?>"><?php
             echo $student_fi; ?></a>:
     </h3>
-    <?php xsm_view_operations('exam', 'exam', 'зачёт', $aux_param); ?>
+    <?php xsm_view_operations('exam', 'зачёт', $aux_param); ?>
     <table class="ankList">
     <?php
     while ($exam_data = $exam_sel->fetchArray(SQLITE3_ASSOC)) {?>
@@ -84,7 +84,7 @@ function xsm_print_exam()
     ?>
     </table>
     <?php
-    xsm_view_operations('exam', 'exam', 'зачёт', $aux_param);
+    xsm_view_operations('exam', 'зачёт', $aux_param);
 }
 
 xsm_print_exam();

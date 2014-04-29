@@ -239,7 +239,7 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
     if (!$simple_view)
     {?>
     <h3>Курсы</h3><?php
-    xsm_view_operations('course', 'course', 'курс', $course_aux_param); ?>
+    xsm_view_operations('course', 'курс', $course_aux_param); ?>
     <table class="ankList">
         <colgroup>
             <col width="40%" />

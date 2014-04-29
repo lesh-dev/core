@@ -13,7 +13,7 @@ function xsm_school_list()
     ?>
 
     <h3>Школы</h3><?php
-    xsm_view_operations('school', 'school', 'школу'); ?>
+    xsm_view_operations('school', 'школу'); ?>
     <table class="ankList">
         <colgroup>
             <col width="60" />
