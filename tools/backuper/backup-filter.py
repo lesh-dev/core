@@ -86,11 +86,10 @@ if cmdArgs[0] == "-l" or cmdArgs[0] == "--list-only":
     doListOnly = True
     cmdArgs.pop(0)
 
-if not cmdArgs:
-    print "Sorry, 'directory-to-clean' not specified. Syntax: backup-filter.py [-l|--list-only] <directory-to-clean>"
-    sys.exit(2)
+baseDir = '.'
+if cmdArgs:
+    baseDir = cmdArgs.pop(0)
 
-baseDir = cmdArgs.pop(0)
 if cmdArgs:
     print "Error: trailing command-line parameters detected. Switches should preceed <path-to-clean>."
     sys.exit(2)

@@ -77,7 +77,8 @@ if (!@$_GET["page"])
             <span class="top-menu-div">&nbsp;</span>
             <a <?php echo xcms_href(array('mode'=>'user_manage', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Пользователи</a>
             <a <?php echo xcms_href(array('mode'=>'group_admin', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Группы</a>
-            <a <?php echo xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Уведомления</a><?php
+            <a <?php echo xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'ladmin')); ?> class="h-menu-link">Уведомления</a>
+            <a href="/mailman/listinfo/preps/" class="h-menu-link">Рассылка</a><?php
             }?>
 
             <span style="display:none;">
