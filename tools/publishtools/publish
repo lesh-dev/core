@@ -20,7 +20,7 @@ function print_warning() {
 
 function print_message() {
     echo -en "\033[32m"
-    print "%7s" "$1"
+    printf "%7s" "$1"
     shift || true
     echo -e "\x1b[0m] $@"
 }
