@@ -19,9 +19,8 @@ function print_warning() {
 }
 
 function print_message() {
-    echo -en "\033[32m"
-    printf "%7s" "$1"
-    shift || true
+    echo -en "[\033[32m"
+    printf "%7s" "$COMPONENT_NAME"
     echo -e "\x1b[0m] $@"
 }
 
@@ -208,8 +207,9 @@ function add_variable
 
 function assemble_folder
 {
+    COMPONENT_NAME="folder"
     mkdir -p $local_target
-    print_message "folder" "Copying to '$local_target'..."
+    print_message "Copying '$location' to '$local_target'..."
     cp -rf $location/. $local_target/
     $hook
 }
@@ -226,20 +226,23 @@ function assemble_symlink
 
 function assemble_git
 {
+    COMPONENT_NAME="git"
+
     mkdir -p $local_target
     TEMP_REPO=/tmp/assemble_git.$RANDOM
     git clone $location $TEMP_REPO
     OLDPWD=$(pwd)
     cd $TEMP_REPO
+    print_message "Checking out '$branch'..."
     git checkout $branch
     export git_revision=$(git rev-list --all | wc -l)
     cd $OLDPWD
     mkdir -p $local_target
-    print_message "git" "Copying repo from temporary folder to '$local_target'..."
+    print_message "Copying repo from temporary folder to '$local_target'..."
     cp -rf $TEMP_REPO/$subfolder/. $local_target/
-    print_message "git" "Invoking hook..."
+    print_message "Invoking hook..."
     $hook
-    print_message "git" "Cleanup..."
+    print_message "Cleanup..."
     rm -rf $TEMP_REPO
 }
 
