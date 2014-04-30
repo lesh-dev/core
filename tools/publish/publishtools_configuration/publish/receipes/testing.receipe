@@ -15,6 +15,7 @@ sympolicy=none
 # This will be executed while publishing component begin
 function hook_begin
 {
+    print_message "Removing '$target'...'"
     rm -rf $target
     echo -en  # Add something useful if you want
 }
@@ -32,8 +33,10 @@ function hook_commit
     if [ $(pwd) != $target ]; then
         echo " *** ERROR *** Can't create save state"
     else
+        print_message "Adding all files to Git to save state..."
         git add -A
-        git commit -am "save state"
+        print_message "Saving state to Git..."
+        git commit -am "Save state"
     fi
 }
 
