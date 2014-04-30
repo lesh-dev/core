@@ -18,6 +18,13 @@ function print_warning() {
     echo -e "\033[33mWarning:\x1b[0m $@"
 }
 
+function print_message() {
+    echo -en "\033[32m"
+    print "%7s" "$1"
+    shift || true
+    echo -e "\x1b[0m] $@"
+}
+
 function print_version() {
     version_script="$MY_DIR/../publish/version.sh"
     if [ -r "$version_script" ] ; then
@@ -202,6 +209,7 @@ function add_variable
 function assemble_folder
 {
     mkdir -p $local_target
+    print_message "folder" "Copying to '$local_target'..."
     cp -rf $location/. $local_target/
     $hook
 }
@@ -209,7 +217,7 @@ function assemble_folder
 function assemble_symlink
 {
     if [ -h $local_target ]; then
-        echo "Symlink already presented."
+        echo "Symlink '$local_target' already exists"
     else
         ln -s $location $local_target
     fi
@@ -227,8 +235,11 @@ function assemble_git
     export git_revision=$(git rev-list --all | wc -l)
     cd $OLDPWD
     mkdir -p $local_target
+    print_message "git" "Copying repo from temporary folder to '$local_target'..."
     cp -rf $TEMP_REPO/$subfolder/. $local_target/
+    print_message "git" "Invoking hook..."
     $hook
+    print_message "git" "Cleanup..."
     rm -rf $TEMP_REPO
 }
 
