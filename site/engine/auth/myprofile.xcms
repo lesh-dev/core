@@ -49,12 +49,18 @@
                 'person_id'=>$person_id,
                 'school_id'=>XSM_SCHOOL_ANK_ID));
             break;
-        }
-        ?>
+        }?>
         <h3>XSM</h3>
-        <div>
-            Ваш профиль:
-            <a href="<?php echo "/${web_prefix}xsm/$person_url"; ?>"><?php echo $fi_enc; ?></a>
+        <div><?php
+        if (xu_not_empty($person_url))
+        {?>
+            Ваша карточка:
+            <a href="<?php echo "/${web_prefix}xsm/$person_url"; ?>"><?php echo $fi_enc; ?></a><?php
+        }
+        else
+        {?>
+            По вашему email в картотеке ничего не найдено.<?php
+        }?>
         </div>
         <?php
     }
