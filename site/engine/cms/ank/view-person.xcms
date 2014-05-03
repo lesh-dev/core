@@ -419,7 +419,6 @@ function xsm_print_add_person_to_school($db, $school_id, $person)
             'is_student'=>$is_student_typical
             ));
     ?>
-    <!-- На <b><?php echo $school_title_enc; ?></b> не присутствовал. -->
     <a class="edit-link add" href="<?php echo $add_href; ?>"
         title="Зачислить на <?php echo $school_title_enc; ?>">&nbsp;</a><?php
 }
@@ -523,8 +522,9 @@ function xsm_print_person_selected_school($db, $school_id, $person)
     $person_id = $person['person_id'];
     $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
     if ($person_school_id === NULL)
-    {
-        //xsm_print_add_person_to_school($db, $school_id, $person);
+    {?>
+        На данной школе не присутствовал. Чтобы зачислить человека на школу,
+        нужно нажать на синий плюсик рядом с соответствующей школой.<?php
         return;
     }
 
