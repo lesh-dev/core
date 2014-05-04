@@ -9,6 +9,7 @@
         $flags = "";
         $page_info = "$init_path/info";
         $text = "";
+        // this prevents from loading sub-folders if no info file here
         if (!file_exists($page_info))
             return;
 
