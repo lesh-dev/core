@@ -26,6 +26,13 @@ function hook_content_symlink
     echo -en  # Add something useful is you want
 }
 
+# This will be executed while publishing component content_symlink
+function hook_sitedata_copy
+{
+    echo "Site data copied"
+    echo -en  # Add something useful is you want
+}
+
 # This will be executed while publishing component preprod_copy
 function hook_preprod_copy
 {
