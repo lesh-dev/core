@@ -137,7 +137,11 @@ function xcms_get_aliases_file_name()
   **/
 function xcms_get_aliases()
 {
-    return xcms_get_list(xcms_get_aliases_file_name());
+    // no aliases is not an error
+    $aliases_name = xcms_get_aliases_file_name();
+    if (!file_exists($aliases_name))
+        return array();
+    return xcms_get_list($aliases_name);
 }
 
 /**
