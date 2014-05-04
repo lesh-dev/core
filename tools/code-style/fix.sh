@@ -37,6 +37,7 @@ fi
 fix_ext "*.xcms"
 fix_ext "*.code"
 fix_ext "*.php"
+fix_ext "*.py"
 fix_ext "*.js"
 fix_ext "*.sh"
 fix_ext "*.html"
