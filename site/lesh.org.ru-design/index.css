@@ -232,7 +232,7 @@ h2 {
 }
 
 .main_text p, .bottom_text p,
-.length_of_text p{
+.length_of_text p {
     font-size: 14px;
     color: black;
     padding-top: 15px;
@@ -240,9 +240,8 @@ h2 {
 
 .main_text p {
     padding-right: 40px;
+    color: #4f4f4f;
 }
-
-
 
 .bottom_text p.top{
     font-size: 14px;
