@@ -119,7 +119,7 @@ function xcms_print_related_pages($related_pages_varname)
 
     <div class="footer">
         <a href=""><img src="<# full_design_dir #>pict/facebook.png" /></a>
-        <a href="http://vk.com/club279809" alt="Вконтакте"><img src="<# full_design_dir #>pict/vkontakte.png" /></a>
+        <a href="https://vk.com/club279809" alt="ЛЭШ ВКонтакте"><img src="<# full_design_dir #>pict/vkontakte.png" /></a>
     </div>
 
     <form>
