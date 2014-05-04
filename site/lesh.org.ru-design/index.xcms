@@ -70,15 +70,19 @@ function xcms_print_related_pages()
         $hdr = xcms_get_key_or($INFO, "header");
         $alias = xcms_get_key_or($INFO, "alias");
         $aparam = xcms_get_key_or($_GET, "aparam");
-        $in_xsm = ($alias == "register" && strlen($aparam));
+
         // little spike: skip header display
         // in case of special pages (XSM manager for now)
+        $in_xsm = ($alias == "register" && strlen($aparam));
 
+        $main_page_id = $pageid;
         ob_start();
         ?>
         <# if //!@$_GET["usr"]//cms/ #>
         <?php
         $main_page = ob_get_clean();
+        // pop page id back
+        $pageid = $main_page_id;
         ?>
         <div id="content-text">
             <div class="right-inv">
