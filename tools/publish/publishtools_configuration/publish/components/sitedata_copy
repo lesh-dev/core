@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Component generated from template on Mon Sep 17 20:32:04 MSK 2012
+# Please don't forget to commit all changes to repo
+
+# Purpose: Load site settings to site root folder (google/yandex/etc files)
+
+if [ -z "$clone_root" ] ; then
+    echo "Clones root is not set"
+    exit 1
+fi
+
+if [ -z "$site" ] ; then
+    echo "Site is not set"
+    exit 1
+fi
+
+type=folder
+location=$clone_root/content-$site/sitedata/
+local_target=./

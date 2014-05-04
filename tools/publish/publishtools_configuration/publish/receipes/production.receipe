@@ -7,7 +7,7 @@ if [ -z "$clone_root" ] ; then
     exit 1
 fi
 
-components="preprod_copy content_symlink"
+components="preprod_copy content_symlink sitedata_copy"
 branch=master
 
 # This will be executed while publishing component begin
