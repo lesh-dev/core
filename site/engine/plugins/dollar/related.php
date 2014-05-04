@@ -1,6 +1,7 @@
 <?php
-global $related_pages;
-if (!$related_pages)
-    $related_pages = array();
-$related_pages = explode(',', $_0);
+$related_varname = $_0;
+global $$related_varname;
+if (!$$related_varname)
+    $$related_varname = array();
+$$related_varname = explode(',', $_1);
 ?>

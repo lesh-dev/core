@@ -6,13 +6,14 @@
 ?><!DOCTYPE html>
 <?php
 
-function xcms_print_related_pages()
+// see dollar/related.php
+function xcms_print_related_pages($related_pages_varname)
 {
-    // see dollar/related.php
-    global $related_pages;
-    if (!$related_pages)
-        $related_pages = array();
-    foreach ($related_pages as $related)
+    global $$related_pages_varname;
+    $rel_pages = $$related_pages_varname;
+    if (!$rel_pages)
+        $rel_pages = array();
+    foreach ($rel_pages as $related)
     {
         $pageid = $related;
         ?><# if //!@$_GET["usr"]//cms/ #><?php
@@ -88,21 +89,15 @@ function xcms_print_related_pages()
             <div class="right-inv">
                 <div class="right-inv-top">
                     <p class="word_left_top">подробнее</p>
-                    <p><?php
-                    xcms_print_related_pages(); ?></p>
+                    <?php
+                    xcms_print_related_pages("related_pages"); ?>
+                    <img class="arrow" src="<# full_design_dir #>pict/arrow.png" />
 
-                    <p> Школа проводится с 23 июля по 24 августа на базе местной сельской
-                        школы, в здании которой проводятся занятия и располагаются необходимые помещения
-                        (медпункт, библиотека, лаборатории, и т.п.).....<a href="">далее</a></p>
-                        <img class="arrow" src="<# full_design_dir #>pict/arrow.png" />
-
-                    <p class="right-inv-middle"><a href=""> документы и снаряжение</a></p>
+                    <p class="right-inv-middle"><a href="/gear">документы и снаряжение</a></p>
                 </div>
                 <div class="right-inv-bottom">
-                    <p class="word_left_top">история</p>
-                    <p>Традиция летних школ зародилась в конце пятидесятых – начале
-                        шестидесятых годов двадцатого века, когда прошли первые летние семинары
-                        и школы по вторичным моделирующим системам и семиотике.....<a href="history.html">далее</a></p>
+                    <p class="word_left_top">история?</p><?php
+                    xcms_print_related_pages("related_pages_bottom"); ?>
                 </div>
                 <img class="white-leaf" src="<# full_design_dir #>pict/white-leaf.gif" />
             </div>
