@@ -1,0 +1,10 @@
+<?php
+/*
+Owner:     mvel
+Actuality: 2.0
+
+This is a global redirector to admin template. It allows us to
+write ref=admin without any paths (since global/* is accessible without
+paths).
+*/
+?><# adm/admin #>

@@ -99,7 +99,7 @@
         if ($read_only)
         {?>
             <div style="padding-top: 10px">Свой собственный профиль Вы можете отредактировать
-            <a <?php echo xcms_href(array('mode'=>'myprofile', 'ref'=>'ladmin')); ?> >здесь</a>.</div><?php
+            <a <?php echo xcms_href(array('mode'=>'myprofile', 'ref'=>'admin')); ?> >здесь</a>.</div><?php
         }
         else
         {?>

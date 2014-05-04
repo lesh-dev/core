@@ -12,7 +12,7 @@
         $redirect = true;
     }
     if ($redirect)
-        include(translate("<! redir_msg ladmin 2 !>"));
+        include(translate("<! redir_msg admin 2 !>"));
 ?>
     <div>
         <span class="admin-form-label">Заголовок</span>

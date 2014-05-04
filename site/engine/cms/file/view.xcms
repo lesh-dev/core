@@ -4,7 +4,7 @@
     {
         echo "<h1>Раздел не заполнен.</h1>";
         if (xcms_user()->login() != "anonymous")
-        echo "<h3><a href=\"?ref=ladmin&page=$pageid\">Вы можете это исправить!</a></h3>";
+        echo "<h3><a href=\"?ref=admin&page=$pageid\">Вы можете это исправить!</a></h3>";
     }
     else
     {

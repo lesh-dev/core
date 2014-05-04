@@ -65,7 +65,7 @@ function xcms_create_contlist()
     xcms_process_page_diff("", $content, $item_pageid);
     ?>
     <meta http-equiv="refresh" content="2;URL=/<# web_prefix #>?<?php
-        echo xcms_url(array('page'=>$item_pageid, 'ref'=>'ladmin'));?>" />
+        echo xcms_url(array('page'=>$item_pageid, 'ref'=>'admin'));?>" />
     <h3>Подождите, сейчас произойдёт перенаправление
         на страницу администрирования...</h3><?php
     return true;

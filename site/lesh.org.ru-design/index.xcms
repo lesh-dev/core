@@ -51,7 +51,7 @@ function xcms_print_related_pages()
             <li><a href="/<# web_prefix #>links">Ссылки</a></li>
             <li><a href="http://forum.fizlesh.ru">Форум</a></li>
             <li><a href="/<# web_prefix #>?<?php
-                echo xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>">Админка</a></li>
+                echo xcms_url(array('page'=>$pageid, 'ref'=>'admin')); ?>">Админка</a></li>
         </ul>
     </div>
 

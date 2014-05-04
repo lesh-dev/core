@@ -13,19 +13,19 @@ function xcmst_page_info($INFO, $pageid)
         <div class="page-info-box-top">
             <span class="td2">
                 <span class="info-label">Заголовок</span>
-                <a <?php echo xcms_href(array('mode'=>'edit_header', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                <a <?php echo xcms_href(array('mode'=>'edit_header', 'page'=>$pageid, 'ref'=>'admin')); ?> >
                 <tt><?php echo xcms_get_key_or_enc($INFO, "header", "<header не задан>"); ?></tt></a>
             </span>
 
             <span class="td2">
                 <span class="info-label">Alias</span>
-                <a <?php echo xcms_href(array('mode'=>'edit_alias', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                <a <?php echo xcms_href(array('mode'=>'edit_alias', 'page'=>$pageid, 'ref'=>'admin')); ?> >
                 <tt><?php echo xcms_get_key_or_enc($INFO, "alias", "<alias не задан>"); ?></tt></a>
             </span>
 
             <span class="td2">
                 <span class="info-label">Настройки меню</span>
-                <a <?php echo xcms_href(array('mode'=>'edit_menu', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                <a <?php echo xcms_href(array('mode'=>'edit_menu', 'page'=>$pageid, 'ref'=>'admin')); ?> >
                 <tt><?php
                     echo xcms_get_key_or_enc($INFO, "menu-title", "<menu-title не задан>");
                     $flags = "";
@@ -37,7 +37,7 @@ function xcmst_page_info($INFO, $pageid)
 
             <span class="td2">
                 <span class="info-label">Физический путь</span>
-                <a <?php echo xcms_href(array('mode'=>'page_rename', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                <a <?php echo xcms_href(array('mode'=>'page_rename', 'page'=>$pageid, 'ref'=>'admin')); ?> >
                 <tt><?php echo htmlspecialchars($pageid); ?></tt></a>
             </span>
         </div>
@@ -45,22 +45,22 @@ function xcmst_page_info($INFO, $pageid)
         <div class="page-info-box-bottom">
             <div class="td1">
                 <span class="info-label">Meta-описание</span>
-                <a <?php echo xcms_href(array('mode'=>'edit_meta', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                <a <?php echo xcms_href(array('mode'=>'edit_meta', 'page'=>$pageid, 'ref'=>'admin')); ?> >
                 <tt><?php echo xcms_get_key_or_enc($INFO, "meta-description", "<meta-description не задано>"); ?></tt></a>
             </div>
             <div class="td1">
                 <span class="info-label">Ключевые слова</span>
-                <a <?php echo xcms_href(array('mode'=>'edit_meta', 'page'=>$pageid, 'ref'=>'ladmin')); ?> >
+                <a <?php echo xcms_href(array('mode'=>'edit_meta', 'page'=>$pageid, 'ref'=>'admin')); ?> >
                 <tt><?php echo xcms_get_key_or_enc($INFO, "meta-keywords", "<meta-keywords не заданы>"); ?></tt></a>
             </div>
         </div>
     </div><?php
     echo '
-        <a'.xcms_href(array('page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Контент</a>
-        <a'.xcms_href(array('mode'=>'edit_attach', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Файлы</a>
-        <a'.xcms_href(array('mode'=>'edit_icon', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Иконка меню</a>
-        <a'.xcms_href(array('mode'=>'access', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Доступ</a>
-        <a'.xcms_href(array('mode'=>'obsolete_settings', 'page'=>$pageid, 'ref'=>'ladmin')).'class="h-menu-tab">Настройки (будет выпилено)</a>';
+        <a'.xcms_href(array('page'=>$pageid, 'ref'=>'admin')).'class="h-menu-tab">Контент</a>
+        <a'.xcms_href(array('mode'=>'edit_attach', 'page'=>$pageid, 'ref'=>'admin')).'class="h-menu-tab">Файлы</a>
+        <a'.xcms_href(array('mode'=>'edit_icon', 'page'=>$pageid, 'ref'=>'admin')).'class="h-menu-tab">Иконка меню</a>
+        <a'.xcms_href(array('mode'=>'access', 'page'=>$pageid, 'ref'=>'admin')).'class="h-menu-tab">Доступ</a>
+        <a'.xcms_href(array('mode'=>'obsolete_settings', 'page'=>$pageid, 'ref'=>'admin')).'class="h-menu-tab">Настройки (будет выпилено)</a>';
 }
 
 ?>

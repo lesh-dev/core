@@ -18,7 +18,7 @@
     if ($editable)
     {?>
         <a id="contlist-edit" class="link-button content-edit"
-            href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'ladmin', 'page'=>$pageid));
+            href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'admin', 'page'=>$pageid));
             ?>">Редактировать список</a><?php
     }
     $pg = (integer)(xcms_get_key_or($_GET, "pg", 0));
@@ -40,7 +40,7 @@
             if ($editable)
             {?>
                 <a id="contlist-item-<?php echo $contlist_block_iter; ?>" class="link-button contlist-edit"
-                    href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'ladmin', 'page'=>$subpage_id)); ?>">Редактировать</a><?php
+                    href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'admin', 'page'=>$subpage_id)); ?>">Редактировать</a><?php
             }
             $timestamp = xcms_get_key_or($info, "timestamp-created");
             $date = xcms_rus_date($timestamp);

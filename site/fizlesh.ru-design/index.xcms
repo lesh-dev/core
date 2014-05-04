@@ -44,7 +44,7 @@
                         if (xcms_user()->check_rights("admin", false))
                         {?>
                             <a title="Админка"
-                                href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>"
+                                href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'admin')); ?>"
                                 >Админка</a> | <?php
                         }
 
@@ -111,7 +111,7 @@
                     if (xcms_user()->check_rights("editor", false) || xcms_user()->check_rights("admin", false))
                     {?>
                         <a href="<?php echo $meta_site_url_secure.'?'.
-                            xcms_url(array('page'=>$pageid, 'ref'=>'ladmin')); ?>"
+                            xcms_url(array('page'=>$pageid, 'ref'=>'admin')); ?>"
                             class="menu-item menu-sys">Админка</a><?php
                     }
 

@@ -208,7 +208,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def performLogout(self):
         self.logAdd("performLogout")
         self.addAction("user-logout")
-        self.gotoPage("/?&mode=logout&ref=ladmin")
+        self.gotoPage("/?&mode=logout&ref=admin")
 
     def getWelcomeMessage(self, login):
         return u"Привет, " + login

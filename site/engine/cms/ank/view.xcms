@@ -17,7 +17,7 @@ require_once("${engine_dir}cms/ank/ank-proc.php");
     {
         echo "<h1>Раздел не заполнен</h1>";
         if(xcms_user()->login() != "anonymous")
-            echo "<h3><a href=\"?ref=ladmin&amp;page=$pageid\">Вы можете это исправить!</a></h3>";
+            echo "<h3><a href=\"?ref=admin&amp;page=$pageid\">Вы можете это исправить!</a></h3>";
     }
     if (@$_POST["submit-anketa"])
     {
