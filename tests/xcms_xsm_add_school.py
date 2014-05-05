@@ -13,14 +13,14 @@ class XcmsXsmAddSchool(xtest_common.XcmsTest):
     * check school in panel
     * edit school properties and save
     """
-    
+
     def run(self):
 
         self.performLoginAsManager()
         self.gotoXsm()
         self.gotoXsmSchools()
         self.gotoUrlByLinkText(u"Добавить школу")
-        
+
         # generate school number
         lastDigit = random_crap.randomDigits(1)
 
@@ -28,20 +28,20 @@ class XcmsXsmAddSchool(xtest_common.XcmsTest):
         inpStart = "202" + lastDigit + ".07.15"
         inpEnd = "202" + lastDigit + ".08.16"
         inpLocation = u"Деревня Гадюкино_" + random_crap.randomWord(6)
-        
+
         inpSchoolTitle = self.fillElementByName("school_title", inpSchoolTitle)
         inpStart = self.fillElementByName("school_date_start", inpStart)
         inpEnd = self.fillElementByName("school_date_end", inpEnd)
         inpLocation = self.fillElementByName("school_location", inpLocation)
-        
+
         self.clickElementByName("update-school")
         self.gotoBackToSchoolView()
-        
+
         self.assertBodyTextPresent(inpSchoolTitle)
         self.assertBodyTextPresent(inpStart)
         self.assertBodyTextPresent(inpEnd)
         self.assertBodyTextPresent(inpLocation)
-        
+
         self.gotoUrlByLinkText(u"Правка")
 
         inpStart = "202" + lastDigit + ".07.23"
@@ -53,8 +53,10 @@ class XcmsXsmAddSchool(xtest_common.XcmsTest):
 
         self.clickElementByName("update-school")
 
+        self.gotoBackToSchoolView()
+
         self.assertBodyTextPresent(inpSchoolTitle)
         self.assertBodyTextPresent(inpStart)
         self.assertBodyTextPresent(inpEnd)
         self.assertBodyTextPresent(inpLocation)
-                        
+

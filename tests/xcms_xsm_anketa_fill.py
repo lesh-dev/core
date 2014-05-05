@@ -23,7 +23,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     * TODO: add person to some schools.
     * TODO: remove person from one of schools
     """
-    
+
     def addCommentsToPerson(self):
         commentText1 = self.addCommentToPerson()
         print "Added first comment: ", commentText1
@@ -63,40 +63,40 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     def run(self):
         # anketa fill positive test:
         # all fields are filled with correct values.
-                       
+
         self.gotoRoot()
-        
+
         #navigate to anketas
-        
+
         self.gotoUrlByLinkText(self.getEntranceLinkName())
         self.gotoAnketa()
         self.assertBodyTextPresent(self.getAnketaPageHeader())
-            
+
         # generate
         inpLastName = u"Чапаев" + random_crap.randomText(5);
         inpFirstName = u"Василий" + random_crap.randomText(3)
         inpMidName = u"Иваныч" + random_crap.randomText(3)
-        
+
         inpBirthDate = random_crap.randomDigits(2) + "." + random_crap.randomDigits(2) + "." + random_crap.randomDigits(4);
-        
+
         inpSchool = u"Тестовая школа им. В.Е.Бдрайвера №" + random_crap.randomDigits(4)
-        
+
         inpSchoolCity = u"Школа находится в /var/opt/" + random_crap.randomText(5)
         inpClass = random_crap.randomDigits(1) + u" Гэ"
-        
+
         inpPhone = "+7" + random_crap.randomDigits(9)
         inpCell = "+7" + random_crap.randomDigits(9)
         inpEmail = random_crap.randomText(10) + "@" + random_crap.randomText(6) + ".ru"
         inpSkype = random_crap.randomText(12)
         inpSocial = random_crap.randomVkontakte()
-        
+
         inpFav = random_crap.randomCrap(20, ["multiline"])
         inpAch = random_crap.randomCrap(15, ["multiline"])
         inpHob = random_crap.randomCrap(10, ["multiline"])
         inpSource = random_crap.randomCrap(10, ["multiline"])
-        
+
         inpLastName = self.fillElementById("last_name-input", inpLastName)
-        
+
         inpFirstName = self.fillElementById("first_name-input", inpFirstName)
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
         inpBirthDate = self.fillElementById("birth_date-input", inpBirthDate)
@@ -112,19 +112,19 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         inpAch = self.fillElementById("achievements-text", inpAch)
         inpHob = self.fillElementById("hobby-text", inpHob)
         inpSource = self.fillElementById("lesh_ref-text", inpSource)
-        
+
         self.clickElementById("submit-anketa-button")
-        
+
         self.assertBodyTextPresent(self.getAnketaSuccessSubmitMessage())
-            
+
         # now login as admin
-        
+
         self.performLoginAsManager()
-        
+
         self.gotoRoot()
-            
+
         self.gotoUrlByLinkText(self.getAnketaListMenuName())
-        
+
         shortAlias = xtest_common.shortAlias(inpLastName, inpFirstName)
         fullAlias = xtest_common.fullAlias(inpLastName, inpFirstName, inpMidName)
         #print "Full student alias:", fullAlias.encode("utf-8")
@@ -135,7 +135,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
 
     # just check text is on the page.
         print "Checking that all filled fields are displayed on the page. "
-        
+
         self.checkPersonAliasInPersonView(fullAlias)
 
         self.assertBodyTextPresent(inpBirthDate)
@@ -153,13 +153,13 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         self.assertElementSubTextById("extra-person-info", inpAch)
         self.assertElementSubTextById("extra-person-info", inpHob)
         self.assertElementSubTextById("extra-person-info", inpSource)
-        
+
         self.addCommentsToPerson()
-        
+
         # now, let's change anketa status to "Ждет собеседования"
-        
-        self.gotoUrlByLinkText(u"Редактировать анкетные данные")
-        
+
+        self.gotoEditPerson()
+
         # first, check that values in opened form match entered in anketa.
 
         self.assertElementValueById("last_name-input", inpLastName)
@@ -180,15 +180,15 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         self.assertElementValueById("achievements-text", inpAch)
         self.assertElementValueById("hobby-text", inpHob)
         self.assertElementValueById("lesh_ref-text", inpSource)
-        
+
         self.assertElementValueById("anketa_status-selector", "new")
         # change anketa status and save it.
-        
+
         self.setOptionValueByIdAndValue("anketa_status-selector", "progress")
-        
+
         self.clickElementById("update-person-submit")
-        
+
         self.assertBodyTextPresent(u"Участник успешно сохранён")
         self.gotoBackToAnketaView()
-        
+
         self.assertElementTextById("anketa_status-span", u"Ждёт собес.")

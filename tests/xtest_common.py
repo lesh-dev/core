@@ -17,7 +17,7 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
 
         super(XcmsBaseTest, self).init()
         self.set404Text(u"Нет такой страницы")
-        
+
         if not checkSingleOption(["--no-maximize"], self.m_params):
             self.maximizeWindow()
 
@@ -52,15 +52,15 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         self.gotoRoot()
         if self.isInstallerPage():
             self.failTest("Installer page detected, while we did not expected it. You should run this test on installed XCMS. ")
-            
+
     def getCurrentPersonId(self):
         curUrl = self.curUrl()
         m = re.search("person_id=(\d+)", curUrl)
         if m and m.groups() >= 1:
             return str(m.group(1))
         return None
-        
-        
+
+
 
 
 class XcmsTestWithConfig(XcmsBaseTest):
@@ -237,7 +237,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
     def gotoXsm(self):
         self.gotoPage("/xsm")
-        
+
     def gotoXsmSchools(self):
         self.gotoUrlByLinkText(u"Школы")
 
@@ -246,7 +246,8 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.gotoUrlByLinkText(self.getAdminPanelLinkName())
 
     def getPersonAbsenceMessage(self):
-        return u"На " + self.m_conf.getTestSchoolName() + u" не присутствовал"
+        #return u"На " + self.m_conf.getTestSchoolName() + u" не присутствовал"
+        return u"На данной школе не присутствовал"
 
 
 class XcmsTest(XcmsTestWithConfig):
