@@ -2,6 +2,7 @@
     $show_anketa_status = xsm_get_persistent_enum_key("list-person-locator", "show_anketa_status", "show_anketa_status_locator");
     $show_is_teacher = xcms_get_persistent_key("list-person-locator", "show_is_teacher");
     $show_is_student = xcms_get_persistent_key("list-person-locator", "show_is_student");
+    $sort_by_class = xcms_get_persistent_key("list-person-locator", "sort_by_class");
 ?>
 <span style="position: relative; float: right;">
 <a href="#" id="show-status-help" class="popup-link">Легенда</a>
@@ -30,6 +31,8 @@
     ?><span class="ankListField">Только преподы</span>&nbsp;&nbsp;<?php
         xsm_checkbox('show_is_student', $show_is_student);
     ?><span class="ankListField">Только школьники</span>&nbsp;&nbsp;<?php
+        xsm_checkbox('sort_by_class', $sort_by_class);
+    ?><span class="ankListField">По класу</span>&nbsp;&nbsp;<?php
         xsm_draw_fio_filter(); ?>
     <input type="submit" name="show-person" value="Показать" />
 </span></form>
@@ -44,6 +47,7 @@ function xsm_show_all_person_list()
     global $show_anketa_status;
     global $show_is_teacher;
     global $show_is_student;
+    global $sort_by_class;
 
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
 
@@ -88,7 +92,10 @@ function xsm_show_all_person_list()
     if (strlen($cond))
         $query .= " WHERE $cond";
 
-    $query .= " ORDER BY NOT (p.is_teacher IS NULL OR LENGTH(p.is_teacher) = 0), p.last_name, p.first_name";
+    if (xcms_checkbox_enabled($sort_by_class))
+        $query .= " ORDER BY NOT (p.is_student IS NOT NULL AND LENGTH(p.is_student) > 0), CAST(p.current_class AS INT), p.last_name, p.first_name";
+    else
+        $query .= " ORDER BY NOT (p.is_student IS NOT NULL AND LENGTH(p.is_student) > 0), p.last_name, p.first_name";
 
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
     $person_sel = $db->query($query);
