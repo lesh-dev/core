@@ -64,18 +64,23 @@ while [ -n "$1" ]; do
     shift || true
 done
 
+user="$USER"
+if [ -z "$user" ] ; then
+    user="$USERNAME"
+fi
+
 # configure rests of unset options
 if [ -z "$DEST_NAME" ] ; then
     # default site location
     DEST_NAME="site"
-    if [ "$USERNAME" == "mvel" ] ; then
+    if [ "$user" == "mvel" ] ; then
         DEST_NAME="fizlesh.ru"
     fi
 fi
 
 # folder with content repo
 REPO_NAME="content-fizlesh.ru"
-if [ "$USERNAME" == "mvel" ] ; then
+if [ "$user" == "mvel" ] ; then
     REPO_NAME="content-$DEST_NAME"
 fi
 
@@ -84,7 +89,7 @@ CONT_DIR="../$REPO_NAME/content"
 
 # installed content folder name
 DEST_CONT="fizlesh.ru-content"
-if [ "$USERNAME" == "mvel" ] ; then
+if [ "$user" == "mvel" ] ; then
     DEST_CONT="$DEST_NAME-content"
 fi
 
@@ -137,7 +142,7 @@ EOF
 
 # site root
 DEST="/var/www/html/$DEST_NAME"
-if [ "$USERNAME" == "mvel" ] ; then
+if [ "$user" == "mvel" ] ; then
     DEST="/var/www/vhosts/$DEST_NAME"
 fi
 
