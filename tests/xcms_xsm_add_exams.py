@@ -84,7 +84,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
 
         self.gotoUrlByLinkText(self.m_conf.getTestSchoolName())
         self.assertBodyTextPresent(self.getPersonAbsenceMessage())
-        self.gotoUrlByLinkText(u"Зачислить на " + self.m_conf.getTestSchoolName())
+        self.gotoUrlByLinkTitle(u"Зачислить на " + self.m_conf.getTestSchoolName())
         self.clickElementByName("update-person_school")
         self.gotoBackToPersonView()
 

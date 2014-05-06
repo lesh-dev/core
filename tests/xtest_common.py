@@ -370,7 +370,8 @@ class XcmsTest(XcmsTestWithConfig):
         self.gotoUrlByLinkText(u"Вернуться к просмотру")
 
     def gotoEditPerson(self):
-        self.gotoUrlByLinkText(u"Редактировать анкетные данные")
+        #self.gotoUrlByLinkText(u"Редактировать анкетные данные")
+        self.gotoUrlByLinkText(u"Ред.")
 
     def gotoBackAfterComment(self):
         #self.gotoUrlByLinkText(u"Вернуться к списку комментов") # older variant

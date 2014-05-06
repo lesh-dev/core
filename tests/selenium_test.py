@@ -296,6 +296,18 @@ class SeleniumTest(object):
         except NoSuchElementException:
             self.failTest("Cannot find URL with name " + userSerialize(linkName) + ". " + self.displayReason(reason))
 
+    # TODO: Remove copypaste from gotoUrlByLinkText
+    def gotoUrlByLinkTitle(self, linkName, reason = ""):
+        """
+        reason is custom comment helping to understand why this link is vital for test pass.
+        """
+        try:
+            link = self.getUrlByLinkText(linkName, reason = reason, optionList = ["title"])
+            self.gotoSite(link, linkName)
+        except NoSuchElementException:
+            self.failTest("Cannot find URL with name " + userSerialize(linkName) + ". " + self.displayReason(reason))
+
+
     def gotoUrlByPartialLinkText(self, linkName, reason = ""):
         try:
             link = self.getUrlByLinkText(linkName, ["partial"], reason)
@@ -568,10 +580,10 @@ class SeleniumTest(object):
             self.m_logCheckStopWords = stopList
         else:
             self.m_logCheckStopWords = [stopList]
-        
+
     def isStopWord(self, text):
         return text in self.m_logCheckStopWords or text == self.m_textOnPage404
-    
+
     def checkTextPresent(self, xpath, text):
         self.checkEmptyParam(xpath, "checkTextPresent")
         self.checkEmptyParam(text, "checkTextPresent")
@@ -583,10 +595,10 @@ class SeleniumTest(object):
                 serOpt = []
                 if xpath in ["/html/body", "//*"]: # too large
                     serOpt = ["cut_strings"]
-                    
+
                 if not self.isStopWord(text):
                     self.logAdd("checkTextPresent: element " + userSerialize(xpath) + " text: " + wrapIfLong(userSerialize(eleText, serOpt).replace("\n", " ")) + ". ")
-                    
+
                 if isList(text):
                     for phrase in text:
                         if phrase in eleText:
@@ -670,15 +682,24 @@ class SeleniumTest(object):
         if "partial" in optionList:
             self.logAdd("Search for partial link text " + userSerialize(urlText) + ". ")
             searchMethod = self.m_driver.find_element_by_partial_link_text
+        elif "title" in optionList:
+            self.logAdd("Search for link with title " + userSerialize(urlText) + ". ")
+            searchMethod = self.m_driver.find_element_by_css_selector
+
+        def getUrl(urlName, optionList=[]):
+            if "title" in optionList:
+                url = searchMethod('[title="' + urlName + '"]')
+            else:
+                url = searchMethod(urlName)
+            return url.get_attribute("href");
+
 
         if isList(urlText):
             for urlName in urlText:
                 try:
-                    url = searchMethod(urlName)
-                    return url.get_attribute("href");
+                    return getUrl(urlName, optionList=optionList)
                 except NoSuchElementException:
                     self.logAdd("Tried to find url by name " + userSerialize(urlName) + ", not found. ")
-                    pass
             else:
                 # loop ended, found nothing
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
@@ -686,8 +707,7 @@ class SeleniumTest(object):
                 self.throwItemNotFound(msg)
         else: # single link
             try:
-                url = searchMethod(urlText)
-                return url.get_attribute("href");
+                return getUrl(urlText, optionList=optionList)
             except NoSuchElementException:
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
                 msg = "Cannot find URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". " + self.displayReason(reason)
@@ -712,8 +732,8 @@ class SeleniumTest(object):
             # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
             msg = "Cannot find no one URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". "
             self.throwItemNotFound(msg)
-        
-        
+
+
     def gotoIndexedUrlByLinkText(self, urlText, index, sibling = ""):
         # case: <a><span>text</span></a> is not captured by internal of 'gotoUrlByLinkText'
         try:

@@ -46,7 +46,7 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
         inpLastName = u"Преподов_" + random_crap.randomText(5)
         inpFirstName = u"Александр_" + random_crap.randomText(3)
         inpMidName = u"Ильич_" + random_crap.randomText(3)
-        
+
         inpLastName = self.fillElementById("last_name-input", inpLastName)
         inpFirstName = self.fillElementById("first_name-input", inpFirstName)
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
@@ -65,7 +65,7 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
 
         self.gotoUrlByLinkText(self.m_conf.getTestSchoolName())
         self.assertBodyTextPresent(self.getPersonAbsenceMessage())
-        self.gotoUrlByLinkText(u"Зачислить на " + self.m_conf.getTestSchoolName())
+        self.gotoUrlByLinkTitle(u"Зачислить на " + self.m_conf.getTestSchoolName())
         self.clickElementByName("update-person_school")
         self.gotoBackToPersonView()
 
