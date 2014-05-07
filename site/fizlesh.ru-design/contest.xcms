@@ -3,7 +3,7 @@
     <title>Contest</title>
     <# cms/bootstrap #>
     <# cms/jquery #>
-    <link href="<# full_design_dir #>/contest.css" rel="stylesheet" media="screen">
+    <link href="<# full_design_dir #>/css<# css_version #>contest.css" rel="stylesheet" media="screen">
 </head>
 <body>
 <# url #>
