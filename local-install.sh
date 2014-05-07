@@ -64,9 +64,9 @@ while [ -n "$1" ]; do
     shift || true
 done
 
-user="$USER"
+user="$USERNAME"
 if [ -z "$user" ] ; then
-    user="$USERNAME"
+    user="$USER"
 fi
 
 # configure rests of unset options
