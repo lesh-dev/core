@@ -253,6 +253,7 @@ img.edit-icon {
 
 .ankEdit.checkbox {
     width: 16px;
+    vertical-align: -10%;
 }
 
 input.delete-button {
