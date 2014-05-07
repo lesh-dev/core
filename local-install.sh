@@ -140,6 +140,27 @@ EOF
 
 }
 
+function xcms_version_css()
+{
+    css_root_dir="$1"
+    if ! [ -d "$css_root_dir" ] ; then
+        return 0
+    fi
+    version="$( cat $DEST/VERSION | sed -e 's/[^0-9.]//g' )"
+
+    (
+    cd "$css_root_dir"
+    css_dirs="$( find . -type d -name 'css' )"
+    for d in $css_dirs ; do (
+        echo $d
+        sudo rm -rf "$d/$version"
+        cd "$d"
+        sudo ln -sfv ../ "$version"
+        #sudo chown $HTTPD_USER:$HTTPD_USER "css"
+        ) done
+    )
+}
+
 # site root
 DEST="/var/www/html/$DEST_NAME"
 if [ "$user" == "mvel" ] ; then
@@ -182,7 +203,7 @@ fi
 DEST_CHECK="` echo -n $DEST | sed -e 's:/::g' `"
 if ! [ -z "$DEST_CHECK" ]; then
     message "Cleaning destination directory $DEST"
-    sudo rm -rf "$DEST/{doc,$DEST_CONT,fizlesh.ru-design,engine,engine_public}"
+    sudo rm -rf "$DEST/{doc,$DEST_CONT,*-design,engine,engine_public}"
 else
     message_error "Bug in your script!"
     exit 1
@@ -238,6 +259,12 @@ fi
 if [ "$PREPARE_INSTALLER" = "yes" ] ; then
     do_prepare_installer "$DEST"
 fi
+
+message "Versioning CSS"
+
+xcms_version_css "$DEST/engine_public"
+xcms_version_css "$DEST/fizlesh.ru-design"
+xcms_version_css "$DEST/lesh.org.ru-design"
 
 xsm_clear_notifications
 
