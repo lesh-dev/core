@@ -64,10 +64,11 @@ while [ -n "$1" ]; do
     shift || true
 done
 
-user="$USERNAME"
+user="$SUDO_USER"
 if [ -z "$user" ] ; then
     user="$USER"
 fi
+message "User detected: $user"
 
 # configure rests of unset options
 if [ -z "$DEST_NAME" ] ; then
@@ -147,16 +148,15 @@ function xcms_version_css()
         return 0
     fi
     version="$( cat $DEST/VERSION | sed -e 's/[^0-9.]//g' )"
+    message "    Processing '$css_root_dir'..."
 
     (
-    cd "$css_root_dir"
-    css_dirs="$( find . -type d -name 'css' )"
-    for d in $css_dirs ; do (
-        echo $d
-        sudo rm -rf "$d/$version"
-        cd "$d"
-        sudo ln -sfv ../ "$version"
-        #sudo chown $HTTPD_USER:$HTTPD_USER "css"
+        cd "$css_root_dir"
+        css_dirs="$( find . -type d -name 'css' )"
+        for d in $css_dirs ; do (
+            sudo rm -rf "$d/$version"
+            cd "$d"
+            sudo ln -sf ../ "$version"
         ) done
     )
 }
