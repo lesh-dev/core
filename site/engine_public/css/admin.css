@@ -180,7 +180,7 @@ a.user-ops-close {
     right: 10px;
     width: 16px;
     height: 16px;
-    background-image: url('../img/close.png');
+    background-image: url('../../img/close.png');
     background-repeat: no-repeat;
 }
 

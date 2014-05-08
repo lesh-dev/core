@@ -260,7 +260,7 @@ input.delete-button {
     margin-top: 5px;
     background-color: #ff9f7f;
     color: #2f2f00;
-    background-image: url('pic/delete.gif');
+    background-image: url('../../pic/delete.gif');
     background-repeat: no-repeat;
     padding-left: 22px;
     background-position: 2px 50%;

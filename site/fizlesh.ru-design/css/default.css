@@ -4,7 +4,7 @@ html {
 
 body {
     background-color: #c0d2ab;
-    background-image: url("pic/cells.png");
+    background-image: url("../../pic/cells.png");
     font-family: Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
     font-size: 10pt;
     color: #203720;
@@ -39,7 +39,7 @@ a img {
 }
 
 .topTable {
-    background-image: url("pic/grass-formulas.jpg");
+    background-image: url("../../pic/grass-formulas.jpg");
     height: 100px;
     width: 100%;
     margin-bottom: 3px;

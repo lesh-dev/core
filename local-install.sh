@@ -156,7 +156,7 @@ function xcms_version_css()
         for d in $css_dirs ; do (
             sudo rm -rf "$d/$version"
             cd "$d"
-            sudo ln -sf ../ "$version"
+            sudo ln -sf . "$version"
         ) done
     )
 }
