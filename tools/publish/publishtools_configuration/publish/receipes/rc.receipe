@@ -24,7 +24,7 @@ function hook_content_copy
     echo -en  # Add something useful is you want
 }
 
-# copy-pasted from local-install
+# almost copy-pasted from local-install
 function xcms_version_css()
 {
     css_root_dir="$1"
@@ -32,7 +32,7 @@ function xcms_version_css()
         return 0
     fi
     version="$( cat VERSION | sed -e 's/[^0-9.]//g' )"
-    message "    Processing '$css_root_dir'..."
+    print_message "    Processing '$css_root_dir'..."
 
     (
         cd "$css_root_dir"
@@ -48,9 +48,10 @@ function xcms_version_css()
 # This will be executed while publishing component git
 function hook_git
 {
-    pwd
-    ls -la
-    echo $local_target
+    xcms_version_css "engine_public"
+    for i in *-design ; do
+        xcms_version_css "$i"
+    done
 }
 
 # This will be executed while publishing component end
