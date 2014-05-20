@@ -1,6 +1,6 @@
 <?php
     /**
-      * Migration/merge script v2.3 to v2.4
+      * Migration/merge script v2.6 to v2.7
       **/
     date_default_timezone_set('Europe/Moscow');
     require_once("settings.php");
