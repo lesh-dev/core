@@ -65,6 +65,7 @@ create table course (
     course_cycle text,  -- цикл, на котором читался курс
     target_class text, -- диапазон классов, на которые рассчитан курс
     course_desc text,  -- описание курса
+    course_type text, --- enum тип курса (прак, поход, etc)
     course_comment text, -- комментарий к курсу (чатик пока не делаем)
     course_created text, -- utc timestamp
     course_modified text -- utc timestamp
@@ -88,7 +89,6 @@ create table exam (
     course_id integer not null, -- fk
     exam_status text,
     deadline_date text,
-    is_prac text, -- enum -- ой, зачем же это в свойствах зачёта? это же свойство курса!
     exam_comment text,
     exam_created text,
     exam_modified text,

@@ -122,6 +122,7 @@ function xsm_get_course_fields()
         "school_id"=>"Школа, на которой читался курс",
         "course_cycle"=>"Цикл, на котором читался курс",
         "course_desc"=>"Описание",
+        "course_type"=>"Тип курса",
         "course_comment"=>"Комментарий",
         "course_created"=>"Время создания",
         "course_modified"=>"Последняя модификация"
@@ -146,7 +147,6 @@ function xsm_get_exam_fields()
         "course_id"=>"Курс",
         "exam_status"=>"Состояние",
         "deadline_date"=>"Дедлайн",
-        "is_prac"=>"Прак?",
         "exam_comment"=>"Комментарий к зачёту",
         "exam_created"=>"Время создания",
         "exam_modified"=>"Последняя модификация"
@@ -158,7 +158,6 @@ function xsm_get_exam_field_types()
     return array(
         "exam_comment"=>"textarea",
         "exam_status"=>"enum",
-        "is_prac"=>"checkbox"
     );
 }
 
@@ -251,7 +250,16 @@ $XSM_ENUMS = array(
             "lesh"=>"Летняя",
             "zesh"=>"Зимняя",
             "vesh"=>"Весеннняя"),
-        "default"=>"lesh")
+        "default"=>"lesh"),
+
+   // Тип курса
+    "course_type"=>array(
+        "values"=>array(
+            "generic"=>"Обычный",
+            "facult"=>"Факультатив",
+            "prac"=>"Практикум",
+            "other"=>"Иное"),
+        "default"=>"generic")
 );
 
 // Enum API
