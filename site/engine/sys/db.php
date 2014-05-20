@@ -295,4 +295,55 @@
         <textarea rows="5" cols="120" style="display: <?php echo ($enabled ? "" : "none"); ?>;"
             id="person-query-debug"><?php echo $query; ?></textarea><?php
     }
+
+    /**
+      * Migration helpers
+      * TODO: unit tests for them
+      **/
+
+    function xdb_open_db($db_name)
+    {
+        xcms_log(XLOG_INFO, "Open database '$db_name'");
+        return new SQlite3($db_name, SQLITE3_OPEN_READONLY);
+    }
+
+    function xdb_open_db_write($db_name)
+    {
+        xcms_log(XLOG_INFO, "Open database '$db_name' for WRITING");
+        return new SQlite3($db_name, SQLITE3_OPEN_READWRITE);
+    }
+
+    function xdb_get_selector($db, $table_name)
+    {
+        $query = "SELECT * FROM $table_name";
+        return $db->query($query);
+    }
+
+    function xdb_drop_column($db, $table_name, $column_name, $create_table)
+    {
+        // create new table
+        $db->exec($create_table);
+        // copy data
+        $sel = xdb_get_selector($db, $table_name);
+        $objects = 0;
+        while ($obj = $sel->fetchArray(SQLITE3_ASSOC))
+        {
+            $idn = "${table_name}_id";
+            $object_id = $obj[$idn];
+            @unset($obj[$column_name]); // specific code
+            xdb_insert_ai("${table_name}_new", $idn, $obj, $obj, XDB_OVERRIDE_TS, XDB_NO_USE_AI, $db);
+            ++$objects;
+        }
+
+        // rename table
+        $db->exec("DROP TABLE $table_name");
+        $db->exec("ALTER TABLE ${table_name}_new RENAME TO $table_name");
+        xcms_log(XLOG_INFO, "Dropped $column_name from $table_name, processed $objects");
+    }
+
+    function xdb_vacuum($db)
+    {
+        $db->exec("VACUUM");
+        xcms_log(XLOG_INFO, "Database vacuumed");
+    }
 ?>
