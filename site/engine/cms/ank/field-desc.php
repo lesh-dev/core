@@ -129,6 +129,15 @@ function xsm_get_course_fields()
     );
 }
 
+function xsm_get_course_field_types()
+{
+    return array(
+        "course_comment"=>"textarea",
+        "course_desc"=>"textarea",
+        "course_type"=>"enum"
+    );
+}
+
 function xsm_get_course_teachers_fields()
 {
     return array(

@@ -49,10 +49,7 @@ function xsm_edit_course()
 
     $school = xdb_get_entity_by_id('school', $school_id);
 
-    $field_types = array(
-        "course_comment"=>"textarea",
-        "course_desc"=>"textarea"
-    );
+    $field_types = xsm_get_course_field_types();
 
     $teachers_edit_url = xcms_url(array('school_id'=>$school_id, 'course_id'=>$course_id));
 
@@ -94,10 +91,15 @@ function xsm_edit_course()
                     $attr = 'disabled="disabled"'; ?>
                 <tr><td class="ankList"><span class="ankEditField"><?php echo $course_fields[$key]; ?></span>
                 <?php
-                if (array_key_exists($key, $field_types))
+                $ft = xcms_get_key_or($field_types, $key);
+                if ($ft == "textarea")
                 {?>
                     <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
                         echo htmlspecialchars($value); ?></textarea><?php
+                }
+                elseif ($ft == "enum")
+                {
+                    echo xsm_make_enum_by_type($key, $value, $key);
                 }
                 elseif ($key == 'school_id')
                 {
