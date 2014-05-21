@@ -9,12 +9,11 @@ function xsm_print_exam()
     $exam_sel = $db->query(
         "SELECT
         tp.last_name as teacher_last_name, tp.first_name as teacher_first_name,
-        c.course_id, c.course_title, c.course_desc, c.course_teacher_id, c.target_class,
+        c.course_id, c.course_title, c.course_desc, c.target_class,
         e.exam_id, e.exam_status, e.exam_comment, e.deadline_date, e.exam_created, e.exam_modified
         FROM course c, person tp, person sp, exam e WHERE
         (e.course_id = c.course_id) AND
         (e.student_person_id = sp.person_id) AND
-        (c.course_teacher_id = tp.person_id) AND
         (e.student_person_id = $student_person_id)"
     );
 
@@ -62,23 +61,19 @@ function xsm_print_exam()
         </tr>
         <!--<tr><td class="ankList"><span class="ankListField">Название курса</span>:
             <?php echo $course_title; ?></td></tr>-->
-        <tr><td class="ankList"><span class="ankListField">На какие классы рассчитан</span>:
-            <?php echo $target_class; ?></td></tr>
+        <tr><td class="ankList"><?php xsm_field("course", "target_class");
+            echo $target_class; ?></td></tr>
 
-        <tr><td class="ankList"><span class="ankListField">Препод</span>:
-            <a href="view-person<?php echo xcms_url(array('person_id'=>$course_teacher_id)); ?>"><?php
-                echo $teacher_fi; ?></a></td></tr>
+        <tr><td class="ankList"><?php xsm_field("exam", "exam_status");
+            echo xsm_make_enum($exam_status, "exam_status"); ?></td></tr>
 
-        <tr><td class="ankList"><span class="ankListField">Статус зачёта</span>:
-            <?php echo xsm_make_enum($exam_status, "exam_status"); ?></td></tr>
+        <tr><td class="ankList"><?php xsm_field("exam", "deadline_date");
+            echo $deadline_date; ?></td></tr>
 
-        <tr><td class="ankList"><span class="ankListField">Дедлайн</span>:
-            <?php echo $deadline_date; ?></td></tr>
-
-        <tr><td class="ankList"><span class="ankListField">Описание курса</span>:
-            <?php echo xcms_html_wrap_by_crlf($course_desc); ?></td></tr>
-        <tr><td class="ankList"><span class="ankListField">Комментарий к зачёту</span>:
-            <?php echo xcms_html_wrap_by_crlf($exam_comment); ?></td></tr>
+        <tr><td class="ankList"><?php xsm_field("course", "course_desc");
+            echo xcms_html_wrap_by_crlf($course_desc); ?></td></tr>
+        <tr><td class="ankList"><?php xsm_field("exam", "exam_comment");
+            echo xcms_html_wrap_by_crlf($exam_comment); ?></td></tr>
         <?php
         }
     ?>
