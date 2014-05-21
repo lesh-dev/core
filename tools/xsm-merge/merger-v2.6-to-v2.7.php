@@ -142,6 +142,5 @@
 
     $db->exec("ALTER TABLE `school` ADD COLUMN `school_location` text;");
 
-    $db->exec("VACUUM");
-    xcms_log(XLOG_INFO, "Database vacuumed");
+    xdb_vacuum();
 ?>
