@@ -261,14 +261,25 @@ $XSM_ENUMS = array(
             "vesh"=>"Весеннняя"),
         "default"=>"lesh"),
 
-   // Тип курса
+    // Тип курса
     "course_type"=>array(
         "values"=>array(
             "generic"=>"Обычный",
             "facult"=>"Факультатив",
             "prac"=>"Практикум",
             "other"=>"Иное"),
-        "default"=>"generic")
+        "default"=>"generic"),
+
+    // Тематика курса
+    "course_area"=>array(
+        "values"=>array(
+            "unknown"=>"Не выбрано",
+            "precise"=>"Точные науки",
+            "nature"=>"Естественные науки",
+            "human"=>"Гуманитарные науки",
+            "other"=>"Иное"),
+        "default"=>"unknown")
+
 );
 
 // Enum API

@@ -330,7 +330,7 @@
         {
             $idn = "${table_name}_id";
             $object_id = $obj[$idn];
-            @unset($obj[$column_name]); // specific code
+            unset($obj[$column_name]); // specific code
             xdb_insert_ai("${table_name}_new", $idn, $obj, $obj, XDB_OVERRIDE_TS, XDB_NO_USE_AI, $db);
             ++$objects;
         }

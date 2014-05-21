@@ -66,6 +66,7 @@ create table course (
     target_class text, -- диапазон классов, на которые рассчитан курс
     course_desc text,  -- описание курса
     course_type text, --- enum тип курса (прак, поход, etc)
+    course_area text, --- enum предметная область
     course_comment text, -- комментарий к курсу (чатик пока не делаем)
     course_created text, -- utc timestamp
     course_modified text -- utc timestamp

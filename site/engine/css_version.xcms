@@ -1,6 +1,6 @@
 <?php
     global $XCMS_VERSION;
-    if (empty($XCMS_VERSION))
+    if (xu_empty($XCMS_VERSION))
         $XCMS_VERSION = trim(file_get_contents("VERSION"));
     echo "$XCMS_VERSION/";
 ?>
