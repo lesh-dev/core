@@ -22,6 +22,9 @@ function xsm_print_course()
         $course_modified = xsm_ymdhm($course["course_modified"]);
         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, "all");
         $teachers_edit_url = xcms_url(array('school_id'=>$school_id, 'course_id'=>$course_id));
+        $hr_course_area = xsm_make_enum($course, "course_area");
+        $hr_course_type = xsm_make_enum($course, "course_type");
+
         ?>
         <tr>
             <td class="ankListRowTitle">Курс <b><?php echo $course_title; ?></b>
@@ -39,6 +42,10 @@ function xsm_print_course()
             <?php echo $teachers_ht; ?>
             <a class="link-button ank" href="edit-teachers<?php
                 echo $teachers_edit_url; ?>">Редактировать преподов</a></td></tr>
+        <tr><td class="ankList"><span class="ankListField">Тип курса</span>:
+            <?php echo $hr_course_type; ?></td></tr>
+        <tr><td class="ankList"><span class="ankListField">Тематика курса</span>:
+            <?php echo $hr_course_area; ?></td></tr>
         <tr><td class="ankList"><span class="ankListField">Описание</span>:
             <?php echo xcms_html_wrap_by_crlf($course_desc); ?></td></tr>
         <tr><td class="ankList"><span class="ankListField">Комментарий</span>:
