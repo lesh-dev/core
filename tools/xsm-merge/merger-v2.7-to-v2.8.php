@@ -21,7 +21,9 @@
     $courses = 0;
 
     // Alter courses
+    // add course_type
     $db->exec("ALTER TABLE course ADD COLUMN course_type text");
+    // add course_area
     $db->exec("ALTER TABLE course ADD COLUMN course_area text");
 
     xdb_drop_column($db, "exam", "is_prac",
