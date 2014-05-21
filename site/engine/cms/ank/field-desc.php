@@ -123,6 +123,7 @@ function xsm_get_course_fields()
         "course_cycle"=>"Цикл, на котором читался курс",
         "course_desc"=>"Описание",
         "course_type"=>"Тип курса",
+        "course_area"=>"Тематика",
         "course_comment"=>"Комментарий",
         "course_created"=>"Время создания",
         "course_modified"=>"Последняя модификация"
@@ -134,7 +135,8 @@ function xsm_get_course_field_types()
     return array(
         "course_comment"=>"textarea",
         "course_desc"=>"textarea",
-        "course_type"=>"enum"
+        "course_type"=>"enum",
+        "course_area"=>"enum"
     );
 }
 
