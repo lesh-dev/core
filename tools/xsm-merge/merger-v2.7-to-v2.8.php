@@ -39,5 +39,5 @@
             foreign key (student_person_id) references person(person_id),
             foreign key (course_id) references course(course_id))");
 
-    xdb_vacuum();
+    xdb_vacuum($db);
 ?>

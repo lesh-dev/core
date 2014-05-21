@@ -78,5 +78,5 @@
     $db->exec("ALTER TABLE course_new RENAME TO course");
     xcms_log(XLOG_INFO, "Courses processed: $courses");
 
-    xdb_vacuum();
+    xdb_vacuum($db);
 ?>

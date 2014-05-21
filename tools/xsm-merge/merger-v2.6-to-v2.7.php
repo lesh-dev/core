@@ -142,5 +142,5 @@
 
     $db->exec("ALTER TABLE `school` ADD COLUMN `school_location` text;");
 
-    xdb_vacuum();
+    xdb_vacuum($db);
 ?>
