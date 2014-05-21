@@ -12,27 +12,9 @@
     require_once("${engine_dir}sys/db.php");
     header("Content-Type: text/html; charset=utf-8");
 
-    function xmerger_open_db($db_name)
-    {
-        xcms_log(XLOG_INFO, "Open database '$db_name'");
-        return new SQlite3($db_name, SQLITE3_OPEN_READONLY);
-    }
-
-    function xmerger_open_db_write($db_name)
-    {
-        xcms_log(XLOG_INFO, "Open database '$db_name' for WRITING");
-        return new SQlite3($db_name, SQLITE3_OPEN_READWRITE);
-    }
-
-    function xmerger_get_selector($db, $table_name)
-    {
-        $query = "SELECT * FROM $table_name";
-        return $db->query($query);
-    }
-
     function ctx_create_structure($path)
     {
-        $db = xmerger_open_db_write("$path/new.v2.sqlite3");
+        $db = xdb_open_db_write("$path/new.v2.sqlite3");
         $db->exec("DROP TABLE IF EXISTS contestants;");
         $db->exec("CREATE TABLE contestants(contestants_id integer  PRIMARY KEY AUTOINCREMENT, name TEXT, mail TEXT, phone TEXT, parents TEXT, address TEXT, school TEXT, level TEXT, teacher_name TEXT, work TEXT, status TEXT);");
         $db->exec("DROP TABLE IF EXISTS problems;");
@@ -48,7 +30,7 @@
     {
         $obj_count = 0;
         xcms_log(XLOG_INFO, "Processing table '$table_name' [$debug_type]");
-        $sel = xmerger_get_selector($db_src, $table_name);
+        $sel = xdb_get_selector($db_src, $table_name);
         while ($obj = $sel->fetchArray(SQLITE3_ASSOC))
         {
             $key_name = "${table_name}_id";
@@ -67,9 +49,9 @@
     // set db for writing
     $SETTINGS['xsm_db_name'] = "$path/new.v2.sqlite3";
 
-    $db_old = xmerger_open_db("$path/old.v1.sqlite3");
-    $db_cur = xmerger_open_db("$path/current.v1.sqlite3");
-    $db_new = xmerger_open_db_write("$path/new.v2.sqlite3");
+    $db_old = xdb_open_db("$path/old.v1.sqlite3");
+    $db_cur = xdb_open_db("$path/current.v1.sqlite3");
+    $db_new = xdb_open_db_write("$path/new.v2.sqlite3");
 
     xcms_log(XLOG_INFO, "Clearing tables");
     // clear tables...
@@ -96,7 +78,7 @@
 
     // person
     xcms_log(XLOG_INFO, "Processing current persons");
-    $sel = xmerger_get_selector($db_cur, "person");
+    $sel = xdb_get_selector($db_cur, "person");
     while ($person_old = $sel->fetchArray(SQLITE3_ASSOC))
     {
         $person_new = $person_old;
@@ -170,7 +152,7 @@
 
     // course
     xcms_log(XLOG_INFO, "Processing current courses");
-    $sel = xmerger_get_selector($db_cur, "course");
+    $sel = xdb_get_selector($db_cur, "course");
     while ($course = $sel->fetchArray(SQLITE3_ASSOC))
     {
         $course_id = $course['course_id'];
@@ -194,7 +176,7 @@
     $merges = 0;
     // persons from old database
     xcms_log(XLOG_INFO, "Processing old persons");
-    $sel = xmerger_get_selector($db_old, "person");
+    $sel = xdb_get_selector($db_old, "person");
     while ($person_old = $sel->fetchArray(SQLITE3_ASSOC))
     {
         // fix upyachka with quotes in old records

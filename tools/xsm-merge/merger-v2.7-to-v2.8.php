@@ -15,9 +15,9 @@
     global $SETTINGS;
     $path = ".";
     // set db for writing
-    $SETTINGS['xsm_db_name'] = "$path/fizlesh.sqlite3";
-    $SETTINGS['xsm_need_open_db'] = "$path/fizlesh.sqlite3";
-    $db = xdb_open_db_write("$path/fizlesh.sqlite3");
+    $db_path = "$path/fizlesh.sqlite3";
+    $SETTINGS['xsm_db_name'] = $db_path;
+    $db = xdb_open_db_write($db_path);
     $courses = 0;
 
     // Alter courses

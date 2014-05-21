@@ -12,48 +12,12 @@
     require_once("${engine_dir}sys/db.php");
     header("Content-Type: text/html; charset=utf-8");
 
-    function xmerger_open_db($db_name)
-    {
-        xcms_log(XLOG_INFO, "Open database '$db_name'");
-        return new SQlite3($db_name, SQLITE3_OPEN_READONLY);
-    }
-
-    function xmerger_open_db_write($db_name)
-    {
-        xcms_log(XLOG_INFO, "Open database '$db_name' for WRITING");
-        return new SQlite3($db_name, SQLITE3_OPEN_READWRITE);
-    }
-
-    function xmerger_get_selector($db, $table_name)
-    {
-        $query = "SELECT * FROM $table_name";
-        return $db->query($query);
-    }
-
-    function xmerger_copy_table($db_src, $table_name, $debug_type)
-    {
-        $obj_count = 0;
-        xcms_log(XLOG_INFO, "Processing table '$table_name' [$debug_type]");
-        $sel = xmerger_get_selector($db_src, $table_name);
-        while ($obj = $sel->fetchArray(SQLITE3_ASSOC))
-        {
-            $key_name = "${table_name}_id";
-            $id = $obj[$key_name];
-            xcms_log(XLOG_DEBUG, "Read object '$table_name' #$id");
-
-            $id_inserted = xdb_insert_ai($table_name, $key_name, $obj, $obj, XDB_NO_OVERRIDE_TS, XDB_NO_USE_AI);
-            xcms_log(XLOG_DEBUG, "Write object '$table_name' #$id_inserted");
-            $obj_count++;
-        }
-        return $obj_count;
-    }
-
     global $SETTINGS;
     $path = ".";
+    $db_path = "$path/fizlesh.sqlite3";
     // set db for writing
-    $SETTINGS['xsm_db_name'] = "$path/fizlesh.sqlite3";
-    $SETTINGS['xsm_need_open_db'] = "$path/fizlesh.sqlite3";
-    $db = xmerger_open_db_write("$path/fizlesh.sqlite3");
+    $SETTINGS['xsm_db_name'] = $db_path;
+    $db = xmerger_open_db_write($db_path);
     $courses = 0;
 
     // first of all, incorporate all existing data from current database
@@ -82,7 +46,7 @@
 
     // course: move teacher info into separate course_teacher table
     xcms_log(XLOG_INFO, "Processing courses");
-    $sel = xmerger_get_selector($db, "course");
+    $sel = xdb_get_selector($db, "course");
     while ($course = $sel->fetchArray(SQLITE3_ASSOC))
     {
         $course_id = $course["course_id"];
@@ -96,7 +60,7 @@
 
     // course: drop course_teacher_id column
     xcms_log(XLOG_INFO, "Drop course_teacher_id column");
-    $sel = xmerger_get_selector($db, "course");
+    $sel = xdb_get_selector($db, "course");
     while ($course = $sel->fetchArray(SQLITE3_ASSOC))
     {
         $course_id = $course['course_id'];

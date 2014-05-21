@@ -12,30 +12,11 @@
     require_once("${engine_dir}sys/db.php");
     header("Content-Type: text/html; charset=utf-8");
 
-    function xmerger_open_db($db_name)
-    {
-        xcms_log(XLOG_INFO, "Open database '$db_name'");
-        return new SQlite3($db_name, SQLITE3_OPEN_READONLY);
-    }
-
-    function xmerger_open_db_write($db_name)
-    {
-        xcms_log(XLOG_INFO, "Open database '$db_name' for WRITING");
-        return new SQlite3($db_name, SQLITE3_OPEN_READWRITE);
-    }
-
-    function xmerger_get_selector($db, $table_name)
-    {
-        $query = "SELECT * FROM $table_name";
-        return $db->query($query);
-    }
-
     global $SETTINGS;
     $path = ".";
     // set db for writing
     $SETTINGS['xsm_db_name'] = "$path/fizlesh.sqlite3";
-    $SETTINGS['xsm_need_open_db'] = "$path/fizlesh.sqlite3";
-    $db = xmerger_open_db_write("$path/fizlesh.sqlite3");
+    $db = xdb_open_db_write("$path/fizlesh.sqlite3");
     $courses = 0;
 
     // Create department table
@@ -105,7 +86,7 @@
 
     // person: add department_id fk
     xcms_log(XLOG_INFO, "Processing persons");
-    $sel = xmerger_get_selector($db, "person");
+    $sel = xdb_get_selector($db, "person");
     $persons = 0;
     while ($person = $sel->fetchArray(SQLITE3_ASSOC))
     {
@@ -143,7 +124,7 @@
         );");
 
 
-    $sel = xmerger_get_selector($db, "person_school");
+    $sel = xdb_get_selector($db, "person_school");
     $person_schools = 0;
     while ($person_school = $sel->fetchArray(SQLITE3_ASSOC))
     {
