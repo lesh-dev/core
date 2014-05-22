@@ -26,6 +26,10 @@
     // add course_area
     $db->exec("ALTER TABLE course ADD COLUMN course_area text");
 
+    // Alter person_school
+    // add curator_group
+    $db->exec("ALTER TABLE person_school ADD COLUMN curator_group text");
+
     xdb_drop_column($db, "exam", "is_prac",
         "CREATE TABLE exam_new (
             exam_id integer primary key autoincrement, -- not used

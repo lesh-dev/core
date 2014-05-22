@@ -55,6 +55,7 @@ function xsm_show_person_list($school_id)
         p.person_created, p.person_modified,
         ps.curatorship, ps.is_teacher, ps.is_student,
         ps.current_class,
+        ps.curator_group,
         ps.courses_needed
         FROM person p, person_school ps
         WHERE (ps.member_person_id == p.person_id)
@@ -79,6 +80,7 @@ function xsm_show_person_list($school_id)
             <col width="25%" />
             <col width="55px" />
             <col width="30px" />
+            <col width="30px" />
             <col width="50px" />
             <col width="25%" />
         </colgroup>
@@ -86,6 +88,7 @@ function xsm_show_person_list($school_id)
             <th class="ankList">#</th>
             <th class="ankList">Фамилия, имя</th>
             <th class="ankList">Зач.</th>
+            <th class="ankList">Кур.</th>
             <th class="ankList">Кл.</th>
             <th class="ankList">ДР</th>
             <th class="ankList">Контакты</th>
@@ -110,7 +113,8 @@ function xsm_show_person_list($school_id)
         $is_teacher = $person["is_teacher"];
         $is_student = $person["is_student"];
         $curatorship = $person["curatorship"];
-        $courses_needed = ($person["courses_needed"]);
+        $curator_group = $person["curator_group"];
+        $courses_needed = $person["courses_needed"];
 
         $person_created = xsm_ymdhm($person["person_created"]);
         $person_modified = xsm_ymdhm($person["person_modified"]);
@@ -165,6 +169,7 @@ function xsm_show_person_list($school_id)
                 <a href="<?php echo "view-person&amp;person_id=$person_id&amp;school_id=$school_id"; ?>"
                     title="<?php echo $fio; ?>"><?php echo $fi; ?></a></td>
             <td class="ankList"><span class="course-progress <?php echo $course_style; ?>"><?php echo $hr_course_progress; ?></span></td>
+            <td class="ankList"><?php echo $curator_group; ?></td>
             <td class="ankList"><?php echo $current_class; ?></td>
             <td class="ankList"><?php echo $birth_date; ?></td>
             <td class="ankList"><?php echo $all_phones; ?></td>

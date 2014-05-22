@@ -11,6 +11,7 @@ $person_school_fields = array(
     "courses_needed"=>"Потребное кол-во зачётов",
     "is_teacher"=>"Препод",
     "curatorship"=>"Кураторство",
+    "curator_group"=>"Кто курирует",
     "person_school_created"=>"Время создания",
     "person_school_modified"=>"Последняя модификация"
 );
