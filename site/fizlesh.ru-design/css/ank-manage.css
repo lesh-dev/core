@@ -226,6 +226,8 @@ span.anketa-status.spam {
     color: #ff0000;
 }
 
+/* exam-status */
+
 span.exam-status {
     font-weight: bold;
 }
@@ -244,6 +246,38 @@ span.exam-status.almost {
 
 span.exam-status.almost {
     color: #0000ff;
+}
+
+/* course-type */
+
+span.course-type {
+    font-weight: bold;
+}
+
+span.course-type.facult {
+    color: #7f7f7f;
+}
+
+span.course-type.generic {
+    color: #000000;
+}
+
+/* course-area */
+
+span.course-area {
+    font-weight: bold;
+}
+
+span.course-area.precise {
+    color: #ff0000;
+}
+
+span.course-area.nature {
+    color: #0000ff;
+}
+
+span.course-area.human {
+    color: #00ff00;
 }
 
 img.edit-icon {

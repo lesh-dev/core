@@ -443,7 +443,7 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
 {
     $query =
         "SELECT
-        c.course_id, c.course_title, c.target_class,
+        c.course_id, c.course_title, c.target_class, c.course_type, c.course_area,
         e.exam_id, e.exam_status, e.exam_comment, e.deadline_date, e.exam_created, e.exam_modified
         FROM course c, exam e WHERE
         (c.school_id = $school_id) AND
@@ -472,13 +472,17 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
             <col width="25%" />
             <col width="40%" />
             <col width="10%" />
+            <col width="10%" />
+            <col width="10%" />
             <col width="15%" />
         </colgroup>
         <thead>
             <th class="ankList">Статус</th>
             <th class="ankList">Препод</th>
             <th class="ankList">Курс</th>
-            <th class="ankList">Класс</th>
+            <th class="ankList">Тип</th>
+            <th class="ankList">Тематика</th>
+            <th class="ankList">Уровень классов</th>
             <th class="ankList">Дедлайн</th>
         </thead>
     <?php
@@ -488,6 +492,8 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
         $course_id = htmlspecialchars($exam_data["course_id"]);
         $course_title = htmlspecialchars($exam_data["course_title"]);
         $target_class = htmlspecialchars($exam_data["target_class"]);
+        $hr_course_type = xsm_make_enum($exam_data, "course_type");
+        $hr_course_area = xsm_make_enum($exam_data, "course_area");
 
         // enum
         $exam_status = htmlspecialchars($exam_data["exam_status"]);
@@ -508,6 +514,8 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
             <td class="ankList"><a href="<?php echo $exam_url; ?>"><?php echo $hr_exam_status; ?></a></td>
             <td class="ankList"><?php echo $teachers_ht; ?></td>
             <td class="ankList"><a href="<?php echo $course_url; ?>"><?php echo $course_title; ?></a></td>
+            <td class="ankList"><?php echo $hr_course_type; ?></td>
+            <td class="ankList"><?php echo $hr_course_area; ?></td>
             <td class="ankList"><?php echo $target_class; ?></td>
             <td class="ankList"><?php echo $deadline_date; ?></td>
         </tr><?php
