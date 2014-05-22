@@ -378,8 +378,7 @@ function xsm_checkbox($name, $value)
 function xsm_field($table_name, $key)
 {
     $func_name = "xsm_get_${table_name}_fields";
-    $fields = $$func_name();
-    ?>
-    <span class="ankFixedField"><?php echo $fields[$key]; ?>:</span> <?php
+    $fields = $func_name();
+    ?><span class="xsm-fixed-field"><?php echo $fields[$key]; ?>:</span> <?php
 }
 ?>

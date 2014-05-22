@@ -34,22 +34,22 @@ function xsm_print_course()
                 </span>
             </td>
         </tr>
-        <tr><td class="ankList"><span class="ankListField">На какие классы рассчитан</span>:
-            <?php echo $target_class; ?></td></tr>
-        <tr><td class="ankList"><span class="ankListField">Цикл</span>:
-            <?php echo $course_cycle; ?></td></tr>
-        <tr><td class="ankList"><span class="ankListField">Преподы</span>:
+        <tr><td class="ankList"><?php xsm_field("course", "target_class");
+            echo $target_class; ?></td></tr>
+        <tr><td class="ankList"><?php xsm_field("course", "course_cycle");
+            echo $course_cycle; ?></td></tr>
+        <tr><td class="ankList"><span class="xsm-fixed-field">Преподы:</span>
             <?php echo $teachers_ht; ?>
             <a class="link-button ank" href="edit-teachers<?php
                 echo $teachers_edit_url; ?>">Редактировать преподов</a></td></tr>
-        <tr><td class="ankList"><span class="ankListField">Тип курса</span>:
-            <?php echo $hr_course_type; ?></td></tr>
-        <tr><td class="ankList"><span class="ankListField">Тематика курса</span>:
-            <?php echo $hr_course_area; ?></td></tr>
-        <tr><td class="ankList"><span class="ankListField">Описание</span>:
-            <?php echo xcms_html_wrap_by_crlf($course_desc); ?></td></tr>
-        <tr><td class="ankList"><span class="ankListField">Комментарий</span>:
-            <?php echo xcms_html_wrap_by_crlf($course_comment); ?></td></tr>
+        <tr><td class="ankList"><?php xsm_field("course", "course_type");
+            echo $hr_course_type; ?></td></tr>
+        <tr><td class="ankList"><?php xsm_field("course", "course_area");
+            echo $hr_course_area; ?></td></tr>
+        <tr><td class="ankList"><?php xsm_field("course", "course_desc");
+            echo xcms_html_wrap_by_crlf($course_desc); ?></td></tr>
+        <tr><td class="ankList"><?php xsm_field("course", "course_comment");
+            echo xcms_html_wrap_by_crlf($course_comment); ?></td></tr>
     </table>
 
     <table class="ankList">

@@ -37,3 +37,9 @@ td.school-selection a.edit-link.delete {
     background-repeat: no-repeat;
     text-decoration: none;
 }
+
+span.xsm-fixed-field {
+    font-weight: bold;
+    display: inline-block;
+    width: 300px;
+}
