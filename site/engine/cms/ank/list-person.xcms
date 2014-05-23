@@ -56,6 +56,7 @@ function xsm_show_person_list($school_id)
         p.last_name, p.first_name, p.patronymic,
         p.birth_date,
         p.phone, p.cellular,
+        p.email, p.skype,
         p.person_created, p.person_modified,
         ps.curatorship, ps.is_teacher, ps.is_student,
         ps.current_class,
@@ -113,7 +114,17 @@ function xsm_show_person_list($school_id)
         $birth_date = str_replace(".07.", "<b>.07.</b>", $birth_date);
         $birth_date = str_replace(".08.", "<b>.08.</b>", $birth_date);
 
-        $all_phones = xsm_format_person_phones($person);
+        $all_phones = trim(xsm_format_person_phones($person));
+        $skype = xcms_get_key_or_enc($person, "skype");
+        $email = xcms_get_key_or_enc($person, "email");
+        $contacts = array();
+        if (xu_not_empty($all_phones))
+            $contacts[] = $all_phones;
+        if (xu_not_empty($skype))
+            $contacts[] = $skype;
+        if (xu_not_empty($email))
+            $contacts[] = $email;
+        $contacts = implode(", &nbsp; ", $contacts);
 
         $is_teacher = $person["is_teacher"];
         $is_student = $person["is_student"];
@@ -177,7 +188,7 @@ function xsm_show_person_list($school_id)
             <td class="ankList"><?php echo $curator_group; ?></td>
             <td class="ankList"><?php echo $current_class; ?></td>
             <td class="ankList"><?php echo $birth_date; ?></td>
-            <td class="ankList"><?php echo $all_phones; ?></td>
+            <td class="ankList"><?php echo $contacts; ?></td>
         </tr>
         <?php
     }
