@@ -56,7 +56,7 @@ function xsm_show_person_list($school_id)
         p.last_name, p.first_name, p.patronymic,
         p.birth_date,
         p.phone, p.cellular,
-        p.email, p.skype,
+        p.email, p.skype, p.social_profile,
         p.person_created, p.person_modified,
         ps.curatorship, ps.is_teacher, ps.is_student,
         ps.current_class,
@@ -117,13 +117,17 @@ function xsm_show_person_list($school_id)
         $all_phones = trim(xsm_format_person_phones($person));
         $skype = xcms_get_key_or_enc($person, "skype");
         $email = xcms_get_key_or_enc($person, "email");
+        $social_profile = xsm_prepare_social_profile($person["social_profile"]);
+
         $contacts = array();
         if (xu_not_empty($all_phones))
             $contacts[] = $all_phones;
-        if (xu_not_empty($skype))
+        if (xu_not_empty($skype) && count($contacts) < 3)
             $contacts[] = $skype;
-        if (xu_not_empty($email))
-            $contacts[] = $email;
+        if (xu_not_empty($email) && count($contacts) < 3)
+            $contacts[] = "<a href=\"mailto:$email\">$email</a>";
+        if (xu_not_empty($social_profile) && count($contacts) < 3)
+            $contacts[] = "<a href=\"$social_profile\">$social_profile</a>";
         $contacts = implode(", &nbsp; ", $contacts);
 
         $is_teacher = $person["is_teacher"];
