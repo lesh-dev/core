@@ -13,7 +13,6 @@ function xsm_get_person_school_id($db, $school_id, $person_id)
         (ps.school_id = $school_id)"
     );
 
-    // TODO: fix this, insert count check
     if (!($ps_data = $ps_sel->fetchArray(SQLITE3_ASSOC)))
         return NULL;
 
@@ -26,22 +25,31 @@ function xsm_get_person_school_id($db, $school_id, $person_id)
   **/
 function xsm_update_person_school($title, $fields)
 {
+    $db = xdb_get();
+    $person_id = xcms_get_key_or($_POST, 'member_person_id', -1);
+    $school_id = xcms_get_key_or($_POST, 'school_id', -1);
+    $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
     $table_name = "person_school";
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-    $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
-    if ($res)
-    {
-        $id = $res;
-        ?>
-        <p><?php echo $title; ?> успешно сохранён.<?php
+    if ($id == XDB_NEW && $person_school_id !== NULL)
+    {?>
+        <p>Этот участник уже зачислен на данную школу.<?php
     }
     else
-    {?>
-        <p>Не удалось добавить <?php echo $title; ?>.<?php
+    {
+        $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
+        if ($res)
+        {
+            $id = $res;
+            ?>
+            <p><?php echo $title; ?> успешно сохранён.<?php
+        }
+        else
+        {?>
+            <p>Не удалось добавить <?php echo $title; ?>.<?php
+        }
     }
-    $person_id = xcms_get_key_or($_POST, 'member_person_id', -1);
-    $school_id = xcms_get_key_or($_POST, 'school_id', -1);
     $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
     ?>
     <a href="<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
