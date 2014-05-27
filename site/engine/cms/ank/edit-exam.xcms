@@ -12,6 +12,26 @@ function xsm_edit_exam_operations($school_id, $student_person_id, $id, $place)
 }
 
 /**
+  * Получение exam_id по person_id и course_id
+  * @return exam_id (или NULL)
+  **/
+function xsm_get_exam_id($db, $course_id, $person_id)
+{
+    $exam_sel = $db->query(
+        "SELECT
+        e.exam_id
+        FROM exam e WHERE
+        (e.student_person_id = $person_id) AND
+        (e.course_id = $course_id)"
+    );
+
+    if (!($exam_data = $exam_sel->fetchArray(SQLITE3_ASSOC)))
+        return NULL;
+
+    return $exam_data['exam_id'];
+}
+
+/**
   * Специфическая функция: возврат происходит совсем в другую таблицу, нежели редактируемая сущность
   * TODO: Сделать более генерический update, чтобы можно было гибко обрабатывать и такие случаи тоже
   **/
@@ -19,18 +39,30 @@ function xsm_update_exam($table_name, $title, $fields)
 {
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-    $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
-    if ($res)
-    {
-        $id = $res;
-        ?>
-        <p><?php echo $title; ?> успешно сохранён.<?php
+
+    $person_id = $_POST['student_person_id'];
+    $course_id = $_POST['course_id'];
+    $db = xdb_get();
+    $exam_id = xsm_get_exam_id($db, $course_id, $person_id);
+
+    if ($id == XDB_NEW && $exam_id !== NULL)
+    {?>
+        <p>Зачёт по этому курсу уже имеется.<?php
     }
     else
-    {?>
-        <p>Не удалось добавить <?php echo $title; ?>.<?php
+    {
+        $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
+        if ($res)
+        {
+            $id = $res;
+            ?>
+            <p><?php echo $title; ?> успешно сохранён.<?php
+        }
+        else
+        {?>
+            <p>Не удалось добавить <?php echo $title; ?>.<?php
+        }
     }
-    $person_id = xcms_get_key_or($_POST, 'student_person_id', -1);
     $school_id = xcms_get_key_or($_POST, 'school_id', -1);
     $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
     ?>
