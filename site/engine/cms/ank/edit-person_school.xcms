@@ -9,9 +9,9 @@ $person_school_fields = array(
     "is_student"=>"Школьник",
     "current_class"=>"Класс",
     "courses_needed"=>"Потребное кол-во зачётов",
+    "curator_group"=>"Кто курирует",
     "is_teacher"=>"Препод",
     "curatorship"=>"Кураторство",
-    "curator_group"=>"Кто курирует",
     "person_school_created"=>"Время создания",
     "person_school_modified"=>"Последняя модификация"
 );
