@@ -16,16 +16,23 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     * add some courses
     * set exam status
     """
+    
+    def getExamAlreadyExistsMessage(self):
+        return u"Зачёт по этому курсу уже имеется"
+    
     def addExamsById(self, examIdList):
         for exam in examIdList:
-            self.addExamById(exam)
+            self.addExamByIdAndReturn(exam)
+
+    def addExamByIdAndReturn(self, exam):
+        self.addExamById(exam)
+        self.assertBodyTextNotPresent(self.getExamAlreadyExistsMessage())
+        self.gotoBackToPersonView()
 
     def addExamById(self, exam):
         self.gotoUrlByLinkText(u"Добавить зачёт")
-
         self.setOptionValueByIdAndValue("course_id-selector", exam)
         self.clickElementByName("update-exam")
-        self.gotoBackToPersonView()
 
     def setExamPassed(self, examLineList):
         for examLine in examLineList:
@@ -99,7 +106,14 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
 
         self.assertBodyTextPresent(u"Зачёты")
 
-        self.addExamsById([95, 119, 91, 134, 73, 107, 130, 133])
+        dupId = 134
+        
+        self.addExamsById([95, 119, 91, 73, 107, 130, 133, dupId])
 
         self.setExamPassed([1, 2, 2])
         self.setExamNotPassed([1, 2, 2])
+
+        # test duplicate exam
+        self.addExamById(dupId)
+        self.assertBodyTextPresent(self.getExamAlreadyExistsMessage())
+        
