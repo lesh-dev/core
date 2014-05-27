@@ -675,7 +675,7 @@ class SeleniumTest(object):
             if isVoid(stringOrList):
                 self.fatalTest("Empty param passed to " + methodName)
 
-    def getUrlByLinkText(self, urlText, optionList = [], reason = ""):
+    def getUrlByLinkText(self, urlText, optionList=[], reason=""):
 
         self.checkEmptyParam(urlText, "getUrlByLinkText");
         searchMethod = self.m_driver.find_element_by_link_text
