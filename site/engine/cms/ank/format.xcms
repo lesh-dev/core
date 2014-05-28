@@ -260,6 +260,15 @@ function xsm_prepare_social_profile($social_profile)
     return $social_profile;
 }
 
+// TODO: when profile is a VK link, transform it into VK icon
+function xsm_social_profile_link($social_profile)
+{
+    $title = $social_profile;
+    $title = str_replace("http://", "", $title);
+    $title = str_replace("https://", "", $title);
+    return "<a href=\"$social_profile\">$title</a>";
+}
+
 /**
   * id is added for testability reasons
   **/

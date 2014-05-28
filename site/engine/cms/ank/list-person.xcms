@@ -127,7 +127,7 @@ function xsm_show_person_list($school_id)
         if (xu_not_empty($email) && count($contacts) < 3)
             $contacts[] = "<a href=\"mailto:$email\">$email</a>";
         if (xu_not_empty($social_profile) && count($contacts) < 3)
-            $contacts[] = "<a href=\"$social_profile\">$social_profile</a>";
+            $contacts[] = xsm_social_profile_link($social_profile);
         $contacts = implode(", &nbsp; ", $contacts);
 
         $is_teacher = $person["is_teacher"];

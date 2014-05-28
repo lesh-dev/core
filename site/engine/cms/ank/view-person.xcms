@@ -192,7 +192,7 @@ function xsm_print_person_header($db, $person, $school_id)
         xsm_draw_person_textval('top', 'Мобильный', $cellular);
         xsm_draw_person_textval('top', 'Домашний', $phone);
         xsm_draw_person_textval('top', 'Skype', $skype);
-        xsm_draw_person_textval('top', 'Профиль', "<a href=\"$social_profile\">$social_profile</a>");
+        xsm_draw_person_textval('top', 'Профиль', xsm_social_profile_link($social_profile));
         ?>
     </div>
     <div class="person-topright"><?php
