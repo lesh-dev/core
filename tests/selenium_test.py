@@ -7,6 +7,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoSuchWindowException
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import InvalidElementStateException
+from selenium.webdriver.common.keys import Keys
 
 from urllib2 import URLError
 from httplib import HTTPException
@@ -307,7 +308,16 @@ class SeleniumTest(object):
         except NoSuchElementException:
             self.failTest("Cannot find URL with name " + userSerialize(linkName) + ". " + self.displayReason(reason))
 
-
+    def sendEnterById(self, eleId):
+        self.checkEmptyParam(eleId, "sendEnterById")
+        ele = self.getElementById(eleId)
+        ele.send_keys(Keys.RETURN)
+        
+    def sendEnterByName(self, eleName):
+        self.checkEmptyParam(eleName, "sendEnterByName")
+        ele = self.getElementByName(eleName)
+        ele.send_keys(Keys.RETURN)
+        
     def gotoUrlByPartialLinkText(self, linkName, reason = ""):
         try:
             link = self.getUrlByLinkText(linkName, ["partial"], reason)
