@@ -4,8 +4,8 @@
     $sort_by_class = xcms_get_persistent_key("list-person", "sort_by_class");
     $sort_by_curator_group = xcms_get_persistent_key("list-person", "sort_by_curator_group");
 
-    $default_school_id = xsm_get_default_school();
-    $school_id = xcms_get_key_or($_GET, 'school_id', $default_school_id);
+    $school_id = xsm_get_default_school_from_request();
+
     $form_action = xcms_url(array('school_id'=>$school_id));
 ?>
 <form method="post" name="filter" id="filter-form"

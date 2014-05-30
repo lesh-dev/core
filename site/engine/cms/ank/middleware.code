@@ -57,6 +57,18 @@ function xsm_get_default_school()
 }
 
 /**
+  * Получение дефолтной школы с учётом текущего контекста запроса
+  **/
+function xsm_get_default_school_from_request()
+{
+    $default_school_id = xsm_get_default_school();
+    $school_id = xcms_get_key_or($_GET, 'school_id', $default_school_id);
+    if ($school_id == XSM_SCHOOL_ANK_ID)
+        $school_id = $default_school_id;
+    return $school_id;
+}
+
+/**
   * Получение id школы по имени
   * @return school id (or -1 when not found)
   **/
