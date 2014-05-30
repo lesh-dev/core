@@ -359,7 +359,6 @@ class XcmsTest(XcmsTestWithConfig):
         self.logAdd("gotoAllPeople: going to 'All People' menu. ")
         self.gotoUrlByLinkText(u"Все люди")
 
-
     def gotoBackToAnketaView(self):
         self.gotoUrlByLinkText(u"Вернуться к просмотру участника")
 
