@@ -1,5 +1,5 @@
 <?php
-    $pageid=@$_GET['page'];
+    $pageid = @$_GET['page'];
     if (!strlen($pageid))
     {
         $pageid = "index";
@@ -7,8 +7,7 @@
     }
     $preface = $pageid;
     $page_info = xcms_get_info_file_name();
-    xcms_log(0, $page_info);
-    if(!file_exists($page_info))
+    if (!file_exists($page_info))
     {
         xcms_log(0, "Page info '$page_info' not found");
         include(translate('<! 404 !>'));

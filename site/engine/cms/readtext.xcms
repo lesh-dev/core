@@ -120,6 +120,7 @@ if ($need)
         "<a href=\"/$web_prefix?ref={$_GET['ref']}&page=\\2\">\\1</a>",
         $text);
 
+    //// Обработка синтаксиса внешних ссылок ((http://site/url текст ссылки))
     $text = preg_replace(
         '/\(\((.*?) (.*?)\)\)/',
         '<a href="\1">\2</a>',
