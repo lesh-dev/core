@@ -52,7 +52,8 @@ if [ "$quota_status." != "OK." ]; then
 fi
 
 if [ "$do_send." == "YES." ]; then
-    $mail_cmd -a $out_log.gz -s "[lesh-dev] Backup: $backup_text, Quota: $quota_text" -- "$mailto" < $letter_file
+    backup_date="$(date +%Y.%m.%d)"
+    $mail_cmd -a $out_log.gz -s "[lesh-dev] $backup_date Backup: $backup_text, Quota: $quota_text" -- "$mailto" < $letter_file
 else
     echo "No need to send mail"
 fi
