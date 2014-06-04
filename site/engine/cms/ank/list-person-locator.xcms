@@ -83,11 +83,13 @@ function xsm_show_all_person_list()
     if (strlen($name_filter_cond))
         $cond .= " AND $name_filter_cond";
 
-    $query = "SELECT ".
-        "p.person_id, p.last_name, p.first_name, ".
-        "p.school, p.school_city, p.current_class, ".
-        "p.phone, p.cellular, p.anketa_status, p.is_student, p.is_teacher ".
-        "FROM person p";
+    $query = "SELECT
+        p.person_id, p.last_name, p.first_name,
+        p.school, p.school_city, p.current_class,
+        p.phone, p.cellular,
+        p.email, p.skype, p.social_profile,
+        p.anketa_status, p.is_student, p.is_teacher
+        FROM person p";
 
     if (strlen($cond))
         $query .= " WHERE $cond";
@@ -126,7 +128,7 @@ function xsm_show_all_person_list()
 
         $current_class = htmlspecialchars($person["current_class"]);
 
-        $all_phones = xsm_format_person_phones($person);
+        $contacts = xsm_contacts_for_list($person);
 
         $is_teacher = $person["is_teacher"];
         $is_student = $person["is_student"];
@@ -139,7 +141,7 @@ function xsm_show_all_person_list()
             <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"><?php
                 echo $fi; ?></a></td>
             <td class="ankList"><?php echo $current_class; ?></td>
-            <td class="ankList"><?php echo $all_phones; ?></td>
+            <td class="ankList"><?php echo $contacts; ?></td>
             <td class="ankList status-col"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php

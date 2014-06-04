@@ -5,8 +5,7 @@ function xsm_print_courses()
 {
     $db = xdb_get();
 
-    $default_school_id = xsm_get_default_school();
-    $school_id = xcms_get_key_or($_GET, 'school_id', $default_school_id);
+    $school_id = xsm_get_default_school_from_request();
 
     xsm_print_recent_schools($db, $school_id, 'course');
     xsm_print_course_selected_school($db, $school_id);

@@ -4,8 +4,8 @@
     $sort_by_class = xcms_get_persistent_key("list-person", "sort_by_class");
     $sort_by_curator_group = xcms_get_persistent_key("list-person", "sort_by_curator_group");
 
-    $default_school_id = xsm_get_default_school();
-    $school_id = xcms_get_key_or($_GET, 'school_id', $default_school_id);
+    $school_id = xsm_get_default_school_from_request();
+
     $form_action = xcms_url(array('school_id'=>$school_id));
 ?>
 <form method="post" name="filter" id="filter-form"
@@ -114,21 +114,7 @@ function xsm_show_person_list($school_id)
         $birth_date = str_replace(".07.", "<b>.07.</b>", $birth_date);
         $birth_date = str_replace(".08.", "<b>.08.</b>", $birth_date);
 
-        $all_phones = trim(xsm_format_person_phones($person));
-        $skype = xcms_get_key_or_enc($person, "skype");
-        $email = xcms_get_key_or_enc($person, "email");
-        $social_profile = xsm_prepare_social_profile($person["social_profile"]);
-
-        $contacts = array();
-        if (xu_not_empty($all_phones))
-            $contacts[] = $all_phones;
-        if (xu_not_empty($skype) && count($contacts) < 3)
-            $contacts[] = $skype;
-        if (xu_not_empty($email) && count($contacts) < 3)
-            $contacts[] = "<a href=\"mailto:$email\">$email</a>";
-        if (xu_not_empty($social_profile) && count($contacts) < 3)
-            $contacts[] = "<a href=\"$social_profile\">$social_profile</a>";
-        $contacts = implode(", &nbsp; ", $contacts);
+        $contacts = xsm_contacts_for_list($person);
 
         $is_teacher = $person["is_teacher"];
         $is_student = $person["is_student"];

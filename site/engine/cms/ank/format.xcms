@@ -250,6 +250,26 @@ function xsm_format_person_phones($person)
     return implode(XSM_PHONE_SEPARATOR, $all_phones);
 }
 
+function xsm_contacts_for_list($person)
+{
+    $all_phones = trim(xsm_format_person_phones($person));
+    $skype = xcms_get_key_or_enc($person, "skype");
+    $email = xcms_get_key_or_enc($person, "email");
+    $social_profile = xsm_prepare_social_profile($person["social_profile"]);
+
+    $contacts = array();
+    if (xu_not_empty($all_phones))
+        $contacts[] = $all_phones;
+    if (xu_not_empty($skype) && count($contacts) < 3)
+        $contacts[] = $skype;
+    if (xu_not_empty($email) && count($contacts) < 3)
+        $contacts[] = "<a href=\"mailto:$email\">$email</a>";
+    if (xu_not_empty($social_profile) && count($contacts) < 3)
+        $contacts[] = xsm_social_profile_link($social_profile);
+
+    return implode(", &nbsp; ", $contacts);
+}
+
 function xsm_prepare_social_profile($social_profile)
 {
     // make it valid URL if it was it form example.com/name
@@ -258,6 +278,15 @@ function xsm_prepare_social_profile($social_profile)
         $social_profile = "http://$social_profile"; // assume http scheme
     $social_profile = htmlspecialchars($social_profile);
     return $social_profile;
+}
+
+// TODO: when profile is a VK link, transform it into VK icon
+function xsm_social_profile_link($social_profile)
+{
+    $title = $social_profile;
+    $title = str_replace("http://", "", $title);
+    $title = str_replace("https://", "", $title);
+    return "<a href=\"$social_profile\">$title</a>";
 }
 
 /**

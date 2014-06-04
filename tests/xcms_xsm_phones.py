@@ -12,6 +12,9 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
     * checks if they are correctly displayed on person card.
     """
 
+    def phoneFix(self, phone):
+        return phone.replace("+7", "8").replace("8-900-", "8(900)")
+    
     def run(self):
 
         self.performLoginAsManager()
@@ -34,10 +37,8 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
         inpCellPhoneLine = self.fillElementById("cellular-input", inpCellPhoneLine)
         inpPhoneLine = self.fillElementById("phone-input", inpPhoneLine)
         
-        inpCellPhones = [x.replace("+7", "8") for x in inpCellPhones]
-        inpPhone = [x.replace("+7", "8") for x in inpPhones]
-        inpCellPhoneLine = inpCellPhoneLine.replace("+7", "8")
-        inpPhoneLine = inpPhoneLine.replace("+7", "8")
+        inpCellPhones = list(map(self.phoneFix, inpCellPhones))
+        inpPhones = list(map(self.phoneFix, inpPhones))
         
         self.clickElementById("update-person-submit")
         
@@ -60,7 +61,7 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
             self.logAdd("Phone #{0} on the site: ".format(i) + sitePhone)
         
             if inpCellPhones[i] != siteCellPhone:
-                self.failTest("Cell phone #{0} on the site don't match entered cell phones. ".format(i))
+                self.failTest("Cell phone #{0} on the site '{1}' don't match entered '{2}'. ".format(i, siteCellPhone, inpCellPhones[i]))
             if inpPhones[i] != sitePhone:
-                self.failTest("Phone #{0} on the site don't match entered phones. ".format(i))
+                self.failTest("Phone #{0} on the site '{1}' don't match entered '{2}'. ".format(i, sitePhone, inpPhones[i]))
         

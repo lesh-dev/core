@@ -30,6 +30,15 @@ td.school-selection a.edit-link.add {
     text-decoration: none;
 }
 
+td.school-selection a.edit-link.edit {
+    width: 16px;
+    height: 16px;
+    background-image: url('../../img/edit.gif');
+    background-repeat: no-repeat;
+    text-decoration: none;
+    right: 19px;
+}
+
 td.school-selection a.edit-link.delete {
     width: 16px;
     height: 16px;

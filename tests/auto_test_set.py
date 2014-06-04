@@ -34,6 +34,7 @@ import xcms_xsm_anketa_fill
 import xcms_xsm_anketa_wrong_fill
 import xcms_xsm_avatar
 import xcms_xsm_hack_person_link
+import xcms_xsm_list_filters
 import xcms_xsm_phones
 
 
@@ -68,5 +69,6 @@ def getTests(baseUrl, args):
         "xcms_xsm_anketa_wrong_fill.py": xcms_xsm_anketa_wrong_fill.XcmsXsmAnketaWrongFill(baseUrl, args),
         "xcms_xsm_avatar.py": xcms_xsm_avatar.XcmsXsmAvatar(baseUrl, args),
         "xcms_xsm_hack_person_link.py": xcms_xsm_hack_person_link.XcmsXsmHackPersonLink(baseUrl, args),
+        "xcms_xsm_list_filters.py": xcms_xsm_list_filters.XcmsXsmListFilters(baseUrl, args),
         "xcms_xsm_phones.py": xcms_xsm_phones.XcmsXsmPhones(baseUrl, args),
     }
