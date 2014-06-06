@@ -8,6 +8,7 @@
     if (@$_POST["change-menu"])
     {
         $INFO["menu-title"] = xcms_get_key_or($_POST, "menu-title");
+        $INFO["menu-order"] = xcms_get_key_or($_POST, "menu-order");
         xcms_set_key_from_checkbox($INFO, "menu-hidden", @$_POST["menu-hidden"]);
         xcms_save_list($list_name, $INFO);
         $redirect = true;
@@ -21,6 +22,10 @@
     <div>
         <span class="admin-form-label">Название в меню</span>
         <?php xcmst_control("menu-title", xcms_get_key_or($INFO, "menu-title"), "Имя в меню", "admin-long"); ?>
+    </div>
+    <div>
+        <span class="admin-form-label">Порядок в меню</span>
+        <?php xcmst_control("menu-order", xcms_get_key_or($INFO, "menu-order"), "Порядок в меню", "admin-long"); ?>
     </div>
     <div>
         <span class="admin-form-label">Скрытый элемент</span>

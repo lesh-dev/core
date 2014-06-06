@@ -6,7 +6,6 @@
         $page_prefix = xcms_get_page_root(true);
         $pageiid = str_replace($page_prefix, "", $init_path);
         $aux_class = "";
-        $flags = "";
         $page_info = "$init_path/info";
         $text = "";
         // this prevents from loading sub-folders if no info file here
@@ -15,10 +14,12 @@
 
         $INFO = xcms_get_list($page_info);
         $show = xcms_get_key_or($options, "show");
+        $order = xcms_get_key_or($INFO, "menu-order", "100");
+        $flags = "$order";
         $view = trim(xcms_get_key_or($INFO, "view"));
         $acl = explode(EXP_SP, $view);
         $access_granted = xu_empty($view) || xcms_check_rights($acl);
-        if ($show != "")
+        if (xu_not_empty($show))
         {
             $text = "{unnamed}";
             if (xcms_get_key_or($INFO, "menu-title"))
@@ -31,7 +32,7 @@
             if (xcms_is_enabled_key($INFO, "menu-hidden", false))
             {
                 $aux_class .= "menuitem-hidden ";
-                $flags .= "H";
+                $flags .= ",H";
             }
             if ($flags)
                 $text = "<sup>$flags</sup>$text";
@@ -92,17 +93,34 @@
         if (!@$array)
             return;
 
-        foreach ($array as $key=>$value)
+        $array_ordered = array();
+
+        foreach ($array as $key => $value) {
+            $sub_info = xcms_get_list("$value/info");
+            $order = xcms_get_key_or($sub_info, "menu-order", "100");
+            $int_order = (integer)$order;
+            if (!array_key_exists($int_order, $array_ordered))
+                $array_ordered[$int_order] = array();
+            $array_ordered[$int_order][] = $value;
+        }
+        sort($array_ordered);
+
+        foreach ($array_ordered as $order=>$same_order_items)
         {
-            if (!file_exists("$value/info")) continue;
-            $without_prefix = str_replace($page_prefix, "", $value);
-            if (xcms_get_key_or($options, "show") != "" || strstr($pageid, $without_prefix))
-                xcms_menu($value, $MENUTEMPLATES, $menu_level+1, $add_href_params, $options, $start_level, $end_level);
-            else
+            foreach ($same_order_items as $value)
             {
-                $new_options = $options;
-                $new_options["stop"] = true;
-                xcms_menu($value, $MENUTEMPLATES, $menu_level+1, $add_href_params, $new_options, $start_level, $end_level);
+                if (!file_exists("$value/info"))
+                    continue;
+
+                $without_prefix = str_replace($page_prefix, "", $value);
+                if (xcms_get_key_or($options, "show") != "" || strstr($pageid, $without_prefix))
+                    xcms_menu($value, $MENUTEMPLATES, $menu_level + 1, $add_href_params, $options, $start_level, $end_level);
+                else
+                {
+                    $new_options = $options;
+                    $new_options["stop"] = true;
+                    xcms_menu($value, $MENUTEMPLATES, $menu_level + 1, $add_href_params, $new_options, $start_level, $end_level);
+                }
             }
         }
     }
