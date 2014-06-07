@@ -103,7 +103,7 @@
                 $array_ordered[$int_order] = array();
             $array_ordered[$int_order][] = $value;
         }
-        sort($array_ordered);
+        ksort($array_ordered);
 
         foreach ($array_ordered as $order=>$same_order_items)
         {
