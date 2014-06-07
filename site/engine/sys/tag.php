@@ -78,7 +78,7 @@ function xcms_save_list($file, $keys)
     }
     if (!xcms_write($file, $output))
     {
-        xcms_log(0, "Cannot open list file '$file' for writing");
+        xcms_log(XLOG_ERROR, "Cannot open list file '$file' for writing");
         return false;
     }
     return true;
