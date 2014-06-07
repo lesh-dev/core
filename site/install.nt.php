@@ -130,6 +130,8 @@
                 // checkbox hack
                 if ($type == "bool" || $type == "boolean")
                     echo "<input type=\"hidden\" name=\"$variable\" value=\"\" />";
+                if (xu_empty($typehack))
+                    $typehack = "type=\"text\"";
                 echo "<input $typehack name=\"$variable\" id=\"$variable\" value=\"$def\" /></td></tr>\n";
             }
         }

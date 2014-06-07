@@ -47,6 +47,11 @@ input {
     padding-right: 2px;
 }
 
+input[type="text"],
+input[type="password"] {
+    width: 240px;
+}
+
 input[type="submit"] {
     border: 2px solid #7f7f7f;
     border-radius: 2px;

@@ -1,7 +1,8 @@
 <?php
     /**
       * Хук настройки метаинформации о сайте (имя сайта и т.п.)
-      * Maintainer: doctor@
+      * Maintainer: mvel@
+      * Author: doctor@
       **/
     class MetaInfoHook
     {
@@ -24,6 +25,11 @@
                 "name"=>"Название веб-сайта",
                 "type"=>"string",
                 "default"=>$_SERVER["HTTP_HOST"]
+                ),
+            "site_log_path"=>array(
+                "name"=>"Путь до log-файлов",
+                "type"=>"string",
+                "default"=>"/var/log/".$_SERVER["HTTP_HOST"]."/engine.log",
                 ),
             "site_url"=>array(
                 "name"=>"Адрес веб-сайта",
@@ -72,6 +78,7 @@
             "\nYou may edit it, but it can be regenerated. */".
             "\n   \$meta_site_name = '".$config["site_name"]."';".
             "\n   \$meta_site_url = '".$config["site_url"]."';".
+            "\n   \$meta_site_log_path = '".$config["site_log_path"]."';".
             "\n   \$meta_site_mail = '".$config["webmaster_mail"]."';".
             "\n/* --- */\n?>");
         if (!$result)
