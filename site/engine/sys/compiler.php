@@ -25,7 +25,7 @@
     {
         global $SETTINGS;
         $open = stristr($s, $SETTINGS["openbracket"]);
-        if(!$open)
+        if (!$open)
         {
             fputs($output_stream, $s);
             return;
@@ -77,7 +77,7 @@
             }
             else
             {
-                xcms_log(0, "name is '$name', nopagecode: ".$SETTINGS["nopagecode"]);
+                xcms_log(XLOG_ERROR, "[COMPILER] name is '$name', nopagecode: ".$SETTINGS["nopagecode"]);
                 fputs($output_stream, file_get_contents("{$SETTINGS["engine_dir"]}{$SETTINGS["nopagecode"]}.code"));
             }
         }
@@ -86,22 +86,24 @@
 
     function xcms_compile($filename, $destination)
     {
-        $toCompile = false;
-        if(!file_exists($filename))
+        $to_compile = false;
+        if (!file_exists($filename))
         {
-            xcms_log(0, "Compiler fatal error: can't find source file '$filename'");
+            xcms_log(XLOG_ERROR, "[COMPILER] Fatal error: can't find source file '$filename'");
         }
-        if(!file_exists($destination))$toCompile = true;
-        else if(@filemtime($filename) > @filemtime($destination))
+        if (!file_exists($destination))
+            $to_compile = true;
+        elseif (@filemtime($filename) > @filemtime($destination))
         {
-            $toCompile = true;
+            $to_compile = true;
         }
-        if($toCompile)
+
+        if ($to_compile)
         {
-            xcms_log(1, "Compiling '$filename'");
+            xcms_log(XLOG_INFO, "[COMPILER] Compiling '$filename'");
             $f = fopen($destination, "w");
             if (!file_exists($filename)) {
-                xcms_log(0, "Compile error: cannot find file '$filename'");
+                xcms_log(XLOG_ERROR, "[COMPILER] Compile error: cannot find file '$filename'");
                 return;
             }
             xcms_parse_string(file_get_contents($filename), $f);
