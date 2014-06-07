@@ -9,7 +9,7 @@
     $page_info = xcms_get_info_file_name();
     if (!file_exists($page_info))
     {
-        xcms_log(0, "Page info '$page_info' not found");
+        xcms_log(XLOG_ERROR, "Page info '$page_info' not found");
         include(translate('<! 404 !>'));
         die();
     }
