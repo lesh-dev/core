@@ -106,12 +106,12 @@
         if ($result)
         {
             $result = $db->lastInsertRowid();
-            xcms_log(0, "[DB] $query");
+            xcms_log(XLOG_INFO, "[DB] $query");
         }
         else
         {
             $result = false;
-            xcms_log(0, "[DB:ERROR] $query");
+            xcms_log(XLOG_ERROR, "[DB] $query");
         }
         if ($outer_db === NULL)
             $db->close();
@@ -164,9 +164,9 @@
         $query = "UPDATE $table_name SET $values WHERE $cond";
         $result = $db->exec($query);
         if ($result)
-            xcms_log(0, "[DB] $query");
+            xcms_log(XLOG_INFO, "[DB] $query");
         else
-            xcms_log(0, "[DB:ERROR] $query");
+            xcms_log(XLOG_ERROR, "[DB] $query");
         if ($outer_db === NULL)
             $db->close();
         return $result ? true : false;
@@ -194,7 +194,7 @@
             $idf = preg_replace('/[^-0-9]/', '', $id);
             if (strlen($idf) == 0)
             {
-                xcms_log(0, "Cannot fetch entity from '$table_name' with empty or filtered id '$id'.");
+                xcms_log(XLOG_ERROR, "[DB] Cannot fetch entity from '$table_name' with empty or filtered id '$id'.");
                 return array();
             }
             $id = $idf;
@@ -202,7 +202,7 @@
             $sel = $db->query($query);
             if (!($ev = $sel->fetchArray(SQLITE3_ASSOC)))
             {
-                xcms_log(0, "Cannot fetch entity from '$table_name' with id: '$id'. Query: $query.");
+                xcms_log(XLOG_ERROR, "[DB] Cannot fetch entity from '$table_name' with id: '$id'. Query: $query.");
                 return array();
             }
             $db->close();
@@ -237,9 +237,9 @@
         $query = "DELETE FROM $table_name WHERE $cond";
         $result = $db->exec($query);
         if ($result)
-            xcms_log(0, "[DB] $query");
+            xcms_log(XLOG_INFO, "[DB] $query");
         else
-            xcms_log(0, "[DB:ERROR] $query");
+            xcms_log(XLOG_ERROR, "[DB] $query");
         if ($outer_db === NULL)
             $db->close();
         return $result;
