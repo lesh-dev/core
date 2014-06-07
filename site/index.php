@@ -41,7 +41,7 @@
     require_once ("${engine_dir}sys/resample.php");
     require_once ("${engine_dir}sys/controls.php");
     if (!$session_result)
-        xcms_log("Session start failed");
+        xcms_log("[SESSION] Session start failed");
 
     $main_ref_file = "";
     $main_ref_name = "";
@@ -51,7 +51,7 @@
     {
         include($main_ref_name);
     }
-    catch(Exception $e)
+    catch (Exception $e)
     {
         xcms_main("exception");
         xcms_compile($main_ref_file, $main_ref_name);

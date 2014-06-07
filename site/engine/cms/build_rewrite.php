@@ -10,7 +10,7 @@ function xcmst_build_rewrite()
     if (!file_exists($rewrite_header_fn))
     {
         die("Cannot find rewrite template header, alias translation will not work.");
-        xcms_log(XLOG_ERROR, "Cannot find rewrite template header");
+        xcms_log(XLOG_ERROR, "[XCMS:REWRITE] Cannot find rewrite template header");
     }
     $rewrite_text = file_get_contents($rewrite_header_fn);
     $rewrite_text = str_replace('@@DESIGN-DIR@', $full_design_dir, $rewrite_text);
@@ -31,7 +31,7 @@ function xcmst_build_rewrite()
                 $from_to = explode(EXP_SP, $line);
                 if (count($from_to) != 2)
                 {
-                    xcms_log(XLOG_WARNING, "Line '$line' does not match rewrite rules");
+                    xcms_log(XLOG_WARNING, "[XCMS:REWRITE] Line '$line' does not match rewrite rules");
                     continue;
                 }
                 $from = $from_to[0];

@@ -303,13 +303,13 @@
 
     function xdb_open_db($db_name)
     {
-        xcms_log(XLOG_INFO, "Open database '$db_name'");
+        xcms_log(XLOG_INFO, "[DB] Open database '$db_name'");
         return new SQlite3($db_name, SQLITE3_OPEN_READONLY);
     }
 
     function xdb_open_db_write($db_name)
     {
-        xcms_log(XLOG_INFO, "Open database '$db_name' for WRITING");
+        xcms_log(XLOG_INFO, "[DB] Open database '$db_name' for WRITING");
         return new SQlite3($db_name, SQLITE3_OPEN_READWRITE);
     }
 
@@ -338,12 +338,12 @@
         // rename table
         $db->exec("DROP TABLE $table_name");
         $db->exec("ALTER TABLE ${table_name}_new RENAME TO $table_name");
-        xcms_log(XLOG_INFO, "Dropped $column_name from $table_name, processed $objects");
+        xcms_log(XLOG_INFO, "[DB] Dropped $column_name from $table_name, processed $objects objects");
     }
 
     function xdb_vacuum($db)
     {
         $db->exec("VACUUM");
-        xcms_log(XLOG_INFO, "Database vacuumed");
+        xcms_log(XLOG_INFO, "[DB] Database vacuumed");
     }
 ?>

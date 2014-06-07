@@ -4,5 +4,5 @@
     if (file_exists($include_file_name))
         include($include_file_name);
     else
-        xcms_log(XLOG_ERROR, "Include file '$include_file_name' does not exist, ignored");
+        xcms_log(XLOG_ERROR, "[COMPILER] Include file '$include_file_name' does not exist, ignored");
 ?>

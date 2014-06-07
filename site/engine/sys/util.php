@@ -114,7 +114,7 @@ function xcms_get_html_template($template_name)
     $full_name = "{$SETTINGS['engine_dir']}templates/$template_name.html";
     if (!file_exists($full_name))
     {
-        xcms_log(XLOG_ERROR, "Template '$full_name' not found");
+        xcms_log(XLOG_ERROR, "[KERNEL] Template '$full_name' not found");
         return "";
     }
     return @file_get_contents($full_name);

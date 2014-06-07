@@ -26,7 +26,7 @@
             Пожалуйста, скопируйте в Ваше письмо идентификатор Вашей проблемы:
             <b><?php echo $problem_guid; ?></b>.</p>
         </div><?php
-        xcms_log(XLOG_ERROR, "Requested invalid entity. ID: $problem_guid. Stack: ".
+        xcms_log(XLOG_ERROR, "[DB] Requested invalid entity. ID: $problem_guid. Stack: ".
             $Exception->getTraceAsString());
     }
     else
