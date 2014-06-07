@@ -36,7 +36,7 @@ function xcms_get_list($file)
     $keys = array();
     if (!file_exists($file))
     {
-        xcms_log(0, "List file '$file' cannot be found");
+        xcms_log(XLOG_ERROR, "List file '$file' cannot be found");
         return $keys;
     }
     $cont = file($file);
@@ -46,7 +46,7 @@ function xcms_get_list($file)
         $p = strpos($line, ':');
         if ($p === false)
         {
-            xcms_log(1, "Invalid line in file '$file': '$line'");
+            xcms_log(XLOG_WARNING, "Invalid line in file '$file': '$line'");
             continue;
         }
         $key = trim(substr($line, 0, $p));
