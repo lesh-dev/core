@@ -29,9 +29,10 @@ function xcmst_page_info($INFO, $pageid)
                 <tt><?php
                     echo xcms_get_key_or_enc($INFO, "menu-title", "<menu-title не задан>");
                     $flags = "";
+                    $order = xcms_get_key_or($INFO, "menu-order", "100");
                     // default menu-hidden: false
                     $flags .= (xcms_is_enabled_key($INFO, "menu-hidden", false) ? "[Hid]" : "[Vis]");
-                    echo "<sup>$flags</sup>";
+                    echo "<sup>$order,$flags</sup>";
                 ?></tt></a>
             </span>
 
