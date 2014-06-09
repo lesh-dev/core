@@ -13,7 +13,7 @@ function xcms_print_related_pages($var_name)
     foreach ($rel_pages as $related)
     {
         $pageid = $related;
-        ?><# if //!@$_GET["usr"]//cms/ #><?php
+        ?><# cms/ #><?php
     }
 }
 
@@ -96,9 +96,7 @@ function xcms_print_related_links()
 
         $main_page_id = $pageid;
         ob_start();
-        ?>
-        <# if //!@$_GET["usr"]//cms/ #>
-        <?php
+        ?><# cms/ #><?php
         $main_page = ob_get_clean();
         // pop page id back
         $pageid = $main_page_id;

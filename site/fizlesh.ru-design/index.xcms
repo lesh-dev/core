@@ -151,7 +151,7 @@
                     {?>
                         <# cms/page/edit_button #><?php
                     }?>
-                    <div id="content-text"><# if //!@$_GET["usr"]//cms/ #></div>
+                    <div id="content-text"><# cms/ #></div>
                     <hr />
                     <div style="font-size: 8pt; text-align: center; height: 15px;">
                         <span>&copy; ФизЛЭШ, 2005&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
