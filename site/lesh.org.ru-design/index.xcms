@@ -3,10 +3,11 @@
 <?php
 
 // see dollar/related.php
-function xcms_print_related_pages($related_pages_varname)
+function xcms_print_related_pages($var_name)
 {
-    global $$related_pages_varname;
-    $rel_pages = $$related_pages_varname;
+    $var_name = "related_pages_${var_name}";
+    global $$var_name;
+    $rel_pages = $$var_name;
     if (!$rel_pages)
         $rel_pages = array();
     foreach ($rel_pages as $related)
@@ -16,7 +17,16 @@ function xcms_print_related_pages($related_pages_varname)
     }
 }
 
-// see dollar/related.php
+// see dollar/relatedtitle.php
+function xcms_print_related_title($var_name)
+{
+    $var_name = "related_title_${var_name}";
+    global $$var_name;
+    $rel_title = $$var_name;
+    echo $rel_title;
+}
+
+// see dollar/relatedlinks.php
 function xcms_print_related_links()
 {
     global $related_links;
@@ -96,9 +106,11 @@ function xcms_print_related_links()
         <div id="content-text">
             <div class="right-inv">
                 <div class="right-inv-top">
-                    <p class="word_left_top">подробнее</p>
+                    <p class="word_left_top"><?php
+                        echo xcms_print_related_title("top");
+                    ?></p>
                     <?php
-                    xcms_print_related_pages("related_pages"); ?>
+                    xcms_print_related_pages("top"); ?>
                     <img class="arrow" src="<# full_design_dir #>pict/arrow.png" />
 
                     <p class="right-inv-middle">
@@ -108,8 +120,10 @@ function xcms_print_related_links()
                     </p>
                 </div>
                 <div class="right-inv-bottom">
-                    <p class="word_left_top">история?</p><?php
-                    xcms_print_related_pages("related_pages_bottom"); ?>
+                    <p class="word_left_top"><?php
+                        echo xcms_print_related_title("bottom");
+                    ?></p><?php
+                    xcms_print_related_pages("bottom"); ?>
                 </div>
                 <img class="white-leaf" src="<# full_design_dir #>pict/white-leaf.gif" />
             </div>
