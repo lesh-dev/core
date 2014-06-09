@@ -793,10 +793,7 @@ a.content-edit {
 }
 
 a.contlist-edit {
-    position: absolute;
-    right: 7px;
-    top: 7px;
-    padding: 2px 5px;
+    float: right;
     font-size: 11px;
 }
 
