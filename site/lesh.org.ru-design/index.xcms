@@ -1,8 +1,4 @@
-<# cms/linit #><?php
-?><# cms/init #><?php
-?><# url #><?php
-?><# deploy_utils #><?php
-?><# locale #><?php
+<# cms/linit #><# cms/init #><# url #><# deploy_utils #><# locale #><?php
 ?><!DOCTYPE html>
 <?php
 
@@ -17,6 +13,21 @@ function xcms_print_related_pages($related_pages_varname)
     {
         $pageid = $related;
         ?><# if //!@$_GET["usr"]//cms/ #><?php
+    }
+}
+
+// see dollar/related.php
+function xcms_print_related_links()
+{
+    global $related_links;
+    print_r("QQQQ");
+    print_r($related_links);
+
+    if (!$related_links)
+        $related_links = array();
+    foreach ($related_links as $related=>$related_title)
+    {?>
+        <a href="<?php echo $related; ?>"><?php echo $related_title; ?></a><?php
     }
 }
 
@@ -93,7 +104,11 @@ function xcms_print_related_pages($related_pages_varname)
                     xcms_print_related_pages("related_pages"); ?>
                     <img class="arrow" src="<# full_design_dir #>pict/arrow.png" />
 
-                    <p class="right-inv-middle"><a href="/gear">документы и снаряжение</a></p>
+                    <p class="right-inv-middle">
+                    <?php
+                    xcms_print_related_links();
+                    ?>
+                    </p>
                 </div>
                 <div class="right-inv-bottom">
                     <p class="word_left_top">история?</p><?php
