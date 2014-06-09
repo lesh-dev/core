@@ -113,16 +113,18 @@ function xcms_print_related_links()
                 </div>
                 <img class="white-leaf" src="<# full_design_dir #>pict/white-leaf.gif" />
             </div>
-            <div id="content-header"><?php
+            <?php
+            if (!$in_xsm)
+            {?>
+                <# cms/page/edit_button #><?php
+            }
+            ?>
+            <div style="margin-bottom: 10px;" id="content-header"><?php
             if (strlen($hdr) && !$in_xsm)
             {?>
                 <h1><?php echo $hdr; ?></h1><?php
             }?>
             </div><?php
-            if (!$in_xsm)
-            {?>
-                <# cms/page/edit_button #><?php
-            }
             echo $main_page;
             ?>
         </div>
