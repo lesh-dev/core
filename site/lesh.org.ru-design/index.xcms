@@ -20,14 +20,11 @@ function xcms_print_related_pages($related_pages_varname)
 function xcms_print_related_links()
 {
     global $related_links;
-    print_r("QQQQ");
-    print_r($related_links);
-
     if (!$related_links)
         $related_links = array();
     foreach ($related_links as $related=>$related_title)
     {?>
-        <a href="<?php echo $related; ?>"><?php echo $related_title; ?></a><?php
+        <div><a href="<?php echo $related; ?>"><?php echo $related_title; ?></a></div><?php
     }
 }
 
