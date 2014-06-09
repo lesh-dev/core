@@ -1,7 +1,14 @@
 <?php
 if (xcms_user()->check_rights("editor", false) || xcms_user()->check_rights("admin", false))
-{?>
-    <a class="link-button content-edit"
+{
+    $info = xcms_get_list(xcms_get_info_file_name());
+    $page_type = xcms_get_key_or($info, "type");
+    $button_title = "Редактировать";
+    if ($page_type == "contlist")
+        $button_title = "Редактировать список";
+    $fpid = str_replace('/', '-', $pageid);
+    ?>
+    <a id="content-edit-<?php echo $fpid; ?>" class="link-button content-edit"
         href="/<# web_prefix #>?<?php
-        echo xcms_url(array('ref'=>'admin', 'page'=>$pageid)); ?>">Редактировать</a><?php
+        echo xcms_url(array('ref'=>'admin', 'page'=>$pageid)); ?>"><?php echo $button_title; ?></a><?php
 }?>
