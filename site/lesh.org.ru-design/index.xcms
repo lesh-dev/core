@@ -13,7 +13,8 @@ function xcms_print_related_pages($var_name)
     foreach ($rel_pages as $related)
     {
         $pageid = $related;
-        ?><# cms/ #><?php
+        $source = xcms_get_page_content_name($pageid);
+        include(translate("<! cms/readtext --limit=50 --next-text=подробнее !>"));
     }
 }
 

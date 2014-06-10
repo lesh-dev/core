@@ -29,9 +29,13 @@ if ($need)
     $markdown = false;
     $text_defined = false;
     $limit = -1;
-    $nextlink = "whereiam";
-    $nexttext = "[more]";
-    foreach($argv as $arg)
+
+    $aliases = xcms_get_aliases();
+    $cur_alias = xcms_get_key_or($aliases, $pageid);
+
+    $next_link = "/${web_prefix}$cur_alias";
+    $next_text = "more";
+    foreach ($argv as $arg)
     {
         if($arg == "--markdown")
             $markdown = true;
@@ -39,13 +43,14 @@ if ($need)
             $text_defined = true;
         elseif (strpos($arg, "="))
         {
+            // TODO: quotes support
             $arr = explode(EXP_EQ, $arg, 2);
             if($arr[0] == "--limit")
                 $limit = $arr[1];
             if($arr[0] == "--next-link")
-                $nextlink = $arr[1];
+                $next_link = $arr[1];
             if($arr[0] == "--next-text")
-                $nexttext = $arr[1];
+                $next_text = $arr[1];
             if($arr[0] == "--file")
                 $source = $arr[1];
         }
@@ -133,8 +138,7 @@ if ($need)
     // никаких ссылок, кроме как через теги. В любом случае искать в урлах последовательность
     // вида ref=index&page=... это очень странно
     //// Замена всех ссылок на страницы на их тег-версии
-    $aliases = xcms_get_aliases();
-    if($aliases)foreach($aliases as $alias=>$page)
+    if ($aliases) foreach ($aliases as $alias=>$page)
     {
         $text = str_replace("?ref=index&page=$page\"", "$alias\"", $text);
         $text = str_replace("?page=$page&ref=index\"", "$alias\"", $text);
@@ -158,7 +162,10 @@ if ($need)
     $text = str_replace("~", "&nbsp;", $text);
 
     //// Обработка сокращенного наименования
-    $text = xcms_truncate_text($text, $limit, "...&nbsp;[<a href=\"$nextlink\">$nexttext</a>]");
+    $text = xcms_truncate_text(
+        $text,
+        $limit,
+        "...&nbsp;[<a class=\"next-link\" href=\"$next_link\">$next_text</a>]");
 
     xcms_write($compiled, $text);
 }
