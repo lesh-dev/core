@@ -4,6 +4,7 @@
       * Database management module
       **/
     define('XDB_NEW', 'new');
+    define('XDB_INVALID_ID', '-1');
 
     define('XDB_OVERRIDE_TS', true);
     define('XDB_NO_OVERRIDE_TS', false); // default

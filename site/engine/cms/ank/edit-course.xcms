@@ -5,7 +5,7 @@ function xsm_edit_course()
 {
     $course_fields = xsm_get_course_fields();
 
-    $course_id = xcms_get_key_or($_GET, 'course_id', '-1'); // invalid key
+    $course_id = xcms_get_key_or($_GET, 'course_id', XDB_INVALID_ID);
     $course = xdb_get_entity_by_id('course', $course_id);
     // По умолчанию надо создавать связку course_teacher,
     // если задан хоть какой-нибудь course_teacher_id извне
@@ -16,7 +16,7 @@ function xsm_edit_course()
     $db = xdb_get();
 
     $course_teacher_id = NULL;
-    $school_id = -1;
+    $school_id = xcms_get_key_or($_GET, 'school_id', XDB_INVALID_ID);
     $teachers_ht = "";
     if ($course_id == XDB_NEW)
     {
@@ -34,10 +34,19 @@ function xsm_edit_course()
                 'school_id'=>$school_id));
             $teachers_ht = "<a href=\"$teacher_url\">$teacher_fi</a> ";
         }
+        else
+        {
+            $teachers_ht = xsm_make_selector_ext('person_id', 'course_teacher_id', XDB_INVALID_ID,
+                "@@last_name@ @@first_name@",
+                "SELECT
+                person_id, last_name, first_name
+                FROM person_school ps LEFT JOIN person p ON p.person_id = ps.member_person_id
+                WHERE
+                ps.school_id = $school_id AND LENGTH(ps.is_teacher) > 0
+                ORDER BY last_name, first_name");
+        }
 
-        // prefill school
-        $school_id = xcms_get_key_or($_GET, 'school_id');
-        if (strlen($school_id))
+        if ($school_id != XDB_INVALID_ID)
             $course['school_id'] = $school_id;
     }
     else
@@ -124,7 +133,7 @@ function xsm_edit_course()
 
 if (@$_POST["update-course"])
 {
-    $school_id = xcms_get_key_or($_POST, 'school_id', '-1');
+    $school_id = xcms_get_key_or($_POST, 'school_id', XDB_INVALID_ID);
     $aux_param = xcms_url(array('school_id'=>$school_id));
     $new_course_id = xsm_update_entity_listmode('course', 'Курс', xsm_get_course_fields(), $aux_param);
     if ($_POST['course_id'] == XDB_NEW && xcms_get_key_or($_POST, 'course_teacher_id', NULL) != NULL)
@@ -143,14 +152,14 @@ if (@$_POST["update-course"])
 }
 elseif (@$_POST["delete-course"])
 {
-    $school_id = xcms_get_key_or($_POST, 'school_id', '-1');
+    $school_id = xcms_get_key_or($_POST, 'school_id', XDB_INVALID_ID);
     $aux_param = xcms_url(array('school_id'=>$school_id));
     xsm_warn_delete_entity_listmode('course', 'курс', $aux_param);
 }
 elseif (@$_POST["confirm-delete-course"])
 {
     // TODO: delete links?
-    $school_id = xcms_get_key_or($_GET, 'school_id', '-1');
+    $school_id = xcms_get_key_or($_GET, 'school_id', XDB_INVALID_ID);
     $aux_param = xcms_url(array('school_id'=>$school_id));
     xsm_delete_entity_listmode('course', 'Курс', $aux_param);
 }
