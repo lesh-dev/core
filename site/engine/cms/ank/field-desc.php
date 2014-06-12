@@ -94,6 +94,24 @@ function xsm_get_person_field_types()
     );
 }
 
+// Person on School
+function xsm_get_person_school_fields()
+{
+    return array(
+        "member_person_id"=>"Участник",
+        "school_id"=>"Школа",
+        "member_department_id"=>"Отделение",
+        "is_student"=>"Школьник",
+        "current_class"=>"Класс",
+        "courses_needed"=>"Потребное кол-во зачётов",
+        "curator_group"=>"Кто курирует",
+        "is_teacher"=>"Препод",
+        "curatorship"=>"Кураторство",
+        "person_school_created"=>"Время создания",
+        "person_school_modified"=>"Последняя модификация"
+    );
+}
+
 // Person comment
 function xsm_get_person_comment_fields()
 {

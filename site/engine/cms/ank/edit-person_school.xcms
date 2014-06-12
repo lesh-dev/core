@@ -2,23 +2,9 @@
 require_once("${engine_dir}cms/ank/edit-format.php");
 require_once("${engine_dir}cms/ank/person_school.php");
 
-$person_school_fields = array(
-    "member_person_id"=>"Участник",
-    "school_id"=>"Школа",
-    "member_department_id"=>"Отделение",
-    "is_student"=>"Школьник",
-    "current_class"=>"Класс",
-    "courses_needed"=>"Потребное кол-во зачётов",
-    "curator_group"=>"Кто курирует",
-    "is_teacher"=>"Препод",
-    "curatorship"=>"Кураторство",
-    "person_school_created"=>"Время создания",
-    "person_school_modified"=>"Последняя модификация"
-);
-
 function xsm_edit_person_school()
 {
-    global $person_school_fields;
+    $person_school_fields = xsm_get_person_school_fields();
 
     $person_school_id = xcms_get_key_or($_GET, 'person_school_id', '-1'); // invalid key
     $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
@@ -121,7 +107,7 @@ function xsm_edit_person_school()
 }
 
 if (@$_POST["update-person_school"])
-    xsm_update_person_school('Участник-на-Школе', $person_school_fields);
+    xsm_update_person_school('Участник-на-Школе', xsm_get_person_school_fields());
 elseif (@$_POST["delete-person_school"])
     xsm_warn_delete_person_school('person_school');
 elseif (xcms_get_key_or($_GET, 'action') == 'delete')
