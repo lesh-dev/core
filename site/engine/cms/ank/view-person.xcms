@@ -1,6 +1,7 @@
 <?php
-
 require_once("${engine_dir}cms/ank/person_school.php");
+require_once("${engine_dir}cms/ank/course_teacher.php");
+require_once("${engine_dir}cms/ank/course.php");
 
 function xsm_draw_person_textval($class, $text, $value)
 {?>

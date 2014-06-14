@@ -1,6 +1,67 @@
 <?php
 require_once("${engine_dir}cms/ank/person_school.php");
 
+/**
+  * Отдаёт пачку ссылок на преподов текущего курса
+  * Формально $school_id можно вытащить из course_id,
+  * но так проще жить.
+  * @param $course_teacher_id фильтр
+  **/
+function xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id_filter)
+{
+    $teachers_query =
+        "SELECT
+        tp.first_name, tp.last_name,
+        ct.course_teacher_id
+        FROM course_teachers ct, person tp WHERE
+        (ct.course_id = $course_id) AND
+        (tp.person_id = ct.course_teacher_id)
+        ORDER BY tp.last_name, tp.first_name";
+    $teachers_sel = $db->query($teachers_query);
+    $teachers_ht = "";
+    $filtered = ($course_teacher_id_filter == "all");
+    while ($teachers_data = $teachers_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $teacher_fi = xsm_fi_enc($teachers_data);
+        $course_teacher_id = $teachers_data['course_teacher_id'];
+        if ($course_teacher_id == $course_teacher_id_filter)
+            $filtered = true;
+        $teacher_url = "view-person".xcms_url(array(
+            'person_id'=>$course_teacher_id,
+            'school_id'=>$school_id));
+        $teachers_ht .= "<a href=\"$teacher_url\">$teacher_fi</a> ";
+    }
+    if (!$filtered)
+        return false;
+    return $teachers_ht;
+}
+
+/**
+  * Same as previous function, but returns list
+  **/
+function xsm_get_course_teachers_list($db, $course_id, $school_id)
+{
+    $teachers_query =
+        "SELECT
+        tp.first_name, tp.last_name,
+        ct.course_teachers_id, ct.course_teacher_id,
+        ps.member_department_id, d.department_title
+        FROM person tp
+        LEFT JOIN course_teachers ct ON (tp.person_id = ct.course_teacher_id)
+        LEFT JOIN person_school ps ON (tp.person_id = ps.member_person_id and ps.school_id = $school_id)
+        LEFT JOIN department d ON (d.department_id = ps.member_department_id)
+        WHERE course_id = $course_id
+        ORDER BY tp.last_name, tp.first_name";
+    $teachers_sel = $db->query($teachers_query);
+    $course_teachers = array();
+    while ($teacher_data = $teachers_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $course_teachers_id = $teacher_data['course_teachers_id'];
+        $course_teachers[$course_teachers_id] = $teacher_data;
+    }
+    return $course_teachers;
+}
+
 function xsm_make_teacher_selector($school_id, $already_added = array())
 {
     $attr = '';

@@ -1,4 +1,5 @@
 <?php
+require_once("${engine_dir}cms/ank/course.php");
 
 // shows course information sliced by school
 function xsm_print_courses()
