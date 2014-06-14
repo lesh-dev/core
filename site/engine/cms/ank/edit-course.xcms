@@ -41,7 +41,7 @@ function xsm_edit_course()
             $teachers_ht = xsm_make_selector_ext('person_id', 'course_teacher_id', XDB_INVALID_ID,
                 "@@last_name@ @@first_name@",
                 "SELECT
-                person_id, last_name, first_name, 'g' as group_order
+                person_id, last_name, first_name
                 FROM person_school ps LEFT JOIN person p ON p.person_id = ps.member_person_id
                 WHERE
                 ps.school_id = $school_id AND LENGTH(ps.is_teacher) > 0
@@ -49,17 +49,12 @@ function xsm_edit_course()
                 UNION
 
                 SELECT
-                $XDB_INVALID_ID as person_id, '-----' as last_name, '' as first_name, 's' as group_order
-
-                UNION
-
-                SELECT
-                person_id, last_name, first_name, 'u' as group_order
+                person_id, last_name, first_name
                 FROM person p
                 WHERE
                 p.anketa_status = 'cont'
 
-                ORDER BY group_order, last_name, first_name
+                ORDER BY last_name, first_name
                 ");
         }
 
