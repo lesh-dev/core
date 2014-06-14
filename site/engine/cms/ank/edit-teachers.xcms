@@ -43,27 +43,7 @@ function xsm_edit_course_teachers()
         }?>
         <form method="post" action="edit-teachers">
         <tr><td class="ankList"><span class="ank-edit-item action">Добавить препода</span><?php
-            $attr = '';
-            echo xsm_make_selector_ext('person_id', 'course_teacher_id', XDB_INVALID_ID,
-                "@@last_name@ @@first_name@",
-                "SELECT
-                person_id, last_name, first_name
-                FROM person_school ps LEFT JOIN person p ON p.person_id = ps.member_person_id
-                WHERE
-                ps.school_id = $school_id AND LENGTH(ps.is_teacher) > 0
-
-                UNION
-
-                SELECT
-                person_id, last_name, first_name
-                FROM person p
-                WHERE
-                p.anketa_status = 'cont'
-
-                ORDER BY last_name, first_name
-                ",
-                $attr, $already_added);
-
+            echo xsm_make_teacher_selector($school_id, $already_added);
             ?>
             <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" />
             <input type="submit" name="add-teacher" value="Добавить" />
