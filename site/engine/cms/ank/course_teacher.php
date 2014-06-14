@@ -18,7 +18,7 @@ function xsm_make_teacher_selector($school_id, $already_added = array())
         person_id, last_name, first_name
         FROM person p
         WHERE
-        p.anketa_status = 'cont'
+        p.anketa_status = 'cont' AND LENGTH(p.is_teacher) > 0
 
         ORDER BY last_name, first_name
         ",
