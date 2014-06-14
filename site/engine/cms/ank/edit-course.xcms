@@ -1,6 +1,7 @@
 <?php
 require_once("${engine_dir}cms/ank/edit-format.php");
 require_once("${engine_dir}cms/ank/person_school.php");
+require_once("${engine_dir}cms/ank/course_teacher.php");
 
 function xsm_edit_course()
 {
@@ -37,7 +38,6 @@ function xsm_edit_course()
         }
         else
         {
-            $XDB_INVALID_ID = XDB_INVALID_ID;
             $teachers_ht = xsm_make_selector_ext('person_id', 'course_teacher_id', XDB_INVALID_ID,
                 "@@last_name@ @@first_name@",
                 "SELECT
@@ -154,35 +154,7 @@ if (@$_POST["update-course"])
     $course_teacher_id = xcms_get_key_or($_POST, 'course_teacher_id', NULL);
     if ($_POST['course_id'] == XDB_NEW && $course_teacher_id !== NULL)
     {
-        $course_teachers = array(
-            'course_id'=>$new_course_id,
-            'course_teacher_id'=>$course_teacher_id
-        );
-        // TODO: Add some error handling (and duplicate handling also)
-        $res = xdb_insert_or_update(
-            'course_teachers',
-            array('course_teachers_id'=>XDB_NEW),
-            $course_teachers,
-            xsm_get_course_teachers_fields());
-
-        // ensure that this person belongs to given school
-        $db = xdb_get();
-        $person_school_id = xsm_get_person_school_id($db, $school_id, $course_teacher_id);
-        if ($person_school_id === NULL)
-        {
-            $key_name = "person_school_id";
-            $teacher = xdb_get_entity_by_id('person', $course_teacher_id);
-
-            // TODO: call person_school API here
-            $person_school = array(
-                'school_id'=>$school_id,
-                'member_person_id'=>$course_teacher_id,
-                'is_teacher'=>'teacher',
-                'member_department_id'=>$teacher['department_id']
-            );
-            $res = xdb_insert_or_update("person_school", array("person_school_id"=>XDB_NEW),
-                $person_school, xsm_get_person_school_fields());
-        }
+        xsm_add_course_teacher($new_course_id, $course_teacher_id);
     }
 }
 elseif (@$_POST["delete-course"])

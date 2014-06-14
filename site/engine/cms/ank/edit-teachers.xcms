@@ -1,11 +1,12 @@
 <?php
+require_once("${engine_dir}cms/ank/course_teacher.php");
 
 function xsm_edit_course_teachers()
 {
 
     $course_id = xcms_get_key_or($_POST, 'course_id');
     if (xu_empty($course_id))
-        $course_id = xcms_get_key_or($_GET, 'course_id', '-1'); // invalid key
+        $course_id = xcms_get_key_or($_GET, 'course_id', XDB_INVALID_ID);
 
     $course = xdb_get_entity_by_id('course', $course_id);
     $school_id = $course['school_id'];
@@ -43,13 +44,22 @@ function xsm_edit_course_teachers()
         <form method="post" action="edit-teachers">
         <tr><td class="ankList"><span class="ank-edit-item action">Добавить препода</span><?php
             $attr = '';
-            echo xsm_make_selector_ext('person_id', 'course_teacher_id', -1,
+            echo xsm_make_selector_ext('person_id', 'course_teacher_id', XDB_INVALID_ID,
                 "@@last_name@ @@first_name@",
                 "SELECT
                 person_id, last_name, first_name
                 FROM person_school ps LEFT JOIN person p ON p.person_id = ps.member_person_id
                 WHERE
                 ps.school_id = $school_id AND LENGTH(ps.is_teacher) > 0
+
+                UNION
+
+                SELECT
+                person_id, last_name, first_name
+                FROM person p
+                WHERE
+                p.anketa_status = 'cont'
+
                 ORDER BY last_name, first_name
                 ",
                 $attr, $already_added);
@@ -65,23 +75,13 @@ function xsm_edit_course_teachers()
 
 if (@$_POST["add-teacher"])
 {
-    $course_id = xcms_get_key_or($_POST, 'course_id', '-1');
-    $course_teacher_id = xcms_get_key_or($_POST, 'course_teacher_id', '-1');
-
-    $course_teachers = array(
-        'course_id'=>$course_id,
-        'course_teacher_id'=>$course_teacher_id
-    );
-    // TODO: Add some error handling
-    $res = xdb_insert_or_update(
-        'course_teachers',
-        array('course_teachers_id'=>XDB_NEW),
-        $course_teachers,
-        xsm_get_course_teachers_fields());
+    $course_id = xcms_get_key_or($_POST, 'course_id', XDB_INVALID_ID);
+    $course_teacher_id = xcms_get_key_or($_POST, 'course_teacher_id', XDB_INVALID_ID);
+    xsm_add_course_teacher($course_id, $course_teacher_id);
 }
 elseif (@$_POST["delete-teacher"])
 {
-    $course_teachers_id = xcms_get_key_or($_POST, 'course_teachers_id', '-1');
+    $course_teachers_id = xcms_get_key_or($_POST, 'course_teachers_id', XDB_INVALID_ID);
     $res = xdb_delete('course_teachers', $course_teachers_id);
 }
 
