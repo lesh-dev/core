@@ -292,7 +292,12 @@
       * Embedded query debugger
       **/
     function xdb_debug_area($query, $enabled = XDB_DEBUG_AREA_ENABLED)
-    {?>
+    {
+        $query = str_replace("\n", " ", $query);
+        $query = str_replace("\r", " ", $query);
+        $query = str_replace("\t", " ", $query);
+        $query = preg_replace("/ +/", " ", $query);
+        ?>
         <textarea rows="5" cols="120" style="display: <?php echo ($enabled ? "" : "none"); ?>;"
             id="person-query-debug"><?php echo $query; ?></textarea><?php
     }
