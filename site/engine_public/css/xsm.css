@@ -52,3 +52,11 @@ span.xsm-fixed-field {
     display: inline-block;
     width: 300px;
 }
+
+span.class-school-num {
+    font-weight: bold;
+}
+
+span.class-school-num.diff {
+    color: #00009f;
+}

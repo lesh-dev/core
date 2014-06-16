@@ -16,8 +16,11 @@ function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = 
 
     $course_sel = $db->query($query);
     $course_aux_param = $pers
-        ? "&amp;course_teacher_id=$course_teacher_id&amp;school_id=$school_id"
-        : "&amp;school_id=$school_id";
+        ? xcms_url(array(
+            'course_teacher_id'=>$course_teacher_id,
+            'school_id'=>$school_id))
+        : xcms_url(array(
+            'school_id'=>$school_id));
 
     if (!$simple_view)
     {?>

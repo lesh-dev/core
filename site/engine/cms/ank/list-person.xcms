@@ -78,6 +78,10 @@ function xsm_show_person_list($school_id)
     $person_sel = $db->query($query);
 
     xsm_print_recent_schools($db, $school_id, 'person');
+
+    $school = xdb_get_entity_by_id('school', $school_id);
+    $school_title = xcms_get_key_or_enc($school, 'school_title');
+
     $student_count = 0;
     $teacher_count = 0;
     ?>
@@ -108,8 +112,8 @@ function xsm_show_person_list($school_id)
         $fi = xsm_fi_enc($person);
         $fio = xsm_fio_enc($person);
 
-        $p_current_class = xcms_get_key_or_enc($person, "p_current_class");
-        $ps_current_class = xcms_get_key_or_enc($person, "ps_current_class");
+        $p_current_class = xsm_class_num(xcms_get_key_or_enc($person, "p_current_class"));
+        $ps_current_class = xsm_class_num(xcms_get_key_or_enc($person, "ps_current_class"));
 
         $birth_date = xcms_get_key_or_enc($person, "birth_date");
         $birth_date = str_replace(".07.", "<b>.07.</b>", $birth_date);
@@ -167,17 +171,26 @@ function xsm_show_person_list($school_id)
             $num = $teacher_count;
         }
 
+        $person_school_url = "view-person".xcms_url(array(
+            'person_id'=>$person_id,
+            'school_id'=>$school_id));
+
         $row_class = (xcms_checkbox_enabled($is_teacher) ? "teacher" : "");
+        $class_diff = ($ps_current_class != $p_current_class) ? "diff" : "";
         ?>
         <tr class="<?php echo $row_class; ?>">
             <td class="ankList"><?php echo $num; ?></td>
             <td class="ankList">
                 <a name="<?php echo "person$person_id"; ?>"></a>
-                <a href="<?php echo "view-person&amp;person_id=$person_id&amp;school_id=$school_id"; ?>"
+                <a href="<?php echo $person_school_url; ?>"
                     title="<?php echo $fio; ?>"><?php echo $fi; ?></a></td>
-            <td class="ankList"><span class="course-progress <?php echo $course_style; ?>"><?php echo $hr_course_progress; ?></span></td>
+            <td class="ankList"><span class="course-progress <?php echo $course_style; ?>"><?php
+                echo $hr_course_progress; ?></span></td>
             <td class="ankList"><?php echo $curator_group; ?></td>
-            <td class="ankList"><?php echo "$ps_current_class&nbsp;/&nbsp;$p_current_class"; ?></td>
+            <td class="ankList"><span class="class-school-num <?php echo $class_diff; ?>"
+                title="Класс на <?php echo $school_title; ?>"><?php echo $ps_current_class;
+                ?></span>&nbsp;/&nbsp;<span class="class-current-num"
+                title="Текущий класс"><?php echo $p_current_class; ?></span></td>
             <td class="ankList"><?php echo $birth_date; ?></td>
             <td class="ankList"><?php echo $contacts; ?></td>
         </tr>

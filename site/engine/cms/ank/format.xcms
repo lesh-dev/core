@@ -59,6 +59,16 @@ function xcms_plural($n, $word)
 }
 
 /**
+  * Get class number without any trash after
+  */
+function xsm_class_num($class)
+{
+    if (!preg_match("/^[0-9]+/", $class))
+        return $class;
+    return preg_replace("/^([0-9]+).*/", "\\1", $class);
+}
+
+/**
   * Canonical way to obtain FIO
   **/
 function xsm_fio($person)
