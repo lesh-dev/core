@@ -24,45 +24,7 @@
                             src="<# full_design_dir #>pic/lesh-subheader-wood.png"
                             width="400" height="30"
                             alt="Летняя Экологическая Школа"/></a>
-                        <div class="top-links">
-                        <?php
-
-                        if (xcms_user()->check_rights("registered", false))
-                        {?>
-                            <a title="Личный кабинет"
-                                href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'cabinet')); ?>"
-                                ><?php echo xcms_user()->login(); ?></a> | <?php
-                        }
-
-                        if (xcms_user()->check_rights("ank", false))
-                        {?>
-                            <a title="Система управления школьниками"
-                                href="<?php echo $meta_site_url_secure; ?>xsm"
-                                >XSM</a> | <?php
-                        }
-
-                        if (xcms_user()->check_rights("admin", false))
-                        {?>
-                            <a title="Админка"
-                                href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'admin')); ?>"
-                                >Админка</a> | <?php
-                        }
-
-                        if (xcms_user()->check_rights("registered", false))
-                        {?>
-                            <a title="Выход"
-                                href="<?php echo $meta_site_url_secure.'?'.
-                                xcms_url(array('page'=>$pageid, 'ref'=>'cabinet', 'mode'=>'logout')); ?>"
-                                >Выход</a><?php
-                        }
-                        else
-                        {?>
-                            <a href="<?php echo $meta_site_url_secure.'?'.
-                                xcms_url(array('page'=>$pageid, 'ref'=>'login', 'return'=>'?ref=index')); ?>"
-                                >Авторизация</a><?php
-                        }
-                        ?>
-                        </div>
+                        <div class="top-links"><# cms/user_menu #></div>
                     </div>
                 </td>
             </tr>

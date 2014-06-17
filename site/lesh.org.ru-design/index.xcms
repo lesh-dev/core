@@ -51,7 +51,10 @@ function xcms_print_related_links()
 <div id="main">
     <div class="header">
         <div class="picture_logo"> </div>
-        <div class="picture_title"> </div>
+        <div class="picture_title">
+            <div class="top-links"><# cms/user_menu #></div>
+        </div>
+
     </div>
 
     <div class="sidebar_top">
@@ -65,26 +68,15 @@ function xcms_print_related_links()
 
     <div class="sidebar-right">
         <ul>
-            <li><a href="/<# web_prefix #>photo">Фотоальбом</a></li>
-            <li><a href="about">О нас пишут</a></li>
-            <li><a href="/<# web_prefix #>people">Кто мы</a></li>
-            <li><a href="/<# web_prefix #>links">Ссылки</a></li>
-            <li><a href="http://forum.fizlesh.ru">Форум</a></li>
-            <li><a href="/<# web_prefix #>?<?php
-                echo xcms_url(array('page'=>$pageid, 'ref'=>'admin')); ?>">Админка</a></li>
+            <li><a class="side-menu" href="/<# web_prefix #>photo">Фотоальбом</a></li>
+            <li><a class="side-menu" href="about">О нас пишут</a></li>
+            <li><a class="side-menu" href="/<# web_prefix #>people">Кто мы</a></li>
+            <li><a class="side-menu" href="/<# web_prefix #>links">Ссылки</a></li>
+            <li><a class="side-menu" href="http://forum.fizlesh.ru">Форум</a></li>
         </ul>
+        <a class="social-icon" href="https://vk.com/club279809" alt="ЛЭШ ВКонтакте"><img
+            src="<# full_design_dir #>pict/vkontakte.png" /></a>
     </div>
-
-    <!--
-    <div class="sidebar_bottom">
-        <ul>
-            <li><a class="small_green_word" href="">вход</a>&nbsp;/</li>
-            <li><a href="">регистрация</a>&nbsp;/</li>
-            <li><a href="">карта сайта</a></li>
-        </ul>
-    </div>
-    -->
-
 
     <div class="main_text"><?php
         $hdr = xcms_get_key_or($INFO, "header");
@@ -142,19 +134,18 @@ function xcms_print_related_links()
             ?>
         </div>
     </div>
-
-
     <div class="footer">
-        <a href=""><img src="<# full_design_dir #>pict/facebook.png" /></a>
-        <a href="https://vk.com/club279809" alt="ЛЭШ ВКонтакте"><img src="<# full_design_dir #>pict/vkontakte.png" /></a>
+        <!--<a href=""><img src="<# full_design_dir #>pict/facebook.png" /></a>-->
+        <span>&copy;&nbsp;ЛЭШ, 1992&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
     </div>
-
+<!--
     <form>
         <div class="searchform">
             <input type="search" name="q">
             <input type="submit" value="">
         </div>
     </form>
+-->
 </div>
 </body>
 </html>
