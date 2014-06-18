@@ -74,8 +74,11 @@ function xcms_print_related_links()
             <li><a class="side-menu" href="/<# web_prefix #>links">Ссылки</a></li>
             <!--<li><a class="side-menu" href="http://forum.fizlesh.ru">Форум</a></li>-->
         </ul>
-        <a class="social-icon" href="https://vk.com/club279809" alt="ЛЭШ ВКонтакте"><img
+        <div class="social-icons">
+            <a class="social-icon" href="https://vk.com/club279809" alt="ЛЭШ ВКонтакте"><img
             src="<# full_design_dir #>pict/vkontakte.png" /></a>
+            <a href=""><img src="<# full_design_dir #>pict/facebook.png" /></a>
+        </div>
     </div>
 
     <div class="main_text"><?php
@@ -135,7 +138,6 @@ function xcms_print_related_links()
         </div>
     </div>
     <div class="footer">
-        <!--<a href=""><img src="<# full_design_dir #>pict/facebook.png" /></a>-->
         <span>&copy;&nbsp;ЛЭШ, 1992&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
     </div>
 <!--
