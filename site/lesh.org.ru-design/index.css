@@ -669,22 +669,16 @@ img.arrow {
     line-height: 18px;
 }
 
-.footer{
-    width: 100px;
+.footer {
     position: relative;
-    clear: both;
-    float: right;
     padding-top: 10px;
-    margin-right: 150px;
-    _padding-top: 20px;
-    _margin-right: 79px;
 }
 
-.footer img{
-    border:0px none; /*для IE */
+.footer img {
+    border: 0px none; /* for IE */
 }
 
-.footer a, .footer a:hover{
+.footer a, .footer a:hover {
     text-decoration: none;
 }
 
