@@ -72,7 +72,7 @@ function xcms_print_related_links()
             <li><a class="side-menu" href="about">О нас пишут</a></li>
             <li><a class="side-menu" href="/<# web_prefix #>people">Кто мы</a></li>
             <li><a class="side-menu" href="/<# web_prefix #>links">Ссылки</a></li>
-            <li><a class="side-menu" href="http://forum.fizlesh.ru">Форум</a></li>
+            <!--<li><a class="side-menu" href="http://forum.fizlesh.ru">Форум</a></li>-->
         </ul>
         <a class="social-icon" href="https://vk.com/club279809" alt="ЛЭШ ВКонтакте"><img
             src="<# full_design_dir #>pict/vkontakte.png" /></a>

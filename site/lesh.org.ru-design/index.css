@@ -97,7 +97,7 @@ h3 {
     min-height: 100%;
     background: white;
     background-attachment: fixed;
-    overflow: auto;
+    /*overflow: auto;*/ /* causes problem under Chrome */
     font-family: "Trebuchet MS", "Helvetica CY", "Arial", sans-serif;
 }
 
