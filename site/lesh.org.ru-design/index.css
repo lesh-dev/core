@@ -91,7 +91,7 @@ h3 {
     color: white;
 }
 
-#main{
+#main {
     margin: 0px auto;
     width: 700px;
     min-height: 100%;
@@ -106,7 +106,7 @@ h3 {
     height: 130px;
 }
 
-.header .picture_logo{
+.header .picture_logo {
     padding-left: 70px;
     background-image: url(pict/lesh-logo-100.png);
     background-repeat: no-repeat;
@@ -116,7 +116,7 @@ h3 {
     float: left;
 }
 
-.header .picture_title{
+.header .picture_title {
     background-image: url(pict/lesh.gif);
     background-repeat: no-repeat;
     width: 500px;
@@ -199,14 +199,14 @@ h3 {
     background-size: 100px;
 }
 
-.sidebar-right ul{
+.sidebar-right ul {
     font-size: 14px;
     font-family: "Trebuchet MS", "Helvetica CY", "Arial", "Lucida Sans", sans-serif;
 }
 
-.sidebar-right ul li{
+.sidebar-right ul li {
     display: block;
-    line-height:22px;
+    line-height: 22px;
 }
 
 .sidebar-right a.side-menu {
@@ -279,8 +279,8 @@ h3 {
     white-space: nowrap;
 }
 
-.main_text p.padding_left{
-    padding-left:20px;
+.main_text p.padding_left {
+    padding-left: 20px;
 }
 
 .bottom_text p.padding{
