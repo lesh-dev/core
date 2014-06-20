@@ -34,7 +34,9 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
             } ?>
             <col width="40" />
             <col width="10%" />
-            <col width="15%" />
+            <col width="10%" />
+            <col width="7%" />
+            <col width="8%" />
         </colgroup>
         <thead>
             <th class="ankList">Курс</th>
@@ -42,6 +44,8 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
             <th class="ankList">Препод</th><?php
             } ?>
             <th class="ankList">Цикл</th>
+            <th class="ankList">Тип курса</th>
+            <th class="ankList">Тематика</th>
             <th class="ankList">Класс</th>
             <th class="ankList">Успехи</th>
         </thead>
@@ -54,6 +58,9 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
         $course_title = xcms_get_key_or_enc($course, "course_title", "<без названия>");
         $target_class = xcms_get_key_or_enc($course, "target_class");
         $course_cycle = xcms_get_key_or_enc($course, "course_cycle");
+        $hr_course_type = xsm_make_enum($course, "course_type");
+        $hr_course_area = xsm_make_enum($course, "course_area");
+
         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id);
         if ($teachers_ht === false) // filter not passed
             continue;
@@ -105,6 +112,8 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
             <td class="ankList"><?php echo $teachers_ht; ?></td>
             <?php } ?>
             <td class="ankList c"><?php echo $course_cycle; ?></td>
+            <td class="ankList"><?php echo $hr_course_type; ?></td>
+            <td class="ankList"><?php echo $hr_course_area; ?></td>
             <td class="ankList"><?php echo $target_class; ?></td>
             <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
                 echo "Сдало <b>$exam_pass_count</b> из <b>$exam_total_count</b>"; ?></a></td>
