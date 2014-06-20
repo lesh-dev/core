@@ -2,6 +2,7 @@
 # -*- coding: utf8 -*-
 
 from selenium_test import RunTest, TestShutdown, DecodeRunResult
+import test_set_gen
 import test_xcms_installer
 import sys
 
@@ -53,6 +54,20 @@ def printStats(stats, detailed):
     for result, testList in stats.iteritems():
         print DecodeRunResult(result) + ":", len(testList), "tests"
         
+
+def generateFailedTestsSuite(failedTests):
+    # header
+    imports = [x[:-3] for x in failedTests.keys()]
+    testMap = []
+    for fn, test in failedTests.iteritems():
+        moduleName = test.__module__
+        className = test.getName()
+        testMap.append('"{testFile}": {modName}.{clName}(baseUrl, args),'.format(testFile=fn, modName=moduleName, clName=className))
+
+    failedSuite = test_set_gen.getHeader() + "\n" + test_set_gen.getFuncCode(imports, testMap)
+    
+    with open("failed_test_set.py", "w") as fs:
+        fs.write(failedSuite)
     
 args = sys.argv[1:] # exclude program name
 
@@ -115,6 +130,8 @@ try:
         sys.exit(1)
         
     tests = testSetModule.getTests(baseUrl, args)
+    
+    failedTests = {}
     specTestFound = False
     
     # init detailed stats
@@ -146,6 +163,8 @@ try:
             print "Running test", test.getName(), "on site", baseUrl
             print test.getDoc()
             result = RunTest(test)
+            if result != 0:
+                failedTests[fileName] = test          
                 
             if result not in testStats: # add new list
                 testStats[result] = [test.getName()]
@@ -170,6 +189,8 @@ try:
         print "Specified test was not found in test suite. "
         
     printStats(testStats, testDetailedStats)
+    
+    generateFailedTestsSuite(failedTests)
 
 except TestShutdown as e:
     pass

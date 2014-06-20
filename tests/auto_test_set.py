@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-This file is AUTO-GENERATED
-Do not edit it, fix generator instead
-"""
+#
+# This file is auto-generated
 
 import xcms_auth_add_new_user
 import xcms_auth_cabinet_email_change

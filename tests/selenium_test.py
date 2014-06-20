@@ -15,9 +15,13 @@ from httplib import HTTPException
 from selenium.webdriver.remote.webdriver import WebElement
 from selenium.webdriver.support.ui import Select
 
-import random, traceback, sys
+import random
+import traceback
+import sys
 from datetime import datetime
-import time, os, shutil
+import time
+import os
+import shutil
 
 from bawlib import isVoid, isList, isString, isNumber, isEqual, getSingleOption, userSerialize, wrapIfLong
 
