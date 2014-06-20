@@ -57,7 +57,7 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         inpEmail = random_crap.randomText(10) + "@" + random_crap.randomText(6) + ".com"
         inpSkype = random_crap.randomText(12)
         inpSocial = random_crap.randomVkontakte()
-        inpSocialShow = cutHttp(inpSocial)
+        inpSocialShow = bawlib.cutHttp(inpSocial)
 
         inpFav = random_crap.randomCrap(20, ["multiline"])
         inpAch = random_crap.randomCrap(15, ["multiline"])
