@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
+import random_crap
+import bawlib
 
 class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
     """

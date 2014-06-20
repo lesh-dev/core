@@ -150,7 +150,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         self.assertBodyTextPresent(inpCell)
         self.assertBodyTextPresent(inpEmail)
         self.assertBodyTextPresent(inpSkype)
-        self.assertBodyTextPresent(inpSocial)
+        self.assertBodyTextPresent(inpSocialShow)
         self.clickElementById("show-extra-person-info")
         self.wait(1)
         self.assertElementSubTextById("extra-person-info", inpFav)
