@@ -566,7 +566,7 @@ function xsm_print_person_selected_school($db, $school_id, $person)
         xsm_print_student_exams($db, $school_id, $person_id, $person_school);
 
     if (xcms_checkbox_enabled($person_school['is_teacher']))
-        xsm_print_course_selected_school($db, $school_id, $person_id);
+        xsm_print_courses_selected_school($db, $school_id, $person_id);
 }
 
 // shows person information sliced by school

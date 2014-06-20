@@ -4,7 +4,7 @@ require_once("${engine_dir}cms/ank/course_teacher.php");
 /**
   * Печаталка таблицы курсов (общая для списка курсов на школе и одного препода)
   **/
-function xsm_print_course_selected_school($db, $school_id, $course_teacher_id = "all", $simple_view = false)
+function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id = "all", $simple_view = false)
 {
     $pers = ($course_teacher_id != "all");
 
