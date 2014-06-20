@@ -20,6 +20,9 @@ def wrapIfLong(text):
         return "\n" + text
     return text
 
+def cutHttp(link):
+    return link.replace('http://', '').replace('https://', '')
+
 def userSerialize(text, options = []):
     if isList(text):
         return "|".join([userSerialize(x) for x in text])
@@ -55,13 +58,13 @@ def isEqual(x, y):
         return (x.strip() == y.strip())
     else:
         raise RuntimeError("Cannot compare anything except strings, sorry. Type of X is " + str(type(x)) + ", and type of Y is " + str(type(y)) + ".")
-    
+
 def isVoid(x):
     if isList(x):
         return (not x)
     else:
         return x is None or x.strip() == ""
-    
+
 
 # simple command line framework
 def argMatchOption(value, optSpec):
@@ -74,7 +77,7 @@ def argMatchOption(value, optSpec):
         return value in optSpec
     else:
         raise RuntimeError("argMatchOption got optSpec parameter, which is neither string list, nor single string. ")
-    
+
 
 def getOption(opt, inArgs):
     """
@@ -104,7 +107,7 @@ def checkSingleOption(opt, args):
     if any(argMatchOption(x, opt) for x in args):
         return True
     return False
-    
+
 
 def getSingleOption(opt, inArgs):
     """
@@ -117,4 +120,3 @@ def getSingleOption(opt, inArgs):
             del args[i]
             return True, args
     return False, args
-    

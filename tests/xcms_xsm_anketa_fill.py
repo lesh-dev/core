@@ -1,7 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
+import random_crap
+import bawlib
+
 
 class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     """
@@ -89,6 +92,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         inpEmail = random_crap.randomText(10) + "@" + random_crap.randomText(6) + ".ru"
         inpSkype = random_crap.randomText(12)
         inpSocial = random_crap.randomVkontakte()
+        inpSocialShow = cutHttp(inpSocial)
 
         inpFav = random_crap.randomCrap(20, ["multiline"])
         inpAch = random_crap.randomCrap(15, ["multiline"])
@@ -133,7 +137,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
 
         self.gotoUrlByLinkText(anketaUrlName)
 
-    # just check text is on the page.
+        # just check text is on the page.
         print "Checking that all filled fields are displayed on the page. "
 
         self.checkPersonAliasInPersonView(fullAlias)

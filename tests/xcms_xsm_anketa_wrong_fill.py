@@ -13,63 +13,64 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
     * correct some values and try submit again
     * correct all errors and finally submit form.
     """
-    
-    def trySubmit(self, reason = None):        
+
+    def trySubmit(self, reason = None):
         self.clickElementById("submit-anketa-button")
         if reason:
             self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage(), reason)
-    
+
     def run(self):
         # anketa fill negative test:
-                
+
         testMailPrefix = self.m_conf.getAnketaNamePrefix()
-            
+
         self.gotoRoot()
-        
+
         #navigate to anketas
-        
+
         self.gotoUrlByLinkText(self.getEntranceLinkName())
         self.gotoAnketa()
-        
+
         self.assertBodyTextPresent(self.getAnketaPageHeader())
-            
+
         # try to submit empty form.
         self.trySubmit("Empty form should not be submitted. ")
-        
+
         lastNameTooShort = u"Поле 'Фамилия' слишком короткое"
-        
+
         self.assertBodyTextPresent(lastNameTooShort)
 
         # generate some text
         inpLastName = testMailPrefix + u"Криворучкин" + random_crap.randomText(5);
         inpFirstName = u"Хакер" + random_crap.randomText(3)
         inpMidName = u"Ламерович" + random_crap.randomText(3)
-        
+
         inpBirthDate = random_crap.randomDigits(2) + "." + random_crap.randomDigits(2) + "." + random_crap.randomDigits(4);
-        
+
         inpSchool = u"Хакерская школа им. К.Митника №" + random_crap.randomDigits(4)
-        
+
         inpSchoolCity = u"Школа находится в /dev/brain/" + random_crap.randomText(5)
         inpClass = random_crap.randomDigits(1) + u"Х"
-        
+
         inpPhone = "+7" + random_crap.randomDigits(9)
         inpCell = "+7" + random_crap.randomDigits(9)
         inpEmail = random_crap.randomText(10) + "@" + random_crap.randomText(6) + ".com"
         inpSkype = random_crap.randomText(12)
         inpSocial = random_crap.randomVkontakte()
-        
+        inpSocialShow = cutHttp(inpSocial)
+
         inpFav = random_crap.randomCrap(20, ["multiline"])
         inpAch = random_crap.randomCrap(15, ["multiline"])
         inpHob = random_crap.randomCrap(10, ["multiline"])
-        
-        # try fill only surname 
+
+        # try fill only surname
         inpLastName = self.fillElementById("last_name-input", inpLastName)
-        
+
         self.trySubmit("Only Last name was filled. ")
         self.assertBodyTextPresent(u"Поле 'Имя' слишком короткое")
-        
+
         inpFirstName = self.fillElementById("first_name-input", inpFirstName)
-        
+
         self.trySubmit("Only Last name and First name was filled. ")
         self.assertBodyTextPresent(u"Поле 'Отчество' слишком короткое")
 
@@ -77,11 +78,11 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
 
         self.trySubmit("Only FIO values were filled. ")
         self.assertBodyTextPresent(u"Класс не указан")
-        
+
         inpBirthDate = self.fillElementById("birth_date-input", inpBirthDate)
         inpSchool = self.fillElementById("school-input", inpSchool)
         inpSchoolCity = self.fillElementById("school_city-input", inpSchoolCity)
-        
+
         inpClass = self.fillElementById("current_class-input", inpClass)
 
         self.trySubmit("Phone fields were not filled. ")
@@ -89,13 +90,13 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
 
         inpPhone = self.fillElementById("phone-input",inpPhone)
         inpCell = self.fillElementById("cellular-input", inpCell)
-        
+
         inpEmail = self.fillElementById("email-input", inpEmail)
         inpSkype = self.fillElementById("skype-input", inpSkype)
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
 
         areYouSure = u"Если Вы уверены, что не хотите указывать эту информацию"
-        
+
         self.trySubmit("Favourites were not filled")
         self.assertBodyTextPresent(areYouSure)
 
@@ -108,11 +109,11 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         self.assertBodyTextPresent(areYouSure)
 
         inpHob = self.fillElementById("hobby-text", inpHob)
-        
+
         # and now try to erase one of very important  fields.
-        
+
         self.fillElementById("last_name-input", "")
-        
+
         self.trySubmit("Empty last name is not allowed. ")
         self.assertBodyTextPresent(lastNameTooShort)
 
@@ -132,14 +133,14 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
 
         # at last, it should work.
         self.trySubmit()
-            
+
         # now login as manager
         self.performLoginAsManager()
-        
+
         self.gotoRoot()
-            
+
         self.gotoUrlByLinkText(self.getAnketaListMenuName())
-        
+
         shortAlias = inpLastName + " " + inpFirstName
         fullAlias = shortAlias + " " + inpMidName
 
@@ -148,9 +149,9 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
 
         self.gotoUrlByLinkText(anketaUrlName)
 
-    # just check text is on the page.
+        # just check text is on the page.
         self.logAdd("Checking that all filled fields are displayed on the page. ")
-        
+
         self.checkPersonAliasInPersonView(fullAlias)
 
         self.assertBodyTextPresent(inpBirthDate)
@@ -161,7 +162,7 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         self.assertBodyTextPresent(inpCell)
         self.assertBodyTextPresent(inpEmail)
         self.assertBodyTextPresent(inpSkype)
-        self.assertBodyTextPresent(inpSocial)
+        self.assertBodyTextPresent(inpSocialShow)
         self.clickElementById("show-extra-person-info")
         self.wait(1)
         self.assertElementSubTextById("extra-person-info", inpFav)
