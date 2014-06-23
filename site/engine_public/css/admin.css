@@ -356,6 +356,7 @@ div.help-widget {
     background-color: #e3e38f;
     padding-bottom: 5px;
     padding-top: 5px;
+    display: none; /* for sliding */
 }
 
 div.floating-box {
