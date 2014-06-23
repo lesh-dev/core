@@ -15,6 +15,7 @@ import xcms_content_add_page
 import xcms_content_auth_only_page
 import xcms_content_bad_path_page
 import xcms_content_hidden_page
+import xcms_content_page_order
 import xcms_content_special_chars_page
 import xcms_content_top_level_page
 import xcms_download_lectures
@@ -50,6 +51,7 @@ def getTests(baseUrl, args):
         "xcms_content_auth_only_page.py": xcms_content_auth_only_page.XcmsContentAuthOnlyPage(baseUrl, args),
         "xcms_content_bad_path_page.py": xcms_content_bad_path_page.XcmsContentBadPathPage(baseUrl, args),
         "xcms_content_hidden_page.py": xcms_content_hidden_page.XcmsContentHiddenPage(baseUrl, args),
+        "xcms_content_page_order.py": xcms_content_page_order.XcmsContentPageOrder(baseUrl, args),
         "xcms_content_special_chars_page.py": xcms_content_special_chars_page.XcmsContentSpecialCharsPage(baseUrl, args),
         "xcms_content_top_level_page.py": xcms_content_top_level_page.XcmsContentTopLevelPage(baseUrl, args),
         "xcms_download_lectures.py": xcms_download_lectures.XcmsDownloadLectures(baseUrl, args),

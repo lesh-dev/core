@@ -23,7 +23,7 @@ class XcmsContentHiddenPage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
 
         self.gotoCreatePage()
-
+        
         inpPageDir = "hiddenPage_" + random_crap.randomText(6);
         inpMenuTitle = "hiddenMenuTitle_" + random_crap.randomText(6);
         inpPageHeader = "hiddenPageHeader_" + random_crap.randomText(6);
