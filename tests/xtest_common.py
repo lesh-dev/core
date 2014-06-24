@@ -382,6 +382,9 @@ class XcmsTest(XcmsTestWithConfig):
     def performLogoutFromAdminPanel(self):
         self.gotoUrlByLinkText(u"Выйти")
 
+    def closeAdminPanel(self):
+        self.gotoUrlByLinkText("X")
+
     def addCommentToPerson(self):
         self.gotoUrlByLinkText(u"Добавить комментарий")
         commentText = random_crap.randomText(40) + "\n" + random_crap.randomText(50) + "\n" + random_crap.randomText(30)
@@ -425,6 +428,30 @@ class XcmsTest(XcmsTestWithConfig):
 
     def getAnketaListMenuName(self):
         return u"Анкеты"
+    
+    def checkScreenIsAdmin(self):
+        screen = self.getElementTextById("screen")
+        if screen != u"Админка":
+            self.failTest("We are not in the admin panel. Cannot add new page. ")
+
+    def addNewPage(self, parentPage, sysName, menuTitle, pageHeader, pageAlias):
+        self.checkScreenIsAdmin()
+                    
+        self.gotoUrlByLinkText(parentPage)
+        self.gotoCreatePage()
+        
+        sysName = self.fillElementById("create-name-input", sysName)
+        menuTitle = self.fillElementById("menu-title-input", menuTitle)
+        pageHeader = self.fillElementById("header-input", pageHeader)
+        pageAlias = self.fillElementById("alias-input", pageAlias)
+
+        defaultPageType = self.getOptionValueById("create-pagetype-selector")
+        if defaultPageType != "content":
+            self.failTest("Default selected page type is not 'content': " + defaultPageType)
+
+        self.clickElementById("create-page-submit")
+        return sysName, menuTitle, pageHeader, pageAlias
+
 
 
 def shortAlias(last, first):

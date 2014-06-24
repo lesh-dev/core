@@ -35,7 +35,7 @@
                 $flags .= ",H";
             }
             if ($flags)
-                $text = "<sup>$flags</sup>$text";
+                $flags = "<sup>$flags</sup>";
         }
         else
         {
@@ -59,6 +59,7 @@
         // render menu item
         $html = $MENUTEMPLATES[$menu_level];
         $html = str_replace('<AUXCLASS>', $aux_class, $html);
+        $html = str_replace('{FLAGS}', $flags, $html);
 
         if (xcms_get_key_or($options, "devel") || !@$INFO["alias"])
         {

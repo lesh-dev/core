@@ -85,7 +85,7 @@ class XcmsXsmAnketaDuplicate(xtest_common.XcmsTest):
         self.gotoRoot()
         self.gotoUrlByLinkText(self.getAnketaListMenuName())
         
-        alias = self.fillElementByName("show_name_filter", alias)
+        alias = self.fillElementById("show_name_filter-input", alias)
         self.clickElementByName("show-person")
         if self.countIndexedUrlsByLinkText(alias) != 1:
             self.failTest("Found more than one anketa with exact FIO. Duplicate filtering is broken. ")

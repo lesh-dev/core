@@ -15,9 +15,13 @@ from httplib import HTTPException
 from selenium.webdriver.remote.webdriver import WebElement
 from selenium.webdriver.support.ui import Select
 
-import random, traceback, sys
+import random
+import traceback
+import sys
 from datetime import datetime
-import time, os, shutil
+import time
+import os
+import shutil
 
 from bawlib import isVoid, isList, isString, isNumber, isEqual, getSingleOption, userSerialize, wrapIfLong
 
@@ -258,6 +262,10 @@ class SeleniumTest(object):
     def gotoRoot(self):
         return self.gotoPage("/")
 
+    # alias of gotoPage, for similarity with gotoUrlByLinkText
+    def gotoUrl(self, url, comment = ""):
+        return self.gotoPage(url, comment)
+    
     # @comment usually means link name (or id), which we used to navigate to this URL.
     def gotoPage(self, url, comment = ""):
         fullUrl = self.m_baseUrl + url
@@ -784,6 +792,9 @@ class SeleniumTest(object):
         except IOError:
             self.fatalTest("Cannot write message to log file " + userSerialize(self.m_logFile) + ". ")
 
+    # alias for getPageSource
+    def getPageContent(self):
+        return self.getPageSource()
 
     def getPageSource(self):
         return self.m_driver.page_source
