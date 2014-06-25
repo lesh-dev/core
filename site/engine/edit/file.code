@@ -100,7 +100,7 @@
     <textarea class="editor" style="display: none" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
         name="edit-text" id="edit-text"><?php echo $text; ?></textarea>
 
-    <pre style="width: 800px; height: 500px;"
+    <pre style="width: 800px; height: 500px; border: 1px solid rgb(236, 199, 173); font-size: 14px;"
         name="edit-text-ace" id="edit-text-ace"><?php echo $text; ?></pre>
 
     <script language="javascript" charset="utf-8" type="text/javascript"
@@ -117,8 +117,12 @@
 
         $(document).ready(function() {
             var editor = ace.edit("edit-text-ace");
-            editor.setTheme("ace/theme/monokai");
+            editor.setTheme("ace/theme/eclipse");
             editor.getSession().setMode("ace/mode/html");
+            editor.setShowPrintMargin(false);
+
+            // does not work ?
+            editor.getSession().setShowGutter(false);
 
             function xcms_set_editor_value() {
                 var text = editor.getValue()
