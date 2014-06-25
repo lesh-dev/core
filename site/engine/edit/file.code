@@ -97,8 +97,43 @@
         <input type="submit" name="set-version" id="set-version-top" value="Смотреть версию"/>
         <?php include(translate('<! edit/help !>')); ?>
     </div>
-    <textarea class="editor" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
+    <textarea class="editor" style="display: none" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
         name="edit-text" id="edit-text"><?php echo $text; ?></textarea>
+
+    <pre style="width: 800px; height: 500px;"
+        name="edit-text-ace" id="edit-text-ace"><?php echo $text; ?></pre>
+
+    <script language="javascript" charset="utf-8" type="text/javascript"
+        src="<?php echo "${full_engine_pub}ace/ace.js"; ?>"></script>
+    <script>
+        function xcms_escape_html(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        $(document).ready(function() {
+            var editor = ace.edit("edit-text-ace");
+            editor.setTheme("ace/theme/monokai");
+            editor.getSession().setMode("ace/mode/html");
+
+            function xcms_set_editor_value() {
+                var text = editor.getValue()
+                var escaped_text = xcms_escape_html(text);
+                $('#edit-text').html(escaped_text);
+            }
+
+            $("#edit-submit-top").click(xcms_set_editor_value);
+            $("#edit-submit-bottom").click(xcms_set_editor_value);
+            $("#edit-preview-top").click(xcms_set_editor_value);
+            $("#edit-preview-bottom").click(xcms_set_editor_value);
+        });
+
+    </script>
+
     <div>
         <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-submit-bottom" value="<?php echo $submit_val; ?>" />
         <input type="submit" name="edit-preview" id="edit-preview-bottom" value="Предпросмотр" />
