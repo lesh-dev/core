@@ -253,7 +253,7 @@ h3 {
     color: #4f4f4f;
 }
 
-.bottom_text p.top{
+.bottom_text p.top {
     font-size: 14px;
     color: black;
     margin-top: -20px;
@@ -261,7 +261,7 @@ h3 {
     margin-left: -20px;
 }
 
-.main_text p.nowrap{
+.main_text p.nowrap {
     font-size: 14px;
     color: black;
     padding-top: 15px;
@@ -294,6 +294,11 @@ h3 {
 .length_of_text p.only_bold{
     font-weight: bold;
     font-size: 14px;
+}
+
+.main_text ul {
+    list-style: disc outside none;
+    margin-left: 20px;
 }
 
 .main_text ul.bullet,
@@ -489,7 +494,7 @@ p.grey_fond{
 }
 
 .bottom_text ol,
-.length_of_text ol{
+.length_of_text ol {
     list-style-type: decimal;
     padding-top: 15px;
     margin-left: 20px;
