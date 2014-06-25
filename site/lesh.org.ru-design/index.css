@@ -298,11 +298,11 @@ h3 {
 
 .main_text ul {
     list-style: disc outside none;
-    margin-left: 20px;
+    padding-left: 20px;
 }
 
 .main_text ul.bullet,
-.bottom_text ul.bullet{
+.bottom_text ul.bullet {
     list-style-type: disc;
     padding-left: 50px;
     padding-top: 15px;
