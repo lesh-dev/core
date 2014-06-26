@@ -81,10 +81,6 @@ if (!@$_GET["page"])
             <a href="/mailman/listinfo/preps/" class="h-menu-link">Рассылка</a><?php
             }?>
 
-            <span style="display:none;">
-                <a <?php echo xcms_href(array('mode'=>'__convert', 'page'=>$pageid, 'ref'=>'admin')); ?>
-                class="h-menu-link">Convert [DoNotPush]</a></span>
-
             <span style="float: right">
             <b id="screen">Админка</b>
             <a <?php echo xcms_href(array('mode'=>'myprofile', 'page'=>$pageid, 'ref'=>'admin')); ?>
@@ -145,31 +141,6 @@ if (!@$_GET["page"])
             xcmst_rebuild_aliases_and_rewrite();
             ?><div class="notice">Список alias-ов успешно обновлён</div>
         </div><?php
-    }
-    else if(@$_GET["mode"]=="__convert")
-    {
-        $fl = file('ifiles');
-        foreach ($fl as $fn) {
-            $fn = trim($fn);
-            echo dirname($fn).'<br/>';
-            $dn = dirname($fn);
-            $nfn = "$dn/newinf";
-            $list = getList($fn);
-            print_r($list);
-            echo "<br />";
-            $description = @file_get_contents("$dn/_description");
-            $author = @file_get_contents("$dn/_authors");
-            $keywords = @file_get_contents("$dn/_keywords");
-            $alias = @file_get_contents("$dn/currtag");
-            $menuTitle = @file_get_contents("$dn/applymenu");
-            $list["meta-description"] = $description;
-            $list["meta-author"] = $author;
-            $list["meta-keywords"] = $keywords;
-            $list["alias"] = $alias;
-            $list["menu-title"] = $menuTitle;
-            xcms_save_list($nfn, $list);
-        }
-        die();
     }
     elseif(@$_GET["mode"]=="taglist")
     {
