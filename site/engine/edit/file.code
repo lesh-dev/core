@@ -120,9 +120,8 @@
             editor.setTheme("ace/theme/eclipse");
             editor.getSession().setMode("ace/mode/html");
             editor.setShowPrintMargin(false);
-
-            // does not work ?
-            editor.getSession().setShowGutter(false);
+            editor.setShowInvisibles(false);
+            editor.setDisplayIndentGuides(false);
 
             function xcms_set_editor_value() {
                 var text = editor.getValue()
