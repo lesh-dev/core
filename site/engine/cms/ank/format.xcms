@@ -381,11 +381,22 @@ function xsm_make_selector_ext($list_key, $name, $current_key, $title_pattern, $
     $db = xdb_get();
     $sel = $db->query($query);
     $html = "<select name=\"$name\" id=\"$name-selector\" $attr>\n";
+    $uniq_titles = array();
     while ($object = $sel->fetchArray(SQLITE3_ASSOC))
     {
         $title = $title_pattern;
         foreach ($object as $key => $value)
             $title = str_replace("@@$key@", htmlspecialchars($value), $title);
+        $uniq_title = $title;
+        foreach ($object as $key => $value)
+            $title = str_replace("##$key#", htmlspecialchars($value), $title);
+        foreach ($object as $key => $value)
+            $uniq_title = str_replace("##$key#", "", $uniq_title);
+
+        if (array_key_exists($uniq_title, $uniq_titles))
+            continue;
+        $uniq_titles[$uniq_title] = true;
+
         $key = $object[$list_key];
         if (xcms_get_key_or($exclude_ids, $key))
             continue;

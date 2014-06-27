@@ -65,10 +65,12 @@ function xsm_get_course_teachers_list($db, $course_id, $school_id)
 function xsm_make_teacher_selector($school_id, $already_added = array())
 {
     $attr = '';
+    $existance = "(Y)";
+    $active = "(A)";
     return xsm_make_selector_ext('person_id', 'course_teacher_id', XDB_INVALID_ID,
-        "@@last_name@ @@first_name@",
+        "##presence# @@last_name@ @@first_name@",
         "SELECT
-        person_id, last_name, first_name
+        person_id, last_name, first_name, '$existance' AS presence
         FROM person_school ps LEFT JOIN person p ON p.person_id = ps.member_person_id
         WHERE
         ps.school_id = $school_id AND LENGTH(ps.is_teacher) > 0
@@ -76,12 +78,12 @@ function xsm_make_teacher_selector($school_id, $already_added = array())
         UNION
 
         SELECT
-        person_id, last_name, first_name
+        person_id, last_name, first_name, '$active' AS presence
         FROM person p
         WHERE
         p.anketa_status = 'cont' AND LENGTH(p.is_teacher) > 0
 
-        ORDER BY last_name, first_name
+        ORDER BY last_name, first_name, presence DESC
         ",
         $attr, $already_added);
 }
