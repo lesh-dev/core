@@ -385,7 +385,15 @@ div.right-image-box {
     display: inline-block;
 }
 
-#content-text-preview {
+div.content-text-diff {
+    background-color: #cfef9f;
+    border: 1px dashed #5f5f5f;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+div.content-text-preview {
     background-color: #cfef9f;
     border: 1px dashed #5f5f5f;
     padding: 10px;

@@ -11,6 +11,8 @@
     $pathv = @$argv[1];
     if (!$pathv) $pathv = "edit-file";
 
+    $diff_html = false;
+
     $ename = $editfile;
     if (!$ename) $ename = @$_POST[$pathv];
     if (!$ename) $ename = @$_GET[$pathv];
@@ -43,7 +45,7 @@
             xcms_write($ename, $new_text);
             chmod($ename, 0666);
             $current_version = "";
-            xcms_process_page_diff($old_text, $new_text);
+            $diff_html = xcms_process_page_diff($old_text, $new_text);
             system("gzip $target_name");
         }
         else
@@ -91,7 +93,13 @@
         */
         $text = htmlspecialchars($text);
 
-    ?>
+        if ($diff_html !== false)
+        {?>
+            <div class="content-text-diff"><?php
+            echo $diff_html; ?>
+            </div><?php
+        }?>
+
 <form method="post" enctype="multipart/form-data">
     <input type="hidden" name="<?php echo $pathv; ?>" value="<?php echo $ename;?>" />
     <div style="padding-top: 15px;">
@@ -149,11 +157,13 @@
         <!-- Version info cannot be easily duplicated here, so we remove it -->
     </div>
 </form>
-<div id="content-text-preview"><?php
+<?php
         if (@$_POST["edit-preview"])
-        {
+        {?>
+            <div id="content-text-preview" class="content-text-preview"><?php
             $text = $preview_text;
-            include(translate("<! cms/readtext --markdown --text !>"));
+            include(translate("<! cms/readtext --markdown --text !>")); ?>
+            </div><?php
         }
-    }?>
-</div>
+    }
+?>
