@@ -350,6 +350,7 @@ span.help-left {
 
 div.help-widget {
     position: absolute;
+    z-index: 10; /* to be above editor */
     width: 500px;
     top: 15px;
     right: -5px;
