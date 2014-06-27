@@ -76,7 +76,6 @@ if (!@$_GET["page"])
             <?php if ($is_admin) {?>
             <span class="top-menu-div">&nbsp;</span>
             <a <?php echo xcms_href(array('mode'=>'user_manage', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Пользователи</a>
-            <a <?php echo xcms_href(array('mode'=>'group_admin', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Группы</a>
             <a <?php echo xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Уведомления</a>
             <a href="/mailman/listinfo/preps/" class="h-menu-link">Рассылка</a><?php
             }?>
@@ -149,10 +148,6 @@ if (!@$_GET["page"])
     elseif(@$_GET["mode"]=="access")
     {
         include(translate("<! cms/access_edit !>"));
-    }
-    elseif(@$_GET["mode"]=="group_admin")
-    {
-        include(translate("<! auth/group !>"));
     }
     elseif(@$_GET["mode"]=="user_manage")
     {
