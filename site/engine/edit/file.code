@@ -22,13 +22,18 @@
     {
         if (@$_POST["edit-submit"])
         {
+            $login = xcms_user()->login();
             $time = time();
-            $target_name = "$ename-version-$time";
+            //$time = (integer)($time / 100) * 100;
+            $target_name = "$ename-version-$time-$login";
 
             $old_text = "";
             if (file_exists($ename))
             {
                 @chmod($ename, 0666); // see bug #64
+                //@unlink("$target_name.gz"); // remove previous version if exists, see #595
+                // it is a non-trivial question: what version should be replaced: ancient one
+                // or previous-in-current-session
                 rename($ename, $target_name);
                 $old_text = file_get_contents($target_name);
                 $old_text = xcms_wrap_long_lines($old_text);
@@ -65,14 +70,15 @@
         $vfiles_list = array_reverse(glob("$ename-version-*"));
         foreach ($vfiles_list as $k=>$v)
         {
-            $timestamp_gz = str_replace("$ename-version-", "", $v);
-            $timestamp = str_replace(".gz", "", $timestamp_gz);
+            $timestamp = preg_replace("/.*-version-([0-9]+)[.-].*/", "\\1", $v);
+            $rests = preg_replace("/.*-version-[0-9]+([.-].*)/", "\\1", $v);
+            $author_suffix = preg_replace('/\.gz$/', "", $rests);
             $version_time = xcms_datetime($timestamp);
             $version_suffix = str_replace("$ename", "", $v);
             $selected = "";
             if ($version_suffix == $current_version)
                 $selected = 'selected="selected"';
-            $vlist .= "<option $selected value=\"$version_suffix\">$version_time</option>";
+            $vlist .= "<option $selected value=\"$version_suffix\">$version_time$author_suffix</option>";
         }
         if (@$_POST["edit-preview"])
         {
