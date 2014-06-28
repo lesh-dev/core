@@ -65,8 +65,8 @@ function xsm_get_course_teachers_list($db, $course_id, $school_id)
 function xsm_make_teacher_selector($school_id, $already_added = array())
 {
     $attr = '';
-    $existance = "(Y)";
-    $active = "(A)";
+    $existance = "(\xE2\x97\x8F)";
+    $active = "(\xE2\x97\x8B)";
     return xsm_make_selector_ext('person_id', 'course_teacher_id', XDB_INVALID_ID,
         "##presence# @@last_name@ @@first_name@",
         "SELECT
