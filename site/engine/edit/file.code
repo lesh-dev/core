@@ -27,18 +27,20 @@
             $login = xcms_user()->login();
             $time = time();
             //$time = (integer)($time / 100) * 100;
-            $target_name = "$ename-version-$time-$login";
-
             $old_text = "";
             if (file_exists($ename))
             {
+                // preserve old version
                 @chmod($ename, 0666); // see bug #64
+                $target_name = "$ename-version-$time-$login";
                 //@unlink("$target_name.gz"); // remove previous version if exists, see #595
                 // it is a non-trivial question: what version should be replaced: ancient one
                 // or previous-in-current-session
                 rename($ename, $target_name);
                 $old_text = file_get_contents($target_name);
                 $old_text = xcms_wrap_long_lines($old_text);
+                if (file_exists($target_name))
+                    system("gzip $target_name");
             }
             $new_text = @$_POST["edit-text"];
             $new_text = xcms_wrap_long_lines($new_text);
@@ -46,8 +48,6 @@
             chmod($ename, 0666);
             $current_version = "";
             $diff_html = xcms_process_page_diff($old_text, $new_text);
-            if (file_exists($target_name))
-                system("gzip $target_name");
         }
         else
             $current_version = @$_POST["versions"];
