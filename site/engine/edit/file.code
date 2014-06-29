@@ -46,14 +46,15 @@
             chmod($ename, 0666);
             $current_version = "";
             $diff_html = xcms_process_page_diff($old_text, $new_text);
-            system("gzip $target_name");
+            if (file_exists($target_name))
+                system("gzip $target_name");
         }
         else
             $current_version = @$_POST["versions"];
 
         if (file_exists($ename))
         {
-            if (strpos($current_version, ".gz"))
+            if (strpos($current_version, ".gz") !== false)
             {
                 $f = gzopen($ename.$current_version, "r");
                 $text = gzread($f, 10000000);
