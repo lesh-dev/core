@@ -166,7 +166,7 @@ if (!@$_GET["page"])
     else
     {
         if ($is_editor)
-            include(translate('<! cms/light_edit_table !>'));
+            include(translate('<! cms/edit_table !>'));
         else
         {?>
             <div class="admin-widget">У вас нет прав для редактирования содержимого.<br/>
