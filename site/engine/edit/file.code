@@ -39,8 +39,7 @@
                 rename($ename, $target_name);
                 $old_text = file_get_contents($target_name);
                 $old_text = xcms_wrap_long_lines($old_text);
-                if (file_exists($target_name))
-                    system("gzip $target_name");
+                system("gzip $target_name");
             }
             $new_text = @$_POST["edit-text"];
             $new_text = xcms_wrap_long_lines($new_text);
