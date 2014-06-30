@@ -30,16 +30,13 @@
             $old_text = "";
             if (file_exists($ename))
             {
-                // preserve old version
+                // preserve old version to $archived_name
                 @chmod($ename, 0666); // see bug #64
-                $target_name = "$ename-version-$time-$login";
-                //@unlink("$target_name.gz"); // remove previous version if exists, see #595
-                // it is a non-trivial question: what version should be replaced: ancient one
-                // or previous-in-current-session
-                rename($ename, $target_name);
-                $old_text = file_get_contents($target_name);
+                $archived_name = "$ename-version-$time-$login";
+                rename($ename, $archived_name);
+                $old_text = file_get_contents($archived_name);
                 $old_text = xcms_wrap_long_lines($old_text);
-                system("gzip $target_name");
+                system("gzip $archived_name");
             }
             $new_text = @$_POST["edit-text"];
             $new_text = xcms_wrap_long_lines($new_text);
