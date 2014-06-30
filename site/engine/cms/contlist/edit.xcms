@@ -3,7 +3,7 @@ require_once("${engine_dir}sys/groups.php");
 require_once("${engine_dir}edit/page_diff.php");
 
 # TODO: dynamic loading
-require_once("${engine_dir}cms/news/get_template.xcms");
+require_once("${engine_dir}cms/news/get_template.php");
 
 function xcms_create_contlist()
 {
