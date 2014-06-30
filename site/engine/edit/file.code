@@ -26,7 +26,7 @@
         {
             $login = xcms_user()->login();
             $time = time();
-            //$time = (integer)($time / 100) * 100;
+            $time = (integer)($time / 100) * 100;
             $old_text = "";
             if (file_exists($ename))
             {
@@ -34,9 +34,16 @@
                 @chmod($ename, 0666); // see bug #64
                 $archived_name = "$ename-version-$time-$login";
                 rename($ename, $archived_name);
+
+                // get diff
                 $old_text = file_get_contents($archived_name);
                 $old_text = xcms_wrap_long_lines($old_text);
-                system("gzip $archived_name");
+
+                // save the very first version with this (rounded) timestamp
+                if (file_exists("$archived_name.gz"))
+                    @unlink($archived_name); // version with this timestamp already exists, drop it
+                else
+                    system("gzip $archived_name");
             }
             $new_text = @$_POST["edit-text"];
             $new_text = xcms_wrap_long_lines($new_text);
