@@ -137,45 +137,6 @@ function xcms_get_tag_list($tag_name)
     }
 }
 
-/**
-  * deprecated function, do not use
-  **/
-function saveList($list, $filename)
-{
-    global $tag_php_delim;
-    $output = "";
-
-    $output .= "_defend".$tag_php_delim."<?php die(); ?".'>'."\n";
-
-    foreach ($list as $key=>$value)
-    {
-        if ($key=="") continue;
-        if ($key[0]=='_') continue;
-        $output .= $key.$tag_php_delim.$value."\n";
-    }
-    xcms_write($filename, $output);
-}
-
-/**
-  * deprecated function, do not use
-  **/
-function getList($filename)
-{
-    global $tag_php_delim;
-    $s = file($filename);
-    $rez = array();
-    foreach ($s as $key=>$value)
-    {
-        $v = str_replace("\n", "", $value);
-        $v = str_replace("\r", "", $v);
-        $k = explode($tag_php_delim, $v, 2);
-        if($k[0] == "_defend") continue;
-        @$rez[$k[0]] = @$k[1];
-    }
-    return $rez;
-}
-
-
 function xcms_draw_text_tag($id, $value, $is_longtext, $placeholder = "")
 {
     if ($is_longtext)

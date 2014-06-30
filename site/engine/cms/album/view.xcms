@@ -46,12 +46,12 @@
 
     if(@$_GET["img"])
     {
-        $list = getList("$page_path/{$_GET["img"]}.pic");
+        $list = xcms_get_list("$page_path/{$_GET["img"]}.pic");
         $name = $list["name"];
         $comment = $list["comment"];
         echo "<center><div><b>$name</b></div><img src=\"$page_path/{$_GET["img"]}.jpeg\"><i>$comment</i></center>";
         @$list["views"]++;
-        saveList($list, "$page_path/{$_GET["img"]}.pic");
+        xcms_save_list("$page_path/{$_GET["img"]}.pic", $list);
     }
     else
     {
@@ -67,7 +67,7 @@
             if ($picnumber>($photono+1)*($onPage))
                 break;
 
-            $list = getList($value);
+            $list = xcms_get_list($value);
             //$pre = $list["prename"];
             $pic = $list["picname"];
             $value = str_replace(".pic", "", $value);

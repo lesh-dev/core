@@ -35,13 +35,13 @@
         $LIST["owner"] = xcms_user()->login();
         if (!file_exists("$dir/{$LIST["cat"]}.cat"))
             xcms_write("$dir/{$LIST["cat"]}.cat", " ");
-        saveList($LIST, $lpic);
+        xcms_save_list($lpic, $LIST);
     }
 
     if(@$_POST["Album-Delete-image"])
     {
         $name = stripslashes(@$_POST["name"]);
-        $dlst = getList($name);
+        $dlst = xcms_get_list($name);
         @unlink($name);
         @unlink($dlst["picname"]);
         @unlink($dlst["prename"]);
@@ -76,7 +76,7 @@
     echo '<h3>Фотографии</h3><table>';
     foreach ($piclist as $key=>$value)
     {
-        $lst = getList($value);
+        $lst = xcms_get_list($value);
         $imgv = str_replace(".pic", "", $value);
         $imgv = str_replace("$dir/", "", $imgv);
         echo "<tr>
