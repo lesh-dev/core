@@ -141,10 +141,6 @@ if (!@$_GET["page"])
             ?><div class="notice">Список alias-ов успешно обновлён</div>
         </div><?php
     }
-    elseif(@$_GET["mode"]=="taglist")
-    {
-        include(translate('<! edit/taglistadmin !>'));
-    }
     elseif(@$_GET["mode"]=="access")
     {
         include(translate("<! cms/access_edit !>"));
