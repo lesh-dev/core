@@ -1,0 +1,27 @@
+<h3>Матрица доступа</h3>
+<table class="access-editor">
+    <tr>
+        <th>Группа</th>
+        <th>Чтение</th>
+        <th>Запись</th>
+    </tr>
+<?php
+    global $engine_dir;
+    require_once("$engine_dir/sys/groups.php");
+    foreach (xcms_all_groups() as $g=>$translation)
+    {
+        if (xu_empty($translation))
+            continue;
+        $chv = "";
+        $che = "";
+        if ($g == "#all") { $chv = "checked"; }
+        if ($g == "#editor") { $che = "checked"; }
+        if ($g == "#admin") { $che = "checked"; }
+        echo
+            "<tr><td>$translation</td>".
+            "<td><input type=\"checkbox\" name=\"view_$g\" id=\"view_$g-checkbox\" $chv /></td>".
+            "<td><input type=\"checkbox\" name=\"edit_$g\" id=\"edit_$g-checkbox\" $che /></td>".
+            "</tr>";
+    }
+?>
+</table>
