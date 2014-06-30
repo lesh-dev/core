@@ -103,59 +103,54 @@ if (!@$_GET["page"])
                 xcmst_page_info($INFO, $pageid);
             ?>
 <?php
-    if(@$_GET["mode"]=="change_passwd")
+    if (@$_GET["mode"]=="change_passwd")
     {
         include(translate('<! auth/chpassw !>'));
     }
-    else if(@$_GET["mode"]=="cleanprec") include(translate("<! cleanprec !>"));
-    else if(@$_GET["mode"]=="delete")
+    else if (@$_GET["mode"] == "cleanprec") include(translate("<! cleanprec !>"));
+    else if (@$_GET["mode"] == "delete")
         include(translate("<! cms/page/delete_page !>"));
-    else if(@$_GET["mode"]=="edit_alias")
+    else if (@$_GET["mode"] == "edit_alias")
         include(translate("<! cms/page/alias !>"));
-    else if(@$_GET["mode"]=="edit_header")
+    else if (@$_GET["mode"] == "edit_header")
         include(translate("<! cms/page/header !>"));
-    else if(@$_GET["mode"]=="edit_meta")
+    else if (@$_GET["mode"] == "edit_meta")
         include(translate("<! cms/edit_meta_tags !>"));
-    else if(@$_GET["mode"]=="edit_menu")
+    else if (@$_GET["mode"] == "edit_menu")
         include(translate("<! cms/menu/edit_menu !>"));
-    else if(@$_GET["mode"]=="page_rename")
+    else if (@$_GET["mode"] == "page_rename")
         include(translate("<! cms/page/rename_page !>"));
-    else if(@$_GET["mode"]=="edit_icon")
+    else if (@$_GET["mode"] == "edit_icon")
         include(translate("<! cms/light_icon_editor !>"));
-    else if(@$_GET["mode"]=="obsolete_settings")
-    {
-        $editfile = xcms_get_info_file_name();
-        include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
-    }
-    else if(@$_GET["mode"]=="edit_attach")
+    else if (@$_GET["mode"] == "edit_attach")
         include(translate("<! cms/edit_page_attachments !>"));
-    else if(@$_GET["mode"]=="mailer" )
+    else if (@$_GET["mode"] == "mailer" )
     {
         $editfile = "{$SETTINGS["content_dir"]}cms/mailer.conf";
         include(translate('<! edit/tag `edit`,`view`,`installed` `longtext` !>'));
     }
-    else if(@$_GET["mode"]=="rebuild_alias")
+    else if (@$_GET["mode"] == "rebuild_alias")
     {?>
         <div class="admin-widget"><?php
             xcmst_rebuild_aliases_and_rewrite();
             ?><div class="notice">Список alias-ов успешно обновлён</div>
         </div><?php
     }
-    elseif(@$_GET["mode"]=="access")
+    elseif (@$_GET["mode"] == "access")
     {
         include(translate("<! cms/access_edit !>"));
     }
-    elseif(@$_GET["mode"]=="user_manage")
+    elseif (@$_GET["mode"] == "user_manage")
     {
         $preface = xcms_url(array('ref'=>'admin', 'mode'=>'user_manage', 'page'=>$pageid));
         include(translate("<! auth/admin !>"));
     }
-    elseif(@$_GET["mode"]=="myprofile")
+    elseif (@$_GET["mode"] == "myprofile")
     {
         $preface = xcms_url(array('ref'=>'admin', 'mode'=>'myprofile', 'page'=>$pageid));
         include(translate("<! auth/myprofile !>"));
     }
-    elseif(@$_GET["mode"]=="create_page")
+    elseif (@$_GET["mode"] == "create_page")
     {
         include(translate("<! cms/create_page_form !>"));
     }
