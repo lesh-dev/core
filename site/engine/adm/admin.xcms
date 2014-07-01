@@ -132,7 +132,7 @@ if (!@$_GET["page"])
     else if (@$_GET["mode"] == "rebuild_alias")
     {?>
         <div class="admin-widget"><?php
-            xcmst_rebuild_aliases_and_rewrite();
+            xcmst_rebuild_aliases_and_rewrite(true);
             ?><div class="notice">Список alias-ов успешно обновлён</div>
         </div><?php
     }
