@@ -2,7 +2,7 @@
 <html><head>
     <title>Contest</title>
     <# cms/bootstrap #>
-    <# cms/jquery #>
+    <# js/jquery #>
     <link href="<# full_design_dir #>css/<# css_version #>contest.css" rel="stylesheet" media="screen">
 </head>
 <body>

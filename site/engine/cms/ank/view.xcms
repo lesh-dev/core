@@ -6,10 +6,10 @@ require_once("${engine_dir}cms/ank/ank-proc.php");
 <# cms/ank/middleware #>
 <# cms/ank/db-actions #>
 <# cms/ank/format #>
-<# cms/jquery #>
-<script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
-<script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/xsm.js"; ?>"></script>
-<script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/control-depends.js"; ?>"></script>
+<# js/jquery #>
+<# js/public common.js #>
+<# js/public xsm.js #>
+<# js/public control-depends.js #>
 
 <?php
     $aparam = xcms_get_key_or($_GET, "aparam");

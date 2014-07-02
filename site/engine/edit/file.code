@@ -121,8 +121,7 @@
     <pre style="width: 800px; height: 500px; border: 1px solid rgb(236, 199, 173); font-size: 14px;"
         name="edit-text-ace" id="edit-text-ace"><?php echo $text; ?></pre>
 
-    <script language="javascript" charset="utf-8" type="text/javascript"
-        src="<?php echo "${full_engine_pub}ace/ace.js"; ?>"></script>
+    <?php include(translate('<! js/ace !>')); ?>
     <script>
         function xcms_escape_html(text) {
             return text

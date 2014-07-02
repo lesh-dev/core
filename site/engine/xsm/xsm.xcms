@@ -3,10 +3,10 @@
 <head>
     <# cms/head #>
     <link rel="stylesheet" type="text/css" href="<# full_design_dir #>css/<# css_version #>default.css" />
-    <# cms/jquery #>
-    <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
-    <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/xsm.js"; ?>"></script>
-    <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/control-depends.js"; ?>"></script>
+    <# js/jquery #>
+    <# js/public common.js #>
+    <# js/public xsm.js #>
+    <# js/public control-depends.js #>
 </head>
 <body>
 <?php

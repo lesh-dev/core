@@ -55,8 +55,8 @@ if (!@$_GET["page"])
     <head>
         <# cms/head #>
         <link rel="stylesheet" type="text/css" href="<?php echo "${full_engine_pub}css/admin.css"; ?>" />
-        <# cms/jquery #>
-        <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
+        <# js/jquery #>
+        <# js/public common.js #>
     </head>
     <body>
         <script language="javascript" type="text/javascript">

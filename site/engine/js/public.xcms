@@ -1,0 +1,4 @@
+<?php
+    global $full_engine_pub;
+    // %1 = script name
+?><script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/%1"; ?>"></script>
