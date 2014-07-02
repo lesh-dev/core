@@ -407,7 +407,8 @@ table.access-editor {
     margin-bottom: 10px;
 }
 
-table.access-editor th {
+table.access-editor th,
+table.sitemap th {
     text-align: left;
 }
 
