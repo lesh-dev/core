@@ -54,7 +54,12 @@ function xcms_collect_aliases_int(&$aliases, $dir, $root_len)
         $page_id = substr($dir, $root_len + 1);
         $cur_alias = xcms_get_key_or($cur_info, "alias");
         if (xu_not_empty($cur_alias))
+        {
+            if (array_key_exists($cur_alias, $aliases))
+                throw new Exception("Duplicate aliases for pages '$info_fn' and '".
+                    $aliases[$cur_alias]."'. ");
             $aliases[$cur_alias] = $page_id;
+        }
     }
     foreach ($subdirs as $subdir)
     {
