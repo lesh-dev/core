@@ -7,8 +7,8 @@ if (!@$_GET["page"])
 ?><# locale #><?php
 ?><# url #><?php
 ?><# adm/page_info #><?php
-    include_once("${engine_dir}cms/alias.php");
-    include_once("${engine_dir}cms/build_rewrite.php");
+    require_once("${engine_dir}cms/alias.php");
+    require_once("${engine_dir}cms/build_rewrite.php");
     $INFO = xcms_get_list(xcms_get_info_file_name());
     $aux_edit_groups = xcms_get_key_or($INFO, "edit");
     include(translate("<! auth/ #editor #admin $aux_edit_groups !>"));
