@@ -34,7 +34,7 @@
 </div>
 </span>
 <script language="javascript" type="text/javascript">
-    AddSlider('status-help', 'show-status-help');
+    xjs_add_slider('status-help', 'show-status-help');
 </script>
 
 <form method="post" name="filter" id="filter-form" action="list-ank"><span>

@@ -1,12 +1,12 @@
-function AddSlider(elId, showElId) {
+function xjs_add_slider(el_id, show_el_id) {
     $(document).ready(
         function() {
-            elId = '#' + elId;
-            showElId = '#' + showElId;
-            $(elId).hide();
-            $(showElId).click(
+            el_id = '#' + el_id;
+            show_el_id = '#' + show_el_id;
+            $(el_id).hide();
+            $(show_el_id).click(
                 function() {
-                    $(elId).slideToggle(400);
+                    $(el_id).slideToggle(400);
                     return false;
                 });
         });
