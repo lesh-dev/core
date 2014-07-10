@@ -76,6 +76,7 @@
         $vfiles_list = array_reverse(glob("$ename-version-*"));
         foreach ($vfiles_list as $k=>$v)
         {
+            // TODO: fix it, when no login specified
             $timestamp = preg_replace("/.*-version-([0-9]+)[.-].*/", "\\1", $v);
             $rests = preg_replace("/.*-version-[0-9]+([.-].*)/", "\\1", $v);
             $author_suffix = preg_replace('/\.gz$/', "", $rests);
