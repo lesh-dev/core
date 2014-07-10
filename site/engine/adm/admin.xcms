@@ -57,10 +57,11 @@ if (!@$_GET["page"])
         <link rel="stylesheet" type="text/css" href="<?php echo "${full_engine_pub}css/admin.css"; ?>" />
         <# js/jquery #>
         <# js/public common.js #>
+        <# js/public control-depends.js #>
     </head>
     <body>
         <script language="javascript" type="text/javascript">
-            AddSlider('editor-help', 'show-editor-help');
+            xjs_add_slider('editor-help', 'show-editor-help');
         </script>
         <?php $is_editor = xcms_user()->check_rights("editor", false); ?>
         <?php $is_admin = xcms_user()->check_rights("admin", false); ?>

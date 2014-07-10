@@ -1,8 +1,12 @@
 function xjs_is_too_small_text(id)
 {
-    var val = $('#' + id).val();
+    var ele = $('#' + id);
+    var min_length = ele.data('dep-min-length');
+    if (!min_length)
+        min_length = 10;
+    var val = ele.val();
     val = $.trim(val);
-    return (val.length < 10);
+    return (val.length < min_length);
 }
 
 function xjs_check_custom_dep_handler(id)
@@ -54,7 +58,7 @@ function xjs_check_dependencies(id)
     xjs_toggle_element(id, enabled);
 }
 
-function xjs_set_depends_on(id, dependency_id, custom_handler)
+function xjs_set_depends_on(id, dependency_id, custom_handler, min_length)
 {
     var node = $('#' + id);
     var deps = node.data('dependencies');
@@ -66,10 +70,22 @@ function xjs_set_depends_on(id, dependency_id, custom_handler)
     var dep_node = $('#' + dependency_id);
     if (custom_handler)
         dep_node.data('custom-dep-handler', custom_handler);
+    if (min_length)
+        dep_node.data('dep-min-length', min_length);
 
     dep_node.change(xjs_check_dependencies.bind(null, id));
     dep_node.bind('input', xjs_check_dependencies.bind(null, id));
 
     // check dependencies for the first time (initial state)
     xjs_check_dependencies(id);
+}
+
+/**
+  * Deferred variant of `xjs_set_depends_on`
+  **/
+function xjready_set_depends_on(id, dependency_id, custom_handler, min_length)
+{
+    $(document).ready(function() {
+        xjs_set_depends_on(id, dependency_id, custom_handler, min_length);
+    });
 }

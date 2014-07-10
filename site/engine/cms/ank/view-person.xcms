@@ -402,7 +402,7 @@ function xsm_print_person_ank_data($db, $person)
     xsm_draw_person_longtextval('main', $fields['lesh_ref'], $lesh_ref);
     ?></div>
     <script>
-        AddSlider('extra-person-info', 'show-extra-person-info');
+        xjs_add_slider('extra-person-info', 'show-extra-person-info');
     </script>
     <?php
     xsm_draw_person_comments($db, $person_id);
