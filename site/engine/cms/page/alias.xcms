@@ -35,7 +35,10 @@ function xcmst_check_alias($info)
     foreach ($aliases as $alias=>$value)
     {
         if ($value == $pageid)
+        {
             unset($aliases[$alias]);
+            break;
+        }
     }
     $aliases[$new_alias] = $pageid;
     xcms_save_aliases($aliases);

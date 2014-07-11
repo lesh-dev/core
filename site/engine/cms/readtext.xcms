@@ -30,7 +30,15 @@ if ($need)
     $limit = -1;
 
     $aliases = xcms_get_aliases();
-    $cur_alias = xcms_get_key_or($aliases, $pageid); // bug here (reverse keys!)
+    // TODO: api helper here
+    foreach ($aliases as $alias=>$path)
+    {
+        if ($path == $pageid)
+        {
+            $cur_alias = $alias;
+            break;
+        }
+    }
 
     $next_link = "/${web_prefix}$cur_alias";
     $next_text = "more";
