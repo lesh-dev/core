@@ -17,7 +17,7 @@ if (!@$_GET["page"])
     if (@$_POST["create-page"])
         $page_creation_result = xcms_create_page();
 
-    if(@$_POST["delete-section"])
+    if (@$_POST["delete-section"])
     {
         $dir = xcms_get_page_path($pageid);
         $list = glob("$dir/*", GLOB_ONLYDIR);
@@ -34,20 +34,12 @@ if (!@$_GET["page"])
                     unlink($value);
             }
             rmdir($dir);
-            echo '<script>alert("Удалено");</script>';
-            translate("<! redir admin 0!>");
-            $pageid = "index";
-            for ($i = strlen($pageid) - 1; $i >= 0; $i--)
-            {
-                if ($pageid[$i]=='/')
-                {
-                    $pageid[$i] = substr($pageid, 0, $i - 1);
-                    break;
-                }
-            }
-
+            xcmst_rebuild_aliases_and_rewrite();
+            translate("<! redir admin 0 !>");
+            $pageid = "index"; // dead code was here
             $INFO = xcms_get_list(xcms_get_info_file_name());
-            @$_GET["mode"]="";
+            @$_GET["mode"] = "";
+
         }
     }
 ?><!DOCTYPE html>
