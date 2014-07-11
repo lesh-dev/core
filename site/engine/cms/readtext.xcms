@@ -1,13 +1,12 @@
 <?php
 /*
-    ReadText -- a new readfile implementation
     Syntax:
     <# readtext  [--markdown] [--limit=number] [--next-link=url] [--next-text=text] [--file=file_name] #>
         --file -- имя файла, которое нужно зачитать. Если опущено -- читается из переменной $source
         --markdown -- указыавет на то, что текст нужно интерпретировать markdown-ом
         --limit -- ограничение на число знаков
-        --next-link-url -- указывает гиперссылку на полный текст
-        --next-link-text -- указывает текст ссылки, ведущий на полный текст
+        --next-link -- указывает гиперссылку на полный текст
+        --next-text -- указывает текст ссылки, ведущий на полный текст
         --text -- указыавет на то, что переменная $text уже зачитана и нужно отобразить текст,
             что в ней находится. Переменная $source (имя файла) по-прежнему
             имеет значение (в смысле кэширования)
@@ -31,31 +30,31 @@ if ($need)
     $limit = -1;
 
     $aliases = xcms_get_aliases();
-    $cur_alias = xcms_get_key_or($aliases, $pageid);
+    $cur_alias = xcms_get_key_or($aliases, $pageid); // bug here (reverse keys!)
 
     $next_link = "/${web_prefix}$cur_alias";
     $next_text = "more";
     foreach ($argv as $arg)
     {
-        if($arg == "--markdown")
+        if ($arg == "--markdown")
             $markdown = true;
-        if($arg == "--text")
+        if ($arg == "--text")
             $text_defined = true;
         elseif (strpos($arg, "="))
         {
             // TODO: quotes support
             $arr = explode(EXP_EQ, $arg, 2);
-            if($arr[0] == "--limit")
+            if ($arr[0] == "--limit")
                 $limit = $arr[1];
-            if($arr[0] == "--next-link")
+            if ($arr[0] == "--next-link")
                 $next_link = $arr[1];
-            if($arr[0] == "--next-text")
+            if ($arr[0] == "--next-text")
                 $next_text = $arr[1];
-            if($arr[0] == "--file")
+            if ($arr[0] == "--file")
                 $source = $arr[1];
         }
     }
-    if(!$text_defined)
+    if (!$text_defined)
         $text = file_get_contents($source);
     //// Обработка синтаксиса
     //// ${prefix} раскрывается в путь до текущего $pageid
@@ -87,15 +86,15 @@ if ($need)
         $name = $notation;
         $name = str_replace("$dir", "", $name);
         $name = str_replace(".php", "", $name);
-        while(1)
+        while (1)
         {
-            $p = strpos($text, "\${"."$name");
-            if($p === FALSE)
+            $p = strpos($text, '${'.$name); // do not merge these two strings, parser will fail here
+            if ($p === false)
                 break;
-            $l = strpos($text, "}", $p);
-            $target = substr($text, $p, $l-$p);
-            $target = substr($target, strlen($name)+3);
-            if(strlen($target))
+            $l = strpos($text, '}', $p);
+            $target = substr($text, $p, $l - $p);
+            $target = substr($target, strlen($name) + 3);
+            if (strlen($target))
                 $uargs = explode(EXP_COL, $target);
             else
                 $uargs = array();
@@ -106,7 +105,7 @@ if ($need)
             }
             $text = substr($text, 0, $p).
                 "<?php $idata ; include(\"$engine_dir/plugins/dollar/$name.php\"); ?>".
-                substr($text, $l+1);
+                substr($text, $l + 1);
         }
     }
     //// Обработка синтаксиса: [[Текст ссылки:pageid]]
