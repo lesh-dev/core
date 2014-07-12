@@ -148,9 +148,10 @@ h3 {
     font-size: 14px;
 }
 
-.sidebar_top ul li, .sidebar_bottom ul li{
+.sidebar_top ul li,
+.sidebar_bottom ul li {
     display: inline;
-    line-height:12px;
+    line-height: 14px;
     color: black;
 }
 
@@ -728,15 +729,15 @@ ul.menu li {
 
 .menu-level1 {
     padding-left: 14px;
-    font-size: 13px;
+    font-size: 14px;
 }
 .menu-level2 {
     padding-left: 14px;
-    font-size: 11px;
+    font-size: 13px;
 }
 .menu-level3 {
     padding-left: 14px;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 a.menu-item {

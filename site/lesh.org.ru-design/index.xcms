@@ -64,6 +64,9 @@ function xcms_print_related_links()
         <ul class="menu">
             <# cms/menu/display start=2 end=2 #>
         </ul>
+        <ul class="menu">
+            <# cms/menu/display start=3 end=3 #>
+        </ul>
     </div>
 
     <div class="sidebar-right">
