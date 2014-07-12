@@ -70,12 +70,6 @@ if [ -z "$DEST_NAME" ] ; then
     DEST_NAME="forum.fizlesh.ru"
 fi
 
-function install_fresh_db()
-{
-    message "Creating fresh database"
-    mysql -uroot fizlesh.ru-forum < ./install_1.1.sql
-}
-
 # site root
 DEST="/var/www/html/$DEST_NAME"
 if [ "$user" == "mvel" ] ; then
@@ -120,8 +114,6 @@ fi
 
 message "Copying all stuff to destination. "
 sudo cp -a $VERBOSE ./* "$DEST/"
-
-install_fresh_db
 
 sudo chown -R $HTTPD_USER:$HTTPD_USER "$DEST"
 
