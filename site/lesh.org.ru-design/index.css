@@ -77,7 +77,6 @@ h3 {
 .indent_form a,
 .main_text a, .bottom_text a,
 .length_of_text a{
-    font-size: 14px;
     color: #4F4F4F;
 }
 
@@ -143,7 +142,7 @@ h3 {
     padding-left: 50px;
 }
 
-.sidebar_top ul{
+.sidebar_top ul {
     list-style-type: none;
     font-size: 14px;
 }
@@ -363,7 +362,7 @@ p.grey_fond{
     padding: 7px 0px 0px 10px;
 }
 
-.length_of_text p.note_bottom{
+.length_of_text p.note_bottom {
     padding-bottom: 10px;
     margin-left: -30px;
     font-size: 12px;

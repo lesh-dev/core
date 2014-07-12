@@ -158,8 +158,8 @@ if ($need)
         $text);
     $text = str_replace("</code>", "</div></div>", $text);
     //// Обработка кавычек-ёлочек
-    $text = str_replace("<<", "&laquo;", $text);
-    $text = str_replace(">>", "&raquo;", $text);
+    $text = preg_replace('/([^<]|^)<</s', '\1&laquo;', $text);
+    $text = preg_replace('/>>([^>]|$)/s', '&raquo;\1', $text);
     //// Обработка тире и неразрывных пробелов
     $text = str_replace("---", "&#8212;", $text);
     // Попытка что-то сделать с #617
