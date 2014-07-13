@@ -21,11 +21,11 @@ if (!@$_GET["page"])
     {
         if (xcms_delete_page($pageid))
         {
-            $last_action_result = "<div class=\"info\">Раздел успешно удалён</div>";
+            $last_action_result = "<div class=\"info\">Раздел успешно удалён. Сейчас вы будете перенаправлены на главную страницу...</div>";
             xcmst_rebuild_aliases_and_rewrite();
-            translate("<! redir admin 2 !>");
             $pageid = "index";  // dead code was here
             $INFO = xcms_get_list(xcms_get_info_file_name());
+            include(translate("<! redir admin 1 !>"));
         }
         else
         {
