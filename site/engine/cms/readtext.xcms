@@ -29,6 +29,7 @@ if ($need)
     $text_defined = false;
     $limit = -1;
 
+    $cur_alias = "";  // will be wrongly calculated when alias is not defined
     $aliases = xcms_get_aliases();
     // TODO: api helper here
     foreach ($aliases as $alias=>$path)
