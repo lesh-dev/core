@@ -197,13 +197,13 @@ function template_main_above()
 	echo '</td>
 				<td align="right" class="catbg" style="white-space: nowrap;">
  					<!--<img src="', $settings['images_url'], '/smflogo.gif" style="margin: 2px;" alt="" />-->
-					
+
 					<span><form action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '" style="margin: 0;">
 						<a href="', $scripturl, '?action=search;advanced" style="vertical-align: bottom"><img src="'.$settings['images_url'].'/search-small.png" style="align: middle; margin: 0 .5ex;" alt="Advanced Search" title="Advanced Search"/></a>
 						<input type="text" id="search" name="search" value="" style="width: 190px;" />&nbsp;';
 						makeSubmit('Search', 100, $txt[182]);
 						echo '<input type="hidden" name="advanced" value="0" />';
-		
+
 					// Search within current topic?
 					if (!empty($context['current_topic'])) {
 						echo '<input type="hidden" name="topic" value="', $context['current_topic'], '" />';
@@ -343,7 +343,7 @@ function template_main_below()
 	<div id="footerarea" style="text-align: center; padding-bottom: 1ex;', $context['browser']['needs_size_fix'] && !$context['browser']['is_ie6'] ? ' width: 100%;' : '', '">',
 	'<span class="smalltext copyright">',
 	'Powered by <a href="http://www.simplemachines.org/" title="Simple Machines Forum" target="_blank">SMF 1.1.11</a>, &copy; 2006&#8211;2009.',
- 	' Changes &amp; tweaks &copy; <a href="http://fizlesh.ru">fizlesh.ru</a> team, 2010 [Version '.trim(file_get_contents('version')).']',
+ 	' Changes &amp; tweaks &copy; <a href="http://fizlesh.ru">fizlesh.ru</a> team, 2010&#8211;'.date('Y').' [Version '.trim(file_get_contents('VERSION')).']',
 	'</span>';
 
 		// Show the load time?
@@ -419,7 +419,7 @@ function drawMainMenuButton($sAction, $sTitle, $current_action, $first, $last, $
 	echo ($bActive || $context['browser']['is_ie4']) ?
 		'<td class="maintab_active_' . $first . '">&nbsp;</td>' : '' ,
 		'<td valign="top" class="maintab_' , ($bActive ? 'active_back' : 'back') , '">';
-	
+
 	echo '<a href="', $scripturl, '?action=', $sAction.$sSessionSpike, '">', $sTitle, '</a>
 		</td>' , ($bActive ? '<td class="maintab_active_'.$last.'">&nbsp;</td>' : '');
 	return $bActive;
