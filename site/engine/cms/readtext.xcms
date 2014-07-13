@@ -29,18 +29,7 @@ if ($need)
     $text_defined = false;
     $limit = -1;
 
-    $cur_alias = "";  // will be wrongly calculated when alias is not defined
-    $aliases = xcms_get_aliases();
-    // TODO: api helper here
-    foreach ($aliases as $alias=>$path)
-    {
-        if ($path == $pageid)
-        {
-            $cur_alias = $alias;
-            break;
-        }
-    }
-
+    $cur_alias = xcms_get_page_alias($pageid);  // empty alias when not found
     $next_link = "/${web_prefix}$cur_alias";
     $next_text = "more";
     foreach ($argv as $arg)
@@ -143,9 +132,10 @@ if ($need)
         $text);
 
     // TODO (#204): это костыли, надо их выкинуть или написать нормально. Не должно быть на странице
-    // никаких ссылок, кроме как через теги. В любом случае искать в урлах последовательность
+    // никаких ссылок, кроме как через alias-ы. В любом случае искать в урлах последовательность
     // вида ref=index&page=... это очень странно
-    //// Замена всех ссылок на страницы на их тег-версии
+    //// Замена всех ссылок на страницы на их alias-ы
+    $aliases = xcms_get_aliases();
     if ($aliases) foreach ($aliases as $alias=>$page)
     {
         $text = str_replace("?ref=index&page=$page\"", "$alias\"", $text);

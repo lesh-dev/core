@@ -41,6 +41,20 @@ function xcms_save_aliases($list)
 }
 
 /**
+  * Return page alias by page id
+  **/
+function xcms_get_page_alias($page_id)
+{
+    $aliases = xcms_get_aliases();
+    foreach ($aliases as $alias=>$path)
+    {
+        if ($path == $page_id)
+            return $alias;
+    }
+    return "";
+}
+
+/**
   * Internal-usage function (@sa xcms_collect_aliases)
   * and should not be invoked directly
   **/
