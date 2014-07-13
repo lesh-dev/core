@@ -60,3 +60,7 @@ span.class-school-num {
 span.class-school-num.diff {
     color: #00009f;
 }
+
+span.xsm-header {
+    font-size: 20px;
+}

@@ -72,7 +72,7 @@ function xsm_edit_course()
 
         <table class="ankEdit">
             <tr>
-                <td class="ankListRowTitle">Курс</td>
+                <td class="ankListRowTitle"><span class="xsm-header">Редактирование курса</span></td>
             </tr>
             <tr><td class="ankList">
                 <span class="ankEditField mid">Препод(ы)</span><?php
