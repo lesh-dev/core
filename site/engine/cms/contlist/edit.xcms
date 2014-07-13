@@ -126,9 +126,9 @@ function xcms_draw_contlist_create($result = true)
                 "Это заголовок новости, напишите его!"); ?></td>
         </tr>
         <tr>
-            <td>Тип блока</td>
+            <td>Тип блока (<a href="https://dev.fizlesh.ru/lesh/ticket/766">только новости</a>)</td>
             <td>
-                <select name="pagetype"><?php
+                <select disabled="disabled" name="pagetype"><?php
     $list = glob("{$SETTINGS["engine_dir"]}cms/*.pagetype");
     foreach ($list as $value)
     {
