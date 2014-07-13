@@ -15,11 +15,11 @@ function xsm_edit_course_teachers()
     $course_teachers = xsm_get_course_teachers_list($db, $course_id, $school_id);
 
     $course_title = xcms_get_key_or_enc($course, 'course_title');
-    $course_href = "view-course".xcms_url(array('course_id'=>$course_id));
+    $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
     ?>
     <table class="ankEdit">
         <tr><td class="ankListRowTitle">Преподы курса
-            <a href="<?php echo $course_href; ?>"><?php echo $course_title; ?></a></td></tr><?php
+            <a href="<?php echo $course_url; ?>"><?php echo $course_title; ?></a></td></tr><?php
 
         $already_added = array();
         foreach ($course_teachers as $course_teachers_id => $teacher_data)
@@ -47,6 +47,10 @@ function xsm_edit_course_teachers()
             ?>
             <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" />
             <input type="submit" name="add-teacher" value="Добавить" />
+        </td></tr>
+        <tr><td class="ankList">
+            <a id="return-to-course" class="link-button ank"
+                href="<?php echo $course_url; ?>">Вернуться к просмотру курса</a>
         </td></tr>
         </form>
     </table>
