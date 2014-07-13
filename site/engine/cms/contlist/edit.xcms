@@ -75,30 +75,6 @@ function xcms_create_contlist()
     return true;
 }
 
-/*
-Dead code: not referenced in interface.
-DO NOT DELETE, it's complete section removal code
-*/
-function xcms_delete_contlist()
-{
-    $dir = "{$SETTINGS["content_dir"]}cms/pages/$pageid/{$_POST["delete-section-nax"]}";
-    $list = glob("$dir/*", GLOB_ONLYDIR);
-    if($list)
-    {
-        echo '<script>alert("Не могу удалить! Сначала удалите все подразделы!");</script>';
-    }
-    else
-    {
-        $list = glob("$dir/*");
-        if ($list)
-        {
-            foreach ($list as $key=>$value)
-                unlink($value);
-        }
-        rmdir($dir);
-    }
-}
-
 function xcms_draw_contlist_create($result = true)
 {
     global $SETTINGS, $INFO, $pageid;
@@ -191,10 +167,6 @@ if (@$_POST["contlist-create"])
     if ($result !== true)
         xcms_draw_contlist_create($result);
 }
-elseif (@$_POST["delete-section-nax"])
-    xcms_delete_contlist();
 else
     xcms_draw_contlist_create();
-
-
 ?>

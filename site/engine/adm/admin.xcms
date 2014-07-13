@@ -13,34 +13,25 @@ if (!@$_GET["page"])
     $aux_edit_groups = xcms_get_key_or($INFO, "edit");
     include(translate("<! auth/ #editor #admin $aux_edit_groups !>"));
 ?><# cms/create_page_handler #><?php
-    $page_creation_result = "";
+    $last_action_result = "";
     if (@$_POST["create-page"])
-        $page_creation_result = xcms_create_page();
+        $last_action_result = xcms_create_page();
 
     if (@$_POST["delete-section"])
     {
-        $dir = xcms_get_page_path($pageid);
-        $list = glob("$dir/*", GLOB_ONLYDIR);
-        if ($list)
+        if (xcms_delete_page($pageid))
         {
-            echo '<script>alert("Не могу удалить! Сначала удалите все подразделы!");</script>';
+            $last_action_result = "<div class=\"info\">Раздел успешно удалён</div>";
+            xcmst_rebuild_aliases_and_rewrite();
+            translate("<! redir admin 2 !>");
+            $pageid = "index";  // dead code was here
+            $INFO = xcms_get_list(xcms_get_info_file_name());
         }
         else
         {
-            $list = glob("$dir/*");
-            if ($list)
-            {
-                foreach ($list as $key=>$value)
-                    unlink($value);
-            }
-            rmdir($dir);
-            xcmst_rebuild_aliases_and_rewrite();
-            translate("<! redir admin 0 !>");
-            $pageid = "index"; // dead code was here
-            $INFO = xcms_get_list(xcms_get_info_file_name());
-            @$_GET["mode"] = "";
-
+            $last_action_result = "<div class=\"error\">Пожалуйста, сначала удалите все подразделы!</div>";
         }
+        @$_GET["mode"] = "";
     }
 ?><!DOCTYPE html>
 <html>
@@ -97,6 +88,13 @@ if (!@$_GET["page"])
                 xcmst_page_info($INFO, $pageid);
             ?>
 <?php
+    if (xu_len($last_action_result))
+    {?>
+        <div class="admin-widget"><?php
+        echo $last_action_result;
+        ?></div><?php
+    }
+
     if (@$_GET["mode"]=="change_passwd")
     {
         include(translate('<! auth/chpassw !>'));

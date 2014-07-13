@@ -123,4 +123,22 @@ function xcms_get_subpages($page_id)
     return $page_ids;
 }
 
+function xcms_delete_page($page_id)
+{
+    $dir = xcms_get_page_path($page_id);
+
+    $list = glob("$dir/*", GLOB_ONLYDIR);
+    if ($list)
+        return false;
+
+    $list = glob("$dir/*");
+    if ($list)
+    {
+        foreach ($list as $key=>$value)
+            unlink($value);
+    }
+    rmdir($dir);
+    return true;
+}
+
 ?>
