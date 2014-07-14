@@ -5,6 +5,7 @@ import re
 
 PHP_FILES = ['php', 'code', 'xcms']
 
+
 def print_bad_context(lines, bad_lines):
     line_count = len(lines)
     skip = True
@@ -13,7 +14,7 @@ def print_bad_context(lines, bad_lines):
         ln = i + 1
         if i in bad_lines:
             print '      ', bad_lines[i]
-            print '%3d > %s' % (ln, l) # , '#', bad_lines[i]
+            print '%3d > %s' % (ln, l)
             skip = False
             continue
         if (i+2) in bad_lines or (i+1) in bad_lines:
@@ -65,7 +66,7 @@ def check_code_style(lines, file_type):
             lem = re.match('^[^\x0A\x0D]+$', line)
             # okay, last line may contain no CR-LF chars
             if not lem:
-                add_bad_line(bad_lines, "UNIX-style line endings only allowed" , i)
+                add_bad_line(bad_lines, "UNIX-style line endings only allowed", i)
 
         # spaces count check
         sm = re.search('^[ ]+', line)
@@ -73,7 +74,7 @@ def check_code_style(lines, file_type):
             spaces = sm.group()
             if len(spaces) % 4 != 0:
                 ls = line.lstrip()
-                if ls[0:2] == '* ' or ls == '*\n' or ls[0:3] == '/**' or ls [0:3] == '**/':
+                if ls[0:2] == '* ' or ls == '*\n' or ls[0:3] == '/**' or ls[0:3] == '**/':
                     # okay, it seems like a Doxygen comment (TODO: add entrance/leave) check)
                     pass
                 else:
@@ -108,8 +109,10 @@ def check_code_style(lines, file_type):
         if file_type in PHP_FILES:
             empty_op = re.search('[^a-zA-Z_]empty\(', line)
             if empty_op:
-                add_bad_line(bad_lines, "Operator 'empty' is forbidden for " +
-                    str(PHP_FILES) + " files", i)
+                add_bad_line(
+                    bad_lines,
+                    "Operator 'empty' is forbidden for " + str(PHP_FILES) + " files",
+                    i)
 
     print_bad_context(lines, bad_lines)
     # return 1 if there some errors
@@ -129,6 +132,7 @@ def check_file(name):
             lines.append(line)
 
     return check_code_style(lines, file_type)
+
 
 def print_usage():
     print "Syntax: " + sys.argv[0] + " <file-name-to-check>"
