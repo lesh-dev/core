@@ -8,7 +8,7 @@
         {
             fputs($output_stream, "\$code=\"$code\";");
             fputs($output_stream, "@\$argv[] = \"$value\";");
-            if($key!=0)
+            if ($key != 0)
             {
                 // singular value is a boolean switch
                 $a = explode(EXP_EQ, $value);
@@ -46,7 +46,7 @@
         $elem_full_name = $SETTINGS["engine_dir"].$name;
         $template_full_name = $SETTINGS["design_dir"]."$name.template";
 
-        if(file_exists("$elem_full_name.php"))
+        if (file_exists("$elem_full_name.php"))
         {
             include("$elem_full_name.php");
         }
@@ -67,11 +67,11 @@
                 $new_contents = str_replace("%*", $code, $new_contents);
                 xcms_parse_string($new_contents, $output_stream);
             }
-            elseif(file_exists("$elem_full_name.code"))
+            elseif (file_exists("$elem_full_name.code"))
             {
                 fputs($output_stream, file_get_contents("$elem_full_name.code"));
             }
-            elseif(file_exists($template_full_name))
+            elseif (file_exists($template_full_name))
             {
                 fputs($output_stream, file_get_contents($template_full_name));
             }
@@ -115,7 +115,7 @@
     {
         global $SETTINGS;
         $fname = "{$SETTINGS["precdir"]}transl-".md5($string).".php";
-        if(!file_exists($fname))
+        if (!file_exists($fname))
         {
             $f = fopen($fname, "w");
             $string = str_replace("<!", "<#", $string);
@@ -135,21 +135,17 @@
         global $ref;
 
         // Choose filename
-        if(strlen($refname) != 0 )
-        {
+        if (strlen($refname) > 0)
             $ref = $refname;
-        }
         else
-        {
             $ref = @$_GET["ref"];
-        }
 
         if (!$ref) $ref = $SETTINGS["defaultpage"];
         if (file_exists("$design_dir/$ref.xcms"))
         {
             $main_ref_file = "$design_dir/$ref.xcms";
         }
-        elseif(file_exists("$engine_dir/global/$ref.xcms"))
+        elseif (file_exists("$engine_dir/global/$ref.xcms"))
         {
             $main_ref_file = "$engine_dir/global/$ref.xcms";
         }
