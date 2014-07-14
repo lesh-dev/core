@@ -8,19 +8,21 @@
 <?php
     global $engine_dir;
     require_once("$engine_dir/sys/groups.php");
+    $checked_attr = 'checked="checked"';
     foreach (xcms_all_groups() as $g=>$translation)
     {
         if (xu_empty($translation))
             continue;
-        $chv = "";
-        $che = "";
-        if ($g == "#all") { $chv = "checked"; }
-        if ($g == "#editor") { $che = "checked"; }
-        if ($g == "#admin") { $che = "checked"; }
+        $enable_view = "";
+        $enable_edit = "";
+        if ($g == "#all")
+            $enable_view = $checked_attr;
+        if ($g == "#editor")
+            $enable_edit = $checked_attr;
         echo
             "<tr><td>$translation</td>".
-            "<td><input type=\"checkbox\" name=\"view_$g\" id=\"view_$g-checkbox\" $chv /></td>".
-            "<td><input type=\"checkbox\" name=\"edit_$g\" id=\"edit_$g-checkbox\" $che /></td>".
+            "<td><input type=\"checkbox\" name=\"view_$g\" id=\"view_$g-checkbox\" $enable_view /></td>".
+            "<td><input type=\"checkbox\" name=\"edit_$g\" id=\"edit_$g-checkbox\" $enable_edit /></td>".
             "</tr>";
     }
 ?>
