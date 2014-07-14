@@ -39,6 +39,13 @@ def remove_strings(line):
     return line
 
 
+# removes JS-style regexps from code
+def remove_js_regexps(line):
+    # remove double quotes
+    line = re.sub(r'/[^/]+/\.test\(', '', line)
+    return line
+
+
 # removes bash arrays file{a,bc}
 def remove_file_expansions(line):
     line = re.sub(r'\{[\$a-zA-Z0-9._,-]*?\}', '', line)
@@ -94,6 +101,7 @@ def check_code_style(lines, file_type):
 
         # missing spaces after commas
         line_cleanup = remove_strings(line)
+        line_cleanup = remove_js_regexps(line_cleanup)
         line_cleanup = remove_file_expansions(line_cleanup)
         line_cleanup = re.sub(r',$', '', line_cleanup)
         sac = re.search(r',[^ ]', line_cleanup)
