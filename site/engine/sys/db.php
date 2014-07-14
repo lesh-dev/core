@@ -24,7 +24,9 @@
     {
         global $SETTINGS;
         global $content_dir;
-        $db_name = xcms_get_key_or($SETTINGS, 'xsm_db_name', $content_dir.XDB_DEFAULT_DB_PATH);
+        $rel_db_name = xcms_get_key_or($SETTINGS, 'xsm_db_name', XDB_DEFAULT_DB_PATH);
+        $db_name = $content_dir.$rel_db_name;
+
         $db = new SQlite3($db_name, SQLITE3_OPEN_READONLY);
         // enhance LIKE immediately to obtain proper UTF-8 support
         $db->createFunction('LIKE', 'xdb_like', 2);
@@ -38,7 +40,8 @@
     {
         global $SETTINGS;
         global $content_dir;
-        $db_name = xcms_get_key_or($SETTINGS, 'xsm_db_name', $content_dir.XDB_DEFAULT_DB_PATH);
+        $rel_db_name = xcms_get_key_or($SETTINGS, 'xsm_db_name', XDB_DEFAULT_DB_PATH);
+        $db_name = $content_dir.$rel_db_name;
         return new SQlite3($db_name, SQLITE3_OPEN_READWRITE);
     }
 

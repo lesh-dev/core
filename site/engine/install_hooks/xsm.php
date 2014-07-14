@@ -23,8 +23,8 @@
             "xsm_db_name"=>array(
                 "name"=>"Имя файла БД",
                 "type"=>"string",
-                "default"=>"fizlesh.sqlite3"
-                )
+                "default"=>"ank/fizlesh.sqlite3"
+            )
         );
     }
     /**
@@ -60,6 +60,7 @@
       **/
     function install($config)
     {
+        global $engine_dir;
         $result = xcms_append("settings.php",
             // TODO: привет кавычкам
             "<?php\n/* This block was inserted by installer -- xsm.php.".
@@ -68,6 +69,15 @@
             "\n/* --- */\n?>");
         if (!$result)
             return "Cannot open 'settings.php' for append. ";
+
+        $content_dir = $config["content_dir"];
+        $db_name = $content_dir.$config["xsm_db_name"];
+        if (!file_exists($db_name))
+        {
+            @mkdir(dirname($db_name), 0777, true);
+            if (system("sqlite3 $db_name < $engine_dir/dbpatches/dbinit-v2.sql > $content_dir/dbinit.log 2>&1") != 0)
+                return "DB initialization failed. ";
+        }
         return true;
     }
     } // class
