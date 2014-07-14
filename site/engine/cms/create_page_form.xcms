@@ -57,7 +57,7 @@
 </div>
 <div class="user-descr">Этот текст появится наверху страницы</div>
 
-<# cms/group_access_matrix #>
+<?php xcmst_print_acl(); ?>
 
 <input name="create-page" id="create-page-submit"
     type="submit" value="Создать раздел" />

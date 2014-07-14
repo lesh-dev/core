@@ -131,7 +131,7 @@ function xcms_draw_contlist_create($result = true)
         </tr>
         <tr>
             <td colspan="2">
-                <# cms/group_access_matrix #>
+                <?php xcmst_print_acl(); ?>
             </td>
         </tr>
     </table>

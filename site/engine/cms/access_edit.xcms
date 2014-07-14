@@ -1,48 +1,15 @@
 <div class="admin-widget">
-<form method="post">
-<table class="access-editor">
-    <tr>
-        <th>Чтение</th>
-        <th>Запись</th>
-    </tr>
-    <tr><td>
 <?php
     include_once("${engine_dir}sys/groups.php");
     include_once("${engine_dir}auth/format.php");
-    if (@$_POST["change-access"])
+    if (@$_POST["change_access"])
     {
-        $nview = "";
-        $nedit = "";
-        foreach ($_POST as $key=>$value)
-        {
-            if (substr($key, 0, 5)=="edit-")
-                $nedit = substr($key, 5)." ".$nedit;
-            if (substr($key, 0, 5)=="view-")
-                $nview = substr($key, 5)." ".$nview;
-        }
-        if(@$_POST["add-edit"])
-            $nedit = $_POST["add-edit"]." ".$nedit;
-        if(@$_POST["add-view"])
-            $nview = $_POST["add-view"]." ".$nview;
-
-        $nvarr = array_unique(explode(EXP_SP, trim($nview)));
-        sort($nvarr);
-        $nearr = array_unique(explode(EXP_SP, trim($nedit)));
-        sort($nearr);
-
-        $nview = implode(" ", $nvarr);
-        $nedit = implode(" ", $nearr);
-
-        $INFO["view"] = $nview;
-        $INFO["edit"] = $nedit;
+        xcms_acl_from_post($INFO);
         xcms_save_list(xcms_get_info_file_name(), $INFO);
     }
-    $all_groups = xcms_all_groups();
-    xcmst_print_acl($all_groups, $INFO, "view");?>
-    </td><td><?php
-    xcmst_print_acl($all_groups, $INFO, "edit");?>
-    </td></tr>
-</table>
-<input type="submit" name="change-access" value="Изменить">
+?>
+<form method="post">
+<?php xcmst_print_acl($INFO); ?>
+<input type="submit" name="change_access" id="change_access-input" value="Изменить" />
 </form>
 </div>
