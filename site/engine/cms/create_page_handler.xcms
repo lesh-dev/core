@@ -22,7 +22,6 @@ function xcms_create_page()
     $info = array();
     $info["owner"] = xcms_user()->login();
     $info["type"] = $page_type;
-    $info["view"] = xcms_user()->login();
     $info["header"] = xcms_get_key_or($_POST, "header");
     $info["alias"] = $alias;
 
