@@ -141,18 +141,18 @@
             $ref = @$_GET["ref"];
 
         if (!$ref) $ref = $SETTINGS["defaultpage"];
-        if (file_exists("$design_dir/$ref.xcms"))
+        if (file_exists("${design_dir}$ref.xcms"))
         {
-            $main_ref_file = "$design_dir/$ref.xcms";
+            $main_ref_file = "${design_dir}$ref.xcms";
         }
-        elseif (file_exists("$engine_dir/global/$ref.xcms"))
+        elseif (file_exists("${engine_dir}global/$ref.xcms"))
         {
-            $main_ref_file = "$engine_dir/global/$ref.xcms";
+            $main_ref_file = "${engine_dir}global/$ref.xcms";
         }
         else
         {
             $ref = "nopage.xcms";
-            $main_ref_file = "$design_dir/nopage.xcms";
+            $main_ref_file = "${design_dir}nopage.xcms";
         }
         // Find prec file
         $main_ref_name = "{$SETTINGS["precdir"]}f$refname-$ref.php";
