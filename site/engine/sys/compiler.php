@@ -77,7 +77,7 @@
             }
             else
             {
-                xcms_log(XLOG_ERROR, "[COMPILER] name is '$name', nopagecode: ".$SETTINGS["nopagecode"]);
+                xcms_log(XLOG_ERROR, "[COMPILER] Template name is '$name', nopagecode: ".$SETTINGS["nopagecode"]);
                 fputs($output_stream, file_get_contents("{$SETTINGS["engine_dir"]}{$SETTINGS["nopagecode"]}.code"));
             }
         }
@@ -151,8 +151,8 @@
         }
         else
         {
-            $ref = "nopage.xcms";
-            $main_ref_file = "${design_dir}nopage.xcms";
+            $ref = "nopage";  // will not be used
+            $main_ref_file = "${design_dir}404.php";
         }
         // Find prec file
         $main_ref_name = "{$SETTINGS["precdir"]}f$refname-$ref.php";
