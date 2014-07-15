@@ -2,7 +2,6 @@
     require_once("settings.php");
     global $SETTINGS;
     $SETTINGS["defaultpage"] = "index";
-    $SETTINGS["nopage"] = ".nopage";
     $SETTINGS["nopagecode"] = "error.404";
     $SETTINGS["openbracket"] = "<# ";
     $SETTINGS["closebracket"] = "#>";
