@@ -92,7 +92,7 @@ function xcms_get_page_templates()
     $ext = ".template";
     $list = glob("$prefix*$ext");
     $name_list = array();
-    foreach ($list as $key=>$value)
+    foreach ($list as $value)
     {
         $value = str_replace($prefix, "", $value);
         $value = str_replace($ext, "", $value);
