@@ -1,5 +1,8 @@
 <?php
+
 require_once("${engine_dir}sys/string.php");
+
+define('XCMS_TAG_NAME', "_NAME");
 
 function xcms_enable_key(&$list, $key)
 {
@@ -116,11 +119,11 @@ function xcms_get_tag_list($tag_name)
     if (substr($tag_text, 0, 5) != "<?php")
     {
         $rez = explode(EXP_LF, $tag_text);
-        foreach($rez as $key=>$value)
+        foreach ($rez as $key => $value)
         {
-            if(!$key)
+            if (!$key)
             {
-                $taglist["_NAME"]=$value;
+                $taglist[XCMS_TAG_NAME] = $value;
                 continue;
             }
             $arr = explode(EXP_EQ, $value);
@@ -132,7 +135,7 @@ function xcms_get_tag_list($tag_name)
     {
         $taglist = array();
         include($tag_file_name);
-        $taglist["_NAME"] = $tagname;
+        $taglist[XCMS_TAG_NAME] = $tagname;
         return $taglist;
     }
 }
@@ -201,7 +204,7 @@ function xcms_editlist_form($file, $skip_params = "", $flags = "")
         {
             $taglist = xcms_get_tag_list($key); ?>
 
-            <tr><td><?php echo $taglist["_NAME"]; ?></td><td><?php
+            <tr><td><?php echo $taglist[XCMS_TAG_NAME]; ?></td><td><?php
 
             if (count($taglist) > 1)
             {?>
@@ -209,7 +212,7 @@ function xcms_editlist_form($file, $skip_params = "", $flags = "")
                 <select name="<?php echo $id; ?>" id="<?php echo $id; ?>" class="key-value"><?php
                 foreach ($taglist as $vtag=>$tag)
                 {
-                    if ($vtag == "_NAME") continue;
+                    if ($vtag == XCMS_TAG_NAME) continue;
                     $vtag = htmlspecialchars($vtag);
                     $tag = htmlspecialchars($tag);
                     if ($tag == $value) echo "<option selected value=\"$tag\">$vtag</option>";
