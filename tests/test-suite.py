@@ -81,9 +81,8 @@ try:
     doFullList, args = getSingleOption(["-f", "--full-list"], args)
     breakOnErrors, args = getSingleOption(["-b", "--break"], args)
 
-    if args:
-        if args[-1].startswith("-"):
-            raise CliParamError("You probably forgot to specify site URL. I believe it cannot begin with dash. ") 
+# do not remove this parameter from args list (to parse by test itself)
+    doShowDoc, _ = getSingleOption(["-d", "--doc"], args)
     
 except CliParamError as e:
     print "Option syntax error: ", e
@@ -99,14 +98,18 @@ if doShowHelp:
 if specTest:
     print "We are going to run just one test " + specTest + ". "
 
+
+useUrl = doList or doFullList or not doShowDoc
 baseUrl = None
-if args:
-    baseUrl = args.pop()
-    if isVoid(baseUrl):
-        showHelp()
-        sys.exit(1)
-else:
-    if not (doList or doFullList):
+
+if useUrl:
+    if args and not args[-1].startswith("-"):
+        baseUrl = args.pop()
+        if isVoid(baseUrl):
+            print "Test site URL is empty. "
+            showHelp()
+            sys.exit(1)
+    else:
         print "Test site URL not defined. "
         showHelp()
         sys.exit(1)
