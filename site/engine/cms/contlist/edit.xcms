@@ -105,14 +105,15 @@ function xcms_draw_contlist_create($result = true)
             <td>Тип блока (<a href="https://dev.fizlesh.ru/lesh/ticket/766">только новости</a>)</td>
             <td>
                 <select disabled="disabled" name="pagetype"><?php
-    $list = glob("{$SETTINGS["engine_dir"]}cms/*.pagetype");
-    foreach ($list as $value)
-    {
-        $value = str_replace("{$SETTINGS["engine_dir"]}cms/", "", $value);
-        $value = str_replace(".pagetype", "", $value);
-        $attrs = ($value == "news") ? "selected=\"selected\" " : "";
-        echo "<option name=\"$value\" value=\"$value\" $attrs>$value</option>";
-    }?>
+                $page_types = xcms_get_tag_list("pagetype");
+                foreach ($page_types as $key => $value)
+                {
+                    $attrs = ($key == "news") ? "selected=\"selected\" " : "";
+                    echo "<option name=\"$key\" value=\"$key\" $attrs>$value</option>\n";
+                }?>
+                </select>
+                <!-- readonly element does not want to be submitted -->
+                <input type="hidden" name="pagetype" value="news" />
             </td>
         </tr>
         <tr>
