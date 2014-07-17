@@ -312,7 +312,8 @@
         function user_list()
         {
             $ans = array();
-            foreach(glob($this->_file_name("*")) as $li)
+            $user_files = glob($this->_file_name("*"));
+            foreach ($user_files as $li)
             {
                 $li = preg_replace("/\\.user/", "", $li);
                 $li = preg_replace("/.*\\//", "", $li);

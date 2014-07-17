@@ -132,11 +132,9 @@ function xcms_delete_page($page_id)
         return false;
 
     $list = glob("$dir/*");
-    if ($list)
-    {
-        foreach ($list as $value)
-            unlink($value);
-    }
+    foreach ($list as $value)
+        unlink($value);
+
     rmdir($dir);
     return true;
 }
