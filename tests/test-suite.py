@@ -81,6 +81,10 @@ try:
     doFullList, args = getSingleOption(["-f", "--full-list"], args)
     breakOnErrors, args = getSingleOption(["-b", "--break"], args)
     
+    if args:
+        if args[-1].beginswith("-"):
+            raise CliParamError("You probably forgot to specify site URL. I believe it cannot begin with dash. ") 
+    
 except CliParamError as e:
     print "Option syntax error: ", e
     showHelp()
@@ -96,7 +100,7 @@ if specTest:
     print "We are going to run just one test " + specTest + ". "
 
 baseUrl = None
-if len(args) >= 1:
+if args:
     baseUrl = args.pop()
     if isVoid(baseUrl):
         showHelp()
