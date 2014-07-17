@@ -81,8 +81,8 @@ try:
     doFullList, args = getSingleOption(["-f", "--full-list"], args)
     breakOnErrors, args = getSingleOption(["-b", "--break"], args)
 
-# do not remove this parameter from args list (to parse by test itself)
-    doShowDoc, _ = getSingleOption(["-d", "--doc"], args)
+    testArgs = [x for x in args if x.startswith("-")]
+    restArgs = [x for x in args if not x.startswith("-")]
     
 except CliParamError as e:
     print "Option syntax error: ", e
@@ -98,25 +98,16 @@ if doShowHelp:
 if specTest:
     print "We are going to run just one test " + specTest + ". "
 
-
-useUrl = doList or doFullList or not doShowDoc
 baseUrl = None
+if restArgs:
+    baseUrl = restArgs.pop(0)
 
-if useUrl:
-    if args and not args[-1].startswith("-"):
-        baseUrl = args.pop()
-        if isVoid(baseUrl):
-            print "Test site URL is empty. "
-            showHelp()
-            sys.exit(1)
-    else:
-        print "Test site URL not defined. "
-        showHelp()
-        sys.exit(1)
-
+if restArgs:
+    print "Warning: trailing parameters are ignored: ", restArgs
+    
 if doInstallerTest:
     print "Running installer test. "
-    result = RunTest(test_xcms_installer.TestXcmsInstaller(baseUrl, args))
+    result = RunTest(test_xcms_installer.TestXcmsInstaller(baseUrl, testArgs))
     if result != 0:
         print "Installer test not succeded, stopping suite. "
         sys.exit(result)
@@ -136,7 +127,7 @@ try:
         print "There is no 'getTests' function defined in specified test set. "
         sys.exit(1)
 
-    tests = testSetModule.getTests(baseUrl, args)
+    tests = testSetModule.getTests(baseUrl, testArgs)
 
     failedTests = {}
     specTestFound = False
