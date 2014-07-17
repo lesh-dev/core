@@ -22,7 +22,6 @@ function xcms_create_page()
     $info = array();
     $info["owner"] = xcms_user()->login();
     $info["type"] = $page_type;
-    $info["view"] = xcms_user()->login();
     $info["header"] = xcms_get_key_or($_POST, "header");
     $info["alias"] = $alias;
 
@@ -30,18 +29,7 @@ function xcms_create_page()
     // creator always has access
     $info["view"] = xcms_user()->login();
     $info["edit"] = xcms_user()->login();
-
-    // seems to be contlist-only code if even necessary
-    if (@$_POST["view_for_all"])
-        $info["view"] .= " #all";
-
-    foreach ($_POST as $key=>$value)
-    {
-        if (substr($key, 0, 5) == "edit_")
-            $info["edit"] .= " ".substr($key, 5);
-        if (substr($key, 0, 5) == "view_")
-            $info["view"] .= " ".substr($key, 5);
-    }
+    xcms_acl_from_post($info);
 
     if (@$_POST["menu-title"])
         $info["menu-title"] = $_POST["menu-title"];

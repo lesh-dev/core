@@ -1,0 +1,12 @@
+<?php
+    global $SETTINGS;
+    $pt_prefix = "{$SETTINGS["engine_dir"]}cms/";
+    $pt_list = glob("$pt_prefix*.pagetype");
+    foreach ($pt_list as $pt_item)
+    {
+        $pt = str_replace($pt_prefix, "", $pt_item);
+        $pt = str_replace(".pagetype", "", $pt);
+        $taglist[$pt] = trim(file_get_contents($pt_item));
+    }
+    $tagname = "Тип раздела";
+?>

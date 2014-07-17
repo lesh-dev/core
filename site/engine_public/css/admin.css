@@ -350,12 +350,14 @@ span.help-left {
 
 div.help-widget {
     position: absolute;
+    z-index: 10; /* to be above editor */
     width: 500px;
     top: 15px;
     right: -5px;
     background-color: #e3e38f;
     padding-bottom: 5px;
     padding-top: 5px;
+    display: none; /* for sliding */
 }
 
 div.floating-box {
@@ -384,7 +386,15 @@ div.right-image-box {
     display: inline-block;
 }
 
-#content-text-preview {
+div.content-text-diff {
+    background-color: #cfef9f;
+    border: 1px dashed #5f5f5f;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+div.content-text-preview {
     background-color: #cfef9f;
     border: 1px dashed #5f5f5f;
     padding: 10px;
@@ -397,7 +407,8 @@ table.access-editor {
     margin-bottom: 10px;
 }
 
-table.access-editor th {
+table.access-editor th,
+table.sitemap th {
     text-align: left;
 }
 

@@ -1,11 +1,11 @@
 <?php
     global $SETTINGS;
     $usr_prefix = "{$SETTINGS["datadir"]}auth/usr/";
-    $list = glob("$usr_prefix*.usr");
-    foreach ($list as $key=>$value)
+    $user_files = glob("$usr_prefix*.user");
+    foreach ($user_files as $value)
     {
         $value = str_replace($usr_prefix, "", $value);
-        $value = str_replace(".usr", "", $value);
+        $value = str_replace(".user", "", $value);
         $taglist[$value] = $value;
     }
     $tagname = "Владелец раздела";

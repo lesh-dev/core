@@ -1,42 +1,4 @@
 <?php
     $source = xcms_get_page_content_name($pageid);
+    include(translate("<! var editfile $source !><! edit/file xz -h !>"));
 ?>
-<dt>Редактировать текст</dt>
-<dd>
-    <div class="reducer">
-        <# var editfile $source #>
-        <# edit/file xz -h #>
-    </div>
-</dd>
-
-<dt>Шаблоны</dt>
-<dd>
-    <div class="reducer">
-        <h4>Заменить содержимое на шаблон</h4>
-        Если вы заменяете содержимое на шаблон, то всё содержимое данной страницы
-        будет безвозвранно утрачено! По этой причине, пожалуйста, будьте аккуратны
-        с использованием этой возможности.<br />
-        Для того, чтобы изменить шаблон, надо воспользоваться формой два раза:
-        нажать на кнопку, страница перезагрузится безо всяких изменений,
-        потом надо нажать еще раз.
-
-        <?php
-        if (@$_POST["change-template"])
-        {
-            $template_name = xcms_get_page_template_name($_POST["change-template"]);
-            xcms_write($source, @file_get_contents($template_name));
-            echo "Заменено: <tt>$source</tt> на <tt>$template_name</tt>";
-        }
-        ?>
-        <form method="post">
-            <select name="change-template">
-            <?php
-                $template_list = xcms_get_page_templates();
-                foreach ($template_list as $value)
-                    echo "<option name=\"$value\" value=\"$value\">$value</option>".EXP_LF;
-            ?>
-            </select>
-            <input type="submit" value="Заменить! " />
-        </form>
-    </div>
-</dd>

@@ -16,5 +16,8 @@
     <div><span class="help-left"><b>${email:</b>name<b>}</b></span> $-плагин для email-ов</div>
     <div><span class="help-left"><b>${phone:</b>телефон<b>}</b></span> $-плагин для телефонов</div>
     <div><span class="help-left"><b>${staffimg:</b>name<b>:</b>title<b>}</b></span> $-плагин для списка людей</div>
+    <div><span class="help-left"><b>${related:[top|bottom]:</b>pageid<b>}</b></span> $-плагин для связанных страниц</div>
+    <div><span class="help-left"><b>${relatedtitle:[top|bottom]:</b>текст<b>}</b></span> $-плагин для заголовков связанных страниц</div>
+    <div><span class="help-left"><b>${relatedlinks:</b>ссылка:заголовок<b>}</b></span> $-плагин для заголовков связанных страниц</div>
 </div>
 </span>

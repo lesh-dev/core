@@ -1,4 +1,0 @@
-<?php
-    $source = xcms_get_page_content_name($pageid);
-    include(translate("<! var editfile $source !><! edit/file xz -h !>"));
-?>

@@ -2,9 +2,8 @@
     $INFO = xcms_get_list(xcms_get_info_file_name());
     if (!$INFO)
         $pageid = "";
-?><div class="admin-widget"><?php
-    echo $page_creation_result;
-?><form method="post">
+?><div class="admin-widget">
+<form method="post">
 <h3>Новая страница</h3>
 
 <div>
@@ -24,15 +23,18 @@
 <div>
     <span class="user-label">Тип содержимого</span>
     <select id="create-pagetype-selector" name="create-pagetype"><?php
-    $list = xcms_get_tag_list("type");
-    foreach ($list as $key=>$value)
+    $page_types = xcms_get_tag_list("pagetype");
+    foreach ($page_types as $key=>$value)
     {
-        if ($key == "_NAME")
+        if ($key == XCMS_TAG_NAME)
             continue;
-        $s = ($value == "content" || $key == "content")
+        // in order to fix #768 problem
+        if ($key != "content" && $key != "contlist")
+            continue;
+        $s = ($key == "content")
             ? 'selected="selected" checked="checked" '
             : '';
-        echo "<option name=\"$value\" $s value=\"$value\">$key</option>";
+        echo "<option name=\"$key\" $s value=\"$key\">$value</option>";
     }
 ?></select></div>
 
@@ -58,32 +60,8 @@
 </div>
 <div class="user-descr">Этот текст появится наверху страницы</div>
 
-<h3>Матрица доступа</h3>
+<?php xcmst_print_acl(); ?>
 
-<table class="access-editor">
-    <tr>
-        <th>Группа</th>
-        <th>Чтение</th>
-        <th>Запись</th>
-    </tr>
-<?php
-    include_once("$engine_dir/sys/groups.php");
-    foreach (xcms_all_groups() as $g=>$translation)
-    {
-        if (!strlen($translation)) continue;
-        $chv = "";
-        $che = "";
-        if ($g == "#all") { $chv = "checked"; }
-        if ($g == "#editor") { $che = "checked"; }
-        if ($g == "#admin") { $che = "checked"; }
-        echo
-            "<tr><td>$translation</td>".
-            "<td><input type=\"checkbox\" name=\"view_$g\" id=\"view_$g-checkbox\" $chv /></td>".
-            "<td><input type=\"checkbox\" name=\"edit_$g\" id=\"edit_$g-checkbox\" $che /></td>".
-            "</tr>";
-    }
-?>
-</table>
 <input name="create-page" id="create-page-submit"
     type="submit" value="Создать раздел" />
 </form>

@@ -92,7 +92,7 @@ function xcms_get_page_templates()
     $ext = ".template";
     $list = glob("$prefix*$ext");
     $name_list = array();
-    foreach ($list as $key=>$value)
+    foreach ($list as $value)
     {
         $value = str_replace($prefix, "", $value);
         $value = str_replace($ext, "", $value);
@@ -123,74 +123,20 @@ function xcms_get_subpages($page_id)
     return $page_ids;
 }
 
-/**
-  * Returns aliases file name
-  **/
-function xcms_get_aliases_file_name()
+function xcms_delete_page($page_id)
 {
-    global $content_dir;
-    return "${content_dir}cms/aliases";
-}
+    $dir = xcms_get_page_path($page_id);
 
-/**
-  * Returns aliases in the key-value format as alias->page_id mapping
-  **/
-function xcms_get_aliases()
-{
-    // no aliases is not an error
-    $aliases_name = xcms_get_aliases_file_name();
-    if (!file_exists($aliases_name))
-        return array();
-    return xcms_get_list($aliases_name);
-}
+    $list = glob("$dir/*", GLOB_ONLYDIR);
+    if ($list)
+        return false;
 
-/**
-  * Writes map of alias->page_id to content
-  **/
-function xcms_save_aliases($list)
-{
-    xcms_save_list(xcms_get_aliases_file_name(), $list);
-}
+    $list = glob("$dir/*");
+    foreach ($list as $value)
+        unlink($value);
 
-/**
-  * Internal-usage function (@sa xcms_collect_aliases)
-  * and should not be invoked directly
-  **/
-function xcms_collect_aliases_int(&$aliases, $dir, $root_len)
-{
-    $subdirs = glob("$dir/*", GLOB_ONLYDIR);
-    $info_fn = "$dir/info";
-    if (file_exists($info_fn))
-    {
-        $cur_info = xcms_get_list($info_fn);
-        $page_id = substr($dir, $root_len + 1);
-        $cur_alias = xcms_get_key_or($cur_info, "alias");
-        if (xu_not_empty($cur_alias))
-            $aliases[$cur_alias] = $page_id;
-    }
-    foreach ($subdirs as $subdir)
-    {
-        xcms_collect_aliases_int($aliases, $subdir, $root_len);
-    }
-}
-
-/**
-  * Recursively walks by content directories and builds aliases mapping
-  * into the alias->page_id array
-  **/
-function xcms_collect_aliases()
-{
-    global $SETTINGS;
-    $root = "{$SETTINGS["content_dir"]}cms/pages";
-    $aliases = array();
-    xcms_collect_aliases_int($aliases, $root, strlen($root));
-    return $aliases;
-}
-
-function xcms_rebuild_aliases()
-{
-    $aliases = xcms_collect_aliases();
-    xcms_save_aliases($aliases);
+    rmdir($dir);
+    return true;
 }
 
 ?>

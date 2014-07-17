@@ -8,9 +8,9 @@ require_once("${engine_dir}cms/ank/field-desc.php");
 <html>
     <head>
         <# cms/head #>
-        <# cms/jquery #>
+        <# js/jquery #>
+        <# js/public common.js #>
         <link rel="stylesheet" type="text/css" href="<?php echo "${full_engine_pub}css/admin.css"; ?>" />
-        <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
     </head>
     <body>
         <div style="padding-bottom: 7px;">

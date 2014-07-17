@@ -14,7 +14,7 @@ function xcms_print_related_pages($var_name)
     {
         $pageid = $related;
         $source = xcms_get_page_content_name($pageid);
-        include(translate("<! cms/readtext --limit=50 --next-text=подробнее !>"));
+        include(translate("<! cms/readtext --limit=200 --next-text=подробнее !>"));
     }
 }
 
@@ -63,6 +63,9 @@ function xcms_print_related_links()
         </ul>
         <ul class="menu">
             <# cms/menu/display start=2 end=2 #>
+        </ul>
+        <ul class="menu">
+            <# cms/menu/display start=3 end=3 #>
         </ul>
     </div>
 

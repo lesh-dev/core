@@ -1,5 +1,6 @@
 <?php
-/* User-related middleware */
+global $engine_dir;
+require_once("${engine_dir}sys/groups.php");
 
 define('XDP_NORMAL', 1);
 define('XDP_READONLY', 2);
@@ -46,25 +47,79 @@ function xcmst_input_attrs_from_user($user, $key, $read_only = false, $placehold
         htmlspecialchars($user->param($key))."\"";
 }
 
-function xcmst_print_acl($all_groups, $list, $mode)
+/**
+  * Save page ACL from $_POST request to page info
+  **/
+function xcms_acl_from_post(&$info)
 {
-    $acl = explode(EXP_SP, trim($list[$mode]));
-    foreach ($acl as $key=>$value)
+    $edit = "";
+    $view = "";
+
+    foreach ($_POST as $key=>$value)
     {
-        if (!$value)
+        if (substr($key, 0, 5) == "edit_")
+            $edit .= " ".substr($key, 5);
+        if (substr($key, 0, 5) == "view_")
+            $view .= " ".substr($key, 5);
+    }
+    // lost user-level ACL info here, it is not used as for now
+    $info["edit"] = $edit;
+    $info["view"] = $view;
+}
+
+/**
+  * Prints (group) access matrix
+  * When @name $info is false, prints default ACL
+  **/
+function xcmst_print_acl($info = false)
+{
+    $default = ($info === false);
+
+    if (!$default)
+    {
+        $edit = $info["edit"];
+        $view = $info["view"];
+
+        $edit = explode(EXP_SP, trim($edit));
+        $view = explode(EXP_SP, trim($view));
+    }
+
+    $all_groups = xcms_all_groups();
+?>
+<h3>Матрица доступа</h3>
+<table class="access-editor">
+    <tr>
+        <th>Группа</th>
+        <th>Чтение</th>
+        <th>Запись</th>
+    </tr>
+<?php
+    $checked_attr = 'checked="checked"';
+    foreach ($all_groups as $g=>$translation)
+    {
+        if (xu_empty($translation))
             continue;
 
-        $t = xcms_get_key_or($all_groups, $value);
-        echo "<div><input type=\"checkbox\" name=\"$mode-$value\" checked=\"checked\">$t ($value)<div/>";
+        $enable_view = "";
+        if (!$default && array_search($g, $view) !== false)
+            $enable_view = $checked_attr;
+
+        $enable_edit = "";
+        if (!$default && array_search($g, $edit) !== false)
+            $enable_edit = $checked_attr;
+
+        if ($default && $g == "#all")
+            $enable_view = $checked_attr;
+        if ($default && $g == "#editor")
+            $enable_edit = $checked_attr;
+        echo
+            "<tr><td>$translation</td>".
+            "<td><input type=\"checkbox\" name=\"view_$g\" id=\"view_$g-checkbox\" $enable_view /></td>".
+            "<td><input type=\"checkbox\" name=\"edit_$g\" id=\"edit_$g-checkbox\" $enable_edit /></td>".
+            "</tr>";
     }
-    echo "Добавить: <select name=\"add-$mode\" id=\"add-$mode\">";
-    echo "<option value=\"\">(не добавлять)</option>";
-    foreach ($all_groups as $k=>$v)
-    {
-        if(!strlen($v)) continue;
-        echo "<option value=\"$k\">$v</option>";
-    }
-    echo "</select></div>";
+?>
+</table><?php
 }
 
 ?>

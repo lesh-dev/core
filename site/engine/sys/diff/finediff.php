@@ -319,7 +319,7 @@ class FineDiff {
 		while ( $opcodes_offset <  $opcodes_len ) {
 			$opcode = xu_substr($opcodes, $opcodes_offset, 1);
 			$opcodes_offset++;
-			$n = intval(xu_end($opcodes, $opcodes_offset));
+			$n = intval(xu_substr($opcodes, $opcodes_offset));
 			if ( $n ) {
 				$opcodes_offset += xu_len(strval($n));
 				}

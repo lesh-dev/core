@@ -1,0 +1,172 @@
+<?php
+require_once("${engine_dir}sys/groups.php");
+require_once("${engine_dir}edit/page_diff.php");
+
+# TODO: dynamic loading
+require_once("${engine_dir}cms/news/get_template.php");
+
+function xcms_create_contlist()
+{
+    global $SETTINGS, $INFO, $pageid;
+
+    /*
+    $suffix = xcms_get_key_or($_POST, "name-suffix");
+    */
+    $date = date('Y.m.d');
+    $timestamp = time();
+    $datetime = xcms_datetime($timestamp);
+    $path_prefix = xcms_get_page_root(true);
+
+    $header = xcms_get_key_or($_POST, "header");
+    $trans_header = xcms_page_id_suffix($header);
+
+    // expected item_id name
+    $item_id = "$date-$trans_header";
+
+    $glob_dir = "$path_prefix$pageid/$item_id";
+    $count = count(glob("$glob_dir*", GLOB_ONLYDIR));
+    if ($count > 0 && $count <= 26)
+        $item_id .= '.'.chr(97 + $count - 1);
+    elseif ($count > 26)
+        $item_id .= '.'.$count;
+    /*
+    if ($suffix)
+        $item_id .= "-$suffix";
+    */
+    $item_pageid = "$pageid/$item_id";
+    $dir = "$path_prefix$item_pageid";
+    // this should not happen, but concurrent blocks addition can lead to such behaviour
+    if (file_exists($dir))
+        return "Блок с таким служебным именем уже существует. ";
+
+    $root_alias = xcms_get_key_or($INFO, "alias");
+    if (!strlen($root_alias))
+        return "Не задан alias у списка блоков";
+
+    mkdir($dir, 0777, true);
+    $list = array();
+    $list["type"] = xcms_get_key_or($_POST, "pagetype");
+    $list["header"] = $header;
+    $list["menu-title"] = $header;
+    $list["owner"] = xcms_user()->login();
+    $list["timestamp-created"] = $timestamp;
+    $list["datetime-created"] = $datetime;
+    $list["view"] = "#all";
+    $list["edit"] = "#editor";
+    $list["alias"] = $root_alias."/$item_id";
+
+    // не показывать их в меню
+    xcms_enable_key($list, "menu-hidden");
+    // не показывать их в системном меню
+    xcms_enable_key($list, "menu-locked");
+
+    $content = $_POST["content"];
+    $content = xcms_wrap_long_lines($content);
+
+    xcms_save_list("$dir/info", $list);
+    xcms_write("$dir/content", $content);
+
+    xcms_process_page_diff("", $content, $item_pageid);
+    ?>
+    <meta http-equiv="refresh" content="2;URL=/<# web_prefix #>?<?php
+        echo xcms_url(array('page'=>$item_pageid, 'ref'=>'admin'));?>" />
+    <h3>Подождите, сейчас произойдёт перенаправление
+        на страницу администрирования...</h3><?php
+    return true;
+}
+
+function xcms_draw_contlist_create($result = true)
+{
+    global $SETTINGS, $INFO, $pageid;
+    $header = xcms_get_key_or($INFO, "header");
+
+    ?><div class="admin-widget"><?php
+    if ($result !== true)
+    {?>
+        <div class="error"><?php echo htmlspecialchars($result); ?></div><?php
+    }?>
+    <h3>Добавить блок</h3>
+    <form method="post">
+
+    <table>
+        <!--
+        <tr>
+            <td>Служебное имя</td>
+            <td><?php xcmst_control_admin("name-suffix", XCMS_FROM_POST,
+                "new-info-block"); ?></td>
+        </tr>
+        -->
+        <tr>
+            <td>Заголовок</td>
+            <td><?php xcmst_control_admin("header", XCMS_FROM_POST,
+                "Это заголовок новости, напишите его!"); ?></td>
+        </tr>
+        <tr>
+            <td>Тип блока (<a href="https://dev.fizlesh.ru/lesh/ticket/766">только новости</a>)</td>
+            <td>
+                <select disabled="disabled" name="pagetype"><?php
+    $list = glob("{$SETTINGS["engine_dir"]}cms/*.pagetype");
+    foreach ($list as $value)
+    {
+        $value = str_replace("{$SETTINGS["engine_dir"]}cms/", "", $value);
+        $value = str_replace(".pagetype", "", $value);
+        $attrs = ($value == "news") ? "selected=\"selected\" " : "";
+        echo "<option name=\"$value\" value=\"$value\" $attrs>$value</option>";
+    }?>
+            </td>
+        </tr>
+        <tr>
+            <td>Содержимое блока</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea name="content" id="content" rows="5" cols="70"><?php
+                // AJAX should be here
+                $pagetype = "news";
+                $f_get_template = "xcms_${pagetype}_get_template";
+                if (function_exists($f_get_template))
+                    echo htmlspecialchars($f_get_template());
+                ?></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <?php xcmst_print_acl(); ?>
+            </td>
+        </tr>
+    </table>
+    <input type="submit" name="contlist-create" id="contlist-create-input" value="Добавить"/>
+    <script type="text/javascript">
+        xjready_set_depends_on('contlist-create-input', 'header-input', null, 3);
+    </script>
+    </form>
+    </div>
+    <div class="admin-widget">
+        <h3>Список блоков</h3>
+        <div class="menu-contlist">
+        <?php
+        $template_file = "{$SETTINGS["engine_dir"]}/cms/menu/menulinks.dat";
+        xcms_menu(
+            "{$SETTINGS["content_dir"]}cms/pages/$pageid",
+            file($template_file),
+            1,
+            xcms_url(array('ref' =>$_GET["ref"])),
+            array("devel"=>true, "show"=>"all"),
+            0, 999);
+        ?>
+        </div>
+    </div>
+    <?php
+}
+
+
+// main
+if (@$_POST["contlist-create"])
+{
+    $result = xcms_create_contlist();
+    if ($result !== true)
+        xcms_draw_contlist_create($result);
+}
+else
+    xcms_draw_contlist_create();
+?>

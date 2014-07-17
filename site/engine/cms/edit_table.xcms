@@ -1,0 +1,3 @@
+<?php
+// TODO: rename this file
+include(translate('<! cms/'.$type.'/edit !>')); ?>

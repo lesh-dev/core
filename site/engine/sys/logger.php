@@ -4,9 +4,10 @@
       * Simple logger:
       * Logging now is as easy as killing bunnies with axes (c)
       **/
-    define('XLOG_DEBUG', 2);
-    define('XLOG_INFO',  1);
-    define('XLOG_ERROR', 0);
+    define('XLOG_ERROR',    0);
+    define('XLOG_WARNING',  1);
+    define('XLOG_INFO',     2);
+    define('XLOG_DEBUG',    3);
 
     // error codes for generic errors
     define('XE_WRONG_PASSWORD',       1000);

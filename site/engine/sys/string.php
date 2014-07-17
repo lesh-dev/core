@@ -123,20 +123,12 @@ function xu_len($string)
 /**
   * Cuts a substring from UTF-8 string
   * It's just a simple wrapper around mb_substr
-  * @sa xcms_end
   **/
-function xu_substr($string, $start, $length)
+function xu_substr($string, $start, $length = false)
 {
+    if ($length === false)
+        $length = xu_len($string) - $start;
     return mb_substr($string, $start, $length, 'UTF-8');
-}
-
-/**
-  * Cuts a substring from UTF-8 string up to the end
-  * It's just a simple wrapper around mb_substr
-  * @sa xu_substr
-  **/
-function xu_end($str, $start) {
-    return mb_substr($str, $start, xu_len($str) - $start, 'UTF-8');
 }
 
 /**
@@ -278,7 +270,7 @@ function xcms_wrap_long_lines($text, $max_length = MAX_LENGTH_DEFAULT)
             // split char found
             $cut = trim(xu_substr($ln, 0, $pos));
             $new_lines[] = $cut;
-            $ln = trim(xu_end($ln, $pos));
+            $ln = trim(xu_substr($ln, $pos));
         }
         // add rest of line
         $new_lines[] = $ln;
@@ -336,6 +328,7 @@ function xcms_string_unit_test()
     xut_equal(xu_len("Привет000"), 9, "Check xu_len");
     xut_equal(xu_strpos("Привет000", "т00", 0), 5, "Check xu_strpos");
     xut_equal(xu_substr("Привет000", 3, 3), "вет", "Check xu_substr");
+    xut_equal(xu_substr("Привет000", 3), "вет000", "Check xu_substr with optional length");
 
     xut_equal(xu_strspn("альфаКу", "афьл", 1), 4, "Check xu_strspn");
     xut_equal(xu_strcspn('abcd', 'apple'), 0, "Check xu_strcspn one");

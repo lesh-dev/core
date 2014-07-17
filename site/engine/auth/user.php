@@ -54,14 +54,14 @@ function xcms_user_operation_notify($template_name, $email, $login, $password, $
     $body_html = str_replace('@@REAL-NAME@', $name, $body_html);
     $body_html = str_replace('@@SUPPORT@', $meta_site_mail, $body_html);
 
-    // do not send private info to [user-change] subscribers
+    // do not send private data to [user-change] subscribers
     $body_html_user = str_replace('@@PASSWORD@', htmlspecialchars($password), $body_html);
     $body_html_notify = str_replace('@@PASSWORD@', '***', $body_html);
 
     $notify_result = xcms_deliver_mail_int(NULL, array($email), $body_html_user, $subject);
 
     // ignore result here, this is not so important
-    xcms_send_notification("user-change", NULL, $body_html_notify, $subject, XMAIL_IMMEDIATE);
+    xcms_send_notification("user-change", NULL, $body_html_notify, "$subject [admin-bcc]", XMAIL_IMMEDIATE);
 
     return $notify_result ? null : "Не удалось послать оповещение пользователю. ";
 }

@@ -1,5 +1,8 @@
 <?php
-    include("../settings.php");
+    if (file_exists("settings.php"))  // for referencing from XCMS 404 handler
+        include("settings.php");
+    elseif (file_exists("../settings.php"))  // for referencing from Apache 404 handler
+        include("../settings.php");
 ?><!DOCTYPE html>
 <html>
 <head>

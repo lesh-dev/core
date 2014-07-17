@@ -162,16 +162,16 @@ function xsm_change_person_status()
     </form>
     <script type="text/javascript">
     $(document).ready(function() {
-        xsm_set_depends_on('update-person_comment-submit-top', 'comment_text-text');
-        xsm_set_depends_on('update-person_comment-submit-bottom', 'comment_text-text');
+        xjs_set_depends_on('update-person_comment-submit-top', 'comment_text-text');
+        xjs_set_depends_on('update-person_comment-submit-bottom', 'comment_text-text');
 
         var init_anketa_status = $('#anketa_status-selector').val()
         var status_custom_handler = function(id) {
             var new_status = $('#' + id).val();
             return (init_anketa_status != new_status);
         }
-        xsm_set_depends_on('update-person_comment-submit-top', 'anketa_status-selector', status_custom_handler);
-        xsm_set_depends_on('update-person_comment-submit-bottom', 'anketa_status-selector', status_custom_handler);
+        xjs_set_depends_on('update-person_comment-submit-top', 'anketa_status-selector', status_custom_handler);
+        xjs_set_depends_on('update-person_comment-submit-bottom', 'anketa_status-selector', status_custom_handler);
     });
     </script>
     <?php

@@ -11,6 +11,8 @@
     $pathv = @$argv[1];
     if (!$pathv) $pathv = "edit-file";
 
+    $diff_html = false;
+
     $ename = $editfile;
     if (!$ename) $ename = @$_POST[$pathv];
     if (!$ename) $ename = @$_GET[$pathv];
@@ -22,31 +24,40 @@
     {
         if (@$_POST["edit-submit"])
         {
+            $login = xcms_user()->login();
             $time = time();
-            $target_name = "$ename-version-$time";
-
+            $time = (integer)($time / 100) * 100;
             $old_text = "";
             if (file_exists($ename))
             {
+                // preserve old version to $archived_name
                 @chmod($ename, 0666); // see bug #64
-                rename($ename, $target_name);
-                $old_text = file_get_contents($target_name);
+                $archived_name = "$ename-version-$time-$login";
+                rename($ename, $archived_name);
+
+                // get diff
+                $old_text = file_get_contents($archived_name);
                 $old_text = xcms_wrap_long_lines($old_text);
+
+                // save the very first version with this (rounded) timestamp
+                if (file_exists("$archived_name.gz"))
+                    @unlink($archived_name); // version with this timestamp already exists, drop it
+                else
+                    system("gzip $archived_name");
             }
             $new_text = @$_POST["edit-text"];
             $new_text = xcms_wrap_long_lines($new_text);
             xcms_write($ename, $new_text);
             chmod($ename, 0666);
             $current_version = "";
-            xcms_process_page_diff($old_text, $new_text);
-            system("gzip $target_name");
+            $diff_html = xcms_process_page_diff($old_text, $new_text);
         }
         else
             $current_version = @$_POST["versions"];
 
         if (file_exists($ename))
         {
-            if (strpos($current_version, ".gz"))
+            if (strpos($current_version, ".gz") !== false)
             {
                 $f = gzopen($ename.$current_version, "r");
                 $text = gzread($f, 10000000);
@@ -61,18 +72,24 @@
         if (!@$param["-h"]) echo "<$tag>edit: $ename</$tag>";
         $ty = "submit";
 
-        $vlist = '<option value="">HEAD</option>';
-        $vfiles_list = array_reverse(glob("$ename-version-*"));
-        foreach ($vfiles_list as $k=>$v)
+        $version_list = '<option value="">HEAD</option>';
+        $version_files_list = array_reverse(glob("$ename-version-*"));
+        $ename_len = xu_len($ename);
+        $ename_version_len = xu_len("$ename-version-");
+        foreach ($version_files_list as $k=>$version_file)
         {
-            $timestamp_gz = str_replace("$ename-version-", "", $v);
-            $timestamp = str_replace(".gz", "", $timestamp_gz);
+            $version_info = xu_substr($version_file, $ename_version_len);
+            $timestamp = preg_replace("/^([0-9]+).*/", "\\1", $version_info);
+            $rests = xu_substr($version_info, xu_len($timestamp));
+            if (xu_len($rests) && $rests[0] == "-")
+                $rests = xu_substr($rests, 1);
+            $author_suffix = preg_replace('/\.gz$/', "", $rests);
             $version_time = xcms_datetime($timestamp);
-            $version_suffix = str_replace("$ename", "", $v);
+            $version_suffix = xu_substr($version_file, $ename_len);
             $selected = "";
             if ($version_suffix == $current_version)
                 $selected = 'selected="selected"';
-            $vlist .= "<option $selected value=\"$version_suffix\">$version_time</option>";
+            $version_list .= "<option $selected value=\"$version_suffix\">$version_time$author_suffix</option>";
         }
         if (@$_POST["edit-preview"])
         {
@@ -85,7 +102,13 @@
         */
         $text = htmlspecialchars($text);
 
-    ?>
+        if ($diff_html !== false)
+        {?>
+            <div class="content-text-diff"><?php
+            echo $diff_html; ?>
+            </div><?php
+        }?>
+
 <form method="post" enctype="multipart/form-data">
     <input type="hidden" name="<?php echo $pathv; ?>" value="<?php echo $ename;?>" />
     <div style="padding-top: 15px;">
@@ -93,23 +116,62 @@
         <input type="submit" name="edit-preview" id="edit-preview-top" value="Предпросмотр" />
         <a <?php echo xcms_href(array('page'=>$pageid, 'ref'=>'index')); ?> class="submit">Свернуть редактор</a>
         Версия:
-        <select name="versions" id="versions-top"><?php echo $vlist; ?></select>
+        <select name="versions" id="versions-top"><?php echo $version_list; ?></select>
         <input type="submit" name="set-version" id="set-version-top" value="Смотреть версию"/>
         <?php include(translate('<! edit/help !>')); ?>
     </div>
-    <textarea class="editor" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
+    <textarea class="editor" style="display: none" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
         name="edit-text" id="edit-text"><?php echo $text; ?></textarea>
+
+    <pre style="width: 800px; height: 500px; border: 1px solid rgb(236, 199, 173); font-size: 14px;"
+        name="edit-text-ace" id="edit-text-ace"><?php echo $text; ?></pre>
+
+    <?php include(translate('<! js/ace !>')); ?>
+    <script>
+        function xcms_escape_html(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        $(document).ready(function() {
+            var editor = ace.edit("edit-text-ace");
+            editor.setTheme("ace/theme/eclipse");
+            editor.getSession().setMode("ace/mode/html");
+            editor.setShowPrintMargin(false);
+            editor.setShowInvisibles(false);
+            editor.setDisplayIndentGuides(false);
+
+            function xcms_set_editor_value() {
+                var text = editor.getValue()
+                var escaped_text = xcms_escape_html(text);
+                $('#edit-text').html(escaped_text);
+            }
+
+            $("#edit-submit-top").click(xcms_set_editor_value);
+            $("#edit-submit-bottom").click(xcms_set_editor_value);
+            $("#edit-preview-top").click(xcms_set_editor_value);
+            $("#edit-preview-bottom").click(xcms_set_editor_value);
+        });
+
+    </script>
+
     <div>
         <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-submit-bottom" value="<?php echo $submit_val; ?>" />
         <input type="submit" name="edit-preview" id="edit-preview-bottom" value="Предпросмотр" />
         <!-- Version info cannot be easily duplicated here, so we remove it -->
     </div>
 </form>
-<div id="content-text-preview"><?php
+<?php
         if (@$_POST["edit-preview"])
-        {
+        {?>
+            <div id="content-text-preview" class="content-text-preview"><?php
             $text = $preview_text;
-            include(translate("<! cms/readtext --markdown --text !>"));
+            include(translate("<! cms/readtext --markdown --text !>")); ?>
+            </div><?php
         }
-    }?>
-</div>
+    }
+?>

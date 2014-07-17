@@ -7,60 +7,45 @@ if (!@$_GET["page"])
 ?><# locale #><?php
 ?><# url #><?php
 ?><# adm/page_info #><?php
-    include_once("${engine_dir}cms/alias.php");
-    include_once("${engine_dir}cms/build_rewrite.php");
+    require_once("${engine_dir}auth/format.php");
+    require_once("${engine_dir}cms/alias.php");
+    require_once("${engine_dir}cms/build_rewrite.php");
     $INFO = xcms_get_list(xcms_get_info_file_name());
     $aux_edit_groups = xcms_get_key_or($INFO, "edit");
     include(translate("<! auth/ #editor #admin $aux_edit_groups !>"));
 ?><# cms/create_page_handler #><?php
-    $page_creation_result = "";
+    $last_action_result = "";
     if (@$_POST["create-page"])
-        $page_creation_result = xcms_create_page();
+        $last_action_result = xcms_create_page();
 
-    if(@$_POST["delete-section"])
+    if (@$_POST["delete-section"])
     {
-        $dir = xcms_get_page_path($pageid);
-        $list = glob("$dir/*", GLOB_ONLYDIR);
-        if ($list)
+        if (xcms_delete_page($pageid))
         {
-            echo '<script>alert("Не могу удалить! Сначала удалите все подразделы!");</script>';
+            $last_action_result = "<div class=\"info\">Раздел успешно удалён. Сейчас вы будете перенаправлены на главную страницу...</div>";
+            xcmst_rebuild_aliases_and_rewrite();
+            $pageid = "index";  // dead code was here
+            $INFO = xcms_get_list(xcms_get_info_file_name());
+            include(translate("<! redir admin 1 !>"));
         }
         else
         {
-            $list = glob("$dir/*");
-            if ($list)
-            {
-                foreach ($list as $key=>$value)
-                    unlink($value);
-            }
-            rmdir($dir);
-            echo '<script>alert("Удалено");</script>';
-            translate("<! redir admin 0!>");
-            $pageid = "index";
-            for ($i = strlen($pageid) - 1; $i >= 0; $i--)
-            {
-                if ($pageid[$i]=='/')
-                {
-                    $pageid[$i] = substr($pageid, 0, $i - 1);
-                    break;
-                }
-            }
-
-            $INFO = xcms_get_list(xcms_get_info_file_name());
-            @$_GET["mode"]="";
+            $last_action_result = "<div class=\"error\">Пожалуйста, сначала удалите все подразделы!</div>";
         }
+        @$_GET["mode"] = "";
     }
 ?><!DOCTYPE html>
 <html>
     <head>
         <# cms/head #>
         <link rel="stylesheet" type="text/css" href="<?php echo "${full_engine_pub}css/admin.css"; ?>" />
-        <# cms/jquery #>
-        <script language="javascript" type="text/javascript" src="<?php echo "${full_engine_pub}js/common.js"; ?>"></script>
+        <# js/jquery #>
+        <# js/public common.js #>
+        <# js/public control-depends.js #>
     </head>
     <body>
         <script language="javascript" type="text/javascript">
-            AddSlider('editor-help', 'show-editor-help');
+            xjs_add_slider('editor-help', 'show-editor-help');
         </script>
         <?php $is_editor = xcms_user()->check_rights("editor", false); ?>
         <?php $is_admin = xcms_user()->check_rights("admin", false); ?>
@@ -76,14 +61,10 @@ if (!@$_GET["page"])
             <?php if ($is_admin) {?>
             <span class="top-menu-div">&nbsp;</span>
             <a <?php echo xcms_href(array('mode'=>'user_manage', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Пользователи</a>
-            <a <?php echo xcms_href(array('mode'=>'group_admin', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Группы</a>
             <a <?php echo xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Уведомления</a>
+            <a href="/<# web_prefix #>xsm" class="h-menu-link">XSM</a>
             <a href="/mailman/listinfo/preps/" class="h-menu-link">Рассылка</a><?php
             }?>
-
-            <span style="display:none;">
-                <a <?php echo xcms_href(array('mode'=>'__convert', 'page'=>$pageid, 'ref'=>'admin')); ?>
-                class="h-menu-link">Convert [DoNotPush]</a></span>
 
             <span style="float: right">
             <b id="screen">Админка</b>
@@ -108,99 +89,68 @@ if (!@$_GET["page"])
                 xcmst_page_info($INFO, $pageid);
             ?>
 <?php
-    if(@$_GET["mode"]=="change_passwd")
+    if (xu_len($last_action_result))
+    {?>
+        <div class="admin-widget"><?php
+        echo $last_action_result;
+        ?></div><?php
+    }
+
+    if (@$_GET["mode"]=="change_passwd")
     {
         include(translate('<! auth/chpassw !>'));
     }
-    else if(@$_GET["mode"]=="cleanprec") include(translate("<! cleanprec !>"));
-    else if(@$_GET["mode"]=="delete")
+    else if (@$_GET["mode"] == "cleanprec") include(translate("<! cleanprec !>"));
+    else if (@$_GET["mode"] == "delete")
         include(translate("<! cms/page/delete_page !>"));
-    else if(@$_GET["mode"]=="edit_alias")
+    else if (@$_GET["mode"] == "edit_alias")
         include(translate("<! cms/page/alias !>"));
-    else if(@$_GET["mode"]=="edit_header")
+    else if (@$_GET["mode"] == "edit_header")
         include(translate("<! cms/page/header !>"));
-    else if(@$_GET["mode"]=="edit_meta")
+    else if (@$_GET["mode"] == "edit_meta")
         include(translate("<! cms/edit_meta_tags !>"));
-    else if(@$_GET["mode"]=="edit_menu")
+    else if (@$_GET["mode"] == "edit_menu")
         include(translate("<! cms/menu/edit_menu !>"));
-    else if(@$_GET["mode"]=="page_rename")
+    else if (@$_GET["mode"] == "page_rename")
         include(translate("<! cms/page/rename_page !>"));
-    else if(@$_GET["mode"]=="edit_icon")
+    else if (@$_GET["mode"] == "edit_icon")
         include(translate("<! cms/light_icon_editor !>"));
-    else if(@$_GET["mode"]=="obsolete_settings")
-    {
-        $editfile = xcms_get_info_file_name();
-        include(translate('<! edit/tag `edit`,`view`,`installed` !>'));
-    }
-    else if(@$_GET["mode"]=="edit_attach")
+    else if (@$_GET["mode"] == "edit_attach")
         include(translate("<! cms/edit_page_attachments !>"));
-    else if(@$_GET["mode"]=="mailer" )
+    else if (@$_GET["mode"] == "mailer" )
     {
         $editfile = "{$SETTINGS["content_dir"]}cms/mailer.conf";
         include(translate('<! edit/tag `edit`,`view`,`installed` `longtext` !>'));
     }
-    else if(@$_GET["mode"]=="rebuild_alias")
+    else if (@$_GET["mode"] == "rebuild_alias")
     {?>
         <div class="admin-widget"><?php
-            xcmst_rebuild_aliases_and_rewrite();
+            xcmst_rebuild_aliases_and_rewrite(/* verbose = */true);
             ?><div class="notice">Список alias-ов успешно обновлён</div>
         </div><?php
     }
-    else if(@$_GET["mode"]=="__convert")
-    {
-        $fl = file('ifiles');
-        foreach ($fl as $fn) {
-            $fn = trim($fn);
-            echo dirname($fn).'<br/>';
-            $dn = dirname($fn);
-            $nfn = "$dn/newinf";
-            $list = getList($fn);
-            print_r($list);
-            echo "<br />";
-            $description = @file_get_contents("$dn/_description");
-            $author = @file_get_contents("$dn/_authors");
-            $keywords = @file_get_contents("$dn/_keywords");
-            $alias = @file_get_contents("$dn/currtag");
-            $menuTitle = @file_get_contents("$dn/applymenu");
-            $list["meta-description"] = $description;
-            $list["meta-author"] = $author;
-            $list["meta-keywords"] = $keywords;
-            $list["alias"] = $alias;
-            $list["menu-title"] = $menuTitle;
-            xcms_save_list($nfn, $list);
-        }
-        die();
-    }
-    elseif(@$_GET["mode"]=="taglist")
-    {
-        include(translate('<! edit/taglistadmin !>'));
-    }
-    elseif(@$_GET["mode"]=="access")
+    elseif (@$_GET["mode"] == "access")
     {
         include(translate("<! cms/access_edit !>"));
     }
-    elseif(@$_GET["mode"]=="group_admin")
-    {
-        include(translate("<! auth/group !>"));
-    }
-    elseif(@$_GET["mode"]=="user_manage")
+    elseif (@$_GET["mode"] == "user_manage")
     {
         $preface = xcms_url(array('ref'=>'admin', 'mode'=>'user_manage', 'page'=>$pageid));
         include(translate("<! auth/admin !>"));
     }
-    elseif(@$_GET["mode"]=="myprofile")
+    elseif (@$_GET["mode"] == "myprofile")
     {
         $preface = xcms_url(array('ref'=>'admin', 'mode'=>'myprofile', 'page'=>$pageid));
         include(translate("<! auth/myprofile !>"));
     }
-    elseif(@$_GET["mode"]=="create_page")
+    elseif (@$_GET["mode"] == "create_page")
     {
         include(translate("<! cms/create_page_form !>"));
     }
     else
     {
         if ($is_editor)
-            include(translate('<! cms/light_edit_table !>'));
+            include(translate('<! cms/edit_table !>'));
         else
         {?>
             <div class="admin-widget">У вас нет прав для редактирования содержимого.<br/>

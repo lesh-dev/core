@@ -40,8 +40,9 @@
     require_once ("${engine_dir}sys/mailer.php");
     require_once ("${engine_dir}sys/resample.php");
     require_once ("${engine_dir}sys/controls.php");
+    require_once ("${engine_dir}cms/alias.php");
     if (!$session_result)
-        xcms_log("[SESSION] Session start failed");
+        xcms_log(XLOG_ERROR, "[SESSION] Session start failed");
 
     $main_ref_file = "";
     $main_ref_name = "";

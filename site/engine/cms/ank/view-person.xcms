@@ -402,7 +402,7 @@ function xsm_print_person_ank_data($db, $person)
     xsm_draw_person_longtextval('main', $fields['lesh_ref'], $lesh_ref);
     ?></div>
     <script>
-        AddSlider('extra-person-info', 'show-extra-person-info');
+        xjs_add_slider('extra-person-info', 'show-extra-person-info');
     </script>
     <?php
     xsm_draw_person_comments($db, $person_id);
@@ -566,7 +566,7 @@ function xsm_print_person_selected_school($db, $school_id, $person)
         xsm_print_student_exams($db, $school_id, $person_id, $person_school);
 
     if (xcms_checkbox_enabled($person_school['is_teacher']))
-        xsm_print_course_selected_school($db, $school_id, $person_id);
+        xsm_print_courses_selected_school($db, $school_id, $person_id);
 }
 
 // shows person information sliced by school

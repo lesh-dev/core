@@ -421,7 +421,7 @@ function CreateMessageIndex()
 					ID_WORD " . $index_properties[$context['index_settings']['bytes_per_word']]['column_definition'] . " unsigned NOT NULL default '0',
 					ID_MSG int(10) unsigned NOT NULL default '0',
 					PRIMARY KEY (ID_WORD, ID_MSG)
-				) TYPE=MyISAM", __FILE__, __LINE__);
+				) ENGINE=MyISAM", __FILE__, __LINE__);
 			
 			// Temporarily switch back to not using a search index.
 			if (!empty($modSettings['search_index']) && $modSettings['search_index'] == 'custom')

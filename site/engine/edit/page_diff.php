@@ -36,5 +36,7 @@ function xcms_process_page_diff($old_text, $new_text, $page_id = false)
     // disable full page text
     //$body_html = str_replace('@@NEW-TEXT@', htmlspecialchars($new_text), $body_html);
     xcms_send_notification("content-change", NULL, $body_html);
+
+    return $diff_html;
 }
 ?>

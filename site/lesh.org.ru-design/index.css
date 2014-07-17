@@ -77,7 +77,6 @@ h3 {
 .indent_form a,
 .main_text a, .bottom_text a,
 .length_of_text a{
-    font-size: 14px;
     color: #4F4F4F;
 }
 
@@ -143,14 +142,15 @@ h3 {
     padding-left: 50px;
 }
 
-.sidebar_top ul{
+.sidebar_top ul {
     list-style-type: none;
     font-size: 14px;
 }
 
-.sidebar_top ul li, .sidebar_bottom ul li{
+.sidebar_top ul li,
+.sidebar_bottom ul li {
     display: inline;
-    line-height:12px;
+    line-height: 14px;
     color: black;
 }
 
@@ -253,7 +253,7 @@ h3 {
     color: #4f4f4f;
 }
 
-.bottom_text p.top{
+.bottom_text p.top {
     font-size: 14px;
     color: black;
     margin-top: -20px;
@@ -261,7 +261,7 @@ h3 {
     margin-left: -20px;
 }
 
-.main_text p.nowrap{
+.main_text p.nowrap {
     font-size: 14px;
     color: black;
     padding-top: 15px;
@@ -296,8 +296,13 @@ h3 {
     font-size: 14px;
 }
 
+.main_text ul {
+    list-style: disc outside none;
+    padding-left: 20px;
+}
+
 .main_text ul.bullet,
-.bottom_text ul.bullet{
+.bottom_text ul.bullet {
     list-style-type: disc;
     padding-left: 50px;
     padding-top: 15px;
@@ -357,7 +362,7 @@ p.grey_fond{
     padding: 7px 0px 0px 10px;
 }
 
-.length_of_text p.note_bottom{
+.length_of_text p.note_bottom {
     padding-bottom: 10px;
     margin-left: -30px;
     font-size: 12px;
@@ -489,7 +494,7 @@ p.grey_fond{
 }
 
 .bottom_text ol,
-.length_of_text ol{
+.length_of_text ol {
     list-style-type: decimal;
     padding-top: 15px;
     margin-left: 20px;
@@ -723,15 +728,15 @@ ul.menu li {
 
 .menu-level1 {
     padding-left: 14px;
-    font-size: 13px;
+    font-size: 14px;
 }
 .menu-level2 {
     padding-left: 14px;
-    font-size: 11px;
+    font-size: 13px;
 }
 .menu-level3 {
     padding-left: 14px;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 a.menu-item {

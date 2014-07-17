@@ -9,16 +9,19 @@
     $form_action = xcms_url(array('school_id'=>$school_id));
 ?>
 <form method="post" name="filter" id="filter-form"
-    action="list-person<?php echo $form_action; ?>" ><span><?php
-        xsm_checkbox('show_is_teacher', $show_is_teacher);
-    ?><span class="ankListField">Только преподы</span>&nbsp;&nbsp;<?php
-        xsm_checkbox('show_is_student', $show_is_student);
-    ?><span class="ankListField">Только школьники</span>&nbsp;&nbsp;<?php
-        xsm_checkbox('sort_by_class', $sort_by_class);
-    ?><span class="ankListField">По классу</span>&nbsp;&nbsp;<?php
+    action="list-person<?php echo $form_action; ?>" >
+    <span>Фильтр: </span>
+    <span><?php xsm_checkbox('show_is_teacher', $show_is_teacher);
+    ?><span class="ankListField">Только преподы</span>&nbsp; &nbsp;
+    <?php xsm_checkbox('show_is_student', $show_is_student);
+    ?><span class="ankListField">Только школьники</span>&nbsp; &nbsp;
+    <?php xsm_draw_fio_filter(); ?>&nbsp; &nbsp;
+
+    <span>Группировка: </span>
+    <?php xsm_checkbox('sort_by_class', $sort_by_class);
+    ?><span class="ankListField">По классу</span>&nbsp; &nbsp;<?php
         xsm_checkbox('sort_by_curator_group', $sort_by_curator_group);
-    ?><span class="ankListField">По гр. кураторства</span>&nbsp;&nbsp;<?php
-        xsm_draw_fio_filter(); ?>
+    ?><span class="ankListField">По гр. кураторства</span>&nbsp; &nbsp;
     <input type="submit" name="show-person" value="Показать" />
 </span></form>
 <script type="text/javascript">
