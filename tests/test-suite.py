@@ -82,7 +82,7 @@ try:
     breakOnErrors, args = getSingleOption(["-b", "--break"], args)
 
     if args:
-        if args[-1].beginswith("-"):
+        if args[-1].startswith("-"):
             raise CliParamError("You probably forgot to specify site URL. I believe it cannot begin with dash. ") 
     
 except CliParamError as e:
