@@ -802,6 +802,9 @@ class SeleniumTest(object):
         return self.m_driver.page_source
 
     def checkPhpErrors(self):
+        """
+            returns True and suspicious word if error found, False/None otherwise
+        """
         pageText = self.getPageSource()
         susp = ["Notice:", "Error:", "Warning:", "Fatal error:", "Parse error:"]
         for word in susp:

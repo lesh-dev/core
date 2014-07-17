@@ -35,7 +35,7 @@ class XcmsContentPageOrder(xtest_common.XcmsTest):
         
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle1)
-        # TODO: wait for fix #779
+        # TODO: wait for fix #779 - fixed
         self.gotoPage("/?&mode=edit_menu&page=index%2F" + inpPageDir1 + "&ref=admin")
 
         order1 = "20"
