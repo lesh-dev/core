@@ -113,7 +113,7 @@ def getValue(ele):
 class SeleniumTest(object):
     def __init__(self, baseUrl, params = []):
         self.m_testName = self.__class__.__name__
-        self.m_baseUrl = baseUrl
+        self.m_baseUrl = baseUrl or ""
         self.m_params = params
 
         self.initDefaults()
@@ -251,6 +251,8 @@ class SeleniumTest(object):
         self.m_errorsAsWarnings = errorsAsWarnings
 
     def fixBaseUrl(self, url):
+        if isVoid(url):
+            raise TestError("Test base URL is empty. Nowhere to run. ")
         if not (url.startswith("http://") or url.startswith("https://")):
             url = "http://" + url;
         return url;
