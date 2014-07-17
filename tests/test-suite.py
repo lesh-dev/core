@@ -81,6 +81,9 @@ try:
     doFullList, args = getSingleOption(["-f", "--full-list"], args)
     breakOnErrors, args = getSingleOption(["-b", "--break"], args)
 
+    testArgs = [x for x in args if x.startswith("-")]
+    restArgs = [x for x in args if not x.startswith("-")]
+    
 except CliParamError as e:
     print "Option syntax error: ", e
     showHelp()
@@ -96,20 +99,15 @@ if specTest:
     print "We are going to run just one test " + specTest + ". "
 
 baseUrl = None
-if len(args) >= 1:
-    baseUrl = args.pop()
-    if isVoid(baseUrl):
-        showHelp()
-        sys.exit(1)
-else:
-    if not (doList or doFullList):
-        print "Test site URL not defined. "
-        showHelp()
-        sys.exit(1)
+if restArgs:
+    baseUrl = restArgs.pop(0)
 
+if restArgs:
+    print "Warning: trailing parameters are ignored: ", restArgs
+    
 if doInstallerTest:
     print "Running installer test. "
-    result = RunTest(test_xcms_installer.TestXcmsInstaller(baseUrl, args))
+    result = RunTest(test_xcms_installer.TestXcmsInstaller(baseUrl, testArgs))
     if result != 0:
         print "Installer test not succeded, stopping suite. "
         sys.exit(result)
@@ -129,7 +127,7 @@ try:
         print "There is no 'getTests' function defined in specified test set. "
         sys.exit(1)
 
-    tests = testSetModule.getTests(baseUrl, args)
+    tests = testSetModule.getTests(baseUrl, testArgs)
 
     failedTests = {}
     specTestFound = False

@@ -25,6 +25,7 @@ import xcms_site_open_all_pages
 import xcms_site_open_renamed_pages
 import xcms_unittests
 import xcms_version_check
+import xcms_warnings
 import xcms_xsm_add_courses
 import xcms_xsm_add_exams
 import xcms_xsm_add_school
@@ -61,6 +62,7 @@ def getTests(baseUrl, args):
         "xcms_site_open_renamed_pages.py": xcms_site_open_renamed_pages.XcmsSiteOpenRenamedPages(baseUrl, args),
         "xcms_unittests.py": xcms_unittests.XcmsUnitTests(baseUrl, args),
         "xcms_version_check.py": xcms_version_check.XcmsVersionCheck(baseUrl, args),
+        "xcms_warnings.py": xcms_warnings.XcmsWarnTest(baseUrl, args),
         "xcms_xsm_add_courses.py": xcms_xsm_add_courses.XcmsXsmAddCourses(baseUrl, args),
         "xcms_xsm_add_exams.py": xcms_xsm_add_exams.XcmsXsmAddExams(baseUrl, args),
         "xcms_xsm_add_school.py": xcms_xsm_add_school.XcmsXsmAddSchool(baseUrl, args),
