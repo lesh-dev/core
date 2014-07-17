@@ -134,7 +134,7 @@ function xcms_delete_page($page_id)
     $list = glob("$dir/*");
     if ($list)
     {
-        foreach ($list as $key=>$value)
+        foreach ($list as $value)
             unlink($value);
     }
     rmdir($dir);
