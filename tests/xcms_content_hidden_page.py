@@ -23,7 +23,7 @@ class XcmsContentHiddenPage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
 
         self.gotoCreatePage()
-        
+
         inpPageDir = "hiddenPage_" + random_crap.randomText(6);
         inpMenuTitle = "hiddenMenuTitle_" + random_crap.randomText(6);
         inpPageHeader = "hiddenPageHeader_" + random_crap.randomText(6);
@@ -46,7 +46,7 @@ class XcmsContentHiddenPage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(inpMenuTitle)
 
         pageText = u"Секретный Скрытый Текст" + random_crap.randomCrap(6)
-        pageText = self.fillElementById("edit-text", pageText)
+        pageText = self.fillAceEditorElement(pageText)
         self.clickElementById("edit-submit-top")
 
         self.gotoCloseEditor()

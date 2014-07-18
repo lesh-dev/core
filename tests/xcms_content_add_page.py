@@ -78,7 +78,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         pageText = random_crap.randomCrap(10, self.wordOptions, specialChars = self.specChars)
         print "Generated page text: '" + pageText + "'"
 
-        pageText = self.fillElementById("edit-text", pageText)
+        pageText = self.fillAceEditorElement(pageText)
         print "After ins page text: '" + pageText + "'"
         self.clickElementById("edit-submit-top")
 
@@ -90,7 +90,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         # add second line
         newPageText = pageText + "\n" + random_crap.randomCrap(10, self.wordOptions, specialChars = self.specChars)
 
-        newPageText = self.fillElementById("edit-text", newPageText)
+        newPageText = self.fillAceEditorElement(newPageText)
         print "Generated 2-line page text: '" + newPageText + "'"
 
         self.clickElementById("edit-submit-top")
@@ -115,26 +115,26 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         if inpMenuTitle not in self.getPageTitle():
             self.failTest("Menu title text does not appear in page title after going to the page by menu. ")
-        
+
     def testVersions(self):
-        
+
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoUrlByLinkText(self.m_menuTitle)
 
         self.gotoEditPageInPlace()
 
         versionUnoText = "version_0001"
-        versionUnoText = self.fillElementById("edit-text", versionUnoText)
+        versionUnoText = self.fillAceEditorElement(versionUnoText)
         self.clickElementById("edit-submit-top")
         self.wait(2)
 
         versionDosText = "version_0002"
-        versionDosText = self.fillElementById("edit-text", versionDosText)
+        versionDosText = self.fillAceEditorElement(versionDosText)
         self.clickElementById("edit-submit-top")
         self.wait(2)
 
         versionTresText = "version_0003"
-        versionTresText = self.fillElementById("edit-text", versionTresText)
+        versionTresText = self.fillAceEditorElement(versionTresText)
         self.clickElementById("edit-submit-top")
         self.wait(2)
 
@@ -165,7 +165,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         pageText = linesToHtml(origLines)
 
-        pageText = self.fillElementById("edit-text", pageText)
+        pageText = self.fillAceEditorElement(pageText)
 
         print "diff test page text original: "
         print pageText
@@ -180,7 +180,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         newLines = origLines[:3] + [insLine] + origLines[3:5] + origLines[7:]
         pageText = linesToHtml(newLines)
 
-        pageText = self.fillElementById("edit-text", pageText)
+        pageText = self.fillAceEditorElement(pageText)
 
         print "diff test page new text: "
         print pageText
@@ -193,7 +193,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         pageText = linesToHtml(newLines)
 
-        pageText = self.fillElementById("edit-text", pageText)
+        pageText = self.fillAceEditorElement(pageText)
         self.clickElementById("edit-submit-top")
 
         pageWords = (" ".join(newLines)).split()
@@ -211,7 +211,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         print pageText
         print "-" * 30
 
-        pageText = self.fillElementById("edit-text", pageText)
+        pageText = self.fillAceEditorElement(pageText)
 
         self.clickElementById("edit-submit-top")
 
@@ -238,7 +238,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.logAdd("test aliases")
 
         self.assertUrlPresent(u"Личный кабинет")
-        
+
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoUrlByLinkText(self.m_menuTitle)
         self.gotoEditPageInPlace()

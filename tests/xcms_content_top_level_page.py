@@ -42,7 +42,7 @@ class XcmsContentTopLevelPage(xtest_common.XcmsTest):
         pageText = random_crap.randomCrap(6)
         self.logAdd("Generated page text: '" + pageText + "'")
 
-        pageText = self.fillElementById("edit-text", pageText)
+        pageText = self.fillAceEditorElement(pageText)
         self.logAdd("Page text after edit: '" + pageText + "'")
         self.clickElementById("edit-submit-top")
 

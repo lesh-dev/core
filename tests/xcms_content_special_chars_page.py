@@ -51,7 +51,7 @@ class XcmsContentSpecialCharsPage(xtest_common.XcmsTest):
 
         pageText = "&amp;&lt;"
 
-        pageText = self.fillElementById("edit-text", pageText)
+        pageText = self.fillAceEditorElement(pageText)
         self.clickElementById("edit-preview-top")
         previewElement = "content-text-preview"
         pageRealText = "&<";

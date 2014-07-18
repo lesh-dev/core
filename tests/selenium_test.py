@@ -267,7 +267,7 @@ class SeleniumTest(object):
     # alias of gotoPage, for similarity with gotoUrlByLinkText
     def gotoUrl(self, url, comment = ""):
         return self.gotoPage(url, comment)
-    
+
     # @comment usually means link name (or id), which we used to navigate to this URL.
     def gotoPage(self, url, comment = ""):
         fullUrl = self.m_baseUrl + url
@@ -322,12 +322,12 @@ class SeleniumTest(object):
         self.checkEmptyParam(eleId, "sendEnterById")
         ele = self.getElementById(eleId)
         ele.send_keys(Keys.RETURN)
-        
+
     def sendEnterByName(self, eleName):
         self.checkEmptyParam(eleName, "sendEnterByName")
         ele = self.getElementByName(eleName)
         ele.send_keys(Keys.RETURN)
-        
+
     def gotoUrlByPartialLinkText(self, linkName, reason = ""):
         try:
             link = self.getUrlByLinkText(linkName, ["partial"], reason)
@@ -382,6 +382,15 @@ class SeleniumTest(object):
             return self.m_driver.find_element_by_id(eleId)
         except NoSuchElementException:
             self.failTest("Cannot get element by id '" + eleId + "'. ")
+
+    def getElementByClass(self, css_class):
+        try:
+            return self.m_driver.find_element_by_css_selector(css_class)
+        except NoSuchElementException:
+            self.failTest("Cannot get element by class '" + css_class + "'. ")
+
+    def executeJS(self, script):
+        return self.m_driver.execute_script(script)
 
     def checkboxIsValid(self, value):
         return value == "checked" or value == "true"
@@ -442,17 +451,29 @@ class SeleniumTest(object):
     def fillElementById(self, eleId, text, clear = True):
         try:
             self.checkEmptyParam(eleId, "fillElementById")
+            ele = self.getElementById(eleId)
             if clear:
                 self.addAction("clear", "element id: '" + eleId + "'")
-                self.getElementById(eleId).clear()
+                ele.clear()
 
             self.addAction("fill", "element id: '" + eleId + "', text: " + wrapIfLong(userSerialize(text)) + " ")
-            ele = self.getElementById(eleId)
             self.logAdd("Sending text to element '" + eleId + "'")
             ele.send_keys(text)
-            return getValue(self.getElementById(eleId))
+            return getValue(ele)
         except InvalidElementStateException as e:
             self.fatalTest("Cannot set element value by id '" + eleId + "', possibly element is read-only.")
+
+    def fillAceEditorElement(self, text, clear = True):
+        eleClass = 'textarea.ace_text-input'  # a bit of hardcode, we have only one ACE editor on screen at a time
+        ele = self.getElementByClass(eleClass)
+        if clear:
+            self.addAction("clear", "element class: '" + eleClass + "'")
+            ele.clear()
+
+        self.addAction("fill", "element class: '" + eleClass + "', text: " + wrapIfLong(userSerialize(text)) + " ")
+        self.logAdd("Sending text to element class '" + eleClass + "'")
+        ele.send_keys(text)
+        return self.executeJS("return $('#edit-text').data('editor-ref').getValue();")
 
     def setOptionValueByIdAndValue(self, eleId, optValue):
         try:
