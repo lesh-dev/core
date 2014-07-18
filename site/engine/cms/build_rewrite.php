@@ -68,12 +68,13 @@ function xcmst_build_rewrite($verbose = false)
             $listing[$level] = "";
         $listing[$level] .= "RewriteRule ^$alias$ index.php?page=$path\n";
         $listing[$level] .= "RewriteRule ^$alias/((.|\\r|\\n)*)$ index.php?page=$path&aparam=$1\n";
-        $level_str = '';
-        for ($i = 0; $i < $level; $i++)
-            $level_str .= '<span style="display: inline-block; width: 10px">&nbsp;</span>';
 
         if ($verbose)
-            echo "<tr><td>$level_str$alias</td><td>$path</td></tr>\n";
+        {
+            $alias_str = str_replace('/', '<b class="slash">/</b>', $alias);
+            $path_str = str_replace('/', '<b class="slash">/</b>', $path);
+            echo "<tr><td>$alias_str</td><td>$path_str</td></tr>\n";
+        }
     }
     if ($verbose)
         echo "</table>\n";

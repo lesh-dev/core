@@ -416,3 +416,9 @@ table.access-editor td {
     vertical-align: top;
     padding-right: 20px;
 }
+
+b.slash {
+    font-weight: bold;
+    color: #9f0000;
+    padding: 0px 2px 0px 2px;
+}
