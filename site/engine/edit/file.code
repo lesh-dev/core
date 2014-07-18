@@ -144,6 +144,7 @@
             editor.setShowPrintMargin(false);
             editor.setShowInvisibles(false);
             editor.setDisplayIndentGuides(false);
+            $('#edit-text').data('editor-ref', editor);
 
             function xcms_set_editor_value() {
                 var text = editor.getValue()
