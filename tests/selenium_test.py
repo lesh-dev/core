@@ -458,6 +458,7 @@ class SeleniumTest(object):
 
             self.addAction("fill", "element id: '" + eleId + "', text: " + wrapIfLong(userSerialize(text)) + " ")
             self.logAdd("Sending text to element '" + eleId + "'")
+            ele = self.getElementById(eleId)  # Selenium element cache miss can occur
             ele.send_keys(text)
             return getValue(ele)
         except InvalidElementStateException as e:
