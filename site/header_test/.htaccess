@@ -1,0 +1,5 @@
+<FilesMatch "\.(php)$">
+    <IfModule mod_headers.c>
+        Header set X-XCMS-HTAccess-Works "yes"
+    </IfModule>
+</FilesMatch>

@@ -1,6 +1,33 @@
 <?php
-    class InstallerInstallHook
+function xcms_check_mod_rewrite()
+{
+    if (function_exists('apache_get_modules'))
     {
+        $modules = apache_get_modules();
+        return in_array('mod_rewrite', $modules);
+    }
+    return (getenv('HTTP_MOD_REWRITE') == 'On');
+}
+
+function xcms_check_allow_override()
+{
+    $header_test_url = str_replace("install.php", "header_test/header_test.php", $_SERVER["REQUEST_URI"]);
+    $header_test_url = "http://{$_SERVER['HTTP_HOST']}$header_test_url";
+    $ch = curl_init($header_test_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_HEADER, true);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5); // enough for connection
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10); // enough for receiving
+    $response = curl_exec($ch);
+    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    return ($http_status == 200 && strpos($response, "X-XCMS-HTAccess-Works") !== false);
+}
+
+
+class InstallerInstallHook
+{
     /**
       * Имя модуля
       **/
@@ -53,15 +80,15 @@
       **/
     function initial_check()
     {
-        if (function_exists('apache_get_modules'))
-        {
-            $modules = apache_get_modules();
-            $mod_rewrite = in_array('mod_rewrite', $modules);
-        }
-        else
-            $mod_rewrite = (getenv('HTTP_MOD_REWRITE')=='On') ? true : false;
-        if(!$mod_rewrite)
-            return "Apache 'mod_rewrite' module is not enabled. Please enable it in your Apache webserver configuration.";
+        if (!xcms_check_mod_rewrite())
+            return
+            "Apache 'mod_rewrite' module is not enabled.\n".
+            "Please enable it in your Apache webserver configuration.";
+
+        if (!xcms_check_allow_override())
+            return
+                "Apache 'AllowOverride' directive is not enabled for site root.\n".
+                "Aliases will not work. Please enable it in your Apache webserver configuration.";
 
         @mkdir(".prec", 0777);
         $PERM["prec"] = xcms_append(".prec/.htaccess", "deny from all");
@@ -168,10 +195,10 @@
 
         return true;
     }
-    } // class InstallerInstallHook
+} // class InstallerInstallHook
 
-    /**
-      * Объект необходимо инстанциировать в переменную с названием $hook
-      **/
-    $hook = new InstallerInstallHook();
+/**
+  * Объект необходимо инстанциировать в переменную с названием $hook
+  **/
+$hook = new InstallerInstallHook();
 ?>
