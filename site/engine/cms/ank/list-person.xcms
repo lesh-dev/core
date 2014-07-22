@@ -88,7 +88,20 @@ function xsm_show_person_list($school_id)
     $student_count = 0;
     $teacher_count = 0;
     ?>
-    <table class="ankList table table-bordered table-hover">
+    <table class="ankList table table-bordered table-hover table-condensed">
+        <?php
+        global $XSM_BOOTSTRAP;
+        if ($XSM_BOOTSTRAP) {?>
+        <colgroup>
+            <col width="1%">
+            <col width="25%">
+            <col width="1%">
+            <col width="1%">
+            <col width="1%">
+            <col width="5%">
+            <col width="50%">
+        </colgroup>
+        <?php } else {?>
         <colgroup>
             <col width="16px" />
             <col width="25%" />
@@ -98,6 +111,7 @@ function xsm_show_person_list($school_id)
             <col width="50px" />
             <col width="25%" />
         </colgroup>
+        <?php } ?>
         <thead>
             <th class="ankList">#</th>
             <th class="ankList">Фамилия, имя</th>

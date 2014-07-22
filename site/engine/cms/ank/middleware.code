@@ -133,7 +133,7 @@ function xsm_print_recent_schools($db, $current_school_id, $table_name)
     $query = "SELECT * FROM school ORDER BY school_date_start DESC LIMIT $school_count";
     $school_sel = $db->query($query);
     ?>
-    <table class="ankList table table-bordered table-hover"><tr>
+    <table class="ankList table table-bordered table-hover table-condensed"><tr>
         <?php
         while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
         {
