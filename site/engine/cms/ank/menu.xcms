@@ -7,6 +7,7 @@ define('XSM_MENU_FIRST', true);
 function xsm_menu_item($view, $aux_url, $title, $first = false)
 {
     global $web_prefix, $aparam;
+    global $XSM_BOOTSTRAP;
     if (xu_empty($aparam))
         die("Variable 'aparam' is not set. Something is broken. ");
 
@@ -25,8 +26,10 @@ function xsm_menu_item($view, $aux_url, $title, $first = false)
         else
             $aux_class .= "current ";
     }
+    if ($XSM_BOOTSTRAP) echo "<li>";
     ?><a class="xsm-menu-item <?php echo $aux_class; ?>"
         href="<?php echo $url.$aux_url; ?>"><?php echo $title; ?></a><?php
+    if ($XSM_BOOTSTRAP) echo "</li>";
 }
 
 $u_locator_all = xcms_url(array('show_anketa_status'=>'all'));
@@ -42,7 +45,8 @@ $u_locator_active = xcms_url($a_locator_active);
 $u_cs = xcms_url($a_cs);
 
 ?>
-<div class="xsm-navbar"><?php
+<div class="xsm-navbar navbar navbar-inverse"><?php
+    if ($XSM_BOOTSTRAP) echo '<div class="navbar-inner"><ul class="nav">';
     xsm_menu_item('list-ank', '', 'Анкеты', XSM_MENU_FIRST);
     xsm_menu_item('list-person-locator', $u_locator_all, 'Все люди');
     xsm_menu_item('list-tour', $u_cs, 'Лес');
@@ -51,4 +55,5 @@ $u_cs = xcms_url($a_cs);
     xsm_menu_item('list-course', $u_cs, 'Курсы');
     xsm_menu_item('list-department', '', 'Отделения');
     xsm_menu_item('list-school', '', 'Школы');
+    if ($XSM_BOOTSTRAP) echo '</ul></div>';
 ?></div>

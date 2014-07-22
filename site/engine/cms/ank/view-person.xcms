@@ -221,7 +221,7 @@ function xsm_print_person_schools($db, $person, $current_school_id)
     $href_ank = "view-person&amp;person_id=$person_id&amp;school_id=".XSM_SCHOOL_ANK_ID;
     $active_ank = (XSM_SCHOOL_ANK_ID == $current_school_id) ? 'current' : '';
     ?>
-    <table class="ankList"><tr>
+    <table class="ankList table table-bordered table-hover"><tr>
         <td class="school-selection <?php echo $active_ank; ?>">
             <div>
                 <a href="<?php echo $href_ank; ?>">Анкета</a>
@@ -487,7 +487,7 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
         Всего нужно сдать <a href="<?php echo $need_href; ?>"><?php
             echo $need.'&nbsp;'.xcms_plural($need, 'зачёт'); ?></a>.
     </div>
-    <table class="ankList">
+    <table class="ankList table table-bordered table-hover">
         <colgroup>
             <col width="15%" />
             <col width="25%" />
