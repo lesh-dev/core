@@ -1,1 +1,17 @@
-<h4>Can&apos;t find element: <?php echo $argv[0];?></h4>
+<style>
+    div.error-widget {
+        border: 1px solid #7f7f7f;
+        border-radius: 3px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+        width: 600px;
+        background-color: #dddcae;
+    }
+</style>
+<div class="error-widget">
+    <h2>XCMS Template Error:</h2>
+    Cannot find template: <tt>&apos;<?php echo htmlspecialchars($argv[0]); ?>&apos;</tt>
+</div>
