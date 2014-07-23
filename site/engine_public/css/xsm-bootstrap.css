@@ -21,3 +21,8 @@ td.school-selection a.edit-link {
     text-align: left;
     display: inline-block;
 }
+
+span.xsm-label {
+    display: inline-block;
+    width: 300px;
+}

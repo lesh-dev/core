@@ -104,7 +104,7 @@ function xsm_show_all_person_list()
 
     xsm_view_operations('person', 'участника', xcms_url(array('anketa_status'=>'cont')));
     ?>
-    <table class="ankList">
+    <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
             <col width="30" class="id" />
             <col width="30%" />

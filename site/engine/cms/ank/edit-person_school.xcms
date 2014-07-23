@@ -51,7 +51,7 @@ function xsm_edit_person_school()
         <input type="hidden" name="person_school_id" value="<?php echo $person_school_id; ?>" />
         <input type="hidden" name="member_person_id" value="<?php echo $member_person_id; ?>" />
         <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
-        <table class="ankEdit">
+        <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
                 <td class="ankListRowTitle"><span class="xsm-header">Редактирование ролей и статусов на школе</span></td>
             </tr>
@@ -62,7 +62,7 @@ function xsm_edit_person_school()
                     continue;
                 $value = xcms_get_key_or($person_school, $key);
                 $attr = ""; ?>
-                <tr><td class="ankList"><span class="ankEditField"><?php echo $person_school_fields[$key]; ?></span>
+                <tr><td class="ankList"><span class="ankEditField xsm-label"><?php echo $person_school_fields[$key]; ?></span>
                 <?php
                 $ft = xcms_get_key_or($field_types, $key);
                 if ($ft == "checkbox")

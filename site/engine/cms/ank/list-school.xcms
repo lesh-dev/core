@@ -14,7 +14,7 @@ function xsm_school_list()
 
     <h3>Школы</h3><?php
     xsm_view_operations('school', 'школу'); ?>
-    <table class="ankList">
+    <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
             <col width="60" />
             <col width="100%" />

@@ -137,7 +137,7 @@ function xsm_change_person_status()
                 if ($key == "owner_login" ||
                     $key == "blamed_person_id")
                     $attr = 'readonly="readonly"'; ?>
-                <tr><td class="ankList"><span class="ankEditField"><?php echo $person_comment_fields[$key]; ?></span>
+                <tr><td class="ankList"><span class="ankEditField xsm-label"><?php echo $person_comment_fields[$key]; ?></span>
                 <?php
                 $cft = xcms_get_key_or($comm_field_types, $key);
                 if ($cft == "textarea")
