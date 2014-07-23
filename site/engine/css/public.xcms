@@ -1,0 +1,4 @@
+<?php
+    global $full_engine_pub;
+    // %1 = script name
+?><link rel="stylesheet" type="text/css" href="<?php echo $full_engine_pub; ?>css/<# css_version #>%1" />
