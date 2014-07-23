@@ -1,0 +1,23 @@
+a.xsm-close {
+    display: inline-block;
+    position: absolute;
+    top: 11px;
+    right: 11px;
+    width: 16px;
+    height: 16px;
+    background-image: url('../../img/close.png');
+    background-repeat: no-repeat;
+}
+
+/* school-selection navbar */
+td.school-selection div {
+    position: relative;
+}
+
+td.school-selection a.edit-link {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    text-align: left;
+    display: inline-block;
+}

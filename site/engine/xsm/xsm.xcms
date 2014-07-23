@@ -13,6 +13,12 @@
     <# js/public common.js #>
     <# js/public xsm.js #>
     <# js/public control-depends.js #>
+
+    <link rel="stylesheet" type="text/css" href="<# full_design_dir #>css/<# css_version #>ank-manage.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $full_engine_pub; ?>css/<# css_version #>xsm.css" />
+    <?php if ($XSM_BOOTSTRAP) {?>
+    <link rel="stylesheet" type="text/css" href="<?php echo $full_engine_pub; ?>css/<# css_version #>xsm-bootstrap.css" /><?php
+    }?>
 </head>
 <body>
 <?php
@@ -22,7 +28,7 @@ require_once("${engine_dir}cms/ank/field-desc.php");
 <# cms/ank/middleware #>
 <# cms/ank/db-actions #>
 <# cms/ank/format #>
-<table style="width: 100%"><tr><td class="main-field roundBorders"><div style="position: relative;">
+<table style="width: 100%"><tr><td class="main-field roundBorders xsm-main-field"><div style="position: relative;">
 <a class="xsm-close" href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'index')); ?>">&nbsp;</a>
 <?php
     $aparam = xcms_get_key_or($_GET, "aparam");

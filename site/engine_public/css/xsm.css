@@ -64,3 +64,8 @@ span.class-school-num.diff {
 span.xsm-header {
     font-size: 20px;
 }
+
+/* new styles for bootstrap XSM only */
+td.xsm-main-field {
+    padding: 5px;
+}
