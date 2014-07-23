@@ -1,5 +1,4 @@
 <# auth/ #admin #ank #>
-<# cms/ank/style #>
 <?php
 
 define('XSM_MENU_FIRST', true);

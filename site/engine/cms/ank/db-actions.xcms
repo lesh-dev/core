@@ -116,10 +116,10 @@ function xsm_delete_entity_listmode($table_name, $title, $aux_param = '')
 }
 
 function xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title, $del_title = "Удалить") {?>
-    <div style="white-space: nowrap">
+    <div class="xsm-edit-ops">
         <input type="submit" name="update-<?php echo $table_name; ?>"
             id="update-<?php echo "$table_name-submit-$place"; ?>"
-            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
+            value="Сохранить" class="xsm-save-button" /><?php
         if (!$is_new) {?>
             <input type="submit" name="delete-<?php echo $table_name; ?>"
                 id="delete-<?php echo "$table_name-$place-submit"; ?>"
@@ -150,10 +150,10 @@ function xsm_edit_operations($table_name, $id, $title, $aux_param = '')
     // TODO: маленький костылик
     $redir = $is_new ? "list-person-locator" : "view-$table_name$aux_param&amp;${table_name}_id=$id";
     ?>
-    <div style="white-space: nowrap">
+    <div class="xsm-edit-ops">
         <input type="submit" name="update-<?php echo $table_name; ?>"
             id="update-<?php echo $table_name; ?>-submit"
-            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
+            value="Сохранить" class="xsm-save-button" /><?php
         if (!$is_new) {?>
             <input type="submit" name="delete-<?php echo $table_name; ?>"
                 id="delete-<?php echo $table_name; ?>-submit"
@@ -169,9 +169,9 @@ function xsm_edit_operations_listmode($entity, $id, $title, $aux_param = '')
     $is_new = ($id == XDB_NEW);
     $redir = $is_new ? "$entity$aux_param" : "$entity$aux_param#$entity$id";
     ?>
-    <div style="white-space: nowrap">
+    <div class="xsm-edit-ops">
         <input type="submit" name="update-<?php echo $entity; ?>"
-            value="Сохранить" style="margin-left: 0px; margin-top: 5px;" /><?php
+            value="Сохранить" class="xsm-save-button" /><?php
         if (!$is_new) {?>
             <input type="submit" name="delete-<?php echo $entity; ?>"
                 value="Удалить" class="delete-button"/><?php
@@ -183,7 +183,7 @@ function xsm_edit_operations_listmode($entity, $id, $title, $aux_param = '')
 
 function xsm_view_operations($table_name, $title, $aux_param = '')
 {?>
-    <div style="white-space: nowrap">
+    <div class="xsm-edit-ops">
         <a class="link-button" href="edit-<?php
             echo "$table_name$aux_param&amp;${table_name}_id=new"; ?>">Добавить <?php echo $title; ?></a>
     </div><?php

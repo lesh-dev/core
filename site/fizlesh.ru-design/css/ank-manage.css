@@ -291,6 +291,11 @@ img.edit-icon {
     vertical-align: -10%;
 }
 
+input.xsm-save-button {
+    margin-left: 0px;
+    margin-top: 5px;
+}
+
 input.delete-button {
     margin-top: 5px;
     background-color: #ff9f7f;
