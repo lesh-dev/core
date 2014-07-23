@@ -46,7 +46,7 @@ function xsm_edit_person_school()
     );
 
     ?>
-    <form method="post" action="edit-person_school"><?php
+    <form method="post" action="edit-person_school" role="form"><?php
         xsm_person_school_edit_operations('person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id, 'top');?>
         <input type="hidden" name="person_school_id" value="<?php echo $person_school_id; ?>" />
         <input type="hidden" name="member_person_id" value="<?php echo $member_person_id; ?>" />

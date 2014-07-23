@@ -1,3 +1,8 @@
+/* new styles for bootstrap XSM only */
+td.xsm-main-field {
+    padding: 7px;
+}
+
 a.xsm-close {
     display: inline-block;
     position: absolute;
@@ -25,4 +30,16 @@ td.school-selection a.edit-link {
 span.xsm-label {
     display: inline-block;
     width: 300px;
+}
+
+input[type="text"].ankEdit {
+    width: 50%;
+}
+
+input.xsm-save-button {
+    margin-right: 5px;  /* for horizontal button stacking */
+}
+
+a.link-button {
+    margin-right: 5px;
 }
