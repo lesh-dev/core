@@ -828,7 +828,7 @@ class SeleniumTest(object):
             returns True and suspicious word if error found, False/None otherwise
         """
         pageText = self.getPageSource()
-        susp = ["Notice:", "Error:", "Warning:", "Fatal error:", "Parse error:"]
+        susp = ["Notice:", "Error:", "Warning:", "Fatal error:", "Parse error:", "Can&apos;t find element:"]
         for word in susp:
             if (word in pageText) and (" on line " in pageText):
                 self.logAdd("PHP ERROR " + userSerialize(word) + " detected on page " + userSerialize(self.curUrl()) + ": ")
