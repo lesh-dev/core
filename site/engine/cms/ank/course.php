@@ -26,7 +26,7 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
     {?>
     <h3>Курсы</h3><?php
     xsm_view_operations('course', 'курс', $course_aux_param); ?>
-    <table class="ankList">
+    <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
             <col width="40%" />
             <?php if (!$pers) {?>
@@ -116,7 +116,7 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
             <td class="ankList"><?php echo $hr_course_area; ?></td>
             <td class="ankList"><?php echo $target_class; ?></td>
             <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
-                echo "Сдало <b>$exam_pass_count</b> из <b>$exam_total_count</b>"; ?></a></td>
+                echo "<b>$exam_pass_count</b> из <b>$exam_total_count</b>"; ?></a></td>
         </tr><?php
         } else
         {
