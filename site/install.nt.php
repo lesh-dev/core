@@ -1,6 +1,11 @@
 <?php
     header("Content-type: text/html; charset=UTF-8;");
     $target_version = @file_get_contents("VERSION");
+
+    function xsm_insert_style($css) {
+        echo "<style>\n$css\n</style>";
+    }
+
 ?><!DOCTYPE html>
 <html>
     <head>
@@ -8,10 +13,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
     <body>
-        <style><?php echo "\n".@file_get_contents('install.css')."\n"; ?></style>
+        <?php
+            xsm_insert_style(@file_get_contents("install.css"));
+        ?>
         <h1>Установка XCMS <?php echo $target_version; ?></h1>
 <?php
-    $engine_dir = "engine/"; // some initial hardcode. TODO: make autodetection
+    $engine_dir = "engine/";  // some initial hardcode. TODO: make autodetection
     require_once("${engine_dir}sys/string.php");
     require_once("${engine_dir}sys/tag.php");
     require_once("${engine_dir}sys/controls.php");
@@ -64,7 +71,7 @@
     }
     if(!$ok)
     {
-        die("<br/>Installation will not be continued until You will not take action.");
+        die("<p>Installation will not be continued until you will not take action.</p>");
     }
     if (@$_POST["submit_variables"])
     {

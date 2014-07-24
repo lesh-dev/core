@@ -82,13 +82,13 @@ class InstallerInstallHook
     {
         if (!xcms_check_mod_rewrite())
             return
-            "Apache 'mod_rewrite' module is not enabled.\n".
-            "Please enable it in your Apache webserver configuration.";
+            "<p>Apache '<tt>mod_rewrite</tt>' module is not enabled.<br/>".
+            "Please enable it in your Apache webserver configuration.</p>";
 
         if (!xcms_check_allow_override())
             return
-                "Apache 'AllowOverride' directive is not enabled for site root.\n".
-                "Aliases will not work. Please enable it in your Apache webserver configuration.";
+                "<p>Apache '<tt>AllowOverride</tt>' directive is not enabled for site root.<br/>".
+                "Aliases will not work. Please enable it in your Apache webserver configuration.</p>";
 
         @mkdir(".prec", 0777);
         $PERM["prec"] = xcms_append(".prec/.htaccess", "deny from all");
@@ -98,21 +98,21 @@ class InstallerInstallHook
 
         if(!$PERM["htaccess"])
         {
-            return "<p>Script can't write to root folder. You should do either</p>
+            return "<p>Script can't write to site root folder. You should do either</p>
             <ul>
-                <li>Change rights to root folder to make it writeable</li>
+                <li>change rights to root folder to make it writeable</li>
                 <li>create (writeable) folder .prec and empty writeable .htaccess file</li>
             </ul>";
         }
 
         if(!$PERM["prec"])
-            return "<p>Folder .prec/ is not writeable. Please fix this problem.</p>";
+            return "<p>Folder <tt>.prec/</tt> is not writeable. Please fix this problem.</p>";
 
         if(!$PERM["install"])
-            return "<p>File ./install.php is not writeable. Please fix this problem.</p>";
+            return "<p>File <tt>./install.php</tt> is not writeable. Please fix this problem.</p>";
 
         if(!$PERM["settings"])
-            return "<p>File ./settings.php is not writeable. Please fix this problem.</p>";
+            return "<p>File <tt>./settings.php</tt> is not writeable. Please fix this problem.</p>";
 
         return true;
     }

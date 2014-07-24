@@ -6,7 +6,7 @@
 
 function xcms_write($file_name, $contents)
 {
-    $f = fopen($file_name, "wb");
+    $f = @fopen($file_name, "wb");
     if (!$f)
         return false;
     $result = true;
@@ -18,7 +18,7 @@ function xcms_write($file_name, $contents)
 
 function xcms_append($file_name, $contents)
 {
-    $f = fopen($file_name, "a+b");
+    $f = @fopen($file_name, "a+b");
     if (!$f)
         return false;
     $result = true;
