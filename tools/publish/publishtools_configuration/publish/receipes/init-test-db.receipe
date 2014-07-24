@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Generated from template on Tue Oct  9 22:33:23 MSK 2012
 # Please don't forget to commit all changes to repo
 
 if [ -z "$clone_root" ] ; then
@@ -18,9 +17,8 @@ function hook_begin
     echo -en  # Add something useful if you want
 }
 
-# Some fizlesh.ru spikes
 # TODO: unhardcode fizlesh.sqlite name
-function xsm_clear_notifications
+function xsm_clear_db
 {
     db="content/ank/fizlesh.sqlite3"
     if [ -w "$db" ] ; then
