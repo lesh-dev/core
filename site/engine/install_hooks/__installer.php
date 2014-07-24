@@ -9,6 +9,11 @@ function xcms_check_mod_rewrite()
     return (getenv('HTTP_MOD_REWRITE') == 'On');
 }
 
+function xcms_check_curl()
+{
+    return function_exists('curl_init');
+}
+
 function xcms_check_allow_override()
 {
     $header_test_url = str_replace("install.php", "header_test/header_test.php", $_SERVER["REQUEST_URI"]);
@@ -82,12 +87,16 @@ class InstallerInstallHook
     {
         if (!xcms_check_mod_rewrite())
             return
-            "<p>Apache '<tt>mod_rewrite</tt>' module is not enabled.<br/>".
+            "<p>Apache <b><tt>mod_rewrite</tt></b> module is not enabled.<br/>".
             "Please enable it in your Apache webserver configuration.</p>";
+
+        if (!xcms_check_curl())
+            return
+            "<p>Please install <b><tt>curl</tt></b> module for PHP (e.g. <b><tt>php5-curl</tt></b> package).</p>";
 
         if (!xcms_check_allow_override())
             return
-                "<p>Apache '<tt>AllowOverride</tt>' directive is not enabled for site root.<br/>".
+                "<p>Apache <b><tt>AllowOverride</tt></b> directive is not enabled for site root.<br/>".
                 "Aliases will not work. Please enable it in your Apache webserver configuration.</p>";
 
         @mkdir(".prec", 0777);
