@@ -100,9 +100,9 @@ def check_code_style(lines, file_type):
             add_bad_line(bad_lines, "No PHP shorttags allowed", i)
 
         # if( ugly style check
-        itm = re.search('\wif\(', line)
+        itm = re.search(' ?if\(', line)
         if not itm:
-            itm = re.search('\welseif\(', line)
+            itm = re.search(' ?elseif\(', line)
         if itm:
             add_bad_line(bad_lines, "if/elseif clause should be separated from condition braces", i)
 
