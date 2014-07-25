@@ -74,6 +74,7 @@
         $db_name = $content_dir.$config["xsm_db_name"];
         if (!file_exists($db_name))
         {
+            $logs .= "<li>[XSM] Creating fresh database <tt>".htmlspecialchars($db_name)."</tt></li>\n";
             @mkdir(dirname($db_name), 0777, true);
             if (system("sqlite3 $db_name < $engine_dir/dbpatches/dbinit-v2.sql > $content_dir/dbinit.log 2>&1") != 0)
                 return "DB initialization failed. ";

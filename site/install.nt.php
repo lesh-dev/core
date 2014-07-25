@@ -94,6 +94,9 @@
         {
             $logs = "";
             $ans = $hook->install(@$_POST, $logs);
+            if (xu_not_empty($logs))
+                echo "<ul>$logs</ul>\n";
+
             if ($ans === true) continue;
             display_error($ans);
             die();
