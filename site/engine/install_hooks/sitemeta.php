@@ -71,7 +71,7 @@
       * Дописываем в settings.php блок метаинформации
       * @return true, если у нас это получилось
       **/
-    function install($config)
+    function install($config, &$logs)
     {
         $result = xcms_append("settings.php",
             "<?php\n/* This block was inserted by installer -- sitemeta.php.".

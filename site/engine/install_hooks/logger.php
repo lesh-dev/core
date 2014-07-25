@@ -67,7 +67,7 @@
       * В нашем случае тут делать нечего.
       * @param config массив параметров
       **/
-    function install($config)
+    function install($config, &$logs)
     {
         return true;
     }

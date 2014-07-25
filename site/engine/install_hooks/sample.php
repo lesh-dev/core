@@ -72,7 +72,7 @@
       * @return true, если установка удалась и строка с ошибкой
       * в противном случае
       **/
-    function install($config)
+    function install($config, &$logs)
     {
         return true;
     }

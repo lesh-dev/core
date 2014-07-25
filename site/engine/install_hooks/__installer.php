@@ -44,12 +44,12 @@ class InstallerInstallHook
     {
         global $SETTINGS;
         $design_list = glob("*design*", GLOB_ONLYDIR);
-        if(count($design_list))
+        if (count($design_list))
             $design = $design_list[0];
         else $design = "design";
 
         $content_list = glob("*content*", GLOB_ONLYDIR);
-        if(count($content_list))
+        if (count($content_list))
             $content = $content_list[0];
         else $content = "content";
 
@@ -105,7 +105,7 @@ class InstallerInstallHook
         $PERM["install"] = xcms_append("install.php", "");
         $PERM["settings"] = xcms_append("settings.php", "");
 
-        if(!$PERM["htaccess"])
+        if (!$PERM["htaccess"])
         {
             return "<p>Script can't write to site root folder. You should do either</p>
             <ul>
@@ -114,13 +114,13 @@ class InstallerInstallHook
             </ul>";
         }
 
-        if(!$PERM["prec"])
+        if (!$PERM["prec"])
             return "<p>Folder <tt>.prec/</tt> is not writeable. Please fix this problem.</p>";
 
-        if(!$PERM["install"])
+        if (!$PERM["install"])
             return "<p>File <tt>./install.php</tt> is not writeable. Please fix this problem.</p>";
 
-        if(!$PERM["settings"])
+        if (!$PERM["settings"])
             return "<p>File <tt>./settings.php</tt> is not writeable. Please fix this problem.</p>";
 
         return true;
@@ -139,7 +139,7 @@ class InstallerInstallHook
         );
 
         foreach ($dirs as $d)
-            if(!is_dir(@$config[$d]))
+            if (!is_dir(@$config[$d]))
                 return "$d variable is not a directory. ";
         return true;
     }
@@ -156,7 +156,7 @@ class InstallerInstallHook
     /**
       * Собственно процесс установки
       **/
-    function install($config)
+    function install($config, &$logs)
     {
         global $SETTINGS;
         global $content_dir;

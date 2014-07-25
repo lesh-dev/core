@@ -58,7 +58,7 @@
       * Дописываем в settings.php блок метаинформации
       * @return true, если у нас это получилось
       **/
-    function install($config)
+    function install($config, &$logs)
     {
         global $engine_dir;
         $result = xcms_append("settings.php",

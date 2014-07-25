@@ -73,7 +73,7 @@
       * @param config параметры, собранные при установке
       * @return true в случае успеха и строку с ошибкой в противном случае
       **/
-    function install($config)
+    function install($config, &$logs)
     {
         global $engine_dir, $SETTINGS;
         require_once($SETTINGS["engine_dir"]."/sys/auth.php");

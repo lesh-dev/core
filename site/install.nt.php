@@ -47,7 +47,7 @@
     foreach($hooks as $hook)
     {
         $ans = $hook->initial_check();
-        if($ans === TRUE)
+        if ($ans === true)
         {
             //echo "<li>Test passed..";
         }
@@ -69,31 +69,32 @@
             $ALLSECVARS[$hook->module_name()][$k] = $v;
         }
     }
-    if(!$ok)
+    if (!$ok)
     {
         die("<p>Installation will not be continued until you will not take action.</p>");
     }
     if (@$_POST["submit_variables"])
     {
         // Handle them
-        foreach($hooks as $hook)
+        foreach ($hooks as $hook)
         {
             $ans = $hook->final_check(@$_POST);
-            if($ans === TRUE) continue;
+            if ($ans === true) continue;
             display_error($ans);
             die();
         }
         foreach($hooks as $hook)
         {
             $ans = $hook->uninstall();
-            if($ans === TRUE) continue;
+            if ($ans === true) continue;
             display_error($ans);
             die();
         }
         foreach($hooks as $hook)
         {
-            $ans = $hook->install(@$_POST);
-            if($ans === TRUE) continue;
+            $logs = "";
+            $ans = $hook->install(@$_POST, $logs);
+            if ($ans === true) continue;
             display_error($ans);
             die();
         }
@@ -113,15 +114,15 @@
         <?php
         foreach($ALLSECVARS as $hook_name=>$hook_variables)
         {
-            if(count($hook_variables))
+            if (count($hook_variables))
                 echo "<tr><td colspan=\"2\" class=\"hook-name\">$hook_name</td></tr>\n";
             foreach($hook_variables as $variable=>$v)
             {
                 $name = @$v["name"];
-                if($name === FALSE)
+                if ($name === false)
                     $name = $variable;
                 $type = @$v["type"];
-                if($type === FALSE)
+                if ($type === false)
                     $type = "string";
                 $def = @$v["default"];
                 $typehack = "";
