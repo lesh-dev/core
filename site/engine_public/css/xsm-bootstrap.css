@@ -29,15 +29,12 @@ td.school-selection a.edit-link {
 
 span.xsm-label {
     display: inline-block;
-    width: 300px;
-}
-
-input[type="text"].ankEdit {
-    width: 50%;
-}
-
-input.ankEdit.filter {
     width: 20%;
+}
+
+input[type="text"].ankEdit,
+td.ankList select {
+    margin-bottom: 0px;
 }
 
 input.xsm-save-button {

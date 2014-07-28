@@ -122,19 +122,6 @@ span.ank-edit-item.action {
     font-weight: bold;
 }
 
-input.ankEdit {
-    width: 75%;
-}
-
-input.ankEdit.filter {
-    width: 200px;
-}
-
-textarea.ankEdit {
-    width: 75%;
-    height: 72px;
-}
-
 input[readonly='readonly'] {
     background-color: #cceeaa;
 }
@@ -284,11 +271,6 @@ span.course-area.human {
 img.edit-icon {
     vertical-align: middle;
     margin-right: 2px;
-}
-
-.ankEdit.checkbox {
-    width: 16px;
-    vertical-align: -10%;
 }
 
 input.xsm-save-button {
