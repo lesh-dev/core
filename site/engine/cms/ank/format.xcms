@@ -324,7 +324,7 @@ function xsm_make_forest_enum($person, $fn)
 
 function xsm_draw_fio_filter()
 {
-    ?><span class="ankListField">Фильтр ФИО</span>:
+    ?><span class="ankListField">Фильтр ФИО:</span>
     <input class="ankEdit filter" type="text"
         value="<?php echo xcms_get_key_or_enc($_POST, 'show_name_filter'); ?>"
         name="show_name_filter" id="show_name_filter-input"

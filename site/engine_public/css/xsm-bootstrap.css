@@ -33,7 +33,8 @@ span.xsm-label {
 }
 
 input[type="text"].ankEdit,
-td.ankList select {
+td.ankList select,
+td.ankList textarea {
     margin-bottom: 0px;
 }
 
@@ -43,4 +44,28 @@ input.xsm-save-button {
 
 a.link-button {
     margin-right: 5px;
+}
+
+form.xsm-filter span {
+    line-height: 30px;
+    vertical-align: 50%;
+}
+form.xsm-filter input {
+    vertical-align: 50%;
+}
+
+form.xsm-filter input.ankEdit.checkbox {
+    vertical-align: 10px;
+}
+
+form.xsm-filter span.ankListField {
+    padding-left: 2px;
+}
+
+form.xsm-filter input.filter {
+    vertical-align: 16px;
+}
+
+form.xsm-filter input[type="submit"] {
+    vertical-align: 16px;
 }
