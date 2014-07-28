@@ -25,7 +25,7 @@
 </script>
 
 <form method="post" name="filter" id="filter-form" action="list-person-locator"><span>
-    Фильтр: <span class="ankListField">Статус</span>: <?php
+    <span class="ankListField">Фильтр: Статус: </span><?php
     echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_locator"); ?>
     &nbsp; <?php
     xsm_checkbox('show_is_teacher', $show_is_teacher);
@@ -33,7 +33,7 @@
         xsm_checkbox('show_is_student', $show_is_student);
     ?><span class="ankListField">Только школьники</span>&nbsp; &nbsp;<?php
         xsm_draw_fio_filter();
-    ?> &nbsp; Группировка: <?php
+    ?> &nbsp;<span> Группировка: </span><?php
         xsm_checkbox('sort_by_class', $sort_by_class);
     ?><span class="ankListField">По классу</span> &nbsp;
     <input type="submit" name="show-person" value="Показать" />

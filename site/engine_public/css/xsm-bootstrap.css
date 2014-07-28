@@ -46,26 +46,37 @@ a.link-button {
     margin-right: 5px;
 }
 
-form.xsm-filter span {
+form#filter-form span {
     line-height: 30px;
     vertical-align: 50%;
 }
-form.xsm-filter input {
+form#filter-form input {
     vertical-align: 50%;
 }
 
-form.xsm-filter input.ankEdit.checkbox {
+form#filter-form input.ankEdit.checkbox {
     vertical-align: 10px;
 }
 
-form.xsm-filter span.ankListField {
+form#filter-form span.ankListField {
     padding-left: 2px;
 }
 
-form.xsm-filter input.filter {
+form#filter-form input.filter {
     vertical-align: 16px;
 }
 
-form.xsm-filter input[type="submit"] {
+form#filter-form select {
     vertical-align: 16px;
+}
+
+form#filter-form input[type="submit"] {
+    vertical-align: 16px;
+}
+
+form#filter-form {
+    margin: 0px 0px 2px 0px;
+}
+form#filter-form select {
+    margin-bottom: 0px;
 }
