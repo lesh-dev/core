@@ -36,6 +36,10 @@ input[type="text"].ankEdit {
     width: 50%;
 }
 
+input.ankEdit.filter {
+    width: 20%;
+}
+
 input.xsm-save-button {
     margin-right: 5px;  /* for horizontal button stacking */
 }
