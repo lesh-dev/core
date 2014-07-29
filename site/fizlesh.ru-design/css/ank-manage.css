@@ -310,23 +310,6 @@ span.link-oper-list {
     border-bottom: 1px dotted black;
 }
 
-span.person-key {
-    font-weight: bold;
-    display: inline-block;
-}
-
-span.person-key.top {
-    width: 100px;
-}
-
-span.person-key.main {
-    width: 170px;
-}
-
-span.person-value {
-    font-weight: normal;
-}
-
 div.line {
     padding-top: 5px;
     padding-bottom: 5px;

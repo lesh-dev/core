@@ -113,3 +113,20 @@ textarea.ankEdit {
     width: 75%;
     height: 72px;
 }
+
+span.person-key {
+    font-weight: bold;
+    display: inline-block;
+}
+
+span.person-key.top {
+    width: 120px;
+}
+
+span.person-key.main {
+    width: 190px;
+}
+
+span.person-value {
+    font-weight: normal;
+}
