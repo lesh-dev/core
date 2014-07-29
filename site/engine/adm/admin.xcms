@@ -38,7 +38,7 @@ if (!@$_GET["page"])
 <html>
     <head>
         <# cms/head #>
-        <link rel="stylesheet" type="text/css" href="<?php echo "${full_engine_pub}css/admin.css"; ?>" />
+        <# css/public admin.css #>
         <# js/jquery #>
         <# js/public common.js #>
         <# js/public control-depends.js #>
