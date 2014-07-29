@@ -6,7 +6,7 @@
 ?>
 <span style="position: relative; float: right;">
 <a href="#" id="show-status-help" class="popup-link">Легенда</a>
-<div id="status-help" class="admin-widget help-widget">
+<div id="status-help" class="admin-widget xsm-help-widget">
 <p>По умолчанию показываются люди, с которыми идёт (или недавно шло) взаимодействие.
     Цветами фона выделены <b class="teacher">Преподаватели</b>,
     жители <b class="not-msk-city">Подмосковья</b> и

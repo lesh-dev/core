@@ -80,3 +80,9 @@ form#filter-form {
 form#filter-form select {
     margin-bottom: 0px;
 }
+
+div.xsm-help-widget {
+    /* design-specific settings here, see xsm.css */
+    border: 1px solid #00005f;
+    background-color: rgb(217, 233, 241);
+}
