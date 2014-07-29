@@ -7,6 +7,7 @@ require_once("${engine_dir}cms/ank/course_teacher.php");
 function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id = "all", $simple_view = false)
 {
     $pers = ($course_teacher_id != "all");
+    global $XSM_BOOTSTRAP;
 
     $query =
     "SELECT *
@@ -28,6 +29,18 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
     xsm_view_operations('course', 'курс', $course_aux_param); ?>
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
+        <?php
+        if ($XSM_BOOTSTRAP) {?>
+            <col width="40%" />
+            <?php if (!$pers) {?>
+            <col width="30%" /><?php
+            } ?>
+            <col width="40" />
+            <col width="10%" />
+            <col width="15%" />
+            <col width="7%" />
+            <col width="8%" /><?php
+        } else {?>
             <col width="40%" />
             <?php if (!$pers) {?>
             <col width="30%" /><?php
@@ -36,7 +49,8 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
             <col width="10%" />
             <col width="10%" />
             <col width="7%" />
-            <col width="8%" />
+            <col width="8%" /><?php
+        }?>
         </colgroup>
         <thead>
             <th class="ankList">Курс</th>
