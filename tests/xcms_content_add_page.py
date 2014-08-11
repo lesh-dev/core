@@ -126,6 +126,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         versionUnoText = "version_0001"
         versionUnoText = self.fillAceEditorElement(versionUnoText)
         self.clickElementById("edit-submit-top")
+        # TODO: fix this
         self.wait(2)
 
         versionDosText = "version_0002"
