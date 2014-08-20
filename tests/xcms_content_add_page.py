@@ -1,7 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
+import random_crap
+
+import datetime
+
+def timestamp():
+    return datetime.datetime.now().strftime("%Y.%m.%d %H:%M:%S")
 
 def htmlParagraph(x):
     return "<p>" + x + "</p>"
@@ -32,10 +38,10 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.testVersions()
 
-        self.testDiffAndLongText()
+        #self.testDiffAndLongText()
 
-        self.testAlias()
-        self.testBadAlias()
+        #self.testAlias()
+        #self.testBadAlias()
 
     def testBaseEditing(self):
 
@@ -75,12 +81,15 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle)
 
-        pageText = random_crap.randomCrap(10, self.wordOptions, specialChars = self.specChars)
+        pageText = random_crap.randomCrap(10, self.wordOptions, specialChars = self.specChars) + " " + timestamp()
         print "Generated page text: '" + pageText + "'"
 
         pageText = self.fillAceEditorElement(pageText)
         print "After ins page text: '" + pageText + "'"
         self.clickElementById("edit-submit-top")
+        
+        self.gotoCloseEditor()
+        return
 
         self.clickElementById("edit-preview-top")
 
@@ -88,7 +97,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.assertElementTextById(previewElement, pageText, "preview text does not match entered page text. ")
 
         # add second line
-        newPageText = pageText + "\n" + random_crap.randomCrap(10, self.wordOptions, specialChars = self.specChars)
+        newPageText = pageText + "\n" + random_crap.randomCrap(10, self.wordOptions, specialChars = self.specChars) + " " + timestamp()
 
         newPageText = self.fillAceEditorElement(newPageText)
         print "Generated 2-line page text: '" + newPageText + "'"
@@ -122,37 +131,69 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_menuTitle)
 
         self.gotoEditPageInPlace()
-
-        versionUnoText = "version_0001"
+        
+        self.logAdd("Waiting before saving of first version. ")
+        timeToWait = 25
+        self.wait(timeToWait)
+        
+        versionUnoText = "version_0001" + "\n" + timestamp()
         versionUnoText = self.fillAceEditorElement(versionUnoText)
         self.clickElementById("edit-submit-top")
-        # TODO: fix this
-        self.wait(2)
+        self.wait(timeToWait)
 
-        versionDosText = "version_0002"
+        versionDosText = "version_0002" + "\n" + timestamp()
         versionDosText = self.fillAceEditorElement(versionDosText)
         self.clickElementById("edit-submit-top")
-        self.wait(2)
+        self.wait(timeToWait)
 
-        versionTresText = "version_0003"
+        versionTresText = "version_0003" + "\n" + timestamp()
         versionTresText = self.fillAceEditorElement(versionTresText)
         self.clickElementById("edit-submit-top")
-        self.wait(2)
+        self.wait(timeToWait)
 
+        #TODO: BUG: check ace editor, not edit-text!!!
+        delay = 5
         self.setOptionValueByIdAndIndex("versions-top", 3)
+        self.wait(delay)
         self.clickElementById("set-version-top") # Смотреть версию
-        self.wait(1)
-        self.assertElementTextById("edit-text", versionUnoText)
+        self.wait(3)
+        self.assertAceEditorElementText(versionUnoText)
 
+        self.setOptionValueByIdAndIndex("versions-top", 1)
+        self.wait(delay)
+        self.clickElementById("set-version-top") # Смотреть версию
+        self.wait(3)
+        self.assertAceEditorElementText(versionTresText)
+
+        self.setOptionValueByIdAndIndex("versions-top", 2)
+        self.wait(delay)
+        self.clickElementById("set-version-top") # Смотреть версию
+        self.wait(3)
+        self.assertAceEditorElementText(versionDosText)
+        
+        
+        self.logAdd("Waiting for next test step. ")
+        self.wait(timeToWait)
+        versionLostText = "version_lost" + "\n" + timestamp()
+        versionLostText = self.fillAceEditorElement(versionLostText)
+        self.clickElementById("edit-submit-top")
+        self.wait(timeToWait)
+        
+        versionDoNotLostText = "version_do_not_lost" + "\n" + timestamp()
+        versionDoNotLostText = self.fillAceEditorElement(versionDoNotLostText)
+        self.clickElementById("edit-submit-top")
+        self.wait(5)
+        
         self.setOptionValueByIdAndIndex("versions-top", 1)
         self.clickElementById("set-version-top") # Смотреть версию
         self.wait(1)
-        self.assertElementTextById("edit-text", versionTresText)
+        self.assertAceEditorElementText(versionDoNotLostText)
 
         self.setOptionValueByIdAndIndex("versions-top", 2)
         self.clickElementById("set-version-top") # Смотреть версию
         self.wait(1)
-        self.assertElementTextById("edit-text", versionDosText)
+        self.assertAceEditorElementText(versionTresText, "Here should be version 3, not lost version 4. ")
+        
 
     def testDiffAndLongText(self):
 

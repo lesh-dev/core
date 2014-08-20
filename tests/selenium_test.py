@@ -17,6 +17,7 @@ from selenium.webdriver.support.ui import Select
 
 import random
 import traceback
+import itertools
 import sys
 from datetime import datetime
 import time
@@ -366,7 +367,12 @@ class SeleniumTest(object):
 
     def wait(self, seconds, comment = ""):
         self.logAdd("Waiting for " + userSerialize(seconds) + " seconds. Comment: " + userSerialize(comment))
-        time.sleep(seconds)
+        quant = 10
+        periods = seconds // quant
+        for i in xrange(periods):
+            time.sleep(quant)
+            self.logAdd("Passed {0} seconds of {1}".format(i * quant, seconds))
+        time.sleep(seconds % quant)
 
     def drv(self):
         return self.m_driver;
@@ -471,10 +477,25 @@ class SeleniumTest(object):
             self.addAction("clear", "element class: '" + eleClass + "'")
             ele.clear()
 
-        self.addAction("fill", "element class: '" + eleClass + "', text: " + wrapIfLong(userSerialize(text)) + " ")
-        self.logAdd("Sending text to element class '" + eleClass + "'")
+        self.addAction("fill", "element: ACE, text: " + wrapIfLong(userSerialize(text)) + " ")
+        self.logAdd("Sending text to ACE element")
         ele.send_keys(text)
         return self.executeJS("return $('#edit-text').data('editor-ref').getValue();")
+
+    def checkAceEditorElementText(self, text):
+        eleClass = 'textarea.ace_text-input'  # a bit of hardcode, we have only one ACE editor on screen at a time
+        ele = self.getElementByClass(eleClass)
+        self.addAction("check-text", "element: ACE, text: " + wrapIfLong(userSerialize(text)) + " ")
+        self.logAdd("Checking ACE element text")
+        currentText = self.executeJS("return $('#edit-text').data('editor-ref').getValue();")
+        if isEqual(text, currentText):
+            return True
+        return False
+
+    def assertAceEditorElementText(self, text, reason = ""):
+        if not self.checkAceEditorElementText(text):
+            self.failTest("ACE element text does not match expected: " + wrapIfLong(userSerialize(text)) + ". " + self.displayReason(reason))
+
 
     def setOptionValueByIdAndValue(self, eleId, optValue):
         try:
