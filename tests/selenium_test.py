@@ -367,11 +367,11 @@ class SeleniumTest(object):
 
     def wait(self, seconds, comment = ""):
         self.logAdd("Waiting for " + userSerialize(seconds) + " seconds. Comment: " + userSerialize(comment))
-        quant = 10
+        quant = 3
         periods = seconds // quant
         for i in xrange(periods):
             time.sleep(quant)
-            self.logAdd("Passed {0} seconds of {1}".format(i * quant, seconds))
+            self.logAdd("Passed {0} seconds of {1}".format((i + 1) * quant, seconds))
         time.sleep(seconds % quant)
 
     def drv(self):

@@ -72,5 +72,5 @@ class XcmsContentSpecialCharsPage(xtest_common.XcmsTest):
         self.assertElementTextById("content-text", pageRealText, "rendered page text does not match expacted text. ")
         self.gotoEditPageInPlace()
 
-        self.assertElementTextById("edit-text", pageText, "page text after reopening editor does not match entered HTML text. ")
+        self.assertAceEditorElementText(pageText, "page text after reopening editor does not match entered HTML text. ")
 

@@ -38,10 +38,10 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.testVersions()
 
-        #self.testDiffAndLongText()
+        self.testDiffAndLongText()
 
-        #self.testAlias()
-        #self.testBadAlias()
+        self.testAlias()
+        self.testBadAlias()
 
     def testBaseEditing(self):
 
@@ -88,9 +88,6 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         print "After ins page text: '" + pageText + "'"
         self.clickElementById("edit-submit-top")
         
-        self.gotoCloseEditor()
-        return
-
         self.clickElementById("edit-preview-top")
 
         previewElement = "content-text-preview"
@@ -125,6 +122,9 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         if inpMenuTitle not in self.getPageTitle():
             self.failTest("Menu title text does not appear in page title after going to the page by menu. ")
 
+    def loadWait(self):
+        self.wait(2, "wait for version load")
+        
     def testVersions(self):
 
         self.gotoUrlByLinkText(self.m_parentPage)
@@ -133,67 +133,61 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.gotoEditPageInPlace()
         
         self.logAdd("Waiting before saving of first version. ")
-        timeToWait = 25
+        timeToWait = 105
         self.wait(timeToWait)
         
         versionUnoText = "version_0001" + "\n" + timestamp()
         versionUnoText = self.fillAceEditorElement(versionUnoText)
         self.clickElementById("edit-submit-top")
-        self.wait(timeToWait)
+        self.wait(timeToWait, "waiting after version 1")
 
         versionDosText = "version_0002" + "\n" + timestamp()
         versionDosText = self.fillAceEditorElement(versionDosText)
         self.clickElementById("edit-submit-top")
-        self.wait(timeToWait)
+        self.wait(timeToWait, "waiting after version 2")
 
         versionTresText = "version_0003" + "\n" + timestamp()
         versionTresText = self.fillAceEditorElement(versionTresText)
         self.clickElementById("edit-submit-top")
-        self.wait(timeToWait)
+        self.wait(timeToWait, "waiting after version 3")
 
-        #TODO: BUG: check ace editor, not edit-text!!!
-        delay = 5
+        delay = 0
         self.setOptionValueByIdAndIndex("versions-top", 3)
-        self.wait(delay)
         self.clickElementById("set-version-top") # Смотреть версию
-        self.wait(3)
+        self.loadWait()
         self.assertAceEditorElementText(versionUnoText)
 
         self.setOptionValueByIdAndIndex("versions-top", 1)
-        self.wait(delay)
         self.clickElementById("set-version-top") # Смотреть версию
-        self.wait(3)
+        self.loadWait()
         self.assertAceEditorElementText(versionTresText)
 
         self.setOptionValueByIdAndIndex("versions-top", 2)
-        self.wait(delay)
         self.clickElementById("set-version-top") # Смотреть версию
-        self.wait(3)
-        self.assertAceEditorElementText(versionDosText)
+        self.loadWait()
+        self.assertAceEditorElementText(versionDosText)    
         
-        
-        self.logAdd("Waiting for next test step. ")
-        self.wait(timeToWait)
+        self.wait(timeToWait, "Waiting for next test step. ")
         versionLostText = "version_lost" + "\n" + timestamp()
         versionLostText = self.fillAceEditorElement(versionLostText)
         self.clickElementById("edit-submit-top")
-        self.wait(timeToWait)
+        # 
+        self.wait(10, "Waiting some small time (less than version interval)")
         
         versionDoNotLostText = "version_do_not_lost" + "\n" + timestamp()
         versionDoNotLostText = self.fillAceEditorElement(versionDoNotLostText)
         self.clickElementById("edit-submit-top")
-        self.wait(5)
         
-        self.setOptionValueByIdAndIndex("versions-top", 1)
-        self.clickElementById("set-version-top") # Смотреть версию
-        self.wait(1)
-        self.assertAceEditorElementText(versionDoNotLostText)
-
         self.setOptionValueByIdAndIndex("versions-top", 2)
         self.clickElementById("set-version-top") # Смотреть версию
-        self.wait(1)
+        self.loadWait()
         self.assertAceEditorElementText(versionTresText, "Here should be version 3, not lost version 4. ")
         
+        # finally, check head revision
+        self.setOptionValueByIdAndIndex("versions-top", 1)
+        self.clickElementById("set-version-top") # Смотреть версию
+        self.loadWait()
+        self.assertAceEditorElementText(versionDoNotLostText)
 
     def testDiffAndLongText(self):
 
