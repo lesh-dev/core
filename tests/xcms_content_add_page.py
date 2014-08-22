@@ -133,7 +133,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.gotoEditPageInPlace()
         
         self.logAdd("Waiting before saving of first version. ")
-        timeToWait = 105
+        timeToWait = 22
         self.wait(timeToWait)
         
         versionUnoText = "version_0001" + "\n" + timestamp()
@@ -168,6 +168,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.assertAceEditorElementText(versionDosText)    
         
         self.wait(timeToWait, "Waiting for next test step. ")
+        
         versionLostText = "version_lost" + "\n" + timestamp()
         versionLostText = self.fillAceEditorElement(versionLostText)
         self.clickElementById("edit-submit-top")

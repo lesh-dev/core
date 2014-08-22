@@ -366,7 +366,7 @@ class SeleniumTest(object):
             self.failTest(exceptionMessage)
 
     def wait(self, seconds, comment = ""):
-        self.logAdd("Waiting for " + userSerialize(seconds) + " seconds. Comment: " + userSerialize(comment))
+        self.addAction("wait", "Waiting for " + userSerialize(seconds) + " seconds. Comment: " + userSerialize(comment))
         quant = 3
         periods = seconds // quant
         for i in xrange(periods):
@@ -485,11 +485,12 @@ class SeleniumTest(object):
     def checkAceEditorElementText(self, text):
         eleClass = 'textarea.ace_text-input'  # a bit of hardcode, we have only one ACE editor on screen at a time
         ele = self.getElementByClass(eleClass)
-        self.addAction("check-text", "element: ACE, text: " + wrapIfLong(userSerialize(text)) + " ")
-        self.logAdd("Checking ACE element text")
+        self.addAction("check-text", "element: ACE, expected: " + wrapIfLong(userSerialize(text)) + ". ")
         currentText = self.executeJS("return $('#edit-text').data('editor-ref').getValue();")
         if isEqual(text, currentText):
+            self.addAction("check-text:ok", "element: ACE")
             return True
+        self.addAction("check-text:fail", "element: ACE, actual: " + wrapIfLong(userSerialize(currentText)) + ", expected: " + wrapIfLong(userSerialize(text)) + " ")
         return False
 
     def assertAceEditorElementText(self, text, reason = ""):
