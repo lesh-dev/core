@@ -8,7 +8,7 @@ function xsm_print_department()
     $department = xdb_get_entity_by_id('department', $department_id);
     $href_departments = "list-department";
     ?>
-    <table class="ankList">
+    <table class="ankList table table-bordered table-hover table-condensed">
     <?php
         $department_title = htmlspecialchars($department["department_title"]);
         $department_created = xsm_ymdhm($department["department_created"]);

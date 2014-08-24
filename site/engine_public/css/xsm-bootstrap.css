@@ -86,3 +86,8 @@ div.xsm-help-widget {
     border: 1px solid #00005f;
     background-color: rgb(217, 233, 241);
 }
+
+.link-oper img {
+    padding-right: 2px;
+}
+
