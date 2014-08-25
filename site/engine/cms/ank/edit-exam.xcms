@@ -208,12 +208,12 @@ function xsm_edit_exam()
         if ($exam_id != XDB_NEW) {?>
             <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" /><?php
         }?>
-        <table class="ankEdit">
+        <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
                 <td class="ankListRowTitle">Зачёт</td>
             </tr>
             <tr><td class="ankList">
-                <span class="ankEditField">Школа</span>
+                <span class="ankEditField xsm-label">Школа</span>
                 <input type="text" class="ankEdit" value="<?php
                     echo htmlspecialchars($school_title); ?>"
                     readonly="readonly" />
@@ -225,7 +225,7 @@ function xsm_edit_exam()
                     continue;
                 $value = xcms_get_key_or($exam, $key);
                 $attr = ""; ?>
-                <tr><td class="ankList"><span class="ankEditField"><?php echo $exam_fields[$key]; ?></span>
+                <tr><td class="ankList"><span class="ankEditField xsm-label"><?php echo $exam_fields[$key]; ?></span>
                 <?php
                 $ft = xcms_get_key_or($field_types, $key);
                 if ($ft == "textarea") {?>
