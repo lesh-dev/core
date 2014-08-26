@@ -70,12 +70,12 @@ function xsm_edit_course()
             <input type="hidden" name="course_teacher_id" value="<?php echo $course_teacher_id; ?>" /><?php
         }?>
 
-        <table class="ankEdit">
+        <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
                 <td class="ankListRowTitle">Редактирование курса</td>
             </tr>
             <tr><td class="ankList">
-                <span class="ankEditField mid">Препод(ы)</span><?php
+                <span class="ankEditField mid xsm-label">Препод(ы)</span><?php
                 echo $teachers_ht;
                 if ($course_id != XDB_NEW) {?>
                 <a class="link-button ank" href="edit-teachers<?php
@@ -97,7 +97,7 @@ function xsm_edit_course()
                 // selectors cannot be readonly
                 if ($key == "school_id")
                     $attr = 'disabled="disabled"'; ?>
-                <tr><td class="ankList"><span class="ankEditField"><?php echo $course_fields[$key]; ?></span>
+                <tr><td class="ankList"><span class="ankEditField xsm-label"><?php echo $course_fields[$key]; ?></span>
                 <?php
                 $ft = xcms_get_key_or($field_types, $key);
                 if ($ft == "textarea")
