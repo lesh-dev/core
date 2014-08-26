@@ -1,0 +1,4 @@
+<?php
+    global $full_design_dir;
+    // %1 = script name
+?><link rel="stylesheet" type="text/css" href="<?php echo $full_design_dir; ?>css/<# css_version #>%1" />
