@@ -2,7 +2,7 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    background-image: url(pict/use_your_illusion.png);
+    background-image: url('../../pict/use_your_illusion.png');
     background-color: black;
     background-position: center;
     background-repeat: repeat;
@@ -107,7 +107,7 @@ h3 {
 
 .header .picture_logo {
     padding-left: 70px;
-    background-image: url(pict/lesh-logo-100.png);
+    background-image: url('../../pict/lesh-logo-100.png');
     background-repeat: no-repeat;
     background-position: center;
     width: 120px;
@@ -116,7 +116,7 @@ h3 {
 }
 
 .header .picture_title {
-    background-image: url(pict/lesh.gif);
+    background-image: url('../../pict/lesh.gif');
     background-repeat: no-repeat;
     width: 500px;
     height: 130px;
@@ -193,7 +193,7 @@ h3 {
 .sidebar-right {
     width: 240px;
     float: right;
-    background-image: url(pict/green.gif);
+    background-image: url('../../pict/green.gif');
     background-repeat: no-repeat;
     background-position: 90% top;
     background-size: 100px;
@@ -714,7 +714,7 @@ input[type="submit"] {
     width: 20px; /* Ширина кнопки */
     height: 20px; /* Высота кнопки */
     border: none; /* Убираем рамку */
-    background: url(pict/search.png);
+    background: url('../../pict/search.png');
     background-repeat: no-repeat;
     margin-top: 5px;
 }
@@ -740,7 +740,7 @@ ul.menu li {
 }
 
 a.menu-item {
-    background-image: url('pict/dot7.png');
+    background-image: url('../../pict/dot7.png');
     background-repeat: no-repeat;
     background-position: 0px 50%;
 }

@@ -44,8 +44,8 @@ function xcms_print_related_links()
 <html>
 <head>
     <# cms/head #>
-    <link rel="stylesheet" type="text/css" href="<# full_design_dir #>reset.css" />
-    <link rel="stylesheet" type="text/css" href="<# full_design_dir #>index.css" />
+    <# css/design reset.css #>
+    <# css/design index.css #>
 </head>
 <body>
 <div id="main">
