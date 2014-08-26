@@ -9,5 +9,14 @@ RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)/$ @@WEB-PREFIX@$1 [R=301,L]
 
+# Admin short links
+RewriteRule ^adm/(.*)$ /?ref=admin&aparam=$1
+RewriteRule ^adm$ /?ref=admin&aparam=root
+
+# XSM short links
 RewriteRule ^xsm/(.*)$ /?ref=xsm&aparam=$1
 RewriteRule ^xsm$ /?ref=xsm&aparam=root
+
+# Contest short links
+RewriteRule ^ctx/(.*)$ /?ref=contest&aparam=$1
+RewriteRule ^ctx$ /?ref=contest&aparam=root
