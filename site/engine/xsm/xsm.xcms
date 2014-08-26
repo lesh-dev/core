@@ -2,7 +2,7 @@
 <html><!-- HTML5 compatible -->
 <head>
     <# cms/head #>
-    <link rel="stylesheet" type="text/css" href="<# full_design_dir #>css/<# css_version #>default.css" />
+    <# css/design default.css #>
     <?php
     global $XSM_BOOTSTRAP;
     $XSM_BOOTSTRAP = (strpos($design_dir, "lesh.org.ru") !== false);
@@ -14,11 +14,11 @@
     <# js/public xsm.js #>
     <# js/public control-depends.js #>
 
-    <link rel="stylesheet" type="text/css" href="<# full_design_dir #>css/<# css_version #>ank-manage.css" />
-    <link rel="stylesheet" type="text/css" href="<?php echo $full_engine_pub; ?>css/<# css_version #>xsm.css" />
+    <# css/design ank-manage.css #>
+    <# css/public xsm.css #>
     <?php if ($XSM_BOOTSTRAP) {?>
-    <link rel="stylesheet" type="text/css" href="<?php echo $full_engine_pub; ?>css/<# css_version #>xsm-bootstrap.css" /><?php
-    }?>
+    <# css/public xsm-bootstrap.css #>
+    <?php }?>
 </head>
 <body>
 <?php
