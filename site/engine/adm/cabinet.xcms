@@ -10,7 +10,7 @@ require_once("${engine_dir}cms/ank/field-desc.php");
         <# cms/head #>
         <# js/jquery #>
         <# js/public common.js #>
-        <link rel="stylesheet" type="text/css" href="<?php echo "${full_engine_pub}css/admin.css"; ?>" />
+        <# css/public admin.css #>
     </head>
     <body>
         <div style="padding-bottom: 7px;">

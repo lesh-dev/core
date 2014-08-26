@@ -3,8 +3,8 @@
 <head>
     <# cms/head #>
     <link rel="yandex-tableau-widget" href="<# full_design_dir #>tableau.json" />
-    <link rel="stylesheet" type="text/css" href="<# full_design_dir #>css/<# css_version #>menu.css" />
-    <link rel="stylesheet" type="text/css" href="<# full_design_dir #>css/<# css_version #>default.css" />
+    <# css/design menu.css #>
+    <# css/design default.css #>
 </head>
 <body>
     <div id="fullHeight">
