@@ -17,7 +17,7 @@ function xsm_edit_department()
         ?>
         <input type="hidden" name="department_id" value="<?php echo $department_id; ?>" />
 
-        <table class="ankEdit">
+        <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
                 <td class="ankListRowTitle">Отделение</td>
             </tr>
@@ -28,7 +28,7 @@ function xsm_edit_department()
                     continue;
                 $value = xcms_get_key_or($department, $key);
                 $attr = ""; ?>
-                <tr><td class="ankList"><span class="ankEditField"><?php echo $department_fields[$key]; ?></span>
+                <tr><td class="ankList"><span class="ankEditField xsm-label"><?php echo $department_fields[$key]; ?></span>
                 <?php
                 if (array_key_exists($key, $field_types))
                 {?>

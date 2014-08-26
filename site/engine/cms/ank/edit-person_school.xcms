@@ -53,7 +53,7 @@ function xsm_edit_person_school()
         <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
         <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
-                <td class="ankListRowTitle"><span class="xsm-header">Редактирование ролей и статусов на школе</span></td>
+                <td class="ankListRowTitle">Редактирование ролей и статусов на школе</td>
             </tr>
             <?php
             foreach ($person_school_fields as $key=>$field_title)

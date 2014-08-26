@@ -28,11 +28,10 @@ function xsm_print_course()
 
         ?>
         <tr>
-            <td class="ankListRowTitle"><span class="xsm-header">Курс <b><?php echo $course_title; ?></b>
+            <td class="ankListRowTitle">Курс <b><?php echo $course_title; ?></b>
                 на <a href="<?php echo $href_courses; ?>"><?php echo $school_title; ?></a></span>
                 <span style="float: right"><?php
                 xsm_edit_delete_info('course', 'course', $course_id, $course_created, $course_modified); ?>
-                </span>
             </td>
         </tr>
         <tr><td class="ankList"><?php xsm_field("course", "target_class");
