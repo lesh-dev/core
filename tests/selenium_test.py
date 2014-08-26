@@ -17,6 +17,7 @@ from selenium.webdriver.support.ui import Select
 
 import random
 import traceback
+import itertools
 import sys
 from datetime import datetime
 import time
@@ -365,8 +366,13 @@ class SeleniumTest(object):
             self.failTest(exceptionMessage)
 
     def wait(self, seconds, comment = ""):
-        self.logAdd("Waiting for " + userSerialize(seconds) + " seconds. Comment: " + userSerialize(comment))
-        time.sleep(seconds)
+        self.addAction("wait", "Waiting for " + userSerialize(seconds) + " seconds. Comment: " + userSerialize(comment))
+        quant = 3
+        periods = seconds // quant
+        for i in xrange(periods):
+            time.sleep(quant)
+            self.logAdd("Passed {0} seconds of {1}".format((i + 1) * quant, seconds))
+        time.sleep(seconds % quant)
 
     def drv(self):
         return self.m_driver;
@@ -471,10 +477,26 @@ class SeleniumTest(object):
             self.addAction("clear", "element class: '" + eleClass + "'")
             ele.clear()
 
-        self.addAction("fill", "element class: '" + eleClass + "', text: " + wrapIfLong(userSerialize(text)) + " ")
-        self.logAdd("Sending text to element class '" + eleClass + "'")
+        self.addAction("fill", "element: ACE, text: " + wrapIfLong(userSerialize(text)) + " ")
+        self.logAdd("Sending text to ACE element")
         ele.send_keys(text)
         return self.executeJS("return $('#edit-text').data('editor-ref').getValue();")
+
+    def checkAceEditorElementText(self, text):
+        eleClass = 'textarea.ace_text-input'  # a bit of hardcode, we have only one ACE editor on screen at a time
+        ele = self.getElementByClass(eleClass)
+        self.addAction("check-text", "element: ACE, expected: " + wrapIfLong(userSerialize(text)) + ". ")
+        currentText = self.executeJS("return $('#edit-text').data('editor-ref').getValue();")
+        if isEqual(text, currentText):
+            self.addAction("check-text:ok", "element: ACE")
+            return True
+        self.addAction("check-text:fail", "element: ACE, actual: " + wrapIfLong(userSerialize(currentText)) + ", expected: " + wrapIfLong(userSerialize(text)) + " ")
+        return False
+
+    def assertAceEditorElementText(self, text, reason = ""):
+        if not self.checkAceEditorElementText(text):
+            self.failTest("ACE element text does not match expected: " + wrapIfLong(userSerialize(text)) + ". " + self.displayReason(reason))
+
 
     def setOptionValueByIdAndValue(self, eleId, optValue):
         try:
@@ -495,6 +517,10 @@ class SeleniumTest(object):
             self.fatalTest("Invalid index in setOptionValueByIdAndIndex for element " + eleId + ". Index should be positive (1 and above). ")
         self.addAction("set-option-by-index", "element id: '" + eleId + "', index: " + userSerialize(index))
         selEle = self.getElementById(eleId)
+        eleList = selEle.find_elements_by_xpath("option")
+        actLen = len(eleList)
+        if index >= actLen:
+            self.failTest("Index in setOptionValueByIdAndIndex is too large for element {0}. Option list size is {1}, requested index: {2}".format(eleId, actLen, index))
         optionValue = getValue(selEle.find_element_by_xpath("option[" + userSerialize(index) + "]"))
         self.setOptionValueByIdAndValue(eleId, optionValue)
 
