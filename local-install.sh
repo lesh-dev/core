@@ -71,7 +71,10 @@ fi
 message "User detected: $user"
 
 if [ "$user" == "mvel" ] ; then
-    HTTPD_USER=www-data
+    if grep -q Ubuntu /etc/*release ; then
+        message "Switching to Ubuntu"
+        HTTPD_USER=www-data
+    fi
 fi
 
 # configure rests of unset options
