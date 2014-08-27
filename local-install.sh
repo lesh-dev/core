@@ -70,6 +70,10 @@ if [ -z "$user" ] ; then
 fi
 message "User detected: $user"
 
+if [ "$user" == "mvel" ] ; then
+    HTTPD_USER=www-data
+fi
+
 # configure rests of unset options
 if [ -z "$DEST_NAME" ] ; then
     # default site location
