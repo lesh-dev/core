@@ -107,7 +107,7 @@
             <input name="update_user" id="update_user" value="Обновить данные пользователя" type="submit" />
             <input name="check_delete_user" id="check_delete_user" value="Удалить пользователя"
                 type="submit" class="delete"/><?php
-            if(@$_POST['check_delete_user'])
+            if (@$_POST['check_delete_user'])
             {?>
                 <div class="warning">Вы точно уверены, что хотите <b>удалить</b> этого пользователя?</div>
                 <input name="delete_user" id="delete_user" value="Таки да, удалить!"
