@@ -62,7 +62,7 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid="x", $
         {
             echo "Запись добавлена. ";
             if ($return)
-                echo "<a href='$return'>Вернуться.</a>";
+                echo "<a href=\"$return\">Вернуться</a>\n";
             else "<meta http-equiv=\"refresh\" content=\"0\"></meta>";
         }
     }
@@ -88,7 +88,7 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid="x", $
                 $value = @$defvalues[$id];
             if ($operation == "edit")
                 xcmst_draw_contest_form_field($type, $name, $value, $id);
-            if($operation == "view")
+            elseif ($operation == "view")
                 xcmst_draw_contest_form_view($type, $name, $value);
         }
         echo "</table>\n";
@@ -239,7 +239,7 @@ function ctx_show_submitted()
 
     if ($mode == "structure")
     {
-        if(@$_POST)
+        if (@$_POST)
         {
             ctx_create_structure();
         }
@@ -249,10 +249,10 @@ function ctx_show_submitted()
             value='ОЧИСТИТЬ ВООБЩЕ ВСЮ БАЗУ' class='btn btn-danger' type=\"submit\"></form>";
     }
 
-    if($mode == "delete")
+    if ($mode == "delete")
         xcmst_contest_delete_entity();
 
-    if($mode == "view")
+    if ($mode == "view")
     {
         $table = $_GET["table"];
 
@@ -268,7 +268,7 @@ function ctx_show_submitted()
 
             foreach($problems_table as $problem)
             {
-                if(@$_GET["pid"] == $problem["problems_id"]) $activeness = "class='active'";
+                if (@$_GET["pid"] == $problem["problems_id"]) $activeness = "class='active'";
                 else $activeness = "";;
                 echo "<li $activeness><a
                     href='?ref=$ref&mode=view&table=contestants&id={$_GET['id']}&pid={$problem["problems_id"]}' >".
@@ -289,12 +289,12 @@ function ctx_show_submitted()
                 $c_id = $_GET["id"];
                 $p_id = $problem["problems_id"];
                 $sid = XDB_NEW;
-                if($p_id != @$_GET["pid"]) continue;
+                if ($p_id != @$_GET["pid"]) continue;
                 echo '<div class="tab-pane" id="pr_'.$problem["problems_id"].'">';
                 foreach($solutions_table as $line)
                 {
-                    if($line["problem_id"] != $p_id) continue;
-                    if($line["contestant_id"] != $c_id) continue;
+                    if ($line["problem_id"] != $p_id) continue;
+                    if ($line["contestant_id"] != $c_id) continue;
                     $sid = $line["solutions_id"];
 
                 }
