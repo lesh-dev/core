@@ -20,5 +20,5 @@ RewriteRule ^xsm/(.*)$ /?ref=xsm&aparam=$1
 RewriteRule ^xsm$ /?ref=xsm&aparam=root
 
 # Contest short links
-RewriteRule ^ctx/(.*)$ /?ref=contest&aparam=$1
-RewriteRule ^ctx$ /?ref=contest&aparam=root
+RewriteRule ^ctx/(.*)$ /?ref=contest&mode=$1
+RewriteRule ^ctx$ /?ref=contest
