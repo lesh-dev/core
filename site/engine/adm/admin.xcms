@@ -63,6 +63,7 @@ if (!@$_GET["page"])
             <a <?php echo xcms_href(array('mode'=>'user_manage', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Пользователи</a>
             <a <?php echo xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Уведомления</a>
             <a href="/<# web_prefix #>xsm" class="h-menu-link">XSM</a>
+            <a href="/<# web_prefix #>ctx" class="h-menu-link">Олимпиада</a>
             <a href="/mailman/listinfo/preps/" class="h-menu-link">Рассылка</a><?php
             }?>
 
