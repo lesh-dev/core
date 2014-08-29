@@ -29,7 +29,7 @@ require_once("${engine_dir}cms/ank/field-desc.php");
         <div class="container">
             <div class="content-cabinet">
 <?php
-    if(@$_GET["mode"] == "change_passwd")
+    if (@$_GET["mode"] == "change_passwd")
     {
         include(translate('<! auth/chpassw !>'));
     }
