@@ -165,11 +165,14 @@ function ctx_show_submitted()
 <div id="container">
 <?php
 
-    $table_name = xcms_get_key_or($_GET, "table_name");
-    $mode = xcms_get_key_or($_GET, "mode");
-    $entry_id = xcms_get_key_or($_GET, "entry_id");
+$table_name = xcms_get_key_or($_GET, "table_name");
+$mode = xcms_get_key_or($_GET, "mode", "view");
+$entry_id = xcms_get_key_or($_GET, "entry_id");
 
-    $FILTER = "( contest_year = \"$CONTEST_CURRENT_YEAR\" )";
+$FILTER = "( contest_year = \"$CONTEST_CURRENT_YEAR\" )";
+
+if ($mode == "view")
+{
     if ($table_name == "problems")
     {
         echo ctx_show_tasty_list(
@@ -180,11 +183,12 @@ function ctx_show_submitted()
         );
         ?><a href="/ctx/problems/edit">Добавить еще одну задачу</a><br/><?php
     }
-
-    if ($table_name == "submitted")
+    elseif ($table_name == "submitted")
+    {
         ctx_show_submitted();
 
-    if ($table_name == "works")
+    }
+    elseif ($table_name == "works")
     {
         $probs = xdb_get_table("problems", null, $FILTER);
         $works = ctx_get_works();
@@ -237,91 +241,96 @@ function ctx_show_submitted()
             }
         ?></table><?php
     }
-
-    if ($mode == "edit")
-    {
-        if ($table_name == "contestants" && xu_not_empty($entry_id))
-            unset($CTX_META["contestants"]["work"]);
-
-        ctx_add_or_edit_form($table_name, $entry_id, "edit", @$_SERVER["HTTP_REFERER"]);
-    }
-
+}
+elseif ($mode == "edit")
+{
+    // secret unreference in interface mode
     if ($table_name == "structure")
     {
         if (@$_POST)
         {
             ctx_create_structure();
         }
-        echo "<h3>Запрос на удаление</h3>";
-        echo "<h1>СТОЙ!!! ПОДУМАЙ, ЧТО ТЫ ДЕЛАЕШЬ!!!!</h1>";
-        echo "<form method='post'><input name='delete'
-            value='ОЧИСТИТЬ ВООБЩЕ ВСЮ БАЗУ' class='btn btn-danger' type=\"submit\"></form>";
+        ?>
+        <h3>Запрос на удаление</h3>
+        <h1>СТОЙ!!! ПОДУМАЙ, ЧТО ТЫ ДЕЛАЕШЬ!!!!</h1>
+        <form method="post">
+            <input name="delete" value="ОЧИСТИТЬ ВООБЩЕ ВСЮ БАЗУ" class="btn btn-danger" type="submit" />
+        </form><?php
     }
-
-    if ($mode == "delete")
-        xcmst_contest_delete_entity();
-
-    if ($mode == "view")
+    else
     {
-        if ($table_name == "contestants")
+        // all other edit modes
+        if ($table_name == "contestants" && xu_not_empty($entry_id))
+            unset($CTX_META["contestants"]["work"]);
+
+        ctx_add_or_edit_form($table_name, $entry_id, "edit", @$_SERVER["HTTP_REFERER"]);
+    }
+}
+elseif ($mode == "delete")
+{
+    xcmst_contest_delete_entity();
+}
+
+if ($mode == "view")
+{
+    if ($table_name == "contestants")
+    {
+        echo '<ul class="nav nav-pills">';
+        $problems_table = xdb_get_table("problems", NULL, $FILTER);
+        $solutions_table = xdb_get_table("solutions", NULL, $FILTER);
+        // TODO: replace pid -> problem_id, not mix with problems_id
+        if (!@$_GET["pid"]) $activeness = "class='active'";
+        else $activeness = "";
+        echo "<li $activeness ><a
+            href='?ref=$ref&mode=view&table=contestants&id={$_GET['id']}' >Информация</a></li>";
+
+        foreach ($problems_table as $problem)
         {
-            echo '<ul class="nav nav-pills">';
-            $problems_table = xdb_get_table("problems", NULL, $FILTER);
-            $solutions_table = xdb_get_table("solutions", NULL, $FILTER);
-            // TODO: replace pid -> problem_id, not mix with problems_id
-            if (!@$_GET["pid"]) $activeness = "class='active'";
-            else $activeness = "";
-            echo "<li $activeness ><a
-                href='?ref=$ref&mode=view&table=contestants&id={$_GET['id']}' >Информация</a></li>";
-
-            foreach ($problems_table as $problem)
-            {
-                if (@$_GET["pid"] == $problem["problems_id"]) $activeness = "class='active'";
-                else $activeness = "";;
-                echo "<li $activeness><a
-                    href='/ctx/contestants/view/&amp;id=$entry_id&pid={$problem["problems_id"]}' >".
-                    $problem["problem_name"]."</a></li>";
-            }
-            echo "</ul>";
-
-            if (!@$_GET["pid"])
-            {?>
-                <div class="tab-pane active" id="def"><?php
-                ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
-                ?><a class="btn btn-warning" href="<?php echo "/ctx/$table_name/edit/$entry_id"; ?>">Правка</a>
-                </div><?php
-            }
-
-            foreach ($problems_table as $problem)
-            {
-                $c_id = $entry_id;
-                $p_id = $problem["problems_id"];
-                $sid = XDB_NEW;
-                if ($p_id != @$_GET["pid"]) continue;
-                echo '<div class="tab-pane" id="pr_'.$problem["problems_id"].'">';
-                foreach ($solutions_table as $line)
-                {
-                    if ($line["problem_id"] != $p_id) continue;
-                    if ($line["contestant_id"] != $c_id) continue;
-                    $sid = $line["solutions_id"];
-
-                }
-                echo "<h3>".$problem["problem_name"]."</h3>";
-                $retur = ($sid == XDB_NEW) ? false : 'stay';
-                ctx_add_or_edit_form("solutions", $sid, "edit", $retur, $c_id.$p_id,
-                    array("problem_id"=>$p_id, "contestant_id"=>$c_id));
-                echo "</div>";
-            }
-
+            if (@$_GET["pid"] == $problem["problems_id"]) $activeness = "class='active'";
+            else $activeness = "";;
+            echo "<li $activeness><a
+                href='/ctx/contestants/view/&amp;id=$entry_id&pid={$problem["problems_id"]}' >".
+                $problem["problem_name"]."</a></li>";
         }
-        else
-        {
+        echo "</ul>";
+
+        if (!@$_GET["pid"])
+        {?>
+            <div class="tab-pane active" id="def"><?php
             ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
-            echo "<a href=\"/ctx/$table_name/edit/$entry_id\">Правка</a>";
+            ?><a class="btn btn-warning" href="<?php echo "/ctx/$table_name/edit/$entry_id"; ?>">Правка</a>
+            </div><?php
+        }
+
+        foreach ($problems_table as $problem)
+        {
+            $c_id = $entry_id;
+            $p_id = $problem["problems_id"];
+            $sid = XDB_NEW;
+            if ($p_id != @$_GET["pid"]) continue;
+            echo '<div class="tab-pane" id="pr_'.$problem["problems_id"].'">';
+            foreach ($solutions_table as $line)
+            {
+                if ($line["problem_id"] != $p_id) continue;
+                if ($line["contestant_id"] != $c_id) continue;
+                $sid = $line["solutions_id"];
+
+            }
+            echo "<h3>".$problem["problem_name"]."</h3>";
+            $retur = ($sid == XDB_NEW) ? false : 'stay';
+            ctx_add_or_edit_form("solutions", $sid, "edit", $retur, $c_id.$p_id,
+                array("problem_id"=>$p_id, "contestant_id"=>$c_id));
+            echo "</div>";
         }
 
     }
-
+    else
+    {
+        ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
+        echo "<a href=\"/ctx/$table_name/edit/$entry_id\">Правка</a>";
+    }
+}
 ?>
 </div>
 </div>
