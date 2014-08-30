@@ -20,6 +20,7 @@ RewriteRule ^xsm/(.*)$ /?ref=xsm&aparam=$1
 RewriteRule ^xsm$ /?ref=xsm&aparam=root
 
 # Contest short links
-RewriteRule ^ctx/([a-z]+)/([a-z]+)$ /?ref=contest&table=$1&mode=$2
-RewriteRule ^ctx/([a-z]+)$ /?ref=contest&table=$1
+RewriteRule ^ctx/([a-z]+)/([a-z]+)$ /?ref=contest&table_name=$1&mode=$2
+RewriteRule ^ctx/([a-z]+)/([a-z]+)/([a-z0-9]+)$ /?ref=contest&table_name=$1&mode=$2&entry_id=$3
+RewriteRule ^ctx/([a-z]+)$ /?ref=contest&table_name=$1&mode=view
 RewriteRule ^ctx$ /?ref=contest

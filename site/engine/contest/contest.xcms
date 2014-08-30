@@ -111,8 +111,8 @@ function ctx_show_tasty_list($table_name, $order, $filter, $row_template)
             $template = str_replace("{".$field."}", $value, $template);
         }
         $pk = $line["${table_name}_id"];
-        $template = str_replace("{#edit}", "href='/ctx&amp;mode=edit&amp;table=$table_name&amp;id=$pk'", $template);
-        $template = str_replace("{#view}", "/ctx&amp;mode=view&amp;table=$table_name&amp;id=$pk", $template);
+        $template = str_replace("{#edit}", "/ctx/$table_name/edit/$pk", $template);
+        $template = str_replace("{#view}", "/ctx/$table_name/view/$pk", $template);
         $ans .= $template;
     }
     return $ans;
@@ -161,12 +161,16 @@ function ctx_show_submitted()
 
 <div class="site-body">
 
+<pre><?php print_r($_GET); ?></pre>
 <div id="container">
 <?php
-    print_r($_GET);
+
+    $table_name = xcms_get_key_or($_GET, "table_name");
+    $mode = xcms_get_key_or($_GET, "mode");
+    $entry_id = xcms_get_key_or($_GET, "entry_id");
+
     $FILTER = "( contest_year = \"$CONTEST_CURRENT_YEAR\" )";
-    $mode = @$_GET["mode"];
-    if ($mode == "problems")
+    if ($table_name == "problems")
     {
         echo ctx_show_tasty_list(
             "problems",
@@ -177,10 +181,10 @@ function ctx_show_submitted()
         ?><a href="/ctx/problems/edit">Добавить еще одну задачу</a><br/><?php
     }
 
-    if ($mode == "submitted")
+    if ($table_name == "submitted")
         ctx_show_submitted();
 
-    if ($mode == "works")
+    if ($table_name == "works")
     {
         $probs = xdb_get_table("problems", null, $FILTER);
         $works = ctx_get_works();
@@ -236,13 +240,13 @@ function ctx_show_submitted()
 
     if ($mode == "edit")
     {
-        if ($_GET["table"] == "contestants" && @$_GET["id"] != "")
+        if ($table_name == "contestants" && xu_not_empty($entry_id))
             unset($CTX_META["contestants"]["work"]);
 
-        ctx_add_or_edit_form(@$_GET["table"], @$_GET["id"], "edit", @$_SERVER["HTTP_REFERER"]);
+        ctx_add_or_edit_form($table_name, $entry_id, "edit", @$_SERVER["HTTP_REFERER"]);
     }
 
-    if ($mode == "structure")
+    if ($table_name == "structure")
     {
         if (@$_POST)
         {
@@ -259,44 +263,43 @@ function ctx_show_submitted()
 
     if ($mode == "view")
     {
-        $table = $_GET["table"];
-
-        if ($table == "contestants")
+        if ($table_name == "contestants")
         {
             echo '<ul class="nav nav-pills">';
             $problems_table = xdb_get_table("problems", NULL, $FILTER);
             $solutions_table = xdb_get_table("solutions", NULL, $FILTER);
+            // TODO: replace pid -> problem_id, not mix with problems_id
             if (!@$_GET["pid"]) $activeness = "class='active'";
             else $activeness = "";
             echo "<li $activeness ><a
                 href='?ref=$ref&mode=view&table=contestants&id={$_GET['id']}' >Информация</a></li>";
 
-            foreach($problems_table as $problem)
+            foreach ($problems_table as $problem)
             {
                 if (@$_GET["pid"] == $problem["problems_id"]) $activeness = "class='active'";
                 else $activeness = "";;
                 echo "<li $activeness><a
-                    href='?ref=$ref&mode=view&table=contestants&id={$_GET['id']}&pid={$problem["problems_id"]}' >".
+                    href='/ctx/contestants/view/&amp;id=$entry_id&pid={$problem["problems_id"]}' >".
                     $problem["problem_name"]."</a></li>";
             }
             echo "</ul>";
 
             if (!@$_GET["pid"])
-            {
-                echo '<div class="tab-pane active" id="def">';
-                ctx_add_or_edit_form(@$_GET["table"], @$_GET["id"], "view", @$_SERVER["HTTP_REFERER"]);
-                echo "<a class='btn btn-warning' href='?ref=$ref&mode=edit&id={$_GET['id']}&table=$table'>Правка</a>";
-                echo '</div>';
+            {?>
+                <div class="tab-pane active" id="def"><?php
+                ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
+                ?><a class="btn btn-warning" href="<?php echo "/ctx/$table_name/edit/$entry_id"; ?>">Правка</a>
+                </div><?php
             }
 
             foreach ($problems_table as $problem)
             {
-                $c_id = $_GET["id"];
+                $c_id = $entry_id;
                 $p_id = $problem["problems_id"];
                 $sid = XDB_NEW;
                 if ($p_id != @$_GET["pid"]) continue;
                 echo '<div class="tab-pane" id="pr_'.$problem["problems_id"].'">';
-                foreach($solutions_table as $line)
+                foreach ($solutions_table as $line)
                 {
                     if ($line["problem_id"] != $p_id) continue;
                     if ($line["contestant_id"] != $c_id) continue;
@@ -307,15 +310,14 @@ function ctx_show_submitted()
                 $retur = ($sid == XDB_NEW) ? false : 'stay';
                 ctx_add_or_edit_form("solutions", $sid, "edit", $retur, $c_id.$p_id,
                     array("problem_id"=>$p_id, "contestant_id"=>$c_id));
-                //ctx_add_or_edit_form("problems", $_GET["id"]);
                 echo "</div>";
             }
 
         }
         else
         {
-            ctx_add_or_edit_form(@$_GET["table"], @$_GET["id"], "view", @$_SERVER["HTTP_REFERER"]);
-            echo "<a href='?ref=$ref&mode=edit&id={$_GET['id']}&table=$table'>Правка</a>";
+            ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
+            echo "<a href=\"/ctx/$table_name/edit/$entry_id\">Правка</a>";
         }
 
     }
