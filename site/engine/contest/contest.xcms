@@ -280,20 +280,20 @@ if ($mode == "view")
         $problems_table = xdb_get_table("problems", NULL, $FILTER);
         $solutions_table = xdb_get_table("solutions", NULL, $FILTER);
         // TODO: replace pid -> problem_id, not mix with problems_id
-        if (!@$_GET["pid"]) $activeness = "class='active'";
+        if (!@$_GET["pid"]) $activeness = " class=\"active\" ";
         else $activeness = "";
-        echo "<li $activeness ><a
-            href='?ref=$ref&mode=view&table=contestants&id={$_GET['id']}' >Информация</a></li>";
+        echo "<li $activeness ><a href=\"/ctx/contestants/view/$entry_id\">Информация</a></li>\n";
 
         foreach ($problems_table as $problem)
         {
-            if (@$_GET["pid"] == $problem["problems_id"]) $activeness = "class='active'";
-            else $activeness = "";;
-            echo "<li $activeness><a
-                href='/ctx/contestants/view/&amp;id=$entry_id&pid={$problem["problems_id"]}' >".
-                $problem["problem_name"]."</a></li>";
+            $activeness = "";
+            if (@$_GET["pid"] == $problem["problems_id"])
+                $activeness = "class='active'";
+            $problem_id = $problem["problems_id"];
+            $problem_name = htmlspecialchars($problem["problem_name"]);
+            echo "<li $activeness><a href=\"/ctx/contestants/view/$entry_id/$problem_id\">$problem_name</a></li>\n";
         }
-        echo "</ul>";
+        echo "</ul>\n";
 
         if (!@$_GET["pid"])
         {?>

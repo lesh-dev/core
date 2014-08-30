@@ -41,10 +41,9 @@ function ctx_print_result_row($work, $probs, $simple = false)
     else
     {
         $row .=
-            "<td><a ".xcms_href(array(
-                'ref'=>$ref, 'mode'=>'view', 'table'=>'contestants', 'id'=>$id)).">{$work['name']}</a></td>".
-            "<td>{$work['level']}</td>".
-            "<td><a href=\"{$work['work']}\">Скачать</a></td>";
+            "<td><a href=\"/ctx/contestants/view/$id\">{$work["name"]}</a></td>".
+            "<td>{$work["level"]}</td>".
+            "<td><a href=\"{$work["work"]}\">Скачать</a></td>";
 
         foreach ($probs as $prob)
         {
@@ -60,8 +59,7 @@ function ctx_print_result_row($work, $probs, $simple = false)
 
     if (!$simple)
     {
-        $row .= "<td><a ".xcms_href(array(
-            'ref'=>$ref, 'mode'=>'delete', 'table'=>'contestants', 'id'=>$id)).">Удалить</a></td>";
+        $row .= "<td><a href=\"/ctx/contestants/delete/$id\">Удалить</a></td>";
     }
     return $row;
 }
