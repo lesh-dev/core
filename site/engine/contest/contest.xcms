@@ -264,7 +264,7 @@ elseif ($mode == "edit")
         if ($table_name == "contestants" && xu_not_empty($entry_id))
             unset($CTX_META["contestants"]["work"]);
 
-        ctx_add_or_edit_form($table_name, $entry_id, "edit", @$_SERVER["HTTP_REFERER"]);
+        ctx_add_or_edit_form($table_name, $entry_id, "edit", "/ctx/$table_name");
     }
 }
 elseif ($mode == "delete")
