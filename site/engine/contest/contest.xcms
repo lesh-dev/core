@@ -25,20 +25,20 @@ function ctx_custom_form($table_name, $pk, $item_template)
         ctx_update_object($table_name, $values);
         $ans .= "Запись добавлена. ";
         if ($return)
-            $ans .= "<a href='$return'>Вернуться.</a>";
+            $ans .= "<a href=\"$return\">Вернуться</a>";
     }
     else
     {
-        $ans .= "<form enctype='multipart/form-data'
-            method=\"POST\"><input type='hidden' name='MAX_FILE_SIZE' value='15000000' />";
+        $ans .= "<form enctype=\"multipart/form-data\"
+            method=\"post\"><input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"15000000\" />";
 
         $values = xdb_get_entity_by_id($table_name, $pk);
         foreach($values as $k=>$v)
             $item_template = str_replace("{".$k."}", $v, $item_template);
         $item_template = str_replace(
             "{#submit}",
-            "<input class='btn btn-primary' type='submit'
-                name='ctx_add_or_edit_form_$table_name' value='Добавить / Изменить' />",
+            "<input class=\"btn btn-primary\" type=\"submit\"
+                name=\"ctx_add_or_edit_form_$table_name\" value=\"Добавить / Изменить\" />",
             $item_template);
         $ans .= "</form>";
     }
@@ -69,12 +69,13 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid="x", $
 
     if ($show_form)
     {
-        echo "<form enctype='multipart/form-data' method=\"POST\">
-            <input type='hidden' name='MAX_FILE_SIZE' value='15000000' />";
+        echo "<form enctype=\"multipart/form-data\" method=\"POST\">
+            <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"15000000\" />";
+
         $cls = "table-condensed";
         if ($operation == "view")
             $cls .= " table table-bordered table-hover";
-        echo "<table class='$cls'>\n";
+        echo "<table class=\"$cls\">\n";
         $values = array();
         if ($pk)
             $values = xdb_get_entity_by_id($table_name, $pk);
@@ -93,7 +94,7 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid="x", $
         }
         echo "</table>\n";
         if ($operation == "edit")
-            echo "<input type='submit' class='btn btn-primary' name='ctx_add_or_edit_form_${table_name}_$fid' value='Добавить / изменить' />";
+            echo "<input type=\"submit\" class=\"btn btn-primary\" name=\"ctx_add_or_edit_form_${table_name}_$fid\" value=\"Добавить / изменить\" />";
         echo "</form>";
     }
 }
@@ -165,7 +166,7 @@ function ctx_show_submitted()
 <div id="container">
 <?php
 
-$table_name = xcms_get_key_or($_GET, "table_name");
+$table_name = xcms_get_key_or($_GET, "table_name", "problems");
 $mode = xcms_get_key_or($_GET, "mode", "view");
 $entry_id = xcms_get_key_or($_GET, "entry_id");
 
@@ -219,7 +220,7 @@ if ($mode == "view")
         </table>
 
         <h3>Проверенные</h3>
-        <table class='table table-striped table-bordered table-condensed table-hover'>
+        <table class="table table-striped table-bordered table-condensed table-hover">
         <thead><tr>
             <th>№</th>
             <th>Ученик</th>
@@ -288,7 +289,7 @@ if ($mode == "view")
         {
             $activeness = "";
             if (@$_GET["pid"] == $problem["problems_id"])
-                $activeness = "class='active'";
+                $activeness = " class=\"active\" ";
             $problem_id = $problem["problems_id"];
             $problem_name = htmlspecialchars($problem["problem_name"]);
             echo "<li $activeness><a href=\"/ctx/contestants/view/$entry_id/$problem_id\">$problem_name</a></li>\n";
