@@ -154,7 +154,7 @@ function ctx_show_submitted()
         <ul class="nav">
             <li><a href="/ctx/problems">Задачи</a></li>
             <li><a href="/ctx/submitted">Присланное</a></li>
-            <li><a href="/ctx/works">Работы</a></li>
+            <li><a href="/ctx/contestants">Работы</a></li>
             <li><a href="/ctx/contestants/edit">Добавить работу</a></li>
         </ul>
     </div>
@@ -189,7 +189,7 @@ if ($mode == "view")
         ctx_show_submitted();
 
     }
-    elseif ($table_name == "works")
+    elseif ($table_name == "contestants")
     {
         $probs = xdb_get_table("problems", null, $FILTER);
         $works = ctx_get_works();
@@ -326,7 +326,7 @@ if ($mode == "view")
         }
 
     }
-    else
+    elseif (xu_not_empty($entry_id))
     {
         ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
         echo "<a href=\"/ctx/$table_name/edit/$entry_id\">Правка</a>";
