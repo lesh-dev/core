@@ -35,8 +35,7 @@ class XcmsContentPageOrder(xtest_common.XcmsTest):
         
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle1)
-        # TODO: wait for fix #779 - fixed
-        self.gotoPage("/?&mode=edit_menu&page=index%2F" + inpPageDir1 + "&ref=admin")
+        self.clickElementById("edit-menu")
 
         order1 = "20"
         pageText = self.fillElementById("menu-order-input", order1)
@@ -44,7 +43,7 @@ class XcmsContentPageOrder(xtest_common.XcmsTest):
 
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle2)
-        self.gotoPage("/?&mode=edit_menu&page=index%2F" + inpPageDir2 + "&ref=admin")
+        self.clickElementById("edit-menu")
 
         order2 = "30"
         pageText = self.fillElementById("menu-order-input", order2)
@@ -52,7 +51,7 @@ class XcmsContentPageOrder(xtest_common.XcmsTest):
 
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle3)
-        self.gotoPage("/?&mode=edit_menu&page=index%2F" + inpPageDir3 + "&ref=admin")
+        self.clickElementById("edit-menu")
 
         order3 = "10"
         pageText = self.fillElementById("menu-order-input", order3)
