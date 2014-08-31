@@ -189,11 +189,17 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.clickElementById("set-version-top") # Смотреть версию
         self.loadWait()
         self.assertAceEditorElementText(versionDoNotLostText)
+        
+        self.gotoCloseEditor()
 
     def testDiffAndLongText(self):
 
         self.logAdd("test diff engine. ")
         self.wait(2)
+        
+        self.gotoUrlByLinkText(self.m_parentPage)
+        self.gotoUrlByLinkText(self.m_menuTitle)
+        self.gotoEditPageInPlace()
 
         wordNumber = 7
         totalLines = 8
@@ -244,9 +250,9 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
             print "replacement: ", replacement
             pageText = pageText.replace(sample, replacement)
 
-        print "diff test page new text after word-replacement: "
-        print pageText
-        print "-" * 30
+        self.logAdd("diff test page new text after word-replacement: ")
+        self.logAdd(pageText)
+        self.logAdd("-" * 30)
 
         pageText = self.fillAceEditorElement(pageText)
 
@@ -256,9 +262,9 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         realPageText = pageText.replace("<p>", "").replace("\n", " ").replace("</p> ", "\n").replace("</p>", "\n").strip()
 
-        print "real page text: "
-        print realPageText
-        print "-" * 30
+        self.logAdd("real page text: ")
+        self.logAdd(realPageText)
+        self.logAdd("-" * 30)
 
         self.assertElementTextById("content-text", realPageText, "real page text does not match entered text. ")
 
