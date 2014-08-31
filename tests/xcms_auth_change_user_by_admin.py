@@ -110,9 +110,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.gotoPage("/?&mode=user_manage&page=index&ref=admin")
         self.assertBodyTextPresent(accessDeniedMsg, "Hack of 'users' hidden link succeeded. ")
 
-        self.assertUrlNotPresent(u"Группы", "Editor should not see 'Groups' menu. ")
-        self.gotoPage("/?&mode=group_admin&page=index&ref=admin")
-        self.assertBodyTextPresent(accessDeniedMsg, "Hack of 'groups' hidden link succeeded. ")
+        # custom groups removed, so group link checking is obsolete
 
         self.performLogoutFromAdminPanel()
 
