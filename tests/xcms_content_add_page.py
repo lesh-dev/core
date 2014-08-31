@@ -133,7 +133,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.gotoEditPageInPlace()
         
         self.logAdd("Waiting before saving of first version. ")
-        timeToWait = 22
+        timeToWait = 105
         self.wait(timeToWait)
         
         versionUnoText = "version_0001" + "\n" + timestamp()

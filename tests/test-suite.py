@@ -156,6 +156,9 @@ try:
             print test.getDoc()
             print
         else:
+            if not baseUrl:
+                print "Test site URL not specified, cannot continue. "
+                break
             if specTest:
                 specTestFound = True
             print "Running test", test.getName(), "on site", baseUrl
