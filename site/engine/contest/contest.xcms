@@ -15,9 +15,12 @@ require_once("${engine_dir}contest/scheme.php");
 require_once("${engine_dir}contest/forms.php");
 require_once("${engine_dir}contest/action.php");
 
+/*
+// не используется
 function ctx_custom_form($table_name, $pk, $item_template)
 {
     global $CTX_META, $content_dir, $CONTEST_CURRENT_YEAR;
+    echo "CUSTOM FORM\n";
     $ans = "";
     if (@$_POST["ctx_custom_$table_name"])
     {
@@ -33,7 +36,7 @@ function ctx_custom_form($table_name, $pk, $item_template)
             method=\"post\"><input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"15000000\" />";
 
         $values = xdb_get_entity_by_id($table_name, $pk);
-        foreach($values as $k=>$v)
+        foreach ($values as $k=>$v)
             $item_template = str_replace("{".$k."}", $v, $item_template);
         $item_template = str_replace(
             "{#submit}",
@@ -43,12 +46,13 @@ function ctx_custom_form($table_name, $pk, $item_template)
         $ans .= "</form>";
     }
 }
+*/
 
 /**
   * Стандартная форма редактирования записи. Нечто аналогичное уже есть в XSM,
   * но в менее явном виде, надо подумать, можно ли их слить воедино.
   **/
-function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid="x", $defvalues=array())
+function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x", $defvalues = array())
 {
     global $CTX_META, $content_dir, $CONTEST_CURRENT_YEAR;
     $show_form = true;
@@ -72,9 +76,9 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid="x", $
     }
 
     if ($show_form)
-    {
-        echo "<form enctype=\"multipart/form-data\" method=\"POST\">
-            <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"15000000\" />";
+    {?>
+        <form enctype="multipart/form-data" method="POST">
+            <input type="hidden" name="MAX_FILE_SIZE" value="15000000" /><?php
 
         $cls = "table-condensed";
         if ($operation == "view")
@@ -98,7 +102,12 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid="x", $
         }
         echo "</table>\n";
         if ($operation == "edit")
-            echo "<input type=\"submit\" class=\"btn btn-primary\" name=\"ctx_add_or_edit_form_${table_name}_$fid\" value=\"Добавить / изменить\" />";
+        {
+            $btn_name = "ctx_add_or_edit_form_${table_name}_$fid"; ?>
+            <input type="submit" class="btn btn-primary"
+                name="<?php echo $btn_name; ?>"
+                value="Добавить / Изменить 111" /><?php
+        }
         echo "</form>";
     }
 }
@@ -115,7 +124,7 @@ function ctx_show_tasty_list($table_name, $order, $filter, $row_template)
     foreach ($rows as $line)
     {
         $template = $row_template;
-        foreach($line as $field=>$value)
+        foreach ($line as $field=>$value)
         {
             $template = str_replace("{".$field."}", $value, $template);
         }
@@ -339,10 +348,6 @@ elseif ($mode == "edit")
     }
     else
     {
-        // all other edit modes
-        if ($table_name == "contestants" && xu_not_empty($entry_id))
-            unset($CTX_META["contestants"]["work"]);
-
         ctx_add_or_edit_form($table_name, $entry_id, "edit", "/ctx/$table_name");
     }
 }

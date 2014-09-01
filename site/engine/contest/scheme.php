@@ -91,7 +91,7 @@ function ctx_update_object($table_name, $values)
     global $CONTEST_CURRENT_YEAR;
     global $content_dir;
 
-    foreach($CTX_META[$table_name] as $id=>$arr)
+    foreach ($CTX_META[$table_name] as $id=>$arr)
     {
         $values[$id] = @$_POST[$id];
         if (!@$_FILES[$id])
