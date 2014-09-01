@@ -4,7 +4,7 @@ function xcmst_upload_page_attach($page_prefix)
 {
     $name = xcms_get_key_or($_POST, "attach-target");
     $name = preg_replace('/[^A-Za-z.,0-9_-]/', '', $name);
-    if(!strlen($name))
+    if (!strlen($name))
     {?>
         <div class="error">Wrong or empty attachment name.
             It can only contain following characters:
@@ -97,10 +97,10 @@ function xcmst_show_attachments($page_prefix)
 <div class="admin-widget"><?php
     $page_prefix = xcms_get_page_path();
 
-    if(@$_POST["upload-attach"])
+    if (@$_POST["upload-attach"])
         xcmst_upload_page_attach($page_prefix);
 
-    if(@$_POST["delete-attach"])
+    if (@$_POST["delete-attach"])
         xcmst_delete_attach($page_prefix);
 
     xcmst_show_attachments($page_prefix);

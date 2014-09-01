@@ -6,20 +6,20 @@
     $qsm = "";
 
     $photono = @$_GET["photono"];
-    if(!$photono)$photono=0;
+    if (!$photono) $photono = 0;
 
     $photoh = @$_GET["photoH"];
-    if(!$photoH)$photoH=5;
+    if (!$photoH) $photoH = 5;
 
     $onPage = @$_GET["onPage"];
-    if(!$onPage)$onPage=15;
+    if (!$onPage) $onPage = 15;
 
     foreach (@$_GET as $key=>$value)
     {
-        if($key=="cat") continue;
-        if($key=="img") continue;
-        if($key=="photono") continue;
-        if($key=="ref") $qsm = $qsm."$key=showphoto&amp;";
+        if ($key=="cat") continue;
+        if ($key=="img") continue;
+        if ($key=="photono") continue;
+        if ($key=="ref") $qsm = $qsm."$key=showphoto&amp;";
         else $qsm = $qsm."$key=$value&amp;";
         $qs = $qs."$key=$value&amp;";
     }
@@ -29,7 +29,7 @@
     if ($photono)
         echo "<a href=\"?{$qs}photono=s$plus\"><==</a>";
     echo "<p class=\"extern_link\">Категории: <a href=\"?{$qs}\">Все</a>";
-    foreach($catlist as $key=>$value)
+    foreach ($catlist as $key=>$value)
     {
         $catname = file_get_contents($value);
         $value = str_replace("$page_path/", "", $value);
@@ -40,11 +40,11 @@
         echo " <a href=\"?{$qs}cat=$value\">$catname</a>";
     }
     echo "</p>";
-    $plus = $photono+1;
-    if (count($piclist) > ($photono+1)*$onPage)
+    $plus = $photono + 1;
+    if (count($piclist) > ($photono + 1) * $onPage)
         echo "<a href=\"?{$qs}photono=$plus\">==></a>";
 
-    if(@$_GET["img"])
+    if (@$_GET["img"])
     {
         $list = xcms_get_list("$page_path/{$_GET["img"]}.pic");
         $name = $list["name"];
@@ -59,12 +59,12 @@
         $picnumber = 0;
         $i = 5;
         echo "<table width=\"100%\">";
-        foreach($piclist as $key=>$value)
+        foreach ($piclist as $key=>$value)
         {
             $picnumber++;
-            if ($picnumber<=$photono*$onPage)
+            if ($picnumber <= $photono * $onPage)
                 continue;
-            if ($picnumber>($photono+1)*($onPage))
+            if ($picnumber > ($photono + 1) * ($onPage))
                 break;
 
             $list = xcms_get_list($value);
@@ -73,10 +73,10 @@
             $value = str_replace(".pic", "", $value);
             $pre = "$value-preview.jpeg";
             $value = str_replace("$page_path/", "", $value);
-            if($i>=5) {echo "<tr>";$i=0;}
+            if ($i>=5) {echo "<tr>";$i=0;}
             $title = $list["name"];
             $views = $list["views"];
-            if(!$views)$views=0;
+            if (!$views)$views=0;
             echo "<td align=\"center\" valign=\"top\">&nbsp;<br />".
                 "<a target=\"_blank\" class=\"photolink\" href=\"?{$qsm}img=$value\">".
                 "<img border=\"0\" src=\"$pre\" alt=\" \"><br />$title<br><font size=\"-2\">$views просмотров</font></a>";

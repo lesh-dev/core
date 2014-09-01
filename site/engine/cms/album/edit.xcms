@@ -6,7 +6,7 @@
         $LIST["name"] = @$_POST["image-name"];
         $LIST["comment"] = @$_POST["image-comment"];
         $LIST["cat"] = @$_POST["image-cat"];
-        if(!$LIST["cat"])$LIST["cat"]="none";
+        if (!$LIST["cat"]) $LIST["cat"]="none";
         $name = $LIST["cat"].'-'.time();
     }
 
@@ -28,7 +28,7 @@
         copy($_FILES["small-image"]["tmp_name"], $spic);
     }
 
-    if($_POST["Album-Upload-image"] || $_POST["Album-S-Upload-image"])
+    if ($_POST["Album-Upload-image"] || $_POST["Album-S-Upload-image"])
     {
         @$LIST["picname"] = $bpic;
         $LIST["prename"] = $spic;
@@ -38,7 +38,7 @@
         xcms_save_list($lpic, $LIST);
     }
 
-    if(@$_POST["Album-Delete-image"])
+    if (@$_POST["Album-Delete-image"])
     {
         $name = stripslashes(@$_POST["name"]);
         $dlst = xcms_get_list($name);
@@ -47,11 +47,11 @@
         @unlink($dlst["prename"]);
     }
 
-    if(@$_POST["album-cat"])
+    if (@$_POST["album-cat"])
     {
-        foreach(@$_POST as $key=>$value)
+        foreach (@$_POST as $key=>$value)
         {
-            if(strstr($key, "album-chcat-"))
+            if (strstr($key, "album-chcat-"))
             {
                 $rcat = str_replace("album-chcat-", "", $key);
                 xcms_write("$dir/$rcat.cat", $value);

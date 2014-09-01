@@ -15,7 +15,7 @@ function xcmst_upload_icon()
 <div class="admin-widget">
     <h3>Иконка меню (png)</h3>
     <?php
-        if(@$_POST["upload-icon"])
+        if (@$_POST["upload-icon"])
             xcmst_upload_icon();
     ?>
     <form method="post" enctype="multipart/form-data">
