@@ -97,7 +97,7 @@ if ($need)
             else
                 $uargs = array();
             $idata = "";
-            foreach($uargs as $k=>$v)
+            foreach ($uargs as $k=>$v)
             {
                 $idata .= "\$_$k = \"$v\";";
             }
