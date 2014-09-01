@@ -13,7 +13,7 @@
     {
         try
         {
-            foreach(array("name", "email") as $form_name)
+            foreach (array("name", "email") as $form_name)
                 $user->set_param($form_name, @$_POST[$form_name]);
 
             ?><div class="notice">Данные обновлены успешно</div><?php

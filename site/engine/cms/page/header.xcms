@@ -4,7 +4,7 @@
     <?php
     $info = xcms_get_list(xcms_get_info_file_name());
     $redirect = false;
-    if(@$_POST["change-header"])
+    if (@$_POST["change-header"])
     {
         $info["header"] = xcms_get_key_or($_POST, "header");
         xcms_save_list(xcms_get_info_file_name(), $info);

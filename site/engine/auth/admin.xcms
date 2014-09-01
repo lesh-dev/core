@@ -20,7 +20,7 @@
         </div>
         <?php
             $uid = 0;
-            foreach($u->user_list() as $login)
+            foreach ($u->user_list() as $login)
             {
                 $activeness = ($login == $target_user) ? "menu-active" : "";
                 $oddity = ($uid % 2 != 0) ? "odd" : "";
