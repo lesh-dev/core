@@ -33,7 +33,7 @@
 
     $hookls = glob("${engine_dir}install_hooks/*.php");
     $hooks = array();
-    foreach($hookls as $hookfile)
+    foreach ($hookls as $hookfile)
     {
         unset($hook);
         require $hookfile;
@@ -44,7 +44,7 @@
     }
     $ok = true;
     // check if it's all OK
-    foreach($hooks as $hook)
+    foreach ($hooks as $hook)
     {
         $ans = $hook->initial_check();
         if ($ans === true)
@@ -59,11 +59,11 @@
     }
     $ALLVARS = array();
     $ALLSECVARS = array();
-    foreach($hooks as $hook)
+    foreach ($hooks as $hook)
     {
         if (!isset($ALLSECVARS[$hook->module_name()]))
             $ALLSECVARS[$hook->module_name()] = array();
-        foreach($hook->request_variables() as $k=>$v)
+        foreach ($hook->request_variables() as $k=>$v)
         {
             $ALLVARS[$k] = $v;
             $ALLSECVARS[$hook->module_name()][$k] = $v;
@@ -83,14 +83,14 @@
             display_error($ans);
             die();
         }
-        foreach($hooks as $hook)
+        foreach ($hooks as $hook)
         {
             $ans = $hook->uninstall();
             if ($ans === true) continue;
             display_error($ans);
             die();
         }
-        foreach($hooks as $hook)
+        foreach ($hooks as $hook)
         {
             $logs = "";
             $ans = $hook->install(@$_POST, $logs);
@@ -115,11 +115,11 @@
             <h3>Шаг 1/2: выбор дополнительных параметров</h3>
             <table>
         <?php
-        foreach($ALLSECVARS as $hook_name=>$hook_variables)
+        foreach ($ALLSECVARS as $hook_name=>$hook_variables)
         {
             if (count($hook_variables))
                 echo "<tr><td colspan=\"2\" class=\"hook-name\">$hook_name</td></tr>\n";
-            foreach($hook_variables as $variable=>$v)
+            foreach ($hook_variables as $variable=>$v)
             {
                 $name = @$v["name"];
                 if ($name === false)
