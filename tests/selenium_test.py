@@ -73,7 +73,7 @@ def RunTest(test):
         return 2
     except TestError as e:
         test.handleTestFail(e)
-        test.printActionLog()
+        #test.printActionLog()
         return 1
     except TestShutdown as e:
         test.handleShutdown(e)
