@@ -108,7 +108,7 @@ def check_code_style(lines, file_type):
         if not itm:
             itm = re.search(' ?for\(', line)
         if itm:
-            add_bad_line(bad_lines, "if/elseif/foreach clause should be separated from condition braces", i)
+            add_bad_line(bad_lines, "if/elseif/for/foreach clause should be separated from condition braces", i)
 
         # missing spaces after commas
         line_cleanup = remove_strings(line)
