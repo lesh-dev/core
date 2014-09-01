@@ -185,7 +185,7 @@ class InstallerInstallHook
             $val = str_replace('"', '\"', $val);
             $output .= "\x20\x20\x20\x20\$$k = \"$val\";\n";
         }
-        foreach($bool_settings as $k)
+        foreach ($bool_settings as $k)
         {
             $v = $config[$k] ? "true" : "false";
             $output .= "\x20\x20\x20\x20\$$k = $v;\n";

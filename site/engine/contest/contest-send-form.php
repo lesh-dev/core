@@ -52,7 +52,7 @@ if (@$_POST["send-contest"])
         $folder = "$content_dir/contest/".time();
         mkdir("$folder");
         $error = false;
-        if(!copy($tmp_name, "$folder/$file_name"))
+        if (!copy($tmp_name, "$folder/$file_name"))
             $error = true;
 
         $data = array(

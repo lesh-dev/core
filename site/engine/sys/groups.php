@@ -10,7 +10,7 @@
             ,"#ank" => "Менеджер анкет"
         );
         $groups = xcms_get_list("$content_dir/groups");
-        foreach($groups as $k=>$v)
+        foreach ($groups as $k=>$v)
             $ans[$k] = $v;
         return $ans;
     }

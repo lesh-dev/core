@@ -12,7 +12,7 @@ function xcmst_draw_privileges($user, $mode = XDP_NORMAL)
     {?>
         <h3>Привилегии</h3><?php
     }
-    foreach(xcms_all_groups() as $group => $title)
+    foreach (xcms_all_groups() as $group => $title)
     {
         $attrs = "";
         $belongs = false;

@@ -99,7 +99,7 @@ def check_code_style(lines, file_type):
         if stm:
             add_bad_line(bad_lines, "No PHP shorttags allowed", i)
 
-        # if( ugly style check
+        # if+( ugly style check
         itm = re.search(' ?if\(', line)
         if not itm:
             itm = re.search(' ?elseif\(', line)
