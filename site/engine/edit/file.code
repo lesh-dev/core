@@ -104,9 +104,12 @@
 
         if ($diff_html !== false)
         {?>
-            <div class="content-text-diff"><?php
-            echo $diff_html; ?>
-            </div><?php
+            <div style="position: relative">
+                <div id="content-text-diff" class="content-text-diff">
+                <?php echo $diff_html; ?>
+                </div>
+                <span class="content-diff-legend">Изменения HTML</span>
+            <?php
         }?>
 
 <form method="post" enctype="multipart/form-data">

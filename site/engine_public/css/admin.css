@@ -394,6 +394,14 @@ div.content-text-diff {
     margin-top: 10px;
 }
 
+span.content-diff-legend {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    font-weight: bold;
+    color: #8f0000;
+}
+
 div.content-text-preview {
     background-color: #cfef9f;
     border: 1px dashed #5f5f5f;
