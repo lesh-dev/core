@@ -470,6 +470,9 @@ class SeleniumTest(object):
         except InvalidElementStateException as e:
             self.fatalTest("Cannot set element value by id '" + eleId + "', possibly element is read-only.")
 
+    def escapeJSString(self, text):
+        return text.replace("'", "\\'").replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t")
+
     def fillAceEditorElement(self, text, clear = True):
         eleClass = 'textarea.ace_text-input'  # a bit of hardcode, we have only one ACE editor on screen at a time
         ele = self.getElementByClass(eleClass)
@@ -481,7 +484,7 @@ class SeleniumTest(object):
         self.logAdd("Sending text to ACE element")
         # send_keys works bad in case of ACE, so we use its JS methods
         # ele.send_keys(text)
-        self.executeJS("return $('#edit-text').data('editor-ref').setValue('" + text.replace("'", "\\'") + "');")
+        self.executeJS("return $('#edit-text').data('editor-ref').setValue('" + self.escapeJSString(text) + "');")
         return self.executeJS("return $('#edit-text').data('editor-ref').getValue();")
 
     def checkAceEditorElementText(self, text):
