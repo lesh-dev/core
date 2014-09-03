@@ -12,6 +12,6 @@
     }
 </style>
 <div class="error-widget">
-    <h2>XCMS Template Error:</h2>
+    <h2>XCMS Template Error</h2>
     Cannot find template: <tt>&apos;<?php echo htmlspecialchars($argv[0]); ?>&apos;</tt>
 </div>
