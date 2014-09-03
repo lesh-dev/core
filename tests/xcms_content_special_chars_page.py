@@ -49,12 +49,12 @@ class XcmsContentSpecialCharsPage(xtest_common.XcmsTest):
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle)
 
-        pageText = "&amp;&lt;"
+        pageText = "&amp;&lt;'"
 
         pageText = self.fillAceEditorElement(pageText)
         self.clickElementById("edit-preview-top")
         previewElement = "content-text-preview"
-        pageRealText = "&<";
+        pageRealText = "&<'";
         self.assertElementTextById(previewElement, pageRealText, "preview text does not match entered page text. ")
 
         self.clickElementById("edit-submit-top")

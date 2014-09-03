@@ -479,7 +479,9 @@ class SeleniumTest(object):
 
         self.addAction("fill", "element: ACE, text: " + wrapIfLong(userSerialize(text)) + " ")
         self.logAdd("Sending text to ACE element")
-        ele.send_keys(text)
+        # send_keys works bad in case of ACE, so we use its JS methods
+        # ele.send_keys(text)
+        self.executeJS("return $('#edit-text').data('editor-ref').setValue('" + text.replace("'", "\\'") + "');")
         return self.executeJS("return $('#edit-text').data('editor-ref').getValue();")
 
     def checkAceEditorElementText(self, text):
