@@ -33,8 +33,8 @@ done
 site="--site fizlesh.ru"
 tech_ssh="ssh tech@fizlesh.ru"
 
-$tech_ssh "sudo publish $site rc"
-$tech_ssh "sudo publish $site testing"
+$tech_ssh "sudo publish $site rc" || ( echo "RC publishing FAILED" && exit 1 )
+$tech_ssh "sudo publish $site testing" || ( echo "Testing publising FAILED" && exit 1 )
 
 if [ -n "$init_test_db" ] ; then
     $tech_ssh "sudo publish $site init-test-db"
