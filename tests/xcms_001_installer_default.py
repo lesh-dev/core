@@ -3,7 +3,7 @@
 
 import random_crap, xtest_common
 
-class TestXcmsInstaller(xtest_common.XcmsTestWithConfig):
+class XcmsInstallerDefault(xtest_common.XcmsTestWithConfig):
     """
     This test checks XCMS installator.
     It does following steps:

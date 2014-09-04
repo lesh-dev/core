@@ -3,7 +3,6 @@
 
 from selenium_test import RunTest, TestShutdown, DecodeRunResult
 import test_set_gen
-import test_xcms_installer
 import sys
 
 from bawlib import getOption, getSingleOption, isVoid, CliParamError, fileBaseName
@@ -57,14 +56,14 @@ def printStats(stats, detailed):
 
 def generateFailedTestsSuite(failedTests):
     # header
-    imports = [x[:-3] for x in failedTests.keys()]
-    testMap = []
-    for fn, test in failedTests.iteritems():
+    imports = [fn[:-3] for (fn, test) in failedTests]
+    testList = []
+    for (fn, test) in failedTests:
         moduleName = test.__module__
         className = test.getName()
-        testMap.append('"{testFile}": {modName}.{clName}(baseUrl, args),'.format(testFile=fn, modName=moduleName, clName=className))
+        testList.append('("{testFile}", {modName}.{clName}(baseUrl, args))'.format(testFile=fn, modName=moduleName, clName=className))
 
-    failedSuite = test_set_gen.getHeader() + "\n" + test_set_gen.getFuncCode(imports, testMap)
+    failedSuite = test_set_gen.getHeader() + "\n" + test_set_gen.getFuncCode(imports, testList)
 
     with open("failed_test_set.py", "w") as fs:
         fs.write(failedSuite)
@@ -105,13 +104,6 @@ if restArgs:
 if restArgs:
     print "Warning: trailing parameters are ignored: ", restArgs
     
-if doInstallerTest:
-    print "Running installer test. "
-    result = RunTest(test_xcms_installer.TestXcmsInstaller(baseUrl, testArgs))
-    if result != 0:
-        print "Installer test not succeded, stopping suite. "
-        sys.exit(result)
-
 setModuleName = "auto_test_set"
 
 if testSet:
@@ -128,19 +120,23 @@ try:
         sys.exit(1)
 
     tests = testSetModule.getTests(baseUrl, testArgs)
+    
+    if not doInstallerTest and tests:
+        print "Skipping installer test. "
+        tests.pop(0)
 
-    failedTests = {}
+    failedTests = []
     specTestFound = False
 
     # init detailed stats
-    for fileName, test in tests.iteritems():
+    for (fileName, test) in tests:
         testDetailedStats[test.getName()] = None
 
     testsDone = 0
     testsNumber = len(tests)
 
     while tests:
-        fileName, test = tests.popitem()
+        fileName, test = tests.pop()
         if specTest:
             if specTest.endswith(".py"): # it is a filename
                 if fileName != specTest:
@@ -165,7 +161,7 @@ try:
             print test.getDoc()
             result = RunTest(test)
             if result != 0:
-                failedTests[fileName] = test
+                failedTests.append((fileName, test))
 
             if result not in testStats: # add new list
                 testStats[result] = [test.getName()]
