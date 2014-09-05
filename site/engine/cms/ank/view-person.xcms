@@ -95,43 +95,6 @@ function xsm_get_avatar($social_profile)
     return $av;
 }
 
-/*
-function xsm_draw_person_school_panel($db, $school_id, $person_id)
-{
-    if ($school_id == XSM_SCHOOL_ANK_ID)
-        return;
-
-    $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
-    if ($person_school_id == NULL)
-        return;
-
-    $school = xdb_get_entity_by_id('school', $school_id);
-    $school_title = $school['school_title'];
-
-    ?><div><?php
-    xsm_edit_link('person_school', $person_school_id, '', "Редактировать роли и статусы на $school_title");
-    ?></div><?php
-
-    $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
-
-    if (!xcms_checkbox_enabled($person_school['is_student']))
-    {?>
-        <div>
-            <?php xsm_edit_link('person_school', $person_school_id, xcms_url(array('is_student'=>'student')),
-                "Добавить роль Школьника на $school_title");?> (можно ставить зачёты)
-        </div><?php
-    }
-
-    if (!xcms_checkbox_enabled($person_school['is_teacher']))
-    {?>
-        <div>
-            <?php xsm_edit_link('person_school', $person_school_id, xcms_url(array('is_teacher'=>'teacher')),
-            "Добавить роль Препода на $school_title");?> (можно добавлять курсы)
-        </div><?php
-    }
-}
-*/
-
 function xsm_draw_list_link($person_id, $school_id)
 {
     $view = ($school_id == XSM_SCHOOL_ANK_ID) ? "list-ank" : "list-person";
@@ -174,8 +137,8 @@ function xsm_print_person_header($db, $person, $school_id)
 
     $av = xsm_get_avatar($social_profile);
     ?>
-    <div style="width: 100%; overflow: auto; padding-bottom: 10px">
-    <div class="person-topleft">
+    <table class="person-top"><tr>
+    <td class="person-top left">
         <div class="person-portrait"><img id="avatar" class="person-portrait"
             src="<?php echo $av; ?>" /></div>
         <div class="person-title"><span id="person-title"><?php
@@ -187,24 +150,26 @@ function xsm_print_person_header($db, $person, $school_id)
             xsm_edit_link_generic(
                 'edit-person-status'.xcms_url(array('blamed_person_id'=>$person_id)),
                 'Сменить статус');
-            ?></div><?php
-        xsm_draw_person_textval('top', 'Отделение', $department_title); ?>
-        <div style="clear: both;"></div><?php
+            ?></div>
+            <div style="clear: both;"></div>
+        <?php
+        xsm_draw_person_textval('top', 'Отделение', $department_title);
+    ?>
+    </td>
+    <td class="person-top middle"><?php
         xsm_draw_person_textval('top', 'Почта', $email);
         xsm_draw_person_textval('top', 'Мобильный', $cellular);
         xsm_draw_person_textval('top', 'Домашний', $phone);
         xsm_draw_person_textval('top', 'Skype', $skype);
         xsm_draw_person_textval('top', 'Профиль', xsm_social_profile_link($social_profile));
         ?>
-    </div>
-    <div class="person-topright"><?php
+    </td>
+    <td class="person-top right"><?php
         xsm_draw_person_textval('top', 'Создана', $person_created);
         xsm_draw_person_textval('top', 'Исправлена', $person_modified);
-        /*?><div style="padding-bottom: 2px;">&nbsp;</div><?php
-        xsm_draw_person_school_panel($db, $school_id, $person_id)
-        */?>
-    </div>
-    </div><!-- container -->
+        ?>
+    </td>
+    </tr></table>
     <?php
 }
 
@@ -369,7 +334,6 @@ function xsm_print_person_ank_data($db, $person)
     $hobby = xcms_html_wrap_by_crlf(htmlspecialchars($person["hobby"]));
     $lesh_ref = xcms_html_wrap_by_crlf(htmlspecialchars($person["lesh_ref"]));
 
-    //$person_comment = xcms_html_wrap_by_crlf(htmlspecialchars($person["person_comment"]));
     $user_agent = htmlspecialchars($person["user_agent"]);
 
     $person_created = xsm_ymdhm($person["person_created"]);

@@ -66,14 +66,27 @@ span.class-school-num.diff {
     color: #00009f;
 }
 
-div.person-topright {
-    float: right;
+table.person-top {
+    margin-bottom: 10px;
+    width: 100%;
+    table-layout: fixed;
+}
+
+td.person-top {
+    vertical-align: top;
+}
+
+td.person-top.left {
     width: 35%;
 }
 
-div.person-topleft {
-    width: 60%;
-    float: left;
+td.person-top.middle {
+    width: 35%;
+}
+
+td.person-top.right {
+    width: 30%;
+    text-align: right;
 }
 
 div.person-portrait {
