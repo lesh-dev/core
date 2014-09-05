@@ -35,11 +35,11 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
             <?php if (!$pers) {?>
             <col width="30%" /><?php
             } ?>
-            <col width="40" />
-            <col width="10%" />
-            <col width="15%" />
-            <col width="7%" />
-            <col width="8%" /><?php
+            <col width="1%" />
+            <col width="1%" />
+            <col width="12%" />
+            <col width="5%" />
+            <col width="12%" /><?php
         } else {?>
             <col width="40%" />
             <?php if (!$pers) {?>
