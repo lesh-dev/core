@@ -153,7 +153,16 @@ function xsm_print_person_header($db, $person, $school_id)
             ?></div>
             <div style="clear: both;"></div>
         <?php
-        xsm_draw_person_textval('top', 'Отделение', $department_title);
+        xsm_draw_person_textval('main', 'Отделение', $department_title);
+        xsm_draw_person_textval('main', "Текущий класс", $person['current_class']);
+        if ($school_id != XSM_SCHOOL_ANK_ID)
+        {
+            $school = xdb_get_entity_by_id('school', $school_id);
+            $school_title = xcms_get_key_or_enc($school, 'school_title');
+            $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
+            $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
+            xsm_draw_person_textval('main', "Класс на $school_title", $person_school['current_class']);
+        }
     ?>
     </td>
     <td class="person-top middle"><?php
@@ -222,9 +231,7 @@ function xsm_print_person_schools($db, $person, $current_school_id)
             <?php
         }?>
     </tr></table>
-
     <?php
-
 }
 
 function xsm_highlight_links($text)
@@ -520,12 +527,7 @@ function xsm_print_person_selected_school($db, $school_id, $person)
         нужно нажать на синий плюсик рядом с соответствующей школой.<?php
         return;
     }
-    $school = xdb_get_entity_by_id('school', $school_id);
-    $school_title = xcms_get_key_or_enc($school, 'school_title');
-
-    xsm_draw_person_textval('main', "Текущий класс", $person['current_class']);
     $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
-    xsm_draw_person_textval('main', "Класс на $school_title", $person_school['current_class']);
     if (xcms_checkbox_enabled($person_school['is_student']))
         xsm_print_student_exams($db, $school_id, $person_id, $person_school);
 
