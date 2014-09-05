@@ -503,7 +503,7 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
             <th class="ankList">Курс</th>
             <th class="ankList">Тип</th>
             <th class="ankList">Тематика</th>
-            <th class="ankList">Уровень классов</th>
+            <th class="ankList">Классы</th>
             <th class="ankList">Дедлайн</th>
         </thead>
     <?php
