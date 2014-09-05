@@ -184,7 +184,7 @@ function xsm_edit_operations_listmode($entity, $id, $title, $aux_param = '')
 function xsm_view_operations($table_name, $title, $aux_param = '')
 {?>
     <div class="xsm-edit-ops">
-        <a class="link-button" href="edit-<?php
+        <a class="link-button btn" href="edit-<?php
             echo "$table_name$aux_param&amp;${table_name}_id=new"; ?>">Добавить <?php echo $title; ?></a>
     </div><?php
 }

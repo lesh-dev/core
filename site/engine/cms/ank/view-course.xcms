@@ -40,7 +40,7 @@ function xsm_print_course()
             echo $course_cycle; ?></td></tr>
         <tr><td class="ankList"><span class="xsm-fixed-field">Преподы:</span>
             <?php echo $teachers_ht; ?>
-            <a class="link-button ank" href="edit-teachers<?php
+            <a class="link-button ank btn" href="edit-teachers<?php
                 echo $teachers_edit_url; ?>">Редактировать преподов</a></td></tr>
         <tr><td class="ankList"><?php xsm_field("course", "course_type");
             echo $hr_course_type; ?></td></tr>

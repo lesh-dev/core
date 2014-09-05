@@ -58,7 +58,7 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
             <th class="ankList">Препод</th><?php
             } ?>
             <th class="ankList">Цикл</th>
-            <th class="ankList">Тип курса</th>
+            <th class="ankList">Тип</th>
             <th class="ankList">Тематика</th>
             <th class="ankList">Класс</th>
             <th class="ankList">Успехи</th>
