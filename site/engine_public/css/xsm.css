@@ -127,6 +127,50 @@ span.person-value {
     font-weight: normal;
 }
 
+/* exam-status */
+span.exam-status.passed {
+    color: #008f00;
+}
+
+span.exam-status.notpassed {
+    color: #ff0000;
+}
+
+span.exam-status.almost {
+    color: #ffff00;
+}
+
+span.exam-status.almost {
+    color: #0000ff;
+}
+
+/* course-area */
+span.course-area.precise {
+    color: #ff0000;
+}
+
+span.course-area.nature {
+    color: #0000ff;
+}
+
+span.course-area.human {
+    color: #00ff00;
+}
+
+/* course-type */
+span.course-type.facult {
+    color: #7f7f7f;
+}
+
+span.course-type.prac {
+    color: #9f0000;
+}
+
+span.course-type.generic {
+    color: #000000;
+}
+/* ------------ */
+
 div.xsm-help-widget {
     border-radius: 3px;
     margin-top: 10px;
