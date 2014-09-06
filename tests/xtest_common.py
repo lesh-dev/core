@@ -82,7 +82,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def gotoAnketa(self):
         self.gotoUrlByLinkText(u"Анкета")
 
-    def gotoAddPerson(self):
+    def gotoXsmAddPerson(self):
         self.gotoUrlByLinkText(u"Добавить участника")
 
     def gotoNotificationsPage(self):
@@ -355,9 +355,21 @@ class XcmsTest(XcmsTestWithConfig):
         self.logAdd("gotoCabinet: going to user control panel (cabinet). ")
         self.gotoUrlByLinkText(u"Личный кабинет")
 
-    def gotoAllPeople(self):
-        self.logAdd("gotoAllPeople: going to 'All People' menu. ")
+    def gotoXsmAllPeople(self):
+        self.logAdd("gotoXsmAllPeople: going to 'All People' menu. ")
         self.gotoUrlByLinkText(u"Все люди")
+
+    def gotoXsmAddSchool(self):
+        self.logAdd("gotoAddSchool: navigating to 'Add School link (button). ")
+        self.gotoUrlByLinkText(u"Добавить школу")
+
+    def gotoXsmCourses(self):
+        self.logAdd("gotoCourses: going to 'Courses' menu. ")
+        self.gotoUrlByLinkText(u"Курсы")
+
+    def gotoXsmAddCourse(self):
+        self.logAdd("gotoAddCourses: navigating to 'Add Course' link (button). ")
+        self.gotoUrlByLinkText(u"Добавить курс")
 
     def gotoBackToAnketaView(self):
         self.gotoUrlByLinkText(u"Вернуться к просмотру участника")
@@ -366,6 +378,9 @@ class XcmsTest(XcmsTestWithConfig):
         self.gotoUrlByLinkText(u"Вернуться к просмотру участника")
 
     def gotoBackToSchoolView(self):
+        self.gotoUrlByLinkText(u"Вернуться к просмотру")
+
+    def gotoBackToCourseView(self):
         self.gotoUrlByLinkText(u"Вернуться к просмотру")
 
     def gotoEditPerson(self):

@@ -22,7 +22,7 @@ class XcmsXsmAddSchool(xtest_common.XcmsTest):
         self.performLoginAsManager()
         self.gotoXsm()
         self.gotoXsmSchools()
-        self.gotoUrlByLinkText(u"Добавить школу")
+        self.gotoXsmAddSchool()
 
         # generate school number
         lastDigit = random_crap.randomDigits(1)

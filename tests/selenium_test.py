@@ -109,11 +109,11 @@ def DecodeRunResult(result):
     else: return "n/a"
 
 
-def createLogDir(directory)
+def createLogDir(directory):
     try:
         os.makedirs(directory)
     except OSError as ex:
-        if e.errno != errno.EEXIST:
+        if ex.errno != errno.EEXIST:
             raise
 
     
@@ -531,6 +531,13 @@ class SeleniumTest(object):
         """
         element index is started with 1, not 0.
         """
+        optionValue = self.getOptionValueByIdAndIndex(eleId, index)
+        self.setOptionValueByIdAndValue(eleId, optionValue)
+
+    def getOptionValueByIdAndIndex(self, eleId, index):
+        """
+        element index is started with 1, not 0.
+        """
         if index < 1:
             self.fatalTest("Invalid index in setOptionValueByIdAndIndex for element " + eleId + ". Index should be positive (1 and above). ")
         self.addAction("set-option-by-index", "element id: '" + eleId + "', index: " + userSerialize(index))
@@ -539,8 +546,7 @@ class SeleniumTest(object):
         actLen = len(eleList)
         if index >= actLen:
             self.failTest("Index in setOptionValueByIdAndIndex is too large for element {0}. Option list size is {1}, requested index: {2}".format(eleId, actLen, index))
-        optionValue = getValue(selEle.find_element_by_xpath("option[" + userSerialize(index) + "]"))
-        self.setOptionValueByIdAndValue(eleId, optionValue)
+        return getValue(selEle.find_element_by_xpath("option[" + userSerialize(index) + "]"))
 
     def getOptionValueByName(self, eleName):
         try:
