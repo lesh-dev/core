@@ -64,7 +64,7 @@ class XcmsXsmCourseWithMultipleTeachers(xtest_common.XcmsTest):
 
     def filterTeacherName(self, name):
         if name.startswith("("):
-            return name[3:]
+            return name[4:]
         return name
     
     def run(self):
@@ -93,9 +93,13 @@ class XcmsXsmCourseWithMultipleTeachers(xtest_common.XcmsTest):
         inpComment = u"Комментарий к курсу " + random_crap.randomCrap(4, ["multiline"])
         inpComment = self.fillElementByName("course_comment", inpComment)
 
-        teacher1 = self.getOptionValueByIdAndIndex("course_teacher_id-selector", 1)
-        teacher2 = self.getOptionValueByIdAndIndex("course_teacher_id-selector", 2)
-        teacher3 = self.getOptionValueByIdAndIndex("course_teacher_id-selector", 3)
+        id1, teacher1 = self.getOptionValueByIdAndIndex("course_teacher_id-selector", 1)
+        id2, teacher2 = self.getOptionValueByIdAndIndex("course_teacher_id-selector", 2)
+        id3, teacher3 = self.getOptionValueByIdAndIndex("course_teacher_id-selector", 3)
+        
+        self.logAdd("Teacher 1: " + teacher1)
+        self.logAdd("Teacher 2: " + teacher2)
+        self.logAdd("Teacher 3: " + teacher3)
         
         self.setOptionValueByIdAndIndex("course_teacher_id-selector", 1)
 

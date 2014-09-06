@@ -531,22 +531,25 @@ class SeleniumTest(object):
         """
         element index is started with 1, not 0.
         """
-        optionValue = self.getOptionValueByIdAndIndex(eleId, index)
+        optionValue, text = self.getOptionValueByIdAndIndex(eleId, index)
+        self.addAction("set-option-by-index", "element id: '" + eleId + "', index: " + userSerialize(index))
         self.setOptionValueByIdAndValue(eleId, optionValue)
 
+    # returns option value (index) and text
     def getOptionValueByIdAndIndex(self, eleId, index):
         """
         element index is started with 1, not 0.
         """
         if index < 1:
-            self.fatalTest("Invalid index in setOptionValueByIdAndIndex for element " + eleId + ". Index should be positive (1 and above). ")
-        self.addAction("set-option-by-index", "element id: '" + eleId + "', index: " + userSerialize(index))
+            self.fatalTest("Invalid index in getOptionValueByIdAndIndex for element " + eleId + ". Index should be positive (1 and above). ")
+        self.addAction("get-option-by-index", "element id: '" + eleId + "', index: " + userSerialize(index))
         selEle = self.getElementById(eleId)
         eleList = selEle.find_elements_by_xpath("option")
         actLen = len(eleList)
         if index >= actLen:
-            self.failTest("Index in setOptionValueByIdAndIndex is too large for element {0}. Option list size is {1}, requested index: {2}".format(eleId, actLen, index))
-        return getValue(selEle.find_element_by_xpath("option[" + userSerialize(index) + "]"))
+            self.failTest("Index in getOptionValueByIdAndIndex is too large for element {0}. Option list size is {1}, requested index: {2}".format(eleId, actLen, index))
+        oneOption = selEle.find_element_by_xpath("option[" + userSerialize(index) + "]")
+        return getValue(oneOption), oneOption.text
 
     def getOptionValueByName(self, eleName):
         try:
