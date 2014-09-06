@@ -22,6 +22,7 @@ import sys
 from datetime import datetime
 import time
 import os
+import errno
 import shutil
 
 from bawlib import isVoid, isList, isString, isNumber, isEqual, getSingleOption, userSerialize, wrapIfLong
@@ -107,6 +108,15 @@ def DecodeRunResult(result):
     elif result == 2: return "FATAL ERROR"
     else: return "n/a"
 
+
+def createLogDir(directory)
+    try:
+        os.makedirs(directory)
+    except OSError as ex:
+        if e.errno != errno.EEXIST:
+            raise
+
+    
 def getValue(ele):
     return ele.get_attribute('value')
 
@@ -137,8 +147,10 @@ class SeleniumTest(object):
         self.m_errorsAsWarnings = False
         self.m_doCheck404 = True
         self.m_textOnPage404 = "Page not found"
+        
+        self.m_logDir = "logs"
 
-        self.m_logFile = self.m_testName + ".log" #"_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") +
+        self.m_logFile = self.m_logDir + "/" + self.m_testName + ".log" #"_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") +
         self.m_actionLog = []
         self.m_logCheckStopWords = []
 
@@ -225,6 +237,7 @@ class SeleniumTest(object):
 
     def logStart(self):
         try:
+            createLogDir(self.m_logDir)
             logFile = open(self.m_logFile, "w")
             logText = "[" + self.m_testName + " log start on " + self.m_baseUrl + "]\n"
             logFile.write(logText.encode("UTF-8"))
