@@ -20,7 +20,8 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
 
         self.performLoginAsManager()
 
-        self.gotoXsmAllPeople()
+        self.gotoXsm()
+        self.gotoXsmActive()
         self.gotoXsmAddPerson()
         
         # generate

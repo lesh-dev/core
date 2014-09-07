@@ -359,6 +359,10 @@ class XcmsTest(XcmsTestWithConfig):
         self.logAdd("gotoXsmAllPeople: going to 'All People' menu. ")
         self.gotoUrlByLinkText(u"Все люди")
 
+    def gotoXsmActive(self):
+        self.logAdd("gotoXsmActive: going to 'Active' menu. ")
+        self.gotoUrlByLinkText(u"Актив")
+
     def gotoXsmAddSchool(self):
         self.logAdd("gotoAddSchool: navigating to 'Add School link (button). ")
         self.gotoUrlByLinkText(u"Добавить школу")
@@ -382,6 +386,9 @@ class XcmsTest(XcmsTestWithConfig):
 
     def gotoBackToCourseView(self):
         self.gotoUrlByLinkText(u"Вернуться к просмотру")
+
+    def gotoXsmChangePersonStatus(self):
+        self.gotoUrlByLinkText(u"Сменить статус")
 
     def gotoEditPerson(self):
         #self.gotoUrlByLinkText(u"Редактировать анкетные данные")
