@@ -39,8 +39,9 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
 
         self.performLoginAsManager()
 
-        self.gotoAllPeople()
-        self.gotoAddPerson()
+        self.gotoXsm()
+        self.gotoXsmAllPeople()
+        self.gotoXsmAddPerson()
 
         # generate
         inpLastName = u"Преподов_" + random_crap.randomText(5)
@@ -63,6 +64,9 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
 
         self.checkPersonAliasInPersonView(fullAlias)
 
+        #TODO: FIXME: BUG: remove after fix of bug #803
+        #self.setPhpErrorsAsWarnings()
+        
         self.gotoUrlByLinkText(self.m_conf.getTestSchoolName())
         self.assertBodyTextPresent(self.getPersonAbsenceMessage())
         self.gotoUrlByLinkTitle(u"Зачислить на " + self.m_conf.getTestSchoolName())

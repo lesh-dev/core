@@ -51,5 +51,5 @@ def findTests(directory, fileNamePrefix="xcms_", classNamePrefix="Xcms"):
         className = r.group(1)
 
         imports.append(moduleName)
-        testList.append('("{testFile}": {modName}.{clName}(baseUrl, args)),'.format(testFile=fn, modName=moduleName, clName=className))
+        testList.append('("{testFile}", {modName}.{clName}(baseUrl, args)),'.format(testFile=fn, modName=moduleName, clName=className))
     return imports, testList

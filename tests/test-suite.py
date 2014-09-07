@@ -7,6 +7,8 @@ import sys
 
 from bawlib import getOption, getSingleOption, isVoid, CliParamError, fileBaseName
 
+sys.path.append(".")
+
 def showHelp():
     prog = sys.argv[0]
     print """

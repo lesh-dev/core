@@ -11,7 +11,7 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
         self.performLoginAsManager()
         self.gotoRoot()
         self.gotoXsm()
-        self.gotoAllPeople()
+        self.gotoXsmAllPeople()
         
         # one line expected
         self.setOptionValueByIdAndValue("show_anketa_status-selector", "all")

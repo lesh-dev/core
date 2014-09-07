@@ -65,9 +65,9 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         self.m_listenedStatus = u"Прослушан"
 
         self.performLoginAsManager()
-        self.gotoAllPeople()
+        self.gotoXsmAllPeople()
 
-        self.gotoAddPerson()
+        self.gotoXsmAddPerson()
 
         # generate
         inpLastName = u"Зачётов" + random_crap.randomText(5)

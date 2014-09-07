@@ -22,6 +22,7 @@ import sys
 from datetime import datetime
 import time
 import os
+import errno
 import shutil
 
 from bawlib import isVoid, isList, isString, isNumber, isEqual, getSingleOption, userSerialize, wrapIfLong
@@ -107,6 +108,15 @@ def DecodeRunResult(result):
     elif result == 2: return "FATAL ERROR"
     else: return "n/a"
 
+
+def createLogDir(directory):
+    try:
+        os.makedirs(directory)
+    except OSError as ex:
+        if ex.errno != errno.EEXIST:
+            raise
+
+    
 def getValue(ele):
     return ele.get_attribute('value')
 
@@ -137,8 +147,10 @@ class SeleniumTest(object):
         self.m_errorsAsWarnings = False
         self.m_doCheck404 = True
         self.m_textOnPage404 = "Page not found"
+        
+        self.m_logDir = "logs"
 
-        self.m_logFile = self.m_testName + ".log" #"_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") +
+        self.m_logFile = self.m_logDir + "/" + self.m_testName + ".log" #"_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") +
         self.m_actionLog = []
         self.m_logCheckStopWords = []
 
@@ -225,6 +237,7 @@ class SeleniumTest(object):
 
     def logStart(self):
         try:
+            createLogDir(self.m_logDir)
             logFile = open(self.m_logFile, "w")
             logText = "[" + self.m_testName + " log start on " + self.m_baseUrl + "]\n"
             logFile.write(logText.encode("UTF-8"))
@@ -518,16 +531,25 @@ class SeleniumTest(object):
         """
         element index is started with 1, not 0.
         """
-        if index < 1:
-            self.fatalTest("Invalid index in setOptionValueByIdAndIndex for element " + eleId + ". Index should be positive (1 and above). ")
+        optionValue, text = self.getOptionValueByIdAndIndex(eleId, index)
         self.addAction("set-option-by-index", "element id: '" + eleId + "', index: " + userSerialize(index))
+        self.setOptionValueByIdAndValue(eleId, optionValue)
+
+    # returns option value (index) and text
+    def getOptionValueByIdAndIndex(self, eleId, index):
+        """
+        element index is started with 1, not 0.
+        """
+        if index < 1:
+            self.fatalTest("Invalid index in getOptionValueByIdAndIndex for element " + eleId + ". Index should be positive (1 and above). ")
+        self.addAction("get-option-by-index", "element id: '" + eleId + "', index: " + userSerialize(index))
         selEle = self.getElementById(eleId)
         eleList = selEle.find_elements_by_xpath("option")
         actLen = len(eleList)
         if index >= actLen:
-            self.failTest("Index in setOptionValueByIdAndIndex is too large for element {0}. Option list size is {1}, requested index: {2}".format(eleId, actLen, index))
-        optionValue = getValue(selEle.find_element_by_xpath("option[" + userSerialize(index) + "]"))
-        self.setOptionValueByIdAndValue(eleId, optionValue)
+            self.failTest("Index in getOptionValueByIdAndIndex is too large for element {0}. Option list size is {1}, requested index: {2}".format(eleId, actLen, index))
+        oneOption = selEle.find_element_by_xpath("option[" + userSerialize(index) + "]")
+        return getValue(oneOption), oneOption.text
 
     def getOptionValueByName(self, eleName):
         try:

@@ -15,7 +15,7 @@ class XcmsXsmHackPersonLink(xtest_common.XcmsTest):
 
         self.performLoginAsManager()
 
-        self.gotoAllPeople()
+        self.gotoXsmAllPeople()
         self.gotoPage("/xsm/view-person&person_id=286")
         self.gotoPage("/xsm/view-person&person_id=far_away")
         self.assertBodyTextPresent(u"Объект")

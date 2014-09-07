@@ -19,8 +19,8 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
 
         self.performLoginAsManager()
 
-        self.gotoAllPeople()
-        self.gotoAddPerson()
+        self.gotoXsmAllPeople()
+        self.gotoXsmAddPerson()
         
         # generate
         inpLastName = u"Телефонов_" + random_crap.randomText(4);
