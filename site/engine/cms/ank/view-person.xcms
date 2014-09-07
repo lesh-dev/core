@@ -160,8 +160,11 @@ function xsm_print_person_header($db, $person, $school_id)
             $school = xdb_get_entity_by_id('school', $school_id);
             $school_title = xcms_get_key_or_enc($school, 'school_title');
             $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
-            $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
-            xsm_draw_person_textval('main', "Класс на $school_title", $person_school['current_class']);
+            if ($person_school_id !== NULL)
+            {
+                $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
+                xsm_draw_person_textval('main', "Класс на $school_title", $person_school['current_class']);
+            }
         }
     ?>
     </td>
@@ -175,7 +178,8 @@ function xsm_print_person_header($db, $person, $school_id)
     </td>
     <td class="person-top right"><?php
         xsm_draw_person_textval('top', 'Создана', $person_created);
-        xsm_draw_person_textval('top', 'Исправлена', $person_modified);
+        if (xu_not_empty($person_modified))
+            xsm_draw_person_textval('top', 'Исправлена', $person_modified);
         ?>
     </td>
     </tr></table>
