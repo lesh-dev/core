@@ -10,6 +10,7 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
     * adds new person
     * fill some examples of valid phone specifications
     * checks if they are correctly displayed on person card.
+    * checks phone autoformat
     """
 
     def phoneFix(self, phone):
@@ -64,4 +65,22 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
                 self.failTest("Cell phone #{0} on the site '{1}' don't match entered '{2}'. ".format(i, siteCellPhone, inpCellPhones[i]))
             if inpPhones[i] != sitePhone:
                 self.failTest("Phone #{0} on the site '{1}' don't match entered '{2}'. ".format(i, sitePhone, inpPhones[i]))
+                
+        self.gotoEditPerson()
+        inpPhone = "+79261112233"
+        inpPhone = self.fillElementById("phone-input", inpPhone)
+        inpCellPhone = "89261112233"
+        inpCellPhone = self.fillElementById("cellular-input", inpCellPhone)
+        self.clickElementById("update-person-submit")
+        self.gotoBackToPersonView()
         
+        personCellPhoneEleId = "person{0}-cellular-{1}".format(personId, 0)
+        personPhoneEleId = "person{0}-phone-{1}".format(personId, 0)
+        
+        siteCellPhone = self.getElementTextById(personCellPhoneEleId)
+        sitePhone = self.getElementTextById(personPhoneEleId)
+        
+        if sitePhone != "8(926)111-22-33":
+            self.failTest("Phone was not autoformatted. ")
+        if siteCellPhone != "8(926)111-22-33":
+            self.failTest("Cell phone was not autoformatted. ")
