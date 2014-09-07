@@ -19,6 +19,7 @@ function xsm_edit_course()
     $course_teacher_id = NULL;
     $school_id = xcms_get_key_or($_GET, 'school_id', XDB_INVALID_ID);
     $teachers_ht = "";
+    $course_title = "";
     if ($course_id == XDB_NEW)
     {
         // prefill teacher if specified
@@ -46,11 +47,14 @@ function xsm_edit_course()
     else
     {
         $school_id = $course['school_id'];
+        $course_title = xcms_get_key_or_enc($course, 'course_title');
         $course_teacher_id = 'all';
         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id);
     }
 
     $school = xdb_get_entity_by_id('school', $school_id);
+    $school_title = xcms_get_key_or_enc($school, "school_title");
+    $href_courses = "list-course".xcms_url(array('school_id'=>$school_id));
 
     $field_types = xsm_get_course_field_types();
 
@@ -72,7 +76,8 @@ function xsm_edit_course()
 
         <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
-                <td class="ankListRowTitle">Редактирование курса</td>
+                <td class="ankListRowTitle">Редактирование курса <?php echo $course_title; ?>
+                на <a href="<?php echo $href_courses; ?>"><?php echo $school_title; ?></a></td>
             </tr>
             <tr><td class="ankList">
                 <span class="ankEditField mid xsm-label">Препод(ы)</span><?php
