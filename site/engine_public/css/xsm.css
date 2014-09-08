@@ -198,3 +198,13 @@ div.xsm-help-widget {
     -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     display: none; /* for sliding */
 }
+
+td.ankListRowTitle {
+    font-size: 20px;
+}
+
+span.edit-delete-info {
+    float: right;
+    font-size: 14px;
+    line-height: 20px; /* same as ankListRowTitle font size */
+}

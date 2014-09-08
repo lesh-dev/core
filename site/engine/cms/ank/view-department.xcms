@@ -16,9 +16,8 @@ function xsm_print_department()
         ?>
         <tr>
             <td class="ankListRowTitle">Отделение <b><?php echo $department_title; ?></b>
-                <span style="float: right"><?php
+            <?php
                 xsm_edit_delete_info('department', 'department', $department_id, $department_created, $department_modified); ?>
-                </span>
             </td>
         </tr>
     </table>

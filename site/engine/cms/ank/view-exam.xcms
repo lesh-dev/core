@@ -53,10 +53,9 @@ function xsm_print_exam()
         ?>
         <tr>
             <td class="ankListRowTitle">
-            <?php echo "[$exam_id] Зачёт по курсу <i>$course_title</i>"; ?><a name="<?php echo "exam$exam_id"; ?>"></a>
-                <span style="float: right"><?php
+                Зачёт по курсу <b><?php echo $course_title; ?></b><a name="<?php echo "exam$exam_id"; ?>"></a>
+                <?php
                 xsm_edit_delete_info('exam', 'exam', $exam_id, $exam_created, $exam_modified, $aux_param); ?>
-                </span>
             </td>
         </tr>
         <!--<tr><td class="ankList"><span class="ankListField">Название курса</span>:
