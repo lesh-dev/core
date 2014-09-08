@@ -189,12 +189,13 @@ function xsm_print_person_header($db, $person, $school_id)
 function xsm_print_person_schools($db, $person, $current_school_id)
 {
     $person_id = $person['person_id'];
-    $school_count = XSM_SCHOOL_COUNT;
+    //$school_count = XSM_SCHOOL_COUNT;
     $query = "SELECT s.school_id, s.school_title, ps.member_person_id
         FROM school s
         LEFT JOIN person_school ps
         ON (s.school_id = ps.school_id) AND (ps.member_person_id = '$person_id')
-        ORDER BY school_date_start DESC LIMIT $school_count";
+        ORDER BY school_date_start DESC";
+    // LIMIT $school_count";
     $school_sel = $db->query($query);
     $href_ank = "view-person&amp;person_id=$person_id&amp;school_id=".XSM_SCHOOL_ANK_ID;
     $active_ank = (XSM_SCHOOL_ANK_ID == $current_school_id) ? 'current' : '';
