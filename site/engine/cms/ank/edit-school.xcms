@@ -13,15 +13,16 @@ function xsm_edit_school()
         "school_type"=>"enum"
     );
 
+    $school_title = xcms_get_key_or_enc($school, 'school_title');
     ?>
     <form method="post" action="edit-school"><?php
         xsm_edit_operations_listmode('school', $school_id, 'Вернуться к списку школ');
         ?>
         <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
 
-        <table class="ankEdit">
+        <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
-                <td class="ankListRowTitle">Школа</td>
+                <td class="ankListRowTitle">Школа <b><?php echo $school_title; ?></b></td>
             </tr>
             <?php
             foreach ($school_fields as $key=>$field_title)
@@ -30,7 +31,7 @@ function xsm_edit_school()
                     continue;
                 $value = xcms_get_key_or($school, $key);
                 $attr = ""; ?>
-                <tr><td class="ankList"><span class="ankEditField"><?php echo $school_fields[$key]; ?></span>
+                <tr><td class="ankList"><span class="ankEditField xsm-label"><?php echo $school_fields[$key]; ?></span>
                 <?php
                 $ft = xcms_get_key_or($field_types, $key);
                 if ($ft == "textarea") {?>

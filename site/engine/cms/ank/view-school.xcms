@@ -7,7 +7,7 @@ function xsm_print_school()
     $school = xdb_get_entity_by_id('school', $school_id);
     $href_schools = "list-school";
     ?>
-    <table class="ankList">
+    <table class="ankList table table-bordered table-hover table-condensed">
     <?php
         $school_title = htmlspecialchars($school["school_title"]);
         $school_date_start = htmlspecialchars($school["school_date_start"]);
