@@ -22,7 +22,7 @@
         xsm_checkbox('sort_by_curator_group', $sort_by_curator_group);
     ?><span class="ankListField">По гр. кураторства</span>&nbsp; &nbsp;
     <input type="submit" name="show-person" value="Показать" />
-</span></form>
+</form>
 <script type="text/javascript">
     xsm_filter_form_autosubmit();
 </script>

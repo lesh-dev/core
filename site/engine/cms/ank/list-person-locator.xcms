@@ -24,8 +24,8 @@
     xjs_add_slider('status-help', 'show-status-help');
 </script>
 
-<form method="post" name="filter" id="filter-form" action="list-person-locator"><span>
-    Фильтрация: <span class="ankListField">Статус: </span><?php
+<form method="post" name="filter" id="filter-form" action="list-person-locator">
+    <span>Фильтр: </span><span class="ankListField">Статус: </span><?php
     echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_locator"); ?>
     &nbsp; <?php
     xsm_checkbox('show_is_teacher', $show_is_teacher);
@@ -37,7 +37,7 @@
         xsm_checkbox('sort_by_class', $sort_by_class);
     ?><span class="ankListField">По классу</span> &nbsp;
     <input type="submit" name="show-person" value="Показать" />
-</span></form>
+</form>
 <script type="text/javascript">
     xsm_filter_form_autosubmit();
 </script>
