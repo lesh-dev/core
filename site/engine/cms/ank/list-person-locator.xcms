@@ -25,7 +25,7 @@
 </script>
 
 <form method="post" name="filter" id="filter-form" action="list-person-locator"><span>
-    <span class="ankListField">Фильтр: Статус: </span><?php
+    Фильтрация: <span class="ankListField">Статус: </span><?php
     echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_locator"); ?>
     &nbsp; <?php
     xsm_checkbox('show_is_teacher', $show_is_teacher);

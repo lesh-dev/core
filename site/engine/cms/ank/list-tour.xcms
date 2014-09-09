@@ -3,7 +3,7 @@
 ?>
 <p>В этом списке показываются активные и принятые или полупринятые школьники и преподы.</p>
 <form method="post" name="filter" id="filter-form" action="list-tour"><span>
-    <span class="ankListField">Фильтрация</span>: <?php
+    Фильтрация: <span class="ankListField">По выходу: </span><?php
     echo xsm_make_enum_by_type("show_forest_num", $show_forest_num, "show_forest_num");
     xsm_draw_fio_filter(); ?>
     <input type="submit" name="show-person" value="Показать" />
