@@ -9,6 +9,10 @@ table.ankList {
     margin-bottom: 10px;
 }
 
+table.ankList tr:hover {
+    background-color: #b2dba0;
+}
+
 td.ankListRowDiv {
     height: 8px;
 }
