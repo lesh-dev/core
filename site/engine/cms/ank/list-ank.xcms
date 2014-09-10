@@ -38,7 +38,7 @@
 </script>
 
 <form method="post" name="filter" id="filter-form" action="list-ank">
-    <span>Фильтр: </span><span class="ankListField">Категория: <?php
+    <span>Фильтр: </span><span class="ankListField">Категория: </span><?php
     echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_ank"); ?>&nbsp;<?php
     xsm_draw_fio_filter(); ?>
     <input type="submit" name="show-person" value="Показать" />
