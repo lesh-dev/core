@@ -39,6 +39,7 @@ function xsm_edit_person()
             $person['anketa_status'] = $anketa_status;
     }
     $field_types = xsm_get_person_field_types();
+    $fio = xsm_fio_enc($person);
 
     ?>
     <form method="post" action="edit-person"><?php
@@ -46,7 +47,7 @@ function xsm_edit_person()
         <input type="hidden" id="person_id-input" name="person_id" value="<?php echo $person_id; ?>" />
         <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
-                <td class="ankListRowTitle">Участник</td>
+                <td class="ankListRowTitle">Участник <b><?php echo $fio; ?></b></td>
             </tr>
 
             <?php
