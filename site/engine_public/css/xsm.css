@@ -140,6 +140,51 @@ span.person-value {
     font-weight: normal;
 }
 
+/* anketa status */
+span.anketa-status {
+    font-weight: bold;
+}
+
+span.anketa-status.new {
+    color: #ffff00;
+}
+
+span.anketa-status.progress {
+    color: #7f007f;
+}
+
+span.anketa-status.less {
+    color: #2f2faf;
+}
+
+span.anketa-status.processed {
+    color: #008f00;
+}
+
+span.anketa-status.nextyear {
+    color: #9f5f5f;
+}
+
+span.anketa-status.declined {
+    color: #7f7f7f;
+}
+
+span.anketa-status.cont {
+    color: #006f00;
+}
+
+span.anketa-status.old {
+    color: #000000;
+}
+
+span.anketa-status.duplicate {
+    color: #ff7f50;
+}
+
+span.anketa-status.spam {
+    color: #ff0000;
+}
+
 /* exam-status */
 span.exam-status.passed {
     color: #008f00;
