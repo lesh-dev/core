@@ -200,7 +200,7 @@ function xsm_print_person_schools($db, $person, $current_school_id)
     $href_ank = "view-person&amp;person_id=$person_id&amp;school_id=".XSM_SCHOOL_ANK_ID;
     $active_ank = (XSM_SCHOOL_ANK_ID == $current_school_id) ? 'current' : '';
     ?>
-    <table class="ankList table table-bordered table-hover"><tr>
+    <table class="ankList table table-bordered"><tr>
         <td class="school-selection <?php echo $active_ank; ?>">
             <div>
                 <a href="<?php echo $href_ank; ?>">Анкета</a>

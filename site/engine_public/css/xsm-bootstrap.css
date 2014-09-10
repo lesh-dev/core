@@ -15,6 +15,10 @@ a.xsm-close {
 }
 
 /* school-selection navbar */
+td.school-selection.current {
+    background-color: #ffffdd;
+}
+
 td.school-selection div {
     position: relative;
 }
