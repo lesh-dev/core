@@ -38,7 +38,10 @@ function xsm_edit_person_school()
 
     $member = xdb_get_entity_by_id('person', $member_person_id);
     $school = xdb_get_entity_by_id('school', $school_id);
-
+    $school_title = xcms_get_key_or_enc($school, "school_title");
+    $fio = xsm_fio_enc($member);
+    $person_url = "view-person".xcms_url(array('person_id'=>$member_person_id, 'school_id'=>$school_id));
+    $school_url = "list-person".xcms_url(array('school_id'=>$school_id));
     $field_types = array(
         "is_student"=>"checkbox",
         "is_teacher"=>"checkbox",
@@ -53,13 +56,20 @@ function xsm_edit_person_school()
         <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
         <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
-                <td class="ankListRowTitle">Редактирование ролей и статусов на школе</td>
+                <td class="ankListRowTitle">Участник
+                    <a href="<?php echo $person_url; ?>"><?php echo $fio; ?></a>
+                    на <a href="<?php echo $school_url; ?>"><?php echo $school_title; ?></a></td>
             </tr>
             <?php
             foreach ($person_school_fields as $key=>$field_title)
             {
                 if (xsm_is_bottom_field($key))
                     continue;
+                if ($key == "school_id")
+                    continue;
+                if ($key == "member_person_id")
+                    continue;
+
                 $value = xcms_get_key_or($person_school, $key);
                 $attr = ""; ?>
                 <tr><td class="ankList"><span class="ankEditField xsm-label"><?php echo $person_school_fields[$key]; ?></span>
@@ -72,18 +82,6 @@ function xsm_edit_person_school()
                 elseif ($ft == "enum")
                 {
                     echo xsm_make_enum_by_type($key, $value, $key);
-                }
-                elseif ($key == 'member_person_id')
-                {
-                    $fio = xsm_fio_enc($member);
-                    ?>
-                    <input type="text" class="ankEdit" value="<?php echo $fio; ?>"
-                        readonly="readonly" /><?php
-                }
-                elseif ($key == 'school_id')
-                {?>
-                    <input type="text" class="ankEdit" value="<?php echo htmlspecialchars($school['school_title']); ?>"
-                        readonly="readonly" /><?php
                 }
                 elseif ($key == 'member_department_id')
                 {
