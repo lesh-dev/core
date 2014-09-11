@@ -175,6 +175,12 @@ function xsm_print_person_header($db, $person, $school_id)
             if ($person_school_id !== NULL)
             {
                 $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
+                $roles_school = array();
+                if (xcms_checkbox_enabled($person_school["is_teacher"]))
+                    $roles_school[] = "Препод";
+                if (xcms_checkbox_enabled($person_school["is_student"]))
+                    $roles_school[] = "Школьник";
+                xsm_draw_person_textval('main', "Роли на $school_title", implode(", ", $roles_school));
                 xsm_draw_person_textval('main', "Класс на $school_title", $person_school['current_class']);
             }
         }
