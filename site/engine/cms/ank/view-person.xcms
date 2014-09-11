@@ -132,6 +132,13 @@ function xsm_print_person_header($db, $person, $school_id)
 
     $hr_status = xsm_make_enum($person, "anketa_status");
 
+    $roles_typical = array();
+    if (xcms_checkbox_enabled($person["is_teacher"]))
+        $roles_typical[] = "Препод";
+    if (xcms_checkbox_enabled($person["is_student"]))
+        $roles_typical[] = "Школьник";
+    // TODO: curatorship
+
     $person_created = xsm_ymdhm($person["person_created"]);
     $person_modified = xsm_ymdhm($person["person_modified"]);
 
@@ -154,7 +161,12 @@ function xsm_print_person_header($db, $person, $school_id)
             <div style="clear: both;"></div>
         <?php
         xsm_draw_person_textval('main', 'Отделение', $department_title);
-        xsm_draw_person_textval('main', "Текущий класс", $person['current_class']);
+        xsm_draw_person_textval('main', "Роли", implode(", ", $roles_typical));
+        $b_teacher_typical = xcms_checkbox_enabled($person["is_teacher"]);
+        $b_student_typical = xcms_checkbox_enabled($person["is_student"]);
+        if ($b_student_typical)
+            xsm_draw_person_textval('main', "Текущий класс", $person['current_class']);
+
         if ($school_id != XSM_SCHOOL_ANK_ID)
         {
             $school = xdb_get_entity_by_id('school', $school_id);
@@ -332,9 +344,6 @@ function xsm_print_person_ank_data($db, $person)
     $ank_class = htmlspecialchars($person["ank_class"]);
     $current_class = htmlspecialchars($person["current_class"]);
 
-    $is_teacher = $person["is_teacher"];
-    $is_student = $person["is_student"];
-
     $tent_capacity = htmlspecialchars($person["tent_capacity"]);
     $tour_requisites = xcms_html_wrap_by_crlf(htmlspecialchars($person["tour_requisites"]));
     $forest_status_1 = xsm_make_forest_enum($person, 1);
@@ -351,8 +360,8 @@ function xsm_print_person_ank_data($db, $person)
     $person_created = xsm_ymdhm($person["person_created"]);
     $person_modified = xsm_ymdhm($person["person_modified"]);
 
-    $hr_teacher = (xcms_checkbox_enabled($is_teacher) ? "Препод" : "&#8212;");
-    $hr_student = (xcms_checkbox_enabled($is_student) ? "Школьник" : "&#8212;");
+    $hr_teacher_typical = (xcms_checkbox_enabled($person["is_teacher"]) ? "Препод" : "&#8212;");
+    $hr_student_typical = (xcms_checkbox_enabled($person["is_student"]) ? "Школьник" : "&#8212;");
 
     xsm_draw_person_textval('main', $fields['birth_date'], $birth_date);
     xsm_draw_person_textval('main', $fields['passport_data'], $passport_data);
@@ -360,7 +369,7 @@ function xsm_print_person_ank_data($db, $person)
     xsm_draw_person_textval('main', "Текущий класс", $current_class);
     xsm_draw_person_textval('main', $fields['school'], $school);
     xsm_draw_person_textval('main', $fields['school_city'], $school_city);
-    xsm_draw_person_textval('main', 'Роль', "$hr_teacher / $hr_student");
+    xsm_draw_person_textval('main', 'Роль', "$hr_teacher_typical / $hr_student_typical");
     echo "<hr/>\n";
     xsm_draw_person_textval('main', $fields['tent_capacity'], $tent_capacity);
     xsm_draw_person_textval('main', $fields['tour_requisites'], $tour_requisites);
