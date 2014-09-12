@@ -66,14 +66,16 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
     <?php
     } else {?><ul><?php }
 
+    $course_count = 0;
     while ($course = $course_sel->fetchArray(SQLITE3_ASSOC))
     {
+        ++$course_count;
         $course_id = xcms_get_key_or_enc($course, "course_id");
         $course_title = xcms_get_key_or_enc($course, "course_title", "<без названия>");
         $target_class = xcms_get_key_or_enc($course, "target_class");
         $course_cycle = xcms_get_key_or_enc($course, "course_cycle");
-        $hr_course_type = xsm_make_enum($course, "course_type");
-        $hr_course_area = xsm_make_enum($course, "course_area");
+        $hr_course_type = xsm_make_enum($course, "course_type", $course_count);
+        $hr_course_area = xsm_make_enum($course, "course_area", $course_count);
 
         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id);
         if ($teachers_ht === false) // filter not passed
