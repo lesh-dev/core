@@ -13,8 +13,6 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
     """
     # override base error-checking method
     def init(self):
-        print "XcmsBaseTest init"
-
         super(XcmsBaseTest, self).init()
         self.set404Text(u"Нет такой страницы")
 
@@ -32,18 +30,20 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         self.checkDocType()
 
     def checkDocType(self):
-        firstLine = self.getPageSourceFirstLine()
+        firstLine, sourceBlock = self.getPageSourceFirstLine()
         if not "<!DOCTYPE" in firstLine:
             if self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"]):
                 self.logAdd("DOCTYPE not detected, but this page seems to be Auth page. ", "warning")
                 return
-            self.failTest("DOCTYPE directive not found on page " + self.curUrl());
+            sourceBlock = "\n".join(sourceBlock)
+            self.logAdd("Source beginning without DOCTYPE:\n" + sourceBlock.strip())
+            self.failTest("DOCTYPE directive not found on page {0}. First line is '{1}'".format(self.curUrl(), firstLine));
 
     def getPageSourceFirstLine(self):
         source = self.getPageSource()
         newlinePos = source.find("\n")
-        return source[0:newlinePos]
-
+        self.logAdd("Newline found at {0}".format(newlinePos))
+        return source[:newlinePos], source[:1000].split("\n")[:4]
 
     def isInstallerPage(self):
         return self.curUrl().endswith("install.php")
@@ -59,8 +59,6 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         if m and m.groups() >= 1:
             return str(m.group(1))
         return None
-
-
 
 
 class XcmsTestWithConfig(XcmsBaseTest):
@@ -90,6 +88,9 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
     def gotoCreatePage(self, reason = ""):
         self.gotoUrlByLinkText(u"Подстраница", reason)
+
+    def gotoRemovePage(self, reason = ""):
+        self.gotoUrlByLinkText(u"Удалить", reason)
 
     def getAnketaPageHeader(self):
         return u"Регистрационная анкета"
