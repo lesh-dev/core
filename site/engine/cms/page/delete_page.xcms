@@ -13,6 +13,6 @@
     Вы <b>точно</b> уверены, что хотите это сделать?</p>
     <form method="post">
         <input type="hidden" id="delete-section" name="delete-section" value="true" />
-        <input class="delete" type="submit" value="Таки да, удалить!" />
+        <input class="delete" type="submit" name="delete-page" id="delete_page-button" value="Таки да, удалить!" />
     </form>
 </div>
