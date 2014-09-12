@@ -43,6 +43,12 @@
     xsm_draw_fio_filter(); ?>
     <input type="submit" name="show-person" value="Показать" />
 </form>
+
+<div>
+    Здесь показываются только &laquo;чистые&raquo; анкеты, то есть школьники,
+    ещё <b>не зачисленные ни на одну из школ</b>.
+</div>
+
 <script type="text/javascript">
     xsm_filter_form_autosubmit();
 </script>
