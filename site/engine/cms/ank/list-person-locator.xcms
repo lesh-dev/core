@@ -66,6 +66,10 @@ function xsm_show_all_person_list()
         $cond .=
             " AND ( (anketa_status = 'processed') ".
             " OR (anketa_status = 'cont') )";
+    elseif ($show_anketa_status == "no-trash")
+        $cond .=
+            " AND ( (anketa_status <> 'duplicate')".
+            " AND (anketa_status <> 'spam') )";
     elseif ($show_anketa_status == "not-decl")
         $cond .=
             " AND ( (anketa_status <> 'duplicate')".
