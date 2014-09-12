@@ -65,6 +65,10 @@ function xsm_show_ank_list()
             " OR (anketa_status = 'discuss')".
             " OR (anketa_status = 'nextyear')".
             " OR (anketa_status = 'declined') )";
+    elseif ($show_anketa_status == "no-trash")
+        $cond .=
+            " AND ( (anketa_status <> 'duplicate')".
+            " AND (anketa_status <> 'spam') )";
     elseif ($show_anketa_status == "all")
         $cond .= "";
     else
