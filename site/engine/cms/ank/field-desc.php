@@ -211,13 +211,14 @@ $XSM_ENUMS = array(
     // селектор для list-person-locator
     "show_anketa_status_locator"=>array(
         "values"=>array(
+            "not-decl"=>"Все, кроме посланных",
             "active"=>"Актив",
             "not-old"=>"Все, кроме архивных",
+            "no-trash"=>"Все",
             "processed"=>"Принятые",
             "cont"=>"Продолжающие",
             "old"=>"Архивные",
-            "not-decl"=>"Без спама, дублей и посланых",
-            "all"=>"Все"),
+            "all"=>"Без фильтрации"),
         "default"=>"active"),
 
     // селектор для list-ank
@@ -232,7 +233,8 @@ $XSM_ENUMS = array(
             "discuss"=>"Обсуждаются",
             "declined"=>"Отклонённые",
             "old"=>"Архивные",
-            "all"=>"Все"),
+            "no-trash"=>"Все",
+            "all"=>"Без фильтрации"),
         "default"=>"abitur"),
 
     // Статус выхода в лес

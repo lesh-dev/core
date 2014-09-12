@@ -73,7 +73,10 @@ function xsm_class_num($class)
   **/
 function xsm_fio($person)
 {
-    return $person['last_name'].' '.$person['first_name'].' '.$person['patronymic'];
+    return
+        xcms_get_key_or($person, 'last_name').' '.
+        xcms_get_key_or($person, 'first_name').' '.
+        xcms_get_key_or($person, 'patronymic');
 }
 /**
   * HTML-encoded version of @c xsm_fio
