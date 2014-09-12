@@ -211,10 +211,10 @@ $XSM_ENUMS = array(
     // селектор для list-person-locator
     "show_anketa_status_locator"=>array(
         "values"=>array(
-            "no-trash"=>"Все",
             "not-decl"=>"Все, кроме посланных",
             "active"=>"Актив",
             "not-old"=>"Все, кроме архивных",
+            "no-trash"=>"Все",
             "processed"=>"Принятые",
             "cont"=>"Продолжающие",
             "old"=>"Архивные",

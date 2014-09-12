@@ -100,8 +100,29 @@ function xsm_show_all_person_list()
     if (strlen($cond))
         $query .= " WHERE $cond";
 
+    $anketa_status_order = "
+        CASE anketa_status
+            WHEN 'new' THEN 0
+            WHEN 'progress' THEN 1
+            WHEN 'less' THEN 2
+            WHEN 'discuss' THEN 3
+            WHEN 'less' THEN 4
+            WHEN 'processed' THEN 5
+            WHEN 'cont' THEN 6
+            WHEN 'nextyear' THEN 7
+            WHEN 'declined' THEN 8
+            WHEN 'old' THEN 9
+            WHEN 'duplicate' THEN 10
+            WHEN 'spam' THEN 11
+        END,";
+
     $class_order = xcms_checkbox_enabled($sort_by_class) ? " CAST(p.current_class AS INT), " : "";
-    $query .= " ORDER BY NOT (p.is_student IS NOT NULL AND LENGTH(p.is_student) > 0), $class_order p.last_name, p.first_name";
+    $query .= " ORDER BY
+        $anketa_status_order
+        NOT (p.is_student IS NOT NULL AND LENGTH(p.is_student) > 0),
+        $class_order
+        p.last_name,
+        p.first_name";
 
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
     $person_sel = $db->query($query);
