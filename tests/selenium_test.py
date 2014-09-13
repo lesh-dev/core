@@ -380,7 +380,11 @@ class SeleniumTest(object):
 
     def wait(self, seconds, comment = ""):
         self.addAction("wait", "Waiting for " + userSerialize(seconds) + " seconds. Comment: " + userSerialize(comment))
+        if seconds <= 3.0:
+            time.sleep(seconds)
+            return
         quant = 3
+        seconds = int(seconds)
         periods = seconds // quant
         for i in xrange(periods):
             time.sleep(quant)
