@@ -42,7 +42,7 @@
                             '" class="menu-item menu-sys">Анкеты</a>'));
 
                         include(translate('<a href="/<# web_prefix #>xsm/list-person-locator'.
-                            xcms_url(array('show_anketa_status'=>'all')).
+                            xcms_url(array('show_anketa_status'=>'no-trash')).
                             '" class="menu-item menu-sys">Все люди</a>'));
 
                         include(translate('<a href="/<# web_prefix #>xsm/list-tour'.
