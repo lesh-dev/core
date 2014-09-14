@@ -80,4 +80,6 @@ class XcmsContentRemovePage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(inpMenuTitle)
         
         self.assertElementTextById("content-text", newPageText, "new page text should appear after page reincarnation. ")
+        
+        self.gotoAlias(inpAlias)
 
