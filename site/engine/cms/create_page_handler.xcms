@@ -4,7 +4,7 @@ function xcms_create_page()
     global $SETTINGS, $pageid;
 
     $loc_name = xcms_get_key_or($_POST, "create-name");
-    if (!xcms_check_page_id($loc_name))
+    if (!xcms_check_page_id($loc_name, true))
         return "<div class=\"error\">Недопустимый физический путь страницы</div>";
 
     $alias = xcms_get_key_or($_POST, "alias");

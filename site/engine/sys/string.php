@@ -74,7 +74,7 @@ function xcms_check_user_name($user_name)
   * Checks whether page id is valid
   * @return true if page id is valid, false otherwise
   **/
-function xcms_check_page_id($page_id)
+function xcms_check_page_id($page_id, $local = false)
 {
     // everything should be replaced if OK
     $bad = preg_replace("#[a-z/A-Z.0-9_-]+#", "", $page_id);
@@ -86,6 +86,9 @@ function xcms_check_page_id($page_id)
         return false;
 
     if (xu_empty($page_id))
+        return false;
+
+    if ($local && strpos($page_id, "/") !== false)
         return false;
 
     return true;
