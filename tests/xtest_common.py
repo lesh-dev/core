@@ -53,6 +53,10 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         if self.isInstallerPage():
             self.failTest("Installer page detected, while we did not expected it. You should run this test on installed XCMS. ")
 
+    def gotoAlias(self, alias):
+        self.logAdd("Going to the page via alias " + alias)
+        self.gotoPage("/" + alias)
+
     def getCurrentPersonId(self):
         curUrl = self.curUrl()
         m = re.search("person_id=(\d+)", curUrl)

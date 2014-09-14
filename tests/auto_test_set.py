@@ -16,6 +16,7 @@ import xcms_content_add_page
 import xcms_content_auth_only_page
 import xcms_content_bad_path_page
 import xcms_content_hidden_page
+import xcms_content_nested_path
 import xcms_content_page_order
 import xcms_content_remove_page
 import xcms_content_special_chars_page
@@ -57,6 +58,7 @@ def getTests(baseUrl, args):
         ("xcms_content_auth_only_page.py", xcms_content_auth_only_page.XcmsContentAuthOnlyPage(baseUrl, args)),
         ("xcms_content_bad_path_page.py", xcms_content_bad_path_page.XcmsContentBadPathPage(baseUrl, args)),
         ("xcms_content_hidden_page.py", xcms_content_hidden_page.XcmsContentHiddenPage(baseUrl, args)),
+        ("xcms_content_nested_path.py", xcms_content_nested_path.XcmsContentNestedPathPage(baseUrl, args)),
         ("xcms_content_page_order.py", xcms_content_page_order.XcmsContentPageOrder(baseUrl, args)),
         ("xcms_content_remove_page.py", xcms_content_remove_page.XcmsContentRemovePage(baseUrl, args)),
         ("xcms_content_special_chars_page.py", xcms_content_special_chars_page.XcmsContentSpecialCharsPage(baseUrl, args)),

@@ -53,6 +53,10 @@ class ItemNotFound(TestError):
     pass
 
 
+class PageNotFound(TestError):
+    pass
+
+
 class TestShutdown(RuntimeError):
     pass
 
@@ -318,7 +322,7 @@ class SeleniumTest(object):
         if not self.m_doCheck404:
             return
         if self.checkSourceTextPresent(self.m_textOnPage404):
-            self.failTest("Requested URL '" + userSerialize(self.curUrl()) + "' leads to non-existing page (404). ")
+            raise PageNotFound("Requested URL '" + userSerialize(self.curUrl()) + "' leads to non-existing page (404). ")
 
     def set404Text(self, text):
         self.m_textOnPage404 = text
@@ -377,11 +381,18 @@ class SeleniumTest(object):
     def assertUrlNotPresent(self, linkName, reason = ""):
         try:
             self.getUrlByLinkText(linkName, reason = reason)
-            exceptionMessage = "Forbidden URL is found on the page in assertUrlNotPresent: " + userSerialize(linkName) + ". " + self.displayReason(reason)
-            self.failTest(exceptionMessage)
+            exMsg = "Forbidden URL is found on the page in assertUrlNotPresent: " + userSerialize(linkName) + ". " + self.displayReason(reason)
+            self.failTest(exMsg)
         except ItemNotFound:
             self.logAdd("URL " + userSerialize(linkName) + " is really not present (ItemNotFound exception raised). ")
-            pass
+
+    def assertPageNotPresent(self, pageUrl, reason = ""):
+        try:
+            self.gotoPage(pageUrl)
+            exMsg = "Forbidden page is found while going to URL in assertPageNotExists: " + userSerialize(pageUrl) + ". " + self.displayReason(reason)
+            self.failTest(exMsg)
+        except PageNotFound:
+            self.logAdd("Page " + userSerialize(pageUrl) + " is really not present (PageNotFound exception raised). ")
 
     def assertUrlPresent(self, linkName, reason = ""):
         try:

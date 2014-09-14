@@ -272,10 +272,6 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.logAdd("Updating aliases. ")
         self.clickElementByName("change-alias")
 
-    def gotoAlias(self, alias):
-        self.logAdd("Going to the page via alias " + alias)
-        self.gotoPage("/" + alias)
-
     def testAlias(self):
 
         self.logAdd("test aliases")
