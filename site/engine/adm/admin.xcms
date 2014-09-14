@@ -15,6 +15,7 @@ if (!@$_GET["page"])
     include(translate("<! auth/ #editor #admin $aux_edit_groups !>"));
 ?><# cms/create_page_handler #><?php
     $last_action_result = "";
+    $page_deleted = false;
     if (@$_POST["create-page"])
         $last_action_result = xcms_create_page();
 
@@ -26,7 +27,7 @@ if (!@$_GET["page"])
             xcmst_rebuild_aliases_and_rewrite();
             $pageid = "index";  // dead code was here
             $INFO = xcms_get_list(xcms_get_info_file_name());
-            include(translate("<! redir admin 1 !>"));
+            $page_deleted = true;
         }
         else
         {
@@ -95,6 +96,8 @@ if (!@$_GET["page"])
         <div class="admin-widget"><?php
         echo $last_action_result;
         ?></div><?php
+        if ($page_deleted)
+            include(translate("<! redir admin 2 !>"));
     }
 
     if (@$_GET["mode"]=="change_passwd")

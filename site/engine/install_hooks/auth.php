@@ -62,8 +62,6 @@
       **/
     function uninstall()
     {
-        // TODO: это баг -- удалять файл с кастомными настройками!
-        @unlink("settings.php");
         return true;
     }
     /**
@@ -87,8 +85,8 @@
         $u->add_to_group($target->login(), "editor");
         $result = xcms_append("settings.php",
             "<?php\n".
-            "\$auth_vk_id=\"${config['vk_id']}\";\n".
-            "\$auth_vk_rights=\"${config['vk_rights']}\";\n".
+            "    \$SETTINGS['auth_vk_id'] = '${config['vk_id']}';\n".
+            "    \$SETTINGS['auth_vk_rights'] = '${config['vk_rights']}';\n".
             "?>");
         if (!$result)
             return "Cannot open settings.php for append. ";
