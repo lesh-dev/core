@@ -42,7 +42,7 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
     def getPageSourceFirstLine(self):
         source = self.getPageSource()
         newlinePos = source.find("\n")
-        self.logAdd("Newline found at {0}".format(newlinePos))
+        #self.logAdd("Newline found at {0}".format(newlinePos))
         return source[:newlinePos], source[:1000].split("\n")[:4]
 
     def isInstallerPage(self):
@@ -66,8 +66,6 @@ class XcmsTestWithConfig(XcmsBaseTest):
         generic Xcms test with config
     """
     def init(self):
-        print "XcmsTestWithConfig init"
-
         super(XcmsTestWithConfig, self).init()
         self.m_conf = XcmsTestConfig()
         self.setAutoPhpErrorChecking(self.m_conf.getPhpErrorCheckFlag())
@@ -170,7 +168,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.addAction("user-login", login + " / " + password)
     #   test.logAdd("performLogin(" + login + ", " + password + ")")
 
-        print "performLogin(): goto root"
+        self.logAdd("performLogin(): goto root")
 
         self.gotoRoot()
 
@@ -256,9 +254,7 @@ class XcmsTest(XcmsTestWithConfig):
         generic Xcms test
     """
     def init(self):
-        print "XcmsTest init"
         super(XcmsTest, self).init()
-        #
         self.assertNoInstallerPage()
         #xtest_common.setTestNotifications(self, self.m_conf.getNotifyEmail(), self.m_conf.getAdminLogin(), self.m_conf.getAdminPass())
 
@@ -274,18 +270,18 @@ class XcmsTest(XcmsTestWithConfig):
         self.gotoUrlByLinkText(["Create user", u"Создать пользователя"])
 
         inpLogin = self.fillElementById("login-input", login)
-        print "login = '" + inpLogin + "'"
+        self.logAdd("login = '" + inpLogin + "'")
         if inpLogin == "":
             raise RuntimeError("Filled login value is empty!")
 
         inpEMail = self.fillElementById("email-input", email)
         inpPass1 = self.fillElementById("password-input", password)
-        print "original pass: '" + password + "'"
+        self.logAdd("original pass: '{0}'".format(password))
         inpPass2 = self.fillElementById("password_confirm-input", password)
         if inpPass1 != inpPass2:
             raise RuntimeError("Unpredicted input behavior on password entering")
         inpPass = inpPass1
-        print "actual pass: '" + inpPass + "'"
+        self.logAdd("actual pass: '" + inpPass + "'")
 
         inpName = self.fillElementById("name-input", name)
 
@@ -297,10 +293,10 @@ class XcmsTest(XcmsTestWithConfig):
 
 
         if "do_not_validate" in auxParams:
-            print "not validating created user, just click create button and shut up. "
+            self.logAdd("not validating created user, just click create button and shut up. ")
             return inpLogin, inpEMail, inpPass, inpName
 
-        print "user created, going to user list again to refresh. "
+        self.logAdd("user created, going to user list again to refresh. ")
 
         self.assertBodyTextPresent(u"Пользователь '" + inpLogin + u"' успешно создан")
 
@@ -308,7 +304,7 @@ class XcmsTest(XcmsTestWithConfig):
         self.gotoUserList()
 
         # enter user profile
-        print "entering user profile. "
+        self.logAdd("entering user profile. ")
 
         profileLink = inpLogin
         # TODO, SITE BUG: make two separate links
@@ -333,7 +329,7 @@ class XcmsTest(XcmsTestWithConfig):
 
     # set email to user (by admin panel)
     def setUserEmailByAdmin(self, login, email, auxParams = []):
-        print "setEmailToUserByAdmin( login: " + login + "', email: " + email + " )"
+        self.logAdd("setEmailToUserByAdmin( login: " + login + "', email: " + email + " )")
 
         self.logAdd("setUserEmailByAdmin: updating email for user '" + login + "' to '" + email + ". ")
 

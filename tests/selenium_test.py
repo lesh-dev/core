@@ -44,14 +44,18 @@ from bawlib import isVoid, isList, isString, isNumber, isEqual, getSingleOption,
 class TestError(RuntimeError):
     pass
 
+
 class TestFatal(TestError):
     pass
+
 
 class ItemNotFound(TestError):
     pass
 
+
 class TestShutdown(RuntimeError):
     pass
+
 
 class TestAction:
     def __init__(self, action, details):
@@ -60,6 +64,11 @@ class TestAction:
 
     def serializeAction(self):
         return self.m_action + " " + self.m_details
+
+
+def currentTime():
+    return time.time()
+
 
 # generic function to run any test.
 def RunTest(test):
@@ -97,6 +106,7 @@ def RunTest(test):
         test.handleException(e)
         return 2
 
+
 def colorStrL(string, color):
     """ Colors string using color """
     return "\x1b[1;{textColor}m{text}\x1b[0m".format(textColor = color, text = string)
@@ -119,6 +129,7 @@ def createLogDir(directory):
     
 def getValue(ele):
     return ele.get_attribute('value')
+
 
 #main API wrapper for Webdriver.
 class SeleniumTest(object):
@@ -244,6 +255,7 @@ class SeleniumTest(object):
             logFile.close()
             #indicate that log was already created
             self.m_logStarted = True
+            self.m_logTime = currentTime()
         except IOError:
             self.fatalTest("Cannot create log file " + userSerialize(self.m_logFile) + ". ")
 
@@ -864,11 +876,14 @@ class SeleniumTest(object):
         try:
             if not self.m_logStarted:
                 self.logStart()
-
-            fullLogText = self.getName() + "[" + logLevel + "]: " + text + "\n"
-            print fullLogText.strip().encode("UTF-8")
+                
+            newTime = currentTime()
+            duration = newTime - self.m_logTime
+            self.m_logTime = newTime
+            fullLogText = u"[{level:8}][{dur:06.2f}]: {text}".format(level=logLevel, dur=duration, text=text.strip())
+            print fullLogText.encode("UTF-8")
             logFile = open(self.m_logFile, 'a')
-            logFile.write(fullLogText.encode("UTF-8"))
+            logFile.write((fullLogText + "\n").encode("UTF-8"))
             logFile.close()
         except IOError:
             self.fatalTest("Cannot write message to log file " + userSerialize(self.m_logFile) + ". ")

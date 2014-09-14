@@ -58,6 +58,7 @@ class XcmsContentRemovePage(xtest_common.XcmsTest):
         self.assertUrlNotPresent(inpMenuTitle, "page should be removed")
 
         # create same page again
+        self.gotoAdminPanel()      
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
         
