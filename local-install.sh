@@ -279,6 +279,9 @@ message "Changing root password to 'root'..."
 # change root password to 'root'
 sudo cp -f $VERBOSE ./tools/xcms_console_tools/root_root_user $DEST/$DEST_CONT/auth/usr/root.user
 
+message "Installing logrotate script"
+sudo cp -f $VERBOSE ./site/xcms.logrotate /etc/logrotate.d/
+
 sudo chown -R $HTTPD_USER:$HTTPD_USER "$DEST"
 
 message_ok "XCMS installed to http://localhost/$DEST_NAME"

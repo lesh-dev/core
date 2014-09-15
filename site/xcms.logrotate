@@ -1,0 +1,8 @@
+ /var/log/xcms/*.log {
+    weekly
+    rotate 4
+    compress
+    delaycompress
+    missingok
+    create 640 www-data www-data
+}

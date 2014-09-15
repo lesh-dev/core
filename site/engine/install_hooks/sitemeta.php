@@ -29,7 +29,7 @@
             "site_log_path"=>array(
                 "name"=>"Путь до log-файлов",
                 "type"=>"string",
-                "default"=>"/var/log/".$_SERVER["HTTP_HOST"]."/engine.log",
+                "default"=>"/var/log/xcms/".$_SERVER["HTTP_HOST"]."-engine.log",
                 ),
             "site_url"=>array(
                 "name"=>"Адрес веб-сайта",
