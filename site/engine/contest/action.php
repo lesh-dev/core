@@ -10,7 +10,7 @@ function xcmst_contest_delete_entity()
     }
     ?>
     <h3>Запрос на удаление</h3>
-    <h1>СТОЙ!!! ПОДУМАЙ, ЧТО ТЫ ДЕЛАЕШЬ!!!!</h1><?php
+    <h2>Стой! Подумай, что ты делаешь!</h2><?php
     $table = @$_GET["table"];
     $id = @$_GET["id"];
     ?>
