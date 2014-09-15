@@ -106,7 +106,7 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
             $btn_name = "ctx_add_or_edit_form_${table_name}_$fid"; ?>
             <input type="submit" class="btn btn-primary"
                 name="<?php echo $btn_name; ?>"
-                value="Добавить / Изменить 111" /><?php
+                value="Добавить / Изменить" /><?php
         }
         echo "</form>";
     }
