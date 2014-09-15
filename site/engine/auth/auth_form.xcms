@@ -2,6 +2,7 @@
     div.auth-widget {
         border: 1px solid #7f7f7f;
         border-radius: 3px;
+        margin-left: 10px;
         margin-top: 10px;
         margin-bottom: 10px;
         padding-left: 5px;
@@ -28,8 +29,8 @@
 
     div.auth-widget input {
         border: 1px solid #7f7f7f;
-        padding-left: 2px;
-        padding-right: 2px;
+        padding-left: 4px;
+        padding-right: 4px;
         width: 200px;
     }
 
