@@ -306,6 +306,12 @@ function ctx_show_submitted()
 
 <div id="container">
 <?php
+if (true) {
+    echo "<pre>\n";
+    print_r($_POST);
+    print_r($_GET);
+    echo "</pre>\n";
+}
 
 $table_name = xcms_get_key_or($_GET, "table_name", "problems");
 $mode = xcms_get_key_or($_GET, "mode", "view");

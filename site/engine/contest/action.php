@@ -2,23 +2,31 @@
 
 function xcmst_contest_delete_entity()
 {
+    $table_name = xcms_get_key_or($_GET, "table_name");
+    if (xu_empty($table_name))
+    {?>
+        <p>Не указана таблица, Вы куда-то не туда нажали</p><?php
+        // TODO: better diagnostics
+        return;
+    }
+    $entry_id = xcms_get_key_or($_GET, "entry_id", XDB_INVALID_ID);
     if (@$_POST["delete"])
     {
-        xdb_delete(@$_GET["table"], @$_GET["id"]);
-        ?><p>Запись удалена успешно</p><?php
+        xdb_delete($table_name, $entry_id);
+        $redir = "/ctx/$table_name";
+        ?><p>Запись удалена успешно.
+            <a href="<?php echo $redir; ?>">Вернуться к списку</p><?php
         return;
     }
     ?>
     <h3>Запрос на удаление</h3>
     <h2>Стой! Подумай, что ты делаешь!</h2><?php
-    $table = @$_GET["table"];
-    $id = @$_GET["id"];
     ?>
-    <p>Таблица: <?php echo $table; ?></p>
-    <p>Идентификатор: <?php echo $id; ?></p>
+    <p>Таблица: <?php echo $table_name; ?></p>
+    <p>Идентификатор: <?php echo $entry_id; ?></p>
     <table class="table table-striped table-bordered table-condensed table-hover"><?php
 
-    $record = xdb_get_entity_by_id($table, $id);
+    $record = xdb_get_entity_by_id($table_name, $entry_id);
     foreach ($record as $key=>$value)
     {
         echo "<tr><td>$key</td><td>$value</td></tr>\n";
@@ -32,7 +40,7 @@ function xcmst_contest_delete_entity()
 function ctx_print_result_row($work, $probs, $simple = false)
 {
     global $ref;
-    $id = $work["contestants_id"];
+    $contestants_id = $work["contestants_id"];
     $row = "";
     if ($simple)
     {
@@ -41,7 +49,7 @@ function ctx_print_result_row($work, $probs, $simple = false)
     else
     {
         $row .=
-            "<td><a href=\"/ctx/contestants/view/$id\">{$work["name"]}</a></td>".
+            "<td><a href=\"/ctx/contestants/view/$contestants_id\">{$work["name"]}</a></td>".
             "<td>{$work["level"]}</td>".
             "<td><a href=\"{$work["work"]}\">Скачать</a></td>";
 
@@ -59,8 +67,7 @@ function ctx_print_result_row($work, $probs, $simple = false)
 
     if (!$simple)
     {
-        $row .= "<td><a href=\"/ctx/contestants/delete/$id\">Удалить</a></td>";
+        $row .= "<td><a href=\"/ctx/contestants/delete/$contestants_id\">Удалить</a></td>";
     }
     return $row;
 }
-
