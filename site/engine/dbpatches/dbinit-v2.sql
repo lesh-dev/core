@@ -6,6 +6,9 @@ create table department (
     department_modified text -- utc timestamp
 );
 
+/* Not to deal with #818 */
+INSERT INTO department (department_title, department_created) VALUES ('Физическое', '2005.08.23 01:02:03');
+
 /* Участник (препод, куратор, школьник...) */
 create table person (
     person_id integer primary key autoincrement,
