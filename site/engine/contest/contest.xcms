@@ -52,7 +52,7 @@ function ctx_custom_form($table_name, $pk, $item_template)
   * Стандартная форма редактирования записи. Нечто аналогичное уже есть в XSM,
   * но в менее явном виде, надо подумать, можно ли их слить воедино.
   **/
-function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x", $defvalues = array())
+function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x", $default_values = array())
 {
     global $CTX_META, $content_dir, $CONTEST_CURRENT_YEAR;
     $show_form = true;
@@ -94,7 +94,7 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
             $type = $arr["type"];
             $value = @$values[$id];
             if (!strlen($value))
-                $value = @$defvalues[$id];
+                $value = xcms_get_key_or($default_values, $id);
             if ($operation == "edit")
                 xcmst_draw_contest_form_field($type, $name, $value, $id);
             elseif ($operation == "view")
