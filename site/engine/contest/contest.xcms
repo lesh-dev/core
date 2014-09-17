@@ -210,15 +210,16 @@ function ctx_show_contestant()
     $problems_table = xdb_get_table("problems", NULL, $FILTER);
 
     $solutions_table = xdb_get_table("solutions", NULL, $FILTER);
-    // TODO: replace pid -> problem_id, not mix with problems_id
+    $pid = xcms_get_key_or($_GET, "pid");
     $activeness = "";
-    if (!@$_GET["pid"]) $activeness = " class=\"active\" ";
+    if (xu_empty($pid))
+        $activeness = " class=\"active\" ";
     echo "<li $activeness ><a href=\"/ctx/contestants/view/$entry_id\">Информация</a></li>\n";
 
     foreach ($problems_table as $problem)
     {
         $activeness = "";
-        if (@$_GET["pid"] == $problem["problems_id"])
+        if ($pid == $problem["problems_id"])
             $activeness = " class=\"active\" ";
         $problem_id = $problem["problems_id"];
         $problem_name = htmlspecialchars($problem["problem_name"]);
@@ -226,7 +227,7 @@ function ctx_show_contestant()
     }
     echo "</ul>\n";
 
-    if (!@$_GET["pid"])
+    if (xu_empty($pid))
     {?>
         <div class="tab-pane active" id="def"><?php
         ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
@@ -236,22 +237,22 @@ function ctx_show_contestant()
 
     foreach ($problems_table as $problem)
     {
-        $c_id = $entry_id;
-        $p_id = $problem["problems_id"];
+        $contestant_id = $entry_id;
+        $problem_id = $problem["problems_id"];
         $sid = XDB_NEW;
-        if ($p_id != @$_GET["pid"]) continue;
+        if ($problem_id != $pid) continue;
         echo '<div class="tab-pane" id="pr_'.$problem["problems_id"].'">';
         foreach ($solutions_table as $line)
         {
-            if ($line["problem_id"] != $p_id) continue;
-            if ($line["contestant_id"] != $c_id) continue;
+            if ($line["problem_id"] != $problem_id) continue;
+            if ($line["contestant_id"] != $contestant_id) continue;
             $sid = $line["solutions_id"];
 
         }
         echo "<h3>".$problem["problem_name"]."</h3>";
         $retur = ($sid == XDB_NEW) ? false : 'stay';
-        ctx_add_or_edit_form("solutions", $sid, "edit", $retur, $c_id.$p_id,
-            array("problem_id"=>$p_id, "contestant_id"=>$c_id));
+        ctx_add_or_edit_form("solutions", $sid, "edit", $retur, $contestant_id.$problem_id,
+            array("problem_id"=>$problem_id, "contestant_id"=>$contestant_id));
         echo "</div>";
     }
 }
