@@ -92,8 +92,8 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
         {
             $name = $arr["name"];
             $type = $arr["type"];
-            $value = @$values[$id];
-            if (!strlen($value))
+            $value = xcms_get_key_or($values, $id);
+            if (xu_empty($value))
                 $value = xcms_get_key_or($default_values, $id);
             if ($operation == "edit")
                 xcmst_draw_contest_form_field($type, $name, $value, $id);
@@ -251,8 +251,12 @@ function ctx_show_contestant()
         }
         echo "<h3>".$problem["problem_name"]."</h3>";
         $retur = ($sid == XDB_NEW) ? false : 'stay';
-        ctx_add_or_edit_form("solutions", $sid, "edit", $retur, $contestant_id.$problem_id,
-            array("problem_id"=>$problem_id, "contestant_id"=>$contestant_id));
+        $default_values = array(
+            "problem_id"=>$problem_id,
+            "contestant_id"=>$contestant_id,
+            "resolution_author"=>xcms_user()->param("name"),
+        );
+        ctx_add_or_edit_form("solutions", $sid, "edit", $retur, "c$contestant_id-p$problem_id", $default_values);
         echo "</div>";
     }
 }
