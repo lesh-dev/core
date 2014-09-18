@@ -203,15 +203,17 @@ function xsm_view_operations($table_name, $title, $aux_param = '')
 // Here entity should be equal to table name, but...
 function xsm_edit_delete_info($entity, $table_name, $id, $created, $modified, $aux_param = '')
 {?>
-    <span class="edit-delete-info">
-    <a class="link-oper" href="edit-<?php echo "$entity$aux_param&amp;${table_name}_id=$id" ?>"><img
-        src="<# full_engine_pub #>img/edit.gif" class="edit-icon"
-        width="16" height="16"
-        title="Редактировать" />Правка</a>
-    <span class="ankListField next">Создан:</span> <?php echo $created;
-    if (xu_not_empty($modified)) {?>
-        <span class="ankListField next">Отредактирован:</span> <?php echo $modified;
-    }?>
+    <span class="edit-op">
+        <a class="link-oper" href="edit-<?php echo "$entity$aux_param&amp;${table_name}_id=$id" ?>"><img
+            src="<# full_engine_pub #>img/edit.gif" class="edit-icon"
+            width="16" height="16"
+            title="Редактировать" />Правка</a>
+    </span>
+    <span class="edit-info">
+        <span class="ankListField next">Создан:</span> <?php echo $created;
+        if (xu_not_empty($modified)) {?>
+            <span class="ankListField next">Отредактирован:</span> <?php echo $modified;
+        }?>
     </span><?php
 }
 
