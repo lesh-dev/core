@@ -33,10 +33,21 @@ function xsm_update_entity_listmode($table_name, $title, $fields, $aux_param = '
     {?>
         <p>Не удалось добавить <?php echo $title; ?>.<?php
     }
-    $redir = "$table_name$aux_param&amp;$key_name=$id";
+    $redir_view = "$table_name$aux_param&amp;$key_name=$id";
+    $redir_list = "$table_name$aux_param";
     ?>
-    <a href="view-<?php echo $redir; ?>">Вернуться к просмотру<?php
-        if (strlen($return_title)) echo " $return_title"; ?></a></p><?php
+    <a href="view-<?php echo $redir_view; ?>">Вернуться к просмотру<?php
+        if (xu_not_empty($return_title))
+            echo " $return_title";
+        ?></a><?php
+        if ($table_name != "person")
+        {?>.
+            <a href="list-<?php echo $redir_list; ?>">Вернуться к списку<?php
+            if (xu_not_empty($return_title))
+                echo " $return_title";
+            ?></a><?php
+        }?>
+        </p><?php
     return $id;
 }
 
