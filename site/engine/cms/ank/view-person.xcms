@@ -389,7 +389,7 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
     $need_href = "edit-person_school".
         xcms_url(array('person_school_id'=>$person_school['person_school_id']));
     ?>
-    <h3>Зачёты</h3>
+    <h2>Зачёты</h2>
     <?php
         xsm_view_operations('exam', 'зачёт', $exam_aux_param);
     ?>

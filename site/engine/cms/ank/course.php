@@ -24,9 +24,10 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
             'school_id'=>$school_id));
 
     if (!$simple_view)
-    {?>
-    <h3>Курсы</h3><?php
-    xsm_view_operations('course', 'курс', $course_aux_param); ?>
+    {
+        if ($pers) {?><h2>Курсы</h2><?php }
+        else {?><h1>Курсы</h1><?php }
+        xsm_view_operations('course', 'курс', $course_aux_param); ?>
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
         <?php

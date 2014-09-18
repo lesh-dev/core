@@ -12,7 +12,7 @@ function xsm_school_list()
     $school_sel = $db->query($query);
     ?>
 
-    <h3>Школы</h3><?php
+    <h1>Школы</h1><?php
     xsm_view_operations('school', 'школу'); ?>
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
