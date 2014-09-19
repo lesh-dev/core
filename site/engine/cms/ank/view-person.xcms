@@ -36,7 +36,7 @@ function xsm_print_person_header($db, $person, $school_id)
     $person_id = $person['person_id'];
     $department_id = $person['department_id'];
     $department = xdb_get_entity_by_id('department', $department_id);
-    $department_title = $department['department_title'];
+    $department_title_typical = $department['department_title'];
 
     $person_fio = xsm_fio_enc($person);
 
@@ -53,17 +53,29 @@ function xsm_print_person_header($db, $person, $school_id)
 
     $hr_status = xsm_make_enum($person, "anketa_status");
 
-    $roles_typical = array();
-    if (xcms_checkbox_enabled($person["is_teacher"]))
-        $roles_typical[] = "Препод";
-    if (xcms_checkbox_enabled($person["is_student"]))
-        $roles_typical[] = "Школьник";
-    // TODO: curatorship
+    $roles_typical = xsm_get_roles($person);
 
     $person_created = xsm_ymdhm($person["person_created"]);
     $person_modified = xsm_ymdhm($person["person_modified"]);
 
     $av = xsm_get_avatar($social_profile);
+
+    $school_title = "";
+    $roles_school = "";
+    if ($school_id != XSM_SCHOOL_ANK_ID)
+    {
+        $school = xdb_get_entity_by_id('school', $school_id);
+        $school_title = xcms_get_key_or_enc($school, 'school_title');
+        $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
+        if ($person_school_id !== NULL)
+        {
+            $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
+            $roles_school = xsm_get_roles($person_school);
+        }
+    }
+    $b_teacher_typical = xcms_checkbox_enabled($person["is_teacher"]);
+    $b_student_typical = xcms_checkbox_enabled($person["is_student"]);
+
     ?>
     <table class="person-top"><tr>
     <td class="person-top left">
@@ -73,18 +85,23 @@ function xsm_print_person_header($db, $person, $school_id)
             echo $person_fio; ?></span> <sup><?php
             xsm_draw_list_link($person_id, $school_id); ?></sup></div>
         <div>
-            <span class="person-key top">Статус анкеты:</span>
+            <!--<span class="person-key top">Статус анкеты:</span>-->
             <span class="person-value"><?php echo $hr_status; ?></span><?php
             xsm_edit_link_generic(
                 'edit-person-status'.xcms_url(array('blamed_person_id'=>$person_id)),
                 'Сменить статус');
-            ?></div>
-            <div style="clear: both;"></div>
+            ?>
+        </div>
+        <div><span class="person-value department"><?php echo $department_title_typical; ?></span></div>
+        <div>
+            <span class="person-value roles"><?php echo $roles_typical; ?></span><?php
+            if (xu_not_empty($roles_school)) {?>,
+                на <?php echo $school_title; ?>: <span class="person-value roles"><?php echo $roles_school; ?></span><?php
+            }?>
+        </div>
+
+        <div style="clear: both;"></div>
         <?php
-        xsm_draw_person_textval('main', 'Отделение', $department_title);
-        xsm_draw_person_textval('main', "Роли", implode(", ", $roles_typical));
-        $b_teacher_typical = xcms_checkbox_enabled($person["is_teacher"]);
-        $b_student_typical = xcms_checkbox_enabled($person["is_student"]);
         if ($b_student_typical)
             xsm_draw_person_textval('main', "Текущий класс", $person['current_class']);
 

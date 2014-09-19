@@ -32,4 +32,15 @@ function xsm_fi_enc($person, $prefix = '')
     return htmlspecialchars(xsm_fi($person, $prefix));
 }
 
+function xsm_get_roles($obj)
+{
+    // TODO: curatorship
+    $roles = array();
+    if (xcms_checkbox_enabled($obj["is_teacher"]))
+        $roles[] = "Препод";
+    if (xcms_checkbox_enabled($obj["is_student"]))
+        $roles[] = "Школьник";
+    return implode(", ", $roles);
+}
+
 ?>
