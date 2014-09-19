@@ -37,6 +37,9 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
         inpEMailXsm = self.fillElementById("email-input", inpEMailXsm)
         
+        # set manager access level
+        self.clickElementById("group_ank-checkbox")
+        
         if inpEMail != inpEMailXsm:
             self.failTest("Cannot create user with identical email. ")
         
@@ -54,7 +57,7 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
         xsmUrlText = xtest_common.shortAlias(inpLastName, inpFirstName)
         self.gotoUrlByLinkText(xsmUrlText)
         xsmAlias = xtest_common.fullAlias(inpLastName, inpFirstName, inpMidName)
-        # self.assertElementTextById("person-title", xsmAlias, "We should get into our XSM person card. ")
+        #self.checkPersonAliasInPersonView(xsmAlias, "We should get into our XSM person card. ")
         self.assertBodyTextPresent(xsmAlias, "We should get into our XSM person card. ")
         
         self.gotoRoot()
