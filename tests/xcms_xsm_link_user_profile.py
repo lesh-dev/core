@@ -53,8 +53,9 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
         self.assertBodyTextPresent(u"Ваша карточка")
         xsmUrlText = xtest_common.shortAlias(inpLastName, inpFirstName)
         self.gotoUrlByLinkText(xsmUrlText)
-        xsmAlias = xtest_common.fullAlias(inpLastName, inpFirstName, inpLastName)
-        self.assertElementTextById("person-title", xsmAlias, "We should get into our XSM person card. ")
+        xsmAlias = xtest_common.fullAlias(inpLastName, inpFirstName, inpMidName)
+        # self.assertElementTextById("person-title", xsmAlias, "We should get into our XSM person card. ")
+        self.assertBodyTextPresent(xsmAlias, "We should get into our XSM person card. ")
         
         self.gotoRoot()
         self.performLogoutFromSite()
