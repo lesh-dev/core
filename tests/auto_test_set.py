@@ -39,6 +39,7 @@ import xcms_xsm_avatar
 import xcms_xsm_change_status_quick
 import xcms_xsm_course_mult_teachers
 import xcms_xsm_hack_person_link
+import xcms_xsm_link_user_profile
 import xcms_xsm_list_filters
 import xcms_xsm_phones
 
@@ -81,6 +82,7 @@ def getTests(baseUrl, args):
         ("xcms_xsm_change_status_quick.py", xcms_xsm_change_status_quick.XcmsXsmChangeStatusQuick(baseUrl, args)),
         ("xcms_xsm_course_mult_teachers.py", xcms_xsm_course_mult_teachers.XcmsXsmCourseWithMultipleTeachers(baseUrl, args)),
         ("xcms_xsm_hack_person_link.py", xcms_xsm_hack_person_link.XcmsXsmHackPersonLink(baseUrl, args)),
+        ("xcms_xsm_link_user_profile.py", xcms_xsm_link_user_profile.XcmsXsmLinkUserProfile(baseUrl, args)),
         ("xcms_xsm_list_filters.py", xcms_xsm_list_filters.XcmsXsmListFilters(baseUrl, args)),
         ("xcms_xsm_phones.py", xcms_xsm_phones.XcmsXsmPhones(baseUrl, args)),
     ]

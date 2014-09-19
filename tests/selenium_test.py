@@ -394,6 +394,7 @@ class SeleniumTest(object):
         except PageNotFound:
             self.logAdd("Page " + userSerialize(pageUrl) + " is really not present (PageNotFound exception raised). ")
 
+
     def assertUrlPresent(self, linkName, reason = ""):
         try:
             self.getUrlByLinkText(linkName, reason = reason)
