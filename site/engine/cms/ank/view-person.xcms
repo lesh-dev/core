@@ -62,6 +62,7 @@ function xsm_print_person_header($db, $person, $school_id)
 
     $school_title = "";
     $roles_school = "";
+    $department_title_school = "";
     if ($school_id != XSM_SCHOOL_ANK_ID)
     {
         $school = xdb_get_entity_by_id('school', $school_id);
@@ -71,6 +72,9 @@ function xsm_print_person_header($db, $person, $school_id)
         {
             $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
             $roles_school = xsm_get_roles($person_school);
+            $department_school_id = $person_school['member_department_id'];
+            $department_school = xdb_get_entity_by_id('department', $department_school_id);
+            $department_title_school = $department_school['department_title'];
         }
     }
     $b_teacher_typical = xcms_checkbox_enabled($person["is_teacher"]);
@@ -92,7 +96,11 @@ function xsm_print_person_header($db, $person, $school_id)
                 'Сменить статус');
             ?>
         </div>
-        <div><span class="person-value department"><?php echo $department_title_typical; ?></span></div>
+        <div><span class="person-value department"><?php echo $department_title_typical; ?></span><?php
+            if (xu_not_empty($department_title_school)) {?>,
+                на <?php echo $school_title; ?>: <span class="person-value department"><?php echo $department_title_school; ?></span><?php
+            }?>
+        </div>
         <div>
             <span class="person-value roles"><?php echo $roles_typical; ?></span><?php
             if (xu_not_empty($roles_school)) {?>,
