@@ -248,7 +248,14 @@ td.ankListRowTitle {
     font-size: 20px;
 }
 
-span.edit-delete-info {
+span.edit-op {
+    padding-left: 10px;
+    font-size: 14px;
+    line-height: 14px; /* same as ankListRowTitle font size */
+    vertical-align: 3px;
+}
+
+span.edit-info {
     float: right;
     font-size: 14px;
     line-height: 20px; /* same as ankListRowTitle font size */

@@ -15,6 +15,12 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
     WHERE (c.school_id = $school_id)
     ORDER BY course_title";
 
+    $school = xdb_get_entity_by_id('school', $school_id);
+    $school_title = xcms_get_key_or_enc($school, 'school_title');
+    $school_url = "list-person".xcms_url(array('school_id'=>$school_id));
+    $ht = $pers ? "h2" : "h1";
+    $table_title = "<$ht>Курсы на <a href=\"$school_url\">$school_title</a></$ht>";
+
     $course_sel = $db->query($query);
     $course_aux_param = $pers
         ? xcms_url(array(
@@ -24,9 +30,9 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
             'school_id'=>$school_id));
 
     if (!$simple_view)
-    {?>
-    <h3>Курсы</h3><?php
-    xsm_view_operations('course', 'курс', $course_aux_param); ?>
+    {
+        echo $table_title;
+        xsm_view_operations('course', 'курс', $course_aux_param); ?>
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
         <?php

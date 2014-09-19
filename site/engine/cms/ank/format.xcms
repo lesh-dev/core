@@ -283,13 +283,17 @@ function xsm_make_enum($object, $key, $id = false)
     return "<span class=\"$css_class $enum_value\" id=\"$id$key-span\">$title</span>";
 }
 
-// TODO: non-generic function!
-function xsm_make_forest_enum($person, $fn)
+/**
+  * Non-generic function, see xsm_make_enum
+  * id is added for testability reasons
+  **/
+function xsm_make_forest_enum($person, $fn, $id = false)
 {
+    $id = ($id !== false) ? "$id-" : "";
     $forest_status = xsm_check_enum_key("forest_status", $person["forest_$fn"]);
     $values = xsm_get_enum("forest_status");
     $title = $values[$forest_status];
-    return "<span class=\"forest-status $forest_status\" id=\"forest_status-span\">$title</span>";
+    return "<span class=\"forest-status $forest_status\" id=\"${id}forest_status$fn-span\">$title</span>";
 }
 
 
