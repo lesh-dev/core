@@ -63,6 +63,7 @@ function xsm_print_person_header($db, $person, $school_id)
     $school_title = "";
     $roles_school = "";
     $department_title_school = "";
+    $person_school_id = NULL;
     if ($school_id != XSM_SCHOOL_ANK_ID)
     {
         $school = xdb_get_entity_by_id('school', $school_id);
@@ -113,22 +114,9 @@ function xsm_print_person_header($db, $person, $school_id)
         if ($b_student_typical)
             xsm_draw_person_textval('main', "Текущий класс", $person['current_class']);
 
-        if ($school_id != XSM_SCHOOL_ANK_ID)
+        if ($school_id != XSM_SCHOOL_ANK_ID && $person_school_id !== NULL)
         {
-            $school = xdb_get_entity_by_id('school', $school_id);
-            $school_title = xcms_get_key_or_enc($school, 'school_title');
-            $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
-            if ($person_school_id !== NULL)
-            {
-                $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
-                $roles_school = array();
-                if (xcms_checkbox_enabled($person_school["is_teacher"]))
-                    $roles_school[] = "Препод";
-                if (xcms_checkbox_enabled($person_school["is_student"]))
-                    $roles_school[] = "Школьник";
-                xsm_draw_person_textval('main', "Роли на $school_title", implode(", ", $roles_school));
-                xsm_draw_person_textval('main', "Класс на $school_title", $person_school['current_class']);
-            }
+            xsm_draw_person_textval('main', "Класс на $school_title", $person_school['current_class']);
         }
     ?>
     </td>
