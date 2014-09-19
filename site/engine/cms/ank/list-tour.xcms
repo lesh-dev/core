@@ -81,7 +81,9 @@ function xsm_show_tour_list()
             <th class="ankList">Статус</th>
         </thead>
     <?php
+    $person_count = 0;
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC)) {
+        $person_count++;
         $person_id = htmlspecialchars($person["person_id"]);
         $fi = xsm_fi_enc($person);
         $fio = xsm_fio_enc($person);
@@ -105,13 +107,13 @@ function xsm_show_tour_list()
             $row_class = "teacher";
         ?>
         <tr class="<?php echo $row_class; ?>">
-            <!--<td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>-->
-            <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"
+            <td class="ankList"><a name="<?php echo "person$person_id"; ?>"
+                /><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"
                 title="<?php echo $fio; ?>"><?php echo $fi; ?></a></td>
             <td class="ankList"><?php echo $current_class; ?></td>
-            <td class="ankList c"><?php echo xsm_make_forest_enum($person, 1); ?></td>
-            <td class="ankList c"><?php echo xsm_make_forest_enum($person, 2); ?></td>
-            <td class="ankList c"><?php echo xsm_make_forest_enum($person, 3); ?></td>
+            <td class="ankList c"><?php echo xsm_make_forest_enum($person, 1, "p$person_count"); ?></td>
+            <td class="ankList c"><?php echo xsm_make_forest_enum($person, 2, "p$person_count"); ?></td>
+            <td class="ankList c"><?php echo xsm_make_forest_enum($person, 3, "p$person_count"); ?></td>
             <td class="ankList"><?php echo $tent_capacity; ?></td>
             <td class="ankList"><?php echo $tour_requisites; ?></td>
             <td class="ankList"><?php echo $all_phones; ?></td>
