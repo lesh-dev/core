@@ -28,11 +28,16 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
                 self.failTest("Forbidden crap '" + stopper + "' found on page. ")
 
         self.checkDocType()
+        if self.isAuthPage() and self.lastActionType() == "navigate":
+            self.logAdd("We are on the AUTH page. Seems that page access was denied. ", "warning")
 
+    def isAuthPage(self):
+        return self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"])
+        
     def checkDocType(self):
         firstLine, sourceBlock = self.getPageSourceFirstLine()
         if not "<!DOCTYPE" in firstLine:
-            if self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"]):
+            if self.isAuthPage():
                 self.logAdd("DOCTYPE not detected, but this page seems to be Auth page. ", "warning")
                 return
             sourceBlock = "\n".join(sourceBlock)
@@ -434,8 +439,8 @@ class XcmsTest(XcmsTestWithConfig):
         self.gotoUrlByLinkText(self.getUserListLinkName())
         self.assertBodyTextPresent(u"Администрирование пользователей")
 
-    def checkPersonAliasInPersonView(self, personAlias):
-        self.assertElementTextById("person-title", personAlias)
+    def checkPersonAliasInPersonView(self, personAlias, reason=""):
+        self.assertElementTextById("person-title", personAlias, reason)
 
     def getEditPageInPlaceLinkName(self):
         return u"Редактировать"

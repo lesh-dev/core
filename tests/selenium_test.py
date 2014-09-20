@@ -302,6 +302,11 @@ class SeleniumTest(object):
     def gotoPage(self, url, comment = ""):
         fullUrl = self.m_baseUrl + url
         return self.gotoSite(fullUrl, comment)
+    
+    def lastActionType(self):
+        if self.m_actionLog:
+            return self.m_actionLog[-1].m_action
+        return "none"
 
     # @comment usually means link name (or id), which we used to navigate to this URL.
     def gotoSite(self, fullUrl, comment = ""):
