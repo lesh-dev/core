@@ -44,6 +44,9 @@ function xsm_print_person_header($db, $person, $school_id)
 
     $school = htmlspecialchars($person["school"]);
     $school_city = htmlspecialchars($person["school_city"]);
+    $current_class = xcms_get_key_or($person, 'current_class');
+    $b_teacher_typical = xcms_checkbox_enabled($person["is_teacher"]);
+    $b_student_typical = xcms_checkbox_enabled($person["is_student"]);
 
     $phone = xsm_make_phone_from_obj($person, "person", "phone");
     $cellular = xsm_make_phone_from_obj($person, "person", "cellular");
@@ -64,6 +67,9 @@ function xsm_print_person_header($db, $person, $school_id)
     $roles_school = "";
     $department_title_school = "";
     $person_school_id = NULL;
+    $class_school = "";
+    $b_teacher_school = false;
+    $b_student_school = false;
     if ($school_id != XSM_SCHOOL_ANK_ID)
     {
         $school = xdb_get_entity_by_id('school', $school_id);
@@ -76,11 +82,11 @@ function xsm_print_person_header($db, $person, $school_id)
             $department_school_id = $person_school['member_department_id'];
             $department_school = xdb_get_entity_by_id('department', $department_school_id);
             $department_title_school = $department_school['department_title'];
+            $class_school = $person_school['current_class'];
+            $b_teacher_school = xcms_checkbox_enabled($person_school["is_teacher"]);
+            $b_student_school = xcms_checkbox_enabled($person_school["is_student"]);
         }
     }
-    $b_teacher_typical = xcms_checkbox_enabled($person["is_teacher"]);
-    $b_student_typical = xcms_checkbox_enabled($person["is_student"]);
-
     ?>
     <table class="person-top"><tr>
     <td class="person-top left">
@@ -108,17 +114,20 @@ function xsm_print_person_header($db, $person, $school_id)
                 на <?php echo $school_title; ?>: <span class="person-value roles"><?php echo $roles_school; ?></span><?php
             }?>
         </div>
-
-        <div style="clear: both;"></div>
         <?php
+        $classes = array();
         if ($b_student_typical)
-            xsm_draw_person_textval('main', "Текущий класс", $person['current_class']);
+            $classes[] = "<span class=\"person-value class\">$current_class</span>&nbsp;класс";
+        if ($b_student_school)
+            $classes[] = "$school_title: <span class=\"person-value class\">$class_school</span>&nbsp;класс";
 
-        if ($school_id != XSM_SCHOOL_ANK_ID && $person_school_id !== NULL)
-        {
-            xsm_draw_person_textval('main', "Класс на $school_title", $person_school['current_class']);
-        }
-    ?>
+        if ($b_student_typical || $b_student_school)
+        {?><div><?php
+            echo implode(", ", $classes);
+            ?>
+        </div><?php
+        }?>
+        <div style="clear: both;"></div>
     </td>
     <td class="person-top middle"><?php
         xsm_draw_person_textval('top', 'Почта', $email);

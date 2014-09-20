@@ -93,7 +93,7 @@ div.person-portrait {
     display: inline-block;
     float: left;
     padding-right: 10px;
-    padding-bottom: 50px;
+    padding-bottom: 35px;
 }
 
 img.person-portrait {
@@ -231,12 +231,15 @@ span.course-type.generic {
 
 span.person-value.department {
     font-weight: bold;
-    color: #ff007f;
+    color: #df005f;
 }
-
 span.person-value.roles {
     font-weight: bold;
-    color: #7f00ff;
+    color: #5f005f;
+}
+span.person-value.class {
+    font-weight: bold;
+    color: #3f3fef;
 }
 
 div.xsm-help-widget {
