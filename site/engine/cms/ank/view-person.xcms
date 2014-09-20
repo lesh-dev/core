@@ -117,7 +117,7 @@ function xsm_print_person_header($db, $person, $school_id)
         <?php
         $classes = array();
         if ($b_student_typical)
-            $classes[] = "<span class=\"person-value class\">$current_class</span>&nbsp;класс";
+            $classes[] = "Сейчас: <span class=\"person-value class\">$current_class</span>&nbsp;класс";
         if ($b_student_school)
             $classes[] = "$school_title: <span class=\"person-value class\">$class_school</span>&nbsp;класс";
 
