@@ -50,7 +50,7 @@ function xsm_print_person_header($db, $person, $school_id)
 
     $phone = xsm_make_phone_from_obj($person, "person", "phone");
     $cellular = xsm_make_phone_from_obj($person, "person", "cellular");
-    $email = htmlspecialchars($person["email"]);
+    $email = "<a href=\"mailto:".xcms_get_key_or_enc($person, "email")."\">".xcms_get_key_or_enc($person, "email")."</a>";
     $skype = htmlspecialchars($person["skype"]);
     $social_profile = xsm_prepare_social_profile($person["social_profile"]);
 
