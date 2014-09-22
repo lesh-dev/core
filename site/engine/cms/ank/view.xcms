@@ -82,7 +82,7 @@ require_once("${engine_dir}cms/ank/ank-proc.php");
                 "comment_text"=>$merge_state,
                 "owner_login"=>"anonymous",
                 "blamed_person_id"=>$person_id,
-                );
+            );
             // assume comment addition is not so important, don't check
             xdb_insert_or_update('person_comment', array('person_comment_id'=>XDB_NEW), $person_comment, xsm_get_person_comment_fields());
 

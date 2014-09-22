@@ -65,6 +65,7 @@ function xsm_merge_persons($person_dst, $person_src)
         if (!array_key_exists($key, $person_fields))
             continue;
 
+        $value = trim($value);
         if (!array_key_exists($key, $person_dst))
         {
             // easy merge
@@ -75,7 +76,7 @@ function xsm_merge_persons($person_dst, $person_src)
         // well, key exists
 
         // handle empty destination keys
-        $old_val = $person_dst[$key];
+        $old_val = trim($person_dst[$key]);
         if (xu_len($old_val) == 0)
         {
             // easy merge
@@ -90,7 +91,7 @@ function xsm_merge_persons($person_dst, $person_src)
         }
 
         // keys are equal
-        if ($person_dst[$key] == $value)
+        if ($old_val == $value)
             continue;
 
         $key_title = xcms_get_key_or($person_fields, $key);
@@ -111,7 +112,7 @@ function xsm_merge_persons($person_dst, $person_src)
     return array(
         "person"=>$person_dst,
         "state"=>$merge_state,
-        );
+    );
 }
 
 function xsm_compose_anketa_table($person)
