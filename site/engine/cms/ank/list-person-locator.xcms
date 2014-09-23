@@ -114,7 +114,7 @@ function xsm_show_all_person_list()
             WHEN 'old' THEN 9
             WHEN 'duplicate' THEN 10
             WHEN 'spam' THEN 11
-        END,";
+        END, ";
 
     $class_order = xcms_checkbox_enabled($sort_by_class) ? " CAST(p.current_class AS INT), " : "";
     $query .= " ORDER BY

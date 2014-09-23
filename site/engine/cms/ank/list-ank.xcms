@@ -109,7 +109,7 @@ function xsm_show_ank_list()
             WHEN 'declined' THEN 6
             WHEN 'old' THEN 7
             WHEN 'duplicate' THEN 8
-        END,";
+        END, ";
 
     $query .= " ORDER BY
         $anketa_status_order
