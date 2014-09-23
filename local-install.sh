@@ -187,7 +187,7 @@ fi
 
 if ! [ -d "$CONT_DIR" ]; then
     message_error "Content directory not found, exiting. "
-    message_error "It should be 2 dir-levels above and named '$DEST_CONT'."
+    message_error "It should be 2 dir-levels above and named '$CONT_DIR'."
     exit 1
 fi
 
@@ -280,7 +280,7 @@ message "Changing root password to 'root'..."
 sudo cp -f $VERBOSE ./tools/xcms_console_tools/root_root_user $DEST/$DEST_CONT/auth/usr/root.user
 
 message "Installing logrotate script"
-sudo cp -f $VERBOSE ./site/xcms.logrotate /etc/logrotate.d/
+sudo cp -f $VERBOSE ./site/xcms.logrotate /etc/logrotate.d/xcms
 
 sudo chown -R $HTTPD_USER:$HTTPD_USER "$DEST"
 
