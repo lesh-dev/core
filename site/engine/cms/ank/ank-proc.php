@@ -46,6 +46,20 @@ function xsm_find_person_origin($db, $new_person)
     return false;
 }
 
+/**
+  * Fields that cannot be merged via text addition
+  **/
+function xsm_non_mergeable_key($key)
+{
+    return (
+        $key == "anketa_status" ||
+        $key == "department_id" ||
+        $key == "is_student" ||
+        $key == "is_teacher" ||
+        $key == "user_agent" ||
+        false
+    );
+}
 
 /**
   * Performs persons merge
@@ -66,6 +80,14 @@ function xsm_merge_persons($person_dst, $person_src)
             continue;
 
         $value = trim($value);
+        $key_title = xcms_get_key_or($person_fields, $key);
+
+        if (xsm_non_mergeable_key($key))
+        {
+            $merge_state .= "$key_title: set '$value'\n";
+            continue;
+        }
+
         if (!array_key_exists($key, $person_dst))
         {
             // easy merge
@@ -94,7 +116,6 @@ function xsm_merge_persons($person_dst, $person_src)
         if ($old_val == $value)
             continue;
 
-        $key_title = xcms_get_key_or($person_fields, $key);
         // old non-empty value is a prefix of new one
         if (xu_substr($value, 0, xu_len($old_val)) == $old_val)
         {
