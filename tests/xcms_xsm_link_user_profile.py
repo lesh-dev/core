@@ -19,7 +19,7 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
         inpName = u"XSM-Юзер-" + random_crap.randomText(6)
 
         inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName,
-                                                                  auxParams=["do_not_logout_admin"])
+                                                                  auxParams=["do_not_logout_admin", "manager_rights"])
         
         self.closeAdminPanel()
         self.gotoXsm()   
@@ -36,10 +36,7 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
         inpFirstName = self.fillElementById("first_name-input", inpFirstName)
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
         inpEMailXsm = self.fillElementById("email-input", inpEMailXsm)
-        
-        # set manager access level
-        self.clickElementById("group_ank-checkbox")
-        
+                
         if inpEMail != inpEMailXsm:
             self.failTest("Cannot create user with identical email. ")
         

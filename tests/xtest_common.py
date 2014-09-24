@@ -297,6 +297,12 @@ class XcmsTest(XcmsTestWithConfig):
         # set notify checkbox.
         # self.clickElementById("notify_user-checkbox")
         # send form
+        
+        if "manager_rights" in auxParams:
+            self.logAdd("Setting manager rights for user. ")
+            # set manager access level
+            self.clickElementById("group_ank-checkbox")
+
 
         self.clickElementByName("create_user")
 
