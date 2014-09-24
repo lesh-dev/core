@@ -1,7 +1,5 @@
 <?php
     /**
-      * @file logger.php
-      * Simple logger:
       * Logging now is as easy as killing bunnies with axes (c)
       **/
     define('XLOG_ERROR',    0);
@@ -22,10 +20,15 @@
       **/
     function xcms_log_filename()
     {
-        global $engine_dir;
-        if (strlen($engine_dir) == 0) $ed = "engine";
-        else $ed = $engine_dir;
-        return "$ed/../engine.log";
+        global $meta_site_log_path;
+        $log_path = $meta_site_log_path;
+        if (!strlen($log_path))
+        {
+            global $engine_dir;
+            $ed = strlen($engine_dir) ? $engine_dir : "engine";
+            $log_path = "$ed/../engine.log";
+        }
+        return $log_path;
     }
 
     /**
