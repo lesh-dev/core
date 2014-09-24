@@ -104,13 +104,13 @@ function xsm_print_person_header($db, $person, $school_id)
             ?>
         </div>
         <div><span class="person-value department"><?php echo $department_title_typical; ?></span><?php
-            if (xu_not_empty($department_title_school)) {?>,
+            if (xu_not_empty($department_title_school) && $department_title_school != $department_title_typical) {?>,
                 на <?php echo $school_title; ?>: <span class="person-value department"><?php echo $department_title_school; ?></span><?php
             }?>
         </div>
         <div>
             <span class="person-value roles"><?php echo $roles_typical; ?></span><?php
-            if (xu_not_empty($roles_school)) {?>,
+            if (xu_not_empty($roles_school) && $roles_school != $roles_typical) {?>,
                 на <?php echo $school_title; ?>: <span class="person-value roles"><?php echo $roles_school; ?></span><?php
             }?>
         </div>
@@ -347,7 +347,7 @@ function xsm_print_add_person_to_school($db, $school_id, $person)
     $is_student_typical = $person['is_student'];
     $current_class = $person['current_class'];
     $school = xdb_get_entity_by_id('school', $school_id);
-    $school_title_enc = xcms_get_key_or_enc($school, 'school_title');
+    $school_title = xcms_get_key_or_enc($school, 'school_title');
     $add_href = "edit-person_school".
         xcms_url(array(
             'person_school_id'=>XDB_NEW,
@@ -359,21 +359,21 @@ function xsm_print_add_person_to_school($db, $school_id, $person)
             ));
     ?>
     <a class="edit-link add" href="<?php echo $add_href; ?>"
-        title="Зачислить на <?php echo $school_title_enc; ?>">&nbsp;</a><?php
+        title="Зачислить на <?php echo $school_title; ?>">&nbsp;</a><?php
 }
 
 function xsm_print_edit_person_school($db, $school_id, $person_id)
 {
     $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
     $school = xdb_get_entity_by_id('school', $school_id);
-    $school_title_enc = htmlspecialchars($school['school_title']);
+    $school_title = xcms_get_key_or_enc($school, 'school_title');
     $edit_href = "edit-person_school".
         xcms_url(array(
             'person_school_id'=>$person_school_id,
             ));
     ?>
     <a class="edit-link edit" href="<?php echo $edit_href; ?>"
-        title="Редактировать роли и статусы на <?php echo $school_title_enc; ?>">&nbsp;</a><?php
+        title="Редактировать роли и статусы на <?php echo $school_title; ?>">&nbsp;</a><?php
 }
 
 function xsm_print_delete_person_from_school($db, $school_id, $person_id)
@@ -381,7 +381,7 @@ function xsm_print_delete_person_from_school($db, $school_id, $person_id)
     $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
 
     $school = xdb_get_entity_by_id('school', $school_id);
-    $school_title_enc = htmlspecialchars($school['school_title']);
+    $school_title = xcms_get_key_or_enc($school, 'school_title');
     $delete_href = "edit-person_school".
         xcms_url(array(
             'person_school_id'=>$person_school_id,
@@ -389,11 +389,15 @@ function xsm_print_delete_person_from_school($db, $school_id, $person_id)
             ));
     ?>
     <a class="edit-link delete" href="<?php echo $delete_href; ?>"
-        title="Отчислить с <?php echo $school_title_enc; ?>">&nbsp;</a><?php
+        title="Отчислить с <?php echo $school_title; ?>">&nbsp;</a><?php
 }
 
 function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
 {
+    $school = xdb_get_entity_by_id('school', $school_id);
+    $school_title = xcms_get_key_or_enc($school, 'school_title');
+    $school_url = "list-person".xcms_url(array('school_id'=>$school_id));
+
     $query_count =
         "SELECT COUNT(*) AS exams_passed
         FROM course c, exam e WHERE
@@ -423,7 +427,7 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
     $need_href = "edit-person_school".
         xcms_url(array('person_school_id'=>$person_school['person_school_id']));
     ?>
-    <h2>Зачёты. Нужно сдать <a href="<?php echo $need_href; ?>"><?php
+    <h2>Зачёты на <a href="<?php echo $school_url; ?>"><?php echo $school_title; ?></a>. Нужно сдать <a href="<?php echo $need_href; ?>"><?php
             echo $need.'&nbsp;'.xcms_plural($need, 'зачёт'); ?></a>, сдано <?php echo $exams_passed; ?></h2>
     <?php
         xsm_view_operations('exam', 'зачёт', $exam_aux_param);
