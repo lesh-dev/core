@@ -2,8 +2,8 @@
 require_once("${engine_dir}sys/db.php");
 require_once("${engine_dir}cms/ank/fio.php");
 
-define('XSM_PHONE_SEPARATOR', ',&nbsp;&nbsp; ');
-define('XSM_SCHOOL_COUNT', 7);
+define('XSM_CONTACT_SEPARATOR', ',&nbsp;&nbsp; ');
+define('XSM_SCHOOL_COUNT', 7);  // not used by now
 
 /**
   * Replace \n by <br /> with respect to various systems line endings
@@ -201,7 +201,7 @@ function xsm_make_phone($phones_str, $id = '')
             $phone = htmlspecialchars($phone);
         }
         if (xu_not_empty($result))
-            $result .= XSM_PHONE_SEPARATOR;
+            $result .= XSM_CONTACT_SEPARATOR;
 
         $pid = xu_not_empty($id) ? " id=\"$id-$count\" " : "";
         $result .= "<span $pid class=\"phone $class\" title=\"$hint\">$phone</span>";
@@ -228,7 +228,7 @@ function xsm_format_person_phones($person)
         $all_phones[] = $cellular;
     if ($phone)
         $all_phones[] = $phone;
-    return implode(XSM_PHONE_SEPARATOR, $all_phones);
+    return implode(XSM_CONTACT_SEPARATOR, $all_phones);
 }
 
 function xsm_contacts_for_list($person)
@@ -248,7 +248,7 @@ function xsm_contacts_for_list($person)
     if (xu_not_empty($social_profile) && count($contacts) < 3)
         $contacts[] = xsm_social_profile_link($social_profile);
 
-    return implode(", &nbsp; ", $contacts);
+    return implode(XSM_CONTACT_SEPARATOR, $contacts);
 }
 
 function xsm_prepare_social_profile($social_profile)

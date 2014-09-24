@@ -156,11 +156,7 @@ function xsm_show_ank_list()
             $school_city = "город не указан";
         $ank_class = htmlspecialchars($person["ank_class"]);
         $current_class = htmlspecialchars($person["current_class"]);
-
-        $all_phones = xsm_format_person_phones($person);
-        $email = htmlspecialchars($person["email"]);
-        $skype = htmlspecialchars($person["skype"]);
-        $social_profile = xsm_prepare_social_profile($person["social_profile"]);
+        $contacts = xsm_contacts_for_list($person);
 
         $favourites = xcms_html_wrap_by_crlf(htmlspecialchars($person["favourites"]));
         $achievements = xcms_html_wrap_by_crlf(htmlspecialchars($person["achievements"]));
@@ -178,7 +174,7 @@ function xsm_show_ank_list()
             <td class="ankList"><?php echo $birth_date; ?></td>
             <td class="ankList"><?php echo $current_class; ?></td>
             <td class="ankList"><?php echo "$school ($school_city)"; ?></td>
-            <td class="ankList"><?php echo $all_phones; ?></td>
+            <td class="ankList"><?php echo $contacts; ?></td>
             <td class="ankList"><?php echo $person_created; ?></td>
             <td class="ankList status-col"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
