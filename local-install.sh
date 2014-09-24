@@ -281,6 +281,9 @@ sudo cp -f $VERBOSE ./tools/xcms_console_tools/root_root_user $DEST/$DEST_CONT/a
 
 message "Installing logrotate script"
 sudo cp -f $VERBOSE ./site/xcms.logrotate /etc/logrotate.d/xcms
+message "Creating directory for logs"
+sudo mkdir -p /var/log/xcms/
+sudo chown -R $HTTPD_USER:$HTTPD_USER /var/log/xcms/
 
 sudo chown -R $HTTPD_USER:$HTTPD_USER "$DEST"
 
