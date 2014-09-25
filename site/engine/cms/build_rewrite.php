@@ -61,9 +61,13 @@ function xcmst_build_rewrite($verbose = false)
     if ($verbose)
         echo "<table class=\"sitemap\">\n<tr><th>Alias</th><th>Path</th></tr>\n";
     ksort($aliases);
+    $max_level = 0;
     foreach ($aliases as $alias=>$path)
     {
         $level = substr_count($alias, "/");
+        if ($level > $max_level)
+            $max_level = $level;
+
         if (!array_key_exists($level, $listing))
             $listing[$level] = "";
         $listing[$level] .= "RewriteRule ^$alias$ index.php?page=$path\n";
@@ -78,8 +82,8 @@ function xcmst_build_rewrite($verbose = false)
     }
     if ($verbose)
         echo "</table>\n";
-    $listing = array_reverse($listing);
-    $rewrite_text .= join($listing);
+    for ($level = $max_level; $level >= 0; --$level)
+        $rewrite_text .= $listing[$level];
     if (!xcms_write(".htaccess", $rewrite_text))
     {?>
         <div class="error">Rewrite rules writing failed!</div><?php
