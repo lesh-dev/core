@@ -44,7 +44,6 @@ class XcmsXsmChangeStatusQuick(xtest_common.XcmsTest):
         
         self.assertElementTextById("anketa_status-span", u"Активный")
      
-        # ok, now let's test xyz100 avatar.
         self.gotoXsmChangePersonStatus()
         
         self.setOptionValueByIdAndValue("anketa_status-selector", "discuss")

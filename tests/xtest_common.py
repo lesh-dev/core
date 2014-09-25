@@ -463,6 +463,9 @@ class XcmsTest(XcmsTestWithConfig):
     def gotoCloseEditor(self):
         self.gotoUrlByLinkText(u"Свернуть редактор")
 
+    def gotoXsmAnketas(self):
+        self.gotoUrlByLinkText(self.getAnketaListMenuName())
+            
     def getAnketaListMenuName(self):
         return u"Анкеты"
     

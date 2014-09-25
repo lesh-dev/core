@@ -41,9 +41,7 @@ class XcmsXsmAnketaDuplicate(xtest_common.XcmsTest):
         self.assertBodyTextPresent(self.getAnketaPageHeader())
             
         # generate
-        
         self.inpLastNameReal = self.fillElementById("last_name-input", self.inpLastName)
-        
         self.inpFirstNameReal = self.fillElementById("first_name-input", self.inpFirstName)
         self.inpMidNameReal = self.fillElementById("patronymic-input", self.inpMidName)
         self.inpBirthDateReal = self.fillElementById("birth_date-input", self.inpBirthDate)
@@ -51,17 +49,52 @@ class XcmsXsmAnketaDuplicate(xtest_common.XcmsTest):
         self.inpSchoolCityReal = self.fillElementById("school_city-input", self.inpSchoolCity)
         self.inpClassReal = self.fillElementById("current_class-input", self.inpClass)
         self.inpPhoneReal = self.fillElementById("phone-input", self.inpPhone)
-        #self.inpCellReal = self.fillElementById("cellular-input", self.inpCell)
         self.inpEmailReal = self.fillElementById("email-input", self.inpEmail)
-        #self.inpSkypeReal = self.fillElementById("skype-input", self.inpSkype)
-        #self.inpSocialReal = self.fillElementById("social_profile-input", self.inpSocial)
         self.inpFavReal = self.fillElementById("favourites-text", self.inpFav)
         self.inpAchReal = self.fillElementById("achievements-text", self.inpAch)
         self.inpHobReal = self.fillElementById("hobby-text", self.inpHob)
         self.inpSourceReal = self.fillElementById("lesh_ref-text", self.inpSource)
         
         self.clickElementById("submit-anketa-button")
+    
+    def checkUniqueAnketa(self):
+            
+        # now login as admin
+        self.personAlias = xtest_common.shortAlias(self.inpLastNameReal, self.inpFirstNameReal)
+        # self.personAlias = xtest_common.fullAlias(self.inpLastNameReal, self.inpFirstNameReal, self.inpMidNameReal)
         
+        self.performLoginAsManager()
+        self.gotoRoot()
+        self.gotoUrlByLinkText(self.getAnketaListMenuName())
+        
+        alias = self.fillElementById("show_name_filter-input", self.personAlias)
+        self.clickElementByName("show-person")
+        if self.countIndexedUrlsByLinkText(self.personAlias) != 1:
+            self.failTest("Found more than one anketa with exact FIO. Duplicate filtering is broken. ")
+            
+    def changeStatus(self):
+        self.gotoXsm()
+        self.gotoXsmAnketas()
+        self.gotoUrlByLinkText(self.personAlias)
+        self.gotoXsmChangePersonStatus()
+        
+        self.setOptionValueByIdAndValue("anketa_status-selector", "nextyear")
+        commentText = u"Меняем статус первой анкете: " + random_crap.randomCrap(5)
+        commentText = self.fillElementById("comment_text-text", commentText)
+                
+        self.clickElementById("update-person_comment-submit-top")
+        self.gotoBackToPersonView()
+        
+        self.newState = u"Отложен"
+        self.assertBodyTextPresent(u"Статус Новый изменён на {0}".format(self.newState))
+        self.assertBodyTextPresent(commentText)
+    
+    def checkStatus(self):
+        self.gotoXsm()
+        self.gotoXsmAnketas()
+        self.gotoUrlByLinkText(self.personAlias)
+        # TODO: BUG: newState or NEW???
+        self.assertElementTextById("anketa_status-span", self.newState)
 
     # -------------------- begining of the test
     def run(self):
@@ -74,19 +107,11 @@ class XcmsXsmAnketaDuplicate(xtest_common.XcmsTest):
         self.assertBodyTextPresent(self.getAnketaDuplicateSubmitMessage())
         
         self.checkUniqueAnketa()
-    
-    def checkUniqueAnketa(self):
-            
-        # now login as admin
-        alias = xtest_common.shortAlias(self.inpLastNameReal, self.inpFirstNameReal)
-        # alias = xtest_common.fullAlias(self.inpLastNameReal, self.inpFirstNameReal, self.inpMidNameReal)
         
-        self.performLoginAsManager()
-        self.gotoRoot()
-        self.gotoUrlByLinkText(self.getAnketaListMenuName())
+        self.changeStatus()
         
-        alias = self.fillElementById("show_name_filter-input", alias)
-        self.clickElementByName("show-person")
-        if self.countIndexedUrlsByLinkText(alias) != 1:
-            self.failTest("Found more than one anketa with exact FIO. Duplicate filtering is broken. ")
-
+        self.addAnketa()
+        self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage())
+        self.assertBodyTextPresent(self.getAnketaDuplicateSubmitMessage())
+        
+        self.checkStatus()
