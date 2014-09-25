@@ -300,7 +300,10 @@ class SeleniumTest(object):
 
     # @comment usually means link name (or id), which we used to navigate to this URL.
     def gotoPage(self, url, comment = ""):
-        fullUrl = self.m_baseUrl + url
+        normUrl = url
+        if not normUrl.startswith("/"):
+            normUrl = "/" + normUrl
+        fullUrl = self.m_baseUrl + normUrl
         return self.gotoSite(fullUrl, comment)
     
     def lastActionType(self):

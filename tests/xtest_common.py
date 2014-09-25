@@ -60,7 +60,7 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
 
     def gotoAlias(self, alias):
         self.logAdd("Going to the page via alias " + alias)
-        self.gotoPage("/" + alias)
+        self.gotoPage(alias)
 
     def getCurrentPersonId(self):
         curUrl = self.curUrl()
@@ -418,6 +418,9 @@ class XcmsTest(XcmsTestWithConfig):
 
     def closeAdminPanel(self):
         self.gotoUrlByLinkText("X")
+        
+    def assertSitePageHeader(self, header, reason = "Page header does not match expected. "):
+        self.assertElementTextById("content-header", header, reason=reason)
 
     def addCommentToPerson(self):
         self.gotoUrlByLinkText(u"Добавить комментарий")
