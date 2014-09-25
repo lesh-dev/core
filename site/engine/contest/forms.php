@@ -28,13 +28,14 @@ function xcmst_draw_contest_form_field($type, $name, $value, $id)
 
 function xcmst_draw_contest_form_view($type, $name, $value)
 {
+    global $web_prefix;
     if ($type == "pk")
     {
 
     }
     if ($type == "file")
     {
-        echo "<tr><th>$name</th><td><a class='btn btn-success' href='$value'>Скачать</a></td></tr>\n";
+        echo "<tr><th>$name</th><td><a class='btn btn-success' href='/$web_prefix$value'>Скачать</a></td></tr>\n";
     }
     if ($type == "text")
     {

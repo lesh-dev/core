@@ -102,7 +102,8 @@ function ctx_update_object($table_name, $values)
 
         $home = "$content_dir/contest/attach/$table_name/".time();
         $new_name = "$home/".$_FILES[$id]["name"];
-        @mkdir("$home", 0777, true);
+        @mkdir($home, 0777, true);
+        file_put_contents("$content_dir/contest/attach/.htaccess", "Allow from all\n");
         if (!copy($_FILES[$id]["tmp_name"], $new_name))
             die("Cannot upload file. ");
         $values[$id] = $new_name;

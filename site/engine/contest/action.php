@@ -40,6 +40,8 @@ function xcmst_contest_delete_entity()
 function ctx_print_result_row($work, $probs, $simple = false)
 {
     global $ref;
+    global $web_prefix;
+
     $contestants_id = $work["contestants_id"];
     $row = "";
     if ($simple)
@@ -51,7 +53,7 @@ function ctx_print_result_row($work, $probs, $simple = false)
         $row .=
             "<td><a href=\"/ctx/contestants/view/$contestants_id\">{$work["name"]}</a></td>".
             "<td>{$work["level"]}</td>".
-            "<td><a href=\"{$work["work"]}\">Скачать</a></td>";
+            "<td><a href=\"/$web_prefix{$work["work"]}\">Скачать</a></td>";
 
         foreach ($probs as $prob)
         {
