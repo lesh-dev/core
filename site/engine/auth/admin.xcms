@@ -95,6 +95,7 @@
         <div><span class="user-label">EMail</span><input
             <?php xcmst_input_attrs_from_user($user, 'email', $read_only, "user@example.com"); ?> /></div>
         <?php
+        xcmst_draw_user_xsm($user);
         xcmst_draw_privileges($user, $read_only ? XDP_READONLY : XDP_NORMAL);
         if ($read_only)
         {?>

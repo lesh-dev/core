@@ -1,10 +1,7 @@
 <?php
     require_once("${engine_dir}sys/auth.php");
     require_once("${engine_dir}sys/groups.php");
-    require_once("${engine_dir}cms/ank/fio.php");
-    require_once("${engine_dir}cms/ank/field-desc.php");
     require_once("${engine_dir}auth/format.php");
-    require_once("${engine_dir}sys/db.php");
     $user = xcms_user();
 ?>
 <div class="admin-widget">
@@ -35,38 +32,7 @@
         <input type="submit" name='update_me' id="update_me" value="Обновить мои данные" />
     </form>
     <?php
-    $email = $user->param("email");
-    $person_url = "";
-    $person_id = "";
-    if (xu_not_empty($email))
-    {
-        $db = xdb_get();
-        $query = "SELECT * FROM person where email = '$email'";
-        $person_sel = $db->query($query);
-        while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
-        {
-            $person_id = $person['person_id'];
-            $fi_enc = xsm_fi_enc($person);
-            $person_url = "view-person".xcms_url(array(
-                'person_id'=>$person_id,
-                'school_id'=>XSM_SCHOOL_ANK_ID));
-            break;
-        }?>
-        <h3>XSM</h3>
-        <div><?php
-        if (xu_not_empty($person_url))
-        {?>
-            Ваша карточка:
-            <a href="<?php echo "/${web_prefix}xsm/$person_url"; ?>"><?php echo $fi_enc; ?></a><?php
-        }
-        else
-        {?>
-            По вашему email в картотеке ничего не найдено.<?php
-        }?>
-        </div>
-        <?php
-    }
-
+    xcmst_draw_user_xsm($user);
     xcmst_draw_privileges($user, XDP_READONLY);
 ?>
 </div>

@@ -1,6 +1,9 @@
 <?php
 global $engine_dir;
 require_once("${engine_dir}sys/groups.php");
+require_once("${engine_dir}sys/db.php");
+require_once("${engine_dir}cms/ank/fio.php");
+require_once("${engine_dir}cms/ank/field-desc.php");
 
 define('XDP_NORMAL', 1);
 define('XDP_READONLY', 2);
@@ -30,6 +33,43 @@ function xcmst_draw_privileges($user, $mode = XDP_NORMAL)
         }
         elseif ($belongs && ($group != '#all' && $group != '#registered'))
             echo "<span id=\"group_$group\">$group</span> ";
+    }
+}
+
+function xcmst_draw_user_xsm($user)
+{
+    global $web_prefix;
+
+    $email = $user->param("email");
+    $person_url = "";
+    $person_id = "";
+    if (xu_not_empty($email))
+    {
+        $db = xdb_get();
+        $query = "SELECT * FROM person where email = '$email'";
+        $person_sel = $db->query($query);
+        while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
+        {
+            $person_id = $person['person_id'];
+            $fi_enc = xsm_fi_enc($person);
+            $person_url = "view-person".xcms_url(array(
+                'person_id'=>$person_id,
+                'school_id'=>XSM_SCHOOL_ANK_ID));
+            break;
+        }?>
+        <h3>XSM</h3>
+        <div><?php
+        if (xu_not_empty($person_url))
+        {?>
+            Карточка участника в XSM:
+            <a href="<?php echo "/${web_prefix}xsm/$person_url"; ?>"><?php echo $fi_enc; ?></a><?php
+        }
+        else
+        {?>
+            По заданному email <tt><?php echo $email; ?></tt> в картотеке XSM ничего не найдено.<?php
+        }?>
+        </div>
+        <?php
     }
 }
 
