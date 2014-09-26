@@ -91,20 +91,33 @@ function ctx_update_object($table_name, $values)
     global $CONTEST_CURRENT_YEAR;
     global $content_dir;
 
-    foreach ($CTX_META[$table_name] as $id=>$arr)
+    // directly update all non-file fields
+    foreach ($CTX_META[$table_name] as $id=>$meta)
     {
-        $values[$id] = @$_POST[$id];
+        if ($meta["type"] == "file")
+            continue;
+        $values[$id] = xcms_get_key_or($_POST, $id);
+    }
+
+    // update file fields: if no new file given, preserve old value
+    foreach ($CTX_META[$table_name] as $id=>$meta)
+    {
+        if ($meta["type"] != "file")
+            continue;
+
         if (!@$_FILES[$id])
             continue;
 
-        if (!strlen($_FILES[$id]["tmp_name"]))
+        $file_desc = $_FILES[$id];
+
+        if (!strlen($file_desc["tmp_name"]))
             continue;
 
-        $home = "$content_dir/contest/attach/$table_name/".time();
-        $new_name = "$home/".$_FILES[$id]["name"];
+        $home = "${content_dir}contest/attach/$table_name/".time();
+        $new_name = "$home/".$file_desc["name"];
         @mkdir($home, 0777, true);
-        file_put_contents("$content_dir/contest/attach/.htaccess", "Allow from all\n");
-        if (!copy($_FILES[$id]["tmp_name"], $new_name))
+        file_put_contents("${content_dir}contest/attach/.htaccess", "Allow from all\n");
+        if (!copy($file_desc["tmp_name"], $new_name))
             die("Cannot upload file. ");
         $values[$id] = $new_name;
     }
@@ -113,6 +126,7 @@ function ctx_update_object($table_name, $values)
     $pkv = $values[$key_name];
     unset($values[$key_name]);
     $values["contest_year"] = $CONTEST_CURRENT_YEAR; // year sharding
+
     xdb_insert_or_update($table_name, array($key_name => $pkv), $values, $values);
 }
 
