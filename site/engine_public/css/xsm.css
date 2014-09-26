@@ -273,3 +273,9 @@ span.edit-info {
     font-size: 14px;
     line-height: 20px; /* same as ankListRowTitle font size */
 }
+
+span.xsm-required-field {
+    font-weight: bold;
+    font-size: 12px;
+    color: #ff0000;
+}

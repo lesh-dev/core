@@ -116,6 +116,7 @@ function xsm_edit_person_comment()
     $person = xdb_get_entity_by_id('person', $blamed_person_id);
 
     $field_types = xsm_get_person_comment_field_types();
+    $field_req = xsm_get_person_comment_field_req();
 
     ?>
     <form method="post" action="edit-person_comment"><?php
@@ -137,8 +138,11 @@ function xsm_edit_person_comment()
                 if ($key == "owner_login" ||
                     $key == "blamed_person_id")
                     $attr = 'readonly="readonly"'; ?>
-                <tr><td class="ankList"><span class="ankEditField"><?php echo $person_comment_fields[$key]; ?></span>
-                <?php
+                <tr><td class="ankList"><span class="ankEditField"><?php echo $person_comment_fields[$key];
+                if (array_key_exists($key, $field_req))
+                    echo "&nbsp;<span class=\"xsm-required-field\">*</span>";
+                ?></span><?php
+
                 if (array_key_exists($key, $field_types))
                 {?>
                     <textarea class="ankEdit" name="<?php echo $key; ?>"><?php

@@ -128,10 +128,18 @@ function xsm_get_person_comment_fields()
 function xsm_get_person_comment_field_types()
 {
     return array(
-        "comment_text"=>"textarea"
+        "comment_text"=>"textarea",
     );
 }
 
+function xsm_get_person_comment_field_req()
+{
+    return array(
+        "comment_text"=>"required",
+    );
+}
+
+// Course
 function xsm_get_course_fields()
 {
     return array(

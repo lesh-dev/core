@@ -110,6 +110,7 @@ function xsm_change_person_status()
     $full_name = xsm_fi_enc($person);
 
     $comm_field_types = xsm_get_person_comment_field_types();
+    $comm_field_req = xsm_get_person_comment_field_req();
 
     ?>
     <form method="post" action="edit-person-status"><?php
@@ -126,6 +127,9 @@ function xsm_change_person_status()
                 $value = xcms_get_key_or($person, "anketa_status");
                 echo xsm_make_enum_by_type("anketa_status", $value, "anketa_status");
             ?></td></tr>
+            <tr><td class="ankList">Комментарии должны быть ёмкими и содержательными, объясняющими причину. Не столь
+            важно писать о том, <b>что</b> сделано (статус и так это отражает),
+            важно писать о том, <b>почему</b> это сделано</td>
             <?php
             foreach ($person_comment_fields as $key=>$field_title)
             {
@@ -137,8 +141,11 @@ function xsm_change_person_status()
                 if ($key == "owner_login" ||
                     $key == "blamed_person_id")
                     $attr = 'readonly="readonly"'; ?>
-                <tr><td class="ankList"><span class="ankEditField xsm-label"><?php echo $person_comment_fields[$key]; ?></span>
-                <?php
+                <tr><td class="ankList"><span class="ankEditField xsm-label"><?php echo $person_comment_fields[$key];
+                if (array_key_exists($key, $comm_field_req))
+                    echo "&nbsp;<span class=\"xsm-required-field\">*</span>";
+                ?></span><?php
+
                 $cft = xcms_get_key_or($comm_field_types, $key);
                 if ($cft == "textarea")
                 {?>
