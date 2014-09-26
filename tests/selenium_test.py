@@ -45,7 +45,7 @@ class TestError(RuntimeError):
     pass
 
 
-class TestFatal(TestError):
+class TestFatal(RuntimeError):
     pass
 
 
@@ -83,32 +83,27 @@ def RunTest(test):
         return 0
     except TestFatal as e:
 #       test.printActionLog()
-        test.handleTestFatal(e)
-        return 2
+        return test.handleTestFatal(e)
     except TestError as e:
-        test.handleTestFail(e)
+        return test.handleTestFail(e)
         #test.printActionLog()
-        return 1
     except TestShutdown as e:
-        test.handleShutdown(e)
-        return 0
+        return test.handleShutdown(e)
     except NoSuchWindowException as e:
         test.logAdd("Seems like browser window have been closed. ", "error")
-        return 2
+        return 3
     except URLError as e:
         test.logAdd("URL error occured. Seems like browser connection error occured (window has been closed, etc). ", "error")
-        return 2
+        return 3
     except HTTPException as e:
         test.logAdd("HTTP error occured. Seems like browser connection error occured (window has been closed, etc). ", "error")
-        return 2
+        return 3
     except KeyboardInterrupt as e:
         test.logAdd("Keyboard interrupt received, stopping test suite. ")
-        test.handleException(e)
-        return 2
+        return 3
     except Exception as e:
         test.logAdd("Generic test exception: " + str(e))
-        test.handleException(e)
-        return 2
+        return test.handleException(e)
 
 
 def colorStrL(string, color):
@@ -119,7 +114,8 @@ def colorStrL(string, color):
 def DecodeRunResult(result):
     if result == 0: return colorStrL("PASSED", 32)
     elif result == 1: return colorStrL("FAILED", 31)
-    elif result == 2: return "FATAL ERROR"
+    elif result == 2: return colorStrL("FATAL ERROR", 33)
+    elif result == 3: return colorStrL("STOPPED", 34)
     else: return "n/a"
 
 
@@ -219,7 +215,7 @@ class SeleniumTest(object):
         return opt
 
     def shutdown(self, exitCode = 0):
-        return exitCode # sys.exit(exitCode)
+        return exitCode
 
     def handleShutdown(self, exc):
         return self.shutdown(0)
@@ -764,7 +760,7 @@ class SeleniumTest(object):
 
     def fatalTest(self, errorText):
         self.logAdd("TEST FATAL ERROR: " + userSerialize(errorText), "fatal")
-        raise TestError(errorText)
+        raise TestFatal(errorText)
 
     def failTest(self, errorText):
         self.logAdd("TEST FAILED: " + userSerialize(errorText), "error")

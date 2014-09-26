@@ -17,6 +17,7 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
         return phone.replace("+7", "8").replace("8-900-", "8(900)")
     
     def run(self):
+        fuck()
 
         self.performLoginAsManager()
 

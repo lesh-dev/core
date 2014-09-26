@@ -33,7 +33,7 @@ ALL OPTIONS:
   -l, --list             List all tests in test set
   -f, --full-list        List all tests in test set with descriptions
   -s, --set              Specify test set to run (instead of default auto_test_set.py)
-  -b, --break            Break test suite on fatal errors
+  -b, --break            Break test suite on errors
 
 TEST OPTIONS could be test-dependent. Commonly supported options are:
   -p, --preserve         Leave browser window after test finish/fail
@@ -175,7 +175,10 @@ try:
             testsDone += 1
             print "PROGRESS: Done", testsDone, "of", testsNumber, "tests. "
 
-            if result == 2:
+            if result == 3:
+                print "User interrupt, stopping test suite."
+                break
+            if breakOnErrors and result == 2:
                 print "Fatal error detected, stopping test suite."
                 break
             if breakOnErrors and result == 1:
