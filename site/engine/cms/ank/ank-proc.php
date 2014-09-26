@@ -66,7 +66,6 @@ function xsm_non_mergeable_key($key)
   * @return: array of keys:
   *   "person": merged person kv-array
   *   "state": merge state
-  * @todo: test suite
   **/
 function xsm_merge_persons($person_dst, $person_src)
 {
@@ -85,6 +84,7 @@ function xsm_merge_persons($person_dst, $person_src)
         if (xsm_non_mergeable_key($key))
         {
             $merge_state .= "$key_title: set '$value'\n";
+            $person_dst[$key] = $value;
             continue;
         }
 
