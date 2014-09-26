@@ -60,10 +60,10 @@ def generateFailedTestsSuite(failedTests):
     # header
     imports = [fn[:-3] for (fn, test) in failedTests]
     testList = []
-    for (fn, test) in failedTests:
-        moduleName = test.__module__
-        className = test.getName()
-        testList.append('("{testFile}", {modName}.{clName}(baseUrl, args))'.format(testFile=fn, modName=moduleName, clName=className))
+    for (fn, testClass) in failedTests:
+        modName = testClass.__module__
+        clName = testClass.getName()
+        testList.append((fn, modName, clName))
 
     failedSuite = test_set_gen.getHeader() + "\n" + test_set_gen.getFuncCode(imports, testList)
 
