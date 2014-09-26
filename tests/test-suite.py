@@ -74,6 +74,8 @@ args = sys.argv[1:] # exclude program name
 
 try:
     doInstallerTest, args = getSingleOption(["-i", "--installer"], args)
+    if doInstallerTest:
+        print "We'll perform installer test first. "
 
     specTest, args = getOption(["-t", "--test"], args)
     doShowHelp, args = getSingleOption(["-h", "--help"], args)
@@ -81,6 +83,8 @@ try:
     doList, args = getSingleOption(["-l", "--list"], args)
     doFullList, args = getSingleOption(["-f", "--full-list"], args)
     breakOnErrors, args = getSingleOption(["-b", "--break"], args)
+    if breakOnErrors:
+        print "We'll break test suite on any test fail/fatal error. "
 
     testArgs = [x for x in args if x.startswith("-")]
     restArgs = [x for x in args if not x.startswith("-")]
@@ -112,6 +116,7 @@ if testSet:
     setModuleName = testSet.replace(".py", "")
 
 try:
+    print doInstallerTest
     testStats = {}
     testDetailedStats = {}
 
@@ -138,7 +143,7 @@ try:
     testsNumber = len(tests)
 
     while tests:
-        fileName, test = tests.pop()
+        fileName, test = tests.pop(0)
         if specTest:
             if specTest.endswith(".py"): # it is a filename
                 if fileName != specTest:

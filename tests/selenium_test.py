@@ -81,28 +81,29 @@ def RunTest(test):
         test.run()
         test.logAdd(test.getName() + " TEST PASSED", "action")
         return 0
-    except TestFatal as e:
+    except TestFatal as exc:
 #       test.printActionLog()
-        return test.handleTestFatal(e)
-    except TestError as e:
-        return test.handleTestFail(e)
+        return test.handleTestFatal(exc)
+    except TestError as exc:
+        return test.handleTestFail(exc)
         #test.printActionLog()
-    except TestShutdown as e:
-        return test.handleShutdown(e)
-    except NoSuchWindowException as e:
+    except TestShutdown as exc:
+        return test.handleShutdown(exc)
+    except NoSuchWindowException as exc:
         test.logAdd("Seems like browser window have been closed. ", "error")
         return 3
-    except URLError as e:
+    except URLError as exc:
         test.logAdd("URL error occured. Seems like browser connection error occured (window has been closed, etc). ", "error")
         return 3
-    except HTTPException as e:
+    except HTTPException as exc:
         test.logAdd("HTTP error occured. Seems like browser connection error occured (window has been closed, etc). ", "error")
         return 3
-    except KeyboardInterrupt as e:
+    except KeyboardInterrupt as exc:
         test.logAdd("Keyboard interrupt received, stopping test suite. ")
         return 3
-    except Exception as e:
-        test.logAdd("Generic test exception: " + str(e))
+    except Exception as exc:
+        test.logAdd(u"Generic test exception: " + userSerialize(exc.message))
+        test.logAdd(traceback.format_exc())
         return test.handleException(e)
 
 
@@ -226,14 +227,11 @@ class SeleniumTest(object):
         return self.shutdown(2)
 
     def handleTestFail(self, exc):
-        #self.m_driver.execute_script("alert('Test failed! See console log for details. ');")
         self.logAdd(self.getName() + " TEST FAILED: " + userSerialize(exc.message), "error")
         return self.shutdown(1)
 
     def handleTestFatal(self, exc):
-        #self.m_driver.execute_script("alert('Test fataled! See logs and check your test/environment. ');")
         self.logAdd(self.getName() + " TEST FATAL ERROR: " + userSerialize(exc.message), "fatal")
-        self.logAdd("Traceback:\n" + traceback.format_exc())
         return self.shutdown(2)
 
     def getActionLog(self):
