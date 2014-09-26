@@ -15,7 +15,10 @@ branch=master
 function hook_begin
 {
     echo "Pre-production (rc) receipe invoked. Your copy will be located at $target"
-    echo -en  # Add something useful is you want
+
+    echo "Preparing folder for XCMS engine logs"
+    mkdir -p /var/log/xcms
+    chown -R www-data:www-data /var/log/xcms
 }
 
 # This will be executed while publishing component content_copy

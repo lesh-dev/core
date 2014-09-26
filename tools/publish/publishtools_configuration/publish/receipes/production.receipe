@@ -15,22 +15,21 @@ target=$clone_root/production.last
 final_target=$clone_root/production
 function hook_begin
 {
-    echo "Start"
-    echo -en  # Add something useful is you want
+    echo "Preparing folder for XCMS engine logs"
+    mkdir -p /var/log/xcms
+    chown -R www-data:www-data /var/log/xcms
 }
 
 # This will be executed while publishing component content_symlink
 function hook_content_symlink
 {
     echo "Symlink done"
-    echo -en  # Add something useful is you want
 }
 
 # This will be executed while publishing component content_symlink
 function hook_sitedata_copy
 {
     echo "Site data copied"
-    echo -en  # Add something useful is you want
 }
 
 # This will be executed while publishing component preprod_copy
@@ -38,7 +37,6 @@ function hook_preprod_copy
 {
     rm -rf content
     echo "Preprod copied"
-    echo -en  # Add something useful is you want
 }
 
 # This will be executed while publishing component end

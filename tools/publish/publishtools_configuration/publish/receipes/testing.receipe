@@ -17,7 +17,9 @@ function hook_begin
 {
     print_message "Removing '$target'...'"
     rm -rf $target
-    echo -en  # Add something useful if you want
+    echo "Preparing folder for XCMS engine logs"
+    mkdir -p /var/log/xcms
+    chown -R www-data:www-data /var/log/xcms
 }
 
 # This will be executed while publishing component preprod_copy
