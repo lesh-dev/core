@@ -93,8 +93,8 @@ class XcmsXsmAnketaDuplicate(xtest_common.XcmsTest):
         self.gotoXsm()
         self.gotoXsmAnketas()
         self.gotoUrlByLinkText(self.personAlias)
-        # TODO: BUG: newState or NEW???
-        self.assertElementTextById("anketa_status-span", self.newState)
+        # anketa should change status to new (like 'ticket reopen')
+        self.assertElementTextById("anketa_status-span", u"Новый")
 
     # -------------------- begining of the test
     def run(self):

@@ -22,6 +22,7 @@ import xcms_content_page_order
 import xcms_content_remove_page
 import xcms_content_special_chars_page
 import xcms_content_top_level_page
+import xcms_contest_submit_work
 import xcms_download_lectures
 import xcms_metrics_check
 import xcms_open_non_existing
@@ -66,6 +67,7 @@ def getTests(baseUrl, args):
         ("xcms_content_remove_page.py", xcms_content_remove_page.XcmsContentRemovePage(baseUrl, args)),
         ("xcms_content_special_chars_page.py", xcms_content_special_chars_page.XcmsContentSpecialCharsPage(baseUrl, args)),
         ("xcms_content_top_level_page.py", xcms_content_top_level_page.XcmsContentTopLevelPage(baseUrl, args)),
+        ("xcms_contest_submit_work.py", xcms_contest_submit_work.XcmsContestSubmitWork(baseUrl, args)),
         ("xcms_download_lectures.py", xcms_download_lectures.XcmsDownloadLectures(baseUrl, args)),
         ("xcms_metrics_check.py", xcms_metrics_check.XcmsMetricsCheck(baseUrl, args)),
         ("xcms_open_non_existing.py", xcms_open_non_existing.XcmsOpenNonExisting(baseUrl, args)),

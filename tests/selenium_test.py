@@ -104,7 +104,7 @@ def RunTest(test):
     except Exception as exc:
         test.logAdd(u"Generic test exception: " + userSerialize(exc.message))
         test.logAdd(traceback.format_exc())
-        return test.handleException(e)
+        return test.handleException(exc)
 
 
 def colorStrL(string, color):
@@ -223,7 +223,6 @@ class SeleniumTest(object):
 
     def handleException(self, exc):
         self.logAdd(self.getName() + " TEST GENERIC ERROR: " + userSerialize(exc.message), "error")
-        self.logAdd("Traceback:\n" + traceback.format_exc())
         return self.shutdown(2)
 
     def handleTestFail(self, exc):
@@ -894,7 +893,7 @@ class SeleniumTest(object):
             newTime = currentTime()
             duration = newTime - self.m_logTime
             self.m_logTime = newTime
-            fullLogText = u"[{level:8}][{dur:06.2f}]: {text}".format(level=logLevel, dur=duration, text=text.strip())
+            fullLogText = u"[{level:8}][{dur:06.2f}]: ".format(level=logLevel, dur=duration) + text.strip()
             print fullLogText.encode("UTF-8")
             logFile = open(self.m_logFile, 'a')
             logFile.write((fullLogText + "\n").encode("UTF-8"))
