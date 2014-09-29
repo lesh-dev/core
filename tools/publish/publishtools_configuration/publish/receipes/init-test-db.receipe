@@ -23,7 +23,9 @@ function xsm_clear_db
     db="content/ank/fizlesh.sqlite3"
     if [ -w "$db" ] ; then
         rm -f "$db"
-        sqlite3 "$db" < engine/dbpatches/dbinit-v2.sql
+        sqlite3 "$db" < engine/dbpatches/dbinit-notify.sql
+        sqlite3 "$db" < engine/dbpatches/dbinit-xsm.sql
+        sqlite3 "$db" < engine/dbpatches/dbinit-contest.sql
         echo "Database re-initialized successfully"
     fi
 }

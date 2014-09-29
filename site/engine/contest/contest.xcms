@@ -106,6 +106,7 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
             $btn_name = "ctx_add_or_edit_form_${table_name}_$fid"; ?>
             <input type="submit" class="btn btn-primary"
                 name="<?php echo $btn_name; ?>"
+                id="<?php echo $btn_name; ?>-submit"
                 value="Добавить / Изменить" /><?php
         }
         echo "</form>";
@@ -311,7 +312,7 @@ function ctx_show_submitted()
 
 <div id="container">
 <?php
-if (true) {
+if (false) {
     echo "<pre>\n";
     print_r($_POST);
     print_r($_GET);
@@ -342,26 +343,7 @@ if ($mode == "view")
         ctx_show_overall_checking_progress();
 }
 elseif ($mode == "edit")
-{
-    // secret unreference in interface mode
-    if ($table_name == "structure")
-    {
-        if (@$_POST)
-        {
-            ctx_create_structure();
-        }
-        ?>
-        <h3>Запрос на удаление</h3>
-        <h1>СТОЙ!!! ПОДУМАЙ, ЧТО ТЫ ДЕЛАЕШЬ!!!!</h1>
-        <form method="post">
-            <input name="delete" value="ОЧИСТИТЬ ВООБЩЕ ВСЮ БАЗУ" class="btn btn-danger" type="submit" />
-        </form><?php
-    }
-    else
-    {
-        ctx_add_or_edit_form($table_name, $entry_id, "edit", "/ctx/$table_name");
-    }
-}
+    ctx_add_or_edit_form($table_name, $entry_id, "edit", "/ctx/$table_name");
 elseif ($mode == "delete")
     xcmst_contest_delete_entity();
 

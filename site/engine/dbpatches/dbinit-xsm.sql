@@ -7,7 +7,7 @@ create table department (
 );
 
 /* Not to deal with #818 */
-INSERT INTO department (department_title, department_created) VALUES ('Физическое', '2005.08.23 01:02:03');
+insert into department (department_title, department_created) values ('Физическое', '2005.08.23 01:02:03');
 
 /* Участник (препод, куратор, школьник...) */
 create table person (
@@ -162,12 +162,4 @@ create table person_comment (
     foreign key (blamed_person_id) references person(person_id)
     -- foreign key (school_id) references school(school_id),
     -- foreign key (owner_person_id) references person(person_id)
-);
-
-/* Почтовые нотификации (сериализуемые в одно письмо для компактности) */
-create table notification (
-    notification_id integer primary key autoincrement,
-    mail_group text,         -- почтовая группа
-    notification_text text,  -- тело нотификации в формате plain text
-    notification_html text   -- тело нотификации в формате HTML
 );
