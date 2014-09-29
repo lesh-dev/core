@@ -26,10 +26,16 @@ def getFuncCode(imports, testList):
     
     result.append('def getTests(baseUrl, args):')
     result.append(tab + 'return [')
-    for i in testList:
-        result.append(tab * 2 + i)
+    for testInfo in testList:
+        result.append(tab * 2 + genOneTestLine(testInfo))
     result.append(tab + ']')
     return "\n".join(result)
+
+
+def genOneTestLine(testInfo):
+    (testFile, modName, clName) = testInfo
+    return '("{testFile}", {modName}.{clName}(baseUrl, args)),'.format(testFile=testFile, modName=modName, clName=clName)
+
 
 def findTests(directory, fileNamePrefix="xcms_", classNamePrefix="Xcms"):
     pyFiles = sorted([f for f in listdir('.') if isfile(f) and f.startswith(fileNamePrefix) and f.endswith('.py')])
@@ -51,5 +57,6 @@ def findTests(directory, fileNamePrefix="xcms_", classNamePrefix="Xcms"):
         className = r.group(1)
 
         imports.append(moduleName)
-        testList.append('("{testFile}", {modName}.{clName}(baseUrl, args)),'.format(testFile=fn, modName=moduleName, clName=className))
+        testList.append((fn, moduleName, className))
     return imports, testList
+

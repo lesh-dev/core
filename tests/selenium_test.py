@@ -45,7 +45,7 @@ class TestError(RuntimeError):
     pass
 
 
-class TestFatal(TestError):
+class TestFatal(RuntimeError):
     pass
 
 
@@ -81,34 +81,30 @@ def RunTest(test):
         test.run()
         test.logAdd(test.getName() + " TEST PASSED", "action")
         return 0
-    except TestFatal as e:
+    except TestFatal as exc:
 #       test.printActionLog()
-        test.handleTestFatal(e)
-        return 2
-    except TestError as e:
-        test.handleTestFail(e)
+        return test.handleTestFatal(exc)
+    except TestError as exc:
+        return test.handleTestFail(exc)
         #test.printActionLog()
-        return 1
-    except TestShutdown as e:
-        test.handleShutdown(e)
-        return 0
-    except NoSuchWindowException as e:
+    except TestShutdown as exc:
+        return test.handleShutdown(exc)
+    except NoSuchWindowException as exc:
         test.logAdd("Seems like browser window have been closed. ", "error")
-        return 2
-    except URLError as e:
+        return 3
+    except URLError as exc:
         test.logAdd("URL error occured. Seems like browser connection error occured (window has been closed, etc). ", "error")
-        return 2
-    except HTTPException as e:
+        return 3
+    except HTTPException as exc:
         test.logAdd("HTTP error occured. Seems like browser connection error occured (window has been closed, etc). ", "error")
-        return 2
-    except KeyboardInterrupt as e:
+        return 3
+    except KeyboardInterrupt as exc:
         test.logAdd("Keyboard interrupt received, stopping test suite. ")
-        test.handleException(e)
-        return 2
-    except Exception as e:
-        test.logAdd("Generic test exception: " + str(e))
-        test.handleException(e)
-        return 2
+        return 3
+    except Exception as exc:
+        test.logAdd(u"Generic test exception: " + userSerialize(exc.message))
+        test.logAdd(traceback.format_exc())
+        return test.handleException(exc)
 
 
 def colorStrL(string, color):
@@ -119,7 +115,8 @@ def colorStrL(string, color):
 def DecodeRunResult(result):
     if result == 0: return colorStrL("PASSED", 32)
     elif result == 1: return colorStrL("FAILED", 31)
-    elif result == 2: return "FATAL ERROR"
+    elif result == 2: return colorStrL("FATAL ERROR", 33)
+    elif result == 3: return colorStrL("STOPPED", 34)
     else: return "n/a"
 
 
@@ -219,25 +216,21 @@ class SeleniumTest(object):
         return opt
 
     def shutdown(self, exitCode = 0):
-        return exitCode # sys.exit(exitCode)
+        return exitCode
 
     def handleShutdown(self, exc):
         return self.shutdown(0)
 
     def handleException(self, exc):
         self.logAdd(self.getName() + " TEST GENERIC ERROR: " + userSerialize(exc.message), "error")
-        self.logAdd("Traceback:\n" + traceback.format_exc())
         return self.shutdown(2)
 
     def handleTestFail(self, exc):
-        #self.m_driver.execute_script("alert('Test failed! See console log for details. ');")
         self.logAdd(self.getName() + " TEST FAILED: " + userSerialize(exc.message), "error")
         return self.shutdown(1)
 
     def handleTestFatal(self, exc):
-        #self.m_driver.execute_script("alert('Test fataled! See logs and check your test/environment. ');")
         self.logAdd(self.getName() + " TEST FATAL ERROR: " + userSerialize(exc.message), "fatal")
-        self.logAdd("Traceback:\n" + traceback.format_exc())
         return self.shutdown(2)
 
     def getActionLog(self):
@@ -764,7 +757,7 @@ class SeleniumTest(object):
 
     def fatalTest(self, errorText):
         self.logAdd("TEST FATAL ERROR: " + userSerialize(errorText), "fatal")
-        raise TestError(errorText)
+        raise TestFatal(errorText)
 
     def failTest(self, errorText):
         self.logAdd("TEST FAILED: " + userSerialize(errorText), "error")
@@ -900,7 +893,7 @@ class SeleniumTest(object):
             newTime = currentTime()
             duration = newTime - self.m_logTime
             self.m_logTime = newTime
-            fullLogText = u"[{level:8}][{dur:06.2f}]: {text}".format(level=logLevel, dur=duration, text=text.strip())
+            fullLogText = u"[{level:8}][{dur:06.2f}]: ".format(level=logLevel, dur=duration) + text.strip()
             print fullLogText.encode("UTF-8")
             logFile = open(self.m_logFile, 'a')
             logFile.write((fullLogText + "\n").encode("UTF-8"))

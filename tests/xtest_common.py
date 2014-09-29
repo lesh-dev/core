@@ -56,7 +56,7 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
     def assertNoInstallerPage(self):
         self.gotoRoot()
         if self.isInstallerPage():
-            self.failTest("Installer page detected, while we did not expected it. You should run this test on installed XCMS. ")
+            self.fatalTest("Installer page detected, while we did not expected it. You should run this test on installed XCMS. ")
 
     def gotoAlias(self, alias):
         self.logAdd("Going to the page via alias " + alias)

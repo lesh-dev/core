@@ -33,7 +33,7 @@ ALL OPTIONS:
   -l, --list             List all tests in test set
   -f, --full-list        List all tests in test set with descriptions
   -s, --set              Specify test set to run (instead of default auto_test_set.py)
-  -b, --break            Break test suite on fatal errors
+  -b, --break            Break test suite on errors
 
 TEST OPTIONS could be test-dependent. Commonly supported options are:
   -p, --preserve         Leave browser window after test finish/fail
@@ -60,10 +60,10 @@ def generateFailedTestsSuite(failedTests):
     # header
     imports = [fn[:-3] for (fn, test) in failedTests]
     testList = []
-    for (fn, test) in failedTests:
-        moduleName = test.__module__
-        className = test.getName()
-        testList.append('("{testFile}", {modName}.{clName}(baseUrl, args))'.format(testFile=fn, modName=moduleName, clName=className))
+    for (fn, testClass) in failedTests:
+        modName = testClass.__module__
+        clName = testClass.getName()
+        testList.append((fn, modName, clName))
 
     failedSuite = test_set_gen.getHeader() + "\n" + test_set_gen.getFuncCode(imports, testList)
 
@@ -74,6 +74,8 @@ args = sys.argv[1:] # exclude program name
 
 try:
     doInstallerTest, args = getSingleOption(["-i", "--installer"], args)
+    if doInstallerTest:
+        print "We'll perform installer test first. "
 
     specTest, args = getOption(["-t", "--test"], args)
     doShowHelp, args = getSingleOption(["-h", "--help"], args)
@@ -81,6 +83,8 @@ try:
     doList, args = getSingleOption(["-l", "--list"], args)
     doFullList, args = getSingleOption(["-f", "--full-list"], args)
     breakOnErrors, args = getSingleOption(["-b", "--break"], args)
+    if breakOnErrors:
+        print "We'll break test suite on any test fail/fatal error. "
 
     testArgs = [x for x in args if x.startswith("-")]
     restArgs = [x for x in args if not x.startswith("-")]
@@ -112,6 +116,7 @@ if testSet:
     setModuleName = testSet.replace(".py", "")
 
 try:
+    print doInstallerTest
     testStats = {}
     testDetailedStats = {}
 
@@ -138,7 +143,7 @@ try:
     testsNumber = len(tests)
 
     while tests:
-        fileName, test = tests.pop()
+        fileName, test = tests.pop(0)
         if specTest:
             if specTest.endswith(".py"): # it is a filename
                 if fileName != specTest:
@@ -175,7 +180,10 @@ try:
             testsDone += 1
             print "PROGRESS: Done", testsDone, "of", testsNumber, "tests. "
 
-            if result == 2:
+            if result == 3:
+                print "User interrupt, stopping test suite."
+                break
+            if breakOnErrors and result == 2:
                 print "Fatal error detected, stopping test suite."
                 break
             if breakOnErrors and result == 1:
