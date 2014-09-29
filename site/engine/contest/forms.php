@@ -55,6 +55,8 @@ function xcmst_draw_contest_form_view($type, $name, $value)
     }
     elseif ($type == "large")
     {
+        if (xu_empty($value))
+            $value = "&nbsp;";
         echo "<tr><th colspan=\"2\">$name:</th></tr>\n";
         echo "<tr><td colspan=\"2\">$value</td></tr>\n";
     }
