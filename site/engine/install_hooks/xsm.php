@@ -89,6 +89,7 @@
         if (!$result)
             return "Cannot open 'settings.php' for append. ";
 
+        $content_dir = $config["content_dir"];
         $db_name = $content_dir.$config["xsm_db_name"];
         if (!file_exists($db_name))
         {
