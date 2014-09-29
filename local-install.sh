@@ -114,13 +114,24 @@ function do_prepare_installer()
     sudo chown -R $HTTPD_USER:$HTTPD_USER "$DEST/install.php"
 }
 
+function install_db_component()
+{
+    message "  Initializing db component '$2'"
+    db_init="./site/engine/dbpatches/dbinit-$2.sql"
+    if ! sqlite3 "$1" < "$db_init" ; then
+        message_error "Error applying '$db_init' to '$1' database"
+        return 1
+    fi
+}
+
 function install_fresh_db()
 {
     message "Creating fresh database"
     TEMP_DB="/tmp/temp_$$_$XSM_DB"
     rm -f $TEMP_DB || true
-    sqlite3 $TEMP_DB < ./site/engine/dbpatches/dbinit-v2.sql
-    sudo cp $VERBOSE $TEMP_DB $DEST_DB
+    install_db_component $TEMP_DB "notify"
+    install_db_component $TEMP_DB "xsm"
+    install_db_component $TEMP_DB "contest"
 }
 
 # Copy-pasted from testing.receipe with -w -> -r modification

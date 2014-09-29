@@ -24,7 +24,7 @@ create table problems(
     problem_name text,
     problem_html text,
     people text,
-    criteria text,
+    criteria text
 );
 
 /* Проверка олимпиады */

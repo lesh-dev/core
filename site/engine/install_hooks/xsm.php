@@ -54,6 +54,25 @@
     {
         return true;
     }
+
+    /**
+      * Временный костыль, см. TODO по месту его использования
+      **/
+    function _init_db_component($config, &$logs, $db_name, $name)
+    {
+        global $engine_dir;
+        $content_dir = $config["content_dir"];
+        $log_name = "$content_dir/dbinit-$name.log";
+        $db_init = "$engine_dir/dbpatches/dbinit-$name.sql";
+        if (system("sqlite3 $db_name < $db_init > $log_name 2>&1") != 0)
+        {
+            $sqlite_log = @file_get_contents($log_name);
+            $logs .= "<pre>".htmlspecialchars($sqlite_log)."</pre>\n";
+            return false;
+        }
+        return true;
+    }
+
     /**
       * Дописываем в settings.php блок метаинформации
       * @return true, если у нас это получилось
@@ -70,21 +89,17 @@
         if (!$result)
             return "Cannot open 'settings.php' for append. ";
 
-        $content_dir = $config["content_dir"];
         $db_name = $content_dir.$config["xsm_db_name"];
         if (!file_exists($db_name))
         {
             // TODO: move dbinit to separate routine, checking table existance
             $logs .= "<li>[XSM] Creating fresh database <tt>".htmlspecialchars($db_name)."</tt></li>\n";
             @mkdir(dirname($db_name), 0777, true);
-            if (system("sqlite3 $db_name < $engine_dir/dbpatches/dbinit-notify.sql > $content_dir/dbinit-notify.log 2>&1") != 0)
-                return "DB [notify] initialization failed. ";
-            if (system("sqlite3 $db_name < $engine_dir/dbpatches/dbinit-xsm.sql > $content_dir/dbinit-xsm.log 2>&1") != 0)
-                return "DB [xsm] initialization failed. ";
-            if (system("sqlite3 $db_name < $engine_dir/dbpatches/dbinit-contest.sql > $content_dir/dbinit-contest.log 2>&1") != 0)
-                return "DB [contest] initialization failed. ";
+            $result = $result && $this->_init_db_component($config, $logs, $db_name, "notify");
+            $result = $result && $this->_init_db_component($config, $logs, $db_name, "xsm");
+            $result = $result && $this->_init_db_component($config, $logs, $db_name, "contest");
         }
-        return true;
+        return $result ? true : "DB initialization failed, see transcript in logs";
     }
     } // class
 
