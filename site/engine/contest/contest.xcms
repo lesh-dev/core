@@ -16,6 +16,7 @@ require_once("${engine_dir}contest/scheme.php");
 require_once("${engine_dir}contest/forms.php");
 require_once("${engine_dir}contest/action.php");
 
+$ctx_prefix = "/$web_prefix/ctx";
 /**
   * Стандартная форма редактирования записи. Нечто аналогичное уже есть в XSM,
   * но в менее явном виде, надо подумать, можно ли их слить воедино.
@@ -96,7 +97,7 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
   **/
 function ctx_show_list($table_name, $order, $filter, $row_template)
 {
-    global $CTX_META, $ref;
+    global $CTX_META, $ref, $ctx_prefix;
     $ans = "";
     $rows = xdb_get_table($table_name, $order, $filter);
     foreach ($rows as $line)
@@ -107,8 +108,8 @@ function ctx_show_list($table_name, $order, $filter, $row_template)
             $template = str_replace("{".$field."}", $value, $template);
         }
         $pk = $line["${table_name}_id"];
-        $template = str_replace("{#edit}", "/ctx/$table_name/edit/$pk", $template);
-        $template = str_replace("{#view}", "/ctx/$table_name/view/$pk", $template);
+        $template = str_replace("{#edit}", "$ctx_prefix/$table_name/edit/$pk", $template);
+        $template = str_replace("{#view}", "$ctx_prefix/$table_name/view/$pk", $template);
         $ans .= $template;
     }
     return $ans;
@@ -183,6 +184,7 @@ function ctx_show_contestant()
     global $table_name;
     global $entry_id;
     global $FILTER;
+    global $ctx_prefix;
 
     echo '<ul class="nav nav-pills">';
     $problems_table = xdb_get_table("problems", NULL, $FILTER);
@@ -192,7 +194,7 @@ function ctx_show_contestant()
     $activeness = "";
     if (xu_empty($pid))
         $activeness = " class=\"active\" ";
-    echo "<li $activeness ><a href=\"/ctx/contestants/view/$entry_id\">Информация</a></li>\n";
+    echo "<li $activeness ><a href=\"$ctx_prefix/contestants/view/$entry_id\">Информация</a></li>\n";
 
     foreach ($problems_table as $problem)
     {
@@ -201,7 +203,7 @@ function ctx_show_contestant()
             $activeness = " class=\"active\" ";
         $problem_id = $problem["problems_id"];
         $problem_name = htmlspecialchars($problem["problem_name"]);
-        echo "<li $activeness><a href=\"/ctx/contestants/view/$entry_id/$problem_id\">$problem_name</a></li>\n";
+        echo "<li $activeness><a href=\"$ctx_prefix/contestants/view/$entry_id/$problem_id\">$problem_name</a></li>\n";
     }
     echo "</ul>\n";
 
@@ -209,7 +211,7 @@ function ctx_show_contestant()
     {?>
         <div class="tab-pane active" id="def"><?php
         ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
-        ?><a class="btn btn-warning" href="<?php echo "/ctx/$table_name/edit/$entry_id"; ?>">Правка</a>
+        ?><a class="btn btn-warning" href="<?php echo "$ctx_prefix/$table_name/edit/$entry_id"; ?>">Правка</a>
         </div><?php
     }
 
@@ -277,10 +279,10 @@ function ctx_show_submitted()
     <div class="navbar-inner">
         <a class="brand" href="?ref=contest">Проверка олимпиады &mdash; <?php echo $CONTEST_CURRENT_YEAR; ?></a>
         <ul class="nav">
-            <li><a href="/ctx/problems">Задачи</a></li>
-            <li><a href="/ctx/submitted">Присланное</a></li>
-            <li><a href="/ctx/contestants">Работы</a></li>
-            <li><a href="/ctx/contestants/edit">Добавить работу</a></li>
+            <li><a href="<?php echo $ctx_prefix; ?>/problems">Задачи</a></li>
+            <li><a href="<?php echo $ctx_prefix; ?>/submitted">Присланное</a></li>
+            <li><a href="<?php echo $ctx_prefix; ?>/contestants">Работы</a></li>
+            <li><a href="<?php echo $ctx_prefix; ?>/contestants/edit">Добавить работу</a></li>
         </ul>
     </div>
 </div>
@@ -312,7 +314,7 @@ if ($mode == "view")
             $FILTER,
             "<b>Задача <a href=\"{#view}\">{problem_name}</a></b>, проверяют: {people}<br />"
         );
-        ?><a href="/ctx/problems/edit">Добавить еще одну задачу</a><br/><?php
+        ?><a href="<?php echo $ctx_prefix; ?>/problems/edit">Добавить еще одну задачу</a><br/><?php
     }
     elseif ($table_name == "submitted")
         ctx_show_submitted();
@@ -320,7 +322,7 @@ if ($mode == "view")
         ctx_show_overall_checking_progress();
 }
 elseif ($mode == "edit")
-    ctx_add_or_edit_form($table_name, $entry_id, "edit", "/ctx/$table_name");
+    ctx_add_or_edit_form($table_name, $entry_id, "edit", "$ctx_prefix/$table_name");
 elseif ($mode == "delete")
     xcmst_contest_delete_entity();
 
@@ -334,7 +336,7 @@ if ($mode == "view")
     elseif (xu_not_empty($entry_id))
     {
         ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
-        echo "<a href=\"/ctx/$table_name/edit/$entry_id\">Правка</a>";
+        echo "<a href=\"$ctx_prefix/$table_name/edit/$entry_id\">Правка</a>";
     }
 }
 ?>

@@ -2,6 +2,8 @@
 
 function xcmst_contest_delete_entity()
 {
+    global $ctx_prefix;
+
     $table_name = xcms_get_key_or($_GET, "table_name");
     if (xu_empty($table_name))
     {?>
@@ -13,7 +15,7 @@ function xcmst_contest_delete_entity()
     if (@$_POST["delete"])
     {
         xdb_delete($table_name, $entry_id);
-        $redir = "/ctx/$table_name";
+        $redir = "$ctx_prefix/$table_name";
         ?><p>Запись удалена успешно.
             <a href="<?php echo $redir; ?>">Вернуться к списку</p><?php
         return;
@@ -41,6 +43,7 @@ function ctx_print_result_row($work, $probs, $simple = false)
 {
     global $ref;
     global $web_prefix;
+    global $ctx_prefix;
 
     $contestants_id = $work["contestants_id"];
     $row = "";
@@ -51,7 +54,7 @@ function ctx_print_result_row($work, $probs, $simple = false)
     else
     {
         $row .=
-            "<td><a href=\"/ctx/contestants/view/$contestants_id\">{$work["name"]}</a></td>".
+            "<td><a href=\"$ctx_prefix/contestants/view/$contestants_id\">{$work["name"]}</a></td>".
             "<td>{$work["level"]}</td>".
             "<td><a href=\"/$web_prefix{$work["work"]}\">Скачать</a></td>";
 
@@ -69,7 +72,7 @@ function ctx_print_result_row($work, $probs, $simple = false)
 
     if (!$simple)
     {
-        $row .= "<td><a href=\"/ctx/contestants/delete/$contestants_id\">Удалить</a></td>";
+        $row .= "<td><a href=\"$ctx_prefix/contestants/delete/$contestants_id\">Удалить</a></td>";
     }
     return $row;
 }
