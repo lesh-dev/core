@@ -15,39 +15,6 @@ require_once("${engine_dir}contest/scheme.php");
 require_once("${engine_dir}contest/forms.php");
 require_once("${engine_dir}contest/action.php");
 
-/*
-// не используется
-function ctx_custom_form($table_name, $pk, $item_template)
-{
-    global $CTX_META, $content_dir, $CONTEST_CURRENT_YEAR;
-    echo "CUSTOM FORM\n";
-    $ans = "";
-    if (@$_POST["ctx_custom_$table_name"])
-    {
-        $values = array();
-        ctx_update_object($table_name, $values);
-        $ans .= "Запись добавлена. ";
-        if ($return)
-            $ans .= "<a href=\"$return\">Вернуться</a>";
-    }
-    else
-    {
-        $ans .= "<form enctype=\"multipart/form-data\"
-            method=\"post\"><input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"15000000\" />";
-
-        $values = xdb_get_entity_by_id($table_name, $pk);
-        foreach ($values as $k=>$v)
-            $item_template = str_replace("{".$k."}", $v, $item_template);
-        $item_template = str_replace(
-            "{#submit}",
-            "<input class=\"btn btn-primary\" type=\"submit\"
-                name=\"ctx_add_or_edit_form_$table_name\" value=\"Добавить / Изменить\" />",
-            $item_template);
-        $ans .= "</form>";
-    }
-}
-*/
-
 /**
   * Стандартная форма редактирования записи. Нечто аналогичное уже есть в XSM,
   * но в менее явном виде, надо подумать, можно ли их слить воедино.
