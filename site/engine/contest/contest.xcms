@@ -84,7 +84,7 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
   * Генерическая рисовалка списка
   * Используется пока только для списка задач (problems)
   **/
-function ctx_show_tasty_list($table_name, $order, $filter, $row_template)
+function ctx_show_list($table_name, $order, $filter, $row_template)
 {
     global $CTX_META, $ref;
     $ans = "";
@@ -296,7 +296,7 @@ if ($mode == "view")
 {
     if ($table_name == "problems")
     {
-        echo ctx_show_tasty_list(
+        echo ctx_show_list(
             "problems",
             null,
             $FILTER,
