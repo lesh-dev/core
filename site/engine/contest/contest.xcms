@@ -16,7 +16,7 @@ require_once("${engine_dir}contest/scheme.php");
 require_once("${engine_dir}contest/forms.php");
 require_once("${engine_dir}contest/action.php");
 
-$ctx_prefix = "/$web_prefix/ctx";
+$ctx_prefix = "/${web_prefix}ctx";
 /**
   * Стандартная форма редактирования записи. Нечто аналогичное уже есть в XSM,
   * но в менее явном виде, надо подумать, можно ли их слить воедино.
@@ -279,10 +279,10 @@ function ctx_show_submitted()
     <div class="navbar-inner">
         <a class="brand" href="?ref=contest">Проверка олимпиады &mdash; <?php echo $CONTEST_CURRENT_YEAR; ?></a>
         <ul class="nav">
-            <li><a href="<?php echo $ctx_prefix; ?>/problems">Задачи</a></li>
-            <li><a href="<?php echo $ctx_prefix; ?>/submitted">Присланное</a></li>
-            <li><a href="<?php echo $ctx_prefix; ?>/contestants">Работы</a></li>
-            <li><a href="<?php echo $ctx_prefix; ?>/contestants/edit">Добавить работу</a></li>
+            <li><a href="<# ctx_prefix #>/problems">Задачи</a></li>
+            <li><a href="<# ctx_prefix #>/submitted">Присланное</a></li>
+            <li><a href="<# ctx_prefix #>/contestants">Работы</a></li>
+            <li><a href="<# ctx_prefix #>/contestants/edit">Добавить работу</a></li>
         </ul>
     </div>
 </div>
@@ -314,7 +314,7 @@ if ($mode == "view")
             $FILTER,
             "<b>Задача <a href=\"{#view}\">{problem_name}</a></b>, проверяют: {people}<br />"
         );
-        ?><a href="<?php echo $ctx_prefix; ?>/problems/edit">Добавить еще одну задачу</a><br/><?php
+        ?><a href="<# ctx_prefix #>/problems/edit">Добавить еще одну задачу</a><br/><?php
     }
     elseif ($table_name == "submitted")
         ctx_show_submitted();

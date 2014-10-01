@@ -1,0 +1,6 @@
+<?php
+{
+    global $web_prefix;
+    echo "/${web_prefix}ctx";
+}
+?>
