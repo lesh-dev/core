@@ -277,7 +277,7 @@ function ctx_show_submitted()
 ?>
 <div class="navbar navbar-inverse">
     <div class="navbar-inner">
-        <a class="brand" href="?ref=contest">Проверка олимпиады &mdash; <?php echo $CONTEST_CURRENT_YEAR; ?></a>
+        <a class="brand" href="<# ctx_prefix #>">Проверка олимпиады &mdash; <?php echo $CONTEST_CURRENT_YEAR; ?></a>
         <ul class="nav">
             <li><a href="<# ctx_prefix #>/problems">Задачи</a></li>
             <li><a href="<# ctx_prefix #>/submitted">Присланное</a></li>
