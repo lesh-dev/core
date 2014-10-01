@@ -18,18 +18,23 @@ function xjs_check_custom_dep_handler(id)
     return handler(id);
 }
 
-function xjs_toggle_element(id, enabled)
+function xjs_toggle_element(id, enabled, reason)
 {
+    if (!reason)
+        reason = ''
+
     var node = $('#' + id);
     if (enabled)
     {
         node.removeAttr('disabled')
         node.removeClass('input-disabled');
+        node.removeAttr('title')
     }
     else
     {
         node.attr('disabled', 'disabled');
         node.addClass('input-disabled');
+        node.attr('title', reason)
     }
 }
 
@@ -42,22 +47,31 @@ function xjs_check_dependencies(id)
         return;
     }
 
+    var reason = "";
+
     var enabled = true;
-    for (var i in deps)
+    for (var i = 0; i < deps.length; ++i)
     {
-        var custom_result = xjs_check_custom_dep_handler(deps[i])
+        var dep_id = deps[i];
+        var custom_result = xjs_check_custom_dep_handler(dep_id)
         if (custom_result !== null)
         {
-            enabled = enabled && custom_result;
+            enabled = enabled && custom_result['valid'];
+            reason += custom_result['reason'];
             continue;
         }
-
-        if (xjs_is_too_small_text(deps[i]))
+        if (xjs_is_too_small_text(dep_id))
+        {
+            reason += "Слишком мало текста в поле '" + $('#' + dep_id).attr('placeholder') + "'. ";
             enabled = false;
+        }
     }
-    xjs_toggle_element(id, enabled);
+    xjs_toggle_element(id, enabled, reason);
 }
 
+/**
+  * This should be used to set dependencies
+  **/
 function xjs_set_depends_on(id, dependency_id, custom_handler, min_length)
 {
     var node = $('#' + id);
