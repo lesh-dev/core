@@ -3,6 +3,7 @@
     <title>Contest</title>
     <# js/bootstrap #>
     <# js/jquery #>
+    <# js/public control-depends.js #>
     <# css/public contest.css #>
 </head>
 <body>
@@ -15,39 +16,7 @@ require_once("${engine_dir}contest/scheme.php");
 require_once("${engine_dir}contest/forms.php");
 require_once("${engine_dir}contest/action.php");
 
-/*
-// не используется
-function ctx_custom_form($table_name, $pk, $item_template)
-{
-    global $CTX_META, $content_dir, $CONTEST_CURRENT_YEAR;
-    echo "CUSTOM FORM\n";
-    $ans = "";
-    if (@$_POST["ctx_custom_$table_name"])
-    {
-        $values = array();
-        ctx_update_object($table_name, $values);
-        $ans .= "Запись добавлена. ";
-        if ($return)
-            $ans .= "<a href=\"$return\">Вернуться</a>";
-    }
-    else
-    {
-        $ans .= "<form enctype=\"multipart/form-data\"
-            method=\"post\"><input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"15000000\" />";
-
-        $values = xdb_get_entity_by_id($table_name, $pk);
-        foreach ($values as $k=>$v)
-            $item_template = str_replace("{".$k."}", $v, $item_template);
-        $item_template = str_replace(
-            "{#submit}",
-            "<input class=\"btn btn-primary\" type=\"submit\"
-                name=\"ctx_add_or_edit_form_$table_name\" value=\"Добавить / Изменить\" />",
-            $item_template);
-        $ans .= "</form>";
-    }
-}
-*/
-
+$ctx_prefix = "/${web_prefix}ctx";
 /**
   * Стандартная форма редактирования записи. Нечто аналогичное уже есть в XSM,
   * но в менее явном виде, надо подумать, можно ли их слить воедино.
@@ -80,6 +49,7 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
         <form enctype="multipart/form-data" method="POST">
             <input type="hidden" name="MAX_FILE_SIZE" value="15000000" /><?php
 
+        $btn_name = "ctx_add_or_edit_form_${table_name}_$fid";
         $cls = "table-condensed";
         if ($operation == "view")
             $cls .= " table table-bordered table-hover";
@@ -88,22 +58,30 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
         if ($pk)
             $values = xdb_get_entity_by_id($table_name, $pk);
 
-        foreach ($CTX_META[$table_name] as $id=>$arr)
+        foreach ($CTX_META[$table_name] as $id=>$desc)
         {
-            $name = $arr["name"];
-            $type = $arr["type"];
+            $name = $desc["name"];
+            $type = $desc["type"];
+            $required = xcms_get_key_or($desc, "required");
             $value = xcms_get_key_or($values, $id);
             if (xu_empty($value))
                 $value = xcms_get_key_or($default_values, $id);
             if ($operation == "edit")
+            {
                 xcmst_draw_contest_form_field($type, $name, $value, $id);
+                if ($required)
+                {?>
+                    <script type="text/javascript">
+                        xjready_set_depends_on('<?php echo $btn_name; ?>-submit', '<?php echo $id; ?>-input');
+                    </script><?php
+                }
+            }
             elseif ($operation == "view")
                 xcmst_draw_contest_form_view($type, $name, $value);
         }
         echo "</table>\n";
         if ($operation == "edit")
-        {
-            $btn_name = "ctx_add_or_edit_form_${table_name}_$fid"; ?>
+        {?>
             <input type="submit" class="btn btn-primary"
                 name="<?php echo $btn_name; ?>"
                 id="<?php echo $btn_name; ?>-submit"
@@ -117,9 +95,9 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
   * Генерическая рисовалка списка
   * Используется пока только для списка задач (problems)
   **/
-function ctx_show_tasty_list($table_name, $order, $filter, $row_template)
+function ctx_show_list($table_name, $order, $filter, $row_template)
 {
-    global $CTX_META, $ref;
+    global $CTX_META, $ref, $ctx_prefix;
     $ans = "";
     $rows = xdb_get_table($table_name, $order, $filter);
     foreach ($rows as $line)
@@ -130,8 +108,8 @@ function ctx_show_tasty_list($table_name, $order, $filter, $row_template)
             $template = str_replace("{".$field."}", $value, $template);
         }
         $pk = $line["${table_name}_id"];
-        $template = str_replace("{#edit}", "/ctx/$table_name/edit/$pk", $template);
-        $template = str_replace("{#view}", "/ctx/$table_name/view/$pk", $template);
+        $template = str_replace("{#edit}", "$ctx_prefix/$table_name/edit/$pk", $template);
+        $template = str_replace("{#view}", "$ctx_prefix/$table_name/view/$pk", $template);
         $ans .= $template;
     }
     return $ans;
@@ -206,6 +184,7 @@ function ctx_show_contestant()
     global $table_name;
     global $entry_id;
     global $FILTER;
+    global $ctx_prefix;
 
     echo '<ul class="nav nav-pills">';
     $problems_table = xdb_get_table("problems", NULL, $FILTER);
@@ -215,7 +194,7 @@ function ctx_show_contestant()
     $activeness = "";
     if (xu_empty($pid))
         $activeness = " class=\"active\" ";
-    echo "<li $activeness ><a href=\"/ctx/contestants/view/$entry_id\">Информация</a></li>\n";
+    echo "<li $activeness ><a href=\"$ctx_prefix/contestants/view/$entry_id\">Информация</a></li>\n";
 
     foreach ($problems_table as $problem)
     {
@@ -224,7 +203,7 @@ function ctx_show_contestant()
             $activeness = " class=\"active\" ";
         $problem_id = $problem["problems_id"];
         $problem_name = htmlspecialchars($problem["problem_name"]);
-        echo "<li $activeness><a href=\"/ctx/contestants/view/$entry_id/$problem_id\">$problem_name</a></li>\n";
+        echo "<li $activeness><a href=\"$ctx_prefix/contestants/view/$entry_id/$problem_id\">$problem_name</a></li>\n";
     }
     echo "</ul>\n";
 
@@ -232,7 +211,7 @@ function ctx_show_contestant()
     {?>
         <div class="tab-pane active" id="def"><?php
         ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
-        ?><a class="btn btn-warning" href="<?php echo "/ctx/$table_name/edit/$entry_id"; ?>">Правка</a>
+        ?><a class="btn btn-warning" href="<?php echo "$ctx_prefix/$table_name/edit/$entry_id"; ?>">Правка</a>
         </div><?php
     }
 
@@ -298,12 +277,12 @@ function ctx_show_submitted()
 ?>
 <div class="navbar navbar-inverse">
     <div class="navbar-inner">
-        <a class="brand" href="?ref=contest">Проверка олимпиады &mdash; <?php echo $CONTEST_CURRENT_YEAR; ?></a>
+        <a class="brand" href="<# ctx_prefix #>">Проверка олимпиады &mdash; <?php echo $CONTEST_CURRENT_YEAR; ?></a>
         <ul class="nav">
-            <li><a href="/ctx/problems">Задачи</a></li>
-            <li><a href="/ctx/submitted">Присланное</a></li>
-            <li><a href="/ctx/contestants">Работы</a></li>
-            <li><a href="/ctx/contestants/edit">Добавить работу</a></li>
+            <li><a href="<# ctx_prefix #>/problems">Задачи</a></li>
+            <li><a href="<# ctx_prefix #>/submitted">Присланное</a></li>
+            <li><a href="<# ctx_prefix #>/contestants">Работы</a></li>
+            <li><a href="<# ctx_prefix #>/contestants/edit">Добавить работу</a></li>
         </ul>
     </div>
 </div>
@@ -329,13 +308,13 @@ if ($mode == "view")
 {
     if ($table_name == "problems")
     {
-        echo ctx_show_tasty_list(
+        echo ctx_show_list(
             "problems",
             null,
             $FILTER,
             "<b>Задача <a href=\"{#view}\">{problem_name}</a></b>, проверяют: {people}<br />"
         );
-        ?><a href="/ctx/problems/edit">Добавить еще одну задачу</a><br/><?php
+        ?><a href="<# ctx_prefix #>/problems/edit">Добавить еще одну задачу</a><br/><?php
     }
     elseif ($table_name == "submitted")
         ctx_show_submitted();
@@ -343,7 +322,7 @@ if ($mode == "view")
         ctx_show_overall_checking_progress();
 }
 elseif ($mode == "edit")
-    ctx_add_or_edit_form($table_name, $entry_id, "edit", "/ctx/$table_name");
+    ctx_add_or_edit_form($table_name, $entry_id, "edit", "$ctx_prefix/$table_name");
 elseif ($mode == "delete")
     xcmst_contest_delete_entity();
 
@@ -357,7 +336,7 @@ if ($mode == "view")
     elseif (xu_not_empty($entry_id))
     {
         ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
-        echo "<a href=\"/ctx/$table_name/edit/$entry_id\">Правка</a>";
+        echo "<a href=\"$ctx_prefix/$table_name/edit/$entry_id\">Правка</a>";
     }
 }
 ?>

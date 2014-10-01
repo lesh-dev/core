@@ -12,7 +12,11 @@ $CTX_META["problems"] = array(
 
 $CTX_META["contestants"] = array(
     "contestants_id" => array("name"=>"", "type"=>"pk"),
-    "name" => array("name"=>"Ф.И.О. ученика", "type"=>"text"),
+    "name" => array(
+        "name"=>"Ф.И.О. ученика",
+        "type"=>"text",
+        "required"=>true,
+    ),
     "mail" => array("name"=>"Электропочта", "type"=>"text"),
     "phone" => array("name"=>"Телефон (и др. контакты)", "type"=>"text"),
     "parents" => array("name"=>"Родители", "type"=>"text"),

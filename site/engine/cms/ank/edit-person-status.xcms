@@ -149,7 +149,8 @@ function xsm_change_person_status()
                 $cft = xcms_get_key_or($comm_field_types, $key);
                 if ($cft == "textarea")
                 {?>
-                    <textarea class="ankEdit" name="<?php echo $key; ?>" id="<?php echo $key; ?>-text"><?php
+                    <textarea class="ankEdit" name="<?php echo $key; ?>" id="<?php echo $key; ?>-text"
+                        placeholder="<?php echo $person_comment_fields[$key]; ?>"><?php
                         echo htmlspecialchars($value); ?></textarea><?php
                 }
                 elseif ($key == 'blamed_person_id')
@@ -175,7 +176,11 @@ function xsm_change_person_status()
         var init_anketa_status = $('#anketa_status-selector').val()
         var status_custom_handler = function(id) {
             var new_status = $('#' + id).val();
-            return (init_anketa_status != new_status);
+            var changed = (init_anketa_status != new_status);
+            return {
+                'valid': changed,
+                'reason': changed ? '' : 'Статус должен измениться. '
+            }
         }
         xjs_set_depends_on('update-person_comment-submit-top', 'anketa_status-selector', status_custom_handler);
         xjs_set_depends_on('update-person_comment-submit-bottom', 'anketa_status-selector', status_custom_handler);

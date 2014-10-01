@@ -136,9 +136,9 @@ function xcms_draw_contlist_create($result = true)
             </td>
         </tr>
     </table>
-    <input type="submit" name="contlist-create" id="contlist-create-input" value="Добавить"/>
+    <input type="submit" name="contlist-create" id="contlist-create-submit" value="Добавить"/>
     <script type="text/javascript">
-        xjready_set_depends_on('contlist-create-input', 'header-input', null, 3);
+        xjready_set_depends_on('contlist-create-submit', 'header-input', null, 3);
     </script>
     </form>
     </div>
