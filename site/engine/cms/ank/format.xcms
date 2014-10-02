@@ -309,8 +309,8 @@ function xsm_draw_field_label($desc)
 }
 
 function xsm_draw_field_textarea($key, $desc, $value)
-{?>
-    <textarea class="ankEdit" name="<?php echo $key; ?>" id="<?php echo $key; ?>-text"
+{
+    ?><textarea class="ankEdit" name="<?php echo $key; ?>" id="<?php echo $key; ?>-text"
         placeholder="<?php echo xcms_get_key_or_enc($desc, "name"); ?>"><?php
         echo htmlspecialchars($value); ?></textarea><?php
 }

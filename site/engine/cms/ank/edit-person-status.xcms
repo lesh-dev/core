@@ -145,12 +145,12 @@ function xsm_change_person_status()
                 if ($pc_ft == "textarea")
                     xsm_draw_field_textarea($key, $desc, $value);
                 elseif ($key == 'blamed_person_id')
-                {?>
-                    <input type="text" class="ankEdit" value="<?php
-                        echo htmlspecialchars($person['last_name'].' '.$person['first_name']); ?>"
+                {
+                    ?><input type="text" class="ankEdit" value="<?php echo xsm_fi_enc($person); ?>"
                         <?php echo $attr; ?> /><?php
                 }
-                else {?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
+                else {
+                    ?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
                         name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
                 } ?>
                 </td></tr>
