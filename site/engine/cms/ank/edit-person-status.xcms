@@ -100,7 +100,6 @@ function xsm_notify_person_status_change()
 
 function xsm_change_person_status()
 {
-    $person_comment_fields = xsm_get_person_comment_fields();
     $person_comment_id = XDB_NEW;
     $person_comment = array();
     // prefill
@@ -109,7 +108,7 @@ function xsm_change_person_status()
     $person = xdb_get_entity_by_id('person', $blamed_person_id);
     $full_name = xsm_fi_enc($person);
 
-    $fields_desc = xsm_get_fields("person_comment")
+    $fields_desc = xsm_get_fields("person_comment");
     ?>
     <form method="post" action="edit-person-status"><?php
         xsm_person_change_status_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id, 'top');?>
@@ -133,8 +132,7 @@ function xsm_change_person_status()
             {
                 if (xsm_is_bottom_field($key))
                     continue;
-                $value = xcms_get_key_or($person_comment, $key);
-                ?>
+                $value = xcms_get_key_or($person_comment, $key); ?>
                 <tr><td class="ankList"><?php
                 xsm_draw_field_label($desc);
                 $pc_ft = xcms_get_key_or($desc, "type");

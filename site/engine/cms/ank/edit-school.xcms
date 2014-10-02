@@ -3,16 +3,12 @@ require_once("${engine_dir}cms/ank/edit-format.php");
 
 function xsm_edit_school()
 {
-    $school_fields = xsm_get_school_fields();
+    $fields_desc = xsm_get_fields("school");
 
     $school_id = xcms_get_key_or($_GET, 'school_id', '-1'); // invalid key
     $school = xdb_get_entity_by_id('school', $school_id);
 
     $db = xdb_get();
-    $field_types = array(
-        "school_type"=>"enum"
-    );
-
     $school_title = xcms_get_key_or_enc($school, 'school_title');
     ?>
     <form method="post" action="edit-school"><?php
@@ -25,26 +21,21 @@ function xsm_edit_school()
                 <td class="ankListRowTitle">Школа <b><?php echo $school_title; ?></b></td>
             </tr>
             <?php
-            foreach ($school_fields as $key=>$field_title)
+            foreach ($fields_desc as $key=>$desc)
             {
                 if (xsm_is_bottom_field($key))
                     continue;
-                $value = xcms_get_key_or($school, $key);
-                $attr = ""; ?>
-                <tr><td class="ankList"><span class="ankEditField xsm-label"><?php echo $school_fields[$key]; ?></span>
-                <?php
-                $ft = xcms_get_key_or($field_types, $key);
-                if ($ft == "textarea") {?>
-                    <textarea class="ankEdit" name="<?php echo $key; ?>" id="<?php echo $key; ?>-text"><?php
-                        echo htmlspecialchars($value); ?></textarea><?php
-                } elseif ($ft == "enum") {
+                $value = xcms_get_key_or($school, $key); ?>
+                <tr><td class="ankList"><?php
+                xsm_draw_field_label($desc);
+                $ft = xcms_get_key_or($desc, "type");
+                if ($ft == "textarea")
+                    xsm_draw_field_textarea($key, $desc, $value);
+                elseif ($ft == "enum")
                     echo xsm_make_enum_by_type($key, $value, $key);
-                }
-                else {?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
-                        name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
-                } ?>
-                </td></tr>
-                <?php
+                else
+                    xsm_draw_field_input($key, $desc, $value);
+                ?></td></tr><?php
             }?>
         </table><?php
         xsm_bottom_fields('school', $school);

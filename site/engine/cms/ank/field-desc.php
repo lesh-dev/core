@@ -143,6 +143,35 @@ function xsm_get_person_comment_field_req()
 function xsm_get_fields($table_name)
 {
     $field_desc = array(
+
+        // school
+        "school"=>array(
+            "school_title"=>array(
+                "name"=>"Название",
+                "required"=>true,
+            ),
+            "school_type"=>array(
+                "name"=>"Тип",
+                "type"=>"enum",
+            ),
+            "school_date_start"=>array(
+                "name"=>"Дата начала (ГГГГ.ММ.ДД)",
+            ),
+            "school_date_end"=>array(
+                "name"=>"Дата окончания (ГГГГ.ММ.ДД)",
+            ),
+            "school_location"=>array(
+                "name"=>"Место проведения",
+            ),
+            "school_created"=>array(
+                "name"=>"Время создания",
+            ),
+            "school_modified"=>array(
+                "name"=>"Последняя модификация",
+            ),
+        ),
+
+        // person_comment
         "person_comment"=>array(
             "comment_text"=>array(
                 "name"=>"Текст комментария",
@@ -166,7 +195,7 @@ function xsm_get_fields($table_name)
             "person_comment_deleted"=>array(
                 "name"=>"Объект удалён",
             ),
-        ), // person_comment
+        ),
     );
     return $field_desc[$table_name];
 }
