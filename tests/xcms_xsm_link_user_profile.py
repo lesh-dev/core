@@ -50,7 +50,8 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
 
         self.gotoCabinet()
         self.assertBodyTextPresent("XSM")
-        self.assertBodyTextPresent(u"Ваша карточка")
+        cardCaption = u"Карточка участника в XSM"
+        self.assertBodyTextPresent(cardCaption)
         xsmUrlText = xtest_common.shortAlias(inpLastName, inpFirstName)
         self.gotoUrlByLinkText(xsmUrlText)
         xsmAlias = xtest_common.fullAlias(inpLastName, inpFirstName, inpMidName)
@@ -64,6 +65,11 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
         self.gotoAdminPanel()
         self.gotoUserList()
         
-        self.gotoUrlByPartialLinkText(inpLogin)
+        self.gotoUrlByPartialLinkText(inpLogin, "Click on user name in the list")
+        
+        self.assertBodyTextPresent(cardCaption, "We should see XSM card link. ")
+        xsmLinkAlias = xtest_common.shortAlias(inpLastName, inpFirstName)
+        
+        self.gotoUrlByLinkText(xsmAlias, "Click on XSM card link")
         
         # TODO: here also should be link to user's XSM profile, if any.

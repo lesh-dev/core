@@ -116,7 +116,6 @@ if testSet:
     setModuleName = testSet.replace(".py", "")
 
 try:
-    print doInstallerTest
     testStats = {}
     testDetailedStats = {}
 
