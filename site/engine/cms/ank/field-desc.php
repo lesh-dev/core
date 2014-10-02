@@ -139,6 +139,36 @@ function xsm_get_person_comment_field_req()
     );
 }
 
+// new style field descriptors
+function xsm_get_fields($table_name)
+{
+    $field_desc = array(
+        "person_comment"=>array(
+            "comment_text"=>array(
+                "name"=>"Текст комментария",
+                "type"=>"textarea",
+                "required"=>true,
+            ),
+            "owner_login"=>array(
+                "name"=>"Логин автора",
+            ),
+            "blamed_person_id"=>array(
+                "name"=>"ID субъекта",
+            ),
+            "person_comment_created"=>array(
+                "name"=>"Время создания",
+            ),
+            "person_comment_modified"=>array(
+                "name"=>"Последняя модификация",
+            ),
+            "person_comment_deleted"=>array(
+                "name"=>"Объект удалён",
+            ),
+        ), // person_comment
+    );
+    return $field_desc[$table_name];
+}
+
 // Course
 function xsm_get_course_fields()
 {

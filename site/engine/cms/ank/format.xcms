@@ -296,6 +296,17 @@ function xsm_make_forest_enum($person, $fn, $id = false)
     return "<span class=\"forest-status $forest_status\" id=\"${id}forest_status$fn-span\">$title</span>";
 }
 
+/**
+  * Field label
+  * @param desc field descriptor
+  **/
+function xsm_draw_field_label($desc)
+{?>
+    <span class="ankEditField xsm-label"><?php echo $desc["name"];
+    if (xcms_get_key_or($desc, "required"))
+        echo "&nbsp;<span class=\"xsm-required-field\">*</span>";
+    ?></span><?php
+}
 
 function xsm_draw_fio_filter()
 {

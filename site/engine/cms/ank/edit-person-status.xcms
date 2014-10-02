@@ -109,9 +109,7 @@ function xsm_change_person_status()
     $person = xdb_get_entity_by_id('person', $blamed_person_id);
     $full_name = xsm_fi_enc($person);
 
-    $comm_field_types = xsm_get_person_comment_field_types();
-    $comm_field_req = xsm_get_person_comment_field_req();
-
+    $fields_desc = xsm_get_fields("person_comment")
     ?>
     <form method="post" action="edit-person-status"><?php
         xsm_person_change_status_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id, 'top');?>
@@ -131,7 +129,7 @@ function xsm_change_person_status()
             важно писать о том, <b>что</b> сделано (статус и так это отражает),
             важно писать о том, <b>почему</b> это сделано</td>
             <?php
-            foreach ($person_comment_fields as $key=>$field_title)
+            foreach ($fields_desc as $key=>$desc)
             {
                 if (xsm_is_bottom_field($key))
                     continue;
@@ -141,12 +139,9 @@ function xsm_change_person_status()
                 if ($key == "owner_login" ||
                     $key == "blamed_person_id")
                     $attr = 'readonly="readonly"'; ?>
-                <tr><td class="ankList"><span class="ankEditField xsm-label"><?php echo $person_comment_fields[$key];
-                if (array_key_exists($key, $comm_field_req))
-                    echo "&nbsp;<span class=\"xsm-required-field\">*</span>";
-                ?></span><?php
-
-                $cft = xcms_get_key_or($comm_field_types, $key);
+                <tr><td class="ankList"><?php
+                xsm_draw_field_label($desc);
+                $cft = xcms_get_key_or($desc, "type");
                 if ($cft == "textarea")
                 {?>
                     <textarea class="ankEdit" name="<?php echo $key; ?>" id="<?php echo $key; ?>-text"
