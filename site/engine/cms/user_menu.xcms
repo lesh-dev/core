@@ -13,6 +13,13 @@ if (xcms_user()->check_rights("ank", false))
         >XSM</a> | <?php
 }
 
+if (xcms_user()->check_rights("ank", false))
+{?>
+    <a title="Олимпиада"
+        href="<?php echo $meta_site_url_secure; ?>ctx"
+        >Олимпиада</a> | <?php
+}
+
 if (xcms_user()->check_rights("admin", false))
 {?>
     <a title="Админка"
