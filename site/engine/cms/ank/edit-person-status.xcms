@@ -141,13 +141,9 @@ function xsm_change_person_status()
                     $attr = 'readonly="readonly"'; ?>
                 <tr><td class="ankList"><?php
                 xsm_draw_field_label($desc);
-                $cft = xcms_get_key_or($desc, "type");
-                if ($cft == "textarea")
-                {?>
-                    <textarea class="ankEdit" name="<?php echo $key; ?>" id="<?php echo $key; ?>-text"
-                        placeholder="<?php echo $person_comment_fields[$key]; ?>"><?php
-                        echo htmlspecialchars($value); ?></textarea><?php
-                }
+                $pc_ft = xcms_get_key_or($desc, "type");
+                if ($pc_ft == "textarea")
+                    xsm_draw_field_textarea($key, $desc, $value);
                 elseif ($key == 'blamed_person_id')
                 {?>
                     <input type="text" class="ankEdit" value="<?php
