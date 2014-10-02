@@ -94,7 +94,7 @@
             $keys_values["${table_name}_modified"] = '';
         }
 
-        foreach ($allowed_keys as $key => $title)
+        foreach ($allowed_keys as $key => $unused)
         {
             $value = xcms_get_key_or($keys_values, $key);
             if ($use_ai and $key == $pk_name)
