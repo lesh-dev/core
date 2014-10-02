@@ -134,27 +134,17 @@ function xsm_change_person_status()
                 if (xsm_is_bottom_field($key))
                     continue;
                 $value = xcms_get_key_or($person_comment, $key);
-                $attr = "";
-                // handle readonly fields
-                if ($key == "owner_login" ||
-                    $key == "blamed_person_id")
-                    $attr = 'readonly="readonly"'; ?>
+                ?>
                 <tr><td class="ankList"><?php
                 xsm_draw_field_label($desc);
                 $pc_ft = xcms_get_key_or($desc, "type");
                 if ($pc_ft == "textarea")
                     xsm_draw_field_textarea($key, $desc, $value);
                 elseif ($key == 'blamed_person_id')
-                {
-                    ?><input type="text" class="ankEdit" value="<?php echo xsm_fi_enc($person); ?>"
-                        <?php echo $attr; ?> /><?php
-                }
-                else {
-                    ?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
-                        name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
-                } ?>
-                </td></tr>
-                <?php
+                    xsm_draw_field_unnamed_input($desc, xsm_fi($person));
+                else
+                    xsm_draw_field_input($key, $desc, $value);
+                ?></td></tr><?php
             }?>
         </table><?php
         xsm_person_change_status_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id, 'bottom');?>

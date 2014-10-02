@@ -151,9 +151,11 @@ function xsm_get_fields($table_name)
             ),
             "owner_login"=>array(
                 "name"=>"Логин автора",
+                "readonly"=>true,
             ),
             "blamed_person_id"=>array(
                 "name"=>"ID субъекта",
+                "readonly"=>true,
             ),
             "person_comment_created"=>array(
                 "name"=>"Время создания",
