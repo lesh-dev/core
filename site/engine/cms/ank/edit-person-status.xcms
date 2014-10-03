@@ -134,8 +134,8 @@ function xsm_change_person_status()
                 $value = xcms_get_key_or($person_comment, $key); ?>
                 <tr><td class="ankList"><?php
                 xsm_draw_field_label($desc);
-                $pc_ft = xcms_get_key_or($desc, "type");
-                if ($pc_ft == "textarea")
+                $ft = xcms_get_key_or($desc, "type");
+                if ($ft == "textarea")
                     xsm_draw_field_textarea($key, $desc, $value);
                 elseif ($key == 'blamed_person_id')
                     xsm_draw_field_unnamed_input($desc, xsm_fi($person));

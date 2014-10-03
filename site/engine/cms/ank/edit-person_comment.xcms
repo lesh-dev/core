@@ -99,7 +99,6 @@ function xsm_notify_person_comment_edit($person_comment)
 
 function xsm_edit_person_comment()
 {
-    $person_comment_fields = xsm_get_person_comment_fields();
     $person_comment_id = xcms_get_key_or($_GET, 'person_comment_id', '-1'); // invalid key
     $person_comment = xdb_get_entity_by_id('person_comment', $person_comment_id);
     if ($person_comment_id == XDB_NEW)
@@ -112,53 +111,33 @@ function xsm_edit_person_comment()
     {
         $blamed_person_id = $person_comment['blamed_person_id'];
     }
-
     $person = xdb_get_entity_by_id('person', $blamed_person_id);
 
-    $field_types = xsm_get_person_comment_field_types();
-    $field_req = xsm_get_person_comment_field_req();
-
-    ?>
+    $fields_desc = xsm_get_fields("person_comment"); ?>
     <form method="post" action="edit-person_comment"><?php
-        xsm_person_comment_edit_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id, 'top');?>
-        <input type="hidden" name="person_comment_id" value="<?php echo $person_comment_id; ?>" />
-        <input type="hidden" name="blamed_person_id" value="<?php echo $blamed_person_id; ?>" />
+        xsm_person_comment_edit_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id, 'top');
+        xsm_draw_field_hidden("person_comment_id", $person_comment_id);
+        xsm_draw_field_hidden("blamed_person_id", $blamed_person_id); ?>
         <table class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Комментарий</td>
             </tr>
             <?php
-            foreach ($person_comment_fields as $key=>$field_title)
+            foreach ($fields_desc as $key=>$desc)
             {
                 if (xsm_is_bottom_field($key))
                     continue;
-                $value = xcms_get_key_or($person_comment, $key);
-                $attr = "";
-                // handle readonly fields
-                if ($key == "owner_login" ||
-                    $key == "blamed_person_id")
-                    $attr = 'readonly="readonly"'; ?>
-                <tr><td class="ankList"><span class="ankEditField"><?php echo $person_comment_fields[$key];
-                if (array_key_exists($key, $field_req))
-                    echo "&nbsp;<span class=\"xsm-required-field\">*</span>";
-                ?></span><?php
-
-                if (array_key_exists($key, $field_types))
-                {?>
-                    <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
-                        echo htmlspecialchars($value); ?></textarea><?php
-                }
+                $value = xcms_get_key_or($person_comment, $key); ?>
+                <tr><td class="ankList"><?php
+                xsm_draw_field_label($desc);
+                $ft = xcms_get_key_or($desc, "type");
+                if ($ft == "textarea")
+                    xsm_draw_field_textarea($key, $desc, $value);
                 elseif ($key == 'blamed_person_id')
-                {?>
-                    <input type="text" class="ankEdit" value="<?php
-                        echo htmlspecialchars($person['last_name'].' '.$person['first_name']); ?>"
-                        <?php echo $attr; ?> /><?php
-                }
-                else {?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
-                        name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
-                } ?>
-                </td></tr>
-                <?php
+                    xsm_draw_field_unnamed_input($desc, xsm_fi($person));
+                else
+                    xsm_draw_field_input($key, $desc, $value);
+                ?></td></tr><?php
             }?>
         </table><?php
         xsm_bottom_fields('person_comment', $person_comment);
@@ -170,7 +149,7 @@ function xsm_edit_person_comment()
 if (@$_POST["update-person_comment"])
 {
     xsm_notify_person_comment_edit($_POST);
-    xsm_update_person_comment('Комментарий', xsm_get_person_comment_fields());
+    xsm_update_person_comment('Комментарий', xsm_get_fields("person_comment"));
 }
 elseif (@$_POST["delete-person_comment"])
     xsm_warn_delete_person_comment('person_comment', 'комментарий');
