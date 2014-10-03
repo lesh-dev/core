@@ -199,10 +199,9 @@ function xsm_edit_exam()
     ?>
     <form method="post" action="edit-exam"><?php
         xsm_edit_exam_operations($school_id, $student_person_id, $exam_id, "top");
-        ?>
-        <input type="hidden" name="exam_id" value="<?php echo $exam_id; ?>" />
-        <input type="hidden" name="student_person_id" value="<?php echo $student_person_id; ?>" />
-        <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" /><?php
+        xsm_draw_field_hidden("exam_id", $exam_id);
+        xsm_draw_field_hidden("student_person_id", $student_person_id);
+        xsm_draw_field_hidden("school_id", $school_id);
         if ($exam_id != XDB_NEW) {?>
             <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" /><?php
         }?>

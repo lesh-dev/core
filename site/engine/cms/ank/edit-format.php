@@ -25,6 +25,15 @@ function xsm_bottom_fields($table_name, $object)
     }
 }
 
+function xsm_draw_field_hidden($name, $value)
+{
+    ?><input
+        type="hidden"
+        name="<?php echo $name; ?>"
+        value="<?php echo $value; ?>"
+    /><?php
+}
+
 /**
   * Field label
   * @param desc field descriptor
