@@ -12,20 +12,6 @@ function xsm_get_department_fields()
     );
 }
 
-// School (indeed, it can be all major events)
-function xsm_get_school_fields()
-{
-    return array(
-        "school_title"=>"Название",
-        "school_type"=>"Тип",
-        "school_date_start"=>"Дата начала (ГГГГ.ММ.ДД)",
-        "school_date_end"=>"Дата окончания (ГГГГ.ММ.ДД)",
-        "school_location"=>"Место проведения",
-        "school_created"=>"Время создания",
-        "school_modified"=>"Последняя модификация"
-    );
-}
-
 // Person
 function xsm_get_person_fields()
 {
@@ -196,6 +182,34 @@ function xsm_get_fields($table_name)
                 "name"=>"Объект удалён",
             ),
         ),
+
+        // exam
+        "exam"=>array(
+            "student_person_id"=>array(
+                "name"=>"Школьник",
+            ),
+            "course_id"=>array(
+                "name"=>"Курс",
+            ),
+            "exam_status"=>array(
+                "name"=>"Состояние",
+                "type"=>"enum",
+            ),
+            "deadline_date"=>array(
+                "name"=>"Дедлайн",
+            ),
+            "exam_comment"=>array(
+                "name"=>"Комментарий к зачёту",
+                "type"=>"textarea",
+            ),
+            "exam_created"=>array(
+                "name"=>"Время создания",
+            ),
+            "exam_modified"=>array(
+                "name"=>"Последняя модификация",
+            ),
+        ),
+
     );
     return $field_desc[$table_name];
 }
