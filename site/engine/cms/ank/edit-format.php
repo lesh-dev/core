@@ -25,4 +25,55 @@ function xsm_bottom_fields($table_name, $object)
     }
 }
 
+/**
+  * Field label
+  * @param desc field descriptor
+  **/
+function xsm_draw_field_label($desc)
+{?>
+    <span class="ankEditField xsm-label"><?php echo $desc["name"];
+    if (xcms_get_key_or($desc, "required"))
+        echo "&nbsp;<span class=\"xsm-required-field\">*</span>";
+    ?></span><?php
+}
+
+function xsm_draw_field_textarea($key, $desc, $value)
+{
+    ?><textarea
+        class="ankEdit"
+        name="<?php echo $key; ?>"
+        id="<?php echo $key; ?>-text"
+        placeholder="<?php echo xcms_get_key_or_enc($desc, "name"); ?>"
+        ><?php
+        echo htmlspecialchars($value);
+    ?></textarea><?php
+}
+
+function xsm_draw_field_input($key, $desc, $value)
+{
+    $attr = xcms_get_key_or($desc, "readonly") ? ' readonly="readonly" ' : '';
+    ?><input
+        type="text"
+        class="ankEdit"
+        value="<?php echo htmlspecialchars($value); ?>"
+        name="<?php echo $key; ?>"
+        id="<?php echo $key; ?>-input"
+        placeholder="<?php echo $desc["name"]; ?>"
+        <?php echo $attr; ?>
+        /><?php
+}
+
+/**
+  * Typicaly for readonly fields
+  */
+function xsm_draw_field_unnamed_input($desc, $value)
+{
+    $attr = xcms_get_key_or($desc, "readonly") ? ' readonly="readonly" ' : '';
+    ?><input
+        type="text"
+        class="ankEdit"
+        value="<?php echo htmlspecialchars($value); ?>"
+        <?php echo $attr; ?> /><?php
+}
+
 ?>
