@@ -2,16 +2,6 @@
 
 define('XSM_SCHOOL_ANK_ID', 'ank');
 
-// Department
-function xsm_get_department_fields()
-{
-    return array(
-        "department_title"=>"Название",
-        "department_created"=>"Время создания",
-        "department_modified"=>"Последняя модификация"
-    );
-}
-
 // Person
 function xsm_get_person_fields()
 {
@@ -129,6 +119,20 @@ function xsm_get_person_comment_field_req()
 function xsm_get_fields($table_name)
 {
     $field_desc = array(
+
+        // department
+        "department"=>array(
+            "department_title"=>array(
+                "name"=>"Название",
+                "required"=>true,
+            ),
+            "department_created"=>array(
+                "name"=>"Время создания",
+            ),
+            "department_modified"=>array(
+                "name"=>"Последняя модификация",
+            ),
+        ),
 
         // school
         "school"=>array(

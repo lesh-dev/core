@@ -3,15 +3,10 @@ require_once("${engine_dir}cms/ank/edit-format.php");
 
 function xsm_edit_department()
 {
-    $department_fields = xsm_get_department_fields();
-
     $department_id = xcms_get_key_or($_GET, 'department_id', '-1'); // invalid key
     $department = xdb_get_entity_by_id('department', $department_id);
-
     $db = xdb_get();
-    $field_types = array();
-
-    ?>
+    $fields_desc = xsm_get_fields("department"); ?>
     <form method="post" action="edit-department"><?php
         xsm_edit_operations_listmode('department', $department_id, 'Вернуться к списку отделений');
         xsm_draw_field_hidden("department_id", $department_id); ?>
@@ -20,24 +15,19 @@ function xsm_edit_department()
                 <td class="ankListRowTitle">Отделение</td>
             </tr>
             <?php
-            foreach ($department_fields as $key=>$field_title)
+            foreach ($fields_desc as $key=>$desc)
             {
                 if (xsm_is_bottom_field($key))
                     continue;
-                $value = xcms_get_key_or($department, $key);
-                $attr = ""; ?>
-                <tr><td class="ankList"><span class="ankEditField xsm-label"><?php echo $department_fields[$key]; ?></span>
-                <?php
-                if (array_key_exists($key, $field_types))
-                {?>
-                    <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
-                        echo htmlspecialchars($value); ?></textarea><?php
-                }
-                else {?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
-                        name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
-                } ?>
-                </td></tr>
-                <?php
+                $value = xcms_get_key_or($department, $key); ?>
+                <tr><td class="ankList"><?php
+                xsm_draw_field_label($desc);
+                $ft = xcms_get_key_or($desc, "type");
+                if ($ft == "textarea")
+                    xsm_draw_field_textarea($key, $desc, $value);
+                else
+                    xsm_draw_field_input($key, $desc, $value);
+                ?></td></tr><?php
             }?>
         </table><?php
         xsm_bottom_fields('department', $department);
@@ -48,7 +38,7 @@ function xsm_edit_department()
 }
 
 if (@$_POST["update-department"])
-    xsm_update_entity_listmode('department', 'Отделение', xsm_get_department_fields());
+    xsm_update_entity_listmode('department', 'Отделение', xsm_get_fields("department"));
 elseif (@$_POST["delete-department"])
     xsm_warn_delete_entity_listmode('department', 'отделение');
 elseif (@$_POST["confirm-delete-department"])
