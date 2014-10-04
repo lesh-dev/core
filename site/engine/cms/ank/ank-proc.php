@@ -23,7 +23,7 @@ function xsm_find_person_origin($db, $new_person)
         ORDER BY person_created";
 
     $person_sel = $db->query($query);
-    $matched_person_id = -1;
+    $matched_person_id = XDB_INVALID_ID;
     $matched_person = false;
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
     {

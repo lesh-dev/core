@@ -4,8 +4,7 @@ require_once("${engine_dir}cms/ank/course_teacher.php");
 function xsm_print_course()
 {
     $db = xdb_get();
-    //xsm_view_operations('course', 'курс');
-    $course_id = xcms_get_key_or($_GET, 'course_id', "-1");
+    $course_id = xcms_get_key_or($_GET, 'course_id', XDB_INVALID_ID);
     $course = xdb_get_entity_by_id('course', $course_id);
     $school_id = $course["school_id"];
     $school = xdb_get_entity_by_id('school', $school_id);
@@ -98,7 +97,6 @@ function xsm_print_course()
     </table>
 
     <?php
-    //xsm_view_operations('course', 'курс');
 }
 
 xsm_print_course();

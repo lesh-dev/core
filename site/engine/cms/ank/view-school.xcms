@@ -3,7 +3,7 @@
 function xsm_print_school()
 {
     $db = xdb_get();
-    $school_id = xcms_get_key_or($_GET, 'school_id', "-1");
+    $school_id = xcms_get_key_or($_GET, 'school_id', XDB_INVALID_ID);
     $school = xdb_get_entity_by_id('school', $school_id);
     $href_schools = "list-school";
     ?>

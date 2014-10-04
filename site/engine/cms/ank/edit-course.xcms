@@ -113,7 +113,7 @@ function xsm_edit_course()
                 }
                 elseif ($key == 'school_id')
                 {
-                    echo xsm_make_selector('school', 'school_id', xcms_get_key_or($course, $key, "-1"),
+                    echo xsm_make_selector('school', 'school_id', xcms_get_key_or($course, $key, XDB_INVALID_ID),
                         array('school_title'),
                         "(1 = 1) ORDER BY school_date_start DESC", $attr);
                 }

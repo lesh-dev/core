@@ -26,8 +26,8 @@ function xsm_get_person_school_id($db, $school_id, $person_id)
 function xsm_update_person_school($title, $fields)
 {
     $db = xdb_get();
-    $person_id = xcms_get_key_or($_POST, 'member_person_id', -1);
-    $school_id = xcms_get_key_or($_POST, 'school_id', -1);
+    $person_id = xcms_get_key_or($_POST, 'member_person_id', XDB_INVALID_ID);
+    $school_id = xcms_get_key_or($_POST, 'school_id', XDB_INVALID_ID);
     $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
     $table_name = "person_school";
     $key_name = "${table_name}_id";

@@ -42,7 +42,7 @@ function xsm_get_city_class($school_city)
 
 /**
   * Получение дефолтной школы (самой последней по времени)
-  * @return school id (or -1 in case of empty schools list)
+  * @return school id (or @c XDB_INVALID_ID in case of empty schools list)
   **/
 function xsm_get_default_school()
 {
@@ -53,7 +53,7 @@ function xsm_get_default_school()
         return $school['school_id'];
 
     echo "Warning: NO SCHOOLS FOUND AT ALL<br />";
-    return "-1";
+    return XDB_INVALID_ID;
 }
 
 /**
@@ -70,7 +70,7 @@ function xsm_get_default_school_from_request()
 
 /**
   * Получение id школы по имени
-  * @return school id (or -1 when not found)
+  * @return school id (or XDB_INVALID_ID when not found)
   **/
 function xsm_get_school_by_title($school_title)
 {
@@ -80,7 +80,7 @@ function xsm_get_school_by_title($school_title)
     if ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
         return $school['school_id'];
 
-    return "-1";
+    return XDB_INVALID_ID;
 }
 
 /**
