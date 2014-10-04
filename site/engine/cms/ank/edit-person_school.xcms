@@ -6,10 +6,10 @@ function xsm_edit_person_school()
 {
     $person_school_fields = xsm_get_person_school_fields();
 
-    $person_school_id = xcms_get_key_or($_GET, 'person_school_id', '-1'); // invalid key
+    $person_school_id = xcms_get_key_or($_GET, 'person_school_id', XDB_INVALID_ID);
     $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
-    $member_person_id = -1;
-    $school_id = -1;
+    $member_person_id = XDB_INVALID_ID;
+    $school_id = XDB_INVALID_ID;
     if ($person_school_id == XDB_NEW)
     {
         // prefill member

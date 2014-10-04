@@ -29,7 +29,7 @@ function xsm_edit_person()
 {
     $person_fields = xsm_get_person_fields();
 
-    $person_id = xcms_get_key_or($_GET, 'person_id', '-1'); // invalid key
+    $person_id = xcms_get_key_or($_GET, 'person_id', XDB_INVALID_ID);
     $person = xdb_get_entity_by_id('person', $person_id);
     if ($person_id == XDB_NEW)
     {

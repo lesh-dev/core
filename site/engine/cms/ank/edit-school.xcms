@@ -5,7 +5,7 @@ function xsm_edit_school()
 {
     $fields_desc = xsm_get_fields("school");
 
-    $school_id = xcms_get_key_or($_GET, 'school_id', '-1'); // invalid key
+    $school_id = xcms_get_key_or($_GET, 'school_id', XDB_INVALID_ID);
     $school = xdb_get_entity_by_id('school', $school_id);
 
     $db = xdb_get();

@@ -3,7 +3,7 @@ require_once("${engine_dir}cms/ank/edit-format.php");
 
 function xsm_edit_department()
 {
-    $department_id = xcms_get_key_or($_GET, 'department_id', '-1'); // invalid key
+    $department_id = xcms_get_key_or($_GET, 'department_id', XDB_INVALID_ID);
     $department = xdb_get_entity_by_id('department', $department_id);
     $db = xdb_get();
     $fields_desc = xsm_get_fields("department"); ?>
