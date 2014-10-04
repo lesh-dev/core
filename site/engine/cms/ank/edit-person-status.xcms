@@ -25,7 +25,7 @@ function xsm_person_change_status_operations($table_name, $id, $ret_title, $memb
 function xsm_update_person_status()
 {
     ?><p><?php
-    $res = xdb_insert_or_update('person_comment', array('person_comment_id'=>XDB_NEW), $_POST, xsm_get_person_comment_fields());
+    $res = xdb_insert_or_update('person_comment', array('person_comment_id'=>XDB_NEW), $_POST, xsm_get_fields("person_comment"));
 
     if ($res)
     {?>

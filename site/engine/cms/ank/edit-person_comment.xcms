@@ -58,7 +58,7 @@ function xsm_delete_person_comment($table_name, $title, $aux_param = '')
     $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
     // experimental 'delete as status update'
     $res = xdb_insert_or_update($table_name, array($key_name=>$id),
-        array('person_comment_deleted'=>'deleted'), xsm_get_person_comment_fields());
+        array('person_comment_deleted'=>'deleted'), xsm_get_fields("person_comment"));
     //$res = xdb_delete($table_name, $id);
     if ($res)
     {?>
@@ -95,7 +95,6 @@ function xsm_notify_person_comment_edit($person_comment)
 
     xcms_send_notification("reg", NULL, $mail_msg);
 }
-
 
 function xsm_edit_person_comment()
 {
