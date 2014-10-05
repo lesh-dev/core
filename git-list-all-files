@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# List all filenames that were in repo since 1st commit
+for i in $( git rev-list --remotes ) ; do git show --name-only $i; done
