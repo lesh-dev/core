@@ -69,17 +69,17 @@ function xsm_non_mergeable_key($key)
   **/
 function xsm_merge_persons($person_dst, $person_src)
 {
-    $person_fields = xsm_get_person_fields();
+    $fields_desc = xsm_get_fields("person");
     $merge_state = "";
 
     foreach ($person_src as $key => $value)
     {
         // skip all unwanted fields
-        if (!array_key_exists($key, $person_fields))
+        if (!array_key_exists($key, $fields_desc))
             continue;
 
         $value = trim($value);
-        $key_title = xcms_get_key_or($person_fields, $key);
+        $key_title = xcms_get_key_or($fields_desc, $key)["name"];
 
         if (xsm_non_mergeable_key($key))
         {
@@ -138,14 +138,14 @@ function xsm_merge_persons($person_dst, $person_src)
 
 function xsm_compose_anketa_table($person)
 {
-    $person_fields = xsm_get_person_fields();
+    $fields_desc = xsm_get_fields("person");
     $html_content = ""; // @@TABLE-CONTENT@
     $row_template = xcms_get_html_template("anketa_mail_one_row");
     foreach ($person as $key=>$value)
     {
         $key_title = $key;
-        if (array_key_exists($key, $person_fields))
-            $key_title = $person_fields[$key];
+        if (array_key_exists($key, $fields_desc))
+            $key_title = $fields_desc[$key]["name"];
         if ($key == "submit-anketa")
             continue;
         $cur_row = $row_template;

@@ -59,7 +59,7 @@ require_once("${engine_dir}cms/ank/ank-proc.php");
         $person_id = XDB_NEW;
         $success = false;
 
-        $person_fields = xsm_get_person_fields();
+        $person_desc = xsm_get_fields("person");
         $full_name = xsm_fio($person);
 
         $old_person = xsm_find_person_origin($db, $person);
@@ -75,7 +75,7 @@ require_once("${engine_dir}cms/ank/ank-proc.php");
             $merge_state = $merge["state"];
             $person_id = $person["person_id"];
             // update merged data
-            $update_result = xdb_insert_or_update('person', array('person_id'=>$person_id), $person, $person_fields);
+            $update_result = xdb_insert_or_update('person', array('person_id'=>$person_id), $person, $person_desc);
 
             $merge_state = "Получена новая анкета для этого человека. Внесены следующие изменения:\n$merge_state";
             $person_comment = array(
@@ -95,11 +95,11 @@ require_once("${engine_dir}cms/ank/ank-proc.php");
         else
         {
             // new person arrived
-            $person_id = xdb_insert_or_update('person', array('person_id'=>XDB_NEW), $person, $person_fields);
+            $person_id = xdb_insert_or_update('person', array('person_id'=>XDB_NEW), $person, $person_desc);
             $write_success = ($person_id != false);
             // fill newly received identifier
             $person["person_id"] = $person_id;
-            $html_content = xsm_compose_anketa_table($person, $person_fields);
+            $html_content = xsm_compose_anketa_table($person);
         }
 
         $mail_msg = xsm_compose_anketa_mail_msg($person, $html_content);

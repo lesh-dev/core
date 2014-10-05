@@ -290,7 +290,7 @@ function xsm_draw_person_comments($db, $person_id)
 
 function xsm_print_person_ank_data($db, $person)
 {
-    $fields = xsm_get_person_fields();
+    $fields = xsm_get_fields("person");
 
     $person_id = htmlspecialchars($person["person_id"]);
 
