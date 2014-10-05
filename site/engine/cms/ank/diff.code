@@ -62,7 +62,7 @@ function xcms_array_diff($new, $old, $table_name, $fields)
   * Build a diff message of two objects in html format.
   * @return HTML-message or empty string if objects are equal.
   **/
-function xsm_build_diff_msg($new_object, $old_object, $table_name, $fields, $types, $table_title)
+function xsm_build_diff_msg($new_object, $old_object, $table_name, $fields, $table_title)
 {
     $mail_msg = xcms_get_html_template("xsm-diff-message");
     $row_template = xcms_get_html_template("xsm-row-finediff");
@@ -75,12 +75,13 @@ function xsm_build_diff_msg($new_object, $old_object, $table_name, $fields, $typ
     foreach ($diff_array as $diff)
     {
         $key = $diff['key'];
-        $key_title = $fields[$key];
-        $type = xcms_get_key_or($types, $key);
+        $desc = $fields[$key];
+        $key_title = $desc["name"];
+        $ft = xcms_get_key_or($desc, "type");
         $old_value = $diff['old'];
         $new_value = $diff['new'];
         $cur_row = $row_template;
-        if ($type == "checkbox")
+        if ($ft == "checkbox")
         {
             $old_value = strlen($old_value) ? "Да" : "Нет";
             $new_value = strlen($new_value) ? "Да" : "Нет";

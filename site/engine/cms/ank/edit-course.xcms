@@ -5,8 +5,6 @@ require_once("${engine_dir}cms/ank/course_teacher.php");
 
 function xsm_edit_course()
 {
-    $course_fields = xsm_get_course_fields();
-
     $course_id = xcms_get_key_or($_GET, 'course_id', XDB_INVALID_ID);
     $course = xdb_get_entity_by_id('course', $course_id);
     // По умолчанию надо создавать связку course_teacher,
@@ -55,25 +53,17 @@ function xsm_edit_course()
     $school = xdb_get_entity_by_id('school', $school_id);
     $school_title = xcms_get_key_or_enc($school, "school_title");
     $href_courses = "list-course".xcms_url(array('school_id'=>$school_id));
-
-    $field_types = xsm_get_course_field_types();
-
     $teachers_edit_url = xcms_url(array('school_id'=>$school_id, 'course_id'=>$course_id));
-
-    ?>
+    $fields_desc = xsm_get_fields("course"); ?>
     <form method="post" action="edit-course"><?php
         xsm_edit_operations_listmode('course', $course_id, 'Вернуться к списку курсов',
             xcms_url(array('school_id'=>$school_id)));
-        ?>
-        <input type="hidden" name="course_id" value="<?php echo $course_id; ?>" />
-        <input type="hidden" name="school_id" value="<?php echo $school_id; ?>" />
-        <?php
+        xsm_draw_field_hidden("course_id", $course_id);
+        xsm_draw_field_hidden("school_id", $school_id);
         // render course_teacher_id only when new course added
         if ($course_teacher_id != 'all' && $course_teacher_id !== NULL)
-        {?>
-            <input type="hidden" name="course_teacher_id" value="<?php echo $course_teacher_id; ?>" /><?php
-        }?>
-
+            xsm_draw_field_hidden("course_teacher_id", $course_teacher_id);
+        ?>
         <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
                 <td class="ankListRowTitle">Редактирование курса <?php echo $course_title; ?>
@@ -83,45 +73,30 @@ function xsm_edit_course()
                 <span class="ankEditField mid xsm-label">Препод(ы)</span><?php
                 echo $teachers_ht;
                 if ($course_id != XDB_NEW) {?>
-                <a class="link-button ank" href="edit-teachers<?php
-                    echo $teachers_edit_url; ?>">Редактировать преподов</a><?php
+                    <a class="link-button ank" href="edit-teachers<?php
+                        echo $teachers_edit_url; ?>">Редактировать преподов</a><?php
                 } else {?>
-                <span><br/>Добавить ещё одного препода можно будет после того, как курс будет сохранён.</span><?php
+                    <span><br/>Добавить ещё одного препода можно будет после того, как курс будет сохранён.</span><?php
                 }?>
             </td></tr>
             <?php
-            foreach ($course_fields as $key=>$field_title)
+            foreach ($fields_desc as $key=>$desc)
             {
                 if (xsm_is_bottom_field($key))
                     continue;
-                $value = xcms_get_key_or($course, $key);
-                $attr = "";
-                // selectors cannot be readonly
-                if ($key == "school_id")
-                    $attr = 'disabled="disabled"'; ?>
-                <tr><td class="ankList"><span class="ankEditField xsm-label"><?php echo $course_fields[$key]; ?></span>
-                <?php
-                $ft = xcms_get_key_or($field_types, $key);
+                if ($key == "school_id") // we already show school title in table caption
+                    continue;
+                $value = xcms_get_key_or($course, $key); ?>
+                <tr><td class="ankList"><?php
+                xsm_draw_field_label($desc);
+                $ft = xcms_get_key_or($desc, "type");
                 if ($ft == "textarea")
-                {?>
-                    <textarea class="ankEdit" name="<?php echo $key; ?>"><?php
-                        echo htmlspecialchars($value); ?></textarea><?php
-                }
+                    xsm_draw_field_textarea($key, $desc, $value);
                 elseif ($ft == "enum")
-                {
                     echo xsm_make_enum_by_type($key, $value, $key);
-                }
-                elseif ($key == 'school_id')
-                {
-                    echo xsm_make_selector('school', 'school_id', xcms_get_key_or($course, $key, XDB_INVALID_ID),
-                        array('school_title'),
-                        "(1 = 1) ORDER BY school_date_start DESC", $attr);
-                }
-                else {?><input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
-                        name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
-                } ?>
-                </td></tr>
-                <?php
+                else
+                    xsm_draw_field_input($key, $desc, $value);
+                ?></td></tr><?php
             }?>
         </table><?php
         xsm_bottom_fields('course', $course);

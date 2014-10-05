@@ -303,6 +303,44 @@ function xsm_get_fields($table_name)
             ),
         ),
 
+        // course
+        "course"=>array(
+            "course_title"=>array(
+                "name"=>"Название курса",
+            ),
+            "target_class"=>array(
+                "name"=>"Уровень (диапазон классов)",
+            ),
+            "school_id"=>array(
+                "name"=>"Школа, на которой читался курс",
+            ),
+            "course_cycle"=>array(
+                "name"=>"Цикл, на котором читался курс",
+            ),
+            "course_desc"=>array(
+                "name"=>"Описание",
+                "type"=>"textarea",
+            ),
+            "course_type"=>array(
+                "name"=>"Тип курса",
+                "type"=>"enum",
+            ),
+            "course_area"=>array(
+                "name"=>"Тематика",
+                "type"=>"enum",
+            ),
+            "course_comment"=>array(
+                "name"=>"Комментарий",
+                "type"=>"textarea",
+            ),
+            "course_created"=>array(
+                "name"=>"Время создания",
+            ),
+            "course_modified"=>array(
+                "name"=>"Последняя модификация",
+            ),
+        ),
+
         // exam
         "exam"=>array(
             "student_person_id"=>array(
