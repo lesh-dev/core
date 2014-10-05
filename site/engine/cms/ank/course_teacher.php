@@ -100,7 +100,7 @@ function xsm_add_course_teacher($course_id, $course_teacher_id)
         'course_teachers',
         array('course_teachers_id'=>XDB_NEW),
         $course_teachers,
-        xsm_get_course_teachers_fields());
+        xsm_get_fields("course_teachers"));
 
     // ensure that this person belongs to given school
     $db = xdb_get();

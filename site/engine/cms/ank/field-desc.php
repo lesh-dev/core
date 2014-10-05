@@ -269,6 +269,22 @@ function xsm_get_fields($table_name)
             ),
         ),
 
+        // course teachers
+        "course_teachers"=>array(
+            "course_id"=>array(
+                "name"=>"Курс",
+            ),
+            "course_teacher_id"=>array(
+                "name"=>"Препод курса",
+            ),
+            "course_teachers_created"=>array(
+                "name"=>"Время создания",
+            ),
+            "course_teachers_modified"=>array(
+                "name"=>"Последняя модификация",
+            ),
+        ),
+
         // exam
         "exam"=>array(
             "student_person_id"=>array(
@@ -298,43 +314,6 @@ function xsm_get_fields($table_name)
 
     );
     return $field_desc[$table_name];
-}
-
-// Course
-function xsm_get_course_fields()
-{
-    return array(
-        "course_title"=>"Название курса",
-        "target_class"=>"Уровень (диапазон классов)",
-        "school_id"=>"Школа, на которой читался курс",
-        "course_cycle"=>"Цикл, на котором читался курс",
-        "course_desc"=>"Описание",
-        "course_type"=>"Тип курса",
-        "course_area"=>"Тематика",
-        "course_comment"=>"Комментарий",
-        "course_created"=>"Время создания",
-        "course_modified"=>"Последняя модификация"
-    );
-}
-
-function xsm_get_course_field_types()
-{
-    return array(
-        "course_comment"=>"textarea",
-        "course_desc"=>"textarea",
-        "course_type"=>"enum",
-        "course_area"=>"enum"
-    );
-}
-
-function xsm_get_course_teachers_fields()
-{
-    return array(
-        "course_id"=>"Курс",
-        "course_teacher_id"=>"Препод курса",
-        "course_teachers_created"=>"Время создания",
-        "course_teachers_modified"=>"Последняя модификация"
-    );
 }
 
 // Exam
