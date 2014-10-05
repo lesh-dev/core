@@ -15,8 +15,7 @@ function xsm_notify_person_edit($person, $old_person)
         $person,
         $old_person,
         'person',
-        xsm_get_person_fields(),
-        xsm_get_person_field_types(),
+        xsm_get_fields("person"),
         $table_title);
 
     if (xu_empty($mail_msg)) // do not send empty diffs

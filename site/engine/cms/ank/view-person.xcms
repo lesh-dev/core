@@ -10,10 +10,20 @@ function xsm_draw_person_textval($class, $text, $value)
         <span class="person-value"><?php echo $value; ?></span></div><?php
 }
 
+function xsm_draw_person_textval_field($fields, $key, $value)
+{
+    xsm_draw_person_textval('main', $fields[$key], $value);
+}
+
 function xsm_draw_person_longtextval($class, $text, $value)
 {?>
     <div><span class="person-key <?php echo $class; ?>"><?php echo "$text:"; ?></span>
         <?php echo $value; ?></div><?php
+}
+
+function xsm_draw_person_longtextval_field($fields, $key, $value)
+{
+    xsm_draw_person_longtextval('main', $fields[$key], $value);
 }
 
 function xsm_draw_list_link($person_id, $school_id)
@@ -312,26 +322,26 @@ function xsm_print_person_ank_data($db, $person)
     $hr_teacher_typical = (xcms_checkbox_enabled($person["is_teacher"]) ? "Препод" : "&#8212;");
     $hr_student_typical = (xcms_checkbox_enabled($person["is_student"]) ? "Школьник" : "&#8212;");
 
-    xsm_draw_person_textval('main', $fields['birth_date'], $birth_date);
-    xsm_draw_person_textval('main', $fields['passport_data'], $passport_data);
-    xsm_draw_person_textval('main', $fields['ank_class'], $ank_class);
-    xsm_draw_person_textval('main', $fields['school'], $school);
-    xsm_draw_person_textval('main', $fields['school_city'], $school_city);
+    xsm_draw_person_textval_field($fields, 'birth_date', $birth_date);
+    xsm_draw_person_textval_field($fields, 'passport_data', $passport_data);
+    xsm_draw_person_textval_field($fields, 'ank_class', $ank_class);
+    xsm_draw_person_textval_field($fields, 'school', $school);
+    xsm_draw_person_textval_field($fields, 'school_city', $school_city);
     echo "<hr/>\n";
-    xsm_draw_person_textval('main', $fields['tent_capacity'], $tent_capacity);
-    xsm_draw_person_textval('main', $fields['tour_requisites'], $tour_requisites);
-    xsm_draw_person_textval('main', $fields['forest_1'], $forest_status_1);
-    xsm_draw_person_textval('main', $fields['forest_2'], $forest_status_2);
-    xsm_draw_person_textval('main', $fields['forest_3'], $forest_status_3);
+    xsm_draw_person_textval_field($fields, 'tent_capacity', $tent_capacity);
+    xsm_draw_person_textval_field($fields, 'tour_requisites', $tour_requisites);
+    xsm_draw_person_textval_field($fields, 'forest_1', $forest_status_1);
+    xsm_draw_person_textval_field($fields, 'forest_2', $forest_status_2);
+    xsm_draw_person_textval_field($fields, 'forest_3', $forest_status_3);
     ?>
     <div style="height: 5px;">&nbsp;</div>
     <a href="#" id="show-extra-person-info" class="popup-link">Прочие анкетные данные</a>
     <div id="extra-person-info" style="padding-top: 3px;"><?php
-    xsm_draw_person_textval('main', $fields['user_agent'], $user_agent);
-    xsm_draw_person_longtextval('main', $fields['favourites'], $favourites);
-    xsm_draw_person_longtextval('main', $fields['achievements'], $achievements);
-    xsm_draw_person_longtextval('main', $fields['hobby'], $hobby);
-    xsm_draw_person_longtextval('main', $fields['lesh_ref'], $lesh_ref);
+    xsm_draw_person_textval_field($fields, 'user_agent', $user_agent);
+    xsm_draw_person_longtextval_field($fields, 'favourites', $favourites);
+    xsm_draw_person_longtextval_field($fields, 'achievements', $achievements);
+    xsm_draw_person_longtextval_field($fields, 'hobby', $hobby);
+    xsm_draw_person_longtextval_field($fields, 'lesh_ref', $lesh_ref);
     ?></div>
     <script>
         xjs_add_slider('extra-person-info', 'show-extra-person-info');

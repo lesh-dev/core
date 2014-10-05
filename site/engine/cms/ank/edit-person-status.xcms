@@ -37,7 +37,7 @@ function xsm_update_person_status()
     }
 
     $person_id = xcms_get_key_or($_POST, 'blamed_person_id', 'invalid'); // invalid key
-    $res = xdb_insert_or_update("person", array("person_id"=>$person_id), $_POST, xsm_get_person_fields());
+    $res = xdb_insert_or_update("person", array("person_id"=>$person_id), $_POST, xsm_get_fields("person"));
     if ($res)
     {?>
         Статус участника успешно сохранён. <?php
