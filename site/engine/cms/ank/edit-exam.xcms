@@ -158,8 +158,7 @@ function xsm_notify_exam_edit($exam)
         $exam,
         $old_exam,
         'exam',
-        xsm_get_exam_fields(),
-        xsm_get_exam_field_types(),
+        xsm_get_fields("exam"),
         $table_title);
 
     xcms_send_notification("reg", NULL, $mail_msg);

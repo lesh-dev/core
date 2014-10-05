@@ -316,29 +316,6 @@ function xsm_get_fields($table_name)
     return $field_desc[$table_name];
 }
 
-// Exam
-function xsm_get_exam_fields()
-{
-    return array(
-        "student_person_id"=>"Школьник",
-        "course_id"=>"Курс",
-        "exam_status"=>"Состояние",
-        "deadline_date"=>"Дедлайн",
-        "exam_comment"=>"Комментарий к зачёту",
-        "exam_created"=>"Время создания",
-        "exam_modified"=>"Последняя модификация"
-    );
-}
-
-function xsm_get_exam_field_types()
-{
-    return array(
-        "exam_comment"=>"textarea",
-        "exam_status"=>"enum",
-    );
-}
-
-
 $XSM_ENUMS = array(
     // статус анкеты (значения в базе)
     "anketa_status"=>array(
