@@ -4,8 +4,6 @@ require_once("${engine_dir}cms/ank/person_school.php");
 
 function xsm_edit_person_school()
 {
-    $person_school_fields = xsm_get_person_school_fields();
-
     $person_school_id = xcms_get_key_or($_GET, 'person_school_id', XDB_INVALID_ID);
     $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
     $member_person_id = XDB_INVALID_ID;
@@ -42,13 +40,7 @@ function xsm_edit_person_school()
     $fio = xsm_fio_enc($member);
     $person_url = "view-person".xcms_url(array('person_id'=>$member_person_id, 'school_id'=>$school_id));
     $school_url = "list-person".xcms_url(array('school_id'=>$school_id));
-    $field_types = array(
-        "is_student"=>"checkbox",
-        "is_teacher"=>"checkbox",
-        "curatorship"=>"enum"
-    );
-
-    ?>
+    $fields_desc = xsm_get_fields("person_school"); ?>
     <form method="post" action="edit-person_school" role="form"><?php
         xsm_person_school_edit_operations('person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id, 'top');?>
         <input type="hidden" name="person_school_id" value="<?php echo $person_school_id; ?>" />
@@ -61,7 +53,7 @@ function xsm_edit_person_school()
                     на <a href="<?php echo $school_url; ?>"><?php echo $school_title; ?></a></td>
             </tr>
             <?php
-            foreach ($person_school_fields as $key=>$field_title)
+            foreach ($fields_desc as $key=>$desc)
             {
                 if (xsm_is_bottom_field($key))
                     continue;
@@ -69,33 +61,24 @@ function xsm_edit_person_school()
                     continue;
                 if ($key == "member_person_id")
                     continue;
-
-                $value = xcms_get_key_or($person_school, $key);
-                $attr = ""; ?>
-                <tr><td class="ankList"><span class="ankEditField xsm-label"><?php echo $person_school_fields[$key]; ?></span>
-                <?php
-                $ft = xcms_get_key_or($field_types, $key);
+                $value = xcms_get_key_or($person_school, $key); ?>
+                <tr><td class="ankList"><?php
+                xsm_draw_field_label($desc);
+                $ft = xcms_get_key_or($desc, "type");
                 if ($ft == "checkbox")
-                {
                     xsm_checkbox($key, $value);
-                }
                 elseif ($ft == "enum")
-                {
                     echo xsm_make_enum_by_type($key, $value, $key);
-                }
                 elseif ($key == 'member_department_id')
                 {
-                    echo xsm_make_selector('department', 'member_department_id', $value,
+                    echo xsm_make_selector(
+                        'department', 'member_department_id', $value,
                         array('department_title'),
-                        "(1 = 1) ORDER BY department_id", $attr);
+                        "(1 = 1) ORDER BY department_id");
                 }
                 else
-                {?>
-                    <input type="text" class="ankEdit" value="<?php echo htmlspecialchars($value); ?>"
-                        name="<?php echo $key; ?>" <?php echo $attr; ?> /><?php
-                } ?>
-                </td></tr>
-                <?php
+                    xsm_draw_field_input($key, $desc, $value);
+                ?></td></tr><?php
             }?>
         </table><?php
         xsm_bottom_fields('person_school', $person_school);
@@ -105,7 +88,7 @@ function xsm_edit_person_school()
 }
 
 if (@$_POST["update-person_school"])
-    xsm_update_person_school('Участник-на-Школе', xsm_get_person_school_fields());
+    xsm_update_person_school('Участник-на-Школе', xsm_get_fields("person_school"));
 elseif (@$_POST["delete-person_school"])
     xsm_warn_delete_person_school('person_school');
 elseif (xcms_get_key_or($_GET, 'action') == 'delete')

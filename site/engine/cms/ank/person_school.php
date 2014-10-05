@@ -23,7 +23,7 @@ function xsm_get_person_school_id($db, $school_id, $person_id)
   * Специфическая функция: возврат происходит совсем в другую таблицу, нежели редактируемая сущность
   * TODO: Сделать более генерический update, чтобы можно было гибко обрабатывать и такие случаи тоже
   **/
-function xsm_update_person_school($title, $fields)
+function xsm_update_person_school($title, $fields_desc)
 {
     $db = xdb_get();
     $person_id = xcms_get_key_or($_POST, 'member_person_id', XDB_INVALID_ID);
@@ -38,7 +38,7 @@ function xsm_update_person_school($title, $fields)
     }
     else
     {
-        $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
+        $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields_desc);
         if ($res)
         {
             $id = $res;

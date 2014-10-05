@@ -120,7 +120,7 @@ function xsm_add_course_teacher($course_id, $course_teacher_id)
             'member_department_id'=>$teacher['department_id']
         );
         $res = xdb_insert_or_update("person_school", array("person_school_id"=>XDB_NEW),
-            $person_school, xsm_get_person_school_fields());
+            $person_school, xsm_get_fields("person_school"));
     }
 }
 ?>

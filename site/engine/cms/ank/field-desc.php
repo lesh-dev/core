@@ -2,24 +2,6 @@
 
 define('XSM_SCHOOL_ANK_ID', 'ank');
 
-// Person on School
-function xsm_get_person_school_fields()
-{
-    return array(
-        "member_person_id"=>"Участник",
-        "school_id"=>"Школа",
-        "member_department_id"=>"Отделение",
-        "is_student"=>"Школьник",
-        "current_class"=>"Класс",
-        "courses_needed"=>"Потребное кол-во зачётов",
-        "curator_group"=>"Кто курирует",
-        "is_teacher"=>"Препод",
-        "curatorship"=>"Кураторство",
-        "person_school_created"=>"Время создания",
-        "person_school_modified"=>"Последняя модификация"
-    );
-}
-
 // Person comment
 function xsm_get_person_comment_fields()
 {
@@ -93,6 +75,7 @@ function xsm_get_fields($table_name)
             ),
         ),
 
+        // person
         "person"=>array(
             "department_id"=>array(
                 "name"=>"Отделение",
@@ -205,6 +188,46 @@ function xsm_get_fields($table_name)
                 "name"=>"Время создания",
             ),
             "person_modified"=>array(
+                "name"=>"Последняя модификация",
+            ),
+        ),
+
+        // person on school
+        "person_school"=>array(
+            "member_person_id"=>array(
+                "name"=>"Участник",
+            ),
+            "school_id"=>array(
+                "name"=>"Школа",
+            ),
+            "member_department_id"=>array(
+                "name"=>"Отделение",
+            ),
+            "is_student"=>array(
+                "name"=>"Школьник",
+                "type"=>"checkbox",
+            ),
+            "current_class"=>array(
+                "name"=>"Класс",
+            ),
+            "courses_needed"=>array(
+                "name"=>"Потребное кол-во зачётов",
+            ),
+            "curator_group"=>array(
+                "name"=>"Кто курирует",
+            ),
+            "is_teacher"=>array(
+                "name"=>"Препод",
+                "type"=>"checkbox",
+            ),
+            "curatorship"=>array(
+                "name"=>"Кураторство",
+                "type"=>"enum",
+            ),
+            "person_school_created"=>array(
+                "name"=>"Время создания",
+            ),
+            "person_school_modified"=>array(
                 "name"=>"Последняя модификация",
             ),
         ),
