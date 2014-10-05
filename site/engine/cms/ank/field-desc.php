@@ -2,33 +2,6 @@
 
 define('XSM_SCHOOL_ANK_ID', 'ank');
 
-// Person comment
-function xsm_get_person_comment_fields()
-{
-    return array(
-        "comment_text"=>"Текст комментария",
-        "owner_login"=>"Логин автора",
-        "blamed_person_id"=>"ID субъекта",
-        "person_comment_created"=>"Время создания",
-        "person_comment_modified"=>"Последняя модификация",
-        "person_comment_deleted"=>"Объект удалён"
-    );
-}
-
-function xsm_get_person_comment_field_types()
-{
-    return array(
-        "comment_text"=>"textarea",
-    );
-}
-
-function xsm_get_person_comment_field_req()
-{
-    return array(
-        "comment_text"=>"required",
-    );
-}
-
 // new style field descriptors
 function xsm_get_fields($table_name)
 {

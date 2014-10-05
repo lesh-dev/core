@@ -89,8 +89,7 @@ function xsm_notify_person_comment_edit($person_comment)
         $person_comment,
         $old_person_comment,
         'person_comment',
-        xsm_get_person_comment_fields(),
-        xsm_get_person_comment_field_types(),
+        xsm_get_fields("person_comment"),
         $table_title);
 
     xcms_send_notification("reg", NULL, $mail_msg);
