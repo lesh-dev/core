@@ -161,6 +161,122 @@ function xsm_get_fields($table_name)
             ),
         ),
 
+        "person"=>array(
+            "department_id"=>array(
+                "name"=>"Отделение",
+            ),
+
+            "anketa_status"=>array(
+                "name"=>"Статус",
+                "type"=>"enum",
+            ),
+
+            "last_name"=>array(
+                "name"=>"Фамилия",
+            ),
+            "first_name"=>array(
+                "name"=>"Имя",
+            ),
+            "patronymic"=>array(
+                "name"=>"Отчество",
+            ),
+
+            "birth_date"=>array(
+                "name"=>"Дата рождения",
+            ),
+            "passport_data"=>array(
+                "name"=>"Паспортные данные",
+            ),
+
+            "school"=>array(
+                "name"=>"Школа",
+            ),
+            "school_city"=>array(
+                "name"=>"Адрес школы",
+            ),
+            "ank_class"=>array(
+                "name"=>"Класс подачи анкеты",
+            ),
+            "current_class"=>array(
+                "name"=>"Класс",
+            ),
+
+            "phone"=>array(
+                "name"=>"Телефон",
+            ),
+            "cellular"=>array(
+                "name"=>"Мобильный телефон",
+            ),
+            "email"=>array(
+                "name"=>"E-Mail",
+            ),
+            "skype"=>array(
+                "name"=>"Skype",
+            ),
+            "social_profile"=>array(
+                "name"=>"Профиль в соц. сети",
+            ),
+
+            "is_teacher"=>array(
+                "name"=>"Препод",
+                "type"=>"checkbox",
+            ),
+            "is_student"=>array(
+                "name"=>"Школьник",
+                "type"=>"checkbox",
+            ),
+
+            "tent_capacity"=>array(
+                "name"=>"Вместимость палатки",
+            ),
+            "tour_requisites"=>array(
+                "name"=>"Туристское барахло",
+                "type"=>"textarea",
+            ),
+
+            "forest_1"=>array(
+                "name"=>"1-й выход в лес",
+                "type"=>"enum",
+            ),
+            "forest_2"=>array(
+                "name"=>"2-й выход в лес",
+                "type"=>"enum",
+            ),
+            "forest_3"=>array(
+                "name"=>"3-й выход в лес",
+                "type"=>"enum",
+            ),
+
+            "favourites"=>array(
+                "name"=>"Любимые предметы",
+                "type"=>"textarea",
+            ),
+            "achievements"=>array(
+                "name"=>"Достижения",
+                "type"=>"textarea",
+            ),
+            "hobby"=>array(
+                "name"=>"Хобби",
+                "type"=>"textarea",
+            ),
+            "lesh_ref"=>array(
+                "name"=>"Откуда узнали о школе",
+                "type"=>"textarea",
+            ),
+
+            "user_agent"=>array(
+                "name"=>"UserAgent",
+                "readonly"=>true,
+            ),
+
+            "person_created"=>array(
+                "name"=>"Время создания",
+            ),
+            "person_modified"=>array(
+                "name"=>"Последняя модификация",
+            ),
+        ),
+
         // person_comment
         "person_comment"=>array(
             "comment_text"=>array(

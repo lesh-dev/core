@@ -74,7 +74,7 @@ function xsm_draw_field_input($key, $desc, $value)
 
 /**
   * Typicaly for readonly fields
-  */
+  **/
 function xsm_draw_field_unnamed_input($desc, $value)
 {
     $attr = xcms_get_key_or($desc, "readonly") ? ' readonly="readonly" ' : '';
