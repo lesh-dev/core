@@ -4,4 +4,4 @@ d=$(dirname $(readlink -f $0))
 ge="$(which grep) -v"
 
 # exclude code and other non-suspicious files
-$d/git-list-all-files | $ge '\.xcms$' | $ge '\.py$' | $ge '\.js$' | $ge '\.php$' | $ge '\.gif$' | $ge '\.png$'
+$d/git-list-all-files | $ge '\.xcms$' | $ge '\.py$' | $ge '\.js$' | $ge '\.php$' | $ge '\.gif$' | $ge '\.png$' | $ge '\.css$'
