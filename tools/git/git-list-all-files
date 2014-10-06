@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 
+ge="$(which grep) -v"
+
 # List all filenames that were in repo since 1st commit
-for i in $( git rev-list --remotes ) ; do git show --name-only $i; done
+for i in $( git rev-list --remotes ) ; do
+    git show --name-only $i | $ge '^commit' | $ge '^Author:' | $ge '^Date:' | $ge 'Merge:' | $ge '^$' | $ge '^ '
+done | sort -u
