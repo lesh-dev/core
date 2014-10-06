@@ -92,27 +92,26 @@ function xsm_add_course_teacher($course_id, $course_teacher_id)
 {
     $course_teachers = array(
         'course_id'=>$course_id,
-        'course_teacher_id'=>$course_teacher_id
+        'course_teacher_id'=>$course_teacher_id,
     );
 
-    // TODO: Add some error handling (and duplicate handling also)
     $res = xdb_insert_or_update(
         'course_teachers',
         array('course_teachers_id'=>XDB_NEW),
         $course_teachers,
         xsm_get_fields("course_teachers"));
 
-    // ensure that this person belongs to given school
+    // check that this person belongs to given school
     $db = xdb_get();
     $course = xdb_get_entity_by_id('course', $course_id);
     $school_id = $course['school_id'];
     $person_school_id = xsm_get_person_school_id($db, $school_id, $course_teacher_id);
     if ($person_school_id === NULL)
     {
+        // and add it if not belongs yet
         $key_name = "person_school_id";
         $teacher = xdb_get_entity_by_id('person', $course_teacher_id);
 
-        // TODO: call person_school API here
         $person_school = array(
             'school_id'=>$school_id,
             'member_person_id'=>$course_teacher_id,
