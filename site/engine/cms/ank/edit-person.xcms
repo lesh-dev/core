@@ -1,6 +1,7 @@
 <# cms/ank/diff #>
 <?php
 require_once("${engine_dir}cms/ank/edit-format.php");
+require_once("${engine_dir}cms/ank/person_school.php");
 
 function xsm_notify_person_edit($person, $old_person)
 {
@@ -27,6 +28,7 @@ function xsm_notify_person_edit($person, $old_person)
 function xsm_edit_person()
 {
     $person_id = xcms_get_key_or($_GET, 'person_id', XDB_INVALID_ID);
+    $school_id = xcms_get_key_or($_GET, 'school_id', XSM_SCHOOL_ANK_ID);
     $person = xdb_get_entity_by_id('person', $person_id);
     if ($person_id == XDB_NEW)
     {
@@ -39,7 +41,9 @@ function xsm_edit_person()
     $fields_desc = xsm_get_fields("person"); ?>
     <form method="post" action="edit-person"><?php
         xsm_edit_operations('person', $person_id, 'Вернуться к просмотру участника');
-        xsm_draw_field_hidden("person_id", $person_id); ?>
+        xsm_draw_field_hidden("person_id", $person_id);
+        xsm_draw_field_hidden("school_id", $school_id);
+        ?>
         <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
                 <td class="ankListRowTitle">Участник <b><?php echo $fio; ?></b></td>
@@ -94,7 +98,9 @@ if (@$_POST["update-person"])
         чтобы вернуться к заполнению!</p><?php
     }
     elseif (!strlen(@$_POST["last_name"]) || !strlen(@$_POST["first_name"]))
-    {?>
+    {
+        // TODO: dependson
+        ?>
         <p>Пожалуйста, укажите хотя бы <b>имя и фамилию</b>!
             Нажмите &laquo;Назад&laquo; (&laquo;Back&raquo;) в браузере,
             чтобы вернуться к заполнению!</p><?php
@@ -102,10 +108,29 @@ if (@$_POST["update-person"])
     else
     {
         $person_id = $_POST["person_id"];
+        $school_id = $_POST["school_id"];
         $old_person = ($person_id != XDB_NEW) ? xdb_get_entity_by_id('person', $person_id) : array();
         $result = xsm_update_entity_listmode('person', 'Участник', xsm_get_fields("person"), '', 'участника');
         if ($person_id == XDB_NEW)
-            $_POST["person_id"] = $result;
+            $person_id = $result;
+            $_POST["person_id"] = $person_id;
+
+        $db = xdb_get();
+        // copy-pasted from course_teacher.php
+        $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
+        if ($person_school_id === NULL)
+        {
+            $person_school = array(
+                'school_id'=>$school_id,
+                'member_person_id'=>$person_id,
+                'is_teacher'=>$_POST['is_teacher'],
+                'is_student'=>$_POST['is_student'],
+                'member_department_id'=>$_POST['department_id'],
+            );
+            // TODO: result checking
+            xdb_insert_or_update("person_school", array("person_school_id"=>XDB_NEW),
+                $person_school, xsm_get_fields("person_school"));
+        }
         xsm_notify_person_edit($_POST, $old_person);
     }
 }

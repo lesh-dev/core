@@ -9,8 +9,8 @@ function xsm_get_person_school_id($db, $school_id, $person_id)
         "SELECT
         ps.person_school_id
         FROM person_school ps WHERE
-        (ps.member_person_id = $person_id) AND
-        (ps.school_id = $school_id)"
+        (ps.member_person_id = '$person_id') AND
+        (ps.school_id = '$school_id')"
     );
 
     if (!($ps_data = $ps_sel->fetchArray(SQLITE3_ASSOC)))

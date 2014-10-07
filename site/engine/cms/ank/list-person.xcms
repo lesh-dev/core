@@ -86,6 +86,14 @@ function xsm_show_person_list($school_id)
 
     $student_count = 0;
     $teacher_count = 0;
+    xsm_view_operations(
+        'person',
+        'участника',
+        xcms_url(array(
+            'anketa_status'=>'cont',
+            'school_id'=>$school_id,
+        ))
+    );
     ?>
     <table class="ankList table table-bordered table-hover table-condensed">
         <?php
@@ -215,6 +223,14 @@ function xsm_show_person_list($school_id)
     ?>
     </table>
     <?php
+    xsm_view_operations(
+        'person',
+        'участника',
+        xcms_url(array(
+            'anketa_status'=>'cont',
+            'school_id'=>$school_id,
+        ))
+    );
 }
 
     xsm_show_person_list($school_id);
