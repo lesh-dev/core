@@ -1,8 +1,8 @@
 LESh Project
 ============
 
-This repo contains all the codebase of current fizlesh.ru and
-(as planned) lesh.org.ru sites guts.
+This repo contains all the codebase of current http://fizlesh.ru and
+(as planned) http://lesh.org.ru sites guts.
 
 X Engine consists of several parts:
 
@@ -19,29 +19,29 @@ fizlesh.ru and lesh.org.ru sites.
 Authors and Contributors
 ========================
 Alexander Trousevitch <trousev@yandex.ru>
-    * Initial XCMS engine design
-    * Initial Contest design
-    * Deploy system
-    * Project administration
+* Initial XCMS engine design
+* Initial Contest design
+* Deploy system
+* Project administration
 
 Mikhail Veltishchev <dichlofos-mv@yandex.ru>
-    * Major XCMS enhancements
-    * Database engine
-    * Mailer and notifications
-    * Current XCMS maintainer
-    * XSM
-    * Forum hacks
-    * Helper scripts and tools
-    * Initial fizlesh.ru design
-    * lesh.org.ru design enhancements
+* Major XCMS enhancements
+* Database engine
+* Mailer and notifications
+* Current XCMS maintainer
+* XSM
+* Forum hacks
+* Helper scripts and tools
+* Initial fizlesh.ru design
+* lesh.org.ru design enhancements
 
 Dmitry Veltishchev <vdm-photo@ya.ru>
-    * Automated test suite
-    * Tools and helper scripts
+* Automated test suite
+* Tools and helper scripts
 
 Julia Aivazyan
-    * lesh.org.ru design
+* lesh.org.ru design
 
 Natalia Skrobova <nata-skr@yandex.ru>
-    * fizlesh.ru design
-    * Art
+* fizlesh.ru design
+* Art
