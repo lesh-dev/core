@@ -14,7 +14,7 @@ X Engine consists of several parts:
 * Administration, deploy and backup tools
 
 Also, this repo hosts design and layout of
-fizlesh.ru and lesh.org.ru sites.
+http://fizlesh.ru and http://lesh.org.ru sites.
 
 Authors and Contributors
 ========================
@@ -32,16 +32,16 @@ Mikhail Veltishchev <dichlofos-mv@yandex.ru>
 * XSM
 * Forum hacks
 * Helper scripts and tools
-* Initial fizlesh.ru design
-* lesh.org.ru design enhancements
+* Initial http://fizlesh.ru design
+* http://lesh.org.ru design enhancements
 
 Dmitry Veltishchev <vdm-photo@ya.ru>
 * Automated test suite
 * Tools and helper scripts
 
 Julia Aivazyan
-* lesh.org.ru design
+* http://lesh.org.ru design
 
 Natalia Skrobova <nata-skr@yandex.ru>
-* fizlesh.ru design
+* http://fizlesh.ru design
 * Art
