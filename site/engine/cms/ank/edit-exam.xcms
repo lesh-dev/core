@@ -191,9 +191,7 @@ function xsm_edit_exam()
         $course = xdb_get_entity_by_id('course', $course_id);
         $school_id = $course['school_id'];
     }
-    $school = xdb_get_entity_by_id('school', $school_id);
-    $school_title = xcms_get_key_or_enc($school, 'school_title');
-    $school_url = "list-person".xcms_url(array('school_id'=>$school_id));
+    $person_list_link = xsm_get_person_list_link($school_id);
     $fields_desc = xsm_get_fields("exam");
     ?>
     <form method="post" action="edit-exam"><?php
@@ -205,7 +203,7 @@ function xsm_edit_exam()
             xsm_draw_field_hidden("course_id", $course_id); ?>
         <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
-                <td class="ankListRowTitle">Зачёт на <a href="<?php echo $school_url; ?>"><?php echo $school_title; ?></a></td>
+                <td class="ankListRowTitle">Зачёт на <?php echo $person_list_link; ?></td>
             </tr>
             <?php
             foreach ($fields_desc as $key=>$desc)
