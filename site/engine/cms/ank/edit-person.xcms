@@ -116,10 +116,10 @@ if (@$_POST["update-person"])
             $_POST["person_id"] = $person_id;
 
         $db = xdb_get();
-        // copy-pasted from course_teacher.php
         $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
         if ($person_school_id === NULL)
         {
+            $school = xdb_get_entity_by_id('school', $school_id);
             $person_school = array(
                 'school_id'=>$school_id,
                 'member_person_id'=>$person_id,
@@ -127,9 +127,22 @@ if (@$_POST["update-person"])
                 'is_student'=>$_POST['is_student'],
                 'member_department_id'=>$_POST['department_id'],
             );
-            // TODO: result checking
-            xdb_insert_or_update("person_school", array("person_school_id"=>XDB_NEW),
+            $ps_result = xdb_insert_or_update("person_school", array("person_school_id"=>XDB_NEW),
                 $person_school, xsm_get_fields("person_school"));
+            $fi = xsm_fi_enc($_POST);
+            $school_title = xcms_get_key_or_enc($school, 'school_title');
+            $school_url = "list-person".xcms_url(array('school_id'=>$school_id));
+            $school_ht = "<a href=\"$school_url\">$school_title</a>";
+            if ($ps_result === false)
+            {?>
+                <p>Не удалось зачислить участника <?php echo $fi; ?>
+                на школу <?php echo $school_ht; ?></p><?php
+            }
+            else
+            {?>
+                <p>Участник <?php echo $fi; ?> успешно зачислен
+                на школу <?php echo $school_ht; ?></p><?php
+            }
         }
         xsm_notify_person_edit($_POST, $old_person);
     }
