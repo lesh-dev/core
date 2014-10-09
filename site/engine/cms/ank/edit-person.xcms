@@ -127,7 +127,7 @@ if (@$_POST["update-person"])
             $ps_result = xdb_insert_or_update("person_school", array("person_school_id"=>XDB_NEW),
                 $person_school, xsm_get_fields("person_school"));
             $fi = xsm_fi_enc($_POST);
-            $person_list_link = xsm_get_person_list_link($school_id);
+            $person_list_link = xsm_person_list_link($school_id);
             if ($ps_result === false)
             {?>
                 <p>Не удалось зачислить участника <?php echo $fi; ?>

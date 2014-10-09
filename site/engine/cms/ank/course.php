@@ -15,7 +15,7 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
     WHERE (c.school_id = $school_id)
     ORDER BY course_title";
 
-    $person_list_link = xsm_get_person_list_link($school_id);
+    $person_list_link = xsm_person_list_link($school_id);
     $ht = $pers ? "h2" : "h1";
     $table_title = "<$ht>Курсы на $person_list_link</$ht>";
 

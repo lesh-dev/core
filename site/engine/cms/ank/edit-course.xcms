@@ -27,12 +27,8 @@ function xsm_edit_course()
         // code from common function
         if ($course_teacher_id !== NULL)
         {
-            $teacher = xdb_get_entity_by_id('person', $course_teacher_id);
-            $teacher_fi = xsm_fi_enc($teacher);
-            $teacher_url = "view-person".xcms_url(array(
-                'person_id'=>$course_teacher_id,
-                'school_id'=>$school_id));
-            $teachers_ht = "<a href=\"$teacher_url\">$teacher_fi</a> ";
+            $teacher_link = xsm_person_view_link($course_teacher_id, $school_id);
+            $teachers_ht = "$teacher_link ";
         }
         else
         {

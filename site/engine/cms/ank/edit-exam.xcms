@@ -115,7 +115,7 @@ function xsm_make_course_selector($name, $value, $db, $school_id)
     foreach ($courses as $key => $course)
     {
         $sel = ($key == $value) ? ' selected="selected" ' : '';
-        $title = htmlspecialchars($course['course_title']);
+        $title = xcms_get_key_or_enc($course, 'course_title');
         $title .= " &#8212; ";
         $next = false;
         foreach ($course['teachers'] as $course_teacher_id => $person)
@@ -191,7 +191,7 @@ function xsm_edit_exam()
         $course = xdb_get_entity_by_id('course', $course_id);
         $school_id = $course['school_id'];
     }
-    $person_list_link = xsm_get_person_list_link($school_id);
+    $person_list_link = xsm_person_list_link($school_id);
     $fields_desc = xsm_get_fields("exam");
     ?>
     <form method="post" action="edit-exam"><?php

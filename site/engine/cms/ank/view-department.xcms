@@ -10,7 +10,7 @@ function xsm_print_department()
     ?>
     <table class="ankList table table-bordered table-hover table-condensed">
     <?php
-        $department_title = htmlspecialchars($department["department_title"]);
+        $department_title = xcms_get_key_or_enc($department, "department_title");
         $department_created = xsm_ymdhm($department["department_created"]);
         $department_modified = xsm_ymdhm($department["department_modified"]);
         ?>

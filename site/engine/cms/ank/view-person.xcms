@@ -168,7 +168,7 @@ function xsm_print_person_schools($db, $person, $current_school_id)
         ORDER BY school_date_start DESC";
     // LIMIT $school_count";
     $school_sel = $db->query($query);
-    $href_ank = "view-person&amp;person_id=$person_id&amp;school_id=".XSM_SCHOOL_ANK_ID;
+    $href_ank = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>XSM_SCHOOL_ANK_ID));
     $active_ank = (XSM_SCHOOL_ANK_ID == $current_school_id) ? 'current' : '';
     ?>
     <table class="ankList table table-bordered"><tr>
