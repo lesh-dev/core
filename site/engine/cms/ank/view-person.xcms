@@ -168,14 +168,12 @@ function xsm_print_person_schools($db, $person, $current_school_id)
         ORDER BY school_date_start DESC";
     // LIMIT $school_count";
     $school_sel = $db->query($query);
-    $href_ank = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>XSM_SCHOOL_ANK_ID));
     $active_ank = (XSM_SCHOOL_ANK_ID == $current_school_id) ? 'current' : '';
     ?>
     <table class="ankList table table-bordered"><tr>
         <td class="school-selection <?php echo $active_ank; ?>">
-            <div>
-                <a href="<?php echo $href_ank; ?>">Анкета</a>
-            <?php
+            <div><?php
+            echo xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID, "Анкета");
             xsm_edit_link('person', $person_id, '', 'Ред.');
             ?>
             </div>
@@ -184,15 +182,14 @@ function xsm_print_person_schools($db, $person, $current_school_id)
         while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
         {
             $school_id = $school['school_id'];
-            $href = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
-            $title = htmlspecialchars($school['school_title']);
+            $title = xcms_get_key_or_enc($school, 'school_title');
             $active = ($school_id == $current_school_id) ? 'current' : '';
             $present = xu_not_empty(xcms_get_key_or($school, 'member_person_id'));
             ?>
             <td class="school-selection <?php echo $active; ?>">
                 <div>
-                    <a href="<?php echo $href; ?>"><?php echo $title; ?></a>
                     <?php
+                    echo xsm_person_view_link($person_id, $school_id, $title);
                     if ($present)
                     {
                         xsm_print_edit_person_school($db, $school_id, $person_id);
@@ -200,7 +197,6 @@ function xsm_print_person_schools($db, $person, $current_school_id)
                     }
                     else
                         xsm_print_add_person_to_school($db, $school_id, $person);
-
                     ?>
                 </div>
             </td>

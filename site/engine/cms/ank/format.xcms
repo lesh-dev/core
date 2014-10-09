@@ -306,7 +306,7 @@ function xsm_person_list_link($school_id)
 
 function xsm_person_view_link($person_id, $school_id, $title = "")
 {
-    if (xu_empty($title)
+    if (xu_empty($title))
     {
         $person = xdb_get_entity_by_id('person', $person_id);
         $title = xsm_fi_enc($person);

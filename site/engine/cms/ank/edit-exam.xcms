@@ -65,9 +65,8 @@ function xsm_update_exam($table_name, $title, $fields)
         }
     }
     $school_id = xcms_get_key_or($_POST, 'school_id', -1);
-    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
-    ?>
-    <a href="<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
+    echo xsm_person_view_link($person_id, $school_id, "Вернуться к просмотру участника");
+    ?></p><?php
 }
 
 /* Ещё одна специфическая функция -- возврат на редактирование, а не на просмотр,
