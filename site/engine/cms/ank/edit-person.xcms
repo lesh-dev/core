@@ -86,6 +86,12 @@ function xsm_edit_person()
         xsm_bottom_fields('person', $person);
         xsm_edit_operations('person', $person_id, 'Вернуться к просмотру участника'); ?>
     </form>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        xjs_set_depends_on('update-person-submit', 'last_name-input', null, 2);
+        xjs_set_depends_on('update-person-submit', 'first_name-input', null, 2);
+    });
+    </script>
     <?php
 }
 
@@ -96,14 +102,6 @@ if (@$_POST["update-person"])
         <p>Передан неполный запрос. Пожалуйста, напишите на dev@fizlesh.ru о том,
         как Вы этого добились! Нажмите &laquo;Назад&laquo; (&laquo;Back&raquo;) в браузере,
         чтобы вернуться к заполнению!</p><?php
-    }
-    elseif (!strlen(@$_POST["last_name"]) || !strlen(@$_POST["first_name"]))
-    {
-        // TODO: dependson
-        ?>
-        <p>Пожалуйста, укажите хотя бы <b>имя и фамилию</b>!
-            Нажмите &laquo;Назад&laquo; (&laquo;Back&raquo;) в браузере,
-            чтобы вернуться к заполнению!</p><?php
     }
     else
     {

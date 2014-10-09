@@ -61,9 +61,11 @@ function xsm_get_fields($table_name)
 
             "last_name"=>array(
                 "name"=>"Фамилия",
+                "required"=>true,
             ),
             "first_name"=>array(
                 "name"=>"Имя",
+                "required"=>true,
             ),
             "patronymic"=>array(
                 "name"=>"Отчество",
