@@ -131,11 +131,11 @@ function xsm_show_all_person_list()
     ?>
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
-            <col width="30" class="id" />
+            <col width="3%"/>
             <col width="30%" />
-            <col width="15%" />
+            <col width="5%" />
             <col width="55%" />
-            <col width="90" class="ank-status" />
+            <col width="7%"/>
         </colgroup>
         <thead>
             <th class="ankList">ID</th>

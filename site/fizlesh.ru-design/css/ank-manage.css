@@ -266,14 +266,6 @@ span.present {
     font-weight: bold;
 }
 
-col.id {
-    width: 35px;
-}
-
-col.ank-status {
-    width: 90px;
-}
-
 div.xsm-help-widget {
     /* design-specific settings here, see xsm.css */
     border: 1px solid #005f00;
