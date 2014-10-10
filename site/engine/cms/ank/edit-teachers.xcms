@@ -27,10 +27,8 @@ function xsm_edit_course_teachers()
             $course_teacher_id = $teacher_data['course_teacher_id'];
             $already_added[$course_teacher_id] = true;
             $teacher_fi = xsm_fi_enc($teacher_data);
-            $teacher_url = "view-person".xcms_url(array(
-                'person_id'=>$course_teacher_id,
-                'school_id'=>$school_id));
-            $teacher_ht = "<a href=\"$teacher_url\">$teacher_fi</a> ";
+            $teacher_link = xsm_person_view_link($course_teacher_id, $school_id, $teacher_fi);
+            $teacher_ht = "$teacher_link ";
 
             ?>
             <form method="post" action="edit-teachers"><?php
