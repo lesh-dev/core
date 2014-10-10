@@ -71,10 +71,7 @@ function xsm_print_course()
         while ($exam = $exam_sel->fetchArray(SQLITE3_ASSOC))
         {
             $student_person_id = $exam['student_person_id'];
-            $student = xdb_get_entity_by_id('person', $student_person_id);
-            $student_fi = xsm_fi_enc($student);
-            $student_url = "view-person".
-                xcms_url(array('person_id'=>$student['person_id'], 'school_id'=>$school_id));
+            $student_link = xsm_person_view_link($student_person_id, $school_id);
 
             $exam_comment = htmlspecialchars($exam["exam_comment"]);
             $deadline_date = htmlspecialchars($exam["deadline_date"]);
@@ -88,7 +85,7 @@ function xsm_print_course()
         ?>
         <tr>
             <td class="ankList"><a href="<?php echo $exam_url; ?>"><?php echo $hr_exam_status; ?></a></td>
-            <td class="ankList"><a href="<?php echo $student_url; ?>"><?php echo $student_fi; ?></a></td>
+            <td class="ankList"><?php echo $student_link; ?></td>
             <td class="ankList"><?php echo $exam_comment; ?></td>
             <td class="ankList"><?php echo $deadline_date; ?></td>
         </tr>
