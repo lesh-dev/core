@@ -26,10 +26,8 @@ function xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id
         $course_teacher_id = $teachers_data['course_teacher_id'];
         if ($course_teacher_id == $course_teacher_id_filter)
             $filtered = true;
-        $teacher_url = "view-person".xcms_url(array(
-            'person_id'=>$course_teacher_id,
-            'school_id'=>$school_id));
-        $teachers_ht .= "<a href=\"$teacher_url\">$teacher_fi</a> ";
+        $teacher_link = xsm_person_view_link($course_teacher_id, $school_id, $teacher_fi);
+        $teachers_ht .= "$teacher_link ";
     }
     if (!$filtered)
         return false;
