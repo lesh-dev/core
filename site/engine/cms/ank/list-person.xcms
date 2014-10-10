@@ -110,13 +110,13 @@ function xsm_show_person_list($school_id)
         </colgroup>
         <?php } else {?>
         <colgroup>
-            <col width="16px" />
-            <col width="25%" />
-            <col width="55px" />
-            <col width="30px" />
-            <col width="30px" />
-            <col width="50px" />
-            <col width="25%" />
+            <col width="3%" />
+            <col width="35%" />
+            <col width="3%" />
+            <col width="10%" />
+            <col width="4%" />
+            <col width="6%" />
+            <col width="45%" />
         </colgroup>
         <?php } ?>
         <thead>
