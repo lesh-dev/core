@@ -34,10 +34,8 @@ function xsm_edit_person_school()
     if (array_key_exists('current_class', $_GET))
         $person_school['current_class'] = $_GET['current_class'];
 
-    $member = xdb_get_entity_by_id('person', $member_person_id);
+    $member_view_link = xsm_person_view_link($member_person_id, $school_id);
     $person_list_link = xsm_person_list_link($school_id);
-    $fio = xsm_fio_enc($member);
-    $person_url = "view-person".xcms_url(array('person_id'=>$member_person_id, 'school_id'=>$school_id));
     $fields_desc = xsm_get_fields("person_school"); ?>
     <form method="post" action="edit-person_school" role="form"><?php
         xsm_person_school_edit_operations('person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id, 'top');
@@ -47,8 +45,7 @@ function xsm_edit_person_school()
         ?>
         <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
-                <td class="ankListRowTitle">Участник
-                    <a href="<?php echo $person_url; ?>"><?php echo $fio; ?></a>
+                <td class="ankListRowTitle">Участник <?php echo $member_view_link; ?>
                     на <?php echo $person_list_link; ?></td>
             </tr>
             <?php
