@@ -185,6 +185,8 @@ function xsm_compose_anketa_reply_link($first_name, $email)
     $reply_link = str_replace("@@REPLY-BODY@", str_replace("\n", "<br />", $reply_body), $reply_link);
     $reply_link = str_replace("@@REPLY-BODY-ENC@", rawurlencode($reply_body), $reply_link);
     $reply_link = str_replace("@@REPLY-TO@", $email, $reply_link);
+
+    return $reply_link;
 }
 
 
