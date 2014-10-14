@@ -71,6 +71,7 @@ function xcms_uuid()
 
 /**
   * YYYY-MM-DD HH:MM:SS
+  * Human-readable timestamp
   **/
 function xcms_datetime($timestamp = false)
 {
@@ -79,6 +80,19 @@ function xcms_datetime($timestamp = false)
     if (xu_empty($timestamp))
         return "";
     return date("Y-m-d H:i:s", $timestamp);
+}
+
+/**
+  * YYYY-MM-DD.HH-MM-SS
+  * Human-readable timestamp without spaces, suitable for filenames
+  **/
+function xcms_datetime_ns($timestamp = false)
+{
+    if ($timestamp === false)
+        return date("Y-m-d.H-i-s");
+    if (xu_empty($timestamp))
+        return "";
+    return date("Y-m-d.H-i-s", $timestamp);
 }
 
 function xcms_date($timestamp = false)
