@@ -60,7 +60,8 @@
     {
         $insert = false;
         foreach ($primary_keys as $key => $value)
-            if ($value == XDB_NEW) $insert = true;
+            if ($value == XDB_NEW)
+                $insert = true;
         if ($insert)
             return xdb_insert_ai($table_name, $primary_keys, $values, $allowed_keys);
         else

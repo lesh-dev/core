@@ -86,11 +86,11 @@ function ctx_update_object($table_name, $new_values, $prev_values = array())
     }
 
     $key_name = "${table_name}_id";
-    $pkv = $values[$key_name];
+    $pk_value = xcms_get_key_or($values, $key_name, XDB_NEW);
     unset($values[$key_name]);
     $values["contest_year"] = $CONTEST_CURRENT_YEAR; // year sharding
 
-    xdb_insert_or_update($table_name, array($key_name => $pkv), $values, $values);
+    xdb_insert_or_update($table_name, array($key_name => $pk_value), $values, $values);
 }
 
 function ctx_get_works()
