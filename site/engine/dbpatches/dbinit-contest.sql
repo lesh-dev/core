@@ -2,6 +2,17 @@
     Участники олимпиады (заполняется де-факто вручную,
     т.к. работы грузятся пачками и их надо расклеивать.
 */
+
+create table submission(
+    submission_id integer primary key autoincrement,
+    mail text,
+    attachment text,
+    fileexchange text,
+    submission_timestamp text,
+    sender text,
+    contest_year text
+);
+
 create table contestants(
     contestants_id integer primary key autoincrement,
     name text,

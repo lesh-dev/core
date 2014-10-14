@@ -10,6 +10,15 @@ $CTX_META["problems"] = array(
     "criteria" => array("name"=>"Критерий", "type"=>"large"),
 );
 
+$CTX_META["submission"] = array(
+    "submission_id" => array("name"=>"ID", "type"=>"pk"),
+    "mail" => array("name"=>"EMail", "type"=>"text"),
+    "fileexchange" => array("name"=>"Ссылка на файлообменник", "type"=>"text"),
+    "attachment" => array("name"=>"Вложение", "type"=>"file"),
+    "submission_timestamp" => array("name"=>"Время получения", "type"=>"text", "readonly"=>true),
+    "sender" => array("name"=>"Отправитель", "type"=>"text", "readonly"=>true),
+);
+
 $CTX_META["contestants"] = array(
     "contestants_id" => array("name"=>"", "type"=>"pk"),
     "name" => array(
@@ -37,18 +46,20 @@ $CTX_META["solutions"] = array(
     "resolution_mark" => array("name"=>"Итоговая оценка", "type"=>"text"),
 );
 
-function ctx_update_object($table_name, $values)
+function ctx_update_object($table_name, $new_values, $prev_values = array())
 {
     global $CTX_META;
     global $CONTEST_CURRENT_YEAR;
     global $content_dir;
+
+    $values = $prev_values;
 
     // directly update all non-file fields
     foreach ($CTX_META[$table_name] as $id=>$meta)
     {
         if ($meta["type"] == "file")
             continue;
-        $values[$id] = xcms_get_key_or($_POST, $id);
+        $values[$id] = xcms_get_key_or($new_values, $id);
     }
 
     // update file fields: if no new file given, preserve old value

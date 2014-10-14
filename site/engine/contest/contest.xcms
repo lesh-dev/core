@@ -32,7 +32,7 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
         if (strlen($pk) && $pk != XDB_NEW)
             $values = xdb_get_entity_by_id($table_name, $pk);
 
-        ctx_update_object($table_name, $values);
+        ctx_update_object($table_name, $_POST, $values);
         if ($return == "stay")
             $show_form = true;
         else
