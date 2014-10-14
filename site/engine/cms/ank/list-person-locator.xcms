@@ -149,7 +149,7 @@ function xsm_show_all_person_list()
     {
         $person_id = htmlspecialchars($person["person_id"]);
         $fi = xsm_fi_enc($person);
-        $person_link = xsm_person_view_link($peron_id, XSM_SCHOOL_ANK_ID, $fi);
+        $person_link = xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID, $fi);
 
         $school = htmlspecialchars($person["school"]);
         $school_city = htmlspecialchars($person["school_city"]);
