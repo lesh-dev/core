@@ -19,6 +19,15 @@ $max_attachment_size = 20 * 1024 * 1024;
 $contest_mail = "fizleshcontest@yandex.ru";
 $contest_mail_ht = "<a href=\"mailto:$contest_mail\">$contest_mail</a>";
 
+function ctx_notify_three_days()
+{
+    global $contest_mail_ht;
+    ?>
+    <p>Мы свяжемся с Вами в течении трёх дней. Если за этот срок
+    Вам на почту не придёт уведомления, обязательно свяжитесь
+    с нами по электронной почте <?php echo $contest_mail_ht; ?>.</p><?php
+}
+
 function ctx_submit_solution()
 {
     $timestamp = time();
@@ -28,11 +37,8 @@ function ctx_submit_solution()
     ctx_update_object("submission", $data);
 
     ?>
-    <h3>Спасибо, Ваше решение принято!</h3>
-    <p>Мы свяжемся с Вами в течении трёх дней. Если за этот срок
-    Вам на почту не придёт уведомления,
-    отправьте, пожалуйста, решение еще раз.</p>
-    <?php
+    <h3>Спасибо, Ваше решение принято!</h3><?php
+    ctx_notify_three_days();
 }
 
 if (@$_POST["send-contest"])
@@ -149,10 +155,7 @@ if ($show_form) { ?>
     <input type="submit" name="send-contest" id="send-contest-submit" value="Отправить" />
 </form>
 
-<p>
-    Оставьте, пожалуйста, работающий и читаемый Вами адрес
-    электронной почты. Мы оповестим Вас о том, что решение получено.
-    Если Вы не получите оповещения в течении трёх дней~---
-    пошлите решение еще раз.
-</p>
+<p>Оставьте, пожалуйста, работающий и читаемый Вами адрес
+электронной почты. Мы оповестим Вас о том, что решение получено.</p><?php
+ctx_notify_three_days(); ?>
 <?php } ?>
