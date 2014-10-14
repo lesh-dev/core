@@ -76,8 +76,13 @@ function ctx_update_object($table_name, $new_values, $prev_values = array())
         if (!strlen($file_desc["tmp_name"]))
             continue;
 
-        $home = "${content_dir}contest/attach/$table_name/".time();
-        $new_name = "$home/".$file_desc["name"];
+        $timestamp = time();
+        $home = "${content_dir}contest/attach/$table_name/$timestamp";
+        $ext = pathinfo($file_desc["name"], PATHINFO_EXTENSION);
+        $ext = xcms_page_id_suffix($ext);
+        $file_name = pathinfo($file_desc["name"], PATHINFO_FILENAME);
+        $file_name = xcms_page_id_suffix($file_name);
+        $new_name = "$home/$table_name-attach-$file_name.$ext";
         @mkdir($home, 0777, true);
         file_put_contents("${content_dir}contest/attach/.htaccess", "Allow from all\n");
         if (!copy($file_desc["tmp_name"], $new_name))
