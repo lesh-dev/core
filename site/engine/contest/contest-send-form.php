@@ -6,7 +6,7 @@
  * ПОЛНОСТЬЮ. В противном случае очень тяжело следить за изменениями этого кода.
  * Длина строки не должна превышать 80 символов.
  *
- * Файл расположен в fizlesh.ru-design/contest-send-form.php
+ * Файл расположен в site/engine/contest/contest-send-form.php
  * Alias страницы: contest/send
  **/
 require_once("${engine_dir}sys/db.php");
