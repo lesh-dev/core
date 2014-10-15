@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
+import random_crap
+
 
 class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
     """
@@ -12,7 +14,7 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
     * check profile linking
     """
 
-    def run(self):      
+    def run(self):
         inpLogin = "xsm_link_" + random_crap.randomText(6)
         inpEMail = random_crap.randomEmail()
         inpPass = random_crap.randomText(8)
@@ -20,12 +22,12 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
 
         inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName,
                                                                   auxParams=["do_not_logout_admin", "manager_rights"])
-        
+
         self.closeAdminPanel()
-        self.gotoXsm()   
+        self.gotoXsm()
         self.gotoXsmActive()
         self.gotoXsmAddPerson()
-        
+
         # generate
         inpLastName = u"ИксЭсЭмов" + random_crap.randomText(4)
         inpFirstName = u"Юзер_" + random_crap.randomText(3)
@@ -36,12 +38,12 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
         inpFirstName = self.fillElementById("first_name-input", inpFirstName)
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
         inpEMailXsm = self.fillElementById("email-input", inpEMailXsm)
-                
+
         if inpEMail != inpEMailXsm:
             self.failTest("Cannot create user with identical email. ")
-        
+
         self.clickElementById("update-person-submit")
-        
+
         self.gotoRoot()
         self.performLogoutFromSite()
 
@@ -57,19 +59,19 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
         xsmAlias = xtest_common.fullAlias(inpLastName, inpFirstName, inpMidName)
         #self.checkPersonAliasInPersonView(xsmAlias, "We should get into our XSM person card. ")
         self.assertBodyTextPresent(xsmAlias, "We should get into our XSM person card. ")
-        
+
         self.gotoRoot()
         self.performLogoutFromSite()
-        
+
         self.performLoginAsAdmin()
         self.gotoAdminPanel()
         self.gotoUserList()
-        
+
         self.gotoUrlByPartialLinkText(inpLogin, "Click on user name in the list")
-        
+
         self.assertBodyTextPresent(cardCaption, "We should see XSM card link. ")
         xsmLinkAlias = xtest_common.shortAlias(inpLastName, inpFirstName)
-        
-        self.gotoUrlByLinkText(xsmAlias, "Click on XSM card link")
-        
+
+        self.gotoUrlByLinkText(xsmLinkAlias, "Click on XSM card link")
+
         # TODO: here also should be link to user's XSM profile, if any.
