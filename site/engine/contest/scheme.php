@@ -13,10 +13,21 @@ $CTX_META["problems"] = array(
 $CTX_META["submission"] = array(
     "submission_id" => array("name"=>"ID", "type"=>"pk"),
     "mail" => array("name"=>"EMail", "type"=>"text"),
-    "fileexchange" => array("name"=>"Ссылка на файлообменник", "type"=>"text"),
+    "fileexchange" => array(
+        "name"=>"Ссылка на файлообменник",
+        "type"=>"link",
+    ),
     "attachment" => array("name"=>"Вложение", "type"=>"file"),
-    "submission_timestamp" => array("name"=>"Время получения", "type"=>"text", "readonly"=>true),
-    "sender" => array("name"=>"Отправитель", "type"=>"text", "readonly"=>true),
+    "submission_timestamp" => array(
+        "name"=>"Время получения",
+        "type"=>"timestamp",
+        "readonly"=>true,
+    ),
+    "sender" => array(
+        "name"=>"Отправитель",
+        "type"=>"text",
+        "readonly"=>true,
+    ),
 );
 
 $CTX_META["contestants"] = array(

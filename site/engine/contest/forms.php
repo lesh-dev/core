@@ -1,7 +1,13 @@
 <?php
 
-function xcmst_draw_contest_form_field($type, $name, $value, $id)
+function xcmst_draw_contest_form_field($desc, $value, $id)
 {
+    $type = $desc["type"];
+    $name = $desc["name"];
+    $readonly = xcms_get_key_or($desc, "readonly", false);
+
+    $a_readonly = $readonly ? " readonly=\"readonly\" " : "";
+
     $value = htmlspecialchars($value);
     if ($type == "pk")
     {
@@ -9,36 +15,50 @@ function xcmst_draw_contest_form_field($type, $name, $value, $id)
             $value = XDB_NEW;
         echo "<input type=\"hidden\" name=\"$id\" value=\"$value\" />";
     }
-    if ($type == "text")
+    elseif ($type == "text" || $type == "link" || $type == "timestamp")
     {
+        $aux_value = "";
+        if ($type == "timestamp")
+            $aux_value = xcms_datetime($value);
         echo "<tr>\n".
             "<td>$name</td>\n".
-            "<td><input type=\"text\" placeholder=\"$name\" name=\"$id\" id=\"$id-input\" value=\"$value\" /></td>\n".
+            "<td><input type=\"text\" $a_readonly placeholder=\"$name\" name=\"$id\" id=\"$id-input\" value=\"$value\" /> $aux_value</td>\n".
             "</tr>\n";
     }
-    if ($type == "file")
+    elseif ($type == "file")
     {
         echo "<tr>\n".
             "<td>$name</td>\n".
             "<td><input name=\"$id\" id=\"$id-file\" type=\"file\" value=\"$value\" /></td>\n".
             "</tr>\n";
     }
-    if ($type == "large")
+    elseif ($type == "large")
     {
         echo "<tr><td colspan=\"2\">$name:</td></tr>\n".
             "<tr><td colspan=\"2\">\n".
             "<textarea class=\"field span12\" rows=\"8\" name=\"$id\" id=\"$id-text\">$value</textarea></td>\n".
             "</tr>\n";
     }
+    else
+    {
+        echo "<tr>\n".
+            "<td>$name</td>\n".
+            "<td>{{UNKNOWN FIELD of type $type}}</td>\n".
+            "</tr>\n";
+    }
 }
 
-function xcmst_draw_contest_form_view($type, $name, $value)
+function xcmst_draw_contest_form_view($desc, $value)
 {
     global $web_prefix;
+
+    $type = $desc["type"];
+    $name = $desc["name"];
+
     $value = htmlspecialchars($value);
     if ($type == "pk")
     {
-
+        // do not render it
     }
     elseif ($type == "file")
     {
@@ -49,9 +69,15 @@ function xcmst_draw_contest_form_view($type, $name, $value)
             echo "(нет файла)";
         echo "</td></tr>\n";
     }
-    elseif ($type == "text")
+    elseif ($type == "text" || $type == "timestamp")
     {
+        if ($type == "timestamp")
+            $value = xcms_datetime($value);
         echo "<tr><th>$name</th><td>$value</td></tr>\n";
+    }
+    elseif ($type == "link")
+    {
+        echo "<tr><th>$name</th><td><a href=\"$value\">$value</a></td></tr>\n";
     }
     elseif ($type == "large")
     {
@@ -59,5 +85,9 @@ function xcmst_draw_contest_form_view($type, $name, $value)
             $value = "&nbsp;";
         echo "<tr><th colspan=\"2\">$name:</th></tr>\n";
         echo "<tr><td colspan=\"2\">$value</td></tr>\n";
+    }
+    else
+    {
+        echo "<tr><th>$name</th><td>{{UNKNOWN FIELD of type $type}}</td></tr>\n";
     }
 }
