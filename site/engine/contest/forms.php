@@ -70,7 +70,7 @@ function xcmst_draw_contest_form_view($desc, $value)
     {
         echo "<tr><th>$name</th><td>";
         if (xu_not_empty($value))
-            echo "<a class=\"btn btn-success\" href=\"/$web_prefix$value\">Скачать</a>";
+            echo "<a href=\"/$web_prefix$value\">Скачать</a>";
         else
             echo "(нет файла)";
         echo "</td></tr>\n";

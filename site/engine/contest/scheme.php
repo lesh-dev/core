@@ -2,6 +2,20 @@
 
 $CONTEST_CURRENT_YEAR = "2014";
 
+$CTX_NAMES = array(
+    "problems"=>array(
+        "name"=>"Задача",
+        "plural"=>"Задачи",
+        "whom"=>"задачу",
+    ),
+    "submission"=>array(
+        "name"=>"Присланное",
+        "plural"=>"Присланное",
+        "whom"=>"присланное",
+    ),
+);
+
+
 $CTX_META["problems"] = array(
     "problems_id" => array("name"=>"ID", "type"=>"pk"),
     "problem_name" => array("name"=>"Название задачи", "type"=>"text"),

@@ -95,12 +95,17 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
 function ctx_show_list($table_name, $order, $filter, $row_template)
 {
     global $CTX_META;
+    global $CTX_NAMES;
     global $ctx_prefix;
     global $web_prefix;
 
     $ans = "";
     $rows = xdb_get_table($table_name, $order, $filter);
     $is_tabular = (substr($row_template, 0, 3) == "<tr");
+
+    $whom = $CTX_NAMES[$table_name]["whom"];
+    $button = "<div style=\"margin-bottom: 16px\"><a class=\"btn btn-primary\" id=\"${table_name}_edit-link\" href=\"$ctx_prefix/problems/edit\">Добавить $whom</a></div>\n";
+    $ans .= $button;
 
     if ($is_tabular)
         $ans .= "<table class=\"table table-striped table-bordered table-condensed table-hover\">\n";
@@ -141,6 +146,8 @@ function ctx_show_list($table_name, $order, $filter, $row_template)
 
     if ($is_tabular)
         $ans .= "</table>\n";
+
+    $ans .= $button;
 
     return $ans;
 }
@@ -312,7 +319,6 @@ if ($mode == "view")
             $FILTER,
             "<b>Задача <a href=\"{#view}\">{problem_name}</a></b>, проверяют: {people}<br />"
         );
-        ?><a href="<# ctx_prefix #>/problems/edit">Добавить еще одну задачу</a><br/><?php
     }
     elseif ($table_name == "submission")
     {
@@ -328,7 +334,6 @@ if ($mode == "view")
                 "<td><a href=\"{#view}\">Просмотр</a></td>".
             "</tr>"
         );
-        ?><a href="<# ctx_prefix #>/submission/edit">Добавить присланное</a><br/><?php
     }
     elseif ($table_name == "contestants" && xu_empty($entry_id))
         ctx_show_overall_checking_progress();
