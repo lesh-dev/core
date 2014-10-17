@@ -104,7 +104,10 @@ function ctx_show_list($table_name, $order, $filter, $row_template)
     $is_tabular = (substr($row_template, 0, 3) == "<tr");
 
     $whom = $CTX_NAMES[$table_name]["whom"];
-    $button = "<div style=\"margin-bottom: 16px\"><a class=\"btn btn-primary\" id=\"${table_name}_edit-link\" href=\"$ctx_prefix/problems/edit\">Добавить $whom</a></div>\n";
+    $button =
+        "<div style=\"margin-bottom: 16px\">".
+        "<a class=\"btn btn-primary\" id=\"${table_name}_edit-link\" href=\"$ctx_prefix/problems/edit\">Добавить $whom</a>".
+        "</div>\n";
     $ans .= $button;
 
     if ($is_tabular)
