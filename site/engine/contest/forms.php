@@ -2,6 +2,8 @@
 
 function xcmst_draw_contest_form_field($desc, $value, $id)
 {
+    global $web_prefix;
+
     $type = $desc["type"];
     $name = $desc["name"];
     $readonly = xcms_get_key_or($desc, "readonly", false);
@@ -27,9 +29,13 @@ function xcmst_draw_contest_form_field($desc, $value, $id)
     }
     elseif ($type == "file")
     {
+        $aux_value = "(нет файла)";
+        if (xu_not_empty($value))
+            $aux_value = "<a href=\"/$web_prefix$value\">Текущий файл</a>";
+
         echo "<tr>\n".
             "<td>$name</td>\n".
-            "<td><input name=\"$id\" id=\"$id-file\" type=\"file\" value=\"$value\" /></td>\n".
+            "<td><input name=\"$id\" id=\"$id-file\" type=\"file\" value=\"$value\" /> $aux_value</td>\n".
             "</tr>\n";
     }
     elseif ($type == "large")

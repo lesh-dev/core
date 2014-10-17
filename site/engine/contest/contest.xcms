@@ -94,7 +94,10 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
   **/
 function ctx_show_list($table_name, $order, $filter, $row_template)
 {
-    global $CTX_META, $ref, $ctx_prefix;
+    global $CTX_META;
+    global $ctx_prefix;
+    global $web_prefix;
+
     $ans = "";
     $rows = xdb_get_table($table_name, $order, $filter);
     $is_tabular = (substr($row_template, 0, 3) == "<tr");
@@ -109,6 +112,7 @@ function ctx_show_list($table_name, $order, $filter, $row_template)
         foreach ($fields_desc as $id=>$desc)
         {
             $value = xcms_get_key_or($line, $id);
+            $value = htmlspecialchars($value);
             $name = $desc["name"];
             $type = $desc["type"];
             $required = xcms_get_key_or($desc, "required", false);
@@ -116,8 +120,7 @@ function ctx_show_list($table_name, $order, $filter, $row_template)
             {
                 if (xu_not_empty($value))
                 {
-                    $value = htmlspecialchars($value);
-                    $value = "<a href=\"$value\">$name</a>";
+                    $value = "<a href=\"/$web_prefix$value\">$name</a>";
                 }
                 else
                 {
