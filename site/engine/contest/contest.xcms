@@ -356,7 +356,7 @@ if ($mode == "view")
     elseif (xu_not_empty($entry_id))
     {
         ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
-        echo "<a href=\"$ctx_prefix/$table_name/edit/$entry_id\">Правка</a>";
+        echo "<div><a class=\"btn btn-primary\" href=\"$ctx_prefix/$table_name/edit/$entry_id\">Правка</a></div>";
     }
 }
 ?>
