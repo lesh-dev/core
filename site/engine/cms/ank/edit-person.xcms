@@ -115,7 +115,7 @@ if (@$_POST["update-person"])
 
         $db = xdb_get();
         $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
-        if ($person_school_id === NULL)
+        if ($person_school_id === NULL && $school_id != XSM_SCHOOL_ANK_ID)
         {
             $person_school = array(
                 'school_id'=>$school_id,
