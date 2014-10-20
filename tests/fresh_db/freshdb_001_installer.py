@@ -1,18 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import random_crap, xtest_common
+import xtest_common
+
 
 class FreshDbInstaller(xtest_common.XcmsTestWithConfig):
     """
-    This test checks XCMS installator with fresh database. 
+    This test checks XCMS installator with fresh database.
     It does following steps:
     * navigates to setup form
     * submits form with default values except db name
     * checks if 'installation complete' message appeared
     * checks if 'Creating fresh database' message appeared
     """
-    
+
     def run(self):
         self.gotoRoot()
 
@@ -22,13 +23,9 @@ class FreshDbInstaller(xtest_common.XcmsTestWithConfig):
         self.assertSourceTextPresent(u"Установка завершена!")
         self.assertSourceTextPresent("Creating fresh database")
         self.gotoUrlByLinkText(u"Перейти к сайту")
-               
+
         self.setTestNotifications()
         self.checkTestNotifications()
 
     def checkDocType(self):
         self.logAdd("DOCTYPE checking disabled for installer test. ", "warning")
-        
-
-        
-    
