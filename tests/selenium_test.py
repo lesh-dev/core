@@ -41,6 +41,7 @@ from bawlib import isVoid, isList, isString, isNumber, isEqual, getSingleOption,
 #'start_session', 'stop_client', 'switch_to_active_element', 'switch_to_alert', 'switch_to_default_content',
 #'switch_to_frame', 'switch_to_window', 'title', 'window_handles']
 
+
 class TestError(RuntimeError):
     pass
 
@@ -127,7 +128,7 @@ def createLogDir(directory):
         if ex.errno != errno.EEXIST:
             raise
 
-    
+
 def getValue(ele):
     return ele.get_attribute('value')
 
@@ -159,7 +160,7 @@ class SeleniumTest(object):
         self.m_errorsAsWarnings = False
         self.m_doCheck404 = True
         self.m_textOnPage404 = "Page not found"
-        
+
         self.m_logDir = "logs"
 
         self.m_logFile = self.m_logDir + "/" + self.m_testName + ".log" #"_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") +
@@ -298,7 +299,7 @@ class SeleniumTest(object):
             normUrl = "/" + normUrl
         fullUrl = self.m_baseUrl + normUrl
         return self.gotoSite(fullUrl, comment)
-    
+
     def lastActionType(self):
         if self.m_actionLog:
             return self.m_actionLog[-1].m_action
@@ -889,7 +890,7 @@ class SeleniumTest(object):
         try:
             if not self.m_logStarted:
                 self.logStart()
-                
+
             newTime = currentTime()
             duration = newTime - self.m_logTime
             self.m_logTime = newTime
