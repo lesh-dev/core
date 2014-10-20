@@ -5,6 +5,7 @@ import xtest_common
 import random_crap
 import bawlib
 
+
 class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
     """
     This test checks bad cases of anketa add functional
@@ -16,7 +17,7 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
     * correct all errors and finally submit form.
     """
 
-    def trySubmit(self, reason = None):
+    def trySubmit(self, reason=None):
         self.clickElementById("submit-anketa-button")
         if reason:
             self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage(), reason)
@@ -43,11 +44,11 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         self.assertBodyTextPresent(lastNameTooShort)
 
         # generate some text
-        inpLastName = testMailPrefix + u"Криворучкин" + random_crap.randomText(5);
+        inpLastName = testMailPrefix + u"Криворучкин" + random_crap.randomText(5)
         inpFirstName = u"Хакер" + random_crap.randomText(3)
         inpMidName = u"Ламерович" + random_crap.randomText(3)
 
-        inpBirthDate = random_crap.randomDigits(2) + "." + random_crap.randomDigits(2) + "." + random_crap.randomDigits(4);
+        inpBirthDate = random_crap.randomDigits(2) + "." + random_crap.randomDigits(2) + "." + random_crap.randomDigits(4)
 
         inpSchool = u"Хакерская школа им. К.Митника №" + random_crap.randomDigits(4)
 
@@ -90,7 +91,7 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         self.trySubmit("Phone fields were not filled. ")
         self.assertBodyTextPresent(u"Укажите правильно хотя бы один из телефонов")
 
-        inpPhone = self.fillElementById("phone-input",inpPhone)
+        inpPhone = self.fillElementById("phone-input", inpPhone)
         inpCell = self.fillElementById("cellular-input", inpCell)
 
         inpEmail = self.fillElementById("email-input", inpEmail)
