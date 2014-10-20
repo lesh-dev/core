@@ -106,14 +106,28 @@ function ctx_show_list($table_name, $order, $filter, $row_template)
     $whom = $CTX_NAMES[$table_name]["whom"];
     $button =
         "<div style=\"margin-bottom: 16px\">".
-        "<a class=\"btn btn-primary\" id=\"${table_name}_edit-link\" href=\"$ctx_prefix/problems/edit\">Добавить $whom</a>".
+        "<a class=\"btn btn-primary\" id=\"${table_name}_edit-link\" href=\"$ctx_prefix/$table_name/edit\">Добавить $whom</a>".
         "</div>\n";
     $ans .= $button;
 
+    $fields_desc = $CTX_META[$table_name];
     if ($is_tabular)
+    {
         $ans .= "<table class=\"table table-striped table-bordered table-condensed table-hover\">\n";
 
-    $fields_desc = $CTX_META[$table_name];
+        // make header
+        $header_template = $row_template;
+        foreach ($fields_desc as $id=>$desc)
+        {
+            $name = $desc["name"];
+            $header_template = str_replace("{".$id."}", $name, $header_template);
+            $header_template = str_replace("{#view}", "&nbsp;", $header_template);
+            $header_template = str_replace("{#edit}", "&nbsp;", $header_template);
+            $header_template = str_replace("<td", "<th", $header_template);
+        }
+        $ans .= $header_template;
+    }
+
     foreach ($rows as $line)
     {
         $template = $row_template;
@@ -142,8 +156,8 @@ function ctx_show_list($table_name, $order, $filter, $row_template)
             $template = str_replace("{".$id."}", $value, $template);
         }
         $pk = $line["${table_name}_id"];
-        $template = str_replace("{#edit}", "$ctx_prefix/$table_name/edit/$pk", $template);
-        $template = str_replace("{#view}", "$ctx_prefix/$table_name/view/$pk", $template);
+        $template = str_replace("{#edit}", "<a href=\"$ctx_prefix/$table_name/edit/$pk\">Правка</a>", $template);
+        $template = str_replace("{#view}", "<a href=\"$ctx_prefix/$table_name/view/$pk\">Просмотр</a>", $template);
         $ans .= $template;
     }
 
@@ -320,7 +334,12 @@ if ($mode == "view")
             "problems",
             null,
             $FILTER,
-            "<b>Задача <a href=\"{#view}\">{problem_name}</a></b>, проверяют: {people}<br />"
+            "<tr>".
+                "<td>{problem_name}</td>".
+                "<td>{people}</td>".
+                "<td>{#view}</td>".
+                "<td>{#edit}</td>".
+            "</tr>"
         );
     }
     elseif ($table_name == "submission")
@@ -334,7 +353,8 @@ if ($mode == "view")
                 "<td>{fileexchange}</td>".
                 "<td>{attachment}</td>".
                 "<td>{submission_timestamp}</td>".
-                "<td><a href=\"{#view}\">Просмотр</a></td>".
+                "<td>{#view}</td>".
+                "<td>{#edit}</td>".
             "</tr>"
         );
     }
