@@ -20,8 +20,10 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
         inpPass = random_crap.randomText(8)
         inpName = u"XSM-Юзер-" + random_crap.randomText(6)
 
-        inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName,
-                                                                  auxParams=["do_not_logout_admin", "manager_rights"])
+        inpLogin, inpEMail, inpPass, inpName = self.createNewUser(
+            inpLogin, inpEMail, inpPass, inpName,
+            auxParams=["do_not_logout_admin", "manager_rights"]
+        )
 
         self.closeAdminPanel()
         self.gotoXsm()
