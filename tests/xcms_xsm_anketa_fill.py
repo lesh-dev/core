@@ -76,11 +76,11 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         self.assertBodyTextPresent(self.getAnketaPageHeader())
 
         # generate
-        inpLastName = u"Чапаев" + random_crap.randomText(5);
+        inpLastName = u"Чапаев" + random_crap.randomText(5)
         inpFirstName = u"Василий" + random_crap.randomText(3)
         inpMidName = u"Иваныч" + random_crap.randomText(3)
 
-        inpBirthDate = random_crap.randomDigits(2) + "." + random_crap.randomDigits(2) + "." + random_crap.randomDigits(4);
+        inpBirthDate = random_crap.randomDigits(2) + "." + random_crap.randomDigits(2) + "." + random_crap.randomDigits(4)
 
         inpSchool = u"Тестовая школа им. В.Е.Бдрайвера №" + random_crap.randomDigits(4)
 
@@ -107,7 +107,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         inpSchool = self.fillElementById("school-input", inpSchool)
         inpSchoolCity = self.fillElementById("school_city-input", inpSchoolCity)
         inpClass = self.fillElementById("current_class-input", inpClass)
-        inpPhone = self.fillElementById("phone-input",inpPhone)
+        inpPhone = self.fillElementById("phone-input", inpPhone)
         inpCell = self.fillElementById("cellular-input", inpCell)
         inpEmail = self.fillElementById("email-input", inpEmail)
         inpSkype = self.fillElementById("skype-input", inpSkype)
