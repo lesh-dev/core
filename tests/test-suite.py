@@ -5,9 +5,10 @@ from selenium_test import RunTest, TestShutdown, DecodeRunResult
 import test_set_gen
 import sys
 
-from bawlib import getOption, getSingleOption, isVoid, CliParamError, fileBaseName
+from bawlib import getOption, getSingleOption, CliParamError, fileBaseName
 
 sys.path.append(".")
+
 
 def showHelp():
     prog = sys.argv[0]
@@ -39,7 +40,7 @@ TEST OPTIONS could be test-dependent. Commonly supported options are:
   -p, --preserve         Leave browser window after test finish/fail
   -c, --chrome           Use Google Chrome browser instead of Firefox
   -d, --doc              Display test documentation
-""".format(script = fileBaseName(sys.argv[0]))
+""".format(script=fileBaseName(prog))
 
 
 def printStats(stats, detailed):
@@ -70,7 +71,7 @@ def generateFailedTestsSuite(failedTests):
     with open("failed_test_set.py", "w") as fs:
         fs.write(failedSuite)
 
-args = sys.argv[1:] # exclude program name
+args = sys.argv[1:]  # exclude program name
 
 try:
     doInstallerTest, args = getSingleOption(["-i", "--installer"], args)
@@ -88,7 +89,7 @@ try:
 
     testArgs = [x for x in args if x.startswith("-")]
     restArgs = [x for x in args if not x.startswith("-")]
-    
+
 except CliParamError as e:
     print "Option syntax error: ", e
     showHelp()
@@ -109,7 +110,7 @@ if restArgs:
 
 if restArgs:
     print "Warning: trailing parameters are ignored: ", restArgs
-    
+
 setModuleName = "auto_test_set"
 
 if testSet:
@@ -126,7 +127,7 @@ try:
         sys.exit(1)
 
     tests = testSetModule.getTests(baseUrl, testArgs)
-    
+
     if not doInstallerTest and tests:
         print "Skipping installer test. "
         tests.pop(0)
@@ -144,10 +145,10 @@ try:
     while tests:
         fileName, test = tests.pop(0)
         if specTest:
-            if specTest.endswith(".py"): # it is a filename
+            if specTest.endswith(".py"):  # it is a filename
                 if fileName != specTest:
                     continue
-            else: # it is a test class name
+            else:  # it is a test class name
                 if not test.getName().startswith(specTest):
                     continue
         if doList:
@@ -169,7 +170,7 @@ try:
             if result != 0:
                 failedTests.append((fileName, test))
 
-            if result not in testStats: # add new list
+            if result not in testStats:  # add new list
                 testStats[result] = [test.getName()]
             else:
                 testStats[result].append(test.getName())
@@ -204,4 +205,3 @@ except ImportError as e:
     print "Failed to load test set '" + setModuleName + "' as Python module. "
     print "Details: "
     print e
-
