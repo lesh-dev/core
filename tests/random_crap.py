@@ -19,26 +19,29 @@ def randomText(length):
     rs = ""
     for i in range(0, length):
         rs = rs + random.choice('abcdef0123456789')
-    return rs   
+    return rs
+
 
 def randomEmail():
     return "mail_test_" + randomText(8) + "@example.com"
-        
+
+
 def randomVkontakte():
     return "http://vk.com/id" + randomDigits(10)
-    
-def randomWord(length, wordOptions = [], specialChars = specialCharsDefault):
+
+
+def randomWord(length, wordOptions=[], specialChars=specialCharsDefault):
     rs = ""
-    
+
     if not wordOptions:
         wordOptions = []
-        
+
     if "english" in wordOptions:
         enLang = True
     else:
-        enLang = (random.randint(0,10) < 7)
-    
-    if random.randint(0,10) < 3:
+        enLang = (random.randint(0, 10) < 7)
+
+    if random.randint(0, 10) < 3:
         if enLang:
             rs = random.choice(engAlphaCap)
         else:
@@ -48,25 +51,27 @@ def randomWord(length, wordOptions = [], specialChars = specialCharsDefault):
             rs = random.choice(engAlphaSmall)
         else:
             rs = random.choice(rusAlphaSmall)
-    
+
     for i in range(0, length):
         if enLang:
             rs += random.choice(engAlphaSmall)
         else:
             rs += random.choice(rusAlphaSmall)
-        
-    if random.choice(range(0,20)) < 3:
+
+    if random.choice(range(0, 20)) < 3:
         rs += random.choice(specialChars)
-            
-    return rs   
-        
+
+    return rs
+
+
 def randomDigits(length):
     rs = ""
     for i in range(0, length):
         rs = rs + str(random.choice('0123456789'))
     return rs
 
-def randomCrap(wordNumber, crapOptions = [], specialChars = specialCharsDefault):
+
+def randomCrap(wordNumber, crapOptions=[], specialChars=specialCharsDefault):
     rs = ""
     for i in range(0, wordNumber):
         separator = " "
@@ -77,6 +82,6 @@ def randomCrap(wordNumber, crapOptions = [], specialChars = specialCharsDefault)
                 separator = "\n"
         if rs != "":
             rs += separator
-        wordLen = random.randint(3,10)
+        wordLen = random.randint(3, 10)
         rs += randomWord(wordLen, crapOptions, specialChars)
     return rs
