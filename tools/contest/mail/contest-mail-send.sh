@@ -2,6 +2,12 @@
 
 mail_list="list"
 
+if ! (locale | grep -qi utf) ; then
+    echo "Please check your locale settings"
+    locale
+    exit 1
+fi
+
 echo "Sending contest from $mail_list"
 for addr in $(cat $mail_list); do
     mutt \
