@@ -199,6 +199,10 @@ function xsm_get_fields($table_name)
                 "name"=>"Кураторство",
                 "type"=>"enum",
             ),
+            "person_school_comment"=>array(
+                "name"=>"Комментарий",
+                "type"=>"textarea",
+            ),
             "person_school_created"=>array(
                 "name"=>"Время создания",
             ),
