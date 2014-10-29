@@ -64,6 +64,7 @@ function xsm_show_person_list($school_id)
         ps.curatorship, ps.is_teacher, ps.is_student,
         ps.current_class as ps_current_class,
         ps.curator_group,
+        ps.person_school_comment,
         ps.courses_needed
         FROM person p, person_school ps
         WHERE (ps.member_person_id == p.person_id)
@@ -101,22 +102,24 @@ function xsm_show_person_list($school_id)
         if ($XSM_BOOTSTRAP) {?>
         <colgroup>
             <col width="1%">
-            <col width="25%">
+            <col width="10%">
             <col width="6%">
             <col width="1%">
             <col width="5%">
             <col width="5%">
-            <col width="50%">
+            <col width="25%">
+            <col width="25%">
         </colgroup>
         <?php } else {?>
         <colgroup>
             <col width="3%" />
-            <col width="35%" />
-            <col width="3%" />
             <col width="10%" />
+            <col width="3%" />
+            <col width="5%" />
             <col width="4%" />
             <col width="6%" />
-            <col width="45%" />
+            <col width="22%" />
+            <col width="23%" />
         </colgroup>
         <?php } ?>
         <thead>
@@ -127,6 +130,7 @@ function xsm_show_person_list($school_id)
             <th class="ankList">Кл.&nbsp;шк.&nbsp;/&nbsp;Кл.</th>
             <th class="ankList">ДР</th>
             <th class="ankList">Контакты</th>
+            <th class="ankList">Комментарий</th>
         </thead>
     <?php
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
@@ -199,6 +203,8 @@ function xsm_show_person_list($school_id)
             'person_id'=>$person_id,
             'school_id'=>$school_id));
 
+        $person_school_comment = xcms_html_wrap_by_crlf(xsm_highlight_links($person['person_school_comment']));
+
         $row_class = (xcms_checkbox_enabled($is_teacher) ? "teacher" : "");
         $class_diff = ($ps_current_class != $p_current_class) ? "diff" : "";
         ?>
@@ -217,6 +223,7 @@ function xsm_show_person_list($school_id)
                 title="Текущий класс"><?php echo $p_current_class; ?></span></td>
             <td class="ankList"><?php echo $birth_date; ?></td>
             <td class="ankList"><?php echo $contacts; ?></td>
+            <td class="ankList"><?php echo $person_school_comment; ?></td>
         </tr>
         <?php
     }

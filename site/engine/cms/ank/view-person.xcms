@@ -206,32 +206,6 @@ function xsm_print_person_schools($db, $person, $current_school_id)
     <?php
 }
 
-function xsm_highlight_links($text)
-{
-    $result = "";
-    $cur_pos = 0;
-    while (true)
-    {
-        $p = strpos($text, "http://", $cur_pos);
-        if ($p === false)
-            break;
-
-        $result .= htmlspecialchars(substr($text, $cur_pos, $p - $cur_pos));
-        $link_length = strcspn($text, "\r\n\t, ", $p);
-        $link = substr($text, $p, $link_length);
-        // cut a dot if it is a link trail (more likely it is a sentence end)
-        if (substr($link, $link_length - 1) == ".")
-        {
-            $link_length--;
-            $link = substr($link, 0, $link_length);
-        }
-        $result .= "<a href=\"$link\">$link</a>";
-        $cur_pos = $p + $link_length;
-    }
-    $result .= htmlspecialchars(substr($text, $cur_pos));
-    return $result;
-}
-
 function xsm_draw_person_comments($db, $person_id)
 {?>
     <div style="height: 10px;"></div><?php
@@ -513,6 +487,13 @@ function xsm_print_person_selected_school($db, $school_id, $person)
 
     if (xcms_checkbox_enabled($person_school['is_teacher']))
         xsm_print_courses_selected_school($db, $school_id, $person_id);
+
+    $person_school_comment = xcms_html_wrap_by_crlf(xsm_highlight_links($person_school['person_school_comment']));
+    if (xu_not_empty($person_school_comment))
+    {
+        ?><h2>Комментарий</h2>
+        <div><?php echo $person_school_comment; ?></div><?php
+    }
 }
 
 // shows person information sliced by school
