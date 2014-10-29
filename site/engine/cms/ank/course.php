@@ -39,20 +39,20 @@ function xsm_print_courses_selected_school(
         <colgroup>
         <?php
         if ($XSM_BOOTSTRAP) {?>
-            <col width="20%" />
+            <col width="10%" />
             <?php if (!$pers) {?>
             <col width="20%" /><?php
             } ?>
             <col width="1%" />
             <col width="1%" />
-            <col width="12%" />
             <col width="5%" />
-            <col width="12%" />
+            <col width="5%" />
+            <col width="5%" />
             <?php if ($show_desc) {?>
             <col width="20%" /><?php
             }
         } else {?>
-            <col width="20%" />
+            <col width="10%" />
             <?php if (!$pers) {?>
             <col width="20%" /><?php
             } ?>
