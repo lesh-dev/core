@@ -4,7 +4,11 @@ require_once("${engine_dir}cms/ank/course_teacher.php");
 /**
   * Печаталка таблицы курсов (общая для списка курсов на школе и одного препода)
   **/
-function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id = "all", $simple_view = false)
+function xsm_print_courses_selected_school(
+    $db, $school_id,
+    $course_teacher_id = "all",
+    $simple_view = false,
+    $show_desc = false)
 {
     $pers = ($course_teacher_id != "all");
     global $XSM_BOOTSTRAP;
@@ -35,25 +39,31 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
         <colgroup>
         <?php
         if ($XSM_BOOTSTRAP) {?>
-            <col width="40%" />
+            <col width="20%" />
             <?php if (!$pers) {?>
-            <col width="30%" /><?php
+            <col width="20%" /><?php
             } ?>
             <col width="1%" />
             <col width="1%" />
             <col width="12%" />
             <col width="5%" />
-            <col width="12%" /><?php
+            <col width="12%" />
+            <?php if ($show_desc) {?>
+            <col width="20%" /><?php
+            }
         } else {?>
-            <col width="40%" />
+            <col width="20%" />
             <?php if (!$pers) {?>
-            <col width="30%" /><?php
+            <col width="20%" /><?php
             } ?>
-            <col width="40" />
-            <col width="10%" />
-            <col width="10%" />
-            <col width="7%" />
-            <col width="8%" /><?php
+            <col width="2%" />
+            <col width="8%" />
+            <col width="8%" />
+            <col width="3%" />
+            <col width="3%" />
+            <?php if ($show_desc) {?>
+            <col width="20%" /><?php
+            }
         }?>
         </colgroup>
         <thead>
@@ -66,6 +76,10 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
             <th class="ankList">Тематика</th>
             <th class="ankList">Класс</th>
             <th class="ankList">Успехи</th>
+            <?php if ($show_desc) {?>
+            <th class="ankList">Описание, комментарий</th><?php
+            }
+        ?>
         </thead>
     <?php
     } else {?><ul><?php }
@@ -80,6 +94,17 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
         $course_cycle = xcms_get_key_or_enc($course, "course_cycle");
         $hr_course_type = xsm_make_enum($course, "course_type", $course_count);
         $hr_course_area = xsm_make_enum($course, "course_area", $course_count);
+
+        $comments = array();
+        $course_desc = xcms_html_wrap_by_crlf(xsm_highlight_links($course['course_desc']));
+        if (xu_not_empty($course_desc))
+            $comments[] = $course_desc;
+
+        $course_comment = xcms_html_wrap_by_crlf(xsm_highlight_links($course['course_comment']));
+        if (xu_not_empty($course_count))
+            $comments[] = $course_comment;
+
+        $course_desc_comment = implode("<br />", $comments);
 
         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id);
         if ($teachers_ht === false) // filter not passed
@@ -137,6 +162,11 @@ function xsm_print_courses_selected_school($db, $school_id, $course_teacher_id =
             <td class="ankList"><?php echo $target_class; ?></td>
             <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
                 echo "<b>$exam_pass_count</b>&nbsp;из&nbsp;<b>$exam_total_count</b>"; ?></a></td>
+
+            <?php if ($show_desc) {?>
+            <td class="ankList"><?php echo $course_desc_comment; ?></td><?php
+            }?>
+
         </tr><?php
         } else
         {

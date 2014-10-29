@@ -7,9 +7,21 @@ function xsm_print_courses()
     $db = xdb_get();
 
     $school_id = xsm_get_default_school_from_request();
-
     xsm_print_recent_schools($db, $school_id, 'course');
-    xsm_print_courses_selected_school($db, $school_id);
+
+    $show_course_desc = xcms_get_persistent_key("list-course", "show_course_desc");
+    $form_action = xcms_url(array('school_id'=>$school_id));
+    ?>
+    <form method="post" name="filter" class="xsm-filter" id="filter-form"
+        action="list-course<?php echo $form_action; ?>" >
+        <span>Настройки списка: </span><?php xsm_checkbox('show_course_desc', $show_course_desc);
+        ?><span class="ankListField">Показывать описания</span>
+    </form>
+    <script type="text/javascript">
+        xsm_filter_form_autosubmit();
+    </script>
+    <?php
+    xsm_print_courses_selected_school($db, $school_id, "all", false, $show_course_desc);
 }
 
 xsm_print_courses();
