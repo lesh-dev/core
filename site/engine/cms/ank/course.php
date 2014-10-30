@@ -101,10 +101,10 @@ function xsm_print_courses_selected_school(
             $comments[] = $course_desc;
 
         $course_comment = xcms_html_wrap_by_crlf(xsm_highlight_links($course['course_comment']));
-        if (xu_not_empty($course_count))
+        if (xu_not_empty($course_comment))
             $comments[] = $course_comment;
 
-        $course_desc_comment = implode("<br />", $comments);
+        $course_desc_comment = implode('<hr class="course"/>', $comments);
 
         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id);
         if ($teachers_ht === false) // filter not passed
