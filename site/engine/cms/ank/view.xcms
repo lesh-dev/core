@@ -88,7 +88,7 @@ require_once("${engine_dir}cms/ank/ank-proc.php");
 
             $write_success = ($update_result === true);
 
-            $html_content = "Обновлённые данные анкеты смотрите по ссылке в XSM.";
+            $html_content = xcms_get_html_template("anketa_mail_see_update");
             // override url
             $dest_url = 'register/already';
         }
