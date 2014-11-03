@@ -95,6 +95,7 @@ div.xsm-help-widget {
     padding-right: 2px;
 }
 
-hr.course {
-    margin: 2px 0px 2px 0px;
+div.course-comment-div {
+    border-top: 1px solid #7f7f7f;
+    margin: 5px 0px 5px 0px;
 }
