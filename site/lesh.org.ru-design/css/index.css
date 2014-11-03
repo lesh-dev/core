@@ -256,6 +256,13 @@ h3 {
     color: #4f4f4f;
 }
 
+.main-text ol {
+    list-style-type: decimal;
+    padding-top: 15px;
+    margin-left: 20px;
+    padding-right: 40px;
+}
+
 .bottom_text p.top {
     font-size: 14px;
     color: black;
@@ -462,12 +469,6 @@ a.left_column_link{
 a:hover.left_column_link{
     color: #CD3700;
     font-size: 14px;
-}
-
-.bottom_text ol {
-    list-style-type: decimal;
-    padding-top: 15px;
-    margin-left: 20px;
 }
 
 .bottom_text div.indent_border{
