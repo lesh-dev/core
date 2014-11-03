@@ -75,13 +75,13 @@ h3 {
 }
 
 .indent_form a,
-.main_text a,
+.main-text a,
 .bottom_text a {
     color: #4F4F4F;
 }
 
 .indent_form a:hover,
-.main_text a:hover,
+.main-text a:hover,
 .right-inv-top a:hover,
 .right-inv-bottom a:hover,
 .bottom_text a:hover {
@@ -234,7 +234,7 @@ h3 {
     clear: both;
 }
 
-.main_text {
+.main-text {
     position: relative; /* to position edit buttons */
     clear: both;
     padding-left: 50px;
@@ -244,14 +244,14 @@ h3 {
     line-height: 18px;
 }
 
-.main_text p,
+.main-text p,
 .bottom_text p {
     font-size: 14px;
     color: black;
     padding-top: 15px;
 }
 
-.main_text p {
+.main-text p {
     padding-right: 40px;
     color: #4f4f4f;
 }
@@ -264,7 +264,7 @@ h3 {
     margin-left: -20px;
 }
 
-.main_text p.nowrap {
+.main-text p.nowrap {
     font-size: 14px;
     color: black;
     padding-top: 15px;
@@ -282,7 +282,7 @@ h3 {
     white-space: nowrap;
 }
 
-.main_text p.padding_left {
+.main-text p.padding_left {
     padding-left: 20px;
 }
 
@@ -290,7 +290,7 @@ h3 {
     padding: 5px 0px 5px 10px;
 }
 
-.main_text span.only_bold,
+.main-text span.only_bold,
 .right-normal p.only_bold,
 .grey_fond span.only_bold,
 .indent_form span.only_bold {
@@ -298,19 +298,19 @@ h3 {
     font-size: 14px;
 }
 
-.main_text ul {
+.main-text ul {
     list-style: disc outside none;
     padding-left: 20px;
 }
 
-.main_text ul.bullet,
+.main-text ul.bullet,
 .bottom_text ul.bullet {
     list-style-type: disc;
     padding-left: 50px;
     padding-top: 15px;
 }
 
-.main_text li.bullet,
+.main-text li.bullet,
 .bottom_text li.bullet,
 .bottom_text ol li,
 p.grey_fond {
@@ -329,7 +329,7 @@ p.grey_fond {
     _margin-top: -50px;
 }
 
-.bottom_text p.title_bold{
+.bottom_text p.title_bold {
     margin-top: -15px;
     font-size: 16px;
     color: black;
@@ -517,13 +517,13 @@ a:hover.left_column_link{
     line-height: 18px;
 }
 
-.right-normal div.indent_form{
+.right-normal div.indent_form {
     padding-left: 15px;
     padding-right: 20px;
     padding-bottom: 10px;
 }
 
-.right-normal span.setting_year{
+.right-normal span.setting_year {
     background: #7A9181;
     color: white;
     width: 250px;
@@ -531,7 +531,7 @@ a:hover.left_column_link{
     margin-left: -15px;
 }
 
-.indent_form div.title_as_chronicle{
+.indent_form div.title_as_chronicle {
     background: #79A544;
     color: white;
     width: 235px;

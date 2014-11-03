@@ -42,13 +42,13 @@ body {
 }
 
 .indent_form a, 
-.main_text a, .bottom_text a, 
+.main-text a, .bottom_text a, 
 .length_of_text a{
 	font-size: 14px;
 	color: #4F4F4F;
 }
 
-.indent_form a:hover,.main_text a:hover, 
+.indent_form a:hover,.main-text a:hover, 
 .right-inv-top a:hover, .right-inv-bottom a:hover, 
 .bottom_text a:hover, .length_of_text a:hover {
 	color: #CD3700;
@@ -187,7 +187,7 @@ body {
 	padding: 3px 5px 3px 5px;
 }
 
-.main_text{
+.main-text{
 	width: 370px;
 	float: left;
 	padding-left: 50px;
@@ -199,13 +199,13 @@ body {
 	_margin-top: -50px;
 }
 
-.main_text span, .length_of_text span{
+.main-text span, .length_of_text span{
 	font-size: 18px;
 	color: black;
 	font-weight: bold;
 }
 
-.main_text p, .bottom_text p, 
+.main-text p, .bottom_text p, 
 .length_of_text p{
 	font-size: 14px;
 	color: black;
@@ -220,7 +220,7 @@ body {
 	margin-left: -20px;
 }
 
-.main_text p.nowrap{
+.main-text p.nowrap{
 	font-size: 14px;
 	color: black;
 	padding-top: 15px;
@@ -238,7 +238,7 @@ body {
 	white-space: nowrap;
 }
 
-.main_text p.padding_left{
+.main-text p.padding_left{
 	padding-left:20px;
 }
 
@@ -246,7 +246,7 @@ body {
 	padding: 5px 0px 5px 10px;
 }
 
-.main_text span.only_bold,
+.main-text span.only_bold,
 .right-normal p.only_bold,
 .grey_fond span.only_bold,
 .indent_form span.only_bold,
@@ -255,14 +255,14 @@ body {
 	font-size: 14px;
 }
 
-.main_text ul.bullet,
+.main-text ul.bullet,
 .bottom_text ul.bullet{
 	list-style-type: disc;
 	padding-left: 50px;
 	padding-top: 15px;
 } 
 
-.main_text li.bullet,
+.main-text li.bullet,
 .bottom_text li.bullet,
 .bottom_text ol li,
 .length_of_text ol li, 
