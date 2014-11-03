@@ -75,18 +75,21 @@ h3 {
 }
 
 .indent_form a,
-.main_text a, .bottom_text a,
-.length_of_text a{
+.main_text a,
+.bottom_text a {
     color: #4F4F4F;
 }
 
-.indent_form a:hover, .main_text a:hover,
-.right-inv-top a:hover, .right-inv-bottom a:hover,
-.bottom_text a:hover, .length_of_text a:hover {
+.indent_form a:hover,
+.main_text a:hover,
+.right-inv-top a:hover,
+.right-inv-bottom a:hover,
+.bottom_text a:hover {
     color: #CD3700;
 }
 
-.right-inv-top a, .right-inv-bottom a{
+.right-inv-top a,
+.right-inv-bottom a {
     color: white;
 }
 
@@ -241,8 +244,8 @@ h3 {
     line-height: 18px;
 }
 
-.main_text p, .bottom_text p,
-.length_of_text p {
+.main_text p,
+.bottom_text p {
     font-size: 14px;
     color: black;
     padding-top: 15px;
@@ -290,8 +293,7 @@ h3 {
 .main_text span.only_bold,
 .right-normal p.only_bold,
 .grey_fond span.only_bold,
-.indent_form span.only_bold,
-.length_of_text p.only_bold{
+.indent_form span.only_bold {
     font-weight: bold;
     font-size: 14px;
 }
@@ -311,13 +313,12 @@ h3 {
 .main_text li.bullet,
 .bottom_text li.bullet,
 .bottom_text ol li,
-.length_of_text ol li,
-p.grey_fond{
+p.grey_fond {
     color: black;
     font-size: 14px;
 }
 
-.bottom_text{
+.bottom_text {
     clear: both;
     padding-left: 50px;
     padding-top: 15px;
@@ -335,44 +336,18 @@ p.grey_fond{
     font-weight: bold;
 }
 
-.length_of_text{
-    padding-left: 50px;
-    padding-top: 10px;
-    padding-right: 30px;
-    float: left;
-    text-align: left;
-    line-height: 18px;
-    _padding-top: 0px;
-    _margin-top: -50px;
-}
-
-.length_of_text p.indent,
 .right-normal .indent_form p,
-.right-normal .indent_form p,
-.length_of_text li.indent{
+.right-normal .indent_form p {
     padding-top: 10px;
 }
 
-.right-normal p.indent{
+.right-normal p.indent {
     padding-top: 7px;
 }
 
 .right-normal a.after_year,
-.right-normal span.after_year{
+.right-normal span.after_year {
     padding: 7px 0px 0px 10px;
-}
-
-.length_of_text p.note_bottom {
-    padding-bottom: 10px;
-    margin-left: -30px;
-    font-size: 12px;
-}
-
-.length_of_text img{
-    float: right;
-    width: 420px;
-    height: 324px;
-    padding-top: 20px;
 }
 
 #main div.big_grey_fond {
@@ -384,14 +359,14 @@ p.grey_fond{
     margin-top: 20px;
 }
 
-.length_of_text .big_grey_fond img{
+.big_grey_fond img{
     float: right;
     width: 340px;
     height: 247px;
     padding-top: 10px;
 }
 
-.length_of_text.big_grey_fond p{
+.big_grey_fond p {
     width: 250px;
     float: left;
     font-size: 14px;
@@ -399,17 +374,15 @@ p.grey_fond{
     padding-top: 10px;
 }
 
-.length_of_text ol.indent,
-.bottom_text ol.indent_minus{
+.bottom_text ol.indent_minus {
     margin-left: -30px;
 }
 
-.bottom_text ol.indent,
-.length_of_text ol.shift{
+.bottom_text ol.indent {
     margin-left: 50px;
 }
 
-.bottom_text p.indent{
+.bottom_text p.indent {
     margin-left: 20px;
 }
 
@@ -442,14 +415,13 @@ p.grey_fond{
     padding: 5px 5px 5px 0px;
 }
 
-.bottom_text p.big_green_stripe{
+.bottom_text p.big_green_stripe {
     color: white;
     font-size: 14px;
     padding: 5px 5px 5px 50px;
 }
 
-.bottom_text p.brown_stripe,
-.length_of_text p.brown_stripe{
+p.brown_stripe {
     width: 260px;
     background: #D0C4A3;
     color: black;
@@ -459,7 +431,7 @@ p.grey_fond{
     margin-top: 10px;
 }
 
-.bottom_text div.middle_brown_stripe{
+.bottom_text div.middle_brown_stripe {
     width: 490px;
     background: #D0C4A3;x;
     margin-left: -100px;
@@ -483,18 +455,16 @@ p.grey_fond{
     margin-right: -30px;
 }
 
-.length_of_text a.left_column_link{
+a.left_column_link{
     color: #4F4F4F;
     font-size: 14px;
 }
-
-.length_of_text a:hover.left_column_link{
+a:hover.left_column_link{
     color: #CD3700;
     font-size: 14px;
 }
 
-.bottom_text ol,
-.length_of_text ol {
+.bottom_text ol {
     list-style-type: decimal;
     padding-top: 15px;
     margin-left: 20px;
@@ -516,10 +486,6 @@ p.grey_fond{
     height: 20px;
     padding: 2px 0px 2px 7px;
     margin-top: 15px;
-    /*_background-color: transparent;
-    _width: 300px;
-    _height: 0px;
-    _padding: 0px;*/
 }
 
 .right-inv {
@@ -541,7 +507,7 @@ p.grey_fond{
 }
 
 .right-normal {
-    background-color:  #EBECEC;
+    background-color: #EBECEC;
     color: black;
     margin-top: 15px;
     width: 250px;
