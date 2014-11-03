@@ -95,7 +95,14 @@ function xsm_highlight_links($text)
     while (true)
     {
         $p = strpos($text, "http://", $cur_pos);
-        if ($p === false)
+        $ps = strpos($text, "https://", $cur_pos);
+        if ($p !== false && $ps !== false)
+            $p = min($p, $ps);
+        elseif ($p !== false)
+            $p = $p;  // do nothing
+        elseif ($ps !== false)
+            $p = $ps;
+        else
             break;
 
         $result .= htmlspecialchars(substr($text, $cur_pos, $p - $cur_pos));
