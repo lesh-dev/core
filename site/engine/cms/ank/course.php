@@ -104,7 +104,7 @@ function xsm_print_courses_selected_school(
         if (xu_not_empty($course_comment))
             $comments[] = $course_comment;
 
-        $course_desc_comment = implode('<hr class="course"/>', $comments);
+        $course_desc_comment = implode('<div class="course-comment-div"></div>', $comments);
 
         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id);
         if ($teachers_ht === false) // filter not passed

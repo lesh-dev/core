@@ -84,7 +84,7 @@ function xcms_print_related_links()
         </div>
     </div>
 
-    <div class="main_text"><?php
+    <div class="main-text"><?php
         $hdr = xcms_get_key_or($INFO, "header");
         $alias = xcms_get_key_or($INFO, "alias");
         $aparam = xcms_get_key_or($_GET, "aparam");
