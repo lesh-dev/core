@@ -138,6 +138,7 @@ create table person_school (
         -- (для Летней школы надо договориться, какой именно класс мы ставим,
         -- будущий или прошедший
     courses_needed integer, -- потребное кол-во курсов для сдачи на школе
+    person_school_comment text, -- комментарий (v2.10)
     person_school_created text, -- utc timestamp
     person_school_modified text, -- utc timestamp
     foreign key (member_person_id) references person(person_id),
