@@ -42,6 +42,14 @@ $CTX_META["submission"] = array(
         "type"=>"text",
         "readonly"=>true,
     ),
+    "replied" => array(
+        "name"=>"Отвечено",
+        "type"=>"checkbox",
+    ),
+    "processed" => array(
+        "name"=>"Обработано",
+        "type"=>"checkbox",
+    ),
 );
 
 $CTX_META["contestants"] = array(
