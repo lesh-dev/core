@@ -91,6 +91,11 @@ function xcmst_draw_contest_form_view($desc, $value)
     {
         echo "<tr><th>$name</th><td><a href=\"$value\">$value</a></td></tr>\n";
     }
+    elseif ($type == "checkbox")
+    {
+        $value = xcms_checkbox_enabled($value) ? "Да" : "Нет";
+        echo "<tr><th>$name</th><td>$value</td></tr>\n";
+    }
     elseif ($type == "large")
     {
         if (xu_empty($value))
