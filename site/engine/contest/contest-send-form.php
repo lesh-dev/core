@@ -31,11 +31,18 @@ function ctx_notify_three_days()
 function ctx_submit_solution()
 {
     $timestamp = time();
+    $sender = @$_SERVER["REMOTE_ADDR"]." (".@$_SERVER["REMOTE_HOST"].")";
     $data = $_POST;
-    $data["sender"] = @$_SERVER["REMOTE_ADDR"]." (".@$_SERVER["REMOTE_HOST"].")";
+    $mail = xcms_get_key_or($data, "mail");
+    $data["sender"] = $sender;
     $data["submission_timestamp"] = $timestamp;
     ctx_update_object("submission", $data);
 
+    $body_html = xcms_get_html_template("ctx_new_submission");
+    $body_html = str_replace('@@MAIL@', htmlspecialchars($mail), $body_html);
+    $body_html = str_replace('@@SENDER@', htmlspecialchars($sender), $body_html);
+    $body_html = str_replace('@@TIMESTAMP@', htmlspecialchars(xcms_datetime($timestamp)), $body_html);
+    xcms_send_notification("ctx", NULL, $body_html);
     ?>
     <h3>Спасибо, Ваше решение принято!</h3><?php
     ctx_notify_three_days();
