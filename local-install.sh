@@ -151,8 +151,6 @@ user-change:$mail_test
 content-change:$mail_test
 reg:$mail_test
 reg-managers:$mail_test
-reg-test:$mail_test
-reg-managers-test:$mail_test
 EOF
         message "Mailer config was reset to '$mail_test' address for each notification handler"
     fi

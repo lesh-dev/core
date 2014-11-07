@@ -33,7 +33,7 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
 
     def isAuthPage(self):
         return self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"])
-        
+
     def checkDocType(self):
         firstLine, sourceBlock = self.getPageSourceFirstLine()
         if not "<!DOCTYPE" in firstLine:
@@ -117,10 +117,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.fillElementById("edtg_content-change", emailString);
 
         self.fillElementById("edtg_reg", emailString);
-
-        self.fillElementById("edtg_reg-test", emailString);
         self.fillElementById("edtg_reg-managers", emailString);
-        self.fillElementById("edtg_reg-managers-test", emailString);
 
         self.clickElementById("editTag")
         self.performLogout()
@@ -142,10 +139,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.assertElementValueById("edtg_content-change", emailString, reason)
 
         self.assertElementValueById("edtg_reg", emailString, reason)
-
-        self.assertElementValueById("edtg_reg-test", emailString, reason)
         self.assertElementValueById("edtg_reg-managers", emailString, reason)
-        self.assertElementValueById("edtg_reg-managers-test", emailString, reason)
 
         self.performLogout()
 
@@ -297,7 +291,7 @@ class XcmsTest(XcmsTestWithConfig):
         # set notify checkbox.
         # self.clickElementById("notify_user-checkbox")
         # send form
-        
+
         if "manager_rights" in auxParams:
             self.logAdd("Setting manager rights for user. ")
             # set manager access level
@@ -418,7 +412,7 @@ class XcmsTest(XcmsTestWithConfig):
 
     def closeAdminPanel(self):
         self.gotoUrlByLinkText("X")
-        
+
     def assertSitePageHeader(self, header, reason = "Page header does not match expected. "):
         self.assertElementTextById("content-header", header, reason=reason)
 
@@ -465,10 +459,10 @@ class XcmsTest(XcmsTestWithConfig):
 
     def gotoXsmAnketas(self):
         self.gotoUrlByLinkText(self.getAnketaListMenuName())
-            
+
     def getAnketaListMenuName(self):
         return u"Анкеты"
-    
+
     def checkScreenIsAdmin(self):
         screen = self.getElementTextById("screen")
         if screen != u"Админка":
@@ -476,10 +470,10 @@ class XcmsTest(XcmsTestWithConfig):
 
     def addNewPage(self, parentPage, sysName, menuTitle, pageHeader, pageAlias):
         self.checkScreenIsAdmin()
-                    
+
         self.gotoUrlByLinkText(parentPage)
         self.gotoCreatePage()
-        
+
         sysName = self.fillElementById("create-name-input", sysName)
         menuTitle = self.fillElementById("menu-title-input", menuTitle)
         pageHeader = self.fillElementById("header-input", pageHeader)
