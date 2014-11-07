@@ -146,15 +146,22 @@ function xcms_draw_text_tag($id, $value, $is_longtext, $placeholder = "")
     {
         $text_value = str_replace("|", "\n", $value);
         ?>
-        <textarea name="<?php echo $id; ?>" id="<?php echo $id; ?>"
+        <textarea
+            name="<?php echo $id; ?>"
+            id="<?php echo $id; ?>"
             placeholder="<?php echo htmlspecialchars($placeholder); ?>"
-            class="key-value" ><?php echo htmlspecialchars($text_value); ?></textarea><?php
+            class="key-value"
+            rows="5"
+            ><?php echo htmlspecialchars($text_value); ?></textarea><?php
     }
     else
     {?>
-        <input name="<?php echo $id; ?>" id="<?php echo $id; ?>"
+        <input
+            name="<?php echo $id; ?>"
+            id="<?php echo $id; ?>"
             placeholder="<?php echo htmlspecialchars($placeholder); ?>"
-            value="<?php echo htmlspecialchars($value); ?>" class="key-value" /><?php
+            value="<?php echo htmlspecialchars($value); ?>"
+            class="key-value" /><?php
     }
 }
 
@@ -245,6 +252,7 @@ function xcms_editlist_form($file, $skip_params = "", $flags = "")
     }
     ?>
         </table>
+        <p>Для удаления поля введите <b>_FORGET</b> в его значение</p>
         <input type="submit" name="editTag" id="editTag" value="Сохранить" />
     </form><?php
 }
