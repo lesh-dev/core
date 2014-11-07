@@ -31,7 +31,10 @@ $CTX_META["submission"] = array(
         "name"=>"Ссылка на файлообменник",
         "type"=>"link",
     ),
-    "attachment" => array("name"=>"Вложение", "type"=>"file"),
+    "attachment" => array(
+        "name"=>"Вложение",
+        "type"=>"file",
+    ),
     "submission_timestamp" => array(
         "name"=>"Время получения",
         "type"=>"timestamp",
