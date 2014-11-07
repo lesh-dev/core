@@ -1,8 +1,8 @@
 /*
-    Участники олимпиады (заполняется де-факто вручную,
-    т.к. работы грузятся пачками и их надо расклеивать.
+    Присланное: может содержать пачки работ,
+    подлежит дальнейшей обработке и расклеиванию.
+    v2.9
 */
-
 create table submission(
     submission_id integer primary key autoincrement,
     mail text,
@@ -10,9 +10,15 @@ create table submission(
     fileexchange text,
     submission_timestamp text,
     sender text,
+    replied text,
+    processed text,
     contest_year text
 );
 
+/*
+    Участники олимпиады (заполняется де-факто вручную,
+    т.к. работы грузятся пачками и их надо расклеивать).
+*/
 create table contestants(
     contestants_id integer primary key autoincrement,
     name text,
@@ -28,7 +34,9 @@ create table contestants(
     contest_year text
 );
 
-/* Задачи олипиады */
+/*
+    Задачи олипиады
+*/
 create table problems(
     problems_id integer primary key autoincrement,
     contest_year text,
@@ -38,7 +46,9 @@ create table problems(
     criteria text
 );
 
-/* Проверка олимпиады */
+/*
+    Проверка олимпиады
+*/
 create table solutions(
     solutions_id integer primary key autoincrement,
     problem_id, -- TODO: FK

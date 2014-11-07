@@ -149,6 +149,10 @@ function ctx_show_list($table_name, $order, $filter, $row_template)
                     $value = "&#8212;";
                 }
             }
+            elseif ($type == "checkbox")
+            {
+                $value = xcms_checkbox_enabled($value) ? "Да" : "Нет";
+            }
             elseif ($type == "timestamp")
             {
                 $value = xcms_datetime($value);
@@ -353,6 +357,8 @@ if ($mode == "view")
                 "<td>{fileexchange}</td>".
                 "<td>{attachment}</td>".
                 "<td>{submission_timestamp}</td>".
+                "<td>{replied}</td>".
+                "<td>{processed}</td>".
                 "<td>{#view}</td>".
                 "<td>{#edit}</td>".
             "</tr>"

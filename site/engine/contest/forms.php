@@ -45,6 +45,12 @@ function xcmst_draw_contest_form_field($desc, $value, $id)
             "<textarea class=\"field span12\" rows=\"8\" name=\"$id\" id=\"$id-text\">$value</textarea></td>\n".
             "</tr>\n";
     }
+    elseif ($type == "checkbox")
+    {
+        echo "<tr><td>$name</td><td>";
+        xcmst_control($id, $value, $name, "", $type);
+        echo "</td></tr>\n";
+    }
     else
     {
         echo "<tr>\n".
@@ -84,6 +90,11 @@ function xcmst_draw_contest_form_view($desc, $value)
     elseif ($type == "link")
     {
         echo "<tr><th>$name</th><td><a href=\"$value\">$value</a></td></tr>\n";
+    }
+    elseif ($type == "checkbox")
+    {
+        $value = xcms_checkbox_enabled($value) ? "Да" : "Нет";
+        echo "<tr><th>$name</th><td>$value</td></tr>\n";
     }
     elseif ($type == "large")
     {
