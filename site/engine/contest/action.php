@@ -47,18 +47,20 @@ function ctx_print_result_row($work, $probs, $simple = false)
 
     $contestants_id = $work["contestants_id"];
     $view = "$ctx_prefix/contestants/view/$contestants_id";
+    $name = xcms_get_key_or($work, "name", "(ФИО не указано)");
     $row = "";
     if ($simple)
     {
-        $row .= "<td>".$work['name']."</td>";
+        $row .= "<td>$name</td>";
     }
     else
     {
-        $name = xcms_get_key_or($work, "name", "(ФИО не указано)");
+        $level = xcms_get_key_or($work, "level");
+        $file_name = $work["work"];
         $row .=
             "<td><a href=\"$view\">$name</a></td>".
-            "<td>{$work["level"]}</td>".
-            "<td><a href=\"/$web_prefix{$work["work"]}\">Скачать</a></td>";
+            "<td>$level</td>".
+            "<td><a href=\"/$web_prefix$file_name\">Скачать</a></td>";
 
         foreach ($probs as $prob)
         {
