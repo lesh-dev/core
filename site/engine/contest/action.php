@@ -46,6 +46,7 @@ function ctx_print_result_row($work, $probs, $simple = false)
     global $ctx_prefix;
 
     $contestants_id = $work["contestants_id"];
+    $view = "$ctx_prefix/contestants/view/$contestants_id";
     $row = "";
     if ($simple)
     {
@@ -53,8 +54,9 @@ function ctx_print_result_row($work, $probs, $simple = false)
     }
     else
     {
+        $name = xcms_get_key_or($work, "name", "(ФИО не указано)");
         $row .=
-            "<td><a href=\"$ctx_prefix/contestants/view/$contestants_id\">{$work["name"]}</a></td>".
+            "<td><a href=\"$view\">$name</a></td>".
             "<td>{$work["level"]}</td>".
             "<td><a href=\"/$web_prefix{$work["work"]}\">Скачать</a></td>";
 
