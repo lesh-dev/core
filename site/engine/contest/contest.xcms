@@ -89,6 +89,33 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
     }
 }
 
+function ctx_contestant_from_submission()
+{
+    global $content_dir;
+    global $ctx_prefix;
+    global $CONTEST_CURRENT_YEAR;
+
+    $db = xdb_get();
+    $submission_id = xcms_get_key_or($_GET, "submission_id", XDB_INVALID_ID);
+    $submission = xdb_get_entity_by_id("submission", $submission_id);
+    $contestant = array();
+    $sub_attachment = xcms_get_key_or($submission, "attachment");
+    $sub_attachment_name = basename($sub_attachment);
+    $cont_attachment_name = str_replace("submission-attach-", "", $sub_attachment_name);
+    $timestamp = time();
+    $home = "${content_dir}contest/attach/contestants/$timestamp";
+    $new_name = "$home/$cont_attachment_name";
+    @mkdir($home, 0777, true);
+    file_put_contents("${content_dir}contest/attach/.htaccess", "Allow from all\n");
+    if (!copy($sub_attachment, $new_name))
+        die("Cannot copy file '$sub_attachment' to '$new_name'. ");
+    $contestant["work"] = $new_name;
+    $contestant["mail"] = xcms_get_key_or($submission, "mail");
+    $contestant["contest_year"] = $CONTEST_CURRENT_YEAR; // year sharding
+    xdb_insert_or_update("contestants", array("contestants_id" => XDB_NEW), $contestant, $contestant);
+    echo "Запись скопирована в таблицу работ. <a href=\"$ctx_prefix/contestants\">Посмотреть</a>\n";
+}
+
 /**
   * Генерическая рисовалка списка
   **/
@@ -121,8 +148,9 @@ function ctx_show_list($table_name, $order, $filter, $row_template)
         {
             $name = $desc["name"];
             $header_template = str_replace("{".$id."}", $name, $header_template);
-            $header_template = str_replace("{#view}", "&nbsp;", $header_template);
-            $header_template = str_replace("{#edit}", "&nbsp;", $header_template);
+            $header_template = str_replace("{#view}", "Просмотр", $header_template);
+            $header_template = str_replace("{#edit}", "Правка", $header_template);
+            $header_template = preg_replace("/{{.+?}}/", "", $header_template);
             $header_template = str_replace("<td", "<th", $header_template);
         }
         $ans .= $header_template;
@@ -162,6 +190,8 @@ function ctx_show_list($table_name, $order, $filter, $row_template)
         $pk = $line["${table_name}_id"];
         $template = str_replace("{#edit}", "<a href=\"$ctx_prefix/$table_name/edit/$pk\">Правка</a>", $template);
         $template = str_replace("{#view}", "<a href=\"$ctx_prefix/$table_name/view/$pk\">Просмотр</a>", $template);
+        $template = str_replace("{{", "", $template);
+        $template = str_replace("}}", "", $template);
         $ans .= $template;
     }
 
@@ -348,6 +378,8 @@ if ($mode == "view")
     }
     elseif ($table_name == "submission")
     {
+        $to_contestant_url = "$ctx_prefix/contestants/from-submission/{submission_id}";
+
         echo ctx_show_list(
             "submission",
             null,
@@ -361,6 +393,7 @@ if ($mode == "view")
                 "<td>{processed}</td>".
                 "<td>{#view}</td>".
                 "<td>{#edit}</td>".
+                "<td>{{<a href=\"$to_contestant_url\">}}Преобразовать в работу{{</a>}}</td>".
             "</tr>"
         );
     }
@@ -369,6 +402,8 @@ if ($mode == "view")
 }
 elseif ($mode == "edit")
     ctx_add_or_edit_form($table_name, $entry_id, "edit", "$ctx_prefix/$table_name");
+elseif ($mode == "from-submission")
+    ctx_contestant_from_submission();
 elseif ($mode == "delete")
     xcmst_contest_delete_entity();
 
