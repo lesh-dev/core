@@ -107,8 +107,15 @@ function ctx_contestant_from_submission()
     $new_name = "$home/$cont_attachment_name";
     @mkdir($home, 0777, true);
     file_put_contents("${content_dir}contest/attach/.htaccess", "Allow from all\n");
-    if (!copy($sub_attachment, $new_name))
-        die("Cannot copy file '$sub_attachment' to '$new_name'. ");
+    if (!@copy($sub_attachment, $new_name))
+    {
+        die(
+            "Не удалось скопировать вложение '<tt>".htmlspecialchars($sub_attachment)."</tt>' в '<tt>".
+            htmlspecialchars($new_name)."</tt>'.<br />".
+            "Обратитесь на <a href=\"mailto:dev@fizlesh.ru\">dev@fizlesh.ru</a> с этой ошибкой.<br />".
+            "<a href=\"$ctx_prefix/submission\">Вернуться</a>"
+        );
+    }
     $contestant["work"] = $new_name;
     $contestant["mail"] = xcms_get_key_or($submission, "mail");
     $contestant["contest_year"] = $CONTEST_CURRENT_YEAR; // year sharding

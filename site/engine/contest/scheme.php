@@ -115,9 +115,9 @@ function ctx_update_object($table_name, $new_values, $prev_values = array())
         $timestamp = time();
         $home = "${content_dir}contest/attach/$table_name/$timestamp";
         $ext = pathinfo($file_desc["name"], PATHINFO_EXTENSION);
-        $ext = xcms_page_id_suffix($ext);
+        $ext = xcms_to_valid_filename($ext);
         $file_name = pathinfo($file_desc["name"], PATHINFO_FILENAME);
-        $file_name = xcms_page_id_suffix($file_name);
+        $file_name = xcms_to_valid_filename($file_name);
         $new_name = "$home/$table_name-attach-$file_name.$ext";
         @mkdir($home, 0777, true);
         file_put_contents("${content_dir}contest/attach/.htaccess", "Allow from all\n");

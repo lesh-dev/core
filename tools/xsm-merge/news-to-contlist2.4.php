@@ -38,7 +38,7 @@
         if ($r)
         {
             $title = trim($r[1]);
-            $title_tr = xcms_page_id_suffix($title);
+            $title_tr = xcms_to_valid_filename($title);
             $suffix = "-$title_tr";
         }
         $folder = "$item_id$suffix";
