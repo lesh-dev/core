@@ -84,6 +84,8 @@
             if (xu_len($rests) && $rests[0] == "-")
                 $rests = xu_substr($rests, 1);
             $author_suffix = preg_replace('/\.gz$/', "", $rests);
+            if (xu_not_empty($author_suffix))
+                $author_suffix = "-$author_suffix";
             $version_time = xcms_datetime($timestamp);
             $version_suffix = xu_substr($version_file, $ename_len);
             $selected = "";
