@@ -18,6 +18,8 @@
     $SETTINGS["session_time"] = 7*24*3600;
     // redirect delay in seconds (for autotesting needs)
     $SETTINGS["zero_redirect_delay"] = "0";
+    // content versioning roundup
+    $SETTINGS["content_time_roundup"] = 100;
 
     // set up some common-used things
     global $full_content_dir;

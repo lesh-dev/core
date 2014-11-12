@@ -24,9 +24,11 @@
     {
         if (@$_POST["edit-submit"])
         {
+            global $SETTINGS;
+            $content_time_roundup = xcms_get_key_or($SETTINGS, "content_time_roundup", 100);
             $login = xcms_user()->login();
             $time = time();
-            $time = (integer)($time / 100) * 100;
+            $time = (integer)($time / $content_time_roundup) * $content_time_roundup;
             $old_text = "";
             if (file_exists($ename))
             {

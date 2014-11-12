@@ -61,21 +61,41 @@ class InstallerInstallHook
         //$SETTINGS["web_prefix"]  = ;
         $SETTINGS["mailer_enabled"] = true;
 
+        $SETTINGS["content_time_roundup"] = 100;
+
         $request_uri = str_replace("install.php", "", $_SERVER["REQUEST_URI"]);
 
         return array(
-            "content_dir" =>
-                array("name"=>"Содержимое сайта", "default"=>"$content/")
-            ,"design_dir" =>
-                array("name"=>"Дизайн", "default"=>"$design/")
-            ,"engine_dir" =>
-                array("name"=>"Движок", "default"=>"engine/")
-            ,"engine_pub" =>
-                array("name"=>"Публичное содержимое движка", "default"=>"engine_public/")
-            ,"web_prefix" =>
-                array("name"=>"Префикс", "default"=>substr($request_uri, 1))
-            ,"mailer_enabled" =>
-                array("name"=>"Использовать ли оповещения по e-mail", "default"=>"true", "type"=>"bool")
+            "content_dir"=>array(
+                "name"=>"Содержимое сайта",
+                "default"=>"$content/",
+            ),
+            "design_dir"=>array(
+                "name"=>"Дизайн",
+                "default"=>"$design/",
+            ),
+            "engine_dir"=>array(
+                "name"=>"Движок",
+                "default"=>"engine/",
+            ),
+            "engine_pub"=>array(
+                "name"=>"Публичное содержимое движка",
+                "default"=>"engine_public/"
+            ),
+            "web_prefix"=>array(
+                "name"=>"Префикс",
+                "default"=>substr($request_uri, 1)
+            ),
+            "mailer_enabled"=>array(
+                "name"=>"Использовать ли оповещения по e-mail",
+                "default"=>"true",
+                "type"=>"bool",
+            ),
+            "content_time_roundup"=>array(
+                "name"=>"Интервал версионирования контента",
+                "default"=>100,
+                "type"=>"integer",
+            ),
         );
 
     }
@@ -172,7 +192,10 @@ class InstallerInstallHook
             'web_prefix'
         );
         $bool_settings = array(
-            'mailer_enabled'
+            'mailer_enabled',
+        );
+        $integer_settings = array(
+            'content_time_roundup',
         );
 
         $output = "<?php\n";
@@ -186,6 +209,11 @@ class InstallerInstallHook
         {
             $v = $config[$k] ? "true" : "false";
             $output .= "\x20\x20\x20\x20\$$k = $v;\n";
+        }
+        foreach ($integer_settings as $k)
+        {
+            $v = $config[$k];
+            $output .= "\x20\x20\x20\x20\$SETTINGS['$k'] = $v;\n";
         }
         $output .= "\n?>";
         if (!xcms_append("settings.php", $output))
