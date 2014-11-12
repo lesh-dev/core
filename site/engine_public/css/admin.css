@@ -430,3 +430,11 @@ b.slash {
     color: #9f0000;
     padding: 0px 2px 0px 2px;
 }
+
+pre.content-edit {
+    width: 90%;
+    min-width: 600px;
+    height: 500px;
+    border: 1px solid rgb(236, 199, 173);
+    font-size: 14px;
+}

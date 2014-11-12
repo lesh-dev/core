@@ -126,8 +126,7 @@
     <textarea class="editor" style="display: none" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
         name="edit-text" id="edit-text"><?php echo $text; ?></textarea>
 
-    <pre style="width: 800px; height: 500px; border: 1px solid rgb(236, 199, 173); font-size: 14px;"
-        name="edit-text-ace" id="edit-text-ace"><?php echo $text; ?></pre>
+    <pre class="content-edit" name="edit-text-ace" id="edit-text-ace"><?php echo $text; ?></pre>
 
     <?php include(translate('<! js/ace !>')); ?>
     <script>
