@@ -118,6 +118,8 @@ function ctx_update_object($table_name, $new_values, $prev_values = array())
         $ext = xcms_to_valid_filename($ext);
         $file_name = pathinfo($file_desc["name"], PATHINFO_FILENAME);
         $file_name = xcms_to_valid_filename($file_name);
+        if (xu_empty($file_name))
+            $file_name = "file";
         $new_name = "$home/$table_name-attach-$file_name.$ext";
         @mkdir($home, 0777, true);
         file_put_contents("${content_dir}contest/attach/.htaccess", "Allow from all\n");
