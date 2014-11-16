@@ -219,7 +219,8 @@ fi
 DEST_CHECK="` echo -n $DEST | sed -e 's:/::g' `"
 if ! [ -z "$DEST_CHECK" ]; then
     message "Cleaning destination directory $DEST"
-    sudo rm -rf "$DEST/{doc,$DEST_CONT,*-design,engine,engine_public}"
+    # do not quote whole path with curly braces, it will not expand
+    sudo rm -rf "$DEST/"{doc,"$DEST_CONT",*-design,engine,engine_public}
 else
     message_error "Bug in your script!"
     exit 1
