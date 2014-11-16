@@ -100,23 +100,27 @@ function ctx_contestant_from_submission()
     $submission = xdb_get_entity_by_id("submission", $submission_id);
     $contestant = array();
     $sub_attachment = xcms_get_key_or($submission, "attachment");
-    $sub_attachment_name = basename($sub_attachment);
-    $cont_attachment_name = str_replace("submission-attach-", "", $sub_attachment_name);
-    $timestamp = time();
-    $home = "${content_dir}contest/attach/contestants/$timestamp";
-    $new_name = "$home/$cont_attachment_name";
-    @mkdir($home, 0777, true);
-    file_put_contents("${content_dir}contest/attach/.htaccess", "Allow from all\n");
-    if (!@copy($sub_attachment, $new_name))
+    if (xu_not_empty($sub_attachment))
     {
-        die(
-            "Не удалось скопировать вложение '<tt>".htmlspecialchars($sub_attachment)."</tt>' в '<tt>".
-            htmlspecialchars($new_name)."</tt>'.<br />".
-            "Обратитесь на <a href=\"mailto:dev@fizlesh.ru\">dev@fizlesh.ru</a> с этой ошибкой.<br />".
-            "<a href=\"$ctx_prefix/submission\">Вернуться</a>"
-        );
+        $sub_attachment_name = basename($sub_attachment);
+        $cont_attachment_name = str_replace("submission-attach-", "", $sub_attachment_name);
+        $timestamp = time();
+        $home = "${content_dir}contest/attach/contestants/$timestamp";
+        $new_name = "$home/$cont_attachment_name";
+        @mkdir($home, 0777, true);
+        file_put_contents("${content_dir}contest/attach/.htaccess", "Allow from all\n");
+        if (!@copy($sub_attachment, $new_name))
+        {
+            die(
+                "Не удалось скопировать вложение '<tt>".htmlspecialchars($sub_attachment)."</tt>' в '<tt>".
+                htmlspecialchars($new_name)."</tt>'.<br />".
+                "Обратитесь на <a href=\"mailto:dev@fizlesh.ru\">dev@fizlesh.ru</a> с этой ошибкой.<br />".
+                "<a href=\"$ctx_prefix/submission\">Вернуться</a>"
+            );
+        }
+        $contestant["work"] = $new_name;
     }
-    $contestant["work"] = $new_name;
+    $contestant["fileexchange"] = xcms_get_key_or($submission, "fileexchange");
     $contestant["mail"] = xcms_get_key_or($submission, "mail");
     $contestant["contest_year"] = $CONTEST_CURRENT_YEAR; // year sharding
     xdb_insert_or_update("contestants", array("contestants_id" => XDB_NEW), $contestant, $contestant);

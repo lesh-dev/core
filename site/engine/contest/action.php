@@ -56,11 +56,22 @@ function ctx_print_result_row($work, $probs, $simple = false)
     else
     {
         $level = xcms_get_key_or($work, "level");
-        $file_name = $work["work"];
+        $links_html = "";
+        $work_link = xcms_get_key_or($work, "work");
+        if (xu_not_empty($work_link))
+            $links_html .= "<a href=\"/$web_prefix$work_link\">Скачать</a>";
+        $fileexchange = xcms_get_key_or($work, "fileexchange");
+        if (xu_not_empty($fileexchange))
+        {
+            if (xu_not_empty($links_html))
+                $links_html .= "&nbsp;";
+            $links_html .= "<a href=\"$fileexchange\">Файлообменник</a>";
+        }
+
         $row .=
             "<td><a href=\"$view\">$name</a></td>".
             "<td>$level</td>".
-            "<td><a href=\"/$web_prefix$file_name\">Скачать</a></td>";
+            "<td>$links_html</td>";
 
         foreach ($probs as $prob)
         {
