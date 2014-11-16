@@ -30,6 +30,7 @@ create table contestants(
     level text,
     teacher_name text,
     work text,
+    fileexchange text,
     status text,
     contest_year text
 );

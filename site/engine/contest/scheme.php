@@ -62,6 +62,10 @@ $CTX_META["contestants"] = array(
         "type"=>"text",
         "required"=>true,
     ),
+    "fileexchange" => array(
+        "name"=>"Ссылка на файлообменник",
+        "type"=>"link",
+    ),
     "mail" => array("name"=>"Электропочта", "type"=>"text"),
     "phone" => array("name"=>"Телефон (и др. контакты)", "type"=>"text"),
     "parents" => array("name"=>"Родители", "type"=>"text"),
