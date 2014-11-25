@@ -80,7 +80,7 @@ function xcms_print_related_links()
         <div class="social-icons">
             <a class="social-icon" href="https://vk.com/club279809" alt="ЛЭШ ВКонтакте"><img
             src="<# full_design_dir #>pict/vkontakte.png" /></a>
-            <a href=""><img src="<# full_design_dir #>pict/facebook.png" /></a>
+            <!--<a href=""><img src="<# full_design_dir #>pict/facebook.png" /></a>-->
         </div>
     </div>
 
