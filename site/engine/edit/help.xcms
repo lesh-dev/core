@@ -19,5 +19,6 @@
     <div><span class="help-left"><b>${related:[top|bottom]:</b>pageid<b>}</b></span> $-плагин для связанных страниц</div>
     <div><span class="help-left"><b>${relatedtitle:[top|bottom]:</b>текст<b>}</b></span> $-плагин для заголовков связанных страниц</div>
     <div><span class="help-left"><b>${relatedlinks:</b>ссылка:заголовок<b>}</b></span> $-плагин для заголовков связанных страниц</div>
+    <div><span class="help-left"><b>${album:[left|right]:</b>img:<b>:</b>text<b>}</b></span> $-плагин для фотоальбома</div>
 </div>
 </span>
