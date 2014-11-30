@@ -558,7 +558,7 @@ img.white-leaf {
     width: 200px;
     background-color: #83ac9b;
     color: black;
-    padding: 5px 20px 20px 20px;
+    padding: 10px 20px 20px 20px;
     margin-left: 10px;
     margin-top: -30px;
     text-align: left;
@@ -584,11 +584,12 @@ img.white-leaf {
     border-bottom: 3px solid white;
 }
 
-.right-inv-top p.word_left_top,
-.right-inv-bottom p.word_left_top {
+.right-inv-top p.related-title,
+.right-inv-bottom p.related-title {
     font-size: 15px;
     color: black;
-    padding-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .right-inv-top p,
@@ -625,7 +626,7 @@ img.arrow {
     right: 5px;
 }
 
-.right-inv-bottom{
+.right-inv-bottom {
     width: 200px;
     background-color: #D0C4A3;
     padding: 10px 0px 0px 30px;
@@ -635,7 +636,7 @@ img.arrow {
 
 .footer {
     text-align: center;
-    padding: 10px 50px 10px 50px;
+    padding: 30px 50px 10px 50px;
     position: relative;
 }
 
@@ -683,6 +684,7 @@ ul.menu {
 }
 ul.menu li {
     white-space: nowrap;
+    line-height: 16px;
 }
 
 .menu-level1 {

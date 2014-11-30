@@ -80,7 +80,7 @@ function xcms_print_related_links()
         <div class="social-icons">
             <a class="social-icon" href="https://vk.com/club279809" alt="ЛЭШ ВКонтакте"><img
             src="<# full_design_dir #>pict/vkontakte.png" /></a>
-            <a href=""><img src="<# full_design_dir #>pict/facebook.png" /></a>
+            <!--<a href=""><img src="<# full_design_dir #>pict/facebook.png" /></a>-->
         </div>
     </div>
 
@@ -103,7 +103,7 @@ function xcms_print_related_links()
         <div id="content-text">
             <div class="right-inv">
                 <div class="right-inv-top">
-                    <p class="word_left_top"><?php
+                    <p class="related-title"><?php
                         echo xcms_print_related_title("top");
                     ?></p>
                     <?php
@@ -117,7 +117,7 @@ function xcms_print_related_links()
                     </p>
                 </div>
                 <div class="right-inv-bottom">
-                    <p class="word_left_top"><?php
+                    <p class="related-title"><?php
                         echo xcms_print_related_title("bottom");
                     ?></p><?php
                     xcms_print_related_pages("bottom"); ?>
