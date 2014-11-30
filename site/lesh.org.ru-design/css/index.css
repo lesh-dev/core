@@ -704,14 +704,6 @@ a.menu-item {
     background-position: 0px 50%;
 }
 
-a.menu-sys {
-    padding-left: 3px;
-    background-color: #a5b991;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-}
-
 a.menu-active:link {
 }
 a.menu-active:visited {
@@ -731,7 +723,7 @@ a.menu-passive:active {
 }
 
 a.menuitem-auth {
-    background-color: #a5b991 !important;
+    color: #0082c5 !important;
 }
 
 a.link-button {
