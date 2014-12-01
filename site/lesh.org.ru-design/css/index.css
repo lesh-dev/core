@@ -589,6 +589,7 @@ img.white-leaf {
 .right-inv-bottom p.related-title {
     font-size: 15px;
     color: black;
+    font-weight: bold;
     padding-top: 15px;
     padding-bottom: 5px;
 }
