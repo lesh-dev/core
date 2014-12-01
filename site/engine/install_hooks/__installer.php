@@ -42,20 +42,33 @@ class InstallerInstallHook
     }
     function request_variables()
     {
+        if (file_exists("settings.php"))
+            include("settings.php");
+
+        $design = "design/";
+        if (isset($design_dir))
+            $design = $design_dir;
+        else
+        {
+            $design_list = glob("*design*", GLOB_ONLYDIR);
+            if (count($design_list))
+                $design = $design_list[0].'/';
+        }
+
+        $content = "content/";
+        if (isset($content_dir))
+            $content = $content_dir;
+        else
+        {
+            $content_list = glob("*content*", GLOB_ONLYDIR);
+            if (count($content_list))
+                $content = $content_list[0].'/';
+        }
+
         global $SETTINGS;
-        $design_list = glob("*design*", GLOB_ONLYDIR);
-        if (count($design_list))
-            $design = $design_list[0];
-        else $design = "design";
-
-        $content_list = glob("*content*", GLOB_ONLYDIR);
-        if (count($content_list))
-            $content = $content_list[0];
-        else $content = "content";
-
         // set default values for *each* setting
-        $SETTINGS["content_dir"] = "$content/";
-        $SETTINGS["design_dir"]  = "$design/";
+        $SETTINGS["content_dir"] = "$content";
+        $SETTINGS["design_dir"]  = "$design";
         $SETTINGS["engine_dir"]  = "engine/";
         $SETTINGS["engine_pub"]  = "engine_public/";
         //$SETTINGS["web_prefix"]  = ;
@@ -68,11 +81,11 @@ class InstallerInstallHook
         return array(
             "content_dir"=>array(
                 "name"=>"Содержимое сайта",
-                "default"=>"$content/",
+                "default"=>"$content",
             ),
             "design_dir"=>array(
                 "name"=>"Дизайн",
-                "default"=>"$design/",
+                "default"=>"$design",
             ),
             "engine_dir"=>array(
                 "name"=>"Движок",
@@ -216,7 +229,7 @@ class InstallerInstallHook
             $output .= "\x20\x20\x20\x20\$SETTINGS['$k'] = $v;\n";
         }
         $output .= "\n?>";
-        if (!xcms_append("settings.php", $output))
+        if (!xcms_write("settings.php", $output))
             return "Cannot append settings to 'settings.php'. ";
 
         include("settings.php");
