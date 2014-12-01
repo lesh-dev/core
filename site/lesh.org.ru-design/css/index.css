@@ -561,16 +561,17 @@ img.white-leaf {
     padding: 10px 20px 20px 20px;
     margin-left: 10px;
     margin-top: -30px;
+    margin-top: -15px\9;
+    _margin-top: -2px;
+    margin-bottom: 15px;
     text-align: left;
     border-bottom: 3px solid white;
     line-height: 18px;
-    margin-top: -15px\9;
-    _margin-top: -2px;
     position: relative;
     font-size: 13px;
 }
 
-.right-inv-top, x:-moz-any-link{
+.right-inv-top, x:-moz-any-link {
     background-color:  #769897;
     padding: 20px;
     padding-top: 1px;
@@ -588,7 +589,7 @@ img.white-leaf {
 .right-inv-bottom p.related-title {
     font-size: 15px;
     color: black;
-    padding-top: 5px;
+    padding-top: 15px;
     padding-bottom: 5px;
 }
 
