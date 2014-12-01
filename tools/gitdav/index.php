@@ -1,6 +1,6 @@
 <?php
 
-$BASE_URI="/gitdav/index.php/";
+$BASE_URI="/index.php/";
 if(!file_exists("SabreDAV"))
 {
     if(@$_POST["install"])
@@ -67,7 +67,7 @@ $server = new DAV\Server($rootDirectory);
 
 // If your server is not on your webroot, make sure the following line has the
 // correct information
-$server->setBaseUri('/gitdav/index.php/');
+$server->setBaseUri("$BASE_URI");
 
 // The lock manager is reponsible for making sure users don't overwrite
 // each others changes.
