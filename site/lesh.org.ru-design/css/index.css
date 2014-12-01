@@ -51,26 +51,28 @@ div#content-header {
 h1 {
     font-size: 16px;
     font-weight: bold;
+    font-family: "Trebuchet MS", "Helvetica CY", "Luxi Sans", sans-serif;
     color: #4f4f4f;
-    margin-top: 18px;
+    margin-top: 20px;
     margin-bottom: 0px;
 }
 
 h2 {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: bold;
+    font-family: "Trebuchet MS", "Helvetica CY", "Luxi Sans", sans-serif;
     color: #2f8f4f;
-    margin-top: 10px;
+    margin-top: 15px;
     margin-bottom: 0px;
 }
 
 h3 {
     color: #4f4f4f;
-    font-family: sans-serif;
-    font-size: 12px;
+    font-family: "Trebuchet MS", "Helvetica CY", "Luxi Sans", sans-serif;
+    font-size: 14px;
     font-weight: bolder;
     text-indent: 0px;
-    margin-top: 10px;
+    margin-top: 15px;
     margin-bottom: 0px;
 }
 
@@ -248,7 +250,7 @@ h3 {
 .bottom_text p {
     font-size: 14px;
     color: black;
-    padding-top: 15px;
+    padding-top: 10px;
 }
 
 .main-text p {
@@ -558,7 +560,7 @@ img.white-leaf {
     width: 200px;
     background-color: #83ac9b;
     color: black;
-    padding: 10px 20px 20px 20px;
+    padding: 0px 20px 20px 20px;
     margin-left: 10px;
     margin-top: -30px;
     margin-top: -15px\9;
@@ -571,7 +573,7 @@ img.white-leaf {
     font-size: 13px;
 }
 
-.right-inv-top, x:-moz-any-link {
+.right-inv-top x:-moz-any-link {
     background-color:  #769897;
     padding: 20px;
     padding-top: 1px;
@@ -631,7 +633,7 @@ img.arrow {
 .right-inv-bottom {
     width: 200px;
     background-color: #D0C4A3;
-    padding: 10px 0px 0px 30px;
+    padding: 0px 0px 0px 30px;
     text-align: left;
     line-height: 18px;
 }
