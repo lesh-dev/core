@@ -65,8 +65,9 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         inpPhone = self.fillElementById("phone-input", inpPhone)
         inpCell = self.fillElementById("cellular-input", inpCell)
         inpEmail = self.fillElementById("email-input", inpEmail)
-        inpSkype = self.fillElementById("skype-input", inpSkype)
 
+        self.clickElementById("submit-anketa-button")
+        self.assertBodyTextPresent(u"ещё раз")
         self.clickElementById("submit-anketa-button")
 
         self.assertBodyTextPresent(self.getAnketaSuccessSubmitMessage())
@@ -122,13 +123,26 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         self.assertElementValueById("email-input", inpEmail)
 
         self.assertElementValueById("anketa_status-selector", "new")
-        # change anketa status and save it.
-
-        self.setOptionValueByIdAndValue("anketa_status-selector", "progress")
+        # change anketa field and save it.
+        
+        inpSkype = random_crap.randomText(8)
+        inpSkype = self.fillElementById("skype-input", inpSkype)        
 
         self.clickElementById("update-person-submit")
 
         self.assertBodyTextPresent(u"Участник успешно сохранён")
         self.gotoBackToAnketaView()
 
-        self.assertElementTextById("anketa_status-span", u"Ждёт собес.")
+        # check bug 
+        self.assertElementTextById("anketa_status-span", u"Новый")
+        
+        self.gotoRoot()
+        self.gotoXsm()
+        self.gotoUrlByLinkText(self.getAnketaListMenuName())
+
+        # try to drill-down again into table with new anketa.
+        # it should be displayed in this list, not in school participants.
+        self.gotoUrlByLinkText(anketaUrlName)
+
+        
+        
