@@ -23,6 +23,8 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
         self.inpPhone = "+7" + random_crap.randomDigits(9)
         self.inpCell = "+7" + random_crap.randomDigits(9)
         self.inpEmail = random_crap.randomText(7) + "@" + random_crap.randomText(5) + ".ru"
+        
+    def generateAuxData(self):
         self.inpSkype = random_crap.randomText(8)
         self.inpSocial = random_crap.randomVkontakte()
         
@@ -33,9 +35,7 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
 
     def addAnketa(self):
         self.gotoRoot()
-        
         #navigate to anketas
-        
         self.gotoUrlByLinkText(self.getEntranceLinkName())
         self.gotoAnketa()
         self.assertBodyTextPresent(self.getAnketaPageHeader())
@@ -71,47 +71,19 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
         self.clickElementByName("show-person")
         if self.countIndexedUrlsByLinkText(self.personAlias) != 1:
             self.failTest("Found more than one anketa with exact FIO. Duplicate filtering is broken. ")
-            
-    def changeStatus(self):
-        self.gotoXsm()
-        self.gotoXsmAnketas()
-        self.gotoUrlByLinkText(self.personAlias)
-        self.gotoXsmChangePersonStatus()
-        
-        self.setOptionValueByIdAndValue("anketa_status-selector", "nextyear")
-        commentText = u"Меняем статус первой анкете: " + random_crap.randomCrap(5)
-        commentText = self.fillElementById("comment_text-text", commentText)
+        self.gotoRoot()
+        self.performLogoutFromSite()
                 
-        self.clickElementById("update-person_comment-submit-top")
-        self.gotoBackToPersonView()
-        
-        self.newState = u"Отложен"
-        self.assertBodyTextPresent(u"Статус Новый изменён на {0}".format(self.newState))
-        self.assertBodyTextPresent(commentText)
-    
-    def checkStatus(self):
-        self.gotoXsm()
-        self.gotoXsmAnketas()
-        self.gotoUrlByLinkText(self.personAlias)
-        # anketa should change status to new (like 'ticket reopen')
-        self.assertElementTextById("anketa_status-span", u"Новый")
-
     # -------------------- begining of the test
     def run(self):
-        # add anketa one
         self.generateData()
-        self.addAnketa()
-        self.assertBodyTextPresent(self.getAnketaSuccessSubmitMessage())
-        self.addAnketa()
-        self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage())
-        self.assertBodyTextPresent(self.getAnketaDuplicateSubmitMessage())
+        for i in range(0, 5):
+            self.generateAuxData()
+            self.addAnketa()
+            if i == 0:
+                self.assertBodyTextPresent(self.getAnketaSuccessSubmitMessage())
+            else:
+                self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage())
+                self.assertBodyTextPresent(self.getAnketaDuplicateSubmitMessage())
         
         self.checkUniqueAnketa()
-        
-        self.changeStatus()
-        
-        self.addAnketa()
-        self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage())
-        self.assertBodyTextPresent(self.getAnketaDuplicateSubmitMessage())
-        
-        self.checkStatus()

@@ -34,6 +34,7 @@ import xcms_warnings
 import xcms_xsm_add_courses
 import xcms_xsm_add_exams
 import xcms_xsm_add_school
+import xcms_xsm_anketa_dup_stress
 import xcms_xsm_anketa_duplicate
 import xcms_xsm_anketa_edit
 import xcms_xsm_anketa_fill
@@ -80,6 +81,7 @@ def getTests(baseUrl, args):
         ("xcms_xsm_add_courses.py", xcms_xsm_add_courses.XcmsXsmAddCourses(baseUrl, args)),
         ("xcms_xsm_add_exams.py", xcms_xsm_add_exams.XcmsXsmAddExams(baseUrl, args)),
         ("xcms_xsm_add_school.py", xcms_xsm_add_school.XcmsXsmAddSchool(baseUrl, args)),
+        ("xcms_xsm_anketa_dup_stress.py", xcms_xsm_anketa_dup_stress.XcmsXsmAnketaDupStress(baseUrl, args)),
         ("xcms_xsm_anketa_duplicate.py", xcms_xsm_anketa_duplicate.XcmsXsmAnketaDuplicate(baseUrl, args)),
         ("xcms_xsm_anketa_edit.py", xcms_xsm_anketa_edit.XcmsXsmAnketaFill(baseUrl, args)),
         ("xcms_xsm_anketa_fill.py", xcms_xsm_anketa_fill.XcmsXsmAnketaFill(baseUrl, args)),
