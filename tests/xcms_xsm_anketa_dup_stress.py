@@ -24,14 +24,27 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
         self.inpCell = "+7" + random_crap.randomDigits(9)
         self.inpEmail = random_crap.randomText(7) + "@" + random_crap.randomText(5) + ".ru"
         
-    def generateAuxData(self):
+    def generateAuxData(self, iteration, random=False):
         self.inpSkype = random_crap.randomText(8)
         self.inpSocial = random_crap.randomVkontakte()
-        
-        self.inpFav = random_crap.randomCrap(20, ["multiline"])
-        self.inpAch = random_crap.randomCrap(13, ["multiline"])
-        self.inpHob = random_crap.randomCrap(24, ["multiline"])
-        self.inpSource = random_crap.randomCrap(20, ["multiline"])
+              
+        fmt = u"iteration {0}_{1}"
+        if not random:
+            fav = "my_favourites"
+            ach = "some_achievements"
+            hob = "different_hobbies"
+            src = "wtf_source"
+        else:
+            crapParams = (30, ["multiline"])
+            crapFunc = random_crap.randomCrap
+            fav = crapFunc(*crapParams)
+            ach = crapFunc(*crapParams)
+            hob = crapFunc(*crapParams)
+            src = crapFunc(*crapParams)
+        self.inpFav = fmt.format(iteration, fav)
+        self.inpAch = fmt.format(iteration, ach)
+        self.inpHob = fmt.format(iteration, hob)
+        self.inpSource = fmt.format(iteration, src)
 
     def addAnketa(self):
         self.gotoRoot()
@@ -78,7 +91,7 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
     def run(self):
         self.generateData()
         for i in range(0, 5):
-            self.generateAuxData()
+            self.generateAuxData(i, random=True)
             self.addAnketa()
             if i == 0:
                 self.assertBodyTextPresent(self.getAnketaSuccessSubmitMessage())
