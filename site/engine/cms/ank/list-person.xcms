@@ -85,17 +85,24 @@ function xsm_show_person_list($school_id)
     $school = xdb_get_entity_by_id('school', $school_id);
     $school_title = xcms_get_key_or_enc($school, 'school_title');
 
+    $person_school_add_url = xcms_url(array(
+        'school_id'=>$school_id,
+    ));
+    $person_add_new_url = xcms_url(array(
+        'person_id'=>XDB_NEW,
+        'anketa_status'=>'cont',
+        'school_id'=>$school_id,
+    ));
+
     $student_count = 0;
     $teacher_count = 0;
-    xsm_view_operations(
-        'person',
-        'участника',
-        xcms_url(array(
-            'anketa_status'=>'cont',
-            'school_id'=>$school_id,
-        ))
-    );
     ?>
+    <div class="xsm-edit-ops">
+        <a class="link-button ank btn" href="add-person_school<?php
+            echo $person_school_add_url; ?>">Зачислить существующего участника</a>
+        <a class="link-button btn" href="edit-person<?php
+            echo $person_add_new_url; ?>">Добавить нового участника</a>
+    </div>
     <table class="ankList table table-bordered table-hover table-condensed">
         <?php
         global $XSM_BOOTSTRAP;

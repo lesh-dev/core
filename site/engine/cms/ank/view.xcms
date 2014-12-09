@@ -1,4 +1,5 @@
 <?php
+require_once("${engine_dir}cms/ank/xsm.php");
 require_once("${engine_dir}cms/ank/pss.php");
 require_once("${engine_dir}cms/ank/field-desc.php");
 require_once("${engine_dir}cms/ank/ank-proc.php");
@@ -136,9 +137,7 @@ require_once("${engine_dir}cms/ank/ank-proc.php");
         include(translate('<! cms/ank/menu !>'));
         include(translate('<! cms/ank/list-person !>'));
     }
-    else if (substr($aparam, 0, 5) == "list-" ||
-        substr($aparam, 0, 5) == "view-" ||
-        substr($aparam, 0, 5) == "edit-")
+    else if (xsm_valid_aparam($aparam))
     {
         include(translate('<! cms/ank/menu !>'));
         include(translate("<! cms/ank/$aparam !>"));

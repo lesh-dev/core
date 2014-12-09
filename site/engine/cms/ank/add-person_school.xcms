@@ -1,0 +1,74 @@
+<?php
+require_once("${engine_dir}cms/ank/course_teacher.php");
+require_once("${engine_dir}cms/ank/edit-format.php");
+
+function xsm_edit_course_teachers()
+{
+    $course_id = xcms_get_key_or($_POST, 'course_id');
+    if (xu_empty($course_id))
+        $course_id = xcms_get_key_or($_GET, 'course_id', XDB_INVALID_ID);
+
+    $course = xdb_get_entity_by_id('course', $course_id);
+    $school_id = $course['school_id'];
+
+    $db = xdb_get();
+    $course_teachers = xsm_get_course_teachers_list($db, $course_id, $school_id);
+
+    $course_title = xcms_get_key_or_enc($course, 'course_title');
+    $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
+    ?>
+    <table class="ankEdit">
+        <tr><td class="ankListRowTitle">Преподы курса
+            <a href="<?php echo $course_url; ?>"><?php echo $course_title; ?></a></td></tr><?php
+
+        $already_added = array();
+        foreach ($course_teachers as $course_teachers_id => $teacher_data)
+        {
+            $course_teacher_id = $teacher_data['course_teacher_id'];
+            $already_added[$course_teacher_id] = true;
+            $teacher_fi = xsm_fi_enc($teacher_data);
+            $teacher_link = xsm_person_view_link($course_teacher_id, $school_id, $teacher_fi);
+            $teacher_ht = "$teacher_link ";
+
+            ?>
+            <form method="post" action="edit-teachers"><?php
+            xsm_draw_field_hidden("course_teachers_id", $course_teachers_id);
+            xsm_draw_field_hidden("course_id", $course_id); ?>
+            <tr><td class="ankList"><span class="ank-edit-item"><?php echo $teacher_ht; ?></span>
+                <input type="submit" name="delete-teacher" class="delete-button item" value="Удалить" />
+            </td></tr>
+            </form><?php
+        }?>
+        <form method="post" action="edit-teachers">
+        <tr><td class="ankList"><span class="ank-edit-item action">Добавить препода</span><?php
+            echo xsm_make_teacher_selector($school_id, $already_added);
+            xsm_draw_field_hidden("course_id", $course_id); ?>
+            <input type="submit" name="add-teacher" value="Добавить" />
+            <span><br/>Символом &#9679; отмечены преподы на данной школе,
+            <br/>символом &#9675; &#8212; активные преподы
+            (они автоматически будут добавлены на школу)<br/></span>
+        </td></tr>
+        <tr><td class="ankList">
+            <a id="return-to-course" class="link-button ank"
+                href="<?php echo $course_url; ?>">Вернуться к просмотру курса</a>
+        </td></tr>
+        </form>
+    </table>
+    <?php
+}
+
+if (@$_POST["add-teacher"])
+{
+    $course_id = xcms_get_key_or($_POST, 'course_id', XDB_INVALID_ID);
+    $course_teacher_id = xcms_get_key_or($_POST, 'course_teacher_id', XDB_INVALID_ID);
+    xsm_add_course_teacher($course_id, $course_teacher_id);
+}
+elseif (@$_POST["delete-teacher"])
+{
+    $course_teachers_id = xcms_get_key_or($_POST, 'course_teachers_id', XDB_INVALID_ID);
+    $res = xdb_delete('course_teachers', $course_teachers_id);
+}
+
+// render same window, because all operations are easily revertible here
+xsm_edit_course_teachers();
+?>
