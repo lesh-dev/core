@@ -55,6 +55,37 @@ function xsm_update_person_school($title, $fields_desc)
     <a href="<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
 }
 
+/* Используется пока в edit-person */
+function xsm_add_person_to_school($school_id, $person_id)
+{
+    $db = xdb_get();
+    $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
+    if ($person_school_id === NULL && $school_id != XSM_SCHOOL_ANK_ID)
+    {
+        $person_school = array(
+            'school_id'=>$school_id,
+            'member_person_id'=>$person_id,
+            'is_teacher'=>$_POST['is_teacher'],
+            'is_student'=>$_POST['is_student'],
+            'member_department_id'=>$_POST['department_id'],
+        );
+        $ps_result = xdb_insert_or_update("person_school", array("person_school_id"=>XDB_NEW),
+            $person_school, xsm_get_fields("person_school"));
+        $fi = xsm_fi_enc($_POST);
+        $person_list_link = xsm_person_list_link($school_id);
+        if ($ps_result === false)
+        {?>
+            <p>Не удалось зачислить участника <?php echo $fi; ?>
+            на школу <?php echo $person_list_link; ?></p><?php
+        }
+        else
+        {?>
+            <p>Участник <?php echo $fi; ?> успешно зачислен
+            на школу <?php echo $person_list_link; ?></p><?php
+        }
+    }
+}
+
 // Специфическая функция для данной таблицы
 function xsm_person_school_edit_operations($table_name, $id, $ret_title, $school_id, $member_person_id, $place)
 {

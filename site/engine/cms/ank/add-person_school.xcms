@@ -1,27 +1,80 @@
 <?php
-require_once("${engine_dir}cms/ank/course_teacher.php");
 require_once("${engine_dir}cms/ank/edit-format.php");
 
-function xsm_edit_course_teachers()
+function xsm_make_add_person_school_selector($school_id, $already_added = array())
 {
-    $course_id = xcms_get_key_or($_POST, 'course_id');
-    if (xu_empty($course_id))
-        $course_id = xcms_get_key_or($_GET, 'course_id', XDB_INVALID_ID);
+    $attr = '';
+    $existance = "(\xE2\x97\x8F)";
+    $active = "(\xE2\x97\x8B)";
+    return xsm_make_selector_ext('person_id', 'member_person_id', XDB_INVALID_ID,
+        "@@anketa_status@@ @@last_name@ @@first_name@",
+        "SELECT
+        person_id, last_name, first_name, '$existance' AS presence
+        FROM person p
+        WHERE
+        p.anketa_status = 'cont'
 
-    $course = xdb_get_entity_by_id('course', $course_id);
-    $school_id = $course['school_id'];
+        UNION
+
+        SELECT
+        person_id, last_name, first_name, '$active' AS presence
+        FROM person p
+        WHERE
+        p.anketa_status <> 'cont'
+
+        ORDER BY last_name, first_name, presence DESC
+        ",
+        $attr, $already_added);
+}
+
+
+function xsm_get_person_school_list($db, $school_id)
+{
+    $members_query =
+        "SELECT
+        p.first_name, p.last_name, p.person_id,
+        ps.member_department_id, d.department_title
+        FROM person p
+        LEFT JOIN person_school ps ON (p.person_id = ps.member_person_id and ps.school_id = $school_id)
+        LEFT JOIN department d ON (d.department_id = ps.member_department_id)
+        ORDER BY p.last_name, p.first_name";
+    echo $members_query;
+    $members_sel = $db->query($members_query);
+    $members = array();
+    while ($member_data = $members_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $person_id = $member_data['person_id'];
+        $members[$person_id] = $member_data;
+    }
+    return $members;
+}
+
+
+function xsm_add_person_school()
+{
+    $person_id = xcms_get_key_or($_POST, 'member_person_id');
+    $school_id = xcms_get_key_or($_POST, 'school_id');
+    if (xu_empty($school_id))
+        $school_id = xcms_get_key_or($_GET, 'school_id');
+
+    //$course = xdb_get_entity_by_id('course', $course_id);
+    //$school_id = $course['school_id'];
 
     $db = xdb_get();
-    $course_teachers = xsm_get_course_teachers_list($db, $course_id, $school_id);
+    $members = xsm_get_person_school_list($db, $school_id);
 
-    $course_title = xcms_get_key_or_enc($course, 'course_title');
-    $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
+    $school = xdb_get_entity_by_id('school', $school_id);
+    $school_title = xcms_get_key_or($school, 'school_title');
+
+    //$course_title = xcms_get_key_or_enc($course, 'course_title');
+    $school_url = "list-person".xcms_url(array('school_id'=>$school_id));
     ?>
     <table class="ankEdit">
-        <tr><td class="ankListRowTitle">Преподы курса
-            <a href="<?php echo $course_url; ?>"><?php echo $course_title; ?></a></td></tr><?php
+        <tr><td class="ankListRowTitle">Участники школы
+            <a href="<?php echo $school_url; ?>"><?php echo $school_title; ?></a></td></tr><?php
 
         $already_added = array();
+        /*
         foreach ($course_teachers as $course_teachers_id => $teacher_data)
         {
             $course_teacher_id = $teacher_data['course_teacher_id'];
@@ -38,37 +91,31 @@ function xsm_edit_course_teachers()
                 <input type="submit" name="delete-teacher" class="delete-button item" value="Удалить" />
             </td></tr>
             </form><?php
-        }?>
-        <form method="post" action="edit-teachers">
-        <tr><td class="ankList"><span class="ank-edit-item action">Добавить препода</span><?php
-            echo xsm_make_teacher_selector($school_id, $already_added);
-            xsm_draw_field_hidden("course_id", $course_id); ?>
-            <input type="submit" name="add-teacher" value="Добавить" />
-            <span><br/>Символом &#9679; отмечены преподы на данной школе,
-            <br/>символом &#9675; &#8212; активные преподы
-            (они автоматически будут добавлены на школу)<br/></span>
+        }*/?>
+        <form method="post" action="add-person_school">
+        <tr><td class="ankList"><span class="ank-edit-item action">Добавить участника</span><?php
+            echo xsm_make_add_person_school_selector($school_id, $already_added);
+            xsm_draw_field_hidden("school_id", $school_id); ?>
+            <input type="submit" name="add-person_school" value="Добавить" />
+            <span><br/>Символом &#9679; отмечены активные участники,
+            <br/>символом &#9675; &#8212; все остальные<br/></span>
         </td></tr>
         <tr><td class="ankList">
-            <a id="return-to-course" class="link-button ank"
-                href="<?php echo $course_url; ?>">Вернуться к просмотру курса</a>
+            <a id="return-to-school" class="link-button ank"
+                href="<?php echo $school_url; ?>">Вернуться к просмотру списка школы</a>
         </td></tr>
         </form>
     </table>
     <?php
 }
 
-if (@$_POST["add-teacher"])
+if (@$_POST["add-person_school"])
 {
-    $course_id = xcms_get_key_or($_POST, 'course_id', XDB_INVALID_ID);
-    $course_teacher_id = xcms_get_key_or($_POST, 'course_teacher_id', XDB_INVALID_ID);
-    xsm_add_course_teacher($course_id, $course_teacher_id);
-}
-elseif (@$_POST["delete-teacher"])
-{
-    $course_teachers_id = xcms_get_key_or($_POST, 'course_teachers_id', XDB_INVALID_ID);
-    $res = xdb_delete('course_teachers', $course_teachers_id);
+    $person_id = xcms_get_key_or($_POST, 'member_person_id', XDB_INVALID_ID);
+    $school_id = xcms_get_key_or($_POST, 'school_id', XDB_INVALID_ID);
+    xsm_add_person_to_school($school_id, $person_id);
 }
 
 // render same window, because all operations are easily revertible here
-xsm_edit_course_teachers();
+xsm_add_person_school();
 ?>
