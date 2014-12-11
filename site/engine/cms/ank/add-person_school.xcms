@@ -4,12 +4,13 @@ require_once("${engine_dir}cms/ank/edit-format.php");
 function xsm_make_add_person_school_selector($school_id, $already_added = array())
 {
     $attr = '';
-    $existance = "(\xE2\x97\x8F)";
-    $active = "(\xE2\x97\x8B)";
+    $cont = "(\xE2\x97\x8F)";
+    $processed = "(\xE2\x80\xBB)";
+    $other = "(\xE2\x97\x8B)";
     return xsm_make_selector_ext('person_id', 'member_person_id', XDB_INVALID_ID,
-        "@@anketa_status@@ @@last_name@ @@first_name@",
+        "##presence# @@last_name@ @@first_name@",
         "SELECT
-        person_id, last_name, first_name, '$existance' AS presence
+        person_id, last_name, first_name, anketa_status, '$cont' AS presence, 0 as sort_order
         FROM person p
         WHERE
         p.anketa_status = 'cont'
@@ -17,12 +18,23 @@ function xsm_make_add_person_school_selector($school_id, $already_added = array(
         UNION
 
         SELECT
-        person_id, last_name, first_name, '$active' AS presence
+        person_id, last_name, first_name, anketa_status, '$processed' AS presence, 1 as sort_order
         FROM person p
         WHERE
-        p.anketa_status <> 'cont'
+        p.anketa_status = 'processed'
 
-        ORDER BY last_name, first_name, presence DESC
+        UNION
+
+        SELECT
+        person_id, last_name, first_name, anketa_status, '$other' AS presence, 2 as sort_order
+        FROM person p
+        WHERE
+        (p.anketa_status <> 'cont') AND
+        (p.anketa_status <> 'processed') AND
+        (p.anketa_status <> 'duplicate') AND
+        (p.anketa_status <> 'spam')
+
+        ORDER BY sort_order, last_name, first_name, presence DESC
         ",
         $attr, $already_added);
 }
@@ -32,13 +44,12 @@ function xsm_get_person_school_list($db, $school_id)
 {
     $members_query =
         "SELECT
-        p.first_name, p.last_name, p.person_id,
+        p.person_id, p.first_name, p.last_name, p.anketa_status,
         ps.member_department_id, d.department_title
         FROM person p
         LEFT JOIN person_school ps ON (p.person_id = ps.member_person_id and ps.school_id = $school_id)
         LEFT JOIN department d ON (d.department_id = ps.member_department_id)
         ORDER BY p.last_name, p.first_name";
-    echo $members_query;
     $members_sel = $db->query($members_query);
     $members = array();
     while ($member_data = $members_sel->fetchArray(SQLITE3_ASSOC))
