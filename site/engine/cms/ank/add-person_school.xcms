@@ -108,8 +108,12 @@ function xsm_add_person_school()
             echo xsm_make_add_person_school_selector($school_id, $already_added);
             xsm_draw_field_hidden("school_id", $school_id); ?>
             <input type="submit" name="add-person_school" value="Добавить" />
-            <span><br/>Символом &#9679; отмечены активные участники,
-            <br/>символом &#9675; &#8212; все остальные<br/></span>
+            <span>
+                <br/>Символом &#9679; отмечены активные участники,
+                <br/>символом &#8251; &#8212; принятые,
+                <br/>символом &#9675; &#8212; все остальные (кроме дублей и спама)
+                <br/>
+            </span>
         </td></tr>
         <tr><td class="ankList">
             <a id="return-to-school" class="link-button ank"
