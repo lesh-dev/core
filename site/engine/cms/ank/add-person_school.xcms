@@ -47,9 +47,10 @@ function xsm_get_person_school_list($db, $school_id)
         "SELECT
         p.person_id, p.first_name, p.last_name, p.anketa_status,
         ps.member_department_id, d.department_title
-        FROM person p
-        LEFT JOIN person_school ps ON (p.person_id = ps.member_person_id and ps.school_id = $school_id)
+        FROM person p, person_school ps
         LEFT JOIN department d ON (d.department_id = ps.member_department_id)
+        WHERE (ps.member_person_id == p.person_id)
+        AND (ps.school_id == $school_id)
         ORDER BY p.last_name, p.first_name";
     $members_sel = $db->query($members_query);
     $members = array();
@@ -69,41 +70,24 @@ function xsm_add_person_school()
     if (xu_empty($school_id))
         $school_id = xcms_get_key_or($_GET, 'school_id');
 
-    //$course = xdb_get_entity_by_id('course', $course_id);
-    //$school_id = $course['school_id'];
-
     $db = xdb_get();
     $members = xsm_get_person_school_list($db, $school_id);
 
     $school = xdb_get_entity_by_id('school', $school_id);
     $school_title = xcms_get_key_or($school, 'school_title');
 
-    //$course_title = xcms_get_key_or_enc($course, 'course_title');
     $school_url = "list-person".xcms_url(array('school_id'=>$school_id));
     ?>
     <table class="ankEdit">
-        <tr><td class="ankListRowTitle">Участники школы
+        <tr><td class="ankListRowTitle">Добавить участников на школу
             <a href="<?php echo $school_url; ?>"><?php echo $school_title; ?></a></td></tr><?php
 
         $already_added = array();
-        /*
-        foreach ($course_teachers as $course_teachers_id => $teacher_data)
+        foreach ($members as $member_person_id => $member)
         {
-            $course_teacher_id = $teacher_data['course_teacher_id'];
-            $already_added[$course_teacher_id] = true;
-            $teacher_fi = xsm_fi_enc($teacher_data);
-            $teacher_link = xsm_person_view_link($course_teacher_id, $school_id, $teacher_fi);
-            $teacher_ht = "$teacher_link ";
-
-            ?>
-            <form method="post" action="edit-teachers"><?php
-            xsm_draw_field_hidden("course_teachers_id", $course_teachers_id);
-            xsm_draw_field_hidden("course_id", $course_id); ?>
-            <tr><td class="ankList"><span class="ank-edit-item"><?php echo $teacher_ht; ?></span>
-                <input type="submit" name="delete-teacher" class="delete-button item" value="Удалить" />
-            </td></tr>
-            </form><?php
-        }*/?>
+            $already_added[$member_person_id] = true;
+        }
+        ?>
         <form method="post" action="add-person_school">
         <tr><td class="ankList"><span class="ank-edit-item action">Добавить участника</span><?php
             echo xsm_make_add_person_school_selector($school_id, $already_added);
