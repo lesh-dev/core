@@ -43,6 +43,9 @@ TEST OPTIONS could be test-dependent. Commonly supported options are:
 """.format(script=fileBaseName(prog))
 
 
+class TestSuiteError(Exception):
+    pass
+
 def printStats(stats, detailed):
     if not stats:
         print "No tests were run"
@@ -71,6 +74,18 @@ def generateFailedTestsSuite(failedTests):
     with open("failed_test_set.py", "w") as fs:
         fs.write(failedSuite)
 
+def testMatchFilter(fileName, test, testFilter):
+    # currently, filter is just a file name prefix
+    if not testFilter:
+        return True
+    if testFilter.endswith(".py"):  # it is a filename
+        if fileName != testFilter:
+            return False
+    else:  # it is a test class name
+        if not test.getName().startswith(testFilter):
+            return False
+    return True
+    
 args = sys.argv[1:]  # exclude program name
 
 try:
@@ -123,8 +138,7 @@ try:
     testSetModule = __import__(setModuleName, [])
 
     if not testSetModule.getTests:
-        print "There is no 'getTests' function defined in specified test set. "
-        sys.exit(1)
+        raise TestSuiteError("There is no 'getTests' function defined in specified test set. ")
 
     tests = testSetModule.getTests(baseUrl, testArgs)
 
@@ -133,24 +147,20 @@ try:
         tests.pop(0)
 
     failedTests = []
-    specTestFound = False
-
+  
+    tests = [x for x in tests if testMatchFilter(*x, testFilter=specTest)]
+    if specTest and not tests:
+        raise TestSuiteError("Specified test was not found in test suite. ")
+        
     # init detailed stats
     for (fileName, test) in tests:
         testDetailedStats[test.getName()] = None
 
     testsDone = 0
     testsNumber = len(tests)
-
+        
     while tests:
         fileName, test = tests.pop(0)
-        if specTest:
-            if specTest.endswith(".py"):  # it is a filename
-                if fileName != specTest:
-                    continue
-            else:  # it is a test class name
-                if not test.getName().startswith(specTest):
-                    continue
         if doList:
             print fileName, test.getName()
         elif doFullList:
@@ -160,11 +170,9 @@ try:
             print
         else:
             if not baseUrl:
-                print "Test site URL not specified, cannot continue. "
-                break
-            if specTest:
-                specTestFound = True
-            print "Running test", test.getName(), "on site", baseUrl
+                raise TestSuiteError("Test site URL not specified, cannot continue. ")
+            
+            print "Running test {0} on site {1}".format(test.getName(), baseUrl)
             print test.getDoc()
             result = RunTest(test)
             if result != 0:
@@ -178,7 +186,7 @@ try:
             testDetailedStats[test.getName()] = result
 
             testsDone += 1
-            print "PROGRESS: Done", testsDone, "of", testsNumber, "tests. "
+            print "PROGRESS: Done {done} of {total} tests".format(done=testsDone, total=testsNumber)
 
             if result == 3:
                 print "User interrupt, stopping test suite."
@@ -192,11 +200,12 @@ try:
 
     # test loop end ------------------
 
-    if specTest and not specTestFound:
-        print "Specified test was not found in test suite. "
+    # fix #840: add rest of tests to failed, at the end of list.
+    while tests:
+        fileName, test = tests.pop(0)
+        failedTests.append((fileName, test))
 
     printStats(testStats, testDetailedStats)
-
     generateFailedTestsSuite(failedTests)
 
 except TestShutdown as e:
@@ -205,3 +214,6 @@ except ImportError as e:
     print "Failed to load test set '" + setModuleName + "' as Python module. "
     print "Details: "
     print e
+except TestSuiteError as e:
+    print e
+    sys.exit(2)

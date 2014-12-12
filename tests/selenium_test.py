@@ -973,6 +973,7 @@ class SeleniumTest(object):
             "Fatal error:",
             "Parse error:",
             "Cannot find template:",
+            "/srv/www"
         ]
         for word in susp:
             if (word in pageText) and (" on line " in pageText):
