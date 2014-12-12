@@ -87,20 +87,49 @@ function xsm_add_person_school()
         {
             $already_added[$member_person_id] = true;
         }
+        $fields_desc = xsm_get_fields("person_school");
         ?>
         <form method="post" action="add-person_school">
-        <tr><td class="ankList"><span class="ank-edit-item action">Добавить участника</span><?php
+        <tr><td class="ankList"><span class="ankEditField xsm-label">Добавить участника</span><?php
             echo xsm_make_add_person_school_selector($school_id, $already_added);
-            xsm_draw_field_hidden("school_id", $school_id); ?>
-            <input type="submit" name="add-person_school" value="Добавить" />
+            xsm_draw_field_hidden("school_id", $school_id);
+        ?>
             <span>
                 <br/>Символом &#9679; отмечены активные участники,
                 <br/>символом &#8251; &#8212; принятые,
                 <br/>символом &#9675; &#8212; все остальные (кроме дублей и спама)
                 <br/>
             </span>
-        </td></tr>
+        </td></tr><?php
+
+        foreach ($fields_desc as $key=>$desc)
+        {
+            if ($key != 'member_department_id' && $key != 'is_teacher' && $key != 'is_student')
+                continue;
+            $value = "";//xcms_get_key_or($person_school, $key); ?>
+            <tr><td class="ankList"><?php
+            xsm_draw_field_label($desc);
+            $ft = xcms_get_key_or($desc, "type");
+            if ($ft == "textarea")
+                xsm_draw_field_textarea($key, $desc, $value);
+            elseif ($ft == "checkbox")
+                xsm_checkbox($key, $value);
+            elseif ($ft == "enum")
+                echo xsm_make_enum_by_type($key, $value, $key);
+            elseif ($key == 'member_department_id')
+            {
+                echo xsm_make_selector(
+                    'department', 'member_department_id', $value,
+                    array('department_title'),
+                    "(1 = 1) ORDER BY department_id");
+            }
+            else
+                xsm_draw_field_input($key, $desc, $value);
+            ?></td></tr><?php
+        }?>
         <tr><td class="ankList">
+            <input type="submit" name="add-person_school" value="Добавить" />
+
             <a id="return-to-school" class="link-button ank"
                 href="<?php echo $school_url; ?>">Вернуться к просмотру списка школы</a>
         </td></tr>
