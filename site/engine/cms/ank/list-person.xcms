@@ -236,15 +236,13 @@ function xsm_show_person_list($school_id)
     }
     ?>
     </table>
+    <div class="xsm-edit-ops">
+        <a class="link-button ank btn" href="add-person_school<?php
+            echo $person_school_add_url; ?>">Зачислить существующего участника</a>
+        <a class="link-button btn" href="edit-person<?php
+            echo $person_add_new_url; ?>">Добавить нового участника</a>
+    </div>
     <?php
-    xsm_view_operations(
-        'person',
-        'участника',
-        xcms_url(array(
-            'anketa_status'=>'cont',
-            'school_id'=>$school_id,
-        ))
-    );
 }
 
     xsm_show_person_list($school_id);
