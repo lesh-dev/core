@@ -118,8 +118,10 @@ function xsm_add_person_school()
                 echo xsm_make_enum_by_type($key, $value, $key);
             elseif ($key == 'member_department_id')
             {
+                // FIXME: отделения надо сортировать по алфавиту,
+                // но подставлять дефолтное отделение из школьника
                 echo xsm_make_selector(
-                    'department', 'member_department_id', $value,
+                    'department', 'department_id', $value,
                     array('department_title'),
                     "(1 = 1) ORDER BY department_id");
             }

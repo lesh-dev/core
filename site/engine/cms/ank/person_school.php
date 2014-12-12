@@ -71,7 +71,9 @@ function xsm_add_person_to_school($school_id, $person_id)
     );
     $ps_result = xdb_insert_or_update("person_school", array("person_school_id"=>XDB_NEW),
         $person_school, xsm_get_fields("person_school"));
-    $fi = xsm_fi_enc($_POST);
+
+    $person = xdb_get_entity_by_id('person', $person_id);
+    $fi = xsm_fi_enc($person);
     $person_list_link = xsm_person_list_link($school_id);
     if ($ps_result === false)
     {?>
