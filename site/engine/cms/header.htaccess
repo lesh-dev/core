@@ -16,6 +16,7 @@ RewriteRule ^admin/(.*)$ /?ref=admin&aparam=$1
 RewriteRule ^admin$ /?ref=admin&aparam=root
 
 # XSM short links
+RewriteRule ^xsm/api/([a-z_]+)/([0-9]+)$ /?ref=api-xsm&table=$1&id=$2
 RewriteRule ^xsm/(.*)$ /?ref=xsm&aparam=$1
 RewriteRule ^xsm$ /?ref=xsm&aparam=root
 

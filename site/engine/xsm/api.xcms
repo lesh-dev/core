@@ -1,0 +1,10 @@
+<# cms/linit #><# cms/init #><# url #><# deploy_utils #><# locale #><# auth/ #admin #ank #><?php
+$result = array();
+
+print_r($_REQUEST);
+
+header("Content-Type: text/json; charset: UTF-8");
+$result["error"] = "XSM API is not accessible yet. ";
+// the only way to output
+echo json_encode($result);
+?>
