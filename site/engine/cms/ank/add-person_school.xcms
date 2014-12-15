@@ -1,3 +1,4 @@
+<# js/public xsm_add_person_school.js #>
 <?php
 require_once("${engine_dir}cms/ank/edit-format.php");
 require_once("${engine_dir}cms/ank/person_school.php");
