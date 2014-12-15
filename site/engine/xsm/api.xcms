@@ -1,10 +1,25 @@
 <# cms/linit #><# cms/init #><# url #><# deploy_utils #><# locale #><# auth/ #admin #ank #><?php
 $result = array();
 
-print_r($_REQUEST);
-
 header("Content-Type: text/json; charset: UTF-8");
-$result["error"] = "XSM API is not accessible yet. ";
-// the only way to output
-echo json_encode($result);
+try
+{
+    $table_name = xcms_get_key_or($_REQUEST, "table_name");
+    $object_id = xcms_get_key_or($_REQUEST, "object_id");
+    $object = xdb_get_entity_by_id($table_name, $object_id);
+    $object_enc = array();
+    foreach ($object as $key=>$value)
+    {
+        $object_enc[$key] = utf8_encode($value);
+    }
+    $result["object"] = $object;
+}
+catch (Exception $e)
+{
+    $result["error"] = $e->message;
+    // the only way to output
+    echo json_encode($result);
+    die();
+}
+echo json_encode($result, JSON_UNESCAPED_UNICODE);
 ?>
