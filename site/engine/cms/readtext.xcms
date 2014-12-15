@@ -84,7 +84,7 @@ if ($need)
         $name = $notation;
         $name = str_replace("$dir", "", $name);
         $name = str_replace(".php", "", $name);
-        while (1)
+        while (true)
         {
             $p = strpos($text, '${'.$name); // do not merge these two strings, parser will fail here
             if ($p === false)
@@ -93,13 +93,22 @@ if ($need)
             $target = substr($text, $p, $l - $p);
             $target = substr($target, strlen($name) + 3);
             if (strlen($target))
+            {
+                $uargs_pipe = explode(EXP_PIPE, $target);
                 $uargs = explode(EXP_COL, $target);
+                // piped arg count has priority over colon
+                if (count($uargs_pipe) > count($uargs))
+                    $uargs = $uargs_pipe;
+            }
             else
                 $uargs = array();
             $idata = "";
             foreach ($uargs as $k=>$v)
             {
-                $idata .= "\$_$k = \"$v\";";
+                // defeat quotes/etc escaping problem
+                $v_enc = base64_encode($v);
+                $idata .= "\$_$k = \"$v_enc\";";
+                $idata .= "\$_$k = base64_decode(\$_$k);";
             }
             $text = substr($text, 0, $p).
                 "<?php $idata ; include(\"$engine_dir/plugins/dollar/$name.php\"); ?>".
