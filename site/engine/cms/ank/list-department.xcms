@@ -4,10 +4,11 @@ function xsm_print_departments()
 {
     $db = xdb_get();
 
+    // костыль: запихнём "Другое" отделение в хвост списка
     $query =
     "SELECT *
     FROM department d
-    ORDER BY department_title";
+    ORDER BY (department_id = 2), department_title";
 
     $department_sel = $db->query($query);
     ?>
