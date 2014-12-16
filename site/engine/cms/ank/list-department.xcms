@@ -7,7 +7,7 @@ function xsm_print_departments()
     $query =
     "SELECT *
     FROM department d
-    ORDER BY department_id";
+    ORDER BY department_title";
 
     $department_sel = $db->query($query);
     ?>

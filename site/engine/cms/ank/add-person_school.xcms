@@ -2,6 +2,7 @@
 <?php
 require_once("${engine_dir}cms/ank/edit-format.php");
 require_once("${engine_dir}cms/ank/person_school.php");
+require_once("${engine_dir}cms/ank/department.php");
 
 function xsm_make_add_person_school_selector($school_id, $already_added = array())
 {
@@ -118,14 +119,7 @@ function xsm_add_person_school()
             elseif ($ft == "enum")
                 echo xsm_make_enum_by_type($key, $value, $key);
             elseif ($key == 'member_department_id')
-            {
-                // FIXME: отделения надо сортировать по алфавиту,
-                // но подставлять дефолтное отделение из школьника
-                echo xsm_make_selector(
-                    'department', 'department_id', $value,
-                    array('department_title'),
-                    "(1 = 1) ORDER BY department_id");
-            }
+                xsm_draw_department_selector($value);
             else
                 xsm_draw_field_input($key, $desc, $value);
             ?></td></tr><?php
