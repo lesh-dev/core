@@ -218,7 +218,7 @@
         $dup_merged = false;
         $merge_fail = false;
         // duplicates are taken from new db
-        $duplicates = xdb_get_table('person', '', "last_name = '$last_name'");
+        $duplicates = xdb_get_table('person', "last_name = '$last_name'");
         $dup_count = count($duplicates);
 
         xcms_log(XLOG_INFO, "DUP: -------------------------------------------------");

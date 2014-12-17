@@ -274,7 +274,7 @@
       * @param order ORDER BY clause
       * @param filter WHERE clause
       **/
-    function xdb_get_table($table_name, $order = '', $filter = '')
+    function xdb_get_table($table_name, $filter = '', $order = '')
     {
         $db = xdb_get();
         $query = "SELECT * FROM $table_name";

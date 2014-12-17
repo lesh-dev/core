@@ -145,7 +145,7 @@ function ctx_get_works()
     global $FILTER;
 
     // store works by contestant_id
-    $works_list = xdb_get_table("contestants", NULL, $FILTER);
+    $works_list = xdb_get_table("contestants", $FILTER);
     $works = array();
     foreach ($works_list as $work)
     {
@@ -154,7 +154,7 @@ function ctx_get_works()
     }
 
     // join with solutions
-    $sols = xdb_get_table("solutions", NULL, $FILTER);
+    $sols = xdb_get_table("solutions", $FILTER);
     foreach ($sols as $sol)
     {
         $pid = $sol["problem_id"];

@@ -13,6 +13,14 @@ function xsm_print_courses_selected_school(
     $pers = ($course_teacher_id != "all");
     global $XSM_BOOTSTRAP;
 
+    $courses = xdb_get_table('course', "school_id = $school_id");
+    $persons_on_school = xdb_get_table('person_school', "school_id = $school_id");
+/*
+    echo "<pre>";
+    print_r($courses);
+    print_r($persons_on_school);
+    echo "</pre>";
+*/
     $query =
     "SELECT *
     FROM course c
