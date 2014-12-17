@@ -1,16 +1,22 @@
 <?php
-    $show_is_teacher = xcms_get_persistent_key("list-person", "show_is_teacher");
-    $show_is_student = xcms_get_persistent_key("list-person", "show_is_student");
-    $sort_by_class = xcms_get_persistent_key("list-person", "sort_by_class");
-    $sort_by_curator_group = xcms_get_persistent_key("list-person", "sort_by_curator_group");
+require_once("${engine_dir}cms/ank/department.php");
 
-    $school_id = xsm_get_default_school_from_request();
+$show_department_id = xcms_get_persistent_key("list-person", "show_department_id", XDB_INVALID_ID);
+$show_is_teacher = xcms_get_persistent_key("list-person", "show_is_teacher");
+$show_is_student = xcms_get_persistent_key("list-person", "show_is_student");
+$sort_by_class = xcms_get_persistent_key("list-person", "sort_by_class");
+$sort_by_curator_group = xcms_get_persistent_key("list-person", "sort_by_curator_group");
 
-    $form_action = xcms_url(array('school_id'=>$school_id));
+$school_id = xsm_get_default_school_from_request();
+
+$form_action = xcms_url(array('school_id'=>$school_id));
+
 ?>
 <form method="post" name="filter" class="xsm-filter" id="filter-form"
     action="list-person<?php echo $form_action; ?>" >
-    <span>Фильтр: </span><?php xsm_checkbox('show_is_teacher', $show_is_teacher);
+    <span>Фильтр: </span><?php
+    xsm_draw_department_selector($show_department_id, 'show_department_id', "Все отделения");
+    xsm_checkbox('show_is_teacher', $show_is_teacher);
     ?><span class="ankListField">Только преподы</span>&nbsp; &nbsp;
     <?php xsm_checkbox('show_is_student', $show_is_student);
     ?><span class="ankListField">Только школьники</span>&nbsp; &nbsp;
@@ -33,6 +39,7 @@
   **/
 function xsm_show_person_list($school_id)
 {
+    global $show_department_id;
     global $show_is_teacher;
     global $show_is_student;
     global $sort_by_class;
@@ -42,6 +49,10 @@ function xsm_show_person_list($school_id)
     $db = xdb_get();
 
     $cond = "(1 = 1)";
+
+    if ($show_department_id != XDB_INVALID_ID)
+        $cond .= " AND ( ps.member_department_id = $show_department_id )";
+
     if (xcms_checkbox_enabled($show_is_teacher))
         $cond .= " AND ( LENGTH(ps.is_teacher) > 0 )";
 

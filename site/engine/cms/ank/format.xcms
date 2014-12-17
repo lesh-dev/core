@@ -370,8 +370,10 @@ function xsm_draw_fio_filter()
   * @param title_keys What keys use to form element titles
   * @param aux_cond Condition to pass in WHERE clause
   * @param attr HTML attributes for SELECT element
+  * @param special if not false, add special element to the top of the list
+  *     with XDB_INVALID_ID key value
   **/
-function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_cond = '', $attr = '')
+function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_cond = '', $attr = '', $special = false)
 {
     $db = xdb_get();
     $query = "SELECT * FROM $table_name";
@@ -380,6 +382,12 @@ function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_c
     $sel = $db->query($query);
     $html = "<select name=\"$name\" id=\"$name-selector\" $attr>\n";
     $list_key = "${table_name}_id";
+    $special_value = XDB_INVALID_ID;
+    if ($special !== false)
+    {
+        $selected = ("" == $current_key) ? 'selected="selected"' : '';
+        $html .= "<option $selected value=\"$special_value\">$special</option>\n";
+    }
     while ($object = $sel->fetchArray(SQLITE3_ASSOC))
     {
         $title = "";
