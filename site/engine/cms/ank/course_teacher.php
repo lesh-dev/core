@@ -1,13 +1,15 @@
 <?php
 require_once("${engine_dir}cms/ank/person_school.php");
 
+define('XSM_CT_ALL', 'all');
+
 /**
   * Отдаёт пачку ссылок на преподов текущего курса
   * Формально $school_id можно вытащить из course_id,
   * но так проще жить.
   * @param $course_teacher_id фильтр
   **/
-function xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id_filter)
+function xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id_filter = XSM_CT_ALL)
 {
     $teachers_query =
         "SELECT
@@ -19,7 +21,7 @@ function xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id
         ORDER BY tp.last_name, tp.first_name";
     $teachers_sel = $db->query($teachers_query);
     $teachers_ht = "";
-    $filtered = ($course_teacher_id_filter == "all");
+    $filtered = ($course_teacher_id_filter == XSM_CT_ALL);
     while ($teachers_data = $teachers_sel->fetchArray(SQLITE3_ASSOC))
     {
         $teacher_fi = xsm_fi_enc($teachers_data);

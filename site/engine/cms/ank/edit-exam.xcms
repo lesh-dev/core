@@ -226,7 +226,7 @@ function xsm_edit_exam()
                         echo xsm_make_course_selector('course_id', xcms_get_key_or($exam, $key, XDB_INVALID_ID), $db, $school_id);
                     else
                     {
-                        $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, "all");
+                        $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id);
                         echo "$teachers_ht &#8212; ".xcms_get_key_or_enc($course, 'course_title');
                     }
                 }

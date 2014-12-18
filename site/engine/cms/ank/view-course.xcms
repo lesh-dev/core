@@ -20,7 +20,7 @@ function xsm_print_course()
         $course_comment = htmlspecialchars($course["course_comment"]);
         $course_created = xsm_ymdhm($course["course_created"]);
         $course_modified = xsm_ymdhm($course["course_modified"]);
-        $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, "all");
+        $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id);
         $teachers_edit_url = xcms_url(array('school_id'=>$school_id, 'course_id'=>$course_id));
         $hr_course_area = xsm_make_enum($course, "course_area");
         $hr_course_type = xsm_make_enum($course, "course_type");

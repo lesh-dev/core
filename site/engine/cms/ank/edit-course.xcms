@@ -42,8 +42,8 @@ function xsm_edit_course()
     {
         $school_id = $course['school_id'];
         $course_title = xcms_get_key_or_enc($course, 'course_title');
-        $course_teacher_id = 'all';
-        $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id);
+        $course_teacher_id = XSM_CT_ALL;
+        $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id);
     }
 
     $school = xdb_get_entity_by_id('school', $school_id);
@@ -57,7 +57,7 @@ function xsm_edit_course()
         xsm_draw_field_hidden("course_id", $course_id);
         xsm_draw_field_hidden("school_id", $school_id);
         // render course_teacher_id only when new course added
-        if ($course_teacher_id != 'all' && $course_teacher_id !== NULL)
+        if ($course_teacher_id != XSM_CT_ALL && $course_teacher_id !== NULL)
             xsm_draw_field_hidden("course_teacher_id", $course_teacher_id);
         ?>
         <table class="ankEdit table table-bordered table-hover table-condensed">

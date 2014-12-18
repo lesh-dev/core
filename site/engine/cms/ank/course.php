@@ -6,19 +6,27 @@ require_once("${engine_dir}cms/ank/course_teacher.php");
   **/
 function xsm_print_courses_selected_school(
     $db, $school_id,
-    $course_teacher_id = "all",
+    $course_teacher_id = XSM_CT_ALL,
     $simple_view = false,
     $show_desc = false)
 {
-    $pers = ($course_teacher_id != "all");
+    $pers = ($course_teacher_id != XSM_CT_ALL);
     global $XSM_BOOTSTRAP;
 
-    $courses = xdb_get_table('course', "school_id = $school_id");
+    $courses = xdb_get_table_by_pk('course', "school_id = $school_id");
     $persons_on_school = xdb_get_table('person_school', "school_id = $school_id");
+    $by_person = array();
+    foreach ($persons_on_school as $person_school)
+        $by_person[$person_school["member_person_id"]] = $person_school;
+
+    foreach ($courses as $course)
+    {
+        // yep, get course teachers
+    }
 /*
     echo "<pre>";
     print_r($courses);
-    print_r($persons_on_school);
+    print_r($by_person);
     echo "</pre>";
 */
     $query =
