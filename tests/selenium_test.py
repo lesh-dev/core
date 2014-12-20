@@ -662,9 +662,9 @@ class SeleniumTest(object):
         )
         return False
 
-    def assertElementSubTextById(self, eleId, text):
+    def assertElementSubTextById(self, eleId, text, reason=""):
         if not self.checkElementSubTextById(eleId, text):
-            self.failTest("Element with id '" + eleId + "' text does not contain expected: " + wrapIfLong(userSerialize(text)) + ". ")
+            self.failTest("Element with id '" + eleId + "' text does not contain expected: " + wrapIfLong(userSerialize(text)) + ". " +  self.displayReason(reason))
 
     def checkElementValueByName(self, name, text):
         self.checkEmptyParam(name, "checkElementValueByName")

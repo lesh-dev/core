@@ -9,12 +9,12 @@ import datetime
 def slashify(line):
     return "".join([x * 2 if x == "\\" else x for x in line])
 
-class XcmsContentDollarPlugin(xtest_common.XcmsTest):
+class XcmsContentContlist(xtest_common.XcmsTest):
     """
-    This test checks content editing - dollar plugin functionality.
+    This test checks cont-lists functionality.
     Steps:
     * login as site editor
-    * add new subpage with $-plugin usage
+    * add new subpage with type 'cont-list', fills one block
     * check rendered text
     """
 
@@ -39,8 +39,10 @@ class XcmsContentDollarPlugin(xtest_common.XcmsTest):
 
         self.m_pageAlias = inpAlias
 
-        self.setOptionValueById("create-pagetype-selector", "contlist")
+        self.setOptionValueByIdAndValue("create-pagetype-selector", "contlist")
 
+        pageDate = datetime.datetime.now()
+        
         self.clickElementById("create-page-submit")
 
         # edit page - click on menu
@@ -53,6 +55,16 @@ class XcmsContentDollarPlugin(xtest_common.XcmsTest):
         blockContent = self.fillElementById("content", blockContent)
         
         self.clickElementById("contlist-create-submit")
-
+        self.wait(3)
         self.gotoCloseEditor()
+        self.gotoUrlByLinkText(inpMenuTitle)
+        
+        dateStr = pageDate.strftime("%d.%m.%Y")
+        self.assertElementSubTextById("content-text", dateStr, "Contlist timestamp not found")
+        self.assertElementSubTextById("content-text", blockTitle, "Block title not found in rendered cont-list. ")
+        blockContentForCheck = blockContent.replace("\n", " ").replace("  ", " ")
+        print self.getElementTextById("content-text")
+        print blockContentForCheck
+        self.assertElementSubTextById("content-text", blockContentForCheck, "Block content not found in rendered cont-list. ")
+        
         
