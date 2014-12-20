@@ -1,6 +1,24 @@
 <?php
 require_once("${engine_dir}cms/ank/course_teacher.php");
 
+function xsm_sort_courses($a, $b)
+{
+    $ta = array();
+    $ta[] = $a["main_department_id"];
+    $ta[] = $a["course_title"];
+    $tb = array();
+    $tb[] = $b["main_department_id"];
+    $tb[] = $b["course_title"];
+    for ($i = 0; $i < count($ta); ++$i)
+    {
+        if ($ta[$i] < $tb[$i])
+            return -1;
+        if ($ta[$i] > $tb[$i])
+            return 1;
+    }
+    return 0;
+}
+
 /**
   * Печаталка таблицы курсов (общая для списка курсов на школе и одного препода)
   **/
@@ -16,19 +34,34 @@ function xsm_print_courses_selected_school(
     $courses = xdb_get_table_by_pk('course', "school_id = $school_id");
     $persons_on_school = xdb_get_table('person_school', "school_id = $school_id");
     $by_person = array();
+    // make person_id -> person_school object map
     foreach ($persons_on_school as $person_school)
         $by_person[$person_school["member_person_id"]] = $person_school;
 
-    foreach ($courses as $course)
+    foreach ($courses as $course_id => &$course)
     {
-        // yep, get course teachers
+        // FIXME: N*SELECT
+        $deps = array();
+        $course_teachers = xsm_get_course_teachers_list($db, $course_id, $school_id);
+        foreach ($course_teachers as $ct_id => $ct)
+        {
+            $m_dep_id = $ct["member_department_id"];
+            if (!array_key_exists($m_dep_id, $deps))
+                $deps[$m_dep_id] = 1;
+            else
+                ++$deps[$m_dep_id];
+        }
+        arsort($deps);
+        $course["course_teachers"] = $course_teachers;
+        foreach ($deps as $m_dep_id => $count)
+        {
+            // take first (max)
+            $course["main_department_id"] = $m_dep_id;
+            break;
+        }
     }
-/*
-    echo "<pre>";
-    print_r($courses);
-    print_r($by_person);
-    echo "</pre>";
-*/
+    uasort($courses, 'xsm_sort_courses');
+
     $query =
     "SELECT *
     FROM course c
@@ -101,7 +134,8 @@ function xsm_print_courses_selected_school(
     } else {?><ul><?php }
 
     $course_count = 0;
-    while ($course = $course_sel->fetchArray(SQLITE3_ASSOC))
+    foreach ($courses as $course_id => $course)
+    //while ($course = $course_sel->fetchArray(SQLITE3_ASSOC))
     {
         ++$course_count;
         $course_id = xcms_get_key_or_enc($course, "course_id");
@@ -122,6 +156,7 @@ function xsm_print_courses_selected_school(
 
         $course_desc_comment = implode('<div class="course-comment-div"></div>', $comments);
 
+        // TODO: do not get course teachers again
         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id);
         if ($teachers_ht === false) // filter not passed
             continue;
