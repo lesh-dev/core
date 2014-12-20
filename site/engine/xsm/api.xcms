@@ -21,5 +21,6 @@ catch (Exception $e)
     echo json_encode($result);
     die();
 }
-echo json_encode($result, JSON_UNESCAPED_UNICODE);
+// do not use JSON_UNESCAPED_UNICODE (php 5.4 only)
+echo json_encode($result);
 ?>
