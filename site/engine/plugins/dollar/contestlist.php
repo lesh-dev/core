@@ -6,7 +6,7 @@ include("$engine_dir/contest/action.php");
 $CONTEST_CURRENT_YEAR = $_0;
 $FILTER = "( contest_year = \"$CONTEST_CURRENT_YEAR\" )";
 
-$probs = xdb_get_table("problems", NULL, $FILTER);
+$probs = xdb_get_table("problems", $FILTER);
 $works = ctx_get_works();
 
 $results = ctx_calculate_results($works, $probs);

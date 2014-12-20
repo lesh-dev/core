@@ -269,12 +269,13 @@
     }
 
     /**
-      * Returns whole content of the table in array, using given order and filter (WHERE condition)
+      * Returns whole content of the table in array
+      * using given filter (WHERE condition) and order
       * @param table_name table name
-      * @param order ORDER BY clause
       * @param filter WHERE clause
+      * @param order ORDER BY clause
       **/
-    function xdb_get_table($table_name, $order = '', $filter = '')
+    function xdb_get_table($table_name, $filter = '', $order = '')
     {
         $db = xdb_get();
         $query = "SELECT * FROM $table_name";
@@ -284,12 +285,32 @@
             $query .= " ORDER BY $order ";
         $sel = $db->query($query);
         $ans = array();
-        while($ev = $sel->fetchArray(SQLITE3_ASSOC))
+        while ($obj = $sel->fetchArray(SQLITE3_ASSOC))
         {
-            $ans[] = $ev;
+            $ans[] = $obj;
         }
         $db->close();
         return $ans;
+    }
+
+    /**
+      * Returns whole content of the table in associative array by PK
+      * using given filter (WHERE condition) and order
+      * @param table_name table name
+      * @param filter WHERE clause
+      * @param order ORDER BY clause
+      **/
+    function xdb_get_table_by_pk($table_name, $filter = '', $order = '')
+    {
+        $ans = xdb_get_table($table_name, $filter, $order);
+        $result = array();
+        $key_name = "${table_name}_id";
+        foreach ($ans as $obj)
+        {
+            $key = $obj[$key_name];
+            $result[$key] = $obj;
+        }
+        return $result;
     }
 
     /**

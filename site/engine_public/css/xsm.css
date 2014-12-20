@@ -299,3 +299,23 @@ span.xsm-required-field {
     font-size: 12px;
     color: #ff0000;
 }
+
+td.ankList.dep1 {
+    background-color: #d1d4ab;
+}
+
+td.ankList.dep2 {
+    background-color: #aaddaa;
+}
+td.ankList.dep3 {
+    background-color: #c8c8f7;
+}
+td.ankList.dep4 {
+    background-color: #b2e4eb;
+}
+td.ankList.dep5 {
+    background-color: #dcfda2;
+}
+td.ankList.dep6 {
+    background-color: #b4fda2;
+}

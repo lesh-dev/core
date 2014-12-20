@@ -130,7 +130,7 @@ function ctx_contestant_from_submission()
 /**
   * Генерическая рисовалка списка
   **/
-function ctx_show_list($table_name, $order, $filter, $row_template)
+function ctx_show_list($table_name, $filter, $row_template)
 {
     global $CTX_META;
     global $CTX_NAMES;
@@ -138,7 +138,7 @@ function ctx_show_list($table_name, $order, $filter, $row_template)
     global $web_prefix;
 
     $ans = "";
-    $rows = xdb_get_table($table_name, $order, $filter);
+    $rows = xdb_get_table($table_name, $filter);
     $is_tabular = (substr($row_template, 0, 3) == "<tr");
 
     $whom = $CTX_NAMES[$table_name]["whom"];
@@ -223,7 +223,7 @@ function ctx_show_overall_checking_progress()
     global $FILTER;
     global $table_name;
 
-    $probs = xdb_get_table("problems", null, $FILTER);
+    $probs = xdb_get_table("problems", $FILTER);
     $works = ctx_get_works();
 
     $results = ctx_calculate_results($works, $probs);
@@ -286,9 +286,9 @@ function ctx_show_contestant()
     global $ctx_prefix;
 
     echo '<ul class="nav nav-pills">';
-    $problems_table = xdb_get_table("problems", NULL, $FILTER);
+    $problems_table = xdb_get_table("problems", $FILTER);
 
-    $solutions_table = xdb_get_table("solutions", NULL, $FILTER);
+    $solutions_table = xdb_get_table("solutions", $FILTER);
     $pid = xcms_get_key_or($_GET, "pid");
     $activeness = "";
     if (xu_empty($pid))
@@ -377,7 +377,6 @@ if ($mode == "view")
     {
         echo ctx_show_list(
             "problems",
-            null,
             $FILTER,
             "<tr>".
                 "<td>{problem_name}</td>".
@@ -393,7 +392,6 @@ if ($mode == "view")
 
         echo ctx_show_list(
             "submission",
-            null,
             $FILTER,
             "<tr>".
                 "<td>{mail}</td>".
