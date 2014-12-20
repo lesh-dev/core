@@ -32,6 +32,8 @@ function xsm_print_courses_selected_school(
     global $XSM_BOOTSTRAP;
 
     $courses = xdb_get_table_by_pk('course', "school_id = $school_id");
+    $departments = xdb_get_table_by_pk('department');
+
     $persons_on_school = xdb_get_table('person_school', "school_id = $school_id");
     $by_person = array();
     // make person_id -> person_school object map
@@ -40,7 +42,7 @@ function xsm_print_courses_selected_school(
 
     foreach ($courses as $course_id => &$course)
     {
-        // FIXME: N*SELECT
+        // FIXME:PERF N*SELECT
         $deps = array();
         $course_teachers = xsm_get_course_teachers_list($db, $course_id, $school_id);
         foreach ($course_teachers as $ct_id => $ct)
@@ -62,17 +64,10 @@ function xsm_print_courses_selected_school(
     }
     uasort($courses, 'xsm_sort_courses');
 
-    $query =
-    "SELECT *
-    FROM course c
-    WHERE (c.school_id = $school_id)
-    ORDER BY course_title";
-
     $person_list_link = xsm_person_list_link($school_id);
     $ht = $pers ? "h2" : "h1";
     $table_title = "<$ht>Курсы на $person_list_link</$ht>";
 
-    $course_sel = $db->query($query);
     $course_aux_param = $pers
         ? xcms_url(array(
             'course_teacher_id'=>$course_teacher_id,
@@ -135,7 +130,6 @@ function xsm_print_courses_selected_school(
 
     $course_count = 0;
     foreach ($courses as $course_id => $course)
-    //while ($course = $course_sel->fetchArray(SQLITE3_ASSOC))
     {
         ++$course_count;
         $course_id = xcms_get_key_or_enc($course, "course_id");
@@ -156,7 +150,7 @@ function xsm_print_courses_selected_school(
 
         $course_desc_comment = implode('<div class="course-comment-div"></div>', $comments);
 
-        // TODO: do not get course teachers again
+        // FIXME:PERF do not get course teachers again
         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id);
         if ($teachers_ht === false) // filter not passed
             continue;
@@ -164,7 +158,7 @@ function xsm_print_courses_selected_school(
         $simple_teachers_ht = "";
         if ($simple_view)
         {
-            $simple_ct = xsm_get_course_teachers_list($db, $course_id, $school_id);
+            $simple_ct = $course["course_teachers"];
             foreach ($simple_ct as $ct_id => $teacher_data)
             {
                 if ($teacher_data['course_teacher_id'] == 13) // Преподаватель Другого Отделения
@@ -176,7 +170,10 @@ function xsm_print_courses_selected_school(
             }
         }
 
-        // ахтунг, тут будет 3*N SELECT-ов
+        // css class for departments coloring
+        $dep_class = "dep".$course["main_department_id"];
+
+        // FIXME:PERF 3*N SELECT-ов
         // до кучи посчитаем количество сдавших
         $exam_passed_sel = $db->query(
             "SELECT
@@ -205,7 +202,7 @@ function xsm_print_courses_selected_school(
             <td class="ankList"><a href="<?php echo $course_url; ?>"><?php
                 echo $course_title; ?></a></td>
             <?php if (!$pers) {?>
-            <td class="ankList"><?php echo $teachers_ht; ?></td>
+            <td class="ankList <?php echo $dep_class; ?>"><?php echo $teachers_ht; ?></td>
             <?php } ?>
             <td class="ankList c"><?php echo $course_cycle; ?></td>
             <td class="ankList"><?php echo $hr_course_type; ?></td>
