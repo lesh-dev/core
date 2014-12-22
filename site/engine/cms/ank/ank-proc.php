@@ -49,13 +49,20 @@ function xsm_find_person_origin($db, $new_person)
 /**
   * Fields that cannot be merged via text addition
   **/
-function xsm_non_mergeable_key($key)
+function xsm_non_mergeable_person_key($key)
 {
     return (
         $key == "anketa_status" ||
         $key == "department_id" ||
         $key == "is_student" ||
         $key == "is_teacher" ||
+        false
+    );
+}
+
+function xsm_ignored_person_key($key)
+{
+    return (
         $key == "user_agent" ||
         false
     );
@@ -77,12 +84,14 @@ function xsm_merge_persons($person_dst, $person_src)
         // skip all unwanted fields
         if (!array_key_exists($key, $fields_desc))
             continue;
+        if (xsm_ignored_person_key($key))
+            continue;
 
         $value = trim($value);
         $desc = xcms_get_key_or($fields_desc, $key);
         $key_title = $desc["name"];
 
-        if (xsm_non_mergeable_key($key))
+        if (xsm_non_mergeable_person_key($key))
         {
             $merge_state .= "$key_title: set '$value'\n";
             $person_dst[$key] = $value;
