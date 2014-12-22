@@ -2,7 +2,7 @@
 
 function xcmst_upload_page_attach($page_prefix)
 {
-    $name = xcms_get_key_or($_POST, "attach-target");
+    $name = xcms_get_key_or($_POST, "attach_target");
     $name = preg_replace('/[^A-Za-z.,0-9_-]/', '', $name);
     if (!strlen($name))
     {?>
@@ -17,14 +17,14 @@ function xcmst_upload_page_attach($page_prefix)
     $ext = preg_replace('/.*\./', '', $original_name);
     // if nothing replaced, assume ext is empty
     $ext = ($ext == $original_name) ? '' : ".$ext";
+    $ext = strtolower($ext);  // #834
     $attach_info = "$page_prefix/$name.attach";
     $attach_target_name = "$page_prefix/$name$ext";
     copy($tmp_name, $attach_target_name);
 
     $info = array();
     $info["file-name"] = $name.$ext;
-    $info["title"] = xcms_get_key_or($_POST, "attach-title");
-    $info["comment"] = xcms_get_key_or($_POST, "attach-comment");
+    $info["comment"] = xcms_get_key_or($_POST, "attach_comment");
     $info["owner"] = xcms_user()->login();
 
     xcms_save_list($attach_info, $info);
@@ -45,24 +45,24 @@ function xcmst_show_attachments($page_prefix)
     <form enctype="multipart/form-data" method="post">
     <h3>Добавить файл</h3>
     <table>
-        <input name="attach-comment" type="hidden" />
+        <input name="attach_comment" type="hidden" />
         <tr>
             <td>Наименование<br/>
                 <font size="-1">Выберите имя файла &#8212; английское, без пробелов<br />
                 Пример: <i>2013-Phys.prac-Alexander.Nikolsky</i>
                 </font></td>
-            <td><input name="attach-target" /></td>
+            <td><?php xcmst_control_admin("attach_target", "", "file-name-without-spaces"); ?></td>
         </tr>
         <tr>
             <td>Комментарий<br/><font size="-1">Комментарий к загружаемому файлу</font></td>
-            <td><input name="attach-comment" /></td>
+            <td><?php xcmst_control_admin("attach_comment", "", "Комментарий"); ?></td>
         </tr>
         <tr>
             <td>Файл</td>
             <td><input type="file" size="60" name="attachment" /></td>
         </tr>
     </table>
-    <input type="submit" name="upload-attach" value="Добавить">
+    <input type="submit" name="upload_attach" value="Добавить" />
     </form>
     <?php
 
@@ -81,12 +81,15 @@ function xcmst_show_attachments($page_prefix)
         $aux_style = ($attach_counter % 2) ? "odd" : "even";
         ?>
         <div class="floating-box news-block <?php echo $aux_style; ?>">
-            <a class="attach-link" href="<?php echo $attach_src; ?>"><?php echo $lst["file-name"]; ?></a>
+            <div style="float: left; width: 30%">
+                <a href="<?php echo $attach_src; ?>"><?php echo $lst["file-name"]; ?></a><br />
+                <span><?php echo xcms_get_key_or_enc($lst, "comment"); ?></span>
+            </div>
             <div class="right-image-box">
                 <span style="padding-left: 5px;">Link: <tt>${prefix}/<?php echo $lst["file-name"]; ?></tt></span><br />
                 <form method="post">
                     <input type="hidden" name="name" value="<?php echo $value; ?>" />
-                    <input type="submit" name="delete-attach" value="Удалить" />
+                    <input type="submit" name="delete_attach" value="Удалить" />
                 </form>
             </div>
         </div>
@@ -97,10 +100,10 @@ function xcmst_show_attachments($page_prefix)
 <div class="admin-widget"><?php
     $page_prefix = xcms_get_page_path();
 
-    if (@$_POST["upload-attach"])
+    if (@$_POST["upload_attach"])
         xcmst_upload_page_attach($page_prefix);
 
-    if (@$_POST["delete-attach"])
+    if (@$_POST["delete_attach"])
         xcmst_delete_attach($page_prefix);
 
     xcmst_show_attachments($page_prefix);

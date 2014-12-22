@@ -370,12 +370,6 @@ a.image-link {
     display: inline-block;
 }
 
-a.attach-link {
-    float: left;
-    width: 150px;
-    display: inline-block;
-}
-
 img.image-link {
     border: 1px solid #cfcf7f;
     width: 100px;
