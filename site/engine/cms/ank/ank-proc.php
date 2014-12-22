@@ -88,7 +88,7 @@ function xsm_merge_persons($person_dst, $person_src)
             continue;
 
         $value = trim($value);
-        $desc = xcms_get_key_or($fields_desc, $key);
+        $desc = $fields_desc[$key];
         $key_title = $desc["name"];
 
         if (xsm_non_mergeable_person_key($key))
