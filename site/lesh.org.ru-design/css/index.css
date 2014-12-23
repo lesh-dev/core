@@ -773,3 +773,41 @@ div.social-icons {
     padding-top: 2px;
     padding-left: 4px;
 }
+
+/* photoalbum dollar plugin */
+div.photoalbum-block {
+    padding-right: 40px;
+    padding-bottom: 10px;
+}
+
+img.photoalbum-left {
+    margin: 0px 20px 40px 0px;
+    float: left;
+    border-width: 2px;
+    border-color: #507050;
+    border-style: solid;
+}
+img.photoalbum-right {
+    margin: 0px 0px 40px 20px;
+    float: right;
+    border-width: 2px;
+    border-color: #507050;
+    border-style: solid;
+}
+
+p.photoalbum-left {
+    text-align: left;
+    text-indent: 0pt;
+}
+
+p.photoalbum-right {
+    text-align: left;
+    text-indent: 0pt;
+}
+
+div.photo-stream {
+    max-width: 800px;
+    margin: 0 auto 0 auto;
+    clear: both;
+}
+/* --------------------- */
