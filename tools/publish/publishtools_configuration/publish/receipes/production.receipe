@@ -17,7 +17,7 @@ function hook_begin
 {
     echo "Preparing folder for XCMS engine logs"
     mkdir -p /var/log/xcms
-    chown -R www-data:www-data /var/log/xcms
+    chown -R $owner:$owner /var/log/xcms
 }
 
 # This will be executed while publishing component content_symlink

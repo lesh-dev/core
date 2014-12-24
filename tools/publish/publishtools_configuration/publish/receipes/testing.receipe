@@ -19,7 +19,7 @@ function hook_begin
     rm -rf $target
     echo "Preparing folder for XCMS engine logs"
     mkdir -p /var/log/xcms
-    chown -R www-data:www-data /var/log/xcms
+    chown -R $owner:$owner /var/log/xcms
 }
 
 # This will be executed while publishing component preprod_copy
@@ -50,7 +50,7 @@ function hook_reset
     else
         git reset --hard
         git clean -f
-        chown -R www-data:www-data .
+        chown -R $owner:$owner .
     fi
 }
 

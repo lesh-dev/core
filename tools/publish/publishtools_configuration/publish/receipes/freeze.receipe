@@ -34,8 +34,6 @@ function hook_end
     ln -s frost content
     echo "FREEZE  : ${sym_suffix}" >> INFO
     echo "SITE IS READ ONLY!" >> INFO
-    #mkdir -p .prec
-    #chown -R www-data .prec
     apachectl -k graceful
     echo " *** Last chance to quit ***"
     echo " Now, please, move your ass to:"
