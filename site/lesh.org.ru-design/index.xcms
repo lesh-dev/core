@@ -142,6 +142,16 @@ function xcms_print_related_links()
     </div>
     <div class="footer">
         <span>&copy;&nbsp;ЛЭШ, 1992&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
+            <span class="site-version"><?php
+                $xcms_version = xcms_get_list("INFO");
+                echo xcms_get_key_or($xcms_version, 'version');
+            ?></span>
+            <?php
+            if (xcms_is_production())
+            {?>
+                <# seo/liveinternet #>
+                <# seo/yandex_metrika 27728262 #><?php
+            }?>
     </div>
 <!--
     <form>
