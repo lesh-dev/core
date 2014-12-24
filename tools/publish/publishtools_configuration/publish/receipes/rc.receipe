@@ -66,6 +66,11 @@ function hook_end
     # echo "branch  : $branch " >> INFO
     echo "version : $branch-$(cat VERSION) rev. $git_revision" >> INFO
     mv install.nt.php install.php
+    prod_settings="$clone_root/production/settings.php"
+    if [ -r "$prod_settings" ] ; then
+        echo "Installing current production settings"
+        cp "$prod_settings" settings.php
+    fi
     echo "Restarting apache..."
     apachectl -k graceful
 }
