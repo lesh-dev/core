@@ -786,7 +786,7 @@ img.photoalbum-left {
     border-width: 1px;
     border-color: #507050;
     border-style: solid;
-    box-shadow: -2px -2px 10px rgba(0, 80, 50, 0.5);
+    box-shadow: -2px 2px 10px rgba(0, 80, 50, 0.5);
 }
 
 img.photoalbum-right {
@@ -795,7 +795,7 @@ img.photoalbum-right {
     border-width: 1px;
     border-color: #507050;
     border-style: solid;
-    box-shadow: 2px -2px 10px rgba(0, 80, 50, 0.5);
+    box-shadow: 2px 2px 10px rgba(0, 80, 50, 0.5);
 }
 
 p.photoalbum-left {
