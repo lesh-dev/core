@@ -19,27 +19,47 @@
       **/
     function request_variables()
     {
-        $request_uri = str_replace("install.php", "", $_SERVER["REQUEST_URI"]);
+        // preload existing settings
+        if (file_exists("settings.php"))
+            include("settings.php");
+
+        if (!isset($meta_site_name)) {
+            $meta_site_name = $_SERVER["HTTP_HOST"];
+        }
+
+        if (!isset($meta_site_log_path))
+            $meta_site_log_path = "/var/log/xcms/".$_SERVER["HTTP_HOST"]."-engine.log";
+
+        if (!isset($meta_site_url))
+        {
+            $request_uri = str_replace("install.php", "", $_SERVER["REQUEST_URI"]);
+            $meta_site_url = "http://{$_SERVER['HTTP_HOST']}$request_uri";
+        }
+
+        if (!isset($meta_site_mail))
+            $meta_site_mail = "support@".$_SERVER["HTTP_HOST"];
+
         return array(
             "site_name"=>array(
                 "name"=>"Название веб-сайта",
                 "type"=>"string",
-                "default"=>$_SERVER["HTTP_HOST"]
-                ),
+                "default"=>$meta_site_name,
+            ),
             "site_log_path"=>array(
                 "name"=>"Путь до log-файлов",
                 "type"=>"string",
-                "default"=>"/var/log/xcms/".$_SERVER["HTTP_HOST"]."-engine.log",
-                ),
+                "default"=>$meta_site_log_path,
+            ),
             "site_url"=>array(
                 "name"=>"Адрес веб-сайта",
                 "type"=>"string",
-                "default"=>"http://{$_SERVER['HTTP_HOST']}$request_uri"
-                ),
+                "default"=>$meta_site_url,
+            ),
             "webmaster_mail"=>array(
                 "name"=>"Адрес службы техподдержки",
                 "type"=>"string",
-                "default"=>"support@".$_SERVER["HTTP_HOST"])
+                "default"=>$meta_site_mail,
+            ),
         );
     }
     /**
