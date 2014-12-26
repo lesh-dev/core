@@ -30,10 +30,10 @@ Examples:
 ALL OPTIONS:
   -h, --help             Display this help
   -i, --installer        Run installer test prior to all rest suite
-  -t, --test <test>      Run specific test instead of all suite
   -l, --list             List all tests in test set
   -f, --full-list        List all tests in test set with descriptions
-  -s, --set              Specify test set to run (instead of default auto_test_set.py)
+  -s, --set <set>        Specify test set to run (instead of default auto_test_set.py)
+  -t, --test <test>      Run specific test instead of all suite
   -b, --break            Break test suite on errors
 
 TEST OPTIONS could be test-dependent. Commonly supported options are:
@@ -124,7 +124,9 @@ if restArgs:
     baseUrl = restArgs.pop(0)
 
 if restArgs:
-    print "Warning: trailing parameters are ignored: ", restArgs
+    print "Error: trailing parameters detected: ", restArgs
+    showHelp()
+    sys.exit(1)
 
 setModuleName = "auto_test_set"
 
