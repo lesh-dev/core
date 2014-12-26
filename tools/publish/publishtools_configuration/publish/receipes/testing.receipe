@@ -87,6 +87,10 @@ function hook_end
         git init
         hook_commit
     fi
+    # eliminate settings that may be obtained from production (#860)
+    > settings.php
+    chown $owner:$owner settings.php
+
     # create robots.txt to prevent indexing (#426)
     cat > robots.txt <<EOF
 User-Agent: *
