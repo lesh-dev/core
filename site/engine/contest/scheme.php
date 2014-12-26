@@ -169,13 +169,19 @@ function ctx_compare_undone_callback($a, $b)
     return strcmp($a["name"], $b["name"]);
 }
 
+function ctx_compare_done_callback($a, $b)
+{
+    if ($a["sum"] == $b["sum"])
+        return strcmp($a["name"], $b["name"]);
+    return $a["sum"] < $b["sum"];
+}
+
 function ctx_calculate_results(&$works, $probs)
 {
     global $ref;
 
     $done = array();
     $undone = array();
-    $done_sum = array();
     foreach ($works as &$work)
     {
         $id = @$work["contestants_id"];
@@ -199,14 +205,12 @@ function ctx_calculate_results(&$works, $probs)
         $work["sum"] = $sum;
 
         if ($is_done)
-        {
-            @$done[$sum][] = $work;
-            $done_sum[$sum] = $sum;
-        }
-        else $undone[] = $work;
+            $done[] = $work;
+        else
+            $undone[] = $work;
     }
+    usort($done, 'ctx_compare_done_callback');
     usort($undone, 'ctx_compare_undone_callback');
-    rsort($done_sum);
 
-    return array('done'=>$done, 'done_sum'=>$done_sum, 'undone'=>$undone);
+    return array('done'=>$done, 'undone'=>$undone);
 }

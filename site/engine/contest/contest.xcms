@@ -230,7 +230,6 @@ function ctx_show_overall_checking_progress()
 
     $undone = $results['undone'];
     $done = $results['done'];
-    $done_sum = $results['done_sum'];
 
     // header
     ?>
@@ -266,12 +265,11 @@ function ctx_show_overall_checking_progress()
     </tr></thead><?php
 
     $i = 1;
-    foreach ($done_sum as $sum)
-        foreach ($done[$sum] as $work)
-        {
-            echo "<tr><td>$i</td>".ctx_print_result_row($work, $probs)."</tr>\n";
-            $i++;
-        }
+    foreach ($done as $work)
+    {
+        echo "<tr><td>$i</td>".ctx_print_result_row($work, $probs)."</tr>\n";
+        $i++;
+    }
     ?></table><?php
 }
 
