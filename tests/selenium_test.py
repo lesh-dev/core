@@ -340,6 +340,8 @@ class SeleniumTest(object):
         """
         try:
             link = self.getUrlByLinkText(linkName, reason=reason)
+            if not link.startswith(self.m_baseUrl):
+                self.failTest("Link with name " + userSerialize(linkName) + " leads to another site: " + userSerialize(link) + ". ")
             self.gotoSite(link, linkName)
         except NoSuchElementException:
             self.failTest("Cannot find URL with name " + userSerialize(linkName) + ". " + self.displayReason(reason))
@@ -351,6 +353,8 @@ class SeleniumTest(object):
         """
         try:
             link = self.getUrlByLinkText(linkName, reason=reason, optionList=["title"])
+            if not link.startswith(self.m_baseUrl):
+                self.failTest("Link with name " + userSerialize(linkName) + " leads to another site: " + userSerialize(link) + ". ")
             self.gotoSite(link, linkName)
         except NoSuchElementException:
             self.failTest("Cannot find URL with name " + userSerialize(linkName) + ". " + self.displayReason(reason))
