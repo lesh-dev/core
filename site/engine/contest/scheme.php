@@ -79,7 +79,7 @@ $CTX_META["contestants"] = array(
 
 $CTX_META["solutions"] = array(
     "solutions_id" => array("name"=>"pk", "type"=>"pk"),
-    "problem_id" => array("name"=>"Идентификатор проблемы", "type"=>"pk"),
+    "problem_id" => array("name"=>"Идентификатор задачи", "type"=>"pk"),
     "contestant_id" => array("name"=>"Идентификатор работы", "type"=>"pk"),
     "resolution_text" => array("name"=>"Текст резолюции", "type"=>"large"),
     "resolution_author" => array("name"=>"Проверяющий", "type"=>"text"),
@@ -164,6 +164,11 @@ function ctx_get_works()
     return $works;
 }
 
+function ctx_compare_undone_callback($a, $b)
+{
+    return strcmp($a["name"], $b["name"]);
+}
+
 function ctx_calculate_results(&$works, $probs)
 {
     global $ref;
@@ -200,6 +205,7 @@ function ctx_calculate_results(&$works, $probs)
         }
         else $undone[] = $work;
     }
+    usort($undone, 'ctx_compare_undone_callback');
     rsort($done_sum);
 
     return array('done'=>$done, 'done_sum'=>$done_sum, 'undone'=>$undone);
