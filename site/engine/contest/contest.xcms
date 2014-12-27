@@ -233,6 +233,11 @@ function ctx_show_overall_checking_progress()
 
     // header
     ?>
+    <p>
+        Символом <span class="ctx-legend-symbol"><?php echo CTX_NOT_CHECKED; ?></span> отмечаются непроверенные задачи.
+        Символ <span class="ctx-legend-symbol"><?php echo CTX_NO_SOLUTION_HT; ?></span> означает, что решение отсутствует.
+    </p>
+
     <h3>Непроверенные</h3>
     <table class="table table-striped table-bordered table-condensed table-hover">
     <thead><tr>

@@ -3,6 +3,7 @@
 $CONTEST_CURRENT_YEAR = "2014";
 
 define('CTX_NO_SOLUTION', '-');
+define('CTX_NO_SOLUTION_HT', '&#8212;');
 define('CTX_NOT_CHECKED', '?');
 
 $CTX_NAMES = array(
