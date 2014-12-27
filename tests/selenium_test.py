@@ -339,12 +339,16 @@ class SeleniumTest(object):
         pureBaseUrl = self.m_baseUrl
         pureLink = link
         for pfx in pfxList:
-            pureBaseUrl = pureBaseUrl.replace(pfx, "")
-            pureLink = pureLink.replace(pfx, "")
-        
+            pureBaseUrl = pureBaseUrl.replace(pfx, "", 1)
+            pureLink = pureLink.replace(pfx, "", 1)
+                
         if not pureLink.startswith(pureBaseUrl):
             return False
         return True        
+
+    def checkBaseUrl(self, link):
+        if not self.isBaseUrl(link):
+            self.failTest("Link with name " + userSerialize(linkName) + " leads to another site: " + userSerialize(link) + ". ")
         
     def gotoUrlByLinkText(self, linkName, reason=""):
         """
@@ -352,8 +356,7 @@ class SeleniumTest(object):
         """
         try:
             link = self.getUrlByLinkText(linkName, reason=reason)
-            if not self.isBaseUrl(link):
-                self.failTest("Link with name " + userSerialize(linkName) + " leads to another site: " + userSerialize(link) + ". ")
+            self.checkBaseUrl(link)
             self.gotoSite(link, linkName)
         except NoSuchElementException:
             self.failTest("Cannot find URL with name " + userSerialize(linkName) + ". " + self.displayReason(reason))
@@ -365,8 +368,7 @@ class SeleniumTest(object):
         """
         try:
             link = self.getUrlByLinkText(linkName, reason=reason, optionList=["title"])
-            if not link.startswith(self.m_baseUrl):
-                self.failTest("Link with name " + userSerialize(linkName) + " leads to another site: " + userSerialize(link) + ". ")
+            self.checkBaseUrl(link)
             self.gotoSite(link, linkName)
         except NoSuchElementException:
             self.failTest("Cannot find URL with name " + userSerialize(linkName) + ". " + self.displayReason(reason))
