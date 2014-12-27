@@ -2,6 +2,9 @@
 
 $CONTEST_CURRENT_YEAR = "2014";
 
+define('CTX_NO_SOLUTION', '-');
+define('CTX_NOT_CHECKED', '?');
+
 $CTX_NAMES = array(
     "problems"=>array(
         "name"=>"Задача",
@@ -194,11 +197,14 @@ function ctx_calculate_results(&$works, $probs)
         {
             $pid = $prob["problems_id"];
             $val = @$work["p$pid"];
-            if (!strlen($val))
+            if (!strlen($val) || $val == CTX_NOT_CHECKED)
             {
-                $val = "?";
+                $val = CTX_NOT_CHECKED;
                 $is_done = false;
             }
+            elseif ($val == "нет решения")
+                $val = CTX_NO_SOLUTION;
+
             $work["p${pid}val"] = $val;
             $sum += (integer)$val;
         }
