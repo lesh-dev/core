@@ -117,25 +117,21 @@
         $mailer = xcms_get_mailer($addr_from, $name_from);
         $mailer->AddReplyTo($addr_from, $name_from);
 
+        $group_mode = XMAIL_DESTMODE_TO;
         if ($addr_list !== NULL)
         {
             foreach ($addr_list as $mail_addr)
                 $mailer->AddAddress($mail_addr);
             // we send an email to address list, but add groups to BCC
-            if ($mail_group !== NULL)
-                xcms_add_mail_group($mailer, $mail_group, XMAIL_DESTMODE_BCC);
+            $group_mode = XMAIL_DESTMODE_BCC;
         }
-        else
-        {
-            // regular notification
-            if ($mail_group !== NULL)
-                xcms_add_mail_group($mailer, $mail_group);
-        }
-
-        $host = xcms_hostname();
-        $subject = "($host) $subject";
         if ($mail_group !== NULL)
-            $subject = "[$mail_group] $subject";
+        {
+            xcms_add_mail_group($mailer, $mail_group, $group_mode);
+            $host = xcms_hostname();
+            // See bug #798
+            $subject = "[$mail_group] ($host) $subject";
+        }
         return xcms_mailer_send($mailer, $subject, $body_html);
     }
 
