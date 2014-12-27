@@ -230,10 +230,14 @@ function ctx_show_overall_checking_progress()
 
     $undone = $results['undone'];
     $done = $results['done'];
-    $done_sum = $results['done_sum'];
 
     // header
     ?>
+    <p>
+        Символом <span class="ctx-legend-symbol"><?php echo CTX_NOT_CHECKED; ?></span> отмечаются непроверенные задачи.
+        Символ <span class="ctx-legend-symbol"><?php echo CTX_NO_SOLUTION_HT; ?></span> означает, что решение отсутствует.
+    </p>
+
     <h3>Непроверенные</h3>
     <table class="table table-striped table-bordered table-condensed table-hover">
     <thead><tr>
@@ -266,12 +270,11 @@ function ctx_show_overall_checking_progress()
     </tr></thead><?php
 
     $i = 1;
-    foreach ($done_sum as $sum)
-        foreach ($done[$sum] as $work)
-        {
-            echo "<tr><td>$i</td>".ctx_print_result_row($work, $probs)."</tr>\n";
-            $i++;
-        }
+    foreach ($done as $work)
+    {
+        echo "<tr><td>$i</td>".ctx_print_result_row($work, $probs)."</tr>\n";
+        $i++;
+    }
     ?></table><?php
 }
 

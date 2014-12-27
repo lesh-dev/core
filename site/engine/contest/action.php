@@ -76,8 +76,17 @@ function ctx_print_result_row($work, $probs, $simple = false)
         foreach ($probs as $prob)
         {
             $pid = $prob["problems_id"];
-            $row .= "<td>";
             $mark = $work["p${pid}val"];
+            $cl = "";
+            if ($mark == CTX_NO_SOLUTION)
+                $mark = CTX_NO_SOLUTION_HT;
+            elseif ($mark == CTX_NOT_CHECKED)
+                $cl = ' class="ctx-not-checked" ';
+            elseif (preg_match('/^\d+$/', $mark))
+                $cl = ' class="ctx-int-mark" ';
+            else
+                $cl = ' class="ctx-bad-mark" ';
+            $row .= "<td $cl>";
             $row .= $mark;
             $row .= "</td>";
         }

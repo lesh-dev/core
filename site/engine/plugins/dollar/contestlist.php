@@ -10,20 +10,17 @@ $probs = xdb_get_table("problems", $FILTER);
 $works = ctx_get_works();
 
 $results = ctx_calculate_results($works, $probs);
-
 $done = $results['done'];
-$done_sum = $results['done_sum'];
 
 ?>
 <table class="contest-results">
 <thead><tr><th>#</th><th>Имя</th><th>Результат</th></tr></thead>
 <?php
 $i = 1;
-foreach ($done_sum as $sum)
-    foreach ($done[$sum] as $work)
-    {
-        echo "<tr><td>$i</td>".ctx_print_result_row($work, $probs, true)."</tr>\n";
-        $i++;
-    }
+foreach ($done as $work)
+{
+    echo "<tr><td>$i</td>".ctx_print_result_row($work, $probs, true)."</tr>\n";
+    $i++;
+}
 ?></table><?php
 ?>

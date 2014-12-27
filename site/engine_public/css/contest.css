@@ -13,3 +13,29 @@ table.table td {
 input, textarea, .uneditable-input {
     width: 506px;
 }
+
+td.sum {
+    font-weight: bold;
+    color: #0000ff;
+}
+
+span.ctx-legend-symbol {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+td.ctx-not-checked {
+    font-weight: bold;
+    color: #ff0000;
+    font-size: 18px;
+}
+
+td.ctx-int-mark {
+    color: #007f00;
+}
+
+td.ctx-bad-mark {
+    font-weight: bold;
+    color: #ff0000;
+    font-size: 18px;
+}

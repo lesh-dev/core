@@ -2,6 +2,10 @@
 
 $CONTEST_CURRENT_YEAR = "2014";
 
+define('CTX_NO_SOLUTION', '-');
+define('CTX_NO_SOLUTION_HT', '&#8212;');
+define('CTX_NOT_CHECKED', '?');
+
 $CTX_NAMES = array(
     "problems"=>array(
         "name"=>"Задача",
@@ -79,7 +83,7 @@ $CTX_META["contestants"] = array(
 
 $CTX_META["solutions"] = array(
     "solutions_id" => array("name"=>"pk", "type"=>"pk"),
-    "problem_id" => array("name"=>"Идентификатор проблемы", "type"=>"pk"),
+    "problem_id" => array("name"=>"Идентификатор задачи", "type"=>"pk"),
     "contestant_id" => array("name"=>"Идентификатор работы", "type"=>"pk"),
     "resolution_text" => array("name"=>"Текст резолюции", "type"=>"large"),
     "resolution_author" => array("name"=>"Проверяющий", "type"=>"text"),
@@ -164,13 +168,24 @@ function ctx_get_works()
     return $works;
 }
 
+function ctx_compare_undone_callback($a, $b)
+{
+    return strcmp($a["name"], $b["name"]);
+}
+
+function ctx_compare_done_callback($a, $b)
+{
+    if ($a["sum"] == $b["sum"])
+        return strcmp($a["name"], $b["name"]);
+    return $a["sum"] < $b["sum"];
+}
+
 function ctx_calculate_results(&$works, $probs)
 {
     global $ref;
 
     $done = array();
     $undone = array();
-    $done_sum = array();
     foreach ($works as &$work)
     {
         $id = @$work["contestants_id"];
@@ -183,24 +198,26 @@ function ctx_calculate_results(&$works, $probs)
         {
             $pid = $prob["problems_id"];
             $val = @$work["p$pid"];
-            if (!strlen($val))
+            if (!strlen($val) || $val == CTX_NOT_CHECKED)
             {
-                $val = "?";
+                $val = CTX_NOT_CHECKED;
                 $is_done = false;
             }
+            elseif ($val == "нет решения")
+                $val = CTX_NO_SOLUTION;
+
             $work["p${pid}val"] = $val;
             $sum += (integer)$val;
         }
         $work["sum"] = $sum;
 
         if ($is_done)
-        {
-            @$done[$sum][] = $work;
-            $done_sum[$sum] = $sum;
-        }
-        else $undone[] = $work;
+            $done[] = $work;
+        else
+            $undone[] = $work;
     }
-    rsort($done_sum);
+    usort($done, 'ctx_compare_done_callback');
+    usort($undone, 'ctx_compare_undone_callback');
 
-    return array('done'=>$done, 'done_sum'=>$done_sum, 'undone'=>$undone);
+    return array('done'=>$done, 'undone'=>$undone);
 }
