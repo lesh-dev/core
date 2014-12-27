@@ -8,6 +8,7 @@
     {
         $mailer = new PHPMailer();
         $mailer->CharSet = "utf-8";
+        $mailer->Encoding = "quoted-printable";
         // please note this address should be configured in postfix
         $mailer->SetFrom($addr_from, $name_from);
         $mailer->Sender = $addr_from;
