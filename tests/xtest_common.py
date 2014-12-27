@@ -32,7 +32,7 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
             self.logAdd("We are on the AUTH page. Seems that page access was denied. ", "warning")
 
     def isAuthPage(self):
-        return self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"])
+        return self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"], optionList=["silent"])
 
     def checkDocType(self):
         firstLine, sourceBlock = self.getPageSourceFirstLine()
@@ -455,6 +455,7 @@ class XcmsTest(XcmsTestWithConfig):
         self.gotoUrlByLinkText(self.getEditPageInPlaceLinkName())
 
     def gotoCloseEditor(self):
+        self.logAdd("gotoCloseEditor")
         self.gotoUrlByLinkText(u"Свернуть редактор")
 
     def gotoXsmAnketas(self):

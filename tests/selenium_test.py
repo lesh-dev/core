@@ -105,7 +105,7 @@ def RunTest(test):
         return 3
     except Exception as exc:
         test.logAdd(u"Generic test exception: " + userSerialize(exc.message))
-        test.logAdd(traceback.format_exc())
+        print traceback.format_exc()
         return test.handleException(exc)
 
 
@@ -334,13 +334,25 @@ class SeleniumTest(object):
     def set404Text(self, text):
         self.m_textOnPage404 = text
 
+    def isBaseUrl(self, link):
+        pfxList = ["http://", "https://"]
+        pureBaseUrl = self.m_baseUrl
+        pureLink = link
+        for pfx in pfxList:
+            pureBaseUrl = pureBaseUrl.replace(pfx, "")
+            pureLink = pureLink.replace(pfx, "")
+        
+        if not pureLink.startswith(pureBaseUrl):
+            return False
+        return True        
+        
     def gotoUrlByLinkText(self, linkName, reason=""):
         """
         reason is custom comment helping to understand why this link is vital for test pass.
         """
         try:
             link = self.getUrlByLinkText(linkName, reason=reason)
-            if not link.startswith(self.m_baseUrl):
+            if not self.isBaseUrl(link):
                 self.failTest("Link with name " + userSerialize(linkName) + " leads to another site: " + userSerialize(link) + ". ")
             self.gotoSite(link, linkName)
         except NoSuchElementException:
@@ -391,11 +403,11 @@ class SeleniumTest(object):
 
     def assertUrlNotPresent(self, linkName, reason=""):
         try:
-            self.getUrlByLinkText(linkName, reason=reason)
+            self.getUrlByLinkText(linkName, reason=reason, optionList=["silent"])
             exMsg = "Forbidden URL is found on the page in assertUrlNotPresent: " + userSerialize(linkName) + ". " + self.displayReason(reason)
             self.failTest(exMsg)
         except ItemNotFound:
-            self.logAdd("URL " + userSerialize(linkName) + " is really not present (ItemNotFound exception raised). ")
+            self.logAdd(u"URL " + userSerialize(linkName) + " is really not present (ItemNotFound exception raised). ")
 
     def assertPageNotPresent(self, pageUrl, reason=""):
         try:
@@ -403,7 +415,7 @@ class SeleniumTest(object):
             exMsg = "Forbidden page is found while going to URL in assertPageNotExists: " + userSerialize(pageUrl) + ". " + self.displayReason(reason)
             self.failTest(exMsg)
         except PageNotFound:
-            self.logAdd("Page " + userSerialize(pageUrl) + " is really not present (PageNotFound exception raised). ")
+            self.logAdd(u"Page " + userSerialize(pageUrl) + " is really not present (PageNotFound exception raised). ")
 
     def assertUrlPresent(self, linkName, reason=""):
         try:
@@ -744,7 +756,7 @@ class SeleniumTest(object):
     def isStopWord(self, text):
         return text in self.m_logCheckStopWords or text == self.m_textOnPage404
 
-    def checkTextPresent(self, xpath, text):
+    def checkTextPresent(self, xpath, text, optionList=[]):
         self.checkEmptyParam(xpath, "checkTextPresent")
         self.checkEmptyParam(text, "checkTextPresent")
 
@@ -756,7 +768,7 @@ class SeleniumTest(object):
                 if xpath in ["/html/body", "//*"]:  # too large
                     serOpt = ["cut_strings"]
 
-                if not self.isStopWord(text):
+                if not self.isStopWord(text) and "silent" not in optionList:
                     self.logAdd(
                         "checkTextPresent: element " + userSerialize(xpath) + " text: " +
                         wrapIfLong(userSerialize(eleText, serOpt).replace("\n", " ")) + ". "
@@ -767,7 +779,8 @@ class SeleniumTest(object):
                         if phrase in eleText:
                             self.logAdd("checkTextPresent: found phrase " + userSerialize(phrase) + " in element with xpath " + userSerialize(xpath) + ". ")
                             return True
-                    self.logAdd("checkTextPresent: NOT found any of " + userSerialize(text) + " in element with xpath " + userSerialize(xpath) + ". ")
+                    if not "silent" in optionList:
+                        self.logAdd("checkTextPresent: NOT found any of " + userSerialize(text) + " in element with xpath " + userSerialize(xpath) + ". ")
                     return False
                 else:
                     bFound = text in eleText
@@ -794,11 +807,11 @@ class SeleniumTest(object):
                 continue
         self.failTest("Unsolvable cache problem in checkTextPresent. XPath: " + userSerialize(xpath) + ", text: " + wrapIfLong(userSerialize(text)) + ". ")
 
-    def checkSourceTextPresent(self, text):
-        return self.checkTextPresent("//*", text)
+    def checkSourceTextPresent(self, text, optionList=[]):
+        return self.checkTextPresent("//*", text, optionList=optionList)
 
-    def checkBodyTextPresent(self, text):
-        return self.checkTextPresent("/html/body", text)
+    def checkBodyTextPresent(self, text, optionList=[]):
+        return self.checkTextPresent("/html/body", text, optionList=optionList)
 
     def fatalTest(self, errorText):
         self.logAdd("TEST FATAL ERROR: " + userSerialize(errorText), "fatal")
@@ -808,8 +821,9 @@ class SeleniumTest(object):
         self.logAdd("TEST FAILED: " + userSerialize(errorText), "error")
         raise TestError(errorText)
 
-    def throwItemNotFound(self, errorText):
-        self.logAdd("Item-Not-Found: " + userSerialize(errorText))
+    def throwItemNotFound(self, errorText, optionList=[]):
+        if not "silent" in optionList:
+            self.logAdd("Item-Not-Found: " + userSerialize(errorText))
         raise ItemNotFound(errorText)
 
     def assertTextPresent(self, xpath, text, reason=""):
@@ -873,7 +887,8 @@ class SeleniumTest(object):
                 try:
                     return getUrl(urlName, optionList=optionList)
                 except NoSuchElementException:
-                    self.logAdd("Tried to find url by name " + userSerialize(urlName) + ", not found. ")
+                    if not "silent" in optionList:
+                        self.logAdd("Tried to find url by name " + userSerialize(urlName) + ", not found. ")
             else:
                 # loop ended, found nothing
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
@@ -881,14 +896,14 @@ class SeleniumTest(object):
                     "Cannot find URL by link texts: " + userSerialize(urlText) +
                     " on page " + userSerialize(self.curUrl()) + ". " + self.displayReason(reason)
                 )
-                self.throwItemNotFound(msg)
+                self.throwItemNotFound(msg, optionList=optionList)
         else:  # single link
             try:
                 return getUrl(urlText, optionList=optionList)
             except NoSuchElementException:
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
                 msg = "Cannot find URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". " + self.displayReason(reason)
-                self.throwItemNotFound(msg)
+                self.throwItemNotFound(msg, optionList=optionList)
 
     def countIndexedUrlsByLinkText(self, urlText, sibling=""):
         # case: <a><span>text</span></a> is not captured by internal of 'gotoUrlByLinkText'
