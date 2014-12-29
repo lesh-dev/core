@@ -348,7 +348,7 @@ class SeleniumTest(object):
 
     def checkBaseUrl(self, link):
         if not self.isBaseUrl(link):
-            self.failTest("Link with name " + userSerialize(linkName) + " leads to another site: " + userSerialize(link) + ". ")
+            self.failTest("Link with name " + userSerialize(link) + " leads to another site: " + userSerialize(link) + ". ")
         
     def gotoUrlByLinkText(self, linkName, reason=""):
         """
