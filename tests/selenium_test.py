@@ -159,7 +159,7 @@ class SeleniumTest(object):
         if self.needLeaveBrowserOpen():
             self.setCloseOnExit(False)
 
-        #self.m_driver.window_maximize()
+        # self.m_driver.window_maximize()
 
     def initDefaults(self):
         self.m_checkErrors = True
@@ -189,7 +189,7 @@ class SeleniumTest(object):
             fp = webdriver.FirefoxProfile(profileDir)
             self.m_driver = webdriver.Firefox(fp)
 
-        #self.maximizeWindow()
+        # self.maximizeWindow()
 
     def getName(self):
         return self.m_testName
@@ -204,7 +204,7 @@ class SeleniumTest(object):
     def __del__(self):
         if hasattr(self, 'm_driver'):
             if self.m_closeOnExit:
-                #self.logAdd("Closing webdriver. ")
+                # self.logAdd("Closing webdriver. ")
                 self.m_driver.quit()
 
     def getBaseUrl(self):
@@ -259,7 +259,7 @@ class SeleniumTest(object):
             logText = "[" + self.m_testName + " log start on " + self.m_baseUrl + "]\n"
             logFile.write(logText.encode("UTF-8"))
             logFile.close()
-            #indicate that log was already created
+            # indicate that log was already created
             self.m_logStarted = True
             self.m_logTime = currentTime()
         except IOError:
@@ -685,7 +685,7 @@ class SeleniumTest(object):
 
     def assertElementSubTextById(self, eleId, text, reason=""):
         if not self.checkElementSubTextById(eleId, text):
-            self.failTest("Element with id '" + eleId + "' text does not contain expected: " + wrapIfLong(userSerialize(text)) + ". " +  self.displayReason(reason))
+            self.failTest("Element with id '" + eleId + "' text does not contain expected: " + wrapIfLong(userSerialize(text)) + ". " + self.displayReason(reason))
 
     def checkElementValueByName(self, name, text):
         self.checkEmptyParam(name, "checkElementValueByName")
@@ -784,7 +784,7 @@ class SeleniumTest(object):
                         if phrase in eleText:
                             self.logAdd("checkTextPresent: found phrase " + userSerialize(phrase) + " in element with xpath " + userSerialize(xpath) + ". ")
                             return True
-                    if not "silent" in optionList:
+                    if "silent" not in optionList:
                         self.logAdd("checkTextPresent: NOT found any of " + userSerialize(text) + " in element with xpath " + userSerialize(xpath) + ". ")
                     return False
                 else:
@@ -827,7 +827,7 @@ class SeleniumTest(object):
         raise TestError(errorText)
 
     def throwItemNotFound(self, errorText, optionList=[]):
-        if not "silent" in optionList:
+        if "silent" not in optionList:
             self.logAdd("Item-Not-Found: " + userSerialize(errorText))
         raise ItemNotFound(errorText)
 
@@ -892,7 +892,7 @@ class SeleniumTest(object):
                 try:
                     return getUrl(urlName, optionList=optionList)
                 except NoSuchElementException:
-                    if not "silent" in optionList:
+                    if "silent" not in optionList:
                         self.logAdd("Tried to find url by name " + userSerialize(urlName) + ", not found. ")
             else:
                 # loop ended, found nothing
