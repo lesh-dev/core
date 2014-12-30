@@ -234,6 +234,16 @@ a.contlist-edit {
     top: 5px;
 }
 
+a.h3 {
+    font: normal normal 11pt/11pt Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+    color: #203720;
+    font-weight: bold;
+    text-indent: 5mm;
+    margin-top: 8pt;
+    margin-bottom: 2pt;
+    text-decoration: none;
+}
+
 div.contlist-block {
     position: relative;
     padding: 10px;

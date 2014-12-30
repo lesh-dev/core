@@ -36,12 +36,13 @@
                 <a id="contlist-item-<?php echo $contlist_block_iter; ?>" class="link-button contlist-edit"
                     href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'admin', 'page'=>$subpage_id)); ?>">Редактировать</a><?php
             }
+            $alias = xcms_get_key_or($info, "alias");
             $timestamp = xcms_get_key_or($info, "timestamp-created");
             $date = xcms_rus_date($timestamp);
+            $header_url = "/$web_prefix$alias";
             ?>
-            <h3 id="<?php echo $subpage_id; ?>"><?php echo "$date &ndash; ".xcms_get_key_or_enc($info, "header"); ?></h3><?php
-            // include(translate("<! cms/readtext --markdown --limit=220
-            //  --next-link=index.php?page=$subpage_id --next-text=подробнее !>"));
+            <a class="h3" id="<?php echo $subpage_id; ?>" href="<?php echo $header_url; ?>"
+                ><?php echo "$date &ndash; ".xcms_get_key_or_enc($info, "header"); ?></a><?php
             include(translate("<! cms/readtext --markdown !>"));
             $login = xcms_get_key_or($info, "owner");
 
