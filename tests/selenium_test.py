@@ -12,14 +12,14 @@ from selenium.webdriver.common.keys import Keys
 from urllib2 import URLError
 from httplib import HTTPException
 
-#from selenium.webdriver.remote.webdriver import WebElement
-#from selenium.webdriver.support.ui import Select
+# from selenium.webdriver.remote.webdriver import WebElement
+# from selenium.webdriver.support.ui import Select
 
-#import random
+# import random
 import traceback
-#import itertools
-#import sys
-#from datetime import datetime
+# import itertools
+# import sys
+# from datetime import datetime
 import time
 import os
 import errno
@@ -28,19 +28,19 @@ import shutil
 # from bawlib import isString
 from bawlib import isVoid, isList, isNumber, isEqual, getSingleOption, userSerialize, wrapIfLong
 
-#['_unwrap_value', '_wrap_value', 'add_cookie',
-#'back', 'binary', 'capabilities', 'close', 'command_executor', 'create_web_element', 'current_window_handle',
-#'delete_all_cookies', 'delete_cookie', 'desired_capabilities', 'error_handler', 'execute', 'execute_async_script',
-#'execute_script', 'find_element', 'find_element_by_class_name', 'find_element_by_css_selector',
-# 'find_element_by_partial_link_text', 'find_element_by_tag_name',
-#'find_element_by_xpath', 'find_elements', 'find_elements_by_class_name', 'find_elements_by_css_selector', 'find_elements_by_id',
-#'find_elements_by_link_text', 'find_elements_by_name', 'find_elements_by_partial_link_text', 'find_elements_by_tag_name',
-#'find_elements_by_xpath', 'firefox_profile', 'forward', 'get', 'get_cookie', 'get_cookies', 'get_screenshot_as_base64',
-#'get_screenshot_as_file', 'get_window_position', 'get_window_size', 'implicitly_wait',
-#'name', 'orientation', 'page_source', 'profile', 'quit', 'refresh', 'save_screenshot', 'session_id',
-#'set_page_load_timeout', 'set_script_timeout', 'set_window_position', 'set_window_size', 'start_client',
-#'start_session', 'stop_client', 'switch_to_active_element', 'switch_to_alert', 'switch_to_default_content',
-#'switch_to_frame', 'switch_to_window', 'title', 'window_handles']
+# ['_unwrap_value', '_wrap_value', 'add_cookie',
+# 'back', 'binary', 'capabilities', 'close', 'command_executor', 'create_web_element', 'current_window_handle',
+# 'delete_all_cookies', 'delete_cookie', 'desired_capabilities', 'error_handler', 'execute', 'execute_async_script',
+# 'execute_script', 'find_element', 'find_element_by_class_name', 'find_element_by_css_selector',
+#  'find_element_by_partial_link_text', 'find_element_by_tag_name',
+# 'find_element_by_xpath', 'find_elements', 'find_elements_by_class_name', 'find_elements_by_css_selector', 'find_elements_by_id',
+# 'find_elements_by_link_text', 'find_elements_by_name', 'find_elements_by_partial_link_text', 'find_elements_by_tag_name',
+# 'find_elements_by_xpath', 'firefox_profile', 'forward', 'get', 'get_cookie', 'get_cookies', 'get_screenshot_as_base64',
+# 'get_screenshot_as_file', 'get_window_position', 'get_window_size', 'implicitly_wait',
+# 'name', 'orientation', 'page_source', 'profile', 'quit', 'refresh', 'save_screenshot', 'session_id',
+# 'set_page_load_timeout', 'set_script_timeout', 'set_window_position', 'set_window_size', 'start_client',
+# 'start_session', 'stop_client', 'switch_to_active_element', 'switch_to_alert', 'switch_to_default_content',
+# 'switch_to_frame', 'switch_to_window', 'title', 'window_handles']
 
 
 class TestError(RuntimeError):
@@ -84,11 +84,11 @@ def RunTest(test):
         test.logAdd(test.getName() + " TEST PASSED", "action")
         return 0
     except TestFatal as exc:
-#       test.printActionLog()
+        # test.printActionLog()
         return test.handleTestFatal(exc)
     except TestError as exc:
         return test.handleTestFail(exc)
-        #test.printActionLog()
+        # test.printActionLog()
     except TestShutdown as exc:
         return test.handleShutdown(exc)
     except NoSuchWindowException as exc:
@@ -139,8 +139,11 @@ def getValue(ele):
     return ele.get_attribute('value')
 
 
-#main API wrapper for Webdriver.
 class SeleniumTest(object):
+    """
+        Main API wrapper for Webdriver
+    """
+
     def __init__(self, baseUrl, params=[]):
         self.m_testName = self.__class__.__name__
         self.m_baseUrl = baseUrl or ""
@@ -348,7 +351,7 @@ class SeleniumTest(object):
 
     def checkBaseUrl(self, link):
         if not self.isBaseUrl(link):
-            self.failTest("Link with name " + userSerialize(linkName) + " leads to another site: " + userSerialize(link) + ". ")
+            self.failTest("Link with name " + userSerialize(link) + " leads to another site: " + userSerialize(link) + ". ")
 
     def gotoUrlByLinkText(self, linkName, reason=""):
         """
