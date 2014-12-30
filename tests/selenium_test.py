@@ -341,15 +341,15 @@ class SeleniumTest(object):
         for pfx in pfxList:
             pureBaseUrl = pureBaseUrl.replace(pfx, "", 1)
             pureLink = pureLink.replace(pfx, "", 1)
-                
+
         if not pureLink.startswith(pureBaseUrl):
             return False
-        return True        
+        return True
 
     def checkBaseUrl(self, link):
         if not self.isBaseUrl(link):
             self.failTest("Link with name " + userSerialize(linkName) + " leads to another site: " + userSerialize(link) + ". ")
-        
+
     def gotoUrlByLinkText(self, linkName, reason=""):
         """
         reason is custom comment helping to understand why this link is vital for test pass.

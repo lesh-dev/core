@@ -24,15 +24,15 @@ class XcmsContentHiddenPage(xtest_common.XcmsTest):
 
         self.gotoCreatePage()
 
-        inpPageDir = "hiddenPage_" + random_crap.randomText(6);
-        inpMenuTitle = "hiddenMenuTitle_" + random_crap.randomText(6);
-        inpPageHeader = "hiddenPageHeader_" + random_crap.randomText(6);
-        inpAlias = "hidden/secret/page/" + random_crap.randomText(6);
+        inpPageDir = "hiddenPage_" + random_crap.randomText(6)
+        inpMenuTitle = "hiddenMenuTitle_" + random_crap.randomText(6)
+        inpPageHeader = "hiddenPageHeader_" + random_crap.randomText(6)
+        inpAlias = "hidden/secret/page/" + random_crap.randomText(6)
 
-        inpPageDir = self.fillElementById("create-name-input", inpPageDir);
-        inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle);
-        inpPageHeader = self.fillElementById("header-input", inpPageHeader);
-        inpAlias = self.fillElementById("alias-input", inpAlias);
+        inpPageDir = self.fillElementById("create-name-input", inpPageDir)
+        inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)
+        inpPageHeader = self.fillElementById("header-input", inpPageHeader)
+        inpAlias = self.fillElementById("alias-input", inpAlias)
 
         self.clickElementById("menu-hidden-checkbox")
 
