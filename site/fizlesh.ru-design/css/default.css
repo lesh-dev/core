@@ -234,13 +234,27 @@ a.contlist-edit {
     top: 5px;
 }
 
-a.h3 {
-    font: normal normal 11pt/11pt Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+a.h1 {
+    font-family: Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+    font-size: 15pt;
     color: #203720;
     font-weight: bold;
     text-indent: 5mm;
-    margin-top: 8pt;
-    margin-bottom: 2pt;
+    margin-top: 10pt;
+    margin-bottom: 3pt;
+    display: inline-block;
+    text-decoration: none;
+}
+
+a.h2 {
+    font: normal normal 12pt/12pt Tahoma, Verdana, Arial, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+    color: #203720;
+    font-weight: bold;
+    text-indent: 5mm;
+    margin-top: 10pt;
+    line-height: 26px;
+    margin-bottom: 3pt;
+    display: inline-block;
     text-decoration: none;
 }
 

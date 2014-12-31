@@ -41,7 +41,10 @@
             $date = xcms_rus_date($timestamp);
             $header_url = "/$web_prefix$alias";
             ?>
-            <a class="h3" id="<?php echo $subpage_id; ?>" href="<?php echo $header_url; ?>"
+            <a
+                class="h2"
+                id="<?php echo $subpage_id; ?>"
+                href="<?php echo $header_url; ?>"
                 ><?php echo "$date &ndash; ".xcms_get_key_or_enc($info, "header"); ?></a><?php
             include(translate("<! cms/readtext --markdown !>"));
             $login = xcms_get_key_or($info, "owner");
