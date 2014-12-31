@@ -814,3 +814,26 @@ div.photo-stream {
     clear: both;
 }
 /* --------------------- */
+a.h1 {
+    font-size: 16px;
+    font-weight: bold;
+    font-family: "Trebuchet MS", "Helvetica CY", "Luxi Sans", sans-serif;
+    color: #4f4f4f;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    display: inline-block;
+    text-decoration: none;
+}
+
+a.h2 {
+    font-size: 15px;
+    font-weight: bold;
+    font-family: "Trebuchet MS", "Helvetica CY", "Luxi Sans", sans-serif;
+    color: #2f8f4f;
+    padding-top: 7px;
+    padding-bottom: 3px;
+    display: inline-block;
+    text-decoration: none;
+}
+
+

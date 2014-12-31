@@ -132,8 +132,12 @@ function xcms_print_related_links()
             ?>
             <div style="margin-bottom: 10px;" id="content-header"><?php
             if (strlen($hdr) && !$in_xsm)
-            {?>
-                <h1><?php echo $hdr; ?></h1><?php
+            {
+                $header_url = "/$web_prefix$alias"; ?>
+                <a
+                    class="h1"
+                    href="<?php echo $header_url; ?>"
+                    ><?php echo $hdr; ?></a><?php
             }?>
             </div><?php
             echo $main_page;

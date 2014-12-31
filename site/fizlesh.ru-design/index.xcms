@@ -104,8 +104,7 @@
                     <div id="content-header"><?php
                     if (strlen($hdr) && !$in_xsm)
                     {
-                        $header_url = "/$web_prefix$alias";
-                        ?>
+                        $header_url = "/$web_prefix$alias"; ?>
                         <a
                             class="h1"
                             href="<?php echo $header_url; ?>"
