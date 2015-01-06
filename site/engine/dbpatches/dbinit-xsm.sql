@@ -1,3 +1,11 @@
+/* Версия базы данных (2.13+) */
+create table xversion (
+    db_version text
+);
+
+insert into xversion values('0.0.0');
+update `xversion` set db_version = '2.13.1';
+
 /* Отделение (2.7+) */
 create table department (
     department_id integer primary key autoincrement,
