@@ -16,6 +16,7 @@ create table person (
     last_name text, -- фамилия
     first_name text, -- имя
     patronymic text, -- отчество
+    nick_name text, -- кличка #569
 
     birth_date text, -- дата рождения
     passport_data text, -- паспортные данные

@@ -48,7 +48,7 @@ function xsm_print_person_header($db, $person, $school_id)
     $department = xdb_get_entity_by_id('department', $department_id);
     $department_title_typical = $department['department_title'];
 
-    $person_fio = xsm_fio_enc($person);
+    $person_fio = xsm_fion_enc($person);
 
     $birth_date = htmlspecialchars($person["birth_date"]);
 

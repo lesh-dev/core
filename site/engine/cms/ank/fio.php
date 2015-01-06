@@ -18,6 +18,25 @@ function xsm_fio_enc($person)
 }
 
 /**
+  * Canonical way to obtain FIO with nick
+  **/
+function xsm_fion($person)
+{
+    $result = xsm_fio($person);
+    $nick_name = xcms_get_key_or($person, 'nick_name');
+    if (xu_not_empty($nick_name))
+        $result .= " ($nick_name)";
+    return $result;
+}
+/**
+  * HTML-encoded version of @c xsm_fion
+  **/
+function xsm_fion_enc($person)
+{
+    return htmlspecialchars(xsm_fion($person));
+}
+
+/**
   * Canonical way to obtain FI
   **/
 function xsm_fi($person, $prefix = '')
