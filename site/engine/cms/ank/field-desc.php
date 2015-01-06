@@ -70,6 +70,9 @@ function xsm_get_fields($table_name)
             "patronymic"=>array(
                 "name"=>"Отчество",
             ),
+            "nick_name"=>array(
+                "name"=>"Кличка",
+            ),
 
             "birth_date"=>array(
                 "name"=>"Дата рождения",
