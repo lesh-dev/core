@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+echo -n "Source version: "
 cat site/VERSION
 git push
 git push --tags
