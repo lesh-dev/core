@@ -65,7 +65,7 @@ function hook_end
     while [ true ]; do
         read -p "Did you tested it all and want to make production copy (yes/no)? " ans
         if [ $ans. == "no." ]; then
-            echo "release-status  : rejected" >> INFO
+            echo "release-status : rejected" >> INFO
             break
         fi
         if [ $ans. == "yes." ]; then
@@ -78,7 +78,7 @@ function hook_end
         echo "You can fix it at final.$site, but no production will be generated!"
         echo "************************************************************"
     elif [ $ans == "yes" ]; then
-        echo "release-status  : accepted" >> INFO
+        echo "release-status : accepted" >> INFO
         if [ -h $final_target ]; then
             rm $final_target
         fi

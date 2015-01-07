@@ -32,7 +32,7 @@ function hook_end
     cp -rf content/* frost
     rm content
     ln -s frost content
-    echo "FREEZE  : ${sym_suffix}" >> INFO
+    echo "FREEZE : ${sym_suffix}" >> INFO
     echo "SITE IS READ ONLY!" >> INFO
     apachectl -k graceful
     echo " *** Last chance to quit ***"
@@ -46,7 +46,7 @@ function hook_end
     while [ true ]; do
         read -p "Did you tested it all and want to freeze production copy (yes/no)? " ans
         if [ $ans. == "no." ]; then
-            echo "freeze  : rejected" >> INFO
+            echo "freeze : rejected" >> INFO
             break
         fi
         if [ $ans. == "yes." ]; then
