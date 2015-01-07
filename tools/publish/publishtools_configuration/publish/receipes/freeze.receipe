@@ -59,7 +59,7 @@ function hook_end
         echo "You can fix it at final.$site, but no production will be generated!"
         echo "************************************************************"
     elif [ $ans == "yes" ]; then
-        echo "freeeze : accepted" >> INFO
+        echo "freeze : accepted" >> INFO
         if [ -h $final_target ]; then
             rm $final_target
         fi
