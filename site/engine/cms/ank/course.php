@@ -40,7 +40,8 @@ function xsm_print_courses_selected_school(
     foreach ($persons_on_school as $person_school)
         $by_person[$person_school["member_person_id"]] = $person_school;
 
-    foreach ($courses as $course_id => &$course)
+    $courses_enh = array();
+    foreach ($courses as $course_id => $course)
     {
         // FIXME:PERF N*SELECT
         $deps = array();
@@ -61,7 +62,9 @@ function xsm_print_courses_selected_school(
             $course["main_department_id"] = $m_dep_id;
             break;
         }
+        $courses_enh[$course_id] = $course;
     }
+    $courses = $courses_enh;
     uasort($courses, 'xsm_sort_courses');
 
     $person_list_link = xsm_person_list_link($school_id);
