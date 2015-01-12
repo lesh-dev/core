@@ -5,6 +5,12 @@
         $rel_info = xcms_get_list("INFO");
         foreach ($rel_info as $key => $value)
             echo "$key: <b>$value</b>".EXP_LF;
+        $xversion = xdb_get_table("xversion");
+        if (count($xversion))
+        {
+            $xversion = $xversion[0];
+            echo "db: ".$xversion["db_version"].EXP_LF;
+        }
         ?></pre><?php
     }
 ?>
