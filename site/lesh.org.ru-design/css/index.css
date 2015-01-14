@@ -836,4 +836,6 @@ a.h2 {
     text-decoration: none;
 }
 
-
+i {
+    font-style: italic;
+}
