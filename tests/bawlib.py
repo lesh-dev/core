@@ -16,7 +16,8 @@ def fileBaseName(fileName):
     return os.path.basename(fileName)
 
 def wrapIfLong(text):
-    if len(text) > 70:
+    # maxLen in userSerialize + epsilon
+    if len(text) > 80:
         return "\n" + text
     return text
 
