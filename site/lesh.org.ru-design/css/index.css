@@ -654,7 +654,7 @@ input[type="search"] {
     vertical-align: middle; /* Выравнивание по середине */
 }
 
-input[type="submit"] {
+input.search[type="submit"] {
     width: 20px; /* Ширина кнопки */
     height: 20px; /* Высота кнопки */
     border: none; /* Убираем рамку */

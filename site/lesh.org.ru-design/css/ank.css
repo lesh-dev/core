@@ -2,8 +2,9 @@ span.ankLabel {
     font-size: 10pt;
     font-weight: bold;
     display: inline-block;
-    width: 300px;
+    width: 200px;
     padding-left: 2px;
+    float: left;
 }
 
 div.ankLegend {
@@ -24,9 +25,13 @@ div.ankRow {
     white-space: nowrap;
 }
 
+span.ankValue {
+    vertical-align: top;
+}
+
 div.ankExample {
     font-size: 8pt;
-    padding-left: 310px;
+    padding-left: 210px;
     padding-bottom: 3pt;
 }
 
