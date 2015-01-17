@@ -66,7 +66,8 @@ div.ankMessageFrame {
     -webkit-border-radius: 5px;
     border-radius: 5px;
     border: 1px solid #003f00;
-    background-color: #aed79b;
+    background-color: #d7f9ea;
+    margin-right: 40px;
     display: none;
 }
 
