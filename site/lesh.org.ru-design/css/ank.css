@@ -12,7 +12,7 @@ div.ankLegend {
     display: inline-block;
     width: 30%;
     border: 1px solid #003f00;
-    background-color: #aed79b;
+    background-color: #d7f9ea;
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -37,7 +37,7 @@ div.ankExample {
 
 span.ankAst {
     font-weight: bold;
-    font-size: 10pt;
+    font-size: 12pt;
 }
 span.ankAst.Req {
     color: #ff0000;
@@ -46,7 +46,7 @@ span.ankAst.Gr {
     color: #cf7f00;
 }
 span.ankAst.Rec {
-    color: #e0f2dd;
+    color: #139ec3;
 }
 
 div.ankError {
