@@ -44,10 +44,12 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
         if self.countIndexedUrlsByLinkText(alias) != 0:
             self.failTest("This search should not return anything. Filters are broken. ")
 
-        # none lines expected
+        # 1 line expected
         #self.setOptionValueByIdAndValue("show_anketa_status-selector", "all")
         alias = u"Демарин Дмитрий"
         self.fillElementById(FIOFilterId, alias)
         self.sendEnterById(FIOFilterId)
+        
+        # sometimes it returns 0 links. Seems to be webdriver bug.
         if self.countIndexedUrlsByLinkText(alias) != 1:
-            self.failTest("This search should return one recored. Filters are broken. ")
+            self.failTest("This search should return one record. Filters are broken. ")
