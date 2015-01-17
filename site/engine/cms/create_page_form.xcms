@@ -29,7 +29,7 @@
         if ($key == XCMS_TAG_NAME)
             continue;
         // in order to fix #768 problem
-        if ($key != "content" && $key != "contlist")
+        if ($key != "content" && $key != "contlist" && $key != "ank")
             continue;
         $s = ($key == "content")
             ? 'selected="selected" checked="checked" '
