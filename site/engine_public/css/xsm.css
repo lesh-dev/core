@@ -118,6 +118,14 @@ input.ankEdit.filter {
     width: 200px;
 }
 
+form.xsm-filter input[type="checkbox"] {
+    margin-left: 10px;
+}
+form.xsm-filter i {
+    display: inline-block;
+    width: 10px;
+}
+
 textarea.ankEdit {
     width: 75%;
     height: 72px;
