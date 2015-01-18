@@ -119,11 +119,11 @@ input.ankEdit.filter {
 }
 
 form.xsm-filter input[type="checkbox"] {
-    margin-left: 10px;
+    margin-left: 15px;
 }
 form.xsm-filter i {
     display: inline-block;
-    width: 10px;
+    width: 15px;
 }
 
 textarea.ankEdit {
