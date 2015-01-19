@@ -48,7 +48,7 @@ function xsm_update_exam($table_name, $title, $fields)
 
     if ($id == XDB_NEW && $exam_id !== NULL)
     {?>
-        <p>Зачёт по этому курсу уже имеется.<?php
+        <p>Зачёт по этому курсу уже имеется. <?php
     }
     else
     {
@@ -57,7 +57,7 @@ function xsm_update_exam($table_name, $title, $fields)
         {
             $id = $res;
             ?>
-            <p><?php echo $title; ?> успешно сохранён.<?php
+            <p><?php echo $title; ?> успешно сохранён. <?php
         }
         else
         {?>
