@@ -14,8 +14,8 @@
     <# js/public xsm.js #>
     <# js/public control-depends.js #>
 
-    <# css/design ank-manage.css #>
     <# css/public xsm.css #>
+    <# css/design ank-manage.css #>
     <?php if ($XSM_BOOTSTRAP) {?>
     <# css/public xsm-bootstrap.css #>
     <?php }?>
