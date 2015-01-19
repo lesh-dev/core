@@ -18,7 +18,9 @@
     <# css/design ank-manage.css #>
     <?php if ($XSM_BOOTSTRAP) {?>
     <# css/public xsm-bootstrap.css #>
-    <?php }?>
+    <?php } else {?>
+    <# css/design xsm.css #><?php
+    }?>
 </head>
 <body>
 <?php
