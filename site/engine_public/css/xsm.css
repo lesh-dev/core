@@ -153,86 +153,86 @@ span.anketa-status {
     font-weight: bold;
 }
 
-span.anketa-status.new {
+span.anketa-status.xe-new {
     color: #cf8f00;
 }
 
-span.anketa-status.progress {
+span.anketa-status.xe-progress {
     color: #7f007f;
 }
 
-span.anketa-status.less {
+span.anketa-status.xe-less {
     color: #2f2faf;
 }
 
-span.anketa-status.processed {
+span.anketa-status.xe-processed {
     color: #008f00;
 }
 
-span.anketa-status.nextyear {
+span.anketa-status.xe-nextyear {
     color: #9f5f5f;
 }
 
-span.anketa-status.declined {
+span.anketa-status.xe-declined {
     color: #7f7f7f;
 }
 
-span.anketa-status.cont {
+span.anketa-status.xe-cont {
     color: #006f00;
 }
 
-span.anketa-status.old {
+span.anketa-status.xe-old {
     color: #000000;
 }
 
-span.anketa-status.duplicate {
+span.anketa-status.xe-duplicate {
     color: #ff7f50;
 }
 
-span.anketa-status.spam {
+span.anketa-status.xe-spam {
     color: #ff0000;
 }
 
 /* exam-status */
-span.exam-status.passed {
+span.exam-status.xe-passed {
     color: #008f00;
 }
 
-span.exam-status.notpassed {
+span.exam-status.xe-notpassed {
     color: #ff0000;
 }
 
-span.exam-status.almost {
+span.exam-status.xe-almost {
     color: #ffff00;
 }
 
-span.exam-status.almost {
+span.exam-status.xe-almost {
     color: #0000ff;
 }
 
 /* course-area */
-span.course-area.precise {
+span.course-area.xe-precise {
     color: #ff0000;
 }
 
-span.course-area.nature {
+span.course-area.xe-nature {
     color: #0000ff;
 }
 
-span.course-area.human {
+span.course-area.xe-human {
     color: #00ff00;
 }
 
 /* course-type */
-span.course-type.facult {
+span.course-type.xe-facult {
     color: #7f7f7f;
 }
 
-span.course-type.prac {
+span.course-type.xe-prac {
     color: #9f0000;
 }
 
-span.course-type.generic {
+span.course-type.xe-generic {
     color: #000000;
 }
 
@@ -240,21 +240,45 @@ span.course-type.generic {
 span.course-progress {
     font-weight: bold;
 }
-span.course-progress.undef {
+span.course-progress.xe-undef {
     color: #7f7f7f;
 }
-span.course-progress.low {
+span.course-progress.xe-low {
     color: #cf0000;
 }
-span.course-progress.medium {
+span.course-progress.xe-medium {
     color: #9f6f00;
 }
-span.course-progress.high {
+span.course-progress.xe-high {
     color: #0f7f00;
 }
-span.course-progress.all {
+span.course-progress.xe-all {
     color: #5f5f5f;
 }
+
+/* forest status */
+span.forest-status {
+    font-weight: bold;
+}
+span.forest-status.xe-undef {
+    color: #7f7f7f;
+}
+span.forest-status.xe-notable {
+    color: #ff0000;
+}
+span.forest-status.xe-no {
+    color: #7f0000;
+}
+span.forest-status.xe-maybe {
+    color: #0000ff;
+}
+span.forest-status.xe-able {
+    color: #009f00;
+}
+span.forest-status.xe-yes {
+    color: #007f00;
+}
+
 /* ------------ */
 
 span.person-value.department {

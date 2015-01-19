@@ -317,7 +317,20 @@ function xsm_make_enum($object, $key, $id = false)
     $values = xsm_get_enum($key);
     $title = $values[$enum_value];
     $id = ($id !== false) ? "$id-" : "";
-    return "<span class=\"$css_class $enum_value\" id=\"$id$key-span\">$title</span>";
+    return "<span class=\"$css_class xe-$enum_value\" id=\"$id$key-span\">$title</span>";
+}
+
+function xsm_calc_course_style($course_ratio)
+{
+    if ($course_ratio >= -0.001 && $course_ratio < 0.333)
+        return "xe-low";
+    elseif ($course_ratio >= 0.333 && $course_ratio < 0.666)
+        return "xe-medium";
+    elseif ($course_ratio >= 0.666 && $course_ratio < 0.999)
+        return "xe-high";
+    elseif ($course_ratio >= 0.999)
+        return "xe-all";
+    return "xe-undef";
 }
 
 /**

@@ -194,15 +194,7 @@ function xsm_show_person_list($school_id)
         if ($course_ratio < -0.5)
             $hr_course_progress = "&#8212;";
 
-        $course_style = "undef";
-        if ($course_ratio >= -0.001 && $course_ratio < 0.333)
-            $course_style = "low";
-        elseif ($course_ratio >= 0.333 && $course_ratio < 0.666)
-            $course_style = "medium";
-        elseif ($course_ratio >= 0.666 && $course_ratio < 0.999)
-            $course_style = "high";
-        elseif ($course_ratio >= 0.999)
-            $course_style = "all";
+        $course_style = xsm_calc_course_style($course_ratio);
 
         $num = "";
         if (xcms_checkbox_enabled($is_student))
