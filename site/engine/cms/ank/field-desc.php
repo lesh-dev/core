@@ -423,6 +423,7 @@ $XSM_ENUMS = array(
             "generic"=>"Обычный",
             "facult"=>"Факультатив",
             "prac"=>"Практикум",
+            "single"=>"Разовая лекция",
             "other"=>"Иное"),
         "default"=>"generic"),
 

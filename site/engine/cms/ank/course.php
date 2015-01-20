@@ -91,7 +91,7 @@ function xsm_print_courses_selected_school(
             <col width="20%" /><?php
             } ?>
             <col width="1%" />
-            <col width="1%" />
+            <col width="5%" />
             <col width="5%" />
             <col width="5%" />
             <col width="5%" />

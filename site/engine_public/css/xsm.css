@@ -228,6 +228,10 @@ span.course-type.xe-facult {
     color: #7f7f7f;
 }
 
+span.course-type.xe-single {
+    color: #004f00;
+}
+
 span.course-type.xe-prac {
     color: #9f0000;
 }
