@@ -1,4 +1,7 @@
 <?php
+    require_once("${engine_dir}cms/ank/department.php");
+
+    $show_department_id = xcms_get_persistent_key("list-person-locator", "show_department_id", XDB_INVALID_ID);
     $show_anketa_status = xsm_get_persistent_enum_key("list-person-locator", "show_anketa_status", "show_anketa_status_locator");
     $show_is_teacher = xcms_get_persistent_key("list-person-locator", "show_is_teacher");
     $show_is_student = xcms_get_persistent_key("list-person-locator", "show_is_student");
@@ -25,7 +28,9 @@
 </script>
 
 <form method="post" class="xsm-filter" name="filter" id="filter-form" action="list-person-locator">
-    <span>Фильтр: </span><span class="ankListField">Статус: </span><?php
+    <span>Фильтр: </span><?php
+    xsm_draw_department_selector($show_department_id, 'show_department_id', "Все отделения"); ?><i>
+    </i><span class="ankListField">Статус: </span><?php
     echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_locator");
     xsm_checkbox('show_is_teacher', $show_is_teacher);
     ?><span class="ankListField">Только преподы</span><?php
@@ -45,6 +50,7 @@
 // вывод активных участников
 function xsm_show_all_person_list()
 {
+    global $show_department_id;
     global $show_anketa_status;
     global $show_is_teacher;
     global $show_is_student;
@@ -55,6 +61,9 @@ function xsm_show_all_person_list()
     $db = xdb_get();
 
     $cond = "(1 = 1)";
+    if ($show_department_id != XDB_INVALID_ID)
+        $cond .= " AND ( department_id = $show_department_id )";
+
     if (xcms_checkbox_enabled($show_is_teacher))
         $cond .= " AND ( LENGTH(is_teacher) > 0 )";
 
