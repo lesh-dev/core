@@ -58,6 +58,7 @@ function xcms_create_contlist()
 
     xcms_save_list("$dir/info", $list);
     xcms_write("$dir/content", $content);
+    xcmst_rebuild_aliases_and_rewrite();
 
     xcms_process_page_diff("", $content, $item_pageid);
     ?>
