@@ -9,9 +9,6 @@ function xcms_create_contlist()
 {
     global $SETTINGS, $INFO, $pageid;
 
-    /*
-    $suffix = xcms_get_key_or($_POST, "name-suffix");
-    */
     $date = date('Y.m.d');
     $timestamp = time();
     $datetime = xcms_datetime($timestamp);
@@ -29,10 +26,6 @@ function xcms_create_contlist()
         $item_id .= '.'.chr(97 + $count - 1);
     elseif ($count > 26)
         $item_id .= '.'.$count;
-    /*
-    if ($suffix)
-        $item_id .= "-$suffix";
-    */
     $item_pageid = "$pageid/$item_id";
     $dir = "$path_prefix$item_pageid";
     // this should not happen, but concurrent blocks addition can lead to such behaviour
@@ -89,13 +82,6 @@ function xcms_draw_contlist_create($result = true)
     <form method="post">
 
     <table>
-        <!--
-        <tr>
-            <td>Служебное имя</td>
-            <td><?php xcmst_control_admin("name-suffix", XCMS_FROM_POST,
-                "new-info-block"); ?></td>
-        </tr>
-        -->
         <tr>
             <td>Заголовок</td>
             <td><?php xcmst_control_admin("header", XCMS_FROM_POST,
