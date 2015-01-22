@@ -71,7 +71,7 @@ function xsm_get_fields($table_name)
                 "name"=>"Отчество",
             ),
             "nick_name"=>array(
-                "name"=>"Кличка",
+                "name"=>"Ник",
             ),
 
             "birth_date"=>array(

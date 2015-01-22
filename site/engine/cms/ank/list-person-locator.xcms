@@ -89,7 +89,8 @@ function xsm_show_all_person_list()
         $cond .= " AND $name_filter_cond";
 
     $query = "SELECT
-        p.person_id, p.last_name, p.first_name,
+        p.person_id,
+        p.last_name, p.first_name, p.patronymic, p.nick_name,
         p.school, p.school_city, p.current_class,
         p.phone, p.cellular,
         p.email, p.skype, p.social_profile,
@@ -147,8 +148,8 @@ function xsm_show_all_person_list()
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
     {
         $person_id = htmlspecialchars($person["person_id"]);
-        $fi = xsm_fi_enc($person);
-        $person_link = xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID, $fi);
+        $fin = xsm_fin_enc($person);
+        $person_link = xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID, $fin);
 
         $school = htmlspecialchars($person["school"]);
         $school_city = htmlspecialchars($person["school_city"]);

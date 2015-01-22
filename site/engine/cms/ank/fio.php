@@ -17,15 +17,38 @@ function xsm_fio_enc($person)
     return htmlspecialchars(xsm_fio($person));
 }
 
+function xsm_add_nick($person, $result)
+{
+    $nick_name = xcms_get_key_or($person, 'nick_name');
+    if (xu_not_empty($nick_name))
+        $result .= " ($nick_name)";
+    return $result;
+}
+
+/**
+  * Canonical way to obtain FI with nick
+  **/
+function xsm_fin($person)
+{
+    $result = xsm_fi($person);
+    $result = xsm_add_nick($person, $result);
+    return $result;
+}
+/**
+  * HTML-encoded version of @c xsm_fin
+  **/
+function xsm_fin_enc($person)
+{
+    return htmlspecialchars(xsm_fin($person));
+}
+
 /**
   * Canonical way to obtain FIO with nick
   **/
 function xsm_fion($person)
 {
     $result = xsm_fio($person);
-    $nick_name = xcms_get_key_or($person, 'nick_name');
-    if (xu_not_empty($nick_name))
-        $result .= " ($nick_name)";
+    $result = xsm_add_nick($person, $result);
     return $result;
 }
 /**
