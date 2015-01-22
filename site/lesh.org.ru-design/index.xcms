@@ -93,11 +93,13 @@ function xcms_print_related_links()
         $in_xsm = ($alias == "register" && strlen($aparam));
 
         $main_page_id = $pageid;
+        $main_page_alias = $alias;
         ob_start();
         ?><# cms/ #><?php
         $main_page = ob_get_clean();
         // pop page id back
         $pageid = $main_page_id;
+        $alias = $main_page_alias;
         ?>
         <div id="content-text">
             <div class="right-inv">
