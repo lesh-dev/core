@@ -821,7 +821,12 @@ a.h1 {
     color: #4f4f4f;
     padding-top: 10px;
     padding-bottom: 5px;
-    display: inline-block;
+    /*
+        inline is to be able to wrap
+        on floating boxes on the right side, see #870
+    */
+    display: inline;
+
     text-decoration: none;
 }
 
@@ -832,7 +837,11 @@ a.h2 {
     color: #2f8f4f;
     padding-top: 7px;
     padding-bottom: 3px;
-    display: inline-block;
+    /*
+        inline is to be able to wrap
+        on floating boxes on the right side, see #870
+    */
+    display: inline;
     text-decoration: none;
 }
 
