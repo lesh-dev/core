@@ -1,4 +1,7 @@
 <?php
+    require_once("${engine_dir}cms/ank/department.php");
+
+    $show_department_id = xcms_get_persistent_key("list-ank", "show_department_id", XDB_INVALID_ID);
     $show_anketa_status = xsm_get_persistent_enum_key("list-ank", "show_anketa_status", "show_anketa_status_ank");
 ?>
 <span style="position: relative; float: right;">
@@ -37,11 +40,13 @@
     xjs_add_slider('status-help', 'show-status-help');
 </script>
 
-<form method="post" name="filter" id="filter-form" action="list-ank">
-    <span>Фильтр: </span><span class="ankListField">Категория: </span><?php
-    echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_ank"); ?>&nbsp;<?php
-    xsm_draw_fio_filter(); ?>
-    <input type="submit" name="show-person" value="Показать" />
+<form method="post" class="xsm-filter" name="filter" id="filter-form" action="list-ank">
+    <span>Фильтр: </span><?php
+    xsm_draw_department_selector($show_department_id, 'show_department_id', "Все отделения"); ?><i>
+    </i><span class="ankListField">Категория: </span><?php
+    echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_ank"); ?><i>
+    </i><?php xsm_draw_fio_filter(); ?><i>
+    </i><input type="submit" name="show-person" value="Показать" />
 </form>
 
 <div>
@@ -56,12 +61,17 @@
 
 function xsm_show_ank_list()
 {
+    global $show_department_id;
     global $show_anketa_status;
+
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
 
     $db = xdb_get();
 
     $cond = "";
+
+    if ($show_department_id != XDB_INVALID_ID)
+        $cond .= " AND ( department_id = $show_department_id )";
 
     if ($show_anketa_status == "abitur")
         $cond .=
@@ -86,7 +96,10 @@ function xsm_show_ank_list()
 
     $query =
         "SELECT
-        p.person_id, p.last_name, p.first_name, p.patronymic, p.birth_date, p.passport_data,
+        p.person_id,
+        p.department_id,
+        p.last_name, p.first_name, p.patronymic,
+        p.birth_date, p.passport_data,
         p.school, p.school_city, p.ank_class, p.current_class,
         p.phone, p.cellular, p.email, p.skype, p.social_profile,
         p.favourites, p.achievements, p.hobby,
