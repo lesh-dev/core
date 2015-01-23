@@ -59,6 +59,7 @@ function xsm_show_all_person_list()
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
 
     $db = xdb_get();
+    $departments = xdb_get_table_by_pk('department');
 
     $cond = "(1 = 1)";
     if ($show_department_id != XDB_INVALID_ID)
@@ -99,6 +100,7 @@ function xsm_show_all_person_list()
 
     $query = "SELECT
         p.person_id,
+        p.department_id,
         p.last_name, p.first_name, p.patronymic, p.nick_name,
         p.school, p.school_city, p.current_class,
         p.phone, p.cellular,
@@ -142,6 +144,7 @@ function xsm_show_all_person_list()
         <colgroup>
             <col width="3%"/>
             <col width="30%" />
+            <col width="10%" />
             <col width="5%" />
             <col width="55%" />
             <col width="7%"/>
@@ -149,6 +152,7 @@ function xsm_show_all_person_list()
         <thead>
             <th class="ankList">ID</th>
             <th class="ankList">Фамилия, имя</th>
+            <th class="ankList">Отделение</th>
             <th class="ankList">Кл.</th>
             <th class="ankList">Контакты</th>
             <th class="ankList">Info</th>
@@ -157,11 +161,17 @@ function xsm_show_all_person_list()
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
     {
         $person_id = htmlspecialchars($person["person_id"]);
+        $department_id = $person["department_id"];
+        $department_title = $departments[$department_id]["department_title"];
+
         $fin = xsm_fin_enc($person);
         $person_link = xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID, $fin);
 
         $school = htmlspecialchars($person["school"]);
         $school_city = htmlspecialchars($person["school_city"]);
+
+        // css class for departments coloring
+        $dep_class = "dep$department_id";
 
         $current_class = htmlspecialchars($person["current_class"]);
 
@@ -176,6 +186,7 @@ function xsm_show_all_person_list()
         <tr class="<?php echo $row_class; ?>">
             <td class="ankList "><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
             <td class="ankList"><?php echo $person_link; ?></td>
+            <td class="ankList <?php echo $dep_class; ?>"><?php echo $department_title; ?></td>
             <td class="ankList"><?php echo $current_class; ?></td>
             <td class="ankList"><?php echo $contacts; ?></td>
             <td class="ankList status-col"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
