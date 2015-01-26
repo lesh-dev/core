@@ -154,7 +154,7 @@ function xcms_print_related_links()
             <?php
             if (xcms_is_production())
             {?>
-                <# seo/liveinternet #>
+                <# seo/liveinternet 24.6 #>
                 <# seo/yandex_metrika 27728262 #><?php
             }?>
     </div>

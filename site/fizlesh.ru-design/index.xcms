@@ -126,7 +126,7 @@
                         <?php
                         if (xcms_is_production())
                         {?>
-                            <# seo/liveinternet #>
+                            <# seo/liveinternet 24.3 #>
                             <# seo/yandex_metrika 12421258 #><?php
                         }?>
                     </div>
