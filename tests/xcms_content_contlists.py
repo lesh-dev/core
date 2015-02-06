@@ -77,7 +77,7 @@ class XcmsContentContlist(xtest_common.XcmsTest):
         # check alias
         # expected: displayed one block with title
         self.gotoAlias(blockAlias)
-        self.assertElementSubTextById("content-text", blockTitle, "Block title not found after clicking by alias. ")
+        self.assertElementSubTextById("content-header", blockTitle, "Block title not found after clicking by alias. ")
         self.assertElementSubTextById("content-text", blockContentForCheck, "Block content not found after clicking by alias. ")
 
         
