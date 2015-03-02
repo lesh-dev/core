@@ -54,6 +54,7 @@ if ($need)
     }
     if (!$text_defined)
         $text = file_get_contents($source);
+
     //// Обработка синтаксиса
     //// ${prefix} раскрывается в путь до текущего $pageid
     $text = str_replace(
@@ -111,7 +112,7 @@ if ($need)
                 $idata .= "\$_$k = base64_decode(\$_$k);";
             }
             $text = substr($text, 0, $p).
-                "<?php $idata ; include(\"$engine_dir/plugins/dollar/$name.php\"); ?>".
+                "<?php $idata ; include(\"$dir$name.php\"); ?>".
                 substr($text, $l + 1);
         }
     }
@@ -160,6 +161,10 @@ if ($need)
     //// Обработка кавычек-ёлочек
     $text = preg_replace('/([^<]|^)<</s', '\1&laquo;', $text);
     $text = preg_replace('/>>([^>]|$)/s', '&raquo;\1', $text);
+    //// Обработка жирного текста: **bold text**
+    $text = preg_replace('/[*][*](.*?)[*][*]/s', '<b>\1</b>', $text);
+    //// Обработка наклонного текста: //italic text//, ignore http://
+    $text = preg_replace("/''(.*?)''/s", '<i>\1</i>', $text);
     //// Обработка тире и неразрывных пробелов
     $text = str_replace("---", "&#8212;", $text);
     // Попытка что-то сделать с #617
