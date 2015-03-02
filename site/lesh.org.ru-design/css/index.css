@@ -42,6 +42,18 @@ body {
     font-family: "Trebuchet MS", "Helvetica CY", "Luxi Sans", sans-serif;
 }
 
+i {
+    font-style: italic;
+}
+
+b {
+    font-weight: bold;
+}
+
+tt {
+    font-family: monospace;
+}
+
 div#content-header {
     font-size: 18px;
     font-weight: bold;
@@ -843,8 +855,4 @@ a.h2 {
     */
     display: inline;
     text-decoration: none;
-}
-
-i {
-    font-style: italic;
 }
