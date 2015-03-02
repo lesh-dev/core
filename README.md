@@ -1,11 +1,12 @@
 LESh Project
 ============
 This repo contains all the codebase of current http://fizlesh.ru and
-(as planned) http://lesh.org.ru sites guts.
+http://lesh.org.ru sites guts.
 
 Issue Tracker
 =============
 https://dev.fizlesh.ru/lesh/
+
 To gain access please do not hestiate to contact us at dev@fizlesh.ru
 
 Engine
