@@ -37,12 +37,13 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
             hob = "different_hobbies"
             src = "wtf_source"
         else:
-            crapParams = (30, ["multiline"])
+            crapParams = (15, ["multiline"])
             crapFunc = random_crap.randomCrap
-            fav = crapFunc(*crapParams)
-            ach = crapFunc(*crapParams)
-            hob = crapFunc(*crapParams)
-            src = crapFunc(*crapParams)
+            crapEnd = " CRAP_END"
+            fav = crapFunc(*crapParams) + crapEnd
+            ach = crapFunc(*crapParams) + crapEnd
+            hob = crapFunc(*crapParams) + crapEnd
+            src = crapFunc(*crapParams) + crapEnd
         self.inpFav = fmt.format(iteration, fav)
         self.inpAch = fmt.format(iteration, ach)
         self.inpHob = fmt.format(iteration, hob)

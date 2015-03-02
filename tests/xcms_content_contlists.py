@@ -56,9 +56,16 @@ class XcmsContentContlist(xtest_common.XcmsTest):
         
         self.clickElementById("contlist-create-submit")
         self.wait(3)
+        
+        # we are still on admin page.
+        # get generated alias.
+        
+        blockAlias = self.getElementTextById("edit-alias")
+        self.logAdd("Alias: {0}".format(blockAlias))
+        
         self.gotoCloseEditor()
         self.gotoUrlByLinkText(inpMenuTitle)
-        
+             
         dateStr = pageDate.strftime("%d.%m.%Y")
         self.assertElementSubTextById("content-text", dateStr, "Contlist timestamp not found")
         self.assertElementSubTextById("content-text", blockTitle, "Block title not found in rendered cont-list. ")
@@ -66,5 +73,12 @@ class XcmsContentContlist(xtest_common.XcmsTest):
         print self.getElementTextById("content-text")
         print blockContentForCheck
         self.assertElementSubTextById("content-text", blockContentForCheck, "Block content not found in rendered cont-list. ")
+
+        # check alias
+        # expected: displayed one block with title
+        self.gotoAlias(blockAlias)
+        self.assertElementSubTextById("content-header", blockTitle, "Block title not found after clicking by alias. ")
+        self.assertElementSubTextById("content-text", blockContentForCheck, "Block content not found after clicking by alias. ")
+
         
         

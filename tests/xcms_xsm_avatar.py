@@ -25,15 +25,13 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
 
     def run(self):
 
-        testMailPrefix = self.m_conf.getAnketaNamePrefix()
-
         self.performLoginAsManager()
 
         self.gotoXsmAllPeople()
         self.gotoXsmAddPerson()
 
         # generate
-        inpLastName = testMailPrefix + u"Аватаров" + random_crap.randomText(5)
+        inpLastName = u"Аватаров" + random_crap.randomText(5)
         inpFirstName = u"Петр_" + random_crap.randomText(3)
         inpMidName = u"Палыч_" + random_crap.randomText(3)
         inpSocial = "http://vk.com/vdm_p"

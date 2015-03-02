@@ -144,15 +144,19 @@ try:
 
     tests = testSetModule.getTests(baseUrl, testArgs)
 
-    if not doInstallerTest and tests:
-        print "Skipping installer test. "
-        tests.pop(0)
+    # save installer test
+    installerTest = None
+    if tests:
+        installerTest = tests.pop(0)
 
     failedTests = []
   
     tests = [x for x in tests if testMatchFilter(*x, testFilter=specTest)]
     if specTest and not tests:
         raise TestSuiteError("Specified test was not found in test suite. ")
+    
+    if doInstallerTest:
+        tests.insert(0, installerTest)
         
     # init detailed stats
     for (fileName, test) in tests:

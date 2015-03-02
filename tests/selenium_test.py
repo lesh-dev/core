@@ -320,7 +320,6 @@ class SeleniumTest(object):
             actionMsg += (" comment: " + userSerialize(comment) + " ")
         self.addAction("navigate", actionMsg)
         self.m_driver.get(fullUrl)
-
         self.checkPageErrors()
         self.check404()
 
@@ -813,7 +812,29 @@ class SeleniumTest(object):
         self.failTest("Unsolvable cache problem in checkTextPresent. XPath: " + userSerialize(xpath) + ", text: " + wrapIfLong(userSerialize(text)) + ". ")
 
     def checkSourceTextPresent(self, text, optionList=[]):
-        return self.checkTextPresent("//*", text, optionList=optionList)
+        eleText = self.getPageSource()
+        serOpt = ["cut_strings"]
+
+        if not self.isStopWord(text) and "silent" not in optionList:
+            self.logAdd(
+                "checkSourceTextPresent: text: " +
+                wrapIfLong(userSerialize(eleText, serOpt).replace("\n", " ")) + ". "
+            )
+
+        if isList(text):
+            for phrase in text:
+                if phrase in eleText:
+                    self.logAdd("checkSourceTextPresent: found phrase " + userSerialize(phrase) + " on page. ")
+                    return True
+            if "silent" not in optionList:
+                self.logAdd("checkSourceTextPresent: NOT found any of " + userSerialize(text) + " on page. ")
+            return False
+        else:
+            bFound = text in eleText
+            particle = "" if bFound else "NOT "
+            if not self.isStopWord(text):
+                self.logAdd("checkSourceTextPresent: " + particle + "found text " + userSerialize(text) + " on page. ")
+            return bFound
 
     def checkBodyTextPresent(self, text, optionList=[]):
         return self.checkTextPresent("/html/body", text, optionList=optionList)
@@ -853,10 +874,16 @@ class SeleniumTest(object):
         return self.assertTextNotPresent("/html/body", text, reason)
 
     def assertSourceTextPresent(self, text, reason=""):
-        return self.assertTextPresent("//*", text, reason)
+        if not self.checkSourceTextPresent(text):
+            self.failTest(
+                "Text " + userSerialize(text) + " not found on page " + userSerialize(self.curUrl()) +
+                ". " + self.displayReason(reason)
+            )
 
     def assertSourceTextNotPresent(self, text, reason=""):
-        return self.assertTextNotPresent("//*", text, reason)
+        if self.checkSourceTextPresent(text):
+            errText = "Forbidden text " + userSerialize(text) + " found on page " + userSerialize(self.curUrl()) + ". " + self.displayReason(reason)
+            self.failTest(errText)
 
     def checkEmptyParam(self, stringOrList, methodName):
         if isList(stringOrList):
