@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+
 class XcmsTestConfig:
     def __init__(self):
         self.m_adminLogin = "root"
@@ -31,12 +32,13 @@ class XcmsTestConfig:
     def getForgottenPasswordCaptcha(self):
         return u"ампер"
 
-    def getValidEmail1(self):
-        return "testsite001@fizlesh.ru"
-
-    def getValidEmail2(self):
-        return "testsite002@fizlesh.ru"
+    def getValidEmail(self, email_id=1):
+        if email_id == 1:
+            return "testsite001@fizlesh.ru"
+        elif email_id == 2:
+            return "testsite002@fizlesh.ru"
+        elif email_id == 'mail.ru':
+            return "m.velt@mail.ru"
 
     def getTestSchoolName(self):
         return u"ЛЭШ-2013"
-

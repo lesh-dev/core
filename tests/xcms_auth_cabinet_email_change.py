@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
+import random_crap
+
 
 class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
     """
@@ -31,53 +33,53 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         print "logging as first created user. "
         if not self.performLogin(inpLogin1, inpPass1):
             self.failTest("Cannot login as newly created first user. ")
-        
+
         self.gotoCabinet()
 
         print "test good email"
-        newGoodEMail = self.m_conf.getValidEmail2()
-        
+        newGoodEMail = self.m_conf.getValidEmail(2)
+
         newGoodEMail = self.fillElementById("email-input", newGoodEMail)
         self.clickElementById("update_me")
 
         badMailMsg = u"пользователь с такой почтой"
         dataUpdatedMsg = u"Данные обновлены успешно"
-        
+
         self.assertBodyTextNotPresent(badMailMsg)
         self.assertBodyTextNotPresent("exception")
         self.assertBodyTextPresent(dataUpdatedMsg)
-        
+
         print "Ok. Please check your mailbox for notification. "
 
         print "test another good random email"
         newGoodEMail = random_crap.randomEmail()
-        
+
         newGoodEMail = self.fillElementById("email-input", newGoodEMail)
         self.clickElementById("update_me")
 
         self.assertBodyTextNotPresent(badMailMsg)
         self.assertBodyTextNotPresent("exception")
         self.assertBodyTextPresent(dataUpdatedMsg)
-    
+
         print "And now test bad e-mail. "
-        
+
         newBadEMail = inpEMail2
-        
+
         newBadEMail = self.fillElementById("email-input", newBadEMail)
         self.clickElementById("update_me")
-        
+
         self.assertBodyTextPresent(badMailMsg)
         self.assertBodyTextNotPresent("exception")
         self.assertBodyTextNotPresent(dataUpdatedMsg)
 
         self.performLogoutFromAdminPanel()
-        
+
         print "logging as first created user again. "
         if not self.performLogin(inpLogin1, inpPass1):
             self.failTest("Cannot login again as newly created first user. ")
-        
+
         self.gotoCabinet()
-        
+
         self.assertElementValueById("email-input", newGoodEMail, "Email should remain unchanged after 1st change")
 
         self.performLogoutFromAdminPanel()
