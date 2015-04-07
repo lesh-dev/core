@@ -843,6 +843,12 @@ class SeleniumTest(object):
         self.logAdd("TEST FATAL ERROR: " + userSerialize(errorText), "fatal")
         raise TestFatal(errorText)
 
+    def assertEqual(self, got_value, expected_value, error_text):
+        if got_value != expected_value:
+            error_text += "Expected '" + expected_value + "', got '" + got_value + "'. "
+            self.logAdd("TEST FAILED: " + userSerialize(error_text), "error")
+        raise TestError(error_text)
+
     def failTest(self, errorText):
         self.logAdd("TEST FAILED: " + userSerialize(errorText), "error")
         raise TestError(errorText)

@@ -1,7 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+
+import xtest_common
+import random_crap
+
 
 class XcmsAuthAddNewUser(xtest_common.XcmsTest):
     """
@@ -41,7 +44,7 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         if self.performLogin(inpLogin, "wrong_pass" + inpPass):
             self.failTest("I'm able to login with incorrect password. Auth is broken. ")
 
-#       self.assertBodyTextPresent(u"Пароль всё ещё неверный"); already checked inside
+        #self.assertBodyTextPresent(u"Пароль всё ещё неверный"); already checked inside
 
         # and now, test bug with remaining cookies:
         # we navigate to root page, and see auth panel!
@@ -84,19 +87,17 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         # TODO: BUG, make separate links
 
         self.gotoUrlByPartialLinkText(inpLogin)
-        
+
         self.assertBodyTextPresent(self.getWelcomeMessage(inpLogin))
 
         nameEle = "name-input"
         emailEle = "email-input"
 
         currentDisplayName = self.getElementValueById(nameEle)
-        if currentDisplayName != inpName:
-            self.failTest("Display name in user profile does not match name entered on user creation. Expected: '" + inpName + "', got '" + currentDisplayName + "'. ")
+        self.assertEqual(currentDisplayName, inpName, "Display name in user profile does not match name entered on user creation. ")
 
         currentEMail = self.getElementValueById(emailEle)
-        if currentEMail != inpEMail:
-            self.failTest("User e-mail in user profile does not match e-mail entered on user creation. Expected: '" + inpEMail + "', got '" + currentEMail + "'. ")
+        self.assertEqual(currentEMail, inpEMail, "User e-mail in user profile does not match e-mail entered on user creation. ")
 
         newName = u"Петя Иванов" + random_crap.randomText(6)
         newEMail = random_crap.randomEmail()
@@ -121,13 +122,7 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         self.assertBodyTextPresent(u"Привет, " + inpLogin)
 
         currentDisplayName = self.getElementValueById(nameEle)
-        if currentDisplayName != newName:
-            self.failTest("Display name in user profile does not match changed user name. Expected: '" + newName + "', got '" + currentDisplayName + "'. ")
+        self.assertEqual(currentDisplayName, newName, "Display name in user profile does not match changed user name. ")
 
         currentEMail = self.getElementValueById(emailEle)
-        if currentEMail != newEMail:
-            self.failTest("User e-mail in user profile does not match changed user e-mail. Expected: '" + newEMail + "', got '" + currentEMail + "'. ")
-
-
-
-
+        self.assertEqual(currentEMail, newEMail, "User e-mail in user profile does not match changed user e-mail. ")
