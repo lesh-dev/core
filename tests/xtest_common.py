@@ -261,7 +261,7 @@ class XcmsTest(XcmsTestWithConfig):
         self.assertNoInstallerPage()
         #xtest_common.setTestNotifications(self, self.m_conf.getNotifyEmail(), self.m_conf.getAdminLogin(), self.m_conf.getAdminPass())
 
-    def createNewUser(self, login, email, password, name, auxParams = []):
+    def createNewUser(self, login, email, password, name, auxParams=[]):
         self.logAdd("createNewUser( login: " + login + "', email: " + email + ", password: " + password + ", name: " + name + " )")
 
         if not "do_not_login_as_admin" in auxParams:
@@ -297,9 +297,7 @@ class XcmsTest(XcmsTestWithConfig):
             # set manager access level
             self.clickElementById("group_ank-checkbox")
 
-
         self.clickElementByName("create_user")
-
 
         if "do_not_validate" in auxParams:
             self.logAdd("not validating created user, just click create button and shut up. ")
@@ -336,8 +334,33 @@ class XcmsTest(XcmsTestWithConfig):
 
         return inpLogin, inpEMail, inpPass, inpName
 
-    # set email to user (by admin panel)
-    def setUserEmailByAdmin(self, login, email, auxParams = []):
+    def removePreviousUsersWithTestEmail(self, emailToDelete):
+
+        self.performLoginAsAdmin()
+        self.gotoAdminPanel()
+        self.gotoUserList()
+
+        while True:
+            try:
+                userUrl = self.getUrlByLinkText(emailToDelete, ["partial"])
+                self.logAdd("Test user found, removing it. ")
+                self.gotoSite(userUrl)
+                self.clickElementById("check_delete_user")
+                self.assertBodyTextPresent(u"Вы точно уверены, что хотите удалить этого пользователя?")
+                self.clickElementById("delete_user")
+                self.assertBodyTextPresent(u"Пользователь удалён.")
+
+            except selenium_test.ItemNotFound:
+                self.logAdd("Users with test email not found, continuing. ")
+                break
+
+        self.logAdd("Test users (old crap) removed, logging out. ")
+        self.performLogoutFromAdminPanel()
+
+    def setUserEmailByAdmin(self, login, email, auxParams=[]):
+        """
+            Set email to user (by admin panel)
+        """
         self.logAdd("setEmailToUserByAdmin( login: " + login + "', email: " + email + " )")
 
         self.logAdd("setUserEmailByAdmin: updating email for user '" + login + "' to '" + email + ". ")

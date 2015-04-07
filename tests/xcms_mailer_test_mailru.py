@@ -20,9 +20,11 @@ class XcmsMailerTestMailRu(xtest_common.XcmsTest):
     def run(self):
         self.gotoRoot()
 
+        inpEMail = self.m_conf.getValidEmail('mail.ru')
+        self.removePreviousUsersWithTestEmail(inpEMail)
+
         # first, login as admin
         inpLogin = "an_mailru_user_" + random_crap.randomText(8)
-        inpEMail = self.m_conf.getValidEmail('mail.ru')
         inpPass = random_crap.randomText(10)
         inpName = u"Вася Пупкин" + random_crap.randomText(6)
 

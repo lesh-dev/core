@@ -3,7 +3,7 @@
 
 import xtest_common
 import random_crap
-import selenium_test
+#import selenium_test
 
 
 class XcmsAuthForgotPassword(xtest_common.XcmsTest):
@@ -21,40 +21,15 @@ class XcmsAuthForgotPassword(xtest_common.XcmsTest):
     * test auto-gen password (manually)
     """
 
-    def removePreviousUsersWithTestEmails(self):
-
-        self.performLoginAsAdmin()
-        self.gotoAdminPanel()
-        self.gotoUserList()
-
-        emailToDelete = self.m_conf.getValidEmail(1)
-
-        while True:
-            try:
-                userUrl = self.getUrlByLinkText(emailToDelete, ["partial"])
-                self.logAdd("Test user found, removing it. ")
-                self.gotoSite(userUrl)
-                self.clickElementById("check_delete_user")
-                self.assertBodyTextPresent(u"Вы точно уверены, что хотите удалить этого пользователя?")
-                self.clickElementById("delete_user")
-                self.assertBodyTextPresent(u"Пользователь удалён.")
-
-            except selenium_test.ItemNotFound:
-                self.logAdd("Users with test email not found, continuing. ")
-                break
-
-        self.logAdd("Test users (old crap) removed, logging out. ")
-        self.performLogoutFromAdminPanel()
-
     def run(self):
         self.gotoRoot()
 
-        self.removePreviousUsersWithTestEmails()
+        inpEMail = self.m_conf.getValidEmail(1)
+
+        self.removePreviousUsersWithTestEmail(inpEMail)
 
         # create new user with ruined memory
         inpLogin = "oblivion_" + random_crap.randomText(6)
-
-        inpEMail = self.m_conf.getValidEmail(1)
 
         inpPass = random_crap.randomText(10)
         inpName = u"Ruined_Memory_" + random_crap.randomText(6)
