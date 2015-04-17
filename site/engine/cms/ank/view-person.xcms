@@ -35,8 +35,8 @@ function xsm_draw_list_link($person_id, $school_id)
         $aux_param = xcms_url(array('school_id'=>$school_id));
     $anchor = "#person$person_id";
     $url = $view.$aux_param.$anchor;
-    ?><a class="person-to-list" href="<?php echo $url; ?>">К списку
-        <?php echo $target; ?></a><?php
+    ?><a class="person-to-list" href="<?php echo $url; ?>">К&nbsp;списку&nbsp;<?php
+        echo $target; ?></a><?php
 }
 
 function xsm_print_person_header($db, $person, $school_id)
