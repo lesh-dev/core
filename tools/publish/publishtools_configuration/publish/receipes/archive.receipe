@@ -19,67 +19,71 @@ function hook_begin
     mkdir -p $target
 }
 
+function _archive_directory()
+{
+    name="$1"
+    echo "Archiving $name ..."
+    ARC_NAME="$(basename $name)"
+    DIR_NAME="$(dirname $name)"
+    tar czf "$DIR_NAME/arc-$ARC_NAME.tgz" "$name"
+    rm -rf "$name"
+}
+
 # This will be executed while publishing component end
 function hook_end
 {
 
     echo "Archiving production copies..."
 
-    for i in $clone_root/production.last-*; do
-        if [ "$(readlink $clone_root/production)" == "$i" ]; then
-            echo "Skipping real production: $i"
-            continue
-        fi
-        if [ "$(readlink $clone_root/production_muted)" == "$i" ]; then
-            echo "Skipping muted production: $i"
-            continue
-        fi
-        if [ "$(readlink $clone_root/production.last)" == "$i" ]; then
-            echo "Skipping 'final': $i"
-            continue
-        fi
-        echo "Archiving $i ..."
-        ARC_NAME="`basename $i`"
-        DIR_NAME="`dirname $i`"
-        tar czf "$DIR_NAME/arc-$ARC_NAME.tgz" "$i"
-        rm -rf "$i"
-    done
+    if [ -e $clone_root/production.last-* ] ; then
+        for i in $clone_root/production.last-* ; do
+            if [ "$(readlink $clone_root/production)" == "$i" ]; then
+                echo "Skipping real production: $i"
+                continue
+            fi
+            if [ "$(readlink $clone_root/production_muted)" == "$i" ]; then
+                echo "Skipping muted production: $i"
+                continue
+            fi
+            if [ "$(readlink $clone_root/production.last)" == "$i" ]; then
+                echo "Skipping 'final': $i"
+                continue
+            fi
+            _archive_directory "$i"
+        done
+    fi
 
     echo "Archiving pre-production copies..."
 
-    for i in $clone_root/preprod-*; do
-        if [ "$(readlink $clone_root/preprod)" == "$i" ]; then
-            echo "Skipping preprod: $i"
-            continue
-        fi
-        echo "Archiving $i ..."
-        ARC_NAME="`basename $i`"
-        DIR_NAME="`dirname $i`"
-        tar czf "$DIR_NAME/arc-$ARC_NAME.tgz" "$i"
-        rm -rf "$i"
-    done
+    if [ -e $clones_root/preprod-* ] ; then
+        for i in $clone_root/preprod-* ; do
+            if [ "$(readlink $clone_root/preprod)" == "$i" ]; then
+                echo "Skipping preprod: $i"
+                continue
+            fi
+            _archive_directory "$i"
+        done
+    fi
 
     echo "Archiving frozen copies..."
 
-    for i in $clone_root/freeze-*; do
-        if [ "$(readlink $clone_root/production)" == "$i" ]; then
-            echo "Skipping real production's frost: $i"
-            continue
-        fi
-        if [ "$(readlink $clone_root/production_muted)" == "$i" ]; then
-            echo "Skipping mute production's frost: $i"
-            continue
-        fi
-        if [ "$(readlink $clone_root/freeze)" == "$i" ]; then
-            echo "Skipping current frost: $i"
-            continue
-        fi
-        echo "Archiving $i ..."
-        ARC_NAME="`basename $i`"
-        DIR_NAME="`dirname $i`"
-        tar czf "$DIR_NAME/arc-$ARC_NAME.tgz" "$i"
-        rm -rf "$i"
-    done
+    if [ -e $clone_root/freeze-* ] ; then
+        for i in $clone_root/freeze-* ; do
+            if [ "$(readlink $clone_root/production)" == "$i" ]; then
+                echo "Skipping real production's frost: $i"
+                continue
+            fi
+            if [ "$(readlink $clone_root/production_muted)" == "$i" ]; then
+                echo "Skipping mute production's frost: $i"
+                continue
+            fi
+            if [ "$(readlink $clone_root/freeze)" == "$i" ]; then
+                echo "Skipping current frost: $i"
+                continue
+            fi
+            _archive_directory "$1"
+        done
+    fi
 
     echo "Total space used by clones:"
     du -hs $clone_root
