@@ -17,23 +17,33 @@ function xsm_school_list()
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
             <col width="60" />
-            <col width="100%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="70%" />
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
             <th class="ankList">Название</th>
+            <th class="ankList">&nbsp;</th>
+            <th class="ankList">&nbsp;</th>
         </thead>
     <?php
     while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
     {
         $school_id = htmlspecialchars($school["school_id"]);
+
+        $member_count_info = xdb_fetch_one($db, "SELECT COUNT(*) AS member_count FROM person_school ps WHERE ps.school_id = $school_id");
+        $member_count = xcms_get_key_or($member_count_info, "member_count", "0");
+
         $school_title = htmlspecialchars($school["school_title"]);
-        $school_url = "view-school".xcms_url(array('school_id'=>$school_id));
+        $school_view_url = "view-school".xcms_url(array('school_id'=>$school_id));
+        $school_members_url = "list-person".xcms_url(array('school_id'=>$school_id));
         ?>
         <tr>
             <td class="ankList"><?php echo $school_id; ?></td>
-            <td class="ankList"><a href="<?php echo $school_url; ?>"><?php
-                echo $school_title; ?></a></td>
+            <td class="ankList"><?php echo $school_title; ?></td>
+            <td class="ankList"><a href="<?php echo $school_view_url; ?>">Просмотр</a></td>
+            <td class="ankList"><a href="<?php echo $school_members_url; ?>">Участники (<?php echo $member_count; ?>)</a></td>
         </tr><?php
     }
     ?></table><?php

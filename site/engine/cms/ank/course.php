@@ -176,27 +176,21 @@ function xsm_print_courses_selected_school(
         // css class for departments coloring
         $dep_class = "dep".$course["main_department_id"];
 
-        // FIXME:PERF 3*N SELECT-ов
         // до кучи посчитаем количество сдавших
-        $exam_passed_sel = $db->query(
-            "SELECT
-            COUNT(*) AS pass_count from exam
+        // FIXME:PERF 3*N SELECT-ов
+        $exam_pass_data = xdb_fetch_one(
+            "SELECT COUNT(*) AS pass_count from exam
             WHERE
             (course_id = '$course_id') AND
             (exam_status = 'passed')"
         );
-        $exam_pass_count = 0;
-        if ($exam_pass_data = $exam_passed_sel->fetchArray(SQLITE3_ASSOC))
-            $exam_pass_count = $exam_pass_data['pass_count'];
-        $exam_total_sel = $db->query(
-            "SELECT
-            COUNT(*) AS total_count from exam
+        $exam_pass_count = xcms_get_key_or($exam_pass_data, "pass_count", 0);
+        $exam_total_data = xdb_fetch_one(
+            "SELECT COUNT(*) AS total_count from exam
             WHERE
             (course_id = '$course_id')"
         );
-        $exam_total_count = 0;
-        if ($exam_total_data = $exam_total_sel->fetchArray(SQLITE3_ASSOC))
-            $exam_total_count = $exam_total_data['total_count'];
+        $exam_total_count = xcms_get_key_or($exam_total_data, "total_count", 0);
         $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
 
         if (!$simple_view)

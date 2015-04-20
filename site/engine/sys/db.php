@@ -250,6 +250,17 @@
         return $result;
     }
 
+    function xdb_fetch_one($db, $query)
+    {
+        $sel = $db->query($query);
+        if (!($info = $sel->fetchArray(SQLITE3_ASSOC)))
+        {
+            xcms_log(XLOG_ERROR, "[DB] Cannot fetch with query: $query.");
+            return array();
+        }
+        return $info;
+    }
+
     /**
       * UTF8-friendly LIKE operator for SQLite database
       * @note this function is for INTERNAL use only
