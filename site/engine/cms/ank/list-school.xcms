@@ -17,13 +17,15 @@ function xsm_school_list()
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
             <col width="60" />
-            <col width="15%" />
-            <col width="15%" />
+            <col width="10%" />
+            <col width="10%" />
+            <col width="10%" />
             <col width="70%" />
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
             <th class="ankList">Название</th>
+            <th class="ankList">&nbsp;</th>
             <th class="ankList">&nbsp;</th>
             <th class="ankList">&nbsp;</th>
         </thead>
@@ -32,15 +34,18 @@ function xsm_school_list()
     {
         $school_id = htmlspecialchars($school["school_id"]);
         $member_count = xdb_count($db, "SELECT COUNT(*) AS cnt FROM person_school ps WHERE ps.school_id = $school_id");
+        $course_count = xdb_count($db, "SELECT COUNT(*) AS cnt FROM course c WHERE c.school_id = $school_id");
         $school_title = htmlspecialchars($school["school_title"]);
         $school_view_url = "view-school".xcms_url(array('school_id'=>$school_id));
         $school_members_url = "list-person".xcms_url(array('school_id'=>$school_id));
+        $school_courses_url = "list-course".xcms_url(array('school_id'=>$school_id));
         ?>
         <tr>
             <td class="ankList"><?php echo $school_id; ?></td>
             <td class="ankList"><?php echo $school_title; ?></td>
             <td class="ankList"><a href="<?php echo $school_view_url; ?>">Просмотр</a></td>
             <td class="ankList"><a href="<?php echo $school_members_url; ?>">Участники (<?php echo $member_count; ?>)</a></td>
+            <td class="ankList"><a href="<?php echo $school_courses_url; ?>">Курсы (<?php echo $course_count; ?>)</a></td>
         </tr><?php
     }
     ?></table><?php
