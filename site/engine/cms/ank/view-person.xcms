@@ -378,17 +378,14 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
     $school_title = xcms_get_key_or_enc($school, 'school_title');
     $school_url = "list-person".xcms_url(array('school_id'=>$school_id));
 
-    $query_count =
-        "SELECT COUNT(*) AS exams_passed
+    $exams_passed = xdb_count($db,
+        "SELECT COUNT(*) AS cnt
         FROM course c, exam e WHERE
         (c.school_id = $school_id) AND
         (e.course_id = c.course_id) AND
         (e.student_person_id = $person_id) AND
-        (e.exam_status = 'passed')";
-    $exam_sel = $db->query($query_count);
-    $exams_passed = 0;
-    while ($exam_data = $exam_sel->fetchArray(SQLITE3_ASSOC))
-        $exams_passed = (integer)($exam_data["exams_passed"]);
+        (e.exam_status = 'passed')"
+    );
 
     $query =
         "SELECT

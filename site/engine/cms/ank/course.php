@@ -178,19 +178,8 @@ function xsm_print_courses_selected_school(
 
         // до кучи посчитаем количество сдавших
         // FIXME:PERF 3*N SELECT-ов
-        $exam_pass_data = xdb_fetch_one(
-            "SELECT COUNT(*) AS pass_count from exam
-            WHERE
-            (course_id = '$course_id') AND
-            (exam_status = 'passed')"
-        );
-        $exam_pass_count = xcms_get_key_or($exam_pass_data, "pass_count", 0);
-        $exam_total_data = xdb_fetch_one(
-            "SELECT COUNT(*) AS total_count from exam
-            WHERE
-            (course_id = '$course_id')"
-        );
-        $exam_total_count = xcms_get_key_or($exam_total_data, "total_count", 0);
+        $exam_pass_count = xdb_count($db, "SELECT COUNT(*) AS cnt FROM exam WHERE (course_id = '$course_id') AND (exam_status = 'passed')");
+        $exam_total_count = xdb_count($db, "SELECT COUNT(*) AS cnt FROM exam WHERE (course_id = '$course_id')");
         $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
 
         if (!$simple_view)

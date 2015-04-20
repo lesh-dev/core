@@ -175,8 +175,8 @@ function xsm_show_person_list($school_id)
         $person_created = xsm_ymdhm($person["person_created"]);
         $person_modified = xsm_ymdhm($person["person_modified"]);
 
-        $exam_passed_sel = $db->query("SELECT
-            COUNT(*) AS courses_passed
+        $courses_passed = xdb_count($db, "SELECT
+            COUNT(*) AS cnt
             FROM exam e, course c
             WHERE
             (e.student_person_id = $person_id) AND
@@ -184,10 +184,6 @@ function xsm_show_person_list($school_id)
             (e.course_id = c.course_id) AND
             (e.exam_status = 'passed')"
         );
-        $courses_passed = 0;
-        if ($exam_pass_data = $exam_passed_sel->fetchArray(SQLITE3_ASSOC))
-            $courses_passed = $exam_pass_data['courses_passed'];
-
         $course_ratio = ($courses_needed > 0) ? ($courses_passed / $courses_needed) : -1;
 
         $hr_course_progress = "$courses_passed&nbsp;/&nbsp;$courses_needed";

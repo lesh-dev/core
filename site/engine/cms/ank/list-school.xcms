@@ -31,10 +31,7 @@ function xsm_school_list()
     while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
     {
         $school_id = htmlspecialchars($school["school_id"]);
-
-        $member_count_info = xdb_fetch_one($db, "SELECT COUNT(*) AS member_count FROM person_school ps WHERE ps.school_id = $school_id");
-        $member_count = xcms_get_key_or($member_count_info, "member_count", "0");
-
+        $member_count = xdb_count($db, "SELECT COUNT(*) AS cnt FROM person_school ps WHERE ps.school_id = $school_id");
         $school_title = htmlspecialchars($school["school_title"]);
         $school_view_url = "view-school".xcms_url(array('school_id'=>$school_id));
         $school_members_url = "list-person".xcms_url(array('school_id'=>$school_id));

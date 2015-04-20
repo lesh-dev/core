@@ -250,15 +250,29 @@
         return $result;
     }
 
+    /**
+      * Selects first fetched object
+      **/
     function xdb_fetch_one($db, $query)
     {
         $sel = $db->query($query);
-        if (!($info = $sel->fetchArray(SQLITE3_ASSOC)))
+        if (!($obj = $sel->fetchArray(SQLITE3_ASSOC)))
         {
-            xcms_log(XLOG_ERROR, "[DB] Cannot fetch with query: $query.");
+            xcms_log(XLOG_ERROR, "[DB] Cannot fetch object using query: $query.");
             return array();
         }
-        return $info;
+        return $obj;
+    }
+
+    /**
+      * Shortcut for SELECT COUNT(*) requests
+      **/
+    function xdb_count($db, $query)
+    {
+        $obj = xdb_fetch_one($db, $query);
+        if (!$obj)
+            return 0;
+        return (integer)(xcms_get_key_or($obj, "cnt", "0"));
     }
 
     /**
