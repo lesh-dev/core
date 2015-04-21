@@ -304,7 +304,7 @@ function xsm_social_profile_link($social_profile)
     $title = $social_profile;
     $title = str_replace("http://", "", $title);
     $title = str_replace("https://", "", $title);
-    return "<a href=\"$social_profile\">$title</a>";
+    return "<a target=\"_blank\" href=\"$social_profile\">$title</a>";
 }
 
 /**
