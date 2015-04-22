@@ -23,6 +23,11 @@ X Engine consists of several parts:
 Also, this repo hosts design and layout of
 http://fizlesh.ru and http://lesh.org.ru sites.
 
+Installation/Deploy
+===================
+Read this (fine) manual:
+https://dev.fizlesh.ru/lesh/wiki/XcmsInstallation
+
 Authors and Contributors
 ========================
 Alexander Trousevitch <trousev@yandex.ru>
