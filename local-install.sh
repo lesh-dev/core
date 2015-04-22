@@ -70,7 +70,7 @@ if [ -z "$user" ] ; then
 fi
 message "User detected: $user"
 
-if [ "$user" == "mvel" ] ; then
+if [ "$user" == "mvel" ] || [ "$user" == "bird" ] ; then
     if grep -q Ubuntu /etc/*release ; then
         message "Switching to Ubuntu"
         HTTPD_USER=www-data
@@ -81,14 +81,14 @@ fi
 if [ -z "$DEST_NAME" ] ; then
     # default site location
     DEST_NAME="site"
-    if [ "$user" == "mvel" ] ; then
+    if [ "$user" == "mvel" ] || [ "$user" == "bird" ] ; then
         DEST_NAME="fizlesh.ru"
     fi
 fi
 
 # folder with content repo
 REPO_NAME="content-fizlesh.ru"
-if [ "$user" == "mvel" ] ; then
+if [ "$user" == "mvel" ] || [ "$user" == "bird" ] ; then
     REPO_NAME="content-$DEST_NAME"
 fi
 
@@ -97,7 +97,7 @@ CONT_DIR="../$REPO_NAME/content"
 
 # installed content folder name
 DEST_CONT="fizlesh.ru-content"
-if [ "$user" == "mvel" ] ; then
+if [ "$user" == "mvel" ] || [ "$user" == "bird" ] ; then
     DEST_CONT="$DEST_NAME-content"
 fi
 
@@ -179,7 +179,7 @@ function xcms_version_css()
 
 # site root
 DEST="/var/www/html/$DEST_NAME"
-if [ "$user" == "mvel" ] ; then
+if [ "$user" == "mvel" ] || [ "$user" == "bird" ] ; then
     DEST="/var/www/vhosts/$DEST_NAME"
 fi
 
