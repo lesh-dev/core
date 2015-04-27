@@ -9,6 +9,16 @@ function xcms_check_mod_rewrite()
     return (getenv('HTTP_MOD_REWRITE') == 'On');
 }
 
+function xcms_check_mod_headers()
+{
+    if (function_exists('apache_get_modules'))
+    {
+        $modules = apache_get_modules();
+        return in_array('mod_headers', $modules);
+    }
+    return false;
+}
+
 function xcms_check_curl()
 {
     return function_exists('curl_init');
@@ -121,11 +131,18 @@ class InstallerInstallHook
         if (!xcms_check_mod_rewrite())
             return
             "<p>Apache <b><tt>mod_rewrite</tt></b> module is not enabled.<br/>".
-            "Please enable it in your Apache webserver configuration.</p>";
+            "Please enable it in your Apache webserver configuration.</p>".
+            "<pre>sudo a2enmod rewrite</pre>";
 
         if (!xcms_check_curl())
             return
             "<p>Please install <b><tt>curl</tt></b> module for PHP (e.g. <b><tt>php5-curl</tt></b> package).</p>";
+
+        if (!xcms_check_mod_headers())
+            return
+            "<p>Apache <b><tt>mod_headers</tt></b> module is not enabled or not installed.<br/>".
+            "Please enable it in your Apache webserver configuration.</p>".
+            "<pre>sudo a2enmod headers</pre>";
 
         if (!xcms_check_allow_override())
             return
