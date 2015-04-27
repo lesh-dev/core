@@ -251,7 +251,10 @@
     }
 
     /**
-      * Selects first fetched object
+      * Selects first fetched object.
+      * Useful when query should typicaly return one record or less.
+      * @param $db database handle
+      * @param $query query
       **/
     function xdb_fetch_one($db, $query)
     {
