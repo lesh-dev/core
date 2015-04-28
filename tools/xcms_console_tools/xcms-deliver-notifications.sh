@@ -7,8 +7,10 @@ if [ -n "$1" ] ; then
     XCMS_HOME="$1"
 fi
 
-su www-data -c "php /srv/tools/git-working-copy/tools/xcms_console_tools/xcms.php 'basedir=$XCMS_HOME' deliver-notifications 'mail-group=reg'"
+console_cmd="php /srv/tools/git-working-copy/tools/xcms_console_tools/xcms.php"
+
+su www-data -c "$console_cmd 'basedir=$XCMS_HOME' deliver-notifications 'mail-group=reg'"
 sleep 1m
-su www-data -c "php /srv/tools/git-working-copy/tools/xcms_console_tools/xcms.php 'basedir=$XCMS_HOME' deliver-notifications 'mail-group=content-change'"
+su www-data -c "$console_cmd 'basedir=$XCMS_HOME' deliver-notifications 'mail-group=content-change'"
 sleep 1m
-su www-data -c "php /srv/tools/git-working-copy/tools/xcms_console_tools/xcms.php 'basedir=$XCMS_HOME' deliver-notifications 'mail-group=ctx'"
+su www-data -c "$console_cmd 'basedir=$XCMS_HOME' deliver-notifications 'mail-group=ctx'"
