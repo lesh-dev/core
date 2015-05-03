@@ -10,6 +10,10 @@
             $mail_group = $params["mail-group"];
             xcms_deliver_notifications($mail_group);
         }
+        elseif ($command == "xsm-ank-reminder")
+        {
+            xsm_ank_reminder();
+        }
     }
 
     $params = array();
