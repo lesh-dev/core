@@ -101,7 +101,12 @@
         if ($to_compile)
         {
             xcms_log(XLOG_INFO, "[COMPILER] Compiling '$filename'");
-            $f = fopen($destination, "w");
+            $dest_file = @fopen($destination, "w");
+            if (!$dest_file)
+            {
+                xcms_log(XLOG_ERROR, "[COMPILER] Destination file '$destination' is not writeable'");
+                return;
+            }
             if (!file_exists($filename)) {
                 xcms_log(XLOG_ERROR, "[COMPILER] Compile error: cannot find file '$filename'");
                 return;
