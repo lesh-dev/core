@@ -2,6 +2,11 @@
 <?php
     function xcms_console_main($args, $params)
     {
+        if (count($args) == 0)
+        {
+            throw new Exception("Usage: xcms.php <command> [args]");
+        }
+
         $command = $args[0];
         if ($command == "useradd")
             xcms_console_create_user($params);
