@@ -19,6 +19,10 @@
         {
             xsm_ank_reminder();
         }
+        else
+        {
+            throw new Exception("Unknown command: '$command'");
+        }
     }
 
     try
