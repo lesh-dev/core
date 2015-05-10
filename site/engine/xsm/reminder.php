@@ -25,7 +25,7 @@ function xsm_ank_reminder()
             $full_name."</a></li>\n";
     }
     $ank_reminder_table .= "</ul>\n";
-    $body_html = xcms_prepare_html_template("anketa_reminder");
+    $body_html = xcms_get_html_template("anketa_reminder");
     $body_html = str_replace('@@ANKETA-REMINDER@', $ank_reminder_table, $body_html);
     xcms_send_notification("reg", "dichlofos-mv@yandex.ru", $body_html);
 }
