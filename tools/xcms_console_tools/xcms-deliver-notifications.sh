@@ -14,3 +14,5 @@ sleep 1m
 su www-data -c "$console_cmd 'basedir=$XCMS_HOME' deliver-notifications 'mail-group=content-change'"
 sleep 1m
 su www-data -c "$console_cmd 'basedir=$XCMS_HOME' deliver-notifications 'mail-group=ctx'"
+sleep 1m
+su www-data -c "$console_cmd 'basedir=$XCMS_HOME' xsm-ank-reminder"
