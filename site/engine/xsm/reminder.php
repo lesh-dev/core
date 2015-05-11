@@ -9,8 +9,6 @@ function xsm_ank_reminder()
         "SELECT * FROM person WHERE
         (anketa_status = 'new') AND
         (person_created < '$max_old')
-        (first_name = '$first_name_esc') AND
-        (patronymic = '$patronymic_esc')
         ORDER BY person_created";
 
     $ank_reminder_table = "<ul>";
