@@ -111,8 +111,8 @@
                 xcms_log(XLOG_ERROR, "[COMPILER] Compile error: cannot find file '$filename'");
                 return;
             }
-            xcms_parse_string(file_get_contents($filename), $f);
-            fclose($f);
+            xcms_parse_string(file_get_contents($filename), $dest_file);
+            fclose($dest_file);
         }
     }
 
