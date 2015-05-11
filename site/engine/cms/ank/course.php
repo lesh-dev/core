@@ -56,6 +56,7 @@ function xsm_print_courses_selected_school(
         }
         arsort($deps);
         $course["course_teachers"] = $course_teachers;
+        $course["main_department_id"] = "NONE";
         foreach ($deps as $m_dep_id => $count)
         {
             // take first (max)
