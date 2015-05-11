@@ -69,6 +69,7 @@
         require_once ("$engine_dir/sys/compiler.php");
         require_once ("$engine_dir/sys/db.php");
         require_once ("$engine_dir/sys/mailer.php");
+        require_once ("$engine_dir/xsm/reminder.php");
 
         $main_ref_file = "";
         $main_ref_name = "";
