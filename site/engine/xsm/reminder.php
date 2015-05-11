@@ -28,7 +28,7 @@ function xsm_ank_reminder()
     $ank_reminder_table .= "</ul>\n";
     $body_html = xcms_get_html_template("anketa_reminder");
     $body_html = str_replace('@@ANKETA-REMINDER@', $ank_reminder_table, $body_html);
-    xcms_deliver_mail_int("reg", array("dichlofos-mv@yandex.ru"), $body_html, "Просроченные анкеты за ".xcms_date());
+    xcms_deliver_mail_int("reg", array("dichlofos-mv@yandex.ru"), $body_html, "По состоянию на ".xcms_date()." есть необработанные анкеты");
 }
 
 ?>
