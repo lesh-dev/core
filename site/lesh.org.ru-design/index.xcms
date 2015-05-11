@@ -1,4 +1,4 @@
-<# cms/linit #><# cms/init #><# url #><# deploy_utils #><# locale #><?php
+<# cms/linit #><# cms/init #><# deploy_utils #><# locale #><?php
 ?><!DOCTYPE html>
 <?php
 

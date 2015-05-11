@@ -1,8 +1,11 @@
 <?php
 // Send notifications on NEW anketas
 
+require_once("${engine_dir}cms/ank/fio.php");
+
 function xsm_ank_reminder()
 {
+    $db = xdb_get();
     $time = time() - 1 * 24 * 3600; // one day
     $max_old = xcms_datetime($time);
     $query =
@@ -25,7 +28,7 @@ function xsm_ank_reminder()
     $ank_reminder_table .= "</ul>\n";
     $body_html = xcms_get_html_template("anketa_reminder");
     $body_html = str_replace('@@ANKETA-REMINDER@', $ank_reminder_table, $body_html);
-    xcms_send_notification("reg", "dichlofos-mv@yandex.ru", $body_html);
+    xcms_deliver_mail_int("reg", array("dichlofos-mv@yandex.ru"), $body_html, "Просроченные анкеты за ".xcms_date());
 }
 
 ?>

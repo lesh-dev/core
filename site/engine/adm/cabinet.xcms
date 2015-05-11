@@ -1,6 +1,5 @@
 <# if //@$_GET['mode']=='logout'//auth/logout//#><?php
 ?><# locale #><?php
-?><# url #><?php
 ?><# auth/ #registered #><?php
 ?><# cms/ank/format #><?php
 require_once("${engine_dir}cms/ank/field-desc.php");

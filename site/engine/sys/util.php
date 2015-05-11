@@ -4,6 +4,34 @@ require_once("${engine_dir}sys/string.php");
 require_once("${engine_dir}sys/tag.php");
 require_once("${engine_dir}sys/file.php");
 
+/**
+  * Transforms an key-value-array to properly encoded URI part:
+  * array('param'=>'value1 value2', 'super'=>'puper') will be translated to
+  * &amp;param=value1%20value2&amp;super=puper
+  * @param args_list array of arguments to encode
+  * @return encoded parameters string
+  **/
+function xcms_url($args_list)
+{
+    $res = '';
+    foreach ($args_list as $key => $value)
+    {
+        $res = "$res&amp;$key=".rawurlencode($value);
+    }
+    return $res;
+}
+
+/**
+  * Same as @sa xcms_url, but makes complete href="..." attribute
+  * containing given parameters
+  * @param args_list array of arguments to encode
+  * @return encoded parameters string
+  **/
+function xcms_href($args_list)
+{
+    return ' href="?'.xcms_url($args_list).'" ';
+}
+
 function xcms_hostname()
 {
     global $meta_site_url;
@@ -20,6 +48,21 @@ function xcms_hostname()
     }
 
     return $host;
+}
+
+/**
+  * External link to XSM view
+  * @param url_prefix (interpreted as aparam after rewrite)
+  * @param args_list array of arguments to encode
+  * @return complete link with scheme and server name to use as link
+  * on (external to site) pages, e.g. in-mail links, etc
+  **/
+function xsm_ext_href($url_prefix, $args_list)
+{
+    global $web_prefix;
+    $url = 'https://'.xcms_hostname().
+        "/${web_prefix}xsm/$url_prefix".xcms_url($args_list);
+    return " href=\"$url\" ";
 }
 
 function xcms_mkpasswd()

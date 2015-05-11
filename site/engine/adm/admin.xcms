@@ -5,7 +5,6 @@ if (!@$_GET["page"])
 
 ?><# cms/linit #><?php
 ?><# locale #><?php
-?><# url #><?php
 ?><# adm/page_info #><?php
     require_once("${engine_dir}auth/format.php");
     require_once("${engine_dir}cms/alias.php");

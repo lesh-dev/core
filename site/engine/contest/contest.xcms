@@ -7,7 +7,6 @@
     <# css/public contest.css #>
 </head>
 <body>
-<# url #>
 <# auth/ #ank #admin #editor #>
 <?php
 

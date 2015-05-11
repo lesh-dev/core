@@ -1,4 +1,4 @@
-<# cms/linit #><# cms/init #><# url #><# deploy_utils #><# locale #><# auth/ #admin #ank #><?php
+<# cms/linit #><# cms/init #><# deploy_utils #><# locale #><# auth/ #admin #ank #><?php
 $result = array();
 
 header("Content-Type: text/json; charset: UTF-8");
