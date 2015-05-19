@@ -16,8 +16,10 @@ function xsm_ank_reminder()
 
     $ank_reminder_table = "<ul>";
     $person_sel = $db->query($query);
+    $empty_list = true;
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
     {
+        $empty_list = false;
         $full_name = xsm_fio_enc($person);
         $person_id = $person["person_id"];
         $ank_reminder_table .=
@@ -25,6 +27,9 @@ function xsm_ank_reminder()
             xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
             $full_name."</a></li>\n";
     }
+    if ($empty_list)
+        return;
+
     $ank_reminder_table .= "</ul>\n";
     $body_html = xcms_get_html_template("anketa_reminder");
     $body_html = str_replace('@@ANKETA-REMINDER@', $ank_reminder_table, $body_html);
