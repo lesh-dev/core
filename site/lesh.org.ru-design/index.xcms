@@ -50,11 +50,10 @@ function xcms_print_related_links()
 <body>
 <div id="main">
     <div class="header">
-        <div class="picture_logo"> </div>
+        <a class="picture_logo" href="/<# web_prefix #>"> </a>
         <div class="picture_title">
             <div class="top-links"><# cms/user_menu #></div>
         </div>
-
     </div>
 
     <div class="sidebar_top">
