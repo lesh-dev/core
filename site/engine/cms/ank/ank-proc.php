@@ -29,7 +29,8 @@ function xsm_find_person_origin($db, $new_person)
         "social_profile",
         "skype",
         "cellular",
-        "phone");
+        "phone",
+    );
 
     $query =
         "SELECT * FROM person WHERE
