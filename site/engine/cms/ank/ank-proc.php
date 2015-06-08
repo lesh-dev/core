@@ -1,6 +1,22 @@
 <?php
 // Anketa processor
 
+function xsm_extract_phone_digits($phones_str)
+{
+    $phones = xsm_format_phones($phones_str);
+    $digits = array();
+    foreach ($phones as $phone)
+        $digits[] = $phone["digits"];
+    return $digits;
+}
+
+function xsm_extract_person_phone_digits($person)
+{
+    $phone = xsm_extract_phone_digits(xcms_get_key_or($person, "phone"));
+    $cellular = xsm_extract_phone_digits(xcms_get_key_or($person, "cellular"));
+    return array_merge($phone, $cellular);
+}
+
 function xsm_find_person_origin($db, $new_person)
 {
     $last_name_esc = $db->escapeString(xcms_get_key_or($new_person, "last_name"));
@@ -25,6 +41,9 @@ function xsm_find_person_origin($db, $new_person)
     $person_sel = $db->query($query);
     $matched_person_id = XDB_INVALID_ID;
     $matched_person = false;
+
+    $new_phones = xsm_extract_person_phone_digits($new_person);
+
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
     {
         if ($person["anketa_status"] == "duplicate")
@@ -41,7 +60,14 @@ function xsm_find_person_origin($db, $new_person)
                 return $matched_person;
             }
         }
-        // TODO: collect suspicious matches here
+        // #885
+        $old_phones = xsm_extract_person_phone_digits($person);
+        if (count(array_intersect($new_phones, $old_phones)))
+        {
+            $matched_person_id = $person['person_id'];
+            $matched_person = $person;
+            return $matched_person;
+        }
     }
     return false;
 }
