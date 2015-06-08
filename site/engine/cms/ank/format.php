@@ -168,6 +168,7 @@ function xsm_format_phones($phones_str)
             $result[] = $item;
             continue;
         }
+        $item["digits"] = $digits;
 
         if ($digits[0] == "7")
             $digits[0] = "8"; // fix country code

@@ -27,10 +27,10 @@
 require_once("${engine_dir}cms/ank/xsm.php");
 require_once("${engine_dir}cms/ank/pss.php");
 require_once("${engine_dir}cms/ank/field-desc.php");
+require_once("${engine_dir}cms/ank/format.php");
 ?>
 <# cms/ank/middleware #>
 <# cms/ank/db-actions #>
-<# cms/ank/format #>
 <table style="width: 100%"><tr><td class="main-field roundBorders xsm-main-field"><div style="position: relative;">
 <a class="xsm-close" href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'index')); ?>">&nbsp;</a>
 <?php

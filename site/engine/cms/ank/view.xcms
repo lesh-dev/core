@@ -2,11 +2,11 @@
 require_once("${engine_dir}cms/ank/xsm.php");
 require_once("${engine_dir}cms/ank/pss.php");
 require_once("${engine_dir}cms/ank/field-desc.php");
+require_once("${engine_dir}cms/ank/format.php");
 require_once("${engine_dir}cms/ank/ank-proc.php");
 ?>
 <# cms/ank/middleware #>
 <# cms/ank/db-actions #>
-<# cms/ank/format #>
 <# js/jquery #>
 <# js/public common.js #>
 <# js/public xsm.js #>
