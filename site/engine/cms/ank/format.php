@@ -168,10 +168,10 @@ function xsm_format_phones($phones_str)
             $result[] = $item;
             continue;
         }
-        $item["digits"] = $digits;
-
         if ($digits[0] == "7")
             $digits[0] = "8"; // fix country code
+
+        $item["digits"] = $digits;
 
         $cl = false;
         if (substr($digits, 0, 2) == "89" ||
@@ -483,4 +483,22 @@ function xsm_field($table_name, $key)
     $desc = $fields_desc[$key];
     ?><span class="xsm-fixed-field"><?php echo $desc["name"]; ?></span> <?php
 }
+
+function xsm_ank_format_unit_test()
+{
+    xut_begin("ank-format");
+
+    $phones = xsm_format_phones(" +7(916)1-686-186\n");
+    xut_equal(count($phones), 1, "Phones count");
+    xut_equal($phones[0]["digits"], "89161686186", "Phone digits");
+
+    // если начать бить по пробелам, будет слишком много ложных разбиений
+    // люди отделяют код города пробелом
+    $phones = xsm_format_phones(" +7(916)1-686-186, 89268104391\n");
+    xut_equal(count($phones), 2, "Phones count 2");
+    xut_equal($phones[0]["digits"], "89161686186", "Phone digits");
+
+    xut_end();
+}
+
 ?>

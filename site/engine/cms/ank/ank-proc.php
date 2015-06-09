@@ -226,6 +226,27 @@ function xsm_compose_anketa_reply_link($first_name, $email)
     return $reply_link;
 }
 
+function xsm_ank_proc_unit_test()
+{
+    xut_begin("ank-proc");
 
+    // test #885
+    $new_person = array(
+        "person_id"=>1,
+        "phone"=>"84951659121",
+        "cellular"=>"+79161686186",
+    );
+    $old_person = array(
+        "person_id"=>1,
+        "cellular"=>"+74951659121",
+        "phone"=>"89161686186, 89146661666",
+    );
+    $new_phones = xsm_extract_person_phone_digits($new_person);
+    $old_phones = xsm_extract_person_phone_digits($old_person);
+    $count = count(array_intersect($new_phones, $old_phones));
+    xut_equal($count, 2, "Common phone count");
+
+    xut_end();
+}
 
 ?>
