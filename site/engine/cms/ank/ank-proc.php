@@ -4,10 +4,15 @@
 function xsm_extract_phone_digits($phones_str)
 {
     $phones = xsm_format_phones($phones_str);
-    $digits = array();
+    $phones_digits = array();
     foreach ($phones as $phone)
-        $digits[] = $phone["digits"];
-    return $digits;
+    {
+        $digits = xcms_get_key_or($phone, "digits");
+        if (xu_empty($digits))
+            continue;
+        $phones_digits[] = $digits;
+    }
+    return $phones_digits;
 }
 
 function xsm_extract_person_phone_digits($person)
@@ -244,7 +249,16 @@ function xsm_ank_proc_unit_test()
     $new_phones = xsm_extract_person_phone_digits($new_person);
     $old_phones = xsm_extract_person_phone_digits($old_person);
     $count = count(array_intersect($new_phones, $old_phones));
-    xut_equal($count, 2, "Common phone count");
+    xut_equal($count, 2, "Nonzero common phone count");
+
+    $old_person = array(
+        "person_id"=>1,
+        "cellular"=>"",
+        "phone"=>"100",
+    );
+    $old_phones = xsm_extract_person_phone_digits($old_person);
+    $count = count(array_intersect($new_phones, $old_phones));
+    xut_equal($count, 0, "Zero common phone count");
 
     xut_end();
 }
