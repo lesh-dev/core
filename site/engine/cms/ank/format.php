@@ -498,6 +498,10 @@ function xsm_ank_format_unit_test()
     xut_equal(count($phones), 2, "Phones count 2");
     xut_equal($phones[0]["digits"], "89161686186", "Phone digits");
 
+    // к сожалению, в жизни встречаются пустые поля
+    $phones = xsm_format_phones("");
+    xut_equal(count($phones), 0, "Phones count 0");
+
     xut_end();
 }
 
