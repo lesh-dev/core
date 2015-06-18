@@ -31,29 +31,7 @@ require_once("${engine_dir}cms/ank/ank-proc.php");
         $person["is_student"] = "student";
         $person["department_id"] = 1;
         $user_agent = $person["user_agent"] = $_SERVER["HTTP_USER_AGENT"];
-        // extract some values to check
-        $last_name = xcms_get_key_or($person, "last_name");
-        $first_name = xcms_get_key_or($person, "first_name");
-        $patronymic = xcms_get_key_or($person, "patronymic");
-        $phone = xcms_get_key_or($person, "phone");
-        $cellular = xcms_get_key_or($person, "cellular");
-        $current_class = xcms_get_key_or($person, "current_class");
-        $person['ank_class'] = $current_class;
-        $email = xcms_get_key_or($person, "email");
-
-        if (
-            xu_empty($last_name) ||
-            xu_empty($first_name) ||
-            preg_match('/[\/.,?!@#$%&*()_+=~^]/', $first_name) ||
-            preg_match('/[\/.,?!@#$%&*()_+=~^]/', $last_name) ||
-            xu_empty($current_class) ||
-            (xu_empty($phone) && xu_empty($cellular))
-            )
-        {
-            // someone hacked the js validator
-            die("Invalid anketa data. ");
-        }
-
+        xsm_validate_anketa_post($person);
 
         $db = xdb_get();
 
@@ -61,6 +39,7 @@ require_once("${engine_dir}cms/ank/ank-proc.php");
         $success = false;
 
         $person_desc = xsm_get_fields("person");
+        $email = xcms_get_key_or($person, "email");
         $full_name = xsm_fio($person);
 
         $old_person = xsm_find_person_origin($db, $person);

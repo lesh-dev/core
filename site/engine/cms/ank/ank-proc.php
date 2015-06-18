@@ -231,6 +231,43 @@ function xsm_compose_anketa_reply_link($first_name, $email)
     return $reply_link;
 }
 
+function xsm_valid_anketa_phone_digits($phone_digits)
+{
+    return empty($phone_digits) || (xu_len($phone_digits) > 9);
+}
+
+function xsm_validate_anketa_post(&$person)
+{
+    // extract some values to check
+    $last_name = xcms_get_key_or($person, "last_name");
+    $first_name = xcms_get_key_or($person, "first_name");
+    $patronymic = xcms_get_key_or($person, "patronymic");
+    $phone = xcms_get_key_or($person, "phone");
+    $phone_digits = preg_replace('/[^0-9]/', '', $phone);
+    $cellular = xcms_get_key_or($person, "cellular");
+    $cellular_digits = preg_replace('/[^0-9]/', '', $cellular);
+    $current_class = xcms_get_key_or($person, "current_class");
+    $person['ank_class'] = $current_class;
+
+    $fi_match = '/[\/.,?!@#$%&*()_+=~^]/';
+
+    if (
+        xu_empty($last_name) ||
+        xu_empty($first_name) ||
+        preg_match($fi_match, $first_name) ||
+        preg_match($fi_match, $last_name) ||
+        xu_empty($current_class) ||
+        !xsm_valid_anketa_phone_digits($phone_digits) ||
+        !xsm_valid_anketa_phone_digits($cellular_digits) ||
+        (xu_empty($phone_digits) && xu_empty($cellular_digits))
+        )
+    {
+        // someone hacked the js validator
+        die("Invalid anketa data. ");
+    }
+}
+
+
 function xsm_ank_proc_unit_test()
 {
     xut_begin("ank-proc");
