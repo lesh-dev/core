@@ -231,9 +231,9 @@ function xsm_compose_anketa_reply_link($first_name, $email)
     return $reply_link;
 }
 
-function xsm_valid_anketa_phone_digits($phone_digits)
+function xsm_valid_anketa_phone_digits($phone_digits, $count)
 {
-    return empty($phone_digits) || (xu_len($phone_digits) > 9);
+    return empty($phone_digits) || (xu_len($phone_digits) >= $count);
 }
 
 function xsm_validate_anketa_post(&$person)
@@ -257,10 +257,15 @@ function xsm_validate_anketa_post(&$person)
         preg_match($fi_match, $first_name) ||
         preg_match($fi_match, $last_name) ||
         xu_empty($current_class) ||
-        !xsm_valid_anketa_phone_digits($phone_digits) ||
-        !xsm_valid_anketa_phone_digits($cellular_digits) ||
-        (xu_empty($phone_digits) && xu_empty($cellular_digits))
+        (
+            !xsm_valid_anketa_phone_digits($phone_digits, 7) &&
+            !xsm_valid_anketa_phone_digits($cellular_digits, 9)
+        ) ||
+        (
+            xu_empty($phone_digits) &&
+            xu_empty($cellular_digits)
         )
+    )
     {
         // someone hacked the js validator
         die("Invalid anketa data. ");
