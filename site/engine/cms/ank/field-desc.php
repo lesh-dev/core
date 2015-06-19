@@ -432,6 +432,7 @@ $XSM_ENUMS = array(
         "values"=>array(
             "unknown"=>"Не выбрано",
             "precise"=>"Точные науки",
+            "cs"=>"Computer science",  // #864
             "nature"=>"Естественные науки",
             "human"=>"Гуманитарные науки",
             "other"=>"Иное"),
