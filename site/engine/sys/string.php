@@ -219,23 +219,25 @@ function xu_transliterate($string)
 
 function xcms_truncate_text($text, $limit, $trail)
 {
-    if ($limit > 0 && xu_len($text) > $limit)
+    if ($limit <= 0 || xu_len($text) <= $limit)
+        return $text;
+
+    $text = xu_substr($text, 0, $limit);
+    $n = xu_len($text);
+    for ($i = $n - 1; $i >= 0; $i--)
     {
-        $text = xu_substr($text, 0, $limit);
-        $n = xu_len($text);
-        for ($i = $n-1; $i>=0; $i--)
+        if (xu_substr($text, $i, 1) == EXP_SP)
         {
-            if (
-                ($text[$i]==EXP_SP)
-            )
-            {
-                $text = xu_substr($text, 0, $i);
-                break;
-            }
+            $text = xu_substr($text, 0, $i);
+            break;
         }
-        $text = $text.$trail;
     }
-    return $text;
+    return trim($text).$trail;
+}
+
+function xcms_truncate_hypertext($text, $limit, $trail) {
+    $text = preg_replace('/<\?php.?\?>/', '', $text);
+    return xcms_truncate_text($text, $limit, $trail);
 }
 
 define('MAX_LENGTH_DEFAULT', 160);
@@ -346,6 +348,13 @@ function xcms_string_unit_test()
         "Очень длинный\nтекст, который надо\nперенести\n\nне\nсмотря\nни\nна что", "Check xcms_wrap_long_lines");
 
     xut_equal(xu_transliterate("Вельтищев Михаил"), "Veltischev Mihail", "Check xu_transliterate");
+
+    $trunc_text =
+        "Иван  Человеков был простой человек и просто смотрел на свет, ".
+        "И <<да>> его было настоящее <<да>>, а нет~--- настоящее <<нет>>";
+    xut_equal(xcms_truncate_text($trunc_text, 300, " ..."), $trunc_text, "Check xcms_truncate_text 0");
+    xut_equal(xcms_truncate_text($trunc_text, 10, " ..."), "Иван ...", "Check xcms_truncate_text 1");
+    xut_equal(xcms_truncate_text($trunc_text, 20, " ..."), "Иван  Человеков был ...", "Check xcms_truncate_text 2");
 
     xut_equal(
         xcms_to_valid_filename("26 апреля ЛЭШевцы идут  на озеро!?"),
