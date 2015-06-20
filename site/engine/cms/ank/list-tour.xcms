@@ -24,6 +24,8 @@ function xsm_show_tour_list()
     global $show_forest_num;
 
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
+    $single_forest = ($show_forest_num != xsm_get_enum_default_value("show_forest_num"));
+    $forest_num = $show_forest_num[7];
 
     $db = xdb_get();
 
@@ -37,12 +39,15 @@ function xsm_show_tour_list()
     if ($show_department_id != XDB_INVALID_ID)
         $cond .= " AND ( department_id = $show_department_id )";
 
-    if ($show_forest_num != xsm_get_enum_default_value("show_forest_num"))
+    if ($single_forest)
+    {
         $cond .=
-            " AND (p.$show_forest_num IS NOT NULL)".
-            " AND (p.$show_forest_num <> 'undef')".
-            " AND (p.$show_forest_num <> 'notable')".
-            " AND (p.$show_forest_num <> 'not')";
+            " AND (".
+                "    (p.$show_forest_num = 'yes')".
+                " OR (p.$show_forest_num = 'able')".
+                " OR (p.$show_forest_num = 'maybe')".
+            ")";
+    }
 
     $name_filter_cond = xsm_person_name_filter($db, $show_name_filter);
     if (strlen($name_filter_cond))
@@ -73,9 +78,9 @@ function xsm_show_tour_list()
         <colgroup>
             <col width="13%" />
             <col width="45px" />
+            <col width="65px" /><?php if (!$single_forest) {?>
             <col width="65px" />
-            <col width="65px" />
-            <col width="65px" />
+            <col width="65px" /><?php } ?>
             <col width="70px" />
             <col width="15%" />
             <col width="19%" />
@@ -84,9 +89,13 @@ function xsm_show_tour_list()
         <thead>
             <th class="ankList">ФИО</th>
             <th class="ankList">Кл.</th>
+            <?php if ($single_forest) {?>
+            <th class="ankList">М<?php echo $forest_num; ?></th>
+            <?php } else {?>
             <th class="ankList">М1</th>
             <th class="ankList">М2</th>
-            <th class="ankList">М3</th>
+            <th class="ankList">М3</th><?php
+            } ?>
             <th class="ankList">Палатка</th>
             <th class="ankList">Снаряжение</th>
             <th class="ankList">Контакты</th>
@@ -123,9 +132,13 @@ function xsm_show_tour_list()
                 /><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"
                 title="<?php echo $fio; ?>"><?php echo $fin; ?></a></td>
             <td class="ankList"><?php echo $current_class; ?></td>
+            <?php if ($single_forest) {?>
+            <td class="ankList c"><?php echo xsm_make_forest_enum($person, (int)($forest_num), "p$person_count"); ?></td>
+            <?php } else {?>
             <td class="ankList c"><?php echo xsm_make_forest_enum($person, 1, "p$person_count"); ?></td>
             <td class="ankList c"><?php echo xsm_make_forest_enum($person, 2, "p$person_count"); ?></td>
             <td class="ankList c"><?php echo xsm_make_forest_enum($person, 3, "p$person_count"); ?></td>
+            <?php } ?>
             <td class="ankList"><?php echo $tent_capacity; ?></td>
             <td class="ankList"><?php echo $tour_requisites; ?></td>
             <td class="ankList"><?php echo $all_phones; ?></td>

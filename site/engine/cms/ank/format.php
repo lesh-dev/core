@@ -344,7 +344,7 @@ function xsm_make_forest_enum($person, $fn, $id = false)
     $forest_status = xsm_check_enum_key("forest_status", $person["forest_$fn"]);
     $values = xsm_get_enum("forest_status");
     $title = $values[$forest_status];
-    return "<span class=\"forest-status $forest_status\" id=\"${id}forest_status$fn-span\">$title</span>";
+    return "<span class=\"forest-status xe-$forest_status\" id=\"${id}forest_status$fn-span\">$title</span>";
 }
 
 function xsm_person_list_link($school_id)
