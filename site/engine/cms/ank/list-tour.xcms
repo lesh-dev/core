@@ -25,7 +25,7 @@ function xsm_show_tour_list()
 
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
     $single_forest = ($show_forest_num != xsm_get_enum_default_value("show_forest_num"));
-    $forest_num = $show_forest_num[7];
+    $forest_num = $single_forest ? $show_forest_num[7] : '';
 
     $db = xdb_get();
 
