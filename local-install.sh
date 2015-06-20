@@ -209,7 +209,7 @@ TEMP_DB="/tmp/xcms_local_installer_$$_$XSM_DB"
 DEST_DB="$DEST/$DB_SUBDIR/$XSM_DB"
 
 if [ -r "$DEST_DB" ]; then
-    message "Database already exists, backing it up."
+    message "Database already exists at [ $DEST_DB ], backing it up."
     sudo cp $VERBOSE "$DEST_DB" "$TEMP_DB"
 fi
 
