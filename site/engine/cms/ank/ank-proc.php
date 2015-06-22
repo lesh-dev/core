@@ -236,6 +236,18 @@ function xsm_valid_anketa_phone_digits($phone_digits, $count)
     return empty($phone_digits) || (xu_len($phone_digits) >= $count);
 }
 
+// В чём измеряется сила тока?
+function xsm_valid_anketa_control_question($answer) {
+    return (
+        xu_strpos($answer, "ампер") !== false ||
+        xu_strpos($answer, "Ампер") !== false ||
+        $answer == "А" ||
+        $answer == "а" ||
+        $answer == "A" ||
+        $answer == "a"
+    );
+}
+
 function xsm_validate_anketa_post(&$person)
 {
     // extract some values to check
@@ -264,7 +276,8 @@ function xsm_validate_anketa_post(&$person)
         (
             xu_empty($phone_digits) &&
             xu_empty($cellular_digits)
-        )
+        ) ||
+        !xsm_valid_anketa_control_question(xcms_get_key_or($person, "control_question"))
     )
     {
         // someone hacked the js validator

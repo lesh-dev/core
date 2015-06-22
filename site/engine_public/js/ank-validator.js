@@ -33,6 +33,21 @@ function CheckEMail(aError) {
         aError.push("EMail должен содержать знак '@'");
 }
 
+function CheckControlQuestion(aError) {
+    var val = $("#control_question-input").val();
+    val = $.trim(val);
+    if (!(
+        val.indexOf("ампер") >= 0 ||
+        val.indexOf("Ампер") !== false ||
+        val == "А" ||  // rus
+        val == "а" ||  // rus
+        val == "A" ||  // eng
+        val == "a"  // eng
+    )) {
+        aError.push("Неправильный ответ на контрольный вопрос. Вспомните физику!");
+    }
+}
+
 function CheckPhone(id, nDigit) {
     var val = $(id).val();
     val = $.trim(val);
@@ -87,6 +102,7 @@ $(document).ready(function() {
         CheckClass(aError);
         CheckPhones(aError);
         CheckEMail(aError);
+        CheckControlQuestion(aError);
 
         var aWarning = [];
         WarnPersonal(aWarning);
