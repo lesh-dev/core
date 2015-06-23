@@ -103,7 +103,7 @@ require_once("${engine_dir}cms/ank/ank-proc.php");
             // В этом случае анкета всё равно сохранится у нас, и на самом деле мы всё узнаем про человека,
             // но чтобы не ждать три дня, пусть уж лучше нас пнут извне
             xcms_log(XLOG_ERROR, "[ANK] Anketa submission failed. ".
-                "Statuses: HTML:$success_notify Write:$write_success");
+                "Statuses: Notify:$success_notify Write:$write_success");
             $dest_url = 'register/error';
         }
         $message = 'Сейчас Вы будете перенаправлены на страницу результата. Нажмите '.
