@@ -218,12 +218,12 @@ function xsm_compose_anketa_mail_msg($person, $html_content)
 
 function xsm_compose_anketa_reply_link($first_name, $email)
 {
+    global $meta_site_name;
     // prepare reply_link
     $reply_link = xcms_get_html_template("anketa_reply_link");
     $reply_body = xcms_get_html_template("anketa_reply_body");
     $reply_body = str_replace("@@NAME@", $first_name, $reply_body);
-    // TODO hardcoded subject
-    $reply_link = str_replace("@@REPLY-SUBJECT@", rawurlencode("ФизЛЭШ: Анкета принята"), $reply_link);
+    $reply_link = str_replace("@@REPLY-SUBJECT@", rawurlencode("$meta_site_name: Анкета принята"), $reply_link);
     $reply_link = str_replace("@@REPLY-BODY@", str_replace("\n", "<br />", $reply_body), $reply_link);
     $reply_link = str_replace("@@REPLY-BODY-ENC@", rawurlencode($reply_body), $reply_link);
     $reply_link = str_replace("@@REPLY-TO@", $email, $reply_link);
