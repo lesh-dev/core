@@ -38,7 +38,7 @@ function CheckControlQuestion(aError) {
     val = $.trim(val);
     if (!(
         val.indexOf("ампер") >= 0 ||
-        val.indexOf("Ампер") !== false ||
+        val.indexOf("Ампер") >= 0 ||
         val == "А" ||  // rus
         val == "а" ||  // rus
         val == "A" ||  // eng
