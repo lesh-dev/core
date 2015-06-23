@@ -15,3 +15,4 @@ with open(version_file, 'w') as vf:
     vf.write(new_version + '\n')
 os.system('git commit -m "Version updated to {}" {}'.format(new_version, version_file))
 os.system('git tag {}-prod-{}'.format(new_version, datetime.datetime.now().strftime("%Y.%m.%d")))
+os.system('./push-prod.sh')
