@@ -39,6 +39,14 @@ function print_version()
     fi
 }
 
+function file_exists()
+{
+    if ls $@ >/dev/null 2>&1 ; then
+        return 0
+    fi
+    return 1
+}
+
 print_version
 if [ -f $CONFIGFILE ]; then
     source $CONFIGFILE

@@ -35,7 +35,7 @@ function hook_end
 
     echo "Archiving production copies..."
 
-    if [ -e $clone_root/production.last-* ] ; then
+    if file_exists $clone_root/production.last-* ; then
         for i in $clone_root/production.last-* ; do
             if [ "$(readlink $clone_root/production)" == "$i" ]; then
                 echo "Skipping real production: $i"
@@ -55,7 +55,7 @@ function hook_end
 
     echo "Archiving pre-production copies..."
 
-    if [ -e $clones_root/preprod-* ] ; then
+    if file_exists $clones_root/preprod-* ; then
         for i in $clone_root/preprod-* ; do
             if [ "$(readlink $clone_root/preprod)" == "$i" ]; then
                 echo "Skipping preprod: $i"
@@ -67,7 +67,7 @@ function hook_end
 
     echo "Archiving frozen copies..."
 
-    if [ -e $clone_root/freeze-* ] ; then
+    if file_exists $clone_root/freeze-* ; then
         for i in $clone_root/freeze-* ; do
             if [ "$(readlink $clone_root/production)" == "$i" ]; then
                 echo "Skipping real production's frost: $i"
