@@ -55,7 +55,7 @@ function hook_end
 
     echo "Archiving pre-production copies..."
 
-    if file_exists $clones_root/preprod-* ; then
+    if file_exists $clone_root/preprod-* ; then
         for i in $clone_root/preprod-* ; do
             if [ "$(readlink $clone_root/preprod)" == "$i" ]; then
                 echo "Skipping preprod: $i"
