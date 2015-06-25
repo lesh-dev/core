@@ -14,21 +14,25 @@ mkdir -p $PUBLISH_REALM
 declare -A PUBLISH_DESCRIPTIONS
 declare -A RECEIPE_DESCRIPTIONS
 
-function print_error() {
+function print_error()
+{
     echo -e "\033[31;1mError:\x1b[0m $@"
 }
 
-function print_warning() {
+function print_warning()
+{
     echo -e "\033[33mWarning:\x1b[0m $@"
 }
 
-function print_message() {
+function print_message()
+{
     echo -en "[\033[32m"
     printf "%7s" "$COMPONENT_NAME"
     echo -e "\x1b[0m] $@"
 }
 
-function print_version() {
+function print_version()
+{
     version_script="$MY_DIR/../publish/version.sh"
     if [ -r "$version_script" ] ; then
         echo -e "\033[33mPublishTools\x1b[0m $($SHELL "$version_script")"
