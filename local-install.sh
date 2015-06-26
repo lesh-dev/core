@@ -70,37 +70,25 @@ if [ -z "$user" ] ; then
 fi
 message "User detected: $user"
 
-if [ "$user" == "mvel" ] || [ "$user" == "bird" ] ; then
-    if grep -q Ubuntu /etc/*release ; then
-        message "Switching to Ubuntu"
-        HTTPD_USER=www-data
-    fi
+if grep -q Ubuntu /etc/*release ; then
+    message "Switching to Ubuntu"
+    HTTPD_USER=www-data
 fi
 
 # configure rests of unset options
 if [ -z "$DEST_NAME" ] ; then
     # default site location
-    DEST_NAME="site"
-    if [ "$user" == "mvel" ] || [ "$user" == "bird" ] ; then
-        DEST_NAME="fizlesh.ru"
-    fi
+    DEST_NAME="fizlesh.ru"
 fi
 
 # folder with content repo
-REPO_NAME="content-fizlesh.ru"
-if [ "$user" == "mvel" ] || [ "$user" == "bird" ] ; then
-    REPO_NAME="content-$DEST_NAME"
-fi
+REPO_NAME="content-$DEST_NAME"
 
 # content path
 CONT_DIR="../$REPO_NAME/content"
 
 # installed content folder name
-DEST_CONT="fizlesh.ru-content"
-if [ "$user" == "mvel" ] || [ "$user" == "bird" ] ; then
-    DEST_CONT="$DEST_NAME-content"
-fi
-
+DEST_CONT="$DEST_NAME-content"
 
 function do_prepare_installer()
 {
@@ -178,10 +166,7 @@ function xcms_version_css()
 }
 
 # site root
-DEST="/var/www/html/$DEST_NAME"
-if [ "$user" == "mvel" ] || [ "$user" == "bird" ] ; then
-    DEST="/var/www/vhosts/$DEST_NAME"
-fi
+DEST="/var/www/vhosts/$DEST_NAME"
 
 # check SQLite3 presence
 if ! which sqlite3 > /dev/null; then
