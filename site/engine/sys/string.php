@@ -235,8 +235,10 @@ function xcms_truncate_text($text, $limit, $trail)
     return trim($text).$trail;
 }
 
-function xcms_truncate_hypertext($text, $limit, $trail) {
-    $text = preg_replace('/<\?php.?\?>/', '', $text);
+function xcms_truncate_hypertext($text, $limit, $trail)
+{
+    $text = preg_replace("/\<\?php.*?\?>/", '', $text);
+    xcms_log(0, "===========\n$text\n--------------");
     return xcms_truncate_text($text, $limit, $trail);
 }
 
@@ -355,6 +357,13 @@ function xcms_string_unit_test()
     xut_equal(xcms_truncate_text($trunc_text, 300, " ..."), $trunc_text, "Check xcms_truncate_text 0");
     xut_equal(xcms_truncate_text($trunc_text, 10, " ..."), "Иван ...", "Check xcms_truncate_text 1");
     xut_equal(xcms_truncate_text($trunc_text, 20, " ..."), "Иван  Человеков был ...", "Check xcms_truncate_text 2");
+
+    $trunc_hypertext =
+        "<?php qqq(); ?>Иван  Человеков был простой человек и просто смотрел на свет, ".
+        "И <<да>> его было настоящее <<да>>, а нет~--- настоящее <<нет>>";
+    xut_equal(xcms_truncate_hypertext($trunc_hypertext, 300, " ..."), $trunc_hypertext, "Check xcms_truncate_hypertext 0");
+    xut_equal(xcms_truncate_hypertext($trunc_hypertext, 10, " ..."), "qqq 1", "Check xcms_truncate_hypertext 1");
+
 
     xut_equal(
         xcms_to_valid_filename("26 апреля ЛЭШевцы идут  на озеро!?"),
