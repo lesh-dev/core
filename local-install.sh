@@ -41,7 +41,7 @@ function print_usage()
     echo "                   empty         Init fresh database using dbinit"
     echo "                   merged        Install merged database"
     echo "          [-p|--path] <name>     Change destination to <name>"
-    echo "          [-h|--help]            This help"
+    echo "          [-h|--help]            This cool help"
     exit 1
 }
 
