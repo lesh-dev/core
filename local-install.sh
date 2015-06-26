@@ -32,7 +32,7 @@ function message_error()
 
 function print_usage()
 {
-    echo "Install XCMS to local www root."
+    echo "Install XCMS to local www root"
     echo "Usage: `basename $0` <options>"
     echo "          [-i|--installer]       Force installer installation"
     echo "          [-v|--verbose]         Verbose mode"
