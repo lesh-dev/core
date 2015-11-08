@@ -1,6 +1,6 @@
 <?php
 
-$CONTEST_CURRENT_YEAR = "2014";
+$CONTEST_CURRENT_YEAR = "2015";
 
 define('CTX_NO_SOLUTION', '-');
 define('CTX_NO_SOLUTION_HT', '&#8212;');
