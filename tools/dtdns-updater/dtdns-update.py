@@ -1,18 +1,33 @@
 #!/usr/bin/env python
 
-import httplib, urllib, os, sys, re, time, socket, signal
+import httplib
+import urllib
+import os
+import sys
+import re
+import time
+import socket
+import signal
 
 timeInterval = 60
 GShutdown = False
+
 cSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-#/api/autodns.cfm?id={your hostname}&pw={your hostname's password}&client=dd-wrt
+"""
+/api/autodns.cfm
+id={your hostname}
+&pw={your hostname's password}
+&client=dd-wrt
+"""
+
 
 def SignalHandler(signum, frame):
     print "Signal handler called with signal", signum
     GShutdown = True
     cSock.close()
     sys.exit(3)
+
 
 def Log(msg):
     try:
@@ -31,13 +46,15 @@ def ParseResp(text):
     ip = m.group(1)
     return ip
 
+
 def GetMyIp():
-    #socket.gethostbyname(hostName)
+    # socket.gethostbyname(hostName)
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.connect(("ya.ru", 80))
     ip = sock.getsockname()[0]
     sock.close()
     return ip
+
 
 def UpdateHost(hostName, passwd):
     try:
@@ -48,7 +65,7 @@ def UpdateHost(hostName, passwd):
             "client": "curl"
         }
 
-        #print "Request params: ", params
+        # print "Request params: ", params
 
         params = urllib.urlencode(request)
         conn.request("GET", "/api/autodns.cfm?" + params)
@@ -84,6 +101,7 @@ def UpdateHost(hostName, passwd):
 def TimeStamp():
     return time.strftime("%Y-%d-%m %H:%M:%S ", time.localtime())
 
+
 def RunDaemon(hostName, passwd):
     Log("Running periodic update for host " + hostName)
     # update once and save ip.
@@ -99,13 +117,13 @@ def RunDaemon(hostName, passwd):
         cnt = (cnt + 1) % 60
         try:
             currentIp = GetMyIp()
-#            Log("Host resolved to: " + currentIp)
+            # Log("Host resolved to: " + currentIp)
             if currentIp != remoteIp:
                 Log("Current ip " + currentIp + " is not matching, updating. ")
                 remoteIp = UpdateHost(hostName, passwd)
             else:
                 pass
-                #if cnt == 0:
+                # if cnt == 0:
         except IOError as (code, text):
             Log("IO Error occured during update: " + text)
         except RuntimeError as e:
@@ -120,39 +138,40 @@ def RunDaemon(hostName, passwd):
             Log("Shutdown signal received")
             break
 
-# program begin
 
-signal.signal(signal.SIGTERM, SignalHandler)
+if __name__ == '__main__':
 
-args = sys.argv[:]
+    signal.signal(signal.SIGTERM, SignalHandler)
 
-daemonMode = False
+    args = sys.argv[:]
 
-if "-d" in args or "--daemon" in args:
-    args = filter(lambda x: x != "-d" and x != "--daemon", args)
-    daemonMode = True
+    daemonMode = False
 
-if len(sys.argv) < 3:
-    print "Wrong parameters. Syntax:"
-    print " dtdns-update.py [-d|--daemon] <dtdns-hostname> <password>"
-    sys.exit(1)
+    if "-d" in args or "--daemon" in args:
+        args = filter(lambda x: x != "-d" and x != "--daemon", args)
+        daemonMode = True
 
-hostName = args[1]
-passwd = args[2]
-
-if daemonMode:
-    try:
-        cSock.bind(("127.0.0.1", 6444))
-        cSock.listen(1)
-    except IOError:
-        Log("Another instance is running, exiting. ")
+    if len(sys.argv) < 3:
+        print "Wrong parameters. Syntax:"
+        print " dtdns-update.py [-d|--daemon] <dtdns-hostname> <password>"
         sys.exit(1)
 
-    try:
-        RunDaemon(hostName, passwd)
-    except KeyboardInterrupt:
-        Log("Keyboard interrupt received, exiting")
+    hostName = args[1]
+    passwd = args[2]
 
-    cSock.close()
-else:
-    UpdateHost(hostName, passwd)
+    if daemonMode:
+        try:
+            cSock.bind(("127.0.0.1", 6444))
+            cSock.listen(1)
+        except IOError:
+            Log("Another instance is running, exiting. ")
+            sys.exit(1)
+
+        try:
+            RunDaemon(hostName, passwd)
+        except KeyboardInterrupt:
+            Log("Keyboard interrupt received, exiting")
+
+        cSock.close()
+    else:
+        UpdateHost(hostName, passwd)
