@@ -113,7 +113,7 @@ function xsm_make_course_selector($name, $value, $db, $school_id)
     $html = "<select name=\"$name\" id=\"$name-selector\">\n";
     foreach ($courses as $key => $course)
     {
-        $sel = ($key == $value) ? ' selected="selected" ' : '';
+        $selected = xcms_enum_selected($key, $value);
         $title = xcms_get_key_or_enc($course, 'course_title');
         $title .= " &#8212; ";
         $next = false;
@@ -124,7 +124,7 @@ function xsm_make_course_selector($name, $value, $db, $school_id)
             $title .= xsm_fi($person);
             $next = true;
         }
-        $html .= "<option $sel value=\"$key\">$title</option>\n";
+        $html .= "<option $selected value=\"$key\">$title</option>\n";
     }
     $html .= "</select>";
     return $html;
