@@ -34,7 +34,9 @@ function xcms_html_wrap_ml($html)
     return $html;
 }
 
-
+/**
+  * Trim all object's fields
+  **/
 function xcms_trim_object($obj)
 {
     $new_obj = array();
@@ -43,6 +45,14 @@ function xcms_trim_object($obj)
         $new_obj[$key] = trim($value);
     }
     return $new_obj;
+}
+
+/**
+  * Proper selected attribute formatting
+  **/
+function xcms_enum_selected($value, $current_value)
+{
+    return ((string)($value) == (string)($current_value)) ? ' selected="selected" ' : '';
 }
 
 /**
@@ -399,7 +409,7 @@ function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_c
     $special_value = XDB_INVALID_ID;
     if ($special !== false)
     {
-        $selected = ("" == $current_key) ? 'selected="selected"' : '';
+        $selected = xcms_enum_selected("", $current_key);
         $html .= "<option $selected value=\"$special_value\">$special</option>\n";
     }
     while ($object = $sel->fetchArray(SQLITE3_ASSOC))
@@ -409,7 +419,7 @@ function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_c
             $title .= $object[$key_name].' ';
         $title = htmlspecialchars(trim($title));
         $key = $object[$list_key];
-        $selected = ($key == $current_key) ? 'selected="selected"' : '';
+        $selected = xcms_enum_selected($key, $current_key);
         $html .= "<option $selected value=\"$key\">$title</option>\n";
     }
     $html .= "</select>";
@@ -452,7 +462,7 @@ function xsm_make_selector_ext($list_key, $name, $current_key, $title_pattern, $
         $key = $object[$list_key];
         if (xcms_get_key_or($exclude_ids, $key))
             continue;
-        $selected = ($key == $current_key) ? 'selected="selected"' : '';
+        $selected = xcms_enum_selected($key, $value);
         $html .= "<option $selected value=\"$key\">$title</option>\n";
     }
     $html .= "</select>";
@@ -465,8 +475,8 @@ function xsm_make_enum_selector($name, $value, $items)
     $html = "<select name=\"$name\" id=\"$name-selector\">\n";
     foreach ($items as $key => $title)
     {
-        $sel = ($key == $value) ? ' selected="selected" ' : '';
-        $html .= "<option $sel value=\"$key\">$title</option>\n";
+        $selected = xcms_enum_selected($key, $value);
+        $html .= "<option $selected value=\"$key\">$title</option>\n";
     }
     $html .= "</select>";
     return $html;
@@ -487,6 +497,10 @@ function xsm_field($table_name, $key)
 function xsm_ank_format_unit_test()
 {
     xut_begin("ank-format");
+
+    xut_check(xcms_enum_selected("", "0") === "", "Enum selection false positive");
+    xut_check(strpos(xcms_enum_selected("", ""), "selected") !== false, "Enum selection true");
+    xut_check(strpos(xcms_enum_selected("1", 1), "selected") !== false, "Enum selection digits");
 
     $phones = xsm_format_phones(" +7(916)1-686-186\n");
     xut_equal(count($phones), 1, "Phones count");
