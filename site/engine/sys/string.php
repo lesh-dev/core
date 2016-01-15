@@ -305,6 +305,12 @@ function xcms_string_unit_test()
 {
     xut_begin("string");
 
+    // test generic PHP weird things
+    xut_check(0 == "", "Zero is weak-equal to empty string");
+    xut_check(0 !== "", "Zero is not weak-equal to empty string");
+    xut_check((string)(0) === "0", "Zero directly converted to string is a '0'");
+    xut_check((string)(0) != (string)(""), "Zero converted to string is not any empty string");
+
     // test xcms_get_key_or function
     $obj = array();
     $obj["super"] = 1;
@@ -361,9 +367,11 @@ function xcms_string_unit_test()
     $trunc_hypertext =
         "<?php qqq(); ?>Иван  Человеков был простой человек и просто смотрел на свет, ".
         "И <<да>> его было настоящее <<да>>, а нет~--- настоящее <<нет>>";
-    xut_equal(xcms_truncate_hypertext($trunc_hypertext, 300, " ..."), $trunc_hypertext, "Check xcms_truncate_hypertext 0");
-    xut_equal(xcms_truncate_hypertext($trunc_hypertext, 10, " ..."), "qqq 1", "Check xcms_truncate_hypertext 1");
-
+    $trunc_hypertext_cut =
+        "Иван  Человеков был простой человек и просто смотрел на свет, ".
+        "И <<да>> его было настоящее <<да>>, а нет~--- настоящее <<нет>>";
+    xut_equal(xcms_truncate_hypertext($trunc_hypertext, 300, " ..."), $trunc_hypertext_cut, "Check xcms_truncate_hypertext 0");
+    xut_equal(xcms_truncate_hypertext($trunc_hypertext, 10, " ..."), "Иван ...", "Check xcms_truncate_hypertext 1");
 
     xut_equal(
         xcms_to_valid_filename("26 апреля ЛЭШевцы идут  на озеро!?"),
