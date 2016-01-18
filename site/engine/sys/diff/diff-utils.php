@@ -57,7 +57,7 @@
         $diff = xcms_diff_html("\n", "тарам-парам\nпарам-парам\n", false);
         xut_equal($diff, "<del>\n</del> <ins>тарам-парам\nпарам-парам\n</ins>", "Diff lockup");
         // I wish it should be, but it does not want to look forward so much
-        //xut_equal($diff, "<ins>тарам-парам\nпарам-парам</ins>\n", "Diff lockup test");
+        //should_be_equal($diff, "<ins>тарам-парам\nпарам-парам</ins>\n", "Diff lockup test");
 
         $diff = xcms_diff_html("", "тарам-парам\nпарам-парам\n", false);
         xut_equal($diff, "<ins>тарам-парам\nпарам-парам\n</ins>", "Another multiline insertion");
