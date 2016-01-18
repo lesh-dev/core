@@ -1,5 +1,8 @@
 <?php
 
+require_once("${engine_dir}cms/ank/field-desc.php");
+require_once("${engine_dir}cms/ank/format.php");
+
 function xcmst_draw_contest_form_field($desc, $value, $id)
 {
     global $web_prefix;
@@ -49,6 +52,12 @@ function xcmst_draw_contest_form_field($desc, $value, $id)
     {
         echo "<tr><td>$name</td><td>";
         xcmst_control($id, $value, $name, "", $type);
+        echo "</td></tr>\n";
+    }
+    elseif ($type == "enum")
+    {
+        echo "<tr><td>$name</td><td>";
+        echo xsm_make_enum_by_type($id, $value, $id);
         echo "</td></tr>\n";
     }
     else

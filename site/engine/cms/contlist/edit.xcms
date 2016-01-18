@@ -1,5 +1,6 @@
 <?php
 require_once("${engine_dir}sys/groups.php");
+require_once("${engine_dir}sys/controls.php");
 require_once("${engine_dir}edit/page_diff.php");
 
 # TODO: dynamic loading
@@ -95,8 +96,8 @@ function xcms_draw_contlist_create($result = true)
                 $page_types = xcms_get_tag_list("pagetype");
                 foreach ($page_types as $key => $value)
                 {
-                    $attrs = ($key == "news") ? "selected=\"selected\" " : "";
-                    echo "<option name=\"$key\" value=\"$key\" $attrs>$value</option>\n";
+                    $selected = xcms_enum_selected($key, "news");
+                    echo "<option name=\"$key\" value=\"$key\" $selected>$value</option>\n";
                 }?>
                 </select>
                 <!-- readonly element does not want to be submitted -->

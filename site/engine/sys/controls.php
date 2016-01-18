@@ -97,3 +97,23 @@ function xcmst_control_admin($name, $value, $placeholder, $type = "input", $titl
 {
     xcmst_control($name, $value, $placeholder, "admin-medium", $type, $title, $def_value, $autocomplete);
 }
+
+/**
+  * Proper selected attribute formatting
+  **/
+function xcms_enum_selected($value, $current_value)
+{
+    return ((string)($value) == (string)($current_value)) ? ' selected="selected" ' : '';
+}
+
+function xcms_sys_controls_unit_test()
+{
+    xut_begin("sys-controls");
+
+    xut_check(xcms_enum_selected("", "0") === "", "Enum selection false positive");
+    xut_check(strpos(xcms_enum_selected("", ""), "selected") !== false, "Enum selection true");
+    xut_check(strpos(xcms_enum_selected("1", 1), "selected") !== false, "Enum selection digits");
+
+    xut_end();
+}
+

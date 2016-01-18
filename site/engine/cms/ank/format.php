@@ -48,14 +48,6 @@ function xcms_trim_object($obj)
 }
 
 /**
-  * Proper selected attribute formatting
-  **/
-function xcms_enum_selected($value, $current_value)
-{
-    return ((string)($value) == (string)($current_value)) ? ' selected="selected" ' : '';
-}
-
-/**
   * Plural form for nouns
   **/
 function xcms_plural($n, $word)
@@ -497,10 +489,6 @@ function xsm_field($table_name, $key)
 function xsm_ank_format_unit_test()
 {
     xut_begin("ank-format");
-
-    xut_check(xcms_enum_selected("", "0") === "", "Enum selection false positive");
-    xut_check(strpos(xcms_enum_selected("", ""), "selected") !== false, "Enum selection true");
-    xut_check(strpos(xcms_enum_selected("1", 1), "selected") !== false, "Enum selection digits");
 
     $phones = xsm_format_phones(" +7(916)1-686-186\n");
     xut_equal(count($phones), 1, "Phones count");

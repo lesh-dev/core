@@ -5,6 +5,7 @@
     require_once("${engine_dir}sys/file.php");
     require_once("${engine_dir}sys/unittest.php");
     require_once("${engine_dir}sys/util.php");
+    require_once("${engine_dir}sys/controls.php");
     require_once("${engine_dir}sys/auth.php");
     require_once("${engine_dir}sys/diff/diff-utils.php");
     require_once("${engine_dir}cms/ank/format.php");
@@ -23,6 +24,7 @@
     // put your unit test function call here
     xcms_util_unit_test();
     xcms_string_unit_test();
+    xcms_sys_controls_unit_test();
     xcms_keyvalue_unit_test();
     xcms_finediff_unit_test();
     xsm_ank_format_unit_test();
