@@ -67,4 +67,3 @@
         else
             echo "<div style=\"color: #7f0000; font-size: 14pt; font-weight: bold;\"><span >UNIT TESTS FAILED<div>\n";
     }
-?>
