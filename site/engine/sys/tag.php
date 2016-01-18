@@ -272,9 +272,11 @@ function xcms_keyvalue_unit_test()
     $values[" key\n5 "] = "proper\nvalue\rwithout\r\nspaces";
     $values[" key6 "] = "proper\nvalue\rwithout\r\nspaces";
     $values[" key7 "] = "generic  values  with   lots  of spaces";
+    $values_count = count($values);
     global $SETTINGS;
     xut_check(xcms_save_list("${SETTINGS["content_dir"]}test-list", $values), "List save");
-    $read_values = xcms_get_list("test-list");
+    $read_values = xcms_get_list("${SETTINGS["content_dir"]}test-list");
+    xut_equal($values_count, count($read_values), "Invalid test values count");
 
     $check["key1"] = "value 1";
     $check["key2"] = "value 2";
@@ -283,6 +285,7 @@ function xcms_keyvalue_unit_test()
     $check["key 5"] = "proper value without  spaces";
     $check["key6"] = "proper value without  spaces";
     $check["key7"] = "generic  values  with   lots  of spaces";
+    xut_equal($values_count, count($check), "Invalid check values count");
 
     foreach ($read_values as $key => $value)
     {
