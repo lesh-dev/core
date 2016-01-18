@@ -325,142 +325,135 @@ function xsm_get_fields($table_name)
     return $field_desc[$table_name];
 }
 
-$XSM_ENUMS = array(
-    // статус анкеты (значения в базе)
-    "anketa_status"=>array(
-        "values"=>array(
-            "new"=>"Новый",
-            "progress"=>"Ждёт собес.",
-            "less"=>"Ждёт леса",
-            "processed"=>"Принят",
-            "discuss"=>"Обсуждается",
-            "nextyear"=>"Отложен",
-            "declined"=>"Отклонён",
-            "cont"=>"Активный",
-            "old"=>"Архив",
-            "duplicate"=>"Дубль",
-            "spam"=>"Спам"),
-        "default"=>"new"),
+global $XSM_ENUMS;
 
-    // селектор для list-person-locator
-    "show_anketa_status_locator"=>array(
-        "values"=>array(
-            "active"=>"Актив",
-            "no-trash"=>"Все",
-            "not-decl"=>"Все, кроме посланных",
-            "not-old"=>"Все, кроме архивных",
-            "processed"=>"Принятые",
-            "cont"=>"Продолжающие",
-            "old"=>"Архивные",
-            "all"=>"Без фильтрации"),
-        "default"=>"active"),
+// статус анкеты (значения в базе)
+$XSM_ENUMS["anketa_status"] = array(
+    "values"=>array(
+        "new"=>"Новый",
+        "progress"=>"Ждёт собес.",
+        "less"=>"Ждёт леса",
+        "processed"=>"Принят",
+        "discuss"=>"Обсуждается",
+        "nextyear"=>"Отложен",
+        "declined"=>"Отклонён",
+        "cont"=>"Активный",
+        "old"=>"Архив",
+        "duplicate"=>"Дубль",
+        "spam"=>"Спам"),
+    "default"=>"new",
+);
 
-    // селектор для list-ank
-    "show_anketa_status_ank"=>array(
-        "values"=>array(
-            "abitur"=>"Набор",
-            "new"=>"Новые",
-            "progress"=>"Ждут собеседования",
-            "less"=>"Ждут леса",
-            "processed"=>"Принятые",
-            "nextyear"=>"Отложенные",
-            "discuss"=>"Обсуждаются",
-            "declined"=>"Отклонённые",
-            "old"=>"Архивные",
-            "no-trash"=>"Все",
-            "all"=>"Без фильтрации"),
-        "default"=>"abitur"),
+// селектор для list-person-locator
+$XSM_ENUMS["show_anketa_status_locator"] = array(
+    "values"=>array(
+        "active"=>"Актив",
+        "no-trash"=>"Все",
+        "not-decl"=>"Все, кроме посланных",
+        "not-old"=>"Все, кроме архивных",
+        "processed"=>"Принятые",
+        "cont"=>"Продолжающие",
+        "old"=>"Архивные",
+        "all"=>"Без фильтрации"),
+    "default"=>"active",
+);
 
-    // Статус выхода в лес
-    "forest_status"=>array(
-        "values"=>array(
-            "undef"=>"&mdash;",
-            "notable"=>"Не может",
-            "no"=>"Не идёт",
-            "maybe"=>"ХЗ",
-            "able"=>"Может",
-            "yes"=>"Идёт"),
-        "default"=>"undef"),
-
-    // Фильтр для показов выходов в лес
-    "show_forest_num"=>array(
-        "values"=>array(
-            "all"=>"Все выходы",
-            "forest_1"=>"1-й выход",
-            "forest_2"=>"2-й выход",
-            "forest_3"=>"3-й выход"),
-        "default"=>"all"),
-
-    // Кураторство
-    "curatorship"=>array(
-        "values"=>array(
-            "none"=>"Не куратор",
-            "assist"=>"Помощник куратора",
-            "cur"=>"Куратор"),
-        "default"=>"none"),
-
-    // Зачёт
-    "exam_status"=>array(
-        "values"=>array(
-            "listen"=>"Прослушан",
-            "passed"=>"Сдан",
-            "notpassed"=>"Не сдан",
-            "almost"=>"Почти сдан",
-            "other"=>"Иное"),
-        "default"=>"listen"),
-
-    // Тип школы
-    "school_type"=>array(
-        "values"=>array(
-            "lesh"=>"Летняя",
-            "zesh"=>"Зимняя",
-            "vesh"=>"Весеннняя"),
-        "default"=>"lesh"),
-
-    // Тип курса
-    "course_type"=>array(
-        "values"=>array(
-            "generic"=>"Обычный",
-            "facult"=>"Факультатив",
-            "prac"=>"Практикум",
-            "single"=>"Разовая лекция",
-            "other"=>"Иное"),
-        "default"=>"generic"),
-
-    // Тематика курса
-    "course_area"=>array(
-        "values"=>array(
-            "unknown"=>"Не выбрано",
-            "precise"=>"Точные науки",
-            "cs"=>"Computer science",  // #864
-            "nature"=>"Естественные науки",
-            "human"=>"Гуманитарные науки",
-            "other"=>"Иное",
-        ),
-        "default"=>"unknown",
+// селектор для list-ank
+$XSM_ENUMS["show_anketa_status_ank"] = array(
+    "values"=>array(
+        "abitur"=>"Набор",
+        "new"=>"Новые",
+        "progress"=>"Ждут собеседования",
+        "less"=>"Ждут леса",
+        "processed"=>"Принятые",
+        "nextyear"=>"Отложенные",
+        "discuss"=>"Обсуждаются",
+        "declined"=>"Отклонённые",
+        "old"=>"Архивные",
+        "no-trash"=>"Все",
+        "all"=>"Без фильтрации",
     ),
+    "default"=>"abitur",
+);
 
-    // Тематика курса
-    "resolution_mark"=>array(
-        "values"=>array(
-            ""=>"Не проверена",
-            "0"=>"0",
-            "1"=>"1",
-            "2"=>"2",
-            "3"=>"3",
-            "4"=>"4",
-            "5"=>"5",
-            "6"=>"6",
-            "7"=>"7",
-            "8"=>"8",
-            "9"=>"9",
-            "10"=>"10",
-            "-"=>"Нет решения",
-            "\$"=>"Списана",
-        ),
-        "default"=>"",
+// Статус выхода в лес
+$XSM_ENUMS["forest_status"] = array(
+    "values"=>array(
+        "undef"=>"&mdash;",
+        "notable"=>"Не может",
+        "no"=>"Не идёт",
+        "maybe"=>"ХЗ",
+        "able"=>"Может",
+        "yes"=>"Идёт",
     ),
+    "default"=>"undef",
+);
 
+// Фильтр для показов выходов в лес
+$XSM_ENUMS["show_forest_num"] = array(
+    "values"=>array(
+        "all"=>"Все выходы",
+        "forest_1"=>"1-й выход",
+        "forest_2"=>"2-й выход",
+        "forest_3"=>"3-й выход",
+    ),
+    "default"=>"all",
+);
+
+// Кураторство
+$XSM_ENUMS["curatorship"] = array(
+    "values"=>array(
+        "none"=>"Не куратор",
+        "assist"=>"Помощник куратора",
+        "cur"=>"Куратор",
+    ),
+    "default"=>"none",
+);
+
+// Зачёт
+$XSM_ENUMS["exam_status"] = array(
+    "values"=>array(
+        "listen"=>"Прослушан",
+        "passed"=>"Сдан",
+        "notpassed"=>"Не сдан",
+        "almost"=>"Почти сдан",
+        "other"=>"Иное"),
+    "default"=>"listen",
+);
+
+// Тип школы
+$XSM_ENUMS["school_type"] = array(
+    "values"=>array(
+        "lesh"=>"Летняя",
+        "zesh"=>"Зимняя",
+        "vesh"=>"Весеннняя",
+    ),
+    "default"=>"lesh",
+);
+
+// Тип курса
+$XSM_ENUMS["course_type"] = array(
+    "values"=>array(
+        "generic"=>"Обычный",
+        "facult"=>"Факультатив",
+        "prac"=>"Практикум",
+        "single"=>"Разовая лекция",
+        "other"=>"Иное",
+    ),
+    "default"=>"generic",
+);
+
+// Тематика курса
+$XSM_ENUMS["course_area"] = array(
+    "values"=>array(
+        "unknown"=>"Не выбрано",
+        "precise"=>"Точные науки",
+        "cs"=>"Computer science",  // #864
+        "nature"=>"Естественные науки",
+        "human"=>"Гуманитарные науки",
+        "other"=>"Иное",
+    ),
+    "default"=>"unknown",
 );
 
 // Enum API

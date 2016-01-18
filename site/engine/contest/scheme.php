@@ -3,8 +3,10 @@
 $CONTEST_CURRENT_YEAR = "2015";
 
 define('CTX_NO_SOLUTION', '-');
+define('CTX_STOLEN_SOLUTION', 'stolen');
 define('CTX_NO_SOLUTION_HT', '&#8212;');
-define('CTX_NOT_CHECKED', '?');
+define('CTX_NOT_CHECKED', '');
+define('CTX_NOT_CHECKED_HT', ' ?');
 
 $CTX_NAMES = array(
     "problems"=>array(
@@ -19,6 +21,28 @@ $CTX_NAMES = array(
     ),
 );
 
+global $XSM_ENUMS;
+
+// Оценка решения
+$XSM_ENUMS["resolution_mark"] = array(
+    "values"=>array(
+        CTX_NOT_CHECKED=>"Не проверена",
+        CTX_NO_SOLUTION=>"Нет решения",
+        CTX_STOLEN_SOLUTION=>"Списана",
+        "0"=>"0",
+        "1"=>"1",
+        "2"=>"2",
+        "3"=>"3",
+        "4"=>"4",
+        "5"=>"5",
+        "6"=>"6",
+        "7"=>"7",
+        "8"=>"8",
+        "9"=>"9",
+        "10"=>"10",
+    ),
+    "default"=>CTX_NOT_CHECKED,
+);
 
 $CTX_META["problems"] = array(
     "problems_id" => array("name"=>"ID", "type"=>"pk"),
@@ -87,7 +111,7 @@ $CTX_META["solutions"] = array(
     "contestant_id" => array("name"=>"Идентификатор работы", "type"=>"pk"),
     "resolution_text" => array("name"=>"Текст резолюции", "type"=>"large"),
     "resolution_author" => array("name"=>"Проверяющий", "type"=>"text"),
-    "resolution_mark" => array("name"=>"Итоговая оценка", "type"=>"text"),
+    "resolution_mark" => array("name"=>"Итоговая оценка", "type"=>"enum"),
 );
 
 function ctx_update_object($table_name, $new_values, $prev_values = array())
@@ -198,14 +222,10 @@ function ctx_calculate_results(&$works, $probs)
         {
             $pid = $prob["problems_id"];
             $val = @$work["p$pid"];
-            if (!strlen($val) || $val == CTX_NOT_CHECKED)
+            if ($val === CTX_NOT_CHECKED)
             {
-                $val = CTX_NOT_CHECKED;
                 $is_done = false;
             }
-            elseif ($val == "нет решения")
-                $val = CTX_NO_SOLUTION;
-
             $work["p${pid}val"] = $val;
             $sum += (integer)$val;
         }
