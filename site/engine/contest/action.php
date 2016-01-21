@@ -49,9 +49,19 @@ function ctx_print_result_row($work, $probs, $simple = false)
     $view = "$ctx_prefix/contestants/view/$contestants_id";
     $name = xcms_get_key_or($work, "name", "(ФИО не указано)");
     $row = "";
+    $stolen_mark = "";
+
     if ($simple)
     {
         $row .= "<td>$name</td>";
+
+        foreach ($probs as $prob)
+        {
+            $pid = $prob["problems_id"];
+            $mark = (string)$work["p${pid}val"];
+            if ($mark === CTX_STOLEN_SOLUTION)
+                $stolen_mark = CTX_STOLEN_SOLUTION_HT;
+        }
     }
     else
     {
@@ -95,8 +105,11 @@ function ctx_print_result_row($work, $probs, $simple = false)
     }
     $sum = @$work["sum"];
     $row .= "<td class=\"sum\">$sum</td>";
-
-    if (!$simple)
+    if ($simple)
+    {
+        $row .= "<td>$stolen_mark</td>";
+    }
+    else
     {
         $row .= "<td><a href=\"$ctx_prefix/contestants/delete/$contestants_id\">Удалить</a></td>";
     }

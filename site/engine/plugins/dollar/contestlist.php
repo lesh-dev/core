@@ -14,7 +14,12 @@ $done = $results['done'];
 
 ?>
 <table class="contest-results">
-<thead><tr><th>#</th><th>Имя</th><th>Результат</th></tr></thead>
+<thead><tr>
+    <th>#</th>
+    <th>Имя</th>
+    <th>Результат</th>
+    <th>Примечания</th>
+</tr></thead>
 <?php
 $i = 1;
 foreach ($done as $work)
