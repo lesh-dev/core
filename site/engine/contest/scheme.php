@@ -4,6 +4,7 @@ $CONTEST_CURRENT_YEAR = "2015";
 
 define('CTX_NO_SOLUTION', '-');
 define('CTX_STOLEN_SOLUTION', 'stolen');
+define('CTX_STOLEN_SOLUTION_HT', '<b style="color: #ff0000">Списана</b>');
 define('CTX_NO_SOLUTION_HT', '&#8212;');
 define('CTX_NOT_CHECKED', '');
 define('CTX_NOT_CHECKED_HT', ' ?');
