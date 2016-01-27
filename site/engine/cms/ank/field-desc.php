@@ -298,9 +298,11 @@ function xsm_get_fields($table_name)
         "exam"=>array(
             "student_person_id"=>array(
                 "name"=>"Школьник",
+                "type"=>"fk",
             ),
             "course_id"=>array(
                 "name"=>"Курс",
+                "type"=>"fk",
             ),
             "exam_status"=>array(
                 "name"=>"Состояние",
@@ -308,6 +310,7 @@ function xsm_get_fields($table_name)
             ),
             "deadline_date"=>array(
                 "name"=>"Дедлайн",
+                "type"=>"input",
             ),
             "exam_comment"=>array(
                 "name"=>"Комментарий к зачёту",
@@ -315,9 +318,11 @@ function xsm_get_fields($table_name)
             ),
             "exam_created"=>array(
                 "name"=>"Время создания",
+                "type"=>"input",
             ),
             "exam_modified"=>array(
                 "name"=>"Последняя модификация",
+                "type"=>"input",
             ),
         ),
 

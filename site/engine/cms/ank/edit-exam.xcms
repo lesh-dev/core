@@ -207,19 +207,9 @@ function xsm_edit_exam()
             <?php
             foreach ($fields_desc as $key=>$desc)
             {
-                if (xsm_is_bottom_field($key))
+                if (xsm_draw_generic_fields_begin($desc, $exam, $key))
                     continue;
-                $value = xcms_get_key_or($exam, $key); ?>
-                <tr><td class="ankList"><?php
-                xsm_draw_field_label($desc);
-                $ft = xcms_get_key_or($desc, "type");
-                if ($ft == "textarea")
-                    xsm_draw_field_textarea($key, $desc, $value);
-                elseif ($ft == "checkbox")
-                    xsm_checkbox($key, $value);
-                elseif ($ft == "enum")
-                    echo xsm_make_enum_by_type($key, $value, $key);
-                elseif ($key == 'student_person_id')
+                if ($key == 'student_person_id')
                     xsm_draw_field_unnamed_input($desc, xsm_fi($student));
                 elseif ($key == 'course_id') {
                     if ($exam_id == XDB_NEW)
@@ -230,9 +220,7 @@ function xsm_edit_exam()
                         echo "$teachers_ht &#8212; ".xcms_get_key_or_enc($course, 'course_title');
                     }
                 }
-                else
-                    xsm_draw_field_input($key, $desc, $value);
-                ?></td></tr><?php
+                xsm_draw_generic_fields_end();
             }?>
         </table><?php
         xsm_bottom_fields('exam', $exam);

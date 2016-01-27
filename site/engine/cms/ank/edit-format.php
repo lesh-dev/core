@@ -85,4 +85,40 @@ function xsm_draw_field_unnamed_input($desc, $value)
         <?php echo $attr; ?> /><?php
 }
 
-?>
+/**
+  * @return true when field is processed, false otherwise
+  **/
+function xsm_draw_generic_fields_begin($desc, $object, $key)
+{
+    if (xsm_is_bottom_field($key))
+        return true;
+
+    $value = xcms_get_key_or($object, $key);
+
+    ?><tr><td class="ankList"><?php
+
+    xsm_draw_field_label($desc);
+    $ft = xcms_get_key_or($desc, "type");
+    $processed = true;
+    if ($ft == "textarea")
+        xsm_draw_field_textarea($key, $desc, $value);
+    elseif ($ft == "checkbox")
+        xsm_checkbox($key, $value);
+    elseif ($ft == "enum")
+        echo xsm_make_enum_by_type($key, $value, $key);
+    elseif ($ft == "input")
+        xsm_draw_field_input($key, $desc, $value);
+    else
+        $processed = false;
+    // close processed row
+    if ($processed)
+    {?>
+        </td></tr><?php
+    }
+    return $processed;
+}
+
+function xsm_draw_generic_fields_end()
+{
+    ?></td></tr><?php
+}
