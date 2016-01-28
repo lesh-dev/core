@@ -78,21 +78,11 @@ function xsm_edit_course()
             <?php
             foreach ($fields_desc as $key=>$desc)
             {
-                if (xsm_is_bottom_field($key))
-                    continue;
                 if ($key == "school_id") // we already show school title in table caption
                     continue;
-                $value = xcms_get_key_or($course, $key); ?>
-                <tr><td class="ankList"><?php
-                xsm_draw_field_label($desc);
-                $ft = xcms_get_key_or($desc, "type");
-                if ($ft == "textarea")
-                    xsm_draw_field_textarea($key, $desc, $value);
-                elseif ($ft == "enum")
-                    echo xsm_make_enum_by_type($key, $value, $key);
-                else
-                    xsm_draw_field_input($key, $desc, $value);
-                ?></td></tr><?php
+                if (xsm_draw_generic_fields_begin($desc, $course, $key))
+                    continue;
+                xsm_draw_generic_fields_end();
             }?>
         </table><?php
         xsm_bottom_fields('course', $course);
