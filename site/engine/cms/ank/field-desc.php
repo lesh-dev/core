@@ -4,6 +4,8 @@ define('XSM_SCHOOL_ANK_ID', 'ank');
 
 // field types
 define('XSM_FT_FOREIGN_KEY', 'fk');
+define('XSM_FT_STR', 'input');
+define('XSM_FT_TEXT', 'textarea');
 define('XSM_FT_ENUM', 'enum');
 
 // new style field descriptors
@@ -254,31 +256,35 @@ function xsm_get_fields($table_name)
         "course"=>array(
             "course_title"=>array(
                 "name"=>"Название курса",
+                "type"=>XSM_FT_STR,
             ),
             "target_class"=>array(
                 "name"=>"Уровень (диапазон классов)",
+                "type"=>XSM_FT_STR,
             ),
             "school_id"=>array(
                 "name"=>"Школа, на которой читался курс",
+                "type"=>XSM_FT_FOREIGN_KEY,
             ),
             "course_cycle"=>array(
                 "name"=>"Цикл, на котором читался курс",
+                "type"=>XSM_FT_STR,
             ),
             "course_desc"=>array(
                 "name"=>"Описание",
-                "type"=>"textarea",
+                "type"=>XSM_FT_TEXT,
             ),
             "course_type"=>array(
                 "name"=>"Тип курса",
-                "type"=>"enum",
+                "type"=>XSM_FT_ENUM,
             ),
             "course_area"=>array(
                 "name"=>"Тематика",
-                "type"=>"enum",
+                "type"=>XSM_FT_ENUM,
             ),
             "course_comment"=>array(
                 "name"=>"Комментарий",
-                "type"=>"textarea",
+                "type"=>XSM_FT_TEXT,
             ),
             "course_created"=>array(
                 "name"=>"Время создания",
