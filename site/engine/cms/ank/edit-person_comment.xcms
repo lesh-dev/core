@@ -123,19 +123,11 @@ function xsm_edit_person_comment()
             <?php
             foreach ($fields_desc as $key=>$desc)
             {
-                if (xsm_is_bottom_field($key))
+                if (xsm_draw_generic_fields_begin($desc, $person_comment, $key))
                     continue;
-                $value = xcms_get_key_or($person_comment, $key); ?>
-                <tr><td class="ankList"><?php
-                xsm_draw_field_label($desc);
-                $ft = xcms_get_key_or($desc, "type");
-                if ($ft == "textarea")
-                    xsm_draw_field_textarea($key, $desc, $value);
-                elseif ($key == 'blamed_person_id')
+                if ($key == 'blamed_person_id')
                     xsm_draw_field_unnamed_input($desc, xsm_fi($person));
-                else
-                    xsm_draw_field_input($key, $desc, $value);
-                ?></td></tr><?php
+                xsm_draw_generic_fields_end();
             }?>
         </table><?php
         xsm_bottom_fields('person_comment', $person_comment);

@@ -2,6 +2,10 @@
 
 define('XSM_SCHOOL_ANK_ID', 'ank');
 
+// field types
+define('XSM_FT_FOREIGN_KEY', 'fk');
+define('XSM_FT_ENUM', 'enum');
+
 // new style field descriptors
 function xsm_get_fields($table_name)
 {
@@ -29,7 +33,7 @@ function xsm_get_fields($table_name)
             ),
             "school_type"=>array(
                 "name"=>"Тип",
-                "type"=>"enum",
+                "type"=>XSM_FT_ENUM,
             ),
             "school_date_start"=>array(
                 "name"=>"Дата начала (ГГГГ.ММ.ДД)",
@@ -174,12 +178,15 @@ function xsm_get_fields($table_name)
         "person_school"=>array(
             "member_person_id"=>array(
                 "name"=>"Участник",
+                "type"=>XSM_FT_FOREIGN_KEY,
             ),
             "school_id"=>array(
                 "name"=>"Школа",
+                "type"=>XSM_FT_FOREIGN_KEY,
             ),
             "member_department_id"=>array(
                 "name"=>"Отделение",
+                "type"=>XSM_FT_FOREIGN_KEY,
             ),
             "is_student"=>array(
                 "name"=>"Школьник",
@@ -187,12 +194,15 @@ function xsm_get_fields($table_name)
             ),
             "current_class"=>array(
                 "name"=>"Класс",
+                "type"=>"input",
             ),
             "courses_needed"=>array(
                 "name"=>"Потребное кол-во зачётов",
+                "type"=>"input",
             ),
             "curator_group"=>array(
                 "name"=>"Кто курирует",
+                "type"=>"input",
             ),
             "is_teacher"=>array(
                 "name"=>"Препод",
