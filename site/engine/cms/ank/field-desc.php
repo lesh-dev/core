@@ -314,31 +314,29 @@ function xsm_get_fields($table_name)
         "exam"=>array(
             "student_person_id"=>array(
                 "name"=>"Школьник",
-                "type"=>"fk",
+                "type"=>XSM_FT_FOREIGN_KEY,
             ),
             "course_id"=>array(
                 "name"=>"Курс",
-                "type"=>"fk",
+                "type"=>XSM_FT_FOREIGN_KEY,
             ),
             "exam_status"=>array(
                 "name"=>"Состояние",
-                "type"=>"enum",
+                "type"=>XSM_FT_ENUM,
             ),
             "deadline_date"=>array(
                 "name"=>"Дедлайн",
-                "type"=>"input",
+                "type"=>XSM_FT_STR,
             ),
             "exam_comment"=>array(
                 "name"=>"Комментарий к зачёту",
-                "type"=>"textarea",
+                "type"=>XSM_FT_TEXT,
             ),
             "exam_created"=>array(
                 "name"=>"Время создания",
-                "type"=>"input",
             ),
             "exam_modified"=>array(
                 "name"=>"Последняя модификация",
-                "type"=>"input",
             ),
         ),
 
@@ -361,7 +359,8 @@ $XSM_ENUMS["anketa_status"] = array(
         "cont"=>"Активный",
         "old"=>"Архив",
         "duplicate"=>"Дубль",
-        "spam"=>"Спам"),
+        "spam"=>"Спам",
+    ),
     "default"=>"new",
 );
 
