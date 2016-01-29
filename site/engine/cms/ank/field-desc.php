@@ -204,15 +204,15 @@ function xsm_get_fields($table_name)
             ),
             "current_class"=>array(
                 "name"=>"Класс",
-                "type"=>"input",
+                "type"=>XSM_FT_STR,
             ),
             "courses_needed"=>array(
                 "name"=>"Потребное кол-во зачётов",
-                "type"=>"input",
+                "type"=>XSM_FT_STR,
             ),
             "curator_group"=>array(
                 "name"=>"Кто курирует",
-                "type"=>"input",
+                "type"=>XSM_FT_STR,
             ),
             "is_teacher"=>array(
                 "name"=>"Препод",
@@ -224,7 +224,7 @@ function xsm_get_fields($table_name)
             ),
             "person_school_comment"=>array(
                 "name"=>"Комментарий",
-                "type"=>"textarea",
+                "type"=>XSM_FT_TEXT,
             ),
             "person_school_created"=>array(
                 "name"=>"Время создания",
