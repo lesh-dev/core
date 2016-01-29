@@ -220,7 +220,7 @@ function xsm_get_fields($table_name)
             ),
             "curatorship"=>array(
                 "name"=>"Кураторство",
-                "type"=>"enum",
+                "type"=>XSM_FT_ENUM,
             ),
             "person_school_comment"=>array(
                 "name"=>"Комментарий",
@@ -238,16 +238,18 @@ function xsm_get_fields($table_name)
         "person_comment"=>array(
             "comment_text"=>array(
                 "name"=>"Текст комментария",
-                "type"=>"textarea",
+                "type"=>XSM_FT_TEXT,
                 "required"=>true,
             ),
             "owner_login"=>array(
                 "name"=>"Логин автора",
                 "readonly"=>true,
+                "type"=>XSM_FT_STR,
             ),
             "blamed_person_id"=>array(
                 "name"=>"ID субъекта",
                 "readonly"=>true,
+                "type"=>XSM_FT_FOREIGN_KEY,
             ),
             "person_comment_created"=>array(
                 "name"=>"Время создания",
