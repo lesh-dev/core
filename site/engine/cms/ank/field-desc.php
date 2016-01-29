@@ -39,12 +39,15 @@ function xsm_get_fields($table_name)
             ),
             "school_date_start"=>array(
                 "name"=>"Дата начала (ГГГГ.ММ.ДД)",
+                "type"=>XSM_FT_STR,
             ),
             "school_date_end"=>array(
                 "name"=>"Дата окончания (ГГГГ.ММ.ДД)",
+                "type"=>XSM_FT_STR,
             ),
             "school_location"=>array(
                 "name"=>"Место проведения",
+                "type"=>XSM_FT_STR,
             ),
             "school_created"=>array(
                 "name"=>"Время создания",
@@ -58,13 +61,12 @@ function xsm_get_fields($table_name)
         "person"=>array(
             "department_id"=>array(
                 "name"=>"Отделение",
+                "type"=>XSM_FT_FOREIGN_KEY,
             ),
-
             "anketa_status"=>array(
                 "name"=>"Статус",
-                "type"=>"enum",
+                "type"=>XSM_FT_ENUM,
             ),
-
             "last_name"=>array(
                 "name"=>"Фамилия",
                 "required"=>true,
@@ -75,47 +77,56 @@ function xsm_get_fields($table_name)
             ),
             "patronymic"=>array(
                 "name"=>"Отчество",
+                "type"=>XSM_FT_STR,
             ),
             "nick_name"=>array(
                 "name"=>"Ник",
+                "type"=>XSM_FT_STR,
             ),
-
             "birth_date"=>array(
                 "name"=>"Дата рождения",
+                "type"=>XSM_FT_STR,
             ),
             "passport_data"=>array(
                 "name"=>"Паспортные данные",
+                "type"=>XSM_FT_STR,
             ),
-
             "school"=>array(
                 "name"=>"Школа",
+                "type"=>XSM_FT_STR,
             ),
             "school_city"=>array(
                 "name"=>"Адрес школы",
+                "type"=>XSM_FT_STR,
             ),
             "ank_class"=>array(
                 "name"=>"Класс подачи анкеты",
+                "type"=>XSM_FT_STR,
             ),
             "current_class"=>array(
                 "name"=>"Класс",
+                "type"=>XSM_FT_STR,
             ),
-
             "phone"=>array(
                 "name"=>"Телефон",
+                "type"=>XSM_FT_STR,
             ),
             "cellular"=>array(
                 "name"=>"Мобильный телефон",
+                "type"=>XSM_FT_STR,
             ),
             "email"=>array(
                 "name"=>"E-Mail",
+                "type"=>XSM_FT_STR,
             ),
             "skype"=>array(
                 "name"=>"Skype",
+                "type"=>XSM_FT_STR,
             ),
             "social_profile"=>array(
                 "name"=>"Профиль в соц. сети",
+                "type"=>XSM_FT_STR,
             ),
-
             "is_teacher"=>array(
                 "name"=>"Препод",
                 "type"=>"checkbox",
@@ -124,50 +135,47 @@ function xsm_get_fields($table_name)
                 "name"=>"Школьник",
                 "type"=>"checkbox",
             ),
-
             "tent_capacity"=>array(
                 "name"=>"Вместимость палатки",
+                "type"=>XSM_FT_STR,
             ),
             "tour_requisites"=>array(
                 "name"=>"Туристское барахло",
                 "type"=>"textarea",
             ),
-
             "forest_1"=>array(
                 "name"=>"1-й выход в лес",
-                "type"=>"enum",
+                "type"=>XSM_FT_ENUM,
             ),
             "forest_2"=>array(
                 "name"=>"2-й выход в лес",
-                "type"=>"enum",
+                "type"=>XSM_FT_ENUM,
             ),
             "forest_3"=>array(
                 "name"=>"3-й выход в лес",
-                "type"=>"enum",
+                "type"=>XSM_FT_ENUM,
             ),
-
             "favourites"=>array(
                 "name"=>"Любимые предметы",
-                "type"=>"textarea",
+                "type"=>XSM_FT_TEXT,
             ),
             "achievements"=>array(
                 "name"=>"Достижения",
-                "type"=>"textarea",
+                "type"=>XSM_FT_TEXT,
             ),
             "hobby"=>array(
                 "name"=>"Хобби",
-                "type"=>"textarea",
+                "type"=>XSM_FT_TEXT,
             ),
             "lesh_ref"=>array(
                 "name"=>"Откуда узнали о школе",
-                "type"=>"textarea",
+                "type"=>XSM_FT_TEXT,
             ),
 
             "user_agent"=>array(
                 "name"=>"UserAgent",
                 "readonly"=>true,
             ),
-
             "person_created"=>array(
                 "name"=>"Время создания",
             ),
