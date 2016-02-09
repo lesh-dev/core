@@ -100,8 +100,10 @@ function xsm_print_person_header($db, $person, $school_id)
     ?>
     <table class="person-top"><tr>
     <td class="person-top left">
-        <div class="person-portrait"><img id="avatar" class="person-portrait"
-            src="<?php echo $av; ?>" /></div>
+        <div class="person-portrait"><a
+            href="<?php echo $social_profile; ?>"><img
+                id="avatar" class="person-portrait"
+            src="<?php echo $av; ?>" /></a></div>
         <div class="person-title"><span id="person-title"><?php
             echo $person_fio; ?></span> <sup><?php
             xsm_draw_list_link($person_id, $school_id); ?></sup></div>
