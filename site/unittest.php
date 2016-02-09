@@ -10,6 +10,7 @@
     require_once("${engine_dir}sys/diff/diff-utils.php");
     require_once("${engine_dir}cms/ank/format.php");
     require_once("${engine_dir}cms/ank/ank-proc.php");
+    require_once("${engine_dir}cms/ank/field-desc.php");
 
     header("Content-Type: text/html; charset=utf-8");
 ?><!DOCTYPE html>
@@ -29,6 +30,7 @@
     xcms_finediff_unit_test();
     xsm_ank_format_unit_test();
     xsm_ank_proc_unit_test();
+    xsm_field_desc_unit_test();
     XcmsUser::unit_test();
 
     xut_finalize();

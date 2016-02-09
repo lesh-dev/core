@@ -7,23 +7,25 @@ define('XSM_FT_FOREIGN_KEY', 'fk');
 define('XSM_FT_STR', 'input');
 define('XSM_FT_TEXT', 'textarea');
 define('XSM_FT_ENUM', 'enum');
+define('XSM_FT_CHECKBOX', 'checkbox');
 
 // new style field descriptors
 function xsm_get_fields($table_name)
 {
-    $field_desc = array(
+    $field_desc = xsm_get_all_field_descriptors();
+    return $field_desc[$table_name];
+}
+
+function xsm_get_all_field_descriptors()
+{
+    $field_descriptors = array(
 
         // department
         "department"=>array(
             "department_title"=>array(
                 "name"=>"Название",
+                "type"=>XSM_FT_STR,
                 "required"=>true,
-            ),
-            "department_created"=>array(
-                "name"=>"Время создания",
-            ),
-            "department_modified"=>array(
-                "name"=>"Последняя модификация",
             ),
         ),
 
@@ -31,6 +33,7 @@ function xsm_get_fields($table_name)
         "school"=>array(
             "school_title"=>array(
                 "name"=>"Название",
+                "type"=>XSM_FT_STR,
                 "required"=>true,
             ),
             "school_type"=>array(
@@ -49,12 +52,6 @@ function xsm_get_fields($table_name)
                 "name"=>"Место проведения",
                 "type"=>XSM_FT_STR,
             ),
-            "school_created"=>array(
-                "name"=>"Время создания",
-            ),
-            "school_modified"=>array(
-                "name"=>"Последняя модификация",
-            ),
         ),
 
         // person
@@ -69,10 +66,12 @@ function xsm_get_fields($table_name)
             ),
             "last_name"=>array(
                 "name"=>"Фамилия",
+                "type"=>XSM_FT_STR,
                 "required"=>true,
             ),
             "first_name"=>array(
                 "name"=>"Имя",
+                "type"=>XSM_FT_STR,
                 "required"=>true,
             ),
             "patronymic"=>array(
@@ -129,11 +128,11 @@ function xsm_get_fields($table_name)
             ),
             "is_teacher"=>array(
                 "name"=>"Препод",
-                "type"=>"checkbox",
+                "type"=>XSM_FT_CHECKBOX,
             ),
             "is_student"=>array(
                 "name"=>"Школьник",
-                "type"=>"checkbox",
+                "type"=>XSM_FT_CHECKBOX,
             ),
             "tent_capacity"=>array(
                 "name"=>"Вместимость палатки",
@@ -141,7 +140,7 @@ function xsm_get_fields($table_name)
             ),
             "tour_requisites"=>array(
                 "name"=>"Туристское барахло",
-                "type"=>"textarea",
+                "type"=>XSM_FT_TEXT,
             ),
             "forest_1"=>array(
                 "name"=>"1-й выход в лес",
@@ -171,16 +170,10 @@ function xsm_get_fields($table_name)
                 "name"=>"Откуда узнали о школе",
                 "type"=>XSM_FT_TEXT,
             ),
-
             "user_agent"=>array(
                 "name"=>"UserAgent",
+                "type"=>XSM_FT_STR,
                 "readonly"=>true,
-            ),
-            "person_created"=>array(
-                "name"=>"Время создания",
-            ),
-            "person_modified"=>array(
-                "name"=>"Последняя модификация",
             ),
         ),
 
@@ -200,7 +193,7 @@ function xsm_get_fields($table_name)
             ),
             "is_student"=>array(
                 "name"=>"Школьник",
-                "type"=>"checkbox",
+                "type"=>XSM_FT_CHECKBOX,
             ),
             "current_class"=>array(
                 "name"=>"Класс",
@@ -216,7 +209,7 @@ function xsm_get_fields($table_name)
             ),
             "is_teacher"=>array(
                 "name"=>"Препод",
-                "type"=>"checkbox",
+                "type"=>XSM_FT_CHECKBOX,
             ),
             "curatorship"=>array(
                 "name"=>"Кураторство",
@@ -225,12 +218,6 @@ function xsm_get_fields($table_name)
             "person_school_comment"=>array(
                 "name"=>"Комментарий",
                 "type"=>XSM_FT_TEXT,
-            ),
-            "person_school_created"=>array(
-                "name"=>"Время создания",
-            ),
-            "person_school_modified"=>array(
-                "name"=>"Последняя модификация",
             ),
         ),
 
@@ -251,14 +238,11 @@ function xsm_get_fields($table_name)
                 "readonly"=>true,
                 "type"=>XSM_FT_FOREIGN_KEY,
             ),
-            "person_comment_created"=>array(
-                "name"=>"Время создания",
-            ),
-            "person_comment_modified"=>array(
-                "name"=>"Последняя модификация",
-            ),
+            // TODO: internals
             "person_comment_deleted"=>array(
                 "name"=>"Объект удалён",
+                "type"=>XSM_FT_ENUM,
+                "hidden"=>true,
             ),
         ),
 
@@ -296,27 +280,17 @@ function xsm_get_fields($table_name)
                 "name"=>"Комментарий",
                 "type"=>XSM_FT_TEXT,
             ),
-            "course_created"=>array(
-                "name"=>"Время создания",
-            ),
-            "course_modified"=>array(
-                "name"=>"Последняя модификация",
-            ),
         ),
 
         // course teachers
         "course_teachers"=>array(
             "course_id"=>array(
                 "name"=>"Курс",
+                "type"=>XSM_FT_FOREIGN_KEY,
             ),
             "course_teacher_id"=>array(
                 "name"=>"Препод курса",
-            ),
-            "course_teachers_created"=>array(
-                "name"=>"Время создания",
-            ),
-            "course_teachers_modified"=>array(
-                "name"=>"Последняя модификация",
+                "type"=>XSM_FT_FOREIGN_KEY,
             ),
         ),
 
@@ -342,16 +316,24 @@ function xsm_get_fields($table_name)
                 "name"=>"Комментарий к зачёту",
                 "type"=>XSM_FT_TEXT,
             ),
-            "exam_created"=>array(
-                "name"=>"Время создания",
-            ),
-            "exam_modified"=>array(
-                "name"=>"Последняя модификация",
-            ),
         ),
 
     );
-    return $field_desc[$table_name];
+
+    foreach ($field_descriptors as $object_type => $fields_desc) {
+        $field_descriptors[$object_type]["${object_type}_created"] = array(
+            "name"=>"Дата создания",
+            "type"=>XSM_FT_STR,
+            "readonly"=>true,
+        );
+        $field_descriptors[$object_type]["${object_type}_modified"] = array(
+            "name"=>"Последняя модификация",
+            "type"=>XSM_FT_STR,
+            "readonly"=>true,
+        );
+    }
+
+    return $field_descriptors;
 }
 
 global $XSM_ENUMS;
@@ -535,6 +517,19 @@ function xsm_saved_form($table_name)
         'department'=>'сохранено',
         );
     return xcms_get_key_or($forms, $table_name, 'сохранён');
+}
+
+function xsm_field_desc_unit_test()
+{
+    xut_begin("field-desc");
+    $field_descriptors = xsm_get_all_field_descriptors();
+    foreach ($field_descriptors as $object_type => $fields_desc) {
+        foreach ($fields_desc as $field_name => $field_desc) {
+            $type = xcms_get_key_or($field_desc, "type");
+            xut_check(!xu_empty($type), "Type $object_type::$field_name should not be empty");
+        }
+    }
+    xut_end();
 }
 
 ?>
