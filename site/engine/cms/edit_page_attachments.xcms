@@ -13,6 +13,11 @@ function xcmst_upload_page_attach($page_prefix)
     }
     // extract extension
     $tmp_name = $_FILES["attachment"]["tmp_name"];
+    if (!strlen($tmp_name))
+    {?>
+        <div class="error">No file selected</div><?php
+        return;
+    }
     $original_name = $_FILES["attachment"]["name"];
     $ext = preg_replace('/.*\./', '', $original_name);
     // if nothing replaced, assume ext is empty
