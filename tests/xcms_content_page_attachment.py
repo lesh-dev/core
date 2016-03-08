@@ -71,4 +71,4 @@ class XcmsContentPageAttachment(xtest_common.XcmsTest):
        
         self.assertPhpErrors()       
        
-       
+        self.assertBodyTextPresent("No file selected")
