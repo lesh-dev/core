@@ -62,7 +62,7 @@ function xcmst_show_attachments($page_prefix)
             <td><input type="file" size="60" name="attachment" /></td>
         </tr>
     </table>
-    <input type="submit" name="upload_attach" value="Добавить" />
+    <input type="submit" name="upload_attach" value="Добавить" id="upload_attach-submit" />
     </form>
     <?php
 
