@@ -16,7 +16,17 @@
     {
         try
         {
-            xcms_user(@$_POST["auth-login"], @$_POST["auth-password"]);
+            $auth_login = xcms_get_key_or($_POST, "auth-login");
+            $auth_password = xcms_get_key_or($_POST, "auth-password");
+
+            $login_check_result = xcms_check_user_name($auth_login);
+            if (!$login_check_result["valid"])
+            {
+                # 901
+                throw new Exception("Invalid login. ");
+            }
+
+            xcms_user($auth_login, $auth_password);
             xcmst_do_auth_redirect();
         }
         catch(Exception $e)
