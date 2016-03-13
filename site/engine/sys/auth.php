@@ -245,10 +245,10 @@
           **/
         function create($login, $email)
         {
-            if (!strlen($login))
-                return $this->set_error("Логин не может быть пустым. ");
-            if (!xcms_check_user_name($login))
-                return $this->set_error("Указан недопустимый логин. ");
+            $login_check_result = xcms_check_user_name($login);
+            if (!$login_check_result["valid"])
+               return $this->set_error($login_check_result["reason"]);
+
             $this->check_rights("admin");
             if (file_exists($this->_file_name($login)))
                 return $this->set_error("Пользователь '$login' уже существует. ");
