@@ -83,12 +83,12 @@ function xcms_check_user_name($user_name)
         $result["reason"] = "Имя пользователя содержит недопустимые символы. ";
     }
 
-    // Check that some letters are present
-    $letters = preg_replace("/[^a-zA-Z0-9]+/i", "", $user_name);
+    // Check that first letter kosherity
+    $letters = preg_replace("/[^a-zA-Z0-9]+/i", "", xu_substr($user_name, 0, 1));
     if (xu_empty($letters))
     {
         $result["valid"] = false;
-        $result["reason"] = "Имя пользователя должно содержать хотя бы одну букву или цифру. ";
+        $result["reason"] = "Имя пользователя должно начинаться с буквы или цифры. ";
         return $result;
     }
 
@@ -361,15 +361,25 @@ function xcms_string_unit_test()
     xut_check(xu_empty(""), "Empty string is not empty");
 
     // xcms_check_user_name
-    $valid_user = xcms_check_user_name("@vasya.123");
+    $valid_user0 = xcms_check_user_name("vasya.123");
+    $valid_user1 = xcms_check_user_name("vasya@123.com");
+    $valid_user2 = xcms_check_user_name("vasya_pupkin");
+
+    $invalid_user0 = xcms_check_user_name(".");
     $invalid_user1 = xcms_check_user_name("..");
     $invalid_user2 = xcms_check_user_name("...");
     $invalid_user3 = xcms_check_user_name("../usr/vasya");
+    $invalid_user4 = xcms_check_user_name(".vasya");
 
-    xut_check($valid_user["valid"], "Check valid user");
+    xut_check($valid_user0["valid"], "Check valid user 0");
+    xut_check($valid_user1["valid"], "Check valid user 1");
+    xut_check($valid_user2["valid"], "Check valid user 2");
+
+    xut_check(!$invalid_user0["valid"], "Check invalid user 0");
     xut_check(!$invalid_user1["valid"], "Check invalid user 1");
     xut_check(!$invalid_user2["valid"], "Check invalid user 2");
     xut_check(!$invalid_user3["valid"], "Check invalid user 3");
+    xut_check(!$invalid_user4["valid"], "Check invalid user 4");
 
     // xcms_check_password
     xut_check(xcms_check_password("123@#$%^&abcABC bla\xFE\xFF"), "Check valid password");

@@ -315,7 +315,7 @@
             $user_files = glob($this->_file_name("*"));
             foreach ($user_files as $li)
             {
-                $li = preg_replace("/\\.user/", "", $li);
+                $li = preg_replace('/\\.user$/', "", trim($li));
                 $li = preg_replace("/.*\\//", "", $li);
                 $ans[] = $li;
             }
