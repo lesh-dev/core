@@ -43,7 +43,7 @@ function xcms_get_key_or($list, $key, $def_value = '')
         return $def_value;
     $value = $list[$key];
     // special case for bool vars
-    if (is_bool($def_value))
+    if (is_bool($def_value) || is_array($value))
         return $value;
 
     if (!strlen($value))
@@ -344,6 +344,8 @@ function xcms_string_unit_test()
     $obj["another"] = "test string";
     $obj["empty"] = "";
     $obj["need_escaping"] = "&";
+    $obj["array"] = array("qqq"=>true);
+    $obj["empty-array"] = array();
 
     xut_equal(xcms_get_key_or($obj, "super"), 1, "Invalid 'super' key");
     xut_equal(xcms_get_key_or($obj, "pupper", true), false, "Invalid 'pupper' key");
@@ -356,6 +358,10 @@ function xcms_string_unit_test()
     xut_equal(xcms_get_key_or($obj, "pupper", true), false, "Failed existing bool key");
 
     xut_equal(xcms_get_key_or_enc($obj, "need_escaping"), "&amp;", "Failed get key with escaping");
+
+    $array_value = xcms_get_key_or($obj, "array");
+    xut_check(is_array($array_value), "Array value type");
+    xut_check($array_value["qqq"] === true, "Array value");
 
     $empty_obj = array();
     $def_key_value = xcms_get_key_or($empty_obj, "nokey", array());
