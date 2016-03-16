@@ -84,12 +84,12 @@ if (@$_POST["send-contest"])
                 файл слишком большой. Максимальный размер файла:
                 <b>15&nbsp;МБ</b></font><?php
         }
-        elseif (xu_empty($file_name) || xu_empty($tmp_name))
+        elseif ($size < 512 || xu_empty($file_name) || xu_empty($tmp_name))
         {
-            xcms_log(XLOG_ERROR, "[CONTEST] File name not set");
+            xcms_log(XLOG_ERROR, "[CONTEST] File is empty or too small");
             ?>
             <font color="red"><b>Ошибка отправки решения</b>:
-                не выбран файл!</font><?php
+                не выбран файл (или его размер подозрительно маленький)!</font><?php
         }
         elseif ($error !== 0)
         {
