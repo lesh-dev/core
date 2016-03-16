@@ -1,4 +1,3 @@
-<!-- <p>Приём работ олимпиады в электронном виде закрыт.</p> -->
 <?php
 /**
  * Пожалуйста, не редактируйте этот код в редакторе, исправляйте
@@ -13,7 +12,12 @@
 require_once("${engine_dir}sys/db.php");
 require_once("${engine_dir}contest/scheme.php");
 
-if (true) {
+if (true)
+{?>
+    <p>Приём работ олимпиады в электронном виде закрыт.</p><?php
+}
+else
+{
 
 $show_form = true;
 $max_attachment_size = 20 * 1024 * 1024;
@@ -178,5 +182,5 @@ if ($show_form) { ?>
 электронной почты. Мы оповестим Вас о том, что решение получено.</p><?php
 ctx_notify_three_days(); ?>
 <?php }
-} // if (true)
+} // end if
 ?>
