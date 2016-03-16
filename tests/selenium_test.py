@@ -1025,7 +1025,6 @@ class SeleniumTest(object):
             returns True and suspicious word if error found, False/None otherwise
         """
         pageText = self.getPageSource()
-        #self.logAdd(pageText)
         susp = [
             "Notice:",
             "Error:",
