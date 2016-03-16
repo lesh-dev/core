@@ -15,6 +15,7 @@ import xcms_auth_set_dup_email_by_admin
 import xcms_content_add_page
 import xcms_content_auth_only_page
 import xcms_content_bad_path_page
+import xcms_content_comment_processing
 import xcms_content_contlists
 import xcms_content_dollar_plugin
 import xcms_content_hidden_page
@@ -66,6 +67,7 @@ def getTests(baseUrl, args):
         ("xcms_content_add_page.py", xcms_content_add_page.XcmsContentAddPage(baseUrl, args)),
         ("xcms_content_auth_only_page.py", xcms_content_auth_only_page.XcmsContentAuthOnlyPage(baseUrl, args)),
         ("xcms_content_bad_path_page.py", xcms_content_bad_path_page.XcmsContentBadPathPage(baseUrl, args)),
+        ("xcms_content_comment_processing.py", xcms_content_comment_processing.XcmsContentCommentProcessing(baseUrl, args)),
         ("xcms_content_contlists.py", xcms_content_contlists.XcmsContentContlist(baseUrl, args)),
         ("xcms_content_dollar_plugin.py", xcms_content_dollar_plugin.XcmsContentDollarPlugin(baseUrl, args)),
         ("xcms_content_hidden_page.py", xcms_content_hidden_page.XcmsContentHiddenPage(baseUrl, args)),
