@@ -1,4 +1,4 @@
-<!-- Приём работ олимпиады в электронном виде закрыт. -->
+<!-- <p>Приём работ олимпиады в электронном виде закрыт.</p> -->
 <?php
 /**
  * Пожалуйста, не редактируйте этот код в редакторе, исправляйте
@@ -9,8 +9,11 @@
  * Файл расположен в site/engine/contest/contest-send-form.php
  * Alias страницы: contest/send
  **/
+
 require_once("${engine_dir}sys/db.php");
 require_once("${engine_dir}contest/scheme.php");
+
+if (true) {
 
 $show_form = true;
 $max_attachment_size = 20 * 1024 * 1024;
@@ -174,4 +177,6 @@ if ($show_form) { ?>
 <p>Оставьте, пожалуйста, работающий и читаемый Вами адрес
 электронной почты. Мы оповестим Вас о том, что решение получено.</p><?php
 ctx_notify_three_days(); ?>
-<?php } ?>
+<?php }
+} // if (true)
+?>
