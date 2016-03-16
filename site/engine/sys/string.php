@@ -357,6 +357,15 @@ function xcms_string_unit_test()
 
     xut_equal(xcms_get_key_or_enc($obj, "need_escaping"), "&amp;", "Failed get key with escaping");
 
+    $empty_obj = array();
+    $def_key_value = xcms_get_key_or($empty_obj, "nokey", array());
+    xut_check(is_array($def_key_value) , "Failed array default value type");
+    xut_check(count($def_key_value) == 0, "Failed array default value item count");
+
+    $def_key_value = xcms_get_key_or($empty_obj, "nokey", array("qqq"=>true));
+    xut_check(is_array($def_key_value) , "Failed non-empty array default value type");
+    xut_check($def_key_value["qqq"] === true, "Failed non-empty array default value items");
+
     xut_check(xu_not_empty(0), "Zero is empty");
     xut_check(xu_empty(""), "Empty string is not empty");
 
