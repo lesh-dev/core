@@ -1025,6 +1025,7 @@ class SeleniumTest(object):
             returns True and suspicious word if error found, False/None otherwise
         """
         pageText = self.getPageSource()
+        #self.logAdd(pageText)
         susp = [
             "Notice:",
             "Error:",
@@ -1032,7 +1033,8 @@ class SeleniumTest(object):
             "Fatal error:",
             "Parse error:",
             "Cannot find template:",
-            "/srv/www"
+            "/var/www/",
+            "/srv/www/",
         ]
         for word in susp:
             if (word in pageText) and (" on line " in pageText):
