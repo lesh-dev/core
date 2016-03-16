@@ -60,10 +60,19 @@ if (@$_POST["send-contest"])
     }
     else
     {
-        $file_name = @$_FILES["attachment"]["name"];
-        $tmp_name = @$_FILES["attachment"]["tmp_name"];
-        $size = @$_FILES["attachment"]["size"];
-        $error = @$_FILES["attachment"]["error"];
+        $attachment = xcms_get_key_or($_FILES, "attachment", array());
+        $file_name = xcms_get_key_or($attachment, "name");
+        $tmp_name = xcms_get_key_or($attachment, "tmp_name");
+        $size = xcms_get_key_or($attachment, "size");
+        $error = xcms_get_key_or($attachment, "error");
+        xcms_log(
+            XLOG_INFO,
+            "[CONTEST] Attachment data: ".
+            "File name: '$file_name', ".
+            "temp name: '$tmp_name', ".
+            "size '$size' bytes, ".
+            "error code: '$error'"
+        );
 
         if ($size > $max_attachment_size ||
             $error == UPLOAD_ERR_INI_SIZE ||
@@ -75,7 +84,7 @@ if (@$_POST["send-contest"])
                 файл слишком большой. Максимальный размер файла:
                 <b>15&nbsp;МБ</b></font><?php
         }
-        elseif (!strlen($file_name))
+        elseif (xu_empty($file_name) || xu_empty($tmp_name))
         {
             xcms_log(XLOG_ERROR, "[CONTEST] File name not set");
             ?>
