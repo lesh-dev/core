@@ -7,6 +7,7 @@ import re
 from xtest_config import XcmsTestConfig
 from bawlib import isVoid, checkSingleOption
 
+
 class XcmsBaseTest(selenium_test.SeleniumTest):
     """
         Base test class wth advanced error checking"
@@ -36,7 +37,7 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
 
     def checkDocType(self):
         firstLine, sourceBlock = self.getPageSourceFirstLine()
-        if not "<!DOCTYPE" in firstLine:
+        if "<!DOCTYPE" not in firstLine:
             if self.isAuthPage():
                 self.logAdd("DOCTYPE not detected, but this page seems to be Auth page. ", "warning")
                 return
