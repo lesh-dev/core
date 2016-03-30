@@ -11,14 +11,20 @@ function xcmst_upload_page_attach($page_prefix)
             <b>A-Z a-z 0-9 . , _ -</b></div><?php
         return;
     }
-    // extract extension
-    $tmp_name = $_FILES["attachment"]["tmp_name"];
-    if (!strlen($tmp_name))
+    $attachment = xcms_get_uploaded_file("attachment", 15000000, 128);
+    $tmp_name = $attachment["tmp_name"];
+    $exception_code = $attachment["exception_code"];
+    if ($exception_code == XE_FILE_TOO_SMALL)
     {?>
-        <div class="error">No file selected</div><?php
+        <div class="error">No file selected (or it is too small)</div><?php
         return;
     }
-    $original_name = $_FILES["attachment"]["name"];
+    elseif ($exception_code == XE_FILE_UPLOAD_ERROR)
+    {?>
+        <div class="error">File uploading error</div><?php
+        return;
+    }
+    $original_name = $attachment["name"];
     $ext = preg_replace('/.*\./', '', $original_name);
     // if nothing replaced, assume ext is empty
     $ext = ($ext == $original_name) ? '' : ".$ext";
