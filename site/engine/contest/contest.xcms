@@ -238,7 +238,7 @@ function ctx_show_overall_checking_progress()
     </p>
 
     <h3>Непроверенные</h3>
-    <table class="table table-striped table-bordered table-condensed table-hover">
+    <table id="unchecked_works" class="table table-striped table-bordered table-condensed table-hover">
     <thead><tr>
         <th>Ученик</th>
         <th>Класс</th>
@@ -255,7 +255,7 @@ function ctx_show_overall_checking_progress()
     </table>
 
     <h3>Проверенные</h3>
-    <table class="table table-striped table-bordered table-condensed table-hover">
+    <table id="checked_works" class="table table-striped table-bordered table-condensed table-hover">
     <thead><tr>
         <th>№</th>
         <th>Ученик</th>
