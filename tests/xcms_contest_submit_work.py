@@ -5,6 +5,7 @@ import xtest_common
 import random_crap
 import os
 
+
 class XcmsContestSubmitWork(xtest_common.XcmsTest):
     """
     This test checks contest work uploading.
@@ -16,16 +17,16 @@ class XcmsContestSubmitWork(xtest_common.XcmsTest):
     """
 
     def run(self):
-        
+
         self.performLoginAsAdmin()
         self.gotoPage("/ctx")
-        
+
         self.gotoUrlByLinkText(u"Добавить работу")
-        
+
         inpFIO = u"Участник_Олимпиады_" + random_crap.randomText(6)
         inpEmail = random_crap.randomEmail()
         inpComment = random_crap.randomText(6)
-        
+
         workFile = os.getcwd() + "/contest-work-sample.png"
         inpFIO = self.fillElementByName("name", inpFIO)
         inpEmail = self.fillElementByName("mail", inpEmail)
