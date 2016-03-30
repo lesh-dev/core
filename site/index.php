@@ -36,6 +36,7 @@
     require_once ("${engine_dir}sys/unittest.php");
     require_once ("${engine_dir}sys/auth.php");
     require_once ("${engine_dir}sys/logger.php");
+    require_once ("${engine_dir}sys/attachment.php");
     require_once ("${engine_dir}sys/compiler.php");
     require_once ("${engine_dir}sys/mailer.php");
     require_once ("${engine_dir}sys/resample.php");

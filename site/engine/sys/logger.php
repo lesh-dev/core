@@ -11,6 +11,11 @@
     define('XE_WRONG_PASSWORD',       1000);
     define('XE_ACCESS_DENIED',        1001);
 
+    // file operation errors
+    define('XE_FILE_TOO_LARGE',       1100);
+    define('XE_FILE_TOO_SMALL',       1101);
+    define('XE_FILE_UPLOAD_ERROR',    1102);
+
     // database errors
     define('XE_DB_OBJECT_NOT_FOUND',  2000);
 
