@@ -46,6 +46,7 @@ TEST OPTIONS could be test-dependent. Commonly supported options are:
 class TestSuiteError(Exception):
     pass
 
+
 def printStats(stats, detailed):
     if not stats:
         print "No tests were run"
@@ -74,6 +75,7 @@ def generateFailedTestsSuite(failedTests):
     with open("failed_test_set.py", "w") as fs:
         fs.write(failedSuite)
 
+
 def testMatchFilter(fileName, test, testFilter):
     # currently, filter is just a file name prefix
     if not testFilter:
@@ -85,7 +87,7 @@ def testMatchFilter(fileName, test, testFilter):
         if not test.getName().startswith(testFilter):
             return False
     return True
-    
+
 args = sys.argv[1:]  # exclude program name
 
 try:
@@ -150,21 +152,21 @@ try:
         installerTest = tests.pop(0)
 
     failedTests = []
-  
+
     tests = [x for x in tests if testMatchFilter(*x, testFilter=specTest)]
     if specTest and not tests:
         raise TestSuiteError("Specified test was not found in test suite. ")
-    
+
     if doInstallerTest:
         tests.insert(0, installerTest)
-        
+
     # init detailed stats
     for (fileName, test) in tests:
         testDetailedStats[test.getName()] = None
 
     testsDone = 0
     testsNumber = len(tests)
-        
+
     while tests:
         fileName, test = tests.pop(0)
         if doList:
@@ -177,7 +179,7 @@ try:
         else:
             if not baseUrl:
                 raise TestSuiteError("Test site URL not specified, cannot continue. ")
-            
+
             print "Running test {0} on site {1}".format(test.getName(), baseUrl)
             print test.getDoc()
             result = RunTest(test)
