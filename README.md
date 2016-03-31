@@ -37,6 +37,7 @@ Alexander Trousevitch <trousev@yandex.ru>
 * Project administration
 
 Mikhail Veltishchev <dichlofos-mv@yandex.ru>
+* Current project administration
 * Major XCMS enhancements
 * Database engine
 * Mailer and notifications
@@ -57,3 +58,4 @@ Julia Aivazyan
 Natalia Skrobova <nata-skr@yandex.ru>
 * http://fizlesh.ru design
 * Art
+* Automated tests and bug fixing
