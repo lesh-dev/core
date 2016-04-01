@@ -137,10 +137,11 @@ function ctx_update_object($table_name, $new_values, $prev_values = array())
         if ($meta["type"] != "file")
             continue;
 
-        if (!@$_FILES[$id])
+        $file_desc = xcms_get_key_or($_FILES, $id, false);
+        if (!$file_desc)
+        {
             continue;
-
-        $file_desc = $_FILES[$id];
+        }
 
         if (!strlen($file_desc["tmp_name"]))
             continue;
