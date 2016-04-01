@@ -117,7 +117,7 @@ if (!@$_GET["page"])
     else if (@$_GET["mode"] == "page_rename")
         include(translate("<! cms/page/rename_page !>"));
     else if (@$_GET["mode"] == "edit_icon")
-        include(translate("<! cms/light_icon_editor !>"));
+        include(translate("<! cms/icon_editor !>"));
     else if (@$_GET["mode"] == "edit_attach")
         include(translate("<! cms/edit_page_attachments !>"));
     else if (@$_GET["mode"] == "mailer" )
