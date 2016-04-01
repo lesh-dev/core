@@ -62,6 +62,7 @@ if (!@$_GET["page"])
             <span class="top-menu-div">&nbsp;</span>
             <a <?php echo xcms_href(array('mode'=>'user_manage', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Пользователи</a>
             <a <?php echo xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Уведомления</a>
+            <a <?php echo xcms_href(array('mode'=>'registry', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Настройки</a>
             <a href="/<# web_prefix #>xsm" class="h-menu-link">XSM</a>
             <a href="/<# web_prefix #>ctx" class="h-menu-link">Олимпиада</a>
             <a href="/mailman/listinfo/preps/" class="h-menu-link">Рассылка</a><?php
@@ -123,7 +124,12 @@ if (!@$_GET["page"])
     else if (@$_GET["mode"] == "mailer" )
     {
         $editfile = "{$SETTINGS["content_dir"]}cms/mailer.conf";
-        include(translate('<! edit/tag `edit`,`view`,`installed` `longtext` !>'));
+        include(translate('<! edit/tag `edit`,`view`,`longtext` !>'));
+    }
+    else if (@$_GET["mode"] == "registry" )
+    {
+        $editfile = "{$SETTINGS["content_dir"]}cms/registry.conf";
+        include(translate('<! edit/tag `edit`,`view` !>'));
     }
     else if (@$_GET["mode"] == "rebuild_alias")
     {?>
