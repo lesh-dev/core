@@ -1,7 +1,7 @@
 <a href="http://www.liveinternet.ru/click" style="vertical-align: middle" target="_blank"><img
     src="<# full_design_dir #>img/li.gif"
     id="counterImage" alt="" title="LiveInternet: number of visitors for today is shown"
-    border="0" width="88" height="15"/></a>
+    style="border: 0;" width="88" height="15"/></a>
 <script type="text/javascript">
     var img = document.getElementById('counterImage');
     img.setAttribute('src', '//counter.yadro.ru/hit?t%1;r'+
