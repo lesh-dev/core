@@ -1,18 +1,11 @@
 <?php
-/**
- * Пожалуйста, не редактируйте этот код в редакторе, исправляйте
- * его прямо в репозитории и копируйте методом Ctrl-C, Ctrl-V на страницу
- * ПОЛНОСТЬЮ. В противном случае очень тяжело следить за изменениями этого кода.
- * Длина строки не должна превышать 80 символов.
- *
- * Файл расположен в site/engine/contest/contest-send-form.php
- * Alias страницы: contest/send
- **/
-
 require_once("${engine_dir}sys/db.php");
+require_once("${engine_dir}sys/registry.php");
 require_once("${engine_dir}contest/scheme.php");
 
-if (true)
+$registry = xcms_get_registry();
+
+if (xcms_is_disabled_key($registry, "contest.enabled"))
 {?>
     <p>Приём работ олимпиады в электронном виде закрыт.</p><?php
 }
