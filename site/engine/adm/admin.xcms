@@ -123,12 +123,12 @@ if (!@$_GET["page"])
         include(translate("<! cms/edit_page_attachments !>"));
     else if (@$_GET["mode"] == "mailer" )
     {
-        $editfile = "{$SETTINGS["content_dir"]}cms/mailer.conf";
+        $editfile = xcms_get_mailer_conf_path();
         include(translate('<! edit/tag `edit`,`view`,`longtext` !>'));
     }
     else if (@$_GET["mode"] == "registry" )
     {
-        $editfile = "{$SETTINGS["content_dir"]}cms/registry.conf";
+        $editfile = xcms_get_registry_path();
         include(translate('<! edit/tag `edit`,`view` !>'));
     }
     else if (@$_GET["mode"] == "rebuild_alias")

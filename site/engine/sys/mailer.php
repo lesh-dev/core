@@ -2,6 +2,7 @@
     include_once("$engine_dir/sys/phpmailer/class.phpmailer.php");
     include_once("$engine_dir/sys/file.php");
     include_once("$engine_dir/sys/util.php");
+    include_once("$engine_dir/sys/tag.php");
     include_once("$engine_dir/sys/db.php");
 
     function xcms_get_mailer($addr_from, $name_from)
@@ -50,8 +51,26 @@
       **/
     function xcms_mailer_enabled()
     {
+        // TODO(mvel): Move this setting from SETIINGS to registry?
         global $SETTINGS;
         return xcms_get_key_or($SETTINGS, "mailer_enabled", true);
+    }
+
+    /**
+      * Obtains mailer configuration file path
+      **/
+    function xcms_get_mailer_conf_path()
+    {
+        global $content_dir;
+        return "${content_dir}cms/mailer.conf";
+    }
+
+    /**
+      * Obtains mailer configuration from config file
+      **/
+    function xcms_get_mailer_conf()
+    {
+        return xcms_get_list(xcms_get_mailer_conf_path());
     }
 
     /**
@@ -59,8 +78,7 @@
       **/
     function xcms_add_mail_group($mailer, $mail_group, $mode = XMAIL_DESTMODE_TO)
     {
-        global $SETTINGS;
-        $mail_groups = xcms_get_list("{$SETTINGS["content_dir"]}cms/mailer.conf");
+        $mail_groups = xcms_get_mailer_conf();
         $ml = xcms_get_key_or($mail_groups, $mail_group);
         if (xu_empty($ml))
         {

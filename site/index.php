@@ -38,6 +38,7 @@
     require_once ("${engine_dir}sys/logger.php");
     require_once ("${engine_dir}sys/attachment.php");
     require_once ("${engine_dir}sys/compiler.php");
+    require_once ("${engine_dir}sys/registry.php");
     require_once ("${engine_dir}sys/mailer.php");
     require_once ("${engine_dir}sys/resample.php");
     require_once ("${engine_dir}sys/controls.php");
