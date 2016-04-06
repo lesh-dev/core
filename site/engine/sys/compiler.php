@@ -44,7 +44,6 @@
 
         $name = $argv[0];
         $elem_full_name = $SETTINGS["engine_dir"].$name;
-        $template_full_name = $SETTINGS["design_dir"]."$name.template";
 
         if (file_exists("$elem_full_name.php"))
         {
@@ -70,10 +69,6 @@
             elseif (file_exists("$elem_full_name.code"))
             {
                 fputs($output_stream, file_get_contents("$elem_full_name.code"));
-            }
-            elseif (file_exists($template_full_name))
-            {
-                fputs($output_stream, file_get_contents($template_full_name));
             }
             else
             {
