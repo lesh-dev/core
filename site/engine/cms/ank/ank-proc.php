@@ -233,7 +233,7 @@ function xsm_compose_anketa_reply_link($first_name, $email)
 
 function xsm_valid_anketa_phone_digits($phone_digits, $count)
 {
-    return empty($phone_digits) || (xu_len($phone_digits) >= $count);
+    return xu_empty($phone_digits) || (xu_len($phone_digits) >= $count);
 }
 
 // В чём измеряется сила тока?
