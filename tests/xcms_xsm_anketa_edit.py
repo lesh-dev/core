@@ -3,7 +3,7 @@
 
 import xtest_common
 import random_crap
-import bawlib
+# import bawlib
 
 
 class XcmsXsmAnketaFill(xtest_common.XcmsTest):
@@ -27,7 +27,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
 
         self.gotoRoot()
 
-        #navigate to anketas
+        # navigate to anketas
 
         self.gotoUrlByLinkText(self.getEntranceLinkName())
         self.gotoAnketa()
@@ -49,10 +49,10 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         inpCell = "+7" + random_crap.randomDigits(9)
         inpEmail = random_crap.randomText(7) + "@" + random_crap.randomText(6) + ".ru"
 
-        inpFav = random_crap.randomCrap(8, ["multiline"])
-        inpAch = random_crap.randomCrap(6, ["multiline"])
-        inpHob = random_crap.randomCrap(4, ["multiline"])
-        inpSource = random_crap.randomCrap(5, ["multiline"])
+        # inpFav = random_crap.randomCrap(8, ["multiline"])
+        # inpAch = random_crap.randomCrap(6, ["multiline"])
+        # inpHob = random_crap.randomCrap(4, ["multiline"])
+        # inpSource = random_crap.randomCrap(5, ["multiline"])
 
         inpLastName = self.fillElementById("last_name-input", inpLastName)
 
@@ -82,7 +82,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
 
         shortAlias = xtest_common.shortAlias(inpLastName, inpFirstName)
         fullAlias = xtest_common.fullAlias(inpLastName, inpFirstName, inpMidName)
-        #print "Full student alias:", fullAlias.encode("utf-8")
+        # print "Full student alias:", fullAlias.encode("utf-8")
         anketaUrlName = shortAlias.strip()
         # try to drill-down into table with new anketa.
 
@@ -102,9 +102,9 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         self.assertBodyTextPresent(inpEmail)
 
         # now, let's edit anketa.
-        
+
         self.gotoEditPerson()
-        
+
         # TODO: continue
 
         # first, check that values in opened form match entered in anketa.
@@ -124,18 +124,18 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
 
         self.assertElementValueById("anketa_status-selector", "new")
         # change anketa field and save it.
-        
+
         inpSkype = random_crap.randomText(8)
-        inpSkype = self.fillElementById("skype-input", inpSkype)        
+        inpSkype = self.fillElementById("skype-input", inpSkype)
 
         self.clickElementById("update-person-submit")
 
         self.assertBodyTextPresent(u"Участник успешно сохранён")
         self.gotoBackToAnketaView()
 
-        # check bug 
+        # check bug
         self.assertElementTextById("anketa_status-span", u"Новый")
-        
+
         self.gotoRoot()
         self.gotoXsm()
         self.gotoUrlByLinkText(self.getAnketaListMenuName())
@@ -143,6 +143,3 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         # try to drill-down again into table with new anketa.
         # it should be displayed in this list, not in school participants.
         self.gotoUrlByLinkText(anketaUrlName)
-
-        
-        
