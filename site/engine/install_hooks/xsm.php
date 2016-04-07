@@ -36,6 +36,10 @@
     {
         if (!function_exists('mb_strlen'))
             return "PHP function 'mb_strlen' is missing. Please install php-mbstring package/module. ";
+
+        if (!class_exists('SQlite3'))
+            return "PHP class 'SQlite3' is missing. Please install php5-sqlite package/module. ";
+
         return true;
     }
     /**
