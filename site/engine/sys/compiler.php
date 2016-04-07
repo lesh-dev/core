@@ -1,4 +1,5 @@
 <?php
+
     function xcms_set_args($code, $output_stream)
     {
         global $SETTINGS;
@@ -53,8 +54,10 @@
         {
             xcms_set_args($code, $output_stream);
             $full_name = "$elem_full_name.xcms";
+
             if (!file_exists($full_name))
                 $full_name = "${elem_full_name}default.xcms";
+
             if (file_exists($full_name))
             {
                 $new_contents = file_get_contents($full_name);
@@ -157,4 +160,3 @@
         // Find prec file
         $main_ref_name = "{$SETTINGS["precdir"]}f$refname-$ref.php";
     }
-?>

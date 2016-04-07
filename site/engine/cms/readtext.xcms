@@ -1,9 +1,8 @@
 <?php
 /*
     Syntax:
-    <# readtext  [--markdown] [--limit=number] [--next-link=url] [--next-text=text] [--file=file_name] #>
+    <# readtext [--limit=number] [--next-link=url] [--next-text=text] [--file=file_name] #>
         --file -- имя файла, которое нужно зачитать. Если опущено -- читается из переменной $source
-        --markdown -- указыавет на то, что текст нужно интерпретировать markdown-ом
         --limit -- ограничение на число знаков
         --next-link -- указывает гиперссылку на полный текст
         --next-text -- указывает текст ссылки, ведущий на полный текст
@@ -25,7 +24,6 @@ if (!file_exists($compiled)) $need = true;
 if (@filemtime($source) > @filemtime($compiled)) $need = true;
 if ($need)
 {
-    $markdown = false;
     $text_defined = false;
     $limit = -1;
 
@@ -34,8 +32,6 @@ if ($need)
     $next_text = "more";
     foreach ($argv as $arg)
     {
-        if ($arg == "--markdown")
-            $markdown = true;
         if ($arg == "--text")
             $text_defined = true;
         elseif (strpos($arg, "="))
