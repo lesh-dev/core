@@ -1,13 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import datetime
+
 import xtest_common
 import random_crap
 
-import datetime
 
 def slashify(line):
     return "".join([x * 2 if x == "\\" else x for x in line])
+
 
 class XcmsContentContlist(xtest_common.XcmsTest):
     """
@@ -42,7 +44,7 @@ class XcmsContentContlist(xtest_common.XcmsTest):
         self.setOptionValueByIdAndValue("create-pagetype-selector", "contlist")
 
         pageDate = datetime.datetime.now()
-        
+
         self.clickElementById("create-page-submit")
 
         # edit page - click on menu
@@ -53,19 +55,19 @@ class XcmsContentContlist(xtest_common.XcmsTest):
 
         blockTitle = self.fillElementById("header-input", blockTitle)
         blockContent = self.fillElementById("content", blockContent)
-        
+
         self.clickElementById("contlist-create-submit")
         self.wait(3)
-        
+
         # we are still on admin page.
         # get generated alias.
-        
+
         blockAlias = self.getElementTextById("edit-alias")
         self.logAdd("Alias: {0}".format(blockAlias))
-        
+
         self.gotoCloseEditor()
         self.gotoUrlByLinkText(inpMenuTitle)
-             
+
         dateStr = pageDate.strftime("%d.%m.%Y")
         self.assertElementSubTextById("content-text", dateStr, "Contlist timestamp not found")
         self.assertElementSubTextById("content-text", blockTitle, "Block title not found in rendered cont-list. ")
@@ -79,6 +81,3 @@ class XcmsContentContlist(xtest_common.XcmsTest):
         self.gotoAlias(blockAlias)
         self.assertElementSubTextById("content-header", blockTitle, "Block title not found after clicking by alias. ")
         self.assertElementSubTextById("content-text", blockContentForCheck, "Block content not found after clicking by alias. ")
-
-        
-        

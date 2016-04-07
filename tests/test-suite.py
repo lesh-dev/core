@@ -15,31 +15,31 @@ def showHelp():
     print """
 Syntax: {script} [OPTIONS] [TEST OPTIONS] <site-url>
 Most generic usage:
-  {script} [-i] [TEST OPTIONS] <site-url>
-  This command runs default test set 'auto_test_set.py'
+    {script} [-i] [TEST OPTIONS] <site-url>
+    This command runs default test set 'auto_test_set.py'
 Run specific test:
-  {script} -t <test-name> [TEST OPTIONS] <site-url>
+    {script} -t <test-name> [TEST OPTIONS] <site-url>
 List test in test set (or list tests with full descriptions):
-  {script} -l(-f) <test-name>
+    {script} -l(-f) <test-name>
 
 Examples:
-  {script} test.fizlesh.ru
-  {script} -t XcmsXsmAnketaFill test.fizlesh.ru
-  {script} -t xcms_xsm_anketa_fill.py test.fizlesh.ru
+    {script} test.fizlesh.ru
+    {script} -t XcmsXsmAnketaFill test.fizlesh.ru
+    {script} -t xcms_xsm_anketa_fill.py test.fizlesh.ru
 
 ALL OPTIONS:
-  -h, --help             Display this help
-  -i, --installer        Run installer test prior to all rest suite
-  -l, --list             List all tests in test set
-  -f, --full-list        List all tests in test set with descriptions
-  -s, --set <set>        Specify test set to run (instead of default auto_test_set.py)
-  -t, --test <test>      Run specific test instead of all suite
-  -b, --break            Break test suite on errors
+    -h, --help             Display this help
+    -i, --installer        Run installer test prior to all rest suite
+    -l, --list             List all tests in test set
+    -f, --full-list        List all tests in test set with descriptions
+    -s, --set <set>        Specify test set to run (instead of default auto_test_set.py)
+    -t, --test <test>      Run specific test instead of all suite
+    -b, --break            Break test suite on errors
 
 TEST OPTIONS could be test-dependent. Commonly supported options are:
-  -p, --preserve         Leave browser window after test finish/fail
-  -c, --chrome           Use Google Chrome browser instead of Firefox
-  -d, --doc              Display test documentation
+    -p, --preserve         Leave browser window after test finish/fail
+    -c, --chrome           Use Google Chrome browser instead of Firefox
+    -d, --doc              Display test documentation
 """.format(script=fileBaseName(prog))
 
 
