@@ -1,19 +1,21 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
+import random_crap
+
 
 class XcmsXsmListFilters(xtest_common.XcmsTest):
     """
     This test checks various filters in XSM lists.
     """
-    
+
     def testExistingPeople(self):
         # one line expected
         self.setOptionValueByIdAndValue("show_anketa_status-selector", "all")
         shortAlias = u"Вельтищев Михаил"
         alias = shortAlias + u" Николаевич"
-        
+
         self.FIOFilterId = "show_name_filter-input"
         self.fillElementById("show_name_filter-input", alias)
         self.clickElementByName("show-person")
@@ -21,19 +23,19 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
             self.failTest("Found more than one anketa with exact FIO. Filters are broken. ")
 
         # two lines expected
-        #self.setOptionValueByIdAndValue("show_anketa_status-selector", "all")
+        # self.setOptionValueByIdAndValue("show_anketa_status-selector", "all")
         shortAliases = [u"Вельтищев Михаил", u"Вельтищев Дмитрий"]
         alias = u"Вельтищев"
         self.fillElementById(self.FIOFilterId, alias)
-        
+
         self.clickElementByName("show-person")
-        
+
         for alias in shortAliases:
             if self.countIndexedUrlsByLinkText(alias) != 1:
                 self.failTest("Expected link {0} not found. Filters are broken. ".format(alias))
-            
+
         # none lines expected
-        #self.setOptionValueByIdAndValue("show_anketa_status-selector", "all")
+        # self.setOptionValueByIdAndValue("show_anketa_status-selector", "all")
         alias = "qwerty"
         alias = self.fillElementById(self.FIOFilterId, alias)
         self.clickElementByName("show-person")
@@ -41,11 +43,11 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
             self.failTest("This search should not return anything. Filters are broken. ")
 
         # 1 line expected
-        #self.setOptionValueByIdAndValue("show_anketa_status-selector", "all")
+        # self.setOptionValueByIdAndValue("show_anketa_status-selector", "all")
         alias = u"Демарин Дмитрий"
         self.fillElementByName("show_name_filter", alias)
         self.sendEnterById(self.FIOFilterId)
-        
+
         # sometimes it returns 0 links. Seems to be webdriver bug.
         if self.countIndexedUrlsByLinkText(alias) != 1:
             self.failTest("This search should return one record. Filters are broken. ")
@@ -62,7 +64,7 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
         inpLastName = self.fillElementById("last_name-input", inpLastName)
         inpFirstName = self.fillElementById("first_name-input", inpFirstName)
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
-        
+
         department = u"Математическое"
         self.setOptionValueByIdAndValue("department_id-selector", department)
         self.clickElementById("update-person-submit")
@@ -70,29 +72,26 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
         self.gotoBackToPersonView()
         self.gotoXsmAllPeople()
         self.setOptionValueByIdAndValue("show_department_id-selector", department)
-        
+
         alias = xtest_common.shortAlias(inpLastName, inpFirstName)
-        self.fillElementById(self.FIOFilterId, alias)        
+        self.fillElementById(self.FIOFilterId, alias)
         self.clickElementByName("show-person")
-        
+
         if self.countIndexedUrlsByLinkText(alias) != 1:
             self.failTest("Search with proper department selection return one record. Filters are broken. ")
 
         self.setOptionValueByIdAndValue("show_department_id-selector", u"Другое")
-        self.fillElementById(self.FIOFilterId, alias)        
+        self.fillElementById(self.FIOFilterId, alias)
         self.clickElementByName("show-person")
-        
+
         if self.countIndexedUrlsByLinkText(alias) != 0:
             self.failTest("Search with wrong department should return none records. Filters are broken. ")
-        
+
     def run(self):
         self.performLoginAsManager()
         self.gotoRoot()
         self.gotoXsm()
         self.gotoXsmAllPeople()
-        
+
         self.testExistingPeople()
         self.testDepartmentSelector()
-        
-            
-            

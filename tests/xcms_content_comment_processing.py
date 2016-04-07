@@ -3,13 +3,12 @@
 
 import xtest_common
 import random_crap
-import os
+
 
 class XcmsContentCommentProcessing(xtest_common.XcmsTest):
-    
 
     def run(self):
-        
+
         self.performLoginAsAdmin()
         self.gotoAdminPanel()
 
@@ -37,24 +36,24 @@ class XcmsContentCommentProcessing(xtest_common.XcmsTest):
 
         self.clickElementById("create-page-submit")
 
-        #self.logAdd("Opening editor again after redirection. ")
-        #self.gotoEditPageInPlace()
+        # self.logAdd("Opening editor again after redirection. ")
+        # self.gotoEditPageInPlace()
 
         self.m_menuTitle = inpMenuTitle
         self.m_pageHeader = inpPageHeader
 
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle)
-        
+
         pageText = "<?php\n/**\n* qqq\n*\n**/\n?>"
-        #print "Generated page text: '" + pageText + "'"
+        # print "Generated page text: '" + pageText + "'"
 
         pageText = self.fillAceEditorElement(pageText)
-        #print "After ins page text: '" + pageText + "'"
+        # print "After ins page text: '" + pageText + "'"
         self.clickElementById("edit-submit-top")
-        
+
         self.performLogoutFromAdminPanel()
-        
+
         self.gotoUrlByLinkText(inpMenuTitle)
-        
-        self.assertPhpErrors() 
+
+        self.assertPhpErrors()
