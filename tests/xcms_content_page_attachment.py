@@ -21,7 +21,7 @@ def linesToHtml(lineArray):
 
 class XcmsContentPageAttachment(xtest_common.XcmsTest):
     """
-    
+        Проверяет, что вложения на страницу загружаются корректно
     """
 
     def run(self):
@@ -53,8 +53,8 @@ class XcmsContentPageAttachment(xtest_common.XcmsTest):
 
         self.clickElementById("create-page-submit")
 
-        #self.logAdd("Opening editor again after redirection. ")
-        #self.gotoEditPageInPlace()
+        # self.logAdd("Opening editor again after redirection. ")
+        # self.gotoEditPageInPlace()
 
         self.m_menuTitle = inpMenuTitle
         self.m_pageHeader = inpPageHeader
@@ -62,13 +62,13 @@ class XcmsContentPageAttachment(xtest_common.XcmsTest):
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle)
 
-        self.gotoUrlByLinkText(u"Файлы")       
-       
-        inpFileName = "SomeNameQQQ" + random_crap.randomText(8)       
+        self.gotoUrlByLinkText(u"Файлы")
+
+        inpFileName = "SomeNameQQQ" + random_crap.randomText(8)
         inpFileName = self.fillElementById("attach_target-input", inpFileName)
-        
+
         self.clickElementById("upload_attach-submit")
-       
-        self.assertPhpErrors()       
-       
+
+        self.assertPhpErrors()
+
         self.assertBodyTextPresent("No file selected")
