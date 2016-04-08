@@ -1,14 +1,4 @@
-<?php
-/**
- * Пожалуйста, не редактируйте этот код в редакторе, исправляйте
- * его прямо в репозитории и копируйте методом Ctrl-C, Ctrl-V на страницу
- * ПОЛНОСТЬЮ. В противном случае очень тяжело следить за изменениями этого кода.
- * Длина строки не должна превышать 80 символов.
- *
- * Файл расположен в site/lesh.org.ru-design/register.html
- * Alias страницы: register
- **/
-include(translate('<! css/design ank.css !>')); ?>
+<?php include(translate('<! css/design ank.css !>')); ?>
 <div class="ankLegend">
 <div><span class="ankAst Req">*</span> &#8211; обязательное поле</div>
 <div><span class="ankAst Gr">*</span> &#8211; должно быть заполнено хотя бы одно из полей</div>
