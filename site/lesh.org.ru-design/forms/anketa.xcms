@@ -19,166 +19,194 @@
 
 <form method="post">
 
-  <div class="ankRow">
-    <span class="ankLabel">Отделение:<span class="ankAst Req">*</span></span>
-    <span class="ankValue">
-    <?php
-    echo xsm_make_selector(
-        'department',
-        'department_id',
-        "",
-        array('department_title'),
-        "(department_id = 1 OR department_id = 3) ORDER BY department_title",
-        "",
-        false
-    );
-    ?>
-      <div class="ankExample">Например: Математическое</div>
-    </span>
-  </div>
+    <div class="ankRow">
+        <span class="ankLabel">Отделение:<span class="ankAst Req">*</span></span>
+        <span class="ankValue"><?php
+            echo xsm_make_selector(
+                'department',
+                'department_id',
+                "",
+                array('department_title'),
+                "(department_id = 1 OR department_id = 3) ORDER BY department_title",
+                "",
+                false
+            );
+            ?><div class="ankExample">Например: Математическое</div>
+        </span>
+    </div>
 
-  <div class="ankRow">
-    <span class="ankLabel">Фамилия:<span class="ankAst Req">*</span></span>
-    <span class="ankValue">
-      <input type="text" name="last_name" id="last_name-input" style="width: 300px" />
-      <div class="ankExample">Например: Сидоров</div>
-    </span>
-  </div>
+    <div class="ankRow">
+        <span class="ankLabel">Фамилия:<span class="ankAst Req">*</span></span>
+        <span class="ankValue">
+            <input type="text" name="last_name" id="last_name-input" style="width: 300px" />
+            <div class="ankExample">Например: Сидоров</div>
+        </span>
+    </div>
 
-  <div class="ankRow">
-    <span class="ankLabel">Имя<span class="ankAst Req">*</span></span>
-    <span class="ankValue">
-      <input type="text" name="first_name" id="first_name-input" style="width: 300px" />
-      <div class="ankExample">Например: Пётр</div>
-    </span>
-  </div>
+    <div class="ankRow">
+        <span class="ankLabel">Имя<span class="ankAst Req">*</span></span>
+        <span class="ankValue">
+            <input type="text" name="first_name" id="first_name-input" style="width: 300px" />
+            <div class="ankExample">Например: Пётр</div>
+        </span>
+    </div>
 
-  <div class="ankRow">
-    <span class="ankLabel">Отчество<span class="ankAst Req">*</span></span>
-    <span class="ankValue">
-      <input type="text" name="patronymic" id="patronymic-input" style="width: 300px" />
-      <div class="ankExample">Например: Михайлович</div>
-    </span>
-  </div>
+    <div class="ankRow">
+        <span class="ankLabel">Отчество<span class="ankAst Req">*</span></span>
+        <span class="ankValue">
+            <input type="text" name="patronymic" id="patronymic-input" style="width: 300px" />
+            <div class="ankExample">Например: Михайлович</div>
+        </span>
+    </div>
 
-  <div class="ankRow">
-    <span class="ankLabel">Дата рождения:</span>
-    <span class="ankValue">
-      <input type="text" name="birth_date" id="birth_date-input" style="width: 200px;" />
-      <div class="ankExample">В формате ДД.ММ.ГГГГ, например: 15.12.1984</div>
-    </span>
-  </div>
+    <div class="ankRow">
+        <span class="ankLabel">Дата рождения:</span>
+        <span class="ankValue">
+            <input type="text" name="birth_date" id="birth_date-input" style="width: 200px;" />
+            <div class="ankExample">В формате ДД.ММ.ГГГГ, например: 15.12.1984</div>
+        </span>
+    </div>
 
-  <div class="ankRow">
-    <span class="ankLabel">Номер (название) школы:</span>
-    <span class="ankValue">
-      <input type="text" name="school" id="school-input" style="width: 400px" />
-      <div class="ankExample">Например: Лицей №30</div>
-    </span>
-  </div>
+    <div class="ankRow">
+        <span class="ankLabel">Номер (название) школы:</span>
+        <span class="ankValue">
+            <input type="text" name="school" id="school-input" style="width: 400px" />
+            <div class="ankExample">Например: Лицей №30</div>
+        </span>
+    </div>
 
-  <div class="ankRow">
-    <span class="ankLabel">
-      Город (село), область (край),<br />
-      где находится школа:</span>
-    <span class="ankValue">
-      <input type="text" name="school_city" id="school_city-input" style="width: 400px" />
-      <div class="ankExample">Например: г. Полярные Зори Мурманской обл.</div>
-    </span>
-  </div>
+    <div class="ankRow">
+        <span class="ankLabel">
+            Город (село), область (край),<br />
+            где находится школа:</span>
+        <span class="ankValue">
+            <input type="text" name="school_city" id="school_city-input" style="width: 400px" />
+            <div class="ankExample">Например: г. Полярные Зори Мурманской обл.</div>
+        </span>
+    </div>
 
-  <div class="ankRow">
-    <span class="ankLabel">Класс:<span class="ankAst Req">*</span></span>
-    <span class="ankValue">
-      <input type="text" name="current_class" id="current_class-input" style="width: 100px" />
-    <div class="ankExample">Например: 8Б</div>
-    </span>
-  </div>
+    <div class="ankRow">
+        <span class="ankLabel">Класс:<span class="ankAst Req">*</span></span>
+        <span class="ankValue">
+            <input type="text" name="current_class" id="current_class-input" style="width: 100px" />
+            <div class="ankExample">Например: 8Б</div>
+        </span>
+    </div>
 
-  <div class="ankRow">
-    <span class="ankLabel">Домашний телефон<br/>с кодом города:<span class="ankAst Gr">*</span></span>
-    <span class="ankValue">
-      <input type="text" name="phone" id="phone-input" style="width: 200px" />
-      <div class="ankExample">
-        Например: +7 (812) 212-85-06<br />
-        (если не знаете код города, не заполняйте это поле)</div>
-    </span>
-  </div>
+    <div class="ankRow">
+        <span class="ankLabel">Домашний телефон<br/>с кодом города:<span class="ankAst Gr">*</span></span>
+        <span class="ankValue">
+            <input type="text" name="phone" id="phone-input" style="width: 200px" />
+            <div class="ankExample">
+                Например: +7 (812) 212-85-06<br />
+                (если не знаете код города, не заполняйте это поле)
+            </div>
+        </span>
+    </div>
 
-  <div class="ankRow">
-    <span class="ankLabel">Мобильный телефон:<span class="ankAst Gr">*</span></span>
-    <span class="ankValue">
-      <input type="text" name="cellular" id="cellular-input" style="width: 200px" />
-      <div class="ankExample">Например: +7 (987) 654-32-10</div>
-    </span>
-  </div>
+    <div class="ankRow">
+        <span class="ankLabel">Мобильный телефон:<span class="ankAst Gr">*</span></span>
+        <span class="ankValue">
+            <input type="text" name="cellular" id="cellular-input" style="width: 200px" />
+            <div class="ankExample">Например: +7 (987) 654-32-10</div>
+        </span>
+    </div>
 
-  <div class="ankRow">
-    <span class="ankLabel">E-mail:</span>
-    <span class="ankValue">
-      <input type="text" name="email" id="email-input" style="width: 200px">
-      <div class="ankExample">Например: sidorov.petr@example.com</div>
-    </span>
-  </div>
+    <div class="ankRow">
+        <span class="ankLabel">E-mail:</span>
+        <span class="ankValue">
+            <input type="text" name="email" id="email-input" style="width: 200px">
+            <div class="ankExample">Например: sidorov.petr@example.com</div>
+        </span>
+    </div>
 
-  <div class="ankRow">
-    <span class="ankLabel">Skype:</span>
-    <span class="ankValue">
-      <input type="text" name="skype" id="skype-input" style="width: 200px" />
-      <div class="ankExample">Например: sidorov.petr</div>
-    </span>
-  </div>
+    <div class="ankRow">
+        <span class="ankLabel">Skype:</span>
+        <span class="ankValue">
+            <input type="text" name="skype" id="skype-input" style="width: 200px" />
+            <div class="ankExample">Например: sidorov.petr</div>
+        </span>
+    </div>
 
-  <div class="ankRow">
-    <span class="ankLabel">Страничка ВКонтакте<br/>(или на Facebook и т.д.)</span>
-    <span class="ankValue">
-      <input type="text" name="social_profile" id="social_profile-input" style="width: 200px" />
-      <div class="ankExample">Например: vk.com/id123456789</div>
-    </span>
-  </div>
+    <div class="ankRow">
+        <span class="ankLabel">Страничка ВКонтакте<br/>(или на Facebook и т.д.)</span>
+        <span class="ankValue">
+            <input type="text" name="social_profile" id="social_profile-input" style="width: 200px" />
+            <div class="ankExample">Например: vk.com/id123456789</div>
+        </span>
+    </div>
 
-  <div class="ankRow">
-    <span class="ankLabel">Любимые разделы<br />
-    науки (подробнее):<span class="ankAst Rec">*</span></span></div>
-  <div class="ankRow"><textarea
+    <div class="ankRow">
+        <span class="ankLabel">
+            Любимые разделы<br />
+            науки (подробнее):<span class="ankAst Rec">*</span>
+        </span>
+    </div>
+    <div class="ankRow"><textarea
       rows="3" cols="40"
       name="favourites" id="favourites-text"
       style="width: 400px"></textarea></div>
 
-  <div class="ankRow"><span class="ankLabel">
-    Достижения на олимпиадах,<br />
-    участие в конференциях,<br/>
-    публикации:<span class="ankAst Rec">*</span></span></div>
-  <div class="ankRow"><textarea
-    rows="5" cols="40"
-    name="achievements" id="achievements-text"
-    style="width: 400px"></textarea></div>
+    <div class="ankRow"><span class="ankLabel">
+        Достижения на олимпиадах,<br />
+        участие в конференциях,<br/>
+        публикации:<span class="ankAst Rec">*</span>
+        </span>
+    </div>
+    <div class="ankRow"><textarea
+        rows="5" cols="40"
+        name="achievements" id="achievements-text"
+        style="width: 400px"></textarea>
+    </div>
 
-  <div class="ankRow">
-    <span class="ankLabel">Хобби, увлечения:<span class="ankAst Rec">*</span></span></div>
-  <div class="ankRow"><textarea
-    rows="3" cols="40"
-    name="hobby" id="hobby-text" style="width: 400px"></textarea></div>
+    <div class="ankRow">
+        <span class="ankLabel">Хобби, увлечения:<span class="ankAst Rec">*</span></span></div>
+        <div class="ankRow"><textarea
+            rows="3" cols="40"
+            name="hobby" id="hobby-text" style="width: 400px">
+        </textarea>
+    </div>
 
-  <div class="ankRow">
-    <span class="ankLabel">Откуда узнали о школе:</span></div>
-  <div class="ankRow"><textarea
-    rows="3" cols="40"
-    name="lesh_ref" id="lesh_ref-text" style="width: 400px;"></textarea></div>
+    <div class="ankRow">
+        <span class="ankLabel">Откуда узнали о школе:</span>
+    </div>
+    <div class="ankRow"><textarea
+        rows="3" cols="40"
+        name="lesh_ref" id="lesh_ref-text" style="width: 400px;"></textarea>
+    </div>
 
-  <div class="ankRow">
-    <input type="submit" name="submit-anketa" id="submit-anketa-button" value="Отправить"></div>
-  <div class="ankMessageFrame" id="c-Message">
-    <div class="ankError" id="t-Error">&nbsp;</div>
-    <div class="ankWarning" id="t-Warning">&nbsp;</div>
-  </div>
+    <div class="ankRow">
+        <span class="ankLabel">
+            В чём измеряется<br/>
+            сила тока (в системе СИ)?
+        </span>
+        <input type="text" name="control_question" id="control_question-input" style="width: 200px" />
+    </div>
+    <div class="ankExample">Если не помните, поищите ответ в Интернете</div>
+
+    <div class="ankRow">
+        <input type="submit" name="submit-anketa" id="submit-anketa-button" value="Отправить">
+    </div>
+    <div class="ankMessageFrame" id="c-Message">
+        <div class="ankError" id="t-Error">&nbsp;</div>
+        <div class="ankWarning" id="t-Warning">&nbsp;</div>
+    </div>
 </form>
 
-<p>Если с вами не свяжутся в течении <b>трёх</b> дней после отправки анкеты, пожалуйста, отправьте её ещё раз!</p>
+<p>
+    Если с вами не свяжутся в течении <b>трёх</b> дней после отправки анкеты,
+    пожалуйста, отправьте её ещё раз!
+</p>
 
-<p>Информация, которую Вы укажете в анкете, нужна нам для того, чтобы связаться с Вами
-и, возможно, пригласить на собеседование. Чем подробнее Вы заполните анкету, тем нам будет проще работать.
-Впрочем, Вы можете отказаться от поступления к нам в любой момент,
-даже если заполните анкету и успешно пройдёте собеседование.</p>
+<p>
+    Информация, которую Вы укажете в анкете, нужна нам для того,
+    чтобы связаться с Вами и, возможно, пригласить на собеседование.
+    Чем подробнее Вы заполните анкету, тем нам будет проще работать.
+    Впрочем, Вы можете отказаться от поступления к нам в любой момент,
+    даже если заполните анкету и успешно пройдёте собеседование.
+</p>
 
-<p><b>P.S.</b> Мы не передаём полученную информацию третьим лицам, нам и без этого есть чем заняться.</p>
+<p>
+    <b>P.S.</b> Мы не передаём полученную информацию третьим лицам,
+    нам и без этого есть чем заняться.
+</p>
