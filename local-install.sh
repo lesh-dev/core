@@ -125,13 +125,14 @@ function install_fresh_db()
 # Copy-pasted from testing.receipe with -w -> -r modification
 function xsm_clear_notifications()
 {
-    db="$DEST/$DEST_CONT/ank/fizlesh.sqlite3"
-    if [ -r "$db" ] ; then
-        echo 'DELETE FROM notification;' | sudo sqlite3 "$db"
+    if [ -r "$DEST_DB" ] ; then
+        echo 'DELETE FROM notification;' | sudo sqlite3 "$DEST_DB"
         message "Notifications table cleared successfully"
+    else
+        message_error "Database [ $DEST_DB ] not found"
     fi
 
-    mc="$DEST/$DEST_CONT/cms/mailer.conf"
+    mc="$FULL_DEST_CONT/cms/mailer.conf"
     if [ -r "$mc" ] ; then
         mail_test="vdm-photo@ya.ru"
         cat > "$mc" <<EOF
@@ -189,14 +190,16 @@ message "Preparing XSM database. "
 
 sudo mkdir -p  $VERBOSE "$DEST"
 
-DB_SUBDIR="$DEST_CONT/ank"
+FULL_DEST_CONT="$DEST/$DEST_CONT"
+DB_SUBDIR="$FULL_DEST_CONT/ank"
 TEMP_DB="/tmp/xcms_local_installer_$$_$XSM_DB"
-DEST_DB="$DEST/$DB_SUBDIR/$XSM_DB"
+DEST_DB="$DB_SUBDIR/$XSM_DB"
 
 if [ -r "$DEST_DB" ]; then
     message "Database already exists at [ $DEST_DB ], backing it up."
     sudo cp $VERBOSE "$DEST_DB" "$TEMP_DB"
 fi
+
 
 # double-check that we are not doing something awful:
 # ensure that DEST with removed slashes is not empty
@@ -204,8 +207,11 @@ fi
 DEST_CHECK="` echo -n $DEST | sed -e 's:/::g' `"
 if ! [ -z "$DEST_CHECK" ]; then
     message "Cleaning destination directory $DEST"
-    # do not quote whole path with curly braces, it will not expand
-    sudo rm -rf "$DEST/"{doc,"$DEST_CONT",*-design,engine,engine_public}
+    sudo rm -rf "$DEST/doc"
+    sudo rm -rf "$FULL_DEST_CONT"
+    sudo rm -rf "$DEST/"*-design
+    sudo rm -rf "$DEST/engine"
+    sudo rm -rf "$DEST/engine_public"
 else
     message_error "Bug in your script!"
     exit 1
@@ -215,8 +221,8 @@ message "Copying all stuff to destination. "
 sudo cp -a $VERBOSE ./site/* "$DEST/"
 
 # need to remove destination, otherwise it will be nested
-sudo rm -rf "$DEST/$DEST_CONT"
-sudo cp -a $VERBOSE $CONT_DIR "$DEST/$DEST_CONT"
+sudo rm -rf "$FULL_DEST_CONT"
+sudo cp -a $VERBOSE $CONT_DIR "$FULL_DEST_CONT"
 
 VERSION="`tools/publish/version.sh`-local"
 message "Set version: $VERSION"
@@ -239,7 +245,7 @@ elif [ "$DB_MODE" == "original" ] ; then
     # otherwise database stored in original content
     # will be used
     if [ -r "$TEMP_DB" ] ; then
-        message "Database backup found, installing..."
+        message "Database backup found, installing at [ $DEST_DB ]"
         sudo mv $TEMP_DB "$DEST_DB"
     fi
 else
@@ -272,7 +278,7 @@ xsm_clear_notifications
 
 message "Changing root password to 'root'..."
 # change root password to 'root'
-sudo cp -f $VERBOSE ./tools/xcms_console_tools/root_root_user $DEST/$DEST_CONT/auth/usr/root.user
+sudo cp -f $VERBOSE ./tools/xcms_console_tools/root_root_user $FULL_DEST_CONT/auth/usr/root.user
 
 message "Installing logrotate script"
 sudo cp -f $VERBOSE ./site/xcms.logrotate /etc/logrotate.d/xcms
