@@ -177,7 +177,7 @@
         {?>
             <div id="content-text-preview" class="content-text-preview"><?php
             $text = $preview_text;
-            include(translate("<! cms/readtext --markdown --text !>")); ?>
+            include(translate("<! cms/readtext --text !>")); ?>
             </div><?php
         }
     }

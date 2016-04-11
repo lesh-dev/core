@@ -47,7 +47,7 @@
                 href="<?php echo $header_url; ?>"
                 ><?php echo "$date &ndash; ".xcms_get_key_or_enc($info, "header"); ?></a>
             <?php
-            include(translate("<! cms/readtext --markdown !>"));
+            include(translate("<! cms/readtext !>"));
             $login = xcms_get_key_or($info, "owner");
 
             // TODO: fix this trash. We need 4 lines to get another user name here

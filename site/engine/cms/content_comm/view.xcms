@@ -23,7 +23,7 @@
         }
         else
         {
-            include(translate("<! cms/readtext --markdown !>"));
+            include(translate("<! cms/readtext !>"));
 
             if (file_exists($commfile))
             {

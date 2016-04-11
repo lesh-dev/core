@@ -126,6 +126,6 @@ require_once("${engine_dir}cms/ank/ank-proc.php");
     {
         $text = file_get_contents($source);
         $source  = "";
-        include(translate("<! cms/readtext --markdown --text !>"));
+        include(translate("<! cms/readtext --text !>"));
     }
 ?>

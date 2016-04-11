@@ -7,6 +7,6 @@
     else
     {
         $source = $page_path;
-        include(translate("<! cms/readtext --markdown !>"));
+        include(translate("<! cms/readtext !>"));
     }
 ?>
