@@ -1,0 +1,4 @@
+<?php
+    $source = "${design_dir}forms/contest_send.xcms";
+    include(translate('<! cms/readtext !>'));
+?>

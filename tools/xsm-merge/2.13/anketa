@@ -1,0 +1,4 @@
+<?php
+    $source = "${design_dir}forms/anketa.xcms";
+    include(translate('<! cms/readtext !>'));
+?>
