@@ -331,7 +331,9 @@ class SeleniumTest(object):
         if not self.m_doCheck404:
             return
         if self.checkSourceTextPresent(self.m_textOnPage404):
-            raise PageNotFound("Requested URL '" + userSerialize(self.curUrl()) + "' leads to non-existing page (404). ")
+            raise PageNotFound(
+                "Requested URL '{}' leads to non-existing page (404). ".format(userSerialize(self.curUrl()))
+            )
 
     def set404Text(self, text):
         self.m_textOnPage404 = text
@@ -350,7 +352,9 @@ class SeleniumTest(object):
 
     def checkBaseUrl(self, link):
         if not self.isBaseUrl(link):
-            self.failTest("Link with name " + userSerialize(link) + " leads to another site: " + userSerialize(link) + ". ")
+            self.failTest(
+                "Link with name " + userSerialize(link) + " leads to another site: " + userSerialize(link) + ". "
+            )
 
     def gotoUrlByLinkText(self, linkName, reason=""):
         """
@@ -1047,7 +1051,7 @@ class SeleniumTest(object):
     def assertPhpErrors(self):
         checkResult, suspWord = self.checkPhpErrors()
         if checkResult:
-            logMsg = "PHP error " + userSerialize(suspWord) + " detected on the page " + userSerialize(self.curUrl()) + ". "
+            logMsg = "PHP ERROR " + userSerialize(suspWord) + " detected on the page " + userSerialize(self.curUrl()) + ". "
             self.logAdd(logMsg, "warning")
             if not self.m_errorsAsWarnings:
                 raise TestError(logMsg)
