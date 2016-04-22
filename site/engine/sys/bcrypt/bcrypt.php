@@ -115,7 +115,7 @@ class XBcrypt {
     }
 }
 
-function xbcrypt_unit_test()
+function xcms_bcrypt_unit_test()
 {
     xut_begin("bcrypt");
 
