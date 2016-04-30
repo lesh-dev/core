@@ -4,7 +4,11 @@
     $show_department_id = xcms_get_persistent_key("list-ank", "show_department_id", XDB_INVALID_ID);
     $show_forest_num = xsm_get_persistent_enum_key("list-tour", "show_forest_num", "show_forest_num");
 ?>
-<p>В этом списке показываются активные и принятые или полупринятые школьники и преподы.</p>
+<p>
+В этом списке показываются активные и принятые или полупринятые школьники и преподы.
+Таблица <b>одна на все годы</b>, т.к. эти данные нужны только для маёвок.
+Чтобы выставить статусы леса по умолчанию, воспользуйтесь кнопкой <b>Очистка статусов</b>.
+</p>
 <form method="post" class="xsm-filter" name="filter" id="filter-form" action="list-tour">
     <span>Фильтр: </span><?php
     xsm_draw_department_selector($show_department_id, 'show_department_id', "Все отделения"); ?><i>
@@ -16,18 +20,17 @@
 <script type="text/javascript">
     xsm_filter_form_autosubmit();
 </script>
+
+<form method="post" id="clear_forest-form" action="list-tour" style="display: inline-block; float: right">
+    <input type="submit" name="clear_forest" id="clear_forest-submit" value="Очистка статусов" />
+</form>
+
 <?php
 
-function xsm_show_tour_list()
+function xsm_get_forest_selector($db, $single_forest, $show_name_filter)
 {
     global $show_department_id;
     global $show_forest_num;
-
-    $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
-    $single_forest = ($show_forest_num != xsm_get_enum_default_value("show_forest_num"));
-    $forest_num = $single_forest ? $show_forest_num[7] : '';
-
-    $db = xdb_get();
 
     // base filter condition
     $cond =
@@ -68,9 +71,52 @@ function xsm_show_tour_list()
 
     if (strlen($cond))
         $query .= " WHERE $cond";
+
     $query .= " ORDER BY NOT (p.is_teacher IS NULL OR LENGTH(p.is_teacher) = 0), p.last_name, p.first_name";
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
-    $person_sel = $db->query($query);
+    return $db->query($query);
+}
+
+
+function xsm_clear_forest($db, $single_forest, $show_name_filter)
+{
+    $person_sel = xsm_get_forest_selector($db, $single_forest, $show_name_filter);
+
+    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $person_id = htmlspecialchars($person["person_id"]);
+        $person_ids[] = $person["person_id"];
+    }
+
+    foreach ($person_ids as $person_id)
+    {
+        $person = xdb_get_entity_by_id('person', $person_id);
+        $person["forest_1"] = 'undef';
+        $person["forest_2"] = 'undef';
+        $person["forest_3"] = 'undef';
+        xdb_insert_or_update('person', array('person_id'=>$person_id), $person, xsm_get_fields("person"));
+    }
+
+}
+
+
+function xsm_show_tour_list()
+{
+    global $show_department_id;
+    global $show_forest_num;
+
+    $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
+    $single_forest = ($show_forest_num != xsm_get_enum_default_value("show_forest_num"));
+    $forest_num = $single_forest ? $show_forest_num[7] : '';
+
+    $db = xdb_get();
+
+    if (@$_POST["clear_forest"])
+    {
+        xsm_clear_forest($db, $single_forest, $show_name_filter);
+    }
+
+    $person_sel = xsm_get_forest_selector($db, $single_forest, $show_name_filter);
 
     xsm_view_operations('person', 'участника');
     ?>
