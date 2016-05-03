@@ -56,6 +56,7 @@ class XcmsXsmAnketaDuplicate(xtest_common.XcmsTest):
         self.inpAchReal = self.fillElementById("achievements-text", self.inpAch)
         self.inpHobReal = self.fillElementById("hobby-text", self.inpHob)
         self.inpSourceReal = self.fillElementById("lesh_ref-text", self.inpSource)
+        self.fillElementById("control_question-input", u"ампер")
 
         self.clickElementById("submit-anketa-button")
 
