@@ -69,7 +69,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
 
         self.gotoRoot()
 
-        #navigate to anketas
+        # navigate to anketas
 
         self.gotoUrlByLinkText(self.getEntranceLinkName())
         self.gotoAnketa()
@@ -116,6 +116,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         inpAch = self.fillElementById("achievements-text", inpAch)
         inpHob = self.fillElementById("hobby-text", inpHob)
         inpSource = self.fillElementById("lesh_ref-text", inpSource)
+        self.fillElementById("control_question-input", u"ампер")
 
         self.clickElementById("submit-anketa-button")
 
@@ -131,7 +132,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
 
         shortAlias = xtest_common.shortAlias(inpLastName, inpFirstName)
         fullAlias = xtest_common.fullAlias(inpLastName, inpFirstName, inpMidName)
-        #print "Full student alias:", fullAlias.encode("utf-8")
+        # print "Full student alias:", fullAlias.encode("utf-8")
         anketaUrlName = shortAlias.strip()
         # try to drill-down into table with new anketa.
 
