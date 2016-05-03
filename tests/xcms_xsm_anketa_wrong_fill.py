@@ -29,7 +29,7 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
 
         self.gotoRoot()
 
-        #navigate to anketas
+        # navigate to anketas
 
         self.gotoUrlByLinkText(self.getEntranceLinkName())
         self.gotoAnketa()
@@ -98,6 +98,12 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         inpSkype = self.fillElementById("skype-input", inpSkype)
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
 
+        self.trySubmit("Invalid control question answer. ")
+        self.assertBodyTextPresent(u"Неправильный ответ на контрольный вопрос")
+
+        # control question
+        self.fillElementById("control_question-input", u"ампер")
+
         areYouSure = u"Если Вы уверены, что не хотите указывать эту информацию"
 
         self.trySubmit("Favourites were not filled")
@@ -114,7 +120,6 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         inpHob = self.fillElementById("hobby-text", inpHob)
 
         # and now try to erase one of very important  fields.
-
         self.fillElementById("last_name-input", "")
 
         self.trySubmit("Empty last name is not allowed. ")
@@ -127,6 +132,7 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
 
         self.trySubmit("Hobbies were erased")
         self.assertBodyTextPresent(areYouSure)
+
         # no erase achievements.
         self.fillElementById("achievements-text", "")
         self.trySubmit("Enter confirmation mode with erased field 'A' and remove another field 'B'. Revalidation check after bug #529")
