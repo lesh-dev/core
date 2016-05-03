@@ -40,6 +40,8 @@ def genOneTestLine(testInfo):
 def findTests(directory, fileNamePrefix="xcms_", classNamePrefix="Xcms"):
     pyFiles = sorted([f for f in listdir('.') if isfile(f) and f.startswith(fileNamePrefix) and f.endswith('.py')])
 
+    test_set = set([])
+
     imports = []
     testList = []
 
@@ -55,6 +57,10 @@ def findTests(directory, fileNamePrefix="xcms_", classNamePrefix="Xcms"):
             #print "Cannot match in ", cl
             continue
         className = r.group(1)
+        test_pair = (moduleName, className)
+        if test_pair in test_set:
+            raise Exception("Duplicate test: {}.{}", moduleName, className)
+        test_set.add(test_pair)
 
         imports.append(moduleName)
         testList.append((fn, moduleName, className))

@@ -145,7 +145,7 @@ class SeleniumTest(object):
     """
 
     def __init__(self, baseUrl, params=[]):
-        self.m_testName = self.__class__.__name__
+        self.m_testName = self.__module__ + "." + self.__class__.__name__
         self.m_baseUrl = baseUrl or ""
         self.m_params = params
 
