@@ -51,7 +51,7 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
 
     def addAnketa(self):
         self.gotoRoot()
-        #navigate to anketas
+        # navigate to anketas
         self.gotoUrlByLinkText(self.getEntranceLinkName())
         self.gotoAnketa()
         self.assertBodyTextPresent(self.getAnketaPageHeader())
@@ -70,6 +70,7 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
         self.inpAchReal = self.fillElementById("achievements-text", self.inpAch)
         self.inpHobReal = self.fillElementById("hobby-text", self.inpHob)
         self.inpSourceReal = self.fillElementById("lesh_ref-text", self.inpSource)
+        self.fillElementById("control_question-input", u"ампер")
 
         self.clickElementById("submit-anketa-button")
 
@@ -83,7 +84,7 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
         self.gotoRoot()
         self.gotoUrlByLinkText(self.getAnketaListMenuName())
 
-        alias = self.fillElementById("show_name_filter-input", self.personAlias)
+        self.fillElementById("show_name_filter-input", self.personAlias)
         self.clickElementByName("show-person")
         if self.countIndexedUrlsByLinkText(self.personAlias) != 1:
             self.failTest("Found more than one anketa with exact FIO. Duplicate filtering is broken. ")
