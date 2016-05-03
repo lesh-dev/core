@@ -6,7 +6,7 @@ import random_crap
 # import bawlib
 
 
-class XcmsXsmAnketaFill(xtest_common.XcmsTest):
+class XcmsXsmAnketaEdit(xtest_common.XcmsTest):
     """
     This test checks anketa edit functional and following person processing steps.
     Steps:
