@@ -12,6 +12,11 @@ define('XCMS_AUTOCOMPLETE_DEFAULT', 'default');
 define('XCMS_AUTOCOMPLETE', 'on');
 define('XCMS_NO_AUTOCOMPLETE', 'off');
 
+define('XCMS_AUTOCAPITALIZE_DEFAULT', 'default');
+define('XCMS_AUTOCAPITALIZE', 'on');
+define('XCMS_NO_AUTOCAPITALIZE', 'off');
+
+
 function xcms_checkbox_enabled($value)
 {
     return xu_not_empty($value);
@@ -44,7 +49,7 @@ function xcms_get_key_for_checkbox($list, $key)
   *     text:     textarea field (TODO: not supported yet)
   *     checkbox:
   **/
-function xcmst_control($name, $value, $placeholder, $class, $type = "input", $title = "", $def_value = "", $autocomplete = XCMS_AUTOCOMPLETE_DEFAULT)
+function xcmst_control($name, $value, $placeholder, $class, $type = "input", $title = "", $def_value = "", $autocomplete = XCMS_AUTOCOMPLETE_DEFAULT, $autocapitalize= XCMS_AUTOCAPITALIZE_DEFAULT)
 {
     if ($value === XCMS_FROM_POST)
         $value = xcms_get_key_or($_POST, $name, $def_value);
@@ -67,10 +72,15 @@ function xcmst_control($name, $value, $placeholder, $class, $type = "input", $ti
 
     if ($type == "input" || $type == "password")
     {
-        $au = "";
+        $complete = "";
         if ($autocomplete != XCMS_AUTOCOMPLETE_DEFAULT)
-            $au = " autocomplete=\"$autocomplete\" ";
-        echo "<input type=\"$type_attr\" name=\"$name\" id=\"$name-input\" $au ".
+            $complete = " autocomplete=\"$autocomplete\" ";
+
+        $capitalize = "";
+        if ($autocapitalize != XCMS_AUTOCAPITALIZE_DEFAULT)
+            $capitalize = " autocapitalize=\"$autocapitalize\" ";
+
+        echo "<input type=\"$type_attr\" name=\"$name\" id=\"$name-input\" $complete $capitalize ".
             "value=\"$value\" class=\"$class\" $attrs />";
     }
     elseif ($type == "checkbox")
@@ -92,10 +102,11 @@ function xcmst_control($name, $value, $placeholder, $class, $type = "input", $ti
 
 /**
   * Specialization for admin-tools
+  * Disable auto-capitalization: #919
   **/
-function xcmst_control_admin($name, $value, $placeholder, $type = "input", $title = "", $def_value = "", $autocomplete = XCMS_AUTOCOMPLETE_DEFAULT)
+function xcmst_control_admin($name, $value, $placeholder, $type = "input", $title = "", $def_value = "", $autocomplete = XCMS_AUTOCOMPLETE_DEFAULT, $autocapitalize = XCMS_NO_AUTOCAPITALIZE)
 {
-    xcmst_control($name, $value, $placeholder, "admin-medium", $type, $title, $def_value, $autocomplete);
+    xcmst_control($name, $value, $placeholder, "admin-medium", $type, $title, $def_value, $autocomplete, $autocapitalize);
 }
 
 /**
