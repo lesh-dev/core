@@ -83,8 +83,8 @@ def testMatchFilter(fileName, test, testFilter):
     if testFilter.endswith(".py"):  # it is a filename
         if fileName != testFilter:
             return False
-    else:  # it is a test class name
-        if not test.getName().startswith(testFilter):
+    else:  # it is like a test's class name
+        if testFilter not in test.getName():
             return False
     return True
 
@@ -119,7 +119,7 @@ if doShowHelp:
     sys.exit(1)
 
 if specTest:
-    print "We are going to run just one test " + specTest + ". "
+    print "We are going to run just one test named like '" + specTest + "'. "
 
 baseUrl = None
 if restArgs:
