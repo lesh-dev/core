@@ -145,7 +145,7 @@ class SeleniumTest(object):
     """
 
     def __init__(self, baseUrl, params=[]):
-        self.m_testName = self.__class__.__name__
+        self.m_testName = self.__module__ + "." + self.__class__.__name__
         self.m_baseUrl = baseUrl or ""
         self.m_params = params
 
@@ -580,6 +580,7 @@ class SeleniumTest(object):
         if not self.checkAceEditorElementText(text):
             self.failTest("ACE element text does not match expected: " + wrapIfLong(userSerialize(text)) + ". " + self.displayReason(reason))
 
+    # by id
     def setOptionValueByIdAndValue(self, eleId, optValue):
         try:
             if isNumber(optValue):
@@ -598,6 +599,18 @@ class SeleniumTest(object):
         optionValue, text = self.getOptionValueByIdAndIndex(eleId, index)
         self.addAction("set-option-by-index", "element id: '" + eleId + "', index: " + userSerialize(index))
         self.setOptionValueByIdAndValue(eleId, optionValue)
+
+    # by name
+    def setOptionValueByNameAndValue(self, eleName, optValue):
+        try:
+            if isNumber(optValue):
+                optValue = str(optValue)
+            self.addAction("set-option-by-value", "element name: '" + eleName + "', value: " + userSerialize(optValue))
+
+            self.getElementByName(eleName).find_element_by_xpath("option[@value='" + optValue + "']").click()
+            self.checkPageErrors()
+        except NoSuchElementException:
+            self.failTest("Cannot get drop-down (select) element by name '" + eleName + "'. ")
 
     # returns option value (index) and text
     def getOptionValueByIdAndIndex(self, eleId, index):

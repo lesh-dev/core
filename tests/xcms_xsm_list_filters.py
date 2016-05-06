@@ -48,8 +48,14 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
         self.fillElementByName("show_name_filter", alias)
         self.sendEnterById(self.FIOFilterId)
 
-        # sometimes it returns 0 links. Seems to be webdriver bug.
-        if self.countIndexedUrlsByLinkText(alias) != 1:
+        for it in xrange(3):
+            # sometimes it returns 0 links. Seems to be webdriver bug.
+            if self.countIndexedUrlsByLinkText(alias) != 1:
+                self.log("One more time...")
+                self.sleep(1)
+            else:
+                break
+        else:
             self.failTest("This search should return one record. Filters are broken. ")
 
     def testDepartmentSelector(self):
@@ -66,7 +72,8 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
 
         department = u"Математическое"
-        self.setOptionValueByIdAndValue("department_id-selector", department)
+        # self.setOptionValueByIdAndValue("department_id-selector", department)
+        self.setOptionValueByNameAndValue("department_id", department)
         self.clickElementById("update-person-submit")
 
         self.gotoBackToPersonView()
