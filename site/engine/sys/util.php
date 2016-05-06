@@ -65,22 +65,38 @@ function xsm_ext_href($url_prefix, $args_list)
     return " href=\"$url\" ";
 }
 
+/**
+  * Filters generated password from bad chars
+  **/
+function _xcms_filter_passwd($passwd)
+{
+    $passwd = preg_replace("/[^A-Za-z0-9OoI]/", "", $passwd);
+    return substr($passwd, 0, 12);
+}
+
+/**
+  * Generates new password
+  **/
 function xcms_mkpasswd()
 {
-    $pass = trim(@shell_exec("mkpasswd")).trim(@shell_exec("mkpasswd"));
-    $pass = preg_replace("/[^A-Za-z0-9_-]/", "@", $pass);
-    $pass = substr($pass, 0, 12);
+    $pass = trim(@shell_exec("mkpasswd")).trim(@shell_exec("mkpasswd")).trim(@shell_exec("mkpasswd"));
+    $pass = _xcms_filter_passwd($pass);
     if (xu_empty($pass))
     {
         $table = array();
         for ($i = 0; $i < 26; $i++)
+        {
             $table[] = chr($i + 65);
-        $table[] = '@';
-        $table[] = '-';
-        $table[] = '_';
+        }
+        for ($i = 0; $i < 10; $i++)
+            $table[] = chr($i + 48);
         $size = count($table);
-        for ($i = 0; $i < 12; $i++)
-            $pass .= $table[mt_rand(0, $i * $i) % $size];
+        for ($i = 0; $i < 32; $i++)
+        {
+            $max = ($i + 256) * ($i + 20);
+            $pass .= $table[mt_rand(0, $max) % $size];
+        }
+        $pass = _xcms_filter_passwd($pass);
     }
     return $pass;
 }
@@ -200,6 +216,10 @@ function xcms_util_unit_test()
 
     $meta_site_url = "http://test.fizlesh.ru";
     xut_equal(xcms_hostname(), "test.fizlesh.ru", "xcms_hostname does not work");
+
+    $passwd = xcms_mkpasswd();
+    xut_equal(xu_len($passwd), 12, "Password is not 12-char");
+    xut_check(strstr($passwd, 'O') === false, "Password contains bad chars");
 
     xut_end();
 }
