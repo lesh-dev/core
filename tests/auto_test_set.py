@@ -15,7 +15,6 @@ import xcms_auth_set_dup_email_by_admin
 import xcms_content_add_page
 import xcms_content_auth_only_page
 import xcms_content_bad_path_page
-import xcms_content_clear_forest_status
 import xcms_content_comment_processing
 import xcms_content_contlists
 import xcms_content_dollar_plugin
@@ -48,6 +47,7 @@ import xcms_xsm_anketa_fill
 import xcms_xsm_anketa_wrong_fill
 import xcms_xsm_avatar
 import xcms_xsm_change_status_quick
+import xcms_xsm_clear_forest_status
 import xcms_xsm_course_mult_teachers
 import xcms_xsm_hack_person_link
 import xcms_xsm_link_user_profile
@@ -69,7 +69,6 @@ def getTests(baseUrl, args):
         ("xcms_content_add_page.py", xcms_content_add_page.XcmsContentAddPage(baseUrl, args)),
         ("xcms_content_auth_only_page.py", xcms_content_auth_only_page.XcmsContentAuthOnlyPage(baseUrl, args)),
         ("xcms_content_bad_path_page.py", xcms_content_bad_path_page.XcmsContentBadPathPage(baseUrl, args)),
-        ("xcms_content_clear_forest_status.py", xcms_content_clear_forest_status.XcmsContentClearForestStatus(baseUrl, args)),
         ("xcms_content_comment_processing.py", xcms_content_comment_processing.XcmsContentCommentProcessing(baseUrl, args)),
         ("xcms_content_contlists.py", xcms_content_contlists.XcmsContentContlist(baseUrl, args)),
         ("xcms_content_dollar_plugin.py", xcms_content_dollar_plugin.XcmsContentDollarPlugin(baseUrl, args)),
@@ -102,6 +101,7 @@ def getTests(baseUrl, args):
         ("xcms_xsm_anketa_wrong_fill.py", xcms_xsm_anketa_wrong_fill.XcmsXsmAnketaWrongFill(baseUrl, args)),
         ("xcms_xsm_avatar.py", xcms_xsm_avatar.XcmsXsmAvatar(baseUrl, args)),
         ("xcms_xsm_change_status_quick.py", xcms_xsm_change_status_quick.XcmsXsmChangeStatusQuick(baseUrl, args)),
+        ("xcms_xsm_clear_forest_status.py", xcms_xsm_clear_forest_status.XcmsXsmClearForestStatus(baseUrl, args)),
         ("xcms_xsm_course_mult_teachers.py", xcms_xsm_course_mult_teachers.XcmsXsmCourseWithMultipleTeachers(baseUrl, args)),
         ("xcms_xsm_hack_person_link.py", xcms_xsm_hack_person_link.XcmsXsmHackPersonLink(baseUrl, args)),
         ("xcms_xsm_link_user_profile.py", xcms_xsm_link_user_profile.XcmsXsmLinkUserProfile(baseUrl, args)),
