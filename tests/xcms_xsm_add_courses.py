@@ -13,7 +13,7 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
     * enter 'all people list'
     * add new person
     * add person to some school
-    * add some courses
+    * add some courses to this person
     """
 
     def addCourse(self, teacherAlias):
@@ -64,9 +64,6 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
 
         self.checkPersonAliasInPersonView(fullAlias)
 
-        #TODO: FIXME: BUG: remove after fix of bug #803
-        #self.setPhpErrorsAsWarnings()
-        
         self.gotoUrlByLinkText(self.m_conf.getTestSchoolName())
         self.assertBodyTextPresent(self.getPersonAbsenceMessage())
         self.gotoUrlByLinkTitle(u"Зачислить на " + self.m_conf.getTestSchoolName())
