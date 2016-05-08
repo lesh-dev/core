@@ -582,15 +582,22 @@ class SeleniumTest(object):
 
     # by id
     def setOptionValueByIdAndValue(self, eleId, optValue):
-        try:
-            if isNumber(optValue):
-                optValue = str(optValue)
-            self.addAction("set-option-by-value", "element id: '" + eleId + "', value: " + userSerialize(optValue))
+        if isNumber(optValue):
+            optValue = str(optValue)
+        self.addAction("set-option-by-value", "element id: '" + eleId + "', value: " + userSerialize(optValue))
 
-            self.getElementById(eleId).find_element_by_xpath("option[@value='" + optValue + "']").click()
-            self.checkPageErrors()
+        selector = None
+        try:
+            selector = self.getElementById(eleId)
         except NoSuchElementException:
             self.failTest("Cannot get drop-down (select) element by id '" + eleId + "'. ")
+
+        xpath = "option[@value='" + optValue + "']"
+        try:
+            option = selector.find_element_by_xpath(xpath)
+            option.click()
+        except NoSuchElementException:
+            self.failTest("Cannot find selector option by xpath " + xpath)
 
     def setOptionValueByIdAndIndex(self, eleId, index):
         """

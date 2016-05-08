@@ -72,8 +72,8 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
 
         department = u"Математическое"
-        # self.setOptionValueByIdAndValue("department_id-selector", department)
-        self.setOptionValueByNameAndValue("department_id", department)
+        self.setOptionValueByIdAndValue("department_id-selector", department)
+        # self.setOptionValueByNameAndValue("department_id", department)
         self.clickElementById("update-person-submit-top")
 
         self.gotoBackToPersonView()
