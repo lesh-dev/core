@@ -154,27 +154,6 @@ function xsm_warn_delete_ops($table_name, $key_name, $id, $redir, $entity_name, 
     </form></div><?php
 }
 
-// Used only for person and contains spikes
-function xsm_edit_operations($table_name, $id, $title, $aux_param = '')
-{
-    $is_new = ($id == XDB_NEW);
-    // TODO: маленький костылик
-    $redir = $is_new ? "list-person-locator" : "view-$table_name$aux_param&amp;${table_name}_id=$id";
-    ?>
-    <div class="xsm-edit-ops">
-        <input type="submit" name="update-<?php echo $table_name; ?>"
-            id="update-<?php echo $table_name; ?>-submit"
-            value="Сохранить" class="xsm-save-button" /><?php
-        if (!$is_new) {?>
-            <input type="submit" name="delete-<?php echo $table_name; ?>"
-                id="delete-<?php echo $table_name; ?>-submit"
-                value="Удалить" class="delete-button"/><?php
-        }?>
-        <a class="link-button" href="<?php echo $redir; ?>"><?php echo $title; ?></a>
-    </div><?php
-}
-
-
 function xsm_edit_operations_listmode($entity, $id, $title, $aux_param = '')
 {
     $is_new = ($id == XDB_NEW);
