@@ -53,7 +53,7 @@ class XcmsXsmCourseWithMultipleTeachers(xtest_common.XcmsTest):
         # set student flag
         self.clickElementById("is_teacher-checkbox")
 
-        self.clickElementById("update-person-submit")
+        self.clickElementById("update-person-submit-top")
 
         self.gotoBackToPersonView()
 

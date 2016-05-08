@@ -23,7 +23,7 @@ class XcmsXsmClearForestStatus(xtest_common.XcmsTest):
 
         self.setOptionValueByIdAndValue("forest_1-selector", "maybe")
         self.setOptionValueByIdAndValue("forest_2-selector", "no")
-        self.clickElementById("update-person-submit")
+        self.clickElementById("update-person-submit-top")
         self.assertBodyTextPresent(u"Участник успешно сохранён")
 
         self.gotoUrlByLinkText(u"Лес")

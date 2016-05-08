@@ -35,7 +35,7 @@ class XcmsXsmChangeStatusQuick(xtest_common.XcmsTest):
         inpFirstName = self.fillElementById("first_name-input", inpFirstName)
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
 
-        self.clickElementById("update-person-submit")
+        self.clickElementById("update-person-submit-top")
 
         self.gotoBackToPersonView()
 

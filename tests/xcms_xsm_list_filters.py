@@ -74,7 +74,7 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
         department = u"Математическое"
         # self.setOptionValueByIdAndValue("department_id-selector", department)
         self.setOptionValueByNameAndValue("department_id", department)
-        self.clickElementById("update-person-submit")
+        self.clickElementById("update-person-submit-top")
 
         self.gotoBackToPersonView()
         self.gotoXsmAllPeople()
