@@ -45,7 +45,7 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
         # 1 line expected
         # self.setOptionValueByIdAndValue("show_anketa_status-selector", "all")
         alias = u"Демарин Дмитрий"
-        self.fillElementByName("show_name_filter", alias)
+        self.fillElementById("show_name_filter-input", alias)
         self.sendEnterById(self.FIOFilterId)
 
         for it in xrange(3):
