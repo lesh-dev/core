@@ -43,6 +43,15 @@ if (xu_not_empty($school_id) && $school_id != XDB_NEW)
 $u_locator_active = xcms_url($a_locator_active);
 $u_cs = xcms_url($a_cs);
 
+$person = xsm_find_person_by_email(xcms_user()->email());
+$u_self = "";
+if ($person !== null)
+{
+    $u_self = xcms_url(array(
+        'person_id'=>$person['person_id'],
+        'school_id'=>XSM_SCHOOL_ANK_ID));
+}
+
 ?>
 <div class="xsm-navbar navbar navbar-inverse"><?php
     if ($XSM_BOOTSTRAP) echo '<div class="navbar-inner"><ul class="nav">';
@@ -54,5 +63,11 @@ $u_cs = xcms_url($a_cs);
     xsm_menu_item('list-course', $u_cs, 'Курсы');
     xsm_menu_item('list-department', '', 'Отделения');
     xsm_menu_item('list-school', '', 'Школы');
+
+    if (xu_not_empty($u_self))
+    {
+        xsm_menu_item('view-person', $u_self, 'Я');
+    }
+
     if ($XSM_BOOTSTRAP) echo '</ul></div>';
 ?></div>
