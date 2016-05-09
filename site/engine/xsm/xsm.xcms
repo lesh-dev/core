@@ -44,7 +44,7 @@ require_once("${engine_dir}cms/ank/format.php");
         $url = $_SERVER["REQUEST_URI"];
         if (substr($url, strlen($url) - 4) == "/xsm")
         {?>
-            <meta http-equiv="refresh" content="0;URL=/<# web_prefix #>xsm/view" /><?php
+            <meta http-equiv="refresh" content="0;URL=/<# web_prefix #>xsm/list-person" /><?php
         }
     }
     elseif ($aparam == "view")

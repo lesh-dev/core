@@ -5,17 +5,20 @@ define('XSM_MENU_FIRST', true);
 
 function xsm_menu_item($view, $aux_url, $title, $first = false)
 {
-    global $web_prefix, $aparam;
+    global $web_prefix;
+    global $aparam;
     global $XSM_BOOTSTRAP;
+
     if (xu_empty($aparam))
         die("Variable 'aparam' is not set. Something is broken. ");
 
-    $url = "$view";
+    $url = $view;
     $aux_class = "";
     $aux_li_class = "";
 
     if ($first)
         $aux_class .= "first ";
+
     if ($view == $aparam)
     {
         if ($view == "list-person-locator")
