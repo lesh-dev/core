@@ -12,6 +12,8 @@ function xsm_menu_item($view, $aux_url, $title, $first = false)
 
     $url = "$view";
     $aux_class = "";
+    $aux_li_class = "";
+
     if ($first)
         $aux_class .= "first ";
     if ($view == $aparam)
@@ -20,12 +22,18 @@ function xsm_menu_item($view, $aux_url, $title, $first = false)
         {
             $show_anketa_status = xsm_get_persistent_enum_key("list-person-locator", "show_anketa_status", "show_anketa_status_locator");
             if (strpos($aux_url, "show_anketa_status=$show_anketa_status") !== false)
+            {
                 $aux_class .= "current ";
+                $aux_li_class .= "active ";
+            }
         }
         else
+        {
             $aux_class .= "current ";
+            $aux_li_class .= "active ";
+        }
     }
-    if ($XSM_BOOTSTRAP) echo "<li>";
+    if ($XSM_BOOTSTRAP) echo "<li class=\"$aux_li_class\">";
     ?><a class="xsm-menu-item <?php echo $aux_class; ?>"
         href="<?php echo $url.$aux_url; ?>"><?php echo $title; ?></a><?php
     if ($XSM_BOOTSTRAP) echo "</li>";
