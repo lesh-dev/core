@@ -177,13 +177,14 @@
         $real_name = xcms_user()->param("name");
         $hr_timestamp = xcms_datetime();
         $host = xcms_hostname();
+        $referer = xcms_get_key_or($_SERVER, "HTTP_REFERER"); // can be empty, see #924
         $body_text =
             "$mail_text\r\n".
             "--\r\n".
             "Это уведомление сгенерировано автоматически. Отвечать на него не нужно\r\n".
             "Пользователь    : $login ($real_name)\r\n".
             "Имя хоста       : $host\r\n".
-            "Обратная ссылка : {$_SERVER['HTTP_REFERER']}\r\n";
+            "Обратная ссылка : $referer\r\n";
             "Дата и время    : $hr_timestamp\r\n";
 
         $body_html = "";
@@ -192,7 +193,7 @@
             $body_html = xcms_prepare_html_template("notification-body");
             $body_html = str_replace('@@MESSAGE@', $mail_text_html, $body_html);
             $body_html = str_replace('@@HOST@', $host, $body_html);
-            $body_html = str_replace('@@REFERER@', htmlspecialchars($_SERVER['HTTP_REFERER']), $body_html);
+            $body_html = str_replace('@@REFERER@', htmlspecialchars($referer), $body_html);
             $body_html = str_replace('@@TIMESTAMP@', $hr_timestamp, $body_html);
         }
         if ($immediate)

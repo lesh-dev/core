@@ -311,7 +311,8 @@ function ctx_show_contestant()
     if (xu_empty($pid))
     {?>
         <div class="tab-pane active" id="def"><?php
-        ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
+        $referer = xcms_get_key_or($_SERVER, "HTTP_REFERER");
+        ctx_add_or_edit_form($table_name, $entry_id, "view", $referer);
         ?><a class="btn btn-warning" href="<?php echo "$ctx_prefix/$table_name/edit/$entry_id"; ?>">Правка</a>
         </div><?php
     }
@@ -427,7 +428,8 @@ if ($mode == "view")
     }
     elseif (xu_not_empty($entry_id))
     {
-        ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
+        $referer = xcms_get_key_or($_SERVER, "HTTP_REFERER");
+        ctx_add_or_edit_form($table_name, $entry_id, "view", $referer);
         echo "<div><a class=\"btn btn-primary\" href=\"$ctx_prefix/$table_name/edit/$entry_id\">Правка</a></div>";
     }
 }
