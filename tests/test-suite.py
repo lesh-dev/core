@@ -53,19 +53,19 @@ def printStats(stats, detailed):
         return
 
     print "===== TEST SUITE DETAILED STATS: ====="
-    for testName, result in detailed.iteritems():
-        print "  " + testName + ": " + DecodeRunResult(result)
+    for testName, test_result in detailed.iteritems():
+        print "  " + testName + ": " + DecodeRunResult(test_result)
 
     print "===== TEST SUITE OVERALL STATS: ====="
-    for result, testList in stats.iteritems():
-        print DecodeRunResult(result) + ":", len(testList), "tests"
+    for test_result, testList in stats.iteritems():
+        print DecodeRunResult(test_result) + ":", len(testList), "tests"
 
 
-def generateFailedTestsSuite(failedTests):
+def generateFailedTestsSuite(failed_tests):
     # header
-    imports = [fn[:-3] for (fn, test) in failedTests]
+    imports = [fn[:-3] for (fn, _) in failed_tests]
     testList = []
-    for (fn, testClass) in failedTests:
+    for (fn, testClass) in failed_tests:
         modName = testClass.__module__
         clName = testClass.getName()
         testList.append((fn, modName, clName))
@@ -76,15 +76,15 @@ def generateFailedTestsSuite(failedTests):
         fs.write(failedSuite)
 
 
-def testMatchFilter(fileName, test, testFilter):
+def testMatchFilter(file_name, test_instance, testFilter):
     # currently, filter is just a file name prefix
     if not testFilter:
         return True
     if testFilter.endswith(".py"):  # it is a filename
-        if fileName != testFilter:
+        if file_name != testFilter:
             return False
     else:  # it is like a test's class name
-        if testFilter not in test.getName():
+        if testFilter not in test_instance.getName():
             return False
     return True
 
@@ -161,7 +161,7 @@ try:
         tests.insert(0, installerTest)
 
     # init detailed stats
-    for (fileName, test) in tests:
+    for (_file_name, test) in tests:
         testDetailedStats[test.getName()] = None
 
     testsDone = 0

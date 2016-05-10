@@ -939,17 +939,19 @@ class SeleniumTest(object):
             self.logAdd("Search for link with title " + userSerialize(urlText) + ". ")
             searchMethod = self.m_driver.find_element_by_css_selector
 
-        def getUrl(urlName, optionList=[]):
-            if "title" in optionList:
-                url = searchMethod('[title="' + urlName + '"]')
+        def getUrl(url_name, option_list=None):
+            if not option_list:
+                option_list = []
+            if "title" in option_list:
+                url = searchMethod('[title="' + url_name + '"]')
             else:
-                url = searchMethod(urlName)
+                url = searchMethod(url_name)
             return url.get_attribute("href")
 
         if isList(urlText):
             for urlName in urlText:
                 try:
-                    return getUrl(urlName, optionList=optionList)
+                    return getUrl(urlName, option_list=optionList)
                 except NoSuchElementException:
                     if "silent" not in optionList:
                         self.logAdd("Tried to find url by name " + userSerialize(urlName) + ", not found. ")
@@ -963,7 +965,7 @@ class SeleniumTest(object):
                 self.throwItemNotFound(msg, optionList=optionList)
         else:  # single link
             try:
-                return getUrl(urlText, optionList=optionList)
+                return getUrl(urlText, option_list=optionList)
             except NoSuchElementException:
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
                 msg = "Cannot find URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". " + self.displayReason(reason)

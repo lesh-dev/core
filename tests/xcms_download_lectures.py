@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
 
 class XcmsDownloadLectures(xtest_common.XcmsBaseTest):
     """

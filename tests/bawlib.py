@@ -24,7 +24,9 @@ def wrapIfLong(text):
 def cutHttp(link):
     return link.replace('http://', '').replace('https://', '')
 
-def userSerialize(text, options = []):
+def userSerialize(text, options=None):
+    if not options:
+        options = []
     if isList(text):
         return "|".join([userSerialize(x) for x in text])
     if isString(text):

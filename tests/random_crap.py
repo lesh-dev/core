@@ -30,8 +30,7 @@ def randomVkontakte():
     return "http://vk.com/id" + randomDigits(10)
 
 
-def randomWord(length, wordOptions=[], specialChars=specialCharsDefault):
-    rs = ""
+def randomWord(length, wordOptions=None, specialChars=specialCharsDefault):
 
     if not wordOptions:
         wordOptions = []
@@ -67,11 +66,11 @@ def randomWord(length, wordOptions=[], specialChars=specialCharsDefault):
 def randomDigits(length):
     rs = ""
     for i in range(0, length):
-        rs = rs + str(random.choice('0123456789'))
+        rs += str(random.choice('0123456789'))
     return rs
 
 
-def randomCrap(wordNumber, crapOptions=[], specialChars=specialCharsDefault):
+def randomCrap(wordNumber, crapOptions=None, specialChars=specialCharsDefault):
     rs = ""
     for i in range(0, wordNumber):
         separator = " "

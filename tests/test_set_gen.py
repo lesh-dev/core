@@ -37,8 +37,8 @@ def genOneTestLine(testInfo):
     return '("{testFile}", {modName}.{clName}(baseUrl, args)),'.format(testFile=testFile, modName=modName, clName=clName)
 
 
-def findTests(directory, fileNamePrefix="xcms_", classNamePrefix="Xcms"):
-    pyFiles = sorted([f for f in listdir('.') if isfile(f) and f.startswith(fileNamePrefix) and f.endswith('.py')])
+def findTests(directory='.', fileNamePrefix="xcms_", classNamePrefix="Xcms"):
+    pyFiles = sorted([f for f in listdir(directory) if isfile(f) and f.startswith(fileNamePrefix) and f.endswith('.py')])
 
     test_set = set([])
 

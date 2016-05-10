@@ -5,7 +5,7 @@ import selenium_test
 import random_crap
 import re
 from xtest_config import XcmsTestConfig
-from bawlib import isVoid, checkSingleOption
+from bawlib import checkSingleOption
 
 
 class XcmsBaseTest(selenium_test.SeleniumTest):
@@ -162,7 +162,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
         #check that we have entered the CP.
         # just chech that link exists.
-        cpUrl = self.getAdminPanelLink()
+        self.getAdminPanelLink()
         #test.gotoSite(cpUrl)
 
     def performLogin(self, login, password):
@@ -374,7 +374,7 @@ class XcmsTest(XcmsTestWithConfig):
 
         self.gotoUrlByPartialLinkText(login)
 
-        inpEMail = self.fillElementById("email-input", email)
+        self.fillElementById("email-input", email)
         self.clickElementByName("update_user")
 
         #logoff root
@@ -452,7 +452,7 @@ class XcmsTest(XcmsTestWithConfig):
         return commentText
 
     def editCommentToPerson(self, commentLinkId):
-        self.gotoUrlByLinkId("comment-edit-1")
+        self.gotoUrlByLinkId(commentLinkId)
         oldCommentText = self.getElementValueByName("comment_text")
         newCommentText =  random_crap.randomText(10) + "\n" + oldCommentText + "\n" + random_crap.randomText(6)
         newCommentText = self.fillElementByName("comment_text", newCommentText)

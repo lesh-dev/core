@@ -51,8 +51,8 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
         for it in xrange(3):
             # sometimes it returns 0 links. Seems to be webdriver bug.
             if self.countIndexedUrlsByLinkText(alias) != 1:
-                self.log("One more time...")
-                self.sleep(1)
+                self.logAdd("One more time...")
+                self.wait(1)
             else:
                 break
         else:

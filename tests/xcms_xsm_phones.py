@@ -15,7 +15,8 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
     * checks phone autoformat
     """
 
-    def phoneFix(self, phone):
+    @staticmethod
+    def phoneFix(phone):
         return phone.replace("+7", "8").replace("8-900-", "8(900)")
 
     def run(self):

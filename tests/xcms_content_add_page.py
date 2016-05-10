@@ -207,7 +207,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         wordNumber = 7
         totalLines = 8
 
-        origLines = [random_crap.randomCrap(wordNumber, self.wordOptions, specialChars=self.specChars) for x in xrange(0, totalLines)]
+        origLines = [random_crap.randomCrap(wordNumber, self.wordOptions, specialChars=self.specChars)
+                     for _ in xrange(0, totalLines)]
 
         pageText = linesToHtml(origLines)
 
