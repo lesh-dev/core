@@ -1,18 +1,44 @@
 <# cms/linit #><# cms/init #><# deploy_utils #><# locale #><# auth/ #admin #ank #><?php
+
+require_once("${engine_dir}cms/ank/field-desc.php");
+
 $result = array();
+
+define('XSM_API_GET', 'get');
+define('XSM_API_UPDATE', 'update');
 
 header("Content-Type: text/json; charset: UTF-8");
 try
 {
+    $object_action = xcms_get_key_or($_REQUEST, "object_action");
     $table_name = xcms_get_key_or($_REQUEST, "table_name");
     $object_id = xcms_get_key_or($_REQUEST, "object_id");
-    $object = xdb_get_entity_by_id($table_name, $object_id);
-    $object_enc = array();
-    foreach ($object as $key=>$value)
+
+    if (XSM_API_GET == $object_action)
     {
-        $object_enc[$key] = utf8_encode($value);
+        $object = xdb_get_entity_by_id($table_name, $object_id);
+        $object_enc = array();
+        foreach ($object as $key=>$value)
+        {
+            $object_enc[$key] = utf8_encode($value);
+        }
+        $result["object"] = $object;
     }
-    $result["object"] = $object;
+    elseif (XSM_API_UPDATE == $object_action)
+    {
+        $object = xdb_get_entity_by_id($table_name, $object_id);
+        $object_data = xcms_get_key_or($_REQUEST, "object_data");
+        // json payload
+        $object_data_decoded = json_decode($object_data);
+        // enrich with new values
+        foreach ($object_data_decoded as $key=>$value)
+        {
+            $object[$key] = $value;
+        }
+        $key_name = "${table_name}_id";
+        xdb_insert_or_update($table_name, array($key_name=>$object_id), $object, xsm_get_fields($table_name));
+        $result["status"] = "OK";
+    }
 }
 catch (Exception $e)
 {
