@@ -358,3 +358,8 @@ td.ankList.dep5 {
 td.ankList.dep6 {
     background-color: #b4fda2;
 }
+
+.cell-editing {
+    min-width: 0px;
+    width: auto;
+}

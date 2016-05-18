@@ -19,6 +19,7 @@
 </form>
 <script type="text/javascript">
     xsm_filter_form_autosubmit();
+    //$(xsm_set_editors);
 </script>
 
 <div style="display: inline-block; float: right">
@@ -176,7 +177,7 @@ function xsm_show_tour_list()
         if (xcms_checkbox_enabled($is_teacher))
             $row_class = "teacher";
         ?>
-        <tr class="<?php echo $row_class; ?>">
+        <tr row-id="<?php echo $person_id; ?>" class="<?php echo $row_class; ?>" >
             <td class="ankList"><a name="<?php echo "person$person_id"; ?>"
                 /><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"
                 title="<?php echo $fio; ?>"><?php echo $fin; ?></a></td>
