@@ -43,12 +43,12 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
                 return
             sourceBlock = "\n".join(sourceBlock)
             self.logAdd("Source beginning without DOCTYPE:\n" + sourceBlock.strip())
-            self.failTest("DOCTYPE directive not found on page {0}. First line is '{1}'".format(self.curUrl(), firstLine));
+            self.failTest("DOCTYPE directive not found on page {0}. First line is '{1}'".format(self.curUrl(), firstLine))
 
     def getPageSourceFirstLine(self):
         source = self.getPageSource()
         newlinePos = source.find("\n")
-        #self.logAdd("Newline found at {0}".format(newlinePos))
+        # self.logAdd("Newline found at {0}".format(newlinePos))
         return source[:newlinePos], source[:1000].split("\n")[:4]
 
     def isInstallerPage(self):
@@ -79,7 +79,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         super(XcmsTestWithConfig, self).init()
         self.m_conf = XcmsTestConfig()
         self.setAutoPhpErrorChecking(self.m_conf.getPhpErrorCheckFlag())
-        #self.maximizeWindow()
+        # self.maximizeWindow()
 
     def gotoRebuildAliases(self):
         self.logAdd("Rebuilding aliases. ")
@@ -94,10 +94,10 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def gotoNotificationsPage(self):
         self.gotoUrlByLinkText(u"Уведомления")
 
-    def gotoCreatePage(self, reason = ""):
+    def gotoCreatePage(self, reason=""):
         self.gotoUrlByLinkText(u"Подстраница", reason)
 
-    def gotoRemovePage(self, reason = ""):
+    def gotoRemovePage(self, reason=""):
         self.gotoUrlByLinkText(u"Удалить", reason)
 
     def getAnketaPageHeader(self):
@@ -114,11 +114,11 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.gotoAdminPanel()
         self.gotoNotificationsPage()
 
-        self.fillElementById("edtg_user-change", emailString);
-        self.fillElementById("edtg_content-change", emailString);
+        self.fillElementById("edtg_user-change", emailString)
+        self.fillElementById("edtg_content-change", emailString)
 
-        self.fillElementById("edtg_reg", emailString);
-        self.fillElementById("edtg_reg-managers", emailString);
+        self.fillElementById("edtg_reg", emailString)
+        self.fillElementById("edtg_reg-managers", emailString)
 
         self.clickElementById("editTag")
         self.performLogout()
@@ -160,10 +160,10 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
         self.logAdd("performLoginAsAdmin(): checking admin panel link")
 
-        #check that we have entered the CP.
+        # check that we have entered the CP.
         # just chech that link exists.
         self.getAdminPanelLink()
-        #test.gotoSite(cpUrl)
+        # test.gotoSite(cpUrl)
 
     def performLogin(self, login, password):
         """
@@ -249,7 +249,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.gotoUrlByLinkText(self.getAdminPanelLinkName())
 
     def getPersonAbsenceMessage(self):
-        #return u"На " + self.m_conf.getTestSchoolName() + u" не присутствовал"
+        # return u"На " + self.m_conf.getTestSchoolName() + u" не присутствовал"
         return u"На данной школе не присутствовал"
 
 
@@ -260,12 +260,12 @@ class XcmsTest(XcmsTestWithConfig):
     def init(self):
         super(XcmsTest, self).init()
         self.assertNoInstallerPage()
-        #xtest_common.setTestNotifications(self, self.m_conf.getNotifyEmail(), self.m_conf.getAdminLogin(), self.m_conf.getAdminPass())
+        # xtest_common.setTestNotifications(self, self.m_conf.getNotifyEmail(), self.m_conf.getAdminLogin(), self.m_conf.getAdminPass())
 
     def createNewUser(self, login, email, password, name, auxParams=[]):
         self.logAdd("createNewUser( login: " + login + "', email: " + email + ", password: " + password + ", name: " + name + " )")
 
-        if not "do_not_login_as_admin" in auxParams:
+        if "do_not_login_as_admin" not in auxParams:
             self.performLoginAsAdmin()
             self.gotoAdminPanel()
 
@@ -329,8 +329,8 @@ class XcmsTest(XcmsTestWithConfig):
         self.assertElementValueById("name-input", inpName)
         self.assertElementValueById("email-input", inpEMail)
 
-        #logoff root
-        if not "do_not_logout_admin" in auxParams:
+        # logoff root
+        if "do_not_logout_admin" not in auxParams:
             self.performLogout()
 
         return inpLogin, inpEMail, inpPass, inpName
@@ -366,7 +366,7 @@ class XcmsTest(XcmsTestWithConfig):
 
         self.logAdd("setUserEmailByAdmin: updating email for user '" + login + "' to '" + email + ". ")
 
-        if not "do_not_login_as_admin" in auxParams:
+        if "do_not_login_as_admin" not in auxParams:
             self.performLoginAsAdmin()
             self.gotoAdminPanel()
 
