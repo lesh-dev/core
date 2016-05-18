@@ -1,9 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common
-#import random_crap
-#import time
 from xtest_config import XcmsTestConfig
 from selenium_test import SeleniumTest
 
@@ -19,7 +16,8 @@ class SelfTest(SeleniumTest):
 
         conf = XcmsTestConfig()
 
-        xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
+        # TODO: somthing is outdated here
+        # xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
 
         self.gotoUrlByLinkText(u"Анкеты")
         self.gotoUrlByLinkText(u"TESTЧаПаевa855d Василийb02")

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
 
 class XcmsSiteOpenAllPages(xtest_common.XcmsTest):
     """
@@ -102,4 +102,3 @@ class XcmsSiteOpenAllPages(xtest_common.XcmsTest):
         
         self.gotoUrlByLinkText(mainPage)
         
-    

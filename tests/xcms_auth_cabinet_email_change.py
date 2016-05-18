@@ -39,7 +39,7 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         print "test good email"
         newGoodEMail = self.m_conf.getValidEmail(2)
 
-        newGoodEMail = self.fillElementById("email-input", newGoodEMail)
+        self.fillElementById("email-input", newGoodEMail)
         self.clickElementById("update_me")
 
         badMailMsg = u"пользователь с такой почтой"
@@ -65,7 +65,7 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
 
         newBadEMail = inpEMail2
 
-        newBadEMail = self.fillElementById("email-input", newBadEMail)
+        self.fillElementById("email-input", newBadEMail)
         self.clickElementById("update_me")
 
         self.assertBodyTextPresent(badMailMsg)

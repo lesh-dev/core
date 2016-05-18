@@ -4,8 +4,6 @@
 import xtest_common
 import random_crap
 
-import datetime
-
 def slashify(line):
     return "".join([x * 2 if x == "\\" else x for x in line])
 

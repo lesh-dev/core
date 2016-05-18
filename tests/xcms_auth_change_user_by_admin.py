@@ -46,7 +46,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.assertElementValueById("name-input", inpName)
         self.assertElementValueById("email-input", inpEMail)
 
-        inpName = inpName + "_changed"
+        inpName += "_changed"
 
         inpName = self.fillElementById("name-input", inpName)
         print "New user name: ", inpName
