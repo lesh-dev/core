@@ -7,7 +7,7 @@ $result = array();
 define('XSM_API_GET', 'get');
 define('XSM_API_UPDATE', 'update');
 
-header("Content-Type: text/json; charset: UTF-8");
+header("Content-Type: application/json; charset: UTF-8");
 try
 {
     $object_action = xcms_get_key_or($_REQUEST, "object_action");
