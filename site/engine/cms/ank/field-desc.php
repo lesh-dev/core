@@ -503,18 +503,12 @@ function xsm_get_persistent_enum_key($scope, $name, $enum_type)
     return xsm_check_enum_key($enum_type, $key);
 }
 
-// Wrapper around generic API call
-function xsm_make_enum_by_type($name, $value, $enum_type)
-{
-    return xsm_make_enum_selector($name, $value, xsm_get_enum($enum_type));
-}
-
 function xsm_saved_form($table_name)
 {
     $forms = array(
         'school'=>'сохранена',
         'department'=>'сохранено',
-        );
+    );
     return xcms_get_key_or($forms, $table_name, 'сохранён');
 }
 

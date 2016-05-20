@@ -1,6 +1,7 @@
 <?php
 require_once("${engine_dir}sys/db.php");
 require_once("${engine_dir}cms/ank/fio.php");
+require_once("${engine_dir}cms/ank/field-desc.php");
 
 define('XSM_CONTACT_SEPARATOR', ',&nbsp;&nbsp; ');
 define('XSM_SCHOOL_COUNT', 7);  // not used by now
@@ -472,6 +473,12 @@ function xsm_make_enum_selector($name, $value, $items)
     }
     $html .= "</select>";
     return $html;
+}
+
+// Wrapper around generic API call
+function xsm_make_enum_by_type($name, $value, $enum_type)
+{
+    return xsm_make_enum_selector($name, $value, xsm_get_enum($enum_type));
 }
 
 function xsm_checkbox($name, $value)
