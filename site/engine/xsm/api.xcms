@@ -6,6 +6,11 @@ $result = array();
 
 define('XSM_API_GET', 'get');
 define('XSM_API_UPDATE', 'update');
+define('XSM_API_ENUM_HTML', 'enum_html');
+
+define('XSM_API_KEY_STATUS', 'status');
+define('XSM_API_KEY_ERROR', 'error');
+
 
 header("Content-Type: application/json; charset: UTF-8");
 try
@@ -23,6 +28,7 @@ try
             $object_enc[$key] = utf8_encode($value);
         }
         $result["object"] = $object;
+        $result[XSM_API_KEY_STATUS] = XSM_API_STATUS_OK;
     }
     elseif (XSM_API_UPDATE == $object_action)
     {
@@ -37,12 +43,20 @@ try
         }
         $key_name = "${table_name}_id";
         xdb_insert_or_update($table_name, array($key_name=>$object_id), $object, xsm_get_fields($table_name));
-        $result["status"] = "OK";
+        $result[XSM_API_KEY_STATUS] = XSM_API_STATUS_OK;
+    }
+    elseif (XSM_API_ENUM_HTML == $object_action)
+    {
+        $name = xcms_get_key_or($_REQUEST, "name");
+        $value = xcms_get_key_or($_REQUEST, "value");
+        $enum_type = xcms_get_key_or($_REQUEST, "enum_type");
+        $result["enum"] = xsm_make_enum_by_type($name, $value, $enum_type);
+        $result[XSM_API_KEY_STATUS] = XSM_API_STATUS_OK;
     }
 }
 catch (Exception $e)
 {
-    $result["error"] = $e->message;
+    $result[XSM_API_KEY_ERROR] = $e->message;
     // the only way to output
     echo json_encode($result);
     die();

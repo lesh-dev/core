@@ -23,12 +23,11 @@ function _xsm_edit_field_keypress_handler(event)
         var cell = $(this).parent();
         cell.text(new_content);
         cell.removeClass("cell-editing");
-        data = {
-            // TODO(mvel): Fix field name
-            'current_class': new_content
-        };
+        field_name = cell.attr('field-name')
+        data = {}
+        data[field_name] = new_content;
         var ele = cell;
-        while (ele.prop('nodeName') != 'TR') {
+        while (ele && ele.prop('nodeName') != 'TR') {
             ele = ele.parent();
         }
 
@@ -38,6 +37,9 @@ function _xsm_edit_field_keypress_handler(event)
         jQuery.get('/xsm/api/update/person/' + id + '/' + encoded_data, function(data) {
             // console.log(data["status"]);
         });
+
+        event.stopPropagation();
+        return false;
     }
 }
 

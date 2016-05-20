@@ -19,7 +19,7 @@
 </form>
 <script type="text/javascript">
     xsm_filter_form_autosubmit();
-    //$(xsm_set_editors);
+    $(xsm_set_editors);
 </script>
 
 <div style="display: inline-block; float: right">
@@ -181,16 +181,16 @@ function xsm_show_tour_list()
             <td class="ankList"><a name="<?php echo "person$person_id"; ?>"
                 /><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"
                 title="<?php echo $fio; ?>"><?php echo $fin; ?></a></td>
-            <td class="ankList"><?php echo $current_class; ?></td>
+            <td class="ankList" field-name="current_class"><?php echo $current_class; ?></td>
             <?php if ($single_forest) {?>
-            <td class="ankList c"><?php echo xsm_make_forest_enum($person, (int)($forest_num), "p$person_count"); ?></td>
+            <td class="ankList c" field-name="forest_<?php echo $forest_num; ?>"><?php echo xsm_make_forest_enum($person, (int)($forest_num), "p$person_count"); ?></td>
             <?php } else {?>
-            <td class="ankList c"><?php echo xsm_make_forest_enum($person, 1, "p$person_count"); ?></td>
-            <td class="ankList c"><?php echo xsm_make_forest_enum($person, 2, "p$person_count"); ?></td>
-            <td class="ankList c"><?php echo xsm_make_forest_enum($person, 3, "p$person_count"); ?></td>
+            <td class="ankList c" field-name="forest_1"><?php echo xsm_make_forest_enum($person, 1, "p$person_count"); ?></td>
+            <td class="ankList c" field-name="forest_2"><?php echo xsm_make_forest_enum($person, 2, "p$person_count"); ?></td>
+            <td class="ankList c" field-name="forest_3"><?php echo xsm_make_forest_enum($person, 3, "p$person_count"); ?></td>
             <?php } ?>
-            <td class="ankList"><?php echo $tent_capacity; ?></td>
-            <td class="ankList"><?php echo $tour_requisites; ?></td>
+            <td class="ankList" field-name="tent_capacity"><?php echo $tent_capacity; ?></td>
+            <td class="ankList" field-name="tour_requisites"><?php echo $tour_requisites; ?></td>
             <td class="ankList"><?php echo $all_phones; ?></td>
             <td class="ankList"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
