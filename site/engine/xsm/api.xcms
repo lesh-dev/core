@@ -52,7 +52,7 @@ try
         $name = xcms_get_key_or($_REQUEST, "name");
         $value = xcms_get_key_or($_REQUEST, "value");
         $enum_type = xcms_get_key_or($_REQUEST, "enum_type");
-        $result["enum"] = xsm_make_enum_by_type($name, $value, $enum_type);
+        $result["enum_html"] = xsm_make_enum_by_type($name, $value, $enum_type);
         $result[XSM_API_KEY_STATUS] = XSM_API_STATUS_OK;
     }
 }
