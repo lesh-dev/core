@@ -2,9 +2,8 @@ span.ankLabel {
     font-size: 10pt;
     font-weight: bold;
     display: inline-block;
-    width: 200px;
+    width: 300px;
     padding-left: 2px;
-    float: left;
 }
 
 div.ankLegend {
@@ -12,7 +11,7 @@ div.ankLegend {
     display: inline-block;
     width: 30%;
     border: 1px solid #003f00;
-    background-color: #d7f9ea;
+    background-color: #aed79b;
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -25,19 +24,15 @@ div.ankRow {
     white-space: nowrap;
 }
 
-span.ankValue {
-    vertical-align: top;
-}
-
 div.ankExample {
     font-size: 8pt;
-    padding-left: 210px;
+    padding-left: 310px;
     padding-bottom: 3pt;
 }
 
 span.ankAst {
     font-weight: bold;
-    font-size: 12pt;
+    font-size: 10pt;
 }
 span.ankAst.Req {
     color: #ff0000;
@@ -46,7 +41,7 @@ span.ankAst.Gr {
     color: #cf7f00;
 }
 span.ankAst.Rec {
-    color: #139ec3;
+    color: #e0f2dd;
 }
 
 div.ankError {
@@ -66,8 +61,7 @@ div.ankMessageFrame {
     -webkit-border-radius: 5px;
     border-radius: 5px;
     border: 1px solid #003f00;
-    background-color: #d7f9ea;
-    margin-right: 40px;
+    background-color: #aed79b;
     display: none;
 }
 
