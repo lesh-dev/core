@@ -185,9 +185,9 @@ function xsm_show_tour_list()
             <?php if ($single_forest) {?>
             <td class="ankList c" field-name="forest_<?php echo $forest_num; ?>"><?php echo xsm_make_forest_enum($person, (int)($forest_num), "p$person_count"); ?></td>
             <?php } else {?>
-            <td class="ankList c" field-name="forest_1"><?php echo xsm_make_forest_enum($person, 1, "p$person_count"); ?></td>
-            <td class="ankList c" field-name="forest_2"><?php echo xsm_make_forest_enum($person, 2, "p$person_count"); ?></td>
-            <td class="ankList c" field-name="forest_3"><?php echo xsm_make_forest_enum($person, 3, "p$person_count"); ?></td>
+            <td class="ankList c" field-name="forest_1" enum-type="forest_status"><?php echo xsm_make_forest_enum($person, 1, "p$person_count"); ?></td>
+            <td class="ankList c" field-name="forest_2" enum-type="forest_status"><?php echo xsm_make_forest_enum($person, 2, "p$person_count"); ?></td>
+            <td class="ankList c" field-name="forest_3" enum-type="forest_status"><?php echo xsm_make_forest_enum($person, 3, "p$person_count"); ?></td>
             <?php } ?>
             <td class="ankList" field-name="tent_capacity"><?php echo $tent_capacity; ?></td>
             <td class="ankList" field-name="tour_requisites"><?php echo $tour_requisites; ?></td>

@@ -16,16 +16,16 @@ RewriteRule ^admin/(.*)$ /?ref=admin&aparam=$1
 RewriteRule ^admin$ /?ref=admin&aparam=root
 
 # XSM short links
-RewriteRule ^xsm/api/get/([a-z_]+)/([0-9]+)$ /?ref=api-xsm&object_action=get&table_name=$1&object_id=$2
-RewriteRule ^xsm/api/update/([a-z_]+)/([0-9]+)/(.*)$ /?ref=api-xsm&object_action=update&table_name=$1&object_id=$2&object_data=$3
-RewriteRule ^xsm/api/enum_html/([a-z_]+)/(.*)/([a-z_]+)$ /?ref=api-xsm&object_action=enum_html&name=$1&value=$2&enum_type=$3
+RewriteRule ^xsm/api/get/([a-z0-9_]+)/([0-9]+)$               /?ref=api-xsm&object_action=get&table_name=$1&object_id=$2
+RewriteRule ^xsm/api/update/([a-z0-9_]+)/([0-9]+)/(.*)$       /?ref=api-xsm&object_action=update&table_name=$1&object_id=$2&object_data=$3
+RewriteRule ^xsm/api/enum_html/([a-z0-9_]+)/(.*?)/([a-z_]+)$  /?ref=api-xsm&object_action=enum_html&name=$1&value=$2&enum_type=$3
 RewriteRule ^xsm/(.*)$ /?ref=xsm&aparam=$1
 RewriteRule ^xsm$ /?ref=xsm&aparam=root
 
 # Contest short links
-RewriteRule ^ctx/([a-z]+)/([a-z-]+)$ /?ref=contest&table_name=$1&mode=$2
-RewriteRule ^ctx/([a-z]+)/from-submission/([0-9]+)$ /?ref=contest&table_name=$1&mode=from-submission&submission_id=$2
-RewriteRule ^ctx/([a-z]+)/([a-z-]+)/([a-z0-9]+)$ /?ref=contest&table_name=$1&mode=$2&entry_id=$3
-RewriteRule ^ctx/([a-z]+)/([a-z-]+)/([0-9]+)/([0-9]+)$ /?ref=contest&table_name=$1&mode=$2&entry_id=$3&pid=$4
+RewriteRule ^ctx/([a-z]+)/([a-z-]+)$                       /?ref=contest&table_name=$1&mode=$2
+RewriteRule ^ctx/([a-z]+)/from-submission/([0-9]+)$        /?ref=contest&table_name=$1&mode=from-submission&submission_id=$2
+RewriteRule ^ctx/([a-z]+)/([a-z-]+)/([a-z0-9]+)$           /?ref=contest&table_name=$1&mode=$2&entry_id=$3
+RewriteRule ^ctx/([a-z]+)/([a-z-]+)/([0-9]+)/([0-9]+)$     /?ref=contest&table_name=$1&mode=$2&entry_id=$3&pid=$4
 RewriteRule ^ctx/([a-z]+)$ /?ref=contest&table_name=$1&mode=view
 RewriteRule ^ctx$ /?ref=contest
