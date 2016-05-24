@@ -55,10 +55,14 @@ try
         $result["enum_html"] = xsm_make_enum_by_type($name, $value, $enum_type);
         $result[XSM_API_KEY_STATUS] = XSM_API_STATUS_OK;
     }
+    else
+    {
+        throw new Exception("Unknown object action: '$object_action'. ");
+    }
 }
 catch (Exception $e)
 {
-    $result[XSM_API_KEY_ERROR] = $e->message;
+    $result[XSM_API_KEY_ERROR] = $e->getMessage();
     // the only way to output
     echo json_encode($result);
     die();
