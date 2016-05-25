@@ -8,6 +8,7 @@ $result = array();
 define('XSM_API_GET', 'get');
 define('XSM_API_UPDATE', 'update');
 define('XSM_API_ENUM_HTML', 'enum_html');
+define('XSM_API_ENUM_VALUE_HTML', 'enum_value_html');
 
 define('XSM_API_KEY_STATUS', 'status');
 define('XSM_API_KEY_ERROR', 'error');
@@ -53,6 +54,14 @@ try
         $value = xcms_get_key_or($_REQUEST, "value");
         $enum_type = xcms_get_key_or($_REQUEST, "enum_type");
         $result["enum_html"] = xsm_make_enum_by_type($name, $value, $enum_type);
+        $result[XSM_API_KEY_STATUS] = XSM_API_STATUS_OK;
+    }
+    elseif (XSM_API_ENUM_VALUE_HTML == $object_action)
+    {
+        $name = xcms_get_key_or($_REQUEST, "name");
+        $value = xcms_get_key_or($_REQUEST, "value");
+        $enum_type = xcms_get_key_or($_REQUEST, "enum_type");
+        $result["enum_value"] = xsm_make_enum_byval($value, $name, $enum_type);
         $result[XSM_API_KEY_STATUS] = XSM_API_STATUS_OK;
     }
     else

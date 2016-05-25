@@ -312,16 +312,38 @@ function xsm_social_profile_link($social_profile)
 }
 
 /**
+  * @return HTML span with enum human-readable value.
+  * @sa @c xsm_make_enum_byval
   * id is added for testability reasons
   **/
 function xsm_make_enum($object, $key, $id = false)
 {
-    $enum_value = xsm_check_enum_key($key, $object[$key]);
-    $css_class = str_replace('_', '-', $key);
-    $values = xsm_get_enum($key);
-    $title = $values[$enum_value];
+    return xsm_make_enum_byval($key, $object[$key], $id);
+}
+
+/**
+  * @return HTML span with enum human-readable value.
+  * Incapsulates all key inconsistency (e.g. forest_status)
+  * id is added for testability reasons
+  **/
+function xsm_make_enum_byval($key, $value, $id = false)
+{
+    $enum_type = $key;
+    // forest hacks
+    if (
+        $key == "forest_1" ||
+        $key == "forest_2" ||
+        $key == "forest_3")
+    {
+        $enum_type = "forest_status";
+    }
+    // filter value
+    $value = xsm_check_enum_key($enum_type, $value);
+    $css_class = str_replace('_', '-', $enum_type);
+    $values = xsm_get_enum($enum_type);
+    $title = $values[$value];
     $id = ($id !== false) ? "$id-" : "";
-    return "<span class=\"$css_class xe-$enum_value\" id=\"$id$key-span\">$title</span>";
+    return "<span class=\"$css_class xe-$value\" id=\"$id$key-span\">$title</span>";
 }
 
 function xsm_calc_course_style($course_ratio)
@@ -335,19 +357,6 @@ function xsm_calc_course_style($course_ratio)
     elseif ($course_ratio >= 0.999)
         return "xe-all";
     return "xe-undef";
-}
-
-/**
-  * Non-generic function, see xsm_make_enum
-  * id is added for testability reasons
-  **/
-function xsm_make_forest_enum($person, $fn, $id = false)
-{
-    $id = ($id !== false) ? "$id-" : "";
-    $forest_status = xsm_check_enum_key("forest_status", $person["forest_$fn"]);
-    $values = xsm_get_enum("forest_status");
-    $title = $values[$forest_status];
-    return "<span class=\"forest-status xe-$forest_status\" id=\"${id}forest_status$fn-span\">$title</span>";
 }
 
 function xsm_person_list_link($school_id)
@@ -510,6 +519,15 @@ function xsm_ank_format_unit_test()
     // к сожалению, в жизни встречаются пустые поля
     $phones = xsm_format_phones("");
     xut_equal(count($phones), 0, "Phones count 0");
+
+    // тестируем enum-ы
+    $enum_span = xsm_make_enum_byval("forest_2", "able");
+    xut_check(xu_strpos($enum_span, "Может") > 0, "Check 'able' status");
+    $person = array(
+        "anketa_status"=>"cont",
+    );
+    $enum_span = xsm_make_enum($person, "anketa_status");
+    xut_check(xu_strpos($enum_span, "Активный") > 0, "Check 'cont' status");
 
     xut_end();
 }
