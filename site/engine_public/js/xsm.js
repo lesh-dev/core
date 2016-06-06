@@ -1,3 +1,6 @@
+/**
+ * Hook providing auto-submit on form controls change
+ */
 function xsm_filter_form_autosubmit()
 {
     $(document).ready(function() {
@@ -25,13 +28,13 @@ function _find_row(ele)
 
 function _update_data(cell, new_content)
 {
-    field_name = cell.attr('field-name')
-    data = {}
+    var field_name = cell.attr('field-name');
+    var data = {};
     data[field_name] = new_content;
 
     var id = _find_row(cell).attr('row-id');
-    json_data = JSON.stringify(data);
-    encoded_data = encodeURIComponent(json_data);
+    var json_data = JSON.stringify(data);
+    var encoded_data = encodeURIComponent(json_data);
     jQuery.get('/xsm/api/update/person/' + id + '/' + encoded_data, function(data) {
         // console.log(data["status"]);
     });
@@ -57,14 +60,15 @@ function _xsm_edit_field_enum_change(event)
 {
     var new_content = $(this).val();
     var cell = $(this).parent();
-    var enum_type = cell.attr('enum-type')
-    var field_name = cell.attr('field-name')
+    var enum_type = cell.attr('enum-type');
+    var field_name = cell.attr('field-name');
     if (enum_type)
     {
         // set new enum value
+        // FIXME(mvel): copypaste, see below
         var enum_value_url = '/xsm/api/enum_value_html/' + field_name + '/' + new_content + '/' + enum_type;
         xsm_async_call(enum_value_url, function(result) {
-            cell.html(result.enum_value);
+            cell.html(result['enum_value']);
             cell.removeClass("cell-editing");
         });
     }
@@ -82,12 +86,13 @@ function _xsm_edit_field_enum_change(event)
 function xsm_async_call(url, on_success)
 {
     var on_failure = function(response) {
-        alert('Ajax request failed, please mail to dev@fizlesh.ru');
-    }
+        console.log('Failed ajax response: ' + response);
+        alert('Ajax request failed, please mail to dev@fizlesh.ru (see JS console for bogus server response).');
+    };
     jQuery.get({
         url: url,
         success: on_success,
-        failure: on_failure,
+        failure: on_failure
     });
 }
 
@@ -109,7 +114,7 @@ function xsm_edit_field_handler(event)
             var enum_url = '/xsm/api/enum_html/' + field_name + '/' + original_value + '/' + enum_type;
             xsm_async_call(enum_url, function(result) {
                 // turn cell into input
-                cell.html(result.enum_html);
+                cell.html(result['enum_html']);
                 var input = cell.children().first();
                 input.focus();
                 input.change(_xsm_edit_field_enum_change);
@@ -119,11 +124,11 @@ function xsm_edit_field_handler(event)
                 var cancel_handler = function() {
                     var enum_value_url = '/xsm/api/enum_value_html/' + field_name + '/' + original_value + '/' + enum_type;
                     xsm_async_call(enum_value_url, function(result) {
-                        console.log(result);
-                        cell.html(result.enum_value_html);
+                        //console.log(result);
+                        cell.html(result['enum_value']);
                         cell.removeClass("cell-editing");
                     });
-                }
+                };
                 input.blur(cancel_handler);
             });
 
@@ -131,7 +136,7 @@ function xsm_edit_field_handler(event)
         else
         {
             // text control
-            cell.html('<input type="text"/>');
+            cell.html('<input type="text" />');
             var input = cell.children().first();
             input.focus();
             input.keypress(_xsm_edit_field_keypress_handler);
@@ -139,7 +144,7 @@ function xsm_edit_field_handler(event)
             var cancel_handler = function() {
                 cell.text(original_value);
                 cell.removeClass("cell-editing");
-            }
+            };
             input.blur(cancel_handler);
         }
     });
@@ -149,7 +154,9 @@ function xsm_edit_field_handler(event)
     return false;
 }
 
-
+/**
+ * Install editor on each cell
+ **/
 function xsm_set_editors()
 {
     $("td").dblclick(xsm_edit_field_handler);
