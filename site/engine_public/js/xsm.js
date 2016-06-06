@@ -57,41 +57,74 @@ function _xsm_edit_field_enum_change(event)
 {
     var new_content = $(this).val();
     var cell = $(this).parent();
-    cell.text(new_content);
-    cell.removeClass("cell-editing");
+    var enum_type = cell.attr('enum-type')
+    var field_name = cell.attr('field-name')
+    if (enum_type)
+    {
+        // set new enum value
+        var enum_value_url = '/xsm/api/enum_value_html/' + field_name + '/' + new_content + '/' + enum_type;
+        xsm_async_call(enum_value_url, function(result) {
+            cell.html(result.enum_value);
+            cell.removeClass("cell-editing");
+        });
+    }
+    else
+    {
+        // set new text
+        cell.text(new_content);
+        cell.removeClass("cell-editing");
+    }
     _update_data(cell, new_content);
     event.stopPropagation();
     return false;
+}
+
+function xsm_async_call(url, on_success)
+{
+    var on_failure = function(response) {
+        alert('Ajax request failed, please mail to dev@fizlesh.ru');
+    }
+    jQuery.get({
+        url: url,
+        success: on_success,
+        failure: on_failure,
+    });
 }
 
 
 function xsm_edit_field_handler(event)
 {
     var cell = $(this);
-    field_name = cell.attr('field-name')
+    var field_name = cell.attr('field-name')
     var enum_type = cell.attr('enum-type')
     var id = _find_row(cell).attr('row-id');
 
     jQuery.get('/xsm/api/get/person/' + id, function(data) {
-        var original_content = data["object"][field_name];
+        var original_value = data["object"][field_name];
         cell.addClass("cell-editing");
 
         if (enum_type)
         {
             // enum
-            var enum_url = '/xsm/api/enum_html/' + field_name + '/' + original_content + '/' + enum_type;
-            jQuery.get(enum_url, function(enum_data) {
-                cell.html(enum_data.enum_html);
+            var enum_url = '/xsm/api/enum_html/' + field_name + '/' + original_value + '/' + enum_type;
+            xsm_async_call(enum_url, function(result) {
+                // turn cell into input
+                cell.html(result.enum_html);
                 var input = cell.children().first();
                 input.focus();
                 input.change(_xsm_edit_field_enum_change);
 
-                // closure is here to original content (it's better to save it via data())
-                input.blur(function() {
-                    cell.text(original_content);
-                    cell.removeClass("cell-editing");
-                });
-
+                // redefine cancel handler
+                // FIXME turn in handler
+                var cancel_handler = function() {
+                    var enum_value_url = '/xsm/api/enum_value_html/' + field_name + '/' + original_value + '/' + enum_type;
+                    xsm_async_call(enum_value_url, function(result) {
+                        console.log(result);
+                        cell.html(result.enum_value_html);
+                        cell.removeClass("cell-editing");
+                    });
+                }
+                input.blur(cancel_handler);
             });
 
         }
@@ -102,13 +135,12 @@ function xsm_edit_field_handler(event)
             var input = cell.children().first();
             input.focus();
             input.keypress(_xsm_edit_field_keypress_handler);
-            input.val(original_content);
-
-            // closure is here to original content (it's better to save it via data())
-            input.blur(function() {
-                cell.text(original_content);
+            input.val(original_value);
+            var cancel_handler = function() {
+                cell.text(original_value);
                 cell.removeClass("cell-editing");
-            });
+            }
+            input.blur(cancel_handler);
         }
     });
 
