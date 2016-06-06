@@ -18,6 +18,12 @@ define('XSM_API_STATUS_OK', 'ok');
 header("Content-Type: application/json; charset: UTF-8");
 try
 {
+    $unknown_object_action = xcms_get_key_or($_REQUEST, "unknown_object_action");
+    if (xu_not_empty($unknown_object_action))
+    {
+        throw new Exception("Unknown object action: $unknown_object_action");
+    }
+
     $object_action = xcms_get_key_or($_REQUEST, "object_action");
     $table_name = xcms_get_key_or($_REQUEST, "table_name");
     $object_id = xcms_get_key_or($_REQUEST, "object_id");
