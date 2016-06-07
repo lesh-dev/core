@@ -127,7 +127,7 @@ function xsm_edit_field_handler(event)
                 input.change(_xsm_edit_field_enum_change);
 
                 var cancel_handler = function() {
-                    _enum_value_handler(cell, field_name, original_value, enum_type);
+                    _enum_value_handler(cell, original_value, enum_type);
                 };
                 input.blur(cancel_handler);
             });
