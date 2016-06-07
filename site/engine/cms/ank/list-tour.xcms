@@ -192,7 +192,7 @@ function xsm_show_tour_list()
             <td class="ankList" field-name="tent_capacity"><?php echo $tent_capacity; ?></td>
             <td class="ankList" field-name="tour_requisites"><?php echo $tour_requisites; ?></td>
             <td class="ankList"><?php echo $all_phones; ?></td>
-            <td class="ankList"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
+            <td class="ankList" field-name="anketa_status" enum-type="anketa_status"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php
         }

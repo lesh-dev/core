@@ -103,6 +103,11 @@ function xsm_edit_field_handler(event)
 {
     var cell = $(this);
     var field_name = cell.attr('field-name');
+    if (!field_name) {
+        // disable handlers for this cell
+        return;
+    }
+
     var enum_type = cell.attr('enum-type');
     var id = _find_row(cell).attr('row-id');
 
