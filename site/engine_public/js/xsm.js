@@ -55,29 +55,31 @@ function _xsm_edit_field_keypress_handler(event)
     }
 }
 
+function _enum_value_handler(cell, value, enum_type)
+{
+    var field_name = cell.attr('field-name');
+    var enum_value_url = '/xsm/api/enum_value_html/' + field_name + '/' + value + '/' + enum_type;
+    xsm_async_call(enum_value_url, function (result) {
+        cell.html(result['enum_value']);
+        cell.removeClass("cell-editing");
+    });
+}
+
+function _text_value_handler(cell, value)
+{
+    cell.text(value);
+    cell.removeClass("cell-editing");
+}
 
 function _xsm_edit_field_enum_change(event)
 {
     var new_content = $(this).val();
     var cell = $(this).parent();
     var enum_type = cell.attr('enum-type');
-    var field_name = cell.attr('field-name');
     if (enum_type)
-    {
-        // set new enum value
-        // FIXME(mvel): copypaste, see below
-        var enum_value_url = '/xsm/api/enum_value_html/' + field_name + '/' + new_content + '/' + enum_type;
-        xsm_async_call(enum_value_url, function(result) {
-            cell.html(result['enum_value']);
-            cell.removeClass("cell-editing");
-        });
-    }
+        _enum_value_handler(cell, new_content, enum_type);
     else
-    {
-        // set new text
-        cell.text(new_content);
-        cell.removeClass("cell-editing");
-    }
+        _text_value_handler(cell, new_content);
     _update_data(cell, new_content);
     event.stopPropagation();
     return false;
@@ -100,8 +102,8 @@ function xsm_async_call(url, on_success)
 function xsm_edit_field_handler(event)
 {
     var cell = $(this);
-    var field_name = cell.attr('field-name')
-    var enum_type = cell.attr('enum-type')
+    var field_name = cell.attr('field-name');
+    var enum_type = cell.attr('enum-type');
     var id = _find_row(cell).attr('row-id');
 
     jQuery.get('/xsm/api/get/person/' + id, function(data) {
@@ -119,15 +121,8 @@ function xsm_edit_field_handler(event)
                 input.focus();
                 input.change(_xsm_edit_field_enum_change);
 
-                // redefine cancel handler
-                // FIXME turn in handler
                 var cancel_handler = function() {
-                    var enum_value_url = '/xsm/api/enum_value_html/' + field_name + '/' + original_value + '/' + enum_type;
-                    xsm_async_call(enum_value_url, function(result) {
-                        //console.log(result);
-                        cell.html(result['enum_value']);
-                        cell.removeClass("cell-editing");
-                    });
+                    _enum_value_handler(cell, field_name, original_value, enum_type);
                 };
                 input.blur(cancel_handler);
             });
@@ -142,8 +137,7 @@ function xsm_edit_field_handler(event)
             input.keypress(_xsm_edit_field_keypress_handler);
             input.val(original_value);
             var cancel_handler = function() {
-                cell.text(original_value);
-                cell.removeClass("cell-editing");
+                _text_value_handler(cell, original_value);
             };
             input.blur(cancel_handler);
         }
