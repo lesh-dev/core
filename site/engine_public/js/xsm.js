@@ -26,6 +26,29 @@ function _find_row(ele)
     return ele;
 }
 
+function _default_handler(response)
+{
+    if (!response)
+    {
+        console.log("Got empty Ajax response");
+        alert("Got empty Ajax response");
+        return false;
+    }
+    if (!response["status"])
+    {
+        alert("No response status in Ajax response");
+        console.log("Ajax response: " + response);
+        return false;
+    }
+    if (response["status"] != "ok")  // XSM_API_STATUS_OK
+    {
+        alert("Ajax response status is not OK");
+        console.log("Ajax response status: " + response["status"]);
+        return false;
+    }
+    return true;
+}
+
 function _update_data(cell, new_content)
 {
     var field_name = cell.attr('field-name');
@@ -35,9 +58,7 @@ function _update_data(cell, new_content)
     var id = _find_row(cell).attr('row-id');
     var json_data = JSON.stringify(data);
     var encoded_data = encodeURIComponent(json_data);
-    jQuery.get('/xsm/api/update/person/' + id + '/' + encoded_data, function(data) {
-        // console.log(data["status"]);
-    });
+    xsm_async_call('/xsm/api/update/person/' + id + '/' + encoded_data);
 }
 
 
@@ -59,8 +80,8 @@ function _enum_value_handler(cell, value, enum_type)
 {
     var field_name = cell.attr('field-name');
     var enum_value_url = '/xsm/api/enum_value_html/' + field_name + '/' + value + '/' + enum_type;
-    xsm_async_call(enum_value_url, function (result) {
-        cell.html(result['enum_value']);
+    xsm_async_call(enum_value_url, function (response) {
+        cell.html(response['enum_value']);
         cell.removeClass("cell-editing");
     });
 }
@@ -85,6 +106,12 @@ function _xsm_edit_field_enum_change(event)
     return false;
 }
 
+/**
+ * Generic Ajax caller for JSON XSM API
+ * @param url query url
+ * @param on_success callback function that will be called on success request.
+ * Contains generic error handler.
+ */
 function xsm_async_call(url, on_success)
 {
     var on_failure = function(response) {
@@ -93,7 +120,13 @@ function xsm_async_call(url, on_success)
     };
     jQuery.get({
         url: url,
-        success: on_success,
+        success: function(response) {
+            if (!_default_handler(response))
+                return;
+
+            if (on_success)
+                on_success(response);
+        },
         failure: on_failure
     });
 }
@@ -111,17 +144,17 @@ function xsm_edit_field_handler(event)
     var enum_type = cell.attr('enum-type');
     var id = _find_row(cell).attr('row-id');
 
-    jQuery.get('/xsm/api/get/person/' + id, function(data) {
-        var original_value = data["object"][field_name];
+    jQuery.get('/xsm/api/get/person/' + id, function(response) {
+        var original_value = response["object"][field_name];
         cell.addClass("cell-editing");
 
         if (enum_type)
         {
             // enum
             var enum_url = '/xsm/api/enum_html/' + field_name + '/' + original_value + '/' + enum_type;
-            xsm_async_call(enum_url, function(result) {
+            xsm_async_call(enum_url, function(response) {
                 // turn cell into input
-                cell.html(result['enum_html']);
+                cell.html(response['enum_html']);
                 var input = cell.children().first();
                 input.focus();
                 input.change(_xsm_edit_field_enum_change);
