@@ -512,11 +512,9 @@ class XcmsTest(XcmsTestWithConfig):
         return sysName, menuTitle, pageHeader, pageAlias
 
 
-
 def shortAlias(last, first):
     return (last + " " + first).strip()
 
+
 def fullAlias(last, first, mid):
     return (last + " " + first + " " + mid).strip()
-
-
