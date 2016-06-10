@@ -4,10 +4,13 @@
     $show_department_id = xcms_get_persistent_key("list-ank", "show_department_id", XDB_INVALID_ID);
     $show_forest_num = xsm_get_persistent_enum_key("list-tour", "show_forest_num", "show_forest_num");
 ?>
-<p>В этом списке показываются активные и принятые или полупринятые школьники и преподы.</p>
-<p>
+<p>В этом списке показываются активные и принятые или полупринятые школьники и преподы.
     Таблица <b>одна на все годы</b>, т.к. эти данные нужны только для маёвок.
     Чтобы выставить статусы леса по умолчанию, воспользуйтесь кнопкой <b>Очистка статусов</b>.
+</p>
+<p>
+    <font color="red"><b>NEW!</b></font> Доступно редактирование лесных статусов (M1-M3)
+    и колонок о снаряжении по двойному щелчку на ячейке (баг <a href="https://dev.fizlesh.ru/lesh/ticket/886">#866</a>)
 </p>
 <form method="post" class="xsm-filter" name="filter" id="filter-form" action="list-tour">
     <span>Фильтр: </span><?php
