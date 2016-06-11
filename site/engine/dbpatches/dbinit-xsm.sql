@@ -11,11 +11,12 @@ create table department (
     department_id integer primary key autoincrement,
     department_title text,
     department_created text, -- utc timestamp
-    department_modified text -- utc timestamp
+    department_modified text, -- utc timestamp
+    department_changedby text -- user name
 );
 
 /* Not to deal with #818 */
-insert into department (department_title, department_created) values ('Физическое', '2005.08.23 01:02:03');
+insert into department (department_title, department_created, department_changedby) values ('Физическое', '2005.08.23 01:02:03', 'serge');
 
 /* Участник (препод, куратор, школьник...) */
 create table person (
@@ -65,6 +66,7 @@ create table person (
 
     person_created text, -- utc timestamp
     person_modified text, -- utc timestamp
+    person_changedby text, -- user name
 
     foreign key (department_id) references department(department_id)
 );
@@ -81,7 +83,8 @@ create table course (
     course_area text, --- enum предметная область
     course_comment text, -- комментарий к курсу (чатик пока не делаем)
     course_created text, -- utc timestamp
-    course_modified text -- utc timestamp
+    course_modified text, -- utc timestamp
+    course_changedby text -- user name
 );
 
 /* Преподы курсов (2.4+) */
@@ -91,6 +94,7 @@ create table course_teachers (
     course_teacher_id integer not null, -- fk
     course_teachers_created text, -- utc timestamp
     course_teachers_modified text, -- utc timestamp
+    course_teachers_changedby text, -- user name
     foreign key (course_id) references course(course_id),
     foreign key (course_teacher_id) references person(person_id)
 );
@@ -103,8 +107,9 @@ create table exam (
     exam_status text,
     deadline_date text,
     exam_comment text,
-    exam_created text,
-    exam_modified text,
+    exam_created text, -- utc timestamp
+    exam_modified text, -- utc timestamp
+    exam_changedby text, -- user name
     foreign key (student_person_id) references person(person_id),
     foreign key (course_id) references course(course_id)
 );
@@ -118,7 +123,8 @@ create table school (
     school_date_end text, -- дата конца
     school_location text, -- место проведения (2.7+)
     school_created text, -- utc timestamp
-    school_modified text -- utc timestamp
+    school_modified text, -- utc timestamp
+    school_changedby text -- user name
 );
 
 /*
@@ -150,6 +156,7 @@ create table person_school (
     person_school_comment text, -- комментарий (v2.10)
     person_school_created text, -- utc timestamp
     person_school_modified text, -- utc timestamp
+    person_school_changedby text, -- user name
     foreign key (member_person_id) references person(person_id),
     foreign key (member_department_id) references department(department_id),
     foreign key (school_id) references school(school_id)
@@ -169,6 +176,7 @@ create table person_comment (
     person_comment_created text, -- utc timestamp
     person_comment_modified text, -- utc timestamp
     person_comment_deleted text, -- признак удаления (из базы ничего удалить нельзя)
+    person_comment_changedby text, -- user name
     foreign key (blamed_person_id) references person(person_id)
     -- foreign key (school_id) references school(school_id),
     -- foreign key (owner_person_id) references person(person_id)
