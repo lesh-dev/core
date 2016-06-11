@@ -7,7 +7,6 @@ function xsm_menu_item($view, $aux_url, $title, $first = false)
 {
     global $web_prefix;
     global $aparam;
-    global $XSM_BOOTSTRAP;
 
     if (xu_empty($aparam))
         die("Variable 'aparam' is not set. Something is broken. ");
@@ -36,10 +35,11 @@ function xsm_menu_item($view, $aux_url, $title, $first = false)
             $aux_li_class .= "active ";
         }
     }
-    if ($XSM_BOOTSTRAP) echo "<li class=\"$aux_li_class\">";
-    ?><a class="xsm-menu-item <?php echo $aux_class; ?>"
-        href="<?php echo $url.$aux_url; ?>"><?php echo $title; ?></a><?php
-    if ($XSM_BOOTSTRAP) echo "</li>";
+    ?>
+    <li class="<?php echo $aux_li_class; ?>">
+    <a class="xsm-menu-item <?php echo $aux_class; ?>"
+        href="<?php echo $url.$aux_url; ?>"><?php echo $title; ?></a>
+    </li><?php
 }
 
 $u_locator_all = xcms_url(array('show_anketa_status'=>'no-trash'));
@@ -64,8 +64,8 @@ if ($person !== null)
 }
 
 ?>
-<div class="xsm-navbar navbar navbar-inverse"><?php
-    if ($XSM_BOOTSTRAP) echo '<div class="navbar-inner"><ul class="nav">';
+<div class="xsm-navbar navbar navbar-inverse">
+    <div class="navbar-inner"><ul class="nav"><?php
     xsm_menu_item('list-ank', '', 'Анкеты', XSM_MENU_FIRST);
     xsm_menu_item('list-person-locator', $u_locator_all, 'Все люди');
     xsm_menu_item('list-tour', $u_cs, 'Лес');
@@ -79,6 +79,6 @@ if ($person !== null)
     {
         xsm_menu_item('view-person', $u_self, 'Я');
     }
-
-    if ($XSM_BOOTSTRAP) echo '</ul></div>';
-?></div>
+    ?>
+    </ul></div>
+</div>

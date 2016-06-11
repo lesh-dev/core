@@ -29,7 +29,6 @@ function xsm_print_courses_selected_school(
     $show_desc = false)
 {
     $pers = ($course_teacher_id != XSM_CT_ALL);
-    global $XSM_BOOTSTRAP;
 
     $courses = xdb_get_table_by_pk('course', "school_id = $school_id");
     $departments = xdb_get_table_by_pk('department');
@@ -85,8 +84,6 @@ function xsm_print_courses_selected_school(
         xsm_view_operations('course', 'курс', $course_aux_param); ?>
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
-        <?php
-        if ($XSM_BOOTSTRAP) {?>
             <col width="10%" />
             <?php if (!$pers) {?>
             <col width="20%" /><?php
@@ -98,21 +95,7 @@ function xsm_print_courses_selected_school(
             <col width="5%" />
             <?php if ($show_desc) {?>
             <col width="20%" /><?php
-            }
-        } else {?>
-            <col width="10%" />
-            <?php if (!$pers) {?>
-            <col width="20%" /><?php
             } ?>
-            <col width="2%" />
-            <col width="8%" />
-            <col width="8%" />
-            <col width="3%" />
-            <col width="3%" />
-            <?php if ($show_desc) {?>
-            <col width="20%" /><?php
-            }
-        }?>
         </colgroup>
         <thead>
             <th class="ankList">Курс</th>
