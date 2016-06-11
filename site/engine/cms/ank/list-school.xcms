@@ -17,10 +17,10 @@ function xsm_school_list()
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
             <col width="60" />
+            <col width="20%" />
             <col width="10%" />
             <col width="10%" />
-            <col width="10%" />
-            <col width="70%" />
+            <col width="60%" />
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
