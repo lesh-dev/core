@@ -2,28 +2,14 @@
 <html><!-- HTML5 compatible -->
 <head>
     <# cms/head #>
-    <?php
-    global $XSM_BOOTSTRAP;
-    $XSM_BOOTSTRAP = true;
-    //$XSM_BOOTSTRAP = (strpos($design_dir, "lesh.org.ru") !== false);
-    if (!$XSM_BOOTSTRAP) {?>
-    <# css/design default.css #><?php
-    }?>
-    <# js/jquery #><?php
-    if ($XSM_BOOTSTRAP) {?>
-    <# js/bootstrap #><?php
-    }?>
+    <# js/jquery #>
+    <# js/bootstrap #>
     <# js/public common.js #>
     <# js/public xsm.js #>
     <# js/public control-depends.js #>
 
     <# css/public xsm.css #>
-    <?php if ($XSM_BOOTSTRAP) {?>
     <# css/public xsm-bootstrap.css #>
-    <?php } else {?>
-    <# css/design ank-manage.css #>
-    <# css/design xsm.css #><?php
-    }?>
 </head>
 <body>
 <?php
