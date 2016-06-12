@@ -3,6 +3,8 @@
       * @author Mikhail Veltishchev <dichlofos-mv@yandex.ru>
       * Database management module
       **/
+    require_once("${engine_dir}sys/auth.php");
+
     define('XDB_NEW', 'new');
     define('XDB_INVALID_ID', '-1');
 
@@ -78,10 +80,13 @@
       * @param $ignore_ai ignore autoincrement keys, use value from $keys_values
       * @param $outer_db use given external database (not used by default)
       *
-      * Two special fields, ${table_name}_created and ${table_name}_modifed
+      * Special fields,
+      * ${table_name}_created,
+      * ${table_name}_modifed,
       * are filled using current UTC time value in human-readable form
       * (that can be converted back to timestamp, though)
-      * so they should always present in any table
+      * and ${table_name}_changedby representing last user name
+      * so they should always present in any table.
       **/
     function xdb_insert_ai($table_name, $pk_name, $keys_values, $allowed_keys, $override_ts = XDB_OVERRIDE_TS, $use_ai = XDB_USE_AI, $outer_db = NULL)
     {
@@ -94,6 +99,8 @@
             $keys_values["${table_name}_created"] = xcms_datetime();
             $keys_values["${table_name}_modified"] = '';
         }
+        // for audit purposes
+        $keys_values["${table_name}_changedby"] = xcms_user()->login();
 
         foreach ($allowed_keys as $key => $unused)
         {
@@ -144,6 +151,8 @@
         $values = "";
         if ($override_ts)
             $keys_values["${table_name}_modified"] = xcms_datetime();
+        // for audit purposes
+        $keys_values["${table_name}_changedby"] = xcms_user()->login();
 
         foreach ($keys_values as $key => $value)
         {

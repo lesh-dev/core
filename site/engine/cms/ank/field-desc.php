@@ -331,6 +331,11 @@ function xsm_get_all_field_descriptors()
             "type"=>XSM_FT_STR,
             "readonly"=>true,
         );
+        $field_descriptors[$object_type]["${object_type}_changedby"] = array(
+            "name"=>"Владелец модификации",
+            "type"=>XSM_FT_STR,
+            "readonly"=>true,
+        );
     }
 
     return $field_descriptors;
