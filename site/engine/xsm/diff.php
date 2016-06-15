@@ -122,5 +122,3 @@ function xsm_build_diff_msg($new_object, $old_object, $table_name, $fields, $tab
 
     return $mail_msg;
 }
-
-?>

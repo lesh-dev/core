@@ -4,8 +4,8 @@ require_once("${engine_dir}cms/ank/pss.php");
 require_once("${engine_dir}cms/ank/field-desc.php");
 require_once("${engine_dir}cms/ank/format.php");
 require_once("${engine_dir}cms/ank/ank-proc.php");
+require_once("${engine_dir}xsm/middleware.php");
 ?>
-<# cms/ank/middleware #>
 <# cms/ank/db-actions #>
 <# js/jquery #>
 <# js/public common.js #>
