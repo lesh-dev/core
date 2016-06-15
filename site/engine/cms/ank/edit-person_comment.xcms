@@ -1,5 +1,5 @@
-<# cms/ank/diff #>
 <?php
+require_once("${engine_dir}xsm/diff.php");
 require_once("${engine_dir}cms/ank/edit-format.php");
 
 // Специфическая функция для данной таблицы (можно объединить с person_school)

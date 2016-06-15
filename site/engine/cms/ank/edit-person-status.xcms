@@ -1,4 +1,5 @@
-<# cms/ank/diff #><?php
+<?php
+require_once("${engine_dir}xsm/diff.php");
 require_once("${engine_dir}cms/ank/edit-format.php");
 
 /**
