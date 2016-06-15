@@ -91,7 +91,7 @@ function xsm_build_diff_msg($new_object, $old_object, $table_name, $fields, $tab
             }
             else
                 $old_value = "Да";
-            $new_value = strlen($new_value) ? "Да" : "Нет";
+            $new_value = xu_not_empty($new_value) ? "Да" : "Нет";
         }
         if (xsm_enum_exists($key))
         {

@@ -1,6 +1,6 @@
 /**
  * Hook providing auto-submit on form controls change
- */
+ **/
 function xsm_filter_form_autosubmit()
 {
     $(document).ready(function() {
@@ -111,7 +111,7 @@ function _xsm_edit_field_enum_change(event)
  * @param url query url
  * @param on_success callback function that will be called on success request.
  * Contains generic error handler.
- */
+ **/
 function xsm_async_call(url, on_success)
 {
     var on_failure = function(response) {
