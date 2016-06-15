@@ -76,8 +76,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.clickElementById("create-page-submit")
 
-        #self.logAdd("Opening editor again after redirection. ")
-        #self.gotoEditPageInPlace()
+        # self.logAdd("Opening editor again after redirection. ")
+        # self.gotoEditPageInPlace()
 
         self.m_menuTitle = inpMenuTitle
         self.m_pageHeader = inpPageHeader
@@ -207,8 +207,10 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         wordNumber = 7
         totalLines = 8
 
-        origLines = [random_crap.randomCrap(wordNumber, self.wordOptions, specialChars=self.specChars)
-                     for _ in xrange(0, totalLines)]
+        origLines = [
+            random_crap.randomCrap(wordNumber, self.wordOptions, specialChars=self.specChars)
+            for _ in xrange(0, totalLines)
+        ]
 
         pageText = linesToHtml(origLines)
 
