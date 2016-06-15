@@ -39,7 +39,6 @@ class XcmsContestSubmitWorkFromSite(xtest_common.XcmsTest):
         os.remove(workFile)
 
         # send large file
-        
         with open('contest-work-sample-large', 'w') as f:
             f.write('Q' * 20*1000*1000)
 
@@ -49,9 +48,9 @@ class XcmsContestSubmitWorkFromSite(xtest_common.XcmsTest):
         self.assertBodyTextPresent(u"файл слишком большой")
         self.assertPhpErrors()
         os.remove(workFile)
-        
+
         """
-        #send very large file 
+        #send very large file
         #TODO now there is still php warning (POST Content-Length ... exceeds the limit)
         with open('contest-work-sample-large', 'w') as f:
             f.write('Q' * 80*1000*1000)
