@@ -129,7 +129,7 @@ function xsm_clear_notifications()
         echo 'DELETE FROM notification;' | sudo sqlite3 "$DEST_DB"
         message "Notifications table cleared successfully"
     else
-        message_error "Database [ $DEST_DB ] not found"
+        message_error "Database [ $DEST_DB ] not found, cannot clear notifications"
     fi
 
     mc="$FULL_DEST_CONT/cms/mailer.conf"
@@ -276,10 +276,13 @@ xcms_version_css "$DEST/lesh.org.ru-design"
 
 xsm_clear_notifications
 
-message "Changing root password to 'root'..."
-# change root password to 'root'
-sudo cp -f $VERBOSE ./tools/xcms_console_tools/root_root_user $FULL_DEST_CONT/auth/usr/root.user
-
+if [ -e $FULL_DEST_CONT/auth/usr/root.user ] ; then
+    message "Changing root password to 'root'..."
+    # change root password to 'root'
+    sudo cp -f $VERBOSE ./tools/xcms_console_tools/root_root_user $FULL_DEST_CONT/auth/usr/root.user
+else
+    message_error "User 'root' was not found, password change skipped"
+fi
 message "Installing logrotate script"
 sudo cp -f $VERBOSE ./site/xcms.logrotate /etc/logrotate.d/xcms
 message "Creating directory for logs"
