@@ -228,7 +228,7 @@ class InstallerInstallHook
             'content_time_roundup',
         );
 
-        $output = "<?php\n";
+        $output = "";
         foreach ($string_settings as $k)
         {
             $val = $config[$k];
@@ -245,11 +245,11 @@ class InstallerInstallHook
             $v = $config[$k];
             $output .= "\x20\x20\x20\x20\$SETTINGS['$k'] = $v;\n";
         }
-        $output .= "\n?>";
-        if (!xcms_write("settings.php", $output))
+        if (!xcms_write("settings.php", "<?php\n$output\n?>"))
             return "Cannot append settings to 'settings.php'. ";
 
-        include("settings.php");
+        // For unknown reasons, eval works better than "include settings.php"
+        eval($output);
         include("${engine_dir}sys/settings.php");
         require_once("${engine_dir}sys/tag.php");
         require_once("${engine_dir}sys/cms.php");
