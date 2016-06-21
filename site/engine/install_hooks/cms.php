@@ -75,22 +75,6 @@
                 return "Cannot save '$root_info_file_name' list. ";
             }
         }
-        if (!glob("${content_dir}auth/usr/*.user"))
-        {
-            $root_usr_filename = "${content_dir}auth/usr/root.user";
-            $creation_timestamp = time();
-            $root_usr_content =
-                "login:root\n".
-                "email:root@example.com\n".
-                "creator:installer\n".
-                "creation_date:$creation_timestamp\n".
-                "password:7ac7678d5fca55cdd3ef609360a0e262\n".
-                "groups:ank,editor,admin\n";
-            if (!xcms_write($root_usr_filename, $root_usr_content))
-            {
-                return "Cannot save user file '$root_usr_filename'. ";
-            }
-        }
 
         return true;
     }
