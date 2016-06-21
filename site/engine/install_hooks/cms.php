@@ -47,36 +47,42 @@
         return true;
     }
 
+    function _create_page($name)
+    {
+        global $content_dir;
+        // FIXME: refactor cms/pages
+        $info_file_name = xcms_get_info_file_name($name);
+        $page_dir = "${content_dir}cms/pages/$name";
+        @mkdir($page_dir, 0777, true);
+        if (!file_exists($info_file_name))
+        {
+            $page_info = array(
+                "owner" => "root",
+                "type" => "content",
+                "header" => "Root",
+                "alias" => "",
+                "view" => "#all",
+                "edit" => "#all",
+            );
+            if (!xcms_save_list($info_file_name, $page_info))
+            {
+                return "Cannot save '$info_file_name' list. ";
+            }
+        }
+
+        return true;
+    }
+
     /**
       * Собственно процесс установки: создаём начальную страницу сайта, если контент пуст.
       * @return true, если у нас это получилось
       **/
     function install($config, &$logs)
     {
-        global $engine_dir;
-        global $content_dir;
-        // FIXME: refactor cms/pages
-        $pages_dir = "${content_dir}cms/pages";
-        mkdir($pages_dir, 0777, true);
-        $root_info_file_name = xcms_get_info_file_name("");  // root page
-
-        if (!file_exists($root_info_file_name))
-        {
-            $root_info = array(
-                "owner" => "root",
-                "type" => "content",
-                "header" => "Main page",
-                "alias" => "",
-                "view" => "#all",
-                "edit" => "#all",
-            );
-            if (!xcms_save_list($root_info_file_name, $root_info))
-            {
-                return "Cannot save '$root_info_file_name' list. ";
-            }
-        }
-
-        return true;
+        $result = $this->_create_page("");
+        if ($result !== true)
+            return $result;
+        return $this->_create_page("index");
     }
     } // class
 
