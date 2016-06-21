@@ -79,14 +79,16 @@
         foreach ($hooks as $hook)
         {
             $ans = $hook->final_check(@$_POST);
-            if ($ans === true) continue;
+            if ($ans === true)
+                continue;
             display_error($ans);
             die();
         }
         foreach ($hooks as $hook)
         {
             $ans = $hook->uninstall();
-            if ($ans === true) continue;
+            if ($ans === true)
+                continue;
             display_error($ans);
             die();
         }
@@ -97,7 +99,8 @@
             if (xu_not_empty($logs))
                 echo "<ul>$logs</ul>\n";
 
-            if ($ans === true) continue;
+            if ($ans === true)
+                continue;
             display_error($ans);
             die();
         }
