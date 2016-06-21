@@ -78,7 +78,7 @@
         global $SETTINGS;
         require_once($SETTINGS["engine_dir"]."sys/auth.php");
         $usr_dir = "${content_dir}auth/usr";
-        mkdir($usr_dir, 0777, true);
+        @mkdir($usr_dir, 0777, true);
         if (!glob("$usr_dir/*.user"))
         {
             $root_usr_filename = "${content_dir}auth/usr/root.user";
