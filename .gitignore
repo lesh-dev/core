@@ -1,3 +1,4 @@
+.idea
 site/.prec
 site/admin_doc/.prec/*
 site/doc/html
@@ -13,3 +14,4 @@ tests/*.pyc
 tools/optimize-images/oim
 *.sublime-project
 *.sublime-workspace
+fizlesh.sqlite3
