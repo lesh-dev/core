@@ -1,39 +1,50 @@
-function CheckName(aError, sFieldName, sFieldTitle) {
-    var val = $("#"+sFieldName+"-input").val();
+function xsm_ank_check_name(aError, sFieldName, sFieldTitle) {
+    var val = $("#" + sFieldName + "-input").val();
     val = $.trim(val);
-    valLenTest = val.replace(/[^a-zA-Zа-яА-Я]/g, '');
+    var valLenTest = val.replace(/[^a-zA-Zа-яА-Я]/g, '');
     if (valLenTest.length < 2) {
         aError.push("Поле '" + sFieldTitle + "' слишком короткое");
-        return;
+        return false;
     }
     if (valLenTest.length > 80) {
         aError.push("Поле '" + sFieldTitle + "' слишком длинное");
-        return;
+        return false;
     }
     if (/[\/.,?!@#$%&*()_+=~^]/.test(val)) {
         aError.push("Поле '" + sFieldTitle + "' должно содержать только русские и английские символы");
-        return;
+        return false;
     }
+    return true;
 }
 
-function OnChange() {
+function xsm_ank_on_change() {
     GShowWarning = true;
 }
 
-function CheckClass(aError) {
+function xsm_ank_check_class(aError) {
     var val = $("#current_class-input").val();
     val = $.trim(val);
     if (val.length < 1) aError.push("Класс не указан");
 }
 
-function CheckEMail(aError) {
+function xsm_ank_check_birth_date(aError, sFieldName, sFieldTitle) {
+    var val = $("#" + sFieldName + "-input").val();
+    val = $.trim(val);
+    if (!/\d\d.\d\d.\d\d\d\d/.test(val)) {
+        aError.push("Поле '" + sFieldTitle + "' должно иметь формат ДД.ММ.ГГГГ");
+        return false;
+    }
+    return true;
+}
+
+function xsm_ank_check_email(aError) {
     var val = $("#email-input").val();
     val = $.trim(val);
     if (val.length && val.indexOf('@') < 0)
         aError.push("EMail должен содержать знак '@'");
 }
 
-function CheckControlQuestion(aError) {
+function xsm_ank_check_control_question(aError) {
     var val = $("#control_question-input").val();
     val = $.trim(val);
     if (!(
@@ -48,38 +59,39 @@ function CheckControlQuestion(aError) {
     }
 }
 
-function CheckPhone(id, nDigit) {
+function xsm_ank_check_phone(id, nDigit) {
     var val = $(id).val();
     val = $.trim(val);
-    valLenTest = val.replace(/[^0-9]/g, '');
+    var valLenTest = val.replace(/[^0-9]/g, '');
     if (valLenTest.length < nDigit)
         return "телефон должен содержать не меньше " + nDigit + " цифр. ";
     return '';
 }
 
-function CheckPhones(aError) {
-    var sPhError = CheckPhone("#phone-input", 7);
-    var sCellError = CheckPhone("#cellular-input", 9);
+function xsm_ank_check_phones(aError) {
+    var sPhError = xsm_ank_check_phone("#phone-input", 7);
+    var sCellError = xsm_ank_check_phone("#cellular-input", 9);
     if (sPhError.length && sCellError.length)
         aError.push("Укажите правильно хотя бы один из телефонов! Домашний " +
             sPhError + "Мобильный " + sCellError);
 }
 
-function CheckEmpty(id, sDesc, aResult) {
+function xsm_ank_check_empty(id, sDesc, aResult) {
     var val = $(id).val();
     val = $.trim(val);
-    if (val.length < 2)
+    if (val.length < 2) {
         aResult.push("Вы не указали " + sDesc);
+    }
 }
 
 function WarnPersonal(aWarning) {
-    CheckEmpty("#favourites-text", "любимые предметы", aWarning);
-    CheckEmpty("#achievements-text", "достижения", aWarning);
-    CheckEmpty("#hobby-text", "хобби", aWarning);
-    //CheckEmpty("#lesh_ref-text", "откуда Вы узнали о школе", aWarning);
+    xsm_ank_check_empty("#favourites-text", "любимые предметы", aWarning);
+    xsm_ank_check_empty("#achievements-text", "достижения", aWarning);
+    xsm_ank_check_empty("#hobby-text", "хобби", aWarning);
+    //xsm_ank_check_empty("#lesh_ref-text", "откуда Вы узнали о школе", aWarning);
 }
 
-function MakeList(aList) {
+function xsm_ank_make_list(aList) {
     var sRes = '<ul class="ankMessageList">';
     for (var i = 0; i < aList.length; ++i)
         sRes += ("<li>" + aList[i] + "</li>");
@@ -90,33 +102,34 @@ var GShowWarning = true;
 
 $(document).ready(function() {
 
-    $('#favourites-text').change(OnChange);
-    $('#achievements-text').change(OnChange);
-    $('#hobby-text').change(OnChange);
+    $('#favourites-text').change(xsm_ank_on_change);
+    $('#achievements-text').change(xsm_ank_on_change);
+    $('#hobby-text').change(xsm_ank_on_change);
 
     $('#submit-anketa-button').click(function() {
         var aError = [];
-        CheckName(aError, 'last_name', 'Фамилия');
-        CheckName(aError, 'first_name', 'Имя');
-        CheckName(aError, 'patronymic', 'Отчество');
-        CheckClass(aError);
-        CheckPhones(aError);
-        CheckEMail(aError);
-        CheckControlQuestion(aError);
+        xsm_ank_check_name(aError, 'last_name', 'Фамилия');
+        xsm_ank_check_name(aError, 'first_name', 'Имя');
+        xsm_ank_check_name(aError, 'patronymic', 'Отчество');
+        xsm_ank_check_birth_date(aError, 'birth_date', 'Дата рождения');
+        xsm_ank_check_class(aError);
+        xsm_ank_check_phones(aError);
+        xsm_ank_check_email(aError);
+        xsm_ank_check_control_question(aError);
 
         var aWarning = [];
         WarnPersonal(aWarning);
 
         var bResult = true;
         if (aError.length) {
-            $("#t-Error").html(MakeList(aError));
+            $("#t-Error").html(xsm_ank_make_list(aError));
             bResult = false;
         } else {
             $("#t-Error").html(' ');
         }
 
         if (aWarning.length) {
-            var sWarning = MakeList(aWarning);
+            var sWarning = xsm_ank_make_list(aWarning);
             // warn once
             if (bResult) { // no severe errors detected
                 $("#t-Warning").html(sWarning +
