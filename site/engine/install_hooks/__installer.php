@@ -229,10 +229,12 @@ class InstallerInstallHook
         );
 
         $output = "";
+        $output .= "\x20\x20\x20\x20global \$SETTINGS;\n";
         foreach ($string_settings as $k)
         {
             $val = $config[$k];
             $val = str_replace('"', '\"', $val);
+            $output .= "\x20\x20\x20\x20global \$$k;\n";
             $output .= "\x20\x20\x20\x20\$$k = \"$val\";\n";
         }
         foreach ($bool_settings as $k)
