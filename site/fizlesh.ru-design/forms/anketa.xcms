@@ -21,17 +21,17 @@
     </div>
     <div class="ankExample">Например: Сидоров</div>
     <div class="ankRow">
-        <span class="ankLabel">Имя<span class="ankAst Req">*</span></span>
+        <span class="ankLabel">Имя:<span class="ankAst Req">*</span></span>
         <input type="text" name="first_name" id="first_name-input" style="width: 300px" />
     </div>
     <div class="ankExample">Например: Пётр</div>
     <div class="ankRow">
-        <span class="ankLabel">Отчество<span class="ankAst Req">*</span></span>
+        <span class="ankLabel">Отчество:<span class="ankAst Req">*</span></span>
         <input type="text" name="patronymic" id="patronymic-input" style="width: 300px" />
     </div>
-    <div class="ankExample">Например: Михайлович</div>
+    <div class="ankExample">Например: Михайлович (или слово &laquo;нет&raquo;, если у вас нет отчества)</div>
     <div class="ankRow">
-        <span class="ankLabel">Дата рождения:</span>
+        <span class="ankLabel">Дата рождения:<span class="ankAst Req">*</span></span>
         <input type="text" name="birth_date" id="birth_date-input" style="width: 200px;" />
     </div>
     <div class="ankExample">В формате ДД.ММ.ГГГГ, например: 15.12.1984</div>
@@ -43,7 +43,7 @@
     <div class="ankExample">Например: Лицей №30</div>
 
     <div class="ankRow">
-        <span class="ankLabel">Город (село), область (край), где находится школа:</span>
+        <span class="ankLabel">Город (село), область (край),<br/>где находится школа:</span>
         <input type="text" name="school_city" id="school_city-input" style="width: 500px" />
     </div>
     <div class="ankExample">Например: г. Полярные Зори Мурманской обл.</div>
@@ -79,7 +79,7 @@
     <div class="ankExample">Например: sidorov.petr</div>
 
     <div class="ankRow">
-        <span class="ankLabel">Страничка ВКонтакте (или на Facebook и т.д.)</span>
+        <span class="ankLabel">Страничка ВКонтакте<br/>(или на Facebook и т.д.):</span>
         <input type="text" name="social_profile" id="social_profile-input" style="width: 200px" />
     </div>
     <div class="ankExample">Например: vk.com/id123456789</div>
@@ -97,7 +97,7 @@
     <div class="ankRow"><textarea rows="3" cols="40" name="lesh_ref" id="lesh_ref-text" style="width:100%"></textarea></div>
 
     <div class="ankRow">
-        <span class="ankLabel">В чём измеряется сила тока (в системе СИ)?</span>
+        <span class="ankLabel">В чём измеряется<br/>сила тока (в системе СИ)?</span>
         <input type="text" name="control_question" id="control_question-input" style="width: 200px" />
     </div>
     <div class="ankExample">Мы верим, что вы интересуетесь физикой! Или поищите ответ в Интернете</div>
