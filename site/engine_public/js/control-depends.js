@@ -21,20 +21,20 @@ function xjs_check_custom_dep_handler(id)
 function xjs_toggle_element(id, enabled, reason)
 {
     if (!reason)
-        reason = ''
+        reason = '';
 
     var node = $('#' + id);
     if (enabled)
     {
-        node.removeAttr('disabled')
+        node.removeAttr('disabled');
         node.removeClass('input-disabled');
-        node.removeAttr('title')
+        node.removeAttr('title');
     }
     else
     {
         node.attr('disabled', 'disabled');
         node.addClass('input-disabled');
-        node.attr('title', reason)
+        node.attr('title', reason);
     }
 }
 
