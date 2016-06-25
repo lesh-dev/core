@@ -187,6 +187,9 @@ class SeleniumTest(object):
             shutil.rmtree(profile_dir, ignore_errors=True)
             os.mkdir(profile_dir)
             firefox_profile = webdriver.FirefoxProfile(profile_dir)
+            firefox_profile.set_preference("security.ssl.enable_ocsp_stapling", False)
+            firefox_profile.set_preference("security.ssl.enable_ocsp_must_staple", False)
+            firefox_profile.set_preference("security.OCSP.enabled", 0)
 
             # see this fine manual about how it's difficult to live under Fx47+
             # https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver
