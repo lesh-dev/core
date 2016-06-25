@@ -7,19 +7,14 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoSuchWindowException
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import InvalidElementStateException
+
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from urllib2 import URLError
 from httplib import HTTPException
 
-# from selenium.webdriver.remote.webdriver import WebElement
-# from selenium.webdriver.support.ui import Select
-
-# import random
 import traceback
-# import itertools
-# import sys
-# from datetime import datetime
 import time
 import os
 import errno
@@ -144,6 +139,8 @@ class SeleniumTest(object):
         Main API wrapper for Webdriver
     """
 
+    m_driver = None
+
     def __init__(self, baseUrl, params=[]):
         self.m_testName = self.__module__ + "." + self.__class__.__name__
         self.m_baseUrl = baseUrl or ""
@@ -178,16 +175,29 @@ class SeleniumTest(object):
     def init(self):
         self.m_baseUrl = self.fixBaseUrl(self.getBaseUrl())
         if self.useChrome():
-            chromePath = "/usr/bin/chromedriver"
-            if not os.path.exists(chromePath):
-                self.fatalTest("Chrome Driver is not installed. Please obtain latest version from\nhttp://chromedriver.storage.googleapis.com/index.html ")
+            chrome_path = "/usr/bin/chromedriver"
+            if not os.path.exists(chrome_path):
+                self.fatalTest(
+                    "Chrome Driver is not installed. Please obtain latest version from\n"
+                    "http://chromedriver.storage.googleapis.com/index.html "
+                )
             self.m_driver = webdriver.Chrome("/usr/bin/chromedriver")
         else:
-            profileDir = "./test_profile"
-            shutil.rmtree(profileDir, ignore_errors=True)
-            os.mkdir(profileDir)
-            fp = webdriver.FirefoxProfile(profileDir)
-            self.m_driver = webdriver.Firefox(fp)
+            profile_dir = "./test_profile"
+            shutil.rmtree(profile_dir, ignore_errors=True)
+            os.mkdir(profile_dir)
+            firefox_profile = webdriver.FirefoxProfile(profile_dir)
+
+            # see this fine manual about how it's difficult to live under Fx47+
+            # https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver
+            caps = DesiredCapabilities.FIREFOX
+            caps["marionette"] = True
+            caps["binary"] = "/usr/bin/firefox"
+            self.m_driver = webdriver.Firefox(
+                firefox_profile=firefox_profile,
+                capabilities=caps,
+                executable_path="/usr/bin/wares",
+            )
 
         # self.maximizeWindow()
 
