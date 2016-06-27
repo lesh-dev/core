@@ -47,7 +47,7 @@ function xcms_get_key_for_checkbox($list, $key)
   *     input :   generic input field
   *     password: password field
   *     text:     textarea field (TODO: not supported yet)
-  *     checkbox:
+  *     checkbox: checkbox control
   **/
 function xcmst_control($name, $value, $placeholder, $class, $type = "input", $title = "", $def_value = "", $autocomplete = XCMS_AUTOCOMPLETE_DEFAULT, $autocapitalize= XCMS_AUTOCAPITALIZE_DEFAULT)
 {

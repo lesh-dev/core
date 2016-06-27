@@ -224,6 +224,7 @@ function ctx_show_overall_checking_progress()
 
     $probs = xdb_get_table("problems", $FILTER);
     $works = ctx_get_works();
+    $show_name_filter = xcms_get_key_or($_REQUEST, 'show_name_filter');
 
     $results = ctx_calculate_results($works, $probs);
 
@@ -232,6 +233,24 @@ function ctx_show_overall_checking_progress()
 
     // header
     ?>
+    <form method="post" class="ctx-filter" name="filter" id="filter-form">
+        <span>Фильтр ФИО:&nbsp;</span><?php
+        xcmst_control(
+            "show_name_filter",
+            $show_name_filter,
+            'Фильтр',
+            "",
+            "input",
+            "Будут найдены все участники, в ФИО которых (в&nbsp;любом порядке) встречаются слова запроса, ".
+            "без&nbsp;учёта регистра. Например, 'дан Мих' найдёт Даниила Михайловича, Михаила Данилевского ".
+            "и Богдана Немихульского, но НЕ&nbsp;найдёт Мишу Данилкина (имена условны)"
+        ); ?>
+        <input type="submit" name="show-person" value="Показать" class="btn btn-primary"/>
+    </form>
+    <script type="text/javascript">
+        //ctx_filter_form_autosubmit();
+    </script>
+
     <p>
         Символом <span class="ctx-legend-symbol"><?php echo CTX_NOT_CHECKED_HT; ?></span> отмечаются непроверенные задачи.
         Символ <span class="ctx-legend-symbol"><?php echo CTX_NO_SOLUTION_HT; ?></span> означает, что решение отсутствует.
