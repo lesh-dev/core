@@ -48,6 +48,7 @@ function xcms_get_key_for_checkbox($list, $key)
   *     password: password field
   *     text:     textarea field (TODO: not supported yet)
   *     checkbox: checkbox control
+  *     submit:   submit (button) control
   **/
 function xcmst_control($name, $value, $placeholder, $class, $type = "input", $title = "", $def_value = "", $autocomplete = XCMS_AUTOCOMPLETE_DEFAULT, $autocapitalize= XCMS_AUTOCAPITALIZE_DEFAULT)
 {
@@ -93,6 +94,10 @@ function xcmst_control($name, $value, $placeholder, $class, $type = "input", $ti
         echo "<input type=\"hidden\" name=\"$name\" value=\"\"/>".
             "<input type=\"$type_attr\" name=\"$name\" id=\"$name-$type\" ".
             "value=\"$value\" class=\"$class checkbox\" $attrs />";
+    }
+    elseif ($type == "submit")
+    {
+        echo "<input type=\"submit\" name=\"$name\" value=\"$value\" class=\"$class\" $attrs/>";
     }
     else
     {

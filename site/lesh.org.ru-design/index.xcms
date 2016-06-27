@@ -159,9 +159,11 @@ function xcms_print_related_links()
     </div>
 <!--
     <form>
-        <div class="searchform">
-            <input type="search" name="q">
-            <input type="submit" value="">
+        <div class="searchform"><?php
+            xcmst_control("q", "", "Поисковый запрос", "", "input" /* "search" ?*/, "Поиск по сайту");
+            echo "&nbsp;";
+            xcmst_control("search", "Искать", "Искать", "", "submit", "Искать");
+        ?>
         </div>
     </form>
 -->
