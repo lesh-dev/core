@@ -37,7 +37,8 @@
 
     ${ankinput:last_name:input:Фамилия:Сидоров:req:middle}
     ${ankinput:first_name:input:Имя:Пётр:req:middle}
-    ${ankinput:patronymic:input:Отчество:Михайлович:req:middle}
+    ${ankinput:patronymic:input:Отчество:Михайлович
+        (или слово &laquo;нет&raquo;, если у вас нет отчества):req:middle}
     ${ankinput:birth_date:input:Дата рождения:15.12.1984, в формате ДД.ММ.ГГГГ:req:middle}
     ${ankinput:school:input:Номер (название) школы:Лицей №30:opt:long}
     ${ankinput:school_city:input:Город (село), область (край), <br />

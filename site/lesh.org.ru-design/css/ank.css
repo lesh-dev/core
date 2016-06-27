@@ -7,6 +7,10 @@ span.ankLabel {
     float: left;
 }
 
+input.ank-input.long {
+    width: 400px;
+}
+
 div.ankLegend {
     float: right;
     display: inline-block;

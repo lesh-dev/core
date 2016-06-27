@@ -15,94 +15,36 @@
 <script type="text/javascript" src="${engine_pub}/js/ank-validator.js"></script>
 
 <form method="post">
-    <div class="ankRow">
-        <span class="ankLabel">Фамилия:<span class="ankAst Req">*</span></span>
-        <input type="text" name="last_name" id="last_name-input" style="width: 300px" />
-    </div>
-    <div class="ankExample">Например: Сидоров</div>
-    <div class="ankRow">
-        <span class="ankLabel">Имя:<span class="ankAst Req">*</span></span>
-        <input type="text" name="first_name" id="first_name-input" style="width: 300px" />
-    </div>
-    <div class="ankExample">Например: Пётр</div>
-    <div class="ankRow">
-        <span class="ankLabel">Отчество:<span class="ankAst Req">*</span></span>
-        <input type="text" name="patronymic" id="patronymic-input" style="width: 300px" />
-    </div>
-    <div class="ankExample">Например: Михайлович (или слово &laquo;нет&raquo;, если у вас нет отчества)</div>
-    <div class="ankRow">
-        <span class="ankLabel">Дата рождения:<span class="ankAst Req">*</span></span>
-        <input type="text" name="birth_date" id="birth_date-input" style="width: 200px;" />
-    </div>
-    <div class="ankExample">В формате ДД.ММ.ГГГГ, например: 15.12.1984</div>
+    ${ankinput:last_name:input:Фамилия:Сидоров:req:middle}
+    ${ankinput:first_name:input:Имя:Пётр:req:middle}
+    ${ankinput:patronymic:input:Отчество:Михайлович
+        (или слово &laquo;нет&raquo;, если у вас нет отчества):req:middle}
+    ${ankinput:birth_date:input:Дата рождения:15.12.1984, в формате ДД.ММ.ГГГГ:req:middle}
+    ${ankinput:school:input:Номер (название) школы:Лицей №30:opt:long}
+    ${ankinput:school_city:input:Город (село), область (край), <br />
+        где находится школа:г. Полярные Зори Мурманской обл.:opt:long}
+    ${ankinput:current_class:input:Класс:8Б:req:middle}
+    ${ankinput:phone:input:Домашний телефон<br/>с кодом
+        города:+7 (812) 212-85-06<br />(если не знаете код города,
+        не заполняйте это поле):gr:middle}
+    ${ankinput:cellular:input:Мобильный телефон:+7 (987) 654-32-10:gr:middle}
+    ${ankinput:email:input:E-mail:sidorov.petr@example.com:opt:middle}
+    ${ankinput:skype:input:Skype:sidorov.petr:opt:middle}
+    ${ankinput:social_profile:input:Страничка ВКонтакте<br/>(или
+        на Facebook и т.д.):vk.com/id123456789:opt:middle}
+
+    ${ankinput:favourites:text:Любимые разделы<br />
+        науки (подробнее)::rec:long}
+    ${ankinput:achievements:text:Достижения на олимпиадах, <br />
+        участие в конференциях, <br/>
+        публикации::rec:long}
+    ${ankinput:hobby:text:Хобби, увлечения::rec:long}
+    ${ankinput:lesh_ref:text:Откуда узнали о школе::opt:long}
+    ${ankinput:control_question:input:В чём измеряется<br/>
+        сила тока (в системе СИ)?:в ...ах (если не помните, поищите ответ в Интернете):req:middle}
 
     <div class="ankRow">
-        <span class="ankLabel">Номер (название) школы:</span>
-        <input type="text" name="school" id="school-input" style="width: 500px" />
-    </div>
-    <div class="ankExample">Например: Лицей №30</div>
-
-    <div class="ankRow">
-        <span class="ankLabel">Город (село), область (край),<br/>где находится школа:</span>
-        <input type="text" name="school_city" id="school_city-input" style="width: 500px" />
-    </div>
-    <div class="ankExample">Например: г. Полярные Зори Мурманской обл.</div>
-
-    <div class="ankRow">
-        <span class="ankLabel">Класс:<span class="ankAst Req">*</span></span>
-        <input type="text" name="current_class" id="current_class-input" style="width: 100px" />
-    </div>
-    <div class="ankExample">Например: 8Б</div>
-
-    <div class="ankRow">
-        <span class="ankLabel">Домашний телефон с кодом города:<span class="ankAst Gr">*</span></span>
-        <input type="text" name="phone" id="phone-input" style="width: 200px" />
-    </div>
-    <div class="ankExample">Например: +7 (812) 212-85-06 (если не знаете код города, не заполняйте это поле)</div>
-
-    <div class="ankRow">
-        <span class="ankLabel">Мобильный телефон:<span class="ankAst Gr">*</span></span>
-        <input type="text" name="cellular" id="cellular-input" style="width: 200px" />
-    </div>
-    <div class="ankExample">Например: +7 (987) 654-32-10</div>
-
-    <div class="ankRow">
-        <span class="ankLabel">E-mail:</span>
-        <input type="text" name="email" id="email-input" style="width: 200px">
-    </div>
-    <div class="ankExample">Например: sidorov.petr@example.com</div>
-
-    <div class="ankRow">
-        <span class="ankLabel">Skype:</span>
-        <input type="text" name="skype" id="skype-input" style="width: 200px" />
-    </div>
-    <div class="ankExample">Например: sidorov.petr</div>
-
-    <div class="ankRow">
-        <span class="ankLabel">Страничка ВКонтакте<br/>(или на Facebook и т.д.):</span>
-        <input type="text" name="social_profile" id="social_profile-input" style="width: 200px" />
-    </div>
-    <div class="ankExample">Например: vk.com/id123456789</div>
-
-    <div class="ankRow"><span class="ankLabel">Любимые разделы физики (подробнее):<span class="ankAst Rec">*</span></span></div>
-    <div class="ankRow"><textarea rows="3" cols="40" name="favourites" id="favourites-text" style="width:100%"></textarea></div>
-
-    <div class="ankRow"><span class="ankLabel">Достижения на олимпиадах, участие в конференциях, публикации:<span class="ankAst Rec">*</span></span></div>
-    <div class="ankRow"><textarea rows="5" cols="40" name="achievements" id="achievements-text" style="width:100%"></textarea></div>
-
-    <div class="ankRow"><span class="ankLabel">Хобби, увлечения:<span class="ankAst Rec">*</span></span></div>
-    <div class="ankRow"><textarea rows="3" cols="40" name="hobby" id="hobby-text" style="width:100%"></textarea></div>
-
-    <div class="ankRow"><span class="ankLabel">Откуда узнали о школе:</span></div>
-    <div class="ankRow"><textarea rows="3" cols="40" name="lesh_ref" id="lesh_ref-text" style="width:100%"></textarea></div>
-
-    <div class="ankRow">
-        <span class="ankLabel">В чём измеряется<br/>сила тока (в системе СИ)?</span>
-        <input type="text" name="control_question" id="control_question-input" style="width: 200px" />
-    </div>
-    <div class="ankExample">Мы верим, что вы интересуетесь физикой! Или поищите ответ в Интернете</div>
-
-    <div class="ankRow"><input type="submit" name="submit-anketa" id="submit-anketa-button" value="Отправить"></div>
+        <input type="submit" name="submit-anketa" id="submit-anketa-button" value="Отправить"></div>
     <div class="ankMessageFrame" id="c-Message">
         <div class="ankError" id="t-Error">&nbsp;</div>
         <div class="ankWarning" id="t-Warning">&nbsp;</div>

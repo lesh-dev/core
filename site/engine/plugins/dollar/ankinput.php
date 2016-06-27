@@ -37,7 +37,7 @@ if ($ank_ele_type == "input")
                 type="text"
                 name="<?php echo $ank_ele_name; ?>"
                 id="<?php echo $ank_ele_name; ?>-input"
-                class="<?php echo $ank_ele_class; ?>"
+                class="ank-input <?php echo $ank_ele_class; ?>"
             />
             <div class="ankExample">Например: <?php echo $ank_ele_example; ?></div>
         </span>
@@ -53,7 +53,7 @@ if ($ank_ele_type == "input")
     <div class="ankRow"><textarea
         rows="3" cols="40"
         name="<?php echo $ank_ele_name; ?>" id="<?php echo $ank_ele_name; ?>-text"
-        class="<?php echo $ank_ele_class; ?>"></textarea>
+        class="ank-text <?php echo $ank_ele_class; ?>"></textarea>
     </div>
 <?php
 } else {
