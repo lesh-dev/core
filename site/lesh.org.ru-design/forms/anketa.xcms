@@ -34,46 +34,11 @@
             ?><div class="ankExample">Например: Математическое</div>
         </span>
     </div>
-
-    <div class="ankRow">
-        <span class="ankLabel">Фамилия:<span class="ankAst Req">*</span></span>
-        <span class="ankValue">
-            <input type="text" name="last_name" id="last_name-input" style="width: 300px" />
-            <div class="ankExample">Например: Сидоров</div>
-        </span>
-    </div>
-
-    <div class="ankRow">
-        <span class="ankLabel">Имя<span class="ankAst Req">*</span></span>
-        <span class="ankValue">
-            <input type="text" name="first_name" id="first_name-input" style="width: 300px" />
-            <div class="ankExample">Например: Пётр</div>
-        </span>
-    </div>
-
-    <div class="ankRow">
-        <span class="ankLabel">Отчество<span class="ankAst Req">*</span></span>
-        <span class="ankValue">
-            <input type="text" name="patronymic" id="patronymic-input" style="width: 300px" />
-            <div class="ankExample">Например: Михайлович</div>
-        </span>
-    </div>
-
-    <div class="ankRow">
-        <span class="ankLabel">Дата рождения:</span>
-        <span class="ankValue">
-            <input type="text" name="birth_date" id="birth_date-input" style="width: 200px;" />
-            <div class="ankExample">В формате ДД.ММ.ГГГГ, например: 15.12.1984</div>
-        </span>
-    </div>
-
-    <div class="ankRow">
-        <span class="ankLabel">Номер (название) школы:</span>
-        <span class="ankValue">
-            <input type="text" name="school" id="school-input" style="width: 400px" />
-            <div class="ankExample">Например: Лицей №30</div>
-        </span>
-    </div>
+    ${ankinput:last_name:input:Фамилия:Сидоров:req:middle}
+    ${ankinput:first_name:input:Имя:Пётр:req:middle}
+    ${ankinput:patronymic:input:Отчество:Михайлович:req:middle}
+    ${ankinput:birth_date:input:Дата рождения:15.12.1984, в формате ДД.ММ.ГГГГ:req:middle}
+    ${ankinput:school:input:Номер (название) школы:Лицей №30:opt:long}
 
     <div class="ankRow">
         <span class="ankLabel">
