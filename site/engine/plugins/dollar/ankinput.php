@@ -19,6 +19,10 @@ elseif ($ank_ele_req == "rec")
 {
      $ank_ele_req = "<span class=\"ankAst Rec\">*</span>";
 }
+elseif ($ank_ele_req == "gr")
+{
+     $ank_ele_req = "<span class=\"ankAst Gr\">*</span>";
+}
 elseif ($ank_ele_req == "opt")
 {
     $ank_ele_req = "";
