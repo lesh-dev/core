@@ -18,7 +18,7 @@
     </i><span class="ankListField">По выходу: </span><?php
     echo xsm_make_enum_by_type("show_forest_num", $show_forest_num, "show_forest_num"); ?><i>
     </i><?php xsm_draw_fio_filter(); ?><i>
-    </i><input type="submit" name="show-person" value="Показать" />
+    </i><?php xcmst_submit("show-person", "Показать"); ?>
 </form>
 <script type="text/javascript">
     xsm_filter_form_autosubmit();
@@ -26,9 +26,8 @@
 </script>
 
 <div style="display: inline-block; float: right">
-<form method="post" id="clear_forest-form" action="list-tour" >
-    <input type="submit" name="clear_forest" id="clear_forest-submit" value="Очистка статусов"
-        title="Будьте внимательны, это действие нельзя отменить" />
+<form method="post" id="clear_forest-form" action="list-tour">
+    <?php xcmst_submit("clear_forest", "Очистка статусов", "Будьте внимательны, это действие нельзя отменить"); ?>
 </form>
 </div>
 

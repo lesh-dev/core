@@ -105,6 +105,11 @@ function xcmst_control($name, $value, $placeholder, $class, $type = "input", $ti
     }
 }
 
+function xcmst_submit($name, $value, $title = "", $class = "")
+{
+    xcmst_control($name, $value, "", $class, "submit", $title);
+}
+
 /**
   * Specialization for admin-tools
   * Disable auto-capitalization: #919

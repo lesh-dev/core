@@ -8,8 +8,8 @@
         xcms_save_list(xcms_get_info_file_name(), $INFO);
     }
 ?>
-<form method="post">
-<?php xcmst_print_acl($INFO); ?>
-<input type="submit" name="change_access" id="change_access-input" value="Изменить" />
+<form method="post"><?php
+xcmst_print_acl($INFO);
+xcmst_submit("change_access", "Изменить"); ?>
 </form>
 </div>

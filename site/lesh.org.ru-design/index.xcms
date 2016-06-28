@@ -162,7 +162,7 @@ function xcms_print_related_links()
         <div class="searchform"><?php
             xcmst_control("q", "", "Поисковый запрос", "", "input" /* "search" ?*/, "Поиск по сайту");
             echo "&nbsp;";
-            xcmst_control("search", "Искать", "Искать", "", "submit", "Искать");
+            xcmst_submit("search", "Искать", "Выполнить поиск");
         ?>
         </div>
     </form>

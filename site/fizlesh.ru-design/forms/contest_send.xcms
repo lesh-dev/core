@@ -148,7 +148,7 @@ if ($show_form) { ?>
             <td><input name="attachment" id="attachment-file" type="file"/></td>
         </tr>
     </table>
-    <input type="submit" name="send-contest" id="send-contest-submit" value="Отправить" />
+    <?php xcmst_submit("send-contest", "Отправить"); ?>
 </form>
 
 <p>Оставьте, пожалуйста, работающий и читаемый Вами адрес
