@@ -43,9 +43,9 @@
     <div class="warn"><b>ВНИМАНИЕ:</b> Изменение физического пути страницы обычно нужно очень редко!</div>
     <div>
         <span class="admin-form-label">Физический путь</span>
-        <input type="text" class="admin-long" xcms-track-changes="yes" name="new-pageid"
+        <input type="text" class="admin-long" name="new-pageid"
             value="<?php echo htmlspecialchars($pageid); ?>" />
     </div>
-    <input type="submit" name="change-pageid" value="Сохранить" />
+    <?php xcmst_submit("change-pageid", "Сохранить"); ?>
     </form>
 </div>
