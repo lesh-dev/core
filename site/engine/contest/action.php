@@ -35,7 +35,7 @@ function xcmst_contest_delete_entity()
     }?>
     </table>
     <form method="post">
-        <input name="delete" value="Удалить запись окончательно" class="btn btn-danger" type="submit" />
+    <?php xcmst_submit("delete", "Удалить запись окончательно", "Восстановление будет невозможно", "btn btn-danger"); ?>
     </form><?php
 }
 
