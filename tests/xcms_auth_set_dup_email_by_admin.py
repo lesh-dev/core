@@ -68,8 +68,8 @@ class XcmsAuthSetDuplicateEmailByAdmin(xtest_common.XcmsTest):
         inpEMail2new = self.fillElementById("email-input", inpEMail2new)
         print "new email 2: ", inpEMail2new
 
-        self.clickElementById("update_user")
+        self.clickElementById("update_user-submit")
 
         self.assertBodyTextPresent(u"уже существует")
 
-        #self.performLogoutFromAdminPanel()
+        # self.performLogoutFromAdminPanel()

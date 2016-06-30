@@ -105,7 +105,7 @@
         else
         {?>
             <input name="login" type="hidden" value="<?php echo htmlspecialchars($target_user); ?>"/>
-            <input name="update_user" id="update_user" value="Обновить данные пользователя" type="submit" />
+            <?php xcmst_submit("update_user", "Обновить данные пользователя"); ?>
             <input name="check_delete_user" id="check_delete_user" value="Удалить пользователя"
                 type="submit" class="delete"/><?php
             if (@$_POST['check_delete_user'])

@@ -26,7 +26,7 @@ $form_action = xcms_url(array('school_id'=>$school_id));
     ?><span class="ankListField">По классу</span><?php
         xsm_checkbox('sort_by_curator_group', $sort_by_curator_group);
     ?><span class="ankListField">По гр. кураторства</span><i>
-    </i><input type="submit" name="show-person" value="Показать" />
+    </i><?php xcmst_submit("show-person", "Показать"); ?>
 </form>
 <script type="text/javascript">
     xsm_filter_form_autosubmit();

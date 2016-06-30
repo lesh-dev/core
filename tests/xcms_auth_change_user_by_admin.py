@@ -58,7 +58,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.clickElementById("group_admin-checkbox")
         self.assertCheckboxValueById("group_admin-checkbox", True)
 
-        self.clickElementById("update_user")
+        self.clickElementById("update_user-submit")
 
         self.performLogoutFromAdminPanel()
 
@@ -90,7 +90,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.assertCheckboxValueById("group_admin-checkbox", False)
         self.assertCheckboxValueById("group_editor-checkbox", True)
 
-        self.clickElementById("update_user")
+        self.clickElementById("update_user-submit")
 
         self.performLogoutFromAdminPanel()
 
@@ -136,7 +136,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.assertCheckboxValueById("group_editor-checkbox", False)
         self.assertCheckboxValueById("group_ank-checkbox", True)
 
-        self.clickElementById("update_user")
+        self.clickElementById("update_user-submit")
 
         self.performLogoutFromAdminPanel()
 

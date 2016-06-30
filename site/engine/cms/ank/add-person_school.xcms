@@ -115,8 +115,7 @@ function xsm_add_person_school()
             xsm_draw_generic_fields_end();
         }?>
         <tr><td class="ankList">
-            <input type="submit" name="add-person_school" value="Добавить" />
-
+            <?php xcmst_submit("add-person_school", "Добавить"); ?>
             <a id="return-to-school" class="link-button ank"
                 href="<?php echo $school_url; ?>">Вернуться к просмотру списка школы</a>
         </td></tr>

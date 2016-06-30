@@ -375,10 +375,10 @@ class XcmsTest(XcmsTestWithConfig):
         self.gotoUrlByPartialLinkText(login)
 
         self.fillElementById("email-input", email)
-        self.clickElementByName("update_user")
+        self.clickElementByName("update_user-submit")
 
-        #logoff root
-        if not "do_not_logout_admin" in auxParams:
+        # logoff root
+        if "do_not_logout_admin" not in auxParams:
             self.performLogout()
 
     def gotoCabinet(self):
@@ -421,11 +421,11 @@ class XcmsTest(XcmsTestWithConfig):
         self.gotoUrlByLinkText(u"Сменить статус")
 
     def gotoEditPerson(self):
-        #self.gotoUrlByLinkText(u"Редактировать анкетные данные")
+        # self.gotoUrlByLinkText(u"Редактировать анкетные данные")
         self.gotoUrlByLinkText(u"Ред.")
 
     def gotoBackAfterComment(self):
-        #self.gotoUrlByLinkText(u"Вернуться к списку комментов") # older variant
+        # self.gotoUrlByLinkText(u"Вернуться к списку комментов") # older variant
         self.gotoBackToAnketaView()
 
     def performLogoutFromSite(self):
@@ -437,7 +437,7 @@ class XcmsTest(XcmsTestWithConfig):
     def closeAdminPanel(self):
         self.gotoUrlByLinkText("X")
 
-    def assertSitePageHeader(self, header, reason = "Page header does not match expected. "):
+    def assertSitePageHeader(self, header, reason="Page header does not match expected. "):
         self.assertElementTextById("content-header", header, reason=reason)
 
     def addCommentToPerson(self):
@@ -454,7 +454,7 @@ class XcmsTest(XcmsTestWithConfig):
     def editCommentToPerson(self, commentLinkId):
         self.gotoUrlByLinkId(commentLinkId)
         oldCommentText = self.getElementValueByName("comment_text")
-        newCommentText =  random_crap.randomText(10) + "\n" + oldCommentText + "\n" + random_crap.randomText(6)
+        newCommentText = random_crap.randomText(10) + "\n" + oldCommentText + "\n" + random_crap.randomText(6)
         newCommentText = self.fillElementByName("comment_text", newCommentText)
         self.clickElementByName("update-person_comment")
         self.assertBodyTextPresent(u"Комментарий успешно сохранён")

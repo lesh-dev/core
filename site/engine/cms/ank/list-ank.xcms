@@ -46,7 +46,7 @@
     </i><span class="ankListField">Категория: </span><?php
     echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_ank"); ?><i>
     </i><?php xsm_draw_fio_filter(); ?><i>
-    </i><input type="submit" name="show-person" value="Показать" />
+    </i><?php xcmst_submit("show-person", "Показать"); ?>
 </form>
 
 <div>
