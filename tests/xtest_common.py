@@ -120,7 +120,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.fillElementById("edtg_reg", emailString)
         self.fillElementById("edtg_reg-managers", emailString)
 
-        self.clickElementById("editTag")
+        self.clickElementById("edit_tag-submit")
         self.performLogout()
 
     def checkTestNotifications(self):

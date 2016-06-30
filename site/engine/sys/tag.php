@@ -175,7 +175,7 @@ function xcms_editlist_form($file, $skip_params = "", $flags = "")
 {
     $list = xcms_get_list($file);
 
-    if (@$_POST["editTag"])
+    if (@$_POST["edit_tag"])
     {
         foreach ($_POST as $key=>$value)
         {
@@ -253,7 +253,7 @@ function xcms_editlist_form($file, $skip_params = "", $flags = "")
     ?>
         </table>
         <p>Для удаления поля введите <b>_FORGET</b> в его значение</p>
-        <input type="submit" name="editTag" id="editTag" value="Сохранить" />
+        <?php xcmst_submit("edit_tag", "Сохранить"); ?>
     </form><?php
 }
 
