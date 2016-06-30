@@ -181,7 +181,9 @@ class SeleniumTest(object):
                     "Chrome Driver is not installed. Please obtain latest version from\n"
                     "http://chromedriver.storage.googleapis.com/index.html "
                 )
-            self.m_driver = webdriver.Chrome("/usr/bin/chromedriver")
+            self.m_driver = webdriver.Chrome(
+                executable_path="/usr/bin/chromedriver",
+            )
         else:
             profile_dir = "./test_profile"
             shutil.rmtree(profile_dir, ignore_errors=True)
