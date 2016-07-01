@@ -99,9 +99,13 @@ function xcmst_control($name, $value, $placeholder, $class, $type = "input", $ti
     {
         echo "<input type=\"submit\" name=\"$name\" value=\"$value\" class=\"$class\" $attrs/>";
     }
+    elseif ($type == "hidden")
+    {
+        echo "<input type=\"hidden\" name=\"$name\" value=\"$value\" $attrs/>";
+    }
     else
     {
-        echo "Not supported yet. ";
+        echo "<b style=\"color: red;\">ERROR:</b> Controls of type '$type' [name: $name] are not supported yet.\n";
     }
 }
 
