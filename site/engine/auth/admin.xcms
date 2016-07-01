@@ -67,8 +67,7 @@
                 ?><span class="user-label">Оповестить пользователя</span></div>
             <?php
             xcmst_draw_privileges(NULL);
-            ?>
-            <input type="submit" name="create_user" value="Создать пользователя" />
+            xcmst_submit("create_user", "Создать пользователя"); ?>
         </form><?php
     }
 
