@@ -188,7 +188,7 @@ function xsm_compose_anketa_table($person)
         $key_title = $key;
         if (array_key_exists($key, $fields_desc))
             $key_title = $fields_desc[$key]["name"];
-        if ($key == "submit-anketa")
+        if ($key == "submit_anketa")
             continue;
         $cur_row = $row_template;
         $cur_row = str_replace("@@ANK-KEY@", $key_title, $cur_row);

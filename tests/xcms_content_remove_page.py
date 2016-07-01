@@ -52,7 +52,7 @@ class XcmsContentRemovePage(xtest_common.XcmsTest):
 
         self.gotoRemovePage()
         self.assertBodyTextPresent(u"Удаление страницы")
-        self.clickElementById("delete_page-button")
+        self.clickElementById("delete_page-submit")
 
         self.gotoCloseEditor()
         self.gotoUrlByLinkText(self.m_parentPage)

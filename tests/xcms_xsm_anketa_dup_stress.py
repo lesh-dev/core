@@ -72,7 +72,7 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
         self.inpSourceReal = self.fillElementById("lesh_ref-text", self.inpSource)
         self.fillElementById("control_question-input", u"ампер")
 
-        self.clickElementById("submit-anketa-button")
+        self.clickElementById("submit_anketa-submit")
 
     def checkUniqueAnketa(self):
 

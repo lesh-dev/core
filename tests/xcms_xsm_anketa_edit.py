@@ -67,9 +67,9 @@ class XcmsXsmAnketaEdit(xtest_common.XcmsTest):
         inpEmail = self.fillElementById("email-input", inpEmail)
         self.fillElementById("control_question-input", u"ампер")
 
-        self.clickElementById("submit-anketa-button")
+        self.clickElementById("submit_anketa-submit")
         self.assertBodyTextPresent(u"ещё раз")
-        self.clickElementById("submit-anketa-button")
+        self.clickElementById("submit_anketa-submit")
 
         self.assertBodyTextPresent(self.getAnketaSuccessSubmitMessage())
 
