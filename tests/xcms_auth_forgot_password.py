@@ -49,7 +49,7 @@ class XcmsAuthForgotPassword(xtest_common.XcmsTest):
 
         self.fillElementById("reset-email-input", inpEMail)
         self.fillElementById("question-input", self.m_conf.getForgottenPasswordCaptcha())
-        self.clickElementById("reset-submit")
+        self.clickElementById("reset_password-submit")
 
         if self.performLogin(inpLogin, inpPass):
             self.failTest("Password was not reset. Old password works fine. ")

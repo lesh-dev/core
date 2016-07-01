@@ -177,8 +177,20 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.gotoRoot()
 
         # assert we have no shit cookies here
-        self.assertUrlNotPresent(u"Админка", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
-        self.assertUrlNotPresent(u"Личный кабинет", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
+        self.assertUrlNotPresent(
+            u"Админка",
+            (
+                "Here should be no auth cookies. But they are. "
+                "Otherwise, your test is buggy and you forgot to logout previous user. "
+            )
+        )
+        self.assertUrlNotPresent(
+            u"Личный кабинет",
+            (
+                "Here should be no auth cookies. But they are. "
+                "Otherwise, your test is buggy and you forgot to logout previous user. "
+            )
+        )
 
         self.gotoAuthLink()
 
