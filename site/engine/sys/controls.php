@@ -110,6 +110,11 @@ function xcmst_submit($name, $value, $title = "", $class = "")
     xcmst_control($name, $value, "", $class, "submit", $title);
 }
 
+function xcmst_hidden($name, $value)
+{
+    xcmst_control($name, $value, "", "", "hidden");
+}
+
 /**
   * Specialization for admin-tools
   * Disable auto-capitalization: #919
