@@ -108,7 +108,7 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         newEMail = self.fillElementById(emailEle, newEMail)
         print "New user e-mail is ", newEMail
 
-        self.clickElementByName("update_me")
+        self.clickElementById("update_me-submit")
 
         self.performLogoutFromAdminPanel()
 
