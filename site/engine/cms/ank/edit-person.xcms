@@ -27,12 +27,12 @@ function xsm_notify_person_edit($person, $old_person)
 }
 
 
-function xsm_person_edit_operations($id, $ret_title, $place)
+function xsm_person_edit_operations($id, $ret_title)
 {
     $table_name = "person";
     $is_new = ($id == XDB_NEW);
     $redir = $is_new ? "list-person-locator" : "view-$table_name&amp;${table_name}_id=$id";
-    xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title);
+    xsm_edit_ops($table_name, $is_new, $redir, $ret_title);
 }
 
 
@@ -51,7 +51,7 @@ function xsm_edit_person()
     $fio = xsm_fio_enc($person);
     $fields_desc = xsm_get_fields("person"); ?>
     <form method="post" action="edit-person"><?php
-        xsm_person_edit_operations($person_id, 'Вернуться к просмотру участника', 'top');
+        xsm_person_edit_operations($person_id, 'Вернуться к просмотру участника');
         xsm_draw_field_hidden("person_id", $person_id);
         xsm_draw_field_hidden("school_id", $school_id);
         ?>
@@ -87,7 +87,7 @@ function xsm_edit_person()
             }?>
         </table><?php
         xsm_bottom_fields('person', $person);
-        xsm_person_edit_operations($person_id, 'Вернуться к просмотру участника', 'bottom');
+        xsm_person_edit_operations($person_id, 'Вернуться к просмотру участника');
     ?>
     </form>
     <script type="text/javascript">

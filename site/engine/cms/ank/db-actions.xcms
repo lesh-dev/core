@@ -62,11 +62,9 @@ function xsm_warn_delete_entity($entity, $table_name, $title, $aux_param = '')
         Связанные с ним объекты также будут удалены,
         а восстановление будет невозможно!</div>
     <div><form method="post" action="edit-<?php echo "$entity$aux_param"; ?>">
-        <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
-        <input type="submit" name="confirm-delete-<?php echo $entity; ?>"
-            value="Таки да, удалить!" class="delete-button"/>
-        <a class="link-button"
-            href="view-<?php echo $redir ?>">Вернуться к просмотру</a>
+        <?php xcmst_hidden($key_name, $id);
+        xcmst_submit("confirm-delete-$entity", "Таки да, удалить!", "Безвозвратно удалить объект", "delete-button"); ?>
+        <a class="link-button" href="view-<?php echo $redir ?>">Вернуться к просмотру</a>
     </form></div>
     <?php
 }
@@ -82,9 +80,8 @@ function xsm_warn_delete_entity_listmode($table_name, $title, $aux_param = '')
         Связанные с ним объекты также будут удалены,
         а восстановление будет невозможно!</div>
     <div><form method="post" action="edit-<?php echo "$table_name$aux_param"; ?>">
-        <input type="hidden" name="<?php echo $key_name; ?>" value="<?php echo $id; ?>" />
-        <input type="submit" name="confirm-delete-<?php echo $table_name; ?>"
-            value="Таки да, удалить!" class="delete-button"/>
+        <?php xcmst_hidden($key_name, $id);
+        xcmst_submit("confirm-delete-$table_name", "Таки да, удалить!", "Безвозвратно удалить объект", "delete-button"); ?>
         <a class="link-button"
             href="view-<?php echo $redir ?>">Вернуться к просмотру <?php echo $title; ?></a>
     </form></div>
@@ -126,16 +123,13 @@ function xsm_delete_entity_listmode($table_name, $title, $aux_param = '')
     <a href="list-<?php echo $redir ?>">Вернуться к просмотру списка</a></p><?php
 }
 
-function xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title, $del_title = "Удалить") {?>
-    <div class="xsm-edit-ops">
-        <input type="submit" name="update-<?php echo $table_name; ?>"
-            id="update-<?php echo "$table_name-submit-$place"; ?>"
-            value="Сохранить" class="xsm-save-button" /><?php
-        if (!$is_new) {?>
-            <input type="submit" name="delete-<?php echo $table_name; ?>"
-                id="delete-<?php echo "$table_name-$place-submit"; ?>"
-                value="<?php echo $del_title; ?>" class="delete-button"/><?php
+function xsm_edit_ops($table_name, $is_new, $redir, $ret_title, $del_title = "Удалить") {?>
+    <div class="xsm-edit-ops"><?php
+        xcmst_submit("update-$table_name", "Сохранить", "", "xsm-save-button");
+        if (!$is_new) {
+            xcmst_submit("delete-$table_name", $del_title, "", "delete-button");
         }?>
+        <!-- FIXME Use link generator -->
         <a class="link-button" id="return-<?php echo $place; ?>"
             href="<?php echo $redir; ?>"><?php echo $ret_title; ?></a>
     </div><?php

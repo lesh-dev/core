@@ -3,12 +3,12 @@ require_once("${engine_dir}xsm/diff.php");
 require_once("${engine_dir}cms/ank/edit-format.php");
 
 // Специфическая функция для данной таблицы (можно объединить с person_school)
-function xsm_person_comment_edit_operations($table_name, $id, $ret_title, $member_person_id, $place)
+function xsm_person_comment_edit_operations($table_name, $id, $ret_title, $member_person_id)
 {
     $school_id = XSM_SCHOOL_ANK_ID;
     $is_new = ($id == XDB_NEW);
     $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$member_person_id));
-    xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title, "Удалить комментарий");
+    xsm_edit_ops($table_name, $is_new, $redir, $ret_title, "Удалить комментарий");
 }
 
 /**
@@ -113,7 +113,7 @@ function xsm_edit_person_comment()
 
     $fields_desc = xsm_get_fields("person_comment"); ?>
     <form method="post" action="edit-person_comment"><?php
-        xsm_person_comment_edit_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id, 'top');
+        xsm_person_comment_edit_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id);
         xsm_draw_field_hidden("person_comment_id", $person_comment_id);
         xsm_draw_field_hidden("blamed_person_id", $blamed_person_id); ?>
         <table class="ankEdit">
@@ -131,7 +131,7 @@ function xsm_edit_person_comment()
             }?>
         </table><?php
         xsm_bottom_fields('person_comment', $person_comment);
-        xsm_person_comment_edit_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id, 'bottom');?>
+        xsm_person_comment_edit_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id);?>
     </form>
     <?php
 }
