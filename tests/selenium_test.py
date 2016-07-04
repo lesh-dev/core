@@ -201,7 +201,7 @@ class SeleniumTest(object):
             self.m_driver = webdriver.Firefox(
                 firefox_profile=firefox_profile,
                 capabilities=caps,
-                executable_path="/usr/bin/wares",
+                executable_path="/usr/bin/geckodriver",
             )
 
         # self.maximizeWindow()
