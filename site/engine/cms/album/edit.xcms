@@ -63,7 +63,7 @@
     $catlist = glob("$dir/*.cat");
     echo "<h3>Категории</h3><form method=\"post\">";
     echo "<font size=\"-2\">* Для удаления категории введите имя \"__FORGET\"</font>";
-    echo "<table>";
+    echo "<table>\n";
     foreach ($catlist as $value)
     {
         $caption = file_get_contents($value);
@@ -71,7 +71,9 @@
         $cat = str_replace("$dir/", "", $cat);
         echo "<tr><td>$cat<td><input name=\"album-chcat-$cat\" value=\"$caption\">";
     }
-    echo "</table><input name=\"album-cat\" type=\"submit\" value=\"Изменить\"></form>";
+    echo "</table>\n";
+    xcmst_submit("album-cat", "Изменить");
+    echo "</form>\n";
     $piclist = glob("$dir/*.pic");
     echo '<h3>Фотографии</h3><table>';
     foreach ($piclist as $key=>$value)
@@ -86,12 +88,10 @@
             <td><input value=\"{$lst["picname"]}\"></td>
             <td><input value=\"{$lst["prename"]}\"></td>
 
-            <td>
-                <form method=\"post\">
-                    <input type=\"hidden\" name=\"name\" value=\"$value\" />
-                    <input type=\"submit\" name=\"Album-Delete-image\" value=\"Удалить\" />
-                </form>
-            </td>";
+            <td>\n<form method=\"post\">";
+        xcmst_hidden("name", $value);
+        xcmst_submit("Album-Delete-image", "Удалить");
+        echo "</form></td>\n";
     }
     echo '</table>';
 ?>
@@ -104,7 +104,7 @@
         <tr><td>Категория</td> <td><input name="image-cat" /></td></tr>
         <tr><td>Файл</td> <td><input type="file" accept="image/*" name="image" /></td></tr>
     </table>
-    <input type="submit" name="Album-Upload-image" value="Загрузить" />
+    <?php xcmst_submit("Album-Upload-image", "Загрузить"); ?>
 </form>
 
 Если Вы не доверяете автоматической пережимке - укажите preview самостоятельно
@@ -116,5 +116,5 @@
         <tr><td>Картинка</td> <td><input type="file" accept="image/*" name="big-image" /></td></tr>
         <tr><td>Маленькая картинка</td> <td><input type="file" accept="image/*" name="small-image" /></td></tr>
     </table>
-    <input type="submit" name="Album-S-Upload-image" value="Загрузить" />
+    <?php xcmst_submit("Album-S-Upload-image", "Загрузить"); ?>
 </form>
