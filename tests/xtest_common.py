@@ -177,8 +177,10 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.gotoRoot()
 
         # assert we have no shit cookies here
-        self.assertUrlNotPresent(u"Админка", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
-        self.assertUrlNotPresent(u"Личный кабинет", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
+        expl_adm = """Here should be no auth cookies. But they are.
+        Otherwise, your test is buggy and you forgot to logout previous user. """
+        self.assertUrlNotPresent(u"Админка", expl_adm)
+        self.assertUrlNotPresent(u"Личный кабинет", expl_adm)
 
         self.gotoAuthLink()
 
@@ -197,6 +199,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
         # now let's check that Cabinet link and Exit link are present. if not - it's a bug.
 
+        self.wait(2)
         self.assertUrlPresent(u"Выход", "Here should be logout link after successful authorization. ")
         self.assertUrlPresent(u"Личный кабинет", "Here should be Cabinet link after successful authorization. ")
 

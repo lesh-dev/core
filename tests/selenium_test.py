@@ -23,20 +23,6 @@ import shutil
 # from bawlib import isString
 from bawlib import isVoid, isList, isNumber, isEqual, getSingleOption, userSerialize, wrapIfLong
 
-# ['_unwrap_value', '_wrap_value', 'add_cookie',
-# 'back', 'binary', 'capabilities', 'close', 'command_executor', 'create_web_element', 'current_window_handle',
-# 'delete_all_cookies', 'delete_cookie', 'desired_capabilities', 'error_handler', 'execute', 'execute_async_script',
-# 'execute_script', 'find_element', 'find_element_by_class_name', 'find_element_by_css_selector',
-#  'find_element_by_partial_link_text', 'find_element_by_tag_name',
-# 'find_element_by_xpath', 'find_elements', 'find_elements_by_class_name', 'find_elements_by_css_selector', 'find_elements_by_id',
-# 'find_elements_by_link_text', 'find_elements_by_name', 'find_elements_by_partial_link_text', 'find_elements_by_tag_name',
-# 'find_elements_by_xpath', 'firefox_profile', 'forward', 'get', 'get_cookie', 'get_cookies', 'get_screenshot_as_base64',
-# 'get_screenshot_as_file', 'get_window_position', 'get_window_size', 'implicitly_wait',
-# 'name', 'orientation', 'page_source', 'profile', 'quit', 'refresh', 'save_screenshot', 'session_id',
-# 'set_page_load_timeout', 'set_script_timeout', 'set_window_position', 'set_window_size', 'start_client',
-# 'start_session', 'stop_client', 'switch_to_active_element', 'switch_to_alert', 'switch_to_default_content',
-# 'switch_to_frame', 'switch_to_window', 'title', 'window_handles']
-
 
 class TestError(RuntimeError):
     pass
@@ -67,7 +53,7 @@ class TestAction:
         return self.m_action + " " + self.m_details
 
 
-def currentTime():
+def current_time():
     return time.time()
 
 
@@ -188,21 +174,25 @@ class SeleniumTest(object):
             profile_dir = "./test_profile"
             shutil.rmtree(profile_dir, ignore_errors=True)
             os.mkdir(profile_dir)
-            firefox_profile = webdriver.FirefoxProfile(profile_dir)
-            firefox_profile.set_preference("security.ssl.enable_ocsp_stapling", False)
-            firefox_profile.set_preference("security.ssl.enable_ocsp_must_staple", False)
-            firefox_profile.set_preference("security.OCSP.enabled", 0)
+            if False:
+                fp = webdriver.FirefoxProfile(profile_dir)
+                self.m_driver = webdriver.Firefox(fp)
+            else:
+                firefox_profile = webdriver.FirefoxProfile(profile_dir)
+                firefox_profile.set_preference("security.ssl.enable_ocsp_stapling", False)
+                firefox_profile.set_preference("security.ssl.enable_ocsp_must_staple", False)
+                firefox_profile.set_preference("security.OCSP.enabled", 0)
 
-            # see this fine manual about how it's difficult to live under Fx47+
-            # https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver
-            caps = DesiredCapabilities.FIREFOX
-            caps["marionette"] = True
-            caps["binary"] = "/usr/bin/firefox"
-            self.m_driver = webdriver.Firefox(
-                firefox_profile=firefox_profile,
-                capabilities=caps,
-                executable_path="/usr/bin/wares",
-            )
+                # see this fine manual about how it's difficult to live under Fx47+
+                # https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver
+                caps = DesiredCapabilities.FIREFOX
+                caps["marionette"] = True
+                caps["binary"] = "/usr/bin/firefox"
+                self.m_driver = webdriver.Firefox(
+                    firefox_profile=firefox_profile,
+                    capabilities=caps,
+                    executable_path="/usr/bin/geckodriver",
+                )
 
         # self.maximizeWindow()
 
@@ -219,8 +209,9 @@ class SeleniumTest(object):
     def __del__(self):
         if hasattr(self, 'm_driver'):
             if self.m_closeOnExit:
+                pass
                 # self.logAdd("Closing webdriver. ")
-                self.m_driver.quit()
+                # self.m_driver.quit()
 
     def getBaseUrl(self):
         if isVoid(self.m_baseUrl):
@@ -276,7 +267,7 @@ class SeleniumTest(object):
             logFile.close()
             # indicate that log was already created
             self.m_logStarted = True
-            self.m_logTime = currentTime()
+            self.m_logTime = current_time()
         except IOError:
             self.fatalTest("Cannot create log file " + userSerialize(self.m_logFile) + ". ")
 
@@ -1043,7 +1034,7 @@ class SeleniumTest(object):
             if not self.m_logStarted:
                 self.logStart()
 
-            newTime = currentTime()
+            newTime = current_time()
             duration = newTime - self.m_logTime
             self.m_logTime = newTime
             fullLogText = u"[{level:8}][{dur:06.2f}]: ".format(level=logLevel, dur=duration) + text.strip()
