@@ -97,7 +97,7 @@ function xcmst_control($name, $value, $placeholder, $class, $type = "input", $ti
     }
     elseif ($type == "submit")
     {
-        echo "<input type=\"submit\" name=\"$name\" value=\"$value\" class=\"$class\" $attrs/>";
+        echo "<input type=\"submit\" name=\"$name\" id=\"$name-submit\" value=\"$value\" class=\"$class\" $attrs/>";
     }
     elseif ($type == "hidden")
     {
