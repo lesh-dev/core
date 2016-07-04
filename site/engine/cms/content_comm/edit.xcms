@@ -5,5 +5,5 @@
         @unlink($comm_file);
 ?>
 <form method="post">
-    <input type="submit" name="clear-comments" value="Очистить комментарии" />
+    <?php xcmst_submit("clear-comments", "Очистить комментарии"); ?>
 </form>
