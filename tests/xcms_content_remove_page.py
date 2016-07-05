@@ -42,7 +42,7 @@ class XcmsContentRemovePage(xtest_common.XcmsTest):
 
         pageText = random_crap.randomCrap(10)
         pageText = self.fillAceEditorElement(pageText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         self.gotoCloseEditor()
         self.gotoAdminPanel()
@@ -74,7 +74,7 @@ class XcmsContentRemovePage(xtest_common.XcmsTest):
 
         newPageText = random_crap.randomCrap(10)
         newPageText = self.fillAceEditorElement(pageText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
         self.gotoCloseEditor()
 
         self.gotoUrlByLinkText(self.m_parentPage)

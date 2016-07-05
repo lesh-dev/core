@@ -6,7 +6,6 @@
     @$rows = $param["rows"]; if (!@$rows) @$rows = 40;
     @$tag = $param["tag"]; if (!@$tag) @$tag = "h3";
     @$submit_val = $param["submit_val"]; if (!@$submit_val) @$submit_val = "Сохранить";
-    @$reset_val = $param["reset_val"]; if (!@$reset_val) @$reset_val = "Отмена";
 
     $pathv = @$argv[1];
     if (!$pathv) $pathv = "edit-file";
@@ -22,7 +21,7 @@
     }
     else
     {
-        if (@$_POST["edit-submit"])
+        if (@$_POST["commit"])
         {
             global $SETTINGS;
             $content_time_roundup = xcms_get_key_or($SETTINGS, "content_time_roundup", 100);
@@ -72,7 +71,6 @@
         else $text = $default_text;
 
         if (!@$param["-h"]) echo "<$tag>edit: $ename</$tag>";
-        $ty = "submit";
 
         $version_list = '<option value="">HEAD</option>';
         $version_files_list = array_reverse(glob("$ename-version-*"));
@@ -95,7 +93,7 @@
                 $selected = 'selected="selected"';
             $version_list .= "<option $selected value=\"$version_suffix\">$version_time$author_suffix</option>";
         }
-        if (@$_POST["edit-preview"])
+        if (@$_POST["preview"])
         {
             $text = @$_POST["edit-text"];
             $preview_text = $text;
@@ -116,15 +114,15 @@
             <?php
         }?>
 
-<form method="post" enctype="multipart/form-data">
-    <input type="hidden" name="<?php echo $pathv; ?>" value="<?php echo $ename;?>" />
-    <div style="padding-top: 15px;">
-        <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-submit-top" value="<?php echo $submit_val; ?>" />
-        <input type="submit" name="edit-preview" id="edit-preview-top" value="Предпросмотр" />
+<form method="post" enctype="multipart/form-data"><?php
+    xcmst_hidden($pathv, $ename); ?>
+    <div style="padding-top: 15px;"><?php
+        xcmst_submit("commit", $submit_val);
+        xcmst_submit("preview", "Предпросмотр"); ?>
         <a <?php echo xcms_href(array('page'=>$pageid, 'ref'=>'index')); ?> class="submit">Свернуть редактор</a>
         Версия:
         <select name="versions" id="versions-top"><?php echo $version_list; ?></select>
-        <input type="submit" name="set-version" id="set-version-top" value="Смотреть версию"/>
+        <?php xcmst_submit("set_version", "Смотреть версию"); ?>
         <?php include(translate('<! edit/help !>')); ?>
     </div>
     <textarea class="editor" style="display: none" rows="<?php echo $rows; ?>" cols="<?php echo $cols; ?>"
@@ -158,22 +156,22 @@
                 $('#edit-text').html(escaped_text);
             }
 
-            $("#edit-submit-top").click(xcms_set_editor_value);
-            $("#edit-submit-bottom").click(xcms_set_editor_value);
-            $("#edit-preview-top").click(xcms_set_editor_value);
-            $("#edit-preview-bottom").click(xcms_set_editor_value);
+            $("#commit-submit").click(xcms_set_editor_value);
+            $("#commit-submit-1").click(xcms_set_editor_value);
+            $("#preview-submit").click(xcms_set_editor_value);
+            $("#preview-submit-1").click(xcms_set_editor_value);
         });
 
     </script>
 
-    <div>
-        <input type="<?php echo $ty; ?>" name="edit-submit" id="edit-submit-bottom" value="<?php echo $submit_val; ?>" />
-        <input type="submit" name="edit-preview" id="edit-preview-bottom" value="Предпросмотр" />
+    <div><?php
+        xcmst_submit("commit", $submit_val);
+        xcmst_submit("preview", "Предпросмотр"); ?>
         <!-- Version info cannot be easily duplicated here, so we remove it -->
     </div>
 </form>
 <?php
-        if (@$_POST["edit-preview"])
+        if (@$_POST["preview"])
         {?>
             <div id="content-text-preview" class="content-text-preview"><?php
             $text = $preview_text;

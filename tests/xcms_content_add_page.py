@@ -90,9 +90,9 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         pageText = self.fillAceEditorElement(pageText)
         print "After ins page text: '" + pageText + "'"
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
-        self.clickElementById("edit-preview-top")
+        self.clickElementById("preview-submit")
 
         previewElement = "content-text-preview"
         self.assertElementTextById(previewElement, pageText, "preview text does not match entered page text. ")
@@ -103,8 +103,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         newPageText = self.fillAceEditorElement(newPageText)
         print "Generated 2-line page text: '" + newPageText + "'"
 
-        self.clickElementById("edit-submit-top")
-        self.clickElementById("edit-preview-top")
+        self.clickElementById("commit-submit")
+        self.clickElementById("preview-submit")
 
         newPageTextForCheck = newPageText.replace("\n", " ").replace("  ", " ").replace(">>", u"»").replace("<<", u"«").strip()
 
@@ -142,17 +142,17 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         versionUnoText = "version_0001" + "\n" + timestamp()
         versionUnoText = self.fillAceEditorElement(versionUnoText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
         self.wait(timeToWait, "waiting after version 1")
 
         versionDosText = "version_0002" + "\n" + timestamp()
         versionDosText = self.fillAceEditorElement(versionDosText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
         self.wait(timeToWait, "waiting after version 2")
 
         versionTresText = "version_0003" + "\n" + timestamp()
         versionTresText = self.fillAceEditorElement(versionTresText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
         self.wait(timeToWait, "waiting after version 3")
 
         self.setOptionValueByIdAndIndex("versions-top", 3)
@@ -174,13 +174,13 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         versionLostText = "version_lost" + "\n" + timestamp()
         versionLostText = self.fillAceEditorElement(versionLostText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
         #
         self.wait(10, "Waiting some small time (less than version interval)")
 
         versionDoNotLostText = "version_do_not_lost" + "\n" + timestamp()
         versionDoNotLostText = self.fillAceEditorElement(versionDoNotLostText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         self.setOptionValueByIdAndIndex("versions-top", 2)
         self.clickElementById("set-version-top")  # Смотреть версию
@@ -220,7 +220,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         print pageText
         print "-" * 30
 
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         # insert one line
         insLine = random_crap.randomCrap(wordNumber, self.wordOptions, specialChars=self.specChars)
@@ -235,7 +235,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         print pageText
         print "-" * 30
 
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         # cut last line
         newLines = newLines[:-1]
@@ -243,7 +243,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         pageText = linesToHtml(newLines)
 
         pageText = self.fillAceEditorElement(pageText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         pageWords = (" ".join(newLines)).split()
 
@@ -262,7 +262,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         pageText = self.fillAceEditorElement(pageText)
 
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         self.gotoCloseEditor()
 
