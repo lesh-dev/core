@@ -63,8 +63,8 @@ function xsm_warn_delete_entity($entity, $table_name, $title, $aux_param = '')
         а восстановление будет невозможно!</div>
     <div><form method="post" action="edit-<?php echo "$entity$aux_param"; ?>">
         <?php xcmst_hidden($key_name, $id);
-        xcmst_submit("confirm-delete-$entity", "Таки да, удалить!", "Безвозвратно удалить объект", "delete-button"); ?>
-        <a class="link-button" href="view-<?php echo $redir ?>">Вернуться к просмотру</a>
+        xcmst_submit("confirm-delete-$entity", "Таки да, удалить!", "Безвозвратно удалить объект", "delete-button");
+        xcmst_link("view-$redir", "return", "Вернуться к просмотру", "Отменить операцию и вернуться", "link-button"); ?>
     </form></div>
     <?php
 }
@@ -79,11 +79,10 @@ function xsm_warn_delete_entity_listmode($table_name, $title, $aux_param = '')
         <b><?php echo $title; ?></b> с кодом <b><?php echo $id; ?></b>?<br />
         Связанные с ним объекты также будут удалены,
         а восстановление будет невозможно!</div>
-    <div><form method="post" action="edit-<?php echo "$table_name$aux_param"; ?>">
-        <?php xcmst_hidden($key_name, $id);
-        xcmst_submit("confirm-delete-$table_name", "Таки да, удалить!", "Безвозвратно удалить объект", "delete-button"); ?>
-        <a class="link-button"
-            href="view-<?php echo $redir ?>">Вернуться к просмотру <?php echo $title; ?></a>
+    <div><form method="post" action="edit-<?php echo "$table_name$aux_param"; ?>"><?php
+        xcmst_hidden($key_name, $id);
+        xcmst_submit("confirm-delete-$table_name", "Таки да, удалить!", "Безвозвратно удалить объект", "delete-button");
+        xcmst_link("view-$redir", "return", "Вернуться к просмотру $title", "Отменить операцию и вернуться", "link-button"); ?>
     </form></div>
     <?php
 }
@@ -128,10 +127,8 @@ function xsm_edit_ops($table_name, $is_new, $redir, $ret_title, $del_title = "У
         xcmst_submit("update-$table_name", "Сохранить", "", "xsm-save-button");
         if (!$is_new) {
             xcmst_submit("delete-$table_name", $del_title, "", "delete-button");
-        }?>
-        <!-- FIXME Use link generator -->
-        <a class="link-button" id="return-<?php echo $place; ?>"
-            href="<?php echo $redir; ?>"><?php echo $ret_title; ?></a>
+        }
+        xcmst_link($redir, "return", $ret_title, "Отменить операцию и вернуться назад", "link-button"); ?>
     </div><?php
 }
 
@@ -140,9 +137,8 @@ function xsm_warn_delete_ops($table_name, $key_name, $id, $redir, $entity_name, 
         <?php echo $entity_name.' '.$object_str ; ?> [<b><?php echo $id; ?></b>]?</div>
     <div><form method="post" action="edit-<?php echo $table_name.$aux_param; ?>"><?php
         xcmst_hidden($key_name, $id);
-        xcmst_submit("confirm-delete-$table_name", "Таки да, удалить!", "", "delete-button"); ?>
-        <a class="link-button" id="return"
-            href="edit-<?php echo $redir ?>">Вернуться к редактированию</a>
+        xcmst_submit("confirm-delete-$table_name", "Таки да, удалить!", "", "delete-button");
+        xcmst_link("edit-$redir", "return", "Вернуться к редактированию", "", "link-button"); ?>
     </form></div><?php
 }
 

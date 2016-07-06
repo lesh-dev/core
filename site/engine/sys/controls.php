@@ -119,6 +119,12 @@ function xcmst_hidden($name, $value)
     xcmst_control($name, $value, "", "", "hidden");
 }
 
+function xcmst_link($url, $id, $inner_html, $title = "", $class = "")
+{
+    $title = htmlspecialchars($title);
+    echo "<a class=\"$class\" id=\"$id\" href=\"$url\" title=\"$title\">$inner_html</a>";
+}
+
 /**
   * Specialization for admin-tools
   * Disable auto-capitalization: #919
