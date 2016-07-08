@@ -10,7 +10,10 @@ class XcmsVersionCheck(xtest_common.XcmsTest):
     """
     def run(self):
 
+        self.logAdd("test begin")
         self.gotoRoot()
+
+        self.logAdd("gotoRoot done")
 
         # frontend
         feVerXpath = "//span[@class='site-version']"
@@ -24,7 +27,10 @@ class XcmsVersionCheck(xtest_common.XcmsTest):
         if not m:
             self.failTest("Site version does not match expected regexp. ");
 
+        self.logAdd("before login")
+
         self.performLoginAsAdmin()
+        self.logAdd("before admin panel")
         self.gotoAdminPanel()
 
         # backend
@@ -35,3 +41,5 @@ class XcmsVersionCheck(xtest_common.XcmsTest):
         m = re.search(versionRegexp, cpVersion)
         if not m:
             self.failTest("Site version in admin CP does not match expected regexp. ");
+
+        self.logAdd("test done OK")

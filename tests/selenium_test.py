@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import logging
+
 from selenium import webdriver
 from selenium.common.exceptions import InvalidSelectorException
 from selenium.common.exceptions import NoSuchElementException
@@ -23,20 +25,8 @@ import shutil
 # from bawlib import isString
 from bawlib import isVoid, isList, isNumber, isEqual, getSingleOption, userSerialize, wrapIfLong
 
-# ['_unwrap_value', '_wrap_value', 'add_cookie',
-# 'back', 'binary', 'capabilities', 'close', 'command_executor', 'create_web_element', 'current_window_handle',
-# 'delete_all_cookies', 'delete_cookie', 'desired_capabilities', 'error_handler', 'execute', 'execute_async_script',
-# 'execute_script', 'find_element', 'find_element_by_class_name', 'find_element_by_css_selector',
-#  'find_element_by_partial_link_text', 'find_element_by_tag_name',
-# 'find_element_by_xpath', 'find_elements', 'find_elements_by_class_name', 'find_elements_by_css_selector', 'find_elements_by_id',
-# 'find_elements_by_link_text', 'find_elements_by_name', 'find_elements_by_partial_link_text', 'find_elements_by_tag_name',
-# 'find_elements_by_xpath', 'firefox_profile', 'forward', 'get', 'get_cookie', 'get_cookies', 'get_screenshot_as_base64',
-# 'get_screenshot_as_file', 'get_window_position', 'get_window_size', 'implicitly_wait',
-# 'name', 'orientation', 'page_source', 'profile', 'quit', 'refresh', 'save_screenshot', 'session_id',
-# 'set_page_load_timeout', 'set_script_timeout', 'set_window_position', 'set_window_size', 'start_client',
-# 'start_session', 'stop_client', 'switch_to_active_element', 'switch_to_alert', 'switch_to_default_content',
-# 'switch_to_frame', 'switch_to_window', 'title', 'window_handles']
-
+MAX_RETRIES = 4
+TIME_INC = 0.2
 
 class TestError(RuntimeError):
     pass
@@ -67,7 +57,7 @@ class TestAction:
         return self.m_action + " " + self.m_details
 
 
-def currentTime():
+def current_time():
     return time.time()
 
 
@@ -156,7 +146,7 @@ class SeleniumTest(object):
     def __init__(self, baseUrl, params=[]):
         self.m_testName = self.__module__ + "." + self.__class__.__name__
         self.m_baseUrl = baseUrl or ""
-        self.m_params = params
+        self.m_params = params or []
 
         # time_suffix = "_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         self.m_logFile = self.m_logDir + "/" + self.m_testName + ".log"
@@ -171,6 +161,7 @@ class SeleniumTest(object):
 
         # self.m_driver.window_maximize()
 
+        self.m_old_firefox_driver = False
     def init(self):
         self.m_baseUrl = self.fixBaseUrl(self.getBaseUrl())
         if self.useChrome():
@@ -187,22 +178,26 @@ class SeleniumTest(object):
             profile_dir = "./test_profile"
             shutil.rmtree(profile_dir, ignore_errors=True)
             os.mkdir(profile_dir)
-            firefox_profile = webdriver.FirefoxProfile(profile_dir)
-            firefox_profile.set_preference("security.ssl.enable_ocsp_stapling", False)
-            firefox_profile.set_preference("security.ssl.enable_ocsp_must_staple", False)
-            firefox_profile.set_preference("security.OCSP.enabled", 0)
+            if self.m_old_firefox_driver:
+                fp = webdriver.FirefoxProfile(profile_dir)
+                self.m_driver = webdriver.Firefox(fp)
+            else:
+                firefox_profile = webdriver.FirefoxProfile(profile_dir)
+                firefox_profile.set_preference("security.ssl.enable_ocsp_stapling", False)
+                firefox_profile.set_preference("security.ssl.enable_ocsp_must_staple", False)
+                firefox_profile.set_preference("security.OCSP.enabled", 0)
             firefox_profile.update_preferences()
 
-            # see this fine manual about how it's difficult to live under Fx47+
-            # https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver
-            caps = DesiredCapabilities.FIREFOX
-            caps["marionette"] = True
-            caps["binary"] = "/usr/bin/firefox"
-            self.m_driver = webdriver.Firefox(
-                firefox_profile=firefox_profile,
-                capabilities=caps,
-                executable_path="/usr/bin/geckodriver",
-            )
+                # see this fine manual about how it's difficult to live under Fx47+
+                # https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver
+                caps = DesiredCapabilities.FIREFOX
+                caps["marionette"] = True
+                caps["binary"] = "/usr/bin/firefox"
+                self.m_driver = webdriver.Firefox(
+                    firefox_profile=firefox_profile,
+                    capabilities=caps,
+                    executable_path="/usr/bin/geckodriver",
+                )
 
         # self.maximizeWindow()
 
@@ -219,8 +214,9 @@ class SeleniumTest(object):
     def __del__(self):
         if hasattr(self, 'm_driver'):
             if self.m_closeOnExit:
+                pass
                 # self.logAdd("Closing webdriver. ")
-                self.m_driver.quit()
+                # self.m_driver.quit()
 
     def getBaseUrl(self):
         if isVoid(self.m_baseUrl):
@@ -276,7 +272,7 @@ class SeleniumTest(object):
             logFile.close()
             # indicate that log was already created
             self.m_logStarted = True
-            self.m_logTime = currentTime()
+            self.m_logTime = current_time()
         except IOError:
             self.fatalTest("Cannot create log file " + userSerialize(self.m_logFile) + ". ")
 
@@ -388,7 +384,7 @@ class SeleniumTest(object):
         reason is custom comment helping to understand why this link is vital for test pass.
         """
         try:
-            link = self.getUrlByLinkText(linkName, reason=reason, optionList=["title"])
+            link = self.getUrlByLinkText(linkName, reason=reason, option_list=["title"])
             self.checkBaseUrl(link)
             self.gotoSite(link, linkName)
         except NoSuchElementException:
@@ -426,7 +422,7 @@ class SeleniumTest(object):
 
     def assertUrlNotPresent(self, linkName, reason=""):
         try:
-            self.getUrlByLinkText(linkName, reason=reason, optionList=["silent"])
+            self.getUrlByLinkText(linkName, reason=reason, option_list=["silent"])
             exMsg = "Forbidden URL is found on the page in assertUrlNotPresent: " + userSerialize(linkName) + ". " + self.displayReason(reason)
             self.failTest(exMsg)
         except ItemNotFound:
@@ -801,42 +797,24 @@ class SeleniumTest(object):
     def isStopWord(self, text):
         return text in self.m_logCheckStopWords or text == self.m_textOnPage404
 
-    def checkTextPresent(self, xpath, text, optionList=[]):
+    def checkTextPresent(self, xpath, text, option_list=None):
+        option_list = option_list or []
+
         self.checkEmptyParam(xpath, "checkTextPresent")
         self.checkEmptyParam(text, "checkTextPresent")
 
         count = 0
-        while count < 3:
+        wait_time = 0.0
+        while count < MAX_RETRIES:
+            self.wait(wait_time, u"Checking for text '" + userSerialize(text) + u"'")
+            count += 1
+            wait_time += TIME_INC
             try:
-                eleText = self.m_driver.find_element_by_xpath(xpath).text
-                serOpt = []
-                if xpath in ["/html/body", "//*"]:  # too large
-                    serOpt = ["cut_strings"]
-
-                if not self.isStopWord(text) and "silent" not in optionList:
-                    self.logAdd(
-                        "checkTextPresent: element " + userSerialize(xpath) + " text: " +
-                        wrapIfLong(userSerialize(eleText, serOpt).replace("\n", " ")) + ". "
-                    )
-
-                if isList(text):
-                    for phrase in text:
-                        if phrase in eleText:
-                            self.logAdd("checkTextPresent: found phrase " + userSerialize(phrase) + " in element with xpath " + userSerialize(xpath) + ". ")
-                            return True
-                    if "silent" not in optionList:
-                        self.logAdd("checkTextPresent: NOT found any of " + userSerialize(text) + " in element with xpath " + userSerialize(xpath) + ". ")
-                    return False
-                else:
-                    bFound = text in eleText
-                    particle = "" if bFound else "NOT "
-                    if not self.isStopWord(text):
-                        self.logAdd(
-                            "checkTextPresent: " + particle + "found text " + userSerialize(text) +
-                            " in element with xpath " + userSerialize(xpath) + ". "
-                        )
-                    return bFound
-
+                is_found = self.check_text_present_once(xpath, text, option_list)
+                if is_found:
+                    return True
+                logging.info("checkTextPresent(): expected text not found, retrying.")
+                continue
             except InvalidSelectorException:
                 self.fatalTest("Invalid XPath expression in checkTextPresent: " + userSerialize(xpath) + ". ")
             except NoSuchElementException:
@@ -847,38 +825,88 @@ class SeleniumTest(object):
                     "Cache problem in checkTextPresent. XPath: " + userSerialize(xpath) +
                     ", text: " + wrapIfLong(userSerialize(text)) + ". Trying again. "
                 )
-                count += 1
-                self.wait(1.0)
                 continue
-        self.failTest("Unsolvable cache problem in checkTextPresent. XPath: " + userSerialize(xpath) + ", text: " + wrapIfLong(userSerialize(text)) + ". ")
+        # not found
+        return False
 
-    def checkSourceTextPresent(self, text, optionList=[]):
-        eleText = self.getPageSource()
-        serOpt = ["cut_strings"]
+    def check_text_present_once(self, xpath, text, option_list):
+        ele_text = self.m_driver.find_element_by_xpath(xpath).text
+        ser_opt = []
+        if xpath in ["/html/body", "//*"]:  # too large
+            ser_opt = ["cut_strings"]
 
-        if not self.isStopWord(text) and "silent" not in optionList:
+        if not self.isStopWord(text) and "silent" not in option_list:
             self.logAdd(
-                "checkSourceTextPresent: text: " +
-                wrapIfLong(userSerialize(eleText, serOpt).replace("\n", " ")) + ". "
+                "checkTextPresent: element " + userSerialize(xpath) + " text: " +
+                wrapIfLong(userSerialize(ele_text, ser_opt).replace("\n", " ")) + ". "
             )
 
         if isList(text):
             for phrase in text:
-                if phrase in eleText:
+                if phrase in ele_text:
+                    self.logAdd("checkTextPresent: found phrase " + userSerialize(
+                        phrase) + " in element with xpath " + userSerialize(xpath) + ". ")
+                    return True
+            if "silent" not in option_list:
+                self.logAdd("checkTextPresent: NOT found any of " + userSerialize(
+                    text) + " in element with xpath " + userSerialize(xpath) + ". ")
+            return False
+        else:
+            is_found = text in ele_text
+            particle = "" if is_found else "NOT "
+            if not self.isStopWord(text):
+                self.logAdd(
+                    "checkTextPresent: " + particle + "found text " + userSerialize(text) +
+                    " in element with xpath " + userSerialize(xpath) + ". "
+                )
+            return is_found
+
+    def checkSourceTextPresent(self, text, option_list=None):
+        option_list = option_list or []
+        self.checkEmptyParam(text, "checkSourceTextPresent")
+
+        count = 0
+        wait_time = 0.0
+        while count < MAX_RETRIES:
+            self.wait(wait_time, u"Checking for source text '" + userSerialize(text) + u"'")
+            count += 1
+            wait_time += TIME_INC
+            is_found = self.check_source_text_present_once(text, option_list)
+            if is_found:
+                return True
+            logging.info("checkSourceTextPresent(): expected text not found, retrying.")
+        # not found
+        return False
+
+    def check_source_text_present_once(self, text, option_list=None):
+
+        option_list = option_list or []
+        ele_text = self.getPageSource()
+        ser_opt = ["cut_strings"]
+
+        if not self.isStopWord(text) and "silent" not in option_list:
+            self.logAdd(
+                "checkSourceTextPresent: text: " +
+                wrapIfLong(userSerialize(ele_text, ser_opt).replace("\n", " ")) + ". "
+            )
+
+        if isList(text):
+            for phrase in text:
+                if phrase in ele_text:
                     self.logAdd("checkSourceTextPresent: found phrase " + userSerialize(phrase) + " on page. ")
                     return True
-            if "silent" not in optionList:
+            if "silent" not in option_list:
                 self.logAdd("checkSourceTextPresent: NOT found any of " + userSerialize(text) + " on page. ")
             return False
         else:
-            bFound = text in eleText
+            bFound = text in ele_text
             particle = "" if bFound else "NOT "
             if not self.isStopWord(text):
                 self.logAdd("checkSourceTextPresent: " + particle + "found text " + userSerialize(text) + " on page. ")
             return bFound
 
-    def checkBodyTextPresent(self, text, optionList=[]):
-        return self.checkTextPresent("/html/body", text, optionList=optionList)
+    def checkBodyTextPresent(self, text, option_list=None):
+        return self.checkTextPresent("/html/body", text, option_list=option_list)
 
     def fatalTest(self, errorText):
         self.logAdd("TEST FATAL ERROR: " + userSerialize(errorText), "fatal")
@@ -894,8 +922,9 @@ class SeleniumTest(object):
         self.logAdd("TEST FAILED: " + userSerialize(errorText), "error")
         raise TestError(errorText)
 
-    def throwItemNotFound(self, errorText, optionList=[]):
-        if "silent" not in optionList:
+    def throwItemNotFound(self, errorText, option_list=None):
+        option_list = option_list or []
+        if "silent" not in option_list:
             self.logAdd("Item-Not-Found: " + userSerialize(errorText))
         raise ItemNotFound(errorText)
 
@@ -943,14 +972,16 @@ class SeleniumTest(object):
             if isVoid(stringOrList):
                 self.fatalTest("Empty param passed to " + methodName)
 
-    def getUrlByLinkText(self, urlText, optionList=[], reason=""):
+    def getUrlByLinkText(self, urlText, option_list=None, reason=""):
+
+        option_list = option_list or []
 
         self.checkEmptyParam(urlText, "getUrlByLinkText")
         searchMethod = self.m_driver.find_element_by_link_text
-        if "partial" in optionList:
+        if "partial" in option_list:
             self.logAdd("Search for partial link text " + userSerialize(urlText) + ". ")
             searchMethod = self.m_driver.find_element_by_partial_link_text
-        elif "title" in optionList:
+        elif "title" in option_list:
             self.logAdd("Search for link with title " + userSerialize(urlText) + ". ")
             searchMethod = self.m_driver.find_element_by_css_selector
 
@@ -966,9 +997,9 @@ class SeleniumTest(object):
         if isList(urlText):
             for urlName in urlText:
                 try:
-                    return getUrl(urlName, option_list=optionList)
+                    return getUrl(urlName, option_list=option_list)
                 except NoSuchElementException:
-                    if "silent" not in optionList:
+                    if "silent" not in option_list:
                         self.logAdd("Tried to find url by name " + userSerialize(urlName) + ", not found. ")
             else:
                 # loop ended, found nothing
@@ -977,14 +1008,14 @@ class SeleniumTest(object):
                     "Cannot find URL by link texts: " + userSerialize(urlText) +
                     " on page " + userSerialize(self.curUrl()) + ". " + self.displayReason(reason)
                 )
-                self.throwItemNotFound(msg, optionList=optionList)
+                self.throwItemNotFound(msg, option_list=option_list)
         else:  # single link
             try:
-                return getUrl(urlText, option_list=optionList)
+                return getUrl(urlText, option_list=option_list)
             except NoSuchElementException:
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
                 msg = "Cannot find URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(self.curUrl()) + ". " + self.displayReason(reason)
-                self.throwItemNotFound(msg, optionList=optionList)
+                self.throwItemNotFound(msg, option_list=option_list)
 
     def countIndexedUrlsByLinkText(self, urlText, sibling=""):
         # case: <a><span>text</span></a> is not captured by internal of 'gotoUrlByLinkText'
@@ -1043,7 +1074,7 @@ class SeleniumTest(object):
             if not self.m_logStarted:
                 self.logStart()
 
-            newTime = currentTime()
+            newTime = current_time()
             duration = newTime - self.m_logTime
             self.m_logTime = newTime
             fullLogText = u"[{level:8}][{dur:06.2f}]: ".format(level=logLevel, dur=duration) + text.strip()
@@ -1059,7 +1090,11 @@ class SeleniumTest(object):
         return self.getPageSource()
 
     def getPageSource(self):
-        return self.m_driver.page_source
+        page_source = self.m_driver.page_source
+        with open("current-page.html", "w") as page_fd:
+            page_fd.write(page_source.encode("utf-8"))
+        return page_source
+
 
     def checkPhpErrors(self):
         """

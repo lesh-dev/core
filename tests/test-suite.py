@@ -223,5 +223,5 @@ except ImportError as e:
     print "Details: "
     print e
 except TestSuiteError as e:
-    print e
+    print "TestSuiteError:", e
     sys.exit(2)

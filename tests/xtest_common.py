@@ -8,6 +8,10 @@ from xtest_config import XcmsTestConfig
 from bawlib import checkSingleOption
 
 
+MAX_RETRIES = 4
+TIME_INC = 0.2
+
+
 class XcmsBaseTest(selenium_test.SeleniumTest):
     """
         Base test class wth advanced error checking"
@@ -33,23 +37,39 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
             self.logAdd("We are on the AUTH page. Seems that page access was denied. ", "warning")
 
     def isAuthPage(self):
-        return self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"], optionList=["silent"])
+        return self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"], option_list=["silent"])
 
     def checkDocType(self):
-        firstLine, sourceBlock = self.getPageSourceFirstLine()
-        if "<!DOCTYPE" not in firstLine:
-            if self.isAuthPage():
-                self.logAdd("DOCTYPE not detected, but this page seems to be Auth page. ", "warning")
+        count = 0
+        wait_time = 0.0
+        while count < MAX_RETRIES:
+            wait_time += TIME_INC
+            count += 1
+            self.wait(wait_time, "checkDocType")
+            if self.check_doc_type_once():
                 return
-            sourceBlock = "\n".join(sourceBlock)
-            self.logAdd("Source beginning without DOCTYPE:\n" + sourceBlock.strip())
-            self.failTest("DOCTYPE directive not found on page {0}. First line is '{1}'".format(self.curUrl(), firstLine))
+            self.logAdd("DOCTYPE not detected, retrying")
+        self.failTest("DOCTYPE directive not found on page {0}. ".format(self.curUrl()))
+
+    def check_doc_type_once(self):
+        first_line, source_block = self.getPageSourceFirstLine()
+        if "<!DOCTYPE" in first_line:
+            # ok
+            return True
+        
+        # not found
+        if self.isAuthPage():
+            self.logAdd("DOCTYPE not detected, but this page seems to be Auth page. ", "warning")
+            return True
+        source_block = "\n".join(source_block)
+        self.logAdd("Source beginning without DOCTYPE:\n" + source_block.strip())
+        return False
 
     def getPageSourceFirstLine(self):
         source = self.getPageSource()
-        newlinePos = source.find("\n")
+        newline_pos = source.find("\n")
         # self.logAdd("Newline found at {0}".format(newlinePos))
-        return source[:newlinePos], source[:1000].split("\n")[:4]
+        return source[:newline_pos], source[:1000].split("\n")[:4]
 
     def isInstallerPage(self):
         return self.curUrl().endswith("install.php")
@@ -177,20 +197,10 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.gotoRoot()
 
         # assert we have no shit cookies here
-        self.assertUrlNotPresent(
-            u"Админка",
-            (
-                "Here should be no auth cookies. But they are. "
-                "Otherwise, your test is buggy and you forgot to logout previous user. "
-            )
-        )
-        self.assertUrlNotPresent(
-            u"Личный кабинет",
-            (
-                "Here should be no auth cookies. But they are. "
-                "Otherwise, your test is buggy and you forgot to logout previous user. "
-            )
-        )
+        expl_adm = """Here should be no auth cookies. But they are.
+        Otherwise, your test is buggy and you forgot to logout previous user. """
+        self.assertUrlNotPresent(u"Админка", expl_adm)
+        self.assertUrlNotPresent(u"Личный кабинет", expl_adm)
 
         self.gotoAuthLink()
 
@@ -209,6 +219,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
         # now let's check that Cabinet link and Exit link are present. if not - it's a bug.
 
+        self.wait(2)
         self.assertUrlPresent(u"Выход", "Here should be logout link after successful authorization. ")
         self.assertUrlPresent(u"Личный кабинет", "Here should be Cabinet link after successful authorization. ")
 
