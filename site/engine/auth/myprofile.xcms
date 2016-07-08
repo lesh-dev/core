@@ -5,7 +5,7 @@
     $user = xcms_user();
 ?>
 <div class="admin-widget">
-<h3>Привет‎, <?php echo $user->login(); ?>!</h3>
+<h3>Привет, <?php echo $user->login(); ?>!</h3>
 
 <?php
     if (@$_POST["update_me"])
