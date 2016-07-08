@@ -151,17 +151,15 @@ function xsm_edit_operations_listmode($entity, $id, $title, $aux_param = '')
         xcmst_submit("update-$entity", "Сохранить", "", "xsm-save-button");
         if (!$is_new) {
             xcmst_submit("delete-$entity", "Удалить", "", "delete-button");
-        }?>
-        <a class="link-button" href="list-<?php
-            echo $redir; ?>"><?php echo $title; ?></a>
+        }
+        xcmst_link("list-$redir", "list", $title, "", "link-button btn"); ?>
     </div><?php
 }
 
 function xsm_view_operations($table_name, $title, $aux_param = '')
 {?>
-    <div class="xsm-edit-ops">
-        <a class="link-button btn" href="edit-<?php
-            echo "$table_name$aux_param&amp;${table_name}_id=new"; ?>">Добавить <?php echo $title; ?></a>
+    <div class="xsm-edit-ops"><?php
+        xcmst_link("edit-$table_name$aux_param&amp;${table_name}_id=new", "add", "Добавить $title", "", "link-button btn"); ?>
     </div><?php
 }
 

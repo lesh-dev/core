@@ -68,9 +68,8 @@ function xsm_edit_course()
             <tr><td class="ankList">
                 <span class="ankEditField mid xsm-label">Препод(ы)</span><?php
                 echo $teachers_ht;
-                if ($course_id != XDB_NEW) {?>
-                    <a class="link-button ank" href="edit-teachers<?php
-                        echo $teachers_edit_url; ?>">Редактировать преподов</a><?php
+                if ($course_id != XDB_NEW) {
+                    xcmst_link("edit-teachers$teachers_edit_url", "edit-teachers", "Редактировать преподов", "", "link-button ank");
                 } else {?>
                     <span><br/>Добавить ещё одного препода можно будет после того, как курс будет сохранён.</span><?php
                 }?>
