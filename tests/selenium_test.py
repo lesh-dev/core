@@ -142,6 +142,7 @@ class SeleniumTest(object):
     m_logFile = None
     m_actionLog = []
     m_logCheckStopWords = []
+    m_old_firefox_driver = False
 
     def __init__(self, baseUrl, params=[]):
         self.m_testName = self.__module__ + "." + self.__class__.__name__
@@ -161,7 +162,6 @@ class SeleniumTest(object):
 
         # self.m_driver.window_maximize()
 
-        self.m_old_firefox_driver = False
     def init(self):
         self.m_baseUrl = self.fixBaseUrl(self.getBaseUrl())
         if self.useChrome():
@@ -186,7 +186,7 @@ class SeleniumTest(object):
                 firefox_profile.set_preference("security.ssl.enable_ocsp_stapling", False)
                 firefox_profile.set_preference("security.ssl.enable_ocsp_must_staple", False)
                 firefox_profile.set_preference("security.OCSP.enabled", 0)
-            firefox_profile.update_preferences()
+                firefox_profile.update_preferences()
 
                 # see this fine manual about how it's difficult to live under Fx47+
                 # https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver
