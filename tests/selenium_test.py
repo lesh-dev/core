@@ -22,11 +22,12 @@ import os
 import errno
 import shutil
 
-# from bawlib import isString
 from bawlib import isVoid, isList, isNumber, isEqual, getSingleOption, userSerialize, wrapIfLong
+
 
 MAX_RETRIES = 4
 TIME_INC = 0.2
+
 
 class TestError(RuntimeError):
     pass
@@ -94,25 +95,25 @@ def RunTest(test):
         return test.handleException(exc)
 
 
-def colorStrL(string, color):
+def color_str_l(string, color):
     """ Colors string using color """
     return "\x1b[1;{textColor}m{text}\x1b[0m".format(textColor=color, text=string)
 
 
-def DecodeRunResult(result):
+def decode_run_result(result):
     if result == 0:
-        return colorStrL("PASSED", 32)
+        return color_str_l("PASSED", 32)
     elif result == 1:
-        return colorStrL("FAILED", 31)
+        return color_str_l("FAILED", 31)
     elif result == 2:
-        return colorStrL("FATAL ERROR", 33)
+        return color_str_l("FATAL ERROR", 33)
     elif result == 3:
-        return colorStrL("STOPPED", 34)
+        return color_str_l("STOPPED", 34)
     else:
         return "n/a"
 
 
-def createLogDir(directory):
+def create_log_dir(directory):
     try:
         os.makedirs(directory)
     except OSError as ex:
@@ -120,7 +121,7 @@ def createLogDir(directory):
             raise
 
 
-def getValue(ele):
+def get_value(ele):
     return ele.get_attribute('value')
 
 
@@ -265,7 +266,7 @@ class SeleniumTest(object):
 
     def logStart(self):
         try:
-            createLogDir(self.m_logDir)
+            create_log_dir(self.m_logDir)
             logFile = open(self.m_logFile, "w")
             logText = "[" + self.m_testName + " log start on " + self.m_baseUrl + "]\n"
             logFile.write(logText.encode("UTF-8"))
@@ -537,7 +538,7 @@ class SeleniumTest(object):
             self.getElementByName(name).clear()
         self.addAction("fill", "element name: " + userSerialize(name) + ", text: " + wrapIfLong(userSerialize(text)) + " ")
         self.getElementByName(name).send_keys(text)
-        return getValue(self.getElementByName(name))
+        return get_value(self.getElementByName(name))
 
     def fillElementById(self, eleId, text, clear=True):
         try:
@@ -551,7 +552,7 @@ class SeleniumTest(object):
             self.logAdd("Sending text to element '" + eleId + "'")
             ele = self.getElementById(eleId)  # Selenium element cache miss can occur
             ele.send_keys(text)
-            return getValue(ele)
+            return get_value(ele)
         except InvalidElementStateException:
             self.fatalTest("Cannot set element value by id '" + eleId + "', possibly element is read-only.")
 
@@ -647,34 +648,34 @@ class SeleniumTest(object):
                 "Option list size is {1}, requested index: {2}".format(eleId, actLen, index)
             )
         oneOption = selEle.find_element_by_xpath("option[" + userSerialize(index) + "]")
-        return getValue(oneOption), oneOption.text
+        return get_value(oneOption), oneOption.text
 
     def getOptionValueByName(self, eleName):
         try:
-            return getValue(self.getElementByName(eleName).find_element_by_xpath("option[@selected='selected']"))
+            return get_value(self.getElementByName(eleName).find_element_by_xpath("option[@selected='selected']"))
         except NoSuchElementException:
             self.failTest("Cannot get drop-down (select) element by name " + userSerialize(eleName) + ". ")
 
     def getOptionValueById(self, eleId):
         try:
-            return getValue(self.getElementById(eleId).find_element_by_xpath("option[@selected='selected']"))
+            return get_value(self.getElementById(eleId).find_element_by_xpath("option[@selected='selected']"))
         except NoSuchElementException:
             self.failTest("Cannot get drop-down (select) element by id '" + eleId + "'. ")
 
     def getElementValueById(self, eleId):
         self.checkEmptyParam(eleId, "getElementValueById")
         self.addAction("get-value", "element id: '" + eleId + "'")
-        return getValue(self.getElementById(eleId))
+        return get_value(self.getElementById(eleId))
 
     def getElementValueByName(self, eleName):
         self.checkEmptyParam(eleName, "getElementValueByName")
         self.addAction("get-value", "element name: " + userSerialize(eleName) + " ")
-        return getValue(self.getElementByName(eleName))
+        return get_value(self.getElementByName(eleName))
 
     def checkElementValueById(self, eleId, text):
         self.checkEmptyParam(eleId, "checkElementValueById")
         self.addAction("check-value", "element id: '" + eleId + "', expected: " + wrapIfLong(userSerialize(text)) + ". ")
-        eleValue = getValue(self.getElementById(eleId))
+        eleValue = get_value(self.getElementById(eleId))
         if not eleValue:
             self.logAdd("None 'value' in element id '" + eleId + "'. Maybe it has no attribute 'value'?", "warning")
             return False
@@ -726,7 +727,7 @@ class SeleniumTest(object):
     def checkElementValueByName(self, name, text):
         self.checkEmptyParam(name, "checkElementValueByName")
         self.addAction("check-value", "element name: '" + name + "', expected: " + wrapIfLong(userSerialize(text)) + ". ")
-        eleValue = getValue(self.getElementByName(name))
+        eleValue = get_value(self.getElementByName(name))
         if not eleValue:
             self.logAdd("None 'value' in element named '" + name + "'. Maybe it has no attribute 'value'?", "warning")
             return False

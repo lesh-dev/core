@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-from selenium_test import RunTest, TestShutdown, DecodeRunResult
+from selenium_test import RunTest, TestShutdown, decode_run_result
 import test_set_gen
 import sys
 
@@ -54,11 +54,11 @@ def printStats(stats, detailed):
 
     print "===== TEST SUITE DETAILED STATS: ====="
     for testName, test_result in detailed.iteritems():
-        print "  " + testName + ": " + DecodeRunResult(test_result)
+        print "  " + testName + ": " + decode_run_result(test_result)
 
     print "===== TEST SUITE OVERALL STATS: ====="
     for test_result, testList in stats.iteritems():
-        print DecodeRunResult(test_result) + ":", len(testList), "tests"
+        print decode_run_result(test_result) + ":", len(testList), "tests"
 
 
 def generateFailedTestsSuite(failed_tests):
