@@ -47,7 +47,7 @@
             <form method="post">
                 <textarea cols="80" rows="5" name="comment"></textarea>
                 <input name="commentator" value="Ваше имя" />
-                <input name="create-comment" value="Оставить" type="submit" />
+                <?php xcmst_submit("create-comment", "Оставить"); ?>
             </form>
             <?php
         }

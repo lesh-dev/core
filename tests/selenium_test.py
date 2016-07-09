@@ -132,12 +132,26 @@ class SeleniumTest(object):
 
     m_driver = None
 
-    def __init__(self, baseUrl, params=None):
+    # defaults
+    m_checkErrors = True
+    m_closeOnExit = True
+    m_logStarted = False
+    m_errorsAsWarnings = False
+    m_doCheck404 = True
+    m_textOnPage404 = "Page not found"
+    m_logDir = "logs"
+    m_logFile = None
+    m_actionLog = []
+    m_logCheckStopWords = []
+    m_old_firefox_driver = False
+
+    def __init__(self, baseUrl, params=[]):
         self.m_testName = self.__module__ + "." + self.__class__.__name__
         self.m_baseUrl = baseUrl or ""
         self.m_params = params or []
 
-        self.initDefaults()
+        # time_suffix = "_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+        self.m_logFile = self.m_logDir + "/" + self.m_testName + ".log"
 
         if self.needDoc():
             print self.m_testName, "test info:"
@@ -148,21 +162,6 @@ class SeleniumTest(object):
             self.setCloseOnExit(False)
 
         # self.m_driver.window_maximize()
-
-    def initDefaults(self):
-        self.m_checkErrors = True
-        self.m_closeOnExit = True
-        self.m_logStarted = False
-        self.m_errorsAsWarnings = False
-        self.m_doCheck404 = True
-        self.m_textOnPage404 = "Page not found"
-
-        self.m_logDir = "logs"
-
-        self.m_logFile = self.m_logDir + "/" + self.m_testName + ".log"  # "_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S") +
-        self.m_actionLog = []
-        self.m_logCheckStopWords = []
-        self.m_old_firefox_driver = False
 
     def init(self):
         self.m_baseUrl = self.fixBaseUrl(self.getBaseUrl())
@@ -188,6 +187,7 @@ class SeleniumTest(object):
                 firefox_profile.set_preference("security.ssl.enable_ocsp_stapling", False)
                 firefox_profile.set_preference("security.ssl.enable_ocsp_must_staple", False)
                 firefox_profile.set_preference("security.OCSP.enabled", 0)
+                firefox_profile.update_preferences()
 
                 # see this fine manual about how it's difficult to live under Fx47+
                 # https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver

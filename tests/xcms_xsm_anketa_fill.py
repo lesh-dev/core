@@ -118,7 +118,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         inpSource = self.fillElementById("lesh_ref-text", inpSource)
         self.fillElementById("control_question-input", u"ампер")
 
-        self.clickElementById("submit-anketa-button")
+        self.clickElementById("submit_anketa-submit")
 
         self.assertBodyTextPresent(self.getAnketaSuccessSubmitMessage())
 

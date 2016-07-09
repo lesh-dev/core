@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
+import random_crap
+
 
 class XcmsContentSpecialCharsPage(xtest_common.XcmsTest):
     """
@@ -24,15 +26,15 @@ class XcmsContentSpecialCharsPage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
 
-        inpPageDir = "spec_char_page_" + random_crap.randomText(8);
-        inpMenuTitle = "spec_menu_title_" + random_crap.randomText(8);
-        inpPageHeader = "spec_page_header_" + random_crap.randomText(8);
-        inpAlias = "spec/char/page/alias/" + random_crap.randomText(8);
+        inpPageDir = "spec_char_page_" + random_crap.randomText(8)
+        inpMenuTitle = "spec_menu_title_" + random_crap.randomText(8)
+        inpPageHeader = "spec_page_header_" + random_crap.randomText(8)
+        inpAlias = "spec/char/page/alias/" + random_crap.randomText(8)
 
-        inpPageDir = self.fillElementById("create-name-input", inpPageDir);
-        inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle);
-        inpPageHeader = self.fillElementById("header-input", inpPageHeader);
-        inpAlias = self.fillElementById("alias-input", inpAlias);
+        inpPageDir = self.fillElementById("create-name-input", inpPageDir)
+        inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)
+        inpPageHeader = self.fillElementById("header-input", inpPageHeader)
+        inpAlias = self.fillElementById("alias-input", inpAlias)
 
         self.m_pageAlias = inpAlias
 
@@ -52,12 +54,12 @@ class XcmsContentSpecialCharsPage(xtest_common.XcmsTest):
         pageText = "&amp;&lt;'"
 
         pageText = self.fillAceEditorElement(pageText)
-        self.clickElementById("edit-preview-top")
+        self.clickElementById("preview-submit")
         previewElement = "content-text-preview"
-        pageRealText = "&<'";
+        pageRealText = "&<'"
         self.assertElementTextById(previewElement, pageRealText, "preview text does not match entered page text. ")
 
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         self.gotoCloseEditor()
 
@@ -73,4 +75,3 @@ class XcmsContentSpecialCharsPage(xtest_common.XcmsTest):
         self.gotoEditPageInPlace()
 
         self.assertAceEditorElementText(pageText, "page text after reopening editor does not match entered HTML text. ")
-

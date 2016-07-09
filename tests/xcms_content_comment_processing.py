@@ -50,7 +50,7 @@ class XcmsContentCommentProcessing(xtest_common.XcmsTest):
 
         pageText = self.fillAceEditorElement(pageText)
         # print "After ins page text: '" + pageText + "'"
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         self.performLogoutFromAdminPanel()
 

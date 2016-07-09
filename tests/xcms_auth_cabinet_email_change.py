@@ -40,7 +40,7 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         newGoodEMail = self.m_conf.getValidEmail(2)
 
         self.fillElementById("email-input", newGoodEMail)
-        self.clickElementById("update_me")
+        self.clickElementById("update_me-submit")
 
         badMailMsg = u"пользователь с такой почтой"
         dataUpdatedMsg = u"Данные обновлены успешно"
@@ -55,7 +55,7 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         newGoodEMail = random_crap.randomEmail()
 
         newGoodEMail = self.fillElementById("email-input", newGoodEMail)
-        self.clickElementById("update_me")
+        self.clickElementById("update_me-submit")
 
         self.assertBodyTextNotPresent(badMailMsg)
         self.assertBodyTextNotPresent("exception")
@@ -66,7 +66,7 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         newBadEMail = inpEMail2
 
         self.fillElementById("email-input", newBadEMail)
-        self.clickElementById("update_me")
+        self.clickElementById("update_me-submit")
 
         self.assertBodyTextPresent(badMailMsg)
         self.assertBodyTextNotPresent("exception")

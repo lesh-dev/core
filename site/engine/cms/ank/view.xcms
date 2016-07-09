@@ -21,7 +21,7 @@ require_once("${engine_dir}xsm/middleware.php");
         if (xcms_user()->login() != "anonymous")
             echo "<h3><a href=\"?ref=admin&amp;page=$pageid\">Вы можете это исправить!</a></h3>";
     }
-    if (@$_POST["submit-anketa"])
+    if (@$_POST["submit_anketa"])
     {
         $person = $_POST; // get all values here (_POST should not be spoiled)
         $person = xcms_trim_object($person);

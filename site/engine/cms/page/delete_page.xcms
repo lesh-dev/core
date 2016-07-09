@@ -11,8 +11,8 @@
     <h3 style="color: red;">Предупреждение</h3>
     <p>Вы собираетесь удалить текущий раздел <b><?php echo "$sec_name$menu_title"; ?></b>.
     Вы <b>точно</b> уверены, что хотите это сделать?</p>
-    <form method="post">
-        <input type="hidden" id="delete-section" name="delete-section" value="true" />
-        <input class="delete" type="submit" name="delete-page" id="delete_page-button" value="Таки да, удалить!" />
-    </form>
+    <form method="post"><?php
+        xcmst_hidden("delete-section", "true");
+        xcmst_submit("delete-page", "Таки да, удалить!", "Восстановление страницы будет невозможно", "delete");
+    ?></form>
 </div>

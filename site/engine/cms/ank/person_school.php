@@ -88,11 +88,11 @@ function xsm_add_person_to_school($school_id, $person_id)
 }
 
 // Специфическая функция для данной таблицы
-function xsm_person_school_edit_operations($table_name, $id, $ret_title, $school_id, $member_person_id, $place)
+function xsm_person_school_edit_operations($table_name, $id, $ret_title, $school_id, $member_person_id)
 {
     $is_new = ($id == XDB_NEW);
     $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$member_person_id));
-    xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title, "Отчислить со школы");
+    xsm_edit_ops($table_name, $is_new, $redir, $ret_title, "Отчислить со школы");
 }
 
 /* Ещё одна специфическая функция -- возврат на редактирование, а не на просмотр,

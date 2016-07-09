@@ -73,7 +73,7 @@ function xcmst_show_attachments($page_prefix)
             <td><input type="file" size="60" name="attachment" /></td>
         </tr>
     </table>
-    <input type="submit" name="upload_attach" value="Добавить" id="upload_attach-submit" />
+    <?php xcmst_submit("upload_attach", "Добавить"); ?>
     </form>
     <?php
 
@@ -98,9 +98,9 @@ function xcmst_show_attachments($page_prefix)
             </div>
             <div class="right-image-box">
                 <span style="padding-left: 5px;">Link: <tt>${prefix}/<?php echo $lst["file-name"]; ?></tt></span><br />
-                <form method="post">
-                    <input type="hidden" name="name" value="<?php echo $value; ?>" />
-                    <input type="submit" name="delete_attach" value="Удалить" />
+                <form method="post"><?php
+                    xcmst_hidden("name", $value);
+                    xcmst_submit("delete_attach", "Удалить"); ?>
                 </form>
             </div>
         </div>

@@ -56,7 +56,7 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
 
         pageText = u"Текст Только Для Авторизованных " + random_crap.randomCrap(6)
         pageText = self.fillAceEditorElement(pageText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         self.gotoCloseEditor()
         self.performLogout()

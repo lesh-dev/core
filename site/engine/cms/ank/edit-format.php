@@ -25,6 +25,7 @@ function xsm_bottom_fields($table_name, $object)
     }
 }
 
+// FIXME: replace with xcmst_hidden common control
 function xsm_draw_field_hidden($name, $value)
 {
     ?><input

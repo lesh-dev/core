@@ -29,7 +29,7 @@
         <div><span class="user-label">EMail</span><input
             <?php xcmst_input_attrs_from_user($user, 'email', false, "user@example.com"); ?> /></div>
 
-        <input type="submit" name='update_me' id="update_me" value="Обновить мои данные" />
+        <?php xcmst_submit("update_me", "Обновить мои данные"); ?>
     </form>
     <?php
     xcmst_draw_user_xsm($user);

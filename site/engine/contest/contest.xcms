@@ -45,8 +45,8 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
 
     if ($show_form)
     {?>
-        <form enctype="multipart/form-data" method="POST">
-            <input type="hidden" name="MAX_FILE_SIZE" value="15000000" /><?php
+        <form enctype="multipart/form-data" method="POST"><?php
+        xcmst_hidden("MAX_FILE_SIZE", "15000000");
 
         $btn_name = "ctx_add_or_edit_form_${table_name}_$fid";
         $cls = "table-condensed";
@@ -78,11 +78,8 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
         }
         echo "</table>\n";
         if ($operation == "edit")
-        {?>
-            <input type="submit" class="btn btn-primary"
-                name="<?php echo $btn_name; ?>"
-                id="<?php echo $btn_name; ?>-submit"
-                value="Добавить / Изменить" /><?php
+        {
+            xcmst_submit($btn_name, "Добавить / Изменить", "Внести изменения", "btn btn-primary");
         }
         echo "</form>";
     }
@@ -244,8 +241,8 @@ function ctx_show_overall_checking_progress()
             "Будут найдены все участники, в ФИО которых (в&nbsp;любом порядке) встречаются слова запроса, ".
             "без&nbsp;учёта регистра. Например, 'дан Мих' найдёт Даниила Михайловича, Михаила Данилевского ".
             "и Богдана Немихульского, но НЕ&nbsp;найдёт Мишу Данилкина (имена условны)"
-        ); ?>
-        <input type="submit" name="show-person" value="Показать" class="btn btn-primary"/>
+        );
+        xcmst_submit("show-person", "Показать", "Применить фильтр", "btn btn-primary"); ?>
     </form>
     <script type="text/javascript">
         //ctx_filter_form_autosubmit();

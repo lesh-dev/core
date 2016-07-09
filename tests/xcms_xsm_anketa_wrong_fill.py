@@ -18,7 +18,7 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
     """
 
     def trySubmit(self, reason=None):
-        self.clickElementById("submit-anketa-button")
+        self.clickElementById("submit_anketa-submit")
         if reason:
             self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage(), reason)
 

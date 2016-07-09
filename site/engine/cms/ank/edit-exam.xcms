@@ -3,13 +3,13 @@ require_once("${engine_dir}xsm/diff.php");
 require_once("${engine_dir}cms/ank/edit-format.php");
 require_once("${engine_dir}cms/ank/course_teacher.php");
 
-function xsm_edit_exam_operations($school_id, $student_person_id, $id, $place)
+function xsm_edit_exam_operations($school_id, $student_person_id, $id)
 {
     $is_new = ($id == XDB_NEW);
     $table_name = "exam";
     $ret_title = "Вернуться к просмотру участника";
     $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$student_person_id));
-    xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title);
+    xsm_edit_ops($table_name, $is_new, $redir, $ret_title);
 }
 
 /**

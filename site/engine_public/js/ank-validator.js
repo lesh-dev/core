@@ -106,7 +106,7 @@ $(document).ready(function() {
     $('#achievements-text').change(xsm_ank_on_change);
     $('#hobby-text').change(xsm_ank_on_change);
 
-    $('#submit-anketa-button').click(function() {
+    $('#submit_anketa-submit').click(function() {
         var aError = [];
         xsm_ank_check_name(aError, 'last_name', 'Фамилия');
         xsm_ank_check_name(aError, 'first_name', 'Имя');

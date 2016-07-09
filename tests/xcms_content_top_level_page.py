@@ -44,7 +44,7 @@ class XcmsContentTopLevelPage(xtest_common.XcmsTest):
 
         pageText = self.fillAceEditorElement(pageText)
         self.logAdd("Page text after edit: '" + pageText + "'")
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         self.gotoCloseEditor()
 
