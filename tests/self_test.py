@@ -14,7 +14,7 @@ class SelfTest(SeleniumTest):
         self.setAutoPhpErrorChecking(True)
         self.gotoRoot()
 
-        conf = XcmsTestConfig()
+        # conf = XcmsTestConfig()
 
         # TODO: somthing is outdated here
         # xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())

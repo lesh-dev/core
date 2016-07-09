@@ -22,7 +22,7 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
 
         inpLogin, inpEMail, inpPass, inpName = self.createNewUser(
             inpLogin, inpEMail, inpPass, inpName,
-            auxParams=["do_not_logout_admin", "manager_rights"]
+            aux_params=["do_not_logout_admin", "manager_rights"]
         )
 
         self.closeAdminPanel()

@@ -66,7 +66,7 @@ class XcmsContentPageOrder(xtest_common.XcmsTest):
             index1 = content.index(inpMenuTitle1)
             index2 = content.index(inpMenuTitle2)
             index3 = content.index(inpMenuTitle3)
-            if index3 < index1 and index1 < index2:
+            if index3 < index1 < index2:
                 pass
             else:
                 self.failTest("Page order does not match expected. ")

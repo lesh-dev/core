@@ -23,10 +23,14 @@ import errno
 import shutil
 
 from bawlib import isVoid, isList, isNumber, isEqual, getSingleOption, userSerialize, wrapIfLong
+from bawlib import configure_logger
 
 
-MAX_RETRIES = 4
-TIME_INC = 0.2
+configure_logger()
+
+MAX_RETRIES = 6
+MAX_RETRIES_NEGATIVE = 2
+TIME_INC = 0.05
 
 
 class TestError(RuntimeError):
@@ -79,15 +83,19 @@ def RunTest(test):
         return test.handleShutdown(exc)
     except NoSuchWindowException as exc:
         test.logAdd("Seems like browser window have been closed. ", "error")
+        logging.info("NoSuchWindowException: %s, %s", exc, traceback.format_exc())
         return 3
     except URLError as exc:
         test.logAdd("URL error occured. Seems like browser connection error occured (window has been closed, etc). ", "error")
+        logging.info("URLerror: %s, %s", exc, traceback.format_exc())
         return 3
     except HTTPException as exc:
         test.logAdd("HTTP error occured. Seems like browser connection error occured (window has been closed, etc). ", "error")
+        logging.info("HTTPException: %s, %s", exc, traceback.format_exc())
         return 3
     except KeyboardInterrupt as exc:
         test.logAdd("Keyboard interrupt received, stopping test suite. ")
+        logging.info("KeyboardInterrupt: %s, %s", exc, traceback.format_exc())
         return 3
     except Exception as exc:
         test.logAdd(u"Generic test exception: " + userSerialize(exc.message))
@@ -145,7 +153,7 @@ class SeleniumTest(object):
     m_logCheckStopWords = []
     m_old_firefox_driver = False
 
-    def __init__(self, baseUrl, params=[]):
+    def __init__(self, baseUrl, params=None):
         self.m_testName = self.__module__ + "." + self.__class__.__name__
         self.m_baseUrl = baseUrl or ""
         self.m_params = params or []
@@ -239,6 +247,7 @@ class SeleniumTest(object):
     def shutdown(self, exitCode=0):
         return exitCode
 
+    # noinspection PyUnusedLocal
     def handleShutdown(self, exc):
         return self.shutdown(0)
 
@@ -342,7 +351,7 @@ class SeleniumTest(object):
     def check404(self):
         if not self.m_doCheck404:
             return
-        if self.checkSourceTextPresent(self.m_textOnPage404):
+        if self.checkSourceTextPresent(self.m_textOnPage404, negative=True):
             raise PageNotFound(
                 "Requested URL '{}' leads to non-existing page (404). ".format(userSerialize(self.curUrl()))
             )
@@ -445,7 +454,8 @@ class SeleniumTest(object):
             self.failTest(exceptionMessage)
 
     def wait(self, seconds, comment=""):
-        self.addAction("wait", "Waiting for " + userSerialize(seconds) + " seconds. Comment: " + userSerialize(comment))
+        log_comment_text = "Comment: " + userSerialize(comment) if comment else ""
+        self.addAction("wait", "Waiting for " + userSerialize(seconds) + " seconds. " + log_comment_text)
         if seconds <= 3.0:
             time.sleep(seconds)
             return
@@ -798,7 +808,7 @@ class SeleniumTest(object):
     def isStopWord(self, text):
         return text in self.m_logCheckStopWords or text == self.m_textOnPage404
 
-    def checkTextPresent(self, xpath, text, option_list=None):
+    def checkTextPresent(self, xpath, text, option_list=None, negative=False):
         option_list = option_list or []
 
         self.checkEmptyParam(xpath, "checkTextPresent")
@@ -806,7 +816,8 @@ class SeleniumTest(object):
 
         count = 0
         wait_time = 0.0
-        while count < MAX_RETRIES:
+        max_retries = MAX_RETRIES if not negative else MAX_RETRIES_NEGATIVE
+        while count < max_retries:
             self.wait(wait_time, u"Checking for text '" + userSerialize(text) + u"'")
             count += 1
             wait_time += TIME_INC
@@ -814,7 +825,7 @@ class SeleniumTest(object):
                 is_found = self.check_text_present_once(xpath, text, option_list)
                 if is_found:
                     return True
-                logging.info("checkTextPresent(): expected text not found, retrying.")
+                logging.debug("checkTextPresent(): expected text not found, retrying.")
                 continue
             except InvalidSelectorException:
                 self.fatalTest("Invalid XPath expression in checkTextPresent: " + userSerialize(xpath) + ". ")
@@ -862,13 +873,14 @@ class SeleniumTest(object):
                 )
             return is_found
 
-    def checkSourceTextPresent(self, text, option_list=None):
+    def checkSourceTextPresent(self, text, option_list=None, negative=False):
         option_list = option_list or []
         self.checkEmptyParam(text, "checkSourceTextPresent")
 
         count = 0
         wait_time = 0.0
-        while count < MAX_RETRIES:
+        max_retries = MAX_RETRIES if not negative else MAX_RETRIES_NEGATIVE
+        while count < max_retries:
             self.wait(wait_time, u"Checking for source text '" + userSerialize(text) + u"'")
             count += 1
             wait_time += TIME_INC
@@ -937,7 +949,7 @@ class SeleniumTest(object):
             )
 
     def assertTextNotPresent(self, xpath, text, reason=""):
-        if self.checkTextPresent(xpath, text):
+        if self.checkTextPresent(xpath, text, negative=True):
             errText = (
                 "Forbidden text " + userSerialize(text) + " found on page " + userSerialize(self.curUrl()) +
                 ", element " + userSerialize(xpath) + ". " + self.displayReason(reason)
@@ -958,7 +970,7 @@ class SeleniumTest(object):
             )
 
     def assertSourceTextNotPresent(self, text, reason=""):
-        if self.checkSourceTextPresent(text):
+        if self.checkSourceTextPresent(text, negative=True):
             errText = "Forbidden text " + userSerialize(text) + " found on page " + userSerialize(self.curUrl()) + ". " + self.displayReason(reason)
             self.failTest(errText)
 

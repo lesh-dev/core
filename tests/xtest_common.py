@@ -9,7 +9,7 @@ from bawlib import checkSingleOption
 
 
 MAX_RETRIES = 4
-TIME_INC = 0.2
+TIME_INC = 0.05
 
 
 class XcmsBaseTest(selenium_test.SeleniumTest):
@@ -37,7 +37,8 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
             self.logAdd("We are on the AUTH page. Seems that page access was denied. ", "warning")
 
     def isAuthPage(self):
-        return self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"], option_list=["silent"])
+        stop_phrases = [u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"]
+        return self.checkSourceTextPresent(stop_phrases, option_list=["silent"], negative=True)
 
     def checkDocType(self):
         count = 0
@@ -213,13 +214,12 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
         self.clickElementById("auth-submit")
 
-        wrongAuth = self.checkSourceTextPresent([u"Пароль всё ещё неверный", "Wrong password"])
-        if wrongAuth:
+        wrong_auth = self.checkSourceTextPresent([u"Пароль всё ещё неверный", "Wrong password"], negative=True)
+        if wrong_auth:
             return False
 
         # now let's check that Cabinet link and Exit link are present. if not - it's a bug.
 
-        self.wait(2)
         self.assertUrlPresent(u"Выход", "Here should be logout link after successful authorization. ")
         self.assertUrlPresent(u"Личный кабинет", "Here should be Cabinet link after successful authorization. ")
 
@@ -285,10 +285,11 @@ class XcmsTest(XcmsTestWithConfig):
         self.assertNoInstallerPage()
         # xtest_common.setTestNotifications(self, self.m_conf.getNotifyEmail(), self.m_conf.getAdminLogin(), self.m_conf.getAdminPass())
 
-    def createNewUser(self, login, email, password, name, auxParams=[]):
+    def createNewUser(self, login, email, password, name, aux_params=None):
+        user_aux_params = aux_params or []
         self.logAdd("createNewUser( login: " + login + "', email: " + email + ", password: " + password + ", name: " + name + " )")
 
-        if "do_not_login_as_admin" not in auxParams:
+        if "do_not_login_as_admin" not in user_aux_params:
             self.performLoginAsAdmin()
             self.gotoAdminPanel()
 
@@ -296,9 +297,9 @@ class XcmsTest(XcmsTestWithConfig):
 
         self.gotoUrlByLinkText(["Create user", u"Создать пользователя"])
 
-        inpLogin = self.fillElementById("login-input", login)
-        self.logAdd("login = '" + inpLogin + "'")
-        if inpLogin == "":
+        inp_login = self.fillElementById("login-input", login)
+        self.logAdd("login = '" + inp_login + "'")
+        if inp_login == "":
             raise RuntimeError("Filled login value is empty!")
 
         inpEMail = self.fillElementById("email-input", email)
@@ -316,20 +317,20 @@ class XcmsTest(XcmsTestWithConfig):
         # self.clickElementById("notify_user-checkbox")
         # send form
 
-        if "manager_rights" in auxParams:
+        if "manager_rights" in user_aux_params:
             self.logAdd("Setting manager rights for user. ")
             # set manager access level
             self.clickElementById("group_ank-checkbox")
 
         self.clickElementByName("create_user")
 
-        if "do_not_validate" in auxParams:
+        if "do_not_validate" in user_aux_params:
             self.logAdd("not validating created user, just click create button and shut up. ")
-            return inpLogin, inpEMail, inpPass, inpName
+            return inp_login, inpEMail, inpPass, inpName
 
         self.logAdd("user created, going to user list again to refresh. ")
 
-        self.assertBodyTextPresent(u"Пользователь '" + inpLogin + u"' успешно создан")
+        self.assertBodyTextPresent(u"Пользователь '" + inp_login + u"' успешно создан")
 
         # refresh user list (re-navigate to user list)
         self.gotoUserList()
@@ -337,7 +338,7 @@ class XcmsTest(XcmsTestWithConfig):
         # enter user profile
         self.logAdd("entering user profile. ")
 
-        profileLink = inpLogin
+        profileLink = inp_login
         # TODO, SITE BUG: make two separate links
         self.gotoUrlByPartialLinkText(profileLink)
 
@@ -346,17 +347,17 @@ class XcmsTest(XcmsTestWithConfig):
 
         # temporary check method
         # test user login
-        self.assertTextPresent("//div[@class='user-ops']", inpLogin)
+        self.assertTextPresent("//div[@class='user-ops']", inp_login)
         # test user creator (root)
         self.assertTextPresent("//div[@class='user-ops']", self.m_conf.getAdminLogin())
         self.assertElementValueById("name-input", inpName)
         self.assertElementValueById("email-input", inpEMail)
 
         # logoff root
-        if "do_not_logout_admin" not in auxParams:
+        if "do_not_logout_admin" not in user_aux_params:
             self.performLogout()
 
-        return inpLogin, inpEMail, inpPass, inpName
+        return inp_login, inpEMail, inpPass, inpName
 
     def removePreviousUsersWithTestEmail(self, emailToDelete):
 

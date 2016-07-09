@@ -1,19 +1,28 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import logging
 import os
+
+
+def configure_logger():
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-8s %(message)s")
 
 # Bells-And-Whistles (tm) Python 2.x library
 # Contains non-categorized common crap code used in selenium tests.
 
+
 class BawError(RuntimeError):
     pass
+
 
 class CliParamError(BawError):
     pass
 
+
 def fileBaseName(fileName):
     return os.path.basename(fileName)
+
 
 def wrapIfLong(text):
     # maxLen in userSerialize + epsilon
@@ -21,8 +30,10 @@ def wrapIfLong(text):
         return "\n" + text
     return text
 
+
 def cutHttp(link):
     return link.replace('http://', '').replace('https://', '')
+
 
 def userSerialize(text, options=None):
     if not options:
@@ -44,23 +55,29 @@ def userSerialize(text, options=None):
             return "FALSE"
     return str(text)
 
+
 def isList(x):
     return type(x) == type(list())
+
 
 def isString(x):
     return type(x) == type("string") or type(x) == type(u"string")
 
+
 def isBool(x):
     return type(x) == type(True)
 
+
 def isNumber(x):
     return type(x) == type(0) or type(x) == type(long(0))
+
 
 def isEqual(x, y):
     if isString(x) and isString(y):
         return (x.strip() == y.strip())
     else:
         raise RuntimeError("Cannot compare anything except strings, sorry. Type of X is " + str(type(x)) + ", and type of Y is " + str(type(y)) + ".")
+
 
 def isVoid(x):
     if isList(x):
