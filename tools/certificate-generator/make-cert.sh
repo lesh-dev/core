@@ -14,4 +14,3 @@ function make_cert() {
 make_cert "xclean.local"
 make_cert "fizlesh.local"
 make_cert "lesh.local"
-make_cert "owncloud.lc"
