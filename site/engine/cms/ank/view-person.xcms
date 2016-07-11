@@ -162,13 +162,13 @@ function xsm_print_person_header($db, $person, $school_id)
 function xsm_print_person_schools($db, $person, $current_school_id)
 {
     $person_id = $person['person_id'];
-    //$school_count = XSM_SCHOOL_COUNT;
+    $school_count = 0;
+    $max_school_count = XSM_SCHOOL_COUNT;
     $query = "SELECT s.school_id, s.school_title, ps.member_person_id
         FROM school s
         LEFT JOIN person_school ps
         ON (s.school_id = ps.school_id) AND (ps.member_person_id = '$person_id')
         ORDER BY school_date_start DESC";
-    // LIMIT $school_count";
     $school_sel = $db->query($query);
     $active_ank = (XSM_SCHOOL_ANK_ID == $current_school_id) ? 'current' : '';
     ?>
@@ -181,7 +181,18 @@ function xsm_print_person_schools($db, $person, $current_school_id)
             </div>
         </td>
         <?php
+        $shown_schools = array();
+        $older_schools = array();
         while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
+        {
+            ++$school_count;
+            if ($school_count <= XSM_SCHOOL_COUNT)
+                $shown_schools[] = $school;
+            else
+                $older_schools[] = $school;
+        }
+
+        foreach ($shown_schools as $school)
         {
             $school_id = $school['school_id'];
             $title = xcms_get_key_or_enc($school, 'school_title');
@@ -189,8 +200,7 @@ function xsm_print_person_schools($db, $person, $current_school_id)
             $present = xu_not_empty(xcms_get_key_or($school, 'member_person_id'));
             ?>
             <td class="school-selection <?php echo $active; ?>">
-                <div>
-                    <?php
+                <div><?php
                     echo xsm_person_view_link($person_id, $school_id, $title);
                     if ($present)
                     {
@@ -199,12 +209,30 @@ function xsm_print_person_schools($db, $person, $current_school_id)
                     }
                     else
                         xsm_print_add_person_to_school($db, $school_id, $person);
-                    ?>
-                </div>
-            </td>
-            <?php
+                ?></div>
+            </td><?php
         }?>
+        <td class="school-selection" style="padding: 4px 8px">
+            <select name="view-school" id="view-school-selector" style="padding: 0px; margin: 0px;">
+            <?php
+            foreach ($older_schools as $school)
+            {
+                $school_id = $school['school_id'];
+                $title = xcms_get_key_or_enc($school, 'school_title');
+                //$active = ($school_id == $current_school_id) ? 'current' : '';
+                $selected = ($school_id == $current_school_id) ? 'selected="selected"' : '';
+                //$present = xu_not_empty(xcms_get_key_or($school, 'member_person_id'));
+                echo "<option $selected value=\"$school_id\">$title</option>\n";
+            }
+            ?></select>
+        </td>
     </tr></table>
+    <script>
+        $('#view-school-selector').change(function() {
+            var val = $('#view-school-selector').val();
+            window.location = <?php echo "\"/xsm/view-person&person_id=$person_id&school_id=\""; ?> + val;
+        });
+    </script>
     <?php
 }
 
