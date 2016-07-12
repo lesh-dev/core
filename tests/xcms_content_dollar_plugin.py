@@ -35,34 +35,32 @@ class XcmsContentDollarPlugin(xtest_common.XcmsTest):
         inpPageHeader = self.fillElementById("header-input", inpPageHeader)
         inpAlias = self.fillElementById("alias-input", inpAlias)
 
-        self.m_pageAlias = inpAlias
-
         defaultPageType = self.getOptionValueById("create-pagetype-selector")
 
         #if defaultPageType != "content":
             #self.failTest("Default selected page type is not 'content': " + defaultPageType)
 
+        self.logAdd("Submitting new page")
         self.clickElementById("create-page-submit")
 
-        self.m_menuTitle = inpMenuTitle
-        self.m_pageHeader = inpPageHeader
+        self.wait(1)
 
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle)
 
-        pluginParam = u'complete-bullshit"\\/&'
+        plugin_param = u'complete-bullshit"\\/&'
         crap1 = random_crap.randomCrap(3)
         crap2 = random_crap.randomCrap(3)
         
-        pageText = crap1 + " " + u'${phone:' + slashify(pluginParam) + '}' + " " + crap2
-        print "Generated page text: '" + pageText + "'"
+        page_text = crap1 + " " + u'${phone:' + slashify(plugin_param) + '}' + " " + crap2
+        print "Generated page text: '" + page_text + "'"
 
-        pageText = self.fillAceEditorElement(pageText)
-        print "After ins page text: '" + pageText + "'"
+        page_text = self.fillAceEditorElement(page_text)
+        print "After ins page text: '" + page_text + "'"
         self.clickElementById("commit-submit")
 
         self.gotoCloseEditor()
         
-        expectedText = u"{c1} {dp} {c2}".format(c1=crap1, dp=pluginParam, c2=crap2)
-        self.assertElementTextById("content-text", expectedText, "page text does not match expected text. ")
+        expected_text = u"{c1} {dp} {c2}".format(c1=crap1, dp=plugin_param, c2=crap2)
+        self.assertElementTextById("content-text", expected_text, "page text does not match expected text. ")
 
