@@ -92,11 +92,11 @@ function xsm_edit_person()
     </form>
     <script type="text/javascript">
     $(document).ready(function() {
-        xjs_set_depends_on('update-person-submit-top', 'last_name-input', null, 2);
-        xjs_set_depends_on('update-person-submit-top', 'first_name-input', null, 2);
+        xjs_set_depends_on('update-person-submit', 'last_name-input', null, 2);
+        xjs_set_depends_on('update-person-submit', 'first_name-input', null, 2);
 
-        xjs_set_depends_on('update-person-submit-bottom', 'last_name-input', null, 2);
-        xjs_set_depends_on('update-person-submit-bottom', 'first_name-input', null, 2);
+        xjs_set_depends_on('update-person-submit1', 'last_name-input', null, 2);
+        xjs_set_depends_on('update-person-submit1', 'first_name-input', null, 2);
     });
     </script>
     <?php

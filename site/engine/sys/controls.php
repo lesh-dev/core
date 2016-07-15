@@ -40,6 +40,30 @@ function xcms_get_key_for_checkbox($list, $key)
     return $bool_value ? XCMS_CHECKBOX_ENABLED : XCMS_CHECKBOX_DISABLED;
 }
 
+/**
+  * Assigns fresh and uniique control id
+  **/
+function xcms_add_control_id($id_template)
+{
+    global $XCMS_CONTROL_IDS;
+    if (!is_array($XCMS_CONTROL_IDS))
+        $XCMS_CONTROL_IDS = array();
+
+    for ($i = 0; $i < 256; ++$i)
+    {
+        $suffix = "";
+        if ($i > 0)
+            $suffix = "$i";
+        $id = $id_template.$suffix;
+        if (!array_key_exists($id, $XCMS_CONTROL_IDS))
+        {
+            $XCMS_CONTROL_IDS[$id] = true;
+            return $id;
+        }
+    }
+    xcms_log(XLOG_ERROR, "xcms_add_control_id error");
+    die("ERROR: xcms_add_control_id failed, please report to dev@fizlesh.ru");
+}
 
 /**
   * Render generic text control
@@ -81,7 +105,8 @@ function xcmst_control($name, $value, $placeholder, $class, $type = "input", $ti
         if ($autocapitalize != XCMS_AUTOCAPITALIZE_DEFAULT)
             $capitalize = " autocapitalize=\"$autocapitalize\" ";
 
-        echo "<input type=\"$type_attr\" name=\"$name\" id=\"$name-input\" $complete $capitalize ".
+        $id = xcms_add_control_id("$name-input");
+        echo "<input type=\"$type_attr\" name=\"$name\" id=\"$id\" $complete $capitalize ".
             "value=\"$value\" class=\"$class\" $attrs />";
     }
     elseif ($type == "checkbox")
@@ -97,7 +122,8 @@ function xcmst_control($name, $value, $placeholder, $class, $type = "input", $ti
     }
     elseif ($type == "submit")
     {
-        echo "<input type=\"submit\" name=\"$name\" id=\"$name-submit\" value=\"$value\" class=\"$class\" $attrs/>";
+        $id = xcms_add_control_id("$name-submit");
+        echo "<input type=\"submit\" name=\"$name\" id=\"$id\" value=\"$value\" class=\"$class\" $attrs/>";
     }
     elseif ($type == "hidden")
     {
