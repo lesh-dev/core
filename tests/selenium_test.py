@@ -98,7 +98,10 @@ def RunTest(test):
         logging.info("KeyboardInterrupt: %s, %s", exc, traceback.format_exc())
         return 3
     except Exception as exc:
-        test.logAdd(u"Generic test exception: " + userSerialize(exc.message) + ", Traceback: " + traceback.format_exc())
+        test.logAdd(
+            u"Generic test exception: " + userSerialize(str(exc)).decode('utf-8') +
+            u", traceback:\n" + traceback.format_exc().decode('utf-8')
+        )
         print traceback.format_exc()
         return test.handleException(exc)
 
