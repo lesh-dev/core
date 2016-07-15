@@ -41,7 +41,7 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
 
-        self.clickElementById("update-person-submit-top")
+        self.clickElementById("update-person-submit")
 
         self.gotoBackToPersonView()
 
@@ -62,7 +62,7 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
         inpSocial = "http://vk.com/vasya10"
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
 
-        self.clickElementById("update-person-submit-top")
+        self.clickElementById("update-person-submit")
         self.gotoBackToPersonView()
 
         avatarSrc = self.getImageSrcById("avatar")
@@ -76,7 +76,7 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
         inpSocial = "http://vk.com/id777314"
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
 
-        self.clickElementById("update-person-submit-top")
+        self.clickElementById("update-person-submit")
         self.gotoBackToPersonView()
 
         avatarSrc = self.getImageSrcById("avatar")
@@ -90,7 +90,7 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
         inpSocial = ""
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
 
-        self.clickElementById("update-person-submit-top")
+        self.clickElementById("update-person-submit")
         self.gotoBackToPersonView()
 
         avatarSrc = self.getImageSrcById("avatar")
@@ -104,7 +104,7 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
         inpSocial = "http://vk.com/id12345678901234567890"
         inpSocial = self.fillElementById("social_profile-input", inpSocial)
 
-        self.clickElementById("update-person-submit-top")
+        self.clickElementById("update-person-submit")
         self.gotoBackToPersonView()
 
         avatarSrc = self.getImageSrcById("avatar")

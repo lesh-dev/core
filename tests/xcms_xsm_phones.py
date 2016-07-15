@@ -44,7 +44,7 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
         inpCellPhones = list(map(self.phoneFix, inpCellPhones))
         inpPhones = list(map(self.phoneFix, inpPhones))
 
-        self.clickElementById("update-person-submit-top")
+        self.clickElementById("update-person-submit")
 
         self.gotoBackToPersonView()
 
@@ -74,7 +74,7 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
         inpPhone = self.fillElementById("phone-input", inpPhone)
         inpCellPhone = "89261112233"
         inpCellPhone = self.fillElementById("cellular-input", inpCellPhone)
-        self.clickElementById("update-person-submit-top")
+        self.clickElementById("update-person-submit")
         self.gotoBackToPersonView()
 
         personCellPhoneEleId = "person{0}-cellular-{1}".format(personId, 0)

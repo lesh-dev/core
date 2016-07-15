@@ -81,7 +81,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         # set student flag
         self.clickElementById("is_student-checkbox")
 
-        self.clickElementById("update-person-submit-top")
+        self.clickElementById("update-person-submit")
 
         self.gotoBackToPersonView()
 

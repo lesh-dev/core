@@ -129,7 +129,7 @@ class XcmsXsmAnketaEdit(xtest_common.XcmsTest):
         inpSkype = random_crap.randomText(8)
         inpSkype = self.fillElementById("skype-input", inpSkype)
 
-        self.clickElementById("update-person-submit-top")
+        self.clickElementById("update-person-submit")
 
         self.assertBodyTextPresent(u"Участник успешно сохранён")
         self.gotoBackToAnketaView()

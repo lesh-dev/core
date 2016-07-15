@@ -44,7 +44,7 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
         if inpEMail != inpEMailXsm:
             self.failTest("Cannot create user with identical email. ")
 
-        self.clickElementById("update-person-submit-top")
+        self.clickElementById("update-person-submit")
 
         self.gotoRoot()
         self.performLogoutFromSite()

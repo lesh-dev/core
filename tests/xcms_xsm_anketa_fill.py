@@ -191,7 +191,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
 
         self.setOptionValueByIdAndValue("anketa_status-selector", "progress")
 
-        self.clickElementById("update-person-submit-top")
+        self.clickElementById("update-person-submit")
 
         self.assertBodyTextPresent(u"Участник успешно сохранён")
         self.gotoBackToAnketaView()
