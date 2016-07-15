@@ -35,8 +35,7 @@ function xsm_draw_list_link($person_id, $school_id)
         $aux_param = xcms_url(array('school_id'=>$school_id));
     $anchor = "#person$person_id";
     $url = $view.$aux_param.$anchor;
-    ?><a class="person-to-list" href="<?php echo $url; ?>">К&nbsp;списку&nbsp;<?php
-        echo $target; ?></a><?php
+    xcmst_link($url, "view_list_p${person_id}_s${school_id}", "К&nbsp;списку&nbsp;$target", "person-to-list");
 }
 
 function xsm_print_person_header($db, $person, $school_id)
@@ -428,8 +427,9 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
     $need_href = "edit-person_school".
         xcms_url(array('person_school_id'=>$person_school['person_school_id']));
     ?>
-    <h2>Зачёты на <a href="<?php echo $school_url; ?>"><?php echo $school_title; ?></a>. Нужно сдать <a href="<?php echo $need_href; ?>"><?php
-            echo $need.'&nbsp;'.xcms_plural($need, 'зачёт'); ?></a>, сдано <?php echo $exams_passed; ?></h2>
+    <h2>Зачёты на <?php xcmst_link($school_url, "exams_link", $school_title); ?>.
+        Нужно сдать <?php xcmst_link($need_href, "exams_need_link", $need.'&nbsp;'.xcms_plural($need, 'зачёт')); ?>,
+        сдано <?php echo $exams_passed; ?></h2>
     <?php
         xsm_view_operations('exam', 'зачёт', $exam_aux_param);
     ?>
