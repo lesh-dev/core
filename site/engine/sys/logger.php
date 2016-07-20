@@ -26,6 +26,8 @@
         XLOG_DEBUG => 'DEBUG',
     );
 
+    require_once("${engine_dir}sys/file.php");
+
     /**
       * Get a log file name
       * @return Log file name
