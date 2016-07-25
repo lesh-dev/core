@@ -1,5 +1,7 @@
 <?php
 
+require_once("${engine_dir}sys/template.php");
+
 function xcms_console_create_user($params)
 {
     $su = xcms_user();
@@ -65,5 +67,3 @@ function xcms_user_operation_notify($template_name, $email, $login, $password, $
 
     return $notify_result ? null : "Не удалось послать оповещение пользователю. ";
 }
-
-?>

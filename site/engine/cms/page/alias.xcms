@@ -1,4 +1,7 @@
 <?php
+
+require_once("${engine_dir}sys/template.php");
+
 function xcmst_check_alias($info)
 {
     global $pageid;

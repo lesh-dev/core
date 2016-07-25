@@ -1,6 +1,7 @@
 <?php
 // Send notifications on NEW anketas
 
+require_once("${engine_dir}sys/template.php");
 require_once("${engine_dir}cms/ank/fio.php");
 
 function xsm_ank_reminder()

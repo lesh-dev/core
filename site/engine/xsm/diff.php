@@ -1,6 +1,7 @@
 <?php
 
-include_once("$engine_dir/sys/diff/diff-utils.php");
+require_once("${engine_dir}sys/diff/diff-utils.php");
+require_once("${engine_dir}sys/template.php");
 
 /**
   * Нормализация и прочистка массивов перед сравнением

@@ -1,5 +1,6 @@
 <?php
 require_once("${engine_dir}sys/db.php");
+require_once("${engine_dir}sys/template.php");
 require_once("${engine_dir}sys/registry.php");
 require_once("${engine_dir}contest/scheme.php");
 

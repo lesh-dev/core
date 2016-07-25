@@ -1,4 +1,5 @@
 <?php
+require_once("${engine_dir}sys/template.php");
 require_once("${engine_dir}cms/ank/xsm.php");
 require_once("${engine_dir}cms/ank/pss.php");
 require_once("${engine_dir}cms/ank/field-desc.php");

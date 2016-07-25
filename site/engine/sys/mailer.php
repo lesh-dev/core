@@ -1,9 +1,10 @@
 <?php
-    include_once("$engine_dir/sys/phpmailer/class.phpmailer.php");
-    include_once("$engine_dir/sys/file.php");
-    include_once("$engine_dir/sys/util.php");
-    include_once("$engine_dir/sys/tag.php");
-    include_once("$engine_dir/sys/db.php");
+    require_once("${engine_dir}sys/phpmailer/class.phpmailer.php");
+    require_once("${engine_dir}sys/template.php");
+    require_once("${engine_dir}sys/file.php");
+    require_once("${engine_dir}sys/util.php");
+    require_once("${engine_dir}sys/tag.php");
+    require_once("${engine_dir}sys/db.php");
 
     function xcms_get_mailer($addr_from, $name_from)
     {
@@ -234,4 +235,3 @@
 
         return true;
     }
-?>
