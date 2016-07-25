@@ -27,6 +27,7 @@
     );
 
     require_once("${engine_dir}sys/file.php");
+    require_once("${engine_dir}sys/util.php");
 
     /**
       * Get a log file name
