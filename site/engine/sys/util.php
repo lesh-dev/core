@@ -1,7 +1,6 @@
 <?php
 
 require_once("${engine_dir}sys/string.php");
-require_once("${engine_dir}sys/tag.php");
 require_once("${engine_dir}sys/file.php");
 
 /**
