@@ -69,7 +69,8 @@ function xsm_ext_href($url_prefix, $args_list)
   **/
 function _xcms_filter_passwd($passwd)
 {
-    $passwd = preg_replace("/[^A-Za-z0-9OoI]/", "", $passwd);
+    $passwd = preg_replace("/[^A-Za-z0-9]/", "", $passwd);
+    $passwd = preg_replace("/[OoIi1]/", "", $passwd);
     return substr($passwd, 0, 12);
 }
 
@@ -188,9 +189,19 @@ function xcms_util_unit_test()
     $meta_site_url = "http://test.fizlesh.ru";
     xut_equal(xcms_hostname(), "test.fizlesh.ru", "xcms_hostname does not work");
 
-    $passwd = xcms_mkpasswd();
-    xut_equal(xu_len($passwd), 12, "Password is not 12-char");
-    xut_check(strstr($passwd, 'O') === false, "Password contains bad chars");
+    for ($i = 0; $i < 100; ++$i)
+    {
+        $passwd = xcms_mkpasswd();
+        xut_equal(xu_len($passwd), 12, "Password '$passwd' is not 12-char");
+        xut_check(
+            strstr($passwd, 'O') === false &&
+            strstr($passwd, 'o') === false &&
+            strstr($passwd, '1') === false &&
+            strstr($passwd, 'I') === false &&
+            strstr($passwd, 'i') === false,
+            "Password '$passwd' contains bad chars."
+        );
+    }
 
     xut_end();
 }
