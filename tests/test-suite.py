@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 import logging
-from selenium_test import RunTest, TestShutdown, decode_run_result
+from selenium_test import RunTest, TestShutdown, BrowserHolder, decode_run_result
 import test_set_gen
 from test_set_gen import TestInfo
 import sys
@@ -10,6 +10,8 @@ import sys
 from bawlib import getOption, getSingleOption, CliParamError, fileBaseName
 from bawlib import configure_logger
 
+# TODO: remove
+import auto_test_set
 
 sys.path.append(".")
 
@@ -41,7 +43,6 @@ ALL OPTIONS:
     -b, --break            Break test suite on errors
 
 TEST OPTIONS could be test-dependent. Commonly supported options are:
-    -p, --preserve         Leave browser window after test finish/fail
     -c, --chrome           Use Google Chrome browser instead of Firefox
     -d, --doc              Display test documentation
 """.format(script=fileBaseName(prog))
@@ -113,8 +114,8 @@ def main():
         if breakOnErrors:
             print "We'll break test suite on any test fail/fatal error. "
 
-        testArgs = [x for x in args if x.startswith("-")]
-        restArgs = [x for x in args if not x.startswith("-")]
+        test_args = [x for x in args if x.startswith("-")]
+        rest_args = [x for x in args if not x.startswith("-")]
 
     except CliParamError as exc:
         print "Option syntax error: ", exc
@@ -130,51 +131,54 @@ def main():
     if specTest:
         print "We are going to run just one test named like '" + specTest + "'. "
 
-    baseUrl = None
-    if restArgs:
-        baseUrl = restArgs.pop(0)
+    browser_holder = BrowserHolder()
 
-    if restArgs:
-        print "Error: trailing parameters detected: ", restArgs
+    base_url = None
+    if rest_args:
+        base_url = rest_args.pop(0)
+
+    if rest_args:
+        print "Error: trailing parameters detected: ", rest_args
         showHelp()
         sys.exit(1)
 
-    setModuleName = "auto_test_set"
+    tests_module_name = "auto_test_set"
 
     if testSet:
-        setModuleName = testSet.replace(".py", "")
+        tests_module_name = testSet.replace(".py", "")
 
     try:
-        testStats = {}
-        testDetailedStats = {}
+        test_stats = {}
+        test_detailed_stats = {}
 
-        testSetModule = __import__(setModuleName, [])
+        test_set_module = __import__(tests_module_name, [])
 
-        if not testSetModule.getTests:
+        if not test_set_module.get_tests:
             raise TestSuiteError("There is no 'getTests' function defined in specified test set. ")
 
-        tests = testSetModule.getTests(baseUrl, testArgs)
+        #  tests = auto_test_set.get_tests(base_url=base_url, browser_holder=browser_holder, params=testArgs)
+        tests = test_set_module.get_tests(base_url=base_url, browser_holder=browser_holder, params=test_args)
 
         # save installer test
-        installerTest = None
+        installer_test = None
         if tests:
-            installerTest = tests.pop(0)
+            installer_test = tests.pop(0)
 
-        failedTests = []
+        failed_tests = []
 
         tests = [x for x in tests if test_match_filter(*x, testFilter=specTest)]
         if specTest and not tests:
             raise TestSuiteError("Specified test was not found in test suite. ")
 
         if doInstallerTest:
-            tests.insert(0, installerTest)
+            tests.insert(0, installer_test)
 
         # init detailed stats
         for (_file_name, test) in tests:
-            testDetailedStats[test.getName()] = None
+            test_detailed_stats[test.getName()] = None
 
-        testsDone = 0
-        testsNumber = len(tests)
+        tests_done = 0
+        tests_number = len(tests)
 
         while tests:
             file_name, test = tests.pop(0)
@@ -186,24 +190,24 @@ def main():
                 print test.getDoc()
                 print
             else:
-                if not baseUrl:
+                if not base_url:
                     raise TestSuiteError("Test site URL not specified, cannot continue. ")
 
-                print "Running test {0} on site {1}".format(test.getName(), baseUrl)
+                print "Running test {0} on site {1}".format(test.getName(), base_url)
                 print test.getDoc()
                 result = RunTest(test)
                 if result != 0:
-                    failedTests.append((file_name, test))
+                    failed_tests.append((file_name, test))
 
-                if result not in testStats:  # add new list
-                    testStats[result] = [test.getName()]
+                if result not in test_stats:  # add new list
+                    test_stats[result] = [test.getName()]
                 else:
-                    testStats[result].append(test.getName())
+                    test_stats[result].append(test.getName())
 
-                testDetailedStats[test.getName()] = result
+                test_detailed_stats[test.getName()] = result
 
-                testsDone += 1
-                print "PROGRESS: Done {done} of {total} tests".format(done=testsDone, total=testsNumber)
+                tests_done += 1
+                print "PROGRESS: Done {done} of {total} tests".format(done=tests_done, total=tests_number)
 
                 if result == 3:
                     print "User interrupt, stopping test suite."
@@ -220,16 +224,16 @@ def main():
         # fix #840: add rest of tests to failed, at the end of list.
         while tests:
             file_name, test = tests.pop(0)
-            failedTests.append((file_name, test))
+            failed_tests.append((file_name, test))
 
-        print_stats(testStats, testDetailedStats)
-        generate_failed_tests_suite(failedTests)
+        print_stats(test_stats, test_detailed_stats)
+        generate_failed_tests_suite(failed_tests)
 
     except TestShutdown as exc:
         logging.debug("Got test shutdown: %s", exc)
         pass
     except ImportError as exc:
-        print "Failed to load test set '" + setModuleName + "' as Python module. "
+        print "Failed to load test set '" + tests_module_name + "' as Python module. "
         print "Details: "
         print exc
     except TestSuiteError as exc:
