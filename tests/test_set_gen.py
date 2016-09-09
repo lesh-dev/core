@@ -42,7 +42,7 @@ def get_func_code(imports, test_list):
     # respect pep8 code style - add 2 empty lines
     result += ["", ""]
 
-    result.append('def getTests(baseUrl, args):')
+    result.append('def get_tests(**kwargs):')
     result.append(tab + 'return [')
     for testInfo in sorted(test_list):
         result.append(tab * 2 + gen_one_test_line(testInfo))
@@ -55,9 +55,9 @@ def gen_one_test_line(test_info):
     :type test_info: TestInfo
     :rtype: str
     """
-    return '("{}", {}.{}(baseUrl, args)),'.format(test_info.file_name,
-                                                  test_info.module_name,
-                                                  test_info.class_name)
+    return '("{}", {}.{}(**kwargs)),'.format(test_info.file_name,
+                                             test_info.module_name,
+                                             test_info.class_name)
 
 
 def find_tests(directory='.', file_name_prefix="xcms_", class_name_prefix="Xcms"):

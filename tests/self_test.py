@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-from xtest_config import XcmsTestConfig
 from selenium_test import SeleniumTest
 
 

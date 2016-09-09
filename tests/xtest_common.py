@@ -21,9 +21,6 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         super(XcmsBaseTest, self).init()
         self.set404Text(u"Нет такой страницы")
 
-        if not checkSingleOption(["--no-maximize"], self.m_params):
-            self.maximizeWindow()
-
     def checkPageErrors(self):
         super(XcmsBaseTest, self).checkPageErrors()
         source = self.getPageSource()
