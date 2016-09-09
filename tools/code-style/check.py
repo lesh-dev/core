@@ -1,9 +1,22 @@
 #!/usr/bin/python
 
+"""
+Stupid code style checker.
+Author: Mikhail Veltishchev <dichlofos-mv@yandex.ru>
+
+Please do not forget to sync changes in `lesh` and `dmvn` style checkers:
+* https://github.com/lesh-dev/core/tools/code-style
+* https://bitbucket.org/dmvn-corp/dmvn.mexmat.net/tools/code_style
+"""
+
 import sys
 import re
 
-PHP_FILES = ['php', 'code', 'xcms']
+PHP_FILES = [
+    'php',
+    'code',
+    'xcms',
+]
 
 
 def print_bad_context(lines, bad_lines):
@@ -43,6 +56,13 @@ def remove_strings(line):
 def remove_js_regexps(line):
     # remove double quotes
     line = re.sub(r'/[^/]+/\.test\(', '', line)
+    return line
+
+
+# removes commas with HTML tags after them
+def remove_commas_in_html(line):
+    # remove cases like 'some words,<br/>'
+    line = re.sub(r',<', '', line)
     return line
 
 
@@ -116,6 +136,7 @@ def check_code_style(lines, file_type):
         line_cleanup = remove_strings(line)
         line_cleanup = remove_js_regexps(line_cleanup)
         line_cleanup = remove_file_expansions(line_cleanup)
+        line_cleanup = remove_commas_in_html(line_cleanup)
         line_cleanup = re.sub(r',$', '', line_cleanup)
         sac = re.search(r',[^ ]', line_cleanup)
         if sac:
