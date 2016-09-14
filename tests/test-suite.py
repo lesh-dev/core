@@ -34,13 +34,14 @@ Examples:
     {script} -t xcms_xsm_anketa_fill.py test.fizlesh.ru
 
 ALL OPTIONS:
-    -h, --help             Display this help
-    -i, --installer        Run installer test prior to all rest suite
-    -l, --list             List all tests in test set
-    -f, --full-list        List all tests in test set with descriptions
-    -s, --set <set>        Specify test set to run (instead of default auto_test_set.py)
-    -t, --test <test>      Run specific test instead of all suite
-    -b, --break            Break test suite on errors
+    -h, --help                Display this help
+    -i, --installer           Run installer test prior to all rest suite
+    -l, --list                List all tests in test set
+    -f, --full-list           List all tests in test set with descriptions
+    -s, --set <set>           Specify test set to run (instead of default auto_test_set.py)
+    -t, --test <test>         Run specific test instead of all suite
+    -b, --break               Break test suite on errors
+    -p, --profile-path <path> Use given browser profile path (firefox only)
 
 TEST OPTIONS could be test-dependent. Commonly supported options are:
     -c, --chrome           Use Google Chrome browser instead of Firefox
@@ -106,6 +107,7 @@ def main():
             print "We'll perform installer test first. "
 
         specTest, args = getOption(["-t", "--test"], args)
+        profile_path, args = getOption(["-p", "--profile-path"], args)
         doShowHelp, args = getSingleOption(["-h", "--help"], args)
         testSet, args = getOption(["-s", "--set"], args)
         doList, args = getSingleOption(["-l", "--list"], args)
@@ -131,7 +133,7 @@ def main():
     if specTest:
         print "We are going to run just one test named like '" + specTest + "'. "
 
-    browser_holder = BrowserHolder()
+    browser_holder = BrowserHolder(profile_path=profile_path)
 
     base_url = None
     if rest_args:
