@@ -68,21 +68,29 @@ def remove_commas_in_html(line):
 
 # removes bash arrays file{a,bc}
 def remove_file_expansions(line):
-    line = re.sub(r'\{[\$a-zA-Z0-9._,-]*?\}', '', line)
+    line = re.sub(r'\{[$a-zA-Z0-9._,-]*?\}', '', line)
     return line
+
+
+class BadLines(object):
+    def __init__(self):
+        self.bad_lines = dict()
+
+    def add(self, message, index):
+        if index not in self.bad_lines:
+            self.bad_lines[index] = []
+        self.bad_lines[index].append(message)
+
+    def lines(self):
+        return self.bad_lines
 
 
 def check_code_style(lines, file_type):
     line_count = len(lines)
-    bad_lines = dict()
+    bad_lines = BadLines()
 
-    def add_bad_line(bad_lines, message, index):
-        if index not in bad_lines:
-            bad_lines[index] = []
-        bad_lines[index].append(message)
-
-    for i in range(line_count):
-        line = lines[i]
+    for index in range(line_count):
+        line = lines[index]
 
         if not len(line) or line == "\n":
             continue
@@ -93,7 +101,7 @@ def check_code_style(lines, file_type):
             lem = re.match('^[^\x0A\x0D]+$', line)
             # okay, last line may contain no CR-LF chars
             if not lem:
-                add_bad_line(bad_lines, "UNIX-style line endings only allowed", i)
+                bad_lines.add("UNIX-style line endings only allowed", index)
 
         # spaces count check
         sm = re.search('^[ ]+', line)
@@ -105,19 +113,19 @@ def check_code_style(lines, file_type):
                     # okay, it seems like a Doxygen comment (TODO: add entrance/leave) check)
                     pass
                 else:
-                    add_bad_line(bad_lines, "Invalid spaces count: %d" % len(spaces), i)
+                    bad_lines.add("Invalid spaces count: {}".format(len(spaces)), index)
 
         # tab check
         tm = re.search('\t', line)
         if tm:
-            add_bad_line(bad_lines, "No tabs allowed", i)
+            bad_lines.add("No tabs allowed", index)
 
         # shorttag check
         stm = re.search('<[?][^px]', line)
         if not stm:
             stm = re.search('<[?]$', line)
         if stm:
-            add_bad_line(bad_lines, "No PHP shorttags allowed", i)
+            bad_lines.add("No PHP shorttags allowed", index)
 
         # if+( ugly style check
         itm = re.search(' ?if\(', line)
@@ -130,7 +138,7 @@ def check_code_style(lines, file_type):
         if not itm:
             itm = re.search(' ?while\(', line)
         if itm:
-            add_bad_line(bad_lines, "if/elseif/for/foreach/while clause should be separated from condition braces", i)
+            bad_lines.add("if/elseif/for/foreach/while clause should be separated from condition braces", index)
 
         # missing spaces after commas
         line_cleanup = remove_strings(line)
@@ -140,25 +148,22 @@ def check_code_style(lines, file_type):
         line_cleanup = re.sub(r',$', '', line_cleanup)
         sac = re.search(r',[^ ]', line_cleanup)
         if sac:
-            add_bad_line(bad_lines, "Commas should contain spaces after them", i)
+            bad_lines.add("Commas should contain spaces after them", index)
 
         # trailing spaces check
         ts = re.search('[^ ]+[ ]+$', line)
         if ts:
-            add_bad_line(bad_lines, "No trailing spaces allowed", i)
+            bad_lines.add("No trailing spaces allowed", index)
 
         # forbidden PHP operators
         if file_type in PHP_FILES:
             empty_op = re.search('[^a-zA-Z_]empty\(', line)
             if empty_op:
-                add_bad_line(
-                    bad_lines,
-                    "Operator 'empty' is forbidden for " + str(PHP_FILES) + " files",
-                    i)
+                bad_lines.add("Operator 'empty' is forbidden for " + str(PHP_FILES) + " files", index)
 
-    print_bad_context(lines, bad_lines)
+    print_bad_context(lines, bad_lines.lines())
     # return 1 if there some errors
-    if len(bad_lines):
+    if len(bad_lines.lines()):
         return 1
     return 0
 
