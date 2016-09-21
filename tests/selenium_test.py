@@ -143,9 +143,11 @@ def get_value(ele):
 
 
 class BrowserHolder(object):
-    def __init__(self):
+
+    def __init__(self, profile_path=None):
         self.driver = None
         self.already_initialized = False
+        self.profile_path = profile_path
 
     # lazy init
     def init(self, use_chrome=False):
@@ -159,7 +161,7 @@ class BrowserHolder(object):
             if use_chrome:
                 self.driver = BrowserHolder.chrome_driver_instance()
             else:
-                self.driver = BrowserHolder.firefox_driver_instance()
+                self.driver = BrowserHolder.firefox_driver_instance(self.profile_path)
             self.already_initialized = True
 
     @staticmethod
@@ -174,14 +176,19 @@ class BrowserHolder(object):
         )
 
     @staticmethod
-    def firefox_driver_instance():
+    def firefox_driver_instance(profile_path):
         logging.info("Using Firefox")
-        profile_dir = "./test_profile"
-        logging.info("Re-creating profile directory %s", profile_dir)
-        shutil.rmtree(profile_dir, ignore_errors=True)
-        os.mkdir(profile_dir)
+
+        if profile_path is None:
+            profile_path = "./test_profile"
+            logging.info("Re-creating profile directory %s", profile_path)
+            shutil.rmtree(profile_path, ignore_errors=True)
+            os.mkdir(profile_path)
+        else:
+            logging.info("Using existing profile directory %s", profile_path)
+
         logging.info("Creating webdriver instance")
-        firefox_profile = webdriver.FirefoxProfile(profile_dir)
+        firefox_profile = webdriver.FirefoxProfile(profile_path)
         firefox_profile.set_preference("security.ssl.enable_ocsp_stapling", False)
         firefox_profile.set_preference("security.ssl.enable_ocsp_must_staple", False)
         firefox_profile.set_preference("security.OCSP.enabled", 0)
@@ -192,8 +199,11 @@ class BrowserHolder(object):
         caps = DesiredCapabilities.FIREFOX
         caps["marionette"] = True
         caps["binary"] = "/usr/bin/firefox"
-        return webdriver.Firefox(executable_path="/usr/bin/geckodriver",
-                                 firefox_profile=firefox_profile, capabilities=caps)
+        return webdriver.Firefox(
+            executable_path="/usr/bin/geckodriver",
+            firefox_profile=firefox_profile,
+            capabilities=caps,
+        )
 
 
 class SeleniumTest(object):
@@ -210,8 +220,8 @@ class SeleniumTest(object):
         :type params: list | None
         """
         assert isinstance(base_url, str), "base_url should has type 'str'"
-        assert isinstance(browser_holder, BrowserHolder), "browser_holder should has type 'BrowserHolder'"
-        assert params is None or isinstance(params, list), "browser_holder should has type 'BrowserHolder'"
+        assert isinstance(browser_holder, BrowserHolder), "browser_holder should have type 'BrowserHolder'"
+        assert params is None or isinstance(params, list), "params should be 'list' or None"
 
         self.check_errors = True
         self.log_started = False
