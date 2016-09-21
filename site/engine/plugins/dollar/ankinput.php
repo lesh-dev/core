@@ -13,15 +13,15 @@ $ank_ele_req = $_4;
 $ank_ele_class = $_5;
 if ($ank_ele_req == "req")
 {
-     $ank_ele_req = "<span class=\"ankAst Req\">*</span>";
+    $ank_ele_req = "<span class=\"ankAst Req\">*</span>";
 }
 elseif ($ank_ele_req == "rec")
 {
-     $ank_ele_req = "<span class=\"ankAst Rec\">*</span>";
+    $ank_ele_req = "<span class=\"ankAst Rec\">*</span>";
 }
 elseif ($ank_ele_req == "gr")
 {
-     $ank_ele_req = "<span class=\"ankAst Gr\">*</span>";
+    $ank_ele_req = "<span class=\"ankAst Gr\">*</span>";
 }
 elseif ($ank_ele_req == "opt")
 {
