@@ -73,10 +73,10 @@ function xsm_print_courses_selected_school(
 
     $course_aux_param = $pers
         ? xcms_url(array(
-            'course_teacher_id'=>$course_teacher_id,
-            'school_id'=>$school_id))
+            'course_teacher_id' => $course_teacher_id,
+            'school_id' => $school_id))
         : xcms_url(array(
-            'school_id'=>$school_id));
+            'school_id' => $school_id));
 
     if (!$simple_view)
     {
@@ -164,7 +164,7 @@ function xsm_print_courses_selected_school(
         // FIXME:PERF 3*N SELECT-ов
         $exam_pass_count = xdb_count($db, "SELECT COUNT(*) AS cnt FROM exam WHERE (course_id = '$course_id') AND (exam_status = 'passed')");
         $exam_total_count = xdb_count($db, "SELECT COUNT(*) AS cnt FROM exam WHERE (course_id = '$course_id')");
-        $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
+        $course_url = "view-course".xcms_url(array('course_id' => $course_id));
 
         if (!$simple_view)
         {?>

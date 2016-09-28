@@ -66,6 +66,18 @@ def remove_commas_in_html(line):
     return line
 
 
+def remove_html_attributes(line):
+    line = re.sub(r' (class|href|width)="', ' \\1"', line)
+    return line
+
+
+# convert all possible operators to one form
+def convert_operators(line):
+    line = line.replace('===', '=')
+    line = line.replace('==', '=')
+    return line
+
+
 # removes bash arrays file{a,bc}
 def remove_file_expansions(line):
     line = re.sub(r'\{[$a-zA-Z0-9._,-]*?\}', '', line)
@@ -140,15 +152,23 @@ def check_code_style(lines, file_type):
         if itm:
             bad_lines.add("if/elseif/for/foreach/while clause should be separated from condition braces", index)
 
-        # missing spaces after commas
-        line_cleanup = remove_strings(line)
+        line_cleanup = line
+        line_cleanup = remove_html_attributes(line_cleanup)
+        line_cleanup = remove_strings(line_cleanup)
         line_cleanup = remove_js_regexps(line_cleanup)
         line_cleanup = remove_file_expansions(line_cleanup)
         line_cleanup = remove_commas_in_html(line_cleanup)
+        line_cleanup = convert_operators(line_cleanup)
         line_cleanup = re.sub(r',$', '', line_cleanup)
+
+        # missing spaces after commas
         sac = re.search(r',[^ ]', line_cleanup)
         if sac:
             bad_lines.add("Commas should contain spaces after them", index)
+
+        nsbe = re.search(r'([^!. ]=|=[^ >]|=>[^ ])', line_cleanup)
+        if nsbe:
+            bad_lines.add("Assignment/comparison/key-value (=>) operators should be surrounded with spaces", index)
 
         # trailing spaces check
         ts = re.search('[^ ]+[ ]+$', line)
