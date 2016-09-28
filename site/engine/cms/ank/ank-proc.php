@@ -175,8 +175,8 @@ function xsm_merge_persons($person_dst, $person_src)
     }
 
     return array(
-        "person"=>$person_dst,
-        "state"=>$merge_state,
+        "person" => $person_dst,
+        "state" => $merge_state,
     );
 }
 
@@ -185,7 +185,7 @@ function xsm_compose_anketa_table($person)
     $fields_desc = xsm_get_fields("person");
     $html_content = ""; // @@TABLE-CONTENT@
     $row_template = xcms_get_html_template("anketa_mail_one_row");
-    foreach ($person as $key=>$value)
+    foreach ($person as $key => $value)
     {
         $key_title = $key;
         if (array_key_exists($key, $fields_desc))
@@ -209,7 +209,7 @@ function xsm_compose_anketa_mail_msg($person, $html_content)
 
     $full_name_enc = xsm_fio_enc($person);
     $table_title = 'Анкета: <a'.
-        xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
+        xsm_ext_href('view-person', array('person_id' => $person_id)).'>'.
         $full_name_enc."</a> ($hr_timestamp)";
     $mail_msg = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg);
     $mail_msg = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg);
@@ -297,14 +297,14 @@ function xsm_ank_proc_unit_test()
 
     // test #885
     $new_person = array(
-        "person_id"=>1,
-        "phone"=>"84951659121",
-        "cellular"=>"+79161686186",
+        "person_id" => 1,
+        "phone" => "84951659121",
+        "cellular" => "+79161686186",
     );
     $old_person = array(
-        "person_id"=>1,
-        "cellular"=>"+74951659121",
-        "phone"=>"89161686186, 89146661666",
+        "person_id" => 1,
+        "cellular" => "+74951659121",
+        "phone" => "89161686186, 89146661666",
     );
     $new_phones = xsm_extract_person_phone_digits($new_person);
     $old_phones = xsm_extract_person_phone_digits($old_person);
@@ -312,9 +312,9 @@ function xsm_ank_proc_unit_test()
     xut_equal($count, 2, "Nonzero common phone count");
 
     $old_person = array(
-        "person_id"=>1,
-        "cellular"=>"",
-        "phone"=>"100",
+        "person_id" => 1,
+        "cellular" => "",
+        "phone" => "100",
     );
     $old_phones = xsm_extract_person_phone_digits($old_person);
     $count = count(array_intersect($new_phones, $old_phones));
