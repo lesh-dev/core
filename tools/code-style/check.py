@@ -166,10 +166,6 @@ def check_code_style(lines, file_type):
         if sac:
             bad_lines.add("Commas should contain spaces after them", index)
 
-        nsbe = re.search(r'([^!. ]=|=[^ >]|=>[^ ])', line_cleanup)
-        if nsbe:
-            bad_lines.add("Assignment/comparison/key-value (=>) operators should be surrounded with spaces", index)
-
         # trailing spaces check
         ts = re.search('[^ ]+[ ]+$', line)
         if ts:
@@ -180,6 +176,10 @@ def check_code_style(lines, file_type):
             empty_op = re.search('[^a-zA-Z_]empty\(', line)
             if empty_op:
                 bad_lines.add("Operator 'empty' is forbidden for " + str(PHP_FILES) + " files", index)
+
+            nsbe = re.search(r'([^!. ]=|=[^ >\n]|=>[^ ])', line_cleanup)
+            if nsbe:
+                bad_lines.add("Assignment/comparison/key-value (=>) operators should be surrounded with spaces", index)
 
     print_bad_context(lines, bad_lines.lines())
     # return 1 if there some errors
