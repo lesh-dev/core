@@ -41,9 +41,9 @@
     function xcms_get_notification_fields()
     {
         return array(
-            "mail_group"=>"Почтовая группа",
-            "notification_text"=>"Текст уведомления в формате plain text",
-            "notification_html"=>"Текст уведомления в формате HTML"
+            "mail_group" => "Почтовая группа",
+            "notification_text" => "Текст уведомления в формате plain text",
+            "notification_html" => "Текст уведомления в формате HTML",
         );
     }
 
@@ -202,12 +202,12 @@
 
         // In case of delayed sending, subject will be lost
         $values = array(
-            "mail_group"=>$mail_group,
-            "notification_text"=>$body_text,
-            "notification_html"=>$body_html
+            "mail_group" => $mail_group,
+            "notification_text" => $body_text,
+            "notification_html" => $body_html,
         );
 
-        return xdb_insert_or_update("notification", array("notification_id"=>XDB_NEW), $values, xcms_get_notification_fields());
+        return xdb_insert_or_update("notification", array("notification_id" => XDB_NEW), $values, xcms_get_notification_fields());
     }
 
     /**

@@ -5,8 +5,8 @@ require_once("${engine_dir}sys/file.php");
 
 /**
   * Transforms an key-value-array to properly encoded URI part:
-  * array('param'=>'value1 value2', 'super'=>'puper') will be translated to
-  * &amp;param=value1%20value2&amp;super=puper
+  * array("param" => "value1 value2", "super" => "puper") will be translated to
+  * "&amp;param=value1%20value2&amp;super=puper"
   * @param args_list array of arguments to encode
   * @return encoded parameters string
   **/
