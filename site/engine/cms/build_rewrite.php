@@ -64,7 +64,7 @@ function xcmst_build_rewrite($verbose = false)
         echo "<table class=\"sitemap\">\n<tr><th>Alias</th><th>Path</th></tr>\n";
     ksort($aliases);
     $max_level = 0;
-    foreach ($aliases as $alias=>$path)
+    foreach ($aliases as $alias => $path)
     {
         $level = substr_count($alias, "/");
         if ($level > $max_level)
