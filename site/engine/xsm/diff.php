@@ -42,19 +42,31 @@ function xcms_array_diff($new, $old, $table_name, $fields)
         if (!array_key_exists($key, $old))
         {
             if (strlen($value))
-                $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>'');
+                $diff[] = array(
+                    'key' => $key,
+                    'new' => $value,
+                    'old' => '',
+                );
             continue;
         }
         // key exists in both arrays
         if ($old[$key] != $value)
-            $diff[] = array('key'=>$key, 'new'=>$value, 'old'=>$old[$key]);
+            $diff[] = array(
+                'key' => $key,
+                'new' => $value,
+                'old' => $old[$key],
+            );
     }
     foreach ($old as $key => $old_value)
     {
         if (array_key_exists($key, $new))
             continue;
         if (strlen($old_value))
-            $diff[] = array('key'=>$key, 'new'=>'', 'old'=>$old_value);
+            $diff[] = array(
+                'key' => $key,
+                'new' => '',
+                'old' => $old_value,
+            );
     }
     return $diff;
 }
