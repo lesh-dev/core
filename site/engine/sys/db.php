@@ -225,7 +225,7 @@
         {
             // new record
             $ev = array(
-                $key_name=>$id
+                $key_name => $id,
             );
         }
         return $ev;
