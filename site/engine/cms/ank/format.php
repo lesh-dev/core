@@ -41,7 +41,7 @@ function xcms_html_wrap_ml($html)
 function xcms_trim_object($obj)
 {
     $new_obj = array();
-    foreach ($obj as $key=>$value)
+    foreach ($obj as $key => $value)
     {
         $new_obj[$key] = trim($value);
     }
@@ -143,9 +143,9 @@ function xsm_format_phones($phones_str)
     {
         // something strange here, cannot format
         $item = array(
-            "phone"=>$phones_str,
-            "hint"=>"В телефонах допустимы только символы 0-9 ( ) + - и пробел. ",
-            "valid"=>false
+            "phone" => $phones_str,
+            "hint" => "В телефонах допустимы только символы 0-9 ( ) + - и пробел. ",
+            "valid" => false,
         );
         $result[] = $item;
         return $result;
@@ -156,9 +156,9 @@ function xsm_format_phones($phones_str)
     {
         $phone = trim($phones[$i]);
         $item = array(
-            "valid"=>true,
-            "hint"=>"",
-            "phone"=>$phone
+            "valid" => true,
+            "hint" => "",
+            "phone" => $phone,
         );
 
         // check digit count
@@ -363,7 +363,7 @@ function xsm_person_list_link($school_id)
 {
     $school = xdb_get_entity_by_id('school', $school_id);
     $school_title = xcms_get_key_or_enc($school, 'school_title');
-    $school_url = "list-person".xcms_url(array('school_id'=>$school_id));
+    $school_url = "list-person".xcms_url(array('school_id' => $school_id));
     return "<a href=\"$school_url\">$school_title</a>";
 }
 
@@ -374,7 +374,7 @@ function xsm_person_view_link($person_id, $school_id, $title_ht = "")
         $person = xdb_get_entity_by_id('person', $person_id);
         $title_ht = xsm_fi_enc($person);
     }
-    $person_url = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
+    $person_url = "view-person".xcms_url(array('person_id' => $person_id, 'school_id' => $school_id));
     return "<a href=\"$person_url\">$title_ht</a>";
 }
 
@@ -524,7 +524,7 @@ function xsm_ank_format_unit_test()
     $enum_span = xsm_make_enum_byval("forest_2", "able");
     xut_check(xu_strpos($enum_span, "Может") > 0, "Check 'able' status");
     $person = array(
-        "anketa_status"=>"cont",
+        "anketa_status" => "cont",
     );
     $enum_span = xsm_make_enum($person, "anketa_status");
     xut_check(xu_strpos($enum_span, "Активный") > 0, "Check 'cont' status");
