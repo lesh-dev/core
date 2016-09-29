@@ -7,7 +7,11 @@ set -e
 
 # ignore list (contrib files whose code style
 # we don't want to verify
-ignore_list_files="class.phpmailer.php finediff.php jquery-1.7.1.min.js"
+ignore_list_files=""
+ignore_list_files="$ignore_list_files class.phpmailer.php"
+ignore_list_files="$ignore_list_files finediff.php"
+ignore_list_files="$ignore_list_files jquery-1.12.3.min.js"
+
 ignore_list_dirs="/forum/ /bootstrap/ /ace/"
 
 # some settings that you don't need to touch
