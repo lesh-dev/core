@@ -23,7 +23,7 @@ function xcms_process_page_diff($old_text, $new_text, $page_id = false)
     }
     $url_name .= (strlen($page_alias))
         ? $page_alias
-        : '?'.xcms_url(array('page'=>$page_id));
+        : '?'.xcms_url(array('page' => $page_id));
     $page_url .= $url_name;
     $id = $page_alias;
     if (!strlen($id))

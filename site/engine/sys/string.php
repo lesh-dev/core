@@ -66,7 +66,7 @@ function xcms_get_key_or_enc($list, $key, $def_value = '')
 function xcms_check_user_name($user_name)
 {
     $result = array(
-        "valid"=>true,
+        "valid" => true,
     );
     if (xu_empty($user_name))
     {
@@ -344,7 +344,7 @@ function xcms_string_unit_test()
     $obj["another"] = "test string";
     $obj["empty"] = "";
     $obj["need_escaping"] = "&";
-    $obj["array"] = array("qqq"=>true);
+    $obj["array"] = array("qqq" => true);
     $obj["empty-array"] = array();
 
     xut_equal(xcms_get_key_or($obj, "super"), 1, "Invalid 'super' key");
@@ -368,7 +368,7 @@ function xcms_string_unit_test()
     xut_check(is_array($def_key_value) , "Failed array default value type");
     xut_check(count($def_key_value) == 0, "Failed array default value item count");
 
-    $def_key_value = xcms_get_key_or($empty_obj, "nokey", array("qqq"=>true));
+    $def_key_value = xcms_get_key_or($empty_obj, "nokey", array("qqq" => true));
     xut_check(is_array($def_key_value) , "Failed non-empty array default value type");
     xut_check($def_key_value["qqq"] === true, "Failed non-empty array default value items");
 

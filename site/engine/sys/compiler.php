@@ -5,7 +5,7 @@
         global $SETTINGS;
         $argv = explode(EXP_SP, $code);
         fputs($output_stream, $SETTINGS["code_begin"]);
-        foreach ($argv as $key=>$value)
+        foreach ($argv as $key => $value)
         {
             fputs($output_stream, "\$code=\"$code\";");
             fputs($output_stream, "@\$argv[] = \"$value\";");
@@ -61,7 +61,7 @@
             if (file_exists($full_name))
             {
                 $new_contents = file_get_contents($full_name);
-                foreach ($argv as $key=>$value)
+                foreach ($argv as $key => $value)
                     $new_contents = str_replace("%$key", $value, $new_contents);
                 // replace all unused parameters with empty strings
                 $new_contents = preg_replace('/%[0-9]/', '', $new_contents);

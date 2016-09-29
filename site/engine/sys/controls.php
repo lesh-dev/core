@@ -74,7 +74,7 @@ function xcms_add_control_id($id_template)
   *     checkbox: checkbox control
   *     submit:   submit (button) control
   **/
-function xcmst_control($name, $value, $placeholder, $class, $type = "input", $title = "", $def_value = "", $autocomplete = XCMS_AUTOCOMPLETE_DEFAULT, $autocapitalize= XCMS_AUTOCAPITALIZE_DEFAULT)
+function xcmst_control($name, $value, $placeholder, $class, $type = "input", $title = "", $def_value = "", $autocomplete = XCMS_AUTOCOMPLETE_DEFAULT, $autocapitalize = XCMS_AUTOCAPITALIZE_DEFAULT)
 {
     if ($value === XCMS_FROM_POST)
         $value = xcms_get_key_or($_POST, $name, $def_value);

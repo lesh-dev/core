@@ -50,8 +50,9 @@ function xcmst_draw_user_xsm($user)
     if ($person !== null)
     {
         $person_url = "view-person".xcms_url(array(
-            'person_id'=>$person['person_id'],
-            'school_id'=>XSM_SCHOOL_ANK_ID));
+            'person_id' => $person['person_id'],
+            'school_id' => XSM_SCHOOL_ANK_ID,
+        ));
         ?>Карточка участника в XSM:
         <a href="<?php echo "/${web_prefix}xsm/$person_url"; ?>"><?php echo xsm_fi_enc($person); ?></a><?php
     }
@@ -84,7 +85,7 @@ function xcms_acl_from_post(&$info)
     $edit = "";
     $view = "";
 
-    foreach ($_POST as $key=>$value)
+    foreach ($_POST as $key => $value)
     {
         if (substr($key, 0, 5) == "edit_")
             $edit .= " ".substr($key, 5);
@@ -124,7 +125,7 @@ function xcmst_print_acl($info = false)
     </tr>
 <?php
     $checked_attr = 'checked="checked"';
-    foreach ($all_groups as $g=>$translation)
+    foreach ($all_groups as $g => $translation)
     {
         if (xu_empty($translation))
             continue;
