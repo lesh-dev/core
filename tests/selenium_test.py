@@ -588,8 +588,10 @@ class SeleniumTest(object):
         if clear:
             self.addAction("clear", "element name: " + userSerialize(name) + " ")
             self.getElementByName(name).clear()
-        self.addAction("fill",
-                       "element name: " + userSerialize(name) + ", text: " + wrapIfLong(userSerialize(text)) + " ")
+        self.addAction(
+            "fill",
+            "element name: " + userSerialize(name) + ", text: " + wrapIfLong(userSerialize(text)) + " "
+        )
         self.getElementByName(name).send_keys(text)
         return get_value(self.getElementByName(name))
 
@@ -730,8 +732,10 @@ class SeleniumTest(object):
 
     def checkElementValueById(self, eleId, text):
         self.checkEmptyParam(eleId, "checkElementValueById")
-        self.addAction("check-value",
-                       "element id: '" + eleId + "', expected: " + wrapIfLong(userSerialize(text)) + ". ")
+        self.addAction(
+            "check-value",
+            "element id: '" + eleId + "', expected: " + wrapIfLong(userSerialize(text)) + ". "
+        )
         eleValue = get_value(self.getElementById(eleId))
         if not eleValue:
             self.logAdd("None 'value' in element id '" + eleId + "'. Maybe it has no attribute 'value'?", "warning")
@@ -790,8 +794,10 @@ class SeleniumTest(object):
 
     def checkElementValueByName(self, name, text):
         self.checkEmptyParam(name, "checkElementValueByName")
-        self.addAction("check-value",
-                       "element name: '" + name + "', expected: " + wrapIfLong(userSerialize(text)) + ". ")
+        self.addAction(
+            "check-value",
+            "element name: '" + name + "', expected: " + wrapIfLong(userSerialize(text)) + ". "
+        )
         eleValue = get_value(self.getElementByName(name))
         if not eleValue:
             self.logAdd("None 'value' in element named '" + name + "'. Maybe it has no attribute 'value'?", "warning")
