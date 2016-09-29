@@ -25,7 +25,7 @@ function xsm_ank_reminder()
         $person_id = $person["person_id"];
         $ank_reminder_table .=
             '<li><a'.
-            xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
+            xsm_ext_href('view-person', array('person_id' => $person_id)).'>'.
             $full_name."</a></li>\n";
     }
     if ($empty_list)
