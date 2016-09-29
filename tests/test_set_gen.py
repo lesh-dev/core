@@ -55,14 +55,18 @@ def gen_one_test_line(test_info):
     :type test_info: TestInfo
     :rtype: str
     """
-    return '("{}", {}.{}(**kwargs)),'.format(test_info.file_name,
-                                             test_info.module_name,
-                                             test_info.class_name)
+    return '("{}", {}.{}(**kwargs)),'.format(
+        test_info.file_name,
+        test_info.module_name,
+        test_info.class_name,
+    )
 
 
 def find_tests(directory='.', file_name_prefix="xcms_", class_name_prefix="Xcms"):
-    py_files = sorted([f for f in os.listdir(directory)
-                       if os.path.isfile(f) and f.startswith(file_name_prefix) and f.endswith('.py')])
+    py_files = sorted([
+        f for f in os.listdir(directory)
+        if os.path.isfile(f) and f.startswith(file_name_prefix) and f.endswith('.py')
+    ])
 
     logging.info("Found %s python files", len(py_files))
 
