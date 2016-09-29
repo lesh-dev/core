@@ -76,7 +76,7 @@
         $version_files_list = array_reverse(glob("$ename-version-*"));
         $ename_len = xu_len($ename);
         $ename_version_len = xu_len("$ename-version-");
-        foreach ($version_files_list as $k=>$version_file)
+        foreach ($version_files_list as $k => $version_file)
         {
             $version_info = xu_substr($version_file, $ename_version_len);
             $timestamp = preg_replace("/^([0-9]+).*/", "\\1", $version_info);
@@ -119,7 +119,7 @@
     <div style="padding-top: 15px;"><?php
         xcmst_submit("commit", $submit_val);
         xcmst_submit("preview", "Предпросмотр"); ?>
-        <a <?php echo xcms_href(array('page'=>$pageid, 'ref'=>'index')); ?> class="submit">Свернуть редактор</a>
+        <a <?php echo xcms_href(array('page' => $pageid, 'ref' => 'index')); ?> class="submit">Свернуть редактор</a>
         Версия:
         <select name="versions" id="versions-top"><?php echo $version_list; ?></select>
         <?php xcmst_submit("set_version", "Смотреть версию"); ?>
