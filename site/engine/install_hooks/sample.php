@@ -19,18 +19,16 @@
       * значение -- массив с ключами name (название), type(тип переменной), default
       * значение по умолчанию. Например,
       * array(
-      *     "param" =>
-      *         array(
-      *             "name" => "Sample Variable One",
-      *             "type" => "string",
-      *             "default" => "def value"
-      *         ),
-      *     "another_var" =>
-      *         array(
-      *             "name" => "Sample Variable Two",
-      *             "type" => "string",
-      *             "default" => "def"
-      *         ),
+      *     "param" => array(
+      *         "name" => "Sample Variable One",
+      *         "type" => "string",
+      *         "default" => "def value",
+      *     ),
+      *     "another_var" => array(
+      *         "name" => "Sample Variable Two",
+      *         "type" => "string",
+      *         "default" => "def",
+      *     ),
       * );
       **/
     function request_variables()
