@@ -12,11 +12,7 @@ Please do not forget to sync changes in `lesh` and `dmvn` style checkers:
 import sys
 import re
 
-PHP_FILES = [
-    'php',
-    'code',
-    'xcms',
-]
+import common
 
 
 def print_bad_context(lines, bad_lines):
@@ -69,7 +65,7 @@ def remove_commas_in_html(line):
 def remove_html_attributes(line):
     line = re.sub(
         r' (class|href|width|rows|cols|style|id|name|placeholder|'
-        r'value|action|method|enctype|alt|src|type|title)="',
+        r'value|action|method|enctype|alt|src|type|title|http-equiv|content)="',
         ' \\1"',
         line
     )
@@ -177,10 +173,10 @@ def check_code_style(lines, file_type):
             bad_lines.add("No trailing spaces allowed", index)
 
         # forbidden PHP operators
-        if file_type in PHP_FILES:
+        if file_type in common.PHP_FILES:
             empty_op = re.search('[^a-zA-Z_]empty\(', line)
             if empty_op:
-                bad_lines.add("Operator 'empty' is forbidden for " + str(PHP_FILES) + " files", index)
+                bad_lines.add("Operator 'empty' is forbidden for " + str(common.PHP_FILES) + " files", index)
 
             nsbe = re.search(r'([^|+<>!. ]=|=[^ >\n]|=>[^ ])', line_cleanup)
             if nsbe:

@@ -12,17 +12,13 @@ Please do not forget to sync changes in `lesh` and `dmvn` style checkers:
 import sys
 import re
 
-PHP_FILES = [
-    'php',
-    'code',
-    'xcms',
-]
+import common
 
 
 def fix_code_style(lines, file_type):
     fixed_lines = []
     for line in lines:
-        if file_type in PHP_FILES:
+        if file_type in common.PHP_FILES:
             if 'foreach' in line and re.match(r'([^ ]=>|=>[^ ])', line):
                 line = line.replace('=>', ' => ')
                 line = line.replace('  ', ' ')
