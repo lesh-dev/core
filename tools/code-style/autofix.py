@@ -22,10 +22,15 @@ PHP_FILES = [
 def fix_code_style(lines, file_type):
     fixed_lines = []
     for line in lines:
-        if 'foreach' in line and re.match(r'([^ ]=>|=>[^ ])', line):
-            line = line.replace('=>', ' => ')
-            line = line.replace('  ', ' ')
+        if file_type in PHP_FILES:
+            if 'foreach' in line and re.match(r'([^ ]=>|=>[^ ])', line):
+                line = line.replace('=>', ' => ')
+                line = line.replace('  ', ' ')
+
+            line = re.sub(r'([\'"])=>([$])', '\\1 => \\2', line)
+
         fixed_lines.append(line)
+
     return fixed_lines
 
 
