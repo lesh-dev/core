@@ -178,7 +178,7 @@ def check_code_style(lines, file_type):
             if empty_op:
                 bad_lines.add("Operator 'empty' is forbidden for " + str(common.PHP_FILES) + " files", index)
 
-            nsbe = re.search(r'([^|+<>!. ]=|=[^ >\n]|=>[^ ])', line_cleanup)
+            nsbe = re.search(r'([^|+<>!.* ]=|=[^ >\n]|=>[^ ])', line_cleanup)
             if nsbe:
                 bad_lines.add("Assignment/comparison/key-value (=>) operators should be surrounded with spaces", index)
 
