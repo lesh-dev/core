@@ -19,18 +19,32 @@
     function request_variables()
     {
         return array(
-            "superuser_name" =>
-                array("name"=>"Имя (логин) администратора", "default"=>"root")
-            , "superuser_mail" =>
-                array("name"=>"Электронная почта администратора", "default"=>"root@example.com")
-            , "superuser_password" =>
-                array("name"=>"Пароль администратора (умолчание: root)", "default"=>"root", "type"=>"password")
-            , "superuser_password2" =>
-                array("name"=>"Повторите пароль", "default"=>"root", "type"=>"password")
-            , "vk_id" =>
-                array("name"=>"Идентификатор приложения ВКонтакте", "type"=>"string")
-            , "vk_rights" =>
-                array("name"=>"Список прав для ВК", "default"=>"notify,offline")
+            "superuser_name" => array(
+                "name" => "Имя (логин) администратора",
+                "default" => "root",
+            ),
+            "superuser_mail" => array(
+                "name" => "Электронная почта администратора",
+                "default" => "root@example.com",
+            ),
+            "superuser_password" => array(
+                "name" => "Пароль администратора (умолчание: root)",
+                "default" => "root",
+                "type" => "password",
+            ),
+            "superuser_password2" => array(
+                "name" => "Повторите пароль",
+                "default" => "root",
+                "type" => "password",
+            ),
+            "vk_id" => array(
+                "name" => "Идентификатор приложения ВКонтакте",
+                "type" => "string",
+            ),
+            "vk_rights" => array(
+                "name" => "Список прав для ВК",
+                "default" => "notify,offline",
+            ),
         );
     }
     /**
