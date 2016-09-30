@@ -23,7 +23,7 @@ def fix_code_style(lines, file_type):
                 line = line.replace('=>', ' => ')
                 line = line.replace('  ', ' ')
 
-            line = re.sub(r'([\'"a-z])=>([\'"$A-Z])', '\\1 => \\2', line)
+            line = re.sub(r'([\'"a-z])=>([\'"$A-Za-z])', '\\1 => \\2', line)
 
         fixed_lines.append(line)
 

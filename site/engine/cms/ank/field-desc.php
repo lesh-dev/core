@@ -21,300 +21,300 @@ function xsm_get_all_field_descriptors()
     $field_descriptors = array(
 
         // department
-        "department"=>array(
-            "department_title"=>array(
-                "name"=>"Название",
-                "type"=>XSM_FT_STR,
-                "required"=>true,
+        "department" => array(
+            "department_title" => array(
+                "name" => "Название",
+                "type" => XSM_FT_STR,
+                "required" => true,
             ),
         ),
 
         // school
-        "school"=>array(
-            "school_title"=>array(
-                "name"=>"Название",
-                "type"=>XSM_FT_STR,
-                "required"=>true,
+        "school" => array(
+            "school_title" => array(
+                "name" => "Название",
+                "type" => XSM_FT_STR,
+                "required" => true,
             ),
-            "school_type"=>array(
-                "name"=>"Тип",
-                "type"=>XSM_FT_ENUM,
+            "school_type" => array(
+                "name" => "Тип",
+                "type" => XSM_FT_ENUM,
             ),
-            "school_date_start"=>array(
-                "name"=>"Дата начала (ГГГГ.ММ.ДД)",
-                "type"=>XSM_FT_STR,
+            "school_date_start" => array(
+                "name" => "Дата начала (ГГГГ.ММ.ДД)",
+                "type" => XSM_FT_STR,
             ),
-            "school_date_end"=>array(
-                "name"=>"Дата окончания (ГГГГ.ММ.ДД)",
-                "type"=>XSM_FT_STR,
+            "school_date_end" => array(
+                "name" => "Дата окончания (ГГГГ.ММ.ДД)",
+                "type" => XSM_FT_STR,
             ),
-            "school_location"=>array(
-                "name"=>"Место проведения",
-                "type"=>XSM_FT_STR,
+            "school_location" => array(
+                "name" => "Место проведения",
+                "type" => XSM_FT_STR,
             ),
         ),
 
         // person
-        "person"=>array(
-            "department_id"=>array(
-                "name"=>"Отделение",
-                "type"=>XSM_FT_FOREIGN_KEY,
+        "person" => array(
+            "department_id" => array(
+                "name" => "Отделение",
+                "type" => XSM_FT_FOREIGN_KEY,
             ),
-            "anketa_status"=>array(
-                "name"=>"Статус",
-                "type"=>XSM_FT_ENUM,
+            "anketa_status" => array(
+                "name" => "Статус",
+                "type" => XSM_FT_ENUM,
             ),
-            "last_name"=>array(
-                "name"=>"Фамилия",
-                "type"=>XSM_FT_STR,
-                "required"=>true,
+            "last_name" => array(
+                "name" => "Фамилия",
+                "type" => XSM_FT_STR,
+                "required" => true,
             ),
-            "first_name"=>array(
-                "name"=>"Имя",
-                "type"=>XSM_FT_STR,
-                "required"=>true,
+            "first_name" => array(
+                "name" => "Имя",
+                "type" => XSM_FT_STR,
+                "required" => true,
             ),
-            "patronymic"=>array(
-                "name"=>"Отчество",
-                "type"=>XSM_FT_STR,
+            "patronymic" => array(
+                "name" => "Отчество",
+                "type" => XSM_FT_STR,
             ),
-            "nick_name"=>array(
-                "name"=>"Ник",
-                "type"=>XSM_FT_STR,
+            "nick_name" => array(
+                "name" => "Ник",
+                "type" => XSM_FT_STR,
             ),
-            "birth_date"=>array(
-                "name"=>"Дата рождения",
-                "type"=>XSM_FT_STR,
+            "birth_date" => array(
+                "name" => "Дата рождения",
+                "type" => XSM_FT_STR,
             ),
-            "passport_data"=>array(
-                "name"=>"Паспортные данные",
-                "type"=>XSM_FT_STR,
+            "passport_data" => array(
+                "name" => "Паспортные данные",
+                "type" => XSM_FT_STR,
             ),
-            "school"=>array(
-                "name"=>"Школа",
-                "type"=>XSM_FT_STR,
+            "school" => array(
+                "name" => "Школа",
+                "type" => XSM_FT_STR,
             ),
-            "school_city"=>array(
-                "name"=>"Адрес школы",
-                "type"=>XSM_FT_STR,
+            "school_city" => array(
+                "name" => "Адрес школы",
+                "type" => XSM_FT_STR,
             ),
-            "ank_class"=>array(
-                "name"=>"Класс подачи анкеты",
-                "type"=>XSM_FT_STR,
+            "ank_class" => array(
+                "name" => "Класс подачи анкеты",
+                "type" => XSM_FT_STR,
             ),
-            "current_class"=>array(
-                "name"=>"Класс",
-                "type"=>XSM_FT_STR,
+            "current_class" => array(
+                "name" => "Класс",
+                "type" => XSM_FT_STR,
             ),
-            "phone"=>array(
-                "name"=>"Телефон",
-                "type"=>XSM_FT_STR,
+            "phone" => array(
+                "name" => "Телефон",
+                "type" => XSM_FT_STR,
             ),
-            "cellular"=>array(
-                "name"=>"Мобильный телефон",
-                "type"=>XSM_FT_STR,
+            "cellular" => array(
+                "name" => "Мобильный телефон",
+                "type" => XSM_FT_STR,
             ),
-            "email"=>array(
-                "name"=>"E-Mail",
-                "type"=>XSM_FT_STR,
+            "email" => array(
+                "name" => "E-Mail",
+                "type" => XSM_FT_STR,
             ),
-            "skype"=>array(
-                "name"=>"Skype",
-                "type"=>XSM_FT_STR,
+            "skype" => array(
+                "name" => "Skype",
+                "type" => XSM_FT_STR,
             ),
-            "social_profile"=>array(
-                "name"=>"Профиль в соц. сети",
-                "type"=>XSM_FT_STR,
+            "social_profile" => array(
+                "name" => "Профиль в соц. сети",
+                "type" => XSM_FT_STR,
             ),
-            "is_teacher"=>array(
-                "name"=>"Препод",
-                "type"=>XSM_FT_CHECKBOX,
+            "is_teacher" => array(
+                "name" => "Препод",
+                "type" => XSM_FT_CHECKBOX,
             ),
-            "is_student"=>array(
-                "name"=>"Школьник",
-                "type"=>XSM_FT_CHECKBOX,
+            "is_student" => array(
+                "name" => "Школьник",
+                "type" => XSM_FT_CHECKBOX,
             ),
-            "tent_capacity"=>array(
-                "name"=>"Вместимость палатки",
-                "type"=>XSM_FT_STR,
+            "tent_capacity" => array(
+                "name" => "Вместимость палатки",
+                "type" => XSM_FT_STR,
             ),
-            "tour_requisites"=>array(
-                "name"=>"Туристское барахло",
-                "type"=>XSM_FT_TEXT,
+            "tour_requisites" => array(
+                "name" => "Туристское барахло",
+                "type" => XSM_FT_TEXT,
             ),
-            "forest_1"=>array(
-                "name"=>"1-й выход в лес",
-                "type"=>XSM_FT_ENUM,
+            "forest_1" => array(
+                "name" => "1-й выход в лес",
+                "type" => XSM_FT_ENUM,
             ),
-            "forest_2"=>array(
-                "name"=>"2-й выход в лес",
-                "type"=>XSM_FT_ENUM,
+            "forest_2" => array(
+                "name" => "2-й выход в лес",
+                "type" => XSM_FT_ENUM,
             ),
-            "forest_3"=>array(
-                "name"=>"3-й выход в лес",
-                "type"=>XSM_FT_ENUM,
+            "forest_3" => array(
+                "name" => "3-й выход в лес",
+                "type" => XSM_FT_ENUM,
             ),
-            "favourites"=>array(
-                "name"=>"Любимые предметы",
-                "type"=>XSM_FT_TEXT,
+            "favourites" => array(
+                "name" => "Любимые предметы",
+                "type" => XSM_FT_TEXT,
             ),
-            "achievements"=>array(
-                "name"=>"Достижения",
-                "type"=>XSM_FT_TEXT,
+            "achievements" => array(
+                "name" => "Достижения",
+                "type" => XSM_FT_TEXT,
             ),
-            "hobby"=>array(
-                "name"=>"Хобби",
-                "type"=>XSM_FT_TEXT,
+            "hobby" => array(
+                "name" => "Хобби",
+                "type" => XSM_FT_TEXT,
             ),
-            "lesh_ref"=>array(
-                "name"=>"Откуда узнали о школе",
-                "type"=>XSM_FT_TEXT,
+            "lesh_ref" => array(
+                "name" => "Откуда узнали о школе",
+                "type" => XSM_FT_TEXT,
             ),
-            "user_agent"=>array(
-                "name"=>"UserAgent",
-                "type"=>XSM_FT_STR,
-                "readonly"=>true,
+            "user_agent" => array(
+                "name" => "UserAgent",
+                "type" => XSM_FT_STR,
+                "readonly" => true,
             ),
         ),
 
         // person on school
-        "person_school"=>array(
-            "member_person_id"=>array(
-                "name"=>"Участник",
-                "type"=>XSM_FT_FOREIGN_KEY,
+        "person_school" => array(
+            "member_person_id" => array(
+                "name" => "Участник",
+                "type" => XSM_FT_FOREIGN_KEY,
             ),
-            "school_id"=>array(
-                "name"=>"Школа",
-                "type"=>XSM_FT_FOREIGN_KEY,
+            "school_id" => array(
+                "name" => "Школа",
+                "type" => XSM_FT_FOREIGN_KEY,
             ),
-            "member_department_id"=>array(
-                "name"=>"Отделение",
-                "type"=>XSM_FT_FOREIGN_KEY,
+            "member_department_id" => array(
+                "name" => "Отделение",
+                "type" => XSM_FT_FOREIGN_KEY,
             ),
-            "is_student"=>array(
-                "name"=>"Школьник",
-                "type"=>XSM_FT_CHECKBOX,
+            "is_student" => array(
+                "name" => "Школьник",
+                "type" => XSM_FT_CHECKBOX,
             ),
-            "current_class"=>array(
-                "name"=>"Класс",
-                "type"=>XSM_FT_STR,
+            "current_class" => array(
+                "name" => "Класс",
+                "type" => XSM_FT_STR,
             ),
-            "courses_needed"=>array(
-                "name"=>"Потребное кол-во зачётов",
-                "type"=>XSM_FT_STR,
+            "courses_needed" => array(
+                "name" => "Потребное кол-во зачётов",
+                "type" => XSM_FT_STR,
             ),
-            "curator_group"=>array(
-                "name"=>"Кто курирует",
-                "type"=>XSM_FT_STR,
+            "curator_group" => array(
+                "name" => "Кто курирует",
+                "type" => XSM_FT_STR,
             ),
-            "is_teacher"=>array(
-                "name"=>"Препод",
-                "type"=>XSM_FT_CHECKBOX,
+            "is_teacher" => array(
+                "name" => "Препод",
+                "type" => XSM_FT_CHECKBOX,
             ),
-            "curatorship"=>array(
-                "name"=>"Кураторство",
-                "type"=>XSM_FT_ENUM,
+            "curatorship" => array(
+                "name" => "Кураторство",
+                "type" => XSM_FT_ENUM,
             ),
-            "person_school_comment"=>array(
-                "name"=>"Комментарий",
-                "type"=>XSM_FT_TEXT,
+            "person_school_comment" => array(
+                "name" => "Комментарий",
+                "type" => XSM_FT_TEXT,
             ),
         ),
 
         // person_comment
-        "person_comment"=>array(
-            "comment_text"=>array(
-                "name"=>"Текст комментария",
-                "type"=>XSM_FT_TEXT,
-                "required"=>true,
+        "person_comment" => array(
+            "comment_text" => array(
+                "name" => "Текст комментария",
+                "type" => XSM_FT_TEXT,
+                "required" => true,
             ),
-            "owner_login"=>array(
-                "name"=>"Логин автора",
-                "readonly"=>true,
-                "type"=>XSM_FT_STR,
+            "owner_login" => array(
+                "name" => "Логин автора",
+                "readonly" => true,
+                "type" => XSM_FT_STR,
             ),
-            "blamed_person_id"=>array(
-                "name"=>"ID субъекта",
-                "readonly"=>true,
-                "type"=>XSM_FT_FOREIGN_KEY,
+            "blamed_person_id" => array(
+                "name" => "ID субъекта",
+                "readonly" => true,
+                "type" => XSM_FT_FOREIGN_KEY,
             ),
             // TODO: internals
-            "person_comment_deleted"=>array(
-                "name"=>"Объект удалён",
-                "type"=>XSM_FT_ENUM,
-                "hidden"=>true,
+            "person_comment_deleted" => array(
+                "name" => "Объект удалён",
+                "type" => XSM_FT_ENUM,
+                "hidden" => true,
             ),
         ),
 
         // course
-        "course"=>array(
-            "course_title"=>array(
-                "name"=>"Название курса",
-                "type"=>XSM_FT_STR,
+        "course" => array(
+            "course_title" => array(
+                "name" => "Название курса",
+                "type" => XSM_FT_STR,
             ),
-            "target_class"=>array(
-                "name"=>"Уровень (диапазон классов)",
-                "type"=>XSM_FT_STR,
+            "target_class" => array(
+                "name" => "Уровень (диапазон классов)",
+                "type" => XSM_FT_STR,
             ),
-            "school_id"=>array(
-                "name"=>"Школа, на которой читался курс",
-                "type"=>XSM_FT_FOREIGN_KEY,
+            "school_id" => array(
+                "name" => "Школа, на которой читался курс",
+                "type" => XSM_FT_FOREIGN_KEY,
             ),
-            "course_cycle"=>array(
-                "name"=>"Цикл, на котором читался курс",
-                "type"=>XSM_FT_STR,
+            "course_cycle" => array(
+                "name" => "Цикл, на котором читался курс",
+                "type" => XSM_FT_STR,
             ),
-            "course_desc"=>array(
-                "name"=>"Описание",
-                "type"=>XSM_FT_TEXT,
+            "course_desc" => array(
+                "name" => "Описание",
+                "type" => XSM_FT_TEXT,
             ),
-            "course_type"=>array(
-                "name"=>"Тип курса",
-                "type"=>XSM_FT_ENUM,
+            "course_type" => array(
+                "name" => "Тип курса",
+                "type" => XSM_FT_ENUM,
             ),
-            "course_area"=>array(
-                "name"=>"Тематика",
-                "type"=>XSM_FT_ENUM,
+            "course_area" => array(
+                "name" => "Тематика",
+                "type" => XSM_FT_ENUM,
             ),
-            "course_comment"=>array(
-                "name"=>"Комментарий",
-                "type"=>XSM_FT_TEXT,
+            "course_comment" => array(
+                "name" => "Комментарий",
+                "type" => XSM_FT_TEXT,
             ),
         ),
 
         // course teachers
-        "course_teachers"=>array(
-            "course_id"=>array(
-                "name"=>"Курс",
-                "type"=>XSM_FT_FOREIGN_KEY,
+        "course_teachers" => array(
+            "course_id" => array(
+                "name" => "Курс",
+                "type" => XSM_FT_FOREIGN_KEY,
             ),
-            "course_teacher_id"=>array(
-                "name"=>"Препод курса",
-                "type"=>XSM_FT_FOREIGN_KEY,
+            "course_teacher_id" => array(
+                "name" => "Препод курса",
+                "type" => XSM_FT_FOREIGN_KEY,
             ),
         ),
 
         // exam
-        "exam"=>array(
-            "student_person_id"=>array(
-                "name"=>"Школьник",
-                "type"=>XSM_FT_FOREIGN_KEY,
+        "exam" => array(
+            "student_person_id" => array(
+                "name" => "Школьник",
+                "type" => XSM_FT_FOREIGN_KEY,
             ),
-            "course_id"=>array(
-                "name"=>"Курс",
-                "type"=>XSM_FT_FOREIGN_KEY,
+            "course_id" => array(
+                "name" => "Курс",
+                "type" => XSM_FT_FOREIGN_KEY,
             ),
-            "exam_status"=>array(
-                "name"=>"Состояние",
-                "type"=>XSM_FT_ENUM,
+            "exam_status" => array(
+                "name" => "Состояние",
+                "type" => XSM_FT_ENUM,
             ),
-            "deadline_date"=>array(
-                "name"=>"Дедлайн",
-                "type"=>XSM_FT_STR,
+            "deadline_date" => array(
+                "name" => "Дедлайн",
+                "type" => XSM_FT_STR,
             ),
-            "exam_comment"=>array(
-                "name"=>"Комментарий к зачёту",
-                "type"=>XSM_FT_TEXT,
+            "exam_comment" => array(
+                "name" => "Комментарий к зачёту",
+                "type" => XSM_FT_TEXT,
             ),
         ),
 
@@ -322,19 +322,19 @@ function xsm_get_all_field_descriptors()
 
     foreach ($field_descriptors as $object_type => $fields_desc) {
         $field_descriptors[$object_type]["${object_type}_created"] = array(
-            "name"=>"Дата создания",
-            "type"=>XSM_FT_STR,
-            "readonly"=>true,
+            "name" => "Дата создания",
+            "type" => XSM_FT_STR,
+            "readonly" => true,
         );
         $field_descriptors[$object_type]["${object_type}_modified"] = array(
-            "name"=>"Последняя модификация",
-            "type"=>XSM_FT_STR,
-            "readonly"=>true,
+            "name" => "Последняя модификация",
+            "type" => XSM_FT_STR,
+            "readonly" => true,
         );
         $field_descriptors[$object_type]["${object_type}_changedby"] = array(
-            "name"=>"Владелец модификации",
-            "type"=>XSM_FT_STR,
-            "readonly"=>true,
+            "name" => "Владелец модификации",
+            "type" => XSM_FT_STR,
+            "readonly" => true,
         );
     }
 
@@ -345,132 +345,132 @@ global $XSM_ENUMS;
 
 // статус анкеты (значения в базе)
 $XSM_ENUMS["anketa_status"] = array(
-    "values"=>array(
-        "new"=>"Новый",
-        "progress"=>"Ждёт собес.",
-        "less"=>"Ждёт леса",
-        "processed"=>"Принят",
-        "discuss"=>"Обсуждается",
-        "nextyear"=>"Отложен",
-        "declined"=>"Отклонён",
-        "cont"=>"Активный",
-        "old"=>"Архив",
-        "duplicate"=>"Дубль",
-        "spam"=>"Спам",
+    "values" => array(
+        "new" => "Новый",
+        "progress" => "Ждёт собес.",
+        "less" => "Ждёт леса",
+        "processed" => "Принят",
+        "discuss" => "Обсуждается",
+        "nextyear" => "Отложен",
+        "declined" => "Отклонён",
+        "cont" => "Активный",
+        "old" => "Архив",
+        "duplicate" => "Дубль",
+        "spam" => "Спам",
     ),
-    "default"=>"new",
+    "default" => "new",
 );
 
 // селектор для list-person-locator
 $XSM_ENUMS["show_anketa_status_locator"] = array(
-    "values"=>array(
-        "active"=>"Актив",
-        "no-trash"=>"Все",
-        "not-decl"=>"Все, кроме посланных",
-        "not-old"=>"Все, кроме архивных",
-        "processed"=>"Принятые",
-        "cont"=>"Продолжающие",
-        "old"=>"Архивные",
-        "all"=>"Без фильтрации"),
-    "default"=>"active",
+    "values" => array(
+        "active" => "Актив",
+        "no-trash" => "Все",
+        "not-decl" => "Все, кроме посланных",
+        "not-old" => "Все, кроме архивных",
+        "processed" => "Принятые",
+        "cont" => "Продолжающие",
+        "old" => "Архивные",
+        "all" => "Без фильтрации"),
+    "default" => "active",
 );
 
 // селектор для list-ank
 $XSM_ENUMS["show_anketa_status_ank"] = array(
-    "values"=>array(
-        "abitur"=>"Набор",
-        "new"=>"Новые",
-        "progress"=>"Ждут собеседования",
-        "less"=>"Ждут леса",
-        "processed"=>"Принятые",
-        "nextyear"=>"Отложенные",
-        "discuss"=>"Обсуждаются",
-        "declined"=>"Отклонённые",
-        "old"=>"Архивные",
-        "no-trash"=>"Все",
-        "all"=>"Без фильтрации",
+    "values" => array(
+        "abitur" => "Набор",
+        "new" => "Новые",
+        "progress" => "Ждут собеседования",
+        "less" => "Ждут леса",
+        "processed" => "Принятые",
+        "nextyear" => "Отложенные",
+        "discuss" => "Обсуждаются",
+        "declined" => "Отклонённые",
+        "old" => "Архивные",
+        "no-trash" => "Все",
+        "all" => "Без фильтрации",
     ),
-    "default"=>"abitur",
+    "default" => "abitur",
 );
 
 // Статус выхода в лес
 $XSM_ENUMS["forest_status"] = array(
-    "values"=>array(
-        "undef"=>"&mdash;",
-        "notable"=>"Не может",
-        "no"=>"Не идёт",
-        "maybe"=>"ХЗ",
-        "able"=>"Может",
-        "yes"=>"Идёт",
+    "values" => array(
+        "undef" => "&mdash;",
+        "notable" => "Не может",
+        "no" => "Не идёт",
+        "maybe" => "ХЗ",
+        "able" => "Может",
+        "yes" => "Идёт",
     ),
-    "default"=>"undef",
+    "default" => "undef",
 );
 
 // Фильтр для показов выходов в лес
 $XSM_ENUMS["show_forest_num"] = array(
-    "values"=>array(
-        "all"=>"Все выходы",
-        "forest_1"=>"1-й выход",
-        "forest_2"=>"2-й выход",
-        "forest_3"=>"3-й выход",
+    "values" => array(
+        "all" => "Все выходы",
+        "forest_1" => "1-й выход",
+        "forest_2" => "2-й выход",
+        "forest_3" => "3-й выход",
     ),
-    "default"=>"all",
+    "default" => "all",
 );
 
 // Кураторство
 $XSM_ENUMS["curatorship"] = array(
-    "values"=>array(
-        "none"=>"Не куратор",
-        "assist"=>"Помощник куратора",
-        "cur"=>"Куратор",
+    "values" => array(
+        "none" => "Не куратор",
+        "assist" => "Помощник куратора",
+        "cur" => "Куратор",
     ),
-    "default"=>"none",
+    "default" => "none",
 );
 
 // Зачёт
 $XSM_ENUMS["exam_status"] = array(
-    "values"=>array(
-        "listen"=>"Прослушан",
-        "passed"=>"Сдан",
-        "notpassed"=>"Не сдан",
-        "almost"=>"Почти сдан",
-        "other"=>"Иное"),
-    "default"=>"listen",
+    "values" => array(
+        "listen" => "Прослушан",
+        "passed" => "Сдан",
+        "notpassed" => "Не сдан",
+        "almost" => "Почти сдан",
+        "other" => "Иное"),
+    "default" => "listen",
 );
 
 // Тип школы
 $XSM_ENUMS["school_type"] = array(
-    "values"=>array(
-        "lesh"=>"Летняя",
-        "zesh"=>"Зимняя",
-        "vesh"=>"Весеннняя",
+    "values" => array(
+        "lesh" => "Летняя",
+        "zesh" => "Зимняя",
+        "vesh" => "Весеннняя",
     ),
-    "default"=>"lesh",
+    "default" => "lesh",
 );
 
 // Тип курса
 $XSM_ENUMS["course_type"] = array(
-    "values"=>array(
-        "generic"=>"Обычный",
-        "facult"=>"Факультатив",
-        "prac"=>"Практикум",
-        "single"=>"Разовая лекция",
-        "other"=>"Иное",
+    "values" => array(
+        "generic" => "Обычный",
+        "facult" => "Факультатив",
+        "prac" => "Практикум",
+        "single" => "Разовая лекция",
+        "other" => "Иное",
     ),
-    "default"=>"generic",
+    "default" => "generic",
 );
 
 // Тематика курса
 $XSM_ENUMS["course_area"] = array(
-    "values"=>array(
-        "unknown"=>"Не выбрано",
-        "precise"=>"Точные науки",
-        "cs"=>"Computer science",  // #864
-        "nature"=>"Естественные науки",
-        "human"=>"Гуманитарные науки",
-        "other"=>"Иное",
+    "values" => array(
+        "unknown" => "Не выбрано",
+        "precise" => "Точные науки",
+        "cs" => "Computer science",  // #864
+        "nature" => "Естественные науки",
+        "human" => "Гуманитарные науки",
+        "other" => "Иное",
     ),
-    "default"=>"unknown",
+    "default" => "unknown",
 );
 
 // Enum API
@@ -511,8 +511,8 @@ function xsm_get_persistent_enum_key($scope, $name, $enum_type)
 function xsm_saved_form($table_name)
 {
     $forms = array(
-        'school'=>'сохранена',
-        'department'=>'сохранено',
+        'school' => 'сохранена',
+        'department' => 'сохранено',
     );
     return xcms_get_key_or($forms, $table_name, 'сохранён');
 }
