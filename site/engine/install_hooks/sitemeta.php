@@ -40,25 +40,25 @@
             $meta_site_mail = "support@".$_SERVER["HTTP_HOST"];
 
         return array(
-            "site_name"=>array(
-                "name"=>"Название веб-сайта",
-                "type"=>"string",
-                "default"=>$meta_site_name,
+            "site_name" => array(
+                "name" => "Название веб-сайта",
+                "type" => "string",
+                "default" => $meta_site_name,
             ),
-            "site_log_path"=>array(
-                "name"=>"Путь до log-файлов",
-                "type"=>"string",
-                "default"=>$meta_site_log_path,
+            "site_log_path" => array(
+                "name" => "Путь до log-файлов",
+                "type" => "string",
+                "default" => $meta_site_log_path,
             ),
-            "site_url"=>array(
-                "name"=>"Адрес веб-сайта",
-                "type"=>"string",
-                "default"=>$meta_site_url,
+            "site_url" => array(
+                "name" => "Адрес веб-сайта",
+                "type" => "string",
+                "default" => $meta_site_url,
             ),
-            "webmaster_mail"=>array(
-                "name"=>"Адрес службы техподдержки",
-                "type"=>"string",
-                "default"=>$meta_site_mail,
+            "webmaster_mail" => array(
+                "name" => "Адрес службы техподдержки",
+                "type" => "string",
+                "default" => $meta_site_mail,
             ),
         );
     }
