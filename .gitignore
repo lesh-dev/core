@@ -10,7 +10,7 @@ site/fizlesh.ru-content/*
 site/settings.php
 site/install.php
 site/engine.log
-tests/*.pyc
+*.pyc
 tests/current-page.html
 tools/optimize-images/oim
 *.sublime-project

@@ -29,7 +29,7 @@ function xcmst_contest_delete_entity()
     <table class="table table-striped table-bordered table-condensed table-hover"><?php
 
     $record = xdb_get_entity_by_id($table_name, $entry_id);
-    foreach ($record as $key=>$value)
+    foreach ($record as $key => $value)
     {
         echo "<tr><td>$key</td><td>$value</td></tr>\n";
     }?>
