@@ -32,7 +32,7 @@ try
     {
         $object = xdb_get_entity_by_id($table_name, $object_id);
         $object_enc = array();
-        foreach ($object as $key=>$value)
+        foreach ($object as $key => $value)
         {
             $object_enc[$key] = utf8_encode($value);
         }
@@ -46,12 +46,12 @@ try
         // json payload
         $object_data_decoded = json_decode($object_data);
         // enrich with new values
-        foreach ($object_data_decoded as $key=>$value)
+        foreach ($object_data_decoded as $key => $value)
         {
             $object[$key] = $value;
         }
         $key_name = "${table_name}_id";
-        xdb_insert_or_update($table_name, array($key_name=>$object_id), $object, xsm_get_fields($table_name));
+        xdb_insert_or_update($table_name, array($key_name => $object_id), $object, xsm_get_fields($table_name));
         $result[XSM_API_KEY_STATUS] = XSM_API_STATUS_OK;
     }
     elseif (XSM_API_ENUM_HTML == $object_action)
