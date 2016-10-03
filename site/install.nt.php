@@ -63,7 +63,7 @@
     {
         if (!isset($ALLSECVARS[$hook->module_name()]))
             $ALLSECVARS[$hook->module_name()] = array();
-        foreach ($hook->request_variables() as $k=>$v)
+        foreach ($hook->request_variables() as $k => $v)
         {
             $ALLVARS[$k] = $v;
             $ALLSECVARS[$hook->module_name()][$k] = $v;
@@ -118,11 +118,11 @@
             <h3>Шаг 1/2: выбор дополнительных параметров</h3>
             <table>
         <?php
-        foreach ($ALLSECVARS as $hook_name=>$hook_variables)
+        foreach ($ALLSECVARS as $hook_name => $hook_variables)
         {
             if (count($hook_variables))
                 echo "<tr><td colspan=\"2\" class=\"hook-name\">$hook_name</td></tr>\n";
-            foreach ($hook_variables as $variable=>$v)
+            foreach ($hook_variables as $variable => $v)
             {
                 $name = @$v["name"];
                 if ($name === false)
