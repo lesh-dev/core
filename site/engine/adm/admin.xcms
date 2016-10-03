@@ -1,4 +1,4 @@
-<# if //@$_GET['mode']=='logout'//auth/logout//#><?php
+<# if //@$_GET['mode'] == 'logout'//auth/logout//#><?php
 
 if (!@$_GET["page"])
     $_GET["page"] = "index";
@@ -51,18 +51,18 @@ if (!@$_GET["page"])
         <?php $is_admin = xcms_user()->check_rights("admin", false); ?>
         <div style="padding-bottom: 7px;">
             <?php if ($is_editor) {?>
-            <a <?php echo xcms_href(array('mode'=>'create_page', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Подстраница</a>
-            <a <?php echo xcms_href(array('mode'=>'delete', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Удалить</a><?php
+            <a <?php echo xcms_href(array('mode' => 'create_page', 'page' => $pageid, 'ref' => 'admin')); ?> class="h-menu-link">Подстраница</a>
+            <a <?php echo xcms_href(array('mode' => 'delete', 'page' => $pageid, 'ref' => 'admin')); ?> class="h-menu-link">Удалить</a><?php
             }?>
 
-            <a <?php echo xcms_href(array('mode'=>'cleanprec', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Очистить кэш</a>
-            <a <?php echo xcms_href(array('mode'=>'rebuild_alias', 'ref'=>'admin')); ?> class="h-menu-link">Перестроить alias-ы</a>
+            <a <?php echo xcms_href(array('mode' => 'cleanprec', 'page' => $pageid, 'ref' => 'admin')); ?> class="h-menu-link">Очистить кэш</a>
+            <a <?php echo xcms_href(array('mode' => 'rebuild_alias', 'ref' => 'admin')); ?> class="h-menu-link">Перестроить alias-ы</a>
 
             <?php if ($is_admin) {?>
             <span class="top-menu-div">&nbsp;</span>
-            <a <?php echo xcms_href(array('mode'=>'user_manage', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Пользователи</a>
-            <a <?php echo xcms_href(array('mode'=>'mailer', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Уведомления</a>
-            <a <?php echo xcms_href(array('mode'=>'registry', 'page'=>$pageid, 'ref'=>'admin')); ?> class="h-menu-link">Настройки</a>
+            <a <?php echo xcms_href(array('mode' => 'user_manage', 'page' => $pageid, 'ref' => 'admin')); ?> class="h-menu-link">Пользователи</a>
+            <a <?php echo xcms_href(array('mode' => 'mailer', 'page' => $pageid, 'ref' => 'admin')); ?> class="h-menu-link">Уведомления</a>
+            <a <?php echo xcms_href(array('mode' => 'registry', 'page' => $pageid, 'ref' => 'admin')); ?> class="h-menu-link">Настройки</a>
             <a href="/<# web_prefix #>xsm" class="h-menu-link">XSM</a>
             <a href="/<# web_prefix #>ctx" class="h-menu-link">Олимпиада</a>
             <a href="/mailman/listinfo/preps/" class="h-menu-link">Рассылка</a><?php
@@ -70,13 +70,13 @@ if (!@$_GET["page"])
 
             <span style="float: right">
             <b id="screen">Админка</b>
-            <a <?php echo xcms_href(array('mode'=>'myprofile', 'page'=>$pageid, 'ref'=>'admin')); ?>
+            <a <?php echo xcms_href(array('mode' => 'myprofile', 'page' => $pageid, 'ref' => 'admin')); ?>
                 class="h-menu-link"><b><?php echo xcms_user()->login(); ?></b></a>
-            <a <?php echo xcms_href(array('mode'=>'change_passwd', 'page'=>$pageid, 'ref'=>'admin')); ?>
+            <a <?php echo xcms_href(array('mode' => 'change_passwd', 'page' => $pageid, 'ref' => 'admin')); ?>
                 class="h-menu-link">Сменить пароль</a>
-            <a <?php echo xcms_href(array('mode'=>'logout', 'page'=>$pageid, 'ref'=>$ref)); ?>
+            <a <?php echo xcms_href(array('mode' => 'logout', 'page' => $pageid, 'ref' => $ref)); ?>
                 class="h-menu-link">Выйти</a>
-            <a <?php echo xcms_href(array('page'=>$pageid, 'ref'=>'index')); ?>
+            <a <?php echo xcms_href(array('page' => $pageid, 'ref' => 'index')); ?>
                 class="h-menu-link">X</a>
             </span>
         </div>
@@ -100,7 +100,7 @@ if (!@$_GET["page"])
             include(translate("<! redir admin 2 !>"));
     }
 
-    if (@$_GET["mode"]=="change_passwd")
+    if (@$_GET["mode"] == "change_passwd")
     {
         include(translate('<! auth/chpassw !>'));
     }
@@ -144,12 +144,12 @@ if (!@$_GET["page"])
     }
     elseif (@$_GET["mode"] == "user_manage")
     {
-        $preface = xcms_url(array('ref'=>'admin', 'mode'=>'user_manage', 'page'=>$pageid));
+        $preface = xcms_url(array('ref' => 'admin', 'mode' => 'user_manage', 'page' => $pageid));
         include(translate("<! auth/admin !>"));
     }
     elseif (@$_GET["mode"] == "myprofile")
     {
-        $preface = xcms_url(array('ref'=>'admin', 'mode'=>'myprofile', 'page'=>$pageid));
+        $preface = xcms_url(array('ref' => 'admin', 'mode' => 'myprofile', 'page' => $pageid));
         include(translate("<! auth/myprofile !>"));
     }
     elseif (@$_GET["mode"] == "create_page")
