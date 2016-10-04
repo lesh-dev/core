@@ -84,7 +84,7 @@ if (!@$_GET["page"])
             <div class="menu">
                 <# adm/site_info #>
                 <b>Menu</b>
-                <# cms/menu/display show=not-locked devel start=1 end=5 #>
+                <# cms/menu/display show=not-locked devel start=1 end=5 #><!-- nostyle -->
             </div>
             <div class="content">
             <?php
