@@ -6,7 +6,8 @@
         $LIST["name"] = @$_POST["image-name"];
         $LIST["comment"] = @$_POST["image-comment"];
         $LIST["cat"] = @$_POST["image-cat"];
-        if (!$LIST["cat"]) $LIST["cat"]="none";
+        if (!$LIST["cat"])
+            $LIST["cat"] = "none";
         $name = $LIST["cat"].'-'.time();
     }
 
@@ -49,7 +50,7 @@
 
     if (@$_POST["album-cat"])
     {
-        foreach (@$_POST as $key=>$value)
+        foreach (@$_POST as $key => $value)
         {
             if (strstr($key, "album-chcat-"))
             {
@@ -76,19 +77,18 @@
     echo "</form>\n";
     $piclist = glob("$dir/*.pic");
     echo '<h3>Фотографии</h3><table>';
-    foreach ($piclist as $key=>$value)
+    foreach ($piclist as $key => $value)
     {
         $lst = xcms_get_list($value);
         $imgv = str_replace(".pic", "", $value);
         $imgv = str_replace("$dir/", "", $imgv);
-        echo "<tr>
-            <td valign=\"top\"><b><a target=\"_blank\" href=\"?page=$pageid&amp;ref=showphoto&amp;img=$imgv\">{$lst["name"]}</a></b></td>
-            <td><i>{$lst["comment"]}</i></td>
-            <td><u>{$lst["cat"]}</u></td>
-            <td><input value=\"{$lst["picname"]}\"></td>
-            <td><input value=\"{$lst["prename"]}\"></td>
-
-            <td>\n<form method=\"post\">";
+        echo "<tr>\n".
+                "<td valign=\"top\"><b><a target=\"_blank\" href=\"?page=$pageid&amp;ref=showphoto&amp;img=$imgv\">{$lst["name"]}</a></b></td>\n".
+                "<td><i>{$lst["comment"]}</i></td>\n".
+                "<td><u>{$lst["cat"]}</u></td>\n".
+                "<td><input value=\"{$lst["picname"]}\"></td>\n".
+                "<td><input value=\"{$lst["prename"]}\"></td>\n".
+                "<td>\n<form method=\"post\">\n";
         xcmst_hidden("name", $value);
         xcmst_submit("Album-Delete-image", "Удалить");
         echo "</form></td>\n";
