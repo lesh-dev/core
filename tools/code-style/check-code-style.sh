@@ -111,7 +111,10 @@ check_file()
     fn="$1"
     # apply autofix if requested
     if [ "$autofix" == "yes" ] ; then
-        $my_base/autofix.py "$fn" || true
+        if ! $my_base/autofix.py "$fn" ; then
+            echo "*** Autofix failed for $fn ***"
+            return
+        fi
     fi
     # and then check
     if $my_base/check.py "$fn" > $tmp/check-result ; then
