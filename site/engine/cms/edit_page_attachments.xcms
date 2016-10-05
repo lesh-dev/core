@@ -85,7 +85,7 @@ function xcmst_show_attachments($page_prefix)
     }
     // show files
     $attach_counter = 0;
-    foreach ($attach_list as $key=>$value)
+    foreach ($attach_list as $key => $value)
     {
         $lst = xcms_get_list($value);
         $attach_src = "$page_prefix/{$lst["file-name"]}";

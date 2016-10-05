@@ -64,9 +64,9 @@ def remove_commas_in_html(line):
 
 def remove_html_attributes(line):
     line = re.sub(
-        r' (class|href|width|height|rows|cols|style|id|name|placeholder|'
+        r' (class|href|width|height|rows|cols|colspan|style|id|name|placeholder|'
         r'value|action|method|enctype|accept|alt|src|target|type|language|title|'
-        r'http-equiv|content)="',
+        r'http-equiv|content|size|disabled|content)="',
         ' \\1"',
         line
     )
