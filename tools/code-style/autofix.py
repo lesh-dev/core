@@ -17,7 +17,7 @@ import common
 
 def _normalize_spaces(line):
     # do not replace indentation
-    line = line.sub(r'([^ ]) {2,3}', '\\1 ')
+    line = re.sub(r'([^ ]) {2,3}', '\\1 ', line)
     return line
 
 
@@ -36,7 +36,7 @@ def fix_code_style(lines, file_type):
                     line = line.replace('===', ' === ')
                     line = _normalize_spaces(line)
 
-                if re.search(r'[^ ]==[^=]|[^=]==[^ ]', line):
+                if re.search(r'[^ !]==[^=]|[^=!]==[^ ]', line):
                     line = re.sub(r'([^=])==([^=])', '\\1 == \\2', line)
                     line = _normalize_spaces(line)
 
@@ -71,8 +71,4 @@ def print_usage():
 if len(sys.argv) < 2:
     print_usage()
 
-try:
-    fix_file(sys.argv[1])
-except Exception as e:
-    print 'ERROR', str(e)
-    sys.exit(1)
+fix_file(sys.argv[1])
