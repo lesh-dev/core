@@ -63,8 +63,8 @@ function xcms_create_contlist()
 
     xcms_process_page_diff("", $content, $item_pageid);
     ?>
-    <meta http-equiv="refresh" content="2;URL=/<# web_prefix #>?<?php
-        echo xcms_url(array('page'=>$item_pageid, 'ref'=>'admin'));?>" />
+    <meta http-equiv="refresh" content="2;URL=/<# web_prefix #>?<?php  // nostyle
+        echo xcms_url(array('page' => $item_pageid, 'ref' => 'admin'));?>" />
     <h3>Подождите, сейчас произойдёт перенаправление
         на страницу администрирования...</h3><?php
     return true;
@@ -139,8 +139,11 @@ function xcms_draw_contlist_create($result = true)
             "{$SETTINGS["content_dir"]}cms/pages/$pageid",
             file($template_file),
             1,
-            xcms_url(array('ref' =>$_GET["ref"])),
-            array("devel"=>true, "show"=>"all"),
+            xcms_url(array('ref' => $_GET["ref"])),
+            array(
+                "devel" => true,
+                "show" => "all",
+            ),
             0, 999);
         ?>
         </div>
