@@ -15,13 +15,30 @@ import re
 import common
 
 
+def _normalize_spaces(line):
+    # do not replace indentation
+    line = line.sub(r'([^ ]) {2,3}', '\\1 ')
+    return line
+
+
 def fix_code_style(lines, file_type):
     fixed_lines = []
     for line in lines:
         if file_type in common.PHP_FILES:
+
             if 'foreach' in line and re.match(r'([^ ]=>|=>[^ ])', line):
                 line = line.replace('=>', ' => ')
-                line = line.replace('  ', ' ')
+                line = _normalize_spaces(line)
+
+            if 'if (' in line:
+
+                if re.search(r'[^ ]===[^=]|[^=]===[^ ]', line):
+                    line = line.replace('===', ' === ')
+                    line = _normalize_spaces(line)
+
+                if re.search(r'[^ ]==[^=]|[^=]==[^ ]', line):
+                    line = re.sub(r'([^=])==([^=])', '\\1 == \\2', line)
+                    line = _normalize_spaces(line)
 
             line = re.sub(r'([\'"a-z])=>([\'"$A-Za-z])', '\\1 => \\2', line)
 
