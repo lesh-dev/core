@@ -34,7 +34,7 @@
             if ($editable)
             {?>
                 <a id="contlist-item-<?php echo $contlist_block_iter; ?>" class="link-button contlist-edit"
-                    href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'admin', 'page'=>$subpage_id)); ?>">Редактировать</a><?php
+                    href="/<# web_prefix #>?<?php echo xcms_url(array('ref' => 'admin', 'page' => $subpage_id)); ?>">Редактировать</a><?php
             }
             $alias = xcms_get_key_or($info, "alias");
             $timestamp = xcms_get_key_or($info, "timestamp-created");
@@ -70,11 +70,11 @@
         <div class="contlist-slider"><?php
         if ($pg > 0) {?>
             <a href="/<# web_prefix #>?<?php
-                echo xcms_url(array('page'=>$pageid, 'pg'=>$pg - 1)); ?>">Новые новости</a><?php
+                echo xcms_url(array('page' => $pageid, 'pg' => $pg - 1)); ?>">Новые новости</a><?php
         }
         if ($block_count >= ($pg + 1) * $block_show_count) {?>
             <a style="float: right;" href="/<# web_prefix #>?<?php
-                echo xcms_url(array('page'=>$pageid, 'pg'=>$pg + 1)); ?>">Старые новости</a><?php
+                echo xcms_url(array('page' => $pageid, 'pg' => $pg + 1)); ?>">Старые новости</a><?php
         }?>
         </div><?php
     }
