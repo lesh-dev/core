@@ -9,10 +9,29 @@ Please do not forget to sync changes in `lesh` and `dmvn` style checkers:
 * https://bitbucket.org/dmvn-corp/dmvn.mexmat.net/tools/code_style
 """
 
-import sys
 import re
+import sys
+import profile
 
 import common
+
+_DOUBLE_QUOTES = re.compile(r'".*?[^\\]"')
+_SINGLE_QUOTES = re.compile(r"'.*?'")
+_RE_HTML_ATTRIBUTES = re.compile(
+    r' (class|href|width|height|rows|cols|colspan|style|id|name|placeholder|'
+    r'value|action|method|enctype|accept|alt|src|target|type|language|title|'
+    r'http-equiv|content|size|disabled|content)="'
+)
+_FILE_EXPANSIONS = re.compile(r'\{[$a-zA-Z0-9._,-]*?\}')
+_JS_REGEXPS = re.compile(r'/[^/]+/\.test\(')
+
+_LINE_ENDINGS = re.compile(r'^[^\x0A\x0D]+[\n]$')
+_LINE_ENDINGS_LAST = re.compile(r'^[^\x0A\x0D]+$')
+
+_SHORTTAG = re.compile(r'<[?][^px]')
+_SHORTTAG_SHORT = re.compile(r'<[?]$')
+
+_SPACES = re.compile(r'^[ ]+')
 
 
 def print_bad_context(lines, bad_lines):
@@ -42,16 +61,15 @@ def print_bad_context(lines, bad_lines):
 # removes quoted strings from code
 def remove_strings(line):
     # remove double quotes
-    line = re.sub(r'".*?[^\\]"', '', line)
+    line = _DOUBLE_QUOTES.sub('', line)
     # remove single quotes
-    line = re.sub(r"'.*?'", '', line)
+    line = _SINGLE_QUOTES.sub('', line)
     return line
 
 
 # removes JS-style regexps from code
 def remove_js_regexps(line):
-    # remove double quotes
-    line = re.sub(r'/[^/]+/\.test\(', '', line)
+    line = _JS_REGEXPS.sub('', line)
     return line
 
 
@@ -63,13 +81,7 @@ def remove_commas_in_html(line):
 
 
 def remove_html_attributes(line):
-    line = re.sub(
-        r' (class|href|width|height|rows|cols|colspan|style|id|name|placeholder|'
-        r'value|action|method|enctype|accept|alt|src|target|type|language|title|'
-        r'http-equiv|content|size|disabled|content)="',
-        ' \\1"',
-        line
-    )
+    line = _RE_HTML_ATTRIBUTES.sub(' \\1"', line)
     return line
 
 
@@ -82,7 +94,7 @@ def convert_operators(line):
 
 # removes bash arrays file{a,bc}
 def remove_file_expansions(line):
-    line = re.sub(r'\{[$a-zA-Z0-9._,-]*?\}', '', line)
+    line = _FILE_EXPANSIONS.sub('', line)
     return line
 
 
@@ -113,15 +125,15 @@ def check_code_style(lines, file_type):
             continue
 
         # line endings check
-        lem = re.match('^[^\x0A\x0D]+[\n]$', line)
+        lem = _LINE_ENDINGS.match(line)
         if not lem:
-            lem = re.match('^[^\x0A\x0D]+$', line)
+            lem = _LINE_ENDINGS_LAST.match(line)
             # okay, last line may contain no CR-LF chars
             if not lem:
                 bad_lines.add("UNIX-style line endings only allowed", index)
 
         # spaces count check
-        sm = re.search('^[ ]+', line)
+        sm = _SPACES.search(line)
         if sm:
             spaces = sm.group()
             if len(spaces) % 4 != 0:
@@ -133,14 +145,13 @@ def check_code_style(lines, file_type):
                     bad_lines.add("Invalid spaces count: {}".format(len(spaces)), index)
 
         # tab check
-        tm = re.search('\t', line)
-        if tm:
+        if '\t' in line:
             bad_lines.add("No tabs allowed", index)
 
         # shorttag check
-        stm = re.search('<[?][^px]', line)
+        stm = _SHORTTAG.search(line)
         if not stm:
-            stm = re.search('<[?]$', line)
+            stm = _SHORTTAG_SHORT.search(line)
         if stm:
             bad_lines.add("No PHP shorttags allowed", index)
 
@@ -215,4 +226,11 @@ if len(sys.argv) < 2:
     print_usage()
 
 result = check_file(sys.argv[1])
+
+if 1:
+    p = profile.Profile()
+    p.run('check_file(sys.argv[1])')
+    p.create_stats()
+    p.print_stats(sort=1)
+
 sys.exit(result)
