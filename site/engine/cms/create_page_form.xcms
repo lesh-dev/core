@@ -24,7 +24,7 @@
     <span class="user-label">Тип содержимого</span>
     <select id="create-pagetype-selector" name="create-pagetype"><?php
     $page_types = xcms_get_tag_list("pagetype");
-    foreach ($page_types as $key=>$value)
+    foreach ($page_types as $key => $value)
     {
         if ($key == XCMS_TAG_NAME)
             continue;

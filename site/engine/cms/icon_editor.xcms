@@ -8,7 +8,7 @@ function xcmst_upload_icon()
         return;
     }
 
-    foreach ($_FILES as $key=>$value)
+    foreach ($_FILES as $key => $value)
         copy($value["tmp_name"], xcms_get_page_menu_icon());
 }
 ?>
