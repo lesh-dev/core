@@ -12,6 +12,7 @@ Please do not forget to sync changes in `lesh` and `dmvn` style checkers:
 import re
 import sys
 import profile
+import textwrap
 
 import common
 
@@ -229,7 +230,12 @@ result = check_file(sys.argv[1])
 
 if 1:
     p = profile.Profile()
-    p.run('check_file(sys.argv[1])')
+    p.run(textwrap.dedent(
+        """
+        for i in xrange(0, 10):
+            check_file(sys.argv[1])
+        """
+    ))
     p.create_stats()
     p.print_stats(sort=1)
 
