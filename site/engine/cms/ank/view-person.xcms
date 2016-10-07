@@ -32,7 +32,7 @@ function xsm_draw_list_link($person_id, $school_id)
     $target = ($school_id == XSM_SCHOOL_ANK_ID) ? "анкет" : "школы";
     $aux_param = "";
     if ($school_id != XSM_SCHOOL_ANK_ID)
-        $aux_param = xcms_url(array('school_id'=>$school_id));
+        $aux_param = xcms_url(array('school_id' => $school_id));
     $anchor = "#person$person_id";
     $url = $view.$aux_param.$anchor;
     xcmst_link($url, "view_list_p${person_id}_s${school_id}", "К&nbsp;списку&nbsp;$target", "person-to-list");
@@ -110,7 +110,7 @@ function xsm_print_person_header($db, $person, $school_id)
             <!--<span class="person-key top">Статус анкеты:</span>-->
             <span class="person-value"><?php echo $hr_status; ?></span><?php
             xsm_edit_link_generic(
-                'edit-person-status'.xcms_url(array('blamed_person_id'=>$person_id)),
+                'edit-person-status'.xcms_url(array('blamed_person_id' => $person_id)),
                 'Сменить статус');
             ?>
         </div>
@@ -359,12 +359,12 @@ function xsm_print_add_person_to_school($db, $school_id, $person)
     $school_title = xcms_get_key_or_enc($school, 'school_title');
     $add_href = "edit-person_school".
         xcms_url(array(
-            'person_school_id'=>XDB_NEW,
-            'school_id'=>$school_id,
-            'member_person_id'=>$person_id,
-            'current_class'=>$current_class,
-            'is_teacher'=>$is_teacher_typical,
-            'is_student'=>$is_student_typical
+            'person_school_id' => XDB_NEW,
+            'school_id' => $school_id,
+            'member_person_id' => $person_id,
+            'current_class' => $current_class,
+            'is_teacher' => $is_teacher_typical,
+            'is_student' => $is_student_typical
             ));
     xcmst_link($add_href, "add_person_school", "&nbsp;", "Зачислить на $school_title", "edit-link add");
 }
@@ -376,7 +376,7 @@ function xsm_print_edit_person_school($db, $school_id, $person_id)
     $school_title = xcms_get_key_or_enc($school, 'school_title');
     $edit_href = "edit-person_school".
         xcms_url(array(
-            'person_school_id'=>$person_school_id,
+            'person_school_id' => $person_school_id,
             ));
     xcmst_link($edit_href, "edit_person_school", "&nbsp;", "Редактировать роли и статусы на $school_title", "edit-link edit");
 }
@@ -389,8 +389,8 @@ function xsm_print_delete_person_from_school($db, $school_id, $person_id)
     $school_title = xcms_get_key_or_enc($school, 'school_title');
     $delete_href = "edit-person_school".
         xcms_url(array(
-            'person_school_id'=>$person_school_id,
-            'action'=>'delete'
+            'person_school_id' => $person_school_id,
+            'action' => 'delete'
             ));
     xcmst_link($delete_href, "delete_person_school", "&nbsp;", "Отчислить с $school_title", "edit-link delete");
 }
@@ -399,7 +399,7 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
 {
     $school = xdb_get_entity_by_id('school', $school_id);
     $school_title = xcms_get_key_or_enc($school, 'school_title');
-    $school_url = "list-person".xcms_url(array('school_id'=>$school_id));
+    $school_url = "list-person".xcms_url(array('school_id' => $school_id));
 
     $exams_passed = xdb_count($db,
         "SELECT COUNT(*) AS cnt
@@ -425,7 +425,7 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
     $need = xcms_get_key_or($person_school, 'courses_needed', '?');
 
     $need_href = "edit-person_school".
-        xcms_url(array('person_school_id'=>$person_school['person_school_id']));
+        xcms_url(array('person_school_id' => $person_school['person_school_id']));
     ?>
     <h2>Зачёты на <?php xcmst_link($school_url, "exams_link", $school_title); ?>.
         Нужно сдать <?php xcmst_link($need_href, "exams_need_link", $need.'&nbsp;'.xcms_plural($need, 'зачёт')); ?>,
@@ -473,9 +473,9 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
 
         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id);
 
-        $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
+        $course_url = "view-course".xcms_url(array('course_id' => $course_id));
         $hr_exam_status = xsm_make_enum($exam_data, "exam_status", "exam$exam_id");
-        $exam_url = "edit-exam".xcms_url(array('exam_id'=>$exam_id));
+        $exam_url = "edit-exam".xcms_url(array('exam_id' => $exam_id));
         ?>
         <tr>
             <td class="ankList"><a href="<?php echo $exam_url; ?>"><?php echo $hr_exam_status; ?></a></td>
