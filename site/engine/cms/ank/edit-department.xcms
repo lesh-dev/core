@@ -15,7 +15,7 @@ function xsm_edit_department()
                 <td class="ankListRowTitle">Отделение</td>
             </tr>
             <?php
-            foreach ($fields_desc as $key=>$desc)
+            foreach ($fields_desc as $key => $desc)
             {
                 if (xsm_is_bottom_field($key))
                     continue;

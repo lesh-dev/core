@@ -50,7 +50,7 @@ function xsm_edit_person_school()
                     на <?php echo $person_list_link; ?></td>
             </tr>
             <?php
-            foreach ($fields_desc as $key=>$desc)
+            foreach ($fields_desc as $key => $desc)
             {
                 if ($key == "school_id")
                     continue;

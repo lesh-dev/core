@@ -8,7 +8,7 @@ function xsm_edit_exam_operations($school_id, $student_person_id, $id)
     $is_new = ($id == XDB_NEW);
     $table_name = "exam";
     $ret_title = "Вернуться к просмотру участника";
-    $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$student_person_id));
+    $redir = "view-person".xcms_url(array('school_id' => $school_id, 'person_id' => $student_person_id));
     xsm_edit_ops($table_name, $is_new, $redir, $ret_title);
 }
 
@@ -52,7 +52,7 @@ function xsm_update_exam($table_name, $title, $fields)
     }
     else
     {
-        $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
+        $res = xdb_insert_or_update($table_name, array($key_name => $id), $_POST, $fields);
         if ($res)
         {
             $id = $res;
@@ -75,7 +75,7 @@ function xsm_warn_delete_exam($table_name, $title)
 {
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-    $redir = $table_name.xcms_url(array($key_name=>$id));
+    $redir = $table_name.xcms_url(array($key_name => $id));
     xsm_warn_delete_ops($table_name, $key_name, $id, $redir, "зачёт");
 }
 
@@ -88,7 +88,7 @@ function xsm_delete_exam($table_name, $title)
     $course_id = $exam['course_id'];
     $course = xdb_get_entity_by_id("course", $course_id);
     $school_id = $course['school_id'];
-    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
+    $redir = "view-person".xcms_url(array('person_id' => $person_id, 'school_id' => $school_id));
     $res = xdb_delete($table_name, $id);
     if ($res)
     {?>
@@ -148,9 +148,9 @@ function xsm_notify_exam_edit($exam)
     $hr_exam_status = $exam_statuses[$exam_status];
 
     $table_title = 'Изменён зачёт школьника <a'.
-        xsm_ext_href('view-person', array('person_id'=>$student_person_id)).'>'.
+        xsm_ext_href('view-person', array('person_id' => $student_person_id)).'>'.
         htmlspecialchars($student_fi).'</a> по курсу <a'.
-        xsm_ext_href('view-course', array('course_id'=>$course_id)).'>'.
+        xsm_ext_href('view-course', array('course_id' => $course_id)).'>'.
         htmlspecialchars($course_title)."</a> [$hr_exam_status]";
 
     $mail_msg = xsm_build_diff_msg(
@@ -205,7 +205,7 @@ function xsm_edit_exam()
                 <td class="ankListRowTitle">Зачёт на <?php echo $person_list_link; ?></td>
             </tr>
             <?php
-            foreach ($fields_desc as $key=>$desc)
+            foreach ($fields_desc as $key => $desc)
             {
                 if (xsm_draw_generic_fields_begin($desc, $exam, $key))
                     continue;
