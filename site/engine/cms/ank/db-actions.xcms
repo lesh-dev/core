@@ -3,9 +3,9 @@
 function xsm_update_entity($entity, $table_name, $title, $fields, $aux_param = '')
 {
     $key_name = "${table_name}_id";
-    $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+    $id = xcms_get_key_or($_POST, $key_name, 'invalid');  // invalid key
     $redir = ($id == XDB_NEW) ? "$entity$aux_param" : "$entity$aux_param#$table_name$id";
-    $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
+    $res = xdb_insert_or_update($table_name, array($key_name => $id), $_POST, $fields);
     if ($res)
     {?>
         <p><?php echo $title; ?> успешно сохранён.<?php
@@ -20,8 +20,8 @@ function xsm_update_entity($entity, $table_name, $title, $fields, $aux_param = '
 function xsm_update_entity_listmode($table_name, $title, $fields, $aux_param = '', $return_title = '')
 {
     $key_name = "${table_name}_id";
-    $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-    $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
+    $id = xcms_get_key_or($_POST, $key_name, 'invalid');  // invalid key
+    $res = xdb_insert_or_update($table_name, array($key_name => $id), $_POST, $fields);
     if ($res === true || $res > 0)
     {
         if ($id == XDB_NEW)
@@ -33,7 +33,7 @@ function xsm_update_entity_listmode($table_name, $title, $fields, $aux_param = '
     {?>
         <p>Не удалось добавить <?php echo $title; ?>.<?php
     }
-    $redir_view = "$table_name$aux_param&amp;$key_name=$id";
+    $redir_view = "$table_name$aux_param".xcms_url(array($key_name => $id));
     $redir_list = "$table_name$aux_param";
     ?>
     <a href="view-<?php echo $redir_view; ?>">Вернуться к просмотру<?php
@@ -73,7 +73,7 @@ function xsm_warn_delete_entity_listmode($table_name, $title, $aux_param = '')
 {
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-    $redir = "$table_name$aux_param&amp;$key_name=$id"; ?>
+    $redir = "$table_name$aux_param".xcms_url(array($key_name => $id)); ?>
     <div class="delete-warning">
         Вы действительно хотите удалить
         <b><?php echo $title; ?></b> с кодом <b><?php echo $id; ?></b>?<br />
@@ -159,15 +159,18 @@ function xsm_edit_operations_listmode($entity, $id, $title, $aux_param = '')
 function xsm_view_operations($table_name, $title, $aux_param = '')
 {?>
     <div class="xsm-edit-ops"><?php
-        xcmst_link("edit-$table_name$aux_param&amp;${table_name}_id=new", "add", "Добавить $title", "", "link-button btn"); ?>
+        $new = xcms_url(array("${table_name}_id" => "new"));
+        xcmst_link("edit-$table_name$aux_param$new", "add", "Добавить $title", "", "link-button btn"); ?>
     </div><?php
 }
 
 // Here entity should be equal to table name, but...
 function xsm_edit_delete_info($entity, $table_name, $id, $created, $modified, $aux_param = '')
-{?>
+{
+    $url_id = xcms_url(array("${table_name}_id" => $id));
+    ?>
     <span class="edit-op">
-        <a class="link-oper" href="edit-<?php echo "$entity$aux_param&amp;${table_name}_id=$id" ?>"><img
+        <a class="link-oper" href="edit-<?php echo "$entity$aux_param$url_id" ?>"><img
             src="<# full_engine_pub #>img/edit.gif" class="edit-icon"
             width="16" height="16"
             title="Редактировать" />Правка</a>
@@ -192,7 +195,8 @@ function xsm_edit_link_generic($url, $custom_title = 'Правка', $custom_hov
 // Less generic link for editing, based on previous function
 function xsm_edit_link($table_name, $id, $aux_param = '', $custom_title = 'Правка', $custom_hover = 'Редактировать')
 {
-    xsm_edit_link_generic("edit-$table_name$aux_param&amp;${table_name}_id=$id", $custom_title, $custom_hover);
+    $url_id = xcms_url(array("${table_name}_id" => $id));
+    xsm_edit_link_generic("edit-$table_name$aux_param$url_id", $custom_title, $custom_hover);
 }
 
 ?>
