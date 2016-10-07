@@ -21,7 +21,7 @@ function xsm_edit_school()
                 <td class="ankListRowTitle">Школа <b><?php echo $school_title; ?></b></td>
             </tr>
             <?php
-            foreach ($fields_desc as $key=>$desc)
+            foreach ($fields_desc as $key => $desc)
             {
                 if (xsm_is_bottom_field($key))
                     continue;

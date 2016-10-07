@@ -16,7 +16,7 @@ function xsm_person_change_status_operations($table_name, $id, $ret_title, $memb
 {
     $school_id = XSM_SCHOOL_ANK_ID;
     $is_new = ($id == XDB_NEW);
-    $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$member_person_id));
+    $redir = "view-person".xcms_url(array('school_id' => $school_id, 'person_id' => $member_person_id));
     xsm_edit_ops($table_name, $is_new, $redir, $ret_title, "Удалить комментарий");
 }
 
@@ -26,7 +26,7 @@ function xsm_person_change_status_operations($table_name, $id, $ret_title, $memb
 function xsm_update_person_status()
 {
     ?><p><?php
-    $res = xdb_insert_or_update('person_comment', array('person_comment_id'=>XDB_NEW), $_POST, xsm_get_fields("person_comment"));
+    $res = xdb_insert_or_update('person_comment', array('person_comment_id' => XDB_NEW), $_POST, xsm_get_fields("person_comment"));
 
     if ($res)
     {?>
@@ -38,7 +38,7 @@ function xsm_update_person_status()
     }
 
     $person_id = xcms_get_key_or($_POST, 'blamed_person_id', 'invalid'); // invalid key
-    $res = xdb_insert_or_update("person", array("person_id"=>$person_id), $_POST, xsm_get_fields("person"));
+    $res = xdb_insert_or_update("person", array("person_id" => $person_id), $_POST, xsm_get_fields("person"));
     if ($res)
     {?>
         Статус участника успешно сохранён. <?php
@@ -47,7 +47,7 @@ function xsm_update_person_status()
     {?>
         Не удалось обновить статус участника. <?php
     }
-    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>XSM_SCHOOL_ANK_ID));
+    $redir = "view-person".xcms_url(array('person_id' => $person_id, 'school_id' => XSM_SCHOOL_ANK_ID));
     ?>
     <a href="<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
 }
@@ -71,19 +71,19 @@ function xsm_notify_person_status_change()
     $old_status = $person["anketa_status"];
     $old_hr_status = $statuses[$old_status];
     $old_person_comment = array(
-        "anketa_status"=>$old_status,
+        "anketa_status" => $old_status,
     );
 
     $full_name = xsm_fio_enc($person);
     $table_title = 'Статус участника <a'.
-        xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
+        xsm_ext_href('view-person', array('person_id' => $person_id)).'>'.
         $full_name.'</a> изменён на <b>'.$hr_status.'</b>';
 
     $fields_desc = xsm_get_fields("person_comment");
     // merge some relevant fields from person
     $fields_desc["anketa_status"] = array(
-        "name"=>"Статус",
-        "type"=>"enum",
+        "name" => "Статус",
+        "type" => "enum",
     );
 
     // hack the message
@@ -128,7 +128,7 @@ function xsm_change_person_status()
             важно писать о том, <b>что</b> сделано (статус и так это отражает),
             важно писать о том, <b>почему</b> это сделано</td>
             <?php
-            foreach ($fields_desc as $key=>$desc)
+            foreach ($fields_desc as $key => $desc)
             {
                 if (xsm_draw_generic_fields_begin($desc, $person_comment, $key))
                     continue;
