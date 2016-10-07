@@ -42,6 +42,9 @@ def fix_code_style(lines, file_type):
 
             line = re.sub(r'([\'"a-z])=>([\'"$A-Za-z])', '\\1 => \\2', line)
 
+            if re.search(r'([^a-z]|^)if\(', line):
+                line = line.replace('if(', 'if (')
+
         fixed_lines.append(line)
 
     return fixed_lines
