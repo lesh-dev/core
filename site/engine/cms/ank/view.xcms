@@ -57,16 +57,16 @@ require_once("${engine_dir}xsm/middleware.php");
             $merge_state = $merge["state"];
             $person_id = $person["person_id"];
             // update merged data
-            $update_result = xdb_insert_or_update('person', array('person_id'=>$person_id), $person, $person_desc);
+            $update_result = xdb_insert_or_update('person', array('person_id' => $person_id), $person, $person_desc);
 
             $merge_state = "Получена новая анкета для этого человека. Внесены следующие изменения:\n$merge_state";
             $person_comment = array(
-                "comment_text"=>$merge_state,
-                "owner_login"=>"anonymous",
-                "blamed_person_id"=>$person_id,
+                "comment_text" => $merge_state,
+                "owner_login" => "anonymous",
+                "blamed_person_id" => $person_id,
             );
             // assume comment addition is not so important, don't check
-            xdb_insert_or_update('person_comment', array('person_comment_id'=>XDB_NEW), $person_comment, xsm_get_fields("person_comment"));
+            xdb_insert_or_update('person_comment', array('person_comment_id' => XDB_NEW), $person_comment, xsm_get_fields("person_comment"));
 
             $write_success = ($update_result === true);
 
@@ -77,7 +77,7 @@ require_once("${engine_dir}xsm/middleware.php");
         else
         {
             // new person arrived
-            $person_id = xdb_insert_or_update('person', array('person_id'=>XDB_NEW), $person, $person_desc);
+            $person_id = xdb_insert_or_update('person', array('person_id' => XDB_NEW), $person, $person_desc);
             $write_success = ($person_id != false);
             // fill newly received identifier
             $person["person_id"] = $person_id;
