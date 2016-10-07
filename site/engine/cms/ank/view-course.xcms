@@ -8,7 +8,7 @@ function xsm_print_course()
     $course = xdb_get_entity_by_id('course', $course_id);
     $school_id = $course["school_id"];
     $school = xdb_get_entity_by_id('school', $school_id);
-    $href_courses = "list-course".xcms_url(array('school_id'=>$school_id));
+    $href_courses = "list-course".xcms_url(array('school_id' => $school_id));
     ?>
     <table class="ankList table table-bordered table-hover table-condensed">
     <?php
@@ -21,7 +21,7 @@ function xsm_print_course()
         $course_created = xsm_ymdhm($course["course_created"]);
         $course_modified = xsm_ymdhm($course["course_modified"]);
         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id);
-        $teachers_edit_url = xcms_url(array('school_id'=>$school_id, 'course_id'=>$course_id));
+        $teachers_edit_url = xcms_url(array('school_id' => $school_id, 'course_id' => $course_id));
         $hr_course_area = xsm_make_enum($course, "course_area");
         $hr_course_type = xsm_make_enum($course, "course_type");
 
@@ -80,7 +80,7 @@ function xsm_print_course()
             $exam_modified = xsm_ymdhm($exam["exam_modified"]);
 
             $hr_exam_status = xsm_make_enum($exam, "exam_status");
-            $exam_url = "edit-exam".xcms_url(array('exam_id'=>$exam['exam_id']));
+            $exam_url = "edit-exam".xcms_url(array('exam_id' => $exam['exam_id']));
 
         ?>
         <tr>

@@ -15,7 +15,7 @@ function xsm_edit_course_teachers()
     $course_teachers = xsm_get_course_teachers_list($db, $course_id, $school_id);
 
     $course_title = xcms_get_key_or_enc($course, 'course_title');
-    $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
+    $course_url = "view-course".xcms_url(array('course_id' => $course_id));
     ?>
     <table class="ankEdit">
         <tr><td class="ankListRowTitle">Преподы курса
