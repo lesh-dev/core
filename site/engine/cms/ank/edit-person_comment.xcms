@@ -7,7 +7,7 @@ function xsm_person_comment_edit_operations($table_name, $id, $ret_title, $membe
 {
     $school_id = XSM_SCHOOL_ANK_ID;
     $is_new = ($id == XDB_NEW);
-    $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$member_person_id));
+    $redir = "view-person".xcms_url(array('school_id' => $school_id, 'person_id' => $member_person_id));
     xsm_edit_ops($table_name, $is_new, $redir, $ret_title, "Удалить комментарий");
 }
 
@@ -20,7 +20,7 @@ function xsm_update_person_comment($title, $fields)
     $table_name = "person_comment";
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-    $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields);
+    $res = xdb_insert_or_update($table_name, array($key_name => $id), $_POST, $fields);
     if ($res)
     {
         $id = $res;
@@ -33,7 +33,7 @@ function xsm_update_person_comment($title, $fields)
     }
     $person_id = xcms_get_key_or($_POST, 'blamed_person_id', XDB_INVALID_ID);
     $school_id = XSM_SCHOOL_ANK_ID;
-    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
+    $redir = "view-person".xcms_url(array('person_id' => $person_id, 'school_id' => $school_id));
     ?>
     <a href="<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
 }
@@ -44,7 +44,7 @@ function xsm_warn_delete_person_comment($table_name, $title, $aux_param = '')
 {
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-    $redir = "$table_name$aux_param".xcms_url(array($key_name=>$id));
+    $redir = "$table_name$aux_param".xcms_url(array($key_name => $id));
     xsm_warn_delete_ops($table_name, $key_name, $id, $redir, "комментарий", $aux_param);
 }
 
@@ -55,10 +55,10 @@ function xsm_delete_person_comment($table_name, $title, $aux_param = '')
     $person_comment = xdb_get_entity_by_id($table_name, $id);
     $person_id = $person_comment['blamed_person_id'];
     $school_id = XSM_SCHOOL_ANK_ID;
-    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
+    $redir = "view-person".xcms_url(array('person_id' => $person_id, 'school_id' => $school_id));
     // experimental 'delete as status update'
-    $res = xdb_insert_or_update($table_name, array($key_name=>$id),
-        array('person_comment_deleted'=>'deleted'), xsm_get_fields("person_comment"));
+    $res = xdb_insert_or_update($table_name, array($key_name => $id),
+        array('person_comment_deleted' => 'deleted'), xsm_get_fields("person_comment"));
     //$res = xdb_delete($table_name, $id);
     if ($res)
     {?>
@@ -82,7 +82,7 @@ function xsm_notify_person_comment_edit($person_comment)
 
     $full_name = xsm_fio_enc($person);
     $table_title = 'Добавлен комментарий к участнику: <a'.
-        xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
+        xsm_ext_href('view-person', array('person_id' => $person_id)).'>'.
         $full_name.'</a>';
 
     $mail_msg = xsm_build_diff_msg(
@@ -121,7 +121,7 @@ function xsm_edit_person_comment()
                 <td class="ankListRowTitle">Комментарий</td>
             </tr>
             <?php
-            foreach ($fields_desc as $key=>$desc)
+            foreach ($fields_desc as $key => $desc)
             {
                 if (xsm_draw_generic_fields_begin($desc, $person_comment, $key))
                     continue;
