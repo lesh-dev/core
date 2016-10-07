@@ -34,7 +34,7 @@
         width: 200px;
     }
 
-    div.auth-widget input[type="submit"] {
+    div.auth-widget input[type="submit"] { /* nostyle */
         border: 2px solid #7f7f7f;
         border-radius: 2px;
         padding-left: 5px;
