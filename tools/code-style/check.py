@@ -168,11 +168,6 @@ def check_code_style(lines, file_type):
         if stm:
             bad_lines.add("No PHP shorttags allowed", index)
 
-        # flow control operators ugly style check
-        itm = _UGLY_CONTROL.search(line)
-        if itm:
-            bad_lines.add("if/elseif/for/foreach/while clause should be separated from condition braces", index)
-
         line_cleanup = line
         line_cleanup = remove_html_attributes(line_cleanup)
         line_cleanup = remove_strings(line_cleanup)
@@ -181,6 +176,11 @@ def check_code_style(lines, file_type):
         line_cleanup = remove_commas_in_html(line_cleanup)
         line_cleanup = convert_operators(line_cleanup)
         line_cleanup = _COMMA_END.sub('', line_cleanup)
+
+        # flow control operators ugly style check
+        itm = _UGLY_CONTROL.search(line_cleanup)
+        if itm:
+            bad_lines.add("if/elseif/for/foreach/while clause should be separated from condition braces", index)
 
         # missing spaces after commas
         sac = _SPACES_COMMAS.search(line_cleanup)
