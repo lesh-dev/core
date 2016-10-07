@@ -9,7 +9,7 @@ $sort_by_curator_group = xcms_get_persistent_key("list-person", "sort_by_curator
 
 $school_id = xsm_get_default_school_from_request();
 
-$form_action = xcms_url(array('school_id'=>$school_id));
+$form_action = xcms_url(array('school_id' => $school_id));
 
 ?>
 <form method="post" name="filter" class="xsm-filter" id="filter-form"
@@ -96,12 +96,12 @@ function xsm_show_person_list($school_id)
     $school_title = xcms_get_key_or_enc($school, 'school_title');
 
     $person_school_add_url = xcms_url(array(
-        'school_id'=>$school_id,
+        'school_id' => $school_id,
     ));
     $person_add_new_url = xcms_url(array(
-        'person_id'=>XDB_NEW,
-        'anketa_status'=>'cont',
-        'school_id'=>$school_id,
+        'person_id' => XDB_NEW,
+        'anketa_status' => 'cont',
+        'school_id' => $school_id,
     ));
 
     $student_count = 0;
@@ -190,8 +190,8 @@ function xsm_show_person_list($school_id)
         }
 
         $person_school_url = "view-person".xcms_url(array(
-            'person_id'=>$person_id,
-            'school_id'=>$school_id));
+            'person_id' => $person_id,
+            'school_id' => $school_id));
 
         $person_school_comment = xcms_html_wrap_by_crlf(xsm_highlight_links($person['person_school_comment']));
 

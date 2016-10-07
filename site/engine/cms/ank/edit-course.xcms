@@ -48,12 +48,12 @@ function xsm_edit_course()
 
     $school = xdb_get_entity_by_id('school', $school_id);
     $school_title = xcms_get_key_or_enc($school, "school_title");
-    $href_courses = "list-course".xcms_url(array('school_id'=>$school_id));
-    $teachers_edit_url = xcms_url(array('school_id'=>$school_id, 'course_id'=>$course_id));
+    $href_courses = "list-course".xcms_url(array('school_id' => $school_id));
+    $teachers_edit_url = xcms_url(array('school_id' => $school_id, 'course_id' => $course_id));
     $fields_desc = xsm_get_fields("course"); ?>
     <form method="post" action="edit-course"><?php
         xsm_edit_operations_listmode('course', $course_id, 'Вернуться к списку курсов',
-            xcms_url(array('school_id'=>$school_id)));
+            xcms_url(array('school_id' => $school_id)));
         xsm_draw_field_hidden("course_id", $course_id);
         xsm_draw_field_hidden("school_id", $school_id);
         // render course_teacher_id only when new course added
@@ -75,7 +75,7 @@ function xsm_edit_course()
                 }?>
             </td></tr>
             <?php
-            foreach ($fields_desc as $key=>$desc)
+            foreach ($fields_desc as $key => $desc)
             {
                 if ($key == "school_id") // we already show school title in table caption
                     continue;
@@ -86,7 +86,7 @@ function xsm_edit_course()
         </table><?php
         xsm_bottom_fields('course', $course);
         xsm_edit_operations_listmode('course', $course_id, 'Вернуться к списку курсов',
-            xcms_url(array('school_id'=>$school_id)));
+            xcms_url(array('school_id' => $school_id)));
         ?>
     </form>
     <?php
@@ -95,7 +95,7 @@ function xsm_edit_course()
 if (@$_POST["update-course"])
 {
     $school_id = xcms_get_key_or($_POST, 'school_id', XDB_INVALID_ID);
-    $aux_param = xcms_url(array('school_id'=>$school_id));
+    $aux_param = xcms_url(array('school_id' => $school_id));
     $new_course_id = xsm_update_entity_listmode('course', 'Курс', xsm_get_fields("course"), $aux_param);
 
     $course_teacher_id = xcms_get_key_or($_POST, 'course_teacher_id', NULL);
@@ -107,13 +107,13 @@ if (@$_POST["update-course"])
 elseif (@$_POST["delete-course"])
 {
     $school_id = xcms_get_key_or($_POST, 'school_id', XDB_INVALID_ID);
-    $aux_param = xcms_url(array('school_id'=>$school_id));
+    $aux_param = xcms_url(array('school_id' => $school_id));
     xsm_warn_delete_entity_listmode('course', 'курс', $aux_param);
 }
 elseif (@$_POST["confirm-delete-course"])
 {
     $school_id = xcms_get_key_or($_GET, 'school_id', XDB_INVALID_ID);
-    $aux_param = xcms_url(array('school_id'=>$school_id));
+    $aux_param = xcms_url(array('school_id' => $school_id));
     xsm_delete_entity_listmode('course', 'Курс', $aux_param);
 }
 else
