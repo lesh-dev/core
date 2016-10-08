@@ -18,6 +18,8 @@ class XcmsMailerTestMailRu(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
+
         self.gotoRoot()
 
         inpEMail = self.m_conf.getValidEmail('mail.ru')

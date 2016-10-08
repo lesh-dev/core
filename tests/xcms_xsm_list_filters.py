@@ -95,6 +95,8 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
             self.failTest("Search with wrong department should return none records. Filters are broken. ")
 
     def run(self):
+        self.ensure_logged_off()
+
         self.performLoginAsManager()
         self.gotoRoot()
         self.gotoXsm()

@@ -21,6 +21,8 @@ class XcmsContentContlist(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
+
         self.performLoginAsAdmin()
         self.gotoAdminPanel()
 
