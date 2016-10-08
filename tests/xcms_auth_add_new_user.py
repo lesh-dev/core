@@ -125,3 +125,5 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
 
         currentEMail = self.getElementValueById(emailEle)
         self.assertEqual(currentEMail, newEMail, "User e-mail in user profile does not match changed user e-mail. ")
+
+        self.performLogout()
