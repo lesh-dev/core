@@ -23,6 +23,8 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
+
         self.gotoRoot()
 
         # first, login as admin
@@ -125,5 +127,3 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
 
         currentEMail = self.getElementValueById(emailEle)
         self.assertEqual(currentEMail, newEMail, "User e-mail in user profile does not match changed user e-mail. ")
-
-        self.performLogout()

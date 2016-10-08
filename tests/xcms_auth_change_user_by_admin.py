@@ -11,6 +11,8 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
+
         # first, login as admin
         inpLogin = "priv_user_" + random_crap.randomText(8)
         inpEMail = random_crap.randomEmail()

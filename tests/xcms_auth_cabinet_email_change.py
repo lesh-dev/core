@@ -16,6 +16,7 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
 
         inpLogin1 = "cab_email_" + random_crap.randomText(6)
         inpLogin2 = "cab_email_" + random_crap.randomText(6)
@@ -87,5 +88,3 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         print "logging as second created user. "
         if not self.performLogin(inpLogin2, inpPass2):
             self.failTest("I was not able to login as second user. ")
-
-

@@ -449,6 +449,10 @@ class XcmsTest(XcmsTestWithConfig):
         # self.gotoUrlByLinkText(u"Вернуться к списку комментов") # older variant
         self.gotoBackToAnketaView()
 
+    def ensure_logged_off(self):
+        self.performLogout()
+        self.gotoRoot()
+
     def performLogoutFromSite(self):
         self.gotoUrlByLinkText(u"Выход")
 
