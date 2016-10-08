@@ -15,6 +15,7 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
         inpLogin = "xsm_link_" + random_crap.randomText(6)
         inpEMail = random_crap.randomEmail()
         inpPass = random_crap.randomText(8)

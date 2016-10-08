@@ -8,7 +8,7 @@ import random_crap
 class XcmsXsmClearForestStatus(xtest_common.XcmsTest):
 
     def run(self):
-
+        self.ensure_logged_off()
         self.performLoginAsAdmin()
         self.gotoUrlByLinkText(u"Выходы в лес")
 

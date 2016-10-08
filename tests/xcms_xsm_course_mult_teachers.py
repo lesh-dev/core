@@ -68,7 +68,7 @@ class XcmsXsmCourseWithMultipleTeachers(xtest_common.XcmsTest):
         return name
     
     def run(self):
-
+        self.ensure_logged_off()
         self.performLoginAsManager()
         self.gotoXsm()
         

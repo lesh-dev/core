@@ -17,6 +17,7 @@ class XcmsXsmChangeStatusQuick(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
 
         testMailPrefix = self.m_conf.getAnketaNamePrefix()
 
