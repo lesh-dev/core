@@ -71,14 +71,14 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
         inpFirstName = self.fillElementById("first_name-input", inpFirstName)
         inpMidName = self.fillElementById("patronymic-input", inpMidName)
 
-        department = u"Математическое"
-        self.setOptionValueByIdAndValue("department_id-selector", department)
+        department_id = 3  # Математическое
+        self.setOptionValueByIdAndValue("department_id-selector", department_id)
         # self.setOptionValueByNameAndValue("department_id", department)
         self.clickElementById("update-person-submit")
 
         self.gotoBackToPersonView()
         self.gotoXsmAllPeople()
-        self.setOptionValueByIdAndValue("show_department_id-selector", department)
+        self.setOptionValueByIdAndValue("show_department_id-selector", department_id)
 
         alias = xtest_common.shortAlias(inpLastName, inpFirstName)
         self.fillElementById(self.FIOFilterId, alias)
