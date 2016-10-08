@@ -17,6 +17,7 @@ class XcmsAuthSetDuplicateEmailByAdmin(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
 
         # step one: create first user
         inpLogin1 = "dup_mail1_" + random_crap.randomText(8)

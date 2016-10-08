@@ -36,7 +36,7 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(teacherAlias)
 
     def run(self):
-
+        self.ensure_logged_off()
         self.performLoginAsManager()
 
         self.gotoXsm()

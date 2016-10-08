@@ -9,11 +9,8 @@ class XcmsVersionCheck(xtest_common.XcmsTest):
     This test checks if version is displayed on main page and in admin panel.
     """
     def run(self):
-
-        self.logAdd("test begin")
+        self.ensure_logged_off()
         self.gotoRoot()
-
-        self.logAdd("gotoRoot done")
 
         # frontend
         feVerXpath = "//span[@class='site-version']"
@@ -27,8 +24,6 @@ class XcmsVersionCheck(xtest_common.XcmsTest):
         if not m:
             self.failTest("Site version does not match expected regexp. ");
 
-        self.logAdd("before login")
-
         self.performLoginAsAdmin()
         self.logAdd("before admin panel")
         self.gotoAdminPanel()
@@ -41,5 +36,3 @@ class XcmsVersionCheck(xtest_common.XcmsTest):
         m = re.search(versionRegexp, cpVersion)
         if not m:
             self.failTest("Site version in admin CP does not match expected regexp. ");
-
-        self.logAdd("test done OK")

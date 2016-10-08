@@ -357,7 +357,6 @@ class XcmsTest(XcmsTestWithConfig):
         return inp_login, inpEMail, inpPass, inpName
 
     def removePreviousUsersWithTestEmail(self, emailToDelete):
-
         self.performLoginAsAdmin()
         self.gotoAdminPanel()
         self.gotoUserList()

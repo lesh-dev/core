@@ -64,9 +64,10 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
 
     # -------------------- begining of the test
     def run(self):
+        self.ensure_logged_off()
+
         # anketa fill positive test:
         # all fields are filled with correct values.
-
         self.gotoRoot()
 
         # navigate to anketas

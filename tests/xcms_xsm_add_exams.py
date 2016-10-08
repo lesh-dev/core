@@ -61,6 +61,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         self.assertBodyTextPresent(u"Не сдан")
 
     def run(self):
+        self.ensure_logged_off()
 
         self.m_listenedStatus = u"Прослушан"
 

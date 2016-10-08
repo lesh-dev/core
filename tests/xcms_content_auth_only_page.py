@@ -19,7 +19,7 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
     """
 
     def run(self):
-
+        self.ensure_logged_off()
         self.performLoginAsEditor()
         self.gotoAdminPanel()
 

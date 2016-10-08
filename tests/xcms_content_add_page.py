@@ -32,6 +32,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
 
         # avoid spontaneous HTML tags
         self.specChars = random_crap.specialCharsWoAngle  # without <>

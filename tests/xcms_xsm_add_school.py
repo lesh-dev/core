@@ -17,7 +17,7 @@ class XcmsXsmAddSchool(xtest_common.XcmsTest):
     """
 
     def run(self):
-
+        self.ensure_logged_off()
         self.performLoginAsManager()
         self.gotoXsm()
         self.gotoXsmSchools()

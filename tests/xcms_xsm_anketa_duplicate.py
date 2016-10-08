@@ -101,6 +101,8 @@ class XcmsXsmAnketaDuplicate(xtest_common.XcmsTest):
 
     # -------------------- begining of the test
     def run(self):
+        self.ensure_logged_off()
+
         # add anketa one
         self.generateData()
         self.addAnketa()
