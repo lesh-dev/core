@@ -87,7 +87,8 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
         if self.countIndexedUrlsByLinkText(alias) != 1:
             self.failTest("Search with proper department selection return one record. Filters are broken. ")
 
-        self.setOptionValueByIdAndValue("show_department_id-selector", u"Другое")
+        other_department_id = 2  # Другое
+        self.setOptionValueByIdAndValue("show_department_id-selector", other_department_id)
         self.fillElementById(self.FIOFilterId, alias)
         self.clickElementByName("show-person")
 

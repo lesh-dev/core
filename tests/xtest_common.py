@@ -399,7 +399,7 @@ class XcmsTest(XcmsTestWithConfig):
         self.gotoUrlByPartialLinkText(login)
 
         self.fillElementById("email-input", email)
-        self.clickElementByName("update_user-submit")
+        self.clickElementByName("update_user")
 
         # logoff root
         if "do_not_logout_admin" not in auxParams:
