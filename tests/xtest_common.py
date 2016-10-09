@@ -54,7 +54,7 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         if "<!DOCTYPE" in first_line:
             # ok
             return True
-        
+
         # not found
         if self.isAuthPage():
             self.logAdd("DOCTYPE not detected, but this page seems to be Auth page. ", "warning")
@@ -232,6 +232,10 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.logAdd("performLogout")
         self.addAction("user-logout")
         self.gotoPage("/?&mode=logout&ref=admin")
+
+    def ensure_logged_off(self):
+        self.performLogout()
+        self.gotoRoot()
 
     def getWelcomeMessage(self, login):
         return u"Привет, " + login
@@ -447,10 +451,6 @@ class XcmsTest(XcmsTestWithConfig):
     def gotoBackAfterComment(self):
         # self.gotoUrlByLinkText(u"Вернуться к списку комментов") # older variant
         self.gotoBackToAnketaView()
-
-    def ensure_logged_off(self):
-        self.performLogout()
-        self.gotoRoot()
 
     def performLogoutFromSite(self):
         self.gotoUrlByLinkText(u"Выход")
