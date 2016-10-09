@@ -121,7 +121,7 @@
         xcmst_submit("preview", "Предпросмотр"); ?>
         <a <?php echo xcms_href(array('page' => $pageid, 'ref' => 'index')); ?> class="submit">Свернуть редактор</a>
         Версия:
-        <select name="versions" id="versions-top"><?php echo $version_list; ?></select>
+        <select name="versions" id="versions-select"><?php echo $version_list; ?></select>
         <?php xcmst_submit("set_version", "Смотреть версию"); ?>
         <?php include(translate('<! edit/help !>')); ?>
     </div>

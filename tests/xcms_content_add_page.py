@@ -156,18 +156,18 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.clickElementById("commit-submit")
         self.wait(timeToWait, "waiting after version 3")
 
-        self.setOptionValueByIdAndIndex("versions-top", 3)
-        self.clickElementById("set-version-top")  # Смотреть версию
+        self.setOptionValueByIdAndIndex("versions-select", 3)
+        self.clickElementById("set_version-submit")  # Смотреть версию
         self.loadWait()
         self.assertAceEditorElementText(versionUnoText)
 
-        self.setOptionValueByIdAndIndex("versions-top", 1)
-        self.clickElementById("set-version-top")  # Смотреть версию
+        self.setOptionValueByIdAndIndex("versions-select", 1)
+        self.clickElementById("set_version-submit")  # Смотреть версию
         self.loadWait()
         self.assertAceEditorElementText(versionTresText)
 
-        self.setOptionValueByIdAndIndex("versions-top", 2)
-        self.clickElementById("set-version-top")  # Смотреть версию
+        self.setOptionValueByIdAndIndex("versions-select", 2)
+        self.clickElementById("set_version-submit")  # Смотреть версию
         self.loadWait()
         self.assertAceEditorElementText(versionDosText)
 
@@ -183,14 +183,14 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         versionDoNotLostText = self.fillAceEditorElement(versionDoNotLostText)
         self.clickElementById("commit-submit")
 
-        self.setOptionValueByIdAndIndex("versions-top", 2)
-        self.clickElementById("set-version-top")  # Смотреть версию
+        self.setOptionValueByIdAndIndex("versions-select", 2)
+        self.clickElementById("set_version-submit")  # Смотреть версию
         self.loadWait()
         self.assertAceEditorElementText(versionTresText, "Here should be version 3, not lost version 4. ")
 
         # finally, check head revision
-        self.setOptionValueByIdAndIndex("versions-top", 1)
-        self.clickElementById("set-version-top")  # Смотреть версию
+        self.setOptionValueByIdAndIndex("versions-select", 1)
+        self.clickElementById("set_version-submit")  # Смотреть версию
         self.loadWait()
         self.assertAceEditorElementText(versionDoNotLostText)
 
