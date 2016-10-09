@@ -85,7 +85,7 @@ class XcmsXsmAnketaDuplicate(xtest_common.XcmsTest):
         commentText = u"Меняем статус первой анкете: " + random_crap.randomCrap(5)
         commentText = self.fillElementById("comment_text-text", commentText)
 
-        self.clickElementById("update-person_comment-submit-top")
+        self.clickElementById("update-person_comment-submit")
         self.gotoBackToPersonView()
 
         self.newState = u"Отложен"

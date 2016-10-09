@@ -53,7 +53,7 @@ class XcmsXsmChangeStatusQuick(xtest_common.XcmsTest):
         commentText = u"Комментарий к смене статуса " + random_crap.randomCrap(5)
         commentText = self.fillElementById("comment_text-text", commentText)
 
-        self.clickElementById("update-person_comment-submit-top")
+        self.clickElementById("update-person_comment-submit")
         self.gotoBackToPersonView()
 
         self.assertBodyTextPresent(u"Статус Активный изменён на Обсуждается")

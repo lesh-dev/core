@@ -157,9 +157,9 @@
             }
 
             $("#commit-submit").click(xcms_set_editor_value);
-            $("#commit-submit-1").click(xcms_set_editor_value);
+            $("#commit-submit1").click(xcms_set_editor_value);
             $("#preview-submit").click(xcms_set_editor_value);
-            $("#preview-submit-1").click(xcms_set_editor_value);
+            $("#preview-submit1").click(xcms_set_editor_value);
         });
 
     </script>
