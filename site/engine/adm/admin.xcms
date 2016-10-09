@@ -15,10 +15,11 @@ if (!@$_GET["page"])
 ?><# cms/create_page_handler #><?php
     $last_action_result = "";
     $page_deleted = false;
+    // FIXME(mvel): create-page style
     if (@$_POST["create-page"])
         $last_action_result = xcms_create_page();
 
-    if (@$_POST["delete-section"])
+    if (@$_POST["delete_section"])
     {
         if (xcms_delete_page($pageid))
         {

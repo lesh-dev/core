@@ -12,7 +12,7 @@
     <p>Вы собираетесь удалить текущий раздел <b><?php echo "$sec_name$menu_title"; ?></b>.
     Вы <b>точно</b> уверены, что хотите это сделать?</p>
     <form method="post"><?php
-        xcmst_hidden("delete-section", "true");
+        xcmst_hidden("delete_section", "true");
         xcmst_submit("delete_page", "Таки да, удалить!", "Восстановление страницы будет невозможно", "delete");
     ?></form>
 </div>
