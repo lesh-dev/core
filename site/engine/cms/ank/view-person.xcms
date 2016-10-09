@@ -502,7 +502,7 @@ function xsm_print_person_selected_school($db, $school_id, $person)
     if ($person_school_id === NULL)
     {?>
         На данной школе не присутствовал.
-        <?php echo xsm_print_add_person_to_school($db, $school_id, $person, /*use_title=*/true); ?>.
+        <?php echo xsm_print_add_person_to_school($db, $school_id, $person, /*use_title = */true); ?>.
         Чтобы зачислить человека на школу, можно также нажать на синий плюсик
         рядом с&nbsp;соответствующей школой.<?php
         return;
