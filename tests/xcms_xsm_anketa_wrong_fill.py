@@ -24,9 +24,6 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
 
     def run(self):
         # anketa fill negative test:
-
-        testMailPrefix = self.m_conf.getAnketaNamePrefix()
-
         self.gotoRoot()
 
         # navigate to anketas
@@ -44,7 +41,7 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         self.assertBodyTextPresent(lastNameTooShort)
 
         # generate some text
-        inpLastName = testMailPrefix + u"Криворучкин" + random_crap.randomText(5)
+        inpLastName = u"Криворучкин" + random_crap.randomText(5)
         inpFirstName = u"Хакер" + random_crap.randomText(3)
         inpMidName = u"Ламерович" + random_crap.randomText(3)
 

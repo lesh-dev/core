@@ -19,8 +19,6 @@ class XcmsXsmChangeStatusQuick(xtest_common.XcmsTest):
     def run(self):
         self.ensure_logged_off()
 
-        testMailPrefix = self.m_conf.getAnketaNamePrefix()
-
         self.performLoginAsManager()
 
         self.gotoXsm()
@@ -28,7 +26,7 @@ class XcmsXsmChangeStatusQuick(xtest_common.XcmsTest):
         self.gotoXsmAddPerson()
 
         # generate
-        inpLastName = testMailPrefix + u"Статусов" + random_crap.randomText(4)
+        inpLastName = u"Статусов" + random_crap.randomText(4)
         inpFirstName = u"Иннокентий_" + random_crap.randomText(3)
         inpMidName = u"Петрович_" + random_crap.randomText(3)
 
