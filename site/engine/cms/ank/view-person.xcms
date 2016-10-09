@@ -173,7 +173,7 @@ function xsm_print_person_schools($db, $person, $current_school_id)
     ?>
     <table class="ankList table table-bordered"><tr>
         <td class="school-selection <?php echo $active_ank; ?>">
-            <div><?php
+            <div style="min-width: 6em;"><?php
             echo xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID, "Анкета");
             xsm_edit_link('person', $person_id, '', 'Ред.');
             ?>
