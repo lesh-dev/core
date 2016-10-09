@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import re
+import logging
+
 import xtest_common
 import random_crap
 
@@ -64,16 +67,16 @@ class XcmsXsmCourseWithMultipleTeachers(xtest_common.XcmsTest):
 
     def filterTeacherName(self, name):
         if name.startswith("("):
-            return name[4:]
+            return re.sub(r'\(.*?\) *', '', name)
         return name
-    
+
     def run(self):
         self.ensure_logged_off()
         self.performLoginAsManager()
         self.gotoXsm()
-        
+
         self.addSchool()
-        
+
         self.addTeacher()
         self.addTeacher()
         self.addTeacher()
@@ -96,36 +99,39 @@ class XcmsXsmCourseWithMultipleTeachers(xtest_common.XcmsTest):
         id1, teacher1 = self.getOptionValueByIdAndIndex("course_teacher_id-selector", 1)
         id2, teacher2 = self.getOptionValueByIdAndIndex("course_teacher_id-selector", 2)
         id3, teacher3 = self.getOptionValueByIdAndIndex("course_teacher_id-selector", 3)
-        
-        self.logAdd("Teacher 1: " + teacher1)
-        self.logAdd("Teacher 2: " + teacher2)
-        self.logAdd("Teacher 3: " + teacher3)
-        
+
+        teacher1 = self.filterTeacherName(teacher1)
+        teacher2 = self.filterTeacherName(teacher2)
+        teacher3 = self.filterTeacherName(teacher3)
+
+        logging.info("Teacher 1: '%s'", teacher1)
+        logging.info("Teacher 2: '%s'", teacher2)
+        logging.info("Teacher 3: '%s'", teacher3)
+
         self.setOptionValueByIdAndIndex("course_teacher_id-selector", 1)
 
         self.clickElementByName("update-course")
         self.gotoBackToCourseView()
-        self.assertUrlPresent(self.filterTeacherName(teacher1))
-        
+        self.assertUrlPresent(teacher1)
+
         self.gotoUrlByLinkText(u"Редактировать преподов")
-        
-        self.assertUrlPresent(self.filterTeacherName(teacher1))
-        
+
+        self.assertUrlPresent(teacher1)
+
         # after first prepod removed from list, teacher2 should take his place.
         self.setOptionValueByIdAndIndex("course_teacher_id-selector", 1)
         self.clickElementByName("add-teacher")
-        self.assertUrlPresent(self.filterTeacherName(teacher1))
-        self.assertUrlPresent(self.filterTeacherName(teacher2))
+        self.assertUrlPresent(teacher1)
+        self.assertUrlPresent(teacher2)
 
         self.setOptionValueByIdAndIndex("course_teacher_id-selector", 1)
         self.clickElementByName("add-teacher")
-        self.assertUrlPresent(self.filterTeacherName(teacher1))
-        self.assertUrlPresent(self.filterTeacherName(teacher2))
-        self.assertUrlPresent(self.filterTeacherName(teacher3))
+        self.assertUrlPresent(teacher1)
+        self.assertUrlPresent(teacher2)
+        self.assertUrlPresent(teacher3)
 
         self.gotoUrlByLinkText(u"Вернуться к просмотру курса")
 
-        self.assertUrlPresent(self.filterTeacherName(teacher1))
-        self.assertUrlPresent(self.filterTeacherName(teacher2))
-        self.assertUrlPresent(self.filterTeacherName(teacher3))
-        
+        self.assertUrlPresent(teacher1)
+        self.assertUrlPresent(teacher2)
+        self.assertUrlPresent(teacher3)
