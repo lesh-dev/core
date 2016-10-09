@@ -349,7 +349,7 @@ function xsm_print_person_ank_data($db, $person)
     xsm_draw_person_comments($db, $person_id);
 }
 
-function xsm_print_add_person_to_school($db, $school_id, $person)
+function xsm_print_add_person_to_school($db, $school_id, $person, $use_title = false)
 {
     $person_id = $person['person_id'];
     $is_teacher_typical = $person['is_teacher'];
@@ -366,7 +366,10 @@ function xsm_print_add_person_to_school($db, $school_id, $person)
             'is_teacher' => $is_teacher_typical,
             'is_student' => $is_student_typical
             ));
-    xcmst_link($add_href, "add_person_school", "&nbsp;", "Зачислить на $school_title", "edit-link add");
+    $link_class = $use_title ? "" : "edit-link add";
+    $title = "Зачислить на $school_title";
+    $text = $use_title ? $title : "&nbsp;";
+    xcmst_link($add_href, "add_person_school", $text, $title, $link_class);
 }
 
 function xsm_print_edit_person_school($db, $school_id, $person_id)
@@ -498,8 +501,10 @@ function xsm_print_person_selected_school($db, $school_id, $person)
     $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
     if ($person_school_id === NULL)
     {?>
-        На данной школе не присутствовал. Чтобы зачислить человека на школу,
-        нужно нажать на синий плюсик рядом с соответствующей школой.<?php
+        На данной школе не присутствовал.
+        <?php echo xsm_print_add_person_to_school($db, $school_id, $person, /*use_title=*/true); ?>.
+        Чтобы зачислить человека на школу, можно также нажать на синий плюсик
+        рядом с&nbsp;соответствующей школой.<?php
         return;
     }
     $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
