@@ -13,6 +13,6 @@
     Вы <b>точно</b> уверены, что хотите это сделать?</p>
     <form method="post"><?php
         xcmst_hidden("delete-section", "true");
-        xcmst_submit("delete-page", "Таки да, удалить!", "Восстановление страницы будет невозможно", "delete");
+        xcmst_submit("delete_page", "Таки да, удалить!", "Восстановление страницы будет невозможно", "delete");
     ?></form>
 </div>
