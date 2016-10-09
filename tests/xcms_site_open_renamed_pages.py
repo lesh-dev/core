@@ -17,9 +17,6 @@ class XcmsSiteOpenRenamedPages(xtest_common.XcmsTest):
         self.gotoPage("/?page=index/doctor-1170556276")  # index/history
         self.assertBodyTextPresent(u"История")
 
-        self.gotoPage("/?page=z024Official/lesh-1311690176")  # lesh2011-by-serge
-        self.assertBodyTextPresent(u"МОИ ЛИЧНЫЕ НАБЛЮДЕНИЯ")
-
         self.gotoPage("/?page=z024Official/root-1174265356")  # info/parents
         self.assertBodyTextPresent(u"Родителям школьников")
 
