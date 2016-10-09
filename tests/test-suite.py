@@ -1,11 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import sys
 import logging
+import collections
+
 from selenium_test import RunTest, TestShutdown, BrowserHolder, decode_run_result
 import test_set_gen
 from test_set_gen import TestInfo
-import sys
 
 from bawlib import getOption, getSingleOption, CliParamError, fileBaseName
 from bawlib import configure_logger
@@ -58,9 +60,11 @@ def print_stats(stats, detailed):
         print "No tests were run"
         return
 
+    detailed_od = collections.OrderedDict(sorted(detailed.items()))
+
     print "===== TEST SUITE DETAILED STATS: ====="
-    for testName, test_result in detailed.iteritems():
-        print "  " + testName + ": " + decode_run_result(test_result)
+    for test_name, test_result in detailed_od.iteritems():
+        print "  " + test_name + ": " + decode_run_result(test_result)
 
     print "===== TEST SUITE OVERALL STATS: ====="
     for test_result, testList in stats.iteritems():
@@ -158,7 +162,12 @@ def main():
         if not test_set_module.get_tests:
             raise TestSuiteError("There is no 'getTests' function defined in specified test set. ")
 
-        #  tests = auto_test_set.get_tests(base_url=base_url, browser_holder=browser_holder, params=testArgs)
+        # FIXME(vdmit): Find proper way to deal with it
+        # this is not necessary for tests listing
+        # but `get_tests` expects base_url is not None
+        if not base_url:
+            raise TestSuiteError("Test site URL not specified, cannot continue. ")
+
         tests = test_set_module.get_tests(base_url=base_url, browser_holder=browser_holder, params=test_args)
 
         # save installer test
@@ -192,9 +201,6 @@ def main():
                 print test.getDoc()
                 print
             else:
-                if not base_url:
-                    raise TestSuiteError("Test site URL not specified, cannot continue. ")
-
                 print "Running test {0} on site {1}".format(test.getName(), base_url)
                 print test.getDoc()
                 result = RunTest(test)
@@ -209,7 +215,7 @@ def main():
                 test_detailed_stats[test.getName()] = result
 
                 tests_done += 1
-                print "PROGRESS: Done {done} of {total} tests".format(done=tests_done, total=tests_number)
+                logging.info("PROGRESS: Done %s of %s tests, %s failed", tests_done, tests_number, len(failed_tests))
 
                 if result == 3:
                     print "User interrupt, stopping test suite."
