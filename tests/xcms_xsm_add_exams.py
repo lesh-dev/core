@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import xsm
 import xtest_common
 import random_crap
 
@@ -16,10 +17,10 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     * add some courses
     * set exam status
     """
-    
+
     def getExamAlreadyExistsMessage(self):
         return u"Зачёт по этому курсу уже имеется"
-    
+
     def addExamsById(self, examIdList):
         for exam in examIdList:
             self.addExamByIdAndReturn(exam)
@@ -69,26 +70,9 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         self.gotoXsmAllPeople()
 
         self.gotoXsmAddPerson()
-
-        # generate
-        inpLastName = u"Зачётов" + random_crap.randomText(5)
-        inpFirstName = u"Андрей_" + random_crap.randomText(3)
-        inpMidName = u"Михалыч_" + random_crap.randomText(3)
-
-        inpLastName = self.fillElementById("last_name-input", inpLastName)
-        inpFirstName = self.fillElementById("first_name-input", inpFirstName)
-        inpMidName = self.fillElementById("patronymic-input", inpMidName)
-
-        # set student flag
-        self.clickElementById("is_student-checkbox")
-
-        self.clickElementById("update-person-submit")
-
-        self.gotoBackToPersonView()
-
-        fullAlias = inpLastName + " " + inpFirstName + " " + inpMidName
-        # check if person alias is present (person saved correctly)
-        self.checkPersonAliasInPersonView(fullAlias)
+        student = xsm.Person(self, u"Зачётов", u"Андрей", u"Михалыч", random=True)
+        student.input(is_student=True)
+        student.back_to_person_view()
 
         self.gotoUrlByLinkText(self.m_conf.getTestSchoolName())
         self.assertBodyTextPresent(self.getPersonAbsenceMessage())
@@ -108,7 +92,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         self.assertBodyTextPresent(u"Зачёты")
 
         dupId = 134
-        
+
         self.addExamsById([95, 119, 91, 73, 107, 130, 133, dupId])
 
         self.setExamPassed([1, 2, 2])
@@ -117,4 +101,4 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         # test duplicate exam
         self.addExamById(dupId)
         self.assertBodyTextPresent(self.getExamAlreadyExistsMessage())
-        
+

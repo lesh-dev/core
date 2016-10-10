@@ -16,6 +16,9 @@ specialCharsWoAngle = '.,!?;:"-=@%$^&*()\''
 
 
 def randomText(length):
+    return random_text(length)
+# PEP8 alternative
+def random_text(length):
     rs = ""
     for i in range(0, length):
         rs = rs + random.choice('abcdef0123456789')
