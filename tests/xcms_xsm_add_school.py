@@ -1,8 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import logging
+
+import xsm
 import xtest_common
-import random_crap
 
 
 class XcmsXsmAddSchool(xtest_common.XcmsTest):
@@ -21,44 +23,31 @@ class XcmsXsmAddSchool(xtest_common.XcmsTest):
         self.performLoginAsManager()
         self.gotoXsm()
         self.gotoXsmSchools()
+
+        # determine next year
+        year = 2016
+        page_content = self.getPageContent()
+        while str(year) in page_content:
+            year += 1
+        logging.info("Found year that is not present on this page: %s", year)
         self.gotoXsmAddSchool()
 
         # generate school number
-        lastDigit = random_crap.randomDigits(1)
-
-        inpSchoolTitle = u"ЛЭШ_202" + lastDigit + "_" + random_crap.randomWord(6);
-        inpStart = "202" + lastDigit + ".07.15"
-        inpEnd = "202" + lastDigit + ".08.16"
-        inpLocation = u"Деревня Гадюкино_" + random_crap.randomWord(6)
-
-        inpSchoolTitle = self.fillElementByName("school_title", inpSchoolTitle)
-        inpStart = self.fillElementByName("school_date_start", inpStart)
-        inpEnd = self.fillElementByName("school_date_end", inpEnd)
-        inpLocation = self.fillElementByName("school_location", inpLocation)
-
-        self.clickElementByName("update-school")
-        self.gotoBackToSchoolView()
-
-        self.assertBodyTextPresent(inpSchoolTitle)
-        self.assertBodyTextPresent(inpStart)
-        self.assertBodyTextPresent(inpEnd)
-        self.assertBodyTextPresent(inpLocation)
+        school = xsm.School(self)
+        school.input(
+            school_title=u"ЛЭШ" + str(year),
+            school_date_start=str(year) + ".07.15",
+            school_date_end=str(year) + ".08.15",
+            school_location=u"Деревня Гадюкино",
+            random=True,
+        )
+        school.back_to_school_view()
 
         self.gotoUrlByLinkText(u"Правка")
 
-        inpStart = "202" + lastDigit + ".07.23"
-        inpEnd = "202" + lastDigit + ".08.23"
-
-        inpStart = self.fillElementByName("school_date_start", inpStart)
-        inpEnd = self.fillElementByName("school_date_end", inpEnd)
-        inpLocation = self.fillElementByName("school_location", inpLocation)
-
-        self.clickElementByName("update-school")
-
-        self.gotoBackToSchoolView()
-
-        self.assertBodyTextPresent(inpSchoolTitle)
-        self.assertBodyTextPresent(inpStart)
-        self.assertBodyTextPresent(inpEnd)
-        self.assertBodyTextPresent(inpLocation)
+        school.input(
+            school_date_start=str(year) + ".07.23",
+            school_date_end=str(year) + ".08.23",
+        )
+        school.back_to_school_view()
 

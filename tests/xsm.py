@@ -23,12 +23,14 @@ class Person(object):
     """
     # Parent test object
     xtest = None
-    # Properties
+    # Same namings as in XSM
     first_name = None
     last_name = None
     patronymic = None
+    # with string repr
     cellular = None
     cellular_str = None
+    # with string repr
     phone = None
     phone_str = None
     is_student = None
@@ -110,3 +112,46 @@ class Person(object):
             ele_id = "person{0}-{1}".format(person_id, field_name)
         return self.xtest.getElementTextById(ele_id)
 
+
+class School(object):
+    # Same namings as in XSM
+    school_title = None
+    school_date_start = None
+    school_date_end = None
+    school_location = None
+
+    def __init__(self, xtest):
+        self.xtest = xtest
+
+    def input(
+        self,
+        school_title=None,
+        school_date_start=None,
+        school_date_end=None,
+        school_location=None,
+        random=False,
+    ):
+        if school_title is not None:
+            if random:
+                school_title += '_' + rc.randomWord(6)
+            self.school_title = self.xtest.fillElementByName("school_title", school_title)
+
+        if school_date_start is not None:
+            self.school_date_start = self.xtest.fillElementByName("school_date_start", school_date_start)
+
+        if school_date_end is not None:
+            self.school_date_end = self.xtest.fillElementByName("school_date_end", school_date_end)
+
+        if school_location is not None:
+            if random:
+                school_location += '_' + rc.randomWord(6)
+            self.school_location = self.xtest.fillElementByName("school_location", school_location)
+
+        self.xtest.clickElementByName("update-school")
+
+    def back_to_school_view(self):
+        self.xtest.gotoBackToSchoolView()
+        self.xtest.assertBodyTextPresent(self.school_title)
+        self.xtest.assertBodyTextPresent(self.school_date_start)
+        self.xtest.assertBodyTextPresent(self.school_date_end)
+        self.xtest.assertBodyTextPresent(self.school_location)
