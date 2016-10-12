@@ -18,7 +18,8 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     * set exam status
     """
 
-    def getExamAlreadyExistsMessage(self):
+    @staticmethod
+    def getExamAlreadyExistsMessage():
         return u"Зачёт по этому курсу уже имеется"
 
     def addExamsById(self, examIdList):
