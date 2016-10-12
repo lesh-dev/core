@@ -68,10 +68,15 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
 
         self.performLoginAsManager()
         self.gotoXsmAllPeople()
-
         self.gotoXsmAddPerson()
-        student = xsm.Person(self, u"Зачётов", u"Андрей", u"Михалыч", random=True)
-        student.input(is_student=True)
+        student = xsm.Person(self)
+        student.input(
+            last_name=u"Зачётов",
+            first_name=u"Андрей",
+            patronymic=u"Михалыч",
+            random=True,
+            is_student=True,
+        )
         student.back_to_person_view()
 
         self.gotoUrlByLinkText(self.m_conf.getTestSchoolName())
@@ -101,4 +106,3 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         # test duplicate exam
         self.addExamById(dupId)
         self.assertBodyTextPresent(self.getExamAlreadyExistsMessage())
-

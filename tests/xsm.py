@@ -27,32 +27,69 @@ class Person(object):
     first_name = None
     last_name = None
     patronymic = None
+    cellular = None
+    cellular_str = None
+    phone = None
+    phone_str = None
+    is_student = None
+    is_teacher = None
 
-    def __init__(self, xtest, first_name=None, last_name=None, patronymic=None, random=True):
+    def __init__(self, xtest):
         self.xtest = xtest
 
-        self.last_name = last_name if last_name else u"Человеков"
-        self.first_name = first_name if first_name else u"Иван"
-        self.patronymic = patronymic if patronymic else u"Бутусович"
+    def input(
+        self,
+        first_name=None,
+        last_name=None,
+        patronymic=None,
+        cellular=None,
+        phone=None,
+        random=False,
+        is_student=False,
+        is_teacher=False,
+    ):
+        if last_name is not None:
+            if random:
+                last_name += "_" + rc.random_text(5)
 
-        if random:
-            self.last_name += "_" + rc.random_text(5)
-            self.first_name += "_" + rc.random_text(3)
-            self.patronymic += "_" + rc.random_text(3)
+            self.last_name = self.xtest.fillElementById("last_name-input", last_name)
 
-    def input(self, is_student=False, is_teacher=False):
-        # FIXME(mvel) non-static crap... f*n SOLYD programming :(
-        self.last_name = self.xtest.fillElementById("last_name-input", self.last_name)
-        self.first_name = self.xtest.fillElementById("first_name-input", self.first_name)
-        self.patronymic = self.xtest.fillElementById("patronymic-input", self.patronymic)
+        if first_name is not None:
+            if random:
+                first_name += "_" + rc.random_text(3)
+            self.first_name = self.xtest.fillElementById("first_name-input", first_name)
 
-        if is_student:
-            self.xtest.clickElementById("is_student-checkbox")
+        if patronymic is not None:
+            if random:
+                patronymic += "_" + rc.random_text(3)
+            self.patronymic = self.xtest.fillElementById("patronymic-input", patronymic)
+
+        if cellular is not None:
+            self.cellular_str = ", ".join(cellular)
+            self.cellular = list(map(self.phone_fix, cellular))
+            self.cellular_str = self.xtest.fillElementById("cellular-input", self.cellular_str)
+
+        if phone is not None:
+            self.phone_str = ", ".join(phone)
+            self.phone = list(map(self.phone_fix, phone))
+            self.phone_str = self.xtest.fillElementById("phone-input", self.phone_str)
+
+        if is_student is not None:
+            self.is_student = is_student
+            # FIXME(mvel): will not handle 'unchecked' option
+            if is_student:
+                self.xtest.clickElementById("is_student-checkbox")
+
+        if is_teacher is not None:
+            self.is_teacher = is_teacher
+            # FIXME(mvel): will not handle 'unchecked' option
+            if is_teacher:
+                self.xtest.clickElementById("is_teacher-checkbox")
 
         self.xtest.clickElementById("update-person-submit")
 
     def back_to_person_view(self):
-        # FIXME(mvel) this is a Person control
+        # FIXME(mvel): this is a Person control: gotoBackToPersonView()
         self.xtest.gotoBackToPersonView()
         full_alias = self.full_alias()
         # check if person alias is present (person saved correctly)
@@ -61,3 +98,15 @@ class Person(object):
     def full_alias(self):
         full_alias = self.last_name + " " + self.first_name + " " + self.patronymic
         return full_alias.strip()
+
+    @staticmethod
+    def phone_fix(phone):
+        return phone.replace("+7", "8").replace("8-900-", "8(900)")
+
+    def get_row_value(self, person_id, field_name, subindex=None):
+        if subindex is not None:
+            ele_id = "person{0}-{1}-{2}".format(person_id, field_name, subindex)
+        else:
+            ele_id = "person{0}-{1}".format(person_id, field_name)
+        return self.xtest.getElementTextById(ele_id)
+

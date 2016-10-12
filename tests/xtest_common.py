@@ -88,6 +88,11 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
             return str(m.group(1))
         return None
 
+    # reduces boilerplate
+    def assert_equal(self, value, proper_value, error_text):
+        if value != proper_value:
+            self.failTest("{} Expected '{}', got '{}'. ".format(error_text, proper_value, value))
+
 
 class XcmsTestWithConfig(XcmsBaseTest):
     """
