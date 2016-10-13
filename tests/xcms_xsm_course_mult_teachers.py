@@ -4,6 +4,7 @@
 import re
 import logging
 
+import xsm
 import xtest_common
 import random_crap
 
@@ -19,53 +20,23 @@ class XcmsXsmCourseWithMultipleTeachers(xtest_common.XcmsTest):
     * populate teacher list
     """
 
-    def addSchool(self):
-        self.gotoXsmSchools()
-        self.gotoXsmAddSchool()
-
-        # generate school number
-        lastDigit = random_crap.randomDigits(1)
-
-        inpSchoolTitle = u"ЛЭШ_205{0}_".format(lastDigit) + random_crap.randomWord(6);
-        inpStart = "205{0}.07.15".format(lastDigit)
-        inpEnd = "205{0}.08.16".format(lastDigit)
-
-        inpSchoolTitle = self.fillElementByName("school_title", inpSchoolTitle)
-        inpStart = self.fillElementByName("school_date_start", inpStart)
-        inpEnd = self.fillElementByName("school_date_end", inpEnd)
-
-        self.m_schoolTitle = inpSchoolTitle
-
-        self.clickElementByName("update-school")
-        self.gotoBackToSchoolView()
-        self.assertBodyTextPresent(inpSchoolTitle)
-
-    def addTeacher(self):
+    def add_teacher(self):
         self.gotoXsmAllPeople()
         self.gotoXsmAddPerson()
+        teacher = xsm.Person(self)
+        teacher.input(
+            last_name=u"Мультипреподов",
+            first_name=u"Сергей",
+            patronymic=u"Викторович",
+            random=True,
+            is_teacher=True,
+        )
+        teacher.back_to_person_view()
+        # FIXME(mvel): is it right that teacher was not added to school?
+        # teacher.add_to_school(school)
 
-        # generate prepod name - to be first in list
-        inpLastName = u"Мультипреподов_" + random_crap.randomText(4)
-        inpFirstName = u"Сергей_" + random_crap.randomText(3)
-        inpMidName = u"Викторович_" + random_crap.randomText(3)
-
-        inpLastName = self.fillElementById("last_name-input", inpLastName)
-        inpFirstName = self.fillElementById("first_name-input", inpFirstName)
-        inpMidName = self.fillElementById("patronymic-input", inpMidName)
-
-        # set student flag
-        self.clickElementById("is_teacher-checkbox")
-
-        self.clickElementById("update-person-submit")
-
-        self.gotoBackToPersonView()
-
-        fullAlias = xtest_common.fullAlias(inpLastName, inpFirstName, inpMidName)
-        # check if person alias is present (person saved correctly)
-
-        self.checkPersonAliasInPersonView(fullAlias)
-
-    def filterTeacherName(self, name):
+    @staticmethod
+    def filter_teacher_name(name):
         if name.startswith("("):
             return re.sub(r'\(.*?\) *', '', name)
         return name
@@ -74,15 +45,14 @@ class XcmsXsmCourseWithMultipleTeachers(xtest_common.XcmsTest):
         self.ensure_logged_off()
         self.performLoginAsManager()
         self.gotoXsm()
+        school = xsm.add_test_school(self)
 
-        self.addSchool()
-
-        self.addTeacher()
-        self.addTeacher()
-        self.addTeacher()
+        self.add_teacher()
+        self.add_teacher()
+        self.add_teacher()
 
         self.gotoXsmCourses()
-        self.gotoUrlByLinkText(self.m_schoolTitle)
+        self.gotoUrlByLinkText(school.school_title)
         self.gotoXsmAddCourse()
 
         inpCourseName = u"Многопреподный Курс " + random_crap.randomCrap(4)
@@ -100,9 +70,9 @@ class XcmsXsmCourseWithMultipleTeachers(xtest_common.XcmsTest):
         id2, teacher2 = self.getOptionValueByIdAndIndex("course_teacher_id-selector", 2)
         id3, teacher3 = self.getOptionValueByIdAndIndex("course_teacher_id-selector", 3)
 
-        teacher1 = self.filterTeacherName(teacher1)
-        teacher2 = self.filterTeacherName(teacher2)
-        teacher3 = self.filterTeacherName(teacher3)
+        teacher1 = self.filter_teacher_name(teacher1)
+        teacher2 = self.filter_teacher_name(teacher2)
+        teacher3 = self.filter_teacher_name(teacher3)
 
         logging.info("Teacher 1: '%s'", teacher1)
         logging.info("Teacher 2: '%s'", teacher2)
@@ -118,7 +88,7 @@ class XcmsXsmCourseWithMultipleTeachers(xtest_common.XcmsTest):
 
         self.assertUrlPresent(teacher1)
 
-        # after first prepod removed from list, teacher2 should take his place.
+        # after teacher1 is removed from list, teacher2 should take his place.
         self.setOptionValueByIdAndIndex("course_teacher_id-selector", 1)
         self.clickElementByName("add-teacher")
         self.assertUrlPresent(teacher1)

@@ -32,8 +32,8 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
         inpComment = self.fillElementByName("course_comment", inpComment)
 
         self.clickElementByName("update-course")
-        # XSM BUG: we should return to prepod page, not to course page!
-        self.gotoUrlByLinkText(u"Вернуться к просмотру")  # view of what? Course? no, prepod!
+        # XSM BUG: we should return to teacher page, not to course page!
+        self.gotoUrlByLinkText(u"Вернуться к просмотру")  # view of what? Course? no, teacher!
         self.gotoUrlByLinkText(teacherAlias)
 
     def run(self):
