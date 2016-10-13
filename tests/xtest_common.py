@@ -542,8 +542,14 @@ class XcmsTest(XcmsTestWithConfig):
 
 
 def shortAlias(last, first):
+    """
+    DEPRECATED. Use Person::short_alias
+    """
     return (last + " " + first).strip()
 
 
 def fullAlias(last, first, mid):
+    """
+    DEPRECATED. Use Person::full_alias
+    """
     return (last + " " + first + " " + mid).strip()

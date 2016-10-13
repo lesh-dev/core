@@ -70,7 +70,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
 
         self.performLoginAsManager()
         self.gotoXsm()
-        xsm.add_test_school(self)
+        school = xsm.add_test_school(self)
 
         self.gotoXsmAllPeople()
         self.gotoXsmAddPerson()
@@ -83,12 +83,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
             is_student=True,
         )
         student.back_to_person_view()
-
-        self.gotoUrlByLinkText(self.m_conf.getTestSchoolName())
-        self.assertBodyTextPresent(self.getPersonAbsenceMessage())
-        self.gotoUrlByLinkTitle(u"Зачислить на " + self.m_conf.getTestSchoolName())
-        self.clickElementByName("update-person_school")
-        self.gotoBackToPersonView()
+        student.add_to_school(school)
 
         # <option  value="95">Базовое электричество &#8212; Тараненко Сергей</option>
         # <option  value="134">Биомеханика &#8212; Преподаватель Другого</option>

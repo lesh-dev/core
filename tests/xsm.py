@@ -98,6 +98,18 @@ class Person(object):
         # check if person alias is present (person saved correctly)
         self.xtest.checkPersonAliasInPersonView(full_alias)
 
+    def add_to_school(self, school):
+        t = self.xtest
+        t.gotoUrlByLinkText(school.school_title)
+        t.assertBodyTextPresent(t.getPersonAbsenceMessage())
+        t.gotoUrlByLinkTitle(u"Зачислить на " + school.school_title)
+        t.clickElementByName("update-person_school")
+        t.gotoBackToPersonView()
+
+    def short_alias(self):
+        short_alias = self.last_name + " " + self.first_name
+        return short_alias.strip()
+
     def full_alias(self):
         full_alias = self.last_name + " " + self.first_name + " " + self.patronymic
         return full_alias.strip()

@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import xsm
 import xtest_common
 import random_crap
 
@@ -38,39 +39,23 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
     def run(self):
         self.ensure_logged_off()
         self.performLoginAsManager()
-
         self.gotoXsm()
+        school = xsm.add_test_school(self)
+
         self.gotoXsmAllPeople()
         self.gotoXsmAddPerson()
-
-        # generate
-        inpLastName = u"Преподов_" + random_crap.randomText(5)
-        inpFirstName = u"Александр_" + random_crap.randomText(3)
-        inpMidName = u"Ильич_" + random_crap.randomText(3)
-
-        inpLastName = self.fillElementById("last_name-input", inpLastName)
-        inpFirstName = self.fillElementById("first_name-input", inpFirstName)
-        inpMidName = self.fillElementById("patronymic-input", inpMidName)
-
-        # set student flag
-        self.clickElementById("is_teacher-checkbox")
-
-        self.clickElementById("update-person-submit")
-
-        self.gotoBackToPersonView()
-
-        fullAlias = xtest_common.fullAlias(inpLastName, inpFirstName, inpMidName)
-        # check if person alias is present (person saved correctly)
-
-        self.checkPersonAliasInPersonView(fullAlias)
-
-        self.gotoUrlByLinkText(self.m_conf.getTestSchoolName())
-        self.assertBodyTextPresent(self.getPersonAbsenceMessage())
-        self.gotoUrlByLinkTitle(u"Зачислить на " + self.m_conf.getTestSchoolName())
-        self.clickElementByName("update-person_school")
-        self.gotoBackToPersonView()
+        teacher = xsm.Person(self)
+        teacher.input(
+            last_name=u"Преподов",
+            first_name=u"Александр",
+            patronymic=u"Ильич",
+            random=True,
+            is_teacher=True,
+        )
+        teacher.back_to_person_view()
+        teacher.add_to_school(school)
 
         self.assertBodyTextPresent(u"Курсы")
 
         for i in range(0, 3):
-            self.addCourse(xtest_common.shortAlias(inpLastName, inpFirstName))
+            self.addCourse(teacher.short_alias())
