@@ -17,6 +17,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     * add some courses
     * set exam status
     """
+    listened_status = None
 
     @staticmethod
     def getExamAlreadyExistsMessage():
@@ -39,7 +40,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     def setExamPassed(self, examLineList):
         for examLine in examLineList:
             # <a><span>Прослушан</span></a>
-            self.gotoIndexedUrlByLinkText(self.m_listenedStatus, examLine, "span")
+            self.gotoIndexedUrlByLinkText(self.listened_status, examLine, "span")
             self.setOptionValueByIdAndValue("exam_status-selector", "passed")
 
             examComment = u"Коммент к сданному зачёту: " + random_crap.randomText(6)
@@ -52,7 +53,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     def setExamNotPassed(self, examLineList):
         for examLine in examLineList:
             # <a><span>Прослушан</span></a>
-            self.gotoIndexedUrlByLinkText(self.m_listenedStatus, examLine, "span")
+            self.gotoIndexedUrlByLinkText(self.listened_status, examLine, "span")
             self.setOptionValueByIdAndValue("exam_status-selector", "notpassed")
 
             examComment = u"Коммент к несданному зачёту: " + random_crap.randomText(6)
@@ -65,9 +66,12 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     def run(self):
         self.ensure_logged_off()
 
-        self.m_listenedStatus = u"Прослушан"
+        self.listened_status = u"Прослушан"
 
         self.performLoginAsManager()
+        self.gotoXsm()
+        xsm.add_test_school(self)
+
         self.gotoXsmAllPeople()
         self.gotoXsmAddPerson()
         student = xsm.Person(self)

@@ -9,6 +9,7 @@
     lowerCamelCase, CamelCase, etc.
 """
 
+import logging
 import random_crap as rc
 
 
@@ -119,6 +120,8 @@ class School(object):
     school_date_start = None
     school_date_end = None
     school_location = None
+    # helper
+    year = None
 
     def __init__(self, xtest):
         self.xtest = xtest
@@ -138,6 +141,7 @@ class School(object):
 
         if school_date_start is not None:
             self.school_date_start = self.xtest.fillElementByName("school_date_start", school_date_start)
+            self.year = school_date_start[0:4]
 
         if school_date_end is not None:
             self.school_date_end = self.xtest.fillElementByName("school_date_end", school_date_end)
@@ -155,3 +159,28 @@ class School(object):
         self.xtest.assertBodyTextPresent(self.school_date_start)
         self.xtest.assertBodyTextPresent(self.school_date_end)
         self.xtest.assertBodyTextPresent(self.school_location)
+
+
+def add_test_school(xtest):
+    xtest.gotoXsmSchools()
+    # determine next year
+    year = 2016
+    page_content = xtest.getPageContent()
+    while str(year) in page_content:
+        year += 1
+    logging.info("Found year that is not present on this page: %s", year)
+    xtest.gotoXsmAddSchool()
+
+    # generate school number
+    school = School(xtest)
+    school.input(
+        school_title=u"ЛЭШ-" + str(year),
+        school_date_start=str(year) + ".07.15",
+        school_date_end=str(year) + ".08.15",
+        school_location=u"Деревня Гадюкино",
+        random=True,
+    )
+    school.back_to_school_view()
+    # global context fix ;)
+    xtest.m_conf.set_test_school_name(school.school_title)
+    return school

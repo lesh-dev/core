@@ -9,6 +9,7 @@ class XcmsTestConfig:
         self.m_notifyEmail = "vdm-photo@ya.ru"
         self.m_testAnketaSend = True  # в настоящее время не используется
         self.m_phpErrorCheckFlag = True
+        self.school_name = u"ЛЭШ-2013"
 
     def getAdminLogin(self):
         return self.m_adminLogin
@@ -34,4 +35,7 @@ class XcmsTestConfig:
             return "m.velt@mail.ru"
 
     def getTestSchoolName(self):
-        return u"ЛЭШ-2016"
+        return self.school_name
+
+    def set_test_school_name(self, school_name):
+        self.school_name = school_name
