@@ -51,52 +51,54 @@ class Person(object):
         is_student=False,
         is_teacher=False,
     ):
+        t = self.xtest
         if last_name is not None:
             if random:
                 last_name += "_" + rc.random_text(5)
 
-            self.last_name = self.xtest.fillElementById("last_name-input", last_name)
+            self.last_name = t.fillElementById("last_name-input", last_name)
 
         if first_name is not None:
             if random:
                 first_name += "_" + rc.random_text(3)
-            self.first_name = self.xtest.fillElementById("first_name-input", first_name)
+            self.first_name = t.fillElementById("first_name-input", first_name)
 
         if patronymic is not None:
             if random:
                 patronymic += "_" + rc.random_text(3)
-            self.patronymic = self.xtest.fillElementById("patronymic-input", patronymic)
+            self.patronymic = t.fillElementById("patronymic-input", patronymic)
 
         if cellular is not None:
             self.cellular_str = ", ".join(cellular)
             self.cellular = list(map(self.phone_fix, cellular))
-            self.cellular_str = self.xtest.fillElementById("cellular-input", self.cellular_str)
+            self.cellular_str = t.fillElementById("cellular-input", self.cellular_str)
 
         if phone is not None:
             self.phone_str = ", ".join(phone)
             self.phone = list(map(self.phone_fix, phone))
-            self.phone_str = self.xtest.fillElementById("phone-input", self.phone_str)
+            self.phone_str = t.fillElementById("phone-input", self.phone_str)
 
         if is_student is not None:
             self.is_student = is_student
             # FIXME(mvel): will not handle 'unchecked' option
             if is_student:
-                self.xtest.clickElementById("is_student-checkbox")
+                t.clickElementById("is_student-checkbox")
 
         if is_teacher is not None:
             self.is_teacher = is_teacher
             # FIXME(mvel): will not handle 'unchecked' option
             if is_teacher:
-                self.xtest.clickElementById("is_teacher-checkbox")
+                t.clickElementById("is_teacher-checkbox")
 
-        self.xtest.clickElementById("update-person-submit")
+        t.clickElementById("update-person-submit")
 
     def back_to_person_view(self):
+        t = self.xtest
         # FIXME(mvel): this is a Person control: gotoBackToPersonView()
-        self.xtest.gotoBackToPersonView()
+        t.gotoBackToPersonView()
         full_alias = self.full_alias()
         # check if person alias is present (person saved correctly)
-        self.xtest.checkPersonAliasInPersonView(full_alias)
+        t.checkPersonAliasInPersonView(full_alias)
 
     def add_to_school(self, school):
         t = self.xtest
@@ -124,6 +126,48 @@ class Person(object):
         else:
             ele_id = "person{0}-{1}".format(person_id, field_name)
         return self.xtest.getElementTextById(ele_id)
+
+
+class Course(object):
+    # Parent test object
+    xtest = None
+    # Same namings as in XSM
+    course_title = None
+    target_class = None
+    course_desc = None
+    course_comment = None
+
+    def __init__(self, xtest):
+        self.xtest = xtest
+
+    def input(
+        self,
+        course_title=None,
+        target_class=None,
+        course_desc=None,
+        course_comment=None,
+        random=False,
+        update=True,
+    ):
+        t = self.xtest
+        if course_title is not None:
+            if random:
+                course_title += rc.randomCrap(4)
+            self.course_title = t.fillElementByName("course_title", course_title)
+
+        if target_class is not None:
+            self.target_class = t.fillElementByName("target_class", target_class)
+
+        if course_desc is not None:
+            course_desc += rc.randomCrap(10, ["multiline"])
+            self.course_desc = t.fillElementByName("course_desc", course_desc)
+
+        if course_comment is not None:
+            course_comment += rc.randomCrap(10, ["multiline"])
+            self.course_comment = t.fillElementByName("course_comment", course_comment)
+
+        if update:
+            t.clickElementByName("update-course")
 
 
 class School(object):

@@ -3,38 +3,32 @@
 
 import xsm
 import xtest_common
-import random_crap
 
 
 class XcmsXsmAddCourses(xtest_common.XcmsTest):
     """
     This test checks course add functional.
     It does following:
-    * login as admin
+    * login as XSM manager
     * enter 'all people list'
     * add new person
     * add person to some school
     * add some courses to this person
     """
 
-    def addCourse(self, teacherAlias):
+    def add_course(self, teacher):
         self.gotoUrlByLinkText(u"Добавить курс")
-
-        inpCourseName = u"Курс " + random_crap.randomCrap(4)
-        inpCourseName = self.fillElementByName("course_title", inpCourseName)
-        inpTargetClass = "7-11"
-        inpTargetClass = self.fillElementByName("target_class", inpTargetClass)
-
-        inpDescription = random_crap.randomCrap(10, ["multiline"])
-        inpDescription = self.fillElementByName("course_desc", inpDescription)
-
-        inpComment = random_crap.randomCrap(10, ["multiline"])
-        inpComment = self.fillElementByName("course_comment", inpComment)
-
-        self.clickElementByName("update-course")
+        course = xsm.Course(self)
+        course.input(
+            course_title=u"Курс",
+            course_comment=u"Какой-то комментарий",
+            course_desc=u"Описание курса",
+            target_class=u"7-11",
+            random=True,
+        )
         # XSM BUG: we should return to teacher page, not to course page!
         self.gotoUrlByLinkText(u"Вернуться к просмотру")  # view of what? Course? no, teacher!
-        self.gotoUrlByLinkText(teacherAlias)
+        self.gotoUrlByLinkText(teacher.short_alias())
 
     def run(self):
         self.ensure_logged_off()
@@ -58,4 +52,4 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
         self.assertBodyTextPresent(u"Курсы")
 
         for i in range(0, 3):
-            self.addCourse(teacher.short_alias())
+            self.add_course(teacher)
