@@ -62,36 +62,37 @@ class XcmsXsmCourseWithMultipleTeachers(xtest_common.XcmsTest):
             random=True,
             update=False,
         )
+        # add first 3 teachers
         teacher_ids = []
-        teachers = []
+        teacher_names = []
         for i in [1, 2, 3]:
             teacher_id, teacher = self.getOptionValueByIdAndIndex("course_teacher_id-selector", i)
             teacher_ids.append(teacher_id)
             teacher = self.filter_teacher_name(teacher)
             logging.info("Teacher %s: '%s'", i, teacher)
-            teachers.append(teacher)
+            teacher_names.append(teacher)
 
         self.setOptionValueByIdAndIndex("course_teacher_id-selector", 1)
         course.input(update=True)
         self.gotoBackToCourseView()
-        self.assertUrlPresent(teachers[0])
+        self.assertUrlPresent(teacher_names[0])
 
         self.gotoUrlByLinkText(u"Редактировать преподов")
 
-        self.assertUrlPresent(teachers[0])
+        self.assertUrlPresent(teacher_names[0])
 
         # after 1st teacher is removed from list, 2nd teacher should take his place.
         self.setOptionValueByIdAndIndex("course_teacher_id-selector", 1)
         self.clickElementByName("add-teacher")
-        self.assertUrlPresent(teachers[0])
-        self.assertUrlPresent(teachers[1])
+        self.assertUrlPresent(teacher_names[0])
+        self.assertUrlPresent(teacher_names[1])
 
         self.setOptionValueByIdAndIndex("course_teacher_id-selector", 1)
         self.clickElementByName("add-teacher")
-        for teacher in teachers:
+        for teacher in teacher_names:
             self.assertUrlPresent(teacher)
 
         self.gotoUrlByLinkText(u"Вернуться к просмотру курса")
 
-        for teacher in teachers:
+        for teacher in teacher_names:
             self.assertUrlPresent(teacher)

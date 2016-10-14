@@ -16,7 +16,7 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
     * add some courses to this person
     """
 
-    def add_course(self, teacher):
+    def add_course_to_teacher(self, teacher):
         self.gotoUrlByLinkText(u"Добавить курс")
         course = xsm.Course(self)
         course.input(

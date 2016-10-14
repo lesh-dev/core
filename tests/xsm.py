@@ -42,14 +42,15 @@ class Person(object):
 
     def input(
         self,
+        department_id=None,
         first_name=None,
         last_name=None,
         patronymic=None,
         cellular=None,
         phone=None,
-        random=False,
         is_student=False,
         is_teacher=False,
+        random=False,
     ):
         t = self.xtest
         if last_name is not None:
@@ -89,6 +90,9 @@ class Person(object):
             # FIXME(mvel): will not handle 'unchecked' option
             if is_teacher:
                 t.clickElementById("is_teacher-checkbox")
+
+        if department_id is not None:
+            t.setOptionValueByIdAndValue("department_id-selector", department_id)
 
         t.clickElementById("update-person-submit")
 
