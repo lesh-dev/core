@@ -1,8 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import logging
+import xsm
 import xtest_common
-import random_crap
 
 
 class XcmsXsmAvatar(xtest_common.XcmsTest):
@@ -23,6 +24,16 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
     * check person's avatar
     """
 
+    def check_avatar(self, person, default):
+        avatar_src = self.getImageSrcById("avatar")
+        logging.debug("Avatar source: %s", avatar_src)
+        fail_condition = ("stalin50" in avatar_src) ^ default
+        if fail_condition:
+            self.failTest("Wrong avatar detected, expected {} image. VK ID: {}".format(
+                "default" if default else "custom",
+                person.social_profile,
+            ))
+
     def run(self):
         self.ensure_logged_off()
         self.performLoginAsManager()
@@ -30,84 +41,36 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
         self.gotoXsmAllPeople()
         self.gotoXsmAddPerson()
 
-        # generate
-        inpLastName = u"Аватаров" + random_crap.randomText(5)
-        inpFirstName = u"Петр_" + random_crap.randomText(3)
-        inpMidName = u"Палыч_" + random_crap.randomText(3)
-        inpSocial = "http://vk.com/vdm_p"
-
-        inpLastName = self.fillElementById("last_name-input", inpLastName)
-        inpFirstName = self.fillElementById("first_name-input", inpFirstName)
-        inpMidName = self.fillElementById("patronymic-input", inpMidName)
-        inpSocial = self.fillElementById("social_profile-input", inpSocial)
-
-        self.clickElementById("update-person-submit")
-
-        self.gotoBackToPersonView()
-
-        fullAlias = inpLastName + " " + inpFirstName + " " + inpMidName
-        # check if person alias is present (person saved correctly)
-
-        self.checkPersonAliasInPersonView(fullAlias)
-        # check avatar
-        avatarSrc = self.getImageSrcById("avatar")
-        print "Avatar Source: ", avatarSrc
-
-        if "stalin50" in avatarSrc:
-            self.failTest("Wrong (default) avatar detected, expected custom image. VK ID: " + inpSocial)
+        person = xsm.Person(self)
+        person.input(
+            last_name=u"Аватаров",
+            first_name=u"Пётр",
+            patronymic=u"Палыч",
+            social_profile="https://vk.com/vdm_p",
+        )
+        person.back_to_person_view()
+        self.check_avatar(person, default=False)
 
         # ok, now let's test xyz100 avatar.
         self.gotoEditPerson()
-
-        inpSocial = "http://vk.com/vasya10"
-        inpSocial = self.fillElementById("social_profile-input", inpSocial)
-
-        self.clickElementById("update-person-submit")
-        self.gotoBackToPersonView()
-
-        avatarSrc = self.getImageSrcById("avatar")
-        print "Avatar Source: ", avatarSrc
-        if "stalin50" in avatarSrc:
-            self.failTest("Wrong (default) avatar detected, expected custom image. VK ID: " + inpSocial)
+        person.input(social_profile="http://vk.com/vasya10")
+        person.back_to_person_view()
+        self.check_avatar(person, default=False)
 
         # ok, now let's test id123456 avatar.
         self.gotoEditPerson()
-
-        inpSocial = "http://vk.com/id777314"
-        inpSocial = self.fillElementById("social_profile-input", inpSocial)
-
-        self.clickElementById("update-person-submit")
-        self.gotoBackToPersonView()
-
-        avatarSrc = self.getImageSrcById("avatar")
-        print "Avatar Source: ", avatarSrc
-        if "stalin50" in avatarSrc:
-            self.failTest("Wrong (default) avatar detected, expected custom image. VK ID: " + inpSocial)
+        person.input(social_profile="http://vk.com/id777314")
+        person.back_to_person_view()
+        self.check_avatar(person, default=False)
 
         # ok, now let's test default avatar.
         self.gotoEditPerson()
-
-        inpSocial = ""
-        inpSocial = self.fillElementById("social_profile-input", inpSocial)
-
-        self.clickElementById("update-person-submit")
-        self.gotoBackToPersonView()
-
-        avatarSrc = self.getImageSrcById("avatar")
-        print "Avatar Source: ", avatarSrc
-        if "stalin50" not in avatarSrc:
-            self.failTest("Default avatar expected. Current src: " + avatarSrc)
+        person.input(social_profile="")
+        person.back_to_person_view()
+        self.check_avatar(person, default=True)
 
         # ok, now let's test non-existing VK page.
         self.gotoEditPerson()
-
-        inpSocial = "http://vk.com/id12345678901234567890"
-        inpSocial = self.fillElementById("social_profile-input", inpSocial)
-
-        self.clickElementById("update-person-submit")
-        self.gotoBackToPersonView()
-
-        avatarSrc = self.getImageSrcById("avatar")
-        print "Avatar Source: ", avatarSrc
-        if "stalin50" not in avatarSrc:
-            self.failTest("Default avatar expected. Current src: " + avatarSrc)
+        person.input(social_profile="http://vk.com/id12345678901234567890")
+        person.back_to_person_view()
+        self.check_avatar(person, default=True)

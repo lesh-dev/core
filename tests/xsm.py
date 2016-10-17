@@ -28,6 +28,7 @@ class Person(object):
     first_name = None
     last_name = None
     patronymic = None
+    social_profile = None
     # with string repr
     cellular = None
     cellular_str = None
@@ -46,6 +47,7 @@ class Person(object):
         first_name=None,
         last_name=None,
         patronymic=None,
+        social_profile=None,
         cellular=None,
         phone=None,
         is_student=False,
@@ -68,6 +70,9 @@ class Person(object):
             if random:
                 patronymic += "_" + rc.random_text(3)
             self.patronymic = t.fillElementById("patronymic-input", patronymic)
+
+        if social_profile is not None:
+            self.social_profile = t.fillElementById("social_profile-input", social_profile)
 
         if cellular is not None:
             self.cellular_str = ", ".join(cellular)
