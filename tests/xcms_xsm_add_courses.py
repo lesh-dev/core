@@ -16,20 +16,6 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
     * add some courses to this person
     """
 
-    def add_course_to_teacher(self, teacher):
-        self.gotoUrlByLinkText(u"Добавить курс")
-        course = xsm.Course(self)
-        course.input(
-            course_title=u"Курс",
-            course_comment=u"Какой-то комментарий",
-            course_desc=u"Описание курса",
-            target_class=u"7-11",
-            random=True,
-        )
-        # XSM BUG: we should return to teacher page, not to course page!
-        self.gotoUrlByLinkText(u"Вернуться к просмотру")  # view of what? Course? no, teacher!
-        self.gotoUrlByLinkText(teacher.short_alias())
-
     def run(self):
         self.ensure_logged_off()
         self.performLoginAsManager()
@@ -52,4 +38,4 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
         self.assertBodyTextPresent(u"Курсы")
 
         for i in range(0, 3):
-            self.add_course(teacher)
+            xsm.add_course_to_teacher(self, teacher)

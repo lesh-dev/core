@@ -249,3 +249,18 @@ def add_test_school(xtest):
     # global context fix ;)
     xtest.m_conf.set_test_school_name(school.school_title)
     return school
+
+
+def add_course_to_teacher(xtest, teacher):
+    xtest.gotoUrlByLinkText(u"Добавить курс")
+    course = Course(xtest)
+    course.input(
+        course_title=u"Курс",
+        course_comment=u"Какой-то комментарий",
+        course_desc=u"Описание курса",
+        target_class=u"7-11",
+        random=True,
+    )
+    # XSM BUG: we should return to teacher page, not to course page!
+    xtest.gotoUrlByLinkText(u"Вернуться к просмотру")  # view of what? Course? no, teacher!
+    xtest.gotoUrlByLinkText(teacher.short_alias())

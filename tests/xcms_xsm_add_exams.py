@@ -23,8 +23,8 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
     def get_exam_already_exists_message():
         return u"Зачёт по этому курсу уже имеется"
 
-    def add_exams_by_id(self, examIdList):
-        for exam in examIdList:
+    def add_exams_by_id(self, exam_ids):
+        for exam in exam_ids:
             self.add_exam_by_id_and_return(exam)
 
     def add_exam_by_id_and_return(self, exam):
@@ -73,6 +73,20 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         school = xsm.add_test_school(self)
 
         self.gotoXsmAllPeople()
+
+        # add teacher
+        self.gotoXsmAddPerson()
+        teacher = xsm.Person(self)
+        teacher.input(
+            last_name=u"Преподов",
+            first_name=u"Александр",
+            patronymic=u"Ильич",
+            random=True,
+            is_teacher=True,
+        )
+        teacher.back_to_person_view()
+        teacher.add_to_school(school)
+
         self.gotoXsmAddPerson()
         student = xsm.Person(self)
         student.input(
