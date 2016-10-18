@@ -16,7 +16,7 @@ function xsm_print_course()
         $school_title = xcms_get_key_or_enc($school, "school_title");
         $course_title = xcms_get_key_or_enc($course, "course_title");
         $target_class = xcms_get_key_or_enc($course, "target_class");
-        $course_desc = xcms_get_key_or_enc($coursem "course_desc");
+        $course_desc = xcms_get_key_or_enc($course, "course_desc");
         $course_cycle = xcms_get_key_or_enc($course, "course_cycle");
         $course_comment = xcms_get_key_or_enc($course, "course_comment");
         $course_created = xsm_ymdhm($course["course_created"]);
