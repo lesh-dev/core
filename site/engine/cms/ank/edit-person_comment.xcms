@@ -114,8 +114,8 @@ function xsm_edit_person_comment()
     $fields_desc = xsm_get_fields("person_comment"); ?>
     <form method="post" action="edit-person_comment"><?php
         xsm_person_comment_edit_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id);
-        xsm_draw_field_hidden("person_comment_id", $person_comment_id);
-        xsm_draw_field_hidden("blamed_person_id", $blamed_person_id); ?>
+        xcmst_hidden("person_comment_id", $person_comment_id);
+        xcmst_hidden("blamed_person_id", $blamed_person_id); ?>
         <table class="ankEdit">
             <tr>
                 <td class="ankListRowTitle">Комментарий</td>

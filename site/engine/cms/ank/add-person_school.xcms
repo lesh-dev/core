@@ -94,7 +94,7 @@ function xsm_add_person_school()
         <form method="post" action="add-person_school">
         <tr><td class="ankList"><span class="ankEditField xsm-label">Добавить участника</span><?php
             echo xsm_make_add_person_school_selector($school_id, $already_added);
-            xsm_draw_field_hidden("school_id", $school_id);
+            xcmst_hidden("school_id", $school_id);
         ?>
             <span>
                 <br/>Символом &#9679; отмечены активные участники,

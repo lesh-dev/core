@@ -25,16 +25,6 @@ function xsm_bottom_fields($table_name, $object)
     }
 }
 
-// FIXME: replace with xcmst_hidden common control
-function xsm_draw_field_hidden($name, $value)
-{
-    ?><input
-        type="hidden"
-        name="<?php echo $name; ?>"
-        value="<?php echo $value; ?>"
-    /><?php
-}
-
 /**
   * Field label
   * @param desc field descriptor

@@ -195,11 +195,11 @@ function xsm_edit_exam()
     ?>
     <form method="post" action="edit-exam"><?php
         xsm_edit_exam_operations($school_id, $student_person_id, $exam_id, "top");
-        xsm_draw_field_hidden("exam_id", $exam_id);
-        xsm_draw_field_hidden("student_person_id", $student_person_id);
-        xsm_draw_field_hidden("school_id", $school_id);
+        xcmst_hidden("exam_id", $exam_id);
+        xcmst_hidden("student_person_id", $student_person_id);
+        xcmst_hidden("school_id", $school_id);
         if ($exam_id != XDB_NEW)
-            xsm_draw_field_hidden("course_id", $course_id); ?>
+            xcmst_hidden("course_id", $course_id); ?>
         <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
                 <td class="ankListRowTitle">Зачёт на <?php echo $person_list_link; ?></td>

@@ -40,9 +40,9 @@ function xsm_edit_person_school()
     $fields_desc = xsm_get_fields("person_school"); ?>
     <form method="post" action="edit-person_school" role="form"><?php
         xsm_person_school_edit_operations('person_school', $person_school_id, 'Вернуться к просмотру', $school_id, $member_person_id);
-        xsm_draw_field_hidden("person_school_id", $person_school_id);
-        xsm_draw_field_hidden("member_person_id", $member_person_id);
-        xsm_draw_field_hidden("school_id", $school_id);
+        xcmst_hidden("person_school_id", $person_school_id);
+        xcmst_hidden("member_person_id", $member_person_id);
+        xcmst_hidden("school_id", $school_id);
         ?>
         <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>

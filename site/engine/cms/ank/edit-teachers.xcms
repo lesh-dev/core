@@ -32,8 +32,8 @@ function xsm_edit_course_teachers()
 
             ?>
             <form method="post" action="edit-teachers"><?php
-            xsm_draw_field_hidden("course_teachers_id", $course_teachers_id);
-            xsm_draw_field_hidden("course_id", $course_id); ?>
+            xcmst_hidden("course_teachers_id", $course_teachers_id);
+            xcmst_hidden("course_id", $course_id); ?>
             <tr><td class="ankList"><span class="ank-edit-item"><?php echo $teacher_ht; ?></span>
                 <?php xcmst_submit("delete-teacher", "Удалить", "", "delete-button item"); ?>
             </td></tr>
@@ -42,7 +42,7 @@ function xsm_edit_course_teachers()
         <form method="post" action="edit-teachers">
         <tr><td class="ankList"><span class="ank-edit-item action">Добавить препода</span><?php
             echo xsm_make_teacher_selector($school_id, $already_added);
-            xsm_draw_field_hidden("course_id", $course_id);
+            xcmst_hidden("course_id", $course_id);
             xcmst_submit("add-teacher", "Добавить"); ?>
             <span><br/>Символом &#9679; отмечены преподы на данной школе,
             <br/>символом &#9675; &#8212; активные преподы

@@ -52,8 +52,8 @@ function xsm_edit_person()
     $fields_desc = xsm_get_fields("person"); ?>
     <form method="post" action="edit-person"><?php
         xsm_person_edit_operations($person_id, 'Вернуться к просмотру участника');
-        xsm_draw_field_hidden("person_id", $person_id);
-        xsm_draw_field_hidden("school_id", $school_id);
+        xcmst_hidden("person_id", $person_id);
+        xcmst_hidden("school_id", $school_id);
         ?>
         <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
