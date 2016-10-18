@@ -502,6 +502,31 @@ function xsm_field($table_name, $key)
     ?><span class="xsm-fixed-field"><?php echo $desc["name"]; ?></span> <?php
 }
 
+function xsm_view_row($table_name, $key, $object)
+{
+    $fields_desc = xsm_get_fields($table_name);
+    $desc = $fields_desc[$key];
+    $output = "__UNKNOWN__FIELD__TYPE__";
+    if ($desc["type"] == XSM_FT_ENUM)
+    {
+        $output = xsm_make_enum($object, $key);
+    }
+    elseif ($desc["type"] == XSM_FT_STR)
+    {
+        $output = xcms_get_key_or_enc($object, $key);
+    }
+    elseif ($desc["type"] == XSM_FT_TEXT)
+    {
+        $output = xcms_get_key_or_enc($object, $key);
+        $output = xcms_html_wrap_by_crlf($output);
+    }
+    ?>
+    <tr><td class="ankList"><?php
+        xsm_field($table_name, $key);
+        echo $output;
+    ?></td></tr><?php
+}
+
 function xsm_ank_format_unit_test()
 {
     xut_begin("ank-format");

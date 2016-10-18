@@ -15,41 +15,27 @@ function xsm_print_course()
     <?php
         $school_title = xcms_get_key_or_enc($school, "school_title");
         $course_title = xcms_get_key_or_enc($course, "course_title");
-        $target_class = xcms_get_key_or_enc($course, "target_class");
-        $course_desc = xcms_get_key_or_enc($course, "course_desc");
-        $course_cycle = xcms_get_key_or_enc($course, "course_cycle");
-        $course_comment = xcms_get_key_or_enc($course, "course_comment");
-        $course_created = xsm_ymdhm($course["course_created"]);
-        $course_modified = xsm_ymdhm($course["course_modified"]);
         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id);
         $teachers_edit_url = xcms_url(array('school_id' => $school_id, 'course_id' => $course_id));
-        $hr_course_area = xsm_make_enum($course, "course_area");
-        $hr_course_type = xsm_make_enum($course, "course_type");
-
         ?>
         <tr>
             <td class="ankListRowTitle">Курс <b><?php echo $course_title; ?></b>
                 на <a href="<?php echo $href_courses; ?>"><?php echo $school_title; ?></a>
-                <?php
-                xsm_edit_delete_info('course', 'course', $course_id, $course_created, $course_modified); ?>
+                <?php xsm_edit_delete_info('course', $course); ?>
             </td>
         </tr>
-        <tr><td class="ankList"><?php xsm_field("course", "target_class");
-            echo $target_class; ?></td></tr>
-        <tr><td class="ankList"><?php xsm_field("course", "course_cycle");
-            echo $course_cycle; ?></td></tr>
+        <?php
+        xsm_view_row("course", "target_class", $course);
+        xsm_view_row("course", "course_cycle", $course); ?>
         <tr><td class="ankList"><span class="xsm-fixed-field">Преподы:</span>
             <?php echo $teachers_ht; ?>
             <a class="link-button ank btn" href="edit-teachers<?php
-                echo $teachers_edit_url; ?>">Редактировать преподов</a></td></tr>
-        <tr><td class="ankList"><?php xsm_field("course", "course_type");
-            echo $hr_course_type; ?></td></tr>
-        <tr><td class="ankList"><?php xsm_field("course", "course_area");
-            echo $hr_course_area; ?></td></tr>
-        <tr><td class="ankList"><?php xsm_field("course", "course_desc");
-            echo xcms_html_wrap_by_crlf($course_desc); ?></td></tr>
-        <tr><td class="ankList"><?php xsm_field("course", "course_comment");
-            echo xcms_html_wrap_by_crlf($course_comment); ?></td></tr>
+                echo $teachers_edit_url; ?>">Редактировать преподов</a></td></tr><?php
+        xsm_view_row("course", "course_type", $course);
+        xsm_view_row("course", "course_area", $course);
+        xsm_view_row("course", "course_desc", $course);
+        xsm_view_row("course", "course_comment", $course);
+        ?>
     </table>
 
     <table class="ankList table table-bordered table-hover table-condensed">

@@ -6,35 +6,17 @@ function xsm_print_school()
     $school_id = xcms_get_key_or($_GET, 'school_id', XDB_INVALID_ID);
     $school = xdb_get_entity_by_id('school', $school_id);
     $href_schools = "list-school";
-    ?>
+    xcmst_hidden("school_id", $school_id); ?>
     <table class="ankList table table-bordered table-hover table-condensed">
-    <?php
-        $school_title = htmlspecialchars($school["school_title"]);
-        $school_date_start = htmlspecialchars($school["school_date_start"]);
-        $school_date_end = htmlspecialchars($school["school_date_end"]);
-        $school_location = htmlspecialchars($school["school_location"]);
-        $school_created = xsm_ymdhm($school["school_created"]);
-        $school_modified = xsm_ymdhm($school["school_modified"]);
-        ?>
         <tr>
             <td class="ankListRowTitle">Школа <b><?php echo $school_title; ?></b>
-                <?php
-                xsm_edit_delete_info('school', 'school', $school_id, $school_created, $school_modified); ?>
+                <?php xsm_edit_delete_info('school', $school); ?>
             </td>
-        </tr>
-
-        <tr><td class="ankList"><?php xsm_field("school", "school_type");
-            echo xsm_make_enum($school, "school_type"); ?></td></tr>
-
-        <tr><td class="ankList"><?php xsm_field("school", "school_date_start");
-            echo $school_date_start; ?></td></tr>
-
-        <tr><td class="ankList"><?php xsm_field("school", "school_date_end");
-            echo $school_date_end; ?></td></tr>
-
-        <tr><td class="ankList"><?php xsm_field("school", "school_location");
-            echo $school_location; ?></td></tr>
-
+        </tr><?php
+        xsm_view_row("school", "school_type", $school);
+        xsm_view_row("school", "school_date_start", $school);
+        xsm_view_row("school", "school_date_end", $school);
+        xsm_view_row("school", "school_location", $school); ?>
     </table>
     <?php
 }

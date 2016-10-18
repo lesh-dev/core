@@ -10,14 +10,10 @@ function xsm_print_department()
     ?>
     <table class="ankList table table-bordered table-hover table-condensed">
     <?php
-        $department_title = xcms_get_key_or_enc($department, "department_title");
-        $department_created = xsm_ymdhm($department["department_created"]);
-        $department_modified = xsm_ymdhm($department["department_modified"]);
-        ?>
+        $department_title = xcms_get_key_or_enc($department, "department_title"); ?>
         <tr>
             <td class="ankListRowTitle">Отделение <b><?php echo $department_title; ?></b>
-            <?php
-                xsm_edit_delete_info('department', 'department', $department_id, $department_created, $department_modified); ?>
+            <?php xsm_edit_delete_info('department', $department); ?>
             </td>
         </tr>
     </table>
