@@ -6,6 +6,7 @@ function xsm_print_school()
     $school_id = xcms_get_key_or($_GET, 'school_id', XDB_INVALID_ID);
     $school = xdb_get_entity_by_id('school', $school_id);
     $href_schools = "list-school";
+    $school_title = xcms_get_key_or_enc($school, "school_title");
     xcmst_hidden("school_id", $school_id); ?>
     <table class="ankList table table-bordered table-hover table-condensed">
         <tr>
