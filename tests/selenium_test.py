@@ -1107,7 +1107,9 @@ class SeleniumTest(object):
 
             if not isList(urls):
                 self.fatalTest(
-                    "countIndexedUrlsByLinkText(): Something bad retrieved from find_elements_by_xpath: it's not a list of WebElement. ")
+                    "countIndexedUrlsByLinkText(): Something bad retrieved from find_elements_by_xpath: "
+                    "it's not a list of WebElement. "
+                )
 
             listSize = len(urls)
             self.logAdd("Urls list size: " + userSerialize(listSize))
@@ -1129,7 +1131,9 @@ class SeleniumTest(object):
 
             if not isList(urls):
                 self.fatalTest(
-                    "clickIndexedElementByText(): Something bad retrieved from find_elements_by_xpath: it's not a list of WebElement. ")
+                    "clickIndexedElementByText(): Something bad retrieved from find_elements_by_xpath: "
+                    "it's not a list of WebElement. "
+                )
 
             self.logAdd("Urls list size: " + userSerialize(len(urls)))
             if index < len(urls):

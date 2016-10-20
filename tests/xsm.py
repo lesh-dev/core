@@ -141,6 +141,7 @@ class Course(object):
     # Parent test object
     xtest = None
     # Same namings as in XSM
+    course_id = None
     course_title = None
     target_class = None
     course_desc = None
@@ -161,18 +162,18 @@ class Course(object):
         t = self.xtest
         if course_title is not None:
             if random:
-                course_title += rc.randomCrap(4)
+                course_title += "_" + rc.randomCrap(4)
             self.course_title = t.fillElementByName("course_title", course_title)
 
         if target_class is not None:
             self.target_class = t.fillElementByName("target_class", target_class)
 
         if course_desc is not None:
-            course_desc += rc.randomCrap(10, ["multiline"])
+            course_desc += " " + rc.randomCrap(10, ["multiline"])
             self.course_desc = t.fillElementByName("course_desc", course_desc)
 
         if course_comment is not None:
-            course_comment += rc.randomCrap(10, ["multiline"])
+            course_comment += " " + rc.randomCrap(10, ["multiline"])
             self.course_comment = t.fillElementByName("course_comment", course_comment)
 
         if update:
@@ -201,7 +202,7 @@ class School(object):
     ):
         if school_title is not None:
             if random:
-                school_title += '_' + rc.randomWord(6)
+                school_title += "_" + rc.randomWord(6)
             self.school_title = self.xtest.fillElementByName("school_title", school_title)
 
         if school_date_start is not None:
@@ -213,7 +214,7 @@ class School(object):
 
         if school_location is not None:
             if random:
-                school_location += '_' + rc.randomWord(6)
+                school_location += "_" + rc.randomWord(6)
             self.school_location = self.xtest.fillElementByName("school_location", school_location)
 
         self.xtest.clickElementByName("update-school")
@@ -263,4 +264,6 @@ def add_course_to_teacher(xtest, teacher):
     )
     # XSM BUG: we should return to teacher page, not to course page!
     xtest.gotoUrlByLinkText(u"Вернуться к просмотру")  # view of what? Course? no, teacher!
+    course.course_id = int(xtest.getElementValueByName("course_id"))
     xtest.gotoUrlByLinkText(teacher.short_alias())
+    return course

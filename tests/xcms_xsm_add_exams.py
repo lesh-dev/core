@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import logging
+
 import xsm
 import xtest_common
 import random_crap
@@ -72,20 +74,31 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         self.gotoXsm()
         school = xsm.add_test_school(self)
 
-        self.gotoXsmAllPeople()
+        # add two teachers: 1st with 2 and 2nd with 3 courses
+        teachers = []
+        for ti in [1, 2]:
+            self.gotoXsmAllPeople()
+            self.gotoXsmAddPerson()
+            teacher = xsm.Person(self)
+            teacher.input(
+                last_name=u"Препод_{}ый".format(ti),
+                first_name=u"Александр" if ti == 1 else u"Иван",
+                patronymic=u"Ильич" if ti == 1 else u"Петрович",
+                random=True,
+                is_teacher=True,
+            )
+            teacher.back_to_person_view()
+            teacher.add_to_school(school)
 
-        # add teacher
-        self.gotoXsmAddPerson()
-        teacher = xsm.Person(self)
-        teacher.input(
-            last_name=u"Преподов",
-            first_name=u"Александр",
-            patronymic=u"Ильич",
-            random=True,
-            is_teacher=True,
-        )
-        teacher.back_to_person_view()
-        teacher.add_to_school(school)
+            self.assertBodyTextPresent(u"Курсы")
+
+            courses = [xsm.add_course_to_teacher(self, teacher) for _ in range(0, 1 + ti)]
+            # store as custom property
+            teacher.courses = courses
+
+            teachers.append(teacher)
+
+        self.gotoXsmAllPeople()
 
         self.gotoXsmAddPerson()
         student = xsm.Person(self)
@@ -99,23 +112,20 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         student.back_to_person_view()
         student.add_to_school(school)
 
-        # <option  value="95">Базовое электричество &#8212; Тараненко Сергей</option>
-        # <option  value="134">Биомеханика &#8212; Преподаватель Другого</option>
-        # <option  value="83">Ботаника &#8212; Преподаватель Другого</option>
-        # <option  value="73">Введение в технику эксперимента &#8212; Пюрьбеева Евгения</option>
-        # <option  value="119">Введение в химию &#8212; Марьясина Софья</option>
-        # <option  value="101">Видеосъёмка &#8212; Дюно-Люповецкий Влас</option>
-        # <option  value="137">Генетические алгоритмы &#8212; Мироненко-Маренков Антон</option>
-        # <option  value="91">Геометрическая оптика &#8212; Пилипюк Дарья</option>
-
         self.assertBodyTextPresent(u"Зачёты")
 
-        dup_id = 134
+        course_ids = []
+        for teacher in teachers:
+            for course in teacher.courses:
+                course_ids.append(course.course_id)
+        logging.info(course_ids)
 
-        self.add_exams_by_id([95, 119, 91, 73, 107, 130, 133, dup_id])
+        # take some id
+        dup_id = course_ids[3]
+        self.add_exams_by_id(course_ids)
 
         self.set_exam_passed([1, 2, 2])
-        self.set_exam_not_passed([1, 2, 2])
+        self.set_exam_not_passed([1, 0])
 
         # test duplicate exam
         self.add_exam_by_id(dup_id)
