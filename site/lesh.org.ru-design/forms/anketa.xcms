@@ -43,7 +43,7 @@
     ${ankinput:school:input:Номер (название) школы:Лицей №30:opt:long}
     ${ankinput:school_city:input:Город (село), область (край), <br />
         где находится школа:г. Полярные Зори Мурманской обл.:opt:long}
-    ${ankinput:current_class:input:Класс:8Б:req:middle}
+    ${ankinput:ank_class:input:Класс:8Б:req:middle}
     ${ankinput:phone:input:Домашний телефон<br/>с кодом
         города:+7 (812) 212-85-06<br />(если не знаете код города,
         не заполняйте это поле):gr:middle}

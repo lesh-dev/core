@@ -30,8 +30,8 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
             first_name=u"Самсунг",
             patronymic=u"Нокиевич",
             random=True,
-            cellular=["+7(900)000-00-00", "+7(900)999-99-99"],
-            phone=["8-900-000-00-00", "+7-900-999-99-99"],
+            cellular_list=["+7(900)000-00-00", "+7(900)999-99-99"],
+            phone_list=["8-900-000-00-00", "+7-900-999-99-99"],
         )
         person.back_to_person_view()
 
@@ -40,13 +40,13 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
         for i in range(0, 2):
             site_cellular_phone = person.get_row_value(person_id, 'cellular', i)
             site_phone = person.get_row_value(person_id, 'phone', i)
-            self.assert_equal(person.cellular[i], site_cellular_phone, "Cell phones #{} do not match. ".format(i))
-            self.assert_equal(person.phone[i], site_phone, "Phones #{} do not match. ".format(i))
+            self.assert_equal(person.cellular_list[i], site_cellular_phone, "Cell phones #{} do not match. ".format(i))
+            self.assert_equal(person.phone_list[i], site_phone, "Phones #{} do not match. ".format(i))
 
         self.gotoEditPerson()
         person.input(
-            phone=["+79261112233"],
-            cellular=["89261112233"],
+            phone="+79261112233",
+            cellular="89261112233",
         )
         self.gotoBackToPersonView()
 

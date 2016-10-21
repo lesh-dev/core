@@ -22,7 +22,7 @@ function xsm_ank_on_change() {
 }
 
 function xsm_ank_check_class(aError) {
-    var val = $("#current_class-input").val();
+    var val = $("#ank_class-input").val();
     val = $.trim(val);
     if (val.length < 1) aError.push("Класс не указан");
 }

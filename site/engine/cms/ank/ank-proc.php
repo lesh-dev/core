@@ -261,8 +261,9 @@ function xsm_validate_anketa_post(&$person)
     $phone_digits = preg_replace('/[^0-9]/', '', $phone);
     $cellular = xcms_get_key_or($person, "cellular");
     $cellular_digits = preg_replace('/[^0-9]/', '', $cellular);
-    $current_class = xcms_get_key_or($person, "current_class");
-    $person['ank_class'] = $current_class;
+    $ank_class = xcms_get_key_or($person, "ank_class");
+    $person['ank_class'] = $ank_class;
+    $person['current_class'] = $ank_class;
 
     $fi_match = '/[\/.,?!@#$%&*()_+=~^]/';
     $birth_date_match = '/[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9][0-9][0-9]/';
@@ -273,7 +274,7 @@ function xsm_validate_anketa_post(&$person)
         preg_match($fi_match, $first_name) ||
         preg_match($fi_match, $last_name) ||
         preg_match($birth_date_match, $last_name) ||
-        xu_empty($current_class) ||
+        xu_empty($ank_class) ||
         (
             !xsm_valid_anketa_phone_digits($phone_digits, 7) &&
             !xsm_valid_anketa_phone_digits($cellular_digits, 9)

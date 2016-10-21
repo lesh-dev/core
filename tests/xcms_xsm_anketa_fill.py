@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import logging
+
+import xsm
 import xtest_common
 import random_crap
 import bawlib
@@ -14,7 +17,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     * fill anketa with all correct values
     * submits form
     * login as admin (root)
-    * naviagates to anketa list
+    * navigates to anketa list
     * clicks on new anketa
     * checks if all entered data match screen form.
     * adds 3 comments to this new person
@@ -27,21 +30,18 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     * TODO: remove person from one of schools
     """
 
-    def addCommentsToPerson(self):
-        commentText1 = self.addCommentToPerson()
-        print "Added first comment: ", commentText1
-        self.assertBodyTextPresent(commentText1)
+    def add_and_check_person_comment(self):
+        comment_text = self.addCommentToPerson()
+        logging.info("Added comment %s", comment_text)
+        self.assertBodyTextPresent(comment_text)
+        return comment_text
 
-        commentText2 = self.addCommentToPerson()
-        print "Added second comment: ", commentText2
-        self.assertBodyTextPresent(commentText2)
-
-        commentText3 = self.addCommentToPerson()
-        print "Added third comment: ", commentText3
-        self.assertBodyTextPresent(commentText3)
+    def add_comments_to_person(self):
+        self.add_and_check_person_comment()
+        comment_text_2 = self.add_and_check_person_comment()
+        self.add_and_check_person_comment()
 
         # and now let's edit one of them.
-
         self.gotoIndexedUrlByLinkText(u"Правка", 0)
         self.gotoBackAfterComment()
 
@@ -49,20 +49,17 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         self.gotoBackAfterComment()
 
         # oh, no! we want to use comment link ids!
+        comment_text_new_1 = self.editCommentToPerson("comment-edit-1")
+        self.assertBodyTextPresent(comment_text_new_1)
 
-        commentTextNew1 = self.editCommentToPerson("comment-edit-1")
-        self.assertBodyTextPresent(commentTextNew1)
-
-        commentTextNew3 = self.editCommentToPerson("comment-edit-3")
-        self.assertBodyTextPresent(commentTextNew3)
+        comment_text_new_3 = self.editCommentToPerson("comment-edit-3")
+        self.assertBodyTextPresent(comment_text_new_3)
 
         # check if all new comments are present here, and 2-nd comment left unchanged
+        self.assertBodyTextPresent(comment_text_new_1, "Comment 1 must change value. ")
+        self.assertBodyTextPresent(comment_text_2, "Comment should remain unchanged. ")
+        self.assertBodyTextPresent(comment_text_new_3, "Comment 3 must change value. ")
 
-        self.assertBodyTextPresent(commentTextNew1, "Comment 1 must change value. ")
-        self.assertBodyTextPresent(commentText2, "Comment should remain unchanged. ")
-        self.assertBodyTextPresent(commentTextNew3, "Comment 3 must change value. ")
-
-    # -------------------- begining of the test
     def run(self):
         self.ensure_logged_off()
 
@@ -76,120 +73,92 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         self.gotoAnketa()
         self.assertBodyTextPresent(self.getAnketaPageHeader())
 
-        # generate
-        inpLastName = u"Чапаев" + random_crap.randomText(5)
-        inpFirstName = u"Василий" + random_crap.randomText(3)
-        inpMidName = u"Иваныч" + random_crap.randomText(3)
-
-        inpBirthDate = random_crap.randomDigits(2) + "." + random_crap.randomDigits(2) + "." + random_crap.randomDigits(4)
-
-        inpSchool = u"Тестовая школа им. В.Е.Бдрайвера №" + random_crap.randomDigits(4)
-
-        inpSchoolCity = u"Школа находится в /var/opt/" + random_crap.randomText(5)
-        inpClass = random_crap.randomDigits(1) + u" Гэ"
-
-        inpPhone = "+7" + random_crap.randomDigits(9)
-        inpCell = "+7" + random_crap.randomDigits(9)
-        inpEmail = random_crap.randomText(10) + "@" + random_crap.randomText(6) + ".ru"
-        inpSkype = random_crap.randomText(12)
-        inpSocial = random_crap.randomVkontakte()
-        inpSocialShow = bawlib.cutHttp(inpSocial)
-
-        inpFav = random_crap.randomCrap(20, ["multiline"])
-        inpAch = random_crap.randomCrap(15, ["multiline"])
-        inpHob = random_crap.randomCrap(10, ["multiline"])
-        inpSource = random_crap.randomCrap(10, ["multiline"])
-
-        inpLastName = self.fillElementById("last_name-input", inpLastName)
-
-        inpFirstName = self.fillElementById("first_name-input", inpFirstName)
-        inpMidName = self.fillElementById("patronymic-input", inpMidName)
-        inpBirthDate = self.fillElementById("birth_date-input", inpBirthDate)
-        inpSchool = self.fillElementById("school-input", inpSchool)
-        inpSchoolCity = self.fillElementById("school_city-input", inpSchoolCity)
-        inpClass = self.fillElementById("current_class-input", inpClass)
-        inpPhone = self.fillElementById("phone-input", inpPhone)
-        inpCell = self.fillElementById("cellular-input", inpCell)
-        inpEmail = self.fillElementById("email-input", inpEmail)
-        inpSkype = self.fillElementById("skype-input", inpSkype)
-        inpSocial = self.fillElementById("social_profile-input", inpSocial)
-        inpFav = self.fillElementById("favourites-text", inpFav)
-        inpAch = self.fillElementById("achievements-text", inpAch)
-        inpHob = self.fillElementById("hobby-text", inpHob)
-        inpSource = self.fillElementById("lesh_ref-text", inpSource)
-        self.fillElementById("control_question-input", u"ампер")
-
-        self.clickElementById("submit_anketa-submit")
-
+        person = xsm.Person(self)
+        person.input(
+            last_name=u"Чапаев",
+            first_name=u"Василий",
+            patronymic=u"Иваныч",
+            birth_date=random_crap.randomDigits(2) + "." + random_crap.randomDigits(2) + "." + random_crap.randomDigits(4),
+            school=u"Тестовая школа им. В.Е.Бдрайвера №",
+            school_city=u"Школа находится в /var/opt/" + random_crap.randomText(5),
+            ank_class=random_crap.randomDigits(1) + u" Гэ",
+            cellular="+7" + random_crap.randomDigits(9),
+            phone="+7" + random_crap.randomDigits(9),
+            email=random_crap.randomText(10) + "@" + random_crap.randomText(6) + ".ru",
+            skype=random_crap.randomText(12),
+            social_profile=random_crap.randomVkontakte(),
+            favourites=random_crap.randomCrap(20, ["multiline"]),
+            achievements=random_crap.randomCrap(15, ["multiline"]),
+            hobby=random_crap.randomCrap(10, ["multiline"]),
+            lesh_ref=random_crap.randomCrap(10, ["multiline"]),
+            control_question=u"ампер",
+            ank_mode=True,
+        )
         self.assertBodyTextPresent(self.getAnketaSuccessSubmitMessage())
+        inp_social_show = bawlib.cutHttp(person.social_profile)
 
         # now login as admin
 
         self.performLoginAsManager()
-
         self.gotoRoot()
-
         self.gotoUrlByLinkText(self.getAnketaListMenuName())
 
-        shortAlias = xtest_common.shortAlias(inpLastName, inpFirstName)
-        fullAlias = xtest_common.fullAlias(inpLastName, inpFirstName, inpMidName)
-        # print "Full student alias:", fullAlias.encode("utf-8")
-        anketaUrlName = shortAlias.strip()
-        # try to drill-down into table with new anketa.
+        short_alias = person.short_alias()
+        full_alias = person.full_alias()
 
-        self.gotoUrlByLinkText(anketaUrlName)
+        # try to drill-down into table with new anketa.
+        self.gotoUrlByLinkText(short_alias)
 
         # just check text is on the page.
-        print "Checking that all filled fields are displayed on the page. "
+        logging.info("Checking that all filled fields are displayed on the page")
 
-        self.checkPersonAliasInPersonView(fullAlias)
+        self.checkPersonAliasInPersonView(full_alias)
 
-        self.assertBodyTextPresent(inpBirthDate)
-        self.assertBodyTextPresent(inpSchool)
-        self.assertBodyTextPresent(inpSchoolCity)
-        self.assertBodyTextPresent(inpClass)
-        self.assertBodyTextPresent(inpPhone)
-        self.assertBodyTextPresent(inpCell)
-        self.assertBodyTextPresent(inpEmail)
-        self.assertBodyTextPresent(inpSkype)
-        self.assertBodyTextPresent(inpSocialShow)
+        self.assertBodyTextPresent(person.birth_date)
+        self.assertBodyTextPresent(person.school)
+        self.assertBodyTextPresent(person.school_city)
+        self.assertBodyTextPresent(person.ank_class)
+        self.assertBodyTextPresent(person.phone)
+        self.assertBodyTextPresent(person.cellular)
+        self.assertBodyTextPresent(person.email)
+        self.assertBodyTextPresent(person.skype)
+        self.assertBodyTextPresent(inp_social_show)
         self.clickElementById("show-extra-person-info")
         self.wait(1)
-        self.assertElementSubTextById("extra-person-info", inpFav)
-        self.assertElementSubTextById("extra-person-info", inpAch)
-        self.assertElementSubTextById("extra-person-info", inpHob)
-        self.assertElementSubTextById("extra-person-info", inpSource)
+        self.assertElementSubTextById("extra-person-info", person.favourites)
+        self.assertElementSubTextById("extra-person-info", person.achievements)
+        self.assertElementSubTextById("extra-person-info", person.hobby)
+        self.assertElementSubTextById("extra-person-info", person.lesh_ref)
 
-        self.addCommentsToPerson()
+        self.add_comments_to_person()
 
         # now, let's change anketa status to "Ждет собеседования"
 
         self.gotoEditPerson()
 
         # first, check that values in opened form match entered in anketa.
-
-        self.assertElementValueById("last_name-input", inpLastName)
-        self.assertElementValueById("first_name-input", inpFirstName)
-        self.assertElementValueById("patronymic-input", inpMidName)
-        self.assertElementValueById("birth_date-input", inpBirthDate)
-        self.assertElementValueById("school-input", inpSchool)
-        self.assertElementValueById("school_city-input", inpSchoolCity)
-        self.assertElementValueById("ank_class-input", inpClass)
+        self.assertElementValueById("last_name-input", person.last_name)
+        self.assertElementValueById("first_name-input", person.first_name)
+        self.assertElementValueById("patronymic-input", person.patronymic)
+        self.assertElementValueById("birth_date-input", person.birth_date)
+        self.assertElementValueById("school-input", person.school)
+        self.assertElementValueById("school_city-input", person.school_city)
+        self.assertElementValueById("ank_class-input", person.ank_class)
         # current_class should now be equal to ank_class (fresh anketa)
-        self.assertElementValueById("current_class-input", inpClass)
-        self.assertElementValueById("phone-input", inpPhone)
-        self.assertElementValueById("cellular-input", inpCell)
-        self.assertElementValueById("email-input", inpEmail)
-        self.assertElementValueById("skype-input", inpSkype)
-        self.assertElementValueById("social_profile-input", inpSocial)
-        self.assertElementValueById("favourites-text", inpFav)
-        self.assertElementValueById("achievements-text", inpAch)
-        self.assertElementValueById("hobby-text", inpHob)
-        self.assertElementValueById("lesh_ref-text", inpSource)
+        self.assertElementValueById("current_class-input", person.ank_class)
+        self.assertElementValueById("phone-input", person.phone)
+        self.assertElementValueById("cellular-input", person.cellular)
+        self.assertElementValueById("email-input", person.email)
+        self.assertElementValueById("skype-input", person.skype)
+        self.assertElementValueById("social_profile-input", person.social_profile)
+        self.assertElementValueById("favourites-text", person.favourites)
+        self.assertElementValueById("achievements-text", person.achievements)
+        self.assertElementValueById("hobby-text", person.hobby)
+        self.assertElementValueById("lesh_ref-text", person.lesh_ref)
 
         self.assertElementValueById("anketa_status-selector", "new")
-        # change anketa status and save it.
 
+        # change anketa status and save it.
         self.setOptionValueByIdAndValue("anketa_status-selector", "progress")
 
         self.clickElementById("update-person-submit")

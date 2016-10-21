@@ -24,17 +24,35 @@ class Person(object):
     """
     # Parent test object
     xtest = None
+
     # Same namings as in XSM
     first_name = None
     last_name = None
     patronymic = None
-    social_profile = None
+
     # with string repr
     cellular = None
-    cellular_str = None
+    cellular_list = None
+
     # with string repr
     phone = None
-    phone_str = None
+    phone_list = None
+
+    birth_date = None
+    school = None
+    school_city = None
+    ank_class = None
+    current_class = None
+    email = None
+    skype = None
+    social_profile = None
+    favourites = None
+    achievements = None
+    hobby = None
+    lesh_ref = None
+    # not a database property
+    control_question = None
+    # in-school properties
     is_student = None
     is_teacher = None
 
@@ -47,12 +65,27 @@ class Person(object):
         first_name=None,
         last_name=None,
         patronymic=None,
-        social_profile=None,
+        birth_date=None,
+        school=None,
+        school_city=None,
+        ank_class=None,
+        current_class=None,
+        cellular_list=None,
         cellular=None,
         phone=None,
+        phone_list=None,
+        email=None,
+        skype=None,
+        social_profile=None,
+        favourites=None,
+        achievements=None,
+        hobby=None,
+        lesh_ref=None,
+        control_question=None,
         is_student=False,
         is_teacher=False,
         random=False,
+        ank_mode=False,
     ):
         t = self.xtest
         if last_name is not None:
@@ -71,18 +104,60 @@ class Person(object):
                 patronymic += "_" + rc.random_text(3)
             self.patronymic = t.fillElementById("patronymic-input", patronymic)
 
+        if cellular_list is not None:
+            self.cellular = ", ".join(cellular_list)
+            self.cellular_list = list(map(self.phone_fix, cellular_list))
+            self.cellular = t.fillElementById("cellular-input", self.cellular)
+        elif cellular is not None:
+            self.cellular_list = [cellular]
+            self.cellular = t.fillElementById("cellular-input", cellular)
+
+        if phone_list is not None:
+            self.phone = ", ".join(phone_list)
+            self.phone_list = list(map(self.phone_fix, phone_list))
+            self.phone = t.fillElementById("phone-input", self.phone)
+        elif phone is not None:
+            self.phone_list = [phone]
+            self.phone = t.fillElementById("phone-input", phone)
+
+        if birth_date is not None:
+            self.birth_date = t.fillElementById("birth_date-input", birth_date)
+
+        if school is not None:
+            self.school = t.fillElementById("school-input", school)
+
+        if school_city is not None:
+            self.school_city = t.fillElementById("school_city-input", school_city)
+
+        if ank_class is not None:
+            self.ank_class = t.fillElementById("ank_class-input", ank_class)
+
+        if current_class is not None:
+            self.current_class = t.fillElementById("current_class-input", current_class)
+
+        if email is not None:
+            self.email = t.fillElementById("email-input", email)
+
+        if skype is not None:
+            self.skype = t.fillElementById("skype-input", skype)
+
         if social_profile is not None:
             self.social_profile = t.fillElementById("social_profile-input", social_profile)
 
-        if cellular is not None:
-            self.cellular_str = ", ".join(cellular)
-            self.cellular = list(map(self.phone_fix, cellular))
-            self.cellular_str = t.fillElementById("cellular-input", self.cellular_str)
+        if achievements is not None:
+            self.achievements = t.fillElementById("achievements-text", achievements)
 
-        if phone is not None:
-            self.phone_str = ", ".join(phone)
-            self.phone = list(map(self.phone_fix, phone))
-            self.phone_str = t.fillElementById("phone-input", self.phone_str)
+        if favourites is not None:
+            self.favourites = t.fillElementById("favourites-text", favourites)
+
+        if hobby is not None:
+            self.hobby = t.fillElementById("hobby-text", hobby)
+
+        if lesh_ref is not None:
+            self.lesh_ref = t.fillElementById("lesh_ref-text", lesh_ref)
+
+        if control_question is not None:
+            self.control_question = t.fillElementById("control_question-input", control_question)
 
         if is_student is not None:
             self.is_student = is_student
@@ -99,7 +174,10 @@ class Person(object):
         if department_id is not None:
             t.setOptionValueByIdAndValue("department_id-selector", department_id)
 
-        t.clickElementById("update-person-submit")
+        if ank_mode:
+            t.clickElementById("submit_anketa-submit")
+        else:
+            t.clickElementById("update-person-submit")
 
     def back_to_person_view(self):
         t = self.xtest
