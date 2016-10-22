@@ -11,13 +11,13 @@ class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
     def run(self):
 
         # first, login as admin
-        inpLogin = "dup_user_" + random_crap.randomText(8)
+        inpLogin = "dup_user_" + random_crap.random_text(8)
         inpEMail1 = random_crap.randomEmail()
         inpEMail2 = random_crap.randomEmail()
-        inpPass1 = random_crap.randomText(10)
-        inpPass2 = random_crap.randomText(10)
-        inpName1 = u"Вася " + random_crap.randomText(6)
-        inpName2 = u"Петя " + random_crap.randomText(6)
+        inpPass1 = random_crap.random_text(10)
+        inpPass2 = random_crap.random_text(10)
+        inpName1 = u"Вася " + random_crap.random_text(6)
+        inpName2 = u"Петя " + random_crap.random_text(6)
 
         inpLogin, inpEMail1, inpPass1, inpName1 = self.createNewUser(inpLogin, inpEMail1, inpPass1, inpName1)
 

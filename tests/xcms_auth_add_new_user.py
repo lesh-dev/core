@@ -28,10 +28,10 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         self.gotoRoot()
 
         # first, login as admin
-        inpLogin = "an_test_user_" + random_crap.randomText(8)
+        inpLogin = "an_test_user_" + random_crap.random_text(8)
         inpEMail = random_crap.randomEmail()
-        inpPass = random_crap.randomText(10)
-        inpName = u"Вася Пупкин" + random_crap.randomText(6)
+        inpPass = random_crap.random_text(10)
+        inpName = u"Вася Пупкин" + random_crap.random_text(6)
 
         inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
 
@@ -100,7 +100,7 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         currentEMail = self.getElementValueById(emailEle)
         self.assertEqual(currentEMail, inpEMail, "User e-mail in user profile does not match e-mail entered on user creation. ")
 
-        newName = u"Петя Иванов" + random_crap.randomText(6)
+        newName = u"Петя Иванов" + random_crap.random_text(6)
         newEMail = random_crap.randomEmail()
 
         newName = self.fillElementById(nameEle, newName)

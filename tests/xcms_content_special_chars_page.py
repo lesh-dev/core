@@ -27,10 +27,10 @@ class XcmsContentSpecialCharsPage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
 
-        inpPageDir = "spec_char_page_" + random_crap.randomText(8)
-        inpMenuTitle = "spec_menu_title_" + random_crap.randomText(8)
-        inpPageHeader = "spec_page_header_" + random_crap.randomText(8)
-        inpAlias = "spec/char/page/alias/" + random_crap.randomText(8)
+        inpPageDir = "spec_char_page_" + random_crap.random_text(8)
+        inpMenuTitle = "spec_menu_title_" + random_crap.random_text(8)
+        inpPageHeader = "spec_page_header_" + random_crap.random_text(8)
+        inpAlias = "spec/char/page/alias/" + random_crap.random_text(8)
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir)
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)

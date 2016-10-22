@@ -31,10 +31,10 @@ class XcmsAuthForgotPassword(xtest_common.XcmsTest):
         self.removePreviousUsersWithTestEmail(inpEMail)
 
         # create new user with ruined memory
-        inpLogin = "oblivion_" + random_crap.randomText(6)
+        inpLogin = "oblivion_" + random_crap.random_text(6)
 
-        inpPass = random_crap.randomText(10)
-        inpName = u"Ruined_Memory_" + random_crap.randomText(6)
+        inpPass = random_crap.random_text(10)
+        inpName = u"Ruined_Memory_" + random_crap.random_text(6)
 
         inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
 

@@ -18,10 +18,10 @@ class XcmsContentTopLevelPage(xtest_common.XcmsTest):
 
         self.gotoCreatePage()
 
-        inpPageDir = "topLevelPage_" + random_crap.randomText(6);
-        inpMenuTitle = "topMenuTitle_" + random_crap.randomText(6);
-        inpPageHeader = "topPageHeader_" + random_crap.randomText(6);
-        inpAlias = "top/level/page/" + random_crap.randomText(6);
+        inpPageDir = "topLevelPage_" + random_crap.random_text(6);
+        inpMenuTitle = "topMenuTitle_" + random_crap.random_text(6);
+        inpPageHeader = "topPageHeader_" + random_crap.random_text(6);
+        inpAlias = "top/level/page/" + random_crap.random_text(6);
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir);
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle);

@@ -471,7 +471,7 @@ class XcmsTest(XcmsTestWithConfig):
 
     def addCommentToPerson(self):
         self.gotoUrlByLinkText(u"Добавить комментарий")
-        commentText = random_crap.randomText(40) + "\n" + random_crap.randomText(50) + "\n" + random_crap.randomText(30)
+        commentText = random_crap.random_text(40) + "\n" + random_crap.random_text(50) + "\n" + random_crap.random_text(30)
 
         commentText = self.fillElementByName("comment_text", commentText)
 
@@ -483,7 +483,7 @@ class XcmsTest(XcmsTestWithConfig):
     def editCommentToPerson(self, commentLinkId):
         self.gotoUrlByLinkId(commentLinkId)
         oldCommentText = self.getElementValueByName("comment_text")
-        newCommentText = random_crap.randomText(10) + "\n" + oldCommentText + "\n" + random_crap.randomText(6)
+        newCommentText = random_crap.random_text(10) + "\n" + oldCommentText + "\n" + random_crap.random_text(6)
         newCommentText = self.fillElementByName("comment_text", newCommentText)
         self.clickElementByName("update-person_comment")
         self.assertBodyTextPresent(u"Комментарий успешно сохранён")

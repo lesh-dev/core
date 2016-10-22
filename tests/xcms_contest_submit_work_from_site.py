@@ -76,7 +76,7 @@ class XcmsContestSubmitWorkFromSite(xtest_common.XcmsTest):
 
         # Send a link
         self.gotoUrlByLinkText(u"Отправить решение")
-        inpLink = u"Бла-бла-бла" + random_crap.randomText(6)
+        inpLink = u"Бла-бла-бла" + random_crap.random_text(6)
         inpLink = self.fillElementByName("fileexchange", inpLink)
         self.clickElementById("send-contest-submit")
 

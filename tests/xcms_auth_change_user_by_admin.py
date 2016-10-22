@@ -14,10 +14,10 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.ensure_logged_off()
 
         # first, login as admin
-        inpLogin = "priv_user_" + random_crap.randomText(8)
+        inpLogin = "priv_user_" + random_crap.random_text(8)
         inpEMail = random_crap.randomEmail()
-        inpPass = random_crap.randomText(10)
-        inpName = u"Саша Тестов" + random_crap.randomText(6)
+        inpPass = random_crap.random_text(10)
+        inpName = u"Саша Тестов" + random_crap.random_text(6)
 
         inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
 

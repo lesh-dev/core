@@ -41,21 +41,21 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
         self.assertBodyTextPresent(lastNameTooShort)
 
         # generate some text
-        inpLastName = u"Криворучкин" + random_crap.randomText(5)
-        inpFirstName = u"Хакер" + random_crap.randomText(3)
-        inpMidName = u"Ламерович" + random_crap.randomText(3)
+        inpLastName = u"Криворучкин" + random_crap.random_text(5)
+        inpFirstName = u"Хакер" + random_crap.random_text(3)
+        inpMidName = u"Ламерович" + random_crap.random_text(3)
 
         inpBirthDate = random_crap.randomDigits(2) + "." + random_crap.randomDigits(2) + "." + random_crap.randomDigits(4)
 
         inpSchool = u"Хакерская школа им. К.Митника №" + random_crap.randomDigits(4)
 
-        inpSchoolCity = u"Школа находится в /dev/brain/" + random_crap.randomText(5)
+        inpSchoolCity = u"Школа находится в /dev/brain/" + random_crap.random_text(5)
         inpClass = random_crap.randomDigits(1) + u"Х"
 
         inpPhone = "+7" + random_crap.randomDigits(9)
         inpCell = "+7" + random_crap.randomDigits(9)
-        inpEmail = random_crap.randomText(10) + "@" + random_crap.randomText(6) + ".com"
-        inpSkype = random_crap.randomText(12)
+        inpEmail = random_crap.random_text(10) + "@" + random_crap.random_text(6) + ".com"
+        inpSkype = random_crap.random_text(12)
         inpSocial = random_crap.randomVkontakte()
         inpSocialShow = bawlib.cutHttp(inpSocial)
 

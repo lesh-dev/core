@@ -15,9 +15,6 @@ specialCharsDefault = '.,!?;:"<>-=@%$^&*()\''
 specialCharsWoAngle = '.,!?;:"-=@%$^&*()\''
 
 
-def randomText(length):
-    return random_text(length)
-# PEP8 alternative
 def random_text(length):
     rs = ""
     for i in range(0, length):
@@ -26,7 +23,11 @@ def random_text(length):
 
 
 def randomEmail():
-    return "mail_test_" + randomText(8) + "@example.com"
+    return "mail_test_" + random_text(8) + "@example.com"
+
+
+def random_date():
+    return randomDigits(2) + "." + randomDigits(2) + "." + randomDigits(4)
 
 
 def randomVkontakte():

@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import xsm
 import xtest_common
 import random_crap
 
@@ -11,9 +12,9 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
     """
 
     def generateData(self):
-        self.inpLastName = u"Спамеров" + random_crap.randomText(4)
-        self.inpFirstName = u"Егор" + random_crap.randomText(3)
-        self.inpMidName = u"Федорович" + random_crap.randomText(2)
+        self.inpLastName = u"Спамеров" + random_crap.random_text(4)
+        self.inpFirstName = u"Егор" + random_crap.random_text(3)
+        self.inpMidName = u"Федорович" + random_crap.random_text(2)
 
         self.inpBirthDate = random_crap.randomDigits(2) + "." + random_crap.randomDigits(2) + "." + random_crap.randomDigits(4)
 
@@ -24,10 +25,10 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
 
         self.inpPhone = "+7" + random_crap.randomDigits(9)
         self.inpCell = "+7" + random_crap.randomDigits(9)
-        self.inpEmail = random_crap.randomText(7) + "@" + random_crap.randomText(5) + ".ru"
+        self.inpEmail = random_crap.random_text(7) + "@" + random_crap.random_text(5) + ".ru"
 
     def generateAuxData(self, iteration, random=False):
-        self.inpSkype = random_crap.randomText(8)
+        self.inpSkype = random_crap.random_text(8)
         self.inpSocial = random_crap.randomVkontakte()
 
         fmt = u"iteration {0}_{1}"
@@ -37,7 +38,7 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
             hob = "different_hobbies"
             src = "wtf_source"
         else:
-            crapParams = (15, ["multiline"])
+            crapParams = 15, ["multiline"]
             crapFunc = random_crap.randomCrap
             crapEnd = " CRAP_END"
             fav = crapFunc(*crapParams) + crapEnd
@@ -91,7 +92,6 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
         self.gotoRoot()
         self.performLogoutFromSite()
 
-    # -------------------- begining of the test
     def run(self):
         self.generateData()
         for i in range(0, 5):

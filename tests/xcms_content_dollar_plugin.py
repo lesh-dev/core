@@ -26,10 +26,10 @@ class XcmsContentDollarPlugin(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
 
-        inpPageDir = "dollar_page_" + random_crap.randomText(6)
-        inpMenuTitle = "dollar_title_" + random_crap.randomText(6)
-        inpPageHeader = "dollar_header_" + random_crap.randomText(6)
-        inpAlias = "dollar/plugin/page/" + random_crap.randomText(6)
+        inpPageDir = "dollar_page_" + random_crap.random_text(6)
+        inpMenuTitle = "dollar_title_" + random_crap.random_text(6)
+        inpPageHeader = "dollar_header_" + random_crap.random_text(6)
+        inpAlias = "dollar/plugin/page/" + random_crap.random_text(6)
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir)
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)

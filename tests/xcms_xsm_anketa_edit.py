@@ -34,20 +34,20 @@ class XcmsXsmAnketaEdit(xtest_common.XcmsTest):
         self.assertBodyTextPresent(self.getAnketaPageHeader())
 
         # generate
-        inpLastName = u"Анкеткин" + random_crap.randomText(4)
-        inpFirstName = u"Юрий" + random_crap.randomText(3)
-        inpMidName = u"Петрович" + random_crap.randomText(3)
+        inpLastName = u"Анкеткин" + random_crap.random_text(4)
+        inpFirstName = u"Юрий" + random_crap.random_text(3)
+        inpMidName = u"Петрович" + random_crap.random_text(3)
 
         inpBirthDate = random_crap.randomDigits(2) + "." + random_crap.randomDigits(2) + "." + random_crap.randomDigits(4)
 
         inpSchool = u"Какая-то школа №" + random_crap.randomDigits(4)
 
-        inpSchoolCity = u"Магадан-" + random_crap.randomText(5)
+        inpSchoolCity = u"Магадан-" + random_crap.random_text(5)
         inpClass = random_crap.randomDigits(1) + u" В"
 
         inpPhone = "+7" + random_crap.randomDigits(9)
         inpCell = "+7" + random_crap.randomDigits(9)
-        inpEmail = random_crap.randomText(7) + "@" + random_crap.randomText(6) + ".ru"
+        inpEmail = random_crap.random_text(7) + "@" + random_crap.random_text(6) + ".ru"
 
         # inpFav = random_crap.randomCrap(8, ["multiline"])
         # inpAch = random_crap.randomCrap(6, ["multiline"])
@@ -126,7 +126,7 @@ class XcmsXsmAnketaEdit(xtest_common.XcmsTest):
         self.assertElementValueById("anketa_status-selector", "new")
         # change anketa field and save it.
 
-        inpSkype = random_crap.randomText(8)
+        inpSkype = random_crap.random_text(8)
         inpSkype = self.fillElementById("skype-input", inpSkype)
 
         self.clickElementById("update-person-submit")

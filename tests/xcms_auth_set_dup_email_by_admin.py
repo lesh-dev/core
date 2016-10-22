@@ -20,18 +20,18 @@ class XcmsAuthSetDuplicateEmailByAdmin(xtest_common.XcmsTest):
         self.ensure_logged_off()
 
         # step one: create first user
-        inpLogin1 = "dup_mail1_" + random_crap.randomText(8)
+        inpLogin1 = "dup_mail1_" + random_crap.random_text(8)
         inpEMail1 = random_crap.randomEmail()
-        inpPass1 = random_crap.randomText(10)
-        inpName1 = u"Вася Тестов" + random_crap.randomText(6)
+        inpPass1 = random_crap.random_text(10)
+        inpName1 = u"Вася Тестов" + random_crap.random_text(6)
 
         inpLogin1, inpEMail1, inpPass1, inpName1 = self.createNewUser(inpLogin1, inpEMail1, inpPass1, inpName1, ["do_not_logout_admin"])
 
         # step 2: create another user
-        inpLogin2 = "dup_mail2_" + random_crap.randomText(8)
+        inpLogin2 = "dup_mail2_" + random_crap.random_text(8)
         inpEMail2 = random_crap.randomEmail()
-        inpPass2 = random_crap.randomText(10)
-        inpName2 = u"Миша Тестов" + random_crap.randomText(6)
+        inpPass2 = random_crap.random_text(10)
+        inpName2 = u"Миша Тестов" + random_crap.random_text(6)
 
         # create second user without re-login Admin
 

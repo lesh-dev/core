@@ -24,10 +24,10 @@ class XcmsContentHiddenPage(xtest_common.XcmsTest):
 
         self.gotoCreatePage()
 
-        inpPageDir = "hiddenPage_" + random_crap.randomText(6)
-        inpMenuTitle = "hiddenMenuTitle_" + random_crap.randomText(6)
-        inpPageHeader = "hiddenPageHeader_" + random_crap.randomText(6)
-        inpAlias = "hidden/secret/page/" + random_crap.randomText(6)
+        inpPageDir = "hiddenPage_" + random_crap.random_text(6)
+        inpMenuTitle = "hiddenMenuTitle_" + random_crap.random_text(6)
+        inpPageHeader = "hiddenPageHeader_" + random_crap.random_text(6)
+        inpAlias = "hidden/secret/page/" + random_crap.random_text(6)
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir)
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)

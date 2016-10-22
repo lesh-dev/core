@@ -16,10 +16,10 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
 
     def run(self):
         self.ensure_logged_off()
-        inpLogin = "xsm_link_" + random_crap.randomText(6)
+        inpLogin = "xsm_link_" + random_crap.random_text(6)
         inpEMail = random_crap.randomEmail()
-        inpPass = random_crap.randomText(8)
-        inpName = u"XSM-Юзер-" + random_crap.randomText(6)
+        inpPass = random_crap.random_text(8)
+        inpName = u"XSM-Юзер-" + random_crap.random_text(6)
 
         inpLogin, inpEMail, inpPass, inpName = self.createNewUser(
             inpLogin, inpEMail, inpPass, inpName,
@@ -32,9 +32,9 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
         self.gotoXsmAddPerson()
 
         # generate
-        inpLastName = u"ИксЭсЭмов" + random_crap.randomText(4)
-        inpFirstName = u"Юзер_" + random_crap.randomText(3)
-        inpMidName = u"Ламерович_" + random_crap.randomText(3)
+        inpLastName = u"ИксЭсЭмов" + random_crap.random_text(4)
+        inpFirstName = u"Юзер_" + random_crap.random_text(3)
+        inpMidName = u"Ламерович_" + random_crap.random_text(3)
         inpEMailXsm = inpEMail
 
         inpLastName = self.fillElementById("last_name-input", inpLastName)

@@ -45,7 +45,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
             self.gotoIndexedUrlByLinkText(self.listened_status, examLine, "span")
             self.setOptionValueByIdAndValue("exam_status-selector", "passed")
 
-            exam_comment = u"Коммент к сданному зачёту: " + random_crap.randomText(6)
+            exam_comment = u"Коммент к сданному зачёту: " + random_crap.random_text(6)
             self.fillElementByName("exam_comment", exam_comment)
             self.clickElementByName("update-exam")
             self.gotoBackToPersonView()
@@ -58,7 +58,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
             self.gotoIndexedUrlByLinkText(self.listened_status, examLine, "span")
             self.setOptionValueByIdAndValue("exam_status-selector", "notpassed")
 
-            exam_comment = u"Коммент к несданному зачёту: " + random_crap.randomText(6)
+            exam_comment = u"Коммент к несданному зачёту: " + random_crap.random_text(6)
             self.fillElementByName("exam_comment", exam_comment)
             self.clickElementByName("update-exam")
             self.gotoBackToPersonView()

@@ -25,10 +25,10 @@ class XcmsContentRemovePage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
 
-        inpPageDir = "phoenix_" + random_crap.randomText(8)
-        inpMenuTitle = "phoenix_menu_title_" + random_crap.randomText(8)
-        inpPageHeader = "phoenix_header_" + random_crap.randomText(8)
-        inpAlias = "removed/phoenix/alias/" + random_crap.randomText(8)
+        inpPageDir = "phoenix_" + random_crap.random_text(8)
+        inpMenuTitle = "phoenix_menu_title_" + random_crap.random_text(8)
+        inpPageHeader = "phoenix_header_" + random_crap.random_text(8)
+        inpAlias = "removed/phoenix/alias/" + random_crap.random_text(8)
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir)
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)

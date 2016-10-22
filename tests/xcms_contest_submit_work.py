@@ -23,9 +23,9 @@ class XcmsContestSubmitWork(xtest_common.XcmsTest):
 
         self.gotoUrlByLinkText(u"Добавить работу")
 
-        inpFIO = u"Участник_Олимпиады_" + random_crap.randomText(6)
+        inpFIO = u"Участник_Олимпиады_" + random_crap.random_text(6)
         inpEmail = random_crap.randomEmail()
-        inpComment = random_crap.randomText(6)
+        inpComment = random_crap.random_text(6)
 
         workFile = os.getcwd() + "/contest-work-sample.png"
         inpFIO = self.fillElementByName("name", inpFIO)

@@ -17,10 +17,10 @@ class XcmsContentCommentProcessing(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
 
-        inpPageDir = "test_page_" + random_crap.randomText(8)
-        inpMenuTitle = "menu_title_" + random_crap.randomText(8)
-        inpPageHeader = "page_header_" + random_crap.randomText(8)
-        inpAlias = "new/page/alias/" + random_crap.randomText(8)
+        inpPageDir = "test_page_" + random_crap.random_text(8)
+        inpMenuTitle = "menu_title_" + random_crap.random_text(8)
+        inpPageHeader = "page_header_" + random_crap.random_text(8)
+        inpAlias = "new/page/alias/" + random_crap.random_text(8)
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir)
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)

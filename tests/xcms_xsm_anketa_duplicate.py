@@ -11,9 +11,9 @@ class XcmsXsmAnketaDuplicate(xtest_common.XcmsTest):
     """
 
     def generateData(self):
-        self.inpLastName = u"Дубликатов" + random_crap.randomText(4)
-        self.inpFirstName = u"Петр" + random_crap.randomText(3)
-        self.inpMidName = u"Сергеевич" + random_crap.randomText(2)
+        self.inpLastName = u"Дубликатов" + random_crap.random_text(4)
+        self.inpFirstName = u"Петр" + random_crap.random_text(3)
+        self.inpMidName = u"Сергеевич" + random_crap.random_text(2)
 
         self.inpBirthDate = random_crap.randomDigits(2) + "." + random_crap.randomDigits(2) + "." + random_crap.randomDigits(4)
 
@@ -24,8 +24,8 @@ class XcmsXsmAnketaDuplicate(xtest_common.XcmsTest):
 
         self.inpPhone = "+7" + random_crap.randomDigits(9)
         self.inpCell = "+7" + random_crap.randomDigits(9)
-        self.inpEmail = random_crap.randomText(8) + "@" + random_crap.randomText(6) + ".ru"
-        self.inpSkype = random_crap.randomText(10)
+        self.inpEmail = random_crap.random_text(8) + "@" + random_crap.random_text(6) + ".ru"
+        self.inpSkype = random_crap.random_text(10)
         self.inpSocial = random_crap.randomVkontakte()
 
         self.inpFav = random_crap.randomCrap(4, ["multiline"])

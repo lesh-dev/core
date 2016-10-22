@@ -26,9 +26,9 @@ class XcmsXsmChangeStatusQuick(xtest_common.XcmsTest):
         self.gotoXsmAddPerson()
 
         # generate
-        inpLastName = u"Статусов" + random_crap.randomText(4)
-        inpFirstName = u"Иннокентий_" + random_crap.randomText(3)
-        inpMidName = u"Петрович_" + random_crap.randomText(3)
+        inpLastName = u"Статусов" + random_crap.random_text(4)
+        inpFirstName = u"Иннокентий_" + random_crap.random_text(3)
+        inpMidName = u"Петрович_" + random_crap.random_text(3)
 
         inpLastName = self.fillElementById("last_name-input", inpLastName)
         inpFirstName = self.fillElementById("first_name-input", inpFirstName)

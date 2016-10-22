@@ -16,22 +16,22 @@ class XcmsContentPageOrder(xtest_common.XcmsTest):
                     
         parentPage = u"Главная"
         
-        inpPageDir1 = "pageOrderTest1_" + random_crap.randomText(4)
-        inpMenuTitle1 = "pageOrderTestMenu1_" + random_crap.randomText(4)
-        inpPageHeader1 = "hiddenPageHeader1_" + random_crap.randomText(4)
-        inpAlias1 = "page/order/test1_" + random_crap.randomText(4)
+        inpPageDir1 = "pageOrderTest1_" + random_crap.random_text(4)
+        inpMenuTitle1 = "pageOrderTestMenu1_" + random_crap.random_text(4)
+        inpPageHeader1 = "hiddenPageHeader1_" + random_crap.random_text(4)
+        inpAlias1 = "page/order/test1_" + random_crap.random_text(4)
         self.addNewPage(parentPage, inpPageDir1, inpMenuTitle1, inpPageHeader1, inpAlias1)
 
-        inpPageDir2 = "pageOrderTest2_" + random_crap.randomText(4)
-        inpMenuTitle2 = "pageOrderTestMenu2_" + random_crap.randomText(4)
-        inpPageHeader2 = "hiddenPageHeader2_" + random_crap.randomText(4)
-        inpAlias2 = "page/order/test2_" + random_crap.randomText(4)
+        inpPageDir2 = "pageOrderTest2_" + random_crap.random_text(4)
+        inpMenuTitle2 = "pageOrderTestMenu2_" + random_crap.random_text(4)
+        inpPageHeader2 = "hiddenPageHeader2_" + random_crap.random_text(4)
+        inpAlias2 = "page/order/test2_" + random_crap.random_text(4)
         self.addNewPage(parentPage, inpPageDir2, inpMenuTitle2, inpPageHeader2, inpAlias2)
 
-        inpPageDir3 = "pageOrderTest3_" + random_crap.randomText(4)
-        inpMenuTitle3 = "pageOrderTestMenu3_" + random_crap.randomText(4)
-        inpPageHeader3 = "hiddenPageHeader3_" + random_crap.randomText(4)
-        inpAlias3 = "page/order/test3_" + random_crap.randomText(4)
+        inpPageDir3 = "pageOrderTest3_" + random_crap.random_text(4)
+        inpMenuTitle3 = "pageOrderTestMenu3_" + random_crap.random_text(4)
+        inpPageHeader3 = "hiddenPageHeader3_" + random_crap.random_text(4)
+        inpAlias3 = "page/order/test3_" + random_crap.random_text(4)
         self.addNewPage(parentPage, inpPageDir3, inpMenuTitle3, inpPageHeader3, inpAlias3)
         
         # edit page - click on menu

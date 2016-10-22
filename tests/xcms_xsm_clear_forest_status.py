@@ -15,8 +15,8 @@ class XcmsXsmClearForestStatus(xtest_common.XcmsTest):
         # create new person
         self.gotoUrlByLinkText(u"Добавить участника")
         self.setOptionValueByIdAndValue("anketa_status-selector", "less")
-        inpFirstName = u"Бруно" + random_crap.randomText(6)
-        inpLastName = u"Понтекорво" + random_crap.randomText(6)
+        inpFirstName = u"Бруно" + random_crap.random_text(6)
+        inpLastName = u"Понтекорво" + random_crap.random_text(6)
 
         inpFirstName = self.fillElementByName("first_name", inpFirstName)
         inpLastName = self.fillElementByName("last_name", inpLastName)
