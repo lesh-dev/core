@@ -74,7 +74,6 @@ class XcmsXsmAnketaEdit(xtest_common.XcmsTest):
         # now, let's edit anketa.
         self.gotoEditPerson()
 
-        # TODO: continue
         # first, check that values in opened form match entered in anketa.
         self.assertElementValueById("last_name-input", person.last_name)
         self.assertElementValueById("first_name-input", person.first_name)
