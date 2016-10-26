@@ -22,11 +22,20 @@ def random_text(length):
     return rs
 
 
+def phone():
+    return "+7" + randomDigits(9)
+
+
+def email():
+    return random_text(7) + "@" + random_text(5) + ".ru",
+
+
 def randomEmail():
+    # FIXME: DEPRECATED, use email()
     return "mail_test_" + random_text(8) + "@example.com"
 
 
-def random_date():
+def date():
     return randomDigits(2) + "." + randomDigits(2) + "." + randomDigits(4)
 
 

@@ -78,7 +78,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
             last_name=u"Чапаев",
             first_name=u"Василий",
             patronymic=u"Иваныч",
-            birth_date=random_crap.randomDigits(2) + "." + random_crap.randomDigits(2) + "." + random_crap.randomDigits(4),
+            birth_date=random_crap.date(),
             school=u"Тестовая школа им. В.Е.Бдрайвера №",
             school_city=u"Школа находится в /var/opt/" + random_crap.random_text(5),
             ank_class=random_crap.randomDigits(1) + u" Гэ",
@@ -114,6 +114,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
 
         self.checkPersonAliasInPersonView(full_alias)
 
+        # TODO(mvel): Extract common checks to module
         self.assertBodyTextPresent(person.birth_date)
         self.assertBodyTextPresent(person.school)
         self.assertBodyTextPresent(person.school_city)

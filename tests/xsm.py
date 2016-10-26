@@ -84,6 +84,7 @@ class Person(object):
         control_question=None,
         is_student=False,
         is_teacher=False,
+        # options
         random=False,
         ank_mode=False,
     ):
@@ -174,6 +175,7 @@ class Person(object):
         if department_id is not None:
             t.setOptionValueByIdAndValue("department_id-selector", department_id)
 
+        # TODO(mvel): autodetect!
         if ank_mode:
             t.clickElementById("submit_anketa-submit")
         else:
