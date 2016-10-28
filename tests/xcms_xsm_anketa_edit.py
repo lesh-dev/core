@@ -21,6 +21,7 @@ class XcmsXsmAnketaEdit(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
         # anketa fill/edit positive test:
         # fields are filled with correct values.
         self.gotoRoot()

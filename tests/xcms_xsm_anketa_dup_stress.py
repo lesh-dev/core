@@ -77,6 +77,7 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
         self.performLogoutFromSite()
 
     def run(self):
+        self.ensure_logged_off()
         person = xsm.Person(self)
         # set some const fields
         person.phone = random_crap.phone()
