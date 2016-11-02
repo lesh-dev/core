@@ -1,83 +1,78 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import os
+import logging
+
 import xtest_common
 import random_crap
-import os
 
 
 class XcmsContestSubmitWorkFromSite(xtest_common.XcmsTest):
 
-    def run(self):
-
+    def _test_work_submit(self, file_size, need_success, fill_work=True):
+        self.gotoRoot()
         self.gotoUrlByLinkText(u"Заочная олимпиада")
         self.gotoUrlByLinkText(u"Отправить решение")
 
-        # send empty form
-        self.clickElementById("send-contest-submit")
-        self.assertBodyTextPresent(u"Ошибка отправки решения")
-        self.assertPhpErrors()
+        work_file = os.path.join(os.getcwd(), 'contest-work-sample.png')
+        if fill_work:
+            # create file if necessary
+            if file_size >= 0:
+                with open(work_file, 'w') as f:
+                    f.write('Q' * file_size)
+            else:
+                # negative size means no file at all
+                try:
+                    os.remove(work_file)
+                except OSError:
+                    # ignore file removal error
+                    pass
 
-        # send unexistent file
-        workFile = os.getcwd() + "/contest-work-sample-nope"
-        workFile = self.fillElementByName("attachment", workFile)
+            work_file = self.fillElementByName("attachment", work_file)
+
+        logging.info("Size: %s", file_size)
+
         self.clickElementById("send-contest-submit")
-        self.assertBodyTextPresent(u"Ошибка отправки решения")
+        if need_success:
+            self.assertBodyTextPresent(u"Спасибо, Ваше решение принято!")
+        else:
+            if file_size >= 0:
+                self.assertBodyTextPresent(u"Ошибка отправки решения")
+
+            if file_size > 16*1000*1000:
+                self.assertBodyTextPresent(u"файл слишком большой")
+
         self.assertPhpErrors()
+        # cleanup
+        if os.path.exists(work_file):
+            os.remove(work_file)
+
+    def run(self):
+        self.ensure_logged_off()
+
+        # send empty form
+        self._test_work_submit(file_size=-1, need_success=False, fill_work=False)
+
+        # send non-existent file
+        self._test_work_submit(file_size=-1, need_success=False)
 
         # send small file
-        with open('contest-work-sample-small', 'w') as f:
-            f.write('Q' * 10)
-        # I don't understand this
-        # And I don't know how to delete qqq
-        workFile = os.getcwd() + "/contest-work-sample-small"
-        # self.logAdd("Current file: " + workFile)
-        workFile = self.fillElementByName("attachment", workFile)
-        self.clickElementById("send-contest-submit")
-        self.assertBodyTextPresent(u"Ошибка отправки решения")
-        self.assertPhpErrors()
-        os.remove(workFile)
+        self._test_work_submit(file_size=10, need_success=False)
 
         # send large file
-        with open('contest-work-sample-large', 'w') as f:
-            f.write('Q' * 20*1000*1000)
+        self._test_work_submit(file_size=25*1000*1000, need_success=False)
 
-        workFile = os.getcwd() + "/contest-work-sample-large"
-        workFile = self.fillElementByName("attachment", workFile)
-        self.clickElementById("send-contest-submit")
-        self.assertBodyTextPresent(u"файл слишком большой")
-        self.assertPhpErrors()
-        os.remove(workFile)
-
-        """
-        #send very large file
-        #TODO now there is still php warning (POST Content-Length ... exceeds the limit)
-        with open('contest-work-sample-large', 'w') as f:
-            f.write('Q' * 80*1000*1000)
-
-        workFile = os.getcwd() + "/contest-work-sample-large"
-        workFile = self.fillElementByName("attachment", workFile)
-        self.clickElementById("send-contest-submit")
-        self.assertBodyTextPresent(u"файл слишком большой")
-        self.assertPhpErrors()
-        os.remove(workFile)
-        """
+        # send very large file (does not work)
+        # self._test_work_submit(file_size=80*1000*1000, need_success=False)
 
         # Finally send normal file
-        with open('contest-work-sample-normal', 'w') as f:
-            f.write('Q' * 2*1000*1000)
-
-        workFile = os.getcwd() + "/contest-work-sample-normal"
-        workFile = self.fillElementByName("attachment", workFile)
-        self.clickElementById("send-contest-submit")
-        self.assertBodyTextPresent(u"Спасибо, Ваше решение принято!")
-        self.assertPhpErrors()
-        os.remove(workFile)
+        self._test_work_submit(file_size=2*1000*1000, need_success=True)
 
         # Send a link
         self.gotoUrlByLinkText(u"Отправить решение")
-        inpLink = u"Бла-бла-бла" + random_crap.random_text(6)
-        inpLink = self.fillElementByName("fileexchange", inpLink)
+        inp_link = u"Бла-бла-бла" + random_crap.random_text(6)
+        self.fillElementByName("fileexchange", inp_link)
         self.clickElementById("send-contest-submit")
 
         self.assertBodyTextPresent(u"Спасибо, Ваше решение принято!")
