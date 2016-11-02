@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html><head>
     <title>Contest</title>
-    <# js/bootstrap #>
     <# js/jquery #>
+    <# js/bootstrap #>
     <# js/public control-depends.js #>
     <# css/public contest.css #>
 </head>
