@@ -29,6 +29,9 @@ class XcmsContestSubmitWork(xtest_common.XcmsTest):
         inp_comment = random_crap.random_text(6)
 
         work_file = os.getcwd() + "/contest-work-sample.png"
+        with open(work_file, 'w') as f:
+            f.write('q' * 1024)
+
         inp_fio = self.fillElementByName("name", inp_fio)
         _ = self.fillElementByName("mail", inp_email)
         _ = self.fillElementByName("work", work_file, clear=False)

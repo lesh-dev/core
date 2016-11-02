@@ -11,6 +11,7 @@ site/settings.php
 site/install.php
 site/engine.log
 *.pyc
+tests/contest-work-sample.png
 tests/current-page.html
 tools/optimize-images/oim
 *.sublime-project
