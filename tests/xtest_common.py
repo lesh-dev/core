@@ -539,17 +539,3 @@ class XcmsTest(XcmsTestWithConfig):
 
         self.clickElementById("create-page-submit")
         return sysName, menuTitle, pageHeader, pageAlias
-
-
-def shortAlias(last, first):
-    """
-    DEPRECATED. Use Person::short_alias
-    """
-    return (last + " " + first).strip()
-
-
-def fullAlias(last, first, mid):
-    """
-    DEPRECATED. Use Person::full_alias
-    """
-    return (last + " " + first + " " + mid).strip()
