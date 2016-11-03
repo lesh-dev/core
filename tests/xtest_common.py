@@ -5,7 +5,6 @@ import selenium_test
 import random_crap
 import re
 from xtest_config import XcmsTestConfig
-from bawlib import checkSingleOption
 
 
 MAX_RETRIES = 4
@@ -387,7 +386,7 @@ class XcmsTest(XcmsTestWithConfig):
         self.logAdd("Test users (old crap) removed, logging out. ")
         self.performLogoutFromAdminPanel()
 
-    def setUserEmailByAdmin(self, login, email, auxParams=[]):
+    def setUserEmailByAdmin(self, login, email, auxParams=list()):
         """
             Set email to user (by admin panel)
         """
