@@ -30,7 +30,7 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
 
         person.input(
             # const fields
-            last_name=u"Спамеров",
+            last_name=person.last_name,
             first_name=u"Егор",
             patronymic=u"Фёдорович",
             birth_date=random_crap.date(),
@@ -80,6 +80,7 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
         self.ensure_logged_off()
         person = xsm.Person(self)
         # set some const fields
+        person.last_name = u"Спамеров" + random_crap.randomWord(5)
         person.phone = random_crap.phone()
         person.cellular = random_crap.phone()
         person.email = random_crap.email()
