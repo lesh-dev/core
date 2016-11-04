@@ -1,6 +1,8 @@
 <?php
 // Anketa processor
 
+require_once("${engine_dir}sys/template.php");
+
 function xsm_extract_phone_digits($phones_str)
 {
     $phones = xsm_format_phones($phones_str);
@@ -173,8 +175,8 @@ function xsm_merge_persons($person_dst, $person_src)
     }
 
     return array(
-        "person"=>$person_dst,
-        "state"=>$merge_state,
+        "person" => $person_dst,
+        "state" => $merge_state,
     );
 }
 
@@ -183,12 +185,12 @@ function xsm_compose_anketa_table($person)
     $fields_desc = xsm_get_fields("person");
     $html_content = ""; // @@TABLE-CONTENT@
     $row_template = xcms_get_html_template("anketa_mail_one_row");
-    foreach ($person as $key=>$value)
+    foreach ($person as $key => $value)
     {
         $key_title = $key;
         if (array_key_exists($key, $fields_desc))
             $key_title = $fields_desc[$key]["name"];
-        if ($key == "submit-anketa")
+        if ($key == "submit_anketa")
             continue;
         $cur_row = $row_template;
         $cur_row = str_replace("@@ANK-KEY@", $key_title, $cur_row);
@@ -207,7 +209,7 @@ function xsm_compose_anketa_mail_msg($person, $html_content)
 
     $full_name_enc = xsm_fio_enc($person);
     $table_title = 'Анкета: <a'.
-        xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
+        xsm_ext_href('view-person', array('person_id' => $person_id)).'>'.
         $full_name_enc."</a> ($hr_timestamp)";
     $mail_msg = str_replace("@@TABLE-CONTENT@", $html_content, $mail_msg);
     $mail_msg = str_replace("@@TABLE-TITLE@", $table_title, $mail_msg);
@@ -254,21 +256,25 @@ function xsm_validate_anketa_post(&$person)
     $last_name = xcms_get_key_or($person, "last_name");
     $first_name = xcms_get_key_or($person, "first_name");
     $patronymic = xcms_get_key_or($person, "patronymic");
+    $birth_date = xcms_get_key_or($person, "birth_date");
     $phone = xcms_get_key_or($person, "phone");
     $phone_digits = preg_replace('/[^0-9]/', '', $phone);
     $cellular = xcms_get_key_or($person, "cellular");
     $cellular_digits = preg_replace('/[^0-9]/', '', $cellular);
-    $current_class = xcms_get_key_or($person, "current_class");
-    $person['ank_class'] = $current_class;
+    $ank_class = xcms_get_key_or($person, "ank_class");
+    $person['ank_class'] = $ank_class;
+    $person['current_class'] = $ank_class;
 
     $fi_match = '/[\/.,?!@#$%&*()_+=~^]/';
+    $birth_date_match = '/[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9][0-9][0-9]/';
 
     if (
         xu_empty($last_name) ||
         xu_empty($first_name) ||
         preg_match($fi_match, $first_name) ||
         preg_match($fi_match, $last_name) ||
-        xu_empty($current_class) ||
+        preg_match($birth_date_match, $last_name) ||
+        xu_empty($ank_class) ||
         (
             !xsm_valid_anketa_phone_digits($phone_digits, 7) &&
             !xsm_valid_anketa_phone_digits($cellular_digits, 9)
@@ -292,14 +298,14 @@ function xsm_ank_proc_unit_test()
 
     // test #885
     $new_person = array(
-        "person_id"=>1,
-        "phone"=>"84951659121",
-        "cellular"=>"+79161686186",
+        "person_id" => 1,
+        "phone" => "84951659121",
+        "cellular" => "+79161686186",
     );
     $old_person = array(
-        "person_id"=>1,
-        "cellular"=>"+74951659121",
-        "phone"=>"89161686186, 89146661666",
+        "person_id" => 1,
+        "cellular" => "+74951659121",
+        "phone" => "89161686186, 89146661666",
     );
     $new_phones = xsm_extract_person_phone_digits($new_person);
     $old_phones = xsm_extract_person_phone_digits($old_person);
@@ -307,9 +313,9 @@ function xsm_ank_proc_unit_test()
     xut_equal($count, 2, "Nonzero common phone count");
 
     $old_person = array(
-        "person_id"=>1,
-        "cellular"=>"",
-        "phone"=>"100",
+        "person_id" => 1,
+        "cellular" => "",
+        "phone" => "100",
     );
     $old_phones = xsm_extract_person_phone_digits($old_person);
     $count = count(array_intersect($new_phones, $old_phones));

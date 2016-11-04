@@ -1,4 +1,4 @@
-<# var preface page={$_GET['page']}#>
+<# var preface page={$_GET['page']} #><!-- nostyle -->
 <# var pageid {$_GET['page']} #>
 <?php
     $INFO = xcms_get_list(xcms_get_info_file_name());

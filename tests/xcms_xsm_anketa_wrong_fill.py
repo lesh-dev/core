@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import logging
+
+import xsm
 import xtest_common
 import random_crap
 import bawlib
@@ -17,125 +20,123 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
     * correct all errors and finally submit form.
     """
 
-    def trySubmit(self, reason=None):
-        self.clickElementById("submit-anketa-button")
-        if reason:
-            self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage(), reason)
+    def ensure_not_submitted(self, reason):
+        self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage(), reason)
 
     def run(self):
-        # anketa fill negative test:
-
-        testMailPrefix = self.m_conf.getAnketaNamePrefix()
-
+        self.ensure_logged_off()
         self.gotoRoot()
 
-        #navigate to anketas
-
+        # navigate to anketas
         self.gotoUrlByLinkText(self.getEntranceLinkName())
         self.gotoAnketa()
-
         self.assertBodyTextPresent(self.getAnketaPageHeader())
 
+        person = xsm.Person(self)
         # try to submit empty form.
-        self.trySubmit("Empty form should not be submitted. ")
-
-        lastNameTooShort = u"Поле 'Фамилия' слишком короткое"
-
-        self.assertBodyTextPresent(lastNameTooShort)
+        person.input(ank_mode=True)
+        self.ensure_not_submitted("Empty form should not be submitted. ")
+        last_name_too_short = u"Поле 'Фамилия' слишком короткое"
+        self.assertBodyTextPresent(last_name_too_short)
 
         # generate some text
-        inpLastName = testMailPrefix + u"Криворучкин" + random_crap.randomText(5)
-        inpFirstName = u"Хакер" + random_crap.randomText(3)
-        inpMidName = u"Ламерович" + random_crap.randomText(3)
+        person.last_name = u"Криворучкин" + random_crap.random_text(5)
+        person.first_name = u"Хакер" + random_crap.random_text(3)
+        person.patronymic = u"Ламерович" + random_crap.random_text(3)
+        person.birth_date = random_crap.date()
+        person.school = u"Хакерская школа им. К.Митника №" + random_crap.randomDigits(4)
+        person.school_city = u"Школа находится в /dev/brain/" + random_crap.random_text(5)
+        person.ank_class = random_crap.randomDigits(1) + u"Х"
+        person.phone = random_crap.phone()
+        person.cellular = random_crap.phone()
+        person.email = random_crap.email()
+        person.skype = random_crap.random_text(12)
+        person.social_profile = random_crap.randomVkontakte()
+        social_profile_show = bawlib.cutHttp(person.social_profile)
 
-        inpBirthDate = random_crap.randomDigits(2) + "." + random_crap.randomDigits(2) + "." + random_crap.randomDigits(4)
-
-        inpSchool = u"Хакерская школа им. К.Митника №" + random_crap.randomDigits(4)
-
-        inpSchoolCity = u"Школа находится в /dev/brain/" + random_crap.randomText(5)
-        inpClass = random_crap.randomDigits(1) + u"Х"
-
-        inpPhone = "+7" + random_crap.randomDigits(9)
-        inpCell = "+7" + random_crap.randomDigits(9)
-        inpEmail = random_crap.randomText(10) + "@" + random_crap.randomText(6) + ".com"
-        inpSkype = random_crap.randomText(12)
-        inpSocial = random_crap.randomVkontakte()
-        inpSocialShow = bawlib.cutHttp(inpSocial)
-
-        inpFav = random_crap.randomCrap(20, ["multiline"])
-        inpAch = random_crap.randomCrap(15, ["multiline"])
-        inpHob = random_crap.randomCrap(10, ["multiline"])
+        favourites = random_crap.randomCrap(20, ["multiline"])
+        achievements = random_crap.randomCrap(15, ["multiline"])
+        hobby = random_crap.randomCrap(10, ["multiline"])
 
         # try fill only surname
-        inpLastName = self.fillElementById("last_name-input", inpLastName)
-
-        self.trySubmit("Only Last name was filled. ")
+        person.input(last_name=person.last_name, ank_mode=True)
+        self.ensure_not_submitted("Only Last name was filled. ")
         self.assertBodyTextPresent(u"Поле 'Имя' слишком короткое")
 
-        inpFirstName = self.fillElementById("first_name-input", inpFirstName)
-
-        self.trySubmit("Only Last name and First name was filled. ")
+        person.input(first_name=person.first_name, ank_mode=True)
+        self.ensure_not_submitted("Only Last name and First name was filled. ")
         self.assertBodyTextPresent(u"Поле 'Отчество' слишком короткое")
 
-        inpMidName = self.fillElementById("patronymic-input", inpMidName)
-
-        self.trySubmit("Only FIO values were filled. ")
+        person.input(patronymic=person.patronymic, ank_mode=True)
+        self.ensure_not_submitted("Only FIO values were filled. ")
         self.assertBodyTextPresent(u"Класс не указан")
 
-        inpBirthDate = self.fillElementById("birth_date-input", inpBirthDate)
-        inpSchool = self.fillElementById("school-input", inpSchool)
-        inpSchoolCity = self.fillElementById("school_city-input", inpSchoolCity)
-
-        inpClass = self.fillElementById("current_class-input", inpClass)
-
-        self.trySubmit("Phone fields were not filled. ")
+        person.input(
+            birth_date=person.birth_date,
+            school=person.school,
+            school_city=person.school_city,
+            ank_class=person.ank_class,
+            ank_mode=True,
+        )
+        self.ensure_not_submitted("Phone fields were not filled. ")
         self.assertBodyTextPresent(u"Укажите правильно хотя бы один из телефонов")
 
-        inpPhone = self.fillElementById("phone-input", inpPhone)
-        inpCell = self.fillElementById("cellular-input", inpCell)
+        person.input(
+            phone=person.phone,
+            cellular=person.cellular,
+            email=person.email,
+            skype=person.skype,
+            social_profile=person.social_profile,
+            ank_mode=True,
+        )
+        self.ensure_not_submitted("Invalid control question answer. ")
+        self.assertBodyTextPresent(u"Неправильный ответ на контрольный вопрос")
 
-        inpEmail = self.fillElementById("email-input", inpEmail)
-        inpSkype = self.fillElementById("skype-input", inpSkype)
-        inpSocial = self.fillElementById("social_profile-input", inpSocial)
+        person.input(control_question=u"ампер", ank_mode=True)
+        self.ensure_not_submitted("Favourites were not filled")
+        are_you_sure = u"Если Вы уверены, что не хотите указывать эту информацию"
+        self.assertBodyTextPresent(are_you_sure)
 
-        areYouSure = u"Если Вы уверены, что не хотите указывать эту информацию"
+        person.input(favourites=favourites, ank_mode=True)
+        self.ensure_not_submitted("Achievements were not filled")
+        self.assertBodyTextPresent(are_you_sure)
 
-        self.trySubmit("Favourites were not filled")
-        self.assertBodyTextPresent(areYouSure)
+        person.input(achievements=achievements, ank_mode=True)
+        self.ensure_not_submitted("Hobbies were not filled")
+        self.assertBodyTextPresent(are_you_sure)
 
-        inpFav = self.fillElementById("favourites-text", inpFav)
-        self.trySubmit("Achievements were not filled")
-        self.assertBodyTextPresent(areYouSure)
-
-        inpAch = self.fillElementById("achievements-text", inpAch)
-        self.trySubmit("Hobbies were not filled")
-        self.assertBodyTextPresent(areYouSure)
-
-        inpHob = self.fillElementById("hobby-text", inpHob)
-
-        # and now try to erase one of very important  fields.
-
-        self.fillElementById("last_name-input", "")
-
-        self.trySubmit("Empty last name is not allowed. ")
-        self.assertBodyTextPresent(lastNameTooShort)
+        # and now fill last optional field and erase one of very important fields.
+        person.input(
+            last_name="",
+            hobby=hobby,
+            ank_mode=True,
+        )
+        self.ensure_not_submitted("Empty last name is not allowed. ")
+        self.assertBodyTextPresent(last_name_too_short)
 
         # fill it again.
-        inpLastName = self.fillElementById("last_name-input", inpLastName)
+        person.input(
+            last_name=u"НаученныйГорькимОпытом" + random_crap.random_text(5),
+            hobby="",
+            ank_mode=True,
+        )
+        self.ensure_not_submitted("Hobbies were erased")
+        self.assertBodyTextPresent(are_you_sure)
 
-        self.fillElementById("hobby-text", "")
-
-        self.trySubmit("Hobbies were erased")
-        self.assertBodyTextPresent(areYouSure)
-        # no erase achievements.
-        self.fillElementById("achievements-text", "")
-        self.trySubmit("Enter confirmation mode with erased field 'A' and remove another field 'B'. Revalidation check after bug #529")
-
-        inpHob = self.fillElementById("hobby-text", inpHob)
-        inpAch = self.fillElementById("achievements-text", inpAch)
-
-        # at last, it should work.
-        self.trySubmit()
+        # now erase achievements.
+        person.input(
+            achievements="",
+            ank_mode=True,
+        )
+        self.ensure_not_submitted(
+            "Enter confirmation mode with erased field 'A' "
+            "and remove another field 'B'. Revalidation check after bug #529"
+        )
+        person.input(
+            hobby=hobby,
+            achievements=achievements,
+            ank_mode=True,
+        )
 
         # now login as manager
         self.performLoginAsManager()
@@ -144,30 +145,24 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
 
         self.gotoUrlByLinkText(self.getAnketaListMenuName())
 
-        shortAlias = inpLastName + " " + inpFirstName
-        fullAlias = shortAlias + " " + inpMidName
-
-        anketaUrlName = shortAlias.strip()
         # try to drill-down into table with new anketa.
-
-        self.gotoUrlByLinkText(anketaUrlName)
+        self.gotoUrlByLinkText(person.short_alias())
 
         # just check text is on the page.
-        self.logAdd("Checking that all filled fields are displayed on the page. ")
+        logging.info("Checking that all filled fields are displayed on the page. ")
+        self.checkPersonAliasInPersonView(person.full_alias())
 
-        self.checkPersonAliasInPersonView(fullAlias)
-
-        self.assertBodyTextPresent(inpBirthDate)
-        self.assertBodyTextPresent(inpSchool)
-        self.assertBodyTextPresent(inpSchoolCity)
-        self.assertBodyTextPresent(inpClass)
-        self.assertBodyTextPresent(inpPhone)
-        self.assertBodyTextPresent(inpCell)
-        self.assertBodyTextPresent(inpEmail)
-        self.assertBodyTextPresent(inpSkype)
-        self.assertBodyTextPresent(inpSocialShow)
+        self.assertBodyTextPresent(person.birth_date)
+        self.assertBodyTextPresent(person.school)
+        self.assertBodyTextPresent(person.school_city)
+        self.assertBodyTextPresent(person.ank_class)
+        self.assertBodyTextPresent(person.phone)
+        self.assertBodyTextPresent(person.cellular)
+        self.assertBodyTextPresent(person.email)
+        self.assertBodyTextPresent(person.skype)
+        self.assertBodyTextPresent(social_profile_show)
         self.clickElementById("show-extra-person-info")
         self.wait(1)
-        self.assertElementSubTextById("extra-person-info", inpFav)
-        self.assertElementSubTextById("extra-person-info", inpAch)
-        self.assertElementSubTextById("extra-person-info", inpHob)
+        self.assertElementSubTextById("extra-person-info", favourites)
+        self.assertElementSubTextById("extra-person-info", achievements)
+        self.assertElementSubTextById("extra-person-info", hobby)

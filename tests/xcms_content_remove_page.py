@@ -16,7 +16,7 @@ class XcmsContentRemovePage(xtest_common.XcmsTest):
     """
 
     def run(self):
-
+        self.ensure_logged_off()
         self.performLoginAsEditor()
         self.gotoAdminPanel()
 
@@ -25,10 +25,10 @@ class XcmsContentRemovePage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
 
-        inpPageDir = "phoenix_" + random_crap.randomText(8)
-        inpMenuTitle = "phoenix_menu_title_" + random_crap.randomText(8)
-        inpPageHeader = "phoenix_header_" + random_crap.randomText(8)
-        inpAlias = "removed/phoenix/alias/" + random_crap.randomText(8)
+        inpPageDir = "phoenix_" + random_crap.random_text(8)
+        inpMenuTitle = "phoenix_menu_title_" + random_crap.random_text(8)
+        inpPageHeader = "phoenix_header_" + random_crap.random_text(8)
+        inpAlias = "removed/phoenix/alias/" + random_crap.random_text(8)
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir)
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)
@@ -42,7 +42,7 @@ class XcmsContentRemovePage(xtest_common.XcmsTest):
 
         pageText = random_crap.randomCrap(10)
         pageText = self.fillAceEditorElement(pageText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         self.gotoCloseEditor()
         self.gotoAdminPanel()
@@ -52,7 +52,7 @@ class XcmsContentRemovePage(xtest_common.XcmsTest):
 
         self.gotoRemovePage()
         self.assertBodyTextPresent(u"Удаление страницы")
-        self.clickElementById("delete_page-button")
+        self.clickElementById("delete_page-submit")
 
         self.gotoCloseEditor()
         self.gotoUrlByLinkText(self.m_parentPage)
@@ -74,7 +74,7 @@ class XcmsContentRemovePage(xtest_common.XcmsTest):
 
         newPageText = random_crap.randomCrap(10)
         newPageText = self.fillAceEditorElement(pageText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
         self.gotoCloseEditor()
 
         self.gotoUrlByLinkText(self.m_parentPage)

@@ -34,7 +34,7 @@
         width: 200px;
     }
 
-    div.auth-widget input[type="submit"] {
+    div.auth-widget input[type="submit"] { /* nostyle */
         border: 2px solid #7f7f7f;
         border-radius: 2px;
         padding-left: 5px;
@@ -66,7 +66,7 @@
             <td><?php xcmst_control_admin("auth-password", XCMS_FROM_POST, "Пароль", "password"); ?></td>
         </tr>
         <tr>
-            <td>&nbsp;</td><td><input type="submit" value="Войти" name="auth-submit" id="auth-submit" /></td>
+            <td>&nbsp;</td><td><?php xcmst_submit("auth", "Войти"); ?></td>
         </tr>
     </form>
     <form method="post">
@@ -82,7 +82,7 @@
             <td><?php xcmst_control_admin("question", XCMS_FROM_POST, "Защита от нелюдей"); ?></td>
         </tr>
         <tr>
-            <td>&nbsp;</td><td><input type="submit" value="Восстановить пароль" name="reset-submit" id="reset-submit" /></td>
+            <td>&nbsp;</td><td><?php xcmst_submit("reset_password", "Восстановить пароль"); ?></td>
         </tr>
     </form>
     </table>

@@ -15,7 +15,7 @@ class XcmsContentBadPathPage(xtest_common.XcmsTest):
     """
 
     def run(self):
-
+        self.ensure_logged_off()
         self.performLoginAsEditor()
         self.gotoAdminPanel()
 
@@ -24,10 +24,10 @@ class XcmsContentBadPathPage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
 
-        inpPageDir = "../../hacked_page_" + random_crap.randomText(8)
-        inpMenuTitle = "hacked_menu_title_" + random_crap.randomText(8)
-        inpPageHeader = "hacked_header_" + random_crap.randomText(8)
-        inpAlias = "hacked/page/alias/" + random_crap.randomText(8)
+        inpPageDir = "../../hacked_page_" + random_crap.random_text(8)
+        inpMenuTitle = "hacked_menu_title_" + random_crap.random_text(8)
+        inpPageHeader = "hacked_header_" + random_crap.random_text(8)
+        inpAlias = "hacked/page/alias/" + random_crap.random_text(8)
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir)
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)

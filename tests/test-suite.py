@@ -1,11 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-from selenium_test import RunTest, TestShutdown, DecodeRunResult
-import test_set_gen
 import sys
+import logging
+import collections
+
+from selenium_test import RunTest, TestShutdown, BrowserHolder, decode_run_result
+import test_set_gen
+from test_set_gen import TestInfo
 
 from bawlib import getOption, getSingleOption, CliParamError, fileBaseName
+from bawlib import configure_logger
+
+# TODO: remove
+import auto_test_set
 
 sys.path.append(".")
 
@@ -28,16 +36,16 @@ Examples:
     {script} -t xcms_xsm_anketa_fill.py test.fizlesh.ru
 
 ALL OPTIONS:
-    -h, --help             Display this help
-    -i, --installer        Run installer test prior to all rest suite
-    -l, --list             List all tests in test set
-    -f, --full-list        List all tests in test set with descriptions
-    -s, --set <set>        Specify test set to run (instead of default auto_test_set.py)
-    -t, --test <test>      Run specific test instead of all suite
-    -b, --break            Break test suite on errors
+    -h, --help                Display this help
+    -i, --installer           Run installer test prior to all rest suite
+    -l, --list                List all tests in test set
+    -f, --full-list           List all tests in test set with descriptions
+    -s, --set <set>           Specify test set to run (instead of default auto_test_set.py)
+    -t, --test <test>         Run specific test instead of all suite
+    -b, --break               Break test suite on errors
+    -p, --profile-path <path> Use given browser profile path (firefox only)
 
 TEST OPTIONS could be test-dependent. Commonly supported options are:
-    -p, --preserve         Leave browser window after test finish/fail
     -c, --chrome           Use Google Chrome browser instead of Firefox
     -d, --doc              Display test documentation
 """.format(script=fileBaseName(prog))
@@ -47,181 +55,199 @@ class TestSuiteError(Exception):
     pass
 
 
-def printStats(stats, detailed):
+def print_stats(stats, detailed):
     if not stats:
         print "No tests were run"
         return
 
+    detailed_od = collections.OrderedDict(sorted(detailed.items()))
+
     print "===== TEST SUITE DETAILED STATS: ====="
-    for testName, result in detailed.iteritems():
-        print "  " + testName + ": " + DecodeRunResult(result)
+    for test_name, test_result in detailed_od.iteritems():
+        print "  " + test_name + ": " + decode_run_result(test_result)
 
     print "===== TEST SUITE OVERALL STATS: ====="
-    for result, testList in stats.iteritems():
-        print DecodeRunResult(result) + ":", len(testList), "tests"
+    for test_result, testList in stats.iteritems():
+        print decode_run_result(test_result) + ":", len(testList), "tests"
 
 
-def generateFailedTestsSuite(failedTests):
+def generate_failed_tests_suite(failed_tests):
     # header
-    imports = [fn[:-3] for (fn, test) in failedTests]
-    testList = []
-    for (fn, testClass) in failedTests:
-        modName = testClass.__module__
-        clName = testClass.getName()
-        testList.append((fn, modName, clName))
+    imports = [file_name[:-3] for (file_name, _) in failed_tests]
+    test_list = []
+    for file_name, test_instance in failed_tests:
+        full_test_name = test_instance.getName()
+        module_name, class_name = full_test_name.split(".")
+        test_list.append(TestInfo(file_name, module_name, class_name))
 
-    failedSuite = test_set_gen.getHeader() + "\n" + test_set_gen.getFuncCode(imports, testList)
+    failed_suite = test_set_gen.get_header() + "\n" + test_set_gen.get_func_code(imports, test_list)
 
     with open("failed_test_set.py", "w") as fs:
-        fs.write(failedSuite)
+        fs.write(failed_suite)
 
 
-def testMatchFilter(fileName, test, testFilter):
+def test_match_filter(file_name, test_instance, testFilter):
     # currently, filter is just a file name prefix
     if not testFilter:
         return True
     if testFilter.endswith(".py"):  # it is a filename
-        if fileName != testFilter:
+        if file_name != testFilter:
             return False
-    else:  # it is a test class name
-        if not test.getName().startswith(testFilter):
+    else:  # it is like a test's class name
+        if testFilter not in test_instance.getName():
             return False
     return True
 
-args = sys.argv[1:]  # exclude program name
 
-try:
-    doInstallerTest, args = getSingleOption(["-i", "--installer"], args)
-    if doInstallerTest:
-        print "We'll perform installer test first. "
+def main():
+    configure_logger()
 
-    specTest, args = getOption(["-t", "--test"], args)
-    doShowHelp, args = getSingleOption(["-h", "--help"], args)
-    testSet, args = getOption(["-s", "--set"], args)
-    doList, args = getSingleOption(["-l", "--list"], args)
-    doFullList, args = getSingleOption(["-f", "--full-list"], args)
-    breakOnErrors, args = getSingleOption(["-b", "--break"], args)
-    if breakOnErrors:
-        print "We'll break test suite on any test fail/fatal error. "
+    args = sys.argv[1:]  # exclude program name
 
-    testArgs = [x for x in args if x.startswith("-")]
-    restArgs = [x for x in args if not x.startswith("-")]
+    logging.info("Starting test suite")
+    try:
+        doInstallerTest, args = getSingleOption(["-i", "--installer"], args)
+        if doInstallerTest:
+            print "We'll perform installer test first. "
 
-except CliParamError as e:
-    print "Option syntax error: ", e
-    showHelp()
-    sys.exit(1)
+        specTest, args = getOption(["-t", "--test"], args)
+        profile_path, args = getOption(["-p", "--profile-path"], args)
+        doShowHelp, args = getSingleOption(["-h", "--help"], args)
+        testSet, args = getOption(["-s", "--set"], args)
+        doList, args = getSingleOption(["-l", "--list"], args)
+        doFullList, args = getSingleOption(["-f", "--full-list"], args)
+        breakOnErrors, args = getSingleOption(["-b", "--break"], args)
+        if breakOnErrors:
+            print "We'll break test suite on any test fail/fatal error. "
 
-# last remaining argument is base test URL.
+        test_args = [x for x in args if x.startswith("-")]
+        rest_args = [x for x in args if not x.startswith("-")]
 
-if doShowHelp:
-    showHelp()
-    sys.exit(1)
+    except CliParamError as exc:
+        print "Option syntax error: ", exc
+        showHelp()
+        sys.exit(1)
 
-if specTest:
-    print "We are going to run just one test " + specTest + ". "
+    # last remaining argument is base test URL.
 
-baseUrl = None
-if restArgs:
-    baseUrl = restArgs.pop(0)
+    if doShowHelp:
+        showHelp()
+        sys.exit(1)
 
-if restArgs:
-    print "Error: trailing parameters detected: ", restArgs
-    showHelp()
-    sys.exit(1)
+    if specTest:
+        print "We are going to run just one test named like '" + specTest + "'. "
 
-setModuleName = "auto_test_set"
+    browser_holder = BrowserHolder(profile_path=profile_path)
 
-if testSet:
-    setModuleName = testSet.replace(".py", "")
+    base_url = None
+    if rest_args:
+        base_url = rest_args.pop(0)
 
-try:
-    testStats = {}
-    testDetailedStats = {}
+    if rest_args:
+        print "Error: trailing parameters detected: ", rest_args
+        showHelp()
+        sys.exit(1)
 
-    testSetModule = __import__(setModuleName, [])
+    tests_module_name = "auto_test_set"
 
-    if not testSetModule.getTests:
-        raise TestSuiteError("There is no 'getTests' function defined in specified test set. ")
+    if testSet:
+        tests_module_name = testSet.replace(".py", "")
 
-    tests = testSetModule.getTests(baseUrl, testArgs)
+    try:
+        test_stats = {}
+        test_detailed_stats = {}
 
-    # save installer test
-    installerTest = None
-    if tests:
-        installerTest = tests.pop(0)
+        test_set_module = __import__(tests_module_name, [])
 
-    failedTests = []
+        if not test_set_module.get_tests:
+            raise TestSuiteError("There is no 'getTests' function defined in specified test set. ")
 
-    tests = [x for x in tests if testMatchFilter(*x, testFilter=specTest)]
-    if specTest and not tests:
-        raise TestSuiteError("Specified test was not found in test suite. ")
+        # FIXME(vdmit): Find proper way to deal with it
+        # this is not necessary for tests listing
+        # but `get_tests` expects base_url is not None
+        if not base_url:
+            raise TestSuiteError("Test site URL not specified, cannot continue. ")
 
-    if doInstallerTest:
-        tests.insert(0, installerTest)
+        tests = test_set_module.get_tests(base_url=base_url, browser_holder=browser_holder, params=test_args)
 
-    # init detailed stats
-    for (fileName, test) in tests:
-        testDetailedStats[test.getName()] = None
+        # save installer test
+        installer_test = None
+        if tests:
+            installer_test = tests.pop(0)
 
-    testsDone = 0
-    testsNumber = len(tests)
+        failed_tests = []
 
-    while tests:
-        fileName, test = tests.pop(0)
-        if doList:
-            print fileName, test.getName()
-        elif doFullList:
-            print "=" * 30
-            print test.getName()
-            print test.getDoc()
-            print
-        else:
-            if not baseUrl:
-                raise TestSuiteError("Test site URL not specified, cannot continue. ")
+        tests = [x for x in tests if test_match_filter(*x, testFilter=specTest)]
+        if specTest and not tests:
+            raise TestSuiteError("Specified test was not found in test suite. ")
 
-            print "Running test {0} on site {1}".format(test.getName(), baseUrl)
-            print test.getDoc()
-            result = RunTest(test)
-            if result != 0:
-                failedTests.append((fileName, test))
+        if doInstallerTest:
+            tests.insert(0, installer_test)
 
-            if result not in testStats:  # add new list
-                testStats[result] = [test.getName()]
+        # init detailed stats
+        for (_file_name, test) in tests:
+            test_detailed_stats[test.getName()] = None
+
+        tests_done = 0
+        tests_number = len(tests)
+
+        while tests:
+            file_name, test = tests.pop(0)
+            if doList:
+                print file_name, test.getName()
+            elif doFullList:
+                print "=" * 30
+                print test.getName()
+                print test.getDoc()
+                print
             else:
-                testStats[result].append(test.getName())
+                print "Running test {0} on site {1}".format(test.getName(), base_url)
+                print test.getDoc()
+                result = RunTest(test)
+                if result != 0:
+                    failed_tests.append((file_name, test))
 
-            testDetailedStats[test.getName()] = result
+                if result not in test_stats:  # add new list
+                    test_stats[result] = [test.getName()]
+                else:
+                    test_stats[result].append(test.getName())
 
-            testsDone += 1
-            print "PROGRESS: Done {done} of {total} tests".format(done=testsDone, total=testsNumber)
+                test_detailed_stats[test.getName()] = result
 
-            if result == 3:
-                print "User interrupt, stopping test suite."
-                break
-            if breakOnErrors and result == 2:
-                print "Fatal error detected, stopping test suite."
-                break
-            if breakOnErrors and result == 1:
-                print "Test error detected, stopping test suite."
-                break
+                tests_done += 1
+                logging.info("PROGRESS: Done %s of %s tests, %s failed", tests_done, tests_number, len(failed_tests))
 
-    # test loop end ------------------
+                if result == 3:
+                    print "User interrupt, stopping test suite."
+                    break
+                if breakOnErrors and result == 2:
+                    print "Fatal error detected, stopping test suite."
+                    break
+                if breakOnErrors and result == 1:
+                    print "Test error detected, stopping test suite."
+                    break
 
-    # fix #840: add rest of tests to failed, at the end of list.
-    while tests:
-        fileName, test = tests.pop(0)
-        failedTests.append((fileName, test))
+        # test loop end ------------------
 
-    printStats(testStats, testDetailedStats)
-    generateFailedTestsSuite(failedTests)
+        # fix #840: add rest of tests to failed, at the end of list.
+        while tests:
+            file_name, test = tests.pop(0)
+            failed_tests.append((file_name, test))
 
-except TestShutdown as e:
-    pass
-except ImportError as e:
-    print "Failed to load test set '" + setModuleName + "' as Python module. "
-    print "Details: "
-    print e
-except TestSuiteError as e:
-    print e
-    sys.exit(2)
+        print_stats(test_stats, test_detailed_stats)
+        generate_failed_tests_suite(failed_tests)
+
+    except TestShutdown as exc:
+        logging.debug("Got test shutdown: %s", exc)
+        pass
+    except ImportError as exc:
+        print "Failed to load test set '" + tests_module_name + "' as Python module. "
+        print "Details: "
+        print exc
+    except TestSuiteError as exc:
+        print "TestSuiteError:", exc
+        sys.exit(2)
+
+
+if __name__ == "__main__":
+    main()

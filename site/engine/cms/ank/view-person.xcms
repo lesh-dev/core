@@ -32,11 +32,10 @@ function xsm_draw_list_link($person_id, $school_id)
     $target = ($school_id == XSM_SCHOOL_ANK_ID) ? "анкет" : "школы";
     $aux_param = "";
     if ($school_id != XSM_SCHOOL_ANK_ID)
-        $aux_param = xcms_url(array('school_id'=>$school_id));
+        $aux_param = xcms_url(array('school_id' => $school_id));
     $anchor = "#person$person_id";
     $url = $view.$aux_param.$anchor;
-    ?><a class="person-to-list" href="<?php echo $url; ?>">К&nbsp;списку&nbsp;<?php
-        echo $target; ?></a><?php
+    xcmst_link($url, "view_list_p${person_id}_s${school_id}", "К&nbsp;списку&nbsp;$target", "person-to-list");
 }
 
 function xsm_print_person_header($db, $person, $school_id)
@@ -111,7 +110,7 @@ function xsm_print_person_header($db, $person, $school_id)
             <!--<span class="person-key top">Статус анкеты:</span>-->
             <span class="person-value"><?php echo $hr_status; ?></span><?php
             xsm_edit_link_generic(
-                'edit-person-status'.xcms_url(array('blamed_person_id'=>$person_id)),
+                'edit-person-status'.xcms_url(array('blamed_person_id' => $person_id)),
                 'Сменить статус');
             ?>
         </div>
@@ -162,26 +161,37 @@ function xsm_print_person_header($db, $person, $school_id)
 function xsm_print_person_schools($db, $person, $current_school_id)
 {
     $person_id = $person['person_id'];
-    //$school_count = XSM_SCHOOL_COUNT;
+    $school_count = 0;
+    $max_school_count = XSM_SCHOOL_COUNT;
     $query = "SELECT s.school_id, s.school_title, ps.member_person_id
         FROM school s
         LEFT JOIN person_school ps
         ON (s.school_id = ps.school_id) AND (ps.member_person_id = '$person_id')
         ORDER BY school_date_start DESC";
-    // LIMIT $school_count";
     $school_sel = $db->query($query);
     $active_ank = (XSM_SCHOOL_ANK_ID == $current_school_id) ? 'current' : '';
     ?>
     <table class="ankList table table-bordered"><tr>
         <td class="school-selection <?php echo $active_ank; ?>">
-            <div><?php
+            <div style="min-width: 6em;"><?php
             echo xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID, "Анкета");
             xsm_edit_link('person', $person_id, '', 'Ред.');
             ?>
             </div>
         </td>
         <?php
+        $shown_schools = array();
+        $older_schools = array();
         while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
+        {
+            ++$school_count;
+            if ($school_count <= XSM_SCHOOL_COUNT)
+                $shown_schools[] = $school;
+            else
+                $older_schools[] = $school;
+        }
+
+        foreach ($shown_schools as $school)
         {
             $school_id = $school['school_id'];
             $title = xcms_get_key_or_enc($school, 'school_title');
@@ -189,8 +199,7 @@ function xsm_print_person_schools($db, $person, $current_school_id)
             $present = xu_not_empty(xcms_get_key_or($school, 'member_person_id'));
             ?>
             <td class="school-selection <?php echo $active; ?>">
-                <div>
-                    <?php
+                <div><?php
                     echo xsm_person_view_link($person_id, $school_id, $title);
                     if ($present)
                     {
@@ -199,12 +208,30 @@ function xsm_print_person_schools($db, $person, $current_school_id)
                     }
                     else
                         xsm_print_add_person_to_school($db, $school_id, $person);
-                    ?>
-                </div>
-            </td>
-            <?php
+                ?></div>
+            </td><?php
         }?>
+        <td class="school-selection" style="padding: 4px 8px">
+            <select name="view-school" id="view-school-selector" style="padding: 0px; margin: 0px;">
+            <?php
+            foreach ($older_schools as $school)
+            {
+                $school_id = $school['school_id'];
+                $title = xcms_get_key_or_enc($school, 'school_title');
+                //$active = ($school_id == $current_school_id) ? 'current' : '';
+                $selected = ($school_id == $current_school_id) ? 'selected="selected"' : '';
+                //$present = xu_not_empty(xcms_get_key_or($school, 'member_person_id'));
+                echo "<option $selected value=\"$school_id\">$title</option>\n";
+            }
+            ?></select>
+        </td>
     </tr></table>
+    <script>
+        $('#view-school-selector').change(function() {
+            var val = $('#view-school-selector').val();
+            window.location = <?php echo "\"/xsm/view-person&person_id=$person_id&school_id=\""; ?> + val;
+        });
+    </script>
     <?php
 }
 
@@ -277,9 +304,9 @@ function xsm_print_person_ank_data($db, $person)
 
     $tent_capacity = htmlspecialchars($person["tent_capacity"]);
     $tour_requisites = xcms_html_wrap_by_crlf(htmlspecialchars($person["tour_requisites"]));
-    $forest_status_1 = xsm_make_forest_enum($person, 1);
-    $forest_status_2 = xsm_make_forest_enum($person, 2);
-    $forest_status_3 = xsm_make_forest_enum($person, 3);
+    $forest_status_1 = xsm_make_enum($person, "forest_1");
+    $forest_status_2 = xsm_make_enum($person, "forest_2");
+    $forest_status_3 = xsm_make_enum($person, "forest_3");
 
     $favourites = xcms_html_wrap_by_crlf(htmlspecialchars($person["favourites"]));
     $achievements = xcms_html_wrap_by_crlf(htmlspecialchars($person["achievements"]));
@@ -322,7 +349,7 @@ function xsm_print_person_ank_data($db, $person)
     xsm_draw_person_comments($db, $person_id);
 }
 
-function xsm_print_add_person_to_school($db, $school_id, $person)
+function xsm_print_add_person_to_school($db, $school_id, $person, $use_title = false)
 {
     $person_id = $person['person_id'];
     $is_teacher_typical = $person['is_teacher'];
@@ -332,16 +359,17 @@ function xsm_print_add_person_to_school($db, $school_id, $person)
     $school_title = xcms_get_key_or_enc($school, 'school_title');
     $add_href = "edit-person_school".
         xcms_url(array(
-            'person_school_id'=>XDB_NEW,
-            'school_id'=>$school_id,
-            'member_person_id'=>$person_id,
-            'current_class'=>$current_class,
-            'is_teacher'=>$is_teacher_typical,
-            'is_student'=>$is_student_typical
+            'person_school_id' => XDB_NEW,
+            'school_id' => $school_id,
+            'member_person_id' => $person_id,
+            'current_class' => $current_class,
+            'is_teacher' => $is_teacher_typical,
+            'is_student' => $is_student_typical
             ));
-    ?>
-    <a class="edit-link add" href="<?php echo $add_href; ?>"
-        title="Зачислить на <?php echo $school_title; ?>">&nbsp;</a><?php
+    $link_class = $use_title ? "" : "edit-link add";
+    $title = "Зачислить на $school_title";
+    $text = $use_title ? $title : "&nbsp;";
+    xcmst_link($add_href, "add_person_school", $text, $title, $link_class);
 }
 
 function xsm_print_edit_person_school($db, $school_id, $person_id)
@@ -351,11 +379,9 @@ function xsm_print_edit_person_school($db, $school_id, $person_id)
     $school_title = xcms_get_key_or_enc($school, 'school_title');
     $edit_href = "edit-person_school".
         xcms_url(array(
-            'person_school_id'=>$person_school_id,
+            'person_school_id' => $person_school_id,
             ));
-    ?>
-    <a class="edit-link edit" href="<?php echo $edit_href; ?>"
-        title="Редактировать роли и статусы на <?php echo $school_title; ?>">&nbsp;</a><?php
+    xcmst_link($edit_href, "edit_person_school", "&nbsp;", "Редактировать роли и статусы на $school_title", "edit-link edit");
 }
 
 function xsm_print_delete_person_from_school($db, $school_id, $person_id)
@@ -366,19 +392,17 @@ function xsm_print_delete_person_from_school($db, $school_id, $person_id)
     $school_title = xcms_get_key_or_enc($school, 'school_title');
     $delete_href = "edit-person_school".
         xcms_url(array(
-            'person_school_id'=>$person_school_id,
-            'action'=>'delete'
+            'person_school_id' => $person_school_id,
+            'action' => 'delete'
             ));
-    ?>
-    <a class="edit-link delete" href="<?php echo $delete_href; ?>"
-        title="Отчислить с <?php echo $school_title; ?>">&nbsp;</a><?php
+    xcmst_link($delete_href, "delete_person_school", "&nbsp;", "Отчислить с $school_title", "edit-link delete");
 }
 
 function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
 {
     $school = xdb_get_entity_by_id('school', $school_id);
     $school_title = xcms_get_key_or_enc($school, 'school_title');
-    $school_url = "list-person".xcms_url(array('school_id'=>$school_id));
+    $school_url = "list-person".xcms_url(array('school_id' => $school_id));
 
     $exams_passed = xdb_count($db,
         "SELECT COUNT(*) AS cnt
@@ -404,10 +428,11 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
     $need = xcms_get_key_or($person_school, 'courses_needed', '?');
 
     $need_href = "edit-person_school".
-        xcms_url(array('person_school_id'=>$person_school['person_school_id']));
+        xcms_url(array('person_school_id' => $person_school['person_school_id']));
     ?>
-    <h2>Зачёты на <a href="<?php echo $school_url; ?>"><?php echo $school_title; ?></a>. Нужно сдать <a href="<?php echo $need_href; ?>"><?php
-            echo $need.'&nbsp;'.xcms_plural($need, 'зачёт'); ?></a>, сдано <?php echo $exams_passed; ?></h2>
+    <h2>Зачёты на <?php xcmst_link($school_url, "exams_link", $school_title); ?>.
+        Нужно сдать <?php xcmst_link($need_href, "exams_need_link", $need.'&nbsp;'.xcms_plural($need, 'зачёт')); ?>,
+        сдано <?php echo $exams_passed; ?></h2>
     <?php
         xsm_view_operations('exam', 'зачёт', $exam_aux_param);
     ?>
@@ -451,9 +476,9 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
 
         $teachers_ht = xsm_get_course_teachers($db, $course_id, $school_id);
 
-        $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
+        $course_url = "view-course".xcms_url(array('course_id' => $course_id));
         $hr_exam_status = xsm_make_enum($exam_data, "exam_status", "exam$exam_id");
-        $exam_url = "edit-exam".xcms_url(array('exam_id'=>$exam_id));
+        $exam_url = "edit-exam".xcms_url(array('exam_id' => $exam_id));
         ?>
         <tr>
             <td class="ankList"><a href="<?php echo $exam_url; ?>"><?php echo $hr_exam_status; ?></a></td>
@@ -476,8 +501,10 @@ function xsm_print_person_selected_school($db, $school_id, $person)
     $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
     if ($person_school_id === NULL)
     {?>
-        На данной школе не присутствовал. Чтобы зачислить человека на школу,
-        нужно нажать на синий плюсик рядом с соответствующей школой.<?php
+        На данной школе не присутствовал.
+        <?php echo xsm_print_add_person_to_school($db, $school_id, $person, /*use_title = */true); ?>.
+        Чтобы зачислить человека на школу, можно также нажать на синий плюсик
+        рядом с&nbsp;соответствующей школой.<?php
         return;
     }
     $person_school = xdb_get_entity_by_id('person_school', $person_school_id);

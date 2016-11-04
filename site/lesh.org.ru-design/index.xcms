@@ -33,7 +33,7 @@ function xcms_print_related_links()
     global $related_links;
     if (!$related_links)
         $related_links = array();
-    foreach ($related_links as $related=>$related_title)
+    foreach ($related_links as $related => $related_title)
     {?>
         <div><a href="<?php echo $related; ?>"><?php echo $related_title; ?></a></div><?php
     }
@@ -58,13 +58,13 @@ function xcms_print_related_links()
 
     <div class="sidebar_top">
         <ul class="menu">
-            <# cms/menu/display start=1 end=1 #>
+            <# cms/menu/display start=1 end=1 #><!-- nostyle -->
         </ul>
         <ul class="menu">
-            <# cms/menu/display start=2 end=2 #>
+            <# cms/menu/display start=2 end=2 #><!-- nostyle -->
         </ul>
         <ul class="menu">
-            <# cms/menu/display start=3 end=3 #>
+            <# cms/menu/display start=3 end=3 #><!-- nostyle -->
         </ul>
     </div>
 
@@ -159,9 +159,11 @@ function xcms_print_related_links()
     </div>
 <!--
     <form>
-        <div class="searchform">
-            <input type="search" name="q">
-            <input type="submit" value="">
+        <div class="searchform"><?php
+            xcmst_control("q", "", "Поисковый запрос", "", "input" /* "search" ?*/, "Поиск по сайту");
+            echo "&nbsp;";
+            xcmst_submit("search", "Искать", "Выполнить поиск");
+        ?>
         </div>
     </form>
 -->

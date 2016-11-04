@@ -1,7 +1,7 @@
 <?php
 /*
     Syntax:
-    <# readtext [--limit=number] [--next-link=url] [--next-text=text] [--file=file_name] #>
+    "<# readtext [--limit=number] [--next-link=url] [--next-text=text] [--file=file_name] #>"
         --file -- имя файла, которое нужно зачитать. Если опущено -- читается из переменной $source
         --limit -- ограничение на число знаков
         --next-link -- указывает гиперссылку на полный текст
@@ -100,7 +100,7 @@ if ($need)
             else
                 $uargs = array();
             $idata = "";
-            foreach ($uargs as $k=>$v)
+            foreach ($uargs as $k => $v)
             {
                 // defeat quotes/etc escaping problem
                 $v_enc = base64_encode($v);
@@ -139,14 +139,17 @@ if ($need)
 
     // TODO (#204): это костыли, надо их выкинуть или написать нормально. Не должно быть на странице
     // никаких ссылок, кроме как через alias-ы. В любом случае искать в урлах последовательность
-    // вида ref=index&page=... это очень странно
+    // вида "ref=index&page=..." -- это очень странно.
     //// Замена всех ссылок на страницы на их alias-ы
     $aliases = xcms_get_aliases();
-    if ($aliases) foreach ($aliases as $alias=>$page)
+    if ($aliases)
     {
-        $text = str_replace("?ref=index&page=$page\"", "$alias\"", $text);
-        $text = str_replace("?page=$page&ref=index\"", "$alias\"", $text);
-        $text = str_replace("?page=$page\"", "$alias\"", $text);
+        foreach ($aliases as $alias => $page)
+        {
+            $text = str_replace("?ref=index&page=$page\"", "$alias\"", $text);
+            $text = str_replace("?page=$page&ref=index\"", "$alias\"", $text);
+            $text = str_replace("?page=$page\"", "$alias\"", $text);
+        }
     }
     //// Обработка синтаксиса: <code>Моноширинный текст</code>
     $text = str_replace(

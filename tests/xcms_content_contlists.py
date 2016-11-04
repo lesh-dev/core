@@ -21,6 +21,8 @@ class XcmsContentContlist(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
+
         self.performLoginAsAdmin()
         self.gotoAdminPanel()
 
@@ -29,10 +31,10 @@ class XcmsContentContlist(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
 
-        inpPageDir = "contlist_dir_" + random_crap.randomText(5)
-        inpMenuTitle = "contlist_mt_" + random_crap.randomText(5)
-        inpPageHeader = "contlist_ph_" + random_crap.randomText(5)
-        inpAlias = "cont/list/page" + random_crap.randomText(5)
+        inpPageDir = "contlist_dir_" + random_crap.random_text(5)
+        inpMenuTitle = "contlist_mt_" + random_crap.random_text(5)
+        inpPageHeader = "contlist_ph_" + random_crap.random_text(5)
+        inpAlias = "cont/list/page" + random_crap.random_text(5)
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir)
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)
@@ -50,7 +52,7 @@ class XcmsContentContlist(xtest_common.XcmsTest):
         # edit page - click on menu
         self.gotoUrlByLinkText(inpMenuTitle)
 
-        blockTitle = "block_title_" + random_crap.randomText(5)
+        blockTitle = "block_title_" + random_crap.random_text(5)
         blockContent = random_crap.randomCrap(10, crapOptions=["multiline"])
 
         blockTitle = self.fillElementById("header-input", blockTitle)

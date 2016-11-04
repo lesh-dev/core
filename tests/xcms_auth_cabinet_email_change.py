@@ -16,15 +16,16 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
 
-        inpLogin1 = "cab_email_" + random_crap.randomText(6)
-        inpLogin2 = "cab_email_" + random_crap.randomText(6)
+        inpLogin1 = "cab_email_" + random_crap.random_text(6)
+        inpLogin2 = "cab_email_" + random_crap.random_text(6)
         inpEMail1 = random_crap.randomEmail()
         inpEMail2 = random_crap.randomEmail()
-        inpPass1 = random_crap.randomText(10)
-        inpPass2 = random_crap.randomText(10)
-        inpName1 = u"Вася " + random_crap.randomText(6)
-        inpName2 = u"Петя " + random_crap.randomText(6)
+        inpPass1 = random_crap.random_text(10)
+        inpPass2 = random_crap.random_text(10)
+        inpName1 = u"Вася " + random_crap.random_text(6)
+        inpName2 = u"Петя " + random_crap.random_text(6)
 
         inpLogin1, inpEMail1, inpPass1, inpName1 = self.createNewUser(inpLogin1, inpEMail1, inpPass1, inpName1)
 
@@ -39,8 +40,8 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         print "test good email"
         newGoodEMail = self.m_conf.getValidEmail(2)
 
-        newGoodEMail = self.fillElementById("email-input", newGoodEMail)
-        self.clickElementById("update_me")
+        self.fillElementById("email-input", newGoodEMail)
+        self.clickElementById("update_me-submit")
 
         badMailMsg = u"пользователь с такой почтой"
         dataUpdatedMsg = u"Данные обновлены успешно"
@@ -55,7 +56,7 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         newGoodEMail = random_crap.randomEmail()
 
         newGoodEMail = self.fillElementById("email-input", newGoodEMail)
-        self.clickElementById("update_me")
+        self.clickElementById("update_me-submit")
 
         self.assertBodyTextNotPresent(badMailMsg)
         self.assertBodyTextNotPresent("exception")
@@ -65,8 +66,8 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
 
         newBadEMail = inpEMail2
 
-        newBadEMail = self.fillElementById("email-input", newBadEMail)
-        self.clickElementById("update_me")
+        self.fillElementById("email-input", newBadEMail)
+        self.clickElementById("update_me-submit")
 
         self.assertBodyTextPresent(badMailMsg)
         self.assertBodyTextNotPresent("exception")
@@ -87,5 +88,3 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         print "logging as second created user. "
         if not self.performLogin(inpLogin2, inpPass2):
             self.failTest("I was not able to login as second user. ")
-
-

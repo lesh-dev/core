@@ -29,7 +29,6 @@ function xsm_print_courses_selected_school(
     $show_desc = false)
 {
     $pers = ($course_teacher_id != XSM_CT_ALL);
-    global $XSM_BOOTSTRAP;
 
     $courses = xdb_get_table_by_pk('course', "school_id = $school_id");
     $departments = xdb_get_table_by_pk('department');
@@ -74,10 +73,10 @@ function xsm_print_courses_selected_school(
 
     $course_aux_param = $pers
         ? xcms_url(array(
-            'course_teacher_id'=>$course_teacher_id,
-            'school_id'=>$school_id))
+            'course_teacher_id' => $course_teacher_id,
+            'school_id' => $school_id))
         : xcms_url(array(
-            'school_id'=>$school_id));
+            'school_id' => $school_id));
 
     if (!$simple_view)
     {
@@ -85,8 +84,6 @@ function xsm_print_courses_selected_school(
         xsm_view_operations('course', 'курс', $course_aux_param); ?>
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
-        <?php
-        if ($XSM_BOOTSTRAP) {?>
             <col width="10%" />
             <?php if (!$pers) {?>
             <col width="20%" /><?php
@@ -98,21 +95,7 @@ function xsm_print_courses_selected_school(
             <col width="5%" />
             <?php if ($show_desc) {?>
             <col width="20%" /><?php
-            }
-        } else {?>
-            <col width="10%" />
-            <?php if (!$pers) {?>
-            <col width="20%" /><?php
             } ?>
-            <col width="2%" />
-            <col width="8%" />
-            <col width="8%" />
-            <col width="3%" />
-            <col width="3%" />
-            <?php if ($show_desc) {?>
-            <col width="20%" /><?php
-            }
-        }?>
         </colgroup>
         <thead>
             <th class="ankList">Курс</th>
@@ -181,7 +164,7 @@ function xsm_print_courses_selected_school(
         // FIXME:PERF 3*N SELECT-ов
         $exam_pass_count = xdb_count($db, "SELECT COUNT(*) AS cnt FROM exam WHERE (course_id = '$course_id') AND (exam_status = 'passed')");
         $exam_total_count = xdb_count($db, "SELECT COUNT(*) AS cnt FROM exam WHERE (course_id = '$course_id')");
-        $course_url = "view-course".xcms_url(array('course_id'=>$course_id));
+        $course_url = "view-course".xcms_url(array('course_id' => $course_id));
 
         if (!$simple_view)
         {?>

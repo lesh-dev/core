@@ -27,19 +27,19 @@
 ?>
     <div>
         <span class="admin-form-label">Описание</span>
-        <textarea cols="80" rows="3" class="admin-long" xcms-track-changes="yes" name="description"><?php
+        <textarea cols="80" rows="3" class="admin-long" name="description"><?php
             echo htmlspecialchars(@$info["meta-description"]); ?></textarea>
     </div>
     <div>
         <span class="admin-form-label">Ключевые слова</span>
-        <textarea cols="80" rows="2" class="admin-long" xcms-track-changes="yes" name="keywords"><?php
+        <textarea cols="80" rows="2" class="admin-long" name="keywords"><?php
             echo htmlspecialchars(@$info["meta-keywords"]); ?></textarea>
     </div>
     <div>
         <span class="admin-form-label">Автор</span>
-        <input type="text" class="admin-long" xcms-track-changes="yes" name="author"
+        <input type="text" class="admin-long" name="author"
             value="<?php echo htmlspecialchars(@$info["author"]); ?>" />
     </div>
-    <input name="change-meta" type="submit" value="Сохранить" />
+    <?php xcmst_submit("change-meta", "Сохранить"); ?>
     </form>
 </div>

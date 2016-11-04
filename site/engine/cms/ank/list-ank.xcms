@@ -46,7 +46,7 @@
     </i><span class="ankListField">Категория: </span><?php
     echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_ank"); ?><i>
     </i><?php xsm_draw_fio_filter(); ?><i>
-    </i><input type="submit" name="show-person" value="Показать" />
+    </i><?php xcmst_submit("show-person", "Показать"); ?>
 </form>
 
 <div>
@@ -178,11 +178,13 @@ function xsm_show_ank_list()
         $person_created = xsm_ymdhm($person["person_created"]);
         $person_modified = xsm_ymdhm($person["person_modified"]);
 
+        $person_view = "view-person".xcms_url(array("person_id" => $person_id));
+
         $row_class = xsm_get_city_class($school_city);
         ?>
         <tr class="<?php echo $row_class; ?>">
             <td class="ankList"><?php echo $person_id; ?><a name="<?php echo "person$person_id"; ?>"></a></td>
-            <td class="ankList"><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"
+            <td class="ankList"><a href="<?php echo $person_view; ?>"
                 title="<?php echo $fio; ?>"><?php echo $fi; ?></a></td>
             <td class="ankList"><?php echo $birth_date; ?></td>
             <td class="ankList"><?php echo $current_class; ?></td>

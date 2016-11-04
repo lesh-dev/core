@@ -1,13 +1,12 @@
 <?php
 
 require_once("${engine_dir}sys/string.php");
-require_once("${engine_dir}sys/tag.php");
 require_once("${engine_dir}sys/file.php");
 
 /**
   * Transforms an key-value-array to properly encoded URI part:
-  * array('param'=>'value1 value2', 'super'=>'puper') will be translated to
-  * &amp;param=value1%20value2&amp;super=puper
+  * array("param" => "value1 value2", "super" => "puper") will be translated to
+  * "&amp;param=value1%20value2&amp;super=puper"
   * @param args_list array of arguments to encode
   * @return encoded parameters string
   **/
@@ -65,22 +64,39 @@ function xsm_ext_href($url_prefix, $args_list)
     return " href=\"$url\" ";
 }
 
+/**
+  * Filters generated password from bad chars
+  **/
+function _xcms_filter_passwd($passwd)
+{
+    $passwd = preg_replace("/[^A-Za-z0-9]/", "", $passwd);
+    $passwd = preg_replace("/[OoIi1]/", "", $passwd);
+    return substr($passwd, 0, 12);
+}
+
+/**
+  * Generates new password
+  **/
 function xcms_mkpasswd()
 {
-    $pass = trim(@shell_exec("mkpasswd")).trim(@shell_exec("mkpasswd"));
-    $pass = preg_replace("/[^A-Za-z0-9_-]/", "@", $pass);
-    $pass = substr($pass, 0, 12);
+    $pass = trim(@shell_exec("mkpasswd")).trim(@shell_exec("mkpasswd")).trim(@shell_exec("mkpasswd"));
+    $pass = _xcms_filter_passwd($pass);
     if (xu_empty($pass))
     {
         $table = array();
         for ($i = 0; $i < 26; $i++)
+        {
             $table[] = chr($i + 65);
-        $table[] = '@';
-        $table[] = '-';
-        $table[] = '_';
+        }
+        for ($i = 0; $i < 10; $i++)
+            $table[] = chr($i + 48);
         $size = count($table);
-        for ($i = 0; $i < 12; $i++)
-            $pass .= $table[mt_rand(0, $i * $i) % $size];
+        for ($i = 0; $i < 32; $i++)
+        {
+            $max = ($i + 256) * ($i + 20);
+            $pass .= $table[mt_rand(0, $max) % $size];
+        }
+        $pass = _xcms_filter_passwd($pass);
     }
     return $pass;
 }
@@ -162,34 +178,6 @@ function xcms_datetime_to_ts($date_time)
     return strtotime($date_time);
 }
 
-/**
-  * Get template contents by name
-  **/
-function xcms_get_html_template($template_name)
-{
-    global $SETTINGS;
-    $full_name = "{$SETTINGS['engine_dir']}templates/$template_name.html";
-    if (!file_exists($full_name))
-    {
-        xcms_log(XLOG_ERROR, "[KERNEL] Template '$full_name' not found");
-        return "";
-    }
-    return @file_get_contents($full_name);
-}
-
-/**
-  * Get template and replace common things there
-  **/
-function xcms_prepare_html_template($template_name)
-{
-    $body_html = xcms_get_html_template($template_name);
-    $login = xcms_user()->login();
-    $real_name = xcms_user()->param("name");
-    $body_html = str_replace('@@LOGIN@', $login, $body_html);
-    $body_html = str_replace('@@REAL-NAME@', $real_name, $body_html);
-    return $body_html;
-}
-
 function xcms_util_unit_test()
 {
     xut_begin("util");
@@ -200,6 +188,20 @@ function xcms_util_unit_test()
 
     $meta_site_url = "http://test.fizlesh.ru";
     xut_equal(xcms_hostname(), "test.fizlesh.ru", "xcms_hostname does not work");
+
+    for ($i = 0; $i < 100; ++$i)
+    {
+        $passwd = xcms_mkpasswd();
+        xut_equal(xu_len($passwd), 12, "Password '$passwd' is not 12-char");
+        xut_check(
+            strstr($passwd, 'O') === false &&
+            strstr($passwd, 'o') === false &&
+            strstr($passwd, '1') === false &&
+            strstr($passwd, 'I') === false &&
+            strstr($passwd, 'i') === false,
+            "Password '$passwd' contains bad chars."
+        );
+    }
 
     xut_end();
 }

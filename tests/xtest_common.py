@@ -5,7 +5,10 @@ import selenium_test
 import random_crap
 import re
 from xtest_config import XcmsTestConfig
-from bawlib import isVoid, checkSingleOption
+
+
+MAX_RETRIES = 4
+TIME_INC = 0.05
 
 
 class XcmsBaseTest(selenium_test.SeleniumTest):
@@ -16,9 +19,6 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
     def init(self):
         super(XcmsBaseTest, self).init()
         self.set404Text(u"Нет такой страницы")
-
-        if not checkSingleOption(["--no-maximize"], self.m_params):
-            self.maximizeWindow()
 
     def checkPageErrors(self):
         super(XcmsBaseTest, self).checkPageErrors()
@@ -33,23 +33,40 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
             self.logAdd("We are on the AUTH page. Seems that page access was denied. ", "warning")
 
     def isAuthPage(self):
-        return self.checkSourceTextPresent([u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"], optionList=["silent"])
+        stop_phrases = [u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"]
+        return self.checkSourceTextPresent(stop_phrases, option_list=["silent"], negative=True)
 
     def checkDocType(self):
-        firstLine, sourceBlock = self.getPageSourceFirstLine()
-        if "<!DOCTYPE" not in firstLine:
-            if self.isAuthPage():
-                self.logAdd("DOCTYPE not detected, but this page seems to be Auth page. ", "warning")
+        count = 0
+        wait_time = 0.0
+        while count < MAX_RETRIES:
+            wait_time += TIME_INC
+            count += 1
+            self.wait(wait_time, "checkDocType")
+            if self.check_doc_type_once():
                 return
-            sourceBlock = "\n".join(sourceBlock)
-            self.logAdd("Source beginning without DOCTYPE:\n" + sourceBlock.strip())
-            self.failTest("DOCTYPE directive not found on page {0}. First line is '{1}'".format(self.curUrl(), firstLine));
+            self.logAdd("DOCTYPE not detected, retrying")
+        self.failTest("DOCTYPE directive not found on page {0}. ".format(self.curUrl()))
+
+    def check_doc_type_once(self):
+        first_line, source_block = self.getPageSourceFirstLine()
+        if "<!DOCTYPE" in first_line:
+            # ok
+            return True
+
+        # not found
+        if self.isAuthPage():
+            self.logAdd("DOCTYPE not detected, but this page seems to be Auth page. ", "warning")
+            return True
+        source_block = "\n".join(source_block)
+        self.logAdd("Source beginning without DOCTYPE:\n" + source_block.strip())
+        return False
 
     def getPageSourceFirstLine(self):
         source = self.getPageSource()
-        newlinePos = source.find("\n")
-        #self.logAdd("Newline found at {0}".format(newlinePos))
-        return source[:newlinePos], source[:1000].split("\n")[:4]
+        newline_pos = source.find("\n")
+        # self.logAdd("Newline found at {0}".format(newlinePos))
+        return source[:newline_pos], source[:1000].split("\n")[:4]
 
     def isInstallerPage(self):
         return self.curUrl().endswith("install.php")
@@ -70,6 +87,11 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
             return str(m.group(1))
         return None
 
+    # reduces boilerplate
+    def assert_equal(self, value, proper_value, error_text):
+        if value != proper_value:
+            self.failTest("{} Expected '{}', got '{}'. ".format(error_text, proper_value, value))
+
 
 class XcmsTestWithConfig(XcmsBaseTest):
     """
@@ -79,7 +101,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         super(XcmsTestWithConfig, self).init()
         self.m_conf = XcmsTestConfig()
         self.setAutoPhpErrorChecking(self.m_conf.getPhpErrorCheckFlag())
-        #self.maximizeWindow()
+        # self.maximizeWindow()
 
     def gotoRebuildAliases(self):
         self.logAdd("Rebuilding aliases. ")
@@ -94,10 +116,10 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def gotoNotificationsPage(self):
         self.gotoUrlByLinkText(u"Уведомления")
 
-    def gotoCreatePage(self, reason = ""):
+    def gotoCreatePage(self, reason=""):
         self.gotoUrlByLinkText(u"Подстраница", reason)
 
-    def gotoRemovePage(self, reason = ""):
+    def gotoRemovePage(self, reason=""):
         self.gotoUrlByLinkText(u"Удалить", reason)
 
     def getAnketaPageHeader(self):
@@ -114,13 +136,13 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.gotoAdminPanel()
         self.gotoNotificationsPage()
 
-        self.fillElementById("edtg_user-change", emailString);
-        self.fillElementById("edtg_content-change", emailString);
+        self.fillElementById("edtg_user-change", emailString)
+        self.fillElementById("edtg_content-change", emailString)
 
-        self.fillElementById("edtg_reg", emailString);
-        self.fillElementById("edtg_reg-managers", emailString);
+        self.fillElementById("edtg_reg", emailString)
+        self.fillElementById("edtg_reg-managers", emailString)
 
-        self.clickElementById("editTag")
+        self.clickElementById("edit_tag-submit")
         self.performLogout()
 
     def checkTestNotifications(self):
@@ -160,10 +182,10 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
         self.logAdd("performLoginAsAdmin(): checking admin panel link")
 
-        #check that we have entered the CP.
+        # check that we have entered the CP.
         # just chech that link exists.
-        cpUrl = self.getAdminPanelLink()
-        #test.gotoSite(cpUrl)
+        self.getAdminPanelLink()
+        # test.gotoSite(cpUrl)
 
     def performLogin(self, login, password):
         """
@@ -177,8 +199,10 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.gotoRoot()
 
         # assert we have no shit cookies here
-        self.assertUrlNotPresent(u"Админка", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
-        self.assertUrlNotPresent(u"Личный кабинет", "Here should be no auth cookies. But they are. Otherwise, your test is buggy and you forgot to logout previous user. ")
+        expl_adm = """Here should be no auth cookies. But they are.
+        Otherwise, your test is buggy and you forgot to logout previous user. """
+        self.assertUrlNotPresent(u"Админка", expl_adm)
+        self.assertUrlNotPresent(u"Личный кабинет", expl_adm)
 
         self.gotoAuthLink()
 
@@ -191,8 +215,8 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
         self.clickElementById("auth-submit")
 
-        wrongAuth = self.checkSourceTextPresent([u"Пароль всё ещё неверный", "Wrong password"])
-        if wrongAuth:
+        wrong_auth = self.checkSourceTextPresent([u"Пароль всё ещё неверный", "Wrong password"], negative=True)
+        if wrong_auth:
             return False
 
         # now let's check that Cabinet link and Exit link are present. if not - it's a bug.
@@ -212,6 +236,10 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.logAdd("performLogout")
         self.addAction("user-logout")
         self.gotoPage("/?&mode=logout&ref=admin")
+
+    def ensure_logged_off(self):
+        self.performLogout()
+        self.gotoRoot()
 
     def getWelcomeMessage(self, login):
         return u"Привет, " + login
@@ -249,7 +277,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.gotoUrlByLinkText(self.getAdminPanelLinkName())
 
     def getPersonAbsenceMessage(self):
-        #return u"На " + self.m_conf.getTestSchoolName() + u" не присутствовал"
+        # return u"На " + self.m_conf.getTestSchoolName() + u" не присутствовал"
         return u"На данной школе не присутствовал"
 
 
@@ -260,12 +288,13 @@ class XcmsTest(XcmsTestWithConfig):
     def init(self):
         super(XcmsTest, self).init()
         self.assertNoInstallerPage()
-        #xtest_common.setTestNotifications(self, self.m_conf.getNotifyEmail(), self.m_conf.getAdminLogin(), self.m_conf.getAdminPass())
+        # xtest_common.setTestNotifications(self, self.m_conf.getNotifyEmail(), self.m_conf.getAdminLogin(), self.m_conf.getAdminPass())
 
-    def createNewUser(self, login, email, password, name, auxParams=[]):
+    def createNewUser(self, login, email, password, name, aux_params=None):
+        user_aux_params = aux_params or []
         self.logAdd("createNewUser( login: " + login + "', email: " + email + ", password: " + password + ", name: " + name + " )")
 
-        if not "do_not_login_as_admin" in auxParams:
+        if "do_not_login_as_admin" not in user_aux_params:
             self.performLoginAsAdmin()
             self.gotoAdminPanel()
 
@@ -273,9 +302,9 @@ class XcmsTest(XcmsTestWithConfig):
 
         self.gotoUrlByLinkText(["Create user", u"Создать пользователя"])
 
-        inpLogin = self.fillElementById("login-input", login)
-        self.logAdd("login = '" + inpLogin + "'")
-        if inpLogin == "":
+        inp_login = self.fillElementById("login-input", login)
+        self.logAdd("login = '" + inp_login + "'")
+        if inp_login == "":
             raise RuntimeError("Filled login value is empty!")
 
         inpEMail = self.fillElementById("email-input", email)
@@ -293,20 +322,20 @@ class XcmsTest(XcmsTestWithConfig):
         # self.clickElementById("notify_user-checkbox")
         # send form
 
-        if "manager_rights" in auxParams:
+        if "manager_rights" in user_aux_params:
             self.logAdd("Setting manager rights for user. ")
             # set manager access level
             self.clickElementById("group_ank-checkbox")
 
         self.clickElementByName("create_user")
 
-        if "do_not_validate" in auxParams:
+        if "do_not_validate" in user_aux_params:
             self.logAdd("not validating created user, just click create button and shut up. ")
-            return inpLogin, inpEMail, inpPass, inpName
+            return inp_login, inpEMail, inpPass, inpName
 
         self.logAdd("user created, going to user list again to refresh. ")
 
-        self.assertBodyTextPresent(u"Пользователь '" + inpLogin + u"' успешно создан")
+        self.assertBodyTextPresent(u"Пользователь '" + inp_login + u"' успешно создан")
 
         # refresh user list (re-navigate to user list)
         self.gotoUserList()
@@ -314,7 +343,7 @@ class XcmsTest(XcmsTestWithConfig):
         # enter user profile
         self.logAdd("entering user profile. ")
 
-        profileLink = inpLogin
+        profileLink = inp_login
         # TODO, SITE BUG: make two separate links
         self.gotoUrlByPartialLinkText(profileLink)
 
@@ -323,20 +352,19 @@ class XcmsTest(XcmsTestWithConfig):
 
         # temporary check method
         # test user login
-        self.assertTextPresent("//div[@class='user-ops']", inpLogin)
+        self.assertTextPresent("//div[@class='user-ops']", inp_login)
         # test user creator (root)
         self.assertTextPresent("//div[@class='user-ops']", self.m_conf.getAdminLogin())
         self.assertElementValueById("name-input", inpName)
         self.assertElementValueById("email-input", inpEMail)
 
-        #logoff root
-        if not "do_not_logout_admin" in auxParams:
+        # logoff root
+        if "do_not_logout_admin" not in user_aux_params:
             self.performLogout()
 
-        return inpLogin, inpEMail, inpPass, inpName
+        return inp_login, inpEMail, inpPass, inpName
 
     def removePreviousUsersWithTestEmail(self, emailToDelete):
-
         self.performLoginAsAdmin()
         self.gotoAdminPanel()
         self.gotoUserList()
@@ -358,7 +386,7 @@ class XcmsTest(XcmsTestWithConfig):
         self.logAdd("Test users (old crap) removed, logging out. ")
         self.performLogoutFromAdminPanel()
 
-    def setUserEmailByAdmin(self, login, email, auxParams=[]):
+    def setUserEmailByAdmin(self, login, email, auxParams=list()):
         """
             Set email to user (by admin panel)
         """
@@ -366,7 +394,7 @@ class XcmsTest(XcmsTestWithConfig):
 
         self.logAdd("setUserEmailByAdmin: updating email for user '" + login + "' to '" + email + ". ")
 
-        if not "do_not_login_as_admin" in auxParams:
+        if "do_not_login_as_admin" not in auxParams:
             self.performLoginAsAdmin()
             self.gotoAdminPanel()
 
@@ -374,11 +402,11 @@ class XcmsTest(XcmsTestWithConfig):
 
         self.gotoUrlByPartialLinkText(login)
 
-        inpEMail = self.fillElementById("email-input", email)
+        self.fillElementById("email-input", email)
         self.clickElementByName("update_user")
 
-        #logoff root
-        if not "do_not_logout_admin" in auxParams:
+        # logoff root
+        if "do_not_logout_admin" not in auxParams:
             self.performLogout()
 
     def gotoCabinet(self):
@@ -421,11 +449,11 @@ class XcmsTest(XcmsTestWithConfig):
         self.gotoUrlByLinkText(u"Сменить статус")
 
     def gotoEditPerson(self):
-        #self.gotoUrlByLinkText(u"Редактировать анкетные данные")
+        # self.gotoUrlByLinkText(u"Редактировать анкетные данные")
         self.gotoUrlByLinkText(u"Ред.")
 
     def gotoBackAfterComment(self):
-        #self.gotoUrlByLinkText(u"Вернуться к списку комментов") # older variant
+        # self.gotoUrlByLinkText(u"Вернуться к списку комментов") # older variant
         self.gotoBackToAnketaView()
 
     def performLogoutFromSite(self):
@@ -437,12 +465,12 @@ class XcmsTest(XcmsTestWithConfig):
     def closeAdminPanel(self):
         self.gotoUrlByLinkText("X")
 
-    def assertSitePageHeader(self, header, reason = "Page header does not match expected. "):
+    def assertSitePageHeader(self, header, reason="Page header does not match expected. "):
         self.assertElementTextById("content-header", header, reason=reason)
 
     def addCommentToPerson(self):
         self.gotoUrlByLinkText(u"Добавить комментарий")
-        commentText = random_crap.randomText(40) + "\n" + random_crap.randomText(50) + "\n" + random_crap.randomText(30)
+        commentText = random_crap.random_text(40) + "\n" + random_crap.random_text(50) + "\n" + random_crap.random_text(30)
 
         commentText = self.fillElementByName("comment_text", commentText)
 
@@ -452,9 +480,9 @@ class XcmsTest(XcmsTestWithConfig):
         return commentText
 
     def editCommentToPerson(self, commentLinkId):
-        self.gotoUrlByLinkId("comment-edit-1")
+        self.gotoUrlByLinkId(commentLinkId)
         oldCommentText = self.getElementValueByName("comment_text")
-        newCommentText =  random_crap.randomText(10) + "\n" + oldCommentText + "\n" + random_crap.randomText(6)
+        newCommentText = random_crap.random_text(10) + "\n" + oldCommentText + "\n" + random_crap.random_text(6)
         newCommentText = self.fillElementByName("comment_text", newCommentText)
         self.clickElementByName("update-person_comment")
         self.assertBodyTextPresent(u"Комментарий успешно сохранён")
@@ -510,13 +538,3 @@ class XcmsTest(XcmsTestWithConfig):
 
         self.clickElementById("create-page-submit")
         return sysName, menuTitle, pageHeader, pageAlias
-
-
-
-def shortAlias(last, first):
-    return (last + " " + first).strip()
-
-def fullAlias(last, first, mid):
-    return (last + " " + first + " " + mid).strip()
-
-

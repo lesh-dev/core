@@ -1,97 +1,84 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import xsm
 import xtest_common
-import random_crap
 
 
 class XcmsXsmListFilters(xtest_common.XcmsTest):
     """
     This test checks various filters in XSM lists.
     """
+    fio_filter_id = "show_name_filter-input"
 
-    def testExistingPeople(self):
+    def check_filter(self, pattern, match_text, expected_count, message):
+        self.fillElementById(self.fio_filter_id, pattern)
+        self.clickElementByName("show-person")
+        self.assert_equal(
+            self.countIndexedUrlsByLinkText(match_text), expected_count,
+            message + "Filters are broken. "
+        )
+
+    def test_existing_people(self):
         # one line expected
         self.setOptionValueByIdAndValue("show_anketa_status-selector", "all")
-        shortAlias = u"Вельтищев Михаил"
-        alias = shortAlias + u" Николаевич"
+        person = xsm.Person(self)
+        person.last_name = u"Вельтищев"
+        person.first_name = u"Михаил"
+        person.patronymic = u"Николаевич"
+        self.check_filter(
+            person.full_alias(), person.short_alias(), 1,
+            "Found more than one anketa with exact FIO. "
+        )
 
-        self.FIOFilterId = "show_name_filter-input"
-        self.fillElementById("show_name_filter-input", alias)
-        self.clickElementByName("show-person")
-        if self.countIndexedUrlsByLinkText(shortAlias) != 1:
-            self.failTest("Found more than one anketa with exact FIO. Filters are broken. ")
-
-        # two lines expected
-        # self.setOptionValueByIdAndValue("show_anketa_status-selector", "all")
-        shortAliases = [u"Вельтищев Михаил", u"Вельтищев Дмитрий"]
+        # 2 lines expected
+        short_aliases = [
+            u"Вельтищев Михаил",
+            u"Вельтищев Дмитрий",
+        ]
         alias = u"Вельтищев"
-        self.fillElementById(self.FIOFilterId, alias)
-
-        self.clickElementByName("show-person")
-
-        for alias in shortAliases:
-            if self.countIndexedUrlsByLinkText(alias) != 1:
-                self.failTest("Expected link {0} not found. Filters are broken. ".format(alias))
+        for short_alias in short_aliases:
+            self.check_filter(alias, short_alias, 1, u"Expected link {} not found. ".format(short_alias))
 
         # none lines expected
-        # self.setOptionValueByIdAndValue("show_anketa_status-selector", "all")
         alias = "qwerty"
-        alias = self.fillElementById(self.FIOFilterId, alias)
-        self.clickElementByName("show-person")
-        if self.countIndexedUrlsByLinkText(alias) != 0:
-            self.failTest("This search should not return anything. Filters are broken. ")
+        self.check_filter(alias, alias, 0, "This search should return nothing. ")
 
         # 1 line expected
-        # self.setOptionValueByIdAndValue("show_anketa_status-selector", "all")
         alias = u"Демарин Дмитрий"
-        self.fillElementByName("show_name_filter", alias)
-        self.sendEnterById(self.FIOFilterId)
+        self.check_filter(alias, alias, 1, "This search should return one record. ")
 
-        # sometimes it returns 0 links. Seems to be webdriver bug.
-        if self.countIndexedUrlsByLinkText(alias) != 1:
-            self.failTest("This search should return one record. Filters are broken. ")
-
-    def testDepartmentSelector(self):
+    def test_department_selector(self):
         self.gotoXsmAllPeople()
         self.gotoXsmAddPerson()
+        department_id = 3  # Математическое
+        person = xsm.Person(self)
+        person.input(
+            last_name=u"Гуглов",
+            first_name=u"Индекс",
+            patronymic=u"Яхович",
+            department_id=department_id,
+            is_student=True,
+            random=True,
+        )
+        person.back_to_person_view()
 
-        # generate
-        inpLastName = u"Гуглов" + random_crap.randomText(3)
-        inpFirstName = u"Индекс_" + random_crap.randomText(3)
-        inpMidName = u"Яхович_" + random_crap.randomText(3)
-
-        inpLastName = self.fillElementById("last_name-input", inpLastName)
-        inpFirstName = self.fillElementById("first_name-input", inpFirstName)
-        inpMidName = self.fillElementById("patronymic-input", inpMidName)
-
-        department = u"Математическое"
-        self.setOptionValueByIdAndValue("department_id-selector", department)
-        self.clickElementById("update-person-submit")
-
-        self.gotoBackToPersonView()
         self.gotoXsmAllPeople()
-        self.setOptionValueByIdAndValue("show_department_id-selector", department)
+        self.setOptionValueByIdAndValue("show_department_id-selector", department_id)
+        alias = person.short_alias()
+        self.check_filter(alias, alias, 1, "Search with proper department selection return 1 record. ")
 
-        alias = xtest_common.shortAlias(inpLastName, inpFirstName)
-        self.fillElementById(self.FIOFilterId, alias)
-        self.clickElementByName("show-person")
-
-        if self.countIndexedUrlsByLinkText(alias) != 1:
-            self.failTest("Search with proper department selection return one record. Filters are broken. ")
-
-        self.setOptionValueByIdAndValue("show_department_id-selector", u"Другое")
-        self.fillElementById(self.FIOFilterId, alias)
-        self.clickElementByName("show-person")
-
-        if self.countIndexedUrlsByLinkText(alias) != 0:
-            self.failTest("Search with wrong department should return none records. Filters are broken. ")
+        other_department_id = 2  # Другое
+        self.setOptionValueByIdAndValue("show_department_id-selector", other_department_id)
+        self.check_filter(alias, alias, 0, "Search with wrong department should return 0 records. ")
 
     def run(self):
+        self.ensure_logged_off()
+
         self.performLoginAsManager()
         self.gotoRoot()
         self.gotoXsm()
         self.gotoXsmAllPeople()
 
-        self.testExistingPeople()
-        self.testDepartmentSelector()
+        self.test_existing_people()
+        self.test_department_selector()

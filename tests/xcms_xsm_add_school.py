@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import xsm
+
 import xtest_common
-import random_crap
-import bawlib
 
 
 class XcmsXsmAddSchool(xtest_common.XcmsTest):
@@ -18,48 +18,13 @@ class XcmsXsmAddSchool(xtest_common.XcmsTest):
     """
 
     def run(self):
-
+        self.ensure_logged_off()
         self.performLoginAsManager()
         self.gotoXsm()
-        self.gotoXsmSchools()
-        self.gotoXsmAddSchool()
-
-        # generate school number
-        lastDigit = random_crap.randomDigits(1)
-
-        inpSchoolTitle = u"ЛЭШ_202" + lastDigit + "_" + random_crap.randomWord(6);
-        inpStart = "202" + lastDigit + ".07.15"
-        inpEnd = "202" + lastDigit + ".08.16"
-        inpLocation = u"Деревня Гадюкино_" + random_crap.randomWord(6)
-
-        inpSchoolTitle = self.fillElementByName("school_title", inpSchoolTitle)
-        inpStart = self.fillElementByName("school_date_start", inpStart)
-        inpEnd = self.fillElementByName("school_date_end", inpEnd)
-        inpLocation = self.fillElementByName("school_location", inpLocation)
-
-        self.clickElementByName("update-school")
-        self.gotoBackToSchoolView()
-
-        self.assertBodyTextPresent(inpSchoolTitle)
-        self.assertBodyTextPresent(inpStart)
-        self.assertBodyTextPresent(inpEnd)
-        self.assertBodyTextPresent(inpLocation)
-
+        school = xsm.add_test_school(self)
         self.gotoUrlByLinkText(u"Правка")
-
-        inpStart = "202" + lastDigit + ".07.23"
-        inpEnd = "202" + lastDigit + ".08.23"
-
-        inpStart = self.fillElementByName("school_date_start", inpStart)
-        inpEnd = self.fillElementByName("school_date_end", inpEnd)
-        inpLocation = self.fillElementByName("school_location", inpLocation)
-
-        self.clickElementByName("update-school")
-
-        self.gotoBackToSchoolView()
-
-        self.assertBodyTextPresent(inpSchoolTitle)
-        self.assertBodyTextPresent(inpStart)
-        self.assertBodyTextPresent(inpEnd)
-        self.assertBodyTextPresent(inpLocation)
-
+        school.input(
+            school_date_start=str(school.year) + ".07.23",
+            school_date_end=str(school.year) + ".08.23",
+        )
+        school.back_to_school_view()

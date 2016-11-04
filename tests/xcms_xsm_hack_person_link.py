@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
 
 class XcmsXsmHackPersonLink(xtest_common.XcmsTest):
     """
@@ -12,6 +12,7 @@ class XcmsXsmHackPersonLink(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
 
         self.performLoginAsManager()
 

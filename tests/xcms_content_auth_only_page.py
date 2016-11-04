@@ -19,7 +19,7 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
     """
 
     def run(self):
-
+        self.ensure_logged_off()
         self.performLoginAsEditor()
         self.gotoAdminPanel()
 
@@ -29,10 +29,10 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
 
         self.gotoCreatePage()
 
-        inpPageDir = "authPage_" + random_crap.randomText(6);
-        inpMenuTitle = "authMenuTitle_" + random_crap.randomText(6);
-        pageHeader = "authPageHeader_" + random_crap.randomText(6);
-        inpAlias = "authorized/only/page/" + random_crap.randomText(6);
+        inpPageDir = "authPage_" + random_crap.random_text(6);
+        inpMenuTitle = "authMenuTitle_" + random_crap.random_text(6);
+        pageHeader = "authPageHeader_" + random_crap.random_text(6);
+        inpAlias = "authorized/only/page/" + random_crap.random_text(6);
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir);
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle);
@@ -56,7 +56,7 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
 
         pageText = u"Текст Только Для Авторизованных " + random_crap.randomCrap(6)
         pageText = self.fillAceEditorElement(pageText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         self.gotoCloseEditor()
         self.performLogout()
@@ -80,10 +80,10 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
 
         self.assertSourceTextPresent([u"Доступ запрещён", "Access denied"], "we should see auth page")
 
-        inpLogin = "AuthPageUser_" + random_crap.randomText(6)
+        inpLogin = "AuthPageUser_" + random_crap.random_text(6)
         inpEMail = random_crap.randomEmail()
-        inpPass = random_crap.randomText(8)
-        inpName = u"Убер Уполномоченный " + random_crap.randomText(4)
+        inpPass = random_crap.random_text(8)
+        inpName = u"Убер Уполномоченный " + random_crap.random_text(4)
 
         inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
 

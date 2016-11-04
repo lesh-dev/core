@@ -16,9 +16,9 @@
 ?>
     <div>
         <span class="admin-form-label">Заголовок</span>
-        <input type="text" class="admin-long" xcms-track-changes="yes" name="header"
+        <input type="text" class="admin-long" name="header"
             value="<?php echo xcms_get_key_or_enc($info, "header"); ?>" />
     </div>
-    <input name="change-header" type="submit" value="Сохранить" />
+    <?php xcmst_submit("change-header", "Сохранить"); ?>
     </form>
 </div>

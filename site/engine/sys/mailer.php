@@ -1,9 +1,10 @@
 <?php
-    include_once("$engine_dir/sys/phpmailer/class.phpmailer.php");
-    include_once("$engine_dir/sys/file.php");
-    include_once("$engine_dir/sys/util.php");
-    include_once("$engine_dir/sys/tag.php");
-    include_once("$engine_dir/sys/db.php");
+    require_once("${engine_dir}sys/phpmailer/class.phpmailer.php");
+    require_once("${engine_dir}sys/template.php");
+    require_once("${engine_dir}sys/file.php");
+    require_once("${engine_dir}sys/util.php");
+    require_once("${engine_dir}sys/tag.php");
+    require_once("${engine_dir}sys/db.php");
 
     function xcms_get_mailer($addr_from, $name_from)
     {
@@ -40,9 +41,9 @@
     function xcms_get_notification_fields()
     {
         return array(
-            "mail_group"=>"Почтовая группа",
-            "notification_text"=>"Текст уведомления в формате plain text",
-            "notification_html"=>"Текст уведомления в формате HTML"
+            "mail_group" => "Почтовая группа",
+            "notification_text" => "Текст уведомления в формате plain text",
+            "notification_html" => "Текст уведомления в формате HTML",
         );
     }
 
@@ -177,13 +178,14 @@
         $real_name = xcms_user()->param("name");
         $hr_timestamp = xcms_datetime();
         $host = xcms_hostname();
+        $referer = xcms_get_key_or($_SERVER, "HTTP_REFERER"); // can be empty, see #924
         $body_text =
             "$mail_text\r\n".
             "--\r\n".
             "Это уведомление сгенерировано автоматически. Отвечать на него не нужно\r\n".
             "Пользователь    : $login ($real_name)\r\n".
             "Имя хоста       : $host\r\n".
-            "Обратная ссылка : {$_SERVER['HTTP_REFERER']}\r\n";
+            "Обратная ссылка : $referer\r\n";
             "Дата и время    : $hr_timestamp\r\n";
 
         $body_html = "";
@@ -192,7 +194,7 @@
             $body_html = xcms_prepare_html_template("notification-body");
             $body_html = str_replace('@@MESSAGE@', $mail_text_html, $body_html);
             $body_html = str_replace('@@HOST@', $host, $body_html);
-            $body_html = str_replace('@@REFERER@', htmlspecialchars($_SERVER['HTTP_REFERER']), $body_html);
+            $body_html = str_replace('@@REFERER@', htmlspecialchars($referer), $body_html);
             $body_html = str_replace('@@TIMESTAMP@', $hr_timestamp, $body_html);
         }
         if ($immediate)
@@ -200,12 +202,12 @@
 
         // In case of delayed sending, subject will be lost
         $values = array(
-            "mail_group"=>$mail_group,
-            "notification_text"=>$body_text,
-            "notification_html"=>$body_html
+            "mail_group" => $mail_group,
+            "notification_text" => $body_text,
+            "notification_html" => $body_html,
         );
 
-        return xdb_insert_or_update("notification", array("notification_id"=>XDB_NEW), $values, xcms_get_notification_fields());
+        return xdb_insert_or_update("notification", array("notification_id" => XDB_NEW), $values, xcms_get_notification_fields());
     }
 
     /**
@@ -233,4 +235,3 @@
 
         return true;
     }
-?>

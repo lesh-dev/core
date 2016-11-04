@@ -1,6 +1,7 @@
 <?php
 require_once("${engine_dir}sys/db.php");
 require_once("${engine_dir}cms/ank/fio.php");
+require_once("${engine_dir}cms/ank/field-desc.php");
 
 define('XSM_CONTACT_SEPARATOR', ',&nbsp;&nbsp; ');
 define('XSM_SCHOOL_COUNT', 7);  // not used by now
@@ -40,7 +41,7 @@ function xcms_html_wrap_ml($html)
 function xcms_trim_object($obj)
 {
     $new_obj = array();
-    foreach ($obj as $key=>$value)
+    foreach ($obj as $key => $value)
     {
         $new_obj[$key] = trim($value);
     }
@@ -142,9 +143,9 @@ function xsm_format_phones($phones_str)
     {
         // something strange here, cannot format
         $item = array(
-            "phone"=>$phones_str,
-            "hint"=>"В телефонах допустимы только символы 0-9 ( ) + - и пробел. ",
-            "valid"=>false
+            "phone" => $phones_str,
+            "hint" => "В телефонах допустимы только символы 0-9 ( ) + - и пробел. ",
+            "valid" => false,
         );
         $result[] = $item;
         return $result;
@@ -155,9 +156,9 @@ function xsm_format_phones($phones_str)
     {
         $phone = trim($phones[$i]);
         $item = array(
-            "valid"=>true,
-            "hint"=>"",
-            "phone"=>$phone
+            "valid" => true,
+            "hint" => "",
+            "phone" => $phone,
         );
 
         // check digit count
@@ -311,16 +312,38 @@ function xsm_social_profile_link($social_profile)
 }
 
 /**
+  * @return HTML span with enum human-readable value.
+  * @sa @c xsm_make_enum_byval
   * id is added for testability reasons
   **/
 function xsm_make_enum($object, $key, $id = false)
 {
-    $enum_value = xsm_check_enum_key($key, $object[$key]);
-    $css_class = str_replace('_', '-', $key);
-    $values = xsm_get_enum($key);
-    $title = $values[$enum_value];
+    return xsm_make_enum_byval($key, $object[$key], $id);
+}
+
+/**
+  * @return HTML span with enum human-readable value.
+  * Incapsulates all key inconsistency (e.g. forest_status)
+  * id is added for testability reasons
+  **/
+function xsm_make_enum_byval($key, $value, $id = false)
+{
+    $enum_type = $key;
+    // forest hacks
+    if (
+        $key == "forest_1" ||
+        $key == "forest_2" ||
+        $key == "forest_3")
+    {
+        $enum_type = "forest_status";
+    }
+    // filter value
+    $value = xsm_check_enum_key($enum_type, $value);
+    $css_class = str_replace('_', '-', $enum_type);
+    $values = xsm_get_enum($enum_type);
+    $title = $values[$value];
     $id = ($id !== false) ? "$id-" : "";
-    return "<span class=\"$css_class xe-$enum_value\" id=\"$id$key-span\">$title</span>";
+    return "<span class=\"$css_class xe-$value\" id=\"$id$key-span\">$title</span>";
 }
 
 function xsm_calc_course_style($course_ratio)
@@ -336,24 +359,11 @@ function xsm_calc_course_style($course_ratio)
     return "xe-undef";
 }
 
-/**
-  * Non-generic function, see xsm_make_enum
-  * id is added for testability reasons
-  **/
-function xsm_make_forest_enum($person, $fn, $id = false)
-{
-    $id = ($id !== false) ? "$id-" : "";
-    $forest_status = xsm_check_enum_key("forest_status", $person["forest_$fn"]);
-    $values = xsm_get_enum("forest_status");
-    $title = $values[$forest_status];
-    return "<span class=\"forest-status xe-$forest_status\" id=\"${id}forest_status$fn-span\">$title</span>";
-}
-
 function xsm_person_list_link($school_id)
 {
     $school = xdb_get_entity_by_id('school', $school_id);
     $school_title = xcms_get_key_or_enc($school, 'school_title');
-    $school_url = "list-person".xcms_url(array('school_id'=>$school_id));
+    $school_url = "list-person".xcms_url(array('school_id' => $school_id));
     return "<a href=\"$school_url\">$school_title</a>";
 }
 
@@ -364,7 +374,7 @@ function xsm_person_view_link($person_id, $school_id, $title_ht = "")
         $person = xdb_get_entity_by_id('person', $person_id);
         $title_ht = xsm_fi_enc($person);
     }
-    $person_url = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
+    $person_url = "view-person".xcms_url(array('person_id' => $person_id, 'school_id' => $school_id));
     return "<a href=\"$person_url\">$title_ht</a>";
 }
 
@@ -474,6 +484,12 @@ function xsm_make_enum_selector($name, $value, $items)
     return $html;
 }
 
+// Wrapper around generic API call
+function xsm_make_enum_by_type($name, $value, $enum_type)
+{
+    return xsm_make_enum_selector($name, $value, xsm_get_enum($enum_type));
+}
+
 function xsm_checkbox($name, $value)
 {
     xcmst_control($name, $value, "", "ankEdit", "checkbox", "");
@@ -484,6 +500,31 @@ function xsm_field($table_name, $key)
     $fields_desc = xsm_get_fields($table_name);
     $desc = $fields_desc[$key];
     ?><span class="xsm-fixed-field"><?php echo $desc["name"]; ?></span> <?php
+}
+
+function xsm_view_row($table_name, $key, $object)
+{
+    $fields_desc = xsm_get_fields($table_name);
+    $desc = $fields_desc[$key];
+    $output = "__UNKNOWN__FIELD__TYPE__";
+    if ($desc["type"] == XSM_FT_ENUM)
+    {
+        $output = xsm_make_enum($object, $key);
+    }
+    elseif ($desc["type"] == XSM_FT_STR)
+    {
+        $output = xcms_get_key_or_enc($object, $key);
+    }
+    elseif ($desc["type"] == XSM_FT_TEXT)
+    {
+        $output = xcms_get_key_or_enc($object, $key);
+        $output = xcms_html_wrap_by_crlf($output);
+    }
+    ?>
+    <tr><td class="ankList"><?php
+        xsm_field($table_name, $key);
+        echo $output;
+    ?></td></tr><?php
 }
 
 function xsm_ank_format_unit_test()
@@ -503,6 +544,15 @@ function xsm_ank_format_unit_test()
     // к сожалению, в жизни встречаются пустые поля
     $phones = xsm_format_phones("");
     xut_equal(count($phones), 0, "Phones count 0");
+
+    // тестируем enum-ы
+    $enum_span = xsm_make_enum_byval("forest_2", "able");
+    xut_check(xu_strpos($enum_span, "Может") > 0, "Check 'able' status");
+    $person = array(
+        "anketa_status" => "cont",
+    );
+    $enum_span = xsm_make_enum($person, "anketa_status");
+    xut_check(xu_strpos($enum_span, "Активный") > 0, "Check 'cont' status");
 
     xut_end();
 }

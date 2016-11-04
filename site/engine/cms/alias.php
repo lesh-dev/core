@@ -46,7 +46,7 @@ function xcms_save_aliases($list)
 function xcms_get_page_alias($page_id)
 {
     $aliases = xcms_get_aliases();
-    foreach ($aliases as $alias=>$path)
+    foreach ($aliases as $alias => $path)
     {
         if ($path == $page_id)
             return $alias;

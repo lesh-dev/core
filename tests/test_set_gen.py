@@ -4,18 +4,36 @@
 Generates test suite execution script
 """
 
+import logging
 import re
-from os import listdir
-from os.path import isfile
+import os
 
-def getHeader():
+
+def get_header():
     return """#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # This file is auto-generated
 """
 
-def getFuncCode(imports, testList):
+
+class TestInfo(object):
+    def __init__(self, file_name, module_name, class_name):
+        self.file_name = file_name
+        self.module_name = module_name
+        self.class_name = class_name
+
+    def key(self):
+        return self.module_name, self.class_name
+
+    def __hash__(self):
+        return hash(self.key())
+
+    def __cmp__(self, other):
+        return cmp(self.key(), other.key())
+
+
+def get_func_code(imports, test_list):
     tab = ' ' * 4
     result = []
     for i in imports:
@@ -23,40 +41,54 @@ def getFuncCode(imports, testList):
 
     # respect pep8 code style - add 2 empty lines
     result += ["", ""]
-    
-    result.append('def getTests(baseUrl, args):')
+
+    result.append('def get_tests(**kwargs):')
     result.append(tab + 'return [')
-    for testInfo in testList:
-        result.append(tab * 2 + genOneTestLine(testInfo))
+    for testInfo in sorted(test_list):
+        result.append(tab * 2 + gen_one_test_line(testInfo))
     result.append(tab + ']')
     return "\n".join(result)
 
 
-def genOneTestLine(testInfo):
-    (testFile, modName, clName) = testInfo
-    return '("{testFile}", {modName}.{clName}(baseUrl, args)),'.format(testFile=testFile, modName=modName, clName=clName)
+def gen_one_test_line(test_info):
+    """
+    :type test_info: TestInfo
+    :rtype: str
+    """
+    return '("{}", {}.{}(**kwargs)),'.format(
+        test_info.file_name,
+        test_info.module_name,
+        test_info.class_name,
+    )
 
 
-def findTests(directory, fileNamePrefix="xcms_", classNamePrefix="Xcms"):
-    pyFiles = sorted([f for f in listdir('.') if isfile(f) and f.startswith(fileNamePrefix) and f.endswith('.py')])
+def find_tests(directory='.', file_name_prefix="xcms_", class_name_prefix="Xcms"):
+    py_files = sorted([
+        f for f in os.listdir(directory)
+        if os.path.isfile(f) and f.startswith(file_name_prefix) and f.endswith('.py')
+    ])
+
+    logging.info("Found %s python files", len(py_files))
+
+    test_set = set([])
 
     imports = []
-    testList = []
 
-    for fn in pyFiles:
-        moduleName = fn[:-3]
-        matchLine = "class " + classNamePrefix
-        classLineList = [line for line in open(fn, 'r') if matchLine in line]
-        if not classLineList:
+    for file_name in py_files:
+        module_name = file_name[:-3]
+        match_line = "class " + class_name_prefix
+        class_line_list = [line for line in open(file_name, 'r') if match_line in line]
+        # first, simply exclude by primitive pattern 'class Xcms'
+        if not class_line_list:
             continue
-        classLine = classLineList.pop().strip()
-        r = re.match(r"class ([\w_]+)\([\w_.]+\):", classLine)
+        class_decl_line = class_line_list.pop().strip()
+        r = re.match(r"class ([\w_]+)\([\w_.]+\):", class_decl_line)
         if not r:
-            #print "Cannot match in ", cl
             continue
-        className = r.group(1)
-
-        imports.append(moduleName)
-        testList.append((fn, moduleName, className))
-    return imports, testList
-
+        class_name = r.group(1)
+        test_info = TestInfo(file_name, module_name, class_name)
+        if test_info in test_set:
+            raise Exception("Duplicate test found: {}.{}", module_name, class_name)
+        test_set.add(test_info)
+        imports.append(module_name)
+    return imports, list(test_set)

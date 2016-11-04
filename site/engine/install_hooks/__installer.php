@@ -89,35 +89,35 @@ class InstallerInstallHook
         $request_uri = str_replace("install.php", "", $_SERVER["REQUEST_URI"]);
 
         return array(
-            "content_dir"=>array(
-                "name"=>"Содержимое сайта",
-                "default"=>"$content",
+            "content_dir" => array(
+                "name" => "Содержимое сайта",
+                "default" => "$content",
             ),
-            "design_dir"=>array(
-                "name"=>"Дизайн",
-                "default"=>"$design",
+            "design_dir" => array(
+                "name" => "Дизайн",
+                "default" => "$design",
             ),
-            "engine_dir"=>array(
-                "name"=>"Движок",
-                "default"=>"engine/",
+            "engine_dir" => array(
+                "name" => "Движок",
+                "default" => "engine/",
             ),
-            "engine_pub"=>array(
-                "name"=>"Публичное содержимое движка",
-                "default"=>"engine_public/"
+            "engine_pub" => array(
+                "name" => "Публичное содержимое движка",
+                "default" => "engine_public/"
             ),
-            "web_prefix"=>array(
-                "name"=>"Префикс",
-                "default"=>substr($request_uri, 1)
+            "web_prefix" => array(
+                "name" => "Префикс",
+                "default" => substr($request_uri, 1)
             ),
-            "mailer_enabled"=>array(
-                "name"=>"Использовать ли оповещения по e-mail",
-                "default"=>"true",
-                "type"=>"bool",
+            "mailer_enabled" => array(
+                "name" => "Использовать ли оповещения по e-mail",
+                "default" => "true",
+                "type" => "bool",
             ),
-            "content_time_roundup"=>array(
-                "name"=>"Интервал версионирования контента",
-                "default"=>100,
-                "type"=>"integer",
+            "content_time_roundup" => array(
+                "name" => "Интервал версионирования контента",
+                "default" => 100,
+                "type" => "integer",
             ),
         );
 
@@ -228,11 +228,13 @@ class InstallerInstallHook
             'content_time_roundup',
         );
 
-        $output = "<?php\n";
+        $output = "";
+        $output .= "\x20\x20\x20\x20global \$SETTINGS;\n";
         foreach ($string_settings as $k)
         {
             $val = $config[$k];
             $val = str_replace('"', '\"', $val);
+            $output .= "\x20\x20\x20\x20global \$$k;\n";
             $output .= "\x20\x20\x20\x20\$$k = \"$val\";\n";
         }
         foreach ($bool_settings as $k)
@@ -245,11 +247,11 @@ class InstallerInstallHook
             $v = $config[$k];
             $output .= "\x20\x20\x20\x20\$SETTINGS['$k'] = $v;\n";
         }
-        $output .= "\n?>";
-        if (!xcms_write("settings.php", $output))
+        if (!xcms_write("settings.php", "<?php\n$output\n?>"))
             return "Cannot append settings to 'settings.php'. ";
 
-        include("settings.php");
+        // For unknown reasons, eval works better than "include settings.php"
+        eval($output);
         include("${engine_dir}sys/settings.php");
         require_once("${engine_dir}sys/tag.php");
         require_once("${engine_dir}sys/cms.php");

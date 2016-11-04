@@ -1,5 +1,5 @@
-<# cms/ank/diff #>
 <?php
+require_once("${engine_dir}xsm/diff.php");
 require_once("${engine_dir}cms/ank/edit-format.php");
 require_once("${engine_dir}cms/ank/person_school.php");
 require_once("${engine_dir}cms/ank/department.php");
@@ -10,7 +10,7 @@ function xsm_notify_person_edit($person, $old_person)
 
     $full_name = xsm_fio_enc($person);
     $table_title = 'Изменения в анкете: <a'.
-        xsm_ext_href('view-person', array('person_id'=>$person_id)).'>'.
+        xsm_ext_href('view-person', array('person_id' => $person_id)).'>'.
         $full_name.'</a>';
 
     $mail_msg = xsm_build_diff_msg(
@@ -25,6 +25,16 @@ function xsm_notify_person_edit($person, $old_person)
 
     xcms_send_notification("reg", NULL, $mail_msg);
 }
+
+
+function xsm_person_edit_operations($id, $ret_title)
+{
+    $table_name = "person";
+    $is_new = ($id == XDB_NEW);
+    $redir = $is_new ? "list-person-locator" : "view-$table_name&amp;${table_name}_id=$id";
+    xsm_edit_ops($table_name, $is_new, $redir, $ret_title);
+}
+
 
 function xsm_edit_person()
 {
@@ -41,16 +51,16 @@ function xsm_edit_person()
     $fio = xsm_fio_enc($person);
     $fields_desc = xsm_get_fields("person"); ?>
     <form method="post" action="edit-person"><?php
-        xsm_edit_operations('person', $person_id, 'Вернуться к просмотру участника');
-        xsm_draw_field_hidden("person_id", $person_id);
-        xsm_draw_field_hidden("school_id", $school_id);
+        xsm_person_edit_operations($person_id, 'Вернуться к просмотру участника');
+        xcmst_hidden("person_id", $person_id);
+        xcmst_hidden("school_id", $school_id);
         ?>
         <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
                 <td class="ankListRowTitle">Участник <b><?php echo $fio; ?></b></td>
             </tr>
             <?php
-            foreach ($fields_desc as $key=>$desc)
+            foreach ($fields_desc as $key => $desc)
             {
                 if (xsm_is_bottom_field($key))
                     continue;
@@ -77,12 +87,16 @@ function xsm_edit_person()
             }?>
         </table><?php
         xsm_bottom_fields('person', $person);
-        xsm_edit_operations('person', $person_id, 'Вернуться к просмотру участника'); ?>
+        xsm_person_edit_operations($person_id, 'Вернуться к просмотру участника');
+    ?>
     </form>
     <script type="text/javascript">
     $(document).ready(function() {
         xjs_set_depends_on('update-person-submit', 'last_name-input', null, 2);
         xjs_set_depends_on('update-person-submit', 'first_name-input', null, 2);
+
+        xjs_set_depends_on('update-person-submit1', 'last_name-input', null, 2);
+        xjs_set_depends_on('update-person-submit1', 'first_name-input', null, 2);
     });
     </script>
     <?php

@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import xsm
 import xtest_common
 import random_crap
 
@@ -13,12 +14,11 @@ class XcmsXsmChangeStatusQuick(xtest_common.XcmsTest):
     * enter 'all people list'
     * add new person
     * change person status
-    * check person's status and autocomments
+    * check person's status and auto-comments
     """
 
     def run(self):
-
-        testMailPrefix = self.m_conf.getAnketaNamePrefix()
+        self.ensure_logged_off()
 
         self.performLoginAsManager()
 
@@ -26,34 +26,25 @@ class XcmsXsmChangeStatusQuick(xtest_common.XcmsTest):
         self.gotoXsmActive()
         self.gotoXsmAddPerson()
 
-        # generate
-        inpLastName = testMailPrefix + u"Статусов" + random_crap.randomText(4)
-        inpFirstName = u"Иннокентий_" + random_crap.randomText(3)
-        inpMidName = u"Петрович_" + random_crap.randomText(3)
-
-        inpLastName = self.fillElementById("last_name-input", inpLastName)
-        inpFirstName = self.fillElementById("first_name-input", inpFirstName)
-        inpMidName = self.fillElementById("patronymic-input", inpMidName)
-
-        self.clickElementById("update-person-submit")
-
-        self.gotoBackToPersonView()
-
-        fullAlias = inpLastName + " " + inpFirstName + " " + inpMidName
-        # check if person alias is present (person saved correctly)
-
-        self.checkPersonAliasInPersonView(fullAlias)
+        person = xsm.Person(self)
+        person.input(
+            last_name=u"Статусов",
+            first_name=u"Иннокентий",
+            patronymic=u"Петрович",
+            random=True,
+        )
+        person.back_to_person_view()
 
         self.assertElementTextById("anketa_status-span", u"Активный")
 
         self.gotoXsmChangePersonStatus()
 
         self.setOptionValueByIdAndValue("anketa_status-selector", "discuss")
-        commentText = u"Комментарий к смене статуса " + random_crap.randomCrap(5)
-        commentText = self.fillElementById("comment_text-text", commentText)
+        comment_text = u"Комментарий к смене статуса " + random_crap.randomCrap(5)
+        comment_text = self.fillElementById("comment_text-text", comment_text)
 
-        self.clickElementById("update-person_comment-submit-top")
+        self.clickElementById("update-person_comment-submit")
         self.gotoBackToPersonView()
 
         self.assertBodyTextPresent(u"Статус Активный изменён на Обсуждается")
-        self.assertBodyTextPresent(commentText)
+        self.assertBodyTextPresent(comment_text)

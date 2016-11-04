@@ -12,16 +12,16 @@ class XcmsContentTopLevelPage(xtest_common.XcmsTest):
     """
 
     def run(self):
-
+        self.ensure_logged_off()
         self.performLoginAsEditor()
         self.gotoAdminPanel()
 
         self.gotoCreatePage()
 
-        inpPageDir = "topLevelPage_" + random_crap.randomText(6);
-        inpMenuTitle = "topMenuTitle_" + random_crap.randomText(6);
-        inpPageHeader = "topPageHeader_" + random_crap.randomText(6);
-        inpAlias = "top/level/page/" + random_crap.randomText(6);
+        inpPageDir = "topLevelPage_" + random_crap.random_text(6);
+        inpMenuTitle = "topMenuTitle_" + random_crap.random_text(6);
+        inpPageHeader = "topPageHeader_" + random_crap.random_text(6);
+        inpAlias = "top/level/page/" + random_crap.random_text(6);
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir);
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle);
@@ -44,7 +44,7 @@ class XcmsContentTopLevelPage(xtest_common.XcmsTest):
 
         pageText = self.fillAceEditorElement(pageText)
         self.logAdd("Page text after edit: '" + pageText + "'")
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         self.gotoCloseEditor()
 

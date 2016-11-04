@@ -4,7 +4,7 @@ Owner:     mvel
 Actuality: 2.x
 
 This is a global redirector to CONTEST template. It allows us to
-write ref=xsm without any paths (since global/* is accessible without
+write "ref=contest" without any paths (since global/* is accessible without
 paths).
 */
 ?><# contest/contest #>

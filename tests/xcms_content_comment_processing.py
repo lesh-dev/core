@@ -8,7 +8,7 @@ import random_crap
 class XcmsContentCommentProcessing(xtest_common.XcmsTest):
 
     def run(self):
-
+        self.ensure_logged_off()
         self.performLoginAsAdmin()
         self.gotoAdminPanel()
 
@@ -17,10 +17,10 @@ class XcmsContentCommentProcessing(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
 
-        inpPageDir = "test_page_" + random_crap.randomText(8)
-        inpMenuTitle = "menu_title_" + random_crap.randomText(8)
-        inpPageHeader = "page_header_" + random_crap.randomText(8)
-        inpAlias = "new/page/alias/" + random_crap.randomText(8)
+        inpPageDir = "test_page_" + random_crap.random_text(8)
+        inpMenuTitle = "menu_title_" + random_crap.random_text(8)
+        inpPageHeader = "page_header_" + random_crap.random_text(8)
+        inpAlias = "new/page/alias/" + random_crap.random_text(8)
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir)
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)
@@ -50,7 +50,7 @@ class XcmsContentCommentProcessing(xtest_common.XcmsTest):
 
         pageText = self.fillAceEditorElement(pageText)
         # print "After ins page text: '" + pageText + "'"
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         self.performLogoutFromAdminPanel()
 

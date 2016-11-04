@@ -44,7 +44,7 @@
     {
         global $preface;
         /* Chrome does not stop from autofilling password and login inputs even when
-        autocomplete="off". But as SO people say, global form autocomplete="off" works
+        'autocomplete="off"'. But as SO people say, global form 'autocomplete="off"' works
         as expected. */
         ?>
         <form method="post" action="?<?php echo $preface; ?>" autocomplete="off">
@@ -67,8 +67,7 @@
                 ?><span class="user-label">Оповестить пользователя</span></div>
             <?php
             xcmst_draw_privileges(NULL);
-            ?>
-            <input type="submit" name="create_user" value="Создать пользователя" />
+            xcmst_submit("create_user", "Создать пользователя"); ?>
         </form><?php
     }
 
@@ -100,12 +99,12 @@
         if ($read_only)
         {?>
             <div style="padding-top: 10px">Свой собственный профиль Вы можете отредактировать
-            <a <?php echo xcms_href(array('mode'=>'myprofile', 'ref'=>'admin')); ?> >здесь</a>.</div><?php
+            <a <?php echo xcms_href(array('mode' => 'myprofile', 'ref' => 'admin')); ?> >здесь</a>.</div><?php
         }
         else
         {?>
             <input name="login" type="hidden" value="<?php echo htmlspecialchars($target_user); ?>"/>
-            <input name="update_user" id="update_user" value="Обновить данные пользователя" type="submit" />
+            <?php xcmst_submit("update_user", "Обновить данные пользователя"); ?>
             <input name="check_delete_user" id="check_delete_user" value="Удалить пользователя"
                 type="submit" class="delete"/><?php
             if (@$_POST['check_delete_user'])
@@ -139,7 +138,7 @@
             $tu = $u->create($login, $email);
             $tu->passwd($password);
             $tu->set_param("name", $name);
-            foreach (xcms_all_groups() as $group=>$title)
+            foreach (xcms_all_groups() as $group => $title)
             {
                 $g = substr($group, 1);
                 if (@$_POST["group_$g"])
@@ -170,7 +169,7 @@
             foreach (array("name", "email") as $field)
                 $user->set_param($field, xcms_get_key_or($_POST, $field));
 
-            foreach (xcms_all_groups() as $group=>$title)
+            foreach (xcms_all_groups() as $group => $title)
             {
                 $g = substr($group, 1);
                 if (@$_POST["group_$g"])
@@ -219,7 +218,7 @@
             <?php xcmst_draw_user_list($u, $target_user); ?>
         </div>
         <div class="user-ops">
-        <a class="user-ops-close" <?php echo xcms_href(array('ref'=>$ref, 'mode'=>'user_manage', 'page'=>$pageid)); ?> >&nbsp;</a>
+        <a class="user-ops-close" <?php echo xcms_href(array('ref' => $ref, 'mode' => 'user_manage', 'page' => $pageid)); ?> >&nbsp;</a>
         <?php
         if ($messages !== null)
         {

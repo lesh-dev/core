@@ -10,5 +10,5 @@ if (xcms_user()->check_rights("editor", false) || xcms_user()->check_rights("adm
     ?>
     <a id="content-edit-<?php echo $fpid; ?>" class="link-button content-edit"
         href="/<# web_prefix #>?<?php
-        echo xcms_url(array('ref'=>'admin', 'page'=>$pageid)); ?>"><?php echo $button_title; ?></a><?php
+        echo xcms_url(array('ref' => 'admin', 'page' => $pageid)); ?>"><?php echo $button_title; ?></a><?php
 }?>

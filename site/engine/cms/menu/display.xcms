@@ -14,7 +14,7 @@
     $add_href_params = "";
     $ref_value = xcms_get_key_or($_GET, "ref");
     if ($ref_value != "index")
-        $add_href_params = xcms_url(array('ref'=>$ref_value));
+        $add_href_params = xcms_url(array('ref' => $ref_value));
 
     xcms_menu(
         xcms_get_page_root(false),

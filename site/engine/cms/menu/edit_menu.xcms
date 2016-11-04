@@ -32,6 +32,6 @@
         <?php xcmst_control("menu-hidden", xcms_get_key_for_checkbox($INFO, "menu-hidden"), "", "", "checkbox",
             "Не будет отображаться в меню (хотя и доступен по прямой ссылке)"); ?>
     </div>
-    <input type="submit" name="change-menu" value="Сохранить" />
+    <?php xcmst_submit("change-menu", "Сохранить"); ?>
     </form>
 </div>

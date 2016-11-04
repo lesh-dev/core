@@ -15,23 +15,35 @@ specialCharsDefault = '.,!?;:"<>-=@%$^&*()\''
 specialCharsWoAngle = '.,!?;:"-=@%$^&*()\''
 
 
-def randomText(length):
+def random_text(length):
     rs = ""
     for i in range(0, length):
         rs = rs + random.choice('abcdef0123456789')
     return rs
 
 
+def phone():
+    return "+7" + randomDigits(9)
+
+
+def email():
+    return random_text(7) + "@" + random_text(5) + ".ru",
+
+
 def randomEmail():
-    return "mail_test_" + randomText(8) + "@example.com"
+    # FIXME: DEPRECATED, use email()
+    return "mail_test_" + random_text(8) + "@example.com"
+
+
+def date():
+    return randomDigits(2) + "." + randomDigits(2) + "." + randomDigits(4)
 
 
 def randomVkontakte():
     return "http://vk.com/id" + randomDigits(10)
 
 
-def randomWord(length, wordOptions=[], specialChars=specialCharsDefault):
-    rs = ""
+def randomWord(length, wordOptions=None, specialChars=specialCharsDefault):
 
     if not wordOptions:
         wordOptions = []
@@ -67,11 +79,11 @@ def randomWord(length, wordOptions=[], specialChars=specialCharsDefault):
 def randomDigits(length):
     rs = ""
     for i in range(0, length):
-        rs = rs + str(random.choice('0123456789'))
+        rs += str(random.choice('0123456789'))
     return rs
 
 
-def randomCrap(wordNumber, crapOptions=[], specialChars=specialCharsDefault):
+def randomCrap(wordNumber, crapOptions=None, specialChars=specialCharsDefault):
     rs = ""
     for i in range(0, wordNumber):
         separator = " "

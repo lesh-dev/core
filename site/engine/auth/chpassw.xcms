@@ -44,7 +44,7 @@ if ($result !== true)
         <tr><td>Новый пароль (ещё раз)</td><td><input name="new_passwd_confirm" id="new_passwd_confirm-input"
             type="password" value="<?php echo htmlspecialchars($new_passwd); ?>" /></td></tr>
     </table>
-    <input type="submit" value="Сменить пароль" name="change_my_password" id="change_my_password-submit"/>
+    <?php xcmst_submit("change_my_password", "Сменить пароль"); ?>
     </form><?php
 }
 ?></div>

@@ -1,3 +1,4 @@
+.idea
 site/.prec
 site/admin_doc/.prec/*
 site/doc/html
@@ -9,7 +10,10 @@ site/fizlesh.ru-content/*
 site/settings.php
 site/install.php
 site/engine.log
-tests/*.pyc
+*.pyc
+tests/contest-work-sample.png
+tests/current-page.html
 tools/optimize-images/oim
 *.sublime-project
 *.sublime-workspace
+fizlesh.sqlite3

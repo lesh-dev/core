@@ -63,8 +63,8 @@ function xcms_create_contlist()
 
     xcms_process_page_diff("", $content, $item_pageid);
     ?>
-    <meta http-equiv="refresh" content="2;URL=/<# web_prefix #>?<?php
-        echo xcms_url(array('page'=>$item_pageid, 'ref'=>'admin'));?>" />
+    <meta http-equiv="refresh" content="2;URL=/<# web_prefix #>?<?php  // nostyle
+        echo xcms_url(array('page' => $item_pageid, 'ref' => 'admin'));?>" />
     <h3>Подождите, сейчас произойдёт перенаправление
         на страницу администрирования...</h3><?php
     return true;
@@ -124,7 +124,7 @@ function xcms_draw_contlist_create($result = true)
             </td>
         </tr>
     </table>
-    <input type="submit" name="contlist-create" id="contlist-create-submit" value="Добавить"/>
+    <?php xcmst_submit("contlist-create", "Добавить"); ?>
     <script type="text/javascript">
         xjready_set_depends_on('contlist-create-submit', 'header-input', null, 3);
     </script>
@@ -139,8 +139,11 @@ function xcms_draw_contlist_create($result = true)
             "{$SETTINGS["content_dir"]}cms/pages/$pageid",
             file($template_file),
             1,
-            xcms_url(array('ref' =>$_GET["ref"])),
-            array("devel"=>true, "show"=>"all"),
+            xcms_url(array('ref' => $_GET["ref"])),
+            array(
+                "devel" => true,
+                "show" => "all",
+            ),
             0, 999);
         ?>
         </div>

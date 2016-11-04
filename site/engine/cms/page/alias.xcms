@@ -1,4 +1,7 @@
 <?php
+
+require_once("${engine_dir}sys/template.php");
+
 function xcmst_check_alias($info)
 {
     global $pageid;
@@ -32,7 +35,7 @@ function xcmst_check_alias($info)
 
     $info["alias"] = $new_alias;
     xcms_save_list(xcms_get_info_file_name(), $info);
-    foreach ($aliases as $alias=>$value)
+    foreach ($aliases as $alias => $value)
     {
         if ($value == $pageid)
         {
@@ -62,9 +65,9 @@ function xcmst_check_alias($info)
 ?>
     <div>
         <span class="admin-form-label">Alias</span>
-        <input type="text" class="admin-long" xcms-track-changes="yes" name="alias"
+        <input type="text" class="admin-long" name="alias"
             value="<?php echo @$info["alias"]; ?>" />
     </div>
-    <input type="submit" name="change-alias" value="Сохранить" />
+    <?php xcmst_submit("change-alias", "Сохранить"); ?>
     </form>
 </div>

@@ -3,7 +3,7 @@
 echo -n "Source version: "
 cat site/VERSION
 echo "Last tags:"
-git tag | sort -V | tail -n 5
+git tag | sort -Vr | head -n 5
 echo "Pushing to github..."
 git push
 echo "    and tags..."

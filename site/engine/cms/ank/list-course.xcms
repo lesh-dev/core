@@ -10,7 +10,7 @@ function xsm_print_courses()
     xsm_print_recent_schools($db, $school_id, 'course');
 
     $show_course_desc = xcms_get_persistent_key("list-course", "show_course_desc");
-    $form_action = xcms_url(array('school_id'=>$school_id));
+    $form_action = xcms_url(array('school_id' => $school_id));
     ?>
     <form method="post" name="filter" class="xsm-filter" id="filter-form"
         action="list-course<?php echo $form_action; ?>" >

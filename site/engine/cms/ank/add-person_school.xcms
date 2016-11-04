@@ -78,7 +78,7 @@ function xsm_add_person_school()
     $school = xdb_get_entity_by_id('school', $school_id);
     $school_title = xcms_get_key_or($school, 'school_title');
 
-    $school_url = "list-person".xcms_url(array('school_id'=>$school_id));
+    $school_url = "list-person".xcms_url(array('school_id' => $school_id));
     ?>
     <table class="ankEdit">
         <tr><td class="ankListRowTitle">Добавить участников на школу
@@ -94,7 +94,7 @@ function xsm_add_person_school()
         <form method="post" action="add-person_school">
         <tr><td class="ankList"><span class="ankEditField xsm-label">Добавить участника</span><?php
             echo xsm_make_add_person_school_selector($school_id, $already_added);
-            xsm_draw_field_hidden("school_id", $school_id);
+            xcmst_hidden("school_id", $school_id);
         ?>
             <span>
                 <br/>Символом &#9679; отмечены активные участники,
@@ -104,7 +104,7 @@ function xsm_add_person_school()
             </span>
         </td></tr><?php
 
-        foreach ($fields_desc as $key=>$desc)
+        foreach ($fields_desc as $key => $desc)
         {
             if ($key != 'member_department_id' && $key != 'is_teacher' && $key != 'is_student')
                 continue;
@@ -114,11 +114,9 @@ function xsm_add_person_school()
                 xsm_draw_department_selector("");
             xsm_draw_generic_fields_end();
         }?>
-        <tr><td class="ankList">
-            <input type="submit" name="add-person_school" value="Добавить" />
-
-            <a id="return-to-school" class="link-button ank"
-                href="<?php echo $school_url; ?>">Вернуться к просмотру списка школы</a>
+        <tr><td class="ankList"><?php
+            xcmst_submit("add-person_school", "Добавить");
+            xcmst_link($school_url, "return-to-school", "Вернуться к просмотру списка школы", "", "link-button ank"); ?>
         </td></tr>
         </form>
     </table>

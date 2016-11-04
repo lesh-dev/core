@@ -2,7 +2,7 @@
 if (xcms_user()->check_rights("registered", false))
 {?>
     <a title="Личный кабинет"
-        href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'cabinet')); ?>"
+        href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page' => $pageid, 'ref' => 'cabinet')); ?>"
         ><?php echo xcms_user()->login(); ?></a> | <?php
 }
 
@@ -23,7 +23,7 @@ if (xcms_user()->check_rights("ank", false))
 if (xcms_user()->check_rights("admin", false))
 {?>
     <a title="Админка"
-        href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page'=>$pageid, 'ref'=>'admin')); ?>"
+        href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page' => $pageid, 'ref' => 'admin')); ?>"
         >Админка</a> | <?php
 }
 
@@ -31,13 +31,13 @@ if (xcms_user()->check_rights("registered", false))
 {?>
     <a title="Выход"
         href="<?php echo $meta_site_url_secure.'?'.
-        xcms_url(array('page'=>$pageid, 'ref'=>'cabinet', 'mode'=>'logout')); ?>"
+        xcms_url(array('page' => $pageid, 'ref' => 'cabinet', 'mode' => 'logout')); ?>"
         >Выход</a><?php
 }
 else
 {?>
     <a href="<?php echo $meta_site_url_secure.'?'.
-        xcms_url(array('page'=>$pageid, 'ref'=>'login', 'return'=>'?ref=index')); ?>"
+        xcms_url(array('page' => $pageid, 'ref' => 'login', 'return' => '?ref=index')); ?>"
         >Авторизация</a><?php
 }
 ?>

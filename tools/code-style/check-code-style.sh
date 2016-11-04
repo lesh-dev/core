@@ -7,7 +7,11 @@ set -e
 
 # ignore list (contrib files whose code style
 # we don't want to verify
-ignore_list_files="class.phpmailer.php finediff.php jquery-1.7.1.min.js"
+ignore_list_files=""
+ignore_list_files="$ignore_list_files class.phpmailer.php"
+ignore_list_files="$ignore_list_files finediff.php"
+ignore_list_files="$ignore_list_files jquery-1.12.3.min.js"
+
 ignore_list_dirs="/forum/ /bootstrap/ /ace/"
 
 # some settings that you don't need to touch
@@ -15,7 +19,8 @@ path="."
 my_base="$(dirname "$(readlink -f "$0")")"
 tmp="/tmp"
 
-interactive=false
+interactive="no"
+autofix="no"
 editor=$EDITOR
 
 print_usage()
@@ -25,6 +30,7 @@ Usage: `basename $0` <options>
     -h  --help                  Show this help
     -n  --names-only            Print only failed file names-only
     -f  --file <file-name>      Check only given file
+    -a  --autofix               Apply automated fixer
     -c  --commit                Check all modified files in GIT repo
                                 You must be inside GIT repo to use it
     -i  --interactive           Interactive mode. You will be prompted
@@ -76,7 +82,12 @@ while [ -n "$1" ] ; do
     fi
     if [ "$1" == "-i" ] || [ "$1" == "--interactive" ] ; then
         shift
-        interactive=true
+        interactive="yes"
+        continue
+    fi
+    if [ "$1" == "-a" ] || [ "$1" == "--autofix" ] ; then
+        shift
+        autofix="yes"
         continue
     fi
     if [ "$1" == "-e" ] || [ "$1" == "--editor" ] ; then
@@ -98,6 +109,14 @@ fail=
 check_file()
 {
     fn="$1"
+    # apply autofix if requested
+    if [ "$autofix" == "yes" ] ; then
+        if ! $my_base/autofix.py "$fn" ; then
+            echo "*** Autofix failed for $fn ***"
+            return
+        fi
+    fi
+    # and then check
     if $my_base/check.py "$fn" > $tmp/check-result ; then
         return
     fi
@@ -108,7 +127,7 @@ check_file()
         echo "*** Checking '$fn' failed:"
         cat $tmp/check-result
         echo
-        if [ $interactive == true ]; then
+        if [ $interactive == "yes" ]; then
             while [ true ]; do
                 read -p "Do you want to edit this file? (yes/no)" ans
                 if [ "$ans" == "yes" ]; then

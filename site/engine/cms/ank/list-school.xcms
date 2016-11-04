@@ -17,10 +17,10 @@ function xsm_school_list()
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
             <col width="60" />
+            <col width="20%" />
             <col width="10%" />
             <col width="10%" />
-            <col width="10%" />
-            <col width="70%" />
+            <col width="60%" />
         </colgroup>
         <thead>
             <th class="ankList">ID</th>
@@ -36,9 +36,9 @@ function xsm_school_list()
         $member_count = xdb_count($db, "SELECT COUNT(*) AS cnt FROM person_school ps WHERE ps.school_id = $school_id");
         $course_count = xdb_count($db, "SELECT COUNT(*) AS cnt FROM course c WHERE c.school_id = $school_id");
         $school_title = htmlspecialchars($school["school_title"]);
-        $school_view_url = "view-school".xcms_url(array('school_id'=>$school_id));
-        $school_members_url = "list-person".xcms_url(array('school_id'=>$school_id));
-        $school_courses_url = "list-course".xcms_url(array('school_id'=>$school_id));
+        $school_view_url = "view-school".xcms_url(array('school_id' => $school_id));
+        $school_members_url = "list-person".xcms_url(array('school_id' => $school_id));
+        $school_courses_url = "list-course".xcms_url(array('school_id' => $school_id));
         ?>
         <tr>
             <td class="ankList"><?php echo $school_id; ?></td>

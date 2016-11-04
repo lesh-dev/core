@@ -40,25 +40,25 @@
             $meta_site_mail = "support@".$_SERVER["HTTP_HOST"];
 
         return array(
-            "site_name"=>array(
-                "name"=>"Название веб-сайта",
-                "type"=>"string",
-                "default"=>$meta_site_name,
+            "site_name" => array(
+                "name" => "Название веб-сайта",
+                "type" => "string",
+                "default" => $meta_site_name,
             ),
-            "site_log_path"=>array(
-                "name"=>"Путь до log-файлов",
-                "type"=>"string",
-                "default"=>$meta_site_log_path,
+            "site_log_path" => array(
+                "name" => "Путь до log-файлов",
+                "type" => "string",
+                "default" => $meta_site_log_path,
             ),
-            "site_url"=>array(
-                "name"=>"Адрес веб-сайта",
-                "type"=>"string",
-                "default"=>$meta_site_url,
+            "site_url" => array(
+                "name" => "Адрес веб-сайта",
+                "type" => "string",
+                "default" => $meta_site_url,
             ),
-            "webmaster_mail"=>array(
-                "name"=>"Адрес службы техподдержки",
-                "type"=>"string",
-                "default"=>$meta_site_mail,
+            "webmaster_mail" => array(
+                "name" => "Адрес службы техподдержки",
+                "type" => "string",
+                "default" => $meta_site_mail,
             ),
         );
     }
@@ -96,10 +96,19 @@
         $result = xcms_append("settings.php",
             "<?php\n/* This block was inserted by installer -- sitemeta.php.".
             "\nYou may edit it, but it can be regenerated. */".
-            "\n   \$meta_site_name = '".$config["site_name"]."';".
-            "\n   \$meta_site_url = '".$config["site_url"]."';".
-            "\n   \$meta_site_log_path = '".$config["site_log_path"]."';".
-            "\n   \$meta_site_mail = '".$config["webmaster_mail"]."';".
+
+            "\n    global \$meta_site_name;".
+            "\n    \$meta_site_name = '".$config["site_name"]."';".
+
+            "\n    global \$meta_site_url;".
+            "\n    \$meta_site_url = '".$config["site_url"]."';".
+
+            "\n    global \$meta_site_log_path;".
+            "\n    \$meta_site_log_path = '".$config["site_log_path"]."';".
+
+            "\n    global \$meta_site_mail;".
+            "\n    \$meta_site_mail = '".$config["webmaster_mail"]."';".
+
             "\n/* --- */\n?>");
         if (!$result)
             return "Cannot open 'settings.php' for append. ";

@@ -32,7 +32,8 @@
         catch(Exception $e)
         {
             $AuthReason = "Пароль всё ещё неверный";
-            ?><# auth/auth_form #><?php
+            ?><!DOCTYPE html><html><body>
+            <# auth/auth_form #></body></html><?php
         }
     }
 
@@ -62,7 +63,9 @@
         catch(Exception $e)
         {
             $AuthReason = $e->getMessage();
-            ?><# auth/auth_form #><?php
+            ?><!DOCTYPE html><html><body>
+            <# auth/auth_form #>
+            </body></html><?php
         }
     }
 
@@ -77,6 +80,8 @@
         if (isset($Exception))
             $AuthReason =  $Exception->getMessage();
 
-        ?><# auth/auth_form #><?php
+        ?><!DOCTYPE html><html><body>
+        <# auth/auth_form #>
+        </body></html><?php
     }
 ?>

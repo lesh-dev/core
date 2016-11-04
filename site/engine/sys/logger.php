@@ -19,6 +19,16 @@
     // database errors
     define('XE_DB_OBJECT_NOT_FOUND',  2000);
 
+    $XLOG_LEVELS = array(
+        XLOG_ERROR => 'ERROR',
+        XLOG_WARNING => 'WARNING',
+        XLOG_INFO => 'INFO',
+        XLOG_DEBUG => 'DEBUG',
+    );
+
+    require_once("${engine_dir}sys/file.php");
+    require_once("${engine_dir}sys/util.php");
+
     /**
       * Get a log file name
       * @return Log file name
@@ -43,7 +53,10 @@
       **/
     function xcms_log($log_level, $message)
     {
-        xcms_append(xcms_log_filename(), "[".xcms_datetime()."]: $message\n");
+        global $XLOG_LEVELS;
+        $str_level = $XLOG_LEVELS[$log_level];
+        $timestamp = xcms_datetime();
+        xcms_append(xcms_log_filename(), "[$str_level][$timestamp]: $message\n");
     }
 
     /**

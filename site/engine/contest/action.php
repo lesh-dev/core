@@ -29,13 +29,13 @@ function xcmst_contest_delete_entity()
     <table class="table table-striped table-bordered table-condensed table-hover"><?php
 
     $record = xdb_get_entity_by_id($table_name, $entry_id);
-    foreach ($record as $key=>$value)
+    foreach ($record as $key => $value)
     {
         echo "<tr><td>$key</td><td>$value</td></tr>\n";
     }?>
     </table>
     <form method="post">
-        <input name="delete" value="Удалить запись окончательно" class="btn btn-danger" type="submit" />
+    <?php xcmst_submit("delete", "Удалить запись окончательно", "Восстановление будет невозможно", "btn btn-danger"); ?>
     </form><?php
 }
 
@@ -66,17 +66,16 @@ function ctx_print_result_row($work, $probs, $simple = false)
     else
     {
         $level = xcms_get_key_or($work, "level");
-        $links_html = "";
+        $links_html = array();
         $work_link = xcms_get_key_or($work, "work");
         if (xu_not_empty($work_link))
-            $links_html .= "<a href=\"/$web_prefix$work_link\">Скачать</a>";
+            $links_html[] = "<a href=\"/$web_prefix$work_link\">Скачать</a>";
         $fileexchange = xcms_get_key_or($work, "fileexchange");
         if (xu_not_empty($fileexchange))
         {
-            if (xu_not_empty($links_html))
-                $links_html .= "&nbsp;";
-            $links_html .= "<a href=\"$fileexchange\">Файлообменник</a>";
+            $links_html[] = "<a href=\"$fileexchange\">Файлообменник</a>";
         }
+        $links_html = implode('&nbsp;|&nbsp;', $links_html);
 
         $row .=
             "<td><a href=\"$view\">$name</a></td>".

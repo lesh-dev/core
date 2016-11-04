@@ -4,30 +4,39 @@
     $show_department_id = xcms_get_persistent_key("list-ank", "show_department_id", XDB_INVALID_ID);
     $show_forest_num = xsm_get_persistent_enum_key("list-tour", "show_forest_num", "show_forest_num");
 ?>
-<p>В этом списке показываются активные и принятые или полупринятые школьники и преподы.</p>
+<p>В этом списке показываются активные и принятые или полупринятые школьники и преподы.
+    Таблица <b>одна на все годы</b>, т.к. эти данные нужны только для маёвок.
+    Чтобы выставить статусы леса по умолчанию, воспользуйтесь кнопкой <b>Очистка статусов</b>.
+</p>
+<p>
+    <font color="red"><b>NEW!</b></font> Доступно редактирование лесных статусов (M1-M3)
+    и колонок о снаряжении по двойному щелчку на ячейке (баг <a href="https://dev.fizlesh.ru/lesh/ticket/886">#866</a>)
+</p>
 <form method="post" class="xsm-filter" name="filter" id="filter-form" action="list-tour">
     <span>Фильтр: </span><?php
     xsm_draw_department_selector($show_department_id, 'show_department_id', "Все отделения"); ?><i>
     </i><span class="ankListField">По выходу: </span><?php
     echo xsm_make_enum_by_type("show_forest_num", $show_forest_num, "show_forest_num"); ?><i>
     </i><?php xsm_draw_fio_filter(); ?><i>
-    </i><input type="submit" name="show-person" value="Показать" />
+    </i><?php xcmst_submit("show-person", "Показать"); ?>
 </form>
 <script type="text/javascript">
     xsm_filter_form_autosubmit();
+    $(xsm_set_editors);
 </script>
+
+<div style="display: inline-block; float: right">
+<form method="post" id="clear_forest-form" action="list-tour">
+    <?php xcmst_submit("clear_forest", "Очистка статусов", "Будьте внимательны, это действие нельзя отменить"); ?>
+</form>
+</div>
+
 <?php
 
-function xsm_show_tour_list()
+function xsm_get_forest_selector($db, $single_forest, $show_name_filter)
 {
     global $show_department_id;
     global $show_forest_num;
-
-    $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
-    $single_forest = ($show_forest_num != xsm_get_enum_default_value("show_forest_num"));
-    $forest_num = $single_forest ? $show_forest_num[7] : '';
-
-    $db = xdb_get();
 
     // base filter condition
     $cond =
@@ -68,9 +77,52 @@ function xsm_show_tour_list()
 
     if (strlen($cond))
         $query .= " WHERE $cond";
+
     $query .= " ORDER BY NOT (p.is_teacher IS NULL OR LENGTH(p.is_teacher) = 0), p.last_name, p.first_name";
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
-    $person_sel = $db->query($query);
+    return $db->query($query);
+}
+
+
+function xsm_clear_forest($db, $single_forest, $show_name_filter)
+{
+    $person_sel = xsm_get_forest_selector($db, $single_forest, $show_name_filter);
+
+    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $person_id = htmlspecialchars($person["person_id"]);
+        $person_ids[] = $person["person_id"];
+    }
+
+    foreach ($person_ids as $person_id)
+    {
+        $person = xdb_get_entity_by_id('person', $person_id);
+        $person["forest_1"] = 'undef';
+        $person["forest_2"] = 'undef';
+        $person["forest_3"] = 'undef';
+        xdb_insert_or_update('person', array('person_id' => $person_id), $person, xsm_get_fields("person"));
+    }
+
+}
+
+
+function xsm_show_tour_list()
+{
+    global $show_department_id;
+    global $show_forest_num;
+
+    $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
+    $single_forest = ($show_forest_num != xsm_get_enum_default_value("show_forest_num"));
+    $forest_num = $single_forest ? $show_forest_num[7] : '';
+
+    $db = xdb_get();
+
+    if (@$_POST["clear_forest"])
+    {
+        xsm_clear_forest($db, $single_forest, $show_name_filter);
+    }
+
+    $person_sel = xsm_get_forest_selector($db, $single_forest, $show_name_filter);
 
     xsm_view_operations('person', 'участника');
     ?>
@@ -122,27 +174,29 @@ function xsm_show_tour_list()
         $person_created = xsm_ymdhm($person["person_created"]);
         $person_modified = xsm_ymdhm($person["person_modified"]);
 
+        $person_view = "view-person".xcms_url(array("person_id" => $person_id));
+
         $row_class = xsm_get_city_class($school_city);
         // override city class in case of teacher, it's not so important
         if (xcms_checkbox_enabled($is_teacher))
             $row_class = "teacher";
         ?>
-        <tr class="<?php echo $row_class; ?>">
+        <tr row-id="<?php echo $person_id; ?>" class="<?php echo $row_class; ?>" >
             <td class="ankList"><a name="<?php echo "person$person_id"; ?>"
-                /><a href="<?php echo "view-person&amp;person_id=$person_id"; ?>"
+                /><a href="<?php echo $person_view; ?>"
                 title="<?php echo $fio; ?>"><?php echo $fin; ?></a></td>
-            <td class="ankList"><?php echo $current_class; ?></td>
+            <td class="ankList" field-name="current_class"><?php echo $current_class; ?></td>
             <?php if ($single_forest) {?>
-            <td class="ankList c"><?php echo xsm_make_forest_enum($person, (int)($forest_num), "p$person_count"); ?></td>
+            <td class="ankList c" field-name="forest_<?php echo $forest_num; ?>"><?php echo xsm_make_enum($person, $show_forest_num, "p$person_count"); ?></td>
             <?php } else {?>
-            <td class="ankList c"><?php echo xsm_make_forest_enum($person, 1, "p$person_count"); ?></td>
-            <td class="ankList c"><?php echo xsm_make_forest_enum($person, 2, "p$person_count"); ?></td>
-            <td class="ankList c"><?php echo xsm_make_forest_enum($person, 3, "p$person_count"); ?></td>
+            <td class="ankList c" field-name="forest_1" enum-type="forest_status"><?php echo xsm_make_enum($person, "forest_1", "p$person_count"); ?></td>
+            <td class="ankList c" field-name="forest_2" enum-type="forest_status"><?php echo xsm_make_enum($person, "forest_2", "p$person_count"); ?></td>
+            <td class="ankList c" field-name="forest_3" enum-type="forest_status"><?php echo xsm_make_enum($person, "forest_3", "p$person_count"); ?></td>
             <?php } ?>
-            <td class="ankList"><?php echo $tent_capacity; ?></td>
-            <td class="ankList"><?php echo $tour_requisites; ?></td>
+            <td class="ankList" field-name="tent_capacity"><?php echo $tent_capacity; ?></td>
+            <td class="ankList" field-name="tour_requisites"><?php echo $tour_requisites; ?></td>
             <td class="ankList"><?php echo $all_phones; ?></td>
-            <td class="ankList"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
+            <td class="ankList" field-name="anketa_status" enum-type="anketa_status"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php
         }

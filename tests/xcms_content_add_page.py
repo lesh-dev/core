@@ -32,6 +32,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
 
         # avoid spontaneous HTML tags
         self.specChars = random_crap.specialCharsWoAngle  # without <>
@@ -57,10 +58,10 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
 
-        inpPageDir = "test_page_" + random_crap.randomText(8)
-        inpMenuTitle = "menu_title_" + random_crap.randomText(8)
-        inpPageHeader = "page_header_" + random_crap.randomText(8)
-        inpAlias = "new/page/alias/" + random_crap.randomText(8)
+        inpPageDir = "test_page_" + random_crap.random_text(8)
+        inpMenuTitle = "menu_title_" + random_crap.random_text(8)
+        inpPageHeader = "page_header_" + random_crap.random_text(8)
+        inpAlias = "new/page/alias/" + random_crap.random_text(8)
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir)
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)
@@ -76,8 +77,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.clickElementById("create-page-submit")
 
-        #self.logAdd("Opening editor again after redirection. ")
-        #self.gotoEditPageInPlace()
+        # self.logAdd("Opening editor again after redirection. ")
+        # self.gotoEditPageInPlace()
 
         self.m_menuTitle = inpMenuTitle
         self.m_pageHeader = inpPageHeader
@@ -90,9 +91,9 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         pageText = self.fillAceEditorElement(pageText)
         print "After ins page text: '" + pageText + "'"
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
-        self.clickElementById("edit-preview-top")
+        self.clickElementById("preview-submit")
 
         previewElement = "content-text-preview"
         self.assertElementTextById(previewElement, pageText, "preview text does not match entered page text. ")
@@ -103,8 +104,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         newPageText = self.fillAceEditorElement(newPageText)
         print "Generated 2-line page text: '" + newPageText + "'"
 
-        self.clickElementById("edit-submit-top")
-        self.clickElementById("edit-preview-top")
+        self.clickElementById("commit-submit")
+        self.clickElementById("preview-submit")
 
         newPageTextForCheck = newPageText.replace("\n", " ").replace("  ", " ").replace(">>", u"»").replace("<<", u"«").strip()
 
@@ -142,31 +143,31 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         versionUnoText = "version_0001" + "\n" + timestamp()
         versionUnoText = self.fillAceEditorElement(versionUnoText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
         self.wait(timeToWait, "waiting after version 1")
 
         versionDosText = "version_0002" + "\n" + timestamp()
         versionDosText = self.fillAceEditorElement(versionDosText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
         self.wait(timeToWait, "waiting after version 2")
 
         versionTresText = "version_0003" + "\n" + timestamp()
         versionTresText = self.fillAceEditorElement(versionTresText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
         self.wait(timeToWait, "waiting after version 3")
 
-        self.setOptionValueByIdAndIndex("versions-top", 3)
-        self.clickElementById("set-version-top")  # Смотреть версию
+        self.setOptionValueByIdAndIndex("versions-select", 3)
+        self.clickElementById("set_version-submit")  # Смотреть версию
         self.loadWait()
         self.assertAceEditorElementText(versionUnoText)
 
-        self.setOptionValueByIdAndIndex("versions-top", 1)
-        self.clickElementById("set-version-top")  # Смотреть версию
+        self.setOptionValueByIdAndIndex("versions-select", 1)
+        self.clickElementById("set_version-submit")  # Смотреть версию
         self.loadWait()
         self.assertAceEditorElementText(versionTresText)
 
-        self.setOptionValueByIdAndIndex("versions-top", 2)
-        self.clickElementById("set-version-top")  # Смотреть версию
+        self.setOptionValueByIdAndIndex("versions-select", 2)
+        self.clickElementById("set_version-submit")  # Смотреть версию
         self.loadWait()
         self.assertAceEditorElementText(versionDosText)
 
@@ -174,22 +175,22 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         versionLostText = "version_lost" + "\n" + timestamp()
         versionLostText = self.fillAceEditorElement(versionLostText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
         #
         self.wait(10, "Waiting some small time (less than version interval)")
 
         versionDoNotLostText = "version_do_not_lost" + "\n" + timestamp()
         versionDoNotLostText = self.fillAceEditorElement(versionDoNotLostText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
-        self.setOptionValueByIdAndIndex("versions-top", 2)
-        self.clickElementById("set-version-top")  # Смотреть версию
+        self.setOptionValueByIdAndIndex("versions-select", 2)
+        self.clickElementById("set_version-submit")  # Смотреть версию
         self.loadWait()
         self.assertAceEditorElementText(versionTresText, "Here should be version 3, not lost version 4. ")
 
         # finally, check head revision
-        self.setOptionValueByIdAndIndex("versions-top", 1)
-        self.clickElementById("set-version-top")  # Смотреть версию
+        self.setOptionValueByIdAndIndex("versions-select", 1)
+        self.clickElementById("set_version-submit")  # Смотреть версию
         self.loadWait()
         self.assertAceEditorElementText(versionDoNotLostText)
 
@@ -207,7 +208,10 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         wordNumber = 7
         totalLines = 8
 
-        origLines = [random_crap.randomCrap(wordNumber, self.wordOptions, specialChars=self.specChars) for x in xrange(0, totalLines)]
+        origLines = [
+            random_crap.randomCrap(wordNumber, self.wordOptions, specialChars=self.specChars)
+            for _ in xrange(0, totalLines)
+        ]
 
         pageText = linesToHtml(origLines)
 
@@ -217,7 +221,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         print pageText
         print "-" * 30
 
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         # insert one line
         insLine = random_crap.randomCrap(wordNumber, self.wordOptions, specialChars=self.specChars)
@@ -232,7 +236,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         print pageText
         print "-" * 30
 
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         # cut last line
         newLines = newLines[:-1]
@@ -240,7 +244,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         pageText = linesToHtml(newLines)
 
         pageText = self.fillAceEditorElement(pageText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         pageWords = (" ".join(newLines)).split()
 
@@ -259,7 +263,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         pageText = self.fillAceEditorElement(pageText)
 
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         self.gotoCloseEditor()
 
@@ -289,7 +293,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_pageAlias)
         self.assertBodyTextPresent("Alias")
 
-        inpAlias = "changed/newpage/alias/" + random_crap.randomText(8)
+        inpAlias = "changed/newpage/alias/" + random_crap.random_text(8)
 
         inpAlias = self.fillElementByName("alias", inpAlias)
         self.m_pageAlias = inpAlias
@@ -321,7 +325,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.updateAliases()
         self.assertBodyTextPresent(u"Alias может содержать только символы")
-        self.m_pageAlias = "/good/alias/" + random_crap.randomText(6)
+        self.m_pageAlias = "/good/alias/" + random_crap.random_text(6)
         self.updateAliases()
         self.assertBodyTextPresent(u"Список alias-ов обновлён")
         self.wait(3, "wait for redirection after fixing alias")

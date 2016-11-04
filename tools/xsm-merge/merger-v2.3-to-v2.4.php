@@ -52,8 +52,8 @@
         $course_id = $course["course_id"];
         $course_teacher_id = $course["course_teacher_id"];
         $course_teacher = array(
-            "course_id"=>$course_id,
-            "course_teacher_id"=>$course_teacher_id
+            "course_id" => $course_id,
+            "course_teacher_id" => $course_teacher_id
         );
         xdb_insert_ai("course_teachers", "course_teachers_id", $course_teacher, $course_teacher, XDB_OVERRIDE_TS, XDB_USE_AI, $db);
     }

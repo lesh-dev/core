@@ -106,7 +106,7 @@
         }
         ksort($array_ordered);
 
-        foreach ($array_ordered as $order=>$same_order_items)
+        foreach ($array_ordered as $order => $same_order_items)
         {
             foreach ($same_order_items as $value)
             {

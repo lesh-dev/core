@@ -31,7 +31,7 @@
         $params = array();
         $params["basedir"] = ".";
         $args = array();
-        foreach ($_SERVER["argv"] as $i=>$cmd)
+        foreach ($_SERVER["argv"] as $i => $cmd)
         {
             if ($i == 0) continue;
             if (strpos($cmd, '=') !== false)

@@ -18,15 +18,17 @@ class XcmsMailerTestMailRu(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
+
         self.gotoRoot()
 
         inpEMail = self.m_conf.getValidEmail('mail.ru')
         self.removePreviousUsersWithTestEmail(inpEMail)
 
         # first, login as admin
-        inpLogin = "an_mailru_user_" + random_crap.randomText(8)
-        inpPass = random_crap.randomText(10)
-        inpName = u"Вася Пупкин" + random_crap.randomText(6)
+        inpLogin = "an_mailru_user_" + random_crap.random_text(8)
+        inpPass = random_crap.random_text(10)
+        inpName = u"Вася Пупкин" + random_crap.random_text(6)
 
         inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
 

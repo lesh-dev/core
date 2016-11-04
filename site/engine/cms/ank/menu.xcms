@@ -5,34 +5,45 @@ define('XSM_MENU_FIRST', true);
 
 function xsm_menu_item($view, $aux_url, $title, $first = false)
 {
-    global $web_prefix, $aparam;
-    global $XSM_BOOTSTRAP;
+    global $web_prefix;
+    global $aparam;
+
     if (xu_empty($aparam))
         die("Variable 'aparam' is not set. Something is broken. ");
 
-    $url = "$view";
+    $url = $view;
     $aux_class = "";
+    $aux_li_class = "";
+
     if ($first)
         $aux_class .= "first ";
+
     if ($view == $aparam)
     {
         if ($view == "list-person-locator")
         {
             $show_anketa_status = xsm_get_persistent_enum_key("list-person-locator", "show_anketa_status", "show_anketa_status_locator");
             if (strpos($aux_url, "show_anketa_status=$show_anketa_status") !== false)
+            {
                 $aux_class .= "current ";
+                $aux_li_class .= "active ";
+            }
         }
         else
+        {
             $aux_class .= "current ";
+            $aux_li_class .= "active ";
+        }
     }
-    if ($XSM_BOOTSTRAP) echo "<li>";
-    ?><a class="xsm-menu-item <?php echo $aux_class; ?>"
-        href="<?php echo $url.$aux_url; ?>"><?php echo $title; ?></a><?php
-    if ($XSM_BOOTSTRAP) echo "</li>";
+    ?>
+    <li class="<?php echo $aux_li_class; ?>">
+    <a class="xsm-menu-item <?php echo $aux_class; ?>"
+        href="<?php echo $url.$aux_url; ?>"><?php echo $title; ?></a>
+    </li><?php
 }
 
-$u_locator_all = xcms_url(array('show_anketa_status'=>'no-trash'));
-$a_locator_active = array('show_anketa_status'=>'active');
+$u_locator_all = xcms_url(array('show_anketa_status' => 'no-trash'));
+$a_locator_active = array('show_anketa_status' => 'active');
 $a_cs = array();
 $school_id = xcms_get_key_or($_GET, 'school_id');
 if (xu_not_empty($school_id) && $school_id != XDB_NEW)
@@ -43,9 +54,18 @@ if (xu_not_empty($school_id) && $school_id != XDB_NEW)
 $u_locator_active = xcms_url($a_locator_active);
 $u_cs = xcms_url($a_cs);
 
+$person = xsm_find_person_by_email(xcms_user()->email());
+$u_self = "";
+if ($person !== null)
+{
+    $u_self = xcms_url(array(
+        'person_id' => $person['person_id'],
+        'school_id' => XSM_SCHOOL_ANK_ID));
+}
+
 ?>
-<div class="xsm-navbar navbar navbar-inverse"><?php
-    if ($XSM_BOOTSTRAP) echo '<div class="navbar-inner"><ul class="nav">';
+<div class="xsm-navbar navbar navbar-inverse">
+    <div class="navbar-inner"><ul class="nav"><?php
     xsm_menu_item('list-ank', '', 'Анкеты', XSM_MENU_FIRST);
     xsm_menu_item('list-person-locator', $u_locator_all, 'Все люди');
     xsm_menu_item('list-tour', $u_cs, 'Лес');
@@ -54,5 +74,11 @@ $u_cs = xcms_url($a_cs);
     xsm_menu_item('list-course', $u_cs, 'Курсы');
     xsm_menu_item('list-department', '', 'Отделения');
     xsm_menu_item('list-school', '', 'Школы');
-    if ($XSM_BOOTSTRAP) echo '</ul></div>';
-?></div>
+
+    if (xu_not_empty($u_self))
+    {
+        xsm_menu_item('view-person', $u_self, 'Я');
+    }
+    ?>
+    </ul></div>
+</div>

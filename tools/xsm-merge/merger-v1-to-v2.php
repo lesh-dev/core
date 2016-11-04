@@ -119,12 +119,12 @@
         if (strlen($comment_text) > 0)
         {
             $person_comment = array(
-                "comment_text"=>$comment_text,
-                "blamed_person_id"=>$person_id,
-                "owner_login"=>"anonymous",
-                "person_comment_created"=>$person_new["person_created"],
-                "person_comment_modified"=>$person_new["person_modified"],
-                "person_comment_deleted"=>"");
+                "comment_text" => $comment_text,
+                "blamed_person_id" => $person_id,
+                "owner_login" => "anonymous",
+                "person_comment_created" => $person_new["person_created"],
+                "person_comment_modified" => $person_new["person_modified"],
+                "person_comment_deleted" => "");
 
             $person_comment_id = xdb_insert_ai("person_comment", "person_comment_id", $person_comment, $person_comment);
             xcms_log(XLOG_DEBUG, "Write person_comment $person_comment_id");
@@ -134,15 +134,15 @@
         if ($person_old['is_current'] == 'current')
         {
             $person_school = array(
-                "member_person_id"=>$person_id,
-                "school_id"=>"1",
-                "is_student"=>$person_old["is_student"],
-                "is_teacher"=>$person_old["is_teacher"],
-                "curatorship"=>"",
-                "current_class"=>$person_old["current_class"],
-                "courses_needed"=>"8",
-                "person_school_created"=>$person_new["person_created"],
-                "person_school_modified"=>$person_new["person_modified"]);
+                "member_person_id" => $person_id,
+                "school_id" => "1",
+                "is_student" => $person_old["is_student"],
+                "is_teacher" => $person_old["is_teacher"],
+                "curatorship" => "",
+                "current_class" => $person_old["current_class"],
+                "courses_needed" => "8",
+                "person_school_created" => $person_new["person_created"],
+                "person_school_modified" => $person_new["person_modified"]);
             $person_school_id = xdb_insert_ai("person_school", "person_school_id", $person_school, $person_school);
             xcms_log(XLOG_DEBUG, "Write person_school $person_school_id");
             $person_schools++;
@@ -158,7 +158,7 @@
         $course_id = $course['course_id'];
         xcms_log(XLOG_DEBUG, "Read course $course_id");
 
-        $course['school_id'] = '1'; // lesh-2012=1, zesh-2013=2,
+        $course['school_id'] = '1'; // lesh-2012 = 1, zesh-2013 = 2,
 
         $course_id_inserted = xdb_insert_ai("course", "course_id", $course, $course, XDB_NO_OVERRIDE_TS, XDB_NO_USE_AI);
         xcms_log(XLOG_DEBUG, "Write course $course_id_inserted");
@@ -253,7 +253,7 @@
             }
 
             //xcms_log(XLOG_DEBUG, "DUP:   Merge OK");
-            xdb_update("person", array("person_id"=>$person_merged['person_id']), $person_merged, $person_merged, XDB_NO_OVERRIDE_TS);
+            xdb_update("person", array("person_id" => $person_merged['person_id']), $person_merged, $person_merged, XDB_NO_OVERRIDE_TS);
             //xcms_log(XLOG_DEBUG, "Update person ".$person_merged['person_id']);
             ++$merges;
             $dup_merged = true;
@@ -280,12 +280,12 @@
         if (strlen($comment_text) > 0)
         {
             $person_comment = array(
-                "comment_text"=>$comment_text,
-                "blamed_person_id"=>$person_id_inserted,
-                "owner_login"=>"anonymous",
-                "person_comment_created"=>$person_new["person_created"],
-                "person_comment_modified"=>$person_new["person_modified"],
-                "person_comment_deleted"=>"");
+                "comment_text" => $comment_text,
+                "blamed_person_id" => $person_id_inserted,
+                "owner_login" => "anonymous",
+                "person_comment_created" => $person_new["person_created"],
+                "person_comment_modified" => $person_new["person_modified"],
+                "person_comment_deleted" => "");
 
             $person_comment_id = xdb_insert_ai("person_comment", "person_comment_id", $person_comment, $person_comment);
             xcms_log(XLOG_DEBUG, "Write person_comment $person_comment_id");

@@ -17,7 +17,7 @@ class XcmsContentNestedPathPage(xtest_common.XcmsTest):
     """
 
     def run(self):
-
+        self.ensure_logged_off()
         self.performLoginAsEditor()
         self.gotoAdminPanel()
 
@@ -26,10 +26,10 @@ class XcmsContentNestedPathPage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
 
-        inpPageDir = "nested/path/page_" + random_crap.randomText(8)
-        inpMenuTitle = "nested/path/page_" + random_crap.randomText(8)
-        inpPageHeader = "nested/path/page_" + random_crap.randomText(8)
-        inpAlias = "nested/path/page/alias" + random_crap.randomText(8)
+        inpPageDir = "nested/path/page_" + random_crap.random_text(8)
+        inpMenuTitle = "nested/path/page_" + random_crap.random_text(8)
+        inpPageHeader = "nested/path/page_" + random_crap.random_text(8)
+        inpAlias = "nested/path/page/alias" + random_crap.random_text(8)
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir)
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)

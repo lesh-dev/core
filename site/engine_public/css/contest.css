@@ -39,3 +39,7 @@ td.ctx-bad-mark {
     color: #ff0000;
     font-size: 18px;
 }
+
+form.ctx-filter input[type="text"] {
+    vertical-align: top;
+}

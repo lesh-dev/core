@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html><head>
     <title>Contest</title>
-    <# js/bootstrap #>
     <# js/jquery #>
+    <# js/bootstrap #>
     <# js/public control-depends.js #>
     <# css/public contest.css #>
 </head>
@@ -45,8 +45,8 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
 
     if ($show_form)
     {?>
-        <form enctype="multipart/form-data" method="POST">
-            <input type="hidden" name="MAX_FILE_SIZE" value="15000000" /><?php
+        <form enctype="multipart/form-data" method="POST"><?php
+        xcmst_hidden("MAX_FILE_SIZE", "15000000");
 
         $btn_name = "ctx_add_or_edit_form_${table_name}_$fid";
         $cls = "table-condensed";
@@ -57,7 +57,7 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
         if ($pk)
             $values = xdb_get_entity_by_id($table_name, $pk);
 
-        foreach ($CTX_META[$table_name] as $id=>$desc)
+        foreach ($CTX_META[$table_name] as $id => $desc)
         {
             $required = xcms_get_key_or($desc, "required");
             $value = xcms_get_key_or($values, $id);
@@ -78,11 +78,8 @@ function ctx_add_or_edit_form($table_name, $pk, $operation, $return, $fid = "x",
         }
         echo "</table>\n";
         if ($operation == "edit")
-        {?>
-            <input type="submit" class="btn btn-primary"
-                name="<?php echo $btn_name; ?>"
-                id="<?php echo $btn_name; ?>-submit"
-                value="Добавить / Изменить" /><?php
+        {
+            xcmst_submit($btn_name, "Добавить / Изменить", "Внести изменения", "btn btn-primary");
         }
         echo "</form>";
     }
@@ -154,7 +151,7 @@ function ctx_show_list($table_name, $filter, $row_template)
 
         // make header
         $header_template = $row_template;
-        foreach ($fields_desc as $id=>$desc)
+        foreach ($fields_desc as $id => $desc)
         {
             $name = $desc["name"];
             $header_template = str_replace("{".$id."}", $name, $header_template);
@@ -169,7 +166,7 @@ function ctx_show_list($table_name, $filter, $row_template)
     foreach ($rows as $line)
     {
         $template = $row_template;
-        foreach ($fields_desc as $id=>$desc)
+        foreach ($fields_desc as $id => $desc)
         {
             $value = xcms_get_key_or($line, $id);
             $value = htmlspecialchars($value);
@@ -224,6 +221,7 @@ function ctx_show_overall_checking_progress()
 
     $probs = xdb_get_table("problems", $FILTER);
     $works = ctx_get_works();
+    $show_name_filter = xcms_get_key_or($_REQUEST, 'show_name_filter');
 
     $results = ctx_calculate_results($works, $probs);
 
@@ -232,6 +230,24 @@ function ctx_show_overall_checking_progress()
 
     // header
     ?>
+    <form method="post" class="ctx-filter" name="filter" id="filter-form">
+        <span>Фильтр ФИО:&nbsp;</span><?php
+        xcmst_control(
+            "show_name_filter",
+            $show_name_filter,
+            'Фильтр',
+            "",
+            "input",
+            "Будут найдены все участники, в ФИО которых (в&nbsp;любом порядке) встречаются слова запроса, ".
+            "без&nbsp;учёта регистра. Например, 'дан Мих' найдёт Даниила Михайловича, Михаила Данилевского ".
+            "и Богдана Немихульского, но НЕ&nbsp;найдёт Мишу Данилкина (имена условны)"
+        );
+        xcmst_submit("show-person", "Показать", "Применить фильтр", "btn btn-primary"); ?>
+    </form>
+    <script type="text/javascript">
+        //ctx_filter_form_autosubmit();
+    </script>
+
     <p>
         Символом <span class="ctx-legend-symbol"><?php echo CTX_NOT_CHECKED_HT; ?></span> отмечаются непроверенные задачи.
         Символ <span class="ctx-legend-symbol"><?php echo CTX_NO_SOLUTION_HT; ?></span> означает, что решение отсутствует.
@@ -311,7 +327,8 @@ function ctx_show_contestant()
     if (xu_empty($pid))
     {?>
         <div class="tab-pane active" id="def"><?php
-        ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
+        $referer = xcms_get_key_or($_SERVER, "HTTP_REFERER");
+        ctx_add_or_edit_form($table_name, $entry_id, "view", $referer);
         ?><a class="btn btn-warning" href="<?php echo "$ctx_prefix/$table_name/edit/$entry_id"; ?>">Правка</a>
         </div><?php
     }
@@ -333,9 +350,9 @@ function ctx_show_contestant()
         echo "<h3>".$problem["problem_name"]."</h3>";
         $retur = ($sid == XDB_NEW) ? false : 'stay';
         $default_values = array(
-            "problem_id"=>$problem_id,
-            "contestant_id"=>$contestant_id,
-            "resolution_author"=>xcms_user()->param("name"),
+            "problem_id" => $problem_id,
+            "contestant_id" => $contestant_id,
+            "resolution_author" => xcms_user()->param("name"),
         );
         ctx_add_or_edit_form("solutions", $sid, "edit", $retur, "c$contestant_id-p$problem_id", $default_values);
         echo "</div>";
@@ -427,7 +444,8 @@ if ($mode == "view")
     }
     elseif (xu_not_empty($entry_id))
     {
-        ctx_add_or_edit_form($table_name, $entry_id, "view", @$_SERVER["HTTP_REFERER"]);
+        $referer = xcms_get_key_or($_SERVER, "HTTP_REFERER");
+        ctx_add_or_edit_form($table_name, $entry_id, "view", $referer);
         echo "<div><a class=\"btn btn-primary\" href=\"$ctx_prefix/$table_name/edit/$entry_id\">Правка</a></div>";
     }
 }

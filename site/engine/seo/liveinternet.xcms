@@ -4,9 +4,14 @@
     style="border: 0;" width="88" height="15"/></a>
 <script type="text/javascript">
     var img = document.getElementById('counterImage');
-    img.setAttribute('src', '//counter.yadro.ru/hit?t%1;r'+
-        escape(document.referrer)+((typeof(screen)=='undefined')?'':
-        ';s'+screen.width+'*'+screen.height+'*'+(screen.colorDepth?
-        screen.colorDepth:screen.pixelDepth))+';u'+escape(document.URL)+
-        ';'+Math.random());
+    img.setAttribute('src', '//counter.yadro.ru/hit?t%1;r' +
+        escape(document.referrer) +
+        (
+            (typeof(screen) == 'undefined') ?
+                '' :
+                ';s' + screen.width + '*' + screen.height + '*' +
+                    (screen.colorDepth ? screen.colorDepth : screen.pixelDepth)
+        ) +
+        ';u' + escape(document.URL) +
+        ';' + Math.random());
 </script>

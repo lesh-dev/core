@@ -6,7 +6,8 @@
         $LIST["name"] = @$_POST["image-name"];
         $LIST["comment"] = @$_POST["image-comment"];
         $LIST["cat"] = @$_POST["image-cat"];
-        if (!$LIST["cat"]) $LIST["cat"]="none";
+        if (!$LIST["cat"])
+            $LIST["cat"] = "none";
         $name = $LIST["cat"].'-'.time();
     }
 
@@ -49,7 +50,7 @@
 
     if (@$_POST["album-cat"])
     {
-        foreach (@$_POST as $key=>$value)
+        foreach (@$_POST as $key => $value)
         {
             if (strstr($key, "album-chcat-"))
             {
@@ -63,7 +64,7 @@
     $catlist = glob("$dir/*.cat");
     echo "<h3>Категории</h3><form method=\"post\">";
     echo "<font size=\"-2\">* Для удаления категории введите имя \"__FORGET\"</font>";
-    echo "<table>";
+    echo "<table>\n";
     foreach ($catlist as $value)
     {
         $caption = file_get_contents($value);
@@ -71,27 +72,26 @@
         $cat = str_replace("$dir/", "", $cat);
         echo "<tr><td>$cat<td><input name=\"album-chcat-$cat\" value=\"$caption\">";
     }
-    echo "</table><input name=\"album-cat\" type=\"submit\" value=\"Изменить\"></form>";
+    echo "</table>\n";
+    xcmst_submit("album-cat", "Изменить");
+    echo "</form>\n";
     $piclist = glob("$dir/*.pic");
     echo '<h3>Фотографии</h3><table>';
-    foreach ($piclist as $key=>$value)
+    foreach ($piclist as $key => $value)
     {
         $lst = xcms_get_list($value);
         $imgv = str_replace(".pic", "", $value);
         $imgv = str_replace("$dir/", "", $imgv);
-        echo "<tr>
-            <td valign=\"top\"><b><a target=\"_blank\" href=\"?page=$pageid&amp;ref=showphoto&amp;img=$imgv\">{$lst["name"]}</a></b></td>
-            <td><i>{$lst["comment"]}</i></td>
-            <td><u>{$lst["cat"]}</u></td>
-            <td><input value=\"{$lst["picname"]}\"></td>
-            <td><input value=\"{$lst["prename"]}\"></td>
-
-            <td>
-                <form method=\"post\">
-                    <input type=\"hidden\" name=\"name\" value=\"$value\" />
-                    <input type=\"submit\" name=\"Album-Delete-image\" value=\"Удалить\" />
-                </form>
-            </td>";
+        echo "<tr>\n".
+                "<td valign=\"top\"><b><a target=\"_blank\" href=\"?page=$pageid&amp;ref=showphoto&amp;img=$imgv\">{$lst["name"]}</a></b></td>\n".
+                "<td><i>{$lst["comment"]}</i></td>\n".
+                "<td><u>{$lst["cat"]}</u></td>\n".
+                "<td><input value=\"{$lst["picname"]}\"></td>\n".
+                "<td><input value=\"{$lst["prename"]}\"></td>\n".
+                "<td>\n<form method=\"post\">\n";
+        xcmst_hidden("name", $value);
+        xcmst_submit("Album-Delete-image", "Удалить");
+        echo "</form></td>\n";
     }
     echo '</table>';
 ?>
@@ -104,7 +104,7 @@
         <tr><td>Категория</td> <td><input name="image-cat" /></td></tr>
         <tr><td>Файл</td> <td><input type="file" accept="image/*" name="image" /></td></tr>
     </table>
-    <input type="submit" name="Album-Upload-image" value="Загрузить" />
+    <?php xcmst_submit("Album-Upload-image", "Загрузить"); ?>
 </form>
 
 Если Вы не доверяете автоматической пережимке - укажите preview самостоятельно
@@ -116,5 +116,5 @@
         <tr><td>Картинка</td> <td><input type="file" accept="image/*" name="big-image" /></td></tr>
         <tr><td>Маленькая картинка</td> <td><input type="file" accept="image/*" name="small-image" /></td></tr>
     </table>
-    <input type="submit" name="Album-S-Upload-image" value="Загрузить" />
+    <?php xcmst_submit("Album-S-Upload-image", "Загрузить"); ?>
 </form>

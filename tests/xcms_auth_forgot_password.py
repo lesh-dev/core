@@ -22,6 +22,8 @@ class XcmsAuthForgotPassword(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
+
         self.gotoRoot()
 
         inpEMail = self.m_conf.getValidEmail(1)
@@ -29,10 +31,10 @@ class XcmsAuthForgotPassword(xtest_common.XcmsTest):
         self.removePreviousUsersWithTestEmail(inpEMail)
 
         # create new user with ruined memory
-        inpLogin = "oblivion_" + random_crap.randomText(6)
+        inpLogin = "oblivion_" + random_crap.random_text(6)
 
-        inpPass = random_crap.randomText(10)
-        inpName = u"Ruined_Memory_" + random_crap.randomText(6)
+        inpPass = random_crap.random_text(10)
+        inpName = u"Ruined_Memory_" + random_crap.random_text(6)
 
         inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
 
@@ -49,7 +51,7 @@ class XcmsAuthForgotPassword(xtest_common.XcmsTest):
 
         self.fillElementById("reset-email-input", inpEMail)
         self.fillElementById("question-input", self.m_conf.getForgottenPasswordCaptcha())
-        self.clickElementById("reset-submit")
+        self.clickElementById("reset_password-submit")
 
         if self.performLogin(inpLogin, inpPass):
             self.failTest("Password was not reset. Old password works fine. ")

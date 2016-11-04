@@ -4,6 +4,11 @@ span.ankLabel {
     display: inline-block;
     width: 300px;
     padding-left: 2px;
+    float: left;
+}
+
+input.ank-input.long {
+    width: 400px;
 }
 
 div.ankLegend {

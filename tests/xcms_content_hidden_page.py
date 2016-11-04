@@ -15,7 +15,7 @@ class XcmsContentHiddenPage(xtest_common.XcmsTest):
     """
 
     def run(self):
-
+        self.ensure_logged_off()
         self.performLoginAsEditor()
         self.gotoAdminPanel()
 
@@ -24,10 +24,10 @@ class XcmsContentHiddenPage(xtest_common.XcmsTest):
 
         self.gotoCreatePage()
 
-        inpPageDir = "hiddenPage_" + random_crap.randomText(6)
-        inpMenuTitle = "hiddenMenuTitle_" + random_crap.randomText(6)
-        inpPageHeader = "hiddenPageHeader_" + random_crap.randomText(6)
-        inpAlias = "hidden/secret/page/" + random_crap.randomText(6)
+        inpPageDir = "hiddenPage_" + random_crap.random_text(6)
+        inpMenuTitle = "hiddenMenuTitle_" + random_crap.random_text(6)
+        inpPageHeader = "hiddenPageHeader_" + random_crap.random_text(6)
+        inpAlias = "hidden/secret/page/" + random_crap.random_text(6)
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir)
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)
@@ -47,7 +47,7 @@ class XcmsContentHiddenPage(xtest_common.XcmsTest):
 
         pageText = u"Секретный Скрытый Текст" + random_crap.randomCrap(6)
         pageText = self.fillAceEditorElement(pageText)
-        self.clickElementById("edit-submit-top")
+        self.clickElementById("commit-submit")
 
         self.gotoCloseEditor()
         self.performLogout()

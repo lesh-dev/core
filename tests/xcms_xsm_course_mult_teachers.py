@@ -1,131 +1,98 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import re
+import logging
+
+import xsm
 import xtest_common
-import random_crap
 
 
 class XcmsXsmCourseWithMultipleTeachers(xtest_common.XcmsTest):
     """
     This test checks course add functional.
     Steps:
-    * login as manager
+    * login as XSM manager
     * add new school
     * add 3 new teachers
     * add course on this new school
     * populate teacher list
     """
 
-    def addSchool(self):
-        self.gotoXsmSchools()
-        self.gotoXsmAddSchool()
-
-        # generate school number
-        lastDigit = random_crap.randomDigits(1)
-
-        inpSchoolTitle = u"ЛЭШ_205{0}_".format(lastDigit) + random_crap.randomWord(6);
-        inpStart = "205{0}.07.15".format(lastDigit)
-        inpEnd = "205{0}.08.16".format(lastDigit)
-
-        inpSchoolTitle = self.fillElementByName("school_title", inpSchoolTitle)
-        inpStart = self.fillElementByName("school_date_start", inpStart)
-        inpEnd = self.fillElementByName("school_date_end", inpEnd)
-
-        self.m_schoolTitle = inpSchoolTitle
-
-        self.clickElementByName("update-school")
-        self.gotoBackToSchoolView()
-        self.assertBodyTextPresent(inpSchoolTitle)
-
-    def addTeacher(self):
+    def add_teacher(self):
         self.gotoXsmAllPeople()
         self.gotoXsmAddPerson()
+        teacher = xsm.Person(self)
+        teacher.input(
+            last_name=u"Мультипреподов",
+            first_name=u"Сергей",
+            patronymic=u"Викторович",
+            random=True,
+            is_teacher=True,
+        )
+        teacher.back_to_person_view()
+        # FIXME(mvel): is it right that teacher was not added to school?
+        # teacher.add_to_school(school)
 
-        # generate prepod name - to be first in list
-        inpLastName = u"Мультипреподов_" + random_crap.randomText(4)
-        inpFirstName = u"Сергей_" + random_crap.randomText(3)
-        inpMidName = u"Викторович_" + random_crap.randomText(3)
-
-        inpLastName = self.fillElementById("last_name-input", inpLastName)
-        inpFirstName = self.fillElementById("first_name-input", inpFirstName)
-        inpMidName = self.fillElementById("patronymic-input", inpMidName)
-
-        # set student flag
-        self.clickElementById("is_teacher-checkbox")
-
-        self.clickElementById("update-person-submit")
-
-        self.gotoBackToPersonView()
-
-        fullAlias = xtest_common.fullAlias(inpLastName, inpFirstName, inpMidName)
-        # check if person alias is present (person saved correctly)
-
-        self.checkPersonAliasInPersonView(fullAlias)
-
-    def filterTeacherName(self, name):
+    @staticmethod
+    def filter_teacher_name(name):
         if name.startswith("("):
-            return name[4:]
+            return re.sub(r'\(.*?\) *', '', name)
         return name
-    
-    def run(self):
 
+    def run(self):
+        self.ensure_logged_off()
         self.performLoginAsManager()
         self.gotoXsm()
-        
-        self.addSchool()
-        
-        self.addTeacher()
-        self.addTeacher()
-        self.addTeacher()
+        school = xsm.add_test_school(self)
+
+        self.add_teacher()
+        self.add_teacher()
+        self.add_teacher()
 
         self.gotoXsmCourses()
-        self.gotoUrlByLinkText(self.m_schoolTitle)
+        self.gotoUrlByLinkText(school.school_title)
         self.gotoXsmAddCourse()
+        course = xsm.Course(self)
+        course.input(
+            course_title=u"Многопреподный курс",
+            course_comment=u"Комментарий к курсу",
+            course_desc=u"Описание многопредметного курса",
+            target_class=u"7-11",
+            random=True,
+            update=False,
+        )
+        # add first 3 teachers
+        teacher_ids = []
+        teacher_names = []
+        for i in [1, 2, 3]:
+            teacher_id, teacher = self.getOptionValueByIdAndIndex("course_teacher_id-selector", i)
+            teacher_ids.append(teacher_id)
+            teacher = self.filter_teacher_name(teacher)
+            logging.info("Teacher %s: '%s'", i, teacher)
+            teacher_names.append(teacher)
 
-        inpCourseName = u"Многопреподный Курс " + random_crap.randomCrap(4)
-        inpCourseName = self.fillElementByName("course_title", inpCourseName)
-        inpTargetClass = "7-11"
-        inpTargetClass = self.fillElementByName("target_class", inpTargetClass)
-
-        inpDescription = u"Описание многопреподного курса " + random_crap.randomCrap(5, ["multiline"])
-        inpDescription = self.fillElementByName("course_desc", inpDescription)
-
-        inpComment = u"Комментарий к курсу " + random_crap.randomCrap(4, ["multiline"])
-        inpComment = self.fillElementByName("course_comment", inpComment)
-
-        id1, teacher1 = self.getOptionValueByIdAndIndex("course_teacher_id-selector", 1)
-        id2, teacher2 = self.getOptionValueByIdAndIndex("course_teacher_id-selector", 2)
-        id3, teacher3 = self.getOptionValueByIdAndIndex("course_teacher_id-selector", 3)
-        
-        self.logAdd("Teacher 1: " + teacher1)
-        self.logAdd("Teacher 2: " + teacher2)
-        self.logAdd("Teacher 3: " + teacher3)
-        
         self.setOptionValueByIdAndIndex("course_teacher_id-selector", 1)
-
-        self.clickElementByName("update-course")
+        course.input(update=True)
         self.gotoBackToCourseView()
-        self.assertUrlPresent(self.filterTeacherName(teacher1))
-        
+        self.assertUrlPresent(teacher_names[0])
+
         self.gotoUrlByLinkText(u"Редактировать преподов")
-        
-        self.assertUrlPresent(self.filterTeacherName(teacher1))
-        
-        # after first prepod removed from list, teacher2 should take his place.
+
+        self.assertUrlPresent(teacher_names[0])
+
+        # after 1st teacher is removed from list, 2nd teacher should take his place.
         self.setOptionValueByIdAndIndex("course_teacher_id-selector", 1)
         self.clickElementByName("add-teacher")
-        self.assertUrlPresent(self.filterTeacherName(teacher1))
-        self.assertUrlPresent(self.filterTeacherName(teacher2))
+        self.assertUrlPresent(teacher_names[0])
+        self.assertUrlPresent(teacher_names[1])
 
         self.setOptionValueByIdAndIndex("course_teacher_id-selector", 1)
         self.clickElementByName("add-teacher")
-        self.assertUrlPresent(self.filterTeacherName(teacher1))
-        self.assertUrlPresent(self.filterTeacherName(teacher2))
-        self.assertUrlPresent(self.filterTeacherName(teacher3))
+        for teacher in teacher_names:
+            self.assertUrlPresent(teacher)
 
         self.gotoUrlByLinkText(u"Вернуться к просмотру курса")
 
-        self.assertUrlPresent(self.filterTeacherName(teacher1))
-        self.assertUrlPresent(self.filterTeacherName(teacher2))
-        self.assertUrlPresent(self.filterTeacherName(teacher3))
-        
+        for teacher in teacher_names:
+            self.assertUrlPresent(teacher)

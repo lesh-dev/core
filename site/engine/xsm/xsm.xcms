@@ -2,34 +2,24 @@
 <html><!-- HTML5 compatible -->
 <head>
     <# cms/head #>
-    <# css/design default.css #>
-    <?php
-    global $XSM_BOOTSTRAP;
-    $XSM_BOOTSTRAP = (strpos($design_dir, "lesh.org.ru") !== false);
-    if ($XSM_BOOTSTRAP) {?>
-    <# js/bootstrap #><?php
-    }?>
     <# js/jquery #>
+    <# js/bootstrap #>
     <# js/public common.js #>
     <# js/public xsm.js #>
     <# js/public control-depends.js #>
 
     <# css/public xsm.css #>
-    <# css/design ank-manage.css #>
-    <?php if ($XSM_BOOTSTRAP) {?>
     <# css/public xsm-bootstrap.css #>
-    <?php } else {?>
-    <# css/design xsm.css #><?php
-    }?>
 </head>
 <body>
 <?php
+require_once("${engine_dir}xsm/user.php");
+require_once("${engine_dir}xsm/middleware.php");
 require_once("${engine_dir}cms/ank/xsm.php");
 require_once("${engine_dir}cms/ank/pss.php");
 require_once("${engine_dir}cms/ank/field-desc.php");
 require_once("${engine_dir}cms/ank/format.php");
 ?>
-<# cms/ank/middleware #>
 <# cms/ank/db-actions #>
 <table style="width: 100%"><tr><td class="main-field roundBorders xsm-main-field"><div style="position: relative;">
 <a class="xsm-close" href="/<# web_prefix #>?<?php echo xcms_url(array('ref'=>'index')); ?>">&nbsp;</a>
@@ -40,7 +30,7 @@ require_once("${engine_dir}cms/ank/format.php");
         $url = $_SERVER["REQUEST_URI"];
         if (substr($url, strlen($url) - 4) == "/xsm")
         {?>
-            <meta http-equiv="refresh" content="0;URL=/<# web_prefix #>xsm/view" /><?php
+            <meta http-equiv="refresh" content="0;URL=/<# web_prefix #>xsm/list-person" /><?php
         }
     }
     elseif ($aparam == "view")

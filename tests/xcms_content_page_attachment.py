@@ -25,7 +25,7 @@ class XcmsContentPageAttachment(xtest_common.XcmsTest):
     """
 
     def run(self):
-
+        self.ensure_logged_off()
         self.performLoginAsAdmin()
         self.gotoAdminPanel()
 
@@ -34,10 +34,10 @@ class XcmsContentPageAttachment(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
 
-        inpPageDir = "test_page_" + random_crap.randomText(8)
-        inpMenuTitle = "menu_title_" + random_crap.randomText(8)
-        inpPageHeader = "page_header_" + random_crap.randomText(8)
-        inpAlias = "new/page/alias/" + random_crap.randomText(8)
+        inpPageDir = "test_page_" + random_crap.random_text(8)
+        inpMenuTitle = "menu_title_" + random_crap.random_text(8)
+        inpPageHeader = "page_header_" + random_crap.random_text(8)
+        inpAlias = "new/page/alias/" + random_crap.random_text(8)
 
         inpPageDir = self.fillElementById("create-name-input", inpPageDir)
         inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)
@@ -64,7 +64,7 @@ class XcmsContentPageAttachment(xtest_common.XcmsTest):
 
         self.gotoUrlByLinkText(u"Файлы")
 
-        inpFileName = "SomeNameQQQ" + random_crap.randomText(8)
+        inpFileName = "SomeNameQQQ" + random_crap.random_text(8)
         inpFileName = self.fillElementById("attach_target-input", inpFileName)
 
         self.clickElementById("upload_attach-submit")

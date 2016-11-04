@@ -7,6 +7,7 @@
     require_once("${engine_dir}sys/util.php");
     require_once("${engine_dir}sys/controls.php");
     require_once("${engine_dir}sys/auth.php");
+    require_once("${engine_dir}sys/bcrypt/bcrypt.php");
     require_once("${engine_dir}sys/diff/diff-utils.php");
     require_once("${engine_dir}cms/ank/format.php");
     require_once("${engine_dir}cms/ank/ank-proc.php");
@@ -27,6 +28,7 @@
     xcms_string_unit_test();
     xcms_sys_controls_unit_test();
     xcms_keyvalue_unit_test();
+    xcms_bcrypt_unit_test();
     xcms_finediff_unit_test();
     xsm_ank_format_unit_test();
     xsm_ank_proc_unit_test();

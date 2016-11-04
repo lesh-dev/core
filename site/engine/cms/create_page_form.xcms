@@ -24,7 +24,7 @@
     <span class="user-label">Тип содержимого</span>
     <select id="create-pagetype-selector" name="create-pagetype"><?php
     $page_types = xcms_get_tag_list("pagetype");
-    foreach ($page_types as $key=>$value)
+    foreach ($page_types as $key => $value)
     {
         if ($key == XCMS_TAG_NAME)
             continue;
@@ -60,9 +60,9 @@
 </div>
 <div class="user-descr">Этот текст появится наверху страницы</div>
 
-<?php xcmst_print_acl(); ?>
-
-<input name="create-page" id="create-page-submit"
-    type="submit" value="Создать раздел" />
+<?php
+xcmst_print_acl();
+xcmst_submit("create-page", "Создать раздел"); ?>
+?>
 </form>
 </div><!-- admin-widget -->

@@ -9,6 +9,7 @@ class XcmsTestConfig:
         self.m_notifyEmail = "vdm-photo@ya.ru"
         self.m_testAnketaSend = True  # в настоящее время не используется
         self.m_phpErrorCheckFlag = True
+        self.school_name = u"ЛЭШ-2013"
 
     def getAdminLogin(self):
         return self.m_adminLogin
@@ -22,13 +23,6 @@ class XcmsTestConfig:
     def getPhpErrorCheckFlag(self):
         return self.m_phpErrorCheckFlag
 
-    def getAnketaNamePrefix(self):
-        """
-            Артефакт старого режима тестирования анкет, в котором в имена приписывались
-            слова TEST, NO-MAIL-TEST и т.п.
-        """
-        return ""
-
     def getForgottenPasswordCaptcha(self):
         return u"ампер"
 
@@ -41,4 +35,7 @@ class XcmsTestConfig:
             return "m.velt@mail.ru"
 
     def getTestSchoolName(self):
-        return u"ЛЭШ-2013"
+        return self.school_name
+
+    def set_test_school_name(self, school_name):
+        self.school_name = school_name

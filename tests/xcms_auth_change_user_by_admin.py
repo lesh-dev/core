@@ -11,11 +11,13 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
+
         # first, login as admin
-        inpLogin = "priv_user_" + random_crap.randomText(8)
+        inpLogin = "priv_user_" + random_crap.random_text(8)
         inpEMail = random_crap.randomEmail()
-        inpPass = random_crap.randomText(10)
-        inpName = u"Саша Тестов" + random_crap.randomText(6)
+        inpPass = random_crap.random_text(10)
+        inpName = u"Саша Тестов" + random_crap.random_text(6)
 
         inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
 
@@ -46,7 +48,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.assertElementValueById("name-input", inpName)
         self.assertElementValueById("email-input", inpEMail)
 
-        inpName = inpName + "_changed"
+        inpName += "_changed"
 
         inpName = self.fillElementById("name-input", inpName)
         print "New user name: ", inpName
@@ -58,7 +60,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.clickElementById("group_admin-checkbox")
         self.assertCheckboxValueById("group_admin-checkbox", True)
 
-        self.clickElementById("update_user")
+        self.clickElementById("update_user-submit")
 
         self.performLogoutFromAdminPanel()
 
@@ -90,7 +92,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.assertCheckboxValueById("group_admin-checkbox", False)
         self.assertCheckboxValueById("group_editor-checkbox", True)
 
-        self.clickElementById("update_user")
+        self.clickElementById("update_user-submit")
 
         self.performLogoutFromAdminPanel()
 
@@ -136,7 +138,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.assertCheckboxValueById("group_editor-checkbox", False)
         self.assertCheckboxValueById("group_ank-checkbox", True)
 
-        self.clickElementById("update_user")
+        self.clickElementById("update_user-submit")
 
         self.performLogoutFromAdminPanel()
 

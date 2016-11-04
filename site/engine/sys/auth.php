@@ -433,7 +433,7 @@
       * This one returns current user object. It will have name "anonymous" if no logged in user.
       * If parameter(s) specified, they're pushed to session.
       **/
-    function xcms_user($login = NULL, $password= NULL)
+    function xcms_user($login = NULL, $password = NULL)
     {
         if ($login != NULL)
             $_SESSION["user"] = $login;

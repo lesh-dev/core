@@ -38,7 +38,7 @@ function xsm_update_person_school($title, $fields_desc)
     }
     else
     {
-        $res = xdb_insert_or_update($table_name, array($key_name=>$id), $_POST, $fields_desc);
+        $res = xdb_insert_or_update($table_name, array($key_name => $id), $_POST, $fields_desc);
         if ($res)
         {
             $id = $res;
@@ -50,7 +50,7 @@ function xsm_update_person_school($title, $fields_desc)
             <p>Не удалось добавить <?php echo $title; ?>.<?php
         }
     }
-    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
+    $redir = "view-person".xcms_url(array('person_id' => $person_id, 'school_id' => $school_id));
     ?>
     <a href="<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
 }
@@ -63,13 +63,13 @@ function xsm_add_person_to_school($school_id, $person_id)
         return;
 
     $person_school = array(
-        'school_id'=>$school_id,
-        'member_person_id'=>$person_id,
-        'is_teacher'=>$_POST['is_teacher'],
-        'is_student'=>$_POST['is_student'],
-        'member_department_id'=>$_POST['department_id'],
+        'school_id' => $school_id,
+        'member_person_id' => $person_id,
+        'is_teacher' => $_POST['is_teacher'],
+        'is_student' => $_POST['is_student'],
+        'member_department_id' => $_POST['department_id'],
     );
-    $ps_result = xdb_insert_or_update("person_school", array("person_school_id"=>XDB_NEW),
+    $ps_result = xdb_insert_or_update("person_school", array("person_school_id" => XDB_NEW),
         $person_school, xsm_get_fields("person_school"));
 
     $person = xdb_get_entity_by_id('person', $person_id);
@@ -88,11 +88,11 @@ function xsm_add_person_to_school($school_id, $person_id)
 }
 
 // Специфическая функция для данной таблицы
-function xsm_person_school_edit_operations($table_name, $id, $ret_title, $school_id, $member_person_id, $place)
+function xsm_person_school_edit_operations($table_name, $id, $ret_title, $school_id, $member_person_id)
 {
     $is_new = ($id == XDB_NEW);
-    $redir = "view-person".xcms_url(array('school_id'=>$school_id, 'person_id'=>$member_person_id));
-    xsm_edit_ops($table_name, $is_new, $redir, $place, $ret_title, "Отчислить со школы");
+    $redir = "view-person".xcms_url(array('school_id' => $school_id, 'person_id' => $member_person_id));
+    xsm_edit_ops($table_name, $is_new, $redir, $ret_title, "Отчислить со школы");
 }
 
 /* Ещё одна специфическая функция -- возврат на редактирование, а не на просмотр,
@@ -110,7 +110,7 @@ function xsm_warn_delete_person_school($table_name, $id = false)
     $first_name = xcms_get_key_or($person, 'first_name');
     $last_name = xcms_get_key_or($person, 'last_name');
     $school_title = xcms_get_key_or($school, 'school_title');
-    $redir = "$table_name".xcms_url(array($key_name=>$id));
+    $redir = "$table_name".xcms_url(array($key_name => $id));
     xsm_warn_delete_ops($table_name, $key_name, $id, $redir, "участника",
         "<b>$first_name $last_name</b> со школы <b>$school_title</b>");
 }
@@ -122,7 +122,7 @@ function xsm_delete_person_school($table_name, $title, $aux_param = '')
     $person_school = xdb_get_entity_by_id('person_school', $id);
     $person_id = $person_school['member_person_id'];
     $school_id = $person_school['school_id'];
-    $redir = "view-person".xcms_url(array('person_id'=>$person_id, 'school_id'=>$school_id));
+    $redir = "view-person".xcms_url(array('person_id' => $person_id, 'school_id' => $school_id));
     $res = xdb_delete($table_name, $id);
     if ($res)
     {?>

@@ -28,12 +28,14 @@ function xcmst_build_rewrite($verbose = false)
                 $line = trim($line);
                 if (!strlen($line))
                     continue;
+
                 $from_to = explode(EXP_SP, $line);
                 if (count($from_to) != 2)
                 {
                     xcms_log(XLOG_WARNING, "[XCMS:REWRITE] Line '$line' does not match rewrite rules");
                     continue;
                 }
+
                 $from = $from_to[0];
                 $to = $from_to[1];
                 $rewrite_text .= "RewriteCond %{QUERY_STRING} page=$from&?\$\n";
@@ -62,7 +64,7 @@ function xcmst_build_rewrite($verbose = false)
         echo "<table class=\"sitemap\">\n<tr><th>Alias</th><th>Path</th></tr>\n";
     ksort($aliases);
     $max_level = 0;
-    foreach ($aliases as $alias=>$path)
+    foreach ($aliases as $alias => $path)
     {
         $level = substr_count($alias, "/");
         if ($level > $max_level)
@@ -70,6 +72,7 @@ function xcmst_build_rewrite($verbose = false)
 
         if (!array_key_exists($level, $listing))
             $listing[$level] = "";
+
         $listing[$level] .= "RewriteRule ^$alias$ index.php?page=$path\n";
         $listing[$level] .= "RewriteRule ^$alias/((.|\\r|\\n)*)$ index.php?page=$path&aparam=$1\n";
 
@@ -82,8 +85,15 @@ function xcmst_build_rewrite($verbose = false)
     }
     if ($verbose)
         echo "</table>\n";
+
     for ($level = $max_level; $level >= 0; --$level)
+    {
+        if (!array_key_exists($level, $listing))
+            continue;
+
         $rewrite_text .= $listing[$level];
+    }
+
     if (!xcms_write(".htaccess", $rewrite_text))
     {?>
         <div class="error">Rewrite rules writing failed!</div><?php
@@ -98,4 +108,3 @@ function xcmst_rebuild_aliases_and_rewrite($verbose = false)
     xcms_rebuild_aliases($verbose);
     xcmst_build_rewrite($verbose);
 }
-?>

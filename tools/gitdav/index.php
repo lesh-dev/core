@@ -1,9 +1,9 @@
 <?php
 
-$BASE_URI="/index.php/";
-if(!file_exists("SabreDAV"))
+$BASE_URI = "/index.php/";
+if (!file_exists("SabreDAV"))
 {
-    if(@$_POST["install"])
+    if (@$_POST["install"])
     {
         echo "<pre>";
         system("wget https://github.com/fruux/sabre-dav/releases/download/1.8.10/sabredav-1.8.10.zip");
@@ -19,13 +19,13 @@ if(!file_exists("SabreDAV"))
         <h1>gitDAV</h1>
         it looks like it's not installed.
         <form method="post">
-            <input type=submit name="install" value="Install"></input>
+            <input type="submit" name="install" value="Install"></input>
         </form>
         <?php
         die();
     }
 }
-if(strpos($_SERVER['REQUEST_URI'], $BASE_URI) === FALSE)
+if (strpos($_SERVER['REQUEST_URI'], $BASE_URI) === false)
 {
     $path = "${_SERVER['HTTP_HOST']}${_SERVER['REQUEST_URI']}index.php"
 
@@ -80,15 +80,15 @@ $server->addPlugin($lockPlugin);
 $server->addPlugin(new DAV\Browser\Plugin());
 
 
-// $server->on('afterWriteContent','afterWriteContent');
+// $server->on('afterWriteContent', 'afterWriteContent');
 
 // All we need to do now, is to fire up the server
 $server->exec();
 
 
-if($_SERVER["REQUEST_METHOD"] != "GET" )
+if ($_SERVER["REQUEST_METHOD"] != "GET")
 {
-    if(strpos( $_SERVER['REQUEST_URI'], ".git") === FALSE)
+    if (strpos($_SERVER['REQUEST_URI'], ".git") === false)
     {
       system("cd public && git add -A 1> /dev/null 2> /dev/null");
       $changed = $_SERVER["REQUEST_URI"];

@@ -148,5 +148,3 @@ function xsm_print_recent_schools($db, $current_school_id, $table_name)
     </tr></table>
     <?php
 }
-
-?>

@@ -91,13 +91,13 @@ function xsm_make_teacher_selector($school_id, $already_added = array())
 function xsm_add_course_teacher($course_id, $course_teacher_id)
 {
     $course_teachers = array(
-        'course_id'=>$course_id,
-        'course_teacher_id'=>$course_teacher_id,
+        'course_id' => $course_id,
+        'course_teacher_id' => $course_teacher_id,
     );
 
     $res = xdb_insert_or_update(
         'course_teachers',
-        array('course_teachers_id'=>XDB_NEW),
+        array('course_teachers_id' => XDB_NEW),
         $course_teachers,
         xsm_get_fields("course_teachers"));
 
@@ -113,12 +113,12 @@ function xsm_add_course_teacher($course_id, $course_teacher_id)
         $teacher = xdb_get_entity_by_id('person', $course_teacher_id);
 
         $person_school = array(
-            'school_id'=>$school_id,
-            'member_person_id'=>$course_teacher_id,
-            'is_teacher'=>'teacher',
-            'member_department_id'=>$teacher['department_id']
+            'school_id' => $school_id,
+            'member_person_id' => $course_teacher_id,
+            'is_teacher' => 'teacher',
+            'member_department_id' => $teacher['department_id']
         );
-        $res = xdb_insert_or_update("person_school", array("person_school_id"=>XDB_NEW),
+        $res = xdb_insert_or_update("person_school", array("person_school_id" => XDB_NEW),
             $person_school, xsm_get_fields("person_school"));
     }
 }

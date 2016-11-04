@@ -175,9 +175,9 @@ function xcms_editlist_form($file, $skip_params = "", $flags = "")
 {
     $list = xcms_get_list($file);
 
-    if (@$_POST["editTag"])
+    if (@$_POST["edit_tag"])
     {
-        foreach ($_POST as $key=>$value)
+        foreach ($_POST as $key => $value)
         {
             $key_name = substr($key, 5);
             if ($value == "_FORGET" || $value == "__FORGET")
@@ -201,7 +201,7 @@ function xcms_editlist_form($file, $skip_params = "", $flags = "")
 
     <form action="" method="post">
         <table class="key-value"><?php
-    foreach ($list as $key=>$value)
+    foreach ($list as $key => $value)
     {
         if (strstr($skip_params, $key))
             continue;
@@ -217,7 +217,7 @@ function xcms_editlist_form($file, $skip_params = "", $flags = "")
             {?>
 
                 <select name="<?php echo $id; ?>" id="<?php echo $id; ?>" class="key-value"><?php
-                foreach ($taglist as $vtag=>$tag)
+                foreach ($taglist as $vtag => $tag)
                 {
                     if ($vtag == XCMS_TAG_NAME) continue;
                     $vtag = htmlspecialchars($vtag);
@@ -253,7 +253,7 @@ function xcms_editlist_form($file, $skip_params = "", $flags = "")
     ?>
         </table>
         <p>Для удаления поля введите <b>_FORGET</b> в его значение</p>
-        <input type="submit" name="editTag" id="editTag" value="Сохранить" />
+        <?php xcmst_submit("edit_tag", "Сохранить"); ?>
     </form><?php
 }
 

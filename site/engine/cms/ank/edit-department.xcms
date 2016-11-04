@@ -9,13 +9,13 @@ function xsm_edit_department()
     $fields_desc = xsm_get_fields("department"); ?>
     <form method="post" action="edit-department"><?php
         xsm_edit_operations_listmode('department', $department_id, 'Вернуться к списку отделений');
-        xsm_draw_field_hidden("department_id", $department_id); ?>
+        xcmst_hidden("department_id", $department_id); ?>
         <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
                 <td class="ankListRowTitle">Отделение</td>
             </tr>
             <?php
-            foreach ($fields_desc as $key=>$desc)
+            foreach ($fields_desc as $key => $desc)
             {
                 if (xsm_is_bottom_field($key))
                     continue;
