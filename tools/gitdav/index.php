@@ -93,13 +93,14 @@ if($_SERVER["REQUEST_METHOD"] != "GET" )
       system("cd public && git add -A 1> /dev/null 2> /dev/null");
       $changed = $_SERVER["REQUEST_URI"];
       $changed = str_replace($BASE_URI,"",$changed);
-      system("cd public && git commit -m 'Changed: $changed' 1> /dev/null 2> /dev/null");
-      system("cd public && git update-server-info 1> /dev/null 2> /dev/null");
+      system("umask 0022 && cd public && git commit -m 'Changed: $changed' 1> /dev/null 2> /dev/null");
+      system("umask 0022 && cd public && git gc 1> /dev/null 2> /dev/null");
+      system("umask 0022 && cd public && git update-server-info 1> /dev/null 2> /dev/null");
     }
     else
     {
-      system("cd public && git reset --hard 1> /dev/null 2>/dev/null");
-      system("cd public && git clean -fx 1>/dev/null 2> /dev/null");
+      system("umask 0022 && cd public && git reset --hard 1> /dev/null 2>/dev/null");
+      system("umask 0022 && cd public && git clean -fx 1>/dev/null 2> /dev/null");
     }
 }
 
