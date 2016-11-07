@@ -91,22 +91,28 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
 
         self.assertBodyTextPresent(self.getWelcomeMessage(inpLogin))
 
-        nameEle = "name-input"
-        emailEle = "email-input"
+        name_ele = "name-input"
+        email_ele = "email-input"
 
-        currentDisplayName = self.getElementValueById(nameEle)
-        self.assertEqual(currentDisplayName, inpName, "Display name in user profile does not match name entered on user creation. ")
+        currentDisplayName = self.getElementValueById(name_ele)
+        self.assert_equal(
+            currentDisplayName, inpName,
+            "Display name in user profile does not match name entered on user creation. "
+        )
 
-        currentEMail = self.getElementValueById(emailEle)
-        self.assertEqual(currentEMail, inpEMail, "User e-mail in user profile does not match e-mail entered on user creation. ")
+        currentEMail = self.getElementValueById(email_ele)
+        self.assert_equal(
+            currentEMail, inpEMail,
+            "User e-mail in user profile does not match e-mail entered on user creation. "
+        )
 
         newName = u"Петя Иванов" + random_crap.random_text(6)
         newEMail = random_crap.randomEmail()
 
-        newName = self.fillElementById(nameEle, newName)
+        newName = self.fillElementById(name_ele, newName)
 
         print "New user display name is ", newName
-        newEMail = self.fillElementById(emailEle, newEMail)
+        newEMail = self.fillElementById(email_ele, newEMail)
         print "New user e-mail is ", newEMail
 
         self.clickElementById("update_me-submit")
@@ -122,8 +128,11 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(inpLogin)
         self.assertBodyTextPresent(u"Привет, " + inpLogin)
 
-        currentDisplayName = self.getElementValueById(nameEle)
-        self.assertEqual(currentDisplayName, newName, "Display name in user profile does not match changed user name. ")
+        currentDisplayName = self.getElementValueById(name_ele)
+        self.assert_equal(
+            currentDisplayName, newName,
+            "Display name in user profile does not match changed user name. "
+        )
 
-        currentEMail = self.getElementValueById(emailEle)
-        self.assertEqual(currentEMail, newEMail, "User e-mail in user profile does not match changed user e-mail. ")
+        currentEMail = self.getElementValueById(email_ele)
+        self.assert_equal(currentEMail, newEMail, "User e-mail in user profile does not match changed user e-mail. ")
