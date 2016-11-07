@@ -373,10 +373,10 @@ class SeleniumTest(object):
             actionMsg += (" comment: " + userSerialize(comment) + " ")
         self.addAction("navigate", actionMsg)
         self.m_driver.get(fullUrl)
-        self.checkPageErrors()
+        self.check_page_errors()
         self.check404()
 
-    def checkPageErrors(self):
+    def check_page_errors(self):
         if self.check_errors:
             self.assertPhpErrors()
 
@@ -684,7 +684,7 @@ class SeleniumTest(object):
             self.addAction("set-option-by-value", "element name: '" + eleName + "', value: " + userSerialize(optValue))
 
             self.getElementByName(eleName).find_element_by_xpath("option[@value='" + optValue + "']").click()
-            self.checkPageErrors()
+            self.check_page_errors()
         except NoSuchElementException:
             self.failTest("Cannot get drop-down (select) element by name '" + eleName + "'. ")
 
@@ -841,12 +841,12 @@ class SeleniumTest(object):
     def clickElementByName(self, name):
         self.addAction("click", "element name: " + userSerialize(name) + " ")
         self.getElementByName(name).click()
-        self.checkPageErrors()
+        self.check_page_errors()
 
     def clickElementById(self, eleId):
         self.addAction("click", "element id: '" + eleId + "'")
         self.getElementById(eleId).click()
-        self.checkPageErrors()
+        self.check_page_errors()
 
     def getElementText(self, xpath):
         try:

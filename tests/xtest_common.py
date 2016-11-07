@@ -4,6 +4,8 @@
 import selenium_test
 import random_crap
 import re
+import logging
+
 from xtest_config import XcmsTestConfig
 
 
@@ -20,29 +22,29 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         super(XcmsBaseTest, self).init()
         self.set404Text(u"Нет такой страницы")
 
-    def checkPageErrors(self):
-        super(XcmsBaseTest, self).checkPageErrors()
+    def check_page_errors(self):
+        super(XcmsBaseTest, self).check_page_errors()
         source = self.getPageSource()
         stoppers = ["<!#", "#!>"]
         for stopper in stoppers:
             if stopper in source:
                 self.failTest("Forbidden crap '" + stopper + "' found on page. ")
 
-        self.checkDocType()
-        if self.isAuthPage() and self.lastActionType() == "navigate":
+        self.check_doc_type()
+        if self.is_auth_page() and self.lastActionType() == "navigate":
             self.logAdd("We are on the AUTH page. Seems that page access was denied. ", "warning")
 
-    def isAuthPage(self):
+    def is_auth_page(self):
         stop_phrases = [u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"]
         return self.checkSourceTextPresent(stop_phrases, option_list=["silent"], negative=True)
 
-    def checkDocType(self):
+    def check_doc_type(self):
         count = 0
         wait_time = 0.0
         while count < MAX_RETRIES:
             wait_time += TIME_INC
             count += 1
-            self.wait(wait_time, "checkDocType")
+            self.wait(wait_time, "check_doc_type")
             if self.check_doc_type_once():
                 return
             self.logAdd("DOCTYPE not detected, retrying")
@@ -55,7 +57,7 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
             return True
 
         # not found
-        if self.isAuthPage():
+        if self.is_auth_page():
             self.logAdd("DOCTYPE not detected, but this page seems to be Auth page. ", "warning")
             return True
         source_block = "\n".join(source_block)
@@ -74,7 +76,9 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
     def assertNoInstallerPage(self):
         self.gotoRoot()
         if self.isInstallerPage():
-            self.fatalTest("Installer page detected, while we did not expected it. You should run this test on installed XCMS. ")
+            self.fatalTest(
+                "Installer page detected, while we did not expected it. You should run this test on installed XCMS. "
+            )
 
     def gotoAlias(self, alias):
         self.logAdd("Going to the page via alias " + alias)
@@ -278,16 +282,17 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
 class XcmsTest(XcmsTestWithConfig):
     """
-        generic Xcms test
+        Generic XCMS test
     """
     def init(self):
         super(XcmsTest, self).init()
         self.assertNoInstallerPage()
-        # xtest_common.setTestNotifications(self, self.m_conf.getNotifyEmail(), self.m_conf.getAdminLogin(), self.m_conf.getAdminPass())
 
     def createNewUser(self, login, email, password, name, aux_params=None):
         user_aux_params = aux_params or []
-        self.logAdd("createNewUser( login: " + login + "', email: " + email + ", password: " + password + ", name: " + name + " )")
+        logging.info(
+            "createNewUser(login: '%s', email: '%s', password: '%s', name: '%s')", login, email, password, name
+        )
 
         if "do_not_login_as_admin" not in user_aux_params:
             self.performLoginAsAdmin()

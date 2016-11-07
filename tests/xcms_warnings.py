@@ -17,5 +17,5 @@ class XcmsWarnTest(xtest_common.XcmsBaseTest):
         if not checkResult:
             self.failTest("Warnings not detected. ");
         
-    def checkDocType(self):
+    def check_doc_type(self):
         self.logAdd("DOCTYPE check is disabled for Warn-tests page. ", "warning")
