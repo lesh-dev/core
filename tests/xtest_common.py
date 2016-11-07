@@ -51,7 +51,7 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         self.failTest("DOCTYPE directive not found on page {0}. ".format(self.curUrl()))
 
     def check_doc_type_once(self):
-        first_line, source_block = self.getPageSourceFirstLine()
+        first_line, source_block = self.get_page_source_first_line()
         if "<!DOCTYPE" in first_line:
             # ok
             return True
@@ -64,29 +64,29 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         self.logAdd("Source beginning without DOCTYPE:\n" + source_block.strip())
         return False
 
-    def getPageSourceFirstLine(self):
+    def get_page_source_first_line(self):
         source = self.getPageSource()
         newline_pos = source.find("\n")
         # self.logAdd("Newline found at {0}".format(newlinePos))
         return source[:newline_pos], source[:1000].split("\n")[:4]
 
-    def isInstallerPage(self):
+    def is_installer_page(self):
         return self.curUrl().endswith("install.php")
 
-    def assertNoInstallerPage(self):
+    def assert_no_installer_page(self):
         self.gotoRoot()
-        if self.isInstallerPage():
+        if self.is_installer_page():
             self.fatalTest(
                 "Installer page detected, while we did not expected it. You should run this test on installed XCMS. "
             )
 
-    def gotoAlias(self, alias):
+    def goto_alias(self, alias):
         self.logAdd("Going to the page via alias " + alias)
         self.gotoPage(alias)
 
-    def getCurrentPersonId(self):
-        curUrl = self.curUrl()
-        m = re.search("person_id=(\d+)", curUrl)
+    def get_current_person_id(self):
+        cur_url = self.curUrl()
+        m = re.search("person_id=(\d+)", cur_url)
         if m and m.groups() >= 1:
             return str(m.group(1))
         return None
@@ -286,7 +286,7 @@ class XcmsTest(XcmsTestWithConfig):
     """
     def init(self):
         super(XcmsTest, self).init()
-        self.assertNoInstallerPage()
+        self.assert_no_installer_page()
 
     def createNewUser(self, login, email, password, name, aux_params=None):
         user_aux_params = aux_params or []

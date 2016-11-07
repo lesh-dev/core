@@ -82,4 +82,4 @@ class XcmsContentRemovePage(xtest_common.XcmsTest):
 
         self.assertElementTextById("content-text", newPageText, "new page text should appear after page reincarnation. ")
 
-        self.gotoAlias(inpAlias)
+        self.goto_alias(inpAlias)

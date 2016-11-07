@@ -47,9 +47,9 @@ class XcmsContentNestedAliases(xtest_common.XcmsTest):
         
         self.closeAdminPanel()
         
-        self.gotoAlias(inpAlias1)
+        self.goto_alias(inpAlias1)
         self.assertSitePageHeader(inpPageHeader1)
-        self.gotoAlias(inpAlias2)
+        self.goto_alias(inpAlias2)
         self.assertSitePageHeader(inpPageHeader2)
         
 

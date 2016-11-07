@@ -9,7 +9,7 @@ class XcmsUnitTests(xtest_common.XcmsBaseTest):
     """
     def run(self):
 
-        self.assertNoInstallerPage()
+        self.assert_no_installer_page()
 
         self.gotoPage("/unittest.php")
         self.assertSourceTextPresent(u"UNIT TESTS PASSED OK");

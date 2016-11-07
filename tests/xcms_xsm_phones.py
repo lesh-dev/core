@@ -35,7 +35,7 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
         )
         person.back_to_person_view()
 
-        person_id = self.getCurrentPersonId()
+        person_id = self.get_current_person_id()
 
         for i in range(0, 2):
             site_cellular_phone = person.get_row_value(person_id, 'cellular', i)

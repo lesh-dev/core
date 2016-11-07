@@ -15,7 +15,7 @@ class XcmsOpenNonExisting(xtest_common.XcmsBaseTest):
     def run(self):
         self.setAutoPhpErrorChecking(True)
 
-        self.assertNoInstallerPage()
+        self.assert_no_installer_page()
 
         self.set404Checking(False)
 

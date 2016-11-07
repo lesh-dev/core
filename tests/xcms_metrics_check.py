@@ -12,7 +12,7 @@ class XcmsMetricsCheck(xtest_common.XcmsBaseTest):
 
         self.setAutoPhpErrorChecking(True)
 
-        self.assertNoInstallerPage()
+        self.assert_no_installer_page()
 
         self.gotoRoot()
         self.assertSourceTextNotPresent("Metrika")

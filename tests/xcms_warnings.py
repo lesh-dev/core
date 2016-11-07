@@ -9,7 +9,7 @@ class XcmsWarnTest(xtest_common.XcmsBaseTest):
     """
     def run(self):
 
-        self.assertNoInstallerPage()
+        self.assert_no_installer_page()
         self.setAutoPhpErrorChecking(False)
         self.gotoPage("/warntest.php")
         self.assertSourceTextPresent("This page intentionally contains errors")

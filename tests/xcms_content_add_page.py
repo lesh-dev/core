@@ -303,7 +303,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.wait(3, "wait for redirection")
 
         # self.gotoRebuildAliases()
-        self.gotoAlias(self.m_pageAlias)
+        self.goto_alias(self.m_pageAlias)
 
         if self.m_menuTitle not in self.getPageTitle():
             self.failTest("Page/menu title text does not appear in page title after going to page by alias after alias change. ")
