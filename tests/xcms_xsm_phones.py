@@ -5,7 +5,7 @@ import xsm
 import xtest_common
 
 
-class XcmsXsmPhones(xtest_common.XcmsTest):
+class XcmsXsmPhones(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks person phone parsing feature
     It does following:
@@ -35,7 +35,7 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
         )
         person.back_to_person_view()
 
-        person_id = xsm.get_current_person_id(self)
+        person_id = self.get_current_person_id()
 
         for i in range(0, 2):
             site_cellular_phone = person.get_row_value(person_id, 'cellular', i)
