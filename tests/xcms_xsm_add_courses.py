@@ -5,7 +5,7 @@ import xsm
 import xtest_common
 
 
-class XcmsXsmAddCourses(xtest_common.XcmsTest):
+class XcmsXsmAddCourses(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks course add functional.
     It does following:
@@ -38,4 +38,4 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
         self.assertBodyTextPresent(u"Курсы")
 
         for i in range(0, 3):
-            xsm.add_course_to_teacher(self, teacher)
+            self.add_course_to_teacher(teacher)

@@ -2,11 +2,12 @@
 # -*- coding: utf8 -*-
 
 import logging
+
 import xsm
 import xtest_common
 
 
-class XcmsXsmAvatar(xtest_common.XcmsTest):
+class XcmsXsmAvatar(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks person user functional and VK's avatar display feature
     It does following:

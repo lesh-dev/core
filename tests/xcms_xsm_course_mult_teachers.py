@@ -8,7 +8,7 @@ import xsm
 import xtest_common
 
 
-class XcmsXsmCourseWithMultipleTeachers(xtest_common.XcmsTest):
+class XcmsXsmCourseWithMultipleTeachers(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks course add functional.
     Steps:

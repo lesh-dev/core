@@ -6,7 +6,7 @@ import xtest_common
 import random_crap
 
 
-class XcmsXsmChangeStatusQuick(xtest_common.XcmsTest):
+class XcmsXsmChangeStatusQuick(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks quick status change functional.
     Steps:

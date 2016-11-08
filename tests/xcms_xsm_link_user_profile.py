@@ -6,7 +6,7 @@ import xtest_common
 import random_crap
 
 
-class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
+class XcmsXsmLinkUserProfile(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks XSM account - user link.
     It does following steps:

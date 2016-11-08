@@ -8,7 +8,7 @@ import xtest_common
 import random_crap
 
 
-class XcmsXsmAddExams(xtest_common.XcmsTest):
+class XcmsXsmAddExams(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks exam add functional.
     It does following:
@@ -92,7 +92,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
 
             self.assertBodyTextPresent(u"Курсы")
 
-            courses = [xsm.add_course_to_teacher(self, teacher) for _ in range(0, 1 + ti)]
+            courses = [self.add_course_to_teacher(teacher) for _ in range(0, 1 + ti)]
             # store as custom property
             teacher.courses = courses
 

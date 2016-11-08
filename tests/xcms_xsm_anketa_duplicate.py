@@ -6,7 +6,7 @@ import xtest_common
 import random_crap
 
 
-class XcmsXsmAnketaDuplicate(xtest_common.XcmsTest):
+class XcmsXsmAnketaDuplicate(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks duplicate anketa add functional.
     * Adds anketa

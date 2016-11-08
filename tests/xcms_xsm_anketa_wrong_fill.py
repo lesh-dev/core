@@ -9,7 +9,7 @@ import random_crap
 import bawlib
 
 
-class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
+class XcmsXsmAnketaWrongFill(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks bad cases of anketa add functional
     It does following:

@@ -6,7 +6,7 @@ import xtest_common
 import random_crap
 
 
-class XcmsXsmAnketaEdit(xtest_common.XcmsTest):
+class XcmsXsmAnketaEdit(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks anketa edit functional and following person processing steps.
     Steps:

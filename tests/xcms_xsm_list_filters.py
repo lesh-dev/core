@@ -5,7 +5,7 @@ import xsm
 import xtest_common
 
 
-class XcmsXsmListFilters(xtest_common.XcmsTest):
+class XcmsXsmListFilters(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks various filters in XSM lists.
     """

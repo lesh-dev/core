@@ -3,7 +3,6 @@
 
 import selenium_test
 import random_crap
-import re
 import logging
 
 from xtest_config import XcmsTestConfig

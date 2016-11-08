@@ -6,7 +6,7 @@ import xtest_common
 import random_crap
 
 
-class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
+class XcmsXsmAnketaDupStress(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks duplicate anketa merging algorithm.
     """
