@@ -50,7 +50,7 @@ class XcmsXsmListFilters(xtest_common.XcmsTest):
 
     def test_department_selector(self):
         self.gotoXsmAllPeople()
-        self.gotoXsmAddPerson()
+        self.goto_xsm_add_person()
         department_id = 3  # Математическое
         person = xsm.Person(self)
         person.input(

@@ -9,9 +9,10 @@
     lowerCamelCase, CamelCase, etc.
 """
 
+import re
 import logging
 import random_crap as rc
-
+import xtest_common as xc
 
 class Person(object):
     """
@@ -332,18 +333,34 @@ def add_test_school(xtest):
     return school
 
 
-def add_course_to_teacher(xtest, teacher):
-    xtest.gotoUrlByLinkText(u"Добавить курс")
-    course = Course(xtest)
-    course.input(
-        course_title=u"Курс",
-        course_comment=u"Какой-то комментарий",
-        course_desc=u"Описание курса",
-        target_class=u"7-11",
-        random=True,
-    )
-    # XSM BUG: we should return to teacher page, not to course page!
-    xtest.gotoUrlByLinkText(u"Вернуться к просмотру")  # view of what? Course? no, teacher!
-    course.course_id = int(xtest.getElementValueByName("course_id"))
-    xtest.gotoUrlByLinkText(teacher.short_alias())
-    return course
+class Manager(xc.XcmsTest):
+    # FIXME(mvel) inheritance
+
+    def add_course_to_teacher(self, teacher):
+        self.gotoUrlByLinkText(u"Добавить курс")
+        course = Course(self)
+        course.input(
+            course_title=u"Курс",
+            course_comment=u"Какой-то комментарий",
+            course_desc=u"Описание курса",
+            target_class=u"7-11",
+            random=True,
+        )
+        # XSM BUG: we should return to teacher page, not to course page!
+        self.gotoUrlByLinkText(u"Вернуться к просмотру")  # view of what? Course? no, teacher!
+        course.course_id = int(self.getElementValueByName("course_id"))
+        self.gotoUrlByLinkText(teacher.short_alias())
+        return course
+
+    def get_current_person_id(self):
+        cur_url = self.curUrl()
+        m = re.search("person_id=(\d+)", cur_url)
+        if m and m.groups() >= 1:
+            return str(m.group(1))
+        return None
+
+    def goto_anketa(self):
+        self.gotoUrlByLinkText(u"Анкета")
+
+    def goto_xsm_add_person(self):
+        self.gotoUrlByLinkText(u"Добавить участника")

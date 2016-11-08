@@ -55,7 +55,7 @@ class XcmsXsmAnketaDupStress(xtest_common.XcmsTest):
         self.gotoRoot()
         # navigate to anketas
         self.gotoUrlByLinkText(self.getEntranceLinkName())
-        self.gotoAnketa()
+        self.goto_anketa()
         self.assertBodyTextPresent(self.getAnketaPageHeader())
         self.input_person_data(person, iteration, random=True)
 

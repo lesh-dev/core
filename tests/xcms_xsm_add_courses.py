@@ -23,7 +23,7 @@ class XcmsXsmAddCourses(xtest_common.XcmsTest):
         school = xsm.add_test_school(self)
 
         self.gotoXsmAllPeople()
-        self.gotoXsmAddPerson()
+        self.goto_xsm_add_person()
         teacher = xsm.Person(self)
         teacher.input(
             last_name=u"Преподов",

@@ -39,7 +39,7 @@ class XcmsXsmAvatar(xtest_common.XcmsTest):
         self.performLoginAsManager()
 
         self.gotoXsmAllPeople()
-        self.gotoXsmAddPerson()
+        self.goto_xsm_add_person()
 
         person = xsm.Person(self)
         person.input(

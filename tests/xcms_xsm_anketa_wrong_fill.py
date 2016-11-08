@@ -29,7 +29,7 @@ class XcmsXsmAnketaWrongFill(xtest_common.XcmsTest):
 
         # navigate to anketas
         self.gotoUrlByLinkText(self.getEntranceLinkName())
-        self.gotoAnketa()
+        self.goto_anketa()
         self.assertBodyTextPresent(self.getAnketaPageHeader())
 
         person = xsm.Person(self)

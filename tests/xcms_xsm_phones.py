@@ -22,7 +22,7 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
 
         self.gotoXsm()
         self.gotoXsmActive()
-        self.gotoXsmAddPerson()
+        self.goto_xsm_add_person()
 
         person = xsm.Person(self)
         person.input(
@@ -35,7 +35,7 @@ class XcmsXsmPhones(xtest_common.XcmsTest):
         )
         person.back_to_person_view()
 
-        person_id = self.get_current_person_id()
+        person_id = xsm.get_current_person_id(self)
 
         for i in range(0, 2):
             site_cellular_phone = person.get_row_value(person_id, 'cellular', i)

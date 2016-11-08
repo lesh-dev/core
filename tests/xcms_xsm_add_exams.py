@@ -78,7 +78,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
         teachers = []
         for ti in [1, 2]:
             self.gotoXsmAllPeople()
-            self.gotoXsmAddPerson()
+            self.goto_xsm_add_person()
             teacher = xsm.Person(self)
             teacher.input(
                 last_name=u"Препод_{}ый".format(ti),
@@ -100,7 +100,7 @@ class XcmsXsmAddExams(xtest_common.XcmsTest):
 
         self.gotoXsmAllPeople()
 
-        self.gotoXsmAddPerson()
+        self.goto_xsm_add_person()
         student = xsm.Person(self)
         student.input(
             last_name=u"Зачётов",

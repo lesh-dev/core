@@ -84,33 +84,22 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         self.logAdd("Going to the page via alias " + alias)
         self.gotoPage(alias)
 
-    def get_current_person_id(self):
-        cur_url = self.curUrl()
-        m = re.search("person_id=(\d+)", cur_url)
-        if m and m.groups() >= 1:
-            return str(m.group(1))
-        return None
-
 
 class XcmsTestWithConfig(XcmsBaseTest):
     """
         generic Xcms test with config
     """
+    m_conf = None
+
     def init(self):
         super(XcmsTestWithConfig, self).init()
         self.m_conf = XcmsTestConfig()
         self.setAutoPhpErrorChecking(self.m_conf.getPhpErrorCheckFlag())
         # self.maximizeWindow()
 
-    def gotoRebuildAliases(self):
+    def goto_rebuild_aliases(self):
         self.logAdd("Rebuilding aliases. ")
         self.gotoUrlByLinkText(u"Перестроить alias-ы")
-
-    def gotoAnketa(self):
-        self.gotoUrlByLinkText(u"Анкета")
-
-    def gotoXsmAddPerson(self):
-        self.gotoUrlByLinkText(u"Добавить участника")
 
     def gotoNotificationsPage(self):
         self.gotoUrlByLinkText(u"Уведомления")

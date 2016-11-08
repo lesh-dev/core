@@ -302,7 +302,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.assertBodyTextPresent(u"Список alias-ов обновлён")
         self.wait(3, "wait for redirection")
 
-        # self.gotoRebuildAliases()
+        # self.goto_rebuild_aliases()
         self.goto_alias(self.m_pageAlias)
 
         if self.m_menuTitle not in self.getPageTitle():

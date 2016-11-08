@@ -21,7 +21,7 @@ class XcmsXsmCourseWithMultipleTeachers(xtest_common.XcmsTest):
 
     def add_teacher(self):
         self.gotoXsmAllPeople()
-        self.gotoXsmAddPerson()
+        self.goto_xsm_add_person()
         teacher = xsm.Person(self)
         teacher.input(
             last_name=u"Мультипреподов",

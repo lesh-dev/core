@@ -30,7 +30,7 @@ class XcmsXsmLinkUserProfile(xtest_common.XcmsTest):
         self.closeAdminPanel()
         self.gotoXsm()
         self.gotoXsmActive()
-        self.gotoXsmAddPerson()
+        self.goto_xsm_add_person()
 
         person = xsm.Person(self)
         person.input(

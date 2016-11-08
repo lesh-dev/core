@@ -9,7 +9,7 @@ import random_crap
 import bawlib
 
 
-class XcmsXsmAnketaFill(xtest_common.XcmsTest):
+class XcmsXsmAnketaFill(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks anketa add functional and following person processing steps.
     It does following:
@@ -29,6 +29,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
     * TODO: add person to some schools.
     * TODO: remove person from one of schools
     """
+    xsm_op = None
 
     def add_and_check_person_comment(self):
         comment_text = self.addCommentToPerson()
@@ -70,7 +71,7 @@ class XcmsXsmAnketaFill(xtest_common.XcmsTest):
         # navigate to anketas
 
         self.gotoUrlByLinkText(self.getEntranceLinkName())
-        self.gotoAnketa()
+        self.goto_anketa()
         self.assertBodyTextPresent(self.getAnketaPageHeader())
 
         person = xsm.Person(self)
