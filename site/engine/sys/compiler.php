@@ -38,13 +38,26 @@
         fputs($output_stream, $before);
 
         $code = substr($open, strlen($SETTINGS["openbracket"])  );
-        $code = substr($code, 0, strlen($code)-strlen($close)-strlen($SETTINGS["closebracket"]));
+        $code = substr($code, 0, strlen($code) - strlen($close) - strlen($SETTINGS["closebracket"]));
 
         $code = trim($code);
         $argv = explode(EXP_SP, $code);
 
         $name = $argv[0];
         $elem_full_name = $SETTINGS["engine_dir"].$name;
+        $elem_full_name_design = $SETTINGS["design_dir"].$name;
+
+        if (false === xcms_try_template($argv, $code, $output_stream, $name, $elem_full_name, false))
+        {
+            xcms_try_template($argv, $code, $output_stream, $name, $elem_full_name_design, true);
+        }
+
+        xcms_parse_string($close, $output_stream);
+    }
+
+    function xcms_try_template($argv, $code, $output_stream, $name, $elem_full_name, $final = false)
+    {
+        global $SETTINGS;
 
         if (file_exists("$elem_full_name.php"))
         {
@@ -54,6 +67,7 @@
         {
             xcms_set_args($code, $output_stream);
             $full_name = "$elem_full_name.xcms";
+            xcms_log(XLOG_INFO, "Trying template path $full_name");
 
             if (!file_exists($full_name))
                 $full_name = "${elem_full_name}default.xcms";
@@ -75,11 +89,15 @@
             }
             else
             {
-                xcms_log(XLOG_ERROR, "[COMPILER] Template name is '$name', nopagecode: ".$SETTINGS["nopagecode"]);
-                fputs($output_stream, file_get_contents("{$SETTINGS["engine_dir"]}{$SETTINGS["nopagecode"]}.code"));
+                if ($final)
+                {
+                    xcms_log(XLOG_ERROR, "[COMPILER] Template name is '$name', nopagecode: ".$SETTINGS["nopagecode"]);
+                    fputs($output_stream, file_get_contents("{$SETTINGS["engine_dir"]}{$SETTINGS["nopagecode"]}.code"));
+                }
+                else
+                    return false;
             }
         }
-        xcms_parse_string($close, $output_stream);
     }
 
     function xcms_compile($filename, $destination)
@@ -143,7 +161,8 @@
         else
             $ref = @$_GET["ref"];
 
-        if (!$ref) $ref = $SETTINGS["defaultpage"];
+        if (!$ref)
+            $ref = $SETTINGS["defaultpage"];
         if (file_exists("${design_dir}$ref.xcms"))
         {
             $main_ref_file = "${design_dir}$ref.xcms";
