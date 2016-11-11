@@ -20,8 +20,8 @@ class XcmsXsmPhones(xsm.Manager, xtest_common.XcmsTest):
 
         self.performLoginAsManager()
 
-        self.gotoXsm()
-        self.gotoXsmActive()
+        self.goto_xsm()
+        self.goto_xsm_active()
         self.goto_xsm_add_person()
 
         person = xsm.Person(self)
@@ -48,7 +48,7 @@ class XcmsXsmPhones(xsm.Manager, xtest_common.XcmsTest):
             phone="+79261112233",
             cellular="89261112233",
         )
-        self.gotoBackToPersonView()
+        self.goto_back_to_person_view()
 
         site_cellular_phone = person.get_row_value(person_id, 'cellular', 0)
         site_phone = person.get_row_value(person_id, 'phone', 0)

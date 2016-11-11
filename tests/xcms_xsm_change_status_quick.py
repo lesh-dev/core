@@ -22,8 +22,8 @@ class XcmsXsmChangeStatusQuick(xsm.Manager, xtest_common.XcmsTest):
 
         self.performLoginAsManager()
 
-        self.gotoXsm()
-        self.gotoXsmActive()
+        self.goto_xsm()
+        self.goto_xsm_active()
         self.goto_xsm_add_person()
 
         person = xsm.Person(self)
@@ -37,14 +37,14 @@ class XcmsXsmChangeStatusQuick(xsm.Manager, xtest_common.XcmsTest):
 
         self.assertElementTextById("anketa_status-span", u"Активный")
 
-        self.gotoXsmChangePersonStatus()
+        self.goto_xsm_change_person_status()
 
         self.setOptionValueByIdAndValue("anketa_status-selector", "discuss")
         comment_text = u"Комментарий к смене статуса " + random_crap.randomCrap(5)
         comment_text = self.fillElementById("comment_text-text", comment_text)
 
         self.clickElementById("update-person_comment-submit")
-        self.gotoBackToPersonView()
+        self.goto_back_to_person_view()
 
         self.assertBodyTextPresent(u"Статус Активный изменён на Обсуждается")
         self.assertBodyTextPresent(comment_text)

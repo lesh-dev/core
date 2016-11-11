@@ -21,7 +21,7 @@ class XcmsXsmAnketaWrongFill(xsm.Manager, xtest_common.XcmsTest):
     """
 
     def ensure_not_submitted(self, reason):
-        self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage(), reason)
+        self.assertBodyTextNotPresent(self.get_anketa_success_submit_message(), reason)
 
     def run(self):
         self.ensure_logged_off()

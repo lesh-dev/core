@@ -20,7 +20,7 @@ class XcmsXsmCourseWithMultipleTeachers(xsm.Manager, xtest_common.XcmsTest):
     """
 
     def add_teacher(self):
-        self.gotoXsmAllPeople()
+        self.goto_xsm_all_people()
         self.goto_xsm_add_person()
         teacher = xsm.Person(self)
         teacher.input(
@@ -43,16 +43,16 @@ class XcmsXsmCourseWithMultipleTeachers(xsm.Manager, xtest_common.XcmsTest):
     def run(self):
         self.ensure_logged_off()
         self.performLoginAsManager()
-        self.gotoXsm()
+        self.goto_xsm()
         school = xsm.add_test_school(self)
 
         self.add_teacher()
         self.add_teacher()
         self.add_teacher()
 
-        self.gotoXsmCourses()
+        self.goto_xsm_courses()
         self.gotoUrlByLinkText(school.school_title)
-        self.gotoXsmAddCourse()
+        self.goto_xsm_add_course()
         course = xsm.Course(self)
         course.input(
             course_title=u"Многопреподный курс",
@@ -74,7 +74,7 @@ class XcmsXsmCourseWithMultipleTeachers(xsm.Manager, xtest_common.XcmsTest):
 
         self.setOptionValueByIdAndIndex("course_teacher_id-selector", 1)
         course.input(update=True)
-        self.gotoBackToCourseView()
+        self.goto_back_to_course_view()
         self.assertUrlPresent(teacher_names[0])
 
         self.gotoUrlByLinkText(u"Редактировать преподов")

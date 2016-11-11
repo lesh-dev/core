@@ -29,7 +29,6 @@ class XcmsXsmAnketaFill(xsm.Manager, xtest_common.XcmsTest):
     * TODO: add person to some schools.
     * TODO: remove person from one of schools
     """
-    xsm_op = None
 
     def add_and_check_person_comment(self):
         comment_text = self.addCommentToPerson()
@@ -95,7 +94,7 @@ class XcmsXsmAnketaFill(xsm.Manager, xtest_common.XcmsTest):
             control_question=u"ампер",
             ank_mode=True,
         )
-        self.assertBodyTextPresent(self.getAnketaSuccessSubmitMessage())
+        self.assertBodyTextPresent(self.get_anketa_success_submit_message())
         inp_social_show = bawlib.cutHttp(person.social_profile)
 
         # now login as admin
@@ -166,6 +165,6 @@ class XcmsXsmAnketaFill(xsm.Manager, xtest_common.XcmsTest):
         self.clickElementById("update-person-submit")
 
         self.assertBodyTextPresent(u"Участник успешно сохранён")
-        self.gotoBackToAnketaView()
+        self.goto_back_to_anketa_view()
 
         self.assertElementTextById("anketa_status-span", u"Ждёт собес.")

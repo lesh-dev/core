@@ -28,8 +28,8 @@ class XcmsXsmLinkUserProfile(xsm.Manager, xtest_common.XcmsTest):
         )
 
         self.closeAdminPanel()
-        self.gotoXsm()
-        self.gotoXsmActive()
+        self.goto_xsm()
+        self.goto_xsm_active()
         self.goto_xsm_add_person()
 
         person = xsm.Person(self)

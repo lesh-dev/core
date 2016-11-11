@@ -32,7 +32,7 @@ class XcmsXsmAddExams(xsm.Manager, xtest_common.XcmsTest):
     def add_exam_by_id_and_return(self, exam):
         self.add_exam_by_id(exam)
         self.assertBodyTextNotPresent(self.get_exam_already_exists_message())
-        self.gotoBackToPersonView()
+        self.goto_back_to_person_view()
 
     def add_exam_by_id(self, exam):
         self.gotoUrlByLinkText(u"Добавить зачёт")
@@ -48,7 +48,7 @@ class XcmsXsmAddExams(xsm.Manager, xtest_common.XcmsTest):
             exam_comment = u"Коммент к сданному зачёту: " + random_crap.random_text(6)
             self.fillElementByName("exam_comment", exam_comment)
             self.clickElementByName("update-exam")
-            self.gotoBackToPersonView()
+            self.goto_back_to_person_view()
 
         self.assertBodyTextPresent(u"Сдан")
 
@@ -61,7 +61,7 @@ class XcmsXsmAddExams(xsm.Manager, xtest_common.XcmsTest):
             exam_comment = u"Коммент к несданному зачёту: " + random_crap.random_text(6)
             self.fillElementByName("exam_comment", exam_comment)
             self.clickElementByName("update-exam")
-            self.gotoBackToPersonView()
+            self.goto_back_to_person_view()
 
         self.assertBodyTextPresent(u"Не сдан")
 
@@ -71,13 +71,13 @@ class XcmsXsmAddExams(xsm.Manager, xtest_common.XcmsTest):
         self.listened_status = u"Прослушан"
 
         self.performLoginAsManager()
-        self.gotoXsm()
+        self.goto_xsm()
         school = xsm.add_test_school(self)
 
         # add two teachers: 1st with 2 and 2nd with 3 courses
         teachers = []
         for ti in [1, 2]:
-            self.gotoXsmAllPeople()
+            self.goto_xsm_all_people()
             self.goto_xsm_add_person()
             teacher = xsm.Person(self)
             teacher.input(
@@ -98,7 +98,7 @@ class XcmsXsmAddExams(xsm.Manager, xtest_common.XcmsTest):
 
             teachers.append(teacher)
 
-        self.gotoXsmAllPeople()
+        self.goto_xsm_all_people()
 
         self.goto_xsm_add_person()
         student = xsm.Person(self)

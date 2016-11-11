@@ -184,8 +184,8 @@ class Person(object):
 
     def back_to_person_view(self):
         t = self.xtest
-        # FIXME(mvel): this is a Person control: gotoBackToPersonView()
-        t.gotoBackToPersonView()
+        # FIXME(mvel): this is a Person control: goto_back_to_person_view()
+        t.goto_back_to_person_view()
         full_alias = self.full_alias()
         # check if person alias is present (person saved correctly)
         t.checkPersonAliasInPersonView(full_alias)
@@ -196,7 +196,7 @@ class Person(object):
         t.assertBodyTextPresent(t.getPersonAbsenceMessage())
         t.gotoUrlByLinkTitle(u"Зачислить на " + school.school_title)
         t.clickElementByName("update-person_school")
-        t.gotoBackToPersonView()
+        t.goto_back_to_person_view()
 
     def short_alias(self):
         short_alias = self.last_name + " " + self.first_name
@@ -301,7 +301,7 @@ class School(object):
         self.xtest.clickElementByName("update-school")
 
     def back_to_school_view(self):
-        self.xtest.gotoBackToSchoolView()
+        self.xtest.goto_back_to_school_view()
         self.xtest.assertBodyTextPresent(self.school_title)
         self.xtest.assertBodyTextPresent(self.school_date_start)
         self.xtest.assertBodyTextPresent(self.school_date_end)
@@ -309,14 +309,14 @@ class School(object):
 
 
 def add_test_school(xtest):
-    xtest.gotoXsmSchools()
+    xtest.goto_xsm_schools()
     # determine next year
     year = 2016
     page_content = xtest.getPageContent()
     while str(year) in page_content:
         year += 1
     logging.info("Found year that is not present on this page: %s", year)
-    xtest.gotoXsmAddSchool()
+    xtest.goto_xsm_add_school()
 
     # generate school number
     school = School(xtest)
@@ -359,8 +359,62 @@ class Manager(xc.XcmsTest):
             return str(m.group(1))
         return None
 
+    # Navigation
     def goto_anketa(self):
         self.gotoUrlByLinkText(u"Анкета")
 
     def goto_xsm_add_person(self):
         self.gotoUrlByLinkText(u"Добавить участника")
+
+    def goto_xsm_anketas(self):
+        self.gotoUrlByLinkText(self.getAnketaListMenuName())
+
+    def goto_xsm(self):
+        self.gotoPage("/xsm")
+
+    def goto_xsm_schools(self):
+        self.gotoUrlByLinkText(u"Школы")
+
+    def goto_xsm_all_people(self):
+        self.logAdd("goto_xsm_all_people: going to 'All People' menu. ")
+        self.gotoUrlByLinkText(u"Все люди")
+
+    def goto_xsm_active(self):
+        self.logAdd("goto_xsm_active: going to 'Active' menu. ")
+        self.gotoUrlByLinkText(u"Актив")
+
+    def goto_xsm_add_school(self):
+        self.logAdd("gotoAddSchool: navigating to 'Add School link (button). ")
+        self.gotoUrlByLinkText(u"Добавить школу")
+
+    def goto_xsm_courses(self):
+        self.logAdd("gotoCourses: going to 'Courses' menu. ")
+        self.gotoUrlByLinkText(u"Курсы")
+
+    def goto_xsm_add_course(self):
+        self.logAdd("gotoAddCourses: navigating to 'Add Course' link (button). ")
+        self.gotoUrlByLinkText(u"Добавить курс")
+
+    def goto_back_to_anketa_view(self):
+        self.gotoUrlByLinkText(u"Вернуться к просмотру участника")
+
+    def goto_back_to_person_view(self):
+        self.gotoUrlByLinkText(u"Вернуться к просмотру участника")
+
+    def goto_back_to_school_view(self):
+        self.gotoUrlByLinkText(u"Вернуться к просмотру")
+
+    def goto_back_to_course_view(self):
+        self.gotoUrlByLinkText(u"Вернуться к просмотру")
+
+    def goto_xsm_change_person_status(self):
+        self.gotoUrlByLinkText(u"Сменить статус")
+
+    @staticmethod
+    def get_anketa_success_submit_message():
+        return u"Спасибо, Ваша анкета принята!"
+
+    @staticmethod
+    def get_anketa_duplicate_submit_message():
+        return u"А мы Вас знаем!"
+

@@ -237,12 +237,6 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def getNewsLinkName(self):
         return u"Новости"
 
-    def getAnketaSuccessSubmitMessage(self):
-        return u"Спасибо, Ваша анкета принята!"
-
-    def getAnketaDuplicateSubmitMessage(self):
-        return u"А мы Вас знаем!"
-
     def getAdminPanelLink(self):
         return self.getUrlByLinkText(self.getAdminPanelLinkName())
 
@@ -252,12 +246,6 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
     def getAuthLink(self):
         return self.getUrlByLinkText(u"Авторизация")
-
-    def gotoXsm(self):
-        self.gotoPage("/xsm")
-
-    def gotoXsmSchools(self):
-        self.gotoUrlByLinkText(u"Школы")
 
     def gotoAdminPanel(self):
         self.logAdd("gotoAdminPanel: going to admin control panel. ")
@@ -401,48 +389,13 @@ class XcmsTest(XcmsTestWithConfig):
         self.logAdd("gotoCabinet: going to user control panel (cabinet). ")
         self.gotoUrlByLinkText(u"Личный кабинет")
 
-    def gotoXsmAllPeople(self):
-        self.logAdd("gotoXsmAllPeople: going to 'All People' menu. ")
-        self.gotoUrlByLinkText(u"Все люди")
-
-    def gotoXsmActive(self):
-        self.logAdd("gotoXsmActive: going to 'Active' menu. ")
-        self.gotoUrlByLinkText(u"Актив")
-
-    def gotoXsmAddSchool(self):
-        self.logAdd("gotoAddSchool: navigating to 'Add School link (button). ")
-        self.gotoUrlByLinkText(u"Добавить школу")
-
-    def gotoXsmCourses(self):
-        self.logAdd("gotoCourses: going to 'Courses' menu. ")
-        self.gotoUrlByLinkText(u"Курсы")
-
-    def gotoXsmAddCourse(self):
-        self.logAdd("gotoAddCourses: navigating to 'Add Course' link (button). ")
-        self.gotoUrlByLinkText(u"Добавить курс")
-
-    def gotoBackToAnketaView(self):
-        self.gotoUrlByLinkText(u"Вернуться к просмотру участника")
-
-    def gotoBackToPersonView(self):
-        self.gotoUrlByLinkText(u"Вернуться к просмотру участника")
-
-    def gotoBackToSchoolView(self):
-        self.gotoUrlByLinkText(u"Вернуться к просмотру")
-
-    def gotoBackToCourseView(self):
-        self.gotoUrlByLinkText(u"Вернуться к просмотру")
-
-    def gotoXsmChangePersonStatus(self):
-        self.gotoUrlByLinkText(u"Сменить статус")
-
     def gotoEditPerson(self):
         # self.gotoUrlByLinkText(u"Редактировать анкетные данные")
         self.gotoUrlByLinkText(u"Ред.")
 
     def gotoBackAfterComment(self):
         # self.gotoUrlByLinkText(u"Вернуться к списку комментов") # older variant
-        self.gotoBackToAnketaView()
+        self.goto_back_to_anketa_view()
 
     def performLogoutFromSite(self):
         self.gotoUrlByLinkText(u"Выход")
@@ -464,7 +417,7 @@ class XcmsTest(XcmsTestWithConfig):
 
         self.clickElementByName("update-person_comment")
         self.assertBodyTextPresent(u"Комментарий успешно сохранён")
-        self.gotoBackToAnketaView()
+        self.goto_back_to_anketa_view()
         return commentText
 
     def editCommentToPerson(self, commentLinkId):
@@ -474,7 +427,7 @@ class XcmsTest(XcmsTestWithConfig):
         newCommentText = self.fillElementByName("comment_text", newCommentText)
         self.clickElementByName("update-person_comment")
         self.assertBodyTextPresent(u"Комментарий успешно сохранён")
-        self.gotoBackToAnketaView()
+        self.goto_back_to_anketa_view()
         return newCommentText
 
     def gotoUserList(self):
@@ -497,9 +450,6 @@ class XcmsTest(XcmsTestWithConfig):
     def gotoCloseEditor(self):
         self.logAdd("gotoCloseEditor")
         self.gotoUrlByLinkText(u"Свернуть редактор")
-
-    def gotoXsmAnketas(self):
-        self.gotoUrlByLinkText(self.getAnketaListMenuName())
 
     def getAnketaListMenuName(self):
         return u"Анкеты"

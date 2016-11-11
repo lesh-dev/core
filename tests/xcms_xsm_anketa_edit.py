@@ -49,7 +49,7 @@ class XcmsXsmAnketaEdit(xsm.Manager, xtest_common.XcmsTest):
         # we will be warned about unfilled fields
         self.assertBodyTextPresent(u"ещё раз")
         self.clickElementById("submit_anketa-submit")
-        self.assertBodyTextPresent(self.getAnketaSuccessSubmitMessage())
+        self.assertBodyTextPresent(self.get_anketa_success_submit_message())
 
         # now login as admin
         self.performLoginAsManager()
@@ -95,13 +95,13 @@ class XcmsXsmAnketaEdit(xsm.Manager, xtest_common.XcmsTest):
             skype=random_crap.random_text(8),
         )
         self.assertBodyTextPresent(u"Участник успешно сохранён")
-        self.gotoBackToAnketaView()
+        self.goto_back_to_anketa_view()
 
         # check bug
         self.assertElementTextById("anketa_status-span", u"Новый")
 
         self.gotoRoot()
-        self.gotoXsm()
+        self.goto_xsm()
         self.gotoUrlByLinkText(self.getAnketaListMenuName())
 
         # try to drill-down again into table with new anketa.

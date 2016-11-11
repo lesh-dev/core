@@ -74,25 +74,25 @@ class XcmsXsmAnketaDuplicate(xsm.Manager, xtest_common.XcmsTest):
         )
 
     def change_status(self, person):
-        self.gotoXsm()
-        self.gotoXsmAnketas()
+        self.goto_xsm()
+        self.goto_xsm_anketas()
         self.gotoUrlByLinkText(person.short_alias())
-        self.gotoXsmChangePersonStatus()
+        self.goto_xsm_change_person_status()
 
         self.setOptionValueByIdAndValue("anketa_status-selector", "nextyear")
         comment_text = u"Меняем статус первой анкете: " + random_crap.randomCrap(5)
         comment_text = self.fillElementById("comment_text-text", comment_text)
 
         self.clickElementById("update-person_comment-submit")
-        self.gotoBackToPersonView()
+        self.goto_back_to_person_view()
 
         new_state = u"Отложен"
         self.assertBodyTextPresent(u"Статус Новый изменён на {0}".format(new_state))
         self.assertBodyTextPresent(comment_text)
 
     def check_status(self, person):
-        self.gotoXsm()
-        self.gotoXsmAnketas()
+        self.goto_xsm()
+        self.goto_xsm_anketas()
         self.gotoUrlByLinkText(person.short_alias())
         # anketa should change status to new (like 'ticket reopen')
         self.assertElementTextById("anketa_status-span", u"Новый")
@@ -106,17 +106,17 @@ class XcmsXsmAnketaDuplicate(xsm.Manager, xtest_common.XcmsTest):
         person.email = random_crap.email()
 
         self.add_anketa(person)
-        self.assertBodyTextPresent(self.getAnketaSuccessSubmitMessage())
+        self.assertBodyTextPresent(self.get_anketa_success_submit_message())
         self.add_anketa(person)
-        self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage())
-        self.assertBodyTextPresent(self.getAnketaDuplicateSubmitMessage())
+        self.assertBodyTextNotPresent(self.get_anketa_success_submit_message())
+        self.assertBodyTextPresent(self.get_anketa_duplicate_submit_message())
 
         self.check_unique_anketa(person)
 
         self.change_status(person)
 
         self.add_anketa(person)
-        self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage())
-        self.assertBodyTextPresent(self.getAnketaDuplicateSubmitMessage())
+        self.assertBodyTextNotPresent(self.get_anketa_success_submit_message())
+        self.assertBodyTextPresent(self.get_anketa_duplicate_submit_message())
 
         self.check_status(person)

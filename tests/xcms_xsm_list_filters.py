@@ -49,7 +49,7 @@ class XcmsXsmListFilters(xsm.Manager, xtest_common.XcmsTest):
         self.check_filter(alias, alias, 1, "This search should return one record. ")
 
     def test_department_selector(self):
-        self.gotoXsmAllPeople()
+        self.goto_xsm_all_people()
         self.goto_xsm_add_person()
         department_id = 3  # Математическое
         person = xsm.Person(self)
@@ -63,7 +63,7 @@ class XcmsXsmListFilters(xsm.Manager, xtest_common.XcmsTest):
         )
         person.back_to_person_view()
 
-        self.gotoXsmAllPeople()
+        self.goto_xsm_all_people()
         self.setOptionValueByIdAndValue("show_department_id-selector", department_id)
         alias = person.short_alias()
         self.check_filter(alias, alias, 1, "Search with proper department selection return 1 record. ")
@@ -77,8 +77,8 @@ class XcmsXsmListFilters(xsm.Manager, xtest_common.XcmsTest):
 
         self.performLoginAsManager()
         self.gotoRoot()
-        self.gotoXsm()
-        self.gotoXsmAllPeople()
+        self.goto_xsm()
+        self.goto_xsm_all_people()
 
         self.test_existing_people()
         self.test_department_selector()

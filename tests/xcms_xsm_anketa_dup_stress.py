@@ -88,9 +88,9 @@ class XcmsXsmAnketaDupStress(xsm.Manager, xtest_common.XcmsTest):
         for iteration in range(0, 5):
             self.add_anketa(person, iteration)
             if iteration == 0:
-                self.assertBodyTextPresent(self.getAnketaSuccessSubmitMessage())
+                self.assertBodyTextPresent(self.get_anketa_success_submit_message())
             else:
-                self.assertBodyTextNotPresent(self.getAnketaSuccessSubmitMessage())
-                self.assertBodyTextPresent(self.getAnketaDuplicateSubmitMessage())
+                self.assertBodyTextNotPresent(self.get_anketa_success_submit_message())
+                self.assertBodyTextPresent(self.get_anketa_duplicate_submit_message())
 
         self.check_unique_anketa(person)

@@ -20,7 +20,7 @@ class XcmsXsmAddSchool(xtest_common.XcmsTest):
     def run(self):
         self.ensure_logged_off()
         self.performLoginAsManager()
-        self.gotoXsm()
+        self.goto_xsm()
         school = xsm.add_test_school(self)
         self.gotoUrlByLinkText(u"Правка")
         school.input(

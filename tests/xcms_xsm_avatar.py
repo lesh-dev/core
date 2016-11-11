@@ -39,7 +39,7 @@ class XcmsXsmAvatar(xsm.Manager, xtest_common.XcmsTest):
         self.ensure_logged_off()
         self.performLoginAsManager()
 
-        self.gotoXsmAllPeople()
+        self.goto_xsm_all_people()
         self.goto_xsm_add_person()
 
         person = xsm.Person(self)

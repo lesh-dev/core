@@ -19,10 +19,10 @@ class XcmsXsmAddCourses(xsm.Manager, xtest_common.XcmsTest):
     def run(self):
         self.ensure_logged_off()
         self.performLoginAsManager()
-        self.gotoXsm()
+        self.goto_xsm()
         school = xsm.add_test_school(self)
 
-        self.gotoXsmAllPeople()
+        self.goto_xsm_all_people()
         self.goto_xsm_add_person()
         teacher = xsm.Person(self)
         teacher.input(
