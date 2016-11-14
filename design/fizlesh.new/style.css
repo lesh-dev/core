@@ -203,7 +203,14 @@ h4 {
 	text-align: left !important;
 }*/
 
+#list .content-text a {
+	color: #28295b;
+}
 
+#list h4 {
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
 
 .doc {
 	height: 100%;
