@@ -23,9 +23,9 @@ body {
 }
 
 .index-wrapper {
-	padding-left: 15px; 
-	padding-right: 15px; 
-	padding-top: 15px; 
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 15px;
 	padding-bottom: 30px;
 	background-color: rgba(255,255,255,0.6);
 }
@@ -40,7 +40,7 @@ body {
 	height: 100%;
 	position: relative;
 	border: 0px;
-	background-color: rgba(255,255,255,0.9); 
+	background-color: rgba(255,255,255,0.9);
 	color: black;
 }
 
@@ -68,11 +68,11 @@ body {
 	height: 100%;
 	position: relative;
 	border: 1px solid #ddd;
-	background-color: rgba(255,255,255,0.9); 
+	background-color: rgba(255,255,255,0.9);
 	color: black;
 }
 
-.wrapper {	
+.wrapper {
 	padding-left: 50px;
 	padding-right: 50px;
 	padding-top: 30px;
@@ -82,7 +82,7 @@ body {
 	height: 100%;
 	position: relative;
 	border: 0px;
-	background-color: rgba(255,255,255,0.9); 
+	background-color: rgba(255,255,255,0.9);
 	color: black;
 }
 
@@ -90,7 +90,7 @@ body {
 
 
 
-	
+
 
 
 /*menu*/
@@ -179,16 +179,16 @@ h4 {
 }
 
 h2 {
-	margin-bottom: 20px; 
+	margin-bottom: 20px;
 	margin-top: 0px;
 }
 
 h3 {
-	margin-bottom: 20px; 
+	margin-bottom: 20px;
 }
 
 h4 {
-	margin-bottom: 20px; 
+	margin-bottom: 20px;
 }
 
 
@@ -224,7 +224,7 @@ h4 {
 	width: 30px;
 	height: 30px;
 
-	background-image: url(img/111.png);
+	background-image: url(../../img/111.png);
 	background-size: 100% ;
 }
 
@@ -270,12 +270,12 @@ h4 {
 }
 
 .aboutCarousel {
-	padding-top: 15px; 
+	padding-top: 15px;
 	padding-bottom: 15px;
 }
 
 .zeshCarousel {
-	padding-top: 20px; 
+	padding-top: 20px;
 	padding-bottom: 20px;
 }
 
@@ -294,40 +294,40 @@ h4 {
 /*backgrounds*/
 #index
 {
-	background-image: url(img/background/index.jpg) ;
+	background-image: url(../../img/background/index.jpg) ;
 	background-attachment: fixed;
-	background-size: cover; 
+	background-size: cover;
 	background-repeat: no-repeat;
 	/* height: 100%*/
 }
 
 #about
 {
-	background-image: url(img/background/about.jpg);
+	background-image: url(../../img/background/about.jpg);
 	background-attachment: fixed;
-	background-size: cover; 
+	background-size: cover;
 	background-repeat: no-repeat;
 }
 
 #life
 {
-	background-image: url(img/background/life.jpg) ;
+	background-image: url(../../img/background/life.jpg) ;
 	background-attachment: fixed;
-	background-size: cover; 
+	background-size: cover;
 	background-repeat: no-repeat;
 }
 
 #education
 {
-	background-image: url(img/background/education.jpg) ;
+	background-image: url(../../img/background/education.jpg) ;
 	background-attachment: fixed;
-	background-size: cover; 
+	background-size: cover;
 	background-repeat: no-repeat;
 }
 
 #list
 {
-	background-image: url(img/background/list.jpg) ;
+	background-image: url(../../img/background/list.jpg) ;
 	background-attachment: fixed;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -335,63 +335,51 @@ h4 {
 
 #album
 {
-	background-image: url(img/background/album.jpg) ;
+	background-image: url(../../img/background/album.jpg) ;
 	background-attachment: fixed;
-	background-size: cover; 
+	background-size: cover;
 	background-repeat: no-repeat;
 }
 
 #admission
 {
-	background-image: url(img/background/admission.jpg) ;
+	background-image: url(../../img/background/admission.jpg) ;
 	background-attachment: fixed;
-	background-size: cover; 
+	background-size: cover;
 	background-repeat: no-repeat;
 }
 
 #zesh
 {
-	background-image: url(img/background/zesh.jpg) ;
+	background-image: url(../../img/background/zesh.jpg) ;
 	background-attachment: fixed;
-	background-size: cover; 
+	background-size: cover;
 	background-repeat: no-repeat;
 }
 
 #contacts
 {
-	background-image: url(img/background/contacts.jpg) ;
+	background-image: url(../../img/background/contacts.jpg) ;
 	background-attachment: fixed;
-	background-size: cover; 
+	background-size: cover;
 	background-repeat: no-repeat;
 }
 
 #links
 {
-	background-image: url(img/background/links.jpg) ;
+	background-image: url(../../img/background/links.jpg) ;
 	background-attachment: fixed;
-	background-size: cover; 
+	background-size: cover;
 	background-repeat: no-repeat;
 }
 
 #news
 {
-	background-image: url(img/background/news.jpg) ;
+	background-image: url(../../img/background/news.jpg) ;
 	background-attachment: fixed;
-	background-size: cover; 
+	background-size: cover;
 	background-repeat: no-repeat;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -551,10 +539,10 @@ h4 {
 		/*background-image: url(img/carousel/c1.1.jpg);
 		background-size: 100% auto;*/
 		/*background-attachment: fixed;*/*/
-		/*background-size: cover; 
+		/*background-size: cover;
 		background-repeat: no-repeat;*/
 	}
-	
+
 }
 
 

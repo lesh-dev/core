@@ -4,9 +4,11 @@
     <# cms/head #>
     <link rel="yandex-tableau-widget" href="<# full_design_dir #>tableau.json" />
     <title>ФизЛЭШ</title>
+    <# js/jquery #>
     <# js/bootstrap3 #>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&amp;subset=latin,cyrillic" rel="stylesheet" type="text/css">
     <# css/design modern.css #>
+    <!-- css/design menu.css -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -50,23 +52,23 @@
       <div class="carousel-inner" role="listbox">
 
         <div class="item active">
-          <a href="/index"><img src="img/carousel/c1.jpg" alt="Физическое отделение Летней экологической школы"></a>
+          <a href="/index"><img src="<# full_design_dir #>img/carousel/c1.jpg" alt="Физическое отделение Летней экологической школы"></a>
         </div>
 
         <div class="item">
-          <a href="/education"><img src="img/carousel/c2.jpg"  alt="То, о чем вам не расскажут в школе"></a>
+          <a href="/education"><img src="<# full_design_dir #>img/carousel/c2.jpg"  alt="То, о чем вам не расскажут в школе"></a>
         </div>
 
         <div class="item">
-          <a href="/life"><img src="img/carousel/c3.jpg" alt="Месяц на свежем воздухе, вдали от пыльного города"></a>
+          <a href="/life"><img src="<# full_design_dir #>img/carousel/c3.jpg" alt="Месяц на свежем воздухе, вдали от пыльного города"></a>
         </div>
 
         <div class="item">
-          <a href="/zesh"><img src="img/carousel/c4.jpg" alt="А еще у нас есть зимняя школа"></a>
+          <a href="/zesh"><img src="<# full_design_dir #>img/carousel/c4.jpg" alt="А еще у нас есть зимняя школа"></a>
         </div>
 
         <div class="item">
-          <a href="/admission"><img src="img/carousel/c5.jpg" alt="Присоединяйся!"></a>
+          <a href="/admission"><img src="<# full_design_dir #>img/carousel/c5.jpg" alt="Присоединяйся!"></a>
         </div>
 
         <!-- Left and right controls -->
@@ -80,7 +82,7 @@
         </a>
       </div>
     </div>
-    <img src="img/carousel/c1.1.jpg" id="mob">
+    <img src="<# full_design_dir #>img/carousel/c1.1.jpg" id="mob">
 
 
     <div class="content-text">
@@ -121,21 +123,8 @@
   </div>
 </div>
 
-</body>
-</html>
-
-<div style="display: none;">
-
-
-
-<head>
-    <# cms/head #>
-    <link rel="yandex-tableau-widget" href="<# full_design_dir #>tableau.json" />
-    <# css/design menu.css #>
-    <# css/design default.css #>
-</head>
-<body>
-    NEW TEMPLATE1111
+<div style="display:none">
+    OLD TEMPLATE:
 
     <div id="fullHeight">
         <table class="topTable roundBorders">
@@ -264,5 +253,6 @@
             </tr>
         </table>
     </div>
+
 </body>
-</div>
+</html>
