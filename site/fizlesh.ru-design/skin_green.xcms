@@ -6,7 +6,10 @@
     <# css/design menu.css #>
     <# css/design default.css #>
 </head>
-<body>
+<body><?php
+    $skin_to_switch_to = ($skin == "green") ? "modern" : "green"; ?>
+    <div style="position: absolute; right: 7px; top: 6px;">Skin:&nbsp;<a
+        href="/?skin=<?php echo $skin_to_switch_to; ?>"><?php echo $skin_to_switch_to; ?></a></div>
     <div id="fullHeight">
         <table class="topTable roundBorders">
             <tr>

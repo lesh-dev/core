@@ -1,5 +1,5 @@
 <?php
-require_once("${engine_dir}ank/pss.php");
+require_once("${engine_dir}cms/ank/pss.php");
 
 $skin = xcms_get_persistent_key("fizlesh.ru", "skin", "green");
 include(translate("<! skin_${skin} !>"));
