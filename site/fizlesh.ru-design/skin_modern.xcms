@@ -1,18 +1,14 @@
 <# cms/linit #><# cms/init #><# deploy_utils #><# locale #><!DOCTYPE html>
 <html lang="ru"><head>
-<meta charset="utf-8">
-
-<title>ФизЛЭШ</title>
-
-<link href="bootstrap-3.3.6-dist/css/bootstrap.css" rel="stylesheet">
-<link href='https://fonts.googleapis.com/css?family=Open+Sans&amp;subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-<script src="jquery-1.12.4.min.js"></script>
-<script src="bootstrap-3.3.6-dist/js/bootstrap.min.js" >
-</script>
-<link href="style.css" rel="stylesheet">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <# cms/head #>
+    <link rel="yandex-tableau-widget" href="<# full_design_dir #>tableau.json" />
+    <title>ФизЛЭШ</title>
+    <# js/bootstrap3 #>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&amp;subset=latin,cyrillic" rel="stylesheet" type="text/css">
+    <# css/design modern.css #>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body>
   <div id="index">
 
