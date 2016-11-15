@@ -1,7 +1,6 @@
 <?php
-if (true)
-{
-    include(translate("<! old_index !>"));
-} else {
-    include(translate("<! new_index !>"));
-}?>
+require_once("${engine_dir}ank/pss.php");
+
+$skin = xcms_get_persistent_key("fizlesh.ru", "skin", "green");
+include(translate("<! skin_${skin} !>"));
+?>
