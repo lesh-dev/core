@@ -12,6 +12,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+<?php
+    $skin_to_switch_to = ($skin == "green") ? "modern" : "green"; ?>
+    <div style="position: absolute; right: 7px; bottom: 6px; z-index: 100; color: #9f9f9f;">Skin:&nbsp;<a
+        href="/?skin=<?php echo $skin_to_switch_to; ?>" style="color: #bfbfbf;"><?php echo $skin_to_switch_to; ?></a></div>
+
   <div id="index">
 
     <nav class="navbar navbar-inverse ">
