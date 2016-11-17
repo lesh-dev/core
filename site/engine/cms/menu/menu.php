@@ -1,5 +1,5 @@
 <?php
-    function xcms_menu($init_path, $MENUTEMPLATES, $menu_level, $add_href_params, $options, $start_level, $end_level)
+    function xcms_menu($init_path, $menu_templates, $menu_level, $add_href_params, $options, $start_level, $end_level)
     {
         global $SETTINGS, $pageid, $web_prefix;
 
@@ -57,7 +57,7 @@
                 $aux_class .= " menuitem-auth";
         }
         // render menu item
-        $html = $MENUTEMPLATES[$menu_level];
+        $html = $menu_templates[$menu_level];
         $html = str_replace('<AUXCLASS>', $aux_class, $html);
         $html = str_replace('{FLAGS}', $flags, $html);
 
@@ -115,12 +115,12 @@
 
                 $without_prefix = str_replace($page_prefix, "", $value);
                 if (xcms_get_key_or($options, "show") != "" || strstr($pageid, $without_prefix))
-                    xcms_menu($value, $MENUTEMPLATES, $menu_level + 1, $add_href_params, $options, $start_level, $end_level);
+                    xcms_menu($value, $menu_templates, $menu_level + 1, $add_href_params, $options, $start_level, $end_level);
                 else
                 {
                     $new_options = $options;
                     $new_options["stop"] = true;
-                    xcms_menu($value, $MENUTEMPLATES, $menu_level + 1, $add_href_params, $new_options, $start_level, $end_level);
+                    xcms_menu($value, $menu_templates, $menu_level + 1, $add_href_params, $new_options, $start_level, $end_level);
                 }
             }
         }
