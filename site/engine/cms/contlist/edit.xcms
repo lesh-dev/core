@@ -134,7 +134,7 @@ function xcms_draw_contlist_create($result = true)
         <h3>Список блоков</h3>
         <div class="menu-contlist">
         <?php
-        $template_file = "{$SETTINGS["engine_dir"]}/cms/menu/menulinks.dat";
+        $template_file = "{$SETTINGS["engine_dir"]}/cms/menu/menu_links.html";
         xcms_menu(
             "{$SETTINGS["content_dir"]}cms/pages/$pageid",
             file($template_file),
