@@ -22,7 +22,8 @@ _RE_HTML_ATTRIBUTES = re.compile(
     r' (class|href|width|height|rows|cols|colspan|style|id|name|placeholder|'
     r'value|action|method|enctype|accept|alt|src|target|type|language|title|'
     r'http-equiv|content|size|disabled|content|enum-type|row-id|color|'
-    r'field-name|role|media|rel|autocomplete)="'
+    r'field-name|role|media|rel|autocomplete|align|aria-controls|aria-expanded|'
+    r'data-toggle|data-target|data-ride|role|aria-hidden|data-slide|lang|charset)="'
 )
 _FILE_EXPANSIONS = re.compile(r'\{[$a-zA-Z0-9._,-]*?\}')
 _JS_REGEXPS = re.compile(r'/[^/]+/\.test\(')
