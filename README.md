@@ -35,18 +35,20 @@ Alexander Trousevitch <trousev@yandex.ru>
 * Initial Contest design
 * Deploy system
 * Project administration
+* Hosting support
 
 Mikhail Veltishchev <dichlofos-mv@yandex.ru>
-* Current project administration
-* Major XCMS enhancements
+* Project administration and management
+* Major XCMS enhancements and maintenance
+* Contest system support and bugfixing
 * Database engine
 * Mailer and notifications
-* Current XCMS maintainer
 * XSM
 * Forum hacks
-* Helper scripts and tools
+* Helper scripts and tools, code styler
 * Initial http://fizlesh.ru design
 * http://lesh.org.ru design enhancements
+* Trash code refactoring, obsolete code removal
 
 Dmitry Veltishchev <vdm-photo@ya.ru>
 * Automated test suite
@@ -56,6 +58,10 @@ Julia Aivazyan
 * http://lesh.org.ru design
 
 Natalia Skrobova <nata-skr@yandex.ru>
-* http://fizlesh.ru design
+* Green http://fizlesh.ru design
 * Art
 * Automated tests and bug fixing
+
+Anastasiya Dianova <mediana96@gmail.com>
+* Modern http://fizlesh.ru design
+* Art
