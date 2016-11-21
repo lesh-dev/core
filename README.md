@@ -15,10 +15,10 @@ X Engine consists of several parts:
 
 * Core components (database engine, mailer subsystem, etc)
 * XCMS, a content management system
-* XSM, a student manager system
+* XSM, a student management system
 * Contest checking helper module
-* Forum (a fork of simplemachinesforum.org forum)
 * Administration, deploy and backup tools
+* (deprecated) Forum (a fork of simplemachinesforum.org forum)
 
 Also, this repo hosts design and layout of
 http://fizlesh.ru and http://lesh.org.ru sites.
