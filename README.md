@@ -37,7 +37,7 @@ Alexander Trousevitch <trousev@yandex.ru>
 * Project administration
 * Hosting support
 
-Mikhail Veltishchev <dichlofos-mv@yandex.ru>
+Mikhail Veltishchev <dichlofos-mv@yandex.ru>, https://github/dichlofos
 * Project administration and management
 * Major XCMS enhancements and maintenance
 * Contest system support and bugfixing
@@ -50,7 +50,7 @@ Mikhail Veltishchev <dichlofos-mv@yandex.ru>
 * http://lesh.org.ru design enhancements
 * Trash code refactoring, obsolete code removal
 
-Dmitry Veltishchev <vdm-photo@ya.ru>
+Dmitry Veltishchev <vdm-photo@ya.ru>, https://github.com/vdmit
 * Automated test suite
 * Tools and helper scripts
 
@@ -58,10 +58,11 @@ Julia Aivazyan
 * http://lesh.org.ru design
 
 Natalia Skrobova <nata-skr@yandex.ru>
+https://github.com/delphinidae
 * Green http://fizlesh.ru design
 * Art
 * Automated tests and bug fixing
 
-Anastasiya Dianova <mediana96@gmail.com>
+Anastasiya Dianova <mediana96@gmail.com>, https://github.com/birdbirdbird
 * Modern http://fizlesh.ru design
 * Art
