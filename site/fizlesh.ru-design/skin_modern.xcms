@@ -78,6 +78,11 @@
                 <img src="<# full_design_dir #>img/carousel/c1.1.jpg" id="mob" />
 
                 <div class="content-text">
+                    <?php
+                        $pageid = "z01News";
+                        include(translate("<! cms/contlist/view !>"));
+                    ?>
+
                     <div class="item-wrapper">
                         <div align="right"><i>17.03.2016  </i></div>
                         <h4>Собеседование 20 марта</h4>
