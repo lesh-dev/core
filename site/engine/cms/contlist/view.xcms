@@ -60,7 +60,7 @@
                 $name = $u->login();
             ?>
             <div class="signature"><?php echo htmlspecialchars($name); ?></div>
-            </div><?php
+            </div><!-- contlist-block --><?php
         }
         $contlist_block_iter++;
     }

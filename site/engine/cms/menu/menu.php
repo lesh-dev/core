@@ -58,26 +58,26 @@
         }
         // render menu item
         $html = $menu_templates[$menu_level];
-        $html = str_replace('<AUXCLASS>', $aux_class, $html);
-        $html = str_replace('{FLAGS}', $flags, $html);
+        $html = str_replace('@@AUX_CLASS@', $aux_class, $html);
+        $html = str_replace('@@FLAGS@', $flags, $html);
 
         if (xcms_get_key_or($options, "devel") || !@$INFO["alias"])
         {
             // if alias not set or in devel mode, always show unaliased menu items
-            $html = str_replace("<HREF>", "/$web_prefix?page=$pageiid&amp;$add_href_params", $html);
+            $html = str_replace("@@HREF@", "/$web_prefix?page=$pageiid&amp;$add_href_params", $html);
         }
         else
         {
             $alias = $INFO["alias"];
-            $html = str_replace("<HREF>", "/$web_prefix$alias/$add_href_params", $html);
+            $html = str_replace("@@HREF@", "/$web_prefix$alias/$add_href_params", $html);
         }
         // text is already escaped here
-        $html = str_replace("<TEXT>", $text, $html);
+        $html = str_replace("@@TEXT@", $text, $html);
 
         if ($pageid == $pageiid || strstr($pageid, "$pageiid/"))
-            $html = str_replace("<ACTIVE>", "active", $html);
+            $html = str_replace("@@ACTIVE", "active", $html);
         else
-            $html = str_replace("<ACTIVE>", "passive", $html);
+            $html = str_replace("@@ACTIVE", "passive", $html);
 
         // add icon
         if (file_exists("$init_path/menuicon.gif"))
