@@ -40,7 +40,12 @@
             $timestamp = xcms_get_key_or($info, "timestamp-created");
             $date = xcms_rus_date($timestamp);
             $header_url = "/$web_prefix$alias";
-            include(translate("<! contlist_header_${skin} !>"));
+
+            if (isset($skin) && xu_not_empty($skin))
+                include(translate("<! contlist_header_${skin} !>"));
+            else
+                include(translate("<! contlist_header !>"));
+
             include(translate("<! cms/readtext !>"));
             $login = xcms_get_key_or($info, "owner");
             // TODO: fix this trash. We need 4 lines to get another user name here
@@ -51,8 +56,12 @@
             $name = trim($u->param("name"));
             if (!strlen($name))
                 $name = $u->login();
+
+            if (isset($skin) && xu_not_empty($skin))
+                include(translate("<! contlist_footer_${skin} !>"));
+            else
+                include(translate("<! contlist_footer !>"));
             ?>
-            <div class="signature"><?php echo htmlspecialchars($name); ?></div>
             </div><!-- contlist-block --><?php
         }
         $contlist_block_iter++;
