@@ -40,16 +40,9 @@
             $timestamp = xcms_get_key_or($info, "timestamp-created");
             $date = xcms_rus_date($timestamp);
             $header_url = "/$web_prefix$alias";
-            ?>
-            <a
-                class="h2"
-                id="<?php echo $subpage_id; ?>"
-                href="<?php echo $header_url; ?>"
-                ><?php echo "$date &ndash; ".xcms_get_key_or_enc($info, "header"); ?></a>
-            <?php
+            include(translate("<! contlist_header_${skin} !>"));
             include(translate("<! cms/readtext !>"));
             $login = xcms_get_key_or($info, "owner");
-
             // TODO: fix this trash. We need 4 lines to get another user name here
             // It's not an API, it's a bullshit
             $su = xcms_user();
