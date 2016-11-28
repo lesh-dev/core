@@ -20,7 +20,7 @@
         href="/?skin=<?php echo $skin_to_switch_to; ?>" style="color: #efefef;"><?php echo $skin_to_switch_to; ?></a></div>
 
 
-    <div id="page_<?php echo $page_id_filtered; ?>">
+    <div class="page" id="page_<?php echo $page_id_filtered; ?>">
 
         <nav class="navbar navbar-inverse ">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarC" aria-expanded="false" aria-controls="navbar">

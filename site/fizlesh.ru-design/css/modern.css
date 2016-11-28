@@ -262,47 +262,47 @@ h4 {
     background-repeat: no-repeat;
 }
 
-.page #page_index {
+#page_index.page {
     background-image: url(../../img/background/index.jpg) ;
 }
 
-.page #about {  /* unused */
+#page_about.page {  /* unused */
     background-image: url(../../img/background/about.jpg);
 }
 
-.page #life {  /* unused */
+#page_life.page {  /* unused */
     background-image: url(../../img/background/life.jpg) ;
 }
 
-.page #page_z03Education {
+#page_z03Education.page {
     background-image: url(../../img/background/education.jpg) ;
 }
 
-.page #page_list {  /* unused */
+#page_list.page {  /* unused */
     background-image: url(../../img/background/list.jpg) ;
 }
 
-.page #page_album {  /* unused */
+#page_album.page {  /* unused */
     background-image: url(../../img/background/album.jpg) ;
 }
 
-.page #page_admission {
+#page_admission.page {
     background-image: url(../../img/background/admission.jpg) ;
 }
 
-.page #page_zesh {
+#page_zesh.page {
     background-image: url(../../img/background/zesh.jpg) ;
 }
 
-.page #page_contacts {
+#page_contacts.page {
     background-image: url(../../img/background/contacts.jpg) ;
 }
 
-.page #page_links {
+#page_links.page {
     background-image: url(../../img/background/links.jpg) ;
 }
 
-.page #page_news {
+#page_news.page {
     background-image: url(../../img/background/news.jpg) ;
 }
 
