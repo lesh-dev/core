@@ -13,11 +13,14 @@
 </head>
 <body>
 <?php
-    $skin_to_switch_to = ($skin == "green") ? "modern" : "green"; ?>
+    $skin_to_switch_to = ($skin == "green") ? "modern" : "green";
+    $page_id_filtered = str_replace("/", "_", $pageid);
+    ?>
     <div style="position: absolute; right: 7px; bottom: 6px; z-index: 100; color: #e5e5e5;">Skin:&nbsp;<a
         href="/?skin=<?php echo $skin_to_switch_to; ?>" style="color: #efefef;"><?php echo $skin_to_switch_to; ?></a></div>
 
-    <div id="index">
+
+    <div id="page_<?php echo $page_id_filtered; ?>">
 
         <nav class="navbar navbar-inverse ">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarC" aria-expanded="false" aria-controls="navbar">
@@ -60,7 +63,7 @@
                         </div>
 
                         <div class="item">
-                            <a href="/admission"><img src="<# full_design_dir #>img/carousel/c5.jpg" alt="Присоединяйся!"></a>
+                            <a href="/join"><img src="<# full_design_dir #>img/carousel/c5.jpg" alt="Присоединяйся!"></a>
                         </div>
 
                         <!-- Left and right controls -->
@@ -82,43 +85,6 @@
                         $pageid = "z01News";
                         include(translate("<! cms/contlist/view !>"));
                     ?>
-
-                    <div class="item-wrapper">
-                        <div align="right"><i>17.03.2016  </i></div>
-                        <h4>Собеседование 20 марта</h4>
-                        <p>
-                            Ближайшее собеседование на ФизЛЭШ состоится 20 марта, в 14 часов в Астрономическом институте
-                            (Университетский проспект, 13). Пожалуйста, подтвердите свое
-                            участие по е-майл serge19746@ya.ru Если вы хотите пройти собеседование, но время начала
-                            14 часов вас не устраивает— также напишите нам, мы что-нибудь
-                            придумаем. Телефон для связи: +79163245071 (Серж).
-                        </p>
-                        <div align="right"><i>Ваня Лилиенберг</i></div>
-                    </div>
-
-                    <div class="item-wrapper">
-                        <div align="right"><i>17.03.2016  </i></div>
-                        <h4>Собеседование 20 марта</h4>
-                        <p>
-                            Ближайшее собеседование на ФизЛЭШ состоится 20 марта, в 14 часов в Астрономическом институте
-                            (Университетский проспект, 13).
-                        </p>
-                        <div align="right"><i>Ваня Лилиенберг</i></div>
-                    </div>
-
-                    <div class="item-wrapper">
-                        <div align="right"><i>17.03.2016  </i></div>
-                        <h4>Собеседование 20 марта</h4>
-                        <p>
-                            Ближайшее собеседование на ФизЛЭШ состоится 20 марта, в 14 часов в Астрономическом институте
-                            (Университетский проспект, 13). Пожалуйста, подтвердите свое участие по е-майл serge19746@ya.ru
-                            Если вы хотите пройти собеседование, но время начала 14 часов вас не устраивает—
-                            также напишите нам, мы что-нибудь
-                            придумаем. Телефон для связи: +79163245071 (Серж).
-                        </p>
-                        <div align="right"><i>Ваня Лилиенберг</i></div>
-                    </div>
-
                     <center><!-- FIXME(bird@) кажется, это лучше задавать стилем, а не тегом, так более гибко -->
                         <a href="news.html" >
                             <button type="button" class="btn btn-default navbar-btn">Больше новостей</button>
