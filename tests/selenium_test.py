@@ -167,13 +167,20 @@ class BrowserHolder(object):
     @staticmethod
     def chrome_driver_instance():
         logging.info("Using Chrome")
-        chrome_path = "/usr/bin/chromedriver"
-        if not os.path.exists(chrome_path):
-            distro_url = "http://chromedriver.storage.googleapis.com/index.html "
-            raise BrowserHolderException("Chrome Driver is not installed. Install it from {}".format(distro_url))
-        return webdriver.Chrome(
-            executable_path="/usr/bin/chromedriver",
-        )
+        chrome_path_list = [
+            "/usr/bin/chromedriver",
+            "/usr/lib/chromium-browser/chromedriver",
+        ]
+        for chrome_path in chrome_path_list:
+            if os.path.exists(chrome_path):
+                logging.info("Using chrome driver from %s", chrome_path)
+                return webdriver.Chrome(
+                    executable_path=chrome_path,
+                )
+        
+        raise BrowserHolderException("Chrome Driver is not installed. Install it from {}".format(distro_url))
+        
+        
 
     @staticmethod
     def firefox_driver_instance(profile_path):
