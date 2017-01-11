@@ -82,7 +82,7 @@ def find_tests(directory='.', file_name_prefix="xcms_", class_name_prefix="Xcms"
         if not class_line_list:
             continue
         class_decl_line = class_line_list.pop().strip()
-        r = re.match(r"class ([\w_]+)\([\w_.]+\):", class_decl_line)
+        r = re.match(r"class (Xcms[\w]+)\(.*\)", class_decl_line)
         if not r:
             continue
         class_name = r.group(1)

@@ -12,6 +12,7 @@ import xcms_auth_check_dup_login
 import xcms_auth_forgot_password
 import xcms_auth_root_login
 import xcms_auth_set_dup_email_by_admin
+import xcms_auth_strange_usernames
 import xcms_content_add_page
 import xcms_content_auth_only_page
 import xcms_content_bad_path_page
@@ -66,6 +67,7 @@ def get_tests(**kwargs):
         ("xcms_auth_forgot_password.py", xcms_auth_forgot_password.XcmsAuthForgotPassword(**kwargs)),
         ("xcms_auth_root_login.py", xcms_auth_root_login.XcmsAuthRootLogin(**kwargs)),
         ("xcms_auth_set_dup_email_by_admin.py", xcms_auth_set_dup_email_by_admin.XcmsAuthSetDuplicateEmailByAdmin(**kwargs)),
+        ("xcms_auth_strange_usernames.py", xcms_auth_strange_usernames.XcmsAuthStrangeUsernames(**kwargs)),
         ("xcms_content_add_page.py", xcms_content_add_page.XcmsContentAddPage(**kwargs)),
         ("xcms_content_auth_only_page.py", xcms_content_auth_only_page.XcmsContentAuthOnlyPage(**kwargs)),
         ("xcms_content_bad_path_page.py", xcms_content_bad_path_page.XcmsContentBadPathPage(**kwargs)),
