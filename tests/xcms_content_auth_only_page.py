@@ -1,7 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
+import random_crap
+import user
+
 
 class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
     """
@@ -29,15 +32,15 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
 
         self.gotoCreatePage()
 
-        inpPageDir = "authPage_" + random_crap.random_text(6);
-        inpMenuTitle = "authMenuTitle_" + random_crap.random_text(6);
-        pageHeader = "authPageHeader_" + random_crap.random_text(6);
-        inpAlias = "authorized/only/page/" + random_crap.random_text(6);
+        inpPageDir = "authPage_" + random_crap.random_text(6)
+        inpMenuTitle = "authMenuTitle_" + random_crap.random_text(6)
+        pageHeader = "authPageHeader_" + random_crap.random_text(6)
+        inpAlias = "authorized/only/page/" + random_crap.random_text(6)
 
-        inpPageDir = self.fillElementById("create-name-input", inpPageDir);
-        inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle);
-        pageHeader = self.fillElementById("header-input", pageHeader);
-        inpAlias = self.fillElementById("alias-input", inpAlias);
+        inpPageDir = self.fillElementById("create-name-input", inpPageDir)
+        inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)
+        pageHeader = self.fillElementById("header-input", pageHeader)
+        inpAlias = self.fillElementById("alias-input", inpAlias)
 
         self.assertCheckboxValueById("view_#all-checkbox", True)
         self.assertCheckboxValueById("view_#registered-checkbox", False)
@@ -80,14 +83,17 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
 
         self.assertSourceTextPresent([u"Доступ запрещён", "Access denied"], "we should see auth page")
 
-        inpLogin = "AuthPageUser_" + random_crap.random_text(6)
-        inpEMail = random_crap.randomEmail()
-        inpPass = random_crap.random_text(8)
-        inpName = u"Убер Уполномоченный " + random_crap.random_text(4)
+        inp_login = "AuthPageUser"
+        inp_name = u"Убер Уполномоченный "
 
-        inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
+        u = user.User(self)
+        u.create_new_user(
+            login=inp_login,
+            name=inp_name,
+            random=True,
+        )
 
-        if not self.performLogin(inpLogin, inpPass):
+        if not self.performLogin(u.login, u.password):
             self.failTest("Cannot login as auth-page-test user. ")
 
         self.logAdd("Clicking on parent menu item. ")
@@ -115,7 +121,3 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
             self.failTest("Menu title text does not appear in page title after going to the page by site menu (under auth). ")
 
         self.assertSourceTextNotPresent([u"Доступ запрещён", "Access denied"])
-
-
-
-

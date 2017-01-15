@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 import xtest_common
-import random_crap
+import user
 
 
 class XcmsAuthSetDuplicateEmailByAdmin(xtest_common.XcmsTest):
@@ -20,31 +20,38 @@ class XcmsAuthSetDuplicateEmailByAdmin(xtest_common.XcmsTest):
         self.ensure_logged_off()
 
         # step one: create first user
-        inpLogin1 = "dup_mail1_" + random_crap.random_text(8)
-        inpEMail1 = random_crap.randomEmail()
-        inpPass1 = random_crap.random_text(10)
-        inpName1 = u"Вася Тестов" + random_crap.random_text(6)
+        inp_login1 = "dup_mail1"
+        inp_name1 = u"Вася Тестов"
 
-        inpLogin1, inpEMail1, inpPass1, inpName1 = self.createNewUser(inpLogin1, inpEMail1, inpPass1, inpName1, ["do_not_logout_admin"])
+        u1 = user.User(self)
+        u1.create_new_user(
+            login=inp_login1,
+            name=inp_name1,
+            random=True,
+            logout_admin=False,
+        )
 
         # step 2: create another user
-        inpLogin2 = "dup_mail2_" + random_crap.random_text(8)
-        inpEMail2 = random_crap.randomEmail()
-        inpPass2 = random_crap.random_text(10)
-        inpName2 = u"Миша Тестов" + random_crap.random_text(6)
+        inp_login2 = "dup_mail2"
+        inp_name2 = u"Миша Тестов"
 
         # create second user without re-login Admin
-
-        inpLogin2, inpEMail2, inpPass2, inpName2 = self.createNewUser(inpLogin2, inpEMail2, inpPass2, inpName2, ["do_not_login_as_admin"])
+        u2 = user.User(self)
+        u2.create_new_user(
+            login=inp_login2,
+            name=inp_name2,
+            random=True,
+            login_as_admin=False,
+        )
 
         print "logging as created first user. "
-        if not self.performLogin(inpLogin1, inpPass1):
+        if not self.performLogin(u1.login, u1.password):
             self.failTest("Cannot login as newly created user One. ")
 
         self.performLogoutFromSite()
 
         print "logging as created second user. "
-        if not self.performLogin(inpLogin2, inpPass2):
+        if not self.performLogin(u2.login, u2.password):
             self.failTest("Cannot login as newly created user Two. ")
 
         self.performLogoutFromSite()
@@ -58,16 +65,16 @@ class XcmsAuthSetDuplicateEmailByAdmin(xtest_common.XcmsTest):
 
         print "enter user profile in admin CP"
 
-        self.gotoUrlByPartialLinkText(inpLogin2)
+        self.gotoUrlByPartialLinkText(u2.login)
 
-        self.assertElementValueById("name-input", inpName2)
-        self.assertElementValueById("email-input", inpEMail2)
+        self.assertElementValueById("name-input", u2.name)
+        self.assertElementValueById("email-input", u2.email)
 
         # try to hack email
-        inpEMail2new = inpEMail1
+        inp_email2_new = u1.email
 
-        inpEMail2new = self.fillElementById("email-input", inpEMail2new)
-        print "new email 2: ", inpEMail2new
+        inp_email2_new = self.fillElementById("email-input", inp_email2_new)
+        print "new email 2: ", inp_email2_new
 
         self.clickElementById("update_user-submit")
 

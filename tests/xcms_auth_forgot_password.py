@@ -3,6 +3,7 @@
 
 import xtest_common
 import random_crap
+import user
 #import selenium_test
 
 
@@ -26,20 +27,27 @@ class XcmsAuthForgotPassword(xtest_common.XcmsTest):
 
         self.gotoRoot()
 
-        inpEMail = self.m_conf.getValidEmail(1)
+        inp_email = self.m_conf.getValidEmail(1)
 
-        self.removePreviousUsersWithTestEmail(inpEMail)
+        self.removePreviousUsersWithTestEmail(inp_email)
 
         # create new user with ruined memory
-        inpLogin = "oblivion_" + random_crap.random_text(6)
+        inp_login = "oblivion_" + random_crap.random_text(6)
 
-        inpPass = random_crap.random_text(10)
-        inpName = u"Ruined_Memory_" + random_crap.random_text(6)
+        inp_pass = random_crap.random_text(10)
+        inp_name = u"Ruined_Memory_" + random_crap.random_text(6)
 
-        inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
+        u = user.User(self)
+        u.create_new_user(
+            login=inp_login,
+            email=inp_email,
+            password=inp_pass,
+            name=inp_name,
+            random=False,
+        )
 
         print "logging as created user. "
-        if not self.performLogin(inpLogin, inpPass):
+        if not self.performLogin(u.login, u.password):
             self.failTest("Cannot login as newly created user. ")
 
         # logout self
@@ -49,12 +57,12 @@ class XcmsAuthForgotPassword(xtest_common.XcmsTest):
         self.logAdd("login again and press 'forgot password' button ")
         self.gotoAuthLink()
 
-        self.fillElementById("reset-email-input", inpEMail)
+        self.fillElementById("reset-email-input", u.email)
         self.fillElementById("question-input", self.m_conf.getForgottenPasswordCaptcha())
         self.clickElementById("reset_password-submit")
 
-        if self.performLogin(inpLogin, inpPass):
+        if self.performLogin(u.login, u.password):
             self.failTest("Password was not reset. Old password works fine. ")
 
         # set random email to user to avoid problems with duplicate email (may occur only if test fails)
-        self.setUserEmailByAdmin(inpLogin, random_crap.randomEmail())
+        self.setUserEmailByAdmin(u.login, random_crap.randomEmail())

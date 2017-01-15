@@ -1,7 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
+import random_crap
+import user
+
 
 class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
     """
@@ -11,32 +14,44 @@ class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
     def run(self):
 
         # first, login as admin
-        inpLogin = "dup_user_" + random_crap.random_text(8)
-        inpEMail1 = random_crap.randomEmail()
-        inpEMail2 = random_crap.randomEmail()
-        inpPass1 = random_crap.random_text(10)
-        inpPass2 = random_crap.random_text(10)
-        inpName1 = u"Вася " + random_crap.random_text(6)
-        inpName2 = u"Петя " + random_crap.random_text(6)
+        inp_login = "dup_user_" + random_crap.random_text(8)
+        inp_email1 = random_crap.randomEmail()
+        inp_email2 = random_crap.randomEmail()
+        inp_pass1 = random_crap.random_text(10)
+        inp_pass2 = random_crap.random_text(10)
+        inp_name1 = u"Вася " + random_crap.random_text(6)
+        inp_name2 = u"Петя " + random_crap.random_text(6)
 
-        inpLogin, inpEMail1, inpPass1, inpName1 = self.createNewUser(inpLogin, inpEMail1, inpPass1, inpName1)
+        u1 = user.User(self)
+        u1.create_new_user(
+            login=inp_login,
+            email=inp_email1,
+            password=inp_pass1,
+            name=inp_name1,
+            random=False,
+        )
 
-        inpLogin, inpEMail2, inpPass2, inpName2 = self.createNewUser(inpLogin, inpEMail2, inpPass2, inpName2, ["do_not_validate"])
+        u2 = user.User(self)
+        u2.create_new_user(
+            login=inp_login,
+            email=inp_email2,
+            password=inp_pass2,
+            name=inp_name2,
+            random=False,
+            validate=False,
+        )
 
-        self.assertBodyTextNotPresent(u"Пользователь '" + inpLogin + u"' успешно создан")
+        self.assertBodyTextNotPresent(u"Пользователь '" + u1.login + u"' успешно создан")
 
         self.performLogout()
 
         self.logAdd("logging as created first user. ")
-        if not self.performLogin(inpLogin, inpPass1):
+        if not self.performLogin(u1.login, u1.password):
             self.failTest("Cannot login as newly created user. ")
 
         # logout self
         self.performLogout()
 
         print "try logging as created second user. "
-        if self.performLogin(inpLogin, inpPass2):
+        if self.performLogin(u1.login, u2.password):
             self.failTest("I am able to login as 'second' user with duplicate login and new password. ")
-
-
-

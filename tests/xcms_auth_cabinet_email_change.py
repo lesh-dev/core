@@ -3,6 +3,7 @@
 
 import xtest_common
 import random_crap
+import user
 
 
 class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
@@ -27,12 +28,26 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         inpName1 = u"Вася " + random_crap.random_text(6)
         inpName2 = u"Петя " + random_crap.random_text(6)
 
-        inpLogin1, inpEMail1, inpPass1, inpName1 = self.createNewUser(inpLogin1, inpEMail1, inpPass1, inpName1)
+        u1 = user.User(self)
+        u1.create_new_user(
+            login=inpLogin1,
+            email=inpEMail1,
+            password=inpPass1,
+            name=inpName1,
+            random=False,
+        )
 
-        inpLogin2, inpEMail2, inpPass2, inpName2 = self.createNewUser(inpLogin2, inpEMail2, inpPass2, inpName2)
+        u2 = user.User(self)
+        u2.create_new_user(
+            login=inpLogin2,
+            email=inpEMail2,
+            password=inpPass2,
+            name=inpName2,
+            random=False,
+        )
 
         print "logging as first created user. "
-        if not self.performLogin(inpLogin1, inpPass1):
+        if not self.performLogin(u1.login, u1.password):
             self.failTest("Cannot login as newly created first user. ")
 
         self.gotoCabinet()
@@ -64,7 +79,7 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
 
         print "And now test bad e-mail. "
 
-        newBadEMail = inpEMail2
+        newBadEMail = u2.email
 
         self.fillElementById("email-input", newBadEMail)
         self.clickElementById("update_me-submit")
@@ -76,7 +91,7 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         self.performLogoutFromAdminPanel()
 
         print "logging as first created user again. "
-        if not self.performLogin(inpLogin1, inpPass1):
+        if not self.performLogin(u1.login, u1.password):
             self.failTest("Cannot login again as newly created first user. ")
 
         self.gotoCabinet()
@@ -86,5 +101,5 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         self.performLogoutFromAdminPanel()
 
         print "logging as second created user. "
-        if not self.performLogin(inpLogin2, inpPass2):
+        if not self.performLogin(u2.login, u2.password):
             self.failTest("I was not able to login as second user. ")

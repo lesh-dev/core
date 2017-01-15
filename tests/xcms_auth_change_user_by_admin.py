@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
+import user
+
 
 class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
     """
@@ -14,17 +16,19 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.ensure_logged_off()
 
         # first, login as admin
-        inpLogin = "priv_user_" + random_crap.random_text(8)
-        inpEMail = random_crap.randomEmail()
-        inpPass = random_crap.random_text(10)
-        inpName = u"Саша Тестов" + random_crap.random_text(6)
 
-        inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
+        inp_login = "priv_user_"
+        inp_name = u"Саша Тестов"
+        u = user.User(self)
+        u.create_new_user(
+            login=inp_login,
+            name=inp_name,
+            random=True,
+        )
 
         print "logging as created user. "
-        if not self.performLogin(inpLogin, inpPass):
+        if not self.performLogin(u.login, u.password):
             self.failTest("Cannot login as newly created user. ")
-
 
         self.assertUrlNotPresent(self.getAdminPanelLinkName(), "default created user should have no Admin rights. ")
         self.assertUrlNotPresent(self.getEditPageInPlaceLinkName(), "default created user should have no Editor rights. ")
@@ -43,15 +47,15 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
 
         print "enter user profile in admin CP"
 
-        self.gotoUrlByPartialLinkText(inpLogin)
+        self.gotoUrlByPartialLinkText(u.login)
 
-        self.assertElementValueById("name-input", inpName)
-        self.assertElementValueById("email-input", inpEMail)
+        self.assertElementValueById("name-input", u.name)
+        self.assertElementValueById("email-input", u.email)
 
-        inpName += "_changed"
+        u.name += "_changed"
 
-        inpName = self.fillElementById("name-input", inpName)
-        print "New user name: ", inpName
+        u.name = self.fillElementById("name-input", u.name)
+        print "New user name: ", u.name
 
         print "Check if administrator priviledge is off now"
         self.assertCheckboxValueById("group_admin-checkbox", False)
@@ -65,7 +69,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.performLogoutFromAdminPanel()
 
         print "logging as new user with changed permissions. now he is Admin. "
-        if not self.performLogin(inpLogin, inpPass):
+        if not self.performLogin(u.login, u.password):
             self.failTest("Cannot login again as newly created user (with admin privs). ")
 
         self.assertUrlPresent(self.getAdminPanelLinkName(), "Now user should have Admin priviledges. ")
@@ -80,7 +84,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
 
         print "goto user profile in admin CP"
 
-        self.gotoUrlByPartialLinkText(inpLogin)
+        self.gotoUrlByPartialLinkText(u.login)
 
         self.assertCheckboxValueById("group_admin-checkbox", True)
         self.assertCheckboxValueById("group_editor-checkbox", False)
@@ -97,7 +101,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.performLogoutFromAdminPanel()
 
         print "logging as new user with 2-nd time changed permissions. now he is Editor. "
-        if not self.performLogin(inpLogin, inpPass):
+        if not self.performLogin(u.login, u.password):
             self.failTest("Cannot login again as newly created user (with Editor privs). ")
 
         self.assertUrlPresent(self.getAdminPanelLinkName(), "Now our user should have no Admin rights, but Editor uses admin panel. ")
@@ -124,7 +128,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
 
         print "goto user profile in admin CP"
 
-        self.gotoUrlByPartialLinkText(inpLogin)
+        self.gotoUrlByPartialLinkText(u.login)
 
         self.assertCheckboxValueById("group_admin-checkbox", False)
         self.assertCheckboxValueById("group_editor-checkbox", True)
@@ -143,11 +147,10 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.performLogoutFromAdminPanel()
 
         print "logging as new user with 3-rd time changed permissions. now he is Manager. "
-        if not self.performLogin(inpLogin, inpPass):
+        if not self.performLogin(u.login, u.password):
             self.failTest("Cannot login again as newly created user (with Manager privs). ")
 
         self.assertUrlNotPresent(self.getAdminPanelLinkName(), "Now our user should have no access to Admin panel. ")
         self.assertUrlPresent(self.getAnketaListMenuName(), "Our user should now obtain Manager rights. ")
         self.assertUrlNotPresent(self.getEditPageInPlaceLinkName(), "On third stage, our user should have no Editor rights. ")
         self.performLogoutFromSite()
-

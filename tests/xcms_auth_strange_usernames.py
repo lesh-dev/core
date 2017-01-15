@@ -4,6 +4,7 @@
 import logging
 import xtest_common
 import random_crap
+import user
 
 
 class XcmsAuthStrangeUsernames(xtest_common.XcmsTest):
@@ -23,51 +24,75 @@ class XcmsAuthStrangeUsernames(xtest_common.XcmsTest):
     """
 
     def run(self):
-        
+
         self.ensure_logged_off()
-        
+
         #positive cases
 
-        inpLogin = "an_test_user_" + ".user." + random_crap.random_text(8)
-        inpEMail = random_crap.randomEmail()
-        inpPass = random_crap.random_text(10)
-        inpName = u"Вася Пупкин" + random_crap.random_text(6)
-        inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
-        logging.info("Created a new user: "+ inpLogin)
-              
-               
-        inpLogin = "a" + random_crap.random_text(8) + ".user" 
-        inpEMail = random_crap.randomEmail()
-        inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
-        logging.info("Created a new user: "+ inpLogin)
+        inp_login = "an_test_user_" + ".user."
+        u = user.User(self)
+        u.create_new_user(
+            login=inp_login,
+            random=True,
+        )
+        logging.info("Created a new user: " + u.name)
 
-         
-        inpLogin = "user." + random_crap.random_text(8)
-        inpEMail = random_crap.randomEmail()
-        inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
-        logging.info("Created a new user: "+ inpLogin)
+        inp_login = random_crap.random_text(8) + ".user"
+        inp_email = random_crap.randomEmail()
+        inp_name = random_crap.random_text(8)
+        inp_pass = random_crap.random_text(8)
+        u.create_new_user(
+            login=inp_login,
+            email=inp_email,
+            password=inp_pass,
+            name=inp_name,
+            random=False,
+        )
+        logging.info("Created a new user: " + u.name)
+
+        inp_login = "user."
+        u.create_new_user(
+            login=inp_login,
+            random=True,
+        )
+        logging.info("Created a new user: " + u.name)
 
         #negative cases
 
         logging.info("Reached negative cases")
-        
-        inpLogin = ".user." + random_crap.random_text(8)
-        inpEMail = random_crap.randomEmail()
-        inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName, "do_not_validate")
+
+        inp_login = ".user"
+        u.create_new_user(
+            login=inp_login,
+            random=True,
+            validate=False,
+        )
         self.assertBodyTextPresent(u"Имя пользователя должно начинаться с буквы или цифры")
-        logging.info("Failed to create a new user: "+ inpLogin)
-        self.performLogout() 
-        
-        inpLogin = "@user." + random_crap.random_text(8)
-        inpEMail = random_crap.randomEmail()
-        inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName, "do_not_validate")
+        logging.info("Failed to create a new user: " + u.name)
+        self.performLogout()
+
+        inp_login = "@user"
+        u.create_new_user(
+            login=inp_login,
+            random=True,
+            validate=False,
+        )
         self.assertBodyTextPresent(u"Имя пользователя должно начинаться с буквы или цифры")
-        logging.info("Failed to create a new user: "+ inpLogin)
-        self.performLogout() 
-        
-        inpLogin = "../usr/login" 
-        inpEMail = random_crap.randomEmail()
-        inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName, "do_not_validate")
+        logging.info("Failed to create a new user: " + u.name)
+        self.performLogout()
+
+        inp_login = "../usr/login"
+        inp_email = random_crap.randomEmail()
+        inp_name = random_crap.random_text(8)
+        inp_pass = random_crap.random_text(8)
+        u.create_new_user(
+            login=inp_login,
+            email=inp_email,
+            password=inp_pass,
+            name=inp_name,
+            random=False,
+            validate=False,
+        )
         self.assertBodyTextPresent(u"Имя пользователя должно начинаться с буквы или цифры")
-        logging.info("Failed to create a new user: "+ inpLogin)
-        self.performLogout() 
+        logging.info("Failed to create a new user: " + u.name)
+        self.performLogout()

@@ -4,6 +4,7 @@
 
 import xtest_common
 import random_crap
+import user
 
 
 class XcmsMailerTestMailRu(xtest_common.XcmsTest):
@@ -26,12 +27,16 @@ class XcmsMailerTestMailRu(xtest_common.XcmsTest):
         self.removePreviousUsersWithTestEmail(inpEMail)
 
         # first, login as admin
-        inpLogin = "an_mailru_user_" + random_crap.random_text(8)
-        inpPass = random_crap.random_text(10)
-        inpName = u"Вася Пупкин" + random_crap.random_text(6)
+        inp_login = "an_mailru_user_" + random_crap.random_text(8)
+        inp_name = u"Вася Пупкин" + random_crap.random_text(6)
 
-        inpLogin, inpEMail, inpPass, inpName = self.createNewUser(inpLogin, inpEMail, inpPass, inpName)
+        u = user.User(self)
+        u.create_new_user(
+            login=inp_login,
+            name=inp_name,
+            random=True,
+        )
 
         print "logging as created user. "
-        if not self.performLogin(inpLogin, inpPass):
+        if not self.performLogin(u.login, u.password):
             self.failTest("Cannot login as newly created user. ")
