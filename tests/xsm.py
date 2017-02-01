@@ -14,6 +14,7 @@ import logging
 import random_crap as rc
 import xtest_common as xc
 
+
 class Person(object):
     """
         Иван Человеков был простой человек
