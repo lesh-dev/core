@@ -125,7 +125,7 @@
             <tr>
                 <td class="menu-field menu-width roundBorders">
                     <# cms/menu/display start=1 end=5 #><!-- nostyle -->
-                    <a class="menu-item menu-level1 menu-passive menu-passive-level1" href="http://forum.fizlesh.ru">Форум</a>
+                    <!--<a class="menu-item menu-level1 menu-passive menu-passive-level1" href="http://forum.fizlesh.ru">Форум</a>-->
 
                     <?php
                     if (xcms_user()->check_rights("ank", false))
