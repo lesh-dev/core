@@ -528,7 +528,7 @@ function xsm_print_person()
     global $web_prefix;
     $db = xdb_get();
 
-    $person_id = xcms_get_key_or($_GET, 'person_id', XDB_INVALID_ID);
+    $person_id = xdb_get_idvar('person_id');
     $person = xdb_get_entity_by_id('person', $person_id);
     if ($person_id == XDB_NEW || is_array($person) && count($person) == 0)
         throw new Exception("Entity not found", XE_DB_OBJECT_NOT_FOUND);
