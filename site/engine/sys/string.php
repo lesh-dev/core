@@ -51,6 +51,7 @@ function xcms_get_key_or($list, $key, $def_value = '')
     return $value;
 }
 
+
 /**
   * Same as @c xcms_get_key_or but with encoding
   **/
@@ -130,14 +131,16 @@ function xcms_check_password($password)
     return ($password == preg_replace('/[\x00-\x1F]/', "", $password));
 }
 
+
 /**
-  * Filters all non-printable characters from string
+  * Filters all non-digits from string
   * @return filtered string
   **/
-function xcms_filter_nonchars($string)
+function xcms_filter_nondigits($string)
 {
-    return preg_replace('/[\x00-\x1F]/', "", $string);
+    return preg_replace('/[^0-9-]/', "", $string);
 }
+
 
 /**
   * Returns length in UTF-8 characters
@@ -263,6 +266,7 @@ function xcms_truncate_text($text, $limit, $trail)
 function xcms_truncate_hypertext($text, $limit, $trail)
 {
     $text = preg_replace("/\<\?php.*?\?>/", '', $text);
+    // FIXME(mvel): proper logging
     xcms_log(0, "===========\n$text\n--------------");
     return xcms_truncate_text($text, $limit, $trail);
 }
@@ -374,6 +378,8 @@ function xcms_string_unit_test()
 
     xut_check(xu_not_empty(0), "Zero is empty");
     xut_check(xu_empty(""), "Empty string is not empty");
+
+    xut_equal(xcms_filter_nondigits("100; drop database"), "100", "Non-digits filtering failed");
 
     // xcms_check_user_name
     $valid_user0 = xcms_check_user_name("vasya.123");
