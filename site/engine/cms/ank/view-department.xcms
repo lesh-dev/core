@@ -4,7 +4,7 @@ function xsm_print_department()
 {
     $db = xdb_get();
     xsm_view_operations('department', 'отделение');
-    $department_id = xcms_get_key_or($_GET, 'department_id', XDB_INVALID_ID);
+    $department_id = xdb_get_idvar('department_id');
     $department = xdb_get_entity_by_id('department', $department_id);
     $href_departments = "list-department";
     ?>
