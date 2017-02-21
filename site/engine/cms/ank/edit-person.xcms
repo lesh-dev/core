@@ -38,14 +38,14 @@ function xsm_person_edit_operations($id, $ret_title)
 
 function xsm_edit_person()
 {
-    $person_id = xcms_get_key_or($_GET, 'person_id', XDB_INVALID_ID);
-    $school_id = xcms_get_key_or($_GET, 'school_id', XSM_SCHOOL_ANK_ID);
+    $person_id = xdb_get_idvar('person_id');
+    $school_id = xdb_get_idvar('school_id');
     $person = xdb_get_entity_by_id('person', $person_id);
     if ($person_id == XDB_NEW)
     {
         // prefill anketa status for new records
-        $anketa_status = xcms_get_key_or($_GET, 'anketa_status');
-        if ($anketa_status)
+        $anketa_status = xdb_get_enumvar('anketa_status');
+        if (xu_not_empty($anketa_status))
             $person['anketa_status'] = $anketa_status;
     }
     $fio = xsm_fio_enc($person);

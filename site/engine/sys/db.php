@@ -23,8 +23,9 @@ define('XDB_DEFAULT_DB_PATH', "ank/fizlesh.sqlite3");
 
 
 /**
-  * Helper for obtaining keys from request. Filters all
-  * all non-numeric characters from input, returns XDB_INVALID_ID (-1) by default.
+  * Helper for obtaining keys that are DB ids from request. Filters all
+  * non-numeric characters from input, returns XDB_INVALID_ID (-1) by default
+  * or when all characters were filtered.
   **/
 function xdb_get_idvar($key, $default_value = XDB_INVALID_ID)
 {
@@ -32,6 +33,18 @@ function xdb_get_idvar($key, $default_value = XDB_INVALID_ID)
     $value = xcms_filter_nondigits($value);
     if (xu_empty($value))
         return $default_value;
+    return $value;
+}
+
+
+/**
+  * Helper for obtaining enum values from request. Filters all
+  * invalid characters from input.
+  **/
+function xdb_get_enumvar($key)
+{
+    $value = xcms_get_key_or($_GET, $key, "");
+    $value = preg_replace('/[^a-zA-Z0-9-]/', "", $value);
     return $value;
 }
 
