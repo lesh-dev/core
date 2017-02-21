@@ -12,9 +12,11 @@ function xsm_edit_person_school()
     if ($person_school_id == XDB_NEW)
     {
         // prefill member
-        $member_person_id = xcms_get_key_or($_GET, 'member_person_id');
-        if (strlen($member_person_id))
-            $person_school['member_person_id'] = $member_person_id;
+        $member_person_id = xdb_get_idvar('member_person_id');
+        // TODO(mvel): Strange place was fixed here, pay attention.
+        if ($member_person_id == XDB_INVALID_ID)
+            die("Invalid member_person_id: $member_person_id. ");
+        $person_school['member_person_id'] = $member_person_id;
 
         // prefill school
         $school_id = xcms_get_key_or($_GET, 'school_id');

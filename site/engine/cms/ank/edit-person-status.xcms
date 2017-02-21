@@ -106,7 +106,7 @@ function xsm_change_person_status()
     $person_comment = array();
     // prefill
     $person_comment['owner_login'] = xcms_user()->login();
-    $blamed_person_id = xcms_get_key_or($_GET, 'blamed_person_id');
+    $blamed_person_id = xdb_get_idvar("blamed_person_id");
     $person = xdb_get_entity_by_id('person', $blamed_person_id);
     $fi_enc = xsm_fi_enc($person);
     $person_link = xsm_person_view_link($blamed_person_id, XSM_SCHOOL_ANK_ID, $fi_enc);

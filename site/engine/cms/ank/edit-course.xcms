@@ -5,7 +5,7 @@ require_once("${engine_dir}cms/ank/course_teacher.php");
 
 function xsm_edit_course()
 {
-    $course_id = xcms_get_key_or($_GET, 'course_id', XDB_INVALID_ID);
+    $course_id = xdb_get_idvar("course_id");
     $course = xdb_get_entity_by_id('course', $course_id);
     // По умолчанию надо создавать связку course_teacher,
     // если задан хоть какой-нибудь course_teacher_id извне
@@ -15,13 +15,13 @@ function xsm_edit_course()
     $db = xdb_get();
 
     $course_teacher_id = NULL;
-    $school_id = xcms_get_key_or($_GET, 'school_id', XDB_INVALID_ID);
+    $school_id = xdb_get_idvar('school_id');
     $teachers_ht = "";
     $course_title = "";
     if ($course_id == XDB_NEW)
     {
         // prefill teacher if specified
-        $course_teacher_id = xcms_get_key_or($_GET, 'course_teacher_id', NULL);
+        $course_teacher_id = xdb_get_idvar('course_teacher_id', NULL);
         $course['course_teacher_id'] = $course_teacher_id;
 
         // code from common function
@@ -112,7 +112,7 @@ elseif (@$_POST["delete-course"])
 }
 elseif (@$_POST["confirm-delete-course"])
 {
-    $school_id = xcms_get_key_or($_GET, 'school_id', XDB_INVALID_ID);
+    $school_id = xdb_get_idvar('school_id');
     $aux_param = xcms_url(array('school_id' => $school_id));
     xsm_delete_entity_listmode('course', 'Курс', $aux_param);
 }

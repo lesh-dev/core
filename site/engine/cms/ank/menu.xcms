@@ -45,7 +45,7 @@ function xsm_menu_item($view, $aux_url, $title, $first = false)
 $u_locator_all = xcms_url(array('show_anketa_status' => 'no-trash'));
 $a_locator_active = array('show_anketa_status' => 'active');
 $a_cs = array();
-$school_id = xcms_get_key_or($_GET, 'school_id');
+$school_id = xdb_get_idvar('school_id');
 if (xu_not_empty($school_id) && $school_id != XDB_NEW)
 {
     $a_locator_active['school_id'] = $school_id;

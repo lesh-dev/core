@@ -70,7 +70,7 @@ function xsm_add_person_school()
     $person_id = xcms_get_key_or($_POST, 'member_person_id');
     $school_id = xcms_get_key_or($_POST, 'school_id');
     if (xu_empty($school_id))
-        $school_id = xcms_get_key_or($_GET, 'school_id');
+        $school_id = xdb_get_idvar('school_id');
 
     $db = xdb_get();
     $members = xsm_get_person_school_list($db, $school_id);
