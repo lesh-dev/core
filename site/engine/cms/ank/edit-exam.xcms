@@ -165,7 +165,7 @@ function xsm_notify_exam_edit($exam)
 
 function xsm_edit_exam()
 {
-    $exam_id = xcms_get_key_or($_GET, 'exam_id', XDB_INVALID_ID);
+    $exam_id = xdb_get_idvar('exam_id');
     $exam = xdb_get_entity_by_id('exam', $exam_id);
     $db = xdb_get();
     $course = array();
@@ -173,14 +173,15 @@ function xsm_edit_exam()
     if ($exam_id == XDB_NEW)
     {
         // prefill student person
-        $student_person_id = xcms_get_key_or($_GET, 'student_person_id', XDB_INVALID_ID);
+        $student_person_id = xdb_get_idvar('student_person_id');
+        // TODO(mvel): Provide generic assertions here.
         if ($student_person_id == XDB_INVALID_ID)
         {
             echo "Недопустимый ID участника. ";
             return;
         }
         $student = xdb_get_entity_by_id('person', $student_person_id);
-        $school_id = xcms_get_key_or($_GET, 'school_id', XDB_INVALID_ID);
+        $school_id = xdb_get_idvar('school_id');
     }
     else
     {

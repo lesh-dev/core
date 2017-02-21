@@ -19,7 +19,7 @@ function xsm_edit_person_school()
         $person_school['member_person_id'] = $member_person_id;
 
         // prefill school
-        $school_id = xcms_get_key_or($_GET, 'school_id');
+        $school_id = xdb_get_idvar('school_id');
         if (strlen($school_id))
             $person_school['school_id'] = $school_id;
     }
@@ -76,7 +76,7 @@ if (@$_POST["update-person_school"])
 elseif (@$_POST["delete-person_school"])
     xsm_warn_delete_person_school('person_school');
 elseif (xcms_get_key_or($_GET, 'action') == 'delete')
-    xsm_warn_delete_person_school('person_school', xcms_get_key_or($_GET, 'person_school_id'));
+    xsm_warn_delete_person_school('person_school', xdb_get_idvar('person_school_id'));
 elseif (@$_POST["confirm-delete-person_school"])
     xsm_delete_person_school('person_school', 'Участник-на-Школе');
 else

@@ -533,7 +533,7 @@ function xsm_print_person()
     if ($person_id == XDB_NEW || is_array($person) && count($person) == 0)
         throw new Exception("Entity not found", XE_DB_OBJECT_NOT_FOUND);
 
-    $school_id = xcms_get_key_or($_GET, 'school_id', XSM_SCHOOL_ANK_ID);
+    $school_id = xdb_get_idvar('school_id', XSM_SCHOOL_ANK_ID);
 
     xsm_print_person_header($db, $person, $school_id);
     xsm_print_person_schools($db, $person, $school_id);
