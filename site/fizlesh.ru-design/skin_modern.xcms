@@ -19,7 +19,6 @@
     <div style="position: absolute; right: 7px; bottom: 6px; z-index: 100; color: #e5e5e5;">Skin:&nbsp;<a
         href="/?skin=<?php echo $skin_to_switch_to; ?>" style="color: #efefef;"><?php echo $skin_to_switch_to; ?></a></div>
 
-
     <div class="page" id="page_<?php echo $page_id_filtered; ?>">
 
         <nav class="navbar navbar-inverse ">
@@ -31,7 +30,7 @@
             </button>
             <div id="navbarC" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <# cms/menu/display start=1 end=5 #><!-- nostyle -->
+                    <# cms/menu/display start=1 end=1 #><!-- nostyle -->
                 </ul>
             </div>
         </nav>
@@ -56,8 +55,19 @@
 
                 <img src="<# full_design_dir #>img/carousel/c1.1.jpg" id="mob" />
 
-                <div class="content-text">
-                    <?php
+
+                <!-- optional menu of level 2 -->
+                <nav class="navbar my-navbar">
+                    <center>
+                        <ul class="nav navbar-nav">
+                            <# cms/menu/display start=2 end=5 #><!-- nostyle -->
+                        </ul>
+                    </center>
+                </nav>
+
+                <div class="content-text"><?php
+                    if ($page_alias == "index")
+                    {
                         $pageid = "z01News";
                         include(translate("<! cms/contlist/view !>"));
                     ?>
@@ -65,7 +75,12 @@
                         <a href="news.html" >
                             <button type="button" class="btn btn-default navbar-btn">Больше новостей</button>
                         </a>
-                    </center>
+                    </center><?php
+                    }
+                    else
+                    {
+                        ?><# cms/ #><?php
+                    }?>
                 </div>
             </div>
         </div>

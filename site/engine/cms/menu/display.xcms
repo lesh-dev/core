@@ -6,7 +6,6 @@
         $_GET["ref"] = "index";
 
 
-
     $template_file = "${design_dir}menu_links.html";
     if (isset($skin))
     {
