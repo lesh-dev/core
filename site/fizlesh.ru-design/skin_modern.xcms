@@ -41,9 +41,10 @@
         <div class="my-container" >
             <?php
                 $page_alias = xcms_get_key_or($INFO, "alias");
+
                 $wrapper_css_class = "generic-wrapper";
                 if (xu_not_empty($page_alias))
-                    $wrapper_css_class = "$page_alias-wrapper";
+                    $wrapper_css_class = "$wrapper_css_class $page_alias-wrapper";
 
             ?>
             <div class="my-content-block <?php echo $wrapper_css_class; ?>">

@@ -25,6 +25,20 @@ body {
     background-color: rgba(255,255,255,0.6);
 }
 
+.generic-wrapper {
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 15px;
+    padding-bottom: 30px;
+    border-radius: 0px;
+    line-height: 1.5;
+    height: 100%;
+    position: relative;
+    border: 0px;
+    background-color: rgba(255,255,255,0.9);
+    color: black;
+}
+
 .about-wrapper {
     padding-left: 50px;
     padding-right: 50px;
