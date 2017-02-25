@@ -12,7 +12,7 @@ class XcmsContestSubmitWorkFromSite(xtest_common.XcmsTest):
 
     def _test_work_submit(self, file_size, need_success, fill_work=True):
         self.gotoRoot()
-        self.gotoUrlByLinkText(u"Заочная олимпиада")
+        self.gotoUrlByLinkText(u"Олимпиада")
         self.gotoUrlByLinkText(u"Отправить решение")
 
         work_file = os.path.join(os.getcwd(), 'contest-work-sample.png')
