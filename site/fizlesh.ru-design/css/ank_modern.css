@@ -1,0 +1,81 @@
+span.ankLabel {
+    font-size: 10pt;
+    font-weight: bold;
+    display: inline-block;
+    width: 300px;
+    padding-left: 2px;
+    float: left;
+}
+
+input.ank-input {
+    padding-left: 3px;
+}
+
+input.ank-input.long {
+    width: 400px;
+}
+
+div.ankLegend {
+    float: right;
+    display: inline-block;
+    width: 30%;
+    border: 1px solid #003f00;
+    background-color: rgb(212, 228, 222);
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    padding: 5px;
+    font-size: 10pt;
+    margin-left: 20px;
+}
+
+div.ankRow {
+    white-space: nowrap;
+}
+
+div.ankExample {
+    font-size: 8pt;
+    padding-left: 310px;
+    padding-bottom: 3pt;
+}
+
+span.ankAst {
+    font-weight: bold;
+    font-size: 10pt;
+}
+span.ankAst.Req {
+    color: #ff0000;
+}
+span.ankAst.Gr {
+    color: #cf7f00;
+}
+span.ankAst.Rec {
+    color: #0000ff;
+}
+
+div.ankError {
+    color: #9f0000;
+    font-size: 9pt;
+    padding: 3px;
+}
+
+div.ankWarning {
+    color: #003f00;
+    font-size: 9pt;
+    padding: 3px;
+}
+
+div.ankMessageFrame {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border: 1px solid #003f00;
+    background-color: #aed79b;
+    display: none;
+}
+
+ul.ankMessageList {
+    margin-right: 20px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}

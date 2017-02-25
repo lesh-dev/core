@@ -1,4 +1,9 @@
-<?php include(translate('<! css/design ank.css !>')); ?>
+<?php
+if ($skin == "modern")
+    include(translate('<! css/design ank_modern.css !>'));
+else
+    include(translate('<! css/design ank_green.css !>'));
+?>
 <div class="ankLegend">
 <div><span class="ankAst Req">*</span> &#8211; обязательное поле</div>
 <div><span class="ankAst Gr">*</span> &#8211; должно быть заполнено хотя бы одно из полей</div>
