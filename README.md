@@ -26,7 +26,7 @@ http://fizlesh.ru and http://lesh.org.ru sites.
 Installation/Deploy
 ===================
 Read this (fine) manual:
-https://dev.fizlesh.ru/lesh/wiki/XcmsInstallation
+https://dev.fizlesh.ru/projects/development/wiki/XcmsInstallation
 
 Authors and Contributors
 ========================
@@ -35,7 +35,7 @@ Alexander Trousevitch <trousev@yandex.ru>
 * Initial Contest design
 * Deploy system
 * Project administration
-* Hosting support
+* Hosting support, RedMine administration
 
 Mikhail Veltishchev <dichlofos-mv@yandex.ru>, https://github/dichlofos
 * Project administration and management
@@ -44,11 +44,11 @@ Mikhail Veltishchev <dichlofos-mv@yandex.ru>, https://github/dichlofos
 * Database engine
 * Mailer and notifications
 * XSM
-* Forum hacks
 * Helper scripts and tools, code styler
-* Initial http://fizlesh.ru design
+* http://fizlesh.ru design and templating
 * http://lesh.org.ru design enhancements
 * Trash code refactoring, obsolete code removal
+* Forum hacks
 
 Dmitry Veltishchev <vdm-photo@ya.ru>, https://github.com/vdmit
 * Automated test suite
