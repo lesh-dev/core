@@ -2,11 +2,10 @@
 # -*- coding: utf8 -*-
 
 import xsm
-
 import xtest_common
 
 
-class XcmsXsmAddSchool(xtest_common.XcmsTest):
+class XcmsXsmAddSchool(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks school add functional.
     * login as manager
