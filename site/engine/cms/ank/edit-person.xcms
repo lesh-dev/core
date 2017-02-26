@@ -117,10 +117,15 @@ if (@$_POST["update-person"])
         $old_person = ($person_id != XDB_NEW) ? xdb_get_entity_by_id('person', $person_id) : array();
         $result = xsm_update_entity_listmode('person', 'Участник', xsm_get_fields("person"), '', 'участника');
         if ($person_id == XDB_NEW)
+        {
             $person_id = $result;
             $_POST["person_id"] = $person_id;
+        }
 
-        xsm_add_person_to_school($school_id, $person_id);
+        if ($school_id != XDB_INVALID_ID)
+        {
+            xsm_add_person_to_school($school_id, $person_id);
+        }
         xsm_notify_person_edit($_POST, $old_person);
     }
 }

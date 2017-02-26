@@ -57,6 +57,12 @@ function xsm_update_person_school($title, $fields_desc)
 
 function xsm_add_person_to_school($school_id, $person_id)
 {
+    if ($school_id == XDB_INVALID_ID)
+    {
+        die("XSM internal error, please report to dev@fizlesh.ru. ");
+        return;
+    }
+
     $db = xdb_get();
     $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
     if ($person_school_id !== NULL || $school_id == XSM_SCHOOL_ANK_ID)
