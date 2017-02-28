@@ -27,10 +27,10 @@ define('XDB_DEFAULT_DB_PATH', "ank/fizlesh.sqlite3");
   * non-numeric characters from input, returns XDB_INVALID_ID (-1) by default
   * or when all characters were filtered.
   **/
-function xdb_get_idvar($key, $default_value = XDB_INVALID_ID)
+function xdb_get_idvar($key, $default_value = XDB_INVALID_ID, $allowed_values = array())
 {
     $value = xcms_get_key_or($_GET, $key, '');
-    if ($value == XDB_NEW)
+    if ($value == XDB_NEW || array_search($value, $allowed_values))
         return $value;
     $value = xcms_filter_nondigits($value);
     if (xu_empty($value))
