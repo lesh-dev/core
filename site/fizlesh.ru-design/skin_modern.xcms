@@ -38,6 +38,8 @@
         <a class="signin" href="<?php echo $meta_site_url_secure.'?'.
             xcms_url(array('page' => $pageid, 'ref' => 'login', 'return' => '?ref=index')); ?>"> </a>
 
+        <div class="top-links"><# cms/user_menu separator=  #></div>
+
         <div class="my-container" >
             <?php
                 $page_alias = xcms_get_key_or($INFO, "alias");

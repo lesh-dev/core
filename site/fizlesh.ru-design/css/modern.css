@@ -497,3 +497,23 @@ h4 {
     }
 
 }
+
+div.top-links {
+    position: absolute;
+    top: 50px;
+    right: 5px;
+    width: 150px;
+    text-align: center;
+}
+
+div.top-links a {
+    display: block;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0px 20px 0px 20px;
+    color: #bbb;
+}
+
+div.top-links a:hover {
+    color: #fff;
+}
