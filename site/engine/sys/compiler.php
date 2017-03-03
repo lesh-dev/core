@@ -2,6 +2,7 @@
 
     function xcms_set_args($code, $output_stream)
     {
+        // TODO(mvel): Use xcms_parse_template_args here
         global $SETTINGS;
         $argv = explode(EXP_SP, $code);
         fputs($output_stream, $SETTINGS["code_begin"]);
@@ -9,6 +10,7 @@
         {
             fputs($output_stream, "\$code=\"$code\";");
             fputs($output_stream, "@\$argv[] = \"$value\";");
+            // first argument is a template name
             if ($key != 0)
             {
                 // singular value is a boolean switch
@@ -21,6 +23,33 @@
         }
         fputs($output_stream, $SETTINGS["code_end"]);
     }
+
+
+function xcms_parse_template_args($arg_list)
+{
+    $parse_result = array();
+    foreach ($arg_list as $index => $arg)
+    {
+        // first argument is a template name, skip it
+        if ($index == 0)
+            continue;
+
+        if (strpos($arg, "="))
+        {
+            // TODO: quotes support
+            $arr = explode(EXP_EQ, $arg, 2);
+            $parse_result[$arr[0]] = $arr[1];
+        }
+        else
+        {
+            // singular value is a boolean switch
+            $parse_result[$arg] = true;
+        }
+    }
+    return $parse_result;
+}
+
+
 
     function xcms_parse_string($s, $output_stream)
     {

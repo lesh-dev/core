@@ -24,30 +24,16 @@ if (!file_exists($compiled)) $need = true;
 if (@filemtime($source) > @filemtime($compiled)) $need = true;
 if ($need)
 {
-    $text_defined = false;
-    $limit = -1;
-
     $cur_alias = xcms_get_page_alias($pageid);  // empty alias when not found
-    $next_link = "/${web_prefix}$cur_alias";
-    $next_text = "more";
-    foreach ($argv as $arg)
-    {
-        if ($arg == "--text")
-            $text_defined = true;
-        elseif (strpos($arg, "="))
-        {
-            // TODO: quotes support
-            $arr = explode(EXP_EQ, $arg, 2);
-            if ($arr[0] == "--limit")
-                $limit = $arr[1];
-            if ($arr[0] == "--next-link")
-                $next_link = $arr[1];
-            if ($arr[0] == "--next-text")
-                $next_text = $arr[1];
-            if ($arr[0] == "--file")
-                $source = $arr[1];
-        }
-    }
+
+    $parsed_args = xcms_parse_template_args($argv);
+
+    $text_defined = xcms_get_key_or($parsed_args, "--text", false);
+    $limit = xcms_get_key_or($parsed_args, "--limit", -1);
+    $next_link = xcms_get_key_or($parsed_args, "--next-link", "/${web_prefix}$cur_alias");
+    $next_text = xcms_get_key_or($parsed_args, "--next-text", "more");
+    $source = xcms_get_key_or($parsed_args, "--file", $source);
+
     if (!$text_defined)
         $text = file_get_contents($source);
 
