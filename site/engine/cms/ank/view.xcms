@@ -25,12 +25,12 @@ require_once("${engine_dir}xsm/middleware.php");
     if (@$_POST["submit_anketa"])
     {
         $person = $_POST; // get all values here (_POST should not be spoiled)
+
         $person = xcms_trim_object($person);
 
         // set some generic fields that cannot be overridden
         $person["anketa_status"] = "new";
         $person["is_student"] = "student";
-        $person["department_id"] = 1;
         $user_agent = $person["user_agent"] = $_SERVER["HTTP_USER_AGENT"];
         xsm_validate_anketa_post($person);
 

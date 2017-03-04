@@ -253,6 +253,14 @@ function xsm_valid_anketa_control_question($answer) {
 function xsm_validate_anketa_post(&$person)
 {
     // extract some values to check
+    $department_id = (string)xcms_get_key_or($person, "department_id");
+    if (
+        ($department_id != "1") &&
+        ($department_id != "9")
+    )
+    {
+        $person_id["department_id"] = 1;
+    }
     $last_name = xcms_get_key_or($person, "last_name");
     $first_name = xcms_get_key_or($person, "first_name");
     $patronymic = xcms_get_key_or($person, "patronymic");
