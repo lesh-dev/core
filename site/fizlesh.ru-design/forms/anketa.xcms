@@ -27,9 +27,12 @@ else
             echo xsm_make_selector(
                 'department',
                 'department_id',
-                "1",
+                "1",  // Физическое отделение
                 array('department_title'),
-                "(department_id = 1 OR department_id = 9) ORDER BY department_title",
+                "(".
+                    "(department_id = 1) OR ".
+                    "(department_id = 9) ".
+                ") ORDER BY department_title",
                 "",
                 false
             );
