@@ -62,7 +62,7 @@
 
 <?php
 xcmst_print_acl();
-xcmst_submit("create-page", "Создать раздел"); ?>
+xcmst_submit("create-page", "Создать раздел");
 ?>
 </form>
 </div><!-- admin-widget -->
