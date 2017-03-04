@@ -49,7 +49,8 @@ else
         сила тока (в системе СИ)?:в ...ах (если не помните, поищите ответ в Интернете):req:middle}
 
     <div class="ankRow">
-        <?php xcmst_submit("submit_anketa", "Отправить"); ?></div>
+        <?php xcmst_submit("submit_anketa", "Отправить"); ?>
+    </div>
     <div class="ankMessageFrame" id="c-Message">
         <div class="ankError" id="t-Error">&nbsp;</div>
         <div class="ankWarning" id="t-Warning">&nbsp;</div>
