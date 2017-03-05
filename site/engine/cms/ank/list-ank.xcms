@@ -129,9 +129,21 @@ function xsm_show_ank_list()
         person_created DESC";
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
     $person_sel = $db->query($query);
-
-    xsm_view_operations('person', 'участника');
     ?>
+    <form method="post" class="xsm-bulk_archive" name="bulk_archive" id="bulk_archive-form" action="list-ank" style="float: right;">
+        <?php xcmst_submit("bulk_archive", "Архивировать отклонённых", "btn btn-danger"); ?>
+    </form>
+    <?php
+    xsm_view_operations('person', 'участника');
+
+    if (@$_POST["bulk_archive"])
+    {
+        xsm_bulk_archive();
+    }
+
+
+    ?>
+
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
             <col width="30px" />
@@ -154,7 +166,8 @@ function xsm_show_ank_list()
             <th class="ankList">Статус</th>
         </thead>
     <?php
-    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC)) {
+    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
+    {
         $person_id = htmlspecialchars($person["person_id"]);
         $fi = xsm_fi_enc($person);
         $fio = xsm_fio_enc($person);
@@ -199,6 +212,70 @@ function xsm_show_ank_list()
     </table>
     <?php
     xsm_view_operations('person', 'участника');
+}
+
+
+function xsm_bulk_archive()
+{
+    if (!xcms_user()->check_rights("admin", false))
+    {?>
+        <div class="error">Извините, эта функциональность доступна только Администратору. Обратитесь к Секте Программистов</div><?php
+        return;
+    }
+    // lock database
+    $db = xdb_get_write();
+
+    $query =
+        "SELECT
+            p.person_id
+        FROM person p
+        LEFT JOIN person_school ps ON
+            p.person_id = ps.member_person_id
+        WHERE
+            (ps.member_person_id IS NULL) AND
+            p.anketa_status = 'declined'
+        ";
+
+    xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
+    $person_sel = $db->query($query);
+
+    $archived_ids = array();
+
+    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $person_id = $person["person_id"];
+        $archived_ids[] = $person_id;
+        $person_link = xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID);
+        echo "Архивируем $person_link...<br/>";
+    }
+
+    $operator = xcms_user()->login();
+    $current_timestamp = xcms_datetime();
+
+    foreach ($archived_ids as $person_id)
+    {
+        xdb_update(
+            "person",
+            array("person_id" => $person_id),
+            array("anketa_status" => "old"),
+            xsm_get_fields("person"),
+            XDB_OVERRIDE_TS,
+            $db
+        );
+
+        $person_comment = array(
+            "owner_login" => $operator,
+            "comment_text" => "Перемещён в Архив за давностью пользователем $operator ($current_timestamp).",
+            "blamed_person_id" => $person_id,
+        );
+        $res = xdb_insert_or_update('person_comment', array('person_comment_id' => XDB_NEW), $person_comment, xsm_get_fields("person_comment"));
+        if (!$res)
+        {
+            die("Не удалось добавить комментарий, обратитесь на dev@fizlesh.ru. ");
+            return;
+        }
+    }
+
 }
 
     xsm_show_ank_list();
