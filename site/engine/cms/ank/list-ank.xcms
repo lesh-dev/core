@@ -131,7 +131,7 @@ function xsm_show_ank_list()
     $person_sel = $db->query($query);
     ?>
     <form method="post" class="xsm-bulk_archive" name="bulk_archive" id="bulk_archive-form" action="list-ank" style="float: right;">
-        <?php xcmst_submit("bulk_archive", "Архивировать отклонённых", "btn btn-danger"); ?>
+        <?php xcmst_submit("bulk_archive", "Архивировать отклонённых", "Доступна только Администратору", "btn btn-danger"); ?>
     </form>
     <?php
     xsm_view_operations('person', 'участника');
