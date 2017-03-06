@@ -58,13 +58,13 @@ function xcms_print_related_links()
 
     <div class="sidebar_top">
         <ul class="menu">
-            <# cms/menu/display start=1 end=1 #><!-- nostyle -->
+            <# cms/menu/display start=1 end=1 #>
         </ul>
         <ul class="menu">
-            <# cms/menu/display start=2 end=2 #><!-- nostyle -->
+            <# cms/menu/display start=2 end=2 #>
         </ul>
         <ul class="menu">
-            <# cms/menu/display start=3 end=3 #><!-- nostyle -->
+            <# cms/menu/display start=3 end=3 #>
         </ul>
     </div>
 
