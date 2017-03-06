@@ -3,7 +3,7 @@
 
 import xsm
 import xtest_common
-import random_crap
+import user
 
 
 class XcmsXsmLinkUserProfile(xsm.Manager, xtest_common.XcmsTest):
@@ -17,33 +17,34 @@ class XcmsXsmLinkUserProfile(xsm.Manager, xtest_common.XcmsTest):
 
     def run(self):
         self.ensure_logged_off()
-        inp_login = "xsm_link_" + random_crap.random_text(6)
-        inp_email = random_crap.randomEmail()
-        inp_pass = random_crap.random_text(8)
-        inp_name = u"XSM-Юзер-" + random_crap.random_text(6)
 
-        inp_login, inp_email, inp_pass, inp_name = self.createNewUser(
-            inp_login, inp_email, inp_pass, inp_name,
-            aux_params=["do_not_logout_admin", "manager_rights"]
+        inp_login = "xsm_link_"
+        inp_name = u"XSM-Юзер-"
+        u = user.User(self)
+        u.create_new_user(
+            login=inp_login,
+            name=inp_name,
+            random=True,
+            logout_admin=False,
+            manager_rights=True,
         )
 
         self.closeAdminPanel()
         self.goto_xsm()
         self.goto_xsm_active()
         self.goto_xsm_add_person()
-
         person = xsm.Person(self)
         person.input(
             last_name=u"ИксЭсЭмов",
             first_name=u"Юзер",
             patronymic=u"Ламерович",
-            email=inp_email,
+            email=u.email,
         )
 
         self.gotoRoot()
         self.performLogoutFromSite()
 
-        if not self.performLogin(inp_login, inp_pass):
+        if not self.performLogin(u.login, u.password):
             self.failTest("Cannot login as newly created user. ")
 
         self.gotoCabinet()
