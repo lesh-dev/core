@@ -8,9 +8,20 @@ function xcms_menu($init_path, $menu_templates, $menu_level, $add_href_params, $
     $aux_class = "";
     $page_info = "$init_path/info";
     $text = "";
+
+    if ($menu_level >= count($menu_templates))
+    {
+        // if templates do not provide necessary levels
+        // it is not an engine problem
+        xcms_log(XLOG_WARNING, "Not all menu items can be rendered (not enough menu template levels)");
+        return;
+    }
+
     // this prevents from loading sub-folders if no info file here
     if (!file_exists($page_info))
+    {
         return;
+    }
 
     $INFO = xcms_get_list($page_info);
     $show = xcms_get_key_or($options, "show");
