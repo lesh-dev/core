@@ -1,0 +1,23 @@
+<?php
+function xdesign_modern_sitelink($title, $link, $image)
+{?>
+    <a href="<?php echo $link; ?>">
+        <div class="col-md-6">
+            <div class="item-wrapper">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <img class="link_image" src="<# full_design_dir #>img/links/<?php echo $image; ?>" />
+                    </div>
+                    <div class="col-md-6 col-sm-6 about_person">
+                        <h4><?php echo $title; ?></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a><?php
+}
+
+xdesign_modern_sitelink("Сайт ЛЭШ", "http://lesh.org.ru", "lesh.png");
+xdesign_modern_sitelink("Группа ФизЛЭШ ВКонтакте", "https://vk.com/fizlesh", "vk_fizlesh_yozh.png");
+
+?>

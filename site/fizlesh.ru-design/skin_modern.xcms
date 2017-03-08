@@ -54,11 +54,13 @@
                 if ($page_alias == "index")
                 {
                     ?><# modern_index #><?php
-                }?>
+                }
+                elseif ($page_alias == "links")
+                {
+                    ?><# modern_links #><?php
+                }
 
-                <img src="<# full_design_dir #>img/carousel/c1.1.jpg" id="mob" />
-
-
+                ?>
                 <!-- optional menu of level 2 -->
                 <nav class="navbar my-navbar">
                     <center>
@@ -74,7 +76,7 @@
                         $pageid = "z01News";
                         include(translate("<! cms/contlist/view !>"));
                     ?>
-                    <center><!-- FIXME(bird@) кажется, это лучше задавать стилем, а не тегом, так более гибко -->
+                    <center><!-- FIXME(bird) кажется, это лучше задавать стилем, а не тегом, так более гибко -->
                         <a href="news.html" >
                             <button type="button" class="btn btn-default navbar-btn">Больше новостей</button>
                         </a>

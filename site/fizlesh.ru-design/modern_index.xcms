@@ -33,3 +33,4 @@
         </a>
     </div>
 </div><!-- indexCarousel -->
+<img src="<# full_design_dir #>img/carousel/c1.1.jpg" id="mob" />
