@@ -1,4 +1,4 @@
-<# cms/linit #><# cms/init #><# deploy_utils #><# locale #><!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <# cms/head #>
@@ -6,10 +6,9 @@
     <# css/design menu.css #>
     <# css/design default.css #>
 </head>
-<body><?php
-    $skin_to_switch_to = ($skin == "green") ? "modern" : "green"; ?>
+<body>
     <div style="position: absolute; right: 7px; top: 6px;">Skin:&nbsp;<a
-        href="/?skin=<?php echo $skin_to_switch_to; ?>"><?php echo $skin_to_switch_to; ?></a></div>
+        href="<?php echo $skin_switch_url; ?>"><?php echo $skin_to_switch_to; ?></a></div>
     <div id="fullHeight">
         <table class="topTable roundBorders">
             <tr>

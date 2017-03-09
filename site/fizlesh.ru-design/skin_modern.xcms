@@ -1,4 +1,4 @@
-<# cms/linit #><# cms/init #><# deploy_utils #><# locale #><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru"><head>
     <meta charset="utf-8">
     <# cms/head #>
@@ -13,11 +13,10 @@
 </head>
 <body>
 <?php
-    $skin_to_switch_to = ($skin == "green") ? "modern" : "green";
     $page_id_filtered = str_replace("/", "_", $pageid);
     ?>
     <div style="position: absolute; right: 7px; bottom: 6px; z-index: 100; color: #e5e5e5;">Skin:&nbsp;<a
-        href="/?skin=<?php echo $skin_to_switch_to; ?>" style="color: #efefef;"><?php echo $skin_to_switch_to; ?></a></div>
+        href="<?php echo $skin_switch_url; ?>" style="color: #efefef;"><?php echo $skin_to_switch_to; ?></a></div>
 
     <div class="page" id="page_<?php echo $page_id_filtered; ?>">
 
