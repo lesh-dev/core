@@ -53,7 +53,8 @@ body {
     color: black;
 }
 
-.transparent-wrapper {
+.transparent-wrapper,
+.links-wrapper {
     padding-top: 15px;
     height: 100%;
     position: relative;
@@ -313,7 +314,9 @@ h4 {
     background-image: url(../../img/background/contacts.jpg) ;
 }
 
-#page_links.page {
+/* FIXME(mvel): Remove old page name spike */
+#page_links.page,
+#page_z07Links.page {
     background-image: url(../../img/background/links.jpg) ;
 }
 

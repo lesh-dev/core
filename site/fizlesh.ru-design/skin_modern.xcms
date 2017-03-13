@@ -45,7 +45,7 @@
 
                 $wrapper_css_class = "generic-wrapper";
                 if (xu_not_empty($page_alias))
-                    $wrapper_css_class = "$wrapper_css_class $page_alias-wrapper";
+                    $wrapper_css_class = "$page_alias-wrapper";
 
             ?>
             <div class="my-content-block <?php echo $wrapper_css_class; ?>">
@@ -74,12 +74,16 @@
                     {
                         $pageid = "z01News";
                         include(translate("<! cms/contlist/view !>"));
-                    ?>
-                    <center><!-- FIXME(bird) кажется, это лучше задавать стилем, а не тегом, так более гибко -->
-                        <a href="news.html" >
-                            <button type="button" class="btn btn-default navbar-btn">Больше новостей</button>
-                        </a>
-                    </center><?php
+                        ?>
+                        <center><!-- FIXME(bird) кажется, это лучше задавать стилем, а не тегом, так более гибко -->
+                            <a href="news.html" >
+                                <button type="button" class="btn btn-default navbar-btn">Больше новостей</button>
+                            </a>
+                        </center><?php
+                    }
+                    elseif ($page_alias == "links")
+                    {
+                        // no contents displayed
                     }
                     else
                     {

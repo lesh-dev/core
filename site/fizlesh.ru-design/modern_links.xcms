@@ -19,5 +19,7 @@ function xdesign_modern_sitelink($title, $link, $image)
 
 xdesign_modern_sitelink("Сайт ЛЭШ", "http://lesh.org.ru", "lesh.png");
 xdesign_modern_sitelink("Группа ФизЛЭШ ВКонтакте", "https://vk.com/fizlesh", "vk_fizlesh_yozh.png");
+xdesign_modern_sitelink("Группа Математического отделения ЛЭШ ВКонтакте", "https://vk.com/maolesh", "mao.png");
+
 
 ?>
