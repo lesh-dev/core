@@ -413,7 +413,7 @@ class Manager(xc.XcmsTest):
 
     @staticmethod
     def get_anketa_success_submit_message():
-        return u"Спасибо, Ваша анкета принята!"
+        return u"Поздравляем!"
 
     @staticmethod
     def get_anketa_duplicate_submit_message():
