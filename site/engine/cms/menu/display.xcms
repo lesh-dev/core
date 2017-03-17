@@ -18,20 +18,28 @@
     if (xcms_get_key_or($param, "devel"))
         $template_file = "${engine_dir}cms/menu/menu_links.html";
 
+
     $start = 0;
     $end = 999;
-    if (@$param["start"]) $start = $param["start"];
-    if (@$param["end"]) $end = $param["end"];
+
+    if (@$param["start"])
+        $start = $param["start"];
+
+    if (@$param["end"])
+        $end = $param["end"];
 
     $add_href_params = "";
     $ref_value = xcms_get_key_or($_GET, "ref");
     if ($ref_value != "index")
         $add_href_params = xcms_url(array('ref' => $ref_value));
 
-    xcms_menu(
+    $menu_html_output = xcms_menu(
         xcms_get_page_root(false),
         file($template_file),
         0,
         $add_href_params,
         $param, $start, $end);
+
+    if (xu_empty(xcms_get_key_or($param, "no_output")))
+        echo $menu_html_output;
 ?>

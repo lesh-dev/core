@@ -60,14 +60,17 @@
                 }
 
                 ?>
-                <!-- optional menu of level 2 -->
-                <nav class="navbar my-navbar">
-                    <center>
-                        <ul class="nav navbar-nav">
-                            <# cms/menu/display start=2 end=5 #>
-                        </ul>
-                    </center>
-                </nav>
+                <# cms/menu/display start=2 end=5 no_output #>
+                <?php
+                if (xu_not_empty($menu_html_output))
+                {?>
+                    <!-- optional menu of level 2 -->
+                    <nav class="navbar my-navbar">
+                        <center>
+                            <ul class="nav navbar-nav"><?php echo $menu_html_output; ?></ul>
+                        </center>
+                    </nav><?php
+                }?>
 
                 <div class="content-text"><?php
                     if ($page_alias == "index")

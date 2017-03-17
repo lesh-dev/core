@@ -1,7 +1,20 @@
 <?php
+/**
+ * Produces HTML code of menu items using given menu templates.
+ * @param init_path: cms folders tree entry point (e.g. root)
+ * @param menu_templates: array of menu HTML templates for each level
+ * @param menu_level: current menu level to render (including sublevels)
+ * @param add_href_params: augmented url part for each menu item
+ * @param options: render options (eg. "show")
+ * @param start_level: topmost level to render
+ * @param end_level: bottom level to render (levels inner than @c end_level are not rendered
+ * @return HTML code with rendered menu.
+ **/
+
 function xcms_menu($init_path, $menu_templates, $menu_level, $add_href_params, $options, $start_level, $end_level)
 {
     global $SETTINGS, $pageid, $web_prefix;
+    $output = "";
 
     $page_prefix = xcms_get_page_root(true);
     $pageiid = str_replace($page_prefix, "", $init_path);
@@ -14,13 +27,13 @@ function xcms_menu($init_path, $menu_templates, $menu_level, $add_href_params, $
         // if templates do not provide necessary levels
         // it is not an engine problem
         xcms_log(XLOG_WARNING, "Not all menu items can be rendered (not enough menu template levels)");
-        return;
+        return $output;
     }
 
     // this prevents from loading sub-folders if no info file here
     if (!file_exists($page_info))
     {
-        return;
+        return $output;
     }
 
     $INFO = xcms_get_list($page_info);
@@ -38,7 +51,7 @@ function xcms_menu($init_path, $menu_templates, $menu_level, $add_href_params, $
 
         // skip locked items in not-locked mode
         if ($show == "not-locked" && xcms_is_enabled_key($INFO, "menu-locked"))
-            return;
+            return $output;
 
         if (xcms_is_enabled_key($INFO, "menu-hidden", false))
         {
@@ -53,12 +66,12 @@ function xcms_menu($init_path, $menu_templates, $menu_level, $add_href_params, $
         $text = htmlspecialchars(@$INFO["menu-title"]);
         // don't show unnamed items
         if (!xcms_get_key_or($INFO, "menu-title")) // no title
-            return;
+            return $output;
         // don't show hidden items
         if (xcms_is_enabled_key($INFO, "menu-hidden", false))
-            return;
+            return $output;
         if (!$access_granted)
-            return;
+            return $output;
 
         $reg_only = true;
         foreach ($acl as $acl_item)
@@ -82,7 +95,7 @@ function xcms_menu($init_path, $menu_templates, $menu_level, $add_href_params, $
         $alias = $INFO["alias"];
         $html = str_replace("@@HREF@", "/$web_prefix$alias/$add_href_params", $html);
     }
-    // text is already escaped here
+    // text is already escaped hereech
     $html = str_replace("@@TEXT@", $text, $html);
 
     if ($pageid == $pageiid || strstr($pageid, "$pageiid/"))
@@ -96,14 +109,14 @@ function xcms_menu($init_path, $menu_templates, $menu_level, $add_href_params, $
 
     // render current level
     if ($menu_level >= $start_level && $menu_level <= $end_level)
-        echo $html;
+        $output .= $html;
 
     // render menu subtree
     $array = glob("$init_path/*", GLOB_ONLYDIR);
     if (xcms_get_key_or($options, "stop"))
-        return;
+        return $output;
     if (!@$array)
-        return;
+        return $output;
 
     $array_ordered = array();
 
@@ -126,13 +139,14 @@ function xcms_menu($init_path, $menu_templates, $menu_level, $add_href_params, $
 
             $without_prefix = str_replace($page_prefix, "", $value);
             if (xcms_get_key_or($options, "show") != "" || strstr($pageid, $without_prefix))
-                xcms_menu($value, $menu_templates, $menu_level + 1, $add_href_params, $options, $start_level, $end_level);
+                $output .= xcms_menu($value, $menu_templates, $menu_level + 1, $add_href_params, $options, $start_level, $end_level);
             else
             {
                 $new_options = $options;
                 $new_options["stop"] = true;
-                xcms_menu($value, $menu_templates, $menu_level + 1, $add_href_params, $new_options, $start_level, $end_level);
+                $output .= xcms_menu($value, $menu_templates, $menu_level + 1, $add_href_params, $new_options, $start_level, $end_level);
             }
         }
     }
+    return $output;
 }
