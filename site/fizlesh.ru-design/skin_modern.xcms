@@ -84,10 +84,6 @@
                             </a>
                         </center><?php
                     }
-                    elseif ($page_alias == "links")
-                    {
-                        // no contents displayed
-                    }
                     else
                     {
                         ?><# cms/ #><?php

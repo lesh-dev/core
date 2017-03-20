@@ -1,12 +1,20 @@
 <?php
+
 function xdesign_modern_sitelink($title, $link, $image)
-{?>
-    <a href="<?php echo $link; ?>">
+{
+    global $full_content_dir;
+    global $pageid;
+
+    $sitelink_page_prefix = "${full_content_dir}cms/pages/$pageid";
+    $img_file = "${sitelink_page_prefix}/$image.jpg";
+    $link_html = htmlspecialchars($link);
+?>
+    <a href="<?php echo $link_html; ?>">
         <div class="col-md-6">
             <div class="item-wrapper">
                 <div class="row">
                     <div class="col-md-6 col-sm-6">
-                        <img class="link_image" src="<# full_design_dir #>img/links/<?php echo $image; ?>" />
+                        <img class="link_image" src="<?php echo $sitelink_page_prefix; ?>" />
                     </div>
                     <div class="col-md-6 col-sm-6 about_person">
                         <h4><?php echo $title; ?></h4>
@@ -17,10 +25,13 @@ function xdesign_modern_sitelink($title, $link, $image)
     </a><?php
 }
 
+/*
+To be inserted on site
+
 xdesign_modern_sitelink("Сайт ЛЭШ", "http://lesh.org.ru", "lesh.png");
 xdesign_modern_sitelink("Группа ФизЛЭШ ВКонтакте", "https://vk.com/fizlesh", "vk_fizlesh_yozh.png");
 xdesign_modern_sitelink("Группа Математического отделения ЛЭШ ВКонтакте", "https://vk.com/maolesh", "mao.png");
 xdesign_modern_sitelink("Группа Биологического отделения ЛЭШ ВКонтакте", "https://vk.com/club847410", "bio.jpg");
 xdesign_modern_sitelink("Группа Гуманитарного отделения ЛЭШ ВКонтакте", "https://vk.com/club4397434", "go.jpg");
-
+*/
 ?>
