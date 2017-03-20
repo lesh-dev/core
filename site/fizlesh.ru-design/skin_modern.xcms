@@ -73,20 +73,29 @@
                 }?>
 
                 <div class="content-text"><?php
+                    $hdr = xcms_get_key_or($INFO, "header");
+                    $alias = xcms_get_key_or($INFO, "alias");
+                    $aparam = xcms_get_key_or($_GET, "aparam");
+                    $in_xsm = ($alias == "register" && strlen($aparam));
+
                     if ($page_alias == "index")
                     {
                         $pageid = "z01News";
                         include(translate("<! cms/contlist/view !>"));
                         ?>
                         <center><!-- FIXME(bird) кажется, это лучше задавать стилем, а не тегом, так более гибко -->
-                            <a href="news.html" >
+                            <a href="/news" >
                                 <button type="button" class="btn btn-default navbar-btn">Больше новостей</button>
                             </a>
                         </center><?php
                     }
                     else
                     {
-                        ?><# cms/ #><?php
+                        if (!$in_xsm)
+                        {?>
+                            <# cms/page/edit_button #><?php
+                        }?>
+                        <# cms/ #><?php
                     }?>
                 </div>
             </div>
