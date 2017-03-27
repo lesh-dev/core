@@ -10,7 +10,7 @@
 </p>
 <p>
     <font color="red"><b>NEW!</b></font> Доступно редактирование лесных статусов (M1-M3)
-    и колонок о снаряжении по двойному щелчку на ячейке (баг <a href="https://dev.fizlesh.ru/lesh/ticket/886">#886</a>)
+    и колонок о снаряжении по двойному щелчку на ячейке (баг <a href="https://dev.fizlesh.ru/issues/886">#886</a>)
 </p>
 <form method="post" class="xsm-filter" name="filter" id="filter-form" action="list-tour">
     <span>Фильтр: </span><?php

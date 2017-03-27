@@ -90,7 +90,7 @@ function xcms_draw_contlist_create($result = true)
                 "Это заголовок новости, напишите его!"); ?></td>
         </tr>
         <tr>
-            <td>Тип блока (<a href="https://dev.fizlesh.ru/lesh/ticket/766">только новости</a>)</td>
+            <td>Тип блока (<a href="https://dev.fizlesh.ru/issues/766">только новости</a>)</td>
             <td>
                 <select disabled="disabled" name="pagetype"><?php
                 $page_types = xcms_get_tag_list("pagetype");

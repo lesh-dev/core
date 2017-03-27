@@ -5,7 +5,7 @@ http://lesh.org.ru sites guts.
 
 Issue Tracker
 =============
-https://dev.fizlesh.ru/lesh/
+https://dev.fizlesh.ru/projects/development
 
 To gain access please do not hestiate to contact us at dev@fizlesh.ru
 
