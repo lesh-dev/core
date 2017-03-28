@@ -4,10 +4,9 @@
 function xsm_filter_form_autosubmit()
 {
     $(document).ready(function() {
-
         var form = $('#filter-form');
         var controls = form.find('input');
-        for (var i in controls)
+        for (var i = 0; i < controls.length; ++i)
         {
             var control = controls[i];
             $(control).change(function() {
