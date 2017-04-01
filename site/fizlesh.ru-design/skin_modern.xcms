@@ -1,4 +1,7 @@
-<!DOCTYPE html>
+<?php
+require_once("${design_dir}modern_links.php");
+require_once("${design_dir}modern_contacts.php");
+?><!DOCTYPE html>
 <html lang="ru"><head>
     <meta charset="utf-8">
     <# cms/head #>
@@ -54,11 +57,6 @@
                 {
                     ?><# modern_index #><?php
                 }
-                elseif ($page_alias == "links")
-                {
-                    ?><# modern_links #><?php
-                }
-
                 ?>
                 <# cms/menu/display start=2 end=5 no_output #>
                 <?php
