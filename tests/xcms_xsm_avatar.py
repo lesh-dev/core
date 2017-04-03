@@ -5,6 +5,7 @@ import logging
 
 import xsm
 import xtest_common
+import requests
 
 
 class XcmsXsmAvatar(xsm.Manager, xtest_common.XcmsTest):
@@ -29,9 +30,16 @@ class XcmsXsmAvatar(xsm.Manager, xtest_common.XcmsTest):
         avatar_src = self.getImageSrcById("avatar")
         logging.debug("Avatar source: %s", avatar_src)
         fail_condition = ("stalin50" in avatar_src) ^ default
+        response = requests.head(avatar_src).status_code
         if fail_condition:
             self.failTest("Wrong avatar detected, expected {} image. VK ID: {}".format(
                 "default" if default else "custom",
+                person.social_profile,
+            ))
+        elif response != 200:
+            self.failTest("Wrong response, expected '200' got {}. request: {}, VK ID  {}".format(
+                response,
+                avatar_src,
                 person.social_profile,
             ))
 
