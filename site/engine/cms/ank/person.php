@@ -28,11 +28,16 @@ function xsm_get_vk_uid($social_profile)
 
 
 // see http://habrahabr.ru/post/190816/#comment_6628996
+// seems like api always returns "https://pp.userapi.com"
 function xsm_vk_src_to_https($url)
 {
-    $url = str_replace('http://cs', '', $url);
-    $url = str_replace('.vk.me', '', $url);
-    return "https://pp.vk.me/c$url";
+    if (strpos($url, "https:") === false)
+    {
+        $url = str_replace('http://cs', '', $url);
+        $url = str_replace('.vk.me', '', $url);
+        return "https://pp.vk.me/c$url";
+    }
+    return $url;
 }
 
 
