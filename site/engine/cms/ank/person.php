@@ -27,20 +27,6 @@ function xsm_get_vk_uid($social_profile)
 }
 
 
-// see http://habrahabr.ru/post/190816/#comment_6628996
-// seems like api always returns "https://pp.userapi.com"
-function xsm_vk_src_to_https($url)
-{
-    if (strpos($url, "https:") === false)
-    {
-        $url = str_replace('http://cs', '', $url);
-        $url = str_replace('.vk.me', '', $url);
-        return "https://pp.vk.me/c$url";
-    }
-    return $url;
-}
-
-
 function xsm_get_avatar($social_profile)
 {
     // TODO: extract first profile (e.g. by spaces)
@@ -80,7 +66,6 @@ function xsm_get_avatar($social_profile)
     if (count($response) > 0)
     {
         $av = $response[0]['photo'];
-        $av = xsm_vk_src_to_https($av);
     }
     return $av;
 }
