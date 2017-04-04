@@ -172,6 +172,14 @@ function xu_strpos($haystack, $needle, $offset = 0)
 }
 
 /**
+  * Python x.startswith(y) analogue.
+  **/
+function xu_startswith($string, $substring)
+{
+    return (mb_substr($string, 0, xu_len($substring), 'UTF-8') === $substring);
+}
+
+/**
   * Split string to array of UTF-8 characters
   **/
 function xu_split($str)
@@ -416,6 +424,8 @@ function xcms_string_unit_test()
     xut_equal(xu_strcspn('abcd', 'banana'), 0, "Check xu_strcspn two");
     xut_equal(xu_strcspn('heЛЛo', 'Л'), 2, "Check xu_strcspn three");
     xut_equal(xu_strcspn('heЛЛo', 'ДworЛЛd'), 2, "Check xu_strcspn four");
+
+    xut_equal(xu_startswith("0иван0 человеков", "0ива"), true, "Check xu_startswith");
 
     xut_equal(xcms_wrap_long_lines("  Очень длинный текст, который надо перенести\n\n\n", 20),
         "Очень длинный\nтекст, который надо\nперенести", "Check xcms_wrap_long_lines");
