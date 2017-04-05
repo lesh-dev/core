@@ -65,6 +65,12 @@ function xdesign_modern_contact(
                 }
                 ?>
                 <p><a href="mailto:<?php echo $email; ?>"><?php echo $email; ?></a></p>
+                <?php
+                if (xu_not_empty($description))
+                {?>
+                    <p><?php echo htmlspecialchars($description); ?></p>
+                <?php
+                }?>
           </div>
         </div>
       </div>
