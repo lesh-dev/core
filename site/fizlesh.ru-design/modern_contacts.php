@@ -5,19 +5,19 @@ function xdesign_modern_contact(
     $last_name = "",
     $first_name = "",
     $job = "",
-    $phone = "",
+    $phone = "",  // or telegram link
     $email = "",
     $social_profile = "",
-    $xsm_id = false,
     $image_name = "",
-    $description = ""
+    $description = "",
+    $xsm_id = false  // TODO: put xsm link in authorized mode?
 ) {
     global $full_content_dir;
     global $pageid;
 
     $contact_page_prefix = "${full_content_dir}cms/pages/$pageid";
     $full_image_file_name = "${contact_page_prefix}/$image_name";
-    $link_html = htmlspecialchars($link);
+    $link_html = htmlspecialchars($full_image_file_name);
     $fio = "$first_name $last_name";
 ?>
     <div class="col-md-12">
@@ -30,16 +30,29 @@ function xdesign_modern_contact(
                 <h4><?php echo $fio; ?></h4>
                 <p><?php echo $job; ?></p>
                 <?php
-                if (xu_not_empty($phone)) {?>
-                    <p><a href="tel:<?php echo $phone; ?>"><?php echo $phone; ?></a></p><?php
+                // TODO: wrap phone handling?
+                if (xu_not_empty($phone))
+                {
+                    $phone_link = $phone;
+                    if (!(xu_strpos($phone, "t.me") === false))
+                    {
+                        // telegram link
+                        if (!xu_startswith($phone, "http"))
+                            $phone_link = "https://$phone";
+                    }
+                    else
+                        $phone_link = "tel:$phone";
+                    ?>
+                    <p><a href="<?php echo $phone_link; ?>"><?php echo $phone; ?></a></p><?php
                 }
+
                 if (xu_not_empty($social_profile))
                 {
                     $social_profile_link = $social_profile;
                     // TODO(mvel): wrap social profile handling
-                    if (xu_substr($social_profile, 0, 4) != "http")
+                    if (!xu_startswith($social_profile, "http"))
                     {
-                        if (xu_substr($social_profile, 0, 5) == "vk.com")
+                        if (xu_startswith($social_profile, "vk.com"))
                         {
                             $social_profile_link = "https://$social_profile";
                         }
@@ -47,6 +60,7 @@ function xdesign_modern_contact(
                     $social_profile = str_replace("http://", "", $social_profile);
                     $social_profile = str_replace("https://", "", $social_profile);
                     ?>
+
                     <p><a href="<?php echo $social_profile_link; ?>"><?php echo $social_profile; ?></a></p><?php
                 }
                 ?>
