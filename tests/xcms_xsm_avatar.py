@@ -30,7 +30,7 @@ class XcmsXsmAvatar(xsm.Manager, xtest_common.XcmsTest):
         avatar_src = self.getImageSrcById("avatar")
         logging.debug("Avatar source: %s", avatar_src)
         fail_condition = ("stalin50" in avatar_src) ^ default
-        response = requests.head(avatar_src).status_code
+        response = requests.head(avatar_src, verify=False).status_code
         if fail_condition:
             self.failTest("Wrong avatar detected, expected {} image. VK ID: {}".format(
                 "default" if default else "custom",
