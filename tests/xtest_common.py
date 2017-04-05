@@ -237,6 +237,9 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def get_news_link_name(self):
         return u"Новости"
 
+    def get_contacts_link_name(self):
+        return u"Контакты"
+
     def getAdminPanelLink(self):
         return self.getUrlByLinkText(self.getAdminPanelLinkName())
 

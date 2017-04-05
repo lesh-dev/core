@@ -79,7 +79,10 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
         self.assertSourceTextNotPresent(pageHeader, "we should not see page header without authorization. ")
 
         if inpMenuTitle in self.getPageTitle():
-            self.failTest("Menu title text appears in page title after going to the page by site menu without authorization. ")
+            self.failTest(
+                "Menu title text appears in page title after going to the page "
+                "by site menu without authorization. "
+            )
 
         self.assertSourceTextPresent([u"Доступ запрещён", "Access denied"], "we should see auth page")
 
@@ -102,22 +105,35 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
         self.logAdd("Checking new page menu item, it should be visible")
         self.gotoUrlByLinkText(inpMenuTitle)
 
-        self.assertElementTextById("content-text", pageText, "menu check: page text does not match entered text (under auth). ")
-        self.assertElementTextById("content-header", pageHeader, "menu check: page header does not match entered header (under auth). ")
+        self.assertElementTextById(
+            "content-text", pageText, "menu check: page text does not match entered text (under auth). "
+        )
+        self.assertElementTextById(
+            "content-header", pageHeader, "menu check: page header does not match entered header (under auth). "
+        )
 
         if inpMenuTitle not in self.getPageTitle():
-            self.failTest("Menu title text does not appear in page title after going to the page by site menu (under auth). ")
+            self.failTest(
+                "Menu title text does not appear in page title after going to the page "
+                "by site menu (under auth). "
+            )
 
         self.logAdd("Clicking on some other menu item. ")
-        self.gotoUrlByLinkText(self.get_news_link_name())
+        self.gotoUrlByLinkText(self.get_contacts_link_name())
 
         self.logAdd("Alias should work now, and we should NOT see access denied page")
         self.gotoPage("/" + inpAlias)
 
-        self.assertElementTextById("content-text", pageText, "alias check: page text does not match entered text (under auth). ")
-        self.assertElementTextById("content-header", pageHeader, "alias check: page header does not match entered header (under auth). ")
+        self.assertElementTextById(
+            "content-text", pageText, "alias check: page text does not match entered text (under auth). "
+        )
+        self.assertElementTextById(
+            "content-header", pageHeader, "alias check: page header does not match entered header (under auth). "
+        )
 
         if inpMenuTitle not in self.getPageTitle():
-            self.failTest("Menu title text does not appear in page title after going to the page by site menu (under auth). ")
+            self.failTest(
+                "Menu title text does not appear in page title "
+                "after going to the page by site menu (under auth). ")
 
         self.assertSourceTextNotPresent([u"Доступ запрещён", "Access denied"])
