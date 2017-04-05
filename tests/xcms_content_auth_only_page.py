@@ -109,7 +109,7 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
             self.failTest("Menu title text does not appear in page title after going to the page by site menu (under auth). ")
 
         self.logAdd("Clicking on some other menu item. ")
-        self.gotoUrlByLinkText(self.getNewsLinkName())
+        self.gotoUrlByLinkText(self.get_news_link_name())
 
         self.logAdd("Alias should work now, and we should NOT see access denied page")
         self.gotoPage("/" + inpAlias)

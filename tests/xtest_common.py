@@ -234,7 +234,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def getAdminPanelLinkName(self):
         return u"Админка"
 
-    def getNewsLinkName(self):
+    def get_news_link_name(self):
         return u"Новости"
 
     def getAdminPanelLink(self):

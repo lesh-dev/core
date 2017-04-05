@@ -51,7 +51,7 @@ class XcmsContentTopLevelPage(xtest_common.XcmsTest):
         # click on some other menu to change active menu item
 
         self.logAdd("Clicking on some other menu item. ")
-        self.gotoUrlByLinkText(self.getNewsLinkName())
+        self.gotoUrlByLinkText(self.get_news_link_name())
 
         self.logAdd("Clicking on new top-level page menu item, it should be visible")
         self.gotoUrlByLinkText(inpMenuTitle)
