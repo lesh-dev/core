@@ -41,14 +41,24 @@ require_once("${design_dir}modern_contacts.php");
             xcms_url(array('page' => $pageid, 'ref' => 'login', 'return' => '?ref=index')); ?>"> </a>
 
         <div class="top-links"><# cms/user_menu separator= #></div>
+        <?php
+            $page_alias = xcms_get_key_or($INFO, "alias");
 
-        <div class="my-container" >
+            $wrapper_css_class = "generic-wrapper";
+            if (xu_not_empty($page_alias))
+                $wrapper_css_class = "$page_alias-wrapper";
+
+            // set proper container class depending on the page
+            $container_class = "";
+            if (
+                $page_alias == "contacts" ||
+                $page_alias == "links"
+            ) {
+                $container_class = "container";
+            }
+        ?>
+        <div class="<?php echo $container_class; ?> my-containe r">
             <?php
-                $page_alias = xcms_get_key_or($INFO, "alias");
-
-                $wrapper_css_class = "generic-wrapper";
-                if (xu_not_empty($page_alias))
-                    $wrapper_css_class = "$page_alias-wrapper";
 
             ?>
             <div class="my-content-block <?php echo $wrapper_css_class; ?>">

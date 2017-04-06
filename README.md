@@ -66,3 +66,7 @@ https://github.com/delphinidae
 Anastasiya Dianova <mediana96@gmail.com>, https://github.com/birdbirdbird
 * Modern http://fizlesh.ru design
 * Art
+
+Yaroslav Rebenko
+* Bugfixing
+* Automated tests

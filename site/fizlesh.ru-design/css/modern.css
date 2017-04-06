@@ -310,7 +310,9 @@ h4 {
     background-image: url(../../img/background/zesh.jpg) ;
 }
 
-#page_contacts.page {
+/* FIXME(mvel): Remove old page name spike */
+#page_contacts.page,
+#page_z08Contact.page {
     background-image: url(../../img/background/contacts.jpg) ;
 }
 
