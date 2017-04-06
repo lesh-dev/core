@@ -57,7 +57,7 @@ require_once("${design_dir}modern_contacts.php");
                 $container_class = "container";
             }
         ?>
-        <div class="<?php echo $container_class; ?> my-containe r">
+        <div class="<?php echo $container_class; ?> my-container">
             <?php
 
             ?>

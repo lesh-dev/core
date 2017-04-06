@@ -54,14 +54,17 @@ body {
 }
 
 .transparent-wrapper,
-.links-wrapper {
+.links-wrapper,
+.contacts-wrapper {
     padding-top: 15px;
     height: 100%;
     position: relative;
     display: block;
 }
 
-.transparent-wrapper a {
+.transparent-wrapper a,
+.links-wrapper a,
+.contacts-wrapper a {
     color: black;
 }
 
