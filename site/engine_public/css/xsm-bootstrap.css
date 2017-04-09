@@ -99,3 +99,29 @@ div.course-comment-div {
     border-top: 1px solid #7f7f7f;
     margin: 5px 0px 5px 0px;
 }
+
+/* forgotten part */
+tr.teacher td.ankList,
+b.teacher {
+    background-color: #fdfbe2;
+}
+
+tr.teacher a {
+    color: #004f00;
+}
+
+tr.not-msk-city td.ankList,
+b.not-msk-city {
+    background-color: #e3ffed;
+}
+
+tr.far-city td.ankList,
+b.far-city {
+    background-color: #e3f4ff;
+}
+
+b.far-city,
+b.not-msk-city,
+b.teacher {
+    padding: 1px 3px 1px 3px;
+}
