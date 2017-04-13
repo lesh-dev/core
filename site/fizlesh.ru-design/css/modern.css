@@ -54,6 +54,7 @@ body {
 }
 
 .transparent-wrapper,
+.news-wrapper,
 .links-wrapper,
 .contacts-wrapper {
     padding-top: 15px;
@@ -63,6 +64,7 @@ body {
 }
 
 .transparent-wrapper a,
+.news-wrapper a,
 .links-wrapper a,
 .contacts-wrapper a {
     color: black;
@@ -325,7 +327,8 @@ h4 {
     background-image: url(../../img/background/links.jpg) ;
 }
 
-#page_news.page {
+#page_news.page,
+#page_z01News {
     background-image: url(../../img/background/news.jpg) ;
 }
 

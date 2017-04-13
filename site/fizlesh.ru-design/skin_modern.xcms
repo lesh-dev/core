@@ -21,6 +21,7 @@ require_once("${design_dir}modern_contacts.php");
     <div style="position: absolute; right: 7px; bottom: 6px; z-index: 100; color: #e5e5e5;">Skin:&nbsp;<a
         href="<?php echo $skin_switch_url; ?>" style="color: #efefef;"><?php echo $skin_to_switch_to; ?></a></div>
 
+    <!-- FIXME(mvel) identification via aliases, not via pageid -->
     <div class="page" id="page_<?php echo $page_id_filtered; ?>">
 
         <nav class="navbar navbar-inverse ">
@@ -52,7 +53,8 @@ require_once("${design_dir}modern_contacts.php");
             $container_class = "";
             if (
                 $page_alias == "contacts" ||
-                $page_alias == "links"
+                $page_alias == "links" ||
+                xu_startswith($page_alias, "news")
             ) {
                 $container_class = "container";
             }
