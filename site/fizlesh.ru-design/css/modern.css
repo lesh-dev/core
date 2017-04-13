@@ -543,3 +543,7 @@ a.contlist-edit {
     padding: 0px 6px 0px 6px;
 }
 
+div.contlist-slider {
+    padding: 10px 50px;
+    background-color: rgba(255, 255, 255, 0.9);
+}

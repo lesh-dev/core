@@ -72,11 +72,11 @@
         <div class="contlist-slider"><?php
         if ($pg > 0) {?>
             <a href="/<# web_prefix #>?<?php
-                echo xcms_url(array('page' => $pageid, 'pg' => $pg - 1)); ?>">Новые новости</a><?php
+                echo xcms_url(array('page' => $pageid, 'pg' => $pg - 1)); ?>">&lt;&lt; Новые новости</a><?php
         }
         if ($block_count >= ($pg + 1) * $block_show_count) {?>
             <a style="float: right;" href="/<# web_prefix #>?<?php
-                echo xcms_url(array('page' => $pageid, 'pg' => $pg + 1)); ?>">Старые новости</a><?php
+                echo xcms_url(array('page' => $pageid, 'pg' => $pg + 1)); ?>">Старые новости &gt;&gt;</a><?php
         }?>
         </div><?php
     }
