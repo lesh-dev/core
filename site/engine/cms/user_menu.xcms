@@ -1,6 +1,8 @@
 <?php
 $parsed_args = xcms_parse_template_args($argv);
 $user_menu_separator = xcms_get_key_or($parsed_args, "separator");
+$show_auth = xcms_get_key_or($parsed_args, "show_auth");
+
 if (xu_not_empty($user_menu_separator))
     $user_menu_separator = " $user_menu_separator ";
 
@@ -43,7 +45,7 @@ if (xcms_user()->check_rights("registered", false))
         xcms_url(array('page' => $pageid, 'ref' => 'cabinet', 'mode' => 'logout')); ?>"
         >Выход</a><?php
 }
-else
+elseif ($show_auth)
 {?>
     <a href="<?php echo $meta_site_url_secure.'?'.
         xcms_url(array('page' => $pageid, 'ref' => 'login', 'return' => '?ref=index')); ?>"

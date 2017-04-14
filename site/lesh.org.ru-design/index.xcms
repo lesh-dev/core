@@ -52,7 +52,7 @@ function xcms_print_related_links()
     <div class="header">
         <a class="picture_logo" href="/<# web_prefix #>"> </a>
         <div class="picture_title">
-            <div class="top-links"><# cms/user_menu #></div>
+            <div class="top-links"><# cms/user_menu show_auth #></div>
         </div>
     </div>
 
