@@ -93,7 +93,8 @@ body {
     display: block;
 }
 
-.wrapper {
+.wrapper,
+.zesh-wrapper {
     padding-left: 50px;
     padding-right: 50px;
     padding-top: 30px;
