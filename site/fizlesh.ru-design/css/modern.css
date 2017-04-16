@@ -289,19 +289,22 @@ h4 {
     background-image: url(../../img/background/index.jpg) ;
 }
 
-#page_about.page {  /* unused */
+#page_about.page,
+#page_about_school {
     background-image: url(../../img/background/about.jpg);
 }
 
-#page_life.page {  /* unused */
+#page_life.page,
+#page_about_school_life {
     background-image: url(../../img/background/life.jpg) ;
 }
 
-#page_z03Education.page {
+#page_about_school_education {
     background-image: url(../../img/background/education.jpg) ;
 }
 
-#page_list.page {  /* unused */
+#page_list.page,
+#page_about_school_gear {
     background-image: url(../../img/background/list.jpg) ;
 }
 
