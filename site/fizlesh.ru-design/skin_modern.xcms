@@ -45,21 +45,20 @@ require_once("${design_dir}modern_contacts.php");
         <?php
             $page_alias = xcms_get_key_or($INFO, "alias");
 
-            $wrapper_css_class = "generic-wrapper";
-            if (xu_not_empty($page_alias))
-                $wrapper_css_class = "$page_alias-wrapper";
+            // FIXME(mvel) const?
+            $container_css_class = "container";
+            $wrapper_css_class = "wrapper";
 
-            // set proper container class depending on the page
-            $container_class = "";
+            // set proper wrapper class depending on the page
             if (
                 $page_alias == "contacts" ||
                 $page_alias == "links" ||
                 xu_startswith($page_alias, "news")
             ) {
-                $container_class = "container";
+                $wrapper_css_class = "transparent-wrapper";
             }
         ?>
-        <div class="<?php echo $container_class; ?> my-container">
+        <div class="<?php echo $container_css_class; ?> my-container">
             <?php
 
             ?>
