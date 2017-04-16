@@ -57,6 +57,10 @@ require_once("${design_dir}modern_contacts.php");
             ) {
                 $wrapper_css_class = "transparent-wrapper";
             }
+            elseif ($page_alias == "index")
+            {
+                $wrapper_css_class = "index-wrapper";
+            }
         ?>
         <div class="<?php echo $container_css_class; ?> my-container">
             <?php
