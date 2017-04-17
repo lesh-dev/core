@@ -4,7 +4,7 @@
     $name = $_1;
     $album_text = $_2;
     $album_img_name = "$album_page_prefix/$name.jpg";
-    $album_arrow_name = "$album_page_prefix/photos/misc/arrow-$cl-small.png";
+    $album_arrow_name = "$album_page_prefix/arrow-$cl-small.png";
 ?><img
     class="album-<?php echo $cl; ?>"
     src="<?php echo $album_img_name; ?>"
