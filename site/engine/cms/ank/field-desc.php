@@ -354,6 +354,7 @@ $XSM_ENUMS["anketa_status"] = array(
         "nextyear" => "Отложен",
         "declined" => "Отклонён",
         "cont" => "Активный",
+        "reserved" => "Резерв",
         "old" => "Архив",
         "duplicate" => "Дубль",
         "spam" => "Спам",
@@ -371,7 +372,8 @@ $XSM_ENUMS["show_anketa_status_locator"] = array(
         "processed" => "Принятые",
         "cont" => "Продолжающие",
         "old" => "Архивные",
-        "all" => "Без фильтрации"),
+        "all" => "Без фильтрации",
+    ),
     "default" => "active",
 );
 
