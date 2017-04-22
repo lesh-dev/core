@@ -73,22 +73,31 @@ function xsm_show_all_person_list()
 
     if ($show_anketa_status == "active")
         $cond .=
-            " AND ( (anketa_status = 'processed') ".
-            " OR (anketa_status = 'cont') )";
+            " AND (".
+            "  (anketa_status = 'processed') OR ".
+            "  (anketa_status = 'cont') OR ".
+            "  (anketa_status = 'reserved') OR ".
+            " 0 )";
     elseif ($show_anketa_status == "no-trash")
         $cond .=
-            " AND ( (anketa_status <> 'duplicate')".
-            " AND (anketa_status <> 'spam') )";
+            " AND (".
+            "  (anketa_status <> 'duplicate') AND ".
+            "  (anketa_status <> 'spam') AND ".
+            " 1 )";
     elseif ($show_anketa_status == "not-decl")
         $cond .=
-            " AND ( (anketa_status <> 'duplicate')".
-            " AND (anketa_status <> 'spam')".
-            " AND (anketa_status <> 'declined') )";
+            " AND (".
+            "  (anketa_status <> 'duplicate') AND ".
+            "  (anketa_status <> 'spam') AND ".
+            "  (anketa_status <> 'declined') AND ".
+            " 1 )";
     elseif ($show_anketa_status == "not-old")
         $cond .=
-            " AND ( (anketa_status <> 'duplicate') ".
-            " AND (anketa_status <> 'spam') ".
-            " AND (anketa_status <> 'old') )";
+            " AND (".
+            "  (anketa_status <> 'duplicate') AND ".
+            "  (anketa_status <> 'spam') AND ".
+            "  (anketa_status <> 'old') AND ".
+            " 1 )";
     elseif ($show_anketa_status == "all")
         $cond .= "";
     else
@@ -113,18 +122,19 @@ function xsm_show_all_person_list()
 
     $anketa_status_order = "
         CASE anketa_status
-            WHEN 'new' THEN 0
-            WHEN 'progress' THEN 1
-            WHEN 'less' THEN 2
-            WHEN 'discuss' THEN 3
-            WHEN 'less' THEN 4
-            WHEN 'processed' THEN 5
-            WHEN 'cont' THEN 6
-            WHEN 'nextyear' THEN 7
-            WHEN 'declined' THEN 8
-            WHEN 'old' THEN 9
-            WHEN 'duplicate' THEN 10
-            WHEN 'spam' THEN 11
+            WHEN 'new' THEN 10
+            WHEN 'progress' THEN 20
+            WHEN 'less' THEN 30
+            WHEN 'discuss' THEN 40
+            WHEN 'less' THEN 50
+            WHEN 'processed' THEN 60
+            WHEN 'cont' THEN 70
+            WHEN 'nextyear' THEN 80
+            WHEN 'declined' THEN 90
+            WHEN 'reserved' THEN 400
+            WHEN 'old' THEN 500
+            WHEN 'duplicate' THEN 800
+            WHEN 'spam' THEN 999
         END, ";
 
     $class_order = xcms_checkbox_enabled($sort_by_class) ? " CAST(p.current_class AS INT), " : "";
