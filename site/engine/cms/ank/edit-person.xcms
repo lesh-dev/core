@@ -1,8 +1,11 @@
+
 <?php
 require_once("${engine_dir}xsm/diff.php");
 require_once("${engine_dir}cms/ank/edit-format.php");
 require_once("${engine_dir}cms/ank/person_school.php");
 require_once("${engine_dir}cms/ank/department.php");
+require_once("${engine_dir}cms/ank/person_school.php");
+
 
 function xsm_notify_person_edit($person, $old_person)
 {
@@ -66,67 +69,138 @@ function xsm_edit_person()
                     continue;
                 $value = xcms_get_key_or($person, $key); ?>
                 <tr><td class="ankList"><?php
-                xsm_draw_field_label($desc);
-                $ft = xcms_get_key_or($desc, "type");
-                if ($ft == "textarea")
-                    xsm_draw_field_textarea($key, $desc, $value);
-                elseif ($ft == "checkbox")
-                    xsm_checkbox($key, $value);
-                elseif ($ft == "enum")
-                {
-                    if (substr($key, 0, strlen("forest_")) == "forest_")
-                        echo xsm_make_enum_by_type($key, $value, "forest_status");
+                    xsm_draw_field_label($desc);
+                    $ft = xcms_get_key_or($desc, "type");
+                    if ($ft == "textarea")
+                        xsm_draw_field_textarea($key, $desc, $value);
+                    elseif ($ft == "checkbox")
+                        xsm_checkbox($key, $value);
+                    elseif ($ft == "enum")
+                    {
+                        if (substr($key, 0, strlen("forest_")) == "forest_")
+                            echo xsm_make_enum_by_type($key, $value, "forest_status");
+                        else
+                            echo xsm_make_enum_by_type($key, $value, $key);
+                    }
+                    elseif ($key == 'department_id')
+                        xsm_draw_department_selector($value);
                     else
-                        echo xsm_make_enum_by_type($key, $value, $key);
-                }
-                elseif ($key == 'department_id')
-                    xsm_draw_department_selector($value);
-                else
-                    xsm_draw_field_input($key, $desc, $value);
-                ?></td></tr><?php
+                        xsm_draw_field_input($key, $desc, $value);
+                    ?></td></tr><?php
             }?>
         </table><?php
         xsm_bottom_fields('person', $person);
         xsm_person_edit_operations($person_id, 'Вернуться к просмотру участника');
-    ?>
+        ?>
     </form>
     <script type="text/javascript">
-    $(document).ready(function() {
-        xjs_set_depends_on('update-person-submit', 'last_name-input', null, 2);
-        xjs_set_depends_on('update-person-submit', 'first_name-input', null, 2);
+        $(document).ready(function() {
+            xjs_set_depends_on('update-person-submit', 'last_name-input', null, 2);
+            xjs_set_depends_on('update-person-submit', 'first_name-input', null, 2);
 
-        xjs_set_depends_on('update-person-submit1', 'last_name-input', null, 2);
-        xjs_set_depends_on('update-person-submit1', 'first_name-input', null, 2);
-    });
+            xjs_set_depends_on('update-person-submit1', 'last_name-input', null, 2);
+            xjs_set_depends_on('update-person-submit1', 'first_name-input', null, 2);
+        });
     </script>
     <?php
 }
+
 
 if (@$_POST["update-person"])
 {
     if (!strlen(@$_POST["person_id"]))
     {?>
         <p>Передан неполный запрос. Пожалуйста, напишите на dev@fizlesh.ru о том,
-        как Вы этого добились! Нажмите &laquo;Назад&laquo; (&laquo;Back&raquo;) в браузере,
-        чтобы вернуться к заполнению!</p><?php
+            как Вы этого добились! Нажмите &laquo;Назад&laquo; (&laquo;Back&raquo;) в браузере,
+            чтобы вернуться к заполнению!</p><?php
     }
     else
     {
         $person_id = $_POST["person_id"];
         $school_id = $_POST["school_id"];
-        $old_person = ($person_id != XDB_NEW) ? xdb_get_entity_by_id('person', $person_id) : array();
-        $result = xsm_update_entity_listmode('person', 'Участник', xsm_get_fields("person"), '', 'участника');
-        if ($person_id == XDB_NEW)
-        {
-            $person_id = $result;
-            $_POST["person_id"] = $person_id;
-        }
+        $first_name = $_POST["first_name"];
+        $last_name = $_POST["last_name"];
 
-        if ($school_id != XDB_INVALID_ID)
-        {
-            xsm_add_person_to_school($school_id, $person_id);
+        $db = xdb_get();
+        $name_filter = "(first_name == '";
+        $name_filter .= $first_name;
+        $name_filter .= "' AND last_name == '";
+        $name_filter .= $last_name;
+        $name_filter .= "')";
+
+        $query =
+            "SELECT
+        p.person_id,
+        p.last_name, p.first_name, p.patronymic, p.nick_name,
+        p.birth_date,
+        p.current_class as p_current_class,
+        p.phone, p.cellular,
+        p.email, p.skype, p.social_profile,
+        p.person_created, p.person_modified,
+        ps.curatorship, ps.is_teacher, ps.is_student,
+        ps.current_class as ps_current_class,
+        ps.curator_group,
+        ps.person_school_comment,
+        ps.courses_needed
+        FROM person p, person_school ps
+        WHERE (ps.member_person_id == p.person_id)";
+
+        $query .= " AND ";
+        $query .= $name_filter;
+
+        $school_query = $query;
+        $n_school_query = $query;
+        $school_query .= " AND (ps.school_id == $school_id)";
+        $n_school_query .= " AND (NOT (ps.school_id == $school_id))";
+
+        $class_order = xcms_checkbox_enabled($sort_by_class) ? " CAST(ps.current_class AS INT), " : "";
+        $cg_order = xcms_checkbox_enabled($sort_by_curator_group) ? " ps.curator_group, " : "";
+        $school_query .= " ORDER BY NOT (ps.is_student IS NOT NULL AND LENGTH(ps.is_student) > 0), $cg_order $class_order p.last_name, p.first_name";
+        $n_school_query .= " ORDER BY NOT (ps.is_student IS NOT NULL AND LENGTH(ps.is_student) > 0), $cg_order $class_order p.last_name, p.first_name";
+
+
+        xdb_debug_area($school_query, XDB_DEBUG_AREA_DISABLED);
+        xdb_debug_area($n_school_query, XDB_DEBUG_AREA_DISABLED);
+        $school_person_sel = $db->query($school_query);
+        $n_school_person_sel = $db->query($n_school_query);
+        $s_count = query_length($school_person_sel);
+        $n_count = query_length($n_school_person_sel);
+
+        if ($s_count > 0) {
+            ?>
+            <p>
+                Люди с такими именем и фамилией уже зачислены на эту школу.
+            </p>
+            <?php
+            xsm_output_list($school_person_sel, $school_id);
         }
-        xsm_notify_person_edit($_POST, $old_person);
+        if ($n_count > 0) {
+            ?>
+            <p>
+                Люди с такими именем и фамилией уже есть в базе и не зачислены на школу. Проверьте, возможно вы хотели добавить одного из этих
+                людей:
+            </p>
+            <?php
+            xsm_output_list($n_school_person_sel, $school_id);
+            ?>
+            <a class="link-button ank btn" href="add-person_school&school_id=<?php
+            echo $school_id
+            ?>">Зачислить существующего участника</a>
+            <?php
+        }
+        if (1 == 2) {
+            $old_person = ($person_id != XDB_NEW) ? xdb_get_entity_by_id('person', $person_id) : array();
+            $result = xsm_update_entity_listmode('person', 'Участник', xsm_get_fields("person"), '', 'участника');
+            if ($person_id == XDB_NEW) {
+                $person_id = $result;
+                $_POST["person_id"] = $person_id;
+            }
+
+            if ($school_id != XDB_INVALID_ID) {
+                xsm_add_person_to_school($school_id, $person_id);
+            }
+            xsm_notify_person_edit($_POST, $old_person);
+        }
     }
 }
 elseif (@$_POST["delete-person"])

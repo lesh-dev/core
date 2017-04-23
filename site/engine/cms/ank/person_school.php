@@ -140,4 +140,121 @@ function xsm_delete_person_school($table_name, $title, $aux_param = '')
     }?>
     <a href="<?php echo $redir ?>">Вернуться к просмотру участника</a></p><?php
 }
+
+function xsm_output_list($person_sel, $school_id)
+{
+    $db = xdb_get();
+    $school = xdb_get_entity_by_id('school', $school_id);
+    $school_title = xcms_get_key_or_enc($school, 'school_title');
+    $student_count = 0;
+    $teacher_count = 0;
+    ?>
+    <table class="ankList table table-bordered table-hover table-condensed">
+        <colgroup>
+            <col width="1%">
+            <col width="10%">
+            <col width="5%">
+            <col width="5%">
+            <col width="5%">
+            <col width="5%">
+            <col width="25%">
+            <col width="25%">
+        </colgroup>
+        <thead>
+        <th class="ankList">#</th>
+        <th class="ankList">Фамилия, имя</th>
+        <th class="ankList">Зач.</th>
+        <th class="ankList">Кур.</th>
+        <th class="ankList">Кл.&nbsp;шк.&nbsp;/&nbsp;Кл.</th>
+        <th class="ankList">ДР</th>
+        <th class="ankList">Контакты</th>
+        <th class="ankList">Комментарий</th>
+        </thead>
+        <?php
+        while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
+        {
+            $person_id = htmlspecialchars($person["person_id"]);
+
+            $fin = xsm_fin_enc($person);
+            $fio = xsm_fio_enc($person);
+
+            $p_current_class = xsm_class_num(xcms_get_key_or_enc($person, "p_current_class"));
+            $ps_current_class = xsm_class_num(xcms_get_key_or_enc($person, "ps_current_class"));
+
+            $birth_date = xcms_get_key_or_enc($person, "birth_date");
+            $birth_date = str_replace(".07.", "<b>.07.</b>", $birth_date);
+            $birth_date = str_replace(".08.", "<b>.08.</b>", $birth_date);
+
+            $contacts = xsm_contacts_for_list($person);
+
+            $is_teacher = $person["is_teacher"];
+            $is_student = $person["is_student"];
+            $curatorship = $person["curatorship"];
+            $curator_group = $person["curator_group"];
+            $courses_needed = $person["courses_needed"];
+
+            $person_created = xsm_ymdhm($person["person_created"]);
+            $person_modified = xsm_ymdhm($person["person_modified"]);
+
+            $courses_passed = xdb_count($db, "SELECT
+            COUNT(*) AS cnt
+            FROM exam e, course c
+            WHERE
+            (e.student_person_id = $person_id) AND
+            (c.school_id = $school_id) AND
+            (e.course_id = c.course_id) AND
+            (e.exam_status = 'passed')"
+            );
+            $course_ratio = ($courses_needed > 0) ? ($courses_passed / $courses_needed) : -1;
+
+            $hr_course_progress = "$courses_passed&nbsp;/&nbsp;$courses_needed";
+            if ($course_ratio < -0.5)
+                $hr_course_progress = "&#8212;";
+
+            $course_style = xsm_calc_course_style($course_ratio);
+
+            $num = "";
+            if (xcms_checkbox_enabled($is_student))
+            {
+                $student_count++;
+                $num = $student_count;
+            }
+            elseif (xcms_checkbox_enabled($is_teacher))
+            {
+                $teacher_count++;
+                $num = $teacher_count;
+            }
+
+            $person_school_url = "view-person".xcms_url(array(
+                    'person_id' => $person_id,
+                    'school_id' => $school_id));
+
+            $person_school_comment = xcms_html_wrap_by_crlf(xsm_highlight_links($person['person_school_comment']));
+
+            $row_class = (xcms_checkbox_enabled($is_teacher) ? "teacher" : "");
+            $class_diff = ($ps_current_class != $p_current_class) ? "diff" : "";
+            ?>
+            <tr class="<?php echo $row_class; ?>">
+                <td class="ankList"><?php echo $num; ?></td>
+                <td class="ankList">
+                    <a name="<?php echo "person$person_id"; ?>"></a>
+                    <a href="<?php echo $person_school_url; ?>"
+                       title="<?php echo $fio; ?>"><?php echo $fin; ?></a></td>
+                <td class="ankList"><span class="course-progress <?php echo $course_style; ?>"><?php
+                        echo $hr_course_progress; ?></span></td>
+                <td class="ankList"><?php echo $curator_group; ?></td>
+                <td class="ankList"><span class="class-school-num <?php echo $class_diff; ?>"
+                                          title="Класс на <?php echo $school_title; ?>"><?php echo $ps_current_class;
+                        ?></span>&nbsp;/&nbsp;<span class="class-current-num"
+                                                    title="Текущий класс"><?php echo $p_current_class; ?></span></td>
+                <td class="ankList"><?php echo $birth_date; ?></td>
+                <td class="ankList"><?php echo $contacts; ?></td>
+                <td class="ankList"><?php echo $person_school_comment; ?></td>
+            </tr>
+            <?php
+        }
+        ?>
+    </table>
+    <?php
+}
 ?>
