@@ -8,6 +8,7 @@ require_once("${engine_dir}sys/string.php");
 require_once("${engine_dir}sys/auth.php");
 
 define('XDB_NEW', 'new');
+define('XDB_APPROVED_NEW', 'approved_new');
 define('XDB_INVALID_ID', '-1');
 
 define('XDB_OVERRIDE_TS', true);
