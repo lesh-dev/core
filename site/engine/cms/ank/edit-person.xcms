@@ -217,11 +217,6 @@ if (@$_POST["update-person"])
             xsm_notify_person_edit($_POST, $old_person);
         }
         else if ($person_id != XDB_NEW) {
-            ?>
-            <p>
-                registered person
-            </p>
-            <?php
             $old_person = xdb_get_entity_by_id('person', $person_id);
             xsm_update_entity_listmode('person', 'Участник', xsm_get_fields("person"), '', 'участника');
             if ($school_id != XDB_INVALID_ID) {
