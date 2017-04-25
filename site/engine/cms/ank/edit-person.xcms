@@ -4,7 +4,6 @@ require_once("${engine_dir}xsm/diff.php");
 require_once("${engine_dir}cms/ank/edit-format.php");
 require_once("${engine_dir}cms/ank/person_school.php");
 require_once("${engine_dir}cms/ank/department.php");
-require_once("${engine_dir}cms/ank/person_school.php");
 
 
 function xsm_notify_person_edit($person, $old_person)
@@ -224,6 +223,7 @@ if (@$_POST["update-person"])
             </p>
             <?php
             $old_person = xdb_get_entity_by_id('person', $person_id);
+            xsm_update_entity_listmode('person', 'Участник', xsm_get_fields("person"), '', 'участника');
             if ($school_id != XDB_INVALID_ID) {
                 xsm_add_person_to_school($school_id, $person_id);
             }
