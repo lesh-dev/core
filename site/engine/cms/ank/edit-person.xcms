@@ -158,6 +158,9 @@ if (@$_POST["update-person"])
             $school_query .= " AND (ps.school_id == $school_id)";
             $n_school_query .= " AND (NOT (ps.school_id == $school_id))";
 
+
+            $sort_by_class = xcms_get_persistent_key("list-person", "sort_by_class");
+            $sort_by_curator_group = xcms_get_persistent_key("list-person", "sort_by_curator_group");
             $class_order = xcms_checkbox_enabled($sort_by_class) ? " CAST(ps.current_class AS INT), " : "";
             $cg_order = xcms_checkbox_enabled($sort_by_curator_group) ? " ps.curator_group, " : "";
             $school_query .= " ORDER BY NOT (ps.is_student IS NOT NULL AND LENGTH(ps.is_student) > 0), $cg_order $class_order p.last_name, p.first_name";
