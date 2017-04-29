@@ -202,14 +202,22 @@ if (@$_POST["update-person"])
             {
                 $person_id = XDB_APPROVED_NEW;
             }
+            ?>
+            <div><form method="post" action="edit-person">
+                    <?php
+                    foreach ($_POST as $key_name=>$value)
+                        if ($key_name != "person_id" and $key_name != "update-person")
+                            xcmst_hidden($key_name, $value);
+                    xcmst_hidden("person_id", XDB_APPROVED_NEW);
+                    xcmst_submit("update-person", "Сохранить", "Добавить", "link-button ank btn");
+                    ?>
+                </form></div>
+            <?php
         }
         if ($person_id == XDB_APPROVED_NEW)
         {
-            ?>
-            <p>
-                approved new person
-            </p>
-            <?php
+            $person_id = XDB_NEW;
+            $_POST["person_id"] = $person_id;
             $old_person = array();
             $result = xsm_update_entity_listmode('person', 'Участник', xsm_get_fields("person"), '', 'участника');
             $person_id = $result;
