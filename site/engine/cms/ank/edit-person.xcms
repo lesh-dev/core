@@ -209,7 +209,7 @@ if (@$_POST["update-person"])
                         if ($key_name != "person_id" and $key_name != "update-person")
                             xcmst_hidden($key_name, $value);
                     xcmst_hidden("person_id", XDB_APPROVED_NEW);
-                    xcmst_submit("update-person", "Сохранить", "Добавить", "link-button ank btn");
+                    xcmst_submit("update-person", "Это таки новый человек. Добавить.", "Добавить", "link-button ank btn");
                     ?>
                 </form></div>
             <?php
