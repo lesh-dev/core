@@ -12,6 +12,8 @@ from test_set_gen import TestInfo
 from bawlib import getOption, getSingleOption, CliParamError, fileBaseName
 from bawlib import configure_logger
 
+from pyvirtualdisplay import Display
+
 # TODO: remove
 import auto_test_set
 
@@ -44,6 +46,7 @@ ALL OPTIONS:
     -t, --test <test>         Run specific test instead of all suite
     -b, --break               Break test suite on errors
     -p, --profile-path <path> Use given browser profile path (firefox only)
+    -v, --virtual             Uses pyvirtualdisplay display
 
 TEST OPTIONS could be test-dependent. Commonly supported options are:
     -c, --chrome           Use Google Chrome browser instead of Firefox
@@ -117,6 +120,7 @@ def main():
         doList, args = getSingleOption(["-l", "--list"], args)
         doFullList, args = getSingleOption(["-f", "--full-list"], args)
         breakOnErrors, args = getSingleOption(["-b", "--break"], args)
+        runVirtualDisplay, args = getSingleOption(["-v", "--virtual"], args)
         if breakOnErrors:
             print "We'll break test suite on any test fail/fatal error. "
 
@@ -129,6 +133,10 @@ def main():
         sys.exit(1)
 
     # last remaining argument is base test URL.
+
+    if runVirtualDisplay:
+        display = Display(visible=0, size=(1024, 768))
+        display.start()
 
     if doShowHelp:
         showHelp()
