@@ -13,7 +13,7 @@
     header("Content-Type: text/html; charset=utf-8");
 
     global $SETTINGS;
-    $path = ".";
+    $path = "/var/www/vhosts/fizlesh.ru/fizlesh.ru-content/ank";
     // set db for writing
     $db_path = "$path/fizlesh.sqlite3";
     $SETTINGS['xsm_db_name'] = $db_path;
@@ -27,7 +27,7 @@
             person_comment_id integer primary key autoincrement,
             comment_text text,
             blamed_person_id integer not null,
-            school_id integer not null,
+            school_id integer,
             owner_login text not null,
             record_acl text,
             person_comment_created text,
@@ -35,7 +35,8 @@
             person_comment_deleted text,
             person_comment_changedby text,
             foreign key (blamed_person_id) references person(person_id),
-            foreign key (school_id) references school(school_id)"
+            foreign key (school_id) references school(school_id)
+        )"
     );
 
     // copy data to new table
