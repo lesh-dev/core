@@ -170,9 +170,9 @@ create table person_comment (
     person_comment_id integer primary key autoincrement,
     comment_text text, -- текст комментария
     blamed_person_id integer not null, -- fk person -- сабжевый участник (типично школьник)
-    school_id integer not null, -- fk school -- школа, о которой идёт речь
+    school_id integer, -- fk school -- школа, о которой идёт речь (v2.15)
     owner_login text not null, -- логин автора комментария
-    record_acl text,
+    record_acl text, -- ACL (v2.15)
     person_comment_created text, -- utc timestamp
     person_comment_modified text, -- utc timestamp
     person_comment_deleted text, -- признак удаления (из базы ничего удалить нельзя)
