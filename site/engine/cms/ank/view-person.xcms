@@ -240,6 +240,10 @@ function xsm_draw_person_comments($db, $person_id)
     <div style="height: 10px;"></div><?php
     xsm_view_operations('person_comment', 'комментарий', "&amp;blamed_person_id=$person_id");
 
+    // Админы и привилегированнве могут видеть скрытые комментарии
+    $xsm_private = xcms_user()->check_rights("xsm-private", false);
+    $xsm_admin = xcms_user()->check_rights("admin", false);
+
     $query = "SELECT * FROM person_comment
         WHERE
         (blamed_person_id = $person_id)
@@ -274,6 +278,12 @@ function xsm_draw_person_comments($db, $person_id)
         $record_acl = xcms_get_key_or_enc($comment_data, "record_acl");
         $school_id = xcms_get_key_or_enc($comment_data, "school_id");
         $comment_text = xcms_html_wrap_by_crlf(xsm_highlight_links($comment_data["comment_text"]));
+
+        if ($record_acl == "xsm-private" && !$xsm_private && !$xsm_admin)
+        {
+            $comment_text = "(Конфиденциальный комментарий. Для просмотра обратитесь к Директорату)";
+        }
+
         $person_comment_created = xsm_ymdhm($comment_data["person_comment_created"]);
         $person_comment_modified = xsm_ymdhm($comment_data["person_comment_modified"]);
         $comment_num++;
