@@ -111,6 +111,18 @@ function xsm_edit_person_comment()
     }
     $person = xdb_get_entity_by_id('person', $blamed_person_id);
 
+    // Админы и привилегированные могут редактировать приватные комментарии
+    $xsm_private = xcms_user()->check_rights("xsm-private", false);
+    $xsm_admin = xcms_user()->check_rights("admin", false);
+    $record_acl = xcms_get_key_or_enc($person_comment, "record_acl");
+
+    if ($record_acl == "xsm-private" && !$xsm_private && !$xsm_admin)
+    {
+        xcms_log(XLOG_ERROR, "ACL violation for person comment");
+        die("Вам сюда нельзя. Если вы перешли по какой-либо ссылке, сообщите об этом на dev@fizlesh.ru. ");
+        return;
+    }
+
     $fields_desc = xsm_get_fields("person_comment"); ?>
     <form method="post" action="edit-person_comment"><?php
         xsm_person_comment_edit_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id);
@@ -138,7 +150,31 @@ function xsm_edit_person_comment()
 
 if (@$_POST["update-person_comment"])
 {
-    xsm_notify_person_comment_edit($_POST);
+    // Админы и привилегированные могут редактировать приватные комментарии
+    $xsm_private = xcms_user()->check_rights("xsm-private", false);
+    $xsm_admin = xcms_user()->check_rights("admin", false);
+
+    $person_comment_id = xcms_get_key_or($_POST, "person_comment_id");
+    if ($person_comment_id != XDB_NEW)
+    {
+        // forbid updating existing comments
+        $person_comment = xdb_get_entity_by_id("person_comment", $person_comment_id);
+        $record_acl_prev = xcms_get_key_or_enc($person_comment, "record_acl");
+
+        if ($record_acl_prev == "xsm-private" && !$xsm_private && !$xsm_admin)
+        {
+            xcms_log(XLOG_ERROR, "ACL violation for person comment update");
+            die("Вам сюда нельзя. Если вы перешли по какой-либо ссылке, сообщите об этом на dev@fizlesh.ru. ");
+        }
+    }
+
+    $record_acl = xcms_get_key_or_enc($_POST, "record_acl");
+    // send only public comments
+    if ($record_acl != "xsm-private")
+    {
+        xsm_notify_person_comment_edit($_POST);
+    }
+
     xsm_update_person_comment('Комментарий', xsm_get_fields("person_comment"));
 }
 elseif (@$_POST["delete-person_comment"])
