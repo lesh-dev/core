@@ -116,7 +116,7 @@ function xsm_edit_person_comment()
         xsm_person_comment_edit_operations('person_comment', $person_comment_id, 'Вернуться к просмотру участника', $blamed_person_id);
         xcmst_hidden("person_comment_id", $person_comment_id);
         xcmst_hidden("blamed_person_id", $blamed_person_id); ?>
-        <table class="ankEdit">
+        <table class="ankEdit table table-bordered table-hover table-condensed">
             <tr>
                 <td class="ankListRowTitle">Комментарий</td>
             </tr>
