@@ -228,14 +228,18 @@ function xsm_get_all_field_descriptors()
                 "type" => XSM_FT_TEXT,
                 "required" => true,
             ),
+            "record_acl" => array(
+                "name" => "ACL",
+                "type" => XSM_FT_ENUM,
+            ),
+            "school_id" => array(
+                "name" => "Школа, к которой относится комментарий",
+                "type" => XSM_FT_FOREIGN_KEY,
+            ),
             "owner_login" => array(
                 "name" => "Логин автора",
                 "readonly" => true,
                 "type" => XSM_FT_STR,
-            ),
-            "record_acl" => array(
-                "name" => "ACL",
-                "type" => XSM_FT_ENUM,
             ),
             "blamed_person_id" => array(
                 "name" => "ID субъекта",
