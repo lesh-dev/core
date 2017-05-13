@@ -240,7 +240,7 @@ function xsm_draw_person_comments($db, $person_id)
     <div style="height: 10px;"></div><?php
     xsm_view_operations('person_comment', 'комментарий', "&amp;blamed_person_id=$person_id");
 
-    // Админы и привилегированнве могут видеть скрытые комментарии
+    // Админы и привилегированные могут видеть скрытые комментарии
     $xsm_private = xcms_user()->check_rights("xsm-private", false);
     $xsm_admin = xcms_user()->check_rights("admin", false);
 
