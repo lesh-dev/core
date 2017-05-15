@@ -161,7 +161,6 @@ function xsm_print_person_header($db, $person, $school_id)
 function xsm_print_person_schools($db, $person, $current_school_id)
 {
     $person_id = $person['person_id'];
-    $school_count = 0;
     $query = "SELECT s.school_id, s.school_title, ps.member_person_id
         FROM school s
         LEFT JOIN person_school ps
@@ -183,8 +182,7 @@ function xsm_print_person_schools($db, $person, $current_school_id)
         $older_schools = array();
         while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
         {
-            ++$school_count;
-            if ($school_count <= XSM_SCHOOL_COUNT)
+            if (count($shown_schools) <= XSM_SCHOOL_COUNT)
                 $shown_schools[] = $school;
             else
                 $older_schools[] = $school;
@@ -384,7 +382,7 @@ function xsm_print_add_person_to_school($db, $school_id, $person, $use_title = f
         xcms_url(array(
             'person_school_id' => XDB_NEW,
             'school_id' => $school_id,
-            'member_person_id' => $person_id,
+            'member_person_id' => $oldperson_id,
             'current_class' => $current_class,
             'is_teacher' => $is_teacher_typical,
             'is_student' => $is_student_typical
