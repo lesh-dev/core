@@ -162,7 +162,6 @@ function xsm_print_person_schools($db, $person, $current_school_id)
 {
     $person_id = $person['person_id'];
     $school_count = 0;
-    $max_school_count = XSM_SCHOOL_COUNT;
     $query = "SELECT s.school_id, s.school_title, ps.member_person_id
         FROM school s
         LEFT JOIN person_school ps
@@ -266,7 +265,7 @@ function xsm_draw_person_comments($db, $person_id)
             <th class="ankList">Текст</th>
             <th class="ankList">Школа</th>
             <th class="ankList">Дата</th>
-            <th class="ankList">&nbsp;</th>
+            <th class="ankList">Операции</th>
         </thead>
     <?php
     $comment_num = 0; // for auto-testing purposes (#525)
@@ -293,8 +292,17 @@ function xsm_draw_person_comments($db, $person_id)
             <td class="ankList"><?php echo $comment_text; ?></td>
             <td class="ankList"><?php echo $school_id; ?></td>
             <td class="ankList"><?php echo $person_comment_created; ?></td>
-            <td class="ankList"><a href="edit-person_comment&amp;person_comment_id=<?php echo $comment_id; ?>"
-                id="comment-edit-<?php echo $comment_num; ?>">Правка</a></td>
+            <td class="ankList"><?php
+                if ($record_acl == "xsm-private" && !$xsm_private && !$xsm_admin)
+                {?>
+                    (Запрещено)
+                <?php
+                }
+                else
+                {?>
+                    <a href="edit-person_comment&amp;person_comment_id=<?php echo $comment_id; ?>"
+                        id="comment-edit-<?php echo $comment_num; ?>">Правка</a><?php
+                }?></td>
         </tr><?php
         }
     ?>
