@@ -166,7 +166,7 @@ function xsm_print_person_schools($db, $person, $current_school_id)
         LEFT JOIN person_school ps
         ON (s.school_id = ps.school_id) AND (ps.member_person_id = '$person_id')
         ORDER BY school_date_start DESC";
-    $school_sel = $db->query($query);
+    $separated_schools = xsm_get_separated_schools($db, $query);
     $active_ank = (XSM_SCHOOL_ANK_ID == $current_school_id) ? 'current' : '';
     ?>
     <table class="ankList table table-bordered"><tr>
@@ -178,17 +178,8 @@ function xsm_print_person_schools($db, $person, $current_school_id)
             </div>
         </td>
         <?php
-        $shown_schools = array();
-        $older_schools = array();
-        while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
-        {
-            if (count($shown_schools) <= XSM_SCHOOL_COUNT)
-                $shown_schools[] = $school;
-            else
-                $older_schools[] = $school;
-        }
 
-        foreach ($shown_schools as $school)
+        foreach ($separated_schools["shown_schools"] as $school)
         {
             $school_id = $school['school_id'];
             $title = xcms_get_key_or_enc($school, 'school_title');
@@ -211,7 +202,7 @@ function xsm_print_person_schools($db, $person, $current_school_id)
         <td class="school-selection" style="padding: 4px 8px">
             <select name="view-school" id="view-school-selector" style="padding: 0px; margin: 0px;">
             <?php
-            foreach ($older_schools as $school)
+            foreach ($separated_schools["older_schools"] as $school)
             {
                 $school_id = $school['school_id'];
                 $title = xcms_get_key_or_enc($school, 'school_title');
@@ -382,7 +373,7 @@ function xsm_print_add_person_to_school($db, $school_id, $person, $use_title = f
         xcms_url(array(
             'person_school_id' => XDB_NEW,
             'school_id' => $school_id,
-            'member_person_id' => $oldperson_id,
+            'member_person_id' => $person_id,
             'current_class' => $current_class,
             'is_teacher' => $is_teacher_typical,
             'is_student' => $is_student_typical
