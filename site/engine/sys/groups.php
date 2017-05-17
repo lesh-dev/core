@@ -8,6 +8,7 @@
             "#admin" => "Администратор",
             "#editor" => "Редактор",
             "#ank" => "Менеджер анкет",
+            "#xsm-private" => "Менеджер конфиденциальных данных XSM",
         );
         $groups = xcms_get_list("$content_dir/groups");
         foreach ($groups as $key => $value)

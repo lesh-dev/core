@@ -113,10 +113,14 @@
         function check_rights($group, $throw_exception = XAUTH_THROW)
         {
             $group = str_replace("#", "", $group);
-            if ($group == "all") return true;
-            if ($group == "registered" && $this->is_valid()) return true;
-            if ($this->is_superuser()) return true;
-            if (in_array($group, $this->groups())) return true;
+            if ($group == "all")
+                return true;
+            if ($group == "registered" && $this->is_valid())
+                return true;
+            if ($this->is_superuser())
+                return true;
+            if (in_array($group, $this->groups()))
+                return true;
             if ($throw_exception)
                 throw new Exception("User doesn't belong to group $group to perform this action");
             return false;

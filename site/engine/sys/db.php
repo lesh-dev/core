@@ -268,34 +268,43 @@ function xdb_get_entity_by_id($table_name, $id)
     return $ev;
 }
 
-function query_length($query) {
+// FIXME(mvel): fix style and tell Yarik
+function query_length($query)
+{
     $tmp = $query;
     $count = 0;
     if (!$tmp) {
         return 0;
     }
-    while ($tmp->fetchArray()) {
+    while ($tmp->fetchArray())
+    {
         ++$count;
     }
     return $count;
 }
 
-function resultSetToArray($queryResultSet){
+function resultSetToArray($queryResultSet)
+{
     $multiArray = array();
     $count = 0;
-    if (!$queryResultSet) {
+    if (!$queryResultSet)
+    {
         return array();
     }
-    while($row = $queryResultSet->fetchArray(SQLITE3_ASSOC)){
-        foreach($row as $i=>$value) {
+    while ($row = $queryResultSet->fetchArray(SQLITE3_ASSOC))
+    {
+        foreach ($row as $i => $value)
+        {
             $multiArray[$count][$i] = $value;
         }
         $count++;
     }
     return $multiArray;
 }
+// End of code style fixes
 
-function xdb_get_filtered($table_name, $keys) {
+function xdb_get_filtered($table_name, $keys)
+{
     $db = xdb_get();
     $filter = "1=1";
     foreach ($keys as $key => $value)
