@@ -141,7 +141,7 @@ function xsm_delete_person_school($table_name, $title, $aux_param = '')
     <a href="<?php echo $redir ?>">Вернуться к просмотру участника</a></p><?php
 }
 
-function xsm_output_list($person_sel, $school_id)
+function xsm_output_school_participants_list($person_sel, $school_id)
 {
     $db = xdb_get();
     $school = xdb_get_entity_by_id('school', $school_id);
