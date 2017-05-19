@@ -177,7 +177,7 @@ class BrowserHolder(object):
                 return webdriver.Chrome(
                     executable_path=chrome_path,
                 )
-        
+
         raise BrowserHolderException("Chrome Driver is not installed. Install it from {}".format(distro_url))
         
         

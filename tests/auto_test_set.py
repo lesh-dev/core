@@ -95,6 +95,7 @@ def get_tests(**kwargs):
         ("xcms_warnings.py", xcms_warnings.XcmsWarnTest(**kwargs)),
         ("xcms_xsm_add_courses.py", xcms_xsm_add_courses.XcmsXsmAddCourses(**kwargs)),
         ("xcms_xsm_add_exams.py", xcms_xsm_add_exams.XcmsXsmAddExams(**kwargs)),
+        ("xcms_xsm_add_person_to_school.py", xcms_xsm_add_person_to_school.XcmsXsmAddPersonToSchool(**kwargs)),
         ("xcms_xsm_add_school.py", xcms_xsm_add_school.XcmsXsmAddSchool(**kwargs)),
         ("xcms_xsm_anketa_dup_stress.py", xcms_xsm_anketa_dup_stress.XcmsXsmAnketaDupStress(**kwargs)),
         ("xcms_xsm_anketa_duplicate.py", xcms_xsm_anketa_duplicate.XcmsXsmAnketaDuplicate(**kwargs)),
@@ -152,6 +153,7 @@ import xcms_version_check
 import xcms_warnings
 import xcms_xsm_add_courses
 import xcms_xsm_add_exams
+import xcms_xsm_add_person_to_school
 import xcms_xsm_add_school
 import xcms_xsm_anketa_dup_stress
 import xcms_xsm_anketa_duplicate
@@ -208,6 +210,7 @@ def get_tests(**kwargs):
         ("xcms_warnings.py", xcms_warnings.XcmsWarnTest(**kwargs)),
         ("xcms_xsm_add_courses.py", xcms_xsm_add_courses.XcmsXsmAddCourses(**kwargs)),
         ("xcms_xsm_add_exams.py", xcms_xsm_add_exams.XcmsXsmAddExams(**kwargs)),
+        ("xcms_xsm_add_person_to_school.py", xcms_xsm_add_person_to_school.XcmsXsmAddPersonToSchool(**kwargs)),
         ("xcms_xsm_add_school.py", xcms_xsm_add_school.XcmsXsmAddSchool(**kwargs)),
         ("xcms_xsm_anketa_dup_stress.py", xcms_xsm_anketa_dup_stress.XcmsXsmAnketaDupStress(**kwargs)),
         ("xcms_xsm_anketa_duplicate.py", xcms_xsm_anketa_duplicate.XcmsXsmAnketaDuplicate(**kwargs)),

@@ -263,6 +263,22 @@ class Course(object):
 
 
 class School(object):
+    """
+    Class representing school
+    :var school_title:
+        string: School name
+    :var school_data_start:
+        string: School start date 
+    :var school_date_end:
+        string: School end date
+    :var school_location:
+        string: School location
+    :var year:
+        string: School year calculated as firs 4 digits of school_data_start
+    :var id:
+        integer: School id in database
+    """
+
     # Same namings as in XSM
     school_title = None
     school_date_start = None
@@ -270,6 +286,7 @@ class School(object):
     school_location = None
     # helper
     year = None
+    id = None
 
     def __init__(self, xtest):
         self.xtest = xtest
@@ -282,6 +299,20 @@ class School(object):
         school_location=None,
         random=False,
     ):
+        """
+        
+        :param school_title: 
+            string: School name
+        :param school_date_start: 
+            string: School start date
+        :param school_date_end: 
+            string: School end date
+        :param school_location: 
+            string: School location
+        :param random:
+            boolean: if it is necessary to add _<random crap> to school_title    
+        :return: void
+        """
         if school_title is not None:
             if random:
                 school_title += "_" + rc.randomWord(6)
@@ -310,6 +341,11 @@ class School(object):
 
 
 def add_test_school(xtest):
+    """
+    Adds a school with unique name generated as 'ЛЭШ-<number not found at the list-school page>_<random crap>'
+    :param xtest: xtest instance 
+    :return: School instance
+    """
     xtest.goto_xsm_schools()
     # determine next year
     year = 2016
@@ -331,6 +367,115 @@ def add_test_school(xtest):
     school.back_to_school_view()
     # global context fix ;)
     xtest.m_conf.set_test_school_name(school.school_title)
+    school.id = xtest.m_driver.current_url.split("=")[-1]
+    return school
+
+
+def add_named_school(xtest, school_title):
+    """
+    Checks if there exists school with school_title name, if not, creates new.
+    :param xtest: 
+        xtest instance
+    :param school_title:
+        string: school name
+    :return:
+        School instance 
+    """
+    xtest.goto_xsm_schools()
+    page_content = xtest.getPageContent()
+    if school_title in page_content:
+        logging.info("Found school with name: %s", school_title)
+        school = School(xtest)
+        school.school_title = school_title
+        school.id = get_school_id(xtest, school_title)
+        view_school(xtest, school)
+        return get_school_information(xtest, school)
+
+    year = 2016
+    page_content = xtest.getPageContent()
+    while str(year) in page_content:
+        year += 1
+    logging.info("Found year that is not present on this page: %s", year)
+    xtest.goto_xsm_add_school()
+    school = School(xtest)
+    school.input(
+        school_title=school_title,
+        school_date_start=str(year) + ".07.15",
+        school_date_end=str(year) + ".08.15",
+        school_location=u"Деревня Гадюкино",
+        random=False,
+    )
+    school.back_to_school_view()
+    # global context fix ;)
+    xtest.m_conf.set_test_school_name(school.school_title)
+    school.id = xtest.m_driver.current_url.split("=")[-1]
+    return school
+
+
+def get_school_information(xtest, school):
+    """
+    Filles the school instance with information from its view
+    :param xtest:  
+        xtest instance
+    :param school: 
+        School instance to delete
+        Only school id variable is used and must be correctly filled
+    :return: school instance
+    """
+    view_school(xtest, school)
+    school.school_title = xtest.getPageContent().split('<td class="ankListRowTitle">')[1].split("</b>")[0].split("<b>")[1]
+    page_content = xtest.getPageContent().split('/span></td></tr>')[1].split("</table>")[0].split("</span>")[1:]
+    school.school_date_start = page_content[0].split("</td></tr>")[0]
+    school.school_date_end = page_content[1].split("</td></tr>")[0]
+    school.school_location = page_content[2].split("</td></tr>")[0]
+    school.year = school.school_date_start[0:4]
+    return school
+
+
+def view_school(xtest, school):
+    """
+        Goes to view-school for provided school.
+        Only school id variable is used and must be correctly filled
+        :param xtest: instance of xtet framework
+        :param school: school instance to delete
+        :return: school instance
+    """
+    xtest.gotoUrl("xsm/view-school&school_id=" + str(school.id))
+    return school
+
+
+def get_school_id(xtest, school_title):
+    """
+    Parces list-school page to find the id of a school with provided title
+    :param xtest: 
+        xtest instance
+    :param school_title:
+        string: School title
+    :return:
+        integer: school id
+    """
+    xtest.goto_xsm_schools()
+    page_content = xtest.getPageContent().split("<tr>")
+    index = 0
+    while index < len(page_content) and not (school_title in page_content[index]):
+        index += 1
+    # magical parsing for school id
+    return int(">".join(page_content[index].split("<")).split(">")[2])
+
+
+def remove_school(xtest, school):
+    """
+    Removes provided school instance
+    Finishes work on xsm/list_school
+    :param xtest: instance of xtet framework
+    :param school: school instance to delete
+    :return: school instance
+    """
+    xtest.goto_school_view(school)
+    xtest.gotoUrlByLinkText(u"Правка")
+    xtest.clickElementById("delete-school-submit")
+    xtest.clickElementById("confirm-delete-school-submit")
+    xtest.goto_xsm_schools()
     return school
 
 
@@ -410,6 +555,16 @@ class Manager(xc.XcmsTest):
 
     def goto_xsm_change_person_status(self):
         self.gotoUrlByLinkText(u"Сменить статус")
+
+    def goto_school_view(xtest, school):
+        """
+            Goes to view-school for provided school
+            :param xtest: instance of xtet framework
+            :param school: school instance to delete
+            :return: school instance
+        """
+        xtest.gotoUrl("xsm/view-school&school_id=" + str(school.id))
+        return school
 
     @staticmethod
     def get_anketa_success_submit_message():
