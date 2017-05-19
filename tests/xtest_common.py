@@ -267,7 +267,7 @@ class XcmsTest(XcmsTestWithConfig):
         super(XcmsTest, self).init()
         self.assert_no_installer_page()
 
-    def createNewUser(self, login, email, password, name, aux_params=None):
+    """def createNewUser(self, login, email, password, name, aux_params=None):
         user_aux_params = aux_params or []
         logging.info(
             "createNewUser(login: '%s', email: '%s', password: '%s', name: '%s')", login, email, password, name
@@ -341,7 +341,7 @@ class XcmsTest(XcmsTestWithConfig):
         if "do_not_logout_admin" not in user_aux_params:
             self.performLogout()
 
-        return inp_login, inpEMail, inpPass, inpName
+        return inp_login, inpEMail, inpPass, inpName"""
 
     def removePreviousUsersWithTestEmail(self, emailToDelete):
         self.performLoginAsAdmin()

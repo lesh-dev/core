@@ -53,7 +53,7 @@ require_once("${design_dir}modern_contacts.php");
             if (
                 $page_alias == "contacts" ||
                 $page_alias == "links" ||
-                xu_startswith($page_alias, "news")
+                $page_alias == "news"
             ) {
                 $wrapper_css_class = "transparent-wrapper";
             }

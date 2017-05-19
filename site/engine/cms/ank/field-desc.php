@@ -228,6 +228,14 @@ function xsm_get_all_field_descriptors()
                 "type" => XSM_FT_TEXT,
                 "required" => true,
             ),
+            "record_acl" => array(
+                "name" => "ACL",
+                "type" => XSM_FT_ENUM,
+            ),
+            "school_id" => array(
+                "name" => "Школа, к которой относится комментарий",
+                "type" => XSM_FT_FOREIGN_KEY,
+            ),
             "owner_login" => array(
                 "name" => "Логин автора",
                 "readonly" => true,
@@ -236,6 +244,11 @@ function xsm_get_all_field_descriptors()
             "blamed_person_id" => array(
                 "name" => "ID субъекта",
                 "readonly" => true,
+                "type" => XSM_FT_FOREIGN_KEY,
+            ),
+            "school_id" => array(
+                "name" => "ID школы",
+                "readonly" => false,
                 "type" => XSM_FT_FOREIGN_KEY,
             ),
             // TODO: internals
@@ -474,6 +487,17 @@ $XSM_ENUMS["course_area"] = array(
     ),
     "default" => "unknown",
 );
+
+// ACL
+$XSM_ENUMS["record_acl"] = array(
+    "values" => array(
+        "all" => "Кто угодно",
+        "ank" => "Менеджер анкет",
+        "xsm-private" => "Конфиденциальный",
+    ),
+    "default" => "all",
+);
+
 
 // Enum API
 function xsm_get_enum($enum_type)
