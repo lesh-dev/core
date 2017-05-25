@@ -42,11 +42,18 @@ elif echo $host | grep -q fizlesh ; then
         exit 1
     fi
 fi
+
+echo to: $root
+echo content: $content_dir
+exit 1
+
 sudo mkdir -p $root
 sudo cp -a ./site/* $root/
+# FIXME(mvel): temp hack for xengine!!!
+sudo cp -a $root/xengine/* $root/engine/
+
 # TODO: version file: site/VERSION or <root>/version ?
 # sudo cp version $root/
-#sudo mkdir -p $root/data
 # sudo chmod -R 777 $root/data
 
 sudo chown -R $www_user $root
