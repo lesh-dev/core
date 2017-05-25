@@ -14,6 +14,8 @@ from selenium.common.exceptions import InvalidElementStateException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
+from selenium.webdriver.common.action_chains import ActionChains
+
 from urllib2 import URLError
 from httplib import HTTPException
 
@@ -850,9 +852,21 @@ class SeleniumTest(object):
         self.getElementByName(name).click()
         self.check_page_errors()
 
+    def doubeClickElementByName(self, name):
+        self.addAction("double-click", "element name: '" + name + "'")
+        actionChains = ActionChains(self.m_driver)
+        actionChains.double_click(self.getElementByName(name)).perform()
+        self.check_page_errors()
+
     def clickElementById(self, eleId):
         self.addAction("click", "element id: '" + eleId + "'")
         self.getElementById(eleId).click()
+        self.check_page_errors()
+
+    def doubeClickElementById(self, eleId):
+        self.addAction("bouble-click", "element id: '" + eleId + "'")
+        actionChains = ActionChains(self.m_driver)
+        actionChains.double_click(self.getElementById(eleId)).perform()
         self.check_page_errors()
 
     def getElementText(self, xpath):
