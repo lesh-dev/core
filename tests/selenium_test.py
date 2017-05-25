@@ -998,7 +998,7 @@ class SeleniumTest(object):
 
     def assert_equal(self, got_value, expected_value, error_text):
         if got_value != expected_value:
-            error_text += "Expected '" + expected_value + "', got '" + got_value + "'. "
+            error_text += "Expected '{0}', got '{1}'.".format(expected_value, got_value)
             logging.error("TEST FAILED: %s", userSerialize(error_text))
             raise TestError(error_text)
 
