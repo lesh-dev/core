@@ -43,8 +43,8 @@
         xsm_checkbox('sort_by_class', $sort_by_class);
     ?><span class="ankListField">По классу</span><i>
     </i><?php xsm_checkbox('show_patronymic', $show_patronymic);
-        ?><span class="ankListField">Отчества</span>
-    <?php xcmst_submit("show-person", "Показать"); ?>
+        ?><span class="ankListField">Отчества</span><i>
+    </i><?php xcmst_submit("show-person", "Показать"); ?>
 </form>
 <script type="text/javascript">
     xsm_filter_form_autosubmit();
