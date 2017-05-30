@@ -49,7 +49,6 @@ import xcms_xsm_anketa_fill
 import xcms_xsm_anketa_wrong_fill
 import xcms_xsm_avatar
 import xcms_xsm_change_status_quick
-import xcms_xsm_check_new_person_status
 import xcms_xsm_clear_forest_status
 import xcms_xsm_course_mult_teachers
 import xcms_xsm_course_without_lecturer
@@ -108,7 +107,6 @@ def get_tests(**kwargs):
         ("xcms_xsm_anketa_wrong_fill.py", xcms_xsm_anketa_wrong_fill.XcmsXsmAnketaWrongFill(**kwargs)),
         ("xcms_xsm_avatar.py", xcms_xsm_avatar.XcmsXsmAvatar(**kwargs)),
         ("xcms_xsm_change_status_quick.py", xcms_xsm_change_status_quick.XcmsXsmChangeStatusQuick(**kwargs)),
-        ("xcms_xsm_check_new_person_status.py", xcms_xsm_check_new_person_status.XcmsXsmCheckNewPersonStatus(**kwargs)),
         ("xcms_xsm_clear_forest_status.py", xcms_xsm_clear_forest_status.XcmsXsmClearForestStatus(**kwargs)),
         ("xcms_xsm_course_mult_teachers.py", xcms_xsm_course_mult_teachers.XcmsXsmCourseWithMultipleTeachers(**kwargs)),
         ("xcms_xsm_course_without_lecturer.py", xcms_xsm_course_without_lecturer.XcmsXsmCourseWithoutLecturer(**kwargs)),
