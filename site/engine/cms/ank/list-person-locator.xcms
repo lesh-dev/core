@@ -6,6 +6,8 @@
     $show_is_teacher = xcms_get_persistent_key("list-person-locator", "show_is_teacher");
     $show_is_student = xcms_get_persistent_key("list-person-locator", "show_is_student");
     $sort_by_class = xcms_get_persistent_key("list-person-locator", "sort_by_class");
+
+    $show_patronymic = xcms_get_persistent_key("list-person-locator", "show_patronymic");
 ?>
 <span style="position: relative; float: right;">
 <a href="#" id="show-status-help" class="popup-link">Легенда</a>
@@ -40,7 +42,9 @@
     ?><i> </i><span>Группировка:</span><?php
         xsm_checkbox('sort_by_class', $sort_by_class);
     ?><span class="ankListField">По классу</span><i>
-    </i><?php xcmst_submit("show-person", "Показать"); ?>
+    </i><?php xsm_checkbox('show_patronymic', $show_patronymic);
+        ?><span class="ankListField">Отчества</span>
+    <?php xcmst_submit("show-person", "Показать"); ?>
 </form>
 <script type="text/javascript">
     xsm_filter_form_autosubmit();
@@ -54,6 +58,8 @@ function xsm_show_all_person_list()
     global $show_anketa_status;
     global $show_is_teacher;
     global $show_is_student;
+
+    global $show_patronymic;
     global $sort_by_class;
 
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
@@ -174,8 +180,8 @@ function xsm_show_all_person_list()
         $department_id = $person["department_id"];
         $department_title = $departments[$department_id]["department_title"];
 
-        $fin = xsm_fin_enc($person);
-        $person_link = xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID, $fin);
+        $display_name = $show_patronymic ? xsm_fio_enc($person) : xsm_fin_enc($person);
+        $person_link = xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID, $display_name);
 
         $school = htmlspecialchars($person["school"]);
         $school_city = htmlspecialchars($person["school_city"]);
