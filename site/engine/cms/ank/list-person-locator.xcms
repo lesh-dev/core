@@ -6,7 +6,6 @@
     $show_is_teacher = xcms_get_persistent_key("list-person-locator", "show_is_teacher");
     $show_is_student = xcms_get_persistent_key("list-person-locator", "show_is_student");
     $sort_by_class = xcms_get_persistent_key("list-person-locator", "sort_by_class");
-
     $show_patronymic = xcms_get_persistent_key("list-person-locator", "show_patronymic");
 ?>
 <span style="position: relative; float: right;">

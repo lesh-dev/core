@@ -7,6 +7,8 @@ $show_is_teacher = xcms_get_persistent_key("list-person", "show_is_teacher");
 $show_is_student = xcms_get_persistent_key("list-person", "show_is_student");
 $sort_by_class = xcms_get_persistent_key("list-person", "sort_by_class");
 $sort_by_curator_group = xcms_get_persistent_key("list-person", "sort_by_curator_group");
+// yep, we use global setting!
+$show_patronymic = xcms_get_persistent_key("list-person-locator", "show_patronymic");
 
 $school_id = xsm_get_default_school_from_request();
 
@@ -27,6 +29,8 @@ $form_action = xcms_url(array('school_id' => $school_id));
     ?><span class="ankListField">По классу</span><?php
         xsm_checkbox('sort_by_curator_group', $sort_by_curator_group);
     ?><span class="ankListField">По гр. кураторства</span><i>
+    </i><?php xsm_checkbox('show_patronymic', $show_patronymic);
+        ?><span class="ankListField">Отчества</span><i>
     </i><?php xcmst_submit("show-person", "Показать"); ?>
 </form>
 <script type="text/javascript">

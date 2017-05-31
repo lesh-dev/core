@@ -143,6 +143,8 @@ function xsm_delete_person_school($table_name, $title, $aux_param = '')
 
 function xsm_output_school_participants_list($person_sel, $school_id)
 {
+    global $show_patronymic;
+
     $db = xdb_get();
     $school = xdb_get_entity_by_id('school', $school_id);
     $school_title = xcms_get_key_or_enc($school, 'school_title');
@@ -177,6 +179,7 @@ function xsm_output_school_participants_list($person_sel, $school_id)
 
             $fin = xsm_fin_enc($person);
             $fio = xsm_fio_enc($person);
+            $display_name = $show_patronymic ? $fio : $fin;
 
             $p_current_class = xsm_class_num(xcms_get_key_or_enc($person, "p_current_class"));
             $ps_current_class = xsm_class_num(xcms_get_key_or_enc($person, "ps_current_class"));
@@ -239,7 +242,7 @@ function xsm_output_school_participants_list($person_sel, $school_id)
                 <td class="ankList">
                     <a name="<?php echo "person$person_id"; ?>"></a>
                     <a href="<?php echo $person_school_url; ?>"
-                       title="<?php echo $fio; ?>"><?php echo $fin; ?></a></td>
+                       title="<?php echo $fio; ?>"><?php echo $display_name; ?></a></td>
                 <td class="ankList"><span class="course-progress <?php echo $course_style; ?>"><?php
                         echo $hr_course_progress; ?></span></td>
                 <td class="ankList"><?php echo $curator_group; ?></td>
