@@ -53,7 +53,9 @@
 </script>
 <?php
 
-// вывод активных участников
+/**
+ * Print persons list by status group
+ **/
 function xsm_show_all_person_list()
 {
     global $show_department_id;
@@ -188,7 +190,7 @@ function xsm_show_all_person_list()
     {
         $person_id = htmlspecialchars($person["person_id"]);
 
-        $comment_text = "";
+        $last_comments_html = "";
         if ($show_comments)
         {
             $comment_query = "SELECT * FROM person_comment
@@ -203,10 +205,20 @@ function xsm_show_all_person_list()
             $comment_sel = $db->query($comment_query);
             $person_comment = array();
             while ($person_comment = $comment_sel->fetchArray(SQLITE3_ASSOC)) {
-                if ($comment_text)
-                    $comment_text .= "<br/><br/>";
-                $comment_text .= xcms_html_wrap_by_crlf(xcms_get_key_or_enc($person_comment, "comment_text"));
+                if ($last_comments_html)
+                    $last_comments_html .= "<br/><br/>";
+
+                $comment_html = rtrim(xcms_get_key_or_enc($person_comment, "comment_text"));
+                $last_comments_html .= xcms_html_wrap_by_crlf($comment_text);
+                $aux_params = xcms_url(array("person_comment_id" => $person_comment["person_comment_id"], "blamed_person_id" => $person_id));
+                $last_comments_html .= $comment_html;
+                $last_comments_html .= " ".xcms_link("edit-person_comment$aux_params", "edit", "Правка");
             }
+            if ($last_comments_html)
+                $last_comments_html .= "<br/>";
+
+            $aux_params = xcms_url(array("person_comment_id" => XDB_NEW, "blamed_person_id" => $person_id));
+            $last_comments_html .= xcms_link("edit-person_comment$aux_params", "add", "Добавить комментарий");
         }
 
         $department_id = $person["department_id"];
@@ -238,7 +250,7 @@ function xsm_show_all_person_list()
             <td class="ankList"><?php echo $current_class; ?></td>
             <td class="ankList"><?php echo $contacts; ?></td><?php
             if ($show_comments) {?>
-            <td class="ankList"><?php echo $comment_text; ?></td><?php
+            <td class="ankList"><?php echo $last_comments_html; ?></td><?php
             }?>
             <td class="ankList status-col"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>

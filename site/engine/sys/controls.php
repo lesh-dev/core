@@ -145,10 +145,15 @@ function xcmst_hidden($name, $value)
     xcmst_control($name, $value, "", "", "hidden");
 }
 
-function xcmst_link($url, $id, $inner_html, $title = "", $class = "")
+function xcms_link($url, $id, $inner_html, $title = "", $class = "")
 {
     $title = htmlspecialchars($title);
-    echo "<a class=\"$class\" id=\"$id\" href=\"$url\" title=\"$title\">$inner_html</a>";
+    return "<a class=\"$class\" id=\"$id\" href=\"$url\" title=\"$title\">$inner_html</a>";
+}
+
+function xcmst_link($url, $id, $inner_html, $title = "", $class = "")
+{
+    echo xcms_link($url, $id, $inner_html, $title, $class);
 }
 
 /**
