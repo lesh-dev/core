@@ -166,7 +166,7 @@ function xsm_print_person_schools($db, $person, $current_school_id)
         LEFT JOIN person_school ps
         ON (s.school_id = ps.school_id) AND (ps.member_person_id = '$person_id')
         ORDER BY school_date_start DESC";
-    $separated_schools = xsm_get_separated_schools($db, $query);
+    $separated_schools = xsm_get_separated_schools($db, $query, $current_school_id);
     $active_ank = (XSM_SCHOOL_ANK_ID == $current_school_id) ? 'current' : '';
     ?>
     <table class="ankList table table-bordered"><tr>

@@ -122,18 +122,35 @@ function xsm_get_all_course_info($db, $school_id)
 }
 
 
-function xsm_get_separated_schools($db, $query)
+function xsm_get_separated_schools($db, $query, $current_school_id)
 {
     $school_sel = $db->query($query);
     $shown_schools = array();
     $older_schools = array();
+    $is_current_school_visible = false;
+    $current_school = false;
     while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
     {
+        if ($school["school_id"] == $current_school_id)
+            $current_school = $school;
+
         if (count($shown_schools) <= XSM_SCHOOL_COUNT)
+        {
             $shown_schools[] = $school;
+            if ($school["school_id"] == $current_school_id)
+                $is_current_school_visible = true;
+        }
         else
             $older_schools[] = $school;
     }
+
+    if (!$is_current_school_visible && $current_school !== false)
+    {
+        $removed_school = array_pop($shown_schools);
+        $shown_schools[] = $current_school;
+        array_unshift($older_schools, $removed_school);
+    }
+
     return array(
         "shown_schools" => $shown_schools,
         "older_schools" => $older_schools,
@@ -148,7 +165,7 @@ function xsm_get_separated_schools($db, $query)
 function xsm_print_recent_schools($db, $current_school_id, $table_name)
 {
     $query = "SELECT * FROM school ORDER BY school_date_start DESC";
-    $separated_schools = xsm_get_separated_schools($db, $query);
+    $separated_schools = xsm_get_separated_schools($db, $query, $current_school_id);
     // do not escape here, will be used in JS string
     $href_prefix = "list-$table_name&school_id=";
     ?>
