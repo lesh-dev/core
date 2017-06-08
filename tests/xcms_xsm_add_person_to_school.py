@@ -2,7 +2,6 @@
 
 import xsm
 import xtest_common
-import random_crap
 
 
 class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
@@ -10,26 +9,26 @@ class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
     This test checks a new person can be added to a new school.
     Steps:
     * login as root
-    * create or uses existing "add_person_to_school_test" school
+    * create/use existing "add_person_to_school_test" school
     * navigate to add member form
-    * fill form with correct and new values 
+    * fill form with correct and new values
     * submit form
-    * check if form is submitted correctly
+    * check whether form is submitted correctly
     * navigate to add member form
     * fill form with same first and last names
     * submit form
-    * check if duplicate block worked
+    * check whether duplicate check strikes or not
     * delete the relation record between the school and the student
     * navigate to add member form
     * fill form with same first and last names
     * submit form
-    * checks if advised to add an existing student
+    * checks whether it is advised to add an existing student
     """
 
     def run(self):
         """
         Look for the class documentation
-        :return: None 
+        :return: None
         """
         self.ensure_logged_off()
         self.performLoginAsManager()
@@ -45,7 +44,7 @@ class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
         self.gotoUrlByLinkText(u"Добавить нового участника")
         person = xsm.Person(self)
         last_name = u"Анкеткин_" + str(person_unique)
-        first_name  = u"Егор"
+        first_name = u"Егор"
         person.input(
             last_name=last_name,
             first_name=first_name,
@@ -80,7 +79,9 @@ class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
             first_name=first_name,
             ank_mode=False,
         )
-        self.assertBodyTextPresent(u"Люди с такими именем и фамилией уже есть в базе и не зачислены на школу. Проверьте, возможно вы хотели добавить одного из этих людей:")
+        self.assertBodyTextPresent(
+            u"Люди с такими именем и фамилией уже есть в базе и не зачислены на школу. "
+            u"Проверьте, возможно вы хотели добавить одного из этих людей:"
+        )
         self.clickElementById("update-person-submit")
         self.assertBodyTextPresent(u"Участник успешно сохранён")
-
