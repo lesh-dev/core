@@ -12,7 +12,7 @@ if [ -z "$destination" ] ; then
 fi
 
 common_repo_path="git@github.com:lesh-dev/core.git"
-if $(hostname) | grep -q fizlesh ; then
+if echo $(hostname) | grep -q fizlesh ; then
     # production host
     common_repo_path="/srv/git"
     hg_common_repo_path="/srv/git"

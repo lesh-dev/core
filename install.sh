@@ -3,6 +3,8 @@
 # Deployment script.
 # Contains configuration for all deploy places
 
+. deploy-tools/installer/installer.sh
+
 program_name="FizLesh"
 
 if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]] ; then
@@ -43,14 +45,14 @@ elif echo $host | grep -q fizlesh ; then
     fi
 fi
 
-echo to: $root
-echo content: $content_dir
-exit 1
+# echo to: $root
+# echo content: $content_dir
+# exit 1
 
 sudo mkdir -p $root
 sudo cp -a ./site/* $root/
 # FIXME(mvel): temp hack for xengine!!!
-sudo cp -a $root/xengine/* $root/engine/
+sudo cp -av ./site/xengine/* $root/engine/
 
 # TODO: version file: site/VERSION or <root>/version ?
 # sudo cp version $root/
