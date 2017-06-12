@@ -30,16 +30,16 @@ class XcmsXsmAnketaFill(xsm.Manager, xtest_common.XcmsTest):
     * TODO: remove person from one of schools
     """
 
-    def add_and_check_person_comment(self):
-        comment_text = self.addCommentToPerson()
+    def add_and_check_person_comment(self, person):
+        comment_text = person.add_comment()
         logging.info("Added comment %s", comment_text)
         self.assertBodyTextPresent(comment_text)
         return comment_text
 
-    def add_comments_to_person(self):
-        self.add_and_check_person_comment()
-        comment_text_2 = self.add_and_check_person_comment()
-        self.add_and_check_person_comment()
+    def add_comments_to_person(self, person):
+        self.add_and_check_person_comment(person)
+        comment_text_2 = self.add_and_check_person_comment(person)
+        self.add_and_check_person_comment(person)
 
         # and now let's edit one of them.
         self.gotoIndexedUrlByLinkText(u"Правка", 0)
@@ -131,7 +131,7 @@ class XcmsXsmAnketaFill(xsm.Manager, xtest_common.XcmsTest):
         self.assertElementSubTextById("extra-person-info", person.hobby)
         self.assertElementSubTextById("extra-person-info", person.lesh_ref)
 
-        self.add_comments_to_person()
+        self.add_comments_to_person(person)
 
         # now, let's change anketa status to "Ждет собеседования"
 

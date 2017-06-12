@@ -199,6 +199,16 @@ class Person(object):
         t.clickElementByName("update-person_school")
         t.goto_back_to_person_view()
 
+    def add_comment(self):
+        t = self.xtest
+        t.gotoUrlByLinkText(u"Добавить комментарий")
+        comment_text = rc.random_text(40) + "\n" + rc.random_text(50) + "\n" + rc.random_text(30)
+        comment_text = t.fillElementByName("comment_text", comment_text)
+        t.clickElementByName("update-person_comment")
+        t.assertBodyTextPresent(u"Комментарий успешно сохранён")
+        t.goto_back_to_anketa_view()
+        return comment_text
+
     def short_alias(self):
         short_alias = self.last_name + " " + self.first_name
         return short_alias.strip()

@@ -72,6 +72,23 @@ class XcmsXsmListFilters(xsm.Manager, xtest_common.XcmsTest):
         self.setOptionValueByIdAndValue("show_department_id-selector", other_department_id)
         self.check_filter(alias, alias, 0, "Search with wrong department should return 0 records. ")
 
+    def test_comments(self):
+        comment_was_set = False
+        self.goto_xsm_all_people()
+        person = xsm.Person(self)
+        for i in xrange(2):
+            if self.checkBodyTextPresent(u"Добавить комментарий"):
+                comment_was_set = True
+                comment_text = person.add_comment()
+                self.goto_xsm_all_people()
+                self.checkBodyTextPresent(comment_text)
+
+            self.clickElementById("show_comments-checkbox")
+            self.wait(3, "Wait while form resubmits")
+            self.check_page_errors()
+
+        self.assert_equal(comment_was_set, True, "No comment can be added: no links. ")
+
     def run(self):
         self.ensure_logged_off()
 
@@ -82,3 +99,4 @@ class XcmsXsmListFilters(xsm.Manager, xtest_common.XcmsTest):
 
         self.test_existing_people()
         self.test_department_selector()
+        self.test_comments()
