@@ -209,9 +209,8 @@ function xsm_show_all_person_list()
                     $last_comments_html .= "<br/><br/>";
 
                 $comment_html = rtrim(xcms_get_key_or_enc($person_comment, "comment_text"));
-                $last_comments_html .= xcms_html_wrap_by_crlf($comment_html);
                 $aux_params = xcms_url(array("person_comment_id" => $person_comment["person_comment_id"], "blamed_person_id" => $person_id));
-                $last_comments_html .= $comment_html;
+                $last_comments_html .= xcms_html_wrap_by_crlf($comment_html);
                 $last_comments_html .= " ".xcms_link("edit-person_comment$aux_params", "edit", "Правка");
             }
             if ($last_comments_html)
