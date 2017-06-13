@@ -73,9 +73,14 @@ class XcmsXsmListFilters(xsm.Manager, xtest_common.XcmsTest):
         self.check_filter(alias, alias, 0, "Search with wrong department should return 0 records. ")
 
     def test_comments(self):
+        # TODO(mvel): в этом месте несколько раз всплывала бага, что текст комментария
+        # двоится. Надо добавить код, проверяющий, что этот текст встречается 1 раз на странице.
         comment_was_set = False
         self.goto_xsm_all_people()
         person = xsm.Person(self)
+        # FIXME(mvel): очень неудобный инструментарий работы с checkbox-ами. Нет интерфейса
+        # "убедиться, что включено". Надо его добавить и потом проверять, что комментарии есть
+        # только тогда, когда включено.
         for i in xrange(2):
             if self.checkBodyTextPresent(u"Добавить комментарий"):
                 comment_was_set = True
