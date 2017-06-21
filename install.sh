@@ -40,34 +40,32 @@ elif echo $host | grep -q fizlesh ; then
     elif [ "$mode" = "testing" ] ; then
         root="/srv/www/fizlesh.ru/testing"
     else
-        echo "Invalid mode '$mode'. Specify it, please"
+        print_error "Invalid mode '$mode'. Specify it, please"
         exit 1
     fi
 fi
 
-# echo to: $root
-# echo content: $content_dir
-# exit 1
-
 sudo mkdir -p $root
 sudo cp -a ./site/* $root/
-# FIXME(mvel): temp hack for xengine!!!
-sudo cp -av ./site/xengine/* $root/engine/
-
-# TODO: version file: site/VERSION or <root>/version ?
-# sudo cp version $root/
-# sudo chmod -R 777 $root/data
+sudo cp -a version $root/
 
 sudo chown -R $www_user $root
-sudo rm -f $root/content
 if [ "$mode" = "production" ] ; then
     # in production we just use kosher content and set symlink to it
+    if [ -e $root/content ] ; then
+        print_message "Unlinking content symlink"
+        sudo rm -f $root/content
+    fi
+    print_message "Setting production content symlink"
     sudo ln -sf $content_dir/content $root/
 else
     # in default/testing mode we clone content from somewhere
+    print_message "Non-production mode, removing entire content directory"
+    sudo rm -rf $root/content
+    print_message "Copying test content"
     sudo cp -r $content_dir/content $root/
 fi
 
 set +x
 
-echo "$program_name was successfully deployed to '$root' in mode '$mode'"
+print_message "$program_name was successfully deployed to '$root' in mode '$mode'"

@@ -152,7 +152,7 @@ function xcms_version_css()
     if ! [ -d "$css_root_dir" ] ; then
         return 0
     fi
-    version="$( cat $DEST/VERSION | sed -e 's/[^0-9.]//g' )"
+    version="$( cat $DEST/version | sed -e 's/[^0-9.]//g' )"
     message "    Processing '$css_root_dir'..."
 
     (
@@ -224,12 +224,12 @@ sudo cp -a $VERBOSE ./site/* "$DEST/"
 sudo rm -rf "$FULL_DEST_CONT"
 sudo cp -a $VERBOSE $CONT_DIR "$FULL_DEST_CONT"
 
-VERSION="`tools/publish/version.sh`-local"
-message "Set version: $VERSION"
-VFILE=`mktemp`
-echo "version : $VERSION" > $VFILE
-sudo cp $VERBOSE $VFILE $DEST/INFO
-rm -f $VFILE
+version="`tools/publish/version.sh`-local"
+message "Set version: $version"
+version_file=`mktemp`
+echo "version : $version" > $version_file
+sudo cp $VERBOSE $version_file $DEST/INFO
+rm -f $version_file
 
 message "Creating database target folder"
 sudo mkdir -p $VERBOSE "$(dirname $DEST_DB)"

@@ -3,7 +3,7 @@
 import datetime
 import os
 
-version_file = 'site/VERSION'
+version_file = 'version'
 
 current_version = open(version_file).read().strip()
 version_components = current_version.split('.')

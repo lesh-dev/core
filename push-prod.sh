@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo -n "Source version: "
-cat site/VERSION
+cat version
 echo "Last tags:"
 git tag | sort -Vr | head -n 5
 echo "Pushing to github..."
