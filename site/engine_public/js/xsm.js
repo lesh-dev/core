@@ -150,7 +150,10 @@ function xsm_edit_field_handler(event)
         if (enum_type)
         {
             // enum
-            original_value = 'some_undefined_value';
+            if (!String(original_value).length) {
+                original_value = 'some_undefined_value';
+            }
+
             var enum_url = '/xsm/api/enum_html/' + field_name + '/' + original_value + '/' + enum_type;
             xsm_async_call(enum_url, function(response) {
                 // turn cell into input
