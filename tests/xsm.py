@@ -278,7 +278,7 @@ class School(object):
     :var school_title:
         string: School name
     :var school_data_start:
-        string: School start date 
+        string: School start date
     :var school_date_end:
         string: School end date
     :var school_location:
@@ -310,17 +310,17 @@ class School(object):
         random=False,
     ):
         """
-        
-        :param school_title: 
+
+        :param school_title:
             string: School name
-        :param school_date_start: 
+        :param school_date_start:
             string: School start date
-        :param school_date_end: 
+        :param school_date_end:
             string: School end date
-        :param school_location: 
+        :param school_location:
             string: School location
         :param random:
-            boolean: if it is necessary to add _<random crap> to school_title    
+            boolean: if it is necessary to add _<random crap> to school_title
         :return: void
         """
         if school_title is not None:
@@ -353,7 +353,7 @@ class School(object):
 def add_test_school(xtest):
     """
     Adds a school with unique name generated as 'ЛЭШ-<number not found at the list-school page>_<random crap>'
-    :param xtest: xtest instance 
+    :param xtest: xtest instance
     :return: School instance
     """
     xtest.goto_xsm_schools()
@@ -384,12 +384,12 @@ def add_test_school(xtest):
 def add_named_school(xtest, school_title):
     """
     Checks if there exists school with school_title name, if not, creates new.
-    :param xtest: 
+    :param xtest:
         xtest instance
     :param school_title:
         string: school name
     :return:
-        School instance 
+        School instance
     """
     xtest.goto_xsm_schools()
     page_content = xtest.getPageContent()
@@ -425,15 +425,17 @@ def add_named_school(xtest, school_title):
 def get_school_information(xtest, school):
     """
     Filles the school instance with information from its view
-    :param xtest:  
+    :param xtest:
         xtest instance
-    :param school: 
+    :param school:
         School instance to delete
         Only school id variable is used and must be correctly filled
     :return: school instance
     """
     view_school(xtest, school)
-    school.school_title = xtest.getPageContent().split('<td class="ankListRowTitle">')[1].split("</b>")[0].split("<b>")[1]
+    school.school_title = (
+        xtest.getPageContent().split('<td class="ankListRowTitle">')[1].split("</b>")[0].split("<b>")[1]
+    )
     page_content = xtest.getPageContent().split('/span></td></tr>')[1].split("</table>")[0].split("</span>")[1:]
     school.school_date_start = page_content[0].split("</td></tr>")[0]
     school.school_date_end = page_content[1].split("</td></tr>")[0]
@@ -457,7 +459,7 @@ def view_school(xtest, school):
 def get_school_id(xtest, school_title):
     """
     Parces list-school page to find the id of a school with provided title
-    :param xtest: 
+    :param xtest:
         xtest instance
     :param school_title:
         string: School title
