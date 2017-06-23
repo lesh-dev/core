@@ -141,7 +141,7 @@ function xsm_show_ank_list()
 
     ?>
     <form method="post" class="xsm-bulk_archive" name="bulk_archive" id="bulk_archive-form" action="list-ank" style="float: right;">
-        <?php xcmst_submit("bulk_archive", "Архивировать отклонённых", "Доступна только Администратору. Обращайтесь к Секте Программистов", "btn btn-danger", $bulk_archive_disabled); ?>
+        <?php xcmst_submit("bulk_archive", "Архивировать отклонённых", $bulk_archive_title, "btn btn-danger", $bulk_archive_disabled); ?>
     </form>
     <?php
     xsm_view_operations('person', 'участника');
@@ -226,11 +226,8 @@ function xsm_show_ank_list()
 
 function xsm_bulk_archive()
 {
-    if (!xcms_user()->check_rights("admin", false))
-    {?>
-        <div class="error">Извините, эта функциональность доступна только Администратору. Обратитесь к Секте Программистов</div><?php
-        return;
-    }
+    xcms_auth_admin_wall();
+
     // lock database
     $db = xdb_get_write();
 

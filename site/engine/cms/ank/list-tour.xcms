@@ -24,10 +24,19 @@
     xsm_filter_form_autosubmit();
     $(xsm_set_editors);
 </script>
+<?php
+    $clear_forest_title = "Будьте внимательны, это действие не может быть отменено (убедитесь, что у вас есть резервная копия БД)";
+    $clear_forest_disabled = false;
+    if (!xcms_user()->check_rights("admin", false))
+    {
+        $clear_forest_title = "Извините, эта функциональность доступна только Администратору. Обратитесь к Секте Программистов";
+        $clear_forest_disabled = true;
+    }
 
+?>
 <div style="display: inline-block; float: right">
 <form method="post" id="clear_forest-form" action="list-tour">
-    <?php xcmst_submit("clear_forest", "Очистка статусов", "Будьте внимательны, это действие нельзя отменить"); ?>
+    <?php xcmst_submit("clear_forest", "Очистка статусов", $clear_forest_title, "btn btn-danger", $clear_forest_disabled); ?>
 </form>
 </div>
 
@@ -86,6 +95,8 @@ function xsm_get_forest_selector($db, $single_forest, $show_name_filter)
 
 function xsm_clear_forest($db, $single_forest, $show_name_filter)
 {
+    xcms_auth_wall_admin();
+
     $person_sel = xsm_get_forest_selector($db, $single_forest, $show_name_filter);
 
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
