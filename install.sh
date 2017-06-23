@@ -58,6 +58,8 @@ if [ "$mode" = "production" ] ; then
     fi
     print_message "Setting production content symlink"
     sudo ln -sf $content_dir/content $root/
+    # FIXME(mvel): lesh.org.ru install
+    cp $root/settings.production-fizlesh.ru.php $root/settings.php
 else
     # in default/testing mode we clone content from somewhere
     print_message "Non-production mode, removing entire content directory"
