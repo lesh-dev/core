@@ -242,14 +242,15 @@ function xsm_output_school_participants_list($person_sel, $school_id)
                 <td class="ankList">
                     <a name="<?php echo "person$person_id"; ?>"></a>
                     <a href="<?php echo $person_school_url; ?>"
-                       title="<?php echo $fio; ?>"><?php echo $display_name; ?></a></td>
+                        title="<?php echo $fio; ?>"><?php echo $display_name; ?></a></td>
                 <td class="ankList"><span class="course-progress <?php echo $course_style; ?>"><?php
                         echo $hr_course_progress; ?></span></td>
                 <td class="ankList"><?php echo $curator_group; ?></td>
                 <td class="ankList"><span class="class-school-num <?php echo $class_diff; ?>"
-                                          title="Класс на <?php echo $school_title; ?>"><?php echo $ps_current_class;
-                        ?></span>&nbsp;/&nbsp;<span class="class-current-num"
-                                                    title="Текущий класс"><?php echo $p_current_class; ?></span></td>
+                    title="Класс на <?php echo $school_title; ?>"><?php echo $ps_current_class;
+                        ?></span>&nbsp;/&nbsp;<span
+                        class="class-current-num"
+                        title="Текущий класс"><?php echo $p_current_class; ?></span></td>
                 <td class="ankList"><?php echo $birth_date; ?></td>
                 <td class="ankList"><?php echo $contacts; ?></td>
                 <td class="ankList"><?php echo $person_school_comment; ?></td>
