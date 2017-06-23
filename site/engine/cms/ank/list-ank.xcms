@@ -129,9 +129,19 @@ function xsm_show_ank_list()
         person_created DESC";
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
     $person_sel = $db->query($query);
+
+
+    $bulk_archive_title = "Будьте внимательны, это действие не может быть отменено (убедитесь, что у вас есть резервная копия БД)";
+    $bulk_archive_disabled = false;
+    if (!xcms_user()->check_rights("admin", false))
+    {
+        $bulk_archive_title = "Извините, эта функциональность доступна только Администратору. Обратитесь к Секте Программистов";
+        $bulk_archive_disabled = true;
+    }
+
     ?>
     <form method="post" class="xsm-bulk_archive" name="bulk_archive" id="bulk_archive-form" action="list-ank" style="float: right;">
-        <?php xcmst_submit("bulk_archive", "Архивировать отклонённых", "Доступна только Администратору", "btn btn-danger"); ?>
+        <?php xcmst_submit("bulk_archive", "Архивировать отклонённых", "Доступна только Администратору. Обращайтесь к Секте Программистов", "btn btn-danger", $bulk_archive_disabled); ?>
     </form>
     <?php
     xsm_view_operations('person', 'участника');
@@ -140,7 +150,6 @@ function xsm_show_ank_list()
     {
         xsm_bulk_archive();
     }
-
 
     ?>
 
