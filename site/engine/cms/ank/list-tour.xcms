@@ -188,6 +188,8 @@ function xsm_show_tour_list()
         $person_view = "view-person".xcms_url(array("person_id" => $person_id));
 
         $row_class = xsm_get_city_class($school_city);
+        $tour_requisites_id = "p".$person_count."-tour_requisites";
+        $tent_capacity_id = "p".$person_count."-tent_capacity";
         // override city class in case of teacher, it's not so important
         if (xcms_checkbox_enabled($is_teacher))
             $row_class = "teacher";
@@ -204,8 +206,8 @@ function xsm_show_tour_list()
             <td class="ankList c" field-name="forest_2" enum-type="forest_status"><?php echo xsm_make_enum($person, "forest_2", "p$person_count"); ?></td>
             <td class="ankList c" field-name="forest_3" enum-type="forest_status"><?php echo xsm_make_enum($person, "forest_3", "p$person_count"); ?></td>
             <?php } ?>
-            <td class="ankList" field-name="tent_capacity"><?php echo $tent_capacity; ?></td>
-            <td class="ankList" field-name="tour_requisites"><?php echo $tour_requisites; ?></td>
+            <td class="ankList" field-name="tent_capacity" id="<?php echo $tent_capacity_id; ?>"><?php echo $tent_capacity; ?></td>
+            <td class="ankList" field-name="tour_requisites" id="<?php echo $tour_requisites_id; ?>"><?php echo $tour_requisites; ?></td>
             <td class="ankList"><?php echo $all_phones; ?></td>
             <td class="ankList" field-name="anketa_status" enum-type="anketa_status"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
