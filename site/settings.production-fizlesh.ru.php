@@ -12,7 +12,7 @@
     $engine_pub = "engine_public/";
     global $web_prefix;
     $web_prefix = "";
-    $mailer_enabled = false;
+    $mailer_enabled = true;
     $SETTINGS['content_time_roundup'] = 100;
 
 ?><?php
@@ -22,13 +22,13 @@
 /* This block was inserted by installer -- sitemeta.php.
 You may edit it, but it can be regenerated. */
     global $meta_site_name;
-    $meta_site_name = 'fizlesh.local';
+    $meta_site_name = 'ФизЛЭШ';
     global $meta_site_url;
-    $meta_site_url = 'http://fizlesh.local/';
+    $meta_site_url = 'http://fizlesh.ru/';
     global $meta_site_log_path;
     $meta_site_log_path = '/var/log/xcms/fizlesh.local-engine.log';
     global $meta_site_mail;
-    $meta_site_mail = 'support@fizlesh.local';
+    $meta_site_mail = 'support@fizlesh.ru';
 /* --- */
 ?><?php
 /* This block was inserted by installer -- xsm.php.
