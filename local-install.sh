@@ -146,26 +146,6 @@ EOF
 
 }
 
-function xcms_version_css()
-{
-    css_root_dir="$1"
-    if ! [ -d "$css_root_dir" ] ; then
-        return 0
-    fi
-    version="$( cat $DEST/version | sed -e 's/[^0-9.]//g' )"
-    message "    Processing '$css_root_dir'..."
-
-    (
-        cd "$css_root_dir"
-        css_dirs="$( find . -type d -name 'css' )"
-        for d in $css_dirs ; do (
-            sudo rm -rf "$d/$version"
-            cd "$d"
-            sudo ln -sf . "$version"
-        ) done
-    )
-}
-
 # site root
 DEST="/var/www/vhosts/$DEST_NAME"
 

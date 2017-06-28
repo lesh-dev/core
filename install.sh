@@ -15,7 +15,7 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]] ; then
     exit 0
 fi
 
-set -xe
+set -e
 
 mode="$1"
 if [ -z "$mode" ] ; then
@@ -66,7 +66,16 @@ else
     sudo rm -rf $root/content
     print_message "Copying test content"
     sudo cp -r $content_dir/content $root/
+    cp $root/settings.local.php $root/settings.php
 fi
+
+print_message "Creating cache directory"
+sudo mkdir -p $root/.prec
+sudo chmod 777 $root/.prec
+
+xcms_version_css "$root" "engine_public"
+xcms_version_css "$root" "fizlesh.ru-design"
+xcms_version_css "$root" "lesh.org.ru-design"
 
 set +x
 

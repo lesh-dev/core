@@ -11,15 +11,15 @@ if [ -z "$destination" ] ; then
     destination="$project_name"
 fi
 
-common_repo_path="git@github.com:lesh-dev/core.git"
+main_repo_path="git@github.com:lesh-dev/core.git"
 if echo $(hostname) | grep -q fizlesh ; then
     # production host
-    common_repo_path="/srv/git"
+    main_repo_path="/srv/git/lesh"
     hg_common_repo_path="/srv/git"
 fi
 
 # bootstrap project into current directory
-git clone $common_repo_path/lesh $destination
+git clone $main_repo_path $destination
 # tmp hack for old and new engine
 hg clone $hg_common_repo_path/xengine $destination/site/xengine
 hg clone $hg_common_repo_path/deploy-tools $destination/deploy-tools
