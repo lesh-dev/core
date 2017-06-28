@@ -16,11 +16,13 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]] ; then
 fi
 
 set -e
+# TODO(mvel) support verbose mode
 
 mode="$1"
 if [ -z "$mode" ] ; then
     mode="default"
 fi
+verbose=""
 
 unalias grep 2>/dev/null || true
 
@@ -67,6 +69,14 @@ else
     print_message "Copying test content"
     sudo cp -r $content_dir/content $root/
     cp $root/settings.local.php $root/settings.php
+
+    if [ -e $root/content/auth/usr/root.user ] ; then
+        print_message "Changing root password to 'root'..."
+        # change root password to 'root'
+        sudo cp -f $verbose ./tools/xcms_console_tools/root_root_user $root/content/auth/usr/root.user
+    else
+        print_error "User 'root' was not found, password change skipped"
+    fi
 fi
 
 print_message "Creating cache directory"
