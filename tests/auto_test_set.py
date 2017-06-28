@@ -33,6 +33,7 @@ import xcms_download_lectures
 import xcms_mailer_test_mailru
 import xcms_metrics_check
 import xcms_open_non_existing
+import xcms_password_check
 import xcms_site_open_all_pages
 import xcms_site_open_renamed_pages
 import xcms_unittests
@@ -91,6 +92,7 @@ def get_tests(**kwargs):
         ("xcms_mailer_test_mailru.py", xcms_mailer_test_mailru.XcmsMailerTestMailRu(**kwargs)),
         ("xcms_metrics_check.py", xcms_metrics_check.XcmsMetricsCheck(**kwargs)),
         ("xcms_open_non_existing.py", xcms_open_non_existing.XcmsOpenNonExisting(**kwargs)),
+        ("xcms_password_check.py", xcms_password_check.XcmsPasswordChecker(**kwargs)),
         ("xcms_site_open_all_pages.py", xcms_site_open_all_pages.XcmsSiteOpenAllPages(**kwargs)),
         ("xcms_site_open_renamed_pages.py", xcms_site_open_renamed_pages.XcmsSiteOpenRenamedPages(**kwargs)),
         ("xcms_unittests.py", xcms_unittests.XcmsUnitTests(**kwargs)),
