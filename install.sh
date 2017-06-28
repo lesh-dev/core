@@ -31,9 +31,7 @@ root="/var/www/html"
 www_user="www-data:www-data"
 content_dir="../content-fizlesh.ru"
 
-if echo $host | grep -q lambda ; then
-    root="/var/www/vhosts/fizlesh.ru"
-elif echo $host | grep -q blackbox ; then
+if echo $host | grep -qE '(lambda|blackbox|falcon)' ; then
     root="/var/www/vhosts/fizlesh.ru"
 elif echo $host | grep -q fizlesh ; then
     if [ "$mode" = "production" ] ; then

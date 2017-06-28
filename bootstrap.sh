@@ -8,10 +8,13 @@ set -e
 project_name="fizlesh"
 destination="$1"
 if [ -z "$destination" ] ; then
+    echo "Destination directory not set, falling back to project name $project_name"
     destination="$project_name"
 fi
 
 main_repo_path="git@github.com:lesh-dev/core.git"
+hg_common_repo_path="ssh://hg@bitbucket.org/dichlofos"
+
 if echo $(hostname) | grep -q fizlesh ; then
     # production host
     main_repo_path="/srv/git/lesh"
