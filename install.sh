@@ -27,13 +27,11 @@ verbose=""
 unalias grep 2>/dev/null || true
 
 host="$( hostname )"
-root="/var/www/html"
+root="/var/www/vhosts/fizlesh.ru"
 www_user="www-data:www-data"
 content_dir="../content-fizlesh.ru"
 
-if echo $host | grep -qE '(lambda|blackbox|falcon)' ; then
-    root="/var/www/vhosts/fizlesh.ru"
-elif echo $host | grep -q fizlesh ; then
+if echo $host | grep -q fizlesh ; then
     if [ "$mode" = "production" ] ; then
         root="/srv/www/fizlesh.ru/production"
         content_dir="/srv/www/fizlesh.ru/content-fizlesh.ru"
@@ -49,7 +47,6 @@ sudo mkdir -p $root
 sudo cp -a ./site/* $root/
 sudo cp -a version $root/
 
-sudo chown -R $www_user $root
 if [ "$mode" = "production" ] ; then
     # in production we just use kosher content and set symlink to it
     if [ -e $root/content ] ; then
@@ -80,6 +77,7 @@ fi
 print_message "Creating cache directory"
 sudo mkdir -p $root/.prec
 sudo chmod 777 $root/.prec
+sudo chown -R $www_user $root
 
 xcms_version_css "$root" "engine_public"
 xcms_version_css "$root" "fizlesh.ru-design"
