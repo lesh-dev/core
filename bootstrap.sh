@@ -3,7 +3,7 @@
 my_self=$(readlink -f "$0")
 my_dir="$(dirname "$my_self")"
 
-set -e
+set -ex
 
 project_name="fizlesh"
 destination="$1"
@@ -12,8 +12,8 @@ if [ -z "$destination" ] ; then
     destination="$project_name"
 fi
 
-main_repo_path="git@github.com:lesh-dev/core.git"
-hg_common_repo_path="ssh://hg@bitbucket.org/dichlofos"
+main_repo_path="https://github.com/lesh-dev/core.git"
+hg_common_repo_path="https://bitbucket.org/dichlofos"
 
 if echo $(hostname) | grep -q fizlesh ; then
     # production host
