@@ -19,3 +19,4 @@ tools/optimize-images/oim
 *.sublime-project
 *.sublime-workspace
 fizlesh.sqlite3
+tests/root_password

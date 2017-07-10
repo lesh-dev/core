@@ -217,6 +217,10 @@ class XcmsTestWithConfig(XcmsBaseTest):
         return self.m_conf.getAdminLogin()
 
     def getAdminPass(self):
+        if "test.fizlesh.ru" in self.base_url:
+            with open("root_password", 'r') as f:
+                passwd = f.readline()
+            return passwd
         return self.m_conf.getAdminPass()
 
     def performLogout(self):
