@@ -3,7 +3,7 @@
 my_self=$(readlink -f "$0")
 my_dir="$(dirname "$my_self")"
 
-set -ex
+set -e
 
 project_name="fizlesh"
 destination="$1"
