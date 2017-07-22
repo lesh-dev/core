@@ -83,6 +83,12 @@ xcms_version_css "$root" "engine_public"
 xcms_version_css "$root" "fizlesh.ru-design"
 xcms_version_css "$root" "lesh.org.ru-design"
 
+target_site="fizlesh.local"
+if [ "$mode" = "production" ] ; then
+    target_site="fizlesh.ru"
+fi
+curl "http://$target_site/?ref=rebuild_aliases"
+
 set +x
 
 print_message "$program_name was successfully deployed to '$root' in mode '$mode'"
