@@ -52,7 +52,7 @@ class XcmsXsmAnketaWrongFill(xsm.Manager, xtest_common.XcmsTest):
         person.email = random_crap.email()
         person.skype = random_crap.random_text(12)
         person.social_profile = random_crap.randomVkontakte()
-        social_profile_show = bawlib.cutHttp(person.social_profile)
+        social_profile_show = bawlib.cut_http(person.social_profile)
 
         favourites = random_crap.randomCrap(20, ["multiline"])
         achievements = random_crap.randomCrap(15, ["multiline"])

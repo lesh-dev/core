@@ -54,7 +54,7 @@ class XcmsXsmInplaceEdit(xsm.Manager, xtest_common.XcmsTest):
             ank_mode=True,
         )
         self.assertBodyTextPresent(self.get_anketa_success_submit_message())
-        #inp_social_show = bawlib.cutHttp(person.social_profile)
+        #inp_social_show = bawlib.cut_http(person.social_profile)
 
         # now login as admin
         inp_last_name = person.last_name

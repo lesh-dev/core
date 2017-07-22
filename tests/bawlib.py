@@ -31,7 +31,7 @@ def wrapIfLong(text):
     return text
 
 
-def cutHttp(link):
+def cut_http(link):
     return link.replace('http://', '').replace('https://', '')
 
 
