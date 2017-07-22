@@ -38,7 +38,7 @@ def cut_http(link):
 def userSerialize(text, options=None):
     if not options:
         options = []
-    if isList(text):
+    if is_list(text):
         return "|".join([userSerialize(x) for x in text])
     if isString(text):
         if "cut_strings" in options or "cut_string" in options:
@@ -56,31 +56,34 @@ def userSerialize(text, options=None):
     return str(text)
 
 
-def isList(x):
-    return type(x) == type(list())
+def is_list(x):
+    return isinstance(x, list)
 
 
 def isString(x):
-    return type(x) == type("string") or type(x) == type(u"string")
+    return isinstance(x, str) or isinstance(x, unicode)
 
 
 def isBool(x):
-    return type(x) == type(True)
+    return isinstance(x, bool)
 
 
 def isNumber(x):
-    return type(x) == type(0) or type(x) == type(long(0))
+    return isinstance(x, int) or isinstance(x, long)
 
 
 def isEqual(x, y):
     if isString(x) and isString(y):
         return (x.strip() == y.strip())
     else:
-        raise RuntimeError("Cannot compare anything except strings, sorry. Type of X is " + str(type(x)) + ", and type of Y is " + str(type(y)) + ".")
+        raise RuntimeError(
+            "Cannot compare anything except strings, sorry. Type of X is " + str(type(x)) +
+            ", and type of Y is " + str(type(y)) + "."
+        )
 
 
 def isVoid(x):
-    if isList(x):
+    if is_list(x):
         return (not x)
     else:
         return x is None or x.strip() == ""
@@ -93,12 +96,13 @@ def argMatchOption(value, optSpec):
     """
     if isString(optSpec):
         return value == optSpec
-    elif isList(optSpec):
+    elif is_list(optSpec):
         return value in optSpec
     else:
         raise RuntimeError("argMatchOption got optSpec parameter, which is neither string list, nor single string. ")
 
 
+# FIXME(mvel): remove this crap, use getopt
 def getOption(opt, inArgs):
     """
         gets option list 'args' and option name 'opt' (or list of synonyms).
@@ -107,7 +111,7 @@ def getOption(opt, inArgs):
         returns 'qqq', [-a, -b]
     """
     args = inArgs[:]
-    for i in xrange(0, len(args)-1):
+    for i in xrange(0, len(args) - 1):
         if argMatchOption(args[i], opt):
             del args[i]
             value = args[i]

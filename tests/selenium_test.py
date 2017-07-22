@@ -25,7 +25,9 @@ import os
 import errno
 import shutil
 
-from bawlib import isVoid, isList, isNumber, isEqual, getSingleOption, userSerialize, wrapIfLong
+import bawlib as bw
+
+from bawlib import isVoid, isNumber, isEqual, getSingleOption, userSerialize, wrapIfLong
 from bawlib import configure_logger
 
 configure_logger()
@@ -180,9 +182,9 @@ class BrowserHolder(object):
                     executable_path=chrome_path,
                 )
 
+        # FIXME(mvel): fix distro_url
+        distro_url = ""
         raise BrowserHolderException("Chrome Driver is not installed. Install it from {}".format(distro_url))
-
-
 
     @staticmethod
     def firefox_driver_instance(profile_path):
@@ -701,7 +703,9 @@ class SeleniumTest(object):
         """
         if index < 1:
             self.fatalTest(
-                "Invalid index in getOptionValueByIdAndIndex for element " + eleId + ". Index should be positive (1 and above). ")
+                "Invalid index in getOptionValueByIdAndIndex for element " + eleId +
+                ". Index should be positive (1 and above). "
+            )
         self.addAction("get-option-by-index", "element id: '" + eleId + "', index: " + userSerialize(index))
         selEle = self.getElementById(eleId)
         eleList = selEle.find_elements_by_xpath("option")
@@ -882,7 +886,7 @@ class SeleniumTest(object):
 
     # to filter log for regular messages like '404 not found'.
     def setLogStopWords(self, stopList):
-        if isList(stopList):
+        if bw.is_list(stopList):
             self.log_check_stop_words = stopList
         else:
             self.log_check_stop_words = [stopList]
@@ -935,7 +939,7 @@ class SeleniumTest(object):
                 wrapIfLong(userSerialize(ele_text, ser_opt).replace("\n", " ")) + ". "
             )
 
-        if isList(text):
+        if bw.is_list(text):
             for phrase in text:
                 if phrase in ele_text:
                     self.logAdd("checkTextPresent: found phrase " + userSerialize(
@@ -985,7 +989,7 @@ class SeleniumTest(object):
                 wrapIfLong(userSerialize(ele_text, ser_opt).replace("\n", " ")) + ". "
             )
 
-        if isList(text):
+        if bw.is_list(text):
             for phrase in text:
                 if phrase in ele_text:
                     self.logAdd("checkSourceTextPresent: found phrase " + userSerialize(phrase) + " on page. ")
@@ -1058,7 +1062,7 @@ class SeleniumTest(object):
             self.failTest(errText)
 
     def checkEmptyParam(self, stringOrList, methodName):
-        if isList(stringOrList):
+        if bw.is_list(stringOrList):
             if len(stringOrList) == 0:
                 self.fatalTest("Empty list passed to " + methodName)
             for text in stringOrList:
@@ -1090,7 +1094,7 @@ class SeleniumTest(object):
                 url = searchMethod(url_name)
             return url.get_attribute("href")
 
-        if isList(urlText):
+        if bw.is_list(urlText):
             for urlName in urlText:
                 try:
                     return getUrl(urlName, option_list=option_list)
@@ -1123,7 +1127,7 @@ class SeleniumTest(object):
             xpath = "//a[" + sibling + "='" + urlText + "']"
             urls = self.m_driver.find_elements_by_xpath(xpath)
 
-            if not isList(urls):
+            if not bw.is_list(urls):
                 self.fatalTest(
                     "countIndexedUrlsByLinkText(): Something bad retrieved from find_elements_by_xpath: "
                     "it's not a list of WebElement. "
@@ -1147,7 +1151,7 @@ class SeleniumTest(object):
             xpath = "//a[" + sibling + "='" + urlText + "']"
             urls = self.m_driver.find_elements_by_xpath(xpath)
 
-            if not isList(urls):
+            if not bw.is_list(urls):
                 self.fatalTest(
                     "clickIndexedElementByText(): Something bad retrieved from find_elements_by_xpath: "
                     "it's not a list of WebElement. "
