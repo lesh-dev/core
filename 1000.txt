@@ -1,0 +1,24 @@
+После install.sh в чистый корень не работают алиасы /xsm, etc
+Added by Mikhail Veltishchev 23 days ago. Updated 23 days ago.
+
+Status:
+Новая
+Priority:
+Высокий
+Assignee:
+Mikhail Veltishchev
+Category:
+-
+Target version:
+-
+Start date:
+06/28/2017
+Due date:
+% Done:
+0%
+Resolution:
+Quote
+Description
+
+Сабж, надо дёргать rebuild_aliases, возможно сделать api-ручку для этого.
+

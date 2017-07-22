@@ -1,0 +1,34 @@
+Warning: mkdir(): File exists in /var/www/vhosts/fizlesh.ru/.prec/f-admin.php on line 126
+Added by Mikhail Veltishchev 5 months ago. Updated 3 months ago.
+
+Status:
+Новая
+Priority:
+Высокий
+Assignee:
+Mikhail Veltishchev
+Category:
+CMS
+Target version:
+-
+Start date:
+02/25/2017
+Due date:
+% Done:
+0%
+Resolution:
+Quote
+Description
+
+Warning: mkdir(): File exists in /var/www/vhosts/fizlesh.ru/.prec/f-admin.php on line 126
+
+HTR:
+1) создать страницу с кривым алиасом (кстати, в этом случае получаем некрасивый exception, и это ещё один баг)
+2) нажать back
+3) исправить alias, нажать "Создать" ещё раз.
+
+Add
+Subtasks
+
+Add
+Related issues
