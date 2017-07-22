@@ -181,8 +181,8 @@ class BrowserHolder(object):
                 )
 
         raise BrowserHolderException("Chrome Driver is not installed. Install it from {}".format(distro_url))
-        
-        
+
+
 
     @staticmethod
     def firefox_driver_instance(profile_path):
@@ -326,9 +326,6 @@ class SeleniumTest(object):
             self.log_time = current_time()
         except IOError:
             self.fatalTest("Cannot create log file " + userSerialize(self.log_file) + ". ")
-
-    def setCloseOnExit(self, flag):
-        self.m_closeOnExit = flag
 
     # PHP errors auto-check toggle
     def setAutoPhpErrorChecking(self, checkErrors=True):
