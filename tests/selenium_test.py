@@ -27,7 +27,7 @@ import shutil
 
 import bawlib as bw
 
-from bawlib import isVoid, isNumber, isEqual, getSingleOption, userSerialize, wrapIfLong
+from bawlib import isVoid, isNumber, isEqual, userSerialize, wrapIfLong
 from bawlib import configure_logger
 
 configure_logger()
@@ -225,15 +225,15 @@ class SeleniumTest(object):
 
     # defaults
 
-    def __init__(self, base_url, browser_holder, params=None):
+    def __init__(self, base_url, browser_holder, args):
         """
         :type base_url: str
         :type browser_holder: BrowserHolder
-        :type params: list | None
+        :type args: object
         """
-        assert isinstance(base_url, str), "base_url should has type 'str'"
+        assert isinstance(base_url, str), "'base_url' should has type 'str'"
         assert isinstance(browser_holder, BrowserHolder), "browser_holder should have type 'BrowserHolder'"
-        assert params is None or isinstance(params, list), "params should be 'list' or None"
+        assert isinstance(args, object), "'args' should be 'object' with parsed command line args from argparse"
 
         self.check_errors = True
         self.log_started = False
@@ -248,8 +248,8 @@ class SeleniumTest(object):
 
         self.test_name = self.__module__ + "." + self.__class__.__name__
         self.base_url = base_url or ""
-        self.params = params or []
         self.browser_holder = browser_holder
+        self.args = args
 
         # time_suffix = "_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         self.log_file = os.path.join(self.log_dir, "{}.log".format(self.test_name))
@@ -281,8 +281,7 @@ class SeleniumTest(object):
         return self.base_url
 
     def needDoc(self):
-        opt, _ = getSingleOption(["-d", "--doc"], self.params)
-        return opt
+        return self.args.doc
 
     def shutdown(self, exit_code=0):
         return exit_code

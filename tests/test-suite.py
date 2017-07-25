@@ -258,7 +258,7 @@ def main():
         if not base_url:
             raise TestSuiteError("Test site URL not specified, cannot continue. ")
 
-        tests = test_set_module.get_tests(base_url=base_url, browser_holder=browser_holder, params=sys.argv)
+        tests = test_set_module.get_tests(base_url=base_url, browser_holder=browser_holder, args=args)
 
         # save installer test
         installer_test = None
