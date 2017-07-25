@@ -148,13 +148,14 @@ def get_value(ele):
 
 class BrowserHolder(object):
 
-    def __init__(self, profile_path=None):
+    def __init__(self, profile_path=None, use_chrome=False):
         self.driver = None
         self.already_initialized = False
         self.profile_path = profile_path
+        self.use_chrome = use_chrome
 
     # lazy init
-    def init(self, use_chrome=False):
+    def init(self):
         with threading.Lock():
             # currently we have just one thread, but...
             if self.already_initialized:
@@ -162,7 +163,7 @@ class BrowserHolder(object):
                 return
 
             logging.info("Initializing browser")
-            if use_chrome:
+            if self.use_chrome:
                 self.driver = BrowserHolder.chrome_driver_instance()
             else:
                 self.driver = BrowserHolder.firefox_driver_instance(self.profile_path)
@@ -266,7 +267,7 @@ class SeleniumTest(object):
 
     def init(self):
         self.base_url = self.fixBaseUrl(self.getBaseUrl())
-        self.browser_holder.init(use_chrome=self.use_chrome())
+        self.browser_holder.init()
 
     def getName(self):
         return self.test_name
@@ -278,10 +279,6 @@ class SeleniumTest(object):
         if isVoid(self.base_url):
             self.failTest("Base URL for test '" + self.getName() + "' is not set. ")
         return self.base_url
-
-    def use_chrome(self):
-        chrome_flag, _ = getSingleOption(["-c", "--chrome"], self.params)
-        return chrome_flag
 
     def needDoc(self):
         opt, _ = getSingleOption(["-d", "--doc"], self.params)
