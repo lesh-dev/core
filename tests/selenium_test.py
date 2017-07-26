@@ -148,11 +148,11 @@ def get_value(ele):
 
 class BrowserHolder(object):
 
-    def __init__(self, profile_path=None, use_chrome=False):
+    def __init__(self, profile_path=None, engine="chrome"):
         self.driver = None
         self.already_initialized = False
         self.profile_path = profile_path
-        self.use_chrome = use_chrome
+        self.use_chrome = (engine == "chrome")
 
     # lazy init
     def init(self):

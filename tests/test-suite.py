@@ -105,6 +105,10 @@ def test_match_filter(file_name, test_instance, testFilter):
     return True
 
 
+_ENGINES = ["chrome", "firefox"]
+_ENGINES_STR = ", ".join("'" + engine + "'" for engine in _ENGINES)
+
+
 def parse_cmd_args():
     parser = argparse.ArgumentParser(description="Run test suite")
     parser.add_argument(
@@ -112,12 +116,6 @@ def parse_cmd_args():
         type=str,
         default="",
         help="Run specific test",
-    )
-    parser.add_argument(
-        "-p", "--profile-path",
-        type=str,
-        default=None,
-        help="Use given browser profile path (firefox-only)",
     )
 
     parser.add_argument(
@@ -177,10 +175,16 @@ def parse_cmd_args():
     )
 
     parser.add_argument(
-        "-c", "--chrome",
-        default=False,
-        action="store_true",
-        help="Use Google Chrome browser and chromedriver instead of Firefox",
+        "-e", "--engine",
+        default="chrome",
+        help="Browser engine to use. Valid options are: " + _ENGINES_STR + ", defaulting to " + _ENGINES[0],
+    )
+
+    parser.add_argument(
+        "-p", "--profile-path",
+        type=str,
+        default=None,
+        help="Use given browser profile path (firefox-only)",
     )
 
     return parser.parse_args()
@@ -208,9 +212,13 @@ def main():
     if args.test:
         logging.info("We are going to run just one test named %s", args.test)
 
+    if args.engine not in _ENGINES:
+        logging.error("Invalid browser engine specified: '%s', valid are %s", args.engine, _ENGINES_STR)
+        sys.exit(1)
+
     browser_holder = BrowserHolder(
         profile_path=args.profile_path,
-        use_chrome=args.chrome,
+        engine=args.engine,
     )
 
     base_url = args.url
