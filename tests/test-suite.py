@@ -192,41 +192,18 @@ def main():
     args = parse_cmd_args()
 
     logging.info("Starting test suite")
-    try:
-        if args.installer:
-            print "We'll perform installer test first. "
 
-        parse_cmd_args()
+    if args.installer:
+        logging.info("We'll perform installer test first")
 
-        # specTest, args = getOption(["-t", "--test"], args)
-        # profile_path, args = getOption(["-p", "--profile-path"], args)
-        # doShowHelp, args = getSingleOption(["-h", "--help"], args)
-        # testSet, args = getOption(["-s", "--set"], args)
-        # doList, args = getSingleOption(["-l", "--list"], args)
-        # doFullList, args = getSingleOption(["-f", "--full-list"], args)
-        # breakOnErrors, args = getSingleOption(["-b", "--break"], args)
-        # runVirtualDisplay, args = getSingleOption(["-v", "--virtual"], args)
-        if args.break_on_errors:
-            print "We'll break test suite on any test fail/fatal error. "
-
-        # test_args = [x for x in args if x.startswith("-")]
-        # rest_args = [x for x in args if not x.startswith("-")]
-
-    except CliParamError as exc:
-        print "Option syntax error: ", exc
-        showHelp()
-        sys.exit(1)
+    if args.break_on_errors:
+        logging.info("We'll break test suite on any test fail/fatal error")
 
     # last remaining argument is base test URL.
 
     if args.virtual:
         display = Display(visible=0, size=(1024, 768))
         display.start()
-
-    # TODO(mvel): remove it
-    # if doShowHelp:
-    #    showHelp()
-    #    sys.exit(1)
 
     if args.test:
         logging.info("We are going to run just one test named %s", args.test)

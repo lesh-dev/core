@@ -16,10 +16,6 @@ class BawError(RuntimeError):
     pass
 
 
-class CliParamError(BawError):
-    pass
-
-
 def fileBaseName(fileName):
     return os.path.basename(fileName)
 
