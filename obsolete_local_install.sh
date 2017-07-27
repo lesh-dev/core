@@ -122,30 +122,6 @@ function install_fresh_db()
     install_db_component $TEMP_DB "contest"
 }
 
-# Copy-pasted from testing.receipe with -w -> -r modification
-function xsm_clear_notifications()
-{
-    if [ -r "$DEST_DB" ] ; then
-        echo 'DELETE FROM notification;' | sudo sqlite3 "$DEST_DB"
-        message "Notifications table cleared successfully"
-    else
-        message_error "Database [ $DEST_DB ] not found, cannot clear notifications"
-    fi
-
-    mc="$FULL_DEST_CONT/cms/mailer.conf"
-    if [ -r "$mc" ] ; then
-        mail_test="vdm-photo@ya.ru"
-        cat > "$mc" <<EOF
-user-change:$mail_test
-content-change:$mail_test
-reg:$mail_test
-reg-managers:$mail_test
-EOF
-        message "Mailer config was reset to '$mail_test' address for each notification handler"
-    fi
-
-}
-
 # site root
 DEST="/var/www/vhosts/$DEST_NAME"
 
@@ -253,8 +229,6 @@ message "Versioning CSS"
 xcms_version_css "$DEST/engine_public"
 xcms_version_css "$DEST/fizlesh.ru-design"
 xcms_version_css "$DEST/lesh.org.ru-design"
-
-xsm_clear_notifications
 
 if [ -e $FULL_DEST_CONT/auth/usr/root.user ] ; then
     message "Changing root password to 'root'..."

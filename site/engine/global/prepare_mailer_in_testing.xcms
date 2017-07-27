@@ -1,0 +1,40 @@
+<?php
+
+global $SETTINGS;
+
+/**
+  * Special handler for purging notifications.
+  * Should be used for testing purposes only.
+  * but due to its non-destructiveness can be auth-free for a while.
+  **/
+
+header("Content-Type: text/plain; charset=utf-8\n\n");
+if (xcms_get_key_or($SETTINGS, "production"))
+{
+    echo "ERROR: This handler is DISABLED in PRODUCTION mode\n";
+    die();
+}
+
+require_once("${engine_dir}sys/db.php");
+require_once("${engine_dir}sys/mailer.php");
+
+// purge notifications
+$db = xdb_get_write();
+$del_query = "DELETE FROM notification";
+$db->query($del_query);
+echo "Notifications cleared OK\n";
+
+// Reset mailer configuration to test state
+$test_email = "dm.velt@yandex.ru";
+$mailer_test_config = array(
+    "user-change" => $test_email,
+    "content-change" => $test_email,
+    "reg" => $test_email,
+    "reg-managers" => $test_email,
+);
+$mailer_conf_path = xcms_get_mailer_conf_path();
+xcms_save_list($mailer_conf_path, $mailer_test_config);
+
+echo "Mailer config was reset to '$test_email' address for each notification handler\n";
+
+?>

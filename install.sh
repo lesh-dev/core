@@ -87,7 +87,14 @@ target_site="fizlesh.local"
 if [ "$mode" = "production" ] ; then
     target_site="fizlesh.ru"
 fi
-curl "http://$target_site/?ref=rebuild_aliases"
+
+if ! [ "$mode" = "production" ] ; then
+    print_message "Rebuilding aliases..."
+    curl "http://$target_site/?ref=rebuild_aliases"
+
+    print_message "Clear notifications and prepare mailer test configuration..."
+    curl "http://$target_site/?ref=prepare_mailer_in_testing"
+fi
 
 set +x
 
