@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+<?php
+
+require_once("${xengine_dir}sys/version.php");
+
+?><!DOCTYPE html>
 <html>
 <head>
     <# cms/head #>
@@ -120,10 +124,7 @@
                     <hr />
                     <div style="font-size: 8pt; text-align: center; height: 15px;">
                         <span>&copy; ФизЛЭШ, 2005&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
-                        <span class="site-version"><?php
-                            $xcms_version = xcms_get_list("INFO");
-                            echo xcms_get_key_or($xcms_version, 'version');
-                        ?></span>
+                        <span class="site-version">ttt<?php echo xcms_version(); ?></span>
                         <?php
                         if (xcms_is_production())
                         {?>

@@ -5,6 +5,20 @@
 
 . deploy-tools/installer/installer.sh
 
+
+function xcms_install_version_file() {
+    mode="$1"
+    if [ "$mode" = "production" ] ; then
+        sudo cp -a version $root/
+    else
+        version="$(cat version)-$(xcms_git_version)-local"
+        print_message "Set version: $version"
+        sudo bash -e <<EOF
+echo "$version" > $root/version
+EOF
+    fi
+}
+
 program_name="FizLesh"
 
 if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]] ; then
@@ -45,7 +59,6 @@ fi
 
 sudo mkdir -p $root
 sudo cp -a ./site/* $root/
-sudo cp -a version $root/
 
 if [ "$mode" = "production" ] ; then
     # in production we just use kosher content and set symlink to it
@@ -74,14 +87,15 @@ else
     fi
 fi
 
+print_message "Clearing cache"
+sudo rm -rf $root/.prec/*
+
 print_message "Creating cache directory"
 sudo mkdir -p $root/.prec
 sudo chmod 777 $root/.prec
-sudo chown -R $www_user $root
 
-xcms_version_css "$root" "engine_public"
-xcms_version_css "$root" "fizlesh.ru-design"
-xcms_version_css "$root" "lesh.org.ru-design"
+
+sudo chown -R $www_user $root
 
 target_site="fizlesh.local"
 if [ "$mode" = "production" ] ; then
@@ -95,6 +109,14 @@ if ! [ "$mode" = "production" ] ; then
     print_message "Clear notifications and prepare mailer test configuration..."
     curl "http://$target_site/?ref=prepare_mailer_in_testing"
 fi
+
+xcms_install_version_file
+
+
+# version css files after installation
+xcms_version_css "$root" "engine_public"
+xcms_version_css "$root" "fizlesh.ru-design"
+xcms_version_css "$root" "lesh.org.ru-design"
 
 set +x
 

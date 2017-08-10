@@ -1,6 +1,4 @@
 <?php
-    global $XCMS_VERSION;
-    if (xu_empty($XCMS_VERSION))
-        $XCMS_VERSION = trim(file_get_contents("version"));
-    echo "$XCMS_VERSION/";
+require_once("${xengine_dir}sys/version.php");
+echo xcms_version()."/";
 ?>
