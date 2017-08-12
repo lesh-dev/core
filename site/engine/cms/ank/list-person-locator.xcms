@@ -6,6 +6,8 @@
     $show_is_teacher = xcms_get_persistent_key("list-person-locator", "show_is_teacher");
     $show_is_student = xcms_get_persistent_key("list-person-locator", "show_is_student");
     $sort_by_class = xcms_get_persistent_key("list-person-locator", "sort_by_class");
+    $show_patronymic = xcms_get_persistent_key("list-person-locator", "show_patronymic");
+    $show_comments = xcms_get_persistent_key("list-person-locator", "show_comments");
 ?>
 <span style="position: relative; float: right;">
 <a href="#" id="show-status-help" class="popup-link">Легенда</a>
@@ -40,6 +42,10 @@
     ?><i> </i><span>Группировка:</span><?php
         xsm_checkbox('sort_by_class', $sort_by_class);
     ?><span class="ankListField">По классу</span><i>
+    </i><?php xsm_checkbox('show_patronymic', $show_patronymic);
+        ?><span class="ankListField">Отчества</span><i>
+    </i><?php xsm_checkbox('show_comments', $show_comments);
+        ?><span class="ankListField">Комментарии</span><i>
     </i><?php xcmst_submit("show-person", "Показать"); ?>
 </form>
 <script type="text/javascript">
@@ -47,14 +53,18 @@
 </script>
 <?php
 
-// вывод активных участников
+/**
+ * Print persons list by status group
+ **/
 function xsm_show_all_person_list()
 {
     global $show_department_id;
     global $show_anketa_status;
     global $show_is_teacher;
     global $show_is_student;
+    global $show_patronymic;
     global $sort_by_class;
+    global $show_comments;
 
     $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
 
@@ -155,8 +165,13 @@ function xsm_show_all_person_list()
             <col width="3%"/>
             <col width="30%" />
             <col width="10%" />
-            <col width="5%" />
-            <col width="55%" />
+            <col width="5%" /><?php
+            if ($show_comments) {?>
+            <col width="25%" />
+            <col width="30%" /><?php
+            } else {?>
+            <col width="55%" /><?php
+            }?>
             <col width="7%"/>
         </colgroup>
         <thead>
@@ -164,18 +179,52 @@ function xsm_show_all_person_list()
             <th class="ankList">Фамилия, имя</th>
             <th class="ankList">Отделение</th>
             <th class="ankList">Кл.</th>
-            <th class="ankList">Контакты</th>
+            <th class="ankList">Контакты</th><?php
+            if ($show_comments) {?>
+            <th class="ankList">Комментарий</th><?php
+            }?>
             <th class="ankList">Info</th>
         </thead>
     <?php
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
     {
         $person_id = htmlspecialchars($person["person_id"]);
+
+        $last_comments_html = "";
+        if ($show_comments)
+        {
+            $comment_query = "SELECT * FROM person_comment
+                WHERE
+                (blamed_person_id = $person_id)
+                AND (person_comment_deleted <> 'deleted')
+                AND (record_acl <> 'xsm-private')
+                ORDER BY person_comment_created DESC
+                LIMIT 2
+                ";
+
+            $comment_sel = $db->query($comment_query);
+            $person_comment = array();
+            while ($person_comment = $comment_sel->fetchArray(SQLITE3_ASSOC)) {
+                if ($last_comments_html)
+                    $last_comments_html .= "<br/><br/>";
+
+                $comment_html = rtrim(xcms_get_key_or_enc($person_comment, "comment_text"));
+                $aux_params = xcms_url(array("person_comment_id" => $person_comment["person_comment_id"], "blamed_person_id" => $person_id));
+                $last_comments_html .= xcms_html_wrap_by_crlf($comment_html);
+                $last_comments_html .= " ".xcms_link("edit-person_comment$aux_params", "edit", "Правка");
+            }
+            if ($last_comments_html)
+                $last_comments_html .= "<br/>";
+
+            $aux_params = xcms_url(array("person_comment_id" => XDB_NEW, "blamed_person_id" => $person_id));
+            $last_comments_html .= xcms_link("edit-person_comment$aux_params", "add", "Добавить комментарий");
+        }
+
         $department_id = $person["department_id"];
         $department_title = $departments[$department_id]["department_title"];
 
-        $fin = xsm_fin_enc($person);
-        $person_link = xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID, $fin);
+        $display_name = $show_patronymic ? xsm_fio_enc($person) : xsm_fin_enc($person);
+        $person_link = xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID, $display_name);
 
         $school = htmlspecialchars($person["school"]);
         $school_city = htmlspecialchars($person["school_city"]);
@@ -198,7 +247,10 @@ function xsm_show_all_person_list()
             <td class="ankList"><?php echo $person_link; ?></td>
             <td class="ankList <?php echo $dep_class; ?>"><?php echo $department_title; ?></td>
             <td class="ankList"><?php echo $current_class; ?></td>
-            <td class="ankList"><?php echo $contacts; ?></td>
+            <td class="ankList"><?php echo $contacts; ?></td><?php
+            if ($show_comments) {?>
+            <td class="ankList"><?php echo $last_comments_html; ?></td><?php
+            }?>
             <td class="ankList status-col"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php

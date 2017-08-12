@@ -2,15 +2,20 @@
 # -*- coding: utf8 -*-
 
 import sys
+import argparse
 import logging
 import collections
 
+# FIXME(mvel): imports style
 from selenium_test import RunTest, TestShutdown, BrowserHolder, decode_run_result
 import test_set_gen
 from test_set_gen import TestInfo
 
-from bawlib import getOption, getSingleOption, CliParamError, fileBaseName
+# FIXME(mvel): imports style
+from bawlib import fileBaseName
 from bawlib import configure_logger
+
+from pyvirtualdisplay import Display
 
 # TODO: remove
 import auto_test_set
@@ -44,6 +49,7 @@ ALL OPTIONS:
     -t, --test <test>         Run specific test instead of all suite
     -b, --break               Break test suite on errors
     -p, --profile-path <path> Use given browser profile path (firefox only)
+    -v, --virtual             Uses pyvirtualdisplay display
 
 TEST OPTIONS could be test-dependent. Commonly supported options are:
     -c, --chrome           Use Google Chrome browser instead of Firefox
@@ -99,59 +105,128 @@ def test_match_filter(file_name, test_instance, testFilter):
     return True
 
 
+_ENGINES = ["chrome", "firefox"]
+_ENGINES_STR = ", ".join("'" + engine + "'" for engine in _ENGINES)
+
+
+def parse_cmd_args():
+    parser = argparse.ArgumentParser(description="Run test suite")
+    parser.add_argument(
+        "-t", "--test",
+        type=str,
+        default="",
+        help="Run specific test",
+    )
+
+    parser.add_argument(
+        "-s", "--test-set",
+        type=str,
+        default="",
+        help="Specify test set to run (instead of default auto_test_set.py)",
+    )
+
+    parser.add_argument(
+        "-u", "--url",
+        type=str,
+        default="fizlesh.local",
+        help="Site to test (fizlesh.local by default)",
+    )
+
+    parser.add_argument(
+        "-i", "--installer",
+        default=False,
+        action="store_true",
+        help="Run installer test first",
+    )
+
+    parser.add_argument(
+        "-l", "--list",
+        default=False,
+        action="store_true",
+        help="List all tests in test set",
+    )
+
+    parser.add_argument(
+        "-f", "--full-list",
+        default=False,
+        action="store_true",
+        help="Print all tests in test set with descriptions",
+    )
+
+    parser.add_argument(
+        "-b", "--break-on-errors",
+        default=False,
+        action="store_true",
+        help="Break test suite on errors",
+    )
+
+    parser.add_argument(
+        "-v", "--virtual",
+        default=False,
+        action="store_true",
+        help="Use pyvirtualdisplay display (for headless runs)",
+    )
+
+    parser.add_argument(
+        "-d", "--doc",
+        default=False,
+        action="store_true",
+        help="Print test documentation",
+    )
+
+    parser.add_argument(
+        "-e", "--engine",
+        default="chrome",
+        help="Browser engine to use. Valid options are: " + _ENGINES_STR + ", defaulting to " + _ENGINES[0],
+    )
+
+    parser.add_argument(
+        "-p", "--profile-path",
+        type=str,
+        default=None,
+        help="Use given browser profile path (firefox-only)",
+    )
+
+    return parser.parse_args()
+
+
 def main():
     configure_logger()
 
-    args = sys.argv[1:]  # exclude program name
+    args = parse_cmd_args()
 
     logging.info("Starting test suite")
-    try:
-        doInstallerTest, args = getSingleOption(["-i", "--installer"], args)
-        if doInstallerTest:
-            print "We'll perform installer test first. "
 
-        specTest, args = getOption(["-t", "--test"], args)
-        profile_path, args = getOption(["-p", "--profile-path"], args)
-        doShowHelp, args = getSingleOption(["-h", "--help"], args)
-        testSet, args = getOption(["-s", "--set"], args)
-        doList, args = getSingleOption(["-l", "--list"], args)
-        doFullList, args = getSingleOption(["-f", "--full-list"], args)
-        breakOnErrors, args = getSingleOption(["-b", "--break"], args)
-        if breakOnErrors:
-            print "We'll break test suite on any test fail/fatal error. "
+    if args.installer:
+        logging.info("We'll perform installer test first")
 
-        test_args = [x for x in args if x.startswith("-")]
-        rest_args = [x for x in args if not x.startswith("-")]
-
-    except CliParamError as exc:
-        print "Option syntax error: ", exc
-        showHelp()
-        sys.exit(1)
+    if args.break_on_errors:
+        logging.info("We'll break test suite on any test fail/fatal error")
 
     # last remaining argument is base test URL.
 
-    if doShowHelp:
-        showHelp()
+    if args.virtual:
+        display = Display(visible=0, size=(1024, 768))
+        display.start()
+
+    if args.test:
+        logging.info("We are going to run just one test named %s", args.test)
+
+    if args.engine not in _ENGINES:
+        logging.error("Invalid browser engine specified: '%s', valid are %s", args.engine, _ENGINES_STR)
         sys.exit(1)
 
-    if specTest:
-        print "We are going to run just one test named like '" + specTest + "'. "
+    browser_holder = BrowserHolder(
+        profile_path=args.profile_path,
+        engine=args.engine,
+    )
 
-    browser_holder = BrowserHolder(profile_path=profile_path)
-
-    base_url = None
-    if rest_args:
-        base_url = rest_args.pop(0)
-
-    if rest_args:
-        print "Error: trailing parameters detected: ", rest_args
-        showHelp()
-        sys.exit(1)
+    base_url = args.url
 
     tests_module_name = "auto_test_set"
 
-    if testSet:
-        tests_module_name = testSet.replace(".py", "")
+    if args.test_set:
+        tests_module_name = args.test_set.replace(".py", "")
 
     try:
         test_stats = {}
@@ -168,7 +243,7 @@ def main():
         if not base_url:
             raise TestSuiteError("Test site URL not specified, cannot continue. ")
 
-        tests = test_set_module.get_tests(base_url=base_url, browser_holder=browser_holder, params=test_args)
+        tests = test_set_module.get_tests(base_url=base_url, browser_holder=browser_holder, args=args)
 
         # save installer test
         installer_test = None
@@ -177,11 +252,11 @@ def main():
 
         failed_tests = []
 
-        tests = [x for x in tests if test_match_filter(*x, testFilter=specTest)]
-        if specTest and not tests:
+        tests = [x for x in tests if test_match_filter(*x, testFilter=args.test)]
+        if args.test and not tests:
             raise TestSuiteError("Specified test was not found in test suite. ")
 
-        if doInstallerTest:
+        if args.installer:
             tests.insert(0, installer_test)
 
         # init detailed stats
@@ -193,9 +268,9 @@ def main():
 
         while tests:
             file_name, test = tests.pop(0)
-            if doList:
+            if args.list:
                 print file_name, test.getName()
-            elif doFullList:
+            elif args.full_list:
                 print "=" * 30
                 print test.getName()
                 print test.getDoc()
@@ -220,10 +295,10 @@ def main():
                 if result == 3:
                     print "User interrupt, stopping test suite."
                     break
-                if breakOnErrors and result == 2:
+                if args.break_on_errors and result == 2:
                     print "Fatal error detected, stopping test suite."
                     break
-                if breakOnErrors and result == 1:
+                if args.break_on_errors and result == 1:
                     print "Test error detected, stopping test suite."
                     break
 

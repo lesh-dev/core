@@ -51,22 +51,22 @@ class XcmsContestSubmitWorkFromSite(xtest_common.XcmsTest):
     def run(self):
         self.ensure_logged_off()
 
-        # send empty form
+        logging.info("send empty form")
         self._test_work_submit(file_size=-1, need_success=False, fill_work=False)
 
-        # send non-existent file
+        logging.info("send non-existent file")
         self._test_work_submit(file_size=-1, need_success=False)
 
-        # send small file
+        logging.info("send small file")
         self._test_work_submit(file_size=10, need_success=False)
 
-        # send large file
+        logging.info("send large file")
         self._test_work_submit(file_size=25*1000*1000, need_success=False)
 
         # send very large file (does not work)
         # self._test_work_submit(file_size=80*1000*1000, need_success=False)
 
-        # Finally send normal file
+        logging.info("Finally send normal file")
         self._test_work_submit(file_size=2*1000*1000, need_success=True)
 
         # Send a link

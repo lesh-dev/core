@@ -217,6 +217,10 @@ class XcmsTestWithConfig(XcmsBaseTest):
         return self.m_conf.getAdminLogin()
 
     def getAdminPass(self):
+        if "test.fizlesh.ru" in self.base_url:
+            with open("root_password", 'r') as f:
+                passwd = f.readline()
+            return passwd
         return self.m_conf.getAdminPass()
 
     def performLogout(self):
@@ -267,7 +271,7 @@ class XcmsTest(XcmsTestWithConfig):
         super(XcmsTest, self).init()
         self.assert_no_installer_page()
 
-    def createNewUser(self, login, email, password, name, aux_params=None):
+    """def createNewUser(self, login, email, password, name, aux_params=None):
         user_aux_params = aux_params or []
         logging.info(
             "createNewUser(login: '%s', email: '%s', password: '%s', name: '%s')", login, email, password, name
@@ -341,7 +345,7 @@ class XcmsTest(XcmsTestWithConfig):
         if "do_not_logout_admin" not in user_aux_params:
             self.performLogout()
 
-        return inp_login, inpEMail, inpPass, inpName
+        return inp_login, inpEMail, inpPass, inpName"""
 
     def removePreviousUsersWithTestEmail(self, emailToDelete):
         self.performLoginAsAdmin()
@@ -411,17 +415,6 @@ class XcmsTest(XcmsTestWithConfig):
 
     def assertSitePageHeader(self, header, reason="Page header does not match expected. "):
         self.assertElementTextById("content-header", header, reason=reason)
-
-    def addCommentToPerson(self):
-        self.gotoUrlByLinkText(u"Добавить комментарий")
-        commentText = random_crap.random_text(40) + "\n" + random_crap.random_text(50) + "\n" + random_crap.random_text(30)
-
-        commentText = self.fillElementByName("comment_text", commentText)
-
-        self.clickElementByName("update-person_comment")
-        self.assertBodyTextPresent(u"Комментарий успешно сохранён")
-        self.goto_back_to_anketa_view()
-        return commentText
 
     def editCommentToPerson(self, commentLinkId):
         self.gotoUrlByLinkId(commentLinkId)

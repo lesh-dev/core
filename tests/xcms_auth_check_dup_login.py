@@ -4,6 +4,7 @@
 import xtest_common
 import random_crap
 import user
+import logging
 
 
 class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
@@ -41,7 +42,7 @@ class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
             validate=False,
         )
 
-        self.assertBodyTextNotPresent(u"Пользователь '" + u1.login + u"' успешно создан")
+        self.assertBodyTextNotPresent(u"Пользователь '" + inp_login + u"' успешно создан")
 
         self.performLogout()
 
@@ -52,6 +53,6 @@ class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
         # logout self
         self.performLogout()
 
-        print "try logging as created second user. "
-        if self.performLogin(u1.login, u2.password):
+        logging.info("try logging as created second user.")
+        if self.performLogin(u2.login, u2.password):
             self.failTest("I am able to login as 'second' user with duplicate login and new password. ")

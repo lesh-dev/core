@@ -1,0 +1,60 @@
+2017-07-26 08:13:48,459 INFO     PROGRESS: Done 54 of 54 tests, 4 failed
+===== TEST SUITE DETAILED STATS: =====
+  xcms_auth_add_new_user.XcmsAuthAddNewUser: PASSED
+    xcms_auth_cabinet_email_change.XcmsAuthCabinetEmailChange: PASSED
+      xcms_auth_change_user_by_admin.XcmsAuthChangeUserByAdmin: PASSED
+        xcms_auth_check_dup_email.XcmsAuthCheckDupEmail: PASSED
+          xcms_auth_check_dup_login.XcmsAuthCheckDupLogin: PASSED
+            xcms_auth_forgot_password.XcmsAuthForgotPassword: PASSED
+              xcms_auth_root_login.XcmsAuthRootLogin: PASSED
+                xcms_auth_set_dup_email_by_admin.XcmsAuthSetDuplicateEmailByAdmin: PASSED
+                  xcms_auth_strange_usernames.XcmsAuthStrangeUsernames: PASSED
+                    xcms_content_add_page.XcmsContentAddPage: FAILED
+                      xcms_content_auth_only_page.XcmsContentAuthOnlyPage: PASSED
+                        xcms_content_bad_path_page.XcmsContentBadPathPage: PASSED
+                          xcms_content_comment_processing.XcmsContentCommentProcessing: PASSED
+                            xcms_content_contlists.XcmsContentContlist: PASSED
+                              xcms_content_dollar_plugin.XcmsContentDollarPlugin: PASSED
+                                xcms_content_hidden_page.XcmsContentHiddenPage: PASSED
+                                  xcms_content_nested_aliases.XcmsContentNestedAliases: PASSED
+                                    xcms_content_nested_path.XcmsContentNestedPathPage: PASSED
+                                      xcms_content_page_attachment.XcmsContentPageAttachment: PASSED
+                                        xcms_content_page_order.XcmsContentPageOrder: PASSED
+                                          xcms_content_remove_page.XcmsContentRemovePage: PASSED
+                                            xcms_content_special_chars_page.XcmsContentSpecialCharsPage: PASSED
+                                              xcms_content_top_level_page.XcmsContentTopLevelPage: PASSED
+                                                xcms_contest_submit_work.XcmsContestSubmitWork: PASSED
+                                                  xcms_contest_submit_work_from_site.XcmsContestSubmitWorkFromSite: PASSED
+                                                    xcms_download_lectures.XcmsDownloadLectures: PASSED
+                                                      xcms_mailer_test_mailru.XcmsMailerTestMailRu: PASSED
+                                                        xcms_metrics_check.XcmsMetricsCheck: PASSED
+                                                          xcms_open_non_existing.XcmsOpenNonExisting: PASSED
+                                                            xcms_password_check.XcmsPasswordChecker: PASSED
+                                                              xcms_site_open_all_pages.XcmsSiteOpenAllPages: FAILED
+                                                                xcms_site_open_renamed_pages.XcmsSiteOpenRenamedPages: FAILED
+                                                                  xcms_unittests.XcmsUnitTests: PASSED
+                                                                    xcms_version_check.XcmsVersionCheck: FAILED
+                                                                      xcms_warnings.XcmsWarnTest: PASSED
+                                                                        xcms_xsm_add_courses.XcmsXsmAddCourses: PASSED
+                                                                          xcms_xsm_add_exams.XcmsXsmAddExams: PASSED
+                                                                            xcms_xsm_add_person_to_school.XcmsXsmAddPersonToSchool: PASSED
+                                                                              xcms_xsm_add_school.XcmsXsmAddSchool: PASSED
+                                                                                xcms_xsm_anketa_dup_stress.XcmsXsmAnketaDupStress: PASSED
+                                                                                  xcms_xsm_anketa_duplicate.XcmsXsmAnketaDuplicate: PASSED
+                                                                                    xcms_xsm_anketa_edit.XcmsXsmAnketaEdit: PASSED
+                                                                                      xcms_xsm_anketa_fill.XcmsXsmAnketaFill: PASSED
+                                                                                        xcms_xsm_anketa_wrong_fill.XcmsXsmAnketaWrongFill: PASSED
+                                                                                          xcms_xsm_avatar.XcmsXsmAvatar: PASSED
+                                                                                            xcms_xsm_change_status_quick.XcmsXsmChangeStatusQuick: PASSED
+                                                                                              xcms_xsm_clear_forest_status.XcmsXsmClearForestStatus: PASSED
+                                                                                                xcms_xsm_course_mult_teachers.XcmsXsmCourseWithMultipleTeachers: PASSED
+                                                                                                  xcms_xsm_course_without_lecturer.XcmsXsmCourseWithoutLecturer: PASSED
+                                                                                                    xcms_xsm_hack_person_link.XcmsXsmHackPersonLink: PASSED
+                                                                                                      xcms_xsm_inplace_edit.XcmsXsmInplaceEdit: PASSED
+                                                                                                        xcms_xsm_link_user_profile.XcmsXsmLinkUserProfile: PASSED
+                                                                                                          xcms_xsm_list_filters.XcmsXsmListFilters: PASSED
+                                                                                                            xcms_xsm_phones.XcmsXsmPhones: PASSED
+                                                                                                            ===== TEST SUITE OVERALL STATS: =====
+                                                                                                            PASSED: 50 tests
+                                                                                                            FAILED: 4 tests
+

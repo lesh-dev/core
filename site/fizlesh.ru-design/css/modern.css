@@ -603,6 +603,27 @@ div.top-links a:hover {
     color: #fff;
 }
 
+/* contest parts */
+table.contest-results {
+    border: 1px solid #7f7f7f;
+    border-collapse: collapse;
+}
+
+table.contest-results th {
+    font-weight: bold;
+    border: 1px solid #7f7f7f;
+    padding: 3px 5px 3px 5px;
+}
+
+table.contest-results td {
+    padding: 3px 5px 3px 5px;
+    border: 1px solid #7f7f7f;
+}
+
+table.contest-results td.sum {
+    text-align: center;
+}
+
 /* cms parts */
 a.content-edit,
 a.contlist-edit {

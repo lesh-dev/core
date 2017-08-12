@@ -34,7 +34,7 @@ function xcms_version_css()
     if ! [ -d "$css_root_dir" ] ; then
         return 0
     fi
-    version="$( cat VERSION | sed -e 's/[^0-9.]//g' )"
+    version="$( cat version | sed -e 's/[^0-9.]//g' )"
     print_message "    Processing '$css_root_dir'..."
 
     (
@@ -64,7 +64,7 @@ function hook_end
     rc_date="$( sym_suffix_to_date )"
     echo "rc-date : $rc_date" >> INFO
     # echo "branch  : $branch " >> INFO
-    echo "version : $branch-$(cat VERSION) rev. $git_revision" >> INFO
+    echo "version : $branch-$(cat version) rev. $git_revision" >> INFO
     mv install.nt.php install.php
     prod_settings="$clone_root/production/settings.php"
     if [ -r "$prod_settings" ] ; then

@@ -1,0 +1,33 @@
+Ошибка #1001
+
+« Previous | 2 of 32 | Next »
+Отломали старый ключ -p у тестов
+Added by Mikhail Veltishchev 23 days ago.
+
+Status:
+Новая
+Priority:
+Высокий
+Assignee:
+Natasha Skrobova
+Category:
+-
+Target version:
+-
+Start date:
+06/28/2017
+Due date:
+% Done:
+0%
+Resolution:
+Quote
+Description
+
+Сабж, был такой режим работы теста, когда окно не закрывалось после падения тестов. Было удобно. Отломали, теперь -p делает совсем другое. Не айс.
+
+Add
+Subtasks
+
+Add
+Related issues
+

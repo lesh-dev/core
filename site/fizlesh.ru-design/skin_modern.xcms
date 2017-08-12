@@ -1,4 +1,5 @@
 <?php
+require_once("${xengine_dir}sys/version.php");
 require_once("${design_dir}modern_links.php");
 require_once("${design_dir}modern_contacts.php");
 ?><!DOCTYPE html>
@@ -59,7 +60,7 @@ require_once("${design_dir}modern_contacts.php");
             if (
                 $page_alias == "contacts" ||
                 $page_alias == "links" ||
-                xu_startswith($page_alias, "news")
+                $page_alias == "news"
             ) {
                 $wrapper_css_class = "transparent-wrapper";
             }
@@ -237,10 +238,7 @@ require_once("${design_dir}modern_contacts.php");
                     <hr />
                     <div style="font-size: 8pt; text-align: center; height: 15px;">
                         <span>&copy; ФизЛЭШ, 2005&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
-                        <span class="site-version"><?php
-                            $xcms_version = xcms_get_list("INFO");
-                            echo xcms_get_key_or($xcms_version, 'version');
-                        ?></span>
+                        <span class="site-version"><?php echo xcms_version(); ?></span>
                         <?php
                         if (xcms_is_production())
                         {?>

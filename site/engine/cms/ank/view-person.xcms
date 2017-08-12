@@ -161,14 +161,12 @@ function xsm_print_person_header($db, $person, $school_id)
 function xsm_print_person_schools($db, $person, $current_school_id)
 {
     $person_id = $person['person_id'];
-    $school_count = 0;
-    $max_school_count = XSM_SCHOOL_COUNT;
     $query = "SELECT s.school_id, s.school_title, ps.member_person_id
         FROM school s
         LEFT JOIN person_school ps
         ON (s.school_id = ps.school_id) AND (ps.member_person_id = '$person_id')
         ORDER BY school_date_start DESC";
-    $school_sel = $db->query($query);
+    $separated_schools = xsm_get_separated_schools($db, $query, $current_school_id);
     $active_ank = (XSM_SCHOOL_ANK_ID == $current_school_id) ? 'current' : '';
     ?>
     <table class="ankList table table-bordered"><tr>
@@ -180,18 +178,8 @@ function xsm_print_person_schools($db, $person, $current_school_id)
             </div>
         </td>
         <?php
-        $shown_schools = array();
-        $older_schools = array();
-        while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
-        {
-            ++$school_count;
-            if ($school_count <= XSM_SCHOOL_COUNT)
-                $shown_schools[] = $school;
-            else
-                $older_schools[] = $school;
-        }
 
-        foreach ($shown_schools as $school)
+        foreach ($separated_schools["shown_schools"] as $school)
         {
             $school_id = $school['school_id'];
             $title = xcms_get_key_or_enc($school, 'school_title');
@@ -214,7 +202,7 @@ function xsm_print_person_schools($db, $person, $current_school_id)
         <td class="school-selection" style="padding: 4px 8px">
             <select name="view-school" id="view-school-selector" style="padding: 0px; margin: 0px;">
             <?php
-            foreach ($older_schools as $school)
+            foreach ($separated_schools["older_schools"] as $school)
             {
                 $school_id = $school['school_id'];
                 $title = xcms_get_key_or_enc($school, 'school_title');
@@ -240,6 +228,10 @@ function xsm_draw_person_comments($db, $person_id)
     <div style="height: 10px;"></div><?php
     xsm_view_operations('person_comment', 'комментарий', "&amp;blamed_person_id=$person_id");
 
+    // Админы и привилегированные могут видеть скрытые комментарии
+    $xsm_private = xcms_user()->check_rights("xsm-private", false);
+    $xsm_admin = xcms_user()->check_rights("admin", false);
+
     $query = "SELECT * FROM person_comment
         WHERE
         (blamed_person_id = $person_id)
@@ -252,24 +244,34 @@ function xsm_draw_person_comments($db, $person_id)
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
             <col width="10%" />
-            <col width="75%" />
+            <col width="70%" />
+            <col width="80px" />
             <col width="105px" />
             <col width="55" />
         </colgroup>
         <thead>
             <th class="ankList">Автор</th>
             <th class="ankList">Текст</th>
+            <th class="ankList">Школа</th>
             <th class="ankList">Дата</th>
-            <th class="ankList">&nbsp;</th>
+            <th class="ankList">Операции</th>
         </thead>
     <?php
     $comment_num = 0; // for auto-testing purposes (#525)
     while ($comment_data = $comment_sel->fetchArray(SQLITE3_ASSOC)) {?>
         <?php
 
-        $comment_id = htmlspecialchars($comment_data["person_comment_id"]);
-        $owner_login = htmlspecialchars($comment_data["owner_login"]);
+        $comment_id = xcms_get_key_or_enc($comment_data, "person_comment_id");
+        $owner_login = xcms_get_key_or_enc($comment_data, "owner_login");
+        $record_acl = xcms_get_key_or_enc($comment_data, "record_acl");
+        $school_id = xcms_get_key_or_enc($comment_data, "school_id");
         $comment_text = xcms_html_wrap_by_crlf(xsm_highlight_links($comment_data["comment_text"]));
+
+        if ($record_acl == "xsm-private" && !$xsm_private && !$xsm_admin)
+        {
+            $comment_text = "(Конфиденциальный комментарий. Для просмотра обратитесь к Директорату)";
+        }
+
         $person_comment_created = xsm_ymdhm($comment_data["person_comment_created"]);
         $person_comment_modified = xsm_ymdhm($comment_data["person_comment_modified"]);
         $comment_num++;
@@ -277,9 +279,19 @@ function xsm_draw_person_comments($db, $person_id)
         <tr>
             <td class="ankList"><?php echo $owner_login; ?></td>
             <td class="ankList"><?php echo $comment_text; ?></td>
+            <td class="ankList"><?php echo $school_id; ?></td>
             <td class="ankList"><?php echo $person_comment_created; ?></td>
-            <td class="ankList"><a href="edit-person_comment&amp;person_comment_id=<?php echo $comment_id; ?>"
-                id="comment-edit-<?php echo $comment_num; ?>">Правка</a></td>
+            <td class="ankList"><?php
+                if ($record_acl == "xsm-private" && !$xsm_private && !$xsm_admin)
+                {?>
+                    (Запрещено)
+                <?php
+                }
+                else
+                {?>
+                    <a href="edit-person_comment&amp;person_comment_id=<?php echo $comment_id; ?>"
+                        id="comment-edit-<?php echo $comment_num; ?>">Правка</a><?php
+                }?></td>
         </tr><?php
         }
     ?>

@@ -1,0 +1,39 @@
+Ошибка #1002
+
+« Previous | 1 of 32 | Next »
+Если база в RO, то при редактировании enum-ов через dblclick мы получим странное
+Added by Mikhail Veltishchev 23 days ago.
+
+Status:
+Новая
+Priority:
+Нормальный
+Assignee:
+Mikhail Veltishchev
+Category:
+-
+Target version:
+-
+Start date:
+06/28/2017
+Due date:
+% Done:
+0%
+Resolution:
+Quote
+Description
+
+Сабж, а именно:
+1) нет ошибки, хотя в базу мы ничего записать не шмогли
+2) В UI создаётся ощущение, что значение поменялось, но на самом деле нет.
+
+HTR:
+
+sudo chmod 444 /var/www/vhosts/fizlesh.ru/content/ank/fizlesh.sqlite3
+Add
+Subtasks
+
+Add
+Related issues
+
+

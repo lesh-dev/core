@@ -4,7 +4,59 @@ require_once("${engine_dir}xsm/diff.php");
 require_once("${engine_dir}cms/ank/edit-format.php");
 require_once("${engine_dir}cms/ank/person_school.php");
 require_once("${engine_dir}cms/ank/department.php");
-require_once("${engine_dir}cms/ank/person_school.php");
+
+
+function xsm_output_person_list($person_select) {
+    ?>
+    <table class="ankList table table-bordered table-hover table-condensed">
+        <colgroup>
+            <col width="10%">
+            <col width="5%">
+            <col width="5%">
+            <col width="25%">
+        </colgroup>
+        <thead>
+        <th class="ankList">Фамилия, имя</th>
+        <th class="ankList">Кл.</th>
+        <th class="ankList">ДР</th>
+        <th class="ankList">Контакты</th>
+        </thead>
+        <?php
+        while ($person = $person_select->fetchArray(SQLITE3_ASSOC))
+        {
+            $person_id = htmlspecialchars($person["person_id"]);
+
+            $fin = xsm_fin_enc($person);
+            $fio = xsm_fio_enc($person);
+
+            $current_class = xsm_class_num(xcms_get_key_or_enc($person, "current_class"));
+
+            $birth_date = xcms_get_key_or_enc($person, "birth_date");
+            $birth_date = str_replace(".07.", "<b>.07.</b>", $birth_date);
+            $birth_date = str_replace(".08.", "<b>.08.</b>", $birth_date);
+
+            $contacts = xsm_contacts_for_list($person);
+            $person_url = "view-person".xcms_url(array(
+                    'person_id' => $person_id));
+
+            ?>
+            <tr class="">
+                <td class="ankList">
+                    <a name="<?php echo "person$person_id"; ?>"></a>
+                    <a href="<?php echo $person_url; ?>" title="<?php echo $fio; ?>">
+                        <?php echo $fin; ?>
+                    </a>
+                </td>
+                <td class="ankList"><span class="class-current-num" title="Текущий класс"><?php echo $current_class; ?></span></td>
+                <td class="ankList"><?php echo $birth_date; ?></td>
+                <td class="ankList"><?php echo $contacts; ?></td>
+            </tr>
+            <?php
+        }
+        ?>
+    </table>
+    <?php
+}
 
 
 function xsm_notify_person_edit($person, $old_person)
@@ -117,13 +169,7 @@ if (@$_POST["update-person"])
     else {
         $person_id = $_POST["person_id"];
         $school_id = $_POST["school_id"];
-        if ($person_id == XDB_NEW)
-        {
-            ?>
-            <p>
-                new person
-            </p>
-            <?php
+        if ($person_id == XDB_NEW) {
             $first_name = $_POST["first_name"];
             $last_name = $_POST["last_name"];
 
@@ -134,80 +180,102 @@ if (@$_POST["update-person"])
             $name_filter .= $last_name;
             $name_filter .= "')";
 
-            $query =
+            $in_this_school_query =
                 "SELECT
                 p.person_id,
                 p.last_name, p.first_name, p.patronymic, p.nick_name,
                 p.birth_date,
-                p.current_class as p_current_class,
+                p.current_class AS p_current_class,
                 p.phone, p.cellular,
                 p.email, p.skype, p.social_profile,
                 p.person_created, p.person_modified,
                 ps.curatorship, ps.is_teacher, ps.is_student,
-                ps.current_class as ps_current_class,
+                ps.current_class AS ps_current_class,
                 ps.curator_group,
                 ps.person_school_comment,
                 ps.courses_needed
                 FROM person p, person_school ps
                 WHERE (ps.member_person_id == p.person_id)";
 
-            $query .= " AND ";
-            $query .= $name_filter;
-
-            $school_query = $query;
-            $n_school_query = $query;
-            $school_query .= " AND (ps.school_id == $school_id)";
-            $n_school_query .= " AND (NOT (ps.school_id == $school_id))";
-
+            $in_this_school_query .= " AND ";
+            $in_this_school_query .= $name_filter;
+            $in_this_school_query .= " AND (ps.school_id == $school_id)";
+            $sort_by_class = xcms_get_persistent_key("list-person", "sort_by_class");
+            $sort_by_curator_group = xcms_get_persistent_key("list-person", "sort_by_curator_group");
             $class_order = xcms_checkbox_enabled($sort_by_class) ? " CAST(ps.current_class AS INT), " : "";
             $cg_order = xcms_checkbox_enabled($sort_by_curator_group) ? " ps.curator_group, " : "";
-            $school_query .= " ORDER BY NOT (ps.is_student IS NOT NULL AND LENGTH(ps.is_student) > 0), $cg_order $class_order p.last_name, p.first_name";
-            $n_school_query .= " ORDER BY NOT (ps.is_student IS NOT NULL AND LENGTH(ps.is_student) > 0), $cg_order $class_order p.last_name, p.first_name";
+            $in_this_school_query .= " ORDER BY NOT (ps.is_student IS NOT NULL AND LENGTH(ps.is_student) > 0), $cg_order $class_order p.last_name, p.first_name";
+            xdb_debug_area($in_this_school_query, XDB_DEBUG_AREA_DISABLED);
+            $in_this_school_sel = $db->query($in_this_school_query);
+            $in_this_school_count = query_length($in_this_school_sel);
 
 
-            xdb_debug_area($school_query, XDB_DEBUG_AREA_DISABLED);
-            xdb_debug_area($n_school_query, XDB_DEBUG_AREA_DISABLED);
-            $school_person_sel = $db->query($school_query);
-            $n_school_person_sel = $db->query($n_school_query);
-            $s_count = query_length($school_person_sel);
-            $n_count = query_length($n_school_person_sel);
+            $not_in_this_school_query =
+                "SELECT
+                p.person_id,
+                p.last_name, p.first_name, p.patronymic, p.nick_name,
+                p.birth_date,
+                p.current_class,
+                p.phone, p.cellular,
+                p.email, p.skype, p.social_profile,
+                p.person_created, p.person_modified
+                FROM person p WHERE $name_filter AND
+                NOT EXISTS (
+                SELECT * FROM person_school ps WHERE 
+                (ps.member_person_id == p.person_id) AND (ps.school_id == $school_id))
+                ";
+            xdb_debug_area($not_in_this_school_query, XDB_DEBUG_AREA_DISABLED);
+            $not_in_this_school_sel = $db->query($not_in_this_school_query);
+            $not_in_this_school_count = query_length($not_in_this_school_sel);
 
-            if ($s_count > 0)
-            {
+            if ($in_this_school_count > 0) {
                 ?>
                 <p>
                     Люди с такими именем и фамилией уже зачислены на эту школу.
                 </p>
                 <?php
-                xsm_output_list($school_person_sel, $school_id);
+                xsm_output_school_participants_list($in_this_school_sel, $school_id);
             }
-            if ($n_count > 0)
-            {
+            if ($not_in_this_school_count > 0) {
                 ?>
                 <p>
-                    Люди с такими именем и фамилией уже есть в базе и не зачислены на школу. Проверьте, возможно вы хотели добавить одного из этих
+                    Люди с такими именем и фамилией уже есть в базе и не зачислены на школу. Проверьте, возможно вы
+                    хотели добавить одного из этих
                     людей:
                 </p>
                 <?php
-                xsm_output_list($n_school_person_sel, $school_id);
+                xsm_output_person_list($not_in_this_school_sel);
                 ?>
                 <a class="link-button ank btn" href="add-person_school&school_id=<?php
                 echo $school_id
                 ?>">Зачислить существующего участника</a>
                 <?php
             }
-            if ($n_count == 0 && $s_count == 0)
-            {
+            if ($not_in_this_school_count == 0 && $in_this_school_count == 0) {
                 $person_id = XDB_APPROVED_NEW;
+            } else {
+                ?>
+                <div>
+                    <form method="post" action="edit-person">
+                        <?php
+                        foreach ($_POST as $key_name => $value)
+                            if ($key_name != "person_id" and $key_name != "update-person")
+                                xcmst_hidden($key_name, $value);
+                        xcmst_hidden("person_id", XDB_APPROVED_NEW);
+                        xcmst_submit("update-person", "Это таки новый человек. Добавить.", "Добавить", "link-button ank btn");
+                        ?>
+                    </form>
+                </div>
+                <p>
+                    Вернуться к просмотру школы <?php echo xsm_person_list_link($school_id); ?>
+                </p>
+                <?php
             }
         }
         if ($person_id == XDB_APPROVED_NEW)
         {
-            ?>
-            <p>
-                approved new person
-            </p>
-            <?php
+            $person_id = XDB_NEW;
+            $_POST["person_id"] = $person_id;
             $old_person = array();
             $result = xsm_update_entity_listmode('person', 'Участник', xsm_get_fields("person"), '', 'участника');
             $person_id = $result;
@@ -218,12 +286,8 @@ if (@$_POST["update-person"])
             xsm_notify_person_edit($_POST, $old_person);
         }
         else if ($person_id != XDB_NEW) {
-            ?>
-            <p>
-                registered person
-            </p>
-            <?php
             $old_person = xdb_get_entity_by_id('person', $person_id);
+            xsm_update_entity_listmode('person', 'Участник', xsm_get_fields("person"), '', 'участника');
             if ($school_id != XDB_INVALID_ID) {
                 xsm_add_person_to_school($school_id, $person_id);
             }

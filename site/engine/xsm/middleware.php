@@ -121,30 +121,84 @@ function xsm_get_all_course_info($db, $school_id)
     return $courses;
 }
 
+
+function xsm_get_separated_schools($db, $query, $current_school_id)
+{
+    $school_sel = $db->query($query);
+    $shown_schools = array();
+    $older_schools = array();
+    $is_current_school_visible = false;
+    $current_school = false;
+    while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        if ($school["school_id"] == $current_school_id)
+            $current_school = $school;
+
+        if (count($shown_schools) <= XSM_SCHOOL_COUNT)
+        {
+            $shown_schools[] = $school;
+            if ($school["school_id"] == $current_school_id)
+                $is_current_school_visible = true;
+        }
+        else
+            $older_schools[] = $school;
+    }
+
+    if (!$is_current_school_visible && $current_school !== false)
+    {
+        $removed_school = array_pop($shown_schools);
+        $shown_schools[] = $current_school;
+        array_unshift($older_schools, $removed_school);
+    }
+
+    return array(
+        "shown_schools" => $shown_schools,
+        "older_schools" => $older_schools,
+    );
+}
+
+
 /**
   * Печать всех школ (селектор сверху)
   * @sa xsm_print_person_schools
   **/
 function xsm_print_recent_schools($db, $current_school_id, $table_name)
 {
-    // надо получать заранее информацию о всех предыдущих школах,
-    // но мы пока что будем отображать список из N последних
-    //$school_count = XSM_SCHOOL_COUNT;
     $query = "SELECT * FROM school ORDER BY school_date_start DESC";
-    //LIMIT $school_count";
-    $school_sel = $db->query($query);
+    $separated_schools = xsm_get_separated_schools($db, $query, $current_school_id);
+    // do not escape here, will be used in JS string
+    $href_prefix = "list-$table_name&school_id=";
     ?>
     <table class="ankList table table-bordered table-condensed"><tr>
         <?php
-        while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
+        foreach ($separated_schools["shown_schools"] as $school)
         {
-            $href = "list-$table_name&amp;school_id=${school['school_id']}";
+            $href = htmlspecialchars("$href_prefix${school['school_id']}");
             $title = htmlspecialchars($school['school_title']);
-            $active = ($school['school_id'] == $current_school_id) ? "current" : ""; ?>
+            $active = ($school["school_id"] == $current_school_id) ? "current" : ""; ?>
             <td class="school-selection <?php echo $active; ?>"><a
                 href="<?php echo $href; ?>"><?php echo $title; ?></a></td>
             <?php
-        }?>
+        }
+        ?>
+        <td class="school-selection" style="padding: 4px 8px">
+            <select name="view-school" id="view-school-selector" style="padding: 0px; margin: 0px;">
+            <?php
+            foreach ($separated_schools["older_schools"] as $school)
+            {
+                $school_id = $school["school_id"];
+                $title = xcms_get_key_or_enc($school, "school_title");
+                $selected = ($school_id == $current_school_id) ? 'selected="selected"' : '';
+                echo "<option $selected value=\"$school_id\">$title</option>\n";
+            }
+            ?></select>
+        </td>
     </tr></table>
+    <script>
+        $('#view-school-selector').change(function() {
+            var val = $('#view-school-selector').val();
+            window.location = <?php echo "\"$href_prefix\""; ?> + val;
+        });
+    </script>
     <?php
 }

@@ -1,4 +1,8 @@
-<# cms/linit #><# cms/init #><# deploy_utils #><# locale #><?php
+<?php
+
+require_once("${xengine_dir}sys/version.php");
+
+?><# cms/linit #><# cms/init #><# deploy_utils #><# locale #><?php
 ?><!DOCTYPE html>
 <?php
 
@@ -39,7 +43,6 @@ function xcms_print_related_links()
     }
 }
 
-    $xcms_version = xcms_get_list("INFO");
 ?>
 <html>
 <head>
@@ -146,10 +149,7 @@ function xcms_print_related_links()
     </div>
     <div class="footer">
         <span>&copy;&nbsp;ЛЭШ, 1992&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
-            <span class="site-version"><?php
-                $xcms_version = xcms_get_list("INFO");
-                echo xcms_get_key_or($xcms_version, 'version');
-            ?></span>
+            <span class="site-version"><?php echo xcms_version(); ?></span>
             <?php
             if (xcms_is_production())
             {?>

@@ -14,6 +14,8 @@ from selenium.common.exceptions import InvalidElementStateException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
+from selenium.webdriver.common.action_chains import ActionChains
+
 from urllib2 import URLError
 from httplib import HTTPException
 
@@ -23,7 +25,9 @@ import os
 import errno
 import shutil
 
-from bawlib import isVoid, isList, isNumber, isEqual, getSingleOption, userSerialize, wrapIfLong
+import bawlib as bw
+
+from bawlib import isVoid, isNumber, isEqual, userSerialize, wrapIfLong
 from bawlib import configure_logger
 
 configure_logger()
@@ -144,13 +148,14 @@ def get_value(ele):
 
 class BrowserHolder(object):
 
-    def __init__(self, profile_path=None):
+    def __init__(self, profile_path=None, engine="chrome"):
         self.driver = None
         self.already_initialized = False
         self.profile_path = profile_path
+        self.use_chrome = (engine == "chrome")
 
     # lazy init
-    def init(self, use_chrome=False):
+    def init(self):
         with threading.Lock():
             # currently we have just one thread, but...
             if self.already_initialized:
@@ -158,7 +163,7 @@ class BrowserHolder(object):
                 return
 
             logging.info("Initializing browser")
-            if use_chrome:
+            if self.use_chrome:
                 self.driver = BrowserHolder.chrome_driver_instance()
             else:
                 self.driver = BrowserHolder.firefox_driver_instance(self.profile_path)
@@ -177,10 +182,10 @@ class BrowserHolder(object):
                 return webdriver.Chrome(
                     executable_path=chrome_path,
                 )
-        
+
+        # FIXME(mvel): fix distro_url
+        distro_url = ""
         raise BrowserHolderException("Chrome Driver is not installed. Install it from {}".format(distro_url))
-        
-        
 
     @staticmethod
     def firefox_driver_instance(profile_path):
@@ -220,15 +225,15 @@ class SeleniumTest(object):
 
     # defaults
 
-    def __init__(self, base_url, browser_holder, params=None):
+    def __init__(self, base_url, browser_holder, args):
         """
         :type base_url: str
         :type browser_holder: BrowserHolder
-        :type params: list | None
+        :type args: object
         """
-        assert isinstance(base_url, str), "base_url should has type 'str'"
+        assert isinstance(base_url, str), "'base_url' should has type 'str'"
         assert isinstance(browser_holder, BrowserHolder), "browser_holder should have type 'BrowserHolder'"
-        assert params is None or isinstance(params, list), "params should be 'list' or None"
+        assert isinstance(args, object), "'args' should be 'object' with parsed command line args from argparse"
 
         self.check_errors = True
         self.log_started = False
@@ -243,8 +248,8 @@ class SeleniumTest(object):
 
         self.test_name = self.__module__ + "." + self.__class__.__name__
         self.base_url = base_url or ""
-        self.params = params or []
         self.browser_holder = browser_holder
+        self.args = args
 
         # time_suffix = "_" + datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         self.log_file = os.path.join(self.log_dir, "{}.log".format(self.test_name))
@@ -262,7 +267,7 @@ class SeleniumTest(object):
 
     def init(self):
         self.base_url = self.fixBaseUrl(self.getBaseUrl())
-        self.browser_holder.init(use_chrome=self.use_chrome())
+        self.browser_holder.init()
 
     def getName(self):
         return self.test_name
@@ -275,13 +280,8 @@ class SeleniumTest(object):
             self.failTest("Base URL for test '" + self.getName() + "' is not set. ")
         return self.base_url
 
-    def use_chrome(self):
-        chrome_flag, _ = getSingleOption(["-c", "--chrome"], self.params)
-        return chrome_flag
-
     def needDoc(self):
-        opt, _ = getSingleOption(["-d", "--doc"], self.params)
-        return opt
+        return self.args.doc
 
     def shutdown(self, exit_code=0):
         return exit_code
@@ -324,9 +324,6 @@ class SeleniumTest(object):
             self.log_time = current_time()
         except IOError:
             self.fatalTest("Cannot create log file " + userSerialize(self.log_file) + ". ")
-
-    def setCloseOnExit(self, flag):
-        self.m_closeOnExit = flag
 
     # PHP errors auto-check toggle
     def setAutoPhpErrorChecking(self, checkErrors=True):
@@ -702,7 +699,9 @@ class SeleniumTest(object):
         """
         if index < 1:
             self.fatalTest(
-                "Invalid index in getOptionValueByIdAndIndex for element " + eleId + ". Index should be positive (1 and above). ")
+                "Invalid index in getOptionValueByIdAndIndex for element " + eleId +
+                ". Index should be positive (1 and above). "
+            )
         self.addAction("get-option-by-index", "element id: '" + eleId + "', index: " + userSerialize(index))
         selEle = self.getElementById(eleId)
         eleList = selEle.find_elements_by_xpath("option")
@@ -850,9 +849,21 @@ class SeleniumTest(object):
         self.getElementByName(name).click()
         self.check_page_errors()
 
+    def doubeClickElementByName(self, name):
+        self.addAction("double-click", "element name: '" + name + "'")
+        actionChains = ActionChains(self.m_driver)
+        actionChains.double_click(self.getElementByName(name)).perform()
+        self.check_page_errors()
+
     def clickElementById(self, eleId):
         self.addAction("click", "element id: '" + eleId + "'")
         self.getElementById(eleId).click()
+        self.check_page_errors()
+
+    def doubeClickElementById(self, eleId):
+        self.addAction("bouble-click", "element id: '" + eleId + "'")
+        actionChains = ActionChains(self.m_driver)
+        actionChains.double_click(self.getElementById(eleId)).perform()
         self.check_page_errors()
 
     def getElementText(self, xpath):
@@ -871,7 +882,7 @@ class SeleniumTest(object):
 
     # to filter log for regular messages like '404 not found'.
     def setLogStopWords(self, stopList):
-        if isList(stopList):
+        if bw.is_list(stopList):
             self.log_check_stop_words = stopList
         else:
             self.log_check_stop_words = [stopList]
@@ -924,7 +935,7 @@ class SeleniumTest(object):
                 wrapIfLong(userSerialize(ele_text, ser_opt).replace("\n", " ")) + ". "
             )
 
-        if isList(text):
+        if bw.is_list(text):
             for phrase in text:
                 if phrase in ele_text:
                     self.logAdd("checkTextPresent: found phrase " + userSerialize(
@@ -974,7 +985,7 @@ class SeleniumTest(object):
                 wrapIfLong(userSerialize(ele_text, ser_opt).replace("\n", " ")) + ". "
             )
 
-        if isList(text):
+        if bw.is_list(text):
             for phrase in text:
                 if phrase in ele_text:
                     self.logAdd("checkSourceTextPresent: found phrase " + userSerialize(phrase) + " on page. ")
@@ -998,7 +1009,7 @@ class SeleniumTest(object):
 
     def assert_equal(self, got_value, expected_value, error_text):
         if got_value != expected_value:
-            error_text += "Expected '" + expected_value + "', got '" + got_value + "'. "
+            error_text += "Expected '{0}', got '{1}'.".format(expected_value, got_value)
             logging.error("TEST FAILED: %s", userSerialize(error_text))
             raise TestError(error_text)
 
@@ -1047,7 +1058,7 @@ class SeleniumTest(object):
             self.failTest(errText)
 
     def checkEmptyParam(self, stringOrList, methodName):
-        if isList(stringOrList):
+        if bw.is_list(stringOrList):
             if len(stringOrList) == 0:
                 self.fatalTest("Empty list passed to " + methodName)
             for text in stringOrList:
@@ -1079,7 +1090,7 @@ class SeleniumTest(object):
                 url = searchMethod(url_name)
             return url.get_attribute("href")
 
-        if isList(urlText):
+        if bw.is_list(urlText):
             for urlName in urlText:
                 try:
                     return getUrl(urlName, option_list=option_list)
@@ -1112,7 +1123,7 @@ class SeleniumTest(object):
             xpath = "//a[" + sibling + "='" + urlText + "']"
             urls = self.m_driver.find_elements_by_xpath(xpath)
 
-            if not isList(urls):
+            if not bw.is_list(urls):
                 self.fatalTest(
                     "countIndexedUrlsByLinkText(): Something bad retrieved from find_elements_by_xpath: "
                     "it's not a list of WebElement. "
@@ -1136,7 +1147,7 @@ class SeleniumTest(object):
             xpath = "//a[" + sibling + "='" + urlText + "']"
             urls = self.m_driver.find_elements_by_xpath(xpath)
 
-            if not isList(urls):
+            if not bw.is_list(urls):
                 self.fatalTest(
                     "clickIndexedElementByText(): Something bad retrieved from find_elements_by_xpath: "
                     "it's not a list of WebElement. "

@@ -10,4 +10,3 @@ function xsm_valid_aparam($aparam)
         false
     );
 }
-?>

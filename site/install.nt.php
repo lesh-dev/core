@@ -1,6 +1,6 @@
 <?php
     header("Content-type: text/html; charset=UTF-8;");
-    $target_version = @file_get_contents("VERSION");
+    $target_version = @file_get_contents("version");
 
     function xsm_insert_style($css) {
         echo "<style>\n$css\n</style>";

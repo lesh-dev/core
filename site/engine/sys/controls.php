@@ -74,7 +74,7 @@ function xcms_add_control_id($id_template)
   *     checkbox: checkbox control
   *     submit:   submit (button) control
   **/
-function xcmst_control($name, $value, $placeholder, $class, $type = "input", $title = "", $def_value = "", $autocomplete = XCMS_AUTOCOMPLETE_DEFAULT, $autocapitalize = XCMS_AUTOCAPITALIZE_DEFAULT)
+function xcmst_control($name, $value, $placeholder, $class, $type = "input", $title = "", $def_value = "", $autocomplete = XCMS_AUTOCOMPLETE_DEFAULT, $autocapitalize = XCMS_AUTOCAPITALIZE_DEFAULT, $disabled = false)
 {
     if ($value === XCMS_FROM_POST)
         $value = xcms_get_key_or($_POST, $name, $def_value);
@@ -94,6 +94,9 @@ function xcmst_control($name, $value, $placeholder, $class, $type = "input", $ti
         $attrs .= " placeholder=\"$placeholder\" ";
     if (xu_not_empty($title))
         $attrs .= " title=\"$title\" ";
+
+    if ($disabled)
+        $attrs .= " disabled=\"disabled\" ";
 
     if ($type == "input" || $type == "password")
     {
@@ -135,9 +138,9 @@ function xcmst_control($name, $value, $placeholder, $class, $type = "input", $ti
     }
 }
 
-function xcmst_submit($name, $value, $title = "", $class = "")
+function xcmst_submit($name, $value, $title = "", $class = "", $disabled = false)
 {
-    xcmst_control($name, $value, "", $class, "submit", $title);
+    xcmst_control($name, $value, "", $class, "submit", $title, "", XCMS_AUTOCOMPLETE_DEFAULT, XCMS_NO_AUTOCAPITALIZE, $disabled);
 }
 
 function xcmst_hidden($name, $value)
@@ -145,10 +148,15 @@ function xcmst_hidden($name, $value)
     xcmst_control($name, $value, "", "", "hidden");
 }
 
-function xcmst_link($url, $id, $inner_html, $title = "", $class = "")
+function xcms_link($url, $id, $inner_html, $title = "", $class = "")
 {
     $title = htmlspecialchars($title);
-    echo "<a class=\"$class\" id=\"$id\" href=\"$url\" title=\"$title\">$inner_html</a>";
+    return "<a class=\"$class\" id=\"$id\" href=\"$url\" title=\"$title\">$inner_html</a>";
+}
+
+function xcmst_link($url, $id, $inner_html, $title = "", $class = "")
+{
+    echo xcms_link($url, $id, $inner_html, $title, $class);
 }
 
 /**

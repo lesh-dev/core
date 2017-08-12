@@ -1,3 +1,5 @@
+site/xengine
+deploy-tools
 .idea
 site/.prec
 site/admin_doc/.prec/*
@@ -17,3 +19,4 @@ tools/optimize-images/oim
 *.sublime-project
 *.sublime-workspace
 fizlesh.sqlite3
+tests/root_password
