@@ -339,6 +339,7 @@ h4 {
 }
 
 
+
 /* Social */
 .icon-button {
     background-color: black;
@@ -429,7 +430,79 @@ h4 {
     display: none;
 }
 
+
+
+.another_menu
+{
+    position: absolute;
+    top: 50px;
+    right: 0px;
+    width: 150px;
+}
+.menu_item
+{
+    text-align: center;
+    position: relative;
+    background-color: #fff;
+    /*height: 50px;*/
+    padding: 15px;
+    padding-top: 10px;
+    text-transform: uppercase;
+    font-size: 15px;
+background-color: rgba(255,255,255,0.55);
+}
+
+div.menu_item > a
+{
+    color: black;
+    text-decoration: none;
+}
+
+div.menu_item a:hover
+{
+    color: #333;
+    text-decoration: none;
+}
+
+
 /*mobile*/
+
+
+
+
+@media (max-width: 768px) {
+    .about_person{
+        text-align: center;
+    }
+    .about_person h4{
+        text-align: center !important;
+    }
+
+    .another_menu {
+        width: 115px !important;
+    }
+    .menu_item {
+        font-size: 10px !important;
+    }
+
+}
+
+@media (min-width: 600px) {
+    .navbar .nav,
+    .navbar .nav > li {
+        float:none;
+        display:inline-block;
+        vertical-align: top;
+    }
+    .my-container {
+        width: 70%;
+        min-height: 100vh;
+    }
+
+    
+
+}
+
 @media (max-width: 600px) {
     .navbar .nav,
     .navbar .nav > li {
@@ -488,29 +561,24 @@ h4 {
         background-repeat: no-repeat;*/
     }
 
-}
-
-@media (min-width: 600px) {
-    .navbar .nav,
-    .navbar .nav > li {
-        float:none;
-        display:inline-block;
-        vertical-align: top;
-    }
-    .my-container {
-        width: 70%;
-        min-height: 100vh;
+    .another_menu {
+        position: absolute;
+        top: 0px !important;
+        right: 0px;
+        width: 248px !important;
     }
 
+    .menu_item {
+        display: inline-block;
+        background-color: transparent !important;
+        color: #fff !important;
+        padding: 18px 5px !important;
+            }
 
-}
-
-@media (max-width: 768px) {
-    .about_person{
-        text-align: center;
-    }
-    .about_person h4{
-        text-align: center !important;
+        div.menu_item > a
+    {
+        color: #fff;
+        text-decoration: none;
     }
 
 }
@@ -553,3 +621,5 @@ div.contlist-slider {
     padding: 10px 50px;
     background-color: rgba(255, 255, 255, 0.9);
 }
+
+

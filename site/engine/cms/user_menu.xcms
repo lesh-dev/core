@@ -8,42 +8,47 @@ if (xu_not_empty($user_menu_separator))
 
 if (xcms_user()->check_rights("registered", false))
 {?>
+    <div class="menu_item">
     <a title="Личный кабинет"
         href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page' => $pageid, 'ref' => 'cabinet')); ?>"
-        ><?php echo xcms_user()->login(); ?></a><?php
+        ><?php echo xcms_user()->login(); ?></a> </div><?php
     echo $user_menu_separator;
 }
 
 if (xcms_user()->check_rights("ank", false))
 {?>
+    <div class="menu_item">
     <a title="Система управления школьниками"
         href="<?php echo $meta_site_url_secure; ?>xsm"
-        >XSM</a><?php
+        >XSM</a> </div> <?php
     echo $user_menu_separator;
 }
 
 if (xcms_user()->check_rights("ank", false))
 {?>
+    <div class="menu_item">
     <a title="Олимпиада"
         href="<?php echo $meta_site_url_secure; ?>ctx"
-        >Олимпиада</a><?php
+        >Олимпиада</a> </div><?php
     echo $user_menu_separator;
 }
 
 if (xcms_user()->check_rights("admin", false))
 {?>
+    <div class="menu_item">
     <a title="Админка"
-        href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page' => $pageid, 'ref' => 'admin')); ?>"
-        >Админка</a><?php
+        href="<?php echo $meta_site_url_secure.'?'.xcms_url(array('page' => $pageid, 'ref' => 'admin')); ?>admin"
+        >Админка</a> </div><?php
     echo $user_menu_separator;
 }
 
 if (xcms_user()->check_rights("registered", false))
 {?>
+    <div class="menu_item">
     <a title="Выход"
         href="<?php echo $meta_site_url_secure.'?'.
         xcms_url(array('page' => $pageid, 'ref' => 'cabinet', 'mode' => 'logout')); ?>"
-        >Выход</a><?php
+        >Выход</a> </div> <?php
 }
 elseif ($show_auth)
 {?>

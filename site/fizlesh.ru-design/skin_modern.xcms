@@ -18,7 +18,7 @@ require_once("${design_dir}modern_contacts.php");
 <?php
     $page_id_filtered = str_replace("/", "_", $pageid);
     ?>
-    <div style="position: absolute; right: 7px; bottom: 6px; z-index: 100; color: #e5e5e5;">Skin:&nbsp;<a
+    <div style="position: fixed; right: 7px; bottom: 6px; z-index: 100; color: #e5e5e5;">Skin:&nbsp;<a
         href="<?php echo $skin_switch_url; ?>" style="color: #efefef;"><?php echo $skin_to_switch_to; ?></a></div>
 
     <!-- FIXME(mvel) identification via aliases, not via pageid -->
@@ -41,7 +41,13 @@ require_once("${design_dir}modern_contacts.php");
         <a class="signin" href="<?php echo $meta_site_url_secure.'?'.
             xcms_url(array('page' => $pageid, 'ref' => 'login', 'return' => '?ref=index')); ?>"> </a>
 
-        <div class="top-links"><# cms/user_menu separator= #></div>
+        <!-- <div class="top-links"><# cms/user_menu separator= #></div> -->
+
+        
+       <div class="another_menu">
+       <# cms/user_menu separator= #>
+       </div>
+        
         <?php
             $page_alias = xcms_get_key_or($INFO, "alias");
 
@@ -62,6 +68,7 @@ require_once("${design_dir}modern_contacts.php");
                 $wrapper_css_class = "index-wrapper";
             }
         ?>
+
         <div class="<?php echo $container_css_class; ?> my-container">
             <?php
 
