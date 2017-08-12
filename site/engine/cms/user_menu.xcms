@@ -45,6 +45,15 @@ if (xcms_user()->check_rights("admin", false))
 if (xcms_user()->check_rights("registered", false))
 {?>
     <div class="menu_item">
+    <a href="<?php echo "$meta_site_url_secure/doc"; ?>"
+        class="menu-item menu-sys">Документация</a>
+    </div><?php
+    echo $user_menu_separator;
+}
+
+if (xcms_user()->check_rights("registered", false))
+{?>
+    <div class="menu_item">
     <a title="Выход"
         href="<?php echo $meta_site_url_secure.'?'.
         xcms_url(array('page' => $pageid, 'ref' => 'cabinet', 'mode' => 'logout')); ?>"

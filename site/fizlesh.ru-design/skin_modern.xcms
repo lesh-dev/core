@@ -42,13 +42,10 @@ require_once("${design_dir}modern_contacts.php");
         <a class="signin" href="<?php echo $meta_site_url_secure.'?'.
             xcms_url(array('page' => $pageid, 'ref' => 'login', 'return' => '?ref=index')); ?>"> </a>
 
-        <!-- <div class="top-links"><# cms/user_menu separator= #></div> -->
+        <div class="another_menu">
+        <# cms/user_menu separator= #>
+        </div>
 
-        
-       <div class="another_menu">
-       <# cms/user_menu separator= #>
-       </div>
-        
         <?php
             $page_alias = xcms_get_key_or($INFO, "alias");
 
@@ -192,6 +189,12 @@ require_once("${design_dir}modern_contacts.php");
                         <a href="<?php echo $meta_site_url_secure.'?'.
                             xcms_url(array('page' => $pageid, 'ref' => 'admin')); ?>"
                             class="menu-item menu-sys">Админка</a><?php
+                    }
+
+                    if (xcms_user()->check_rights("registered", false))
+                    {?>
+                        <a href="<?php echo "$meta_site_url_secure/doc"; ?>"
+                            class="menu-item menu-sys">Документация</a><?php
                     }
 
                     if (xcms_user()->check_rights("registered", false))
