@@ -124,7 +124,7 @@ require_once("${xengine_dir}sys/version.php");
                     <hr />
                     <div style="font-size: 8pt; text-align: center; height: 15px;">
                         <span>&copy; ФизЛЭШ, 2005&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
-                        <span class="site-version">ttt<?php echo xcms_version(); ?></span>
+                        <span class="site-version"><?php echo xcms_version(); ?></span>
                         <?php
                         if (xcms_is_production())
                         {?>
