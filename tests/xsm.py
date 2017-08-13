@@ -24,42 +24,43 @@ class Person(object):
 
                     И. Кормильцев, В. Бутусов
     """
-    # Parent test object
-    xtest = None
-
-    # Same namings as in XSM
-    first_name = None
-    last_name = None
-    patronymic = None
-
-    # with string repr
-    cellular = None
-    cellular_list = None
-
-    # with string repr
-    phone = None
-    phone_list = None
-
-    birth_date = None
-    school = None
-    school_city = None
-    ank_class = None
-    current_class = None
-    email = None
-    skype = None
-    social_profile = None
-    favourites = None
-    achievements = None
-    hobby = None
-    lesh_ref = None
-    # not a database property
-    control_question = None
-    # in-school properties
-    is_student = None
-    is_teacher = None
 
     def __init__(self, xtest):
         self.xtest = xtest
+
+        # Parent test object
+        self.xtest = None
+
+        # Same namings as in XSM
+        self.first_name = None
+        self.last_name = None
+        self.patronymic = None
+
+        # with string repr
+        self.cellular = None
+        self.cellular_list = None
+
+        # with string repr
+        self.phone = None
+        self.phone_list = None
+
+        self.birth_date = None
+        self.school = None
+        self.school_city = None
+        self.ank_class = None
+        self.current_class = None
+        self.email = None
+        self.skype = None
+        self.social_profile = None
+        self.favourites = None
+        self.achievements = None
+        self.hobby = None
+        self.lesh_ref = None
+        # not a database property
+        self.control_question = None
+        # in-school properties
+        self.is_student = None
+        self.is_teacher = None
 
     def input(
         self,
