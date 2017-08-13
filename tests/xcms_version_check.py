@@ -4,6 +4,7 @@
 import re
 import xtest_common
 
+
 class XcmsVersionCheck(xtest_common.XcmsTest):
     """
     This test checks if version is displayed on main page and in admin panel.
@@ -13,26 +14,30 @@ class XcmsVersionCheck(xtest_common.XcmsTest):
         self.gotoRoot()
 
         # frontend
-        feVerXpath = "//span[@class='site-version']"
-        self.assertTextPresent(feVerXpath, "rev.");
-        siteVersion = self.getElementText(feVerXpath);
-        print "XCMS version: ", siteVersion
+        version_xpath = "//span[@class='site-version']"
+        self.assertTextPresent(version_xpath, "master-r")
+        site_version = self.getElementText(version_xpath)
+        print "XCMS version: ", site_version
 
-        # master-2.1 rev. 848
-        versionRegexp = "[\w\d_]+\-[\d\.]+ rev\. [\d]+"
-        m = re.search(versionRegexp, siteVersion)
+        # 2.15.8-master-r3408-5e0a-27e1-local
+        # 2.15.8-master-r3408
+
+        version_regexp = "\d+\.\d+\.\d+-master-r\d+"
+
+        m = re.search(version_regexp, site_version)
         if not m:
-            self.failTest("Site version does not match expected regexp. ");
+            self.failTest("Site version does not match expected regexp. ")
 
         self.performLoginAsAdmin()
         self.logAdd("before admin panel")
         self.gotoAdminPanel()
 
         # backend
-        beVerXpath = "//pre[@class='site-info']"
-        self.assertTextPresent(beVerXpath, "rev.");
-        cpVersion = self.getElementText(beVerXpath);
-        print "XCMS version in CP: ", cpVersion
-        m = re.search(versionRegexp, cpVersion)
+        backend_version_xpath = "//pre[@class='site-info']"
+        self.assertTextPresent(backend_version_xpath, "rev.")
+        control_panel_version = self.getElementText(backend_version_xpath)
+        print "XCMS version in Control Panel: ", control_panel_version
+
+        m = re.search(version_regexp, control_panel_version)
         if not m:
-            self.failTest("Site version in admin CP does not match expected regexp. ");
+            self.failTest("Site version in admin CP does not match expected regexp. ")
