@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import logging
-import os
 
 
 def configure_logger():
@@ -14,10 +13,6 @@ def configure_logger():
 
 class BawError(RuntimeError):
     pass
-
-
-def fileBaseName(fileName):
-    return os.path.basename(fileName)
 
 
 def wrapIfLong(text):

@@ -1,23 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import os
 import sys
 import argparse
 import logging
 import collections
 
-# FIXME(mvel): imports style
-from selenium_test import RunTest, TestShutdown, BrowserHolder, decode_run_result
+import selenium_test as st
+import bawlib as bw
 import test_set_gen
-from test_set_gen import TestInfo
-
-# FIXME(mvel): imports style
-from bawlib import fileBaseName
-from bawlib import configure_logger
 
 from pyvirtualdisplay import Display
 
-# TODO: remove
+# TODO(mvel): remove
 import auto_test_set
 
 sys.path.append(".")
@@ -54,7 +50,7 @@ ALL OPTIONS:
 TEST OPTIONS could be test-dependent. Commonly supported options are:
     -c, --chrome           Use Google Chrome browser instead of Firefox
     -d, --doc              Display test documentation
-""".format(script=fileBaseName(prog))
+""".format(script=os.path.basename(prog))
 
 
 class TestSuiteError(Exception):
@@ -70,11 +66,11 @@ def print_stats(stats, detailed):
 
     print "===== TEST SUITE DETAILED STATS: ====="
     for test_name, test_result in detailed_od.iteritems():
-        print "  " + test_name + ": " + decode_run_result(test_result)
+        print "  " + test_name + ": " + st.decode_run_result(test_result)
 
     print "===== TEST SUITE OVERALL STATS: ====="
     for test_result, testList in stats.iteritems():
-        print decode_run_result(test_result) + ":", len(testList), "tests"
+        print st.decode_run_result(test_result) + ":", len(testList), "tests"
 
 
 def generate_failed_tests_suite(failed_tests):
@@ -84,7 +80,7 @@ def generate_failed_tests_suite(failed_tests):
     for file_name, test_instance in failed_tests:
         full_test_name = test_instance.getName()
         module_name, class_name = full_test_name.split(".")
-        test_list.append(TestInfo(file_name, module_name, class_name))
+        test_list.append(test_set_gen.TestInfo(file_name, module_name, class_name))
 
     failed_suite = test_set_gen.get_header() + "\n" + test_set_gen.get_func_code(imports, test_list)
 
@@ -191,7 +187,7 @@ def parse_cmd_args():
 
 
 def main():
-    configure_logger()
+    bw.configure_logger()
 
     args = parse_cmd_args()
 
@@ -216,7 +212,7 @@ def main():
         logging.error("Invalid browser engine specified: '%s', valid are %s", args.engine, _ENGINES_STR)
         sys.exit(1)
 
-    browser_holder = BrowserHolder(
+    browser_holder = st.BrowserHolder(
         profile_path=args.profile_path,
         engine=args.engine,
     )
@@ -278,7 +274,7 @@ def main():
             else:
                 print "Running test {0} on site {1}".format(test.getName(), base_url)
                 print test.getDoc()
-                result = RunTest(test)
+                result = st.RunTest(test)
                 if result != 0:
                     failed_tests.append((file_name, test))
 
@@ -312,7 +308,7 @@ def main():
         print_stats(test_stats, test_detailed_stats)
         generate_failed_tests_suite(failed_tests)
 
-    except TestShutdown as exc:
+    except st.TestShutdown as exc:
         logging.debug("Got test shutdown: %s", exc)
         pass
     except ImportError as exc:
