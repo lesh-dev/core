@@ -6,19 +6,16 @@ import sys
 import argparse
 import logging
 import collections
+import pyvirtualdisplay
 
 import selenium_test as st
 import bawlib as bw
 import test_set_gen
 
-from pyvirtualdisplay import Display
-
-# TODO(mvel): remove
-import auto_test_set
-
 sys.path.append(".")
 
 
+# TODO(mvel): remove this
 def showHelp():
     prog = sys.argv[0]
     print """
@@ -88,15 +85,15 @@ def generate_failed_tests_suite(failed_tests):
         fs.write(failed_suite)
 
 
-def test_match_filter(file_name, test_instance, testFilter):
+def test_match_filter(file_name, test_instance, test_filter):
     # currently, filter is just a file name prefix
-    if not testFilter:
+    if not test_filter:
         return True
-    if testFilter.endswith(".py"):  # it is a filename
-        if file_name != testFilter:
+    if test_filter.endswith(".py"):  # it is a filename
+        if file_name != test_filter:
             return False
     else:  # it is like a test's class name
-        if testFilter not in test_instance.getName():
+        if test_filter not in test_instance.getName():
             return False
     return True
 
@@ -111,7 +108,7 @@ def parse_cmd_args():
         "-t", "--test",
         type=str,
         default="",
-        help="Run specific test",
+        help="Run specific test (e.g. `-t xcms_version_check`)",
     )
 
     parser.add_argument(
@@ -147,6 +144,13 @@ def parse_cmd_args():
         default=False,
         action="store_true",
         help="Print all tests in test set with descriptions",
+    )
+
+    parser.add_argument(
+        "-P", "--pause",
+        default=False,
+        action="store_true",
+        help="Pause execution on test failure",
     )
 
     parser.add_argument(
@@ -199,10 +203,8 @@ def main():
     if args.break_on_errors:
         logging.info("We'll break test suite on any test fail/fatal error")
 
-    # last remaining argument is base test URL.
-
     if args.virtual:
-        display = Display(visible=0, size=(1024, 768))
+        display = pyvirtualdisplay.Display(visible=0, size=(1024, 768))
         display.start()
 
     if args.test:
@@ -233,7 +235,7 @@ def main():
         if not test_set_module.get_tests:
             raise TestSuiteError("There is no 'getTests' function defined in specified test set. ")
 
-        # FIXME(vdmit): Find proper way to deal with it
+        # FIXME(vdmit@): Find proper way to deal with it
         # this is not necessary for tests listing
         # but `get_tests` expects base_url is not None
         if not base_url:
@@ -248,7 +250,7 @@ def main():
 
         failed_tests = []
 
-        tests = [x for x in tests if test_match_filter(*x, testFilter=args.test)]
+        tests = [x for x in tests if test_match_filter(*x, test_filter=args.test)]
         if args.test and not tests:
             raise TestSuiteError("Specified test was not found in test suite. ")
 
@@ -288,12 +290,18 @@ def main():
                 tests_done += 1
                 logging.info("PROGRESS: Done %s of %s tests, %s failed", tests_done, tests_number, len(failed_tests))
 
+                if args.pause and result:
+                    raw_input("Test suite stopped because of errors. Press any key to close...")
+
+                # TODO(mvel@): refactor this codes to enum
                 if result == 3:
                     print "User interrupt, stopping test suite."
                     break
+
                 if args.break_on_errors and result == 2:
                     print "Fatal error detected, stopping test suite."
                     break
+
                 if args.break_on_errors and result == 1:
                     print "Test error detected, stopping test suite."
                     break
