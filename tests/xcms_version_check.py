@@ -34,7 +34,6 @@ class XcmsVersionCheck(xtest_common.XcmsTest):
 
         # backend
         backend_version_xpath = "//pre[@class='site-info']"
-        self.assertTextPresent(backend_version_xpath, "rev.")
         control_panel_version = self.getElementText(backend_version_xpath)
         print "XCMS version in Control Panel: ", control_panel_version
 
