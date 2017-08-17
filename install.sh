@@ -15,6 +15,7 @@ function xcms_install_version_file() {
         print_message "Set version: $version"
         sudo bash -e <<EOF
 echo "$version" > $root/version
+echo "version: $version" > $root/INFO
 EOF
     fi
 }
