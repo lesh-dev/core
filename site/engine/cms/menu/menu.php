@@ -58,7 +58,15 @@ function xcms_menu($init_path, $menu_templates, $menu_level, $add_href_params, $
             $aux_class .= "menuitem-hidden ";
             $flags .= ",H";
         }
-        if ($flags)
+
+        // FIXME(mvel): ACL parse trash
+        $view_acl = xcms_get_key_or($INFO, "view");
+        $view_acl_list = explode(EXP_SP, $view_acl);
+
+        if (array_search("#all", $view_acl_list) === false)
+            $flags .= ",$view_acl";
+
+        if (xu_not_empty($flags))
             $flags = "<sup>$flags</sup>";
     }
     else
