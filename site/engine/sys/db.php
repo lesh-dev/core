@@ -31,7 +31,7 @@ define('XDB_DEFAULT_DB_PATH', "ank/fizlesh.sqlite3");
 function xdb_get_idvar($key, $default_value = XDB_INVALID_ID, $allowed_values = array())
 {
     $value = xcms_get_key_or($_GET, $key, '');
-    if ($value == XDB_NEW || array_search($value, $allowed_values))
+    if ($value == XDB_NEW || array_search($value, $allowed_values) !== false)
         return $value;
     $value = xcms_filter_nondigits($value);
     if (xu_empty($value))
