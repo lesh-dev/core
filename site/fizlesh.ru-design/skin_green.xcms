@@ -8,7 +8,7 @@ require_once("${xengine_dir}sys/version.php");
     <# cms/head #>
     <link rel="yandex-tableau-widget" href="<# full_design_dir #>tableau.json" />
     <# css/design menu.css #>
-    <# css/design default.css #>
+    <# css/design green.css #>
 </head>
 <body>
     <div style="position: absolute; right: 7px; top: 6px;">Skin:&nbsp;<a
