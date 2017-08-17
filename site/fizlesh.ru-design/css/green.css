@@ -313,3 +313,7 @@ div.contlist-slider {
     padding-top: 8px;
     padding-bottom: 20px;
 }
+
+.menu_item {
+    display: inline-block;
+}
