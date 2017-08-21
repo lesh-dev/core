@@ -18,7 +18,7 @@ function xcms_create_page()
 
     $page_type = xcms_get_key_or($_POST, "create-pagetype");
 
-    mkdir($dir);
+    @mkdir($dir);
     $info = array();
     $info["owner"] = xcms_user()->login();
     $info["type"] = $page_type;

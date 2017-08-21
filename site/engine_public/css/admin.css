@@ -218,8 +218,10 @@ div.admin-widget.user-manage {
     position: relative;
 }
 
-div.admin-widget div.error {
+div.error {
     color: #ff0000;
+    padding-top: 12px;
+    padding-bottom: 12px;
 }
 
 div.admin-widget div.warn {

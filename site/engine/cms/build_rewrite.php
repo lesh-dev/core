@@ -105,6 +105,14 @@ function xcmst_build_rewrite($verbose = false)
   **/
 function xcmst_rebuild_aliases_and_rewrite($verbose = false)
 {
-    xcms_rebuild_aliases($verbose);
+    $rebuild_aliases_result = xcms_rebuild_aliases();
+    if ($rebuild_aliases_result !== true)
+    {?>
+        <div class="error">Aliases rebuilding failed: <?php
+            echo htmlspecialchars($rebuild_aliases_result);
+        ?>Rewrite rules writing aborted.</div><?php
+        // we should not write broken aliases to rewrite
+        return;
+    }
     xcmst_build_rewrite($verbose);
 }

@@ -70,8 +70,10 @@ function xcms_collect_aliases_int(&$aliases, $dir, $root_len)
         if (xu_not_empty($cur_alias))
         {
             if (array_key_exists($cur_alias, $aliases))
+            {
                 throw new Exception("Duplicate aliases for pages '$info_fn' and '".
                     $aliases[$cur_alias]."'. ");
+            }
             $aliases[$cur_alias] = $page_id;
         }
     }
@@ -94,10 +96,22 @@ function xcms_collect_aliases()
     return $aliases;
 }
 
+/**
+ * Rebuilds aliases
+ * @return true on success, error message on failure.
+ **/
 function xcms_rebuild_aliases()
 {
-    $aliases = xcms_collect_aliases();
+    try
+    {
+        $aliases = xcms_collect_aliases();
+    }
+    catch (Exception $err)
+    {
+        return $err->getMessage();
+    }
     xcms_save_aliases($aliases);
+    return true;
 }
 
 ?>
