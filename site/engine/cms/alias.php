@@ -110,7 +110,12 @@ function xcms_rebuild_aliases()
     {
         return $err->getMessage();
     }
-    xcms_save_aliases($aliases);
+
+    if (!xcms_save_aliases($aliases))
+    {
+        return "Cannot save aliases. ";
+    }
+
     return true;
 }
 
