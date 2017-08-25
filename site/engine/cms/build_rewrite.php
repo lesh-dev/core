@@ -4,7 +4,7 @@
   * @return dict("error", "output").
   * error can be either `false` or error message.
   **/
-function xcmst_build_rewrite()
+function xcms_build_rewrite()
 {
 
     global $full_design_dir;
@@ -84,12 +84,9 @@ function xcmst_build_rewrite()
         $listing[$level] .= "RewriteRule ^$alias$ index.php?page=$path\n";
         $listing[$level] .= "RewriteRule ^$alias/((.|\\r|\\n)*)$ index.php?page=$path&aparam=$1\n";
 
-        if ($verbose)
-        {
-            $alias_str = str_replace('/', '<b class="slash">/</b>', $alias);
-            $path_str = str_replace('/', '<b class="slash">/</b>', $path);
-            $html_output .= "<tr><td>$alias_str</td><td>$path_str</td></tr>\n";
-        }
+        $alias_str = str_replace('/', '<b class="slash">/</b>', $alias);
+        $path_str = str_replace('/', '<b class="slash">/</b>', $path);
+        $html_output .= "<tr><td>$alias_str</td><td>$path_str</td></tr>\n";
     }
     $html_output .= "</table>\n";
 
@@ -117,7 +114,7 @@ function xcmst_build_rewrite()
   * @return dict("error", "output").
   * error can be either `false` or error message.
   **/
-function xcmst_rebuild_aliases_and_rewrite()
+function xcms_rebuild_aliases_and_rewrite()
 {
     $rebuild_aliases_result = xcms_rebuild_aliases();
     if ($rebuild_aliases_result !== true)
@@ -127,5 +124,5 @@ function xcmst_rebuild_aliases_and_rewrite()
             "error" => "$rebuild_aliases_result Rewrite rules writing aborted. ",
         );
     }
-    return xcmst_build_rewrite($verbose);
+    return xcms_build_rewrite();
 }
