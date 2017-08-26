@@ -1,15 +1,20 @@
 <?php
+
+/**
+  * @return true on success, error message on failure
+  **/
+
 function xcms_create_page()
 {
     global $SETTINGS, $pageid;
 
     $loc_name = xcms_get_key_or($_POST, "create-name");
     if (!xcms_check_page_id($loc_name, true))
-        return "<div class=\"error\">Недопустимый физический путь страницы</div>";
+        return "Недопустимый физический путь страницы. ";
 
     $alias = xcms_get_key_or($_POST, "alias");
     if (!xcms_check_page_alias($alias))
-        return "<div class=\"error\">Недопустимый alias страницы</div>";
+        return "Недопустимый alias страницы. ";
 
     if (@$_POST["global"])
         $dir = xcms_get_page_path($loc_name);
@@ -49,6 +54,6 @@ function xcms_create_page()
     xcmst_rebuild_aliases_and_rewrite();
     foreach ($_POST as $key => $value)
         unset($_POST[$key]);
-    return "";
+
+    return true;
 }
-?>
