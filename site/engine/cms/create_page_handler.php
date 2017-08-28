@@ -1,7 +1,9 @@
 <?php
 
 /**
-  * @return true on success, error message on failure
+  * Creates page using data in $_POST (page creation handler).
+  * @return dict("output", "error")
+  * "error" can be either `false` or error message.
   **/
 
 function xcms_create_page()
@@ -50,10 +52,20 @@ function xcms_create_page()
         include("{$SETTINGS["engine_dir"]}cms/$page_type/install.php");
         $pageid = $opageid;
     }
-    xcms_save_list("$dir/info", $info);
-    xcmst_rebuild_aliases_and_rewrite();
+
+    if (!xcms_save_list("$dir/info", $info))
+    {
+        return array(
+            "error" => "Cannot save INFO '$dir/info'. ",
+            "output" => "",
+        );
+    }
+    $rebuild_result = xcmst_rebuild_aliases_and_rewrite();
+    if ($rebuild_result["error"] !== false)
+        return $rebuild_result;
+
     foreach ($_POST as $key => $value)
         unset($_POST[$key]);
 
-    return true;
+    return $rebuild_result;
 }
