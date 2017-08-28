@@ -60,7 +60,7 @@ function xcms_create_page()
             "output" => "",
         );
     }
-    $rebuild_result = xcmst_rebuild_aliases_and_rewrite();
+    $rebuild_result = xcms_rebuild_aliases_and_rewrite();
     if ($rebuild_result["error"] !== false)
         return $rebuild_result;
 
