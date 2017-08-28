@@ -1,5 +1,17 @@
 <# if //@$_GET['mode'] == 'logout'//auth/logout//#><?php
 
+function xcmst_process_last_action_result($last_action_result)
+{
+    if ($last_action_result["error"] !== false || xu_len($last_action_result["output"]))
+    {?>
+        <div class="admin-widget"><?php
+        echo "<div class=\"error\">".$last_action_result["error"]."</div>\n";
+        echo $last_action_result["output"];
+        ?></div>
+        <?php
+    }
+}
+
 if (!@$_GET["page"])
     $_GET["page"] = "index";
 
@@ -13,7 +25,7 @@ if (!@$_GET["page"])
     $INFO = xcms_get_list(xcms_get_info_file_name());
     $aux_edit_groups = xcms_get_key_or($INFO, "edit");
     include(translate("<! auth/ #editor #admin $aux_edit_groups !>"));
-    $last_action_result = "";
+    $last_action_result = array("error" => false, "output" => "");
     $page_deleted = false;
     // FIXME(mvel): create-page style
     if (@$_POST["create-page"])
@@ -23,15 +35,16 @@ if (!@$_GET["page"])
     {
         if (xcms_delete_page($pageid))
         {
-            $last_action_result = "<div class=\"info\">Раздел успешно удалён. Сейчас вы будете перенаправлены на главную страницу...</div>";
-            xcmst_rebuild_aliases_and_rewrite();
+            $last_action_result["output"] .= "<div class=\"info\">Раздел успешно удалён. Сейчас вы будете перенаправлены на главную страницу...</div>";
+            // fixme(mvel): handle rvalue
+            xcms_rebuild_aliases_and_rewrite();
             $pageid = "index";
             $INFO = xcms_get_list(xcms_get_info_file_name());
             $page_deleted = true;
         }
         else
         {
-            $last_action_result = "<div class=\"error\">Пожалуйста, сначала удалите все подразделы!</div>";
+            $last_action_result["error"] = "Пожалуйста, сначала удалите все подразделы. ";
         }
         @$_GET["mode"] = "";
     }
@@ -89,17 +102,12 @@ if (!@$_GET["page"])
             </div>
             <div class="content">
             <?php
-                xcmst_page_info($INFO, $pageid);
-            ?>
-<?php
-    if (xu_len($last_action_result))
-    {?>
-        <div class="admin-widget"><?php
-        echo $last_action_result;
-        ?></div><?php
-        if ($page_deleted)
-            include(translate("<! redir admin 2 !>"));
-    }
+
+    xcmst_page_info($INFO, $pageid);
+    xcmst_process_last_action_result($last_action_result);
+
+    if ($page_deleted)
+        include(translate("<! redir admin 2 !>"));
 
     if (@$_GET["mode"] == "change_passwd")
     {
@@ -133,11 +141,9 @@ if (!@$_GET["page"])
         include(translate('<! edit/tag `edit`,`view` !>'));
     }
     else if (@$_GET["mode"] == "rebuild_alias")
-    {?>
-        <div class="admin-widget"><?php
-            xcmst_rebuild_aliases_and_rewrite(/* verbose = */true);
-            ?><div class="notice">Список alias-ов успешно обновлён</div>
-        </div><?php
+    {
+        $last_action_result = xcms_rebuild_aliases_and_rewrite();
+        xcmst_process_last_action_result($last_action_result);
     }
     elseif (@$_GET["mode"] == "access")
     {
