@@ -2,6 +2,13 @@
 header("Content-Type: text/plain; charset=utf-8\n\n");
 
 require_once("${engine_dir}cms/build_rewrite.php");
-xcmst_rebuild_aliases_and_rewrite();
-echo "Aliases rebuilt OK\n";
+$rebuild_result = xcms_rebuild_aliases_and_rewrite();
+if ($rebuild_result["error"] === false)
+{
+    echo "Aliases rebuilt OK\n";
+}
+else
+{
+    echo "Aliases rebuilding failed: ".$rebuild_result["error"]."\n";
+}
 ?>

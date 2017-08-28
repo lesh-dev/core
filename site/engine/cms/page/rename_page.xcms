@@ -35,7 +35,8 @@ require_once("${engine_dir}sys/template.php");
 
                 $pageid = $new_pageid;
                 $redirect = true;
-                xcmst_rebuild_aliases_and_rewrite();
+                // FIXME(mvel):
+                xcms_rebuild_aliases_and_rewrite();
                 ?><div class="notice">Путь успешно изменён!</div><?php
             }
         }

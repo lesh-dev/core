@@ -257,7 +257,8 @@ class InstallerInstallHook
         require_once("${engine_dir}sys/cms.php");
         require_once("${engine_dir}cms/alias.php");
         require_once("${engine_dir}cms/build_rewrite.php");
-        xcmst_rebuild_aliases_and_rewrite();
+        // FIXME(mvel): error handling?
+        xcms_rebuild_aliases_and_rewrite();
 
         return true;
     }
