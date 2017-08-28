@@ -4,7 +4,7 @@
   * @return dict("error", "output").
   * error can be either `false` or error message.
   **/
-function xcms_build_rewrite()
+function _xcms_build_rewrite()
 {
 
     global $full_design_dir;
@@ -124,5 +124,5 @@ function xcms_rebuild_aliases_and_rewrite()
             "error" => "$rebuild_aliases_result Rewrite rules writing aborted. ",
         );
     }
-    return xcms_build_rewrite();
+    return _xcms_build_rewrite();
 }
