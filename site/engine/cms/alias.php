@@ -34,10 +34,11 @@ function xcms_get_aliases()
 
 /**
   * Writes map of alias->page_id to content
+  * Returns true on success, false on failure.
   **/
 function xcms_save_aliases($list)
 {
-    xcms_save_list(xcms_get_aliases_file_name(), $list);
+    return xcms_save_list(xcms_get_aliases_file_name(), $list);
 }
 
 /**
