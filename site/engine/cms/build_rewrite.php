@@ -103,6 +103,8 @@ function _xcms_build_rewrite()
         $error = "Rewrite rules writing failed. ";
     }
 
+    $html_output .= "<div class=\"notice\">Список alias-ов успешно обновлён</div>\n";
+
     return array(
         "output" => $html_output,
         "error" => $error,
