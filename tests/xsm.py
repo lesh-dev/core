@@ -26,10 +26,8 @@ class Person(object):
     """
 
     def __init__(self, xtest):
-        self.xtest = xtest
-
         # Parent test object
-        self.xtest = None
+        self.xtest = xtest
 
         # Same namings as in XSM
         self.first_name = None
