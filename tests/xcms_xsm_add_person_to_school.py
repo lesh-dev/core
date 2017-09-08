@@ -2,6 +2,7 @@
 
 import xsm
 import xtest_common
+import random
 
 
 class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
@@ -33,17 +34,22 @@ class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
         self.ensure_logged_off()
         self.performLoginAsManager()
         self.goto_xsm()
+
+        # obtain fresh member
+        self.gotoUrlByLinkText(u"Все люди")
+        person_unique = 0
+        base_name = u"Анкеткин_"
+        page_content = self.getPageContent()
+        while base_name + str(person_unique) in page_content:
+            person_unique += 1
+
         self.goto_xsm_schools()
         school = xsm.add_named_school(self, "add_person_to_school_test")
         self.gotoUrlByLinkText(u"Участники школ")
         self.gotoUrlByLinkText(school.school_title)
-        person_unique = 0
-        page_content = self.getPageContent()
-        while str(person_unique) in page_content:
-            person_unique += 1
         self.gotoUrlByLinkText(u"Добавить нового участника")
         person = xsm.Person(self)
-        last_name = u"Анкеткин_" + str(person_unique)
+        last_name = base_name + str(person_unique)
         first_name = u"Егор"
         person.input(
             last_name=last_name,
@@ -53,9 +59,9 @@ class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
             school=u"Какая-то школа №0000",
             school_city=u"Магадан-23",
             ank_class=u"15 В",
-            phone=u"88005553535",
-            cellular=u"88005553535",
-            email=u"spaminatro228@10minutemail.com",
+            phone=u"8800" + str(random.randint(100000, 899999)),
+            cellular=u"8800" + str(random.randint(100000, 899999)),
+            email=u"spaminatro" + str(random.randint(10000, 89999)) + "@10minutemail.com",
             ank_mode=False,
         )
         self.assertBodyTextPresent(u"Участник успешно сохранён")
@@ -72,6 +78,9 @@ class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
         self.gotoUrlByLinkTitle(u"Отчислить с " + school.school_title)
         self.clickElementById("confirm-delete-person_school-submit")
         self.gotoUrlByLinkText(u"Участники школ")
+        school_id = xsm.get_school_id_from_selector(self, "add_person_to_school_test")
+        self.setOptionValueByIdAndValue("view-school-selector", school_id)
+
         self.gotoUrlByLinkText(school.school_title)
         self.gotoUrlByLinkText(u"Добавить нового участника")
         person.input(

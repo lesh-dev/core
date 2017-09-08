@@ -380,6 +380,14 @@ def add_test_school(xtest):
     return school
 
 
+def get_school_id_from_selector(xtest, school_title):
+    school_selector_options = xtest.get_selector_options("view-school-selector")
+    for option in school_selector_options:
+        if option[1] == school_title:
+            return option[0]
+    return None
+
+
 def add_named_school(xtest, school_title):
     """
     Checks if there exists school with school_title name, if not, creates new.
@@ -415,8 +423,9 @@ def add_named_school(xtest, school_title):
         random=False,
     )
     school.back_to_school_view()
-    # global context fix ;)
+    # FIXME(mvel): global context fix ;)
     xtest.m_conf.set_test_school_name(school.school_title)
+    # FIXME(mvel): complete trash here
     school.id = xtest.m_driver.current_url.split("=")[-1]
     return school
 

@@ -714,6 +714,17 @@ class SeleniumTest(object):
         oneOption = selEle.find_element_by_xpath("option[" + userSerialize(index) + "]")
         return get_value(oneOption), oneOption.text
 
+    def get_selector_options(self, element_id):
+        """
+            Obtain all selector items (options)
+            @return list of pairs (value, text)
+        """
+        # addAction?
+        logging.info("Obtaining selector options for %s", element_id)
+        selector = self.getElementById(element_id)
+        options = selector.find_elements_by_xpath("option")
+        return [(get_value(option), option.text) for option in options]
+
     def getOptionValueByName(self, eleName):
         try:
             return get_value(self.getElementByName(eleName).find_element_by_xpath("option[@selected='selected']"))
