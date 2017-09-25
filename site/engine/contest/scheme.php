@@ -128,7 +128,17 @@ function ctx_update_object($table_name, $new_values, $prev_values = array())
     {
         if ($meta["type"] == "file")
             continue;
-        $values[$id] = xcms_get_key_or($new_values, $id);
+
+        $new_value = xcms_get_key_or($new_values, $id);
+        if ($meta["type"] == "link")
+        {
+            # see issue #912
+            if (xu_strpos($new_value, "docviewer.yandex."))
+            {
+                die("You should not use Yandex docviewer links, they are not permanent. ");
+            }
+        }
+        $values[$id] = $new_value;
     }
 
     // update file fields: if no new file given, preserve old value
