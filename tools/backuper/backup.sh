@@ -71,19 +71,19 @@ tar czf "$backup_folder/attach.tgz"  /srv/www/fizlesh.ru/forum/attachments
 plan_a()
 {
     echo "Performing backup plan A. "
-    dest_host=doctor@doctor.dtdns.net
-    rsync -avz "$backup_folder" "$dest_host:/data/backup/lesh/$back_date/"
-}
-
-plan_b()
-{
-    echo "Performing backup plan B. "
     dest_host=mvel@mvel.dtdns.net
     chown -R mvel:mvel $backup_folder
     dest_folder=backup/lesh/$back_date/
     ssh $dest_host mkdir -p $dest_folder
     # reverse scp-ying works!
     ssh $dest_host scp fizlesh.ru:$backup_folder/* $dest_folder
+}
+
+plan_b()
+{
+    echo "Performing backup plan B. "
+    dest_host=doctor@doctor.dtdns.net
+    rsync -avz "$backup_folder" "$dest_host:/data/backup/lesh/$back_date/"
 }
 
 back_date="`date +%Y-%m-%d`"
