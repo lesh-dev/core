@@ -102,6 +102,8 @@ sudo chown -R $www_user $root
 target_site="fizlesh.local"
 if [ "$mode" = "production" ] ; then
     target_site="fizlesh.ru"
+elif [ "$mode" = "testing" ] ; then
+    target_site="test.fizlesh.ru"
 fi
 
 if ! [ "$mode" = "production" ] ; then
@@ -113,7 +115,6 @@ if ! [ "$mode" = "production" ] ; then
 fi
 
 xcms_install_version_file
-
 
 # version css files after installation
 xcms_version_css "$root" "engine_public"
