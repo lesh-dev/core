@@ -7,7 +7,6 @@
 
 
 function xcms_install_version_file() {
-    mode="$1"
     if [ "$mode" = "production" ] ; then
         sudo cp -a version $root/
     else
@@ -37,6 +36,8 @@ mode="$1"
 if [ -z "$mode" ] ; then
     mode="default"
 fi
+
+print_message "Mode: '$mode'"
 verbose=""
 
 unalias grep 2>/dev/null || true
