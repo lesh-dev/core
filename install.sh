@@ -52,6 +52,7 @@ if echo $host | grep -q fizlesh ; then
         content_dir="/srv/www/fizlesh.ru/content-fizlesh.ru"
     elif [ "$mode" = "testing" ] ; then
         root="/srv/www/fizlesh.ru/testing"
+        content_dir="/srv/www/fizlesh.ru/content-fizlesh.ru"
     else
         print_error "Invalid mode '$mode'. Specify it, please"
         exit 1
