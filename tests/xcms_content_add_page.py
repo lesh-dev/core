@@ -36,7 +36,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         # avoid spontaneous HTML tags
         self.specChars = random_crap.specialCharsWoAngle  # without <>
-        # here was spike for old version of Chrome - to enter only english words.
+        # here was spike for old version of Chrome - to enter only English words.
         self.wordOptions = []
 
         self.testBaseEditing()
@@ -99,17 +99,30 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.assertElementTextById(previewElement, pageText, "preview text does not match entered page text. ")
 
         # add second line
-        newPageText = pageText + "\n" + random_crap.randomCrap(10, self.wordOptions, specialChars=self.specChars) + " " + timestamp()
+        new_page_text = (
+            pageText + "\n" +
+            random_crap.randomCrap(10, self.wordOptions, specialChars=self.specChars) + " " + timestamp()
+        )
 
-        newPageText = self.fillAceEditorElement(newPageText)
-        print "Generated 2-line page text: '" + newPageText + "'"
+        newPageText = self.fillAceEditorElement(new_page_text)
+        print "Generated 2-line page text: '" + new_page_text + "'"
 
         self.clickElementById("commit-submit")
         self.clickElementById("preview-submit")
 
-        newPageTextForCheck = newPageText.replace("\n", " ").replace("  ", " ").replace(">>", u"»").replace("<<", u"«").strip()
+        newPageTextForCheck = (
+            newPageText
+            .replace("\n", " ")
+            .replace("  ", " ")
+            .replace(">>", u"»")
+            .replace("<<", u"«")
+            .strip()
+        )
 
-        self.assertElementTextById(previewElement, newPageTextForCheck, "preview text on text change does not match entered text. ")
+        self.assertElementTextById(
+            previewElement, newPageTextForCheck,
+            "preview text on text change does not match entered text. "
+        )
 
         self.gotoCloseEditor()
 
@@ -121,7 +134,11 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.logAdd("Clicking on new page menu item. ")
         self.gotoUrlByLinkText(inpMenuTitle)
 
-        self.assertElementTextById("content-text", newPageTextForCheck, "page text after reopening editor does not match entered text. ")
+        self.assertElementTextById(
+            "content-text",
+            newPageTextForCheck,
+            "page text after reopening editor does not match entered text. "
+        )
         self.assertElementTextById("content-header", self.m_pageHeader, "page header does not match entered header. ")
 
         if inpMenuTitle not in self.getPageTitle():
@@ -267,7 +284,14 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.gotoCloseEditor()
 
-        realPageText = pageText.replace("<p>", "").replace("\n", " ").replace("</p> ", "\n").replace("</p>", "\n").strip()
+        realPageText = (
+            pageText
+            .replace("<p>", "")
+            .replace("\n", " ")
+            .replace("</p> ", "\n")
+            .replace("</p>", "\n")
+            .strip()
+        )
 
         self.logAdd("real page text: ")
         self.logAdd(realPageText)
@@ -299,14 +323,16 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.m_pageAlias = inpAlias
 
         self.updateAliases()
-        self.assertBodyTextPresent(u"Список alias-ов обновлён")
+        self.assertBodyTextPresent(u"Список alias-ов успешно обновлён")
         self.wait(3, "wait for redirection")
 
         # self.goto_rebuild_aliases()
         self.goto_alias(self.m_pageAlias)
 
         if self.m_menuTitle not in self.getPageTitle():
-            self.failTest("Page/menu title text does not appear in page title after going to page by alias after alias change. ")
+            self.failTest(
+                "Page/menu title text does not appear in page title after going to page by alias after alias change. "
+            )
 
         self.assertElementTextById("content-header", self.m_pageHeader, "page header does not match entered header. ")
 
@@ -333,4 +359,6 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.gotoCloseEditor()
 
         self.gotoAdminPanel()
-        self.gotoCreatePage(reason="We should successfully enter admin panel, but we cannot see button to create new subpage. ")
+        self.gotoCreatePage(
+            reason="We should successfully enter admin panel, but we cannot see button to create new subpage. "
+        )
