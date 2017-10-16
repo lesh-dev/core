@@ -277,7 +277,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
     def updateAliases(self):
         self.logAdd("Updating aliases. ")
-        self.clickElementByName("change-alias")
+        self.clickElementByName("change_alias")
 
     def testAlias(self):
 

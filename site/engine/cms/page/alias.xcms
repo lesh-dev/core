@@ -84,7 +84,7 @@ function xcms_change_alias($info)
 
     $info = xcms_get_list(xcms_get_info_file_name());
     $redirect = false;
-    if (@$_POST["change-alias"])
+    if (@$_POST["change_alias"])
     {
         $alias_change_result = xcms_change_alias($info);
         $error = $alias_change_result["error"];
@@ -113,6 +113,6 @@ function xcms_change_alias($info)
         <input type="text" class="admin-long" name="alias"
             value="<?php echo @$info["alias"]; ?>" />
     </div>
-    <?php xcmst_submit("change-alias", "Сохранить"); ?>
+    <?php xcmst_submit("change_alias", "Сохранить"); ?>
     </form>
 </div>
