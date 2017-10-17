@@ -381,10 +381,17 @@ def add_test_school(xtest):
 
 
 def get_school_id_from_selector(xtest, school_title):
+    """
+    This method is not used as for now. Use ```get_school_id``` function instead.
+    It can be useful
+    """
     school_selector_options = xtest.get_selector_options("view-school-selector")
     for option in school_selector_options:
         if option[1] == school_title:
+            logging.info("Found school by title '%s': %s", school_title, option[0])
             return option[0]
+
+    logging.warn("Cannot find school by title '%s'", school_title)
     return None
 
 
@@ -432,7 +439,7 @@ def add_named_school(xtest, school_title):
 
 def get_school_information(xtest, school):
     """
-    Filles the school instance with information from its view
+    Fills the school instance with information from its view
     :param xtest:
         xtest instance
     :param school:
@@ -466,7 +473,9 @@ def view_school(xtest, school):
 
 def get_school_id(xtest, school_title):
     """
-    Parces list-school page to find the id of a school with provided title
+    Parse list-school page to find the id of a school with given title.
+    @sa get_school_id_from_selector function
+
     :param xtest:
         xtest instance
     :param school_title:

@@ -5,6 +5,9 @@ import xtest_common
 import random
 
 
+_SCHOOL_NAME = "add_person_to_school_test"
+
+
 class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks a new person can be added to a new school.
@@ -44,7 +47,8 @@ class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
             person_unique += 1
 
         self.goto_xsm_schools()
-        school = xsm.add_named_school(self, "add_person_to_school_test")
+        school = xsm.add_named_school(self, _SCHOOL_NAME)
+        school_id = xsm.get_school_id(self, _SCHOOL_NAME)
         self.gotoUrlByLinkText(u"Участники школ")
         self.gotoUrlByLinkText(school.school_title)
         self.gotoUrlByLinkText(u"Добавить нового участника")
@@ -78,8 +82,12 @@ class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
         self.gotoUrlByLinkTitle(u"Отчислить с " + school.school_title)
         self.clickElementById("confirm-delete-person_school-submit")
         self.gotoUrlByLinkText(u"Участники школ")
-        school_id = xsm.get_school_id_from_selector(self, "add_person_to_school_test")
-        self.setOptionValueByIdAndValue("view-school-selector", school_id)
+        if self.checkBodyTextPresent(school.school_title):
+            # school is in recents row
+            self.gotoUrlByLinkText(school.school_title)
+        else:
+            # school is hidden in school selector
+            self.setOptionValueByIdAndValue("view-school-selector", school_id)
 
         self.gotoUrlByLinkText(school.school_title)
         self.gotoUrlByLinkText(u"Добавить нового участника")
