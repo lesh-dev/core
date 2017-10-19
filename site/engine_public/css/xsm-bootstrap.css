@@ -48,6 +48,7 @@ input.xsm-save-button {
 
 a.link-button {
     margin-right: 5px;
+    margin-left: 5px; /* horizontal stacking with buttons */
 }
 
 form#filter-form span {
