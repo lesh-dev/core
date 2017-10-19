@@ -9,14 +9,24 @@
 function xcms_create_page()
 {
     global $SETTINGS, $pageid;
+    $result = array(
+        "error" => false,
+        "output" => "",
+    );
 
     $loc_name = xcms_get_key_or($_POST, "create-name");
     if (!xcms_check_page_id($loc_name, true))
-        return "Недопустимый физический путь страницы. ";
+    {
+        $result["error"] = "Недопустимый физический путь страницы. ";
+        return $result;
+    }
 
     $alias = xcms_get_key_or($_POST, "alias");
     if (!xcms_check_page_alias($alias))
-        return "Недопустимый alias страницы. ";
+    {
+        $result["error"] = "Недопустимый alias страницы. ";
+        return $result;
+    }
 
     if (@$_POST["global"])
         $dir = xcms_get_page_path($loc_name);
@@ -55,12 +65,13 @@ function xcms_create_page()
 
     if (!xcms_save_list("$dir/info", $info))
     {
-        return array(
-            "error" => "Cannot save INFO '$dir/info'. ",
-            "output" => "",
-        );
+        $result["error"] = "Cannot save INFO '$dir/info'. ";
+        return $result;
     }
     $rebuild_result = xcms_rebuild_aliases_and_rewrite();
+    // append output
+    $result["output"] .= $rebuild_result["output"];
+
     if ($rebuild_result["error"] !== false)
         return $rebuild_result;
 
