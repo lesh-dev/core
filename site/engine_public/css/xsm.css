@@ -146,6 +146,7 @@ span.person-key.main {
 
 span.person-value {
     font-weight: normal;
+    white-space: nowrap;
 }
 
 /* anketa status */
