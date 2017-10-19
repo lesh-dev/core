@@ -167,6 +167,9 @@ class BrowserHolder(object):
                 self.driver = BrowserHolder.chrome_driver_instance()
             else:
                 self.driver = BrowserHolder.firefox_driver_instance(self.profile_path)
+            # FIXME(mvel): proper settings to fit all contents on the screen
+            # to fight with "Element is not clickable" error
+            # self.driver.set_window_size(2560, 1980)
             self.already_initialized = True
 
     @staticmethod
@@ -1195,7 +1198,8 @@ class SeleniumTest(object):
             duration = newTime - self.log_time
             self.log_time = newTime
             fullLogText = u"[{level:8}][{dur:06.2f}]: ".format(level=logLevel, dur=duration) + text.strip()
-            print fullLogText.encode("UTF-8")
+            logging.info(fullLogText)
+            # print fullLogText.encode("UTF-8")
             logFile = open(self.log_file, 'a')
             logFile.write((fullLogText + "\n").encode("UTF-8"))
             logFile.close()
