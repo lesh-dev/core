@@ -119,11 +119,11 @@ function xsm_print_person_header($db, $person, $school_id)
             echo $person_fio; ?></span> <sup><?php
             xsm_draw_list_link($person_id, $school_id); ?></sup></div>
         <div>
-            <!--<span class="person-key top">Статус анкеты:</span>-->
             <span class="person-value"><?php echo $hr_status; ?></span><?php
             xsm_edit_link_generic(
                 'edit-person-status'.xcms_url(array('blamed_person_id' => $person_id)),
-                'Сменить статус');
+                'Сменить статус'
+            );
             ?>
         </div>
         <div><span class="person-value department"><?php echo $department_title_typical; ?></span><?php
