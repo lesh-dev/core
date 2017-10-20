@@ -5,7 +5,7 @@
     $SETTINGS["production"] = true;
 
     global $content_dir;
-    $content_dir = "fizlesh.ru-content/";
+    $content_dir = "content/";
     global $design_dir;
     $design_dir = "fizlesh.ru-design/";
     global $engine_dir;
