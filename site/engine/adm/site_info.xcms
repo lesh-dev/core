@@ -1,10 +1,11 @@
 <?php
-if (file_exists("INFO") && xcms_user()->check_rights("admin", false))
+require_once("${xengine_dir}sys/version.php");
+
+if (xcms_user()->check_rights("admin", false))
 {?>
     <pre class="site-info"><?php
-    $rel_info = xcms_get_list("INFO");
-    foreach ($rel_info as $key => $value)
-        echo "$key: <b>$value</b>".EXP_LF;
+    echo "version: ".xcms_version().EXP_LF;
+
     $xversion = xdb_get_table("xversion");
     if (count($xversion))
     {
@@ -12,9 +13,5 @@ if (file_exists("INFO") && xcms_user()->check_rights("admin", false))
         echo "db: ".$xversion["db_version"].EXP_LF;
     }
     ?></pre><?php
-}
-else
-{?>
-    <pre>INFO file not installed</pre><?php
 }
 ?>
