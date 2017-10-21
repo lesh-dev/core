@@ -239,7 +239,6 @@ function xdb_get_entity_by_id($table_name, $id)
     $db = xdb_get();
     $key_name = "${table_name}_id";
 
-
     if ($id != XDB_NEW)
     {
         $idf = preg_replace('/[^-0-9]/', '', $id);
