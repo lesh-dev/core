@@ -227,6 +227,8 @@ function xdb_update($table_name, $primary_keys, $keys_values, $allowed_keys, $ov
   * Retrieves KV-array of values for the given ID from table.
   * @param $table_name Table name to get data from
   * @param $id primary key value (compound keys are not supported)
+  * @param string_key boolean flag indicating that key should not be filtered
+  * by numeric rules (for SQL injections safety).
   * @return KV-array of row values
   * A convention states that primary keys in our tables have
   * special names obtained from table name: ${table_name}_id
@@ -234,20 +236,30 @@ function xdb_update($table_name, $primary_keys, $keys_values, $allowed_keys, $ov
   * If the $id has the magic value XDB_NEW, the empty record is
   * returned
   **/
-function xdb_get_entity_by_id($table_name, $id)
+function xdb_get_entity_by_id($table_name, $id, $string_key = false)
 {
     $db = xdb_get();
     $key_name = "${table_name}_id";
 
     if ($id != XDB_NEW)
     {
-        $idf = preg_replace('/[^-0-9]/', '', $id);
+        if ($string_key)
+        {
+            $idf = preg_replace('/[^-a-zA-Z_:]/', '', $id);
+        }
+        else
+        {
+            $idf = preg_replace('/[^-0-9]/', '', $id);
+        }
         if (strlen($idf) == 0)
         {
-            xcms_log(XLOG_ERROR, "[DB] Cannot fetch entity from '$table_name' with empty or filtered id '$id'.");
+            xcms_log(XLOG_ERROR, "[DB] It's not possible to fetch entity from '$table_name' with empty or filtered id '$id'.");
             return array();
         }
         $id = $idf;
+        if ($string_key)
+            $id = "\"$id\"";
+
         $query = "SELECT * FROM $table_name WHERE $key_name = $id";
         $sel = $db->query($query);
         if (!($ev = $sel->fetchArray(SQLITE3_ASSOC)))
