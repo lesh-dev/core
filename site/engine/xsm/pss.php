@@ -2,23 +2,19 @@
 function _store_pss_key($pss_key, $value)
 {
     $user = xcms_user()->login();
-    $full_key = "user::$pss_key";
+    $pss_id = "user::$pss_key";
     $values = array(
-        "pss_key" => $full_key,
+        "pss_id" => $pss_id,
         "pss_value" => $value,
     );
-    xdb_insert_or_update("pss", array("pss_key" => $pss_key), $values, $values);
+    xdb_insert_or_update("pss", array("pss_id" => $pss_id), $values, $values);
 }
 
-function _get_pss_key($pss_key, $value)
+function _get_pss_key($pss_key)
 {
     $user = xcms_user()->login();
-    $full_key = "user::$pss_key";
-    $values = array(
-        "pss_key" => $full_key,
-        "pss_value" => $value,
-    );
-    $pss_record = xdb_get_entity_by_id("pss", $full_key);
+    $pss_id = "user::$pss_key";
+    $pss_record = xdb_get_entity_by_id("pss", $pss_id, true);
     return xcms_get_key_or($pss_record, "pss_value");
 }
 
@@ -38,7 +34,7 @@ function xcms_get_persistent_key($key_prefix, $key_name, $default_value = '')
         $value = $_GET[$key_name];
         _store_pss_key($pss_key, $value);
     }
-    elseif (array_key_exists($session_key, $_SESSION))
+    else
     {
         $value = _get_pss_key($pss_key);
     }
