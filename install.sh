@@ -83,6 +83,7 @@ else
             tmp_db_path=$(mktemp fizlesh.XXXXXXXX)
             print_message "Database $db_path backed up"
             cp $db_path $tmp_db_path
+            rm -f $tmp_db_path
         fi
     fi
     print_message "Non-production mode, removing entire content directory"
@@ -115,7 +116,6 @@ sudo rm -rf $root/.prec/*
 print_message "Creating cache directory"
 sudo mkdir -p $root/.prec
 sudo chmod 777 $root/.prec
-
 
 sudo chown -R $www_user $root
 
