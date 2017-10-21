@@ -75,10 +75,29 @@ if [ "$mode" = "production" ] ; then
     cp $root/settings.production-fizlesh.ru.php $root/settings.php
 else
     # in default/testing mode we clone content from somewhere
+    tmp_db_path=""
+    if [ "$mode" = "default" ] ; then
+        # in default mode we back up database
+        db_path="$root/content/ank/fizlesh.sqlite3"
+        if [ -e $db_path ] ; then
+            tmp_db_path=$(mktemp fizlesh.XXXXXXXX)
+            print_message "Database $db_path backed up"
+            cp $db_path $tmp_db_path
+        fi
+    fi
     print_message "Non-production mode, removing entire content directory"
     sudo rm -rf $root/content
     print_message "Copying test content"
     sudo cp -r $content_dir/content $root/
+
+    if [ "$mode" = "default" ] ; then
+        # restore database backed up
+        if [ -n $tmp_db_path ] ; then
+            cp $tmp_db_path $db_path
+            print_message "Database $db_path restored from backup"
+        fi
+    fi
+
     cp $root/settings.local.php $root/settings.php
 
     if [ -e $root/content/auth/usr/root.user ] ; then
