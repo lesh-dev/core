@@ -83,7 +83,6 @@ else
             tmp_db_path=$(mktemp fizlesh.XXXXXXXX)
             print_message "Database $db_path backed up"
             cp $db_path $tmp_db_path
-            rm -f $tmp_db_path
         fi
     fi
     print_message "Non-production mode, removing entire content directory"
@@ -96,6 +95,7 @@ else
         if [ -n $tmp_db_path ] ; then
             cp $tmp_db_path $db_path
             print_message "Database $db_path restored from backup"
+            rm -f $tmp_db_path
         fi
     fi
 
