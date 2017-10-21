@@ -10,12 +10,12 @@ function _store_pss_key($pss_key, $value)
     xdb_insert_or_update("pss", array("pss_id" => $pss_id), $values, $values);
 }
 
-function _get_pss_key($pss_key)
+function _get_pss_key($pss_key, $default_value)
 {
     $user = xcms_user()->login();
     $pss_id = "user::$pss_key";
     $pss_record = xdb_get_entity_by_id("pss", $pss_id, true);
-    return xcms_get_key_or($pss_record, "pss_value");
+    return xcms_get_key_or($pss_record, "pss_value", $default_value);
 }
 
 // Persistent session keys storage
@@ -36,7 +36,7 @@ function xcms_get_persistent_key($key_prefix, $key_name, $default_value = '')
     }
     else
     {
-        $value = _get_pss_key($pss_key);
+        $value = _get_pss_key($pss_key, $default_value);
     }
     return $value;
 }
