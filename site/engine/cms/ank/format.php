@@ -1,5 +1,8 @@
 <?php
-require_once("${engine_dir}sys/db.php");
+global $engine_dir;
+global $xengine_dir;
+
+require_once("${xengine_dir}sys/db.php");
 require_once("${engine_dir}cms/ank/fio.php");
 require_once("${engine_dir}cms/ank/field-desc.php");
 
