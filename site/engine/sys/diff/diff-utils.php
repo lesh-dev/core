@@ -30,9 +30,9 @@
     // Test with long text
     function xcms_diff_test()
     {
-        global $engine_dir;
-        $from_text = file_get_contents("$engine_dir/sys/diff/text.html");
-        $to_text = file_get_contents("$engine_dir/sys/diff/newtext.html");
+        global $xengine_dir;
+        $from_text = file_get_contents("${xengine_dir}sys/diff/text.html");
+        $to_text = file_get_contents("${xengine_dir}sys/diff/newtext.html");
         $diff_html = xcms_diff_html($from_text, $to_text);
         echo $diff_html;
     }

@@ -1,5 +1,5 @@
 <?php
-    require_once("$engine_dir/edit/page_diff.php");
+    require_once("${engine_dir}edit/page_diff.php");
 
     $default_text = xcms_get_key_or($param, "def-text");
     @$cols = $param["cols"]; if (!@$cols) @$cols = 120;

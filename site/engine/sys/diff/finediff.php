@@ -76,8 +76,8 @@
 *   be done as a postprocessing method (->optimize()?)
 */
 
-if (isset($engine_dir))
-	require_once("$engine_dir/sys/string.php");
+if (isset($xengine_dir))
+	require_once("${xengine_dir}sys/string.php");
 else
 	require_once("../string.php");
 

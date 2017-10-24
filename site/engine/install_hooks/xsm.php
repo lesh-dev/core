@@ -69,7 +69,7 @@
         global $engine_dir;
         $content_dir = $config["content_dir"];
         $log_name = "$content_dir/dbinit-$name.log";
-        $db_init = "$engine_dir/dbpatches/dbinit-$name.sql";
+        $db_init = "${engine_dir}dbpatches/dbinit-$name.sql";
         if (system("sqlite3 $db_name < $db_init > $log_name 2>&1") != 0)
         {
             $sqlite_log = @file_get_contents($log_name);

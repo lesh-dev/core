@@ -1,6 +1,6 @@
 <?php
-include("$engine_dir/contest/scheme.php");
-include("$engine_dir/contest/action.php");
+include("${engine_dir}contest/scheme.php");
+include("${engine_dir}contest/action.php");
 
 // redefine it
 $CONTEST_CURRENT_YEAR = $_0;

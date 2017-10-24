@@ -10,7 +10,7 @@
 <# auth/ #ank #admin #editor #>
 <?php
 
-require_once("${engine_dir}sys/db.php");
+require_once("${xengine_dir}sys/db.php");
 require_once("${engine_dir}contest/scheme.php");
 require_once("${engine_dir}contest/forms.php");
 require_once("${engine_dir}contest/action.php");
