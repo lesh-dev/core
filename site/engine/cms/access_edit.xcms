@@ -1,7 +1,7 @@
 <div class="admin-widget">
 <?php
-    include_once("${engine_dir}sys/groups.php");
-    include_once("${engine_dir}auth/format.php");
+    require_once("${engine_dir}sys/groups.php");
+    require_once("${engine_dir}auth/format.php");
     if (@$_POST["change_access"])
     {
         xcms_acl_from_post($INFO);

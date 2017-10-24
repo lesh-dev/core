@@ -1,6 +1,6 @@
 <?php
     global $engine_dir;
-    include_once("${engine_dir}cms/menu/menu.php");
+    require_once("${engine_dir}cms/menu/menu.php");
 
     if (!@$_GET["ref"])
         $_GET["ref"] = "index";
