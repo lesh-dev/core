@@ -3,9 +3,9 @@
 define('XAUTH_THROW', true);
 define('XAUTH_NO_THROW', false);
 
-require_once("${engine_dir}sys/string.php");
-require_once("${engine_dir}sys/logger.php");
-require_once("${engine_dir}sys/tag.php");
+require_once("${xengine_dir}sys/string.php");
+require_once("${xengine_dir}sys/logger.php");
+require_once("${xengine_dir}sys/tag.php");
 
 class XcmsUser
 {

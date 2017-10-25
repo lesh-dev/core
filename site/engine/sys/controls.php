@@ -1,7 +1,7 @@
 <?php
 
-require_once("${engine_dir}sys/string.php");
-require_once("${engine_dir}sys/tag.php");
+require_once("${xengine_dir}sys/string.php");
+require_once("${xengine_dir}sys/tag.php");
 
 define('XCMS_FROM_POST', '{{{XCMS_FROM_POST}}}');
 define('XCMS_FROM_GET', '{{{XCMS_FROM_GET}}}');

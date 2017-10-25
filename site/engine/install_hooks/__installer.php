@@ -253,8 +253,8 @@ class InstallerInstallHook
         // For unknown reasons, eval works better than "include settings.php"
         eval($output);
         include("${engine_dir}sys/settings.php");
-        require_once("${engine_dir}sys/tag.php");
-        require_once("${engine_dir}sys/cms.php");
+        require_once("${xengine_dir}sys/tag.php");
+        require_once("${xengine_dir}sys/cms.php");
         require_once("${engine_dir}cms/alias.php");
         require_once("${engine_dir}cms/build_rewrite.php");
         // FIXME(mvel): error handling?
