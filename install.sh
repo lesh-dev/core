@@ -5,7 +5,6 @@
 
 . deploy-tools/installer/installer.sh
 
-
 function xcms_install_version_file() {
     if [ "$mode" = "production" ] ; then
         sudo cp -a version $root/
@@ -92,7 +91,7 @@ else
 
     if [ "$mode" = "default" ] ; then
         # restore database backed up
-        if [ -n $tmp_db_path ] ; then
+        if [ -n "$tmp_db_path" ] ; then
             cp $tmp_db_path $db_path
             print_message "Database $db_path restored from backup"
             rm -f $tmp_db_path
