@@ -90,7 +90,7 @@
         global $engine_dir;
         global $content_dir;
         global $SETTINGS;
-        require_once($SETTINGS["engine_dir"]."sys/auth.php");
+        require_once($SETTINGS["xengine_dir"]."sys/auth.php");
         $usr_dir = "${content_dir}auth/usr";
         @mkdir($usr_dir, 0777, true);
         if (!glob("$usr_dir/*.user"))

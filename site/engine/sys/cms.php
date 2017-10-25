@@ -3,7 +3,7 @@
   * TODO: Add pageid regex checking for safety
   **/
 
-require_once("${engine_dir}sys/string.php");
+require_once("${xengine_dir}sys/string.php");
 
 /**
   * Retrieve page info location

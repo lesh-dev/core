@@ -4,10 +4,10 @@
       **/
     date_default_timezone_set('Europe/Moscow');
     require_once("settings.php");
-    require_once("${engine_dir}sys/settings.php");
-    require_once("${engine_dir}sys/file.php");
-    require_once("${engine_dir}sys/logger.php");
-    require_once("${engine_dir}sys/string.php");
+    require_once("${xengine_dir}sys/settings.php");
+    require_once("${xengine_dir}sys/file.php");
+    require_once("${xengine_dir}sys/logger.php");
+    require_once("${xengine_dir}sys/string.php");
     header("Content-Type: text/html; charset=utf-8");
 
     function xconv_convert_news_file($file)

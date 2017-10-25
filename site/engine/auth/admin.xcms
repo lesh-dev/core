@@ -1,5 +1,5 @@
 <?php
-    require_once("${engine_dir}sys/auth.php");
+    require_once("${xengine_dir}sys/auth.php");
     require_once("${engine_dir}sys/groups.php");
     require_once("${engine_dir}auth/user.php");
     require_once("${engine_dir}auth/format.php");

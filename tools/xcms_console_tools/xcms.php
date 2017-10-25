@@ -64,13 +64,12 @@
         require_once("${xengine_dir}sys/string.php");
         require_once("${xengine_dir}sys/util.php");
         require_once("${xengine_dir}sys/tag.php");
-        # TODO(mvel): remove old engine dependency 
-        require_once("${engine_dir}sys/auth.php");
+        require_once("${xengine_dir}sys/auth.php");
         require_once("${xengine_dir}sys/logger.php");
         require_once("${xengine_dir}sys/compiler.php");
         require_once("${xengine_dir}sys/db.php");
         require_once("${xengine_dir}sys/mailer.php");
-        # TODO(mvel): remove old engine dependency (xsm)? 
+        # old engine
         require_once("${engine_dir}xsm/reminder.php");
 
         $main_ref_file = "";

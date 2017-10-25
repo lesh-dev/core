@@ -1,7 +1,7 @@
 <?php
 
-require_once("${engine_dir}sys/logger.php");
-require_once("${engine_dir}sys/auth.php");
+require_once("${xengine_dir}sys/logger.php");
+require_once("${xengine_dir}sys/auth.php");
 
 /**
   * Get template contents by name

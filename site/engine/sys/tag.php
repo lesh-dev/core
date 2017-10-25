@@ -1,6 +1,6 @@
 <?php
 
-require_once("${engine_dir}sys/string.php");
+require_once("${xengine_dir}sys/string.php");
 
 define('XCMS_TAG_NAME', "_NAME");
 

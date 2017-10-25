@@ -1,7 +1,7 @@
 <?php
 
-require_once("${engine_dir}sys/string.php");
-require_once("${engine_dir}sys/file.php");
+require_once("${xengine_dir}sys/string.php");
+require_once("${xengine_dir}sys/file.php");
 
 /**
   * Transforms an key-value-array to properly encoded URI part:
