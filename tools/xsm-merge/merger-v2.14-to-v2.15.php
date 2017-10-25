@@ -4,12 +4,13 @@
       **/
     date_default_timezone_set('Europe/Moscow');
     require_once("settings.php");
-    require_once("${engine_dir}sys/settings.php");
-    require_once("${engine_dir}sys/unittest.php");
-    require_once("${engine_dir}sys/file.php");
-    require_once("${engine_dir}sys/util.php");
+    require_once("${xengine_dir}sys/settings.php");
+    require_once("${xengine_dir}sys/unittest.php");
+    require_once("${xengine_dir}sys/file.php");
+    require_once("${xengine_dir}sys/util.php");
+    # TODO: migrate to new engine
     require_once("${engine_dir}sys/auth.php");
-    require_once("${engine_dir}sys/db.php");
+    require_once("${xengine_dir}sys/db.php");
     header("Content-Type: text/html; charset=utf-8");
 
     global $SETTINGS;
