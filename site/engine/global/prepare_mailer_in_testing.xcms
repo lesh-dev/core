@@ -16,7 +16,7 @@ if (xcms_get_key_or($SETTINGS, "production"))
 }
 
 require_once("${xengine_dir}sys/db.php");
-require_once("${engine_dir}sys/mailer.php");
+require_once("${xengine_dir}sys/mailer.php");
 
 // purge notifications
 $db = xdb_get_write();
