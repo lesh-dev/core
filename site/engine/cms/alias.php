@@ -1,7 +1,7 @@
 <?php
 
-require_once("${engine_dir}sys/template.php");
-require_once("${engine_dir}sys/mailer.php");
+require_once("${xengine_dir}sys/template.php");
+require_once("${xengine_dir}sys/mailer.php");
 
 /**
   * Checks whether page alias is valid

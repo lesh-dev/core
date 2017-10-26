@@ -3,8 +3,8 @@ global $engine_dir;
 global $xengine_dir;
 
 require_once("${xengine_dir}sys/db.php");
-require_once("${engine_dir}sys/template.php");
-require_once("${engine_dir}sys/registry.php");
+require_once("${xengine_dir}sys/template.php");
+require_once("${xengine_dir}sys/registry.php");
 require_once("${engine_dir}contest/scheme.php");
 
 $registry = xcms_get_registry();

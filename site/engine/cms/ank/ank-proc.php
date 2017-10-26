@@ -1,7 +1,7 @@
 <?php
 // Anketa processor
 
-require_once("${engine_dir}sys/template.php");
+require_once("${xengine_dir}sys/template.php");
 
 function xsm_extract_phone_digits($phones_str)
 {

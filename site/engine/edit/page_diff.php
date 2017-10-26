@@ -1,6 +1,6 @@
 <?php
-require_once("${engine_dir}sys/diff/diff-utils.php");
-require_once("${engine_dir}sys/template.php");
+require_once("${xengine_dir}sys/diff/diff-utils.php");
+require_once("${xengine_dir}sys/template.php");
 
 function xcms_process_page_diff($old_text, $new_text, $page_id = false)
 {

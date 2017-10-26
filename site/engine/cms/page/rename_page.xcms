@@ -1,5 +1,5 @@
 <?php
-require_once("${engine_dir}sys/template.php");
+require_once("${xengine_dir}sys/template.php");
 
 ?><div class="admin-widget">
     <h3>Физический путь</h3>
