@@ -2,5 +2,5 @@ login:root
 email:root@example.com
 creator:anonymous
 creation_date:1234567890
-password:7ac7678d5fca55cdd3ef609360a0e262
+password:99adc231b045331e514a516b4b7680f588e3823213abe901738bc3ad67b2f6fcb3c64efb93d18002588d3ccc1a49efbae1ce20cb43df36b38651f11fa75678e8
 groups:ank,editor,admin
