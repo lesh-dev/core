@@ -28,11 +28,11 @@
       **/
     function initial_check()
     {
-        global $engine_dir;
-        if (!isset($engine_dir))
-            return "Engine directory (\$engine_dir global variable) not specified. ";
+        global $xengine_dir;
+        if (!isset($xengine_dir))
+            return "XEngine directory (\$xengine_dir global variable) not specified. ";
 
-        require_once "${engine_dir}sys/logger.php";
+        require_once "${xengine_dir}sys/logger.php";
         if (!xcms_append(xcms_log_filename(), ""))
             return "Logger file '".xcms_log_filename()."' is not writeable. ";
         return true;
