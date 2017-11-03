@@ -221,7 +221,7 @@ if (@$_POST["update-person"])
                 p.person_created, p.person_modified
                 FROM person p WHERE $name_filter AND
                 NOT EXISTS (
-                SELECT * FROM person_school ps WHERE 
+                SELECT * FROM person_school ps WHERE
                 (ps.member_person_id == p.person_id) AND (ps.school_id == $school_id))
                 ";
             xdb_debug_area($not_in_this_school_query, XDB_DEBUG_AREA_DISABLED);
@@ -246,9 +246,8 @@ if (@$_POST["update-person"])
                 <?php
                 xsm_output_person_list($not_in_this_school_sel);
                 ?>
-                <a class="link-button ank btn" href="add-person_school&school_id=<?php
-                echo $school_id
-                ?>">Зачислить существующего участника</a>
+                <a class="link-button ank btn" href="add-person_school<?php echo xcms_url(array("school_id" => $school_id)); ?>"
+                >Зачислить существующего участника</a>
                 <?php
             }
             if ($not_in_this_school_count == 0 && $in_this_school_count == 0) {

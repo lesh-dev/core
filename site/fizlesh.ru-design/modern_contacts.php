@@ -71,11 +71,8 @@ function xdesign_modern_contact(
                     <p><?php echo htmlspecialchars($description); ?></p>
                 <?php
                 }?>
-          </div>
+            </div>
         </div>
-      </div>
     </div>
 <?php
 }
-
-?>

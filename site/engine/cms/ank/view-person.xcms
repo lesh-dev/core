@@ -6,7 +6,7 @@ require_once("${engine_dir}cms/ank/course.php");
 
 /**
  * @param person_id is for drawing edit link
- */
+ **/
 function xsm_draw_person_textval($class, $text, $value, $person_id = false)
 {?>
     <div style="white-space: nowrap">
