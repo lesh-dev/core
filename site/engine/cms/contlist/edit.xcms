@@ -1,6 +1,6 @@
 <?php
-require_once("${engine_dir}sys/groups.php");
-require_once("${engine_dir}sys/controls.php");
+require_once("${xengine_dir}sys/groups.php");
+require_once("${xengine_dir}sys/controls.php");
 require_once("${engine_dir}edit/page_diff.php");
 
 # TODO: dynamic loading

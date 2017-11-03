@@ -1,6 +1,6 @@
 <div class="admin-widget">
 <?php
-    require_once("${engine_dir}sys/groups.php");
+    require_once("${xengine_dir}sys/groups.php");
     require_once("${engine_dir}auth/format.php");
     if (@$_POST["change_access"])
     {
