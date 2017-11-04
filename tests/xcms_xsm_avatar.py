@@ -56,6 +56,7 @@ class XcmsXsmAvatar(xsm.Manager, xtest_common.XcmsTest):
             first_name=u"Пётр",
             patronymic=u"Палыч",
             social_profile="https://vk.com/vdm_p",
+            random=True,
         )
         person.back_to_person_view()
         self.check_avatar(person, default=False)

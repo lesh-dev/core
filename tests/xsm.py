@@ -186,9 +186,9 @@ class Person(object):
         t = self.xtest
         # FIXME(mvel): this is a Person control: goto_back_to_person_view()
         t.goto_back_to_person_view()
-        full_alias = self.full_alias()
+        person_alias = self.full_alias()
         # check if person alias is present (person saved correctly)
-        t.checkPersonAliasInPersonView(full_alias)
+        t.checkPersonAliasInPersonView(person_alias)
 
     def add_to_school(self, school):
         t = self.xtest
