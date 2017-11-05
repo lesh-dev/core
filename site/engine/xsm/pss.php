@@ -12,7 +12,15 @@ function _store_pss_key($pss_key, $value)
         "pss_id" => $pss_id,
         "pss_value" => $value,
     );
-    xdb_insert_or_update("pss", array("pss_id" => $pss_id), $values, $values);
+    $pss_data = xdb_get_entity_by_id("pss", $pss_id, true);
+    if (!$pss_data)
+    {
+        xdb_insert_ai("pss", array("pss_id"), $values, $values, XDB_OVERRIDE_TS, XDB_NO_USE_AI, $outer_db = $db);
+    }
+    else
+    {
+        xdb_update("pss", array("pss_id" => $pss_id), $values, $values);
+    }
 }
 
 function _get_pss_key($pss_key, $default_value)
