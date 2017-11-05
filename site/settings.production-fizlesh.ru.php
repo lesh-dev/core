@@ -27,7 +27,7 @@
     global $meta_site_url;
     $meta_site_url = 'http://fizlesh.ru/';
     global $meta_site_log_path;
-    $meta_site_log_path = '/var/log/xcms/fizlesh.local-engine.log';
+    $meta_site_log_path = '/var/log/xcms/fizlesh.ru-engine.log';
     global $meta_site_mail;
     $meta_site_mail = 'support@fizlesh.ru';
 

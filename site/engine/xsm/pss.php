@@ -1,8 +1,13 @@
 <?php
-function _store_pss_key($pss_key, $value)
+function _format_pss_id($pss_key)
 {
     $user = xcms_user()->login();
-    $pss_id = "user::$pss_key";
+    return "$user::$pss_key";
+}
+
+function _store_pss_key($pss_key, $value)
+{
+    $pss_id = _format_pss_id($pss_key);
     $values = array(
         "pss_id" => $pss_id,
         "pss_value" => $value,
@@ -12,8 +17,7 @@ function _store_pss_key($pss_key, $value)
 
 function _get_pss_key($pss_key, $default_value)
 {
-    $user = xcms_user()->login();
-    $pss_id = "user::$pss_key";
+    $pss_id = _format_pss_id($pss_key);
     $pss_record = xdb_get_entity_by_id("pss", $pss_id, true);
     return xcms_get_key_or($pss_record, "pss_value", $default_value);
 }
