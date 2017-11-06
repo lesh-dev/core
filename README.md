@@ -18,7 +18,6 @@ X Engine consists of several parts:
 * XSM, a student management system
 * Contest checking helper module
 * Administration, deploy and backup tools
-* (deprecated) Forum (a fork of simplemachinesforum.org forum)
 
 Also, this repo hosts design and layout of
 http://fizlesh.ru and http://lesh.org.ru sites.

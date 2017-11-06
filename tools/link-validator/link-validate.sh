@@ -12,7 +12,7 @@ fi
 URL="$1"
 LOG="validate.log"
 BROKEN="broken.log"
-wget --exclude-directories="/forum" --no-verbose --spider -r $URL -o "$LOG"
+wget --no-verbose --spider -r $URL -o "$LOG"
 
 if grep -B2 "broken link!" "$LOG" > "$BROKEN"; then
     echo "ERROR! Broken links detected! See files '$BROKEN' and '$LOG' for details."

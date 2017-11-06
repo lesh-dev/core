@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-# Component generated from template on Wed Sep 19 18:26:50 MSK 2012
-# Please don't forget to commit all changes to repo
-
-type=folder
-location=/srv/www/publish/forum
-local_target=./
