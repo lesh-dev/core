@@ -9,7 +9,7 @@ function xdesign_modern_sitelink($title, $link, $image_file_name)
     $full_image_file_name = "${sitelink_page_prefix}/$image_file_name";
     $link_html = htmlspecialchars($link);
 ?>
-    <a href="<?php echo $link_html; ?>">
+    <a target="_blank" href="<?php echo $link_html; ?>">
         <div class="col-md-6">
             <div class="item-wrapper">
                 <div class="row">
