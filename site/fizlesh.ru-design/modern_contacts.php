@@ -34,17 +34,19 @@ function xdesign_modern_contact(
                 // TODO: wrap phone handling?
                 if (xu_not_empty($phone))
                 {
+                    $aux_attrs = "";
                     $phone_link = $phone;
                     if (!(xu_strpos($phone, "t.me") === false))
                     {
                         // telegram link
                         if (!xu_startswith($phone, "http"))
                             $phone_link = "https://$phone";
+                        $aux_attrs = " target=\"_blank\" ";
                     }
                     else
                         $phone_link = "tel:$phone";
                     ?>
-                    <p><a href="<?php echo $phone_link; ?>"><?php echo $phone; ?></a></p><?php
+                    <p><a <?php echo $aux_attrs; ?> href="<?php echo $phone_link; ?>"><?php echo $phone; ?></a></p><?php
                 }
 
                 if (xu_not_empty($social_profile))
@@ -62,7 +64,7 @@ function xdesign_modern_contact(
                     $social_profile = str_replace("https://", "", $social_profile);
                     ?>
 
-                    <p><a href="<?php echo $social_profile_link; ?>"><?php echo $social_profile; ?></a></p><?php
+                    <p><a target="_blank" href="<?php echo $social_profile_link; ?>"><?php echo $social_profile; ?></a></p><?php
                 }
                 ?>
                 <p><a href="mailto:<?php echo $email; ?>"><?php echo $email; ?></a></p>
