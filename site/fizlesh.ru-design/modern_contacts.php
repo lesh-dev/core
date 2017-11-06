@@ -26,6 +26,7 @@ function xdesign_modern_contact(
                 <div class="col-md-4 col-sm-6">
                     <img class="ava_image" src="<?php echo $full_image_file_name; ?>" alt="<?php echo $fio; ?>" />
                 </div>
+
                 <div class="col-md-6 col-sm-6 about_person">
                 <h4><?php echo $fio; ?></h4>
                 <p><?php echo $job; ?></p>
@@ -71,6 +72,7 @@ function xdesign_modern_contact(
                     <p><?php echo htmlspecialchars($description); ?></p>
                 <?php
                 }?>
+                </div>
             </div>
         </div>
     </div>
