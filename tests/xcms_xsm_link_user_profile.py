@@ -4,6 +4,7 @@
 import xsm
 import xtest_common
 import user
+import random_crap as rc
 
 
 class XcmsXsmLinkUserProfile(xsm.Manager, xtest_common.XcmsTest):
@@ -18,7 +19,7 @@ class XcmsXsmLinkUserProfile(xsm.Manager, xtest_common.XcmsTest):
     def run(self):
         self.ensure_logged_off()
 
-        inp_login = "xsm_link_"
+        inp_login = "xsm_link_" + rc.random_text(4)
         inp_name = u"XSM-Юзер-"
         u = user.User(self)
         u.create_new_user(
@@ -39,6 +40,7 @@ class XcmsXsmLinkUserProfile(xsm.Manager, xtest_common.XcmsTest):
             first_name=u"Юзер",
             patronymic=u"Ламерович",
             email=u.email,
+            random=True,
         )
 
         self.gotoRoot()
