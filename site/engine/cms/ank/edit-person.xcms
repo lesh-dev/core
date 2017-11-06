@@ -87,7 +87,7 @@ function xsm_person_edit_operations($id, $ret_title)
     $table_name = "person";
     $is_new = ($id == XDB_NEW);
     $redir = $is_new ? "list-person-locator" : "view-$table_name&amp;${table_name}_id=$id";
-    xsm_edit_ops($table_name, $is_new, $redir, $ret_title);
+    xsm_edit_ops($table_name, $is_new, $redir, $ret_title, false);
 }
 
 
