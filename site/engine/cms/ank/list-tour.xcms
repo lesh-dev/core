@@ -25,7 +25,7 @@
     $(xsm_set_editors);
 </script>
 <?php
-    $clear_forest_title = "Будьте внимательны, это действие не может быть отменено (убедитесь, что у вас есть резервная копия БД)";
+    $clear_forest_title = "Будьте внимательны, это действие не может быть отменено (убедитесь, что у вас есть резервная копия&nbsp;БД)";
     $clear_forest_disabled = false;
     if (!xcms_user()->check_rights("admin", false))
     {
