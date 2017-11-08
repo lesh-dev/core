@@ -29,7 +29,7 @@
     xjs_add_slider('status-help', 'show-status-help');
 </script>
 
-<form method="post" class="xsm-filter" name="filter" id="filter-form" action="list-person-locator">
+<form method="get" class="xsm-filter" name="filter" id="filter-form" action="list-person-locator">
     <span>Фильтр: </span><?php
     xsm_draw_department_selector($show_department_id, 'show_department_id', "Все отделения"); ?><i>
     </i><span class="ankListField">Статус: </span><?php
