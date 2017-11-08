@@ -2,7 +2,7 @@
     Персональное постоянное хранилище настроек
     Persistent Session Storage
 */
-drop table pss;
+drop table if exists pss;
 
 create table pss (
     pss_id text primary key,   -- ключ (составной)
