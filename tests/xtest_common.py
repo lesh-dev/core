@@ -206,8 +206,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
             return False
 
         # now let's check that Cabinet link and Exit link are present. if not - it's a bug.
-
-        self.assertUrlPresent(u"Выход", "Here should be logout link after successful authorization. ")
+        self.getElementById("logout")
         self.assertUrlPresent(u"Личный кабинет", "Here should be Cabinet link after successful authorization. ")
 
         return True
@@ -248,10 +247,10 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
     def gotoAuthLink(self):
         self.logAdd("gotoAuthLink: going to authenticate. ")
-        self.gotoUrlByLinkText(u"Авторизация")
+        self.clickElementById("signin")
 
     def getAuthLink(self):
-        return self.getUrlByLinkText(u"Авторизация")
+        return self.getElementById("signin")
 
     def gotoAdminPanel(self):
         self.logAdd("gotoAdminPanel: going to admin control panel. ")
@@ -407,7 +406,7 @@ class XcmsTest(XcmsTestWithConfig):
         self.gotoUrlByLinkText(u"Выход")
 
     def performLogoutFromAdminPanel(self):
-        self.gotoUrlByLinkText(u"Выйти")
+        self.gotoUrlByLinkId("logout")
 
     def closeAdminPanel(self):
         self.gotoUrlByLinkText("X")

@@ -88,7 +88,7 @@ require_once("${xengine_dir}sys/version.php");
                     }
                     else
                     {?>
-                        <a href="<?php echo $meta_site_url_secure.'?'.
+                        <a id="signin" href="<?php echo $meta_site_url_secure.'?'.
                             xcms_url(array('page' => $pageid, 'ref' => 'login', 'return' => '?ref=index')); ?>"
                             class="menu-item menu-level1 menu-sys">Авторизация</a><?php
                     }

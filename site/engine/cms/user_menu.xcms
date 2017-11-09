@@ -53,14 +53,14 @@ if (xcms_user()->check_rights("registered", false))
 if (xcms_user()->check_rights("registered", false))
 {?>
     <div class="menu_item">
-    <a title="Выход"
+    <a id="logout" title="Выход"
         href="<?php echo $meta_site_url_secure.'?'.
         xcms_url(array('page' => $pageid, 'ref' => 'cabinet', 'mode' => 'logout')); ?>"
         >Выход</a> </div> <?php
 }
 elseif ($show_auth)
 {?>
-    <a href="<?php echo $meta_site_url_secure.'?'.
+    <a id="signin" href="<?php echo $meta_site_url_secure.'?'.
         xcms_url(array('page' => $pageid, 'ref' => 'login', 'return' => '?ref=index')); ?>"
         >Авторизация</a><?php
 }

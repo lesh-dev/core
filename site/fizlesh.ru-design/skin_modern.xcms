@@ -39,7 +39,7 @@ require_once("${design_dir}modern_contacts.php");
             </div>
         </nav>
 
-        <a class="signin" href="<?php echo $meta_site_url_secure.'?'.
+        <a id="signin" class="signin" href="<?php echo $meta_site_url_secure.'?'.
             xcms_url(array('page' => $pageid, 'ref' => 'login', 'return' => '?ref=index')); ?>"> </a>
 
         <div class="another_menu">
