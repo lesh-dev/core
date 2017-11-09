@@ -170,7 +170,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
         # check that we have entered the CP.
         # just chech that link exists.
-        self.getAdminPanelLink()
+        self.get_admin_panel_link()
         # test.gotoSite(cpUrl)
 
     def performLogin(self, login, password):
@@ -187,7 +187,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         # assert we have no shit cookies here
         expl_adm = """Here should be no auth cookies. But they are.
         Otherwise, your test is buggy and you forgot to logout previous user. """
-        self.assertUrlNotPresent(u"Админка", expl_adm)
+        self.assertUrlNotPresent(self.admin_panel_link_name(), expl_adm)
         self.assertUrlNotPresent(u"Личный кабинет", expl_adm)
 
         self.gotoAuthLink()
@@ -234,8 +234,8 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def getWelcomeMessage(self, login):
         return u"Привет, " + login
 
-    def getAdminPanelLinkName(self):
-        return u"Админка"
+    def admin_panel_link_name(self):
+        return u"АДМИНКА"
 
     def get_news_link_name(self):
         return u"Новости"
@@ -243,8 +243,8 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def get_contacts_link_name(self):
         return u"Контакты"
 
-    def getAdminPanelLink(self):
-        return self.getUrlByLinkText(self.getAdminPanelLinkName())
+    def get_admin_panel_link(self):
+        return self.getUrlByLinkText(self.admin_panel_link_name())
 
     def gotoAuthLink(self):
         self.logAdd("gotoAuthLink: going to authenticate. ")
@@ -255,7 +255,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
     def gotoAdminPanel(self):
         self.logAdd("gotoAdminPanel: going to admin control panel. ")
-        self.gotoUrlByLinkText(self.getAdminPanelLinkName())
+        self.gotoUrlByLinkText(self.admin_panel_link_name())
 
     def getPersonAbsenceMessage(self):
         # return u"На " + self.m_conf.getTestSchoolName() + u" не присутствовал"
@@ -451,7 +451,7 @@ class XcmsTest(XcmsTestWithConfig):
 
     def checkScreenIsAdmin(self):
         screen = self.getElementTextById("screen")
-        if screen != u"Админка":
+        if screen != self.admin_panel_link_name():
             self.failTest("We are not in the admin panel. Cannot add new page. ")
 
     def addNewPage(self, parentPage, sysName, menuTitle, pageHeader, pageAlias):
