@@ -17,242 +17,107 @@ require_once("${design_dir}modern_contacts.php");
 </head>
 <body>
 <?php
-    $page_id_filtered = str_replace("/", "_", $pageid);
-    ?>
-    <div style="position: fixed; right: 7px; bottom: 6px; z-index: 100; color: #e5e5e5;">Skin:&nbsp;<a
-        href="<?php echo $skin_switch_url; ?>" style="color: #efefef;"><?php echo $skin_to_switch_to; ?></a></div>
+$page_id_filtered = str_replace("/", "_", $pageid);
+?>
+<div style="position: fixed; right: 7px; bottom: 6px; z-index: 100; color: #e5e5e5;">Skin:&nbsp;<a
+    href="<?php echo $skin_switch_url; ?>" style="color: #efefef;"><?php echo $skin_to_switch_to; ?></a></div>
 
-    <!-- FIXME(mvel) identification via aliases, not via pageid -->
-    <div class="page" id="page_<?php echo $page_id_filtered; ?>">
+<!-- FIXME(mvel) identification via aliases, not via pageid -->
+<div class="page" id="page_<?php echo $page_id_filtered; ?>">
 
-        <nav class="navbar navbar-inverse ">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarC" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <div id="navbarC" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <# cms/menu/display start=1 end=1 #>
-                </ul>
-            </div>
-        </nav>
-
-        <a id="signin" class="signin" href="<?php echo $meta_site_url_secure.'?'.
-            xcms_url(array('page' => $pageid, 'ref' => 'login', 'return' => '?ref=index')); ?>"> </a>
-
-        <div class="another_menu">
-        <# cms/user_menu separator= #>
+    <nav class="navbar navbar-inverse ">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarC" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <div id="navbarC" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <# cms/menu/display start=1 end=1 #>
+            </ul>
         </div>
+    </nav>
 
-        <?php
-            $page_alias = xcms_get_key_or($INFO, "alias");
+    <a id="signin" class="signin" href="<?php echo $meta_site_url_secure.'?'.
+        xcms_url(array('page' => $pageid, 'ref' => 'login', 'return' => '?ref=index')); ?>"> </a>
 
-            // FIXME(mvel) const?
-            $container_css_class = "container";
-            $wrapper_css_class = "wrapper";
-
-            // set proper wrapper class depending on the page
-            if (
-                $page_alias == "contacts" ||
-                $page_alias == "links" ||
-                $page_alias == "news"
-            ) {
-                $wrapper_css_class = "transparent-wrapper";
-            }
-            elseif ($page_alias == "index")
-            {
-                $wrapper_css_class = "index-wrapper";
-            }
-        ?>
-
-        <div class="<?php echo $container_css_class; ?> my-container">
-            <?php
-
-            ?>
-            <div class="my-content-block <?php echo $wrapper_css_class; ?>">
-                <?php
-                if ($page_alias == "index")
-                {
-                    ?><# modern_index #><?php
-                }
-                ?>
-                <# cms/menu/display start=2 end=5 no_output #>
-                <?php
-                if (xu_not_empty($menu_html_output))
-                {?>
-                    <!-- optional menu of level 2 -->
-                    <nav class="navbar my-navbar">
-                        <center>
-                            <ul class="nav navbar-nav"><?php echo $menu_html_output; ?></ul>
-                        </center>
-                    </nav><?php
-                }?>
-
-                <div class="content-text"><?php
-                    $hdr = xcms_get_key_or($INFO, "header");
-                    $alias = xcms_get_key_or($INFO, "alias");
-                    $aparam = xcms_get_key_or($_GET, "aparam");
-                    $in_xsm = ($alias == "register" && strlen($aparam));
-
-                    if ($page_alias == "index")
-                    {
-                        $pageid = "z01News";
-                        include(translate("<! cms/contlist/view !>"));
-                        ?>
-                        <center><!-- FIXME(bird) кажется, это лучше задавать стилем, а не тегом, так более гибко -->
-                            <a href="/news" >
-                                <button type="button" class="btn btn-default navbar-btn">Больше новостей</button>
-                            </a>
-                        </center><?php
-                    }
-                    else
-                    {
-                        if (!$in_xsm)
-                        {?>
-                            <# cms/page/edit_button #><?php
-                        }?>
-                        <# cms/ #><?php
-                    }?>
-                </div>
-            </div>
-        </div>
+    <div class="another_menu">
+    <# cms/user_menu separator= #>
     </div>
 
+    <?php
+        $page_alias = xcms_get_key_or($INFO, "alias");
 
-<div style="display:none">
-    OLD TEMPLATE:
+        // FIXME(mvel) const?
+        $container_css_class = "container";
+        $wrapper_css_class = "wrapper";
 
-    <div id="fullHeight">
-        <table class="topTable roundBorders">
-            <tr>
-                <td class="logoCell menuWidth">
-                    <a href="/<# web_prefix #>" title="ФизЛЭШ"><img
-                        src="<# full_design_dir #>pic/fizlesh-logo-small.png"
-                        width="96" height="72" alt="Логотип ФизЛЭШ" /></a>
-                </td>
-                <td class="logoCell">
-                    <div style="position: relative; width: 100%; height: 80px;">
-                        <img src="<# full_design_dir #>pic/fizlesh-title.png"
-                            width="659" height="58"
-                            alt="Физическое отделение ЛЭШ"/>
-                        <a class="leshLogoTitle" href="http://lesh.org.ru"><img
-                            src="<# full_design_dir #>pic/lesh-subheader-wood.png"
-                            width="400" height="30"
-                            alt="Летняя Экологическая Школа"/></a>
-                        <div class="top-links"><# cms/user_menu #></div>
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <table class="bottomTable">
-            <tr>
-                <td class="menu-field menu-width roundBorders">
-                    <# cms/menu/display start=1 end=5 #>
+        // set proper wrapper class depending on the page
+        if (
+            $page_alias == "contacts" ||
+            $page_alias == "links" ||
+            $page_alias == "news"
+        ) {
+            $wrapper_css_class = "transparent-wrapper";
+        }
+        elseif ($page_alias == "index")
+        {
+            $wrapper_css_class = "index-wrapper";
+        }
+    ?>
 
-                    <?php
-                    if (xcms_user()->check_rights("ank", false))
-                    {
-                        include(translate('<a href="/<# web_prefix #>xsm/list-ank'.
-                            '" class="menu-item menu-sys">Анкеты</a>'));
+    <div class="<?php echo $container_css_class; ?> my-container">
+        <?php
 
-                        include(translate('<a href="/<# web_prefix #>xsm/list-person-locator'.
-                            xcms_url(array('show_anketa_status' => 'no-trash')).
-                            '" class="menu-item menu-sys">Все люди</a>'));
+        ?>
+        <div class="my-content-block <?php echo $wrapper_css_class; ?>">
+            <?php
+            if ($page_alias == "index")
+            {
+                ?><# modern_index #><?php
+            }
+            ?>
+            <# cms/menu/display start=2 end=5 no_output #>
+            <?php
+            if (xu_not_empty($menu_html_output))
+            {?>
+                <!-- optional menu of level 2 -->
+                <nav class="navbar my-navbar">
+                    <center>
+                        <ul class="nav navbar-nav"><?php echo $menu_html_output; ?></ul>
+                    </center>
+                </nav><?php
+            }?>
 
-                        include(translate('<a href="/<# web_prefix #>xsm/list-tour'.
-                            '" class="menu-item menu-sys">Выходы в лес</a>'));
+            <div class="content-text"><?php
+                $hdr = xcms_get_key_or($INFO, "header");
+                $alias = xcms_get_key_or($INFO, "alias");
+                $aparam = xcms_get_key_or($_GET, "aparam");
+                $in_xsm = ($alias == "register" && strlen($aparam));
 
-                        include(translate('<a href="/<# web_prefix #>xsm/list-person-locator'.
-                            xcms_url(array('show_anketa_status' => 'active')).
-                            '" class="menu-item menu-sys">Актив отделения</a>'));
-
-                        include(translate('<a href="/<# web_prefix #>xsm/list-person'.
-                            '" class="menu-item menu-sys">Участники школ</a>'));
-
-                        include(translate('<a href="/<# web_prefix #>xsm/list-course'.
-                            '" class="menu-item menu-sys">Курсы</a>'));
-
-                        include(translate('<a href="<# ctx_prefix #>" class="menu-item menu-sys">Проверка олимпиады</a>'));
-                    }
-
-                    if (xcms_user()->check_rights("registered", false))
-                    {?>
-                        <a href="<?php echo $meta_site_url_secure.'?'.
-                            xcms_url(array('page' => $pageid, 'ref' => 'cabinet')); ?>"
-                            class="menu-item menu-sys">Личный кабинет</a><?php
-                    }
-
-                    if (xcms_user()->check_rights("editor", false) || xcms_user()->check_rights("admin", false))
-                    {?>
-                        <a href="<?php echo $meta_site_url_secure.'?'.
-                            xcms_url(array('page' => $pageid, 'ref' => 'admin')); ?>"
-                            class="menu-item menu-sys">Админка</a><?php
-                    }
-
-                    if (xcms_user()->check_rights("registered", false))
-                    {?>
-                        <a href="<?php echo "$meta_site_url_secure/doc"; ?>"
-                            class="menu-item menu-sys">Документация</a><?php
-                    }
-
-                    if (xcms_user()->check_rights("registered", false))
-                    {?>
-                        <a href="<?php echo $meta_site_url_secure.'?'.
-                            xcms_url(array('page' => $pageid, 'ref' => 'cabinet', 'mode' => 'logout')); ?>"
-                            class="menu-item menu-sys">Выход</a><?php
-                    }
-                    else
-                    {?>
-                        <a href="<?php echo $meta_site_url_secure.'?'.
-                            xcms_url(array('page' => $pageid, 'ref' => 'login', 'return' => '?ref=index')); ?>"
-                            class="menu-item menu-level1 menu-sys">Авторизация</a><?php
-                    }
-                ?>
-                <!--a href="http://validator.w3.org/check?uri=referer"><img
-                    src="<# full_design_dir #>pic/valid-html401-green.gif"
-                    alt="Valid HTML 4.01 Transitional" height="31" width="88"></a-->
-                </td>
-                <td class="main-field roundBorders"><div style="position: relative;">
-                    <?php
-                    $hdr = xcms_get_key_or($INFO, "header");
-                    $alias = xcms_get_key_or($INFO, "alias");
-                    $aparam = xcms_get_key_or($_GET, "aparam");
-                    $in_xsm = ($alias == "register" && strlen($aparam));
-                    // little spike: skip header display
-                    // in case of special pages (XSM manager for now)
+                if ($page_alias == "index")
+                {
+                    $pageid = "z01News";
+                    include(translate("<! cms/contlist/view !>"));
                     ?>
-                    <div id="content-header"><?php
-                    if (strlen($hdr) && !$in_xsm)
-                    {
-                        $header_url = "/$web_prefix$alias"; ?>
-                        <a
-                            class="h1"
-                            href="<?php echo $header_url; ?>"
-                            ><?php echo $hdr; ?></a><?php
-                    }?>
-                    </div><?php
+                    <center><!-- FIXME(bird) кажется, это лучше задавать стилем, а не тегом, так более гибко -->
+                        <a href="/news" >
+                            <button type="button" class="btn btn-default navbar-btn">Больше новостей</button>
+                        </a>
+                    </center><?php
+                }
+                else
+                {
                     if (!$in_xsm)
                     {?>
                         <# cms/page/edit_button #><?php
                     }?>
-                    <div id="content-text"><# cms/ #></div>
-                    <hr />
-                    <div style="font-size: 8pt; text-align: center; height: 15px;">
-                        <span>&copy; ФизЛЭШ, 2005&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
-                        <span class="site-version"><?php echo xcms_version(); ?></span>
-                        <?php
-                        if (xcms_is_production())
-                        {?>
-                            <# seo/liveinternet 24.3 #>
-                            <# seo/yandex_metrika 12421258 #><?php
-                        }?>
-                    </div>
-                </div></td>
-            </tr>
-        </table>
+                    <# cms/ #><?php
+                }?>
+            </div>
+        </div>
     </div>
-
+</div>
 </body>
 </html>
