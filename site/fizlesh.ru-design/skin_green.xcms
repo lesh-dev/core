@@ -68,21 +68,21 @@ require_once("${xengine_dir}sys/version.php");
 
                     if (xcms_user()->check_rights("registered", false))
                     {?>
-                        <a href="<?php echo $meta_site_url_secure.'?'.
+                        <a id="cabinet" href="<?php echo $meta_site_url_secure.'?'.
                             xcms_url(array('page' => $pageid, 'ref' => 'cabinet')); ?>"
                             class="menu-item menu-sys">Личный кабинет</a><?php
                     }
 
                     if (xcms_user()->check_rights("editor", false) || xcms_user()->check_rights("admin", false))
                     {?>
-                        <a href="<?php echo $meta_site_url_secure.'?'.
+                        <a id="admin" href="<?php echo $meta_site_url_secure.'?'.
                             xcms_url(array('page' => $pageid, 'ref' => 'admin')); ?>"
                             class="menu-item menu-sys">Админка</a><?php
                     }
 
                     if (xcms_user()->check_rights("registered", false))
                     {?>
-                        <a href="<?php echo $meta_site_url_secure.'?'.
+                        <a id="logout" href="<?php echo $meta_site_url_secure.'?'.
                             xcms_url(array('page' => $pageid, 'ref' => 'cabinet', 'mode' => 'logout')); ?>"
                             class="menu-item menu-sys">Выход</a><?php
                     }
