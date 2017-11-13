@@ -518,17 +518,21 @@ class SeleniumTest(object):
     def drv(self):
         return self.m_driver
 
-    def getElementByName(self, name):
+    def getElementByName(self, name, fail=True):
         try:
             return self.m_driver.find_element_by_name(name)
         except NoSuchElementException:
+            if not fail:
+                return None
             self.failTest("Cannot get element by name " + userSerialize(name) + ". ")
 
-    def getElementById(self, eleId):
+    def getElementById(self, element_id, fail=True):
         try:
-            return self.m_driver.find_element_by_id(eleId)
+            return self.m_driver.find_element_by_id(element_id)
         except NoSuchElementException:
-            self.failTest("Cannot get element by id '" + eleId + "'. ")
+            if not fail:
+                return None
+            self.failTest("Cannot get element by id '" + element_id + "'. ")
 
     def getElementByClass(self, css_class):
         try:
