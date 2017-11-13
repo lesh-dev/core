@@ -395,7 +395,7 @@ class XcmsTest(XcmsTestWithConfig):
 
     def gotoCabinet(self):
         self.logAdd("gotoCabinet: going to user control panel (cabinet). ")
-        self.gotoUrlByLinkText(u"Личный кабинет")
+        self.gotoUrlByLinkId("cabinet")
 
     def gotoEditPerson(self):
         # self.gotoUrlByLinkText(u"Редактировать анкетные данные")
@@ -406,7 +406,7 @@ class XcmsTest(XcmsTestWithConfig):
         self.goto_back_to_anketa_view()
 
     def performLogoutFromSite(self):
-        self.gotoUrlByLinkText(u"Выход")
+        self.gotoUrlByLinkId("logout")
 
     def performLogoutFromAdminPanel(self):
         self.gotoUrlByLinkId("logout")

@@ -126,7 +126,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.gotoCloseEditor()
 
-        self.assertUrlPresent(u"Личный кабинет")
+        self.fillElementById("cabinet")
         # click on menu.
 
         self.logAdd("Clicking on parent menu item. ")
@@ -307,7 +307,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.logAdd("test aliases")
 
-        self.assertUrlPresent(u"Личный кабинет")
+        self.findElementById("cabinet")
 
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoUrlByLinkText(self.m_menuTitle)

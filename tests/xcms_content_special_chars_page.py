@@ -64,9 +64,9 @@ class XcmsContentSpecialCharsPage(xtest_common.XcmsTest):
 
         self.gotoCloseEditor()
 
-        self.assertUrlPresent(u"Личный кабинет")
-        # click on menu.
+        self.fillElementById("cabinet")
 
+        # click on menu.
         self.logAdd("Clicking on parent menu item. ")
         self.gotoUrlByLinkText(self.m_parentPage)
         self.logAdd("Clicking on new page menu item. ")
