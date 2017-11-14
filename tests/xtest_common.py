@@ -246,7 +246,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         return u"Контакты"
 
     def get_admin_panel_link(self):
-        return self.getUrlByLinkText(self.admin_panel_link_name())
+        return self.getElementById("admin")
 
     def gotoAuthLink(self):
         self.logAdd("gotoAuthLink: going to authenticate. ")
