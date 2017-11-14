@@ -237,7 +237,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         return u"Привет, " + login
 
     def admin_panel_link_name(self):
-        return u"АДМИНКА"
+        return u"Админка"
 
     def get_news_link_name(self):
         return u"Новости"
@@ -257,7 +257,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
     def gotoAdminPanel(self):
         self.logAdd("gotoAdminPanel: going to admin control panel. ")
-        self.gotoUrlByLinkText(self.admin_panel_link_name())
+        self.gotoUrlByLinkId("admin")
 
     def getPersonAbsenceMessage(self):
         # return u"На " + self.m_conf.getTestSchoolName() + u" не присутствовал"
@@ -453,8 +453,7 @@ class XcmsTest(XcmsTestWithConfig):
 
     def checkScreenIsAdmin(self):
         screen = self.getElementTextById("screen")
-        if screen != self.admin_panel_link_name():
-            self.failTest("We are not in the admin panel. Cannot add new page. ")
+        self.assert_equal(screen, u"Админка", "We are not in the admin panel. Cannot add new page. ")
 
     def addNewPage(self, parentPage, sysName, menuTitle, pageHeader, pageAlias):
         self.checkScreenIsAdmin()
