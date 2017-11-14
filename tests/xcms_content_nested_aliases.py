@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
+import random_crap
+
 
 class XcmsContentNestedAliases(xtest_common.XcmsTest):
     """
@@ -27,7 +29,7 @@ class XcmsContentNestedAliases(xtest_common.XcmsTest):
         inpPageDir1 = self.fillElementById("create-name-input", inpPageDir1)
         inpMenuTitle1 = self.fillElementById("menu-title-input", inpMenuTitle1)
         inpPageHeader1 = self.fillElementById("header-input", inpPageHeader1)
-        inpAlias1 = self.fillElementById("alias-input", inpAlias1);
+        inpAlias1 = self.fillElementById("alias-input", inpAlias1)
 
         self.clickElementById("create-page-submit")
 
@@ -41,15 +43,13 @@ class XcmsContentNestedAliases(xtest_common.XcmsTest):
         inpPageDir2 = self.fillElementById("create-name-input", inpPageDir2)
         inpMenuTitle2 = self.fillElementById("menu-title-input", inpMenuTitle2)
         inpPageHeader2 = self.fillElementById("header-input", inpPageHeader2)
-        inpAlias2 = self.fillElementById("alias-input", inpAlias2);
+        inpAlias2 = self.fillElementById("alias-input", inpAlias2)
 
         self.clickElementById("create-page-submit")
-        
+
         self.closeAdminPanel()
-        
+
         self.goto_alias(inpAlias1)
         self.assertSitePageHeader(inpPageHeader1)
         self.goto_alias(inpAlias2)
         self.assertSitePageHeader(inpPageHeader2)
-        
-
