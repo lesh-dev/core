@@ -484,6 +484,15 @@ class SeleniumTest(object):
         except ItemNotFound:
             self.logAdd(u"URL " + userSerialize(linkName) + " is really not present (ItemNotFound exception raised). ")
 
+    def assert_id_not_present(self, element_id, reason=""):
+        if not self.getElementById(element_id, fail=False):
+            return
+
+        message = "Forbidden ID is found on the page [assert_id_not_present]: '{}'. {}".format(
+            element_id, self.displayReason(reason)
+        )
+        self.failTest(message)
+
     def assertPageNotPresent(self, pageUrl, reason=""):
         try:
             self.gotoPage(pageUrl)
@@ -526,13 +535,19 @@ class SeleniumTest(object):
                 return None
             self.failTest("Cannot get element by name " + userSerialize(name) + ". ")
 
-    def getElementById(self, element_id, fail=True):
+    def getElementById(self, element_id, reason=None, fail=True):
+        """
+        Obtain HTML element by id.
+        :param reason: auxillary failure message that will be printed in logs.
+        :param fail: if False, do not fail test, just return None
+        :return matched element, exception when element not found, or None when fail=False
+        """
         try:
             return self.m_driver.find_element_by_id(element_id)
         except NoSuchElementException:
             if not fail:
                 return None
-            self.failTest("Cannot get element by id '" + element_id + "'. ")
+            self.failTest("Cannot get element by id '{}'. Reason: {}".format(element_id, reason or "n/a"))
 
     def getElementByClass(self, css_class):
         try:

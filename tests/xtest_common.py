@@ -178,7 +178,6 @@ class XcmsTestWithConfig(XcmsBaseTest):
         returns True if login was successful
         """
         self.addAction("user-login", login + " / " + password)
-    #   test.logAdd("performLogin(" + login + ", " + password + ")")
 
         self.logAdd("performLogin(): goto root")
 
@@ -189,9 +188,8 @@ class XcmsTestWithConfig(XcmsBaseTest):
             "Here should be no auth cookies. But they are. "
             "Otherwise, your test is buggy and you forgot to logout previous user. "
         )
-        self.assertUrlNotPresent(self.admin_panel_link_name(), expl_adm)
-        if self.getElementById("cabinet", fail=False):
-            self.failTest(expl_adm)
+        self.assert_id_not_present("admin", expl_adm)
+        self.assert_id_not_present("cabinet", expl_adm)
 
         self.gotoAuthLink()
 

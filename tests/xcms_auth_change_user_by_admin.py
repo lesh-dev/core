@@ -74,7 +74,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         if not self.performLogin(u.login, u.password):
             self.failTest("Cannot login again as newly created user (with admin privs). ")
 
-        self.assertUrlPresent(self.admin_panel_link_name(), "Now user should have Admin priviledges. ")
+        self.getElementById("admin", reason="Now user should have Admin priviledges. ")
         self.performLogoutFromSite()
 
         # ---------------------- 2nd stage: Editor
