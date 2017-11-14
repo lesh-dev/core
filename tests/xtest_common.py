@@ -413,6 +413,11 @@ class XcmsTest(XcmsTestWithConfig):
         self.gotoUrlByLinkText("X")
 
     def assertSitePageHeader(self, header, reason="Page header does not match expected. "):
+        if header in self.getPageTitle():
+            # light check for new skin
+            return
+        # Not all designs render page title. So we check either page title or real content header.
+        # FIXME(mvel): Here should be a skin option/etc
         self.assertElementTextById("content-header", header, reason=reason)
 
     def editCommentToPerson(self, commentLinkId):
