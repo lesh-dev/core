@@ -82,11 +82,10 @@ def RunTest(test):
         test.logAdd(test.getName() + " TEST PASSED", "action")
         return 0
     except TestFatal as exc:
-        # test.printActionLog()
         return test.handleTestFatal(exc)
     except TestError as exc:
+        logging.error("Test FAILED with traceback\n%s\n\n", traceback.format_exc())
         return test.handleTestFail(exc)
-        # test.printActionLog()
     except TestShutdown as exc:
         return test.handleShutdown(exc)
     except NoSuchWindowException as exc:
