@@ -21,6 +21,6 @@ class XcmsOpenNonExisting(xtest_common.XcmsBaseTest):
 
         self.gotoPage("/qqq")
         self.assertTextPresent("//div[@class='error-widget']", u"Нет такой страницы")
-        homeHref = self.getUrlByLinkText(u"этой ссылке")
-        print "Home reference on 404 page: ", homeHref
-        self.gotoSite(homeHref)
+        home_href = self.get_url_by_link_data(u"этой ссылке")
+        print "Home reference on 404 page: ", home_href
+        self.gotoSite(home_href)

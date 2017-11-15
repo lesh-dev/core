@@ -426,7 +426,7 @@ class SeleniumTest(object):
         reason is custom comment helping to understand why this link is vital for test pass.
         """
         try:
-            link = self.getUrlByLinkText(linkName, reason=reason)
+            link = self.get_url_by_link_data(linkName, reason=reason)
             self.checkBaseUrl(link)
             self.gotoSite(link, linkName)
         except NoSuchElementException:
@@ -438,7 +438,7 @@ class SeleniumTest(object):
         reason is custom comment helping to understand why this link is vital for test pass.
         """
         try:
-            link = self.getUrlByLinkText(linkName, reason=reason, option_list=["title"])
+            link = self.get_url_by_link_data(linkName, reason=reason, attribute="title")
             self.checkBaseUrl(link)
             self.gotoSite(link, linkName)
         except NoSuchElementException:
@@ -456,7 +456,7 @@ class SeleniumTest(object):
 
     def gotoUrlByPartialLinkText(self, linkName, reason=""):
         try:
-            link = self.getUrlByLinkText(linkName, ["partial"], reason)
+            link = self.get_url_by_link_data(linkName, partial=True, reason=reason)
             self.gotoSite(link, linkName)
         except NoSuchElementException:
             self.failTest("Cannot find URL with name " + userSerialize(linkName) + ". ")
@@ -476,7 +476,7 @@ class SeleniumTest(object):
 
     def assertUrlNotPresent(self, linkName, reason=""):
         try:
-            self.getUrlByLinkText(linkName, reason=reason, option_list=["silent"])
+            self.get_url_by_link_data(linkName, reason=reason, silent=True)
             exMsg = "Forbidden URL is found on the page in assertUrlNotPresent: " + userSerialize(
                 linkName) + ". " + self.displayReason(reason)
             self.failTest(exMsg)
@@ -503,7 +503,7 @@ class SeleniumTest(object):
 
     def assertUrlPresent(self, linkName, reason=""):
         try:
-            self.getUrlByLinkText(linkName, reason=reason)
+            self.get_url_by_link_data(linkName, reason=reason)
         except ItemNotFound:
             exceptionMessage = "Required URL is not found on the page in assertUrlPresent: " + userSerialize(
                 linkName) + ". " + self.displayReason(reason)
@@ -1100,51 +1100,55 @@ class SeleniumTest(object):
             if isVoid(stringOrList):
                 self.fatalTest("Empty param passed to " + methodName)
 
-    def getUrlByLinkText(self, urlText, option_list=None, reason=""):
+    def get_url_by_link_data(self, url_text, partial=False, attribute=None, reason="", silent=False):
+        """
+        Search for link with given properties.
+        :param url_text: url text to search (can be either string or list)
+        :param partial: search for partial text
+        :param attribute: search for text in attribute, not in link text
+        :param reason: reason to be added to failure message
+        :param silent: do not write in logs about failures
+        """
+        self.checkEmptyParam(url_text, "get_url_by_link_data")
+        url_text_str = userSerialize(url_text)
+        search_method = self.m_driver.find_element_by_link_text
+        if partial:
+            logging.info("Search for partial link text %s", url_text_str)
+            search_method = self.m_driver.find_element_by_partial_link_text
+        elif attribute:
+            logging.info("Search for link with '%s' attribute %s", attribute, url_text_str)
+            search_method = self.m_driver.find_element_by_css_selector
 
-        option_list = option_list or []
-
-        self.checkEmptyParam(urlText, "getUrlByLinkText")
-        searchMethod = self.m_driver.find_element_by_link_text
-        if "partial" in option_list:
-            self.logAdd("Search for partial link text " + userSerialize(urlText) + ". ")
-            searchMethod = self.m_driver.find_element_by_partial_link_text
-        elif "title" in option_list:
-            self.logAdd("Search for link with title " + userSerialize(urlText) + ". ")
-            searchMethod = self.m_driver.find_element_by_css_selector
-
-        def getUrl(url_name, option_list=None):
-            if not option_list:
-                option_list = []
-            if "title" in option_list:
-                url = searchMethod('[title="' + url_name + '"]')
+        def get_url(url_name, attribute=None):
+            if attribute:
+                url = search_method('[{}="{}"]'.format(attribute, url_name))
             else:
-                url = searchMethod(url_name)
+                url = search_method(url_name)
             return url.get_attribute("href")
 
-        if bw.is_list(urlText):
-            for urlName in urlText:
+        if bw.is_list(url_text):
+            for url_name in url_text:
                 try:
-                    return getUrl(urlName, option_list=option_list)
+                    return get_url(url_name, attribute=attribute)
                 except NoSuchElementException:
-                    if "silent" not in option_list:
-                        self.logAdd("Tried to find url by name " + userSerialize(urlName) + ", not found. ")
+                    if not silent:
+                        logging.info("Tried to find url by name '%s', not found", url_name)
             else:
                 # loop ended, found nothing
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
                 msg = (
-                    "Cannot find URL by link texts: " + userSerialize(urlText) +
+                    "Cannot find URL by link texts: " + url_text_str +
                     " on page " + userSerialize(self.curUrl()) + ". " + self.displayReason(reason)
                 )
-                self.throwItemNotFound(msg, option_list=option_list)
-        else:  # single link
+                self.throwItemNotFound(msg, ["silent"] if silent else [])
+        else:   # single link
             try:
-                return getUrl(urlText, option_list=option_list)
+                return get_url(url_text, attribute=attribute)
             except NoSuchElementException:
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
-                msg = "Cannot find URL by link text: " + userSerialize(urlText) + " on page " + userSerialize(
+                msg = "Cannot find URL by link text: " + url_text_str + " on page " + userSerialize(
                     self.curUrl()) + ". " + self.displayReason(reason)
-                self.throwItemNotFound(msg, option_list=option_list)
+                self.throwItemNotFound(msg, ["silent"] if silent else [])
 
     def countIndexedUrlsByLinkText(self, urlText, sibling=""):
         # case: <a><span>text</span></a> is not captured by internal of 'gotoUrlByLinkText'

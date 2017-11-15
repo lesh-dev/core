@@ -354,7 +354,7 @@ class XcmsTest(XcmsTestWithConfig):
 
         while True:
             try:
-                userUrl = self.getUrlByLinkText(emailToDelete, ["partial"])
+                userUrl = self.get_url_by_link_data(emailToDelete, partial=True)
                 self.logAdd("Test user found, removing it. ")
                 self.gotoSite(userUrl)
                 self.clickElementById("check_delete_user")
