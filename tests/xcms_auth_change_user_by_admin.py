@@ -106,9 +106,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         if not self.performLogin(u.login, u.password):
             self.failTest("Cannot login again as newly created user (with Editor privs). ")
 
-        self.assertUrlPresent(
-            self.admin_panel_link_name(), "Now our user should have no Admin rights, but Editor uses admin panel. "
-        )
+        self.getElementById("admin", "Now our user should have no Admin rights, but Editor uses admin panel. ")
         self.assertUrlNotPresent(self.getAnketaListMenuName(), "Our user still have no Manager rights. ")
         self.assertUrlPresent(self.getEditPageInPlaceLinkName(), "Now our user should have Editor rights. ")
 

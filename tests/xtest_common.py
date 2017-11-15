@@ -3,6 +3,7 @@
 
 import selenium_test
 import random_crap
+import logging
 
 from xtest_config import XcmsTestConfig
 
@@ -413,6 +414,7 @@ class XcmsTest(XcmsTestWithConfig):
         self.gotoUrlByLinkText("X")
 
     def assertSitePageHeader(self, header, reason="Page header does not match expected. "):
+        logging.info("%s %s", header, self.getPageTitle())
         if header in self.getPageTitle():
             # light check for new skin
             return

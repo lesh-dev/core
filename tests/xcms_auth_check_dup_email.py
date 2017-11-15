@@ -12,6 +12,7 @@ class XcmsAuthCheckDupEmail(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
 
         inp_login1 = "dup_email_" + random_crap.random_text(8)
         inp_login2 = "dup_email_" + random_crap.random_text(8)
@@ -40,7 +41,10 @@ class XcmsAuthCheckDupEmail(xtest_common.XcmsTest):
             validate=False,
         )
 
-        self.assertBodyTextNotPresent(u"Пользователь '" + u2.login + u"' успешно создан", "We should get error about duplicate e-mails. ")
+        self.assertBodyTextNotPresent(
+            u"Пользователь '{}' успешно создан".format(u2.login),
+            "We should get error about duplicate e-mails. ",
+        )
 
         self.performLogout()
 

@@ -21,7 +21,7 @@ class XcmsContentNestedAliases(xtest_common.XcmsTest):
         self.gotoCreatePage()
 
         inpPageDir1 = "nested_alias1_" + random_crap.random_text(4)
-        inpMenuTitle1 = "nested_alias1_" + random_crap.random_text(4)
+        inpMenuTitle1 = "nested_alias_mt1_" + random_crap.random_text(4)
         inpPageHeader1 = "nested_alias1_" + random_crap.random_text(4)
         inpAlias1 = "nested_alias_" + random_crap.random_text(4) + "/level1"
         inpAlias2 = inpAlias1 + "/level2"
@@ -37,7 +37,7 @@ class XcmsContentNestedAliases(xtest_common.XcmsTest):
         self.gotoCreatePage()
 
         inpPageDir2 = "nested_alias2_" + random_crap.random_text(4)
-        inpMenuTitle2 = "nested_alias2_" + random_crap.random_text(4)
+        inpMenuTitle2 = "nested_alias_mt2_" + random_crap.random_text(4)
         inpPageHeader2 = "nested_alias2_" + random_crap.random_text(4)
 
         inpPageDir2 = self.fillElementById("create-name-input", inpPageDir2)
