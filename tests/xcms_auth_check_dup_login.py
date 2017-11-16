@@ -13,6 +13,7 @@ class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
     """
 
     def run(self):
+        self.ensure_logged_off()
 
         # first, login as admin
         inp_login = "dup_user_" + random_crap.random_text(8)
