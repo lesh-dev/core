@@ -33,7 +33,11 @@ if (xcms_user()->check_rights("ank", false))
     echo $user_menu_separator;
 }
 
-if (xcms_user()->check_rights("admin", false))
+if (
+    xcms_user()->check_rights("admin", false) ||
+    # This is a bug. Site editor and Admin panel should not be the same things!
+    xcms_user()->check_rights("editor", false)
+)
 {?>
     <div class="menu_item">
     <a id="admin" title="Админка"
