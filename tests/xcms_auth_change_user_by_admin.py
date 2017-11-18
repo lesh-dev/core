@@ -153,7 +153,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
             self.failTest("Cannot login again as newly created user (with Manager privs). ")
 
         self.assertUrlNotPresent(self.admin_panel_link_name(), "Now our user should have no access to Admin panel. ")
-        self.findElementById("xsm")
+        self.getElementById("xsm", "Now user should have Manager rights and have XSM access")
         self.assertUrlNotPresent(
             self.getEditPageInPlaceLinkName(), "On third stage, our user should have no Editor rights. "
         )
