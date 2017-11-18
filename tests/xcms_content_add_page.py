@@ -139,7 +139,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
             newPageTextForCheck,
             "page text after reopening editor does not match entered text. "
         )
-        self.assertElementTextById("content-header", self.m_pageHeader, "page header does not match entered header. ")
+        # FIXME(content-header) not in new design
+        # self.assertElementTextById("content-header", self.m_pageHeader, "page header does not match entered header. ")
 
         if inpMenuTitle not in self.getPageTitle():
             self.failTest("Menu title text does not appear in page title after going to the page by menu. ")
@@ -149,8 +150,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
     def testVersions(self):
 
-        self.gotoUrlByLinkText(self.m_parentPage)
-        self.gotoUrlByLinkText(self.m_menuTitle)
+        self.gotoUrlByLinkText(self.m_parentPage, attribute="xcms-content")
+        self.gotoUrlByLinkText(self.m_menuTitle, attribute="xcms-content")
 
         self.gotoEditPageInPlace()
 
@@ -218,8 +219,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.logAdd("test diff engine. ")
         self.wait(2)
 
-        self.gotoUrlByLinkText(self.m_parentPage)
-        self.gotoUrlByLinkText(self.m_menuTitle)
+        self.gotoUrlByLinkText(self.m_parentPage, attribute="xcms-content")
+        self.gotoUrlByLinkText(self.m_menuTitle, attribute="xcms-content")
         self.gotoEditPageInPlace()
 
         wordNumber = 7
