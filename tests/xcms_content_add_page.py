@@ -126,9 +126,9 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.gotoCloseEditor()
 
-        self.fillElementById("cabinet")
-        # click on menu.
+        self.findElementById("cabinet")
 
+        # click on menu.
         self.logAdd("Clicking on parent menu item. ")
         self.gotoUrlByLinkText(self.m_parentPage)
         self.logAdd("Clicking on new page menu item. ")
