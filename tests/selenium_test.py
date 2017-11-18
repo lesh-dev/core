@@ -421,12 +421,12 @@ class SeleniumTest(object):
                 "Link with name " + userSerialize(link) + " leads to another site: " + userSerialize(link) + ". "
             )
 
-    def gotoUrlByLinkText(self, linkName, reason=""):
+    def gotoUrlByLinkText(self, linkName, reason="", partial=False, attribute=None):
         """
         reason is custom comment helping to understand why this link is vital for test pass.
         """
         try:
-            link = self.get_url_by_link_data(linkName, reason=reason)
+            link = self.get_url_by_link_data(linkName, reason=reason, partial=partial, attribute=attribute)
             self.checkBaseUrl(link)
             self.gotoSite(link, linkName)
         except NoSuchElementException:
@@ -1121,7 +1121,7 @@ class SeleniumTest(object):
 
         def get_url(url_name, attribute=None):
             if attribute:
-                url = search_method('[{}="{}"]'.format(attribute, url_name))
+                url = search_method(u'[{}="{}"]'.format(attribute, url_name))
             else:
                 url = search_method(url_name)
             return url.get_attribute("href")
