@@ -55,16 +55,15 @@ class XcmsXsmAnketaDuplicate(xsm.Manager, xtest_common.XcmsTest):
     def add_anketa(self, person):
         self.gotoRoot()
         # navigate to anketas
-        self.gotoUrlByLinkText(self.getEntranceLinkName())
-        self.goto_anketa()
-        self.assertBodyTextPresent(self.getAnketaPageHeader())
+        self.gotoUrlByLinkText(self.getEntranceLinkName(), attribute="xcms-content")
+        self.assertBodyTextPresent(u"заполните анкету")
         self.input_person_data(person)
 
     def check_unique_anketa(self, person):
         # login as admin
         self.performLoginAsManager()
-        self.gotoRoot()
-        self.gotoUrlByLinkText(self.getAnketaListMenuName())
+        self.goto_xsm()
+        self.goto_xsm_anketas()
 
         self.fillElementById("show_name_filter-input", person.short_alias())
         self.clickElementByName("show-person")
