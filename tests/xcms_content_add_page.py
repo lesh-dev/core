@@ -310,8 +310,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.getElementById("cabinet")
 
-        self.gotoUrlByLinkText(self.m_parentPage)
-        self.gotoUrlByLinkText(self.m_menuTitle)
+        self.gotoUrlByLinkText(self.m_parentPage, attribute="xcms-content")
+        self.gotoUrlByLinkText(self.m_menuTitle, attribute="xcms-content")
         self.gotoEditPageInPlace()
 
         # edit alias
@@ -335,7 +335,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
                 "Page/menu title text does not appear in page title after going to page by alias after alias change. "
             )
 
-        self.assertElementTextById("content-header", self.m_pageHeader, "page header does not match entered header. ")
+        # FIXME(mvel): new design does not support headers
+        # self.assertElementTextById("content-header", self.m_pageHeader, "page header does not match entered header. ")
 
     def testBadAlias(self):
 
