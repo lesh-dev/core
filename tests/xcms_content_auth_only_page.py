@@ -67,7 +67,7 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
         # click on some other menu to change active menu item
 
         self.logAdd("Clicking on parent menu item. ")
-        self.gotoUrlByLinkText(parentPage)
+        self.gotoUrlByLinkText(parentPage, attribute="xcms-content")
 
         self.logAdd("Checking new page menu item, it should NOT be visible")
         self.assertUrlNotPresent(inpMenuTitle)
@@ -100,17 +100,15 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
             self.failTest("Cannot login as auth-page-test user. ")
 
         self.logAdd("Clicking on parent menu item. ")
-        self.gotoUrlByLinkText(parentPage)
+        self.gotoUrlByLinkText(parentPage, attribute="xcms-content")
 
         self.logAdd("Checking new page menu item, it should be visible")
-        self.gotoUrlByLinkText(inpMenuTitle)
+        self.gotoUrlByLinkText(inpMenuTitle, attribute="xcms-content")
 
         self.assertElementTextById(
             "content-text", pageText, "menu check: page text does not match entered text (under auth). "
         )
-        self.assertElementTextById(
-            "content-header", pageHeader, "menu check: page header does not match entered header (under auth). "
-        )
+        self.assert_page_header(pageHeader)
 
         if inpMenuTitle not in self.getPageTitle():
             self.failTest(
