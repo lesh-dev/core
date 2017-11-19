@@ -413,7 +413,7 @@ class XcmsTest(XcmsTestWithConfig):
     def closeAdminPanel(self):
         self.gotoUrlByLinkText("X")
 
-    def assertSitePageHeader(self, header, reason="Page header does not match expected. "):
+    def assert_page_header(self, header, reason="Page header does not match expected. "):
         logging.info("%s %s", header, self.getPageTitle())
         if header in self.getPageTitle():
             # light check for new skin

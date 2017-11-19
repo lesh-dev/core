@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
+import random_crap
+
 
 class XcmsContentHiddenPage(xtest_common.XcmsTest):
     """
@@ -55,7 +57,7 @@ class XcmsContentHiddenPage(xtest_common.XcmsTest):
         # click on some other menu to change active menu item
 
         self.logAdd("Clicking on parent menu item. ")
-        self.gotoUrlByLinkText(self.m_parentPage)
+        self.gotoUrlByLinkText(self.m_parentPage, attribute="xcms-content")
 
         self.logAdd("Checking new page menu item, it should NOT be visible")
         self.assertUrlNotPresent(inpMenuTitle)
@@ -68,4 +70,3 @@ class XcmsContentHiddenPage(xtest_common.XcmsTest):
 
         if inpMenuTitle not in self.getPageTitle():
             self.failTest("Menu title text does not appear in page title after going to the page by site menu. ")
-
