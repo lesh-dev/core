@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
+import random_crap
 
 
 class XcmsContentTopLevelPage(xtest_common.XcmsTest):
@@ -19,15 +20,15 @@ class XcmsContentTopLevelPage(xtest_common.XcmsTest):
 
         self.gotoCreatePage()
 
-        inpPageDir = "topLevelPage_" + random_crap.random_text(6);
-        inpMenuTitle = "topMenuTitle_" + random_crap.random_text(6);
-        inpPageHeader = "topPageHeader_" + random_crap.random_text(6);
-        inpAlias = "top/level/page/" + random_crap.random_text(6);
+        inpPageDir = "topLevelPage_" + random_crap.random_text(6)
+        inpMenuTitle = "topMenuTitle_" + random_crap.random_text(6)
+        inpPageHeader = "topPageHeader_" + random_crap.random_text(6)
+        inpAlias = "top/level/page/" + random_crap.random_text(6)
 
-        inpPageDir = self.fillElementById("create-name-input", inpPageDir);
-        inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle);
-        inpPageHeader = self.fillElementById("header-input", inpPageHeader);
-        inpAlias = self.fillElementById("alias-input", inpAlias);
+        inpPageDir = self.fillElementById("create-name-input", inpPageDir)
+        inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)
+        inpPageHeader = self.fillElementById("header-input", inpPageHeader)
+        inpAlias = self.fillElementById("alias-input", inpAlias)
 
         self.clickElementById("global-checkbox")
 
@@ -58,8 +59,7 @@ class XcmsContentTopLevelPage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(inpMenuTitle)
 
         self.assertElementTextById("content-text", pageText, "page text does not match entered text. ")
-        self.assertElementTextById("content-header", inpPageHeader, "page header does not match entered header. ")
+        self.assert_page_header(inpPageHeader)
 
         if inpMenuTitle not in self.getPageTitle():
             self.failTest("Menu title text does not appear in page title after going to the page by site menu. ")
-
