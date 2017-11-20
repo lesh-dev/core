@@ -501,13 +501,9 @@ class SeleniumTest(object):
         except PageNotFound:
             self.logAdd(u"Page " + userSerialize(pageUrl) + " is really not present (PageNotFound exception raised). ")
 
+    # TODO(mvel): remove this: чем меньше API-методов, тем лучше: они больше повторяются и запоминаются.
     def assertUrlPresent(self, linkName, reason=""):
-        try:
-            self.get_url_by_link_data(linkName, reason=reason)
-        except ItemNotFound:
-            exceptionMessage = "Required URL is not found on the page in assertUrlPresent: " + userSerialize(
-                linkName) + ". " + self.displayReason(reason)
-            self.failTest(exceptionMessage)
+        self.get_url_by_link_data(linkName, reason=reason)
 
     def wait(self, seconds, comment=""):
         log_comment_text = "Comment: " + userSerialize(comment) if comment else ""
@@ -1100,17 +1096,17 @@ class SeleniumTest(object):
             if isVoid(stringOrList):
                 self.fatalTest("Empty param passed to " + methodName)
 
-    def get_url_by_link_data(self, url_text, partial=False, attribute=None, reason="", silent=False):
+    def get_url_by_link_data(self, url_data, partial=False, attribute=None, reason="", silent=False):
         """
-        Search for link with given properties.
-        :param url_text: url text to search (can be either string or list)
+        Search for link with given data in properties.
+        :param url_data: url data (text) to search (can be either string or list)
         :param partial: search for partial text
         :param attribute: search for text in attribute, not in link text
         :param reason: reason to be added to failure message
         :param silent: do not write in logs about failures
         """
-        self.checkEmptyParam(url_text, "get_url_by_link_data")
-        url_text_str = userSerialize(url_text)
+        self.checkEmptyParam(url_data, "get_url_by_link_data")
+        url_text_str = userSerialize(url_data)
         search_method = self.m_driver.find_element_by_link_text
         if partial:
             logging.info("Search for partial link text %s", url_text_str)
@@ -1126,8 +1122,8 @@ class SeleniumTest(object):
                 url = search_method(url_name)
             return url.get_attribute("href")
 
-        if bw.is_list(url_text):
-            for url_name in url_text:
+        if bw.is_list(url_data):
+            for url_name in url_data:
                 try:
                     return get_url(url_name, attribute=attribute)
                 except NoSuchElementException:
@@ -1143,7 +1139,7 @@ class SeleniumTest(object):
                 self.throwItemNotFound(msg, ["silent"] if silent else [])
         else:   # single link
             try:
-                return get_url(url_text, attribute=attribute)
+                return get_url(url_data, attribute=attribute)
             except NoSuchElementException:
                 # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
                 msg = "Cannot find URL by link text: " + url_text_str + " on page " + userSerialize(
