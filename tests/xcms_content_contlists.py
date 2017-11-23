@@ -68,7 +68,7 @@ class XcmsContentContlist(xtest_common.XcmsTest):
         self.logAdd("Alias: {0}".format(blockAlias))
 
         self.gotoCloseEditor()
-        self.gotoUrlByLinkText(inpMenuTitle)
+        self.gotoUrlByLinkText(inpMenuTitle, attribute="xcms-content")
 
         dateStr = pageDate.strftime("%d.%m.%Y")
         self.assertElementSubTextById("content-text", dateStr, "Contlist timestamp not found")
