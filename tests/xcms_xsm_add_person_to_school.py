@@ -50,6 +50,10 @@ class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
         school = xsm.add_named_school(self, _SCHOOL_NAME)
         school_id = xsm.get_school_id(self, _SCHOOL_NAME)
         self.gotoUrlByLinkText(u"Участники школ")
+        if not self.get_url_by_link_data(school.school_title, fail=False):
+            # school is hidden in school selector
+            self.setOptionValueByIdAndValue("view-school-selector", school_id)
+
         self.gotoUrlByLinkText(school.school_title)
         self.gotoUrlByLinkText(u"Добавить нового участника")
         person = xsm.Person(self)
@@ -82,10 +86,7 @@ class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
         self.gotoUrlByLinkTitle(u"Отчислить с " + school.school_title)
         self.clickElementById("confirm-delete-person_school-submit")
         self.gotoUrlByLinkText(u"Участники школ")
-        if self.checkBodyTextPresent(school.school_title):
-            # school is in recents row
-            self.gotoUrlByLinkText(school.school_title)
-        else:
+        if not self.get_url_by_link_data(school.school_title, fail=False):
             # school is hidden in school selector
             self.setOptionValueByIdAndValue("view-school-selector", school_id)
 

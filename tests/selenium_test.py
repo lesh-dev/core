@@ -1096,7 +1096,7 @@ class SeleniumTest(object):
             if isVoid(stringOrList):
                 self.fatalTest("Empty param passed to " + methodName)
 
-    def get_url_by_link_data(self, url_data, partial=False, attribute=None, reason="", silent=False):
+    def get_url_by_link_data(self, url_data, partial=False, attribute=None, reason="", silent=False, fail=True):
         """
         Search for link with given data in properties.
         :param url_data: url data (text) to search (can be either string or list)
@@ -1122,29 +1122,26 @@ class SeleniumTest(object):
                 url = search_method(url_name)
             return url.get_attribute("href")
 
-        if bw.is_list(url_data):
-            for url_name in url_data:
-                try:
-                    return get_url(url_name, attribute=attribute)
-                except NoSuchElementException:
-                    if not silent:
-                        logging.info("Tried to find url by name '%s', not found", url_name)
-            else:
-                # loop ended, found nothing
-                # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
-                msg = (
-                    "Cannot find URL by link texts: " + url_text_str +
-                    " on page " + userSerialize(self.curUrl()) + ". " + self.displayReason(reason)
-                )
-                self.throwItemNotFound(msg, ["silent"] if silent else [])
-        else:   # single link
+        if not bw.is_list(url_data):
+            url_data = [url_data, ]
+
+        for url_name in url_data:
             try:
-                return get_url(url_data, attribute=attribute)
+                return get_url(url_name, attribute=attribute)
             except NoSuchElementException:
-                # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
-                msg = "Cannot find URL by link text: " + url_text_str + " on page " + userSerialize(
-                    self.curUrl()) + ". " + self.displayReason(reason)
-                self.throwItemNotFound(msg, ["silent"] if silent else [])
+                if not silent:
+                    logging.info("Tried to find url by name '%s', not found", url_name)
+        else:
+            # loop ended, found nothing
+            if not fail:
+                return None
+
+            # here we don't use failTest() because this special exception is caught in assertUrlNotPresent, etc.
+            msg = (
+                "Cannot find URL by link texts: " + url_text_str +
+                " on page " + userSerialize(self.curUrl()) + ". " + self.displayReason(reason)
+            )
+            self.throwItemNotFound(msg, ["silent"] if silent else [])
 
     def countIndexedUrlsByLinkText(self, urlText, sibling=""):
         # case: <a><span>text</span></a> is not captured by internal of 'gotoUrlByLinkText'
