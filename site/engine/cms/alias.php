@@ -123,10 +123,10 @@ function xcms_rebuild_aliases()
     return true;
 }
 
-/*/
+/**
  * Alias change handler.
  * @return dict("output", "error")
- */
+ **/
 function xcms_change_alias($info)
 {
     global $pageid;

@@ -128,7 +128,7 @@ function xsm_delete_entity_listmode($table_name, $title, $aux_param = '')
  * @param $redir Ссылка для возврата назад
  * @param $ret_title Заголовок ссылки для возврата назад
  * @param @del_title Заголовок кнопки "Удалить" (если false, кнопка не показывается совсем)
- */
+ **/
 function xsm_edit_ops($table_name, $is_new, $redir, $ret_title, $del_title = "Удалить") {?>
     <div class="xsm-edit-ops"><?php
         xcmst_submit("update-$table_name", "Сохранить", "", "xsm-save-button");
