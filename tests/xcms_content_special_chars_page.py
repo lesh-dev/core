@@ -64,7 +64,7 @@ class XcmsContentSpecialCharsPage(xtest_common.XcmsTest):
 
         self.gotoCloseEditor()
 
-        self.fillElementById("cabinet")
+        self.getElementById("cabinet")
 
         # click on menu.
         self.logAdd("Clicking on parent menu item. ")
