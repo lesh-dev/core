@@ -7,7 +7,6 @@ require_once("${design_dir}modern_contacts.php");
     <meta charset="utf-8">
     <# cms/head #>
     <link rel="yandex-tableau-widget" href="<# full_design_dir #>tableau.json" />
-    <title>ФизЛЭШ</title>
     <# js/jquery #>
     <# js/bootstrap3 #>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&amp;subset=latin,cyrillic" rel="stylesheet" type="text/css">
