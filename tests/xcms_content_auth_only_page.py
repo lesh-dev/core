@@ -125,8 +125,9 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
         self.assertElementTextById(
             "content-text", pageText, "alias check: page text does not match entered text (under auth). "
         )
-        self.assertElementTextById(
-            "content-header", pageHeader, "alias check: page header does not match entered header (under auth). "
+        self.assert_page_header(
+            pageHeader,
+            reason="Alias check: page header does not match entered header (under auth). "
         )
 
         if inpMenuTitle not in self.getPageTitle():

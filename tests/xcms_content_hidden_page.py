@@ -66,7 +66,7 @@ class XcmsContentHiddenPage(xtest_common.XcmsTest):
 
         self.logAdd("We should see page text")
         self.assertElementTextById("content-text", pageText, "page text does not match entered text. ")
-        self.assertElementTextById("content-header", inpPageHeader, "page header does not match entered header. ")
+        self.assert_page_header(inpPageHeader, reason="Page header does not match entered header. ")
 
         if inpMenuTitle not in self.getPageTitle():
             self.failTest("Menu title text does not appear in page title after going to the page by site menu. ")

@@ -139,8 +139,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
             newPageTextForCheck,
             "page text after reopening editor does not match entered text. "
         )
-        # FIXME(content-header) not in new design
-        # self.assertElementTextById("content-header", self.m_pageHeader, "page header does not match entered header. ")
+        self.assert_page_header(self.m_pageHeader, reason="Page header does not match entered header. ")
 
         if inpMenuTitle not in self.getPageTitle():
             self.failTest("Menu title text does not appear in page title after going to the page by menu. ")
@@ -335,8 +334,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
                 "Page/menu title text does not appear in page title after going to page by alias after alias change. "
             )
 
-        # FIXME(mvel): new design does not support headers
-        # self.assertElementTextById("content-header", self.m_pageHeader, "page header does not match entered header. ")
+        self.assert_page_header(self.m_pageHeader, reason="Page header does not match entered header. ")
 
     def testBadAlias(self):
 
