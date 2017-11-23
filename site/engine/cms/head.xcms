@@ -9,11 +9,18 @@
 <meta name="keywords" content="<?php echo htmlspecialchars($keywords); ?>" />
 <meta name="description" content="<?php echo htmlspecialchars($description); ?>" />
 <title><?php
-    $title = $meta_site_name; // from settings
+    $page_title = $meta_site_name; // from settings
     if (isset($pageid) && strlen($pageid)) {
-        $append = xcms_get_key_or($list, "menu-title");
-        if (xu_not_empty($append))
-            $title = "$append :: $title";
+        $page_header = xcms_get_key_or($list, "header");
+        if (xu_empty($page_header))
+        {
+            // menu title is a fallback for header
+            $page_header = xcms_get_key_or($list, "menu-title");
+        }
+        if (xu_not_empty($page_header))
+        {
+            $page_title = "$page_header :: $meta_site_name";
+        }
     }
-    echo htmlspecialchars($title);
+    echo htmlspecialchars($page_title);
 ?></title>
