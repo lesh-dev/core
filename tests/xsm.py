@@ -597,7 +597,7 @@ class Manager(xc.XcmsTest):
 
     @staticmethod
     def get_anketa_success_submit_message():
-        return u"Поздравляем"
+        return u"наших координаторов"
 
     @staticmethod
     def get_anketa_duplicate_submit_message():
