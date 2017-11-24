@@ -3,12 +3,23 @@
 
 import logging
 
-
-def configure_logger():
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-8s %(message)s")
-
 # Bells-And-Whistles (tm) Python 2.x library
 # Contains non-categorized common crap code used in selenium tests.
+
+
+def configure_logger():
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+
+    formatter = logging.Formatter("%(asctime)s|%(levelname)-8s %(message)s")
+
+    file_handler = logging.FileHandler("logs/all_tests.log")
+    file_handler.setFormatter(formatter)
+    root_logger.addHandler(file_handler)
+
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
+    root_logger.addHandler(console_handler)
 
 
 class BawError(RuntimeError):
