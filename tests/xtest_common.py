@@ -414,7 +414,7 @@ class XcmsTest(XcmsTestWithConfig):
         self.gotoUrlByLinkText("X")
 
     def assert_page_header(self, header, reason="Page header does not match expected. "):
-        logging.info("%s %s", header, self.getPageTitle())
+        logging.info("Header: %s| page title: %s", header, self.getPageTitle())
         if header in self.getPageTitle():
             # light check for new skin
             return
