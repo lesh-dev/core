@@ -3,6 +3,7 @@
 
 import xtest_common
 
+
 class XcmsSiteOpenAllPages(xtest_common.XcmsTest):
     """
     This test checks overall site content.
@@ -12,9 +13,11 @@ class XcmsSiteOpenAllPages(xtest_common.XcmsTest):
     def run(self):
         self.gotoRoot()
         mainPage = u"Главная"
-        
+
         self.gotoUrlByLinkText(mainPage)
-        self.assertBodyTextPresent(u"Приветствуем Вас на сайте Физического отделения Летней Экологической Школы");
+        self.assertBodyTextPresent(
+            u"Приветствуем Вас на сайте Физического отделения Летней Экологической Школы"
+        )
 
         self.gotoUrlByLinkText(u"История ЛЭШ")
         self.assertBodyTextPresent(u"Школа существует достаточно давно")
@@ -50,15 +53,15 @@ class XcmsSiteOpenAllPages(xtest_common.XcmsTest):
         self.gotoPage("/gear/equipment")
         self.assertBodyTextPresent(gear)
         self.assertBodyTextPresent(u"Палатка")
-        
+
         wear = u"Личные вещи и одежда"
         self.gotoUrlByLinkText(wear)
         self.assertBodyTextPresent(wear)
-        
+
         self.gotoPage("/gear/wear")
         self.assertBodyTextPresent(u"Кружка, Ложка, Миска, Нож.")
         self.assertBodyTextPresent(u"КЛМН")
-        
+
         self.gotoUrlByLinkText(u"Документы")
         self.assertBodyTextPresent(u"Полис ОМС")
         self.gotoPage("/gear/docs")
@@ -99,6 +102,5 @@ class XcmsSiteOpenAllPages(xtest_common.XcmsTest):
         self.gotoPage("/fun")
         self.gotoPage("/links")
         self.gotoPage("/contacts")
-        
+
         self.gotoUrlByLinkText(mainPage)
-        

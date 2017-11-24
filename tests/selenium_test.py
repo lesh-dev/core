@@ -107,11 +107,7 @@ def RunTest(test):
         logging.info("KeyboardInterrupt: %s, %s", exc, traceback.format_exc())
         return 3
     except Exception as exc:
-        test.logAdd(
-            u"Generic test exception: " + userSerialize(str(exc)).decode('utf-8') +
-            u", traceback:\n" + traceback.format_exc().decode('utf-8')
-        )
-        print traceback.format_exc()
+        logging.error("Generic test exception:\n%s", traceback.format_exc())
         return test.handleException(exc)
 
 
@@ -1205,6 +1201,7 @@ class SeleniumTest(object):
             self.throwItemNotFound(msg)
 
     def logAdd(self, text, logLevel="debug"):
+        logging.debug(text)
         try:
             if not self.log_started:
                 self.logStart()
