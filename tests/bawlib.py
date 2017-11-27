@@ -22,6 +22,16 @@ def configure_logger():
     root_logger.addHandler(console_handler)
 
 
+def set_logger_file_output(file_name):
+    root_logger = logging.getLogger()
+    for handler in root_logger.handlers:
+        if isinstance(handler, logging.FileHandler):
+            handler.acquire()
+            handler.stream.close()
+            handler.stream = open(file_name, handler.mode)
+            handler.release()
+
+
 class BawError(RuntimeError):
     pass
 
