@@ -265,6 +265,7 @@ class SeleniumTest(object):
 
     def init(self):
         bw.set_logger_file_output(self.log_file + ".ng.log")
+        self.log_time = current_time()
         logging.info("Started nextgen logging")
         self.base_url = self.fixBaseUrl(self.getBaseUrl())
         self.browser_holder.init()
@@ -311,19 +312,6 @@ class SeleniumTest(object):
         for act in self.action_log:
             self.logAdd("    " + act.serializeAction())
         self.logAdd("=" * 20)
-
-    def logStart(self):
-        try:
-            create_log_dir(self.log_dir)
-            logFile = open(self.log_file, "w")
-            logText = "[" + self.test_name + " log start on " + self.base_url + "]\n"
-            logFile.write(logText.encode("UTF-8"))
-            logFile.close()
-            # indicate that log was already created
-            self.log_started = True
-            self.log_time = current_time()
-        except IOError:
-            self.fatalTest("Cannot create log file " + userSerialize(self.log_file) + ". ")
 
     # PHP errors auto-check toggle
     def setAutoPhpErrorChecking(self, checkErrors=True):
@@ -1202,23 +1190,16 @@ class SeleniumTest(object):
                 self.curUrl()) + ". "
             self.throwItemNotFound(msg)
 
-    def logAdd(self, text, logLevel="debug"):
-        logging.debug(text)
-        try:
-            if not self.log_started:
-                self.logStart()
-
-            newTime = current_time()
-            duration = newTime - self.log_time
-            self.log_time = newTime
-            fullLogText = u"[{level:8}][{dur:06.2f}]: ".format(level=logLevel, dur=duration) + text.strip()
-            logging.info(fullLogText)
-            # print fullLogText.encode("UTF-8")
-            logFile = open(self.log_file, 'a')
-            logFile.write((fullLogText + "\n").encode("UTF-8"))
-            logFile.close()
-        except IOError:
-            self.fatalTest("Cannot write message to log file " + userSerialize(self.log_file) + ". ")
+    def logAdd(self, text, log_level="debug"):
+        # FIXME(mvel): log level is ignored
+        new_time = current_time()
+        duration = new_time - self.log_time
+        self.log_time = new_time
+        full_log_text = u"[{log_level:8}][{duration:06.2f}]: ".format(
+            log_level=log_level,
+            duration=duration,
+        ) + text.strip()
+        logging.info(full_log_text)
 
     # alias for getPageSource
     def getPageContent(self):
