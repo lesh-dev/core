@@ -18,6 +18,7 @@ def configure_logger():
     # and clear output
     all_tests_log_path = "logs/all_tests.log"
     try:
+        os.makedirs(os.path.dirname(all_tests_log_path))
         os.unlink(all_tests_log_path)
     except Exception:
         pass
