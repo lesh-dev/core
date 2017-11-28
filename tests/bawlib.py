@@ -2,6 +2,8 @@
 # -*- coding: utf8 -*-
 
 import logging
+import os
+
 
 # Bells-And-Whistles (tm) Python 2.x library
 # Contains non-categorized common crap code used in selenium tests.
@@ -10,10 +12,19 @@ import logging
 def configure_logger():
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.INFO)
+    # remove all default handlers
+    root_logger.handlers = []
+
+    # and clear output
+    all_tests_log_path = "logs/all_tests.log"
+    try:
+        os.unlink(all_tests_log_path)
+    except Exception:
+        pass
 
     formatter = logging.Formatter("%(asctime)s|%(levelname)-8s %(message)s")
 
-    file_handler = logging.FileHandler("logs/all_tests.log")
+    file_handler = logging.FileHandler(all_tests_log_path)
     file_handler.setFormatter(formatter)
     root_logger.addHandler(file_handler)
 
