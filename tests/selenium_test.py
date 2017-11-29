@@ -264,7 +264,7 @@ class SeleniumTest(object):
         return self.browser_holder.driver
 
     def init(self):
-        bw.set_logger_file_output(self.log_file + ".ng.log")
+        bw.set_logger_file_output(self.log_file)
         self.log_time = current_time()
         logging.info("Started nextgen logging")
         self.base_url = self.fixBaseUrl(self.getBaseUrl())
