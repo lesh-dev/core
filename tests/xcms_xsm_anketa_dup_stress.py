@@ -53,10 +53,7 @@ class XcmsXsmAnketaDupStress(xsm.Manager, xtest_common.XcmsTest):
 
     def add_anketa(self, person, iteration):
         self.gotoRoot()
-        # navigate to anketas
-        self.gotoUrlByLinkText(self.getEntranceLinkName())
         self.goto_anketa()
-        self.assertBodyTextPresent(self.getAnketaPageHeader())
         self.input_person_data(person, iteration, random=True)
 
     def check_unique_anketa(self, person):

@@ -26,11 +26,7 @@ class XcmsXsmAnketaWrongFill(xsm.Manager, xtest_common.XcmsTest):
     def run(self):
         self.ensure_logged_off()
         self.gotoRoot()
-
-        # navigate to anketas
-        self.gotoUrlByLinkText(self.getEntranceLinkName())
         self.goto_anketa()
-        self.assertBodyTextPresent(self.getAnketaPageHeader())
 
         person = xsm.Person(self)
         # try to submit empty form.

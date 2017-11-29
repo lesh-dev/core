@@ -110,8 +110,8 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def gotoRemovePage(self, reason=""):
         self.gotoUrlByLinkText(u"Удалить", reason)
 
-    def getAnketaPageHeader(self):
-        return u"Анкета"
+    def get_anketa_page_text_sample(self):
+        return u"заполните анкету"
 
     def getUserListLinkName(self):
         return u"Пользователи"

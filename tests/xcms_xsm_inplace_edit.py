@@ -19,19 +19,14 @@ class XcmsXsmInplaceEdit(xsm.Manager, xtest_common.XcmsTest):
 
     def run(self):
         return
-        #ToDo finish
+        # TODO(nata-skr): finish
         self.ensure_logged_off()
 
         # anketa fill positive test:
         # all fields are filled with correct values.
         self.gotoRoot()
-
-        # navigate to anketas
-
-        self.gotoUrlByLinkText(self.getEntranceLinkName())
         self.goto_anketa()
-        self.assertBodyTextPresent(self.getAnketaPageHeader())
-        
+
         person = xsm.Person(self)
         person.input(
             last_name=u"Ландау",
@@ -54,7 +49,7 @@ class XcmsXsmInplaceEdit(xsm.Manager, xtest_common.XcmsTest):
             ank_mode=True,
         )
         self.assertBodyTextPresent(self.get_anketa_success_submit_message())
-        #inp_social_show = bawlib.cut_http(person.social_profile)
+        # inp_social_show = bawlib.cut_http(person.social_profile)
 
         # now login as admin
         inp_last_name = person.last_name
@@ -63,7 +58,7 @@ class XcmsXsmInplaceEdit(xsm.Manager, xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.getAnketaListMenuName())
 
         short_alias = person.short_alias()
-        #full_alias = person.full_alias()
+        # full_alias = person.full_alias()
 
         # try to drill-down into table with new anketa.
         self.gotoUrlByLinkText(short_alias)
@@ -99,7 +94,7 @@ class XcmsXsmInplaceEdit(xsm.Manager, xtest_common.XcmsTest):
         self.fillElementById(self.fio_filter_id, inp_last_name)
         self.clickElementByName("show-person")
 
-        #self.assertBodyTextPresent(u"ХЗ")
+        # self.assertBodyTextPresent(u"ХЗ")
         time.sleep(5)
         self.doubeClickElementById("p1-forest_1-span")
         val = selenium_test.get_value(self.getElementById("forest_1-selector"))
@@ -114,4 +109,4 @@ class XcmsXsmInplaceEdit(xsm.Manager, xtest_common.XcmsTest):
         val = selenium_test.get_value(self.getElementById("forest_1-selector"))
         if val != "no":
             self.failTest("Incorrect value in forest selector")
-        #self.assertBodyTextNotPresent(u"ХЗ")
+        # self.assertBodyTextNotPresent(u"ХЗ")

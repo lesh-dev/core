@@ -536,7 +536,8 @@ class Manager(xc.XcmsTest):
 
     # Navigation
     def goto_anketa(self):
-        self.gotoUrlByLinkText(u"Анкета")
+        self.gotoUrlByLinkText(self.getEntranceLinkName(), attribute=self.CONTENT)
+        self.assertBodyTextPresent(self.get_anketa_page_text_sample())
 
     def goto_xsm_add_person(self):
         self.gotoUrlByLinkText(u"Добавить участника")

@@ -25,11 +25,7 @@ class XcmsXsmAnketaEdit(xsm.Manager, xtest_common.XcmsTest):
         # anketa fill/edit positive test:
         # fields are filled with correct values.
         self.gotoRoot()
-
-        # navigate to anketas
-        self.gotoUrlByLinkText(self.getEntranceLinkName())
         self.goto_anketa()
-        self.assertBodyTextPresent(self.getAnketaPageHeader())
 
         person = xsm.Person(self)
         person.input(

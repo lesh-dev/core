@@ -66,11 +66,7 @@ class XcmsXsmAnketaFill(xsm.Manager, xtest_common.XcmsTest):
         # anketa fill positive test:
         # all fields are filled with correct values.
         self.gotoRoot()
-
-        # navigate to anketas
-        self.gotoUrlByLinkText(self.getEntranceLinkName(), attribute=self.CONTENT)
         self.goto_anketa()
-        self.assertBodyTextPresent(self.getAnketaPageHeader())
 
         person = xsm.Person(self)
         person.input(
