@@ -55,7 +55,7 @@ class XcmsXsmAnketaDuplicate(xsm.Manager, xtest_common.XcmsTest):
     def add_anketa(self, person):
         self.gotoRoot()
         # navigate to anketas
-        self.gotoUrlByLinkText(self.getEntranceLinkName(), attribute="xcms-content")
+        self.gotoUrlByLinkText(self.getEntranceLinkName(), attribute=self.CONTENT)
         self.assertBodyTextPresent(u"заполните анкету")
         self.input_person_data(person)
 

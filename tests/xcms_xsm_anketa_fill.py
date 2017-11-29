@@ -68,8 +68,7 @@ class XcmsXsmAnketaFill(xsm.Manager, xtest_common.XcmsTest):
         self.gotoRoot()
 
         # navigate to anketas
-
-        self.gotoUrlByLinkText(self.getEntranceLinkName())
+        self.gotoUrlByLinkText(self.getEntranceLinkName(), attribute=self.CONTENT)
         self.goto_anketa()
         self.assertBodyTextPresent(self.getAnketaPageHeader())
 

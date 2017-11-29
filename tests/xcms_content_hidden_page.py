@@ -57,7 +57,7 @@ class XcmsContentHiddenPage(xtest_common.XcmsTest):
         # click on some other menu to change active menu item
 
         self.logAdd("Clicking on parent menu item. ")
-        self.gotoUrlByLinkText(self.m_parentPage, attribute="xcms-content")
+        self.gotoUrlByLinkText(self.m_parentPage, attribute=self.CONTENT)
 
         self.logAdd("Checking new page menu item, it should NOT be visible")
         self.assertUrlNotPresent(inpMenuTitle)

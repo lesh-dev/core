@@ -13,6 +13,7 @@ TIME_INC = 0.05
 
 
 class XcmsBaseTest(selenium_test.SeleniumTest):
+    CONTENT = "xcms-content"
     """
         Base test class wth advanced error checking"
     """

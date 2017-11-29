@@ -130,9 +130,9 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         # click on menu.
         self.logAdd("Clicking on parent menu item. ")
-        self.gotoUrlByLinkText(self.m_parentPage, attribute="xcms-content")
+        self.gotoUrlByLinkText(self.m_parentPage, attribute=self.CONTENT)
         self.logAdd("Clicking on new page menu item. ")
-        self.gotoUrlByLinkText(inpMenuTitle, attribute="xcms-content")
+        self.gotoUrlByLinkText(inpMenuTitle, attribute=self.CONTENT)
 
         self.assertElementTextById(
             "content-text",
@@ -149,8 +149,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
     def testVersions(self):
 
-        self.gotoUrlByLinkText(self.m_parentPage, attribute="xcms-content")
-        self.gotoUrlByLinkText(self.m_menuTitle, attribute="xcms-content")
+        self.gotoUrlByLinkText(self.m_parentPage, attribute=self.CONTENT)
+        self.gotoUrlByLinkText(self.m_menuTitle, attribute=self.CONTENT)
 
         self.gotoEditPageInPlace()
 
@@ -218,8 +218,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.logAdd("test diff engine. ")
         self.wait(2)
 
-        self.gotoUrlByLinkText(self.m_parentPage, attribute="xcms-content")
-        self.gotoUrlByLinkText(self.m_menuTitle, attribute="xcms-content")
+        self.gotoUrlByLinkText(self.m_parentPage, attribute=self.CONTENT)
+        self.gotoUrlByLinkText(self.m_menuTitle, attribute=self.CONTENT)
         self.gotoEditPageInPlace()
 
         wordNumber = 7
@@ -309,8 +309,8 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.getElementById("cabinet")
 
-        self.gotoUrlByLinkText(self.m_parentPage, attribute="xcms-content")
-        self.gotoUrlByLinkText(self.m_menuTitle, attribute="xcms-content")
+        self.gotoUrlByLinkText(self.m_parentPage, attribute=self.CONTENT)
+        self.gotoUrlByLinkText(self.m_menuTitle, attribute=self.CONTENT)
         self.gotoEditPageInPlace()
 
         # edit alias
