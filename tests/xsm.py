@@ -586,6 +586,17 @@ class Manager(xc.XcmsTest):
     def goto_xsm_change_person_status(self):
         self.gotoUrlByLinkText(u"Сменить статус")
 
+    def anketa_drilldown(self, person, do_login=True):
+        if do_login:
+            self.performLoginAsManager()
+
+        self.gotoRoot()
+        self.goto_xsm()
+        self.gotoUrlByLinkText(self.getAnketaListMenuName())
+
+        # try to drill-down into table with new anketa.
+        self.gotoUrlByLinkText(person.short_alias())
+
     def goto_school_view(xtest, school):
         """
             Goes to view-school for provided school

@@ -134,15 +134,7 @@ class XcmsXsmAnketaWrongFill(xsm.Manager, xtest_common.XcmsTest):
             ank_mode=True,
         )
 
-        # now login as manager
-        self.performLoginAsManager()
-
-        self.gotoRoot()
-
-        self.gotoUrlByLinkText(self.getAnketaListMenuName())
-
-        # try to drill-down into table with new anketa.
-        self.gotoUrlByLinkText(person.short_alias())
+        self.anketa_drilldown(person)
 
         # just check text is on the page.
         logging.info("Checking that all filled fields are displayed on the page. ")

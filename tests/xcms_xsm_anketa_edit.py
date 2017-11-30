@@ -47,13 +47,7 @@ class XcmsXsmAnketaEdit(xsm.Manager, xtest_common.XcmsTest):
         self.clickElementById("submit_anketa-submit")
         self.assertBodyTextPresent(self.get_anketa_success_submit_message())
 
-        # now login as admin
-        self.performLoginAsManager()
-        self.gotoRoot()
-        self.gotoUrlByLinkText(self.getAnketaListMenuName())
-
-        # try to drill-down into table with new anketa.
-        self.gotoUrlByLinkText(person.short_alias())
+        self.anketa_drilldown(person)
 
         # just check text is on the page.
         print "Checking that filled fields are displayed on the page. "
@@ -96,10 +90,4 @@ class XcmsXsmAnketaEdit(xsm.Manager, xtest_common.XcmsTest):
         # check bug
         self.assertElementTextById("anketa_status-span", u"Новый")
 
-        self.gotoRoot()
-        self.goto_xsm()
-        self.gotoUrlByLinkText(self.getAnketaListMenuName())
-
-        # try to drill-down again into table with new anketa.
-        # it should be displayed in this list, not in school participants.
-        self.gotoUrlByLinkText(person.short_alias())
+        self.anketa_drilldown(person, do_login=False)

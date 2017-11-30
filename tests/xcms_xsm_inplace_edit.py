@@ -53,15 +53,7 @@ class XcmsXsmInplaceEdit(xsm.Manager, xtest_common.XcmsTest):
 
         # now login as admin
         inp_last_name = person.last_name
-        self.performLoginAsManager()
-        self.gotoRoot()
-        self.gotoUrlByLinkText(self.getAnketaListMenuName())
-
-        short_alias = person.short_alias()
-        # full_alias = person.full_alias()
-
-        # try to drill-down into table with new anketa.
-        self.gotoUrlByLinkText(short_alias)
+        self.anketa_drilldown(person)
         # now, let's change anketa status to "Ждет собеседования"
 
         self.gotoEditPerson()

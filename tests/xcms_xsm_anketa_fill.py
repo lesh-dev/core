@@ -92,18 +92,9 @@ class XcmsXsmAnketaFill(xsm.Manager, xtest_common.XcmsTest):
         self.assertBodyTextPresent(self.get_anketa_success_submit_message())
         inp_social_show = bawlib.cut_http(person.social_profile)
 
-        # now login as admin
+        self.anketa_drilldown(person)
 
-        self.performLoginAsManager()
-        self.gotoRoot()
-        self.gotoUrlByLinkText(self.getAnketaListMenuName())
-
-        short_alias = person.short_alias()
         full_alias = person.full_alias()
-
-        # try to drill-down into table with new anketa.
-        self.gotoUrlByLinkText(short_alias)
-
         # just check text is on the page.
         logging.info("Checking that all filled fields are displayed on the page")
 
