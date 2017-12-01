@@ -54,11 +54,19 @@ class Person(object):
         self.achievements = None
         self.hobby = None
         self.lesh_ref = None
+
+        self.forest_1 = None
+        self.forest_2 = None
+        self.forest_3 = None
+
         # not a database property
         self.control_question = None
         # in-school properties
         self.is_student = None
         self.is_teacher = None
+
+        # aux properties
+        self.anketa_status = None
 
     def input(
         self,
@@ -85,6 +93,10 @@ class Person(object):
         control_question=None,
         is_student=False,
         is_teacher=False,
+        anketa_status=None,
+        forest_1=None,
+        forest_2=None,
+        forest_3=None,
         # options
         random=False,
         ank_mode=False,
@@ -173,14 +185,32 @@ class Person(object):
             if is_teacher:
                 t.clickElementById("is_teacher-checkbox")
 
+        if anketa_status is not None:
+            self.anketa_status = anketa_status
+            t.setOptionValueByIdAndValue("anketa_status-selector", anketa_status)
+
+        if forest_1 is not None:
+            self.forest_1 = forest_1
+            t.setOptionValueByIdAndValue("forest_1-selector", forest_1)
+
+        if forest_2 is not None:
+            self.forest_2 = forest_2
+            t.setOptionValueByIdAndValue("forest_2-selector", forest_2)
+
+        if forest_3 is not None:
+            self.forest_3 = forest_3
+            t.setOptionValueByIdAndValue("forest_3-selector", forest_3)
+
         if department_id is not None:
             t.setOptionValueByIdAndValue("department_id-selector", department_id)
 
         # TODO(mvel): autodetect!
         if ank_mode:
             t.clickElementById("submit_anketa-submit")
+            # TODO(mvel): verify text?
         else:
             t.clickElementById("update-person-submit")
+            t.assertBodyTextPresent(u"Участник успешно сохранён")
 
     def back_to_person_view(self):
         t = self.xtest
@@ -613,4 +643,4 @@ class Manager(xc.XcmsTest):
 
     @staticmethod
     def get_anketa_duplicate_submit_message():
-        return u"А мы вас знаем!"
+        return u"уже отправляли нам заявку"

@@ -1,30 +1,32 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import xsm
 import xtest_common
-import random_crap
 
 
-class XcmsXsmClearForestStatus(xtest_common.XcmsTest):
+class XcmsXsmClearForestStatus(xsm.Manager, xtest_common.XcmsTest):
+    """
+    Сначала заполняем лесные статусы, потом их чистим и проверяем,
+    что они действительно очистились. Заходим непременно под Администратором.
+    """
 
     def run(self):
         self.ensure_logged_off()
         self.performLoginAsAdmin()
+        self.goto_xsm()
         self.gotoUrlByLinkText(u"Выходы в лес")
 
-        # create new person
-        self.gotoUrlByLinkText(u"Добавить участника")
-        self.setOptionValueByIdAndValue("anketa_status-selector", "less")
-        inpFirstName = u"Бруно" + random_crap.random_text(6)
-        inpLastName = u"Понтекорво" + random_crap.random_text(6)
-
-        inpFirstName = self.fillElementByName("first_name", inpFirstName)
-        inpLastName = self.fillElementByName("last_name", inpLastName)
-
-        self.setOptionValueByIdAndValue("forest_1-selector", "maybe")
-        self.setOptionValueByIdAndValue("forest_2-selector", "no")
-        self.clickElementById("update-person-submit")
-        self.assertBodyTextPresent(u"Участник успешно сохранён")
+        self.goto_xsm_add_person()
+        person = xsm.Person(self)
+        person.input(
+            first_name=u"Бруно",
+            last_name=u"Понтекорво",
+            anketa_status="less",
+            forest_1="maybe",
+            forest_2="no",
+            random=True,
+        )
 
         self.gotoUrlByLinkText(u"Лес")
         self.assertBodyTextPresent(u"ХЗ")
