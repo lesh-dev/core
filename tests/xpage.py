@@ -12,15 +12,16 @@ class Page(object):
         self.xtest = xtest
         self.page_dir = None
         self.menu_title = None
-        self.page_header = None
+        self.header = None
         self.alias = None
 
     def input(
         self,
         page_dir=None,
         menu_title=None,
-        page_header=None,
+        header=None,
         alias=None,
+        permissions=[],
         random=False,
     ):
         t = self.xtest
@@ -34,10 +35,10 @@ class Page(object):
                 menu_title += random_crap.random_text(8)
             self.menu_title = t.fillElementById("menu-title-input", menu_title)
 
-        if page_header is not None:
+        if header is not None:
             if random:
-                page_header += random_crap.random_text(8)
-            self.page_header = t.fillElementById("header-input", page_header)
+                header += random_crap.random_text(8)
+            self.header = t.fillElementById("header-input", header)
 
         if alias is not None:
             if random:
@@ -48,5 +49,12 @@ class Page(object):
 
         if default_page_type != "content":
             t.failTest("Default selected page type is not 'content': " + default_page_type)
+
+        # default values
+        self.assertCheckboxValueById("view_#all-checkbox", True)
+        self.assertCheckboxValueById("view_#registered-checkbox", False)
+
+        for permission in permissions:
+            self.clickElementById("{}-checkbox".format(permission))
 
         t.clickElementById("create-page-submit")

@@ -4,6 +4,7 @@
 import xtest_common
 import random_crap
 import user
+import xpage
 
 
 class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
@@ -31,58 +32,44 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(parent_page)
 
         self.gotoCreatePage()
-
-        page_dir = "authPage_" + random_crap.random_text(6)
-        menu_title = "authMenuTitle_" + random_crap.random_text(6)
-        pageHeader = "authPageHeader_" + random_crap.random_text(6)
-        inpAlias = "authorized/only/page/" + random_crap.random_text(6)
-
-        inpPageDir = self.fillElementById("create-name-input", inpPageDir)
-        inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)
-        pageHeader = self.fillElementById("header-input", pageHeader)
-        inpAlias = self.fillElementById("alias-input", inpAlias)
-
-        self.assertCheckboxValueById("view_#all-checkbox", True)
-        self.assertCheckboxValueById("view_#registered-checkbox", False)
-
-        self.clickElementById("view_#all-checkbox")
-        self.clickElementById("view_#registered-checkbox")
-
-        defaultPageType = self.getOptionValueById("create-pagetype-selector")
-        if defaultPageType != "content":
-            self.failTest("Default selected page type is not 'content': " + defaultPageType)
-
-        self.clickElementById("create-page-submit")
+        page = xpage.Page(self)
+        page.input(
+            page_dir="authPage",
+            menu_title="authMenuTitle",
+            page_header="authPageHeader",
+            alias="authorized/only/page/",
+            random=True,
+            permissions=["view_#all", "view_#registered"],
+        )
 
         # edit page - click on menu
-        self.gotoUrlByLinkText(inpMenuTitle)
+        self.gotoUrlByLinkText(page.menu_title)
 
-        pageText = u"Текст Только Для Авторизованных " + random_crap.randomCrap(6)
-        pageText = self.fillAceEditorElement(pageText)
+        page_text = u"Текст Только Для Авторизованных " + random_crap.randomCrap(6)
+        page_text = self.fillAceEditorElement(page_text)
         self.clickElementById("commit-submit")
 
         self.gotoCloseEditor()
         self.performLogout()
 
         # click on some other menu to change active menu item
-
         self.logAdd("Clicking on parent menu item. ")
-        self.gotoUrlByLinkText(parentPage, attribute=self.CONTENT)
+        self.gotoUrlByLinkText(parent_page, attribute=self.CONTENT)
 
         self.logAdd("Checking new page menu item, it should NOT be visible")
-        self.assertUrlNotPresent(inpMenuTitle)
+        self.assertUrlNotPresent(page.menu_title)
         self.logAdd("Alias should NOT work too, we should see access denied page")
-        self.gotoPage("/" + inpAlias)
+        self.gotoPage("/" + page.alias)
 
         self.logAdd("We should NOT see page text at all")
-        self.assertSourceTextNotPresent(pageText, "we should not see page text without authorization. ")
-        self.assertSourceTextNotPresent(pageHeader, "we should not see page header without authorization. ")
+        self.assertSourceTextNotPresent(page_text, "we should not see page text without authorization. ")
+        self.assertSourceTextNotPresent(page.header, "we should not see page header without authorization. ")
 
-        if inpMenuTitle in self.getPageTitle():
-            self.failTest(
-                "Menu title text appears in page title after going to the page "
-                "by site menu without authorization. "
-            )
+        self.assert_page_header(
+            page.page_header,
+            "Menu title text appears in page title after going to the page "
+            "by site menu without authorization. "
+        )
 
         self.assertSourceTextPresent([u"Доступ запрещён", "Access denied"], "we should see auth page")
 
@@ -100,39 +87,28 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
             self.failTest("Cannot login as auth-page-test user. ")
 
         self.logAdd("Clicking on parent menu item. ")
-        self.gotoUrlByLinkText(parentPage, attribute=self.CONTENT)
+        self.gotoUrlByLinkText(parent_page, attribute=self.CONTENT)
 
         self.logAdd("Checking new page menu item, it should be visible")
-        self.gotoUrlByLinkText(inpMenuTitle, attribute=self.CONTENT)
+        self.gotoUrlByLinkText(page.menu_title, attribute=self.CONTENT)
 
         self.assertElementTextById(
-            "content-text", pageText, "menu check: page text does not match entered text (under auth). "
+            "content-text", page_text, "menu check: page text does not match entered text (under auth). "
         )
-        self.assert_page_header(pageHeader)
-
-        if inpMenuTitle not in self.getPageTitle():
-            self.failTest(
-                "Menu title text does not appear in page title after going to the page "
-                "by site menu (under auth). "
-            )
+        self.assert_page_header(page.page_header)
 
         self.logAdd("Clicking on some other menu item. ")
         self.gotoUrlByLinkText(self.get_contacts_link_name())
 
         self.logAdd("Alias should work now, and we should NOT see access denied page")
-        self.gotoPage("/" + inpAlias)
+        self.gotoPage("/" + page.alias)
 
         self.assertElementTextById(
-            "content-text", pageText, "alias check: page text does not match entered text (under auth). "
+            "content-text", page_text, "alias check: page text does not match entered text (under auth). "
         )
         self.assert_page_header(
-            pageHeader,
+            page.page_header,
             reason="Alias check: page header does not match entered header (under auth). "
         )
-
-        if inpMenuTitle not in self.getPageTitle():
-            self.failTest(
-                "Menu title text does not appear in page title "
-                "after going to the page by site menu (under auth). ")
 
         self.assertSourceTextNotPresent([u"Доступ запрещён", "Access denied"])

@@ -1079,7 +1079,7 @@ class SeleniumTest(object):
                     self.fatalTest("Empty string passed in the list to " + methodName)
         else:
             if isVoid(stringOrList):
-                self.fatalTest("Empty param passed to " + methodName)
+                raise Exception("Empty param passed to " + methodName)
 
     def get_url_by_link_data(self, url_data, partial=False, attribute=None, reason="", silent=False, fail=True):
         """
