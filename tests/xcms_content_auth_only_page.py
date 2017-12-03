@@ -26,14 +26,14 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
         self.performLoginAsEditor()
         self.gotoAdminPanel()
 
-        parentPage = u"Главная"
+        parent_page = u"Главная"
 
-        self.gotoUrlByLinkText(parentPage)
+        self.gotoUrlByLinkText(parent_page)
 
         self.gotoCreatePage()
 
-        inpPageDir = "authPage_" + random_crap.random_text(6)
-        inpMenuTitle = "authMenuTitle_" + random_crap.random_text(6)
+        page_dir = "authPage_" + random_crap.random_text(6)
+        menu_title = "authMenuTitle_" + random_crap.random_text(6)
         pageHeader = "authPageHeader_" + random_crap.random_text(6)
         inpAlias = "authorized/only/page/" + random_crap.random_text(6)
 

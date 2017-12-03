@@ -3,6 +3,7 @@
 
 import xtest_common
 import random_crap
+import xpage
 
 import datetime
 
@@ -58,33 +59,18 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
 
-        page_dir = "test_page_" + random_crap.random_text(8)
-        menu_title = "menu_title_" + random_crap.random_text(8)
-        page_header = "page_header_" + random_crap.random_text(8)
-        alias = "new/page/alias/" + random_crap.random_text(8)
-
-        page_dir = self.fillElementById("create-name-input", page_dir)
-        menu_title = self.fillElementById("menu-title-input", menu_title)
-        page_header = self.fillElementById("header-input", page_header)
-        alias = self.fillElementById("alias-input", alias)
-
-        self.m_pageAlias = alias
-        self.m_pageHeader = page_header
-
-        default_page_type = self.getOptionValueById("create-pagetype-selector")
-
-        if default_page_type != "content":
-            self.failTest("Default selected page type is not 'content': " + default_page_type)
-
-        self.clickElementById("create-page-submit")
-
-        # self.logAdd("Opening editor again after redirection. ")
-        # self.gotoEditPageInPlace()
-
-        self.m_menuTitle = menu_title
+        page = xpage.Page(self)
+        page.input(
+            page_dir="test_page",
+            menu_title="menu_title",
+            page_header="page_header",
+            alias="new/page/alias/",
+            random=True,
+        )
+        self.page = page
 
         # edit page - click on menu
-        self.gotoUrlByLinkText(menu_title)
+        self.gotoUrlByLinkText(page.menu_title)
 
         page_text = random_crap.randomCrap(10, self.wordOptions, specialChars=self.specChars) + " " + timestamp()
         print "Generated page text: '" + page_text + "'"
@@ -132,14 +118,14 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.logAdd("Clicking on parent menu item. ")
         self.gotoUrlByLinkText(self.m_parentPage, attribute=self.CONTENT)
         self.logAdd("Clicking on new page menu item. ")
-        self.gotoUrlByLinkText(menu_title, attribute=self.CONTENT)
+        self.gotoUrlByLinkText(page.menu_title, attribute=self.CONTENT)
 
         self.assertElementTextById(
             "content-text",
             new_page_text_for_check,
             "page text after reopening editor does not match entered text. "
         )
-        self.assert_page_header(page_header, reason="Page header does not match entered header. ")
+        self.assert_page_header(page.page_header, reason="Page header does not match entered header. ")
 
     def loadWait(self):
         self.wait(2, "wait for version load")
@@ -147,7 +133,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
     def testVersions(self):
 
         self.gotoUrlByLinkText(self.m_parentPage, attribute=self.CONTENT)
-        self.gotoUrlByLinkText(self.m_menuTitle, attribute=self.CONTENT)
+        self.gotoUrlByLinkText(self.page.menu_title, attribute=self.CONTENT)
 
         self.gotoEditPageInPlace()
 
@@ -216,7 +202,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.wait(2)
 
         self.gotoUrlByLinkText(self.m_parentPage, attribute=self.CONTENT)
-        self.gotoUrlByLinkText(self.m_menuTitle, attribute=self.CONTENT)
+        self.gotoUrlByLinkText(self.page.menu_title, attribute=self.CONTENT)
         self.gotoEditPageInPlace()
 
         wordNumber = 7
@@ -306,11 +292,11 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.getElementById("cabinet")
 
         self.gotoUrlByLinkText(self.m_parentPage, attribute=self.CONTENT)
-        self.gotoUrlByLinkText(self.m_menuTitle, attribute=self.CONTENT)
+        self.gotoUrlByLinkText(self.page.menu_title, attribute=self.CONTENT)
         self.gotoEditPageInPlace()
 
         # edit alias
-        self.gotoUrlByLinkText(self.m_pageAlias)
+        self.gotoUrlByLinkText(self.page.alias)
         self.assertBodyTextPresent("Alias")
 
         inpAlias = "changed/newpage/alias/" + random_crap.random_text(8)
