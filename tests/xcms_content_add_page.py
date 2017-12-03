@@ -69,6 +69,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         alias = self.fillElementById("alias-input", alias)
 
         self.m_pageAlias = alias
+        self.m_pageHeader = page_header
 
         default_page_type = self.getOptionValueById("create-pagetype-selector")
 
@@ -81,7 +82,6 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         # self.gotoEditPageInPlace()
 
         self.m_menuTitle = menu_title
-        self.m_pageHeader = page_header
 
         # edit page - click on menu
         self.gotoUrlByLinkText(menu_title)
@@ -139,10 +139,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
             new_page_text_for_check,
             "page text after reopening editor does not match entered text. "
         )
-        self.assert_page_header(self.m_pageHeader, reason="Page header does not match entered header. ")
-
-        if page_header not in self.getPageTitle():
-            self.failTest("Menu title text does not appear in page title after going to the page by menu. ")
+        self.assert_page_header(page_header, reason="Page header does not match entered header. ")
 
     def loadWait(self):
         self.wait(2, "wait for version load")
@@ -304,7 +301,6 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.clickElementByName("change_alias")
 
     def testAlias(self):
-
         self.logAdd("test aliases")
 
         self.getElementById("cabinet")
@@ -326,14 +322,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.assertBodyTextPresent(u"Список alias-ов успешно обновлён")
         self.wait(3, "wait for redirection")
 
-        # self.goto_rebuild_aliases()
         self.goto_alias(self.m_pageAlias)
-
-        if self.m_menuTitle not in self.getPageTitle():
-            self.failTest(
-                "Page/menu title text does not appear in page title after going to page by alias after alias change. "
-            )
-
         self.assert_page_header(self.m_pageHeader, reason="Page header does not match entered header. ")
 
     def testBadAlias(self):
