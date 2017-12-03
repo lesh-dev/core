@@ -58,60 +58,60 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
 
-        inpPageDir = "test_page_" + random_crap.random_text(8)
-        inpMenuTitle = "menu_title_" + random_crap.random_text(8)
-        inpPageHeader = "page_header_" + random_crap.random_text(8)
-        inpAlias = "new/page/alias/" + random_crap.random_text(8)
+        page_dir = "test_page_" + random_crap.random_text(8)
+        menu_title = "menu_title_" + random_crap.random_text(8)
+        page_header = "page_header_" + random_crap.random_text(8)
+        alias = "new/page/alias/" + random_crap.random_text(8)
 
-        inpPageDir = self.fillElementById("create-name-input", inpPageDir)
-        inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)
-        inpPageHeader = self.fillElementById("header-input", inpPageHeader)
-        inpAlias = self.fillElementById("alias-input", inpAlias)
+        page_dir = self.fillElementById("create-name-input", page_dir)
+        menu_title = self.fillElementById("menu-title-input", menu_title)
+        page_header = self.fillElementById("header-input", page_header)
+        alias = self.fillElementById("alias-input", alias)
 
-        self.m_pageAlias = inpAlias
+        self.m_pageAlias = alias
 
-        defaultPageType = self.getOptionValueById("create-pagetype-selector")
+        default_page_type = self.getOptionValueById("create-pagetype-selector")
 
-        if defaultPageType != "content":
-            self.failTest("Default selected page type is not 'content': " + defaultPageType)
+        if default_page_type != "content":
+            self.failTest("Default selected page type is not 'content': " + default_page_type)
 
         self.clickElementById("create-page-submit")
 
         # self.logAdd("Opening editor again after redirection. ")
         # self.gotoEditPageInPlace()
 
-        self.m_menuTitle = inpMenuTitle
-        self.m_pageHeader = inpPageHeader
+        self.m_menuTitle = menu_title
+        self.m_pageHeader = page_header
 
         # edit page - click on menu
-        self.gotoUrlByLinkText(inpMenuTitle)
+        self.gotoUrlByLinkText(menu_title)
 
-        pageText = random_crap.randomCrap(10, self.wordOptions, specialChars=self.specChars) + " " + timestamp()
-        print "Generated page text: '" + pageText + "'"
+        page_text = random_crap.randomCrap(10, self.wordOptions, specialChars=self.specChars) + " " + timestamp()
+        print "Generated page text: '" + page_text + "'"
 
-        pageText = self.fillAceEditorElement(pageText)
-        print "After ins page text: '" + pageText + "'"
+        page_text = self.fillAceEditorElement(page_text)
+        print "After ins page text: '" + page_text + "'"
         self.clickElementById("commit-submit")
 
         self.clickElementById("preview-submit")
 
-        previewElement = "content-text-preview"
-        self.assertElementTextById(previewElement, pageText, "preview text does not match entered page text. ")
+        preview_element = "content-text-preview"
+        self.assertElementTextById(preview_element, page_text, "preview text does not match entered page text. ")
 
         # add second line
         new_page_text = (
-            pageText + "\n" +
+            page_text + "\n" +
             random_crap.randomCrap(10, self.wordOptions, specialChars=self.specChars) + " " + timestamp()
         )
 
-        newPageText = self.fillAceEditorElement(new_page_text)
+        new_page_text = self.fillAceEditorElement(new_page_text)
         print "Generated 2-line page text: '" + new_page_text + "'"
 
         self.clickElementById("commit-submit")
         self.clickElementById("preview-submit")
 
-        newPageTextForCheck = (
-            newPageText
+        new_page_text_for_check = (
+            new_page_text
             .replace("\n", " ")
             .replace("  ", " ")
             .replace(">>", u"»")
@@ -120,7 +120,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         )
 
         self.assertElementTextById(
-            previewElement, newPageTextForCheck,
+            preview_element, new_page_text_for_check,
             "preview text on text change does not match entered text. "
         )
 
@@ -132,16 +132,16 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         self.logAdd("Clicking on parent menu item. ")
         self.gotoUrlByLinkText(self.m_parentPage, attribute=self.CONTENT)
         self.logAdd("Clicking on new page menu item. ")
-        self.gotoUrlByLinkText(inpMenuTitle, attribute=self.CONTENT)
+        self.gotoUrlByLinkText(menu_title, attribute=self.CONTENT)
 
         self.assertElementTextById(
             "content-text",
-            newPageTextForCheck,
+            new_page_text_for_check,
             "page text after reopening editor does not match entered text. "
         )
         self.assert_page_header(self.m_pageHeader, reason="Page header does not match entered header. ")
 
-        if inpMenuTitle not in self.getPageTitle():
+        if page_header not in self.getPageTitle():
             self.failTest("Menu title text does not appear in page title after going to the page by menu. ")
 
     def loadWait(self):

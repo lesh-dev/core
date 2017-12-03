@@ -890,7 +890,6 @@ class SeleniumTest(object):
         self.checkEmptyParam(eleId, "getElementTextById")
         return self.getElementById(eleId).text
 
-    # getPageTitle
     def getPageTitle(self):
         return self.m_driver.title
 
