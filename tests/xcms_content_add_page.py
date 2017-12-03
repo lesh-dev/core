@@ -125,7 +125,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
             new_page_text_for_check,
             "page text after reopening editor does not match entered text. "
         )
-        self.assert_page_header(page.page_header, reason="Page header does not match entered header. ")
+        self.assert_page_header(page.header, reason="Page header does not match entered header. ")
 
     def loadWait(self):
         self.wait(2, "wait for version load")

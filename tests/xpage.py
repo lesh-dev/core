@@ -22,6 +22,7 @@ class Page(object):
         header=None,
         alias=None,
         permissions=[],
+        global_page=False,
         random=False,
     ):
         t = self.xtest
@@ -51,10 +52,13 @@ class Page(object):
             t.failTest("Default selected page type is not 'content': " + default_page_type)
 
         # default values
-        self.assertCheckboxValueById("view_#all-checkbox", True)
-        self.assertCheckboxValueById("view_#registered-checkbox", False)
+        t.assertCheckboxValueById("view_#all-checkbox", True)
+        t.assertCheckboxValueById("view_#registered-checkbox", False)
 
         for permission in permissions:
-            self.clickElementById("{}-checkbox".format(permission))
+            t.clickElementById("{}-checkbox".format(permission))
+
+        if global_page:
+            t.clickElementById("global-checkbox")
 
         t.clickElementById("create-page-submit")

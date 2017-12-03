@@ -36,7 +36,7 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
         page.input(
             page_dir="authPage",
             menu_title="authMenuTitle",
-            page_header="authPageHeader",
+            header="authPageHeader",
             alias="authorized/only/page/",
             random=True,
             permissions=["view_#all", "view_#registered"],
@@ -64,13 +64,6 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
         self.logAdd("We should NOT see page text at all")
         self.assertSourceTextNotPresent(page_text, "we should not see page text without authorization. ")
         self.assertSourceTextNotPresent(page.header, "we should not see page header without authorization. ")
-
-        self.assert_page_header(
-            page.page_header,
-            "Menu title text appears in page title after going to the page "
-            "by site menu without authorization. "
-        )
-
         self.assertSourceTextPresent([u"Доступ запрещён", "Access denied"], "we should see auth page")
 
         inp_login = "AuthPageUser"
@@ -95,7 +88,7 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
         self.assertElementTextById(
             "content-text", page_text, "menu check: page text does not match entered text (under auth). "
         )
-        self.assert_page_header(page.page_header)
+        self.assert_page_header(page.header)
 
         self.logAdd("Clicking on some other menu item. ")
         self.gotoUrlByLinkText(self.get_contacts_link_name())
@@ -107,7 +100,7 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
             "content-text", page_text, "alias check: page text does not match entered text (under auth). "
         )
         self.assert_page_header(
-            page.page_header,
+            page.header,
             reason="Alias check: page header does not match entered header (under auth). "
         )
 
