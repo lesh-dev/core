@@ -14,6 +14,8 @@ class Page(object):
         self.menu_title = None
         self.header = None
         self.alias = None
+        self.permissions = []
+        self.global_page = False
 
     def input(
         self,

@@ -460,21 +460,3 @@ class XcmsTest(XcmsTestWithConfig):
     def checkScreenIsAdmin(self):
         screen = self.getElementTextById("screen")
         self.assert_equal(screen, u"Админка", "We are not in the admin panel. Cannot add new page. ")
-
-    def addNewPage(self, parentPage, sysName, menuTitle, pageHeader, pageAlias):
-        self.checkScreenIsAdmin()
-
-        self.gotoUrlByLinkText(parentPage)
-        self.gotoCreatePage()
-
-        sysName = self.fillElementById("create-name-input", sysName)
-        menuTitle = self.fillElementById("menu-title-input", menuTitle)
-        pageHeader = self.fillElementById("header-input", pageHeader)
-        pageAlias = self.fillElementById("alias-input", pageAlias)
-
-        defaultPageType = self.getOptionValueById("create-pagetype-selector")
-        if defaultPageType != "content":
-            self.failTest("Default selected page type is not 'content': " + defaultPageType)
-
-        self.clickElementById("create-page-submit")
-        return sysName, menuTitle, pageHeader, pageAlias

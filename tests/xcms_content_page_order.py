@@ -1,77 +1,94 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import xtest_common, random_crap
+import xtest_common
+import xpage
+
 
 class XcmsContentPageOrder(xtest_common.XcmsTest):
     """
     This test checks page order management
     """
 
+    def pre_create_page(self, parent_page):
+        self.checkScreenIsAdmin()
+        self.gotoUrlByLinkText(parent_page)
+        self.gotoCreatePage()
+
     def run(self):
         self.ensure_logged_off()
 
         self.performLoginAsEditor()
         self.gotoAdminPanel()
-                    
-        parentPage = u"Главная"
-        
-        inpPageDir1 = "pageOrderTest1_" + random_crap.random_text(4)
-        inpMenuTitle1 = "pageOrderTestMenu1_" + random_crap.random_text(4)
-        inpPageHeader1 = "hiddenPageHeader1_" + random_crap.random_text(4)
-        inpAlias1 = "page/order/test1_" + random_crap.random_text(4)
-        self.addNewPage(parentPage, inpPageDir1, inpMenuTitle1, inpPageHeader1, inpAlias1)
 
-        inpPageDir2 = "pageOrderTest2_" + random_crap.random_text(4)
-        inpMenuTitle2 = "pageOrderTestMenu2_" + random_crap.random_text(4)
-        inpPageHeader2 = "hiddenPageHeader2_" + random_crap.random_text(4)
-        inpAlias2 = "page/order/test2_" + random_crap.random_text(4)
-        self.addNewPage(parentPage, inpPageDir2, inpMenuTitle2, inpPageHeader2, inpAlias2)
+        parent_page = u"Главная"
 
-        inpPageDir3 = "pageOrderTest3_" + random_crap.random_text(4)
-        inpMenuTitle3 = "pageOrderTestMenu3_" + random_crap.random_text(4)
-        inpPageHeader3 = "hiddenPageHeader3_" + random_crap.random_text(4)
-        inpAlias3 = "page/order/test3_" + random_crap.random_text(4)
-        self.addNewPage(parentPage, inpPageDir3, inpMenuTitle3, inpPageHeader3, inpAlias3)
-        
+        self.pre_create_page(parent_page)
+        page1 = xpage.Page(self)
+        page1.input(
+            page_dir="pageOrderTest1",
+            menu_title="pageOrderTestMenu1",
+            header="hiddenPageHeader1",
+            alias="page/order/test1",
+            random=True,
+        )
+
+        self.pre_create_page(parent_page)
+        page2 = xpage.Page(self)
+        page2.input(
+            page_dir="pageOrderTest2",
+            menu_title="pageOrderTestMenu2",
+            header="hiddenPageHeader2",
+            alias="page/order/test2",
+            random=True,
+        )
+
+        self.pre_create_page(parent_page)
+        page3 = xpage.Page(self)
+        page3.input(
+            page_dir="pageOrderTest3",
+            menu_title="pageOrderTestMenu3",
+            header="hiddenPageHeader3",
+            alias="page/order/test3",
+            random=True,
+        )
+
         # edit page - click on menu
-        self.gotoUrlByLinkText(inpMenuTitle1)
+        self.gotoUrlByLinkText(page1.menu_title)
         self.clickElementById("edit-menu")
 
         order1 = "20"
-        pageText = self.fillElementById("menu-order-input", order1)
+        order1 = self.fillElementById("menu-order-input", order1)
         self.clickElementByName("change-menu")
 
         # edit page - click on menu
-        self.gotoUrlByLinkText(inpMenuTitle2)
+        self.gotoUrlByLinkText(page2.menu_title)
         self.clickElementById("edit-menu")
 
         order2 = "30"
-        pageText = self.fillElementById("menu-order-input", order2)
+        order2 = self.fillElementById("menu-order-input", order2)
         self.clickElementByName("change-menu")
 
         # edit page - click on menu
-        self.gotoUrlByLinkText(inpMenuTitle3)
+        self.gotoUrlByLinkText(page3.menu_title)
         self.clickElementById("edit-menu")
 
         order3 = "10"
-        pageText = self.fillElementById("menu-order-input", order3)
+        order3 = self.fillElementById("menu-order-input", order3)
         self.clickElementByName("change-menu")
 
         self.closeAdminPanel()
-        self.gotoUrlByLinkText(parentPage)
-        
+        self.gotoUrlByLinkText(parent_page, attribute=self.CONTENT)
+
         content = self.getPageSource()
 
         try:
-            index1 = content.index(inpMenuTitle1)
-            index2 = content.index(inpMenuTitle2)
-            index3 = content.index(inpMenuTitle3)
+            index1 = content.index(page1.menu_title)
+            index2 = content.index(page2.menu_title)
+            index3 = content.index(page3.menu_title)
             if index3 < index1 < index2:
                 pass
             else:
                 self.failTest("Page order does not match expected. ")
         except ValueError:
             self.failTest("One of page menu titles could not be found in page source. ")
-            
-
