@@ -63,7 +63,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
         page.input(
             page_dir="test_page",
             menu_title="menu_title",
-            page_header="page_header",
+            header="page_header",
             alias="new/page/alias/",
             random=True,
         )
