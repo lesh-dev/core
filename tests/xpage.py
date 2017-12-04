@@ -46,7 +46,7 @@ class Page(object):
         if alias is not None:
             if random:
                 alias += random_crap.random_text(8)
-            alias = t.fillElementById("alias-input", alias)
+            self.alias = t.fillElementById("alias-input", alias)
 
         default_page_type = t.getOptionValueById("create-pagetype-selector")
 
