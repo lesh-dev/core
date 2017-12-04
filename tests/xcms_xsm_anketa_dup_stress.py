@@ -62,7 +62,8 @@ class XcmsXsmAnketaDupStress(xsm.Manager, xtest_common.XcmsTest):
 
         self.performLoginAsManager()
         self.gotoRoot()
-        self.gotoUrlByLinkText(self.getAnketaListMenuName())
+        self.goto_xsm()
+        self.goto_xsm_anketas()
 
         self.fillElementById("show_name_filter-input", person_alias)
         self.clickElementByName("show-person")

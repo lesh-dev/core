@@ -622,7 +622,7 @@ class Manager(xc.XcmsTest):
 
         self.gotoRoot()
         self.goto_xsm()
-        self.gotoUrlByLinkText(self.getAnketaListMenuName())
+        self.goto_xsm_anketas()
 
         # try to drill-down into table with new anketa.
         self.gotoUrlByLinkText(person.short_alias())
