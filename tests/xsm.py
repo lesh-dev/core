@@ -24,6 +24,9 @@ class Person(object):
 
                     И. Кормильцев, В. Бутусов
     """
+    EXP_NORMAL = "normal"
+    EXP_DUPLICATE = "duplicate"
+    EXP_NOT_AT_SCHOOL = "not_at_school"
 
     def __init__(self, xtest):
         # Parent test object
@@ -100,6 +103,7 @@ class Person(object):
         # options
         random=False,
         ank_mode=False,
+        expect=EXP_NORMAL,
     ):
         t = self.xtest
         if last_name is not None:
@@ -210,7 +214,15 @@ class Person(object):
             # TODO(mvel): verify text?
         else:
             t.clickElementById("update-person-submit")
-            t.assertBodyTextPresent(u"Участник успешно сохранён")
+            if expect == self.EXP_NORMAL:
+                t.assertBodyTextPresent(u"Участник успешно сохранён")
+            elif expect == self.EXP_DUPLICATE:
+                t.assertBodyTextPresent(u"Люди с такими именем и фамилией уже зачислены на эту школу")
+            elif expect == self.EXP_NOT_AT_SCHOOL:
+                t.assertBodyTextPresent(
+                    u"Люди с такими именем и фамилией уже есть в базе и не зачислены на школу. "
+                    u"Проверьте, возможно вы хотели добавить одного из этих людей:"
+                )
 
     def back_to_person_view(self):
         t = self.xtest

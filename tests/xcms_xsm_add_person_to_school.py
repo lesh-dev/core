@@ -79,8 +79,8 @@ class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
             last_name=last_name,
             first_name=first_name,
             ank_mode=False,
+            expect=person.EXP_DUPLICATE,
         )
-        self.assertBodyTextPresent(u"Люди с такими именем и фамилией уже зачислены на эту школу")
         self.gotoUrlByLinkText(school.school_title)
         self.gotoUrlByLinkText(person.last_name + u" " + person.first_name)
         self.gotoUrlByLinkTitle(u"Отчислить с " + school.school_title)
@@ -96,10 +96,7 @@ class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
             last_name=last_name,
             first_name=first_name,
             ank_mode=False,
-        )
-        self.assertBodyTextPresent(
-            u"Люди с такими именем и фамилией уже есть в базе и не зачислены на школу. "
-            u"Проверьте, возможно вы хотели добавить одного из этих людей:"
+            expect=person.EXP_NOT_AT_SCHOOL,
         )
         self.clickElementById("update-person-submit")
         self.assertBodyTextPresent(u"Участник успешно сохранён")
