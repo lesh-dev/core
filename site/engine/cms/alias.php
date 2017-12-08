@@ -71,6 +71,7 @@ function xcms_collect_aliases_int(&$aliases, $dir, $root_len)
         $cur_info = xcms_get_list($info_fn);
         $page_id = substr($dir, $root_len + 1);
         $cur_alias = xcms_get_key_or($cur_info, "alias");
+        $cur_alias = trim($cur_alias, "/");
         if (xu_not_empty($cur_alias))
         {
             if (array_key_exists($cur_alias, $aliases))
