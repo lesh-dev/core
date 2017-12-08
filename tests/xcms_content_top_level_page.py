@@ -24,7 +24,7 @@ class XcmsContentTopLevelPage(xtest_common.XcmsTest):
             page_dir="topLevelPage",
             menu_title="topMenuTitle",
             header="topPageHeader",
-            alias="top/level/page/",
+            alias="top/level/page",
             global_page=True,
         )
 

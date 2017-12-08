@@ -8,6 +8,7 @@ import random_crap
 class XcmsContentNestedAliases(xtest_common.XcmsTest):
     """
     This test checks that nested aliases /qqq and /qqq/www work fine
+    Also checks that /qqq/www and /qqq/www/ is the same page
     """
 
     def run(self):
@@ -24,7 +25,7 @@ class XcmsContentNestedAliases(xtest_common.XcmsTest):
         inpMenuTitle1 = "nested_alias_mt1_" + random_crap.random_text(4)
         inpPageHeader1 = "nested_alias1_" + random_crap.random_text(4)
         inpAlias1 = "nested_alias_" + random_crap.random_text(4) + "/level1"
-        inpAlias2 = inpAlias1 + "/level2"
+        inpAlias2 = inpAlias1 + "/level2/"
 
         inpPageDir1 = self.fillElementById("create-name-input", inpPageDir1)
         inpMenuTitle1 = self.fillElementById("menu-title-input", inpMenuTitle1)
