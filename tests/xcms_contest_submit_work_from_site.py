@@ -12,7 +12,7 @@ class XcmsContestSubmitWorkFromSite(xtest_common.XcmsTest):
 
     def _test_work_submit(self, file_size, need_success, fill_work=True):
         self.gotoRoot()
-        self.gotoUrlByLinkText(u"Олимпиада")
+        self.gotoUrlByLinkText(u"Олимпиада", attribute=self.CONTENT)
         self.gotoUrlByLinkText(u"Отправить решение")
 
         work_file = os.path.join(os.getcwd(), 'contest-work-sample.png')
@@ -40,7 +40,7 @@ class XcmsContestSubmitWorkFromSite(xtest_common.XcmsTest):
             if file_size >= 0:
                 self.assertBodyTextPresent(u"Ошибка отправки решения")
 
-            if file_size > 16*1000*1000:
+            if file_size > 16 * 1000 * 1000:
                 self.assertBodyTextPresent(u"файл слишком большой")
 
         self.assertPhpErrors()
