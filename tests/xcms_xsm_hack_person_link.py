@@ -17,7 +17,7 @@ class XcmsXsmHackPersonLink(xsm.Manager, xtest_common.XcmsTest):
         self.ensure_logged_off()
 
         self.performLoginAsManager()
-
+        self.goto_xsm()
         self.goto_xsm_all_people()
         self.gotoPage("/xsm/view-person&person_id=286")
         self.gotoPage("/xsm/view-person&person_id=far_away")
