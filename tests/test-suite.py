@@ -204,7 +204,7 @@ def main():
         logging.info("We'll break test suite on any test fail/fatal error")
 
     if args.virtual:
-        display = pyvirtualdisplay.Display(visible=0, size=(1024, 768))
+        display = pyvirtualdisplay.Display(visible=0, size=(3000, 2000))
         display.start()
 
     if args.test:
