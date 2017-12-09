@@ -90,7 +90,6 @@ $page_id_filtered = str_replace("/", "_", $pageid);
             }?>
 
             <div class="content-text"><?php
-                //$hdr = xcms_get_key_or($INFO, "header");
                 $alias = xcms_get_key_or($INFO, "alias");
                 $aparam = xcms_get_key_or($_GET, "aparam");
                 $in_xsm = ($alias == "register" && strlen($aparam));
@@ -113,6 +112,16 @@ $page_id_filtered = str_replace("/", "_", $pageid);
                         <# cms/page/edit_button #><?php
                     }?>
                     <div id="content-text"><# cms/ #></div><?php
+                }?>
+            </div>
+            <div style="font-size: 8pt; text-align: center; height: 15px; margin-top: 20px">
+                <span>&copy; ФизЛЭШ, 2005&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
+                <span class="site-version"><?php echo xcms_version(); ?></span>
+                <?php
+                if (xcms_is_production())
+                {?>
+                    <# seo/liveinternet 24.3 #>
+                    <# seo/yandex_metrika 12421258 #><?php
                 }?>
             </div>
         </div>
