@@ -15,41 +15,6 @@ import test_set_gen
 sys.path.append(".")
 
 
-# TODO(mvel): remove this
-def showHelp():
-    prog = sys.argv[0]
-    print """
-Syntax: {script} [OPTIONS] [TEST OPTIONS] <site-url>
-Most generic usage:
-    {script} [-i] [TEST OPTIONS] <site-url>
-    This command runs default test set 'auto_test_set.py'
-Run specific test:
-    {script} -t <test-name> [TEST OPTIONS] <site-url>
-List test in test set (or list tests with full descriptions):
-    {script} -l(-f) <test-name>
-
-Examples:
-    {script} test.fizlesh.ru
-    {script} -t XcmsXsmAnketaFill test.fizlesh.ru
-    {script} -t xcms_xsm_anketa_fill.py test.fizlesh.ru
-
-ALL OPTIONS:
-    -h, --help                Display this help
-    -i, --installer           Run installer test prior to all rest suite
-    -l, --list                List all tests in test set
-    -f, --full-list           List all tests in test set with descriptions
-    -s, --set <set>           Specify test set to run (instead of default auto_test_set.py)
-    -t, --test <test>         Run specific test instead of all suite
-    -b, --break               Break test suite on errors
-    -p, --profile-path <path> Use given browser profile path (firefox only)
-    -v, --virtual             Uses pyvirtualdisplay display
-
-TEST OPTIONS could be test-dependent. Commonly supported options are:
-    -c, --chrome           Use Google Chrome browser instead of Firefox
-    -d, --doc              Display test documentation
-""".format(script=os.path.basename(prog))
-
-
 class TestSuiteError(Exception):
     pass
 
@@ -243,10 +208,14 @@ def main():
 
         tests = test_set_module.get_tests(base_url=base_url, browser_holder=browser_holder, args=args)
 
-        # save installer test
+        # save installer test when it's present
         installer_test = None
         if tests:
-            installer_test = tests.pop(0)
+            if "installer" in tests[0][0]:
+                installer_test = tests.pop(0)
+
+        if not installer_test and args.installer:
+            raise TestSuiteError("Installer test was requested but not found. ")
 
         failed_tests = []
 
