@@ -635,7 +635,7 @@ class Manager(xc.XcmsTest):
         self.gotoRoot()
         self.goto_xsm()
         self.goto_xsm_anketas()
-
+        self.clear_filters()
         # try to drill-down into table with new anketa.
         self.gotoUrlByLinkText(person.short_alias())
 
