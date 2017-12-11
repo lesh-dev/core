@@ -649,6 +649,16 @@ class Manager(xc.XcmsTest):
         xtest.gotoUrl("xsm/view-school&school_id=" + str(school.id))
         return school
 
+    def filter_person(self, fio=None):
+        if fio is not None:
+            self.fillElementById("show_name_filter-input", fio)
+        self.clickElementByName("show-person")
+
+    def clear_filters(self):
+        # TODO(mvel): clear other fields
+        self.fillElementById("show_name_filter-input", "")
+        self.clickElementByName("show-person")
+
     @staticmethod
     def get_anketa_success_submit_message():
         return u"наших координаторов"

@@ -64,9 +64,7 @@ class XcmsXsmAnketaDupStress(xsm.Manager, xtest_common.XcmsTest):
         self.gotoRoot()
         self.goto_xsm()
         self.goto_xsm_anketas()
-
-        self.fillElementById("show_name_filter-input", person_alias)
-        self.clickElementByName("show-person")
+        self.filter_person(fio=person_alias)
         self.assert_equal(
             self.countIndexedUrlsByLinkText(person_alias), 1,
             "Found more than one anketa with exact FIO. Duplicate filtering is broken. "

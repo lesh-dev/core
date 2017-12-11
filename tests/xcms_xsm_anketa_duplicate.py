@@ -62,9 +62,7 @@ class XcmsXsmAnketaDuplicate(xsm.Manager, xtest_common.XcmsTest):
         self.performLoginAsManager()
         self.goto_xsm()
         self.goto_xsm_anketas()
-
-        self.fillElementById("show_name_filter-input", person.short_alias())
-        self.clickElementByName("show-person")
+        self.filter_person(fio=person.short_alias())
         self.assert_equal(
             self.countIndexedUrlsByLinkText(person.short_alias()), 1,
             "Found more than one anketa with exact FIO. Duplicate filtering is broken. "

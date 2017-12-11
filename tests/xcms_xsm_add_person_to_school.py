@@ -38,8 +38,10 @@ class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
         self.performLoginAsManager()
         self.goto_xsm()
 
-        # obtain fresh member
         self.goto_xsm_all_people()
+        self.clear_filters()
+
+        # obtain fresh member
         person_unique = 0
         base_name = u"Анкеткин_"
         page_content = self.getPageContent()

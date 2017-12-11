@@ -9,11 +9,8 @@ class XcmsXsmListFilters(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks various filters in XSM lists.
     """
-    fio_filter_id = "show_name_filter-input"
-
     def check_filter(self, pattern, match_text, expected_count, message):
-        self.fillElementById(self.fio_filter_id, pattern)
-        self.clickElementByName("show-person")
+        self.filter_person(fio=pattern)
         self.assert_equal(
             self.countIndexedUrlsByLinkText(match_text), expected_count,
             message + "Filters are broken. "

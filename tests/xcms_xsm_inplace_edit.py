@@ -15,8 +15,6 @@ class XcmsXsmInplaceEdit(xsm.Manager, xtest_common.XcmsTest):
     Creating a new particiant with some forest status, changing his status, checking changes took place
     """
 
-    fio_filter_id = "show_name_filter-input"
-
     def run(self):
         return
         # TODO(nata-skr): finish
@@ -83,9 +81,7 @@ class XcmsXsmInplaceEdit(xsm.Manager, xtest_common.XcmsTest):
 
         self.gotoUrlByLinkText(u"Лес")"""
 
-        self.fillElementById(self.fio_filter_id, inp_last_name)
-        self.clickElementByName("show-person")
-
+        self.filter_person(fio=inp_last_name)
         # self.assertBodyTextPresent(u"ХЗ")
         time.sleep(5)
         self.doubeClickElementById("p1-forest_1-span")
