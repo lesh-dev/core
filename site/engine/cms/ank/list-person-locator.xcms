@@ -8,6 +8,7 @@
     $sort_by_class = xcms_get_persistent_key("list-person-locator", "sort_by_class");
     $show_patronymic = xcms_get_persistent_key("list-person-locator", "show_patronymic");
     $show_comments = xcms_get_persistent_key("list-person-locator", "show_comments");
+    $show_name_filter = xcms_get_persistent_key("list-person-locator", "show_name_filter");
 ?>
 <span style="position: relative; float: right;">
 <a href="#" id="show-status-help" class="popup-link">Легенда</a>
@@ -38,7 +39,7 @@
     ?><span class="ankListField">Только преподы</span><?php
         xsm_checkbox('show_is_student', $show_is_student);
     ?><span class="ankListField">Только школьники</span><i> </i><?php
-        xsm_draw_fio_filter();
+        xsm_draw_fio_filter($show_name_filter);
     ?><i> </i><span>Группировка:</span><?php
         xsm_checkbox('sort_by_class', $sort_by_class);
     ?><span class="ankListField">По классу</span><i>
@@ -65,8 +66,7 @@ function xsm_show_all_person_list()
     global $show_patronymic;
     global $sort_by_class;
     global $show_comments;
-
-    $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
+    global $show_name_filter;
 
     $db = xdb_get();
     $departments = xdb_get_table_by_pk('department');

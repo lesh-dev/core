@@ -9,6 +9,7 @@ $sort_by_class = xcms_get_persistent_key("list-person", "sort_by_class");
 $sort_by_curator_group = xcms_get_persistent_key("list-person", "sort_by_curator_group");
 // yep, we use global setting!
 $show_patronymic = xcms_get_persistent_key("list-person-locator", "show_patronymic");
+$show_name_filter = xcms_get_persistent_key("list-person-locator", "show_name_filter");
 
 $school_id = xsm_get_default_school_from_request();
 
@@ -23,7 +24,7 @@ $form_action = xcms_url(array('school_id' => $school_id));
     ?><span class="ankListField">Только преподы</span>
     <?php xsm_checkbox('show_is_student', $show_is_student);
     ?><span class="ankListField">Только школьники</span><i>
-    </i><?php xsm_draw_fio_filter(); ?><i>
+    </i><?php xsm_draw_fio_filter($show_name_filter); ?><i>
     </i><span>Группировка: </span>
     <?php xsm_checkbox('sort_by_class', $sort_by_class);
     ?><span class="ankListField">По классу</span><?php
@@ -49,8 +50,8 @@ function xsm_show_person_list($school_id)
     global $show_is_student;
     global $sort_by_class;
     global $sort_by_curator_group;
+    global $show_name_filter;
 
-    $show_name_filter = xcms_get_key_or($_POST, "show_name_filter");
     $db = xdb_get();
 
     $cond = "(1 = 1)";
