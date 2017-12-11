@@ -39,7 +39,7 @@ class XcmsXsmAddPersonToSchool(xsm.Manager, xtest_common.XcmsTest):
         self.goto_xsm()
 
         # obtain fresh member
-        self.gotoUrlByLinkText(u"Все люди")
+        self.goto_xsm_all_people()
         person_unique = 0
         base_name = u"Анкеткин_"
         page_content = self.getPageContent()
