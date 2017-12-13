@@ -1,9 +1,9 @@
 <?php
     require_once("${engine_dir}cms/ank/department.php");
 
-    $show_department_id = xcms_get_persistent_key("list-ank", "show_department_id", XDB_INVALID_ID);
+    $show_department_id = xcms_get_persistent_key("global", "show_department_id", XDB_INVALID_ID);
+    $show_name_filter = xcms_get_persistent_key("global", "show_name_filter");
     $show_forest_num = xsm_get_persistent_enum_key("list-tour", "show_forest_num", "show_forest_num");
-    $show_name_filter = xsm_get_persistent_enum_key("list-tour", "show_name_filter");
 ?>
 <p>В этом списке показываются активные и принятые или полупринятые школьники и преподы.
     Таблица <b>одна на все годы</b>, т.к. эти данные нужны только для маёвок.

@@ -1,14 +1,15 @@
 <?php
     require_once("${engine_dir}cms/ank/department.php");
 
-    $show_department_id = xcms_get_persistent_key("list-person-locator", "show_department_id", XDB_INVALID_ID);
+    $show_department_id = xcms_get_persistent_key("global", "show_department_id", XDB_INVALID_ID);
+    $show_name_filter = xcms_get_persistent_key("global", "show_name_filter");
+
     $show_anketa_status = xsm_get_persistent_enum_key("list-person-locator", "show_anketa_status", "show_anketa_status_locator");
     $show_is_teacher = xcms_get_persistent_key("list-person-locator", "show_is_teacher");
     $show_is_student = xcms_get_persistent_key("list-person-locator", "show_is_student");
     $sort_by_class = xcms_get_persistent_key("list-person-locator", "sort_by_class");
     $show_patronymic = xcms_get_persistent_key("list-person-locator", "show_patronymic");
     $show_comments = xcms_get_persistent_key("list-person-locator", "show_comments");
-    $show_name_filter = xcms_get_persistent_key("list-person-locator", "show_name_filter");
 ?>
 <span style="position: relative; float: right;">
 <a href="#" id="show-status-help" class="popup-link">Легенда</a>

@@ -72,8 +72,10 @@ class XcmsXsmListFilters(xsm.Manager, xtest_common.XcmsTest):
     def test_comments(self):
         # TODO(mvel): в этом месте несколько раз всплывала бага, что текст комментария
         # двоится. Надо добавить код, проверяющий, что этот текст встречается 1 раз на странице.
-        comment_was_set = False
         self.goto_xsm_all_people()
+        self.clear_filters()
+
+        comment_was_set = False
         person = xsm.Person(self)
         # FIXME(mvel): очень неудобный инструментарий работы с checkbox-ами. Нет интерфейса
         # "убедиться, что включено". Надо его добавить и потом проверять, что комментарии есть

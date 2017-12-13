@@ -1,10 +1,10 @@
 <?php
     require_once("${engine_dir}cms/ank/department.php");
 
-    $show_department_id = xcms_get_persistent_key("list-ank", "show_department_id", XDB_INVALID_ID);
+    $show_department_id = xcms_get_persistent_key("global", "show_department_id", XDB_INVALID_ID);
+    $show_name_filter = xcms_get_persistent_key("global", "show_name_filter");
+
     $show_anketa_status = xsm_get_persistent_enum_key("list-ank", "show_anketa_status", "show_anketa_status_ank");
-    // yes, we use global key here
-    $show_name_filter = xcms_get_persistent_key("list-person-locator", "show_name_filter");
 ?>
 <span style="position: relative; float: right;">
 <a href="#" id="show-status-help" class="popup-link">Легенда</a>
