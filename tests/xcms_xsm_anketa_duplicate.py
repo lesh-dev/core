@@ -57,17 +57,6 @@ class XcmsXsmAnketaDuplicate(xsm.Manager, xtest_common.XcmsTest):
         self.goto_anketa()
         self.input_person_data(person)
 
-    def check_unique_anketa(self, person):
-        # login as admin
-        self.performLoginAsManager()
-        self.goto_xsm()
-        self.goto_xsm_anketas()
-        self.filter_person(fio=person.short_alias())
-        self.assert_equal(
-            self.countIndexedUrlsByLinkText(person.short_alias()), 1,
-            "Found more than one anketa with exact FIO. Duplicate filtering is broken. "
-        )
-
     def change_status(self, person):
         self.goto_xsm()
         self.goto_xsm_anketas()
@@ -105,8 +94,7 @@ class XcmsXsmAnketaDuplicate(xsm.Manager, xtest_common.XcmsTest):
         self.add_anketa(person)
         self.assertBodyTextNotPresent(self.get_anketa_success_submit_message())
         self.assertBodyTextPresent(self.get_anketa_duplicate_submit_message())
-
-        self.check_unique_anketa(person)
+        self.anketa_drilldown(person, jump_into=False)
 
         self.change_status(person)
 

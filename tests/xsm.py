@@ -628,7 +628,12 @@ class Manager(xc.XcmsTest):
     def goto_xsm_change_person_status(self):
         self.gotoUrlByLinkText(u"Сменить статус")
 
-    def anketa_drilldown(self, person, do_login=True):
+    def anketa_drilldown(self, person, do_login=True, jump_into=True):
+        """
+            Navigate to specific person's card
+            :param do_login: Perform login as manager
+            :param jump_into: Goto anketa view (default)
+        """
         if do_login:
             self.performLoginAsManager()
 
@@ -636,8 +641,13 @@ class Manager(xc.XcmsTest):
         self.goto_xsm()
         self.goto_xsm_anketas()
         self.clear_filters()
-        # try to drill-down into table with new anketa.
-        self.gotoUrlByLinkText(person.short_alias())
+        self.filter_person(fio=person.short_alias())
+        self.assert_equal(
+            self.countIndexedUrlsByLinkText(person.short_alias()), 1,
+            "Found more than one anketa with exact FIO. Duplicate filtering is broken. "
+        )
+        if jump_into:
+            self.gotoUrlByLinkText(person.short_alias())
 
     def goto_school_view(xtest, school):
         """
