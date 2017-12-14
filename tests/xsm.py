@@ -667,9 +667,9 @@ class Manager(xc.XcmsTest):
     def clear_filters(self):
         # TODO(mvel): clear other fields
         self.fillElementById("show_name_filter-input", "")
-        self.clickElementByName("show-person")
         # select "All departments"
         self.setOptionValueByIdAndValue("show_department_id-selector", -1)
+        self.clickElementByName("show-person")
 
     @staticmethod
     def get_anketa_success_submit_message():
