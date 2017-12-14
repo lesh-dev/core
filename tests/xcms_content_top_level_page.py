@@ -41,9 +41,8 @@ class XcmsContentTopLevelPage(xtest_common.XcmsTest):
         self.gotoCloseEditor()
 
         # click on some other menu to change active menu item
-
+        self.goto_contacts()
         self.logAdd("Clicking on some other menu item. ")
-        self.gotoUrlByLinkText(self.get_contacts_link_name(), attribute=self.CONTENT)
 
         self.logAdd("Clicking on new top-level page menu item, it should be visible")
         self.gotoUrlByLinkText(page.menu_title, attribute=self.CONTENT)

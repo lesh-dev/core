@@ -242,11 +242,11 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def get_news_link_name(self):
         return u"Новости"
 
-    def get_contacts_link_name(self):
-        return u"Контакты"
-
     def get_admin_panel_link(self):
         return self.getElementById("admin")
+
+    def goto_contacts(self):
+        self.gotoUrlByLinkText(u"Контакты", attribute=self.CONTENT)
 
     def gotoAuthLink(self):
         self.logAdd("gotoAuthLink: going to authenticate. ")

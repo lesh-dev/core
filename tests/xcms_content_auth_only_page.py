@@ -91,7 +91,7 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
         self.assert_page_header(page.header)
 
         self.logAdd("Clicking on some other menu item. ")
-        self.gotoUrlByLinkText(self.get_contacts_link_name())
+        self.goto_contacts()
 
         self.logAdd("Alias should work now, and we should NOT see access denied page")
         self.gotoPage("/" + page.alias)
