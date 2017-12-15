@@ -88,6 +88,7 @@ class XcmsXsmAnketaFill(xsm.Manager, xtest_common.XcmsTest):
             lesh_ref=random_crap.randomCrap(10, ["multiline"]),
             control_question=u"ампер",
             ank_mode=True,
+            random=True,
         )
         self.assertBodyTextPresent(self.get_anketa_success_submit_message())
         inp_social_show = bawlib.cut_http(person.social_profile)
