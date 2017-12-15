@@ -16,6 +16,7 @@ class XcmsXsmClearForestStatus(xsm.Manager, xtest_common.XcmsTest):
         self.performLoginAsAdmin()
         self.goto_xsm()
         self.gotoUrlByLinkText(u"Лес")
+        self.clear_filters()
 
         self.goto_xsm_add_person()
         person = xsm.Person(self)
