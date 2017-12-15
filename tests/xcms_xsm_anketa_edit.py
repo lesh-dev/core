@@ -41,6 +41,7 @@ class XcmsXsmAnketaEdit(xsm.Manager, xtest_common.XcmsTest):
             email=random_crap.email(),
             control_question=u"ампер",
             ank_mode=True,
+            random=True,
         )
         # we will be warned about unfilled fields
         self.assertBodyTextPresent(u"ещё раз")

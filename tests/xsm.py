@@ -108,18 +108,18 @@ class Person(object):
         t = self.xtest
         if last_name is not None:
             if random:
-                last_name += "_" + rc.random_text(5)
+                last_name += rc.randomWord(5)
 
             self.last_name = t.fillElementById("last_name-input", last_name)
 
         if first_name is not None:
             if random:
-                first_name += "_" + rc.random_text(3)
+                first_name += rc.randomWord(3)
             self.first_name = t.fillElementById("first_name-input", first_name)
 
         if patronymic is not None:
             if random:
-                patronymic += "_" + rc.random_text(3)
+                patronymic += rc.randomWord(3)
             self.patronymic = t.fillElementById("patronymic-input", patronymic)
 
         if cellular_list is not None:
