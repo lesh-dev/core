@@ -282,12 +282,11 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         self.assertElementTextById("content-text", realPageText, "real page text does not match entered text. ")
 
-    def updateAliases(self):
-        self.logAdd("Updating aliases. ")
+    def updateAliases(self, expected_state=u"Список alias-ов успешно обновлён"):
         self.clickElementByName("change_alias")
+        self.assertBodyTextPresent(expected_state)
 
     def testAlias(self):
-        self.logAdd("test aliases")
 
         self.getElementById("cabinet")
 
@@ -297,38 +296,24 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
         # edit alias
         self.gotoUrlByLinkText(self.page.alias)
-        self.assertBodyTextPresent("Alias")
-
-        inpAlias = "changed/newpage/alias/" + random_crap.random_text(8)
-
-        inpAlias = self.fillElementByName("alias", inpAlias)
-        self.m_pageAlias = inpAlias
-
+        self.page.input_alias("changed/newpage/alias/" + random_crap.random_text(8))
         self.updateAliases()
-        self.assertBodyTextPresent(u"Список alias-ов успешно обновлён")
         self.wait(3, "wait for redirection")
 
-        self.goto_alias(self.m_pageAlias)
-        self.assert_page_header(self.m_pageHeader, reason="Page header does not match entered header. ")
+        self.goto_alias(self.page.alias)
+        self.assert_page_header(self.page.header, reason="Page header does not match entered header. ")
 
     def testBadAlias(self):
 
         self.logAdd("test bad aliases")
         self.gotoEditPageInPlace()
 
-        self.gotoUrlByLinkText(self.m_pageAlias)
-        self.assertBodyTextPresent("Alias")
+        self.gotoUrlByLinkText(self.page.alias)
+        self.page.input_alias("../root/alias~")
+        self.updateAliases(expected_state=u"Alias может содержать только символы")
 
-        inpAlias = "    ../root/alias~"  # evil hack
-
-        inpAlias = self.fillElementByName("alias", inpAlias)
-        self.m_pageAlias = inpAlias
-
+        self.page.input_alias("/good/alias/" + random_crap.random_text(6))
         self.updateAliases()
-        self.assertBodyTextPresent(u"Alias может содержать только символы")
-        self.m_pageAlias = "/good/alias/" + random_crap.random_text(6)
-        self.updateAliases()
-        self.assertBodyTextPresent(u"Список alias-ов обновлён")
         self.wait(3, "wait for redirection after fixing alias")
 
         self.gotoCloseEditor()

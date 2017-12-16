@@ -64,3 +64,11 @@ class Page(object):
             t.clickElementById("global-checkbox")
 
         t.clickElementById("create-page-submit")
+
+    def input_alias(
+        self,
+        alias,
+    ):
+        self.xtest.assertBodyTextPresent("Alias")
+        self.alias = alias
+        self.alias = self.xtest.fillElementByName("alias", self.alias)
