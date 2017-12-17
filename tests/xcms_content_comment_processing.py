@@ -27,7 +27,7 @@ class XcmsContentCommentProcessing(xtest_common.XcmsTest):
         )
 
         # edit page - click on menu
-        self.gotoUrlByLinkText(page.menu_title, attribute=self.CONTENT)
+        self.gotoUrlByLinkText(page.menu_title)
 
         page_text = "<?php\n/**\n* qqq\n*\n**/\n?>"
         page_text = self.fillAceEditorElement(page_text)
