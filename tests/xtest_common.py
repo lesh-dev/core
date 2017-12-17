@@ -248,6 +248,9 @@ class XcmsTestWithConfig(XcmsBaseTest):
     def goto_contacts(self):
         self.gotoUrlByLinkText(u"Контакты", attribute=self.CONTENT)
 
+    def goto_menu_item(self, text):
+        self.gotoUrlByLinkText(text, attribute=self.CONTENT)
+
     def gotoAuthLink(self):
         self.logAdd("gotoAuthLink: going to authenticate. ")
         self.clickElementById("signin")
