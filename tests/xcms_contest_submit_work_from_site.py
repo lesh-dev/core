@@ -7,6 +7,8 @@ import logging
 import xtest_common
 import random_crap
 
+M = 1000 * 1000
+
 
 class XcmsContestSubmitWorkFromSite(xtest_common.XcmsTest):
 
@@ -61,16 +63,16 @@ class XcmsContestSubmitWorkFromSite(xtest_common.XcmsTest):
         self._test_work_submit(file_size=10, need_success=False)
 
         logging.info("send large file")
-        self._test_work_submit(file_size=25*1000*1000, need_success=False)
+        self._test_work_submit(file_size=25 * M, need_success=False)
 
         # send very large file (does not work)
         # self._test_work_submit(file_size=80*1000*1000, need_success=False)
 
         logging.info("Finally send normal file")
-        self._test_work_submit(file_size=2*1000*1000, need_success=True)
+        self._test_work_submit(file_size=2 * M, need_success=True)
 
         # Send a link
-        self.gotoUrlByLinkText(u"Отправить решение")
+        self.gotoUrlByLinkText(u"Отправить решение", attribute=self.CONTENT)
         inp_link = u"Бла-бла-бла" + random_crap.random_text(6)
         self.fillElementByName("fileexchange", inp_link)
         self.clickElementById("send-contest-submit")
