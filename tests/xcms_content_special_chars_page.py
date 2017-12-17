@@ -68,9 +68,9 @@ class XcmsContentSpecialCharsPage(xtest_common.XcmsTest):
 
         # click on menu.
         self.logAdd("Clicking on parent menu item. ")
-        self.gotoUrlByLinkText(self.m_parentPage)
+        self.gotoUrlByLinkText(self.m_parentPage, attribute=self.CONTENT)
         self.logAdd("Clicking on new page menu item. ")
-        self.gotoUrlByLinkText(inpMenuTitle)
+        self.gotoUrlByLinkText(inpMenuTitle, attribute=self.CONTENT)
 
         self.assertElementTextById("content-text", pageRealText, "rendered page text does not match expacted text. ")
         self.gotoEditPageInPlace()

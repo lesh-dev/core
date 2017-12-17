@@ -22,6 +22,14 @@ def random_text(length):
     return rs
 
 
+def random_name(length):
+    assert length > 0, "WTF, length cannot be zero"
+    rs = random.choice(rusAlphaCap)
+    for i in range(0, length - 1):
+        rs = rs + random.choice(rusAlphaSmall)
+    return rs
+
+
 def phone():
     return "+7" + randomDigits(9)
 
