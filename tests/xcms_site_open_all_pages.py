@@ -16,15 +16,18 @@ class XcmsSiteOpenAllPages(xtest_common.XcmsTest):
 
         self.goto_menu_item(mainPage)
         self.assertBodyTextPresent(
-            u"Приветствуем Вас на сайте Физического отделения Летней Экологической Школы"
+            u"Больше новостей",
         )
+
+        self.goto_menu_item(u"О школе")
+        self.assertBodyTextPresent(u"содружество школьников и преподавателей")
 
         self.goto_menu_item(u"История ЛЭШ")
         self.assertBodyTextPresent(u"Школа существует достаточно давно")
 
-        news = u"Новости"
-        self.goto_menu_item(news)
-        self.assertBodyTextPresent(news)
+        self.goto_menu_item(mainPage)
+        self.goto_menu_item(u"Новости")
+        self.assertBodyTextPresent(u"Старые новости")
 
         self.goto_menu_item(u"Официально о ЛЭШ")
         self.assertBodyTextPresent(u"Официальная информация")
