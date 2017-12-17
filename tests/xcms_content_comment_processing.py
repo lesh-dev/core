@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import xpage
 import xtest_common
-import random_crap
 
 
 class XcmsContentCommentProcessing(xtest_common.XcmsTest):
@@ -17,43 +17,23 @@ class XcmsContentCommentProcessing(xtest_common.XcmsTest):
         self.gotoUrlByLinkText(self.m_parentPage)
         self.gotoCreatePage()
 
-        inpPageDir = "test_page_" + random_crap.random_text(8)
-        inpMenuTitle = "menu_title_" + random_crap.random_text(8)
-        inpPageHeader = "page_header_" + random_crap.random_text(8)
-        inpAlias = "new/page/alias/" + random_crap.random_text(8)
-
-        inpPageDir = self.fillElementById("create-name-input", inpPageDir)
-        inpMenuTitle = self.fillElementById("menu-title-input", inpMenuTitle)
-        inpPageHeader = self.fillElementById("header-input", inpPageHeader)
-        inpAlias = self.fillElementById("alias-input", inpAlias)
-
-        self.m_pageAlias = inpAlias
-
-        defaultPageType = self.getOptionValueById("create-pagetype-selector")
-
-        if defaultPageType != "content":
-            self.failTest("Default selected page type is not 'content': " + defaultPageType)
-
-        self.clickElementById("create-page-submit")
-
-        # self.logAdd("Opening editor again after redirection. ")
-        # self.gotoEditPageInPlace()
-
-        self.m_menuTitle = inpMenuTitle
-        self.m_pageHeader = inpPageHeader
+        page = xpage.Page(self)
+        page.input(
+            page_dir="test_page",
+            menu_title="menu_title",
+            header="page_header",
+            alias="new/page/alias/",
+            random=True,
+        )
 
         # edit page - click on menu
-        self.gotoUrlByLinkText(inpMenuTitle)
+        self.gotoUrlByLinkText(page.menu_title, attribute=self.CONTENT)
 
-        pageText = "<?php\n/**\n* qqq\n*\n**/\n?>"
-        # print "Generated page text: '" + pageText + "'"
-
-        pageText = self.fillAceEditorElement(pageText)
-        # print "After ins page text: '" + pageText + "'"
+        page_text = "<?php\n/**\n* qqq\n*\n**/\n?>"
+        page_text = self.fillAceEditorElement(page_text)
         self.clickElementById("commit-submit")
 
         self.performLogoutFromAdminPanel()
 
-        self.gotoUrlByLinkText(inpMenuTitle)
-
+        self.gotoUrlByLinkText(page.menu_title, attribute=self.CONTENT)
         self.assertPhpErrors()
