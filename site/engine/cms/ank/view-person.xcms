@@ -371,6 +371,8 @@ function xsm_print_person_ank_data($db, $person)
     </script>
     <?php
     xsm_draw_person_comments($db, $person_id);
+
+    xsm_set_title(xsm_fion($person));
 }
 
 function xsm_print_add_person_to_school($db, $school_id, $person, $use_title = false)
