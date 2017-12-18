@@ -202,3 +202,19 @@ function xsm_print_recent_schools($db, $current_school_id, $table_name)
     </script>
     <?php
 }
+
+/**
+ * Устанавливает заголовок документу через JS
+ */
+function xsm_set_title($title)
+{
+    global $meta_site_name;
+    ?>
+    <span id="document_title-span" style="display: none;"><?php echo htmlspecialchars($title)
+        ?> :: XSM :: <?php echo $meta_site_name; ?></span>
+    <script>
+    $(function(){
+        document.title = $("#document_title-span").text();
+    });
+    </script><?php
+}
