@@ -372,7 +372,7 @@ function xsm_print_person_ank_data($db, $person)
     <?php
     xsm_draw_person_comments($db, $person_id);
 
-    xsm_set_title(xsm_fion($person));
+    xsm_set_title(xsm_fion($person)." :: Анкета");
 }
 
 function xsm_print_add_person_to_school($db, $school_id, $person, $use_title = false)
@@ -546,6 +546,9 @@ function xsm_print_person_selected_school($db, $school_id, $person)
         ?><h2>Комментарий</h2>
         <div><?php echo $person_school_comment; ?></div><?php
     }
+
+    $school = xdb_get_entity_by_id("school", $school_id);
+    xsm_set_title(xsm_fion($person)." :: ".xcms_get_key_or($school, "school_title"));
 }
 
 // shows person information sliced by school
