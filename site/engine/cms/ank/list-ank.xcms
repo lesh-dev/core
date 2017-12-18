@@ -225,6 +225,8 @@ function xsm_show_ank_list()
     </table>
     <?php
     xsm_view_operations('person', 'участника');
+
+    xsm_set_title("Анкеты");
 }
 
 
