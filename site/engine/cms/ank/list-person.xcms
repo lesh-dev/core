@@ -131,6 +131,11 @@ function xsm_show_person_list($school_id)
             echo $person_school_add_url; ?>">Зачислить существующего участника</a>
         <a class="link-button btn" href="edit-person<?php
             echo $person_add_new_url; ?>">Добавить нового участника</a>
+        <?php
+        if (xu_not_empty($u_add_self))
+        {?>
+            <a class="link-button ank btn" href="list-person<?php echo $u_add_self; ?>">Я еду на эту школу</a><?php
+        }?>
     </div>
     <?php
     xsm_output_school_participants_list($person_sel, $school_id)
@@ -140,11 +145,6 @@ function xsm_show_person_list($school_id)
             echo $person_school_add_url; ?>">Зачислить существующего участника</a>
         <a class="link-button btn" href="edit-person<?php
             echo $person_add_new_url; ?>">Добавить нового участника</a>
-        <?php
-        if (xu_not_empty($u_add_self))
-        {?>
-            <a class="link-button ank btn" href="list-person<?php echo $u_add_self; ?>">Я еду на эту школу</a><?php
-        }?>
     </div>
     <?php
 }
