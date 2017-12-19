@@ -14,6 +14,11 @@ TIME_INC = 0.05
 
 class XcmsBaseTest(selenium_test.SeleniumTest):
     CONTENT = "xcms-content"
+    STOP_PHRASES = [
+        u"Пожалуйста, авторизуйтесь",
+        u"Пароль всё ещё неверный",
+    ]
+
     """
         Base test class wth advanced error checking"
     """
@@ -35,8 +40,7 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
             self.logAdd("We are on the AUTH page. Seems that page access was denied. ", "warning")
 
     def is_auth_page(self):
-        stop_phrases = [u"Требуется аутентификация", u"Пароль всё ещё неверный", u"Доступ запрещён"]
-        return self.checkSourceTextPresent(stop_phrases, option_list=["silent"], negative=True)
+        return self.checkSourceTextPresent(self.STOP_PHRASES, option_list=["silent"], negative=True)
 
     def check_doc_type(self):
         count = 0
@@ -197,14 +201,14 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
         self.assertSourceTextPresent(u"Логин")
         self.assertSourceTextPresent(u"Пароль")
-        self.assertSourceTextPresent(u"Требуется аутентификация")
+        self.assertSourceTextPresent(self.STOP_PHRASES)
 
         self.fillElementById("auth-login-input", login)
         self.fillElementById("auth-password-input", password)
 
         self.clickElementById("auth-submit")
 
-        wrong_auth = self.checkSourceTextPresent([u"Пароль всё ещё неверный", "Wrong password"], negative=True)
+        wrong_auth = self.checkSourceTextPresent(self.STOP_PHRASES, negative=True)
         if wrong_auth:
             return False
 

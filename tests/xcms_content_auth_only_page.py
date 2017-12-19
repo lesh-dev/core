@@ -64,7 +64,7 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
         self.logAdd("We should NOT see page text at all")
         self.assertSourceTextNotPresent(page_text, "we should not see page text without authorization. ")
         self.assertSourceTextNotPresent(page.header, "we should not see page header without authorization. ")
-        self.assertSourceTextPresent([u"Доступ запрещён", "Access denied"], "we should see auth page")
+        self.assertSourceTextPresent(self.STOP_PHRASES, "we should see auth page")
 
         inp_login = "AuthPageUser"
         inp_name = u"Убер Уполномоченный "
@@ -104,4 +104,4 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
             reason="Alias check: page header does not match entered header (under auth). "
         )
 
-        self.assertSourceTextNotPresent([u"Доступ запрещён", "Access denied"])
+        self.assertSourceTextNotPresent(self.STOP_PHRASES)

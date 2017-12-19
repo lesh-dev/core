@@ -1,16 +1,16 @@
 <?php
 /**
-     * Универсальный обработчик логина -- глобальный шаблон login.xcms.
-    * Непонятно, как его можно сдизайнить универсальным образом.
-    **/
+ * Универсальный обработчик логина -- глобальный шаблон login.xcms.
+ * Непонятно, как его можно сдизайнить универсальным образом.
+ **/
 require_once("${engine_dir}auth/user.php");
 require_once("${engine_dir}auth/user.php");
 
 function xcmst_do_auth_redirect()
 {
-        $return = xcms_get_key_or($_GET, "return");
-        $location = strlen($return) ? $return : $_SERVER["REQUEST_URI"]; ?>
-        <meta http-equiv="refresh" content="0;URL=<?php echo $location; ?>" /><?php
+    $return = xcms_get_key_or($_GET, "return");
+    $location = strlen($return) ? $return : $_SERVER["REQUEST_URI"]; ?>
+    <meta http-equiv="refresh" content="0;URL=<?php echo $location; ?>" /><?php
 }
 
 function xcmst_login_handler()
@@ -77,7 +77,7 @@ elseif (strlen(xcms_get_key_or($_POST, "reset-email")))
     xcmst_password_reset_handler();
 else
 {
-    $AuthReason = "Требуется аутентификация";
+    $AuthReason = XAUTH_AUTH_REQUIRED;
     if (isset($Exception))
         $AuthReason =  $Exception->getMessage();
 

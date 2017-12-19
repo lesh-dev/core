@@ -1,5 +1,5 @@
 <?php
     // $argv[0] is a template name
     if (!xcms_check_rights(array_slice($argv, 1)))
-        throw new Exception("Доступ запрещён. ", XE_ACCESS_DENIED);
+        throw new Exception(XAUTH_AUTH_REQUIRED, XE_ACCESS_DENIED);
 ?>
