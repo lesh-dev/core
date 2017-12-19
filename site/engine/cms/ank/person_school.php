@@ -71,9 +71,9 @@ function xsm_add_person_to_school($school_id, $person_id)
     $person_school = array(
         'school_id' => $school_id,
         'member_person_id' => $person_id,
-        'is_teacher' => $_POST['is_teacher'],
-        'is_student' => $_POST['is_student'],
-        'member_department_id' => $_POST['department_id'],
+        'is_teacher' => $_REQUEST['is_teacher'],
+        'is_student' => $_REQUEST['is_student'],
+        'member_department_id' => $_REQUEST['department_id'],
     );
     $ps_result = xdb_insert_or_update("person_school", array("person_school_id" => XDB_NEW),
         $person_school, xsm_get_fields("person_school"));

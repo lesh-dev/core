@@ -38,6 +38,7 @@ $form_action = xcms_url(array('school_id' => $school_id));
 </script>
 <?php
 
+$myself_person = xsm_find_person_by_email(xcms_user()->email());
 
 /**
   * Print per-school persons list
@@ -50,6 +51,20 @@ function xsm_show_person_list($school_id)
     global $sort_by_class;
     global $sort_by_curator_group;
     global $show_name_filter;
+
+    global $myself_person;
+    $u_add_self = "";
+    if ($myself_person !== null)
+    {
+        $u_add_self = xcms_url(array(
+            "add_me_to_school" => "true",
+            "member_person_id" => $myself_person["person_id"],
+            "department_id" => $myself_person["department_id"],
+            "is_teacher" => "teacher",
+            "is_student" => "",
+            "school_id" => $school_id,
+        ));
+    }
 
     $db = xdb_get();
 
@@ -125,9 +140,21 @@ function xsm_show_person_list($school_id)
             echo $person_school_add_url; ?>">Зачислить существующего участника</a>
         <a class="link-button btn" href="edit-person<?php
             echo $person_add_new_url; ?>">Добавить нового участника</a>
+        <?php
+        if (xu_not_empty($u_add_self))
+        {?>
+            <a class="link-button ank btn" href="list-person<?php echo $u_add_self; ?>">Я еду на эту школу</a><?php
+        }?>
     </div>
     <?php
 }
 
-    xsm_show_person_list($school_id);
+if (@$_REQUEST["add_me_to_school"])
+{
+    $person_id = xcms_get_key_or($_REQUEST, 'member_person_id', XDB_INVALID_ID);
+    $school_id = xcms_get_key_or($_REQUEST, 'school_id', XDB_INVALID_ID);
+    xsm_add_person_to_school($school_id, $person_id);
+}
+
+xsm_show_person_list($school_id);
 ?>
