@@ -1,6 +1,6 @@
- /var/log/xcms/*.log {
-    weekly
-    rotate 4
+/var/log/xcms/*.log {
+    monthly
+    rotate 24
     compress
     delaycompress
     missingok
