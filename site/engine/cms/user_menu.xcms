@@ -36,6 +36,17 @@ if (xcms_user()->check_rights("ank", false))
 if (xcms_user()->check_rights("ank", false))
 {?>
     <div class="menu_item">
+    <a id="anketas" title="XSM :: Школа"
+        href="<?php echo $meta_site_url_secure; ?>xsm/list-person"
+        >Школа</a> </div> <?php
+    echo $user_menu_separator;
+}
+
+// Disable contest iface as it does not held as for now
+// At least in early 2018
+if (false && xcms_user()->check_rights("ank", false))
+{?>
+    <div class="menu_item">
     <a id="contest" title="Олимпиада"
         href="<?php echo $meta_site_url_secure; ?>ctx"
         >Олимпиада</a> </div><?php
