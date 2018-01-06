@@ -27,6 +27,15 @@ if (xcms_user()->check_rights("ank", false))
 if (xcms_user()->check_rights("ank", false))
 {?>
     <div class="menu_item">
+    <a id="anketas" title="XSM :: Анкеты"
+        href="<?php echo $meta_site_url_secure; ?>xsm/list-ank"
+        >Анкеты</a> </div> <?php
+    echo $user_menu_separator;
+}
+
+if (xcms_user()->check_rights("ank", false))
+{?>
+    <div class="menu_item">
     <a id="contest" title="Олимпиада"
         href="<?php echo $meta_site_url_secure; ?>ctx"
         >Олимпиада</a> </div><?php
