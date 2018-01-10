@@ -4,7 +4,7 @@ create table xversion (
 );
 
 insert into xversion values('0.0.0');
-update `xversion` set db_version = '2.13.1';
+update `xversion` set db_version = '2.17.1';
 
 /* Отделение (2.7+) */
 create table department (
@@ -34,12 +34,17 @@ create table person (
     school_city text,   -- город, в котором находится школа
     ank_class text,     -- класс подачи заявки
     current_class text, -- текущий класс
+    teacher_fio text,      -- ФИО учителя ключевого предмета
 
     phone text,         -- телефон (городской)
     cellular text,      -- мобильный телефон
     email text,         -- контактный email
     skype text,         -- skype
     social_profile text,  -- профиль ВКонтакте и т.п. (используемый!)
+
+    parent_fio text,       -- ФИО Законного Представителя (ЗП)
+    parent_phone text,     -- мобильный телефон ЗП
+    parent_email text,     -- контактный email ЗП
 
     is_teacher text, -- типично препод
     is_student text, -- типично школьник
