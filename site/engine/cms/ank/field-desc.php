@@ -98,6 +98,10 @@ function xsm_get_all_field_descriptors()
                 "name" => "Адрес школы",
                 "type" => XSM_FT_STR,
             ),
+            "teacher_fio" => array(
+                "name" => "ФИО учителя",
+                "type" => XSM_FT_STR,
+            ),
             "ank_class" => array(
                 "name" => "Класс подачи анкеты",
                 "type" => XSM_FT_STR,
@@ -124,6 +128,18 @@ function xsm_get_all_field_descriptors()
             ),
             "social_profile" => array(
                 "name" => "Профиль в соц. сети",
+                "type" => XSM_FT_STR,
+            ),
+            "parent_fio" => array(
+                "name" => "ФИО родителя/ЗП",
+                "type" => XSM_FT_STR,
+            ),
+            "parent_phone" => array(
+                "name" => "Телефон родителя/ЗП",
+                "type" => XSM_FT_STR,
+            ),
+            "parent_email" => array(
+                "name" => "E-Mail родителя/ЗП",
                 "type" => XSM_FT_STR,
             ),
             "is_teacher" => array(
