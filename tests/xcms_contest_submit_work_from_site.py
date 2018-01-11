@@ -14,7 +14,11 @@ class XcmsContestSubmitWorkFromSite(xtest_common.XcmsTest):
 
     def _test_work_submit(self, file_size, need_success, fill_work=True):
         self.gotoRoot()
-        self.gotoUrlByLinkText(u"Олимпиада", attribute=self.CONTENT)
+
+        # FIXME(mvel): if contest will be raised up, this should be fixed too
+        # self.gotoUrlByLinkText(u"Олимпиада", attribute=self.CONTENT)
+        self.gotoUrl("/contest")
+
         self.gotoUrlByLinkText(u"Отправить решение", attribute=self.CONTENT)
 
         work_file = os.path.join(os.getcwd(), 'contest-work-sample.png')
