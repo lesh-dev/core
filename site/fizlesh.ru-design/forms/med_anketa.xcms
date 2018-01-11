@@ -1,0 +1,77 @@
+<?php
+if ($skin == "modern")
+    include(translate('<! css/design ank_modern.css !>'));
+else
+    include(translate('<! css/design ank_green.css !>'));
+?>
+<div class="ankLegend">
+<div><span class="ankAst Req">*</span> &#8211; обязательное поле</div>
+<div><span class="ankAst Gr">*</span> &#8211; должно быть заполнено хотя бы одно из полей</div>
+<div><span class="ankAst Rec">*</span> &#8211; рекомендуемое к заполнению поле</div>
+</div>
+<p><b>Пожалуйста, указывайте действующие способы в качестве контактных данных!</b>
+Если у Вас <i>в принципе есть</i> электронная почта, но Вы проверяете
+ящик раз в полгода, не указывайте его. Пожалуйста, проверьте номера телефонов
+и e-mail перед отправкой анкеты.</p>
+<div style="clear: both">&nbsp;</div>
+<script type="text/javascript" src="${engine_pub}/js/ank-validator.js"></script>
+
+<form method="post">
+
+    <div class="ankRow">
+        <span class="ankLabel">Отделение:</span>
+        <span class="ankValue"><?php
+            echo xsm_make_selector(
+                'department',
+                'department_id',
+                "8",  // Медицинское отделение
+                array('department_title'),
+                "(".
+                    "(department_id = 8) ".
+                ") ORDER BY department_title",
+                "",
+                false
+            );
+            ?>
+        </span>
+    </div>
+
+    ${ankinput:last_name:input:Фамилия:Сидоров:req:middle}
+    ${ankinput:first_name:input:Имя:Пётр:req:middle}
+    ${ankinput:patronymic:input:Отчество:Михайлович
+        (или слово &laquo;нет&raquo;, если у вас нет отчества):req:middle}
+    ${ankinput:birth_date:input:Дата рождения:15.12.1984, в формате ДД.ММ.ГГГГ:req:middle}
+    ${ankinput:school:input:Номер (название) школы:Лицей №30:opt:long}
+    ${ankinput:school_city:input:Город (село), область (край), <br />
+        где находится школа:г. Полярные Зори Мурманской обл.:opt:long}
+    ${ankinput:ank_class:input:Класс:8Б:req:middle}
+    ${ankinput:teacher_fio:input:ФИО учителя:Иванов Егор Петрович:opt:middle}
+    ${ankinput:phone:input:Домашний телефон<br/>с кодом
+        города:+7 (812) 212-85-06<br />(если не знаете код города,
+        не заполняйте это поле):gr:middle}
+    ${ankinput:cellular:input:Мобильный телефон:+7 (987) 654-32-10:gr:middle}
+    ${ankinput:email:input:E-mail:sidorov.petr@example.com:opt:middle}
+    ${ankinput:skype:input:Skype:sidorov.petr:opt:middle}
+    ${ankinput:social_profile:input:Страничка ВКонтакте<br/>(или
+        на Facebook и т.д.):vk.com/id123456789:opt:middle}
+
+    ${ankinput:parent_fio:input:ФИО родителя<br/>(или законного представителя):Сидоров Михаил Игоревич:opt:middle}
+    ${ankinput:parent_phone:input:Телефон родителя<br/>(или законного представителя):Мобильный телефон:+7 (987) 000-01-02:req:middle}
+    ${ankinput:parent_email:input:E-mail родителя<br/>(или законного представителя):sidorov.mikhail@example.com:opt:middle}
+
+    ${ankinput:lesh_ref:text:Откуда узнали про олимпиаду::opt:long}
+    ${ankinput:control_question:input:Сколько у человека пальцев<br/>на одной руке (прописью)?:req:middle}
+
+    <div class="ankRow">
+        <?php xcmst_submit("submit_anketa", "Отправить"); ?>
+    </div>
+    <div class="ankMessageFrame" id="c-Message">
+        <div class="ankError" id="t-Error">&nbsp;</div>
+        <div class="ankWarning" id="t-Warning">&nbsp;</div>
+    </div>
+</form>
+
+<p>
+    <b>P.S.</b> Мы не передаём полученную информацию третьим лицам,
+    нам и без этого есть чем заняться.
+</p>
