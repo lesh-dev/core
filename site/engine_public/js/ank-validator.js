@@ -37,25 +37,41 @@ function xsm_ank_check_birth_date(aError, sFieldName, sFieldTitle) {
     return true;
 }
 
-function xsm_ank_check_email(aError) {
-    var val = $("#email-input").val();
+/**
+ * @param errors: array of errors to push new errors
+ * @param element_name: non-default element name to check
+ */
+function xsm_ank_check_email(errors, element_name) {
+    var element_id = (element_name) ? ('#' + element_name + "-input") : "#email-input";
+    var val = $(element_name).val();
     val = $.trim(val);
-    if (val.length && val.indexOf('@') < 0)
-        aError.push("EMail должен содержать знак '@'");
+    if (val.length && val.indexOf('@') < 0) {
+        errors.push("EMail должен содержать знак '@'");
+    }
 }
 
-function xsm_ank_check_control_question(aError) {
+function xsm_ank_check_control_question(errors, mode) {
     var val = $("#control_question-input").val();
     val = $.trim(val);
-    if (!(
-        val.indexOf("ампер") >= 0 ||
-        val.indexOf("Ампер") >= 0 ||
-        val == "А" ||  // rus
-        val == "а" ||  // rus
-        val == "A" ||  // eng
-        val == "a"  // eng
-    )) {
-        aError.push("Неправильный ответ на контрольный вопрос. Вспомните физику!");
+    if (mode == "fizlesh") {
+        if (!(
+            val.indexOf("ампер") >= 0 ||
+            val.indexOf("Ампер") >= 0 ||
+            val == "А" ||  // rus
+            val == "а" ||  // rus
+            val == "A" ||  // eng
+            val == "a"  // eng
+        )) {
+            errors.push("Неправильный ответ на контрольный вопрос. Вспомните физику!");
+        }
+    } else if (mode == "med_olymp") {
+        if (!(
+            val.indexOf("пять") >= 0 ||
+            val.indexOf("Пять") >= 0 ||
+            val == "5"
+        )) {
+            errors.push("Неправильный ответ на контрольный вопрос. Посмотрите на свою руку!");
+        }
     }
 }
 
@@ -100,22 +116,21 @@ function xsm_ank_make_list(aList) {
 
 var GShowWarning = true;
 
-$(document).ready(function() {
+function xsm_ank_setup_fizlesh() {
+    $("#favourites-text").change(xsm_ank_on_change);
+    $("#achievements-text").change(xsm_ank_on_change);
+    $("#hobby-text").change(xsm_ank_on_change);
 
-    $('#favourites-text').change(xsm_ank_on_change);
-    $('#achievements-text').change(xsm_ank_on_change);
-    $('#hobby-text').change(xsm_ank_on_change);
-
-    $('#submit_anketa-submit').click(function() {
+    $("#submit_anketa-submit").click(function() {
         var aError = [];
-        xsm_ank_check_name(aError, 'last_name', 'Фамилия');
-        xsm_ank_check_name(aError, 'first_name', 'Имя');
-        xsm_ank_check_name(aError, 'patronymic', 'Отчество');
-        xsm_ank_check_birth_date(aError, 'birth_date', 'Дата рождения');
+        xsm_ank_check_name(aError, "last_name", "Фамилия");
+        xsm_ank_check_name(aError, "first_name", "Имя");
+        xsm_ank_check_name(aError, "patronymic", "Отчество");
+        xsm_ank_check_birth_date(aError, "birth_date", "Дата рождения");
         xsm_ank_check_class(aError);
         xsm_ank_check_phones(aError);
         xsm_ank_check_email(aError);
-        xsm_ank_check_control_question(aError);
+        xsm_ank_check_control_question(aError, "fizlesh");
 
         var aWarning = [];
         WarnPersonal(aWarning);
@@ -150,4 +165,56 @@ $(document).ready(function() {
 
         return bResult;
     });
+}
+
+function xsm_ank_collect_phone_errors(errors, element_id) {
+    var phone_error = xsm_ank_check_phone(element_id, 9);
+    if (phone_error.length) {
+        errors.push(phone_error);
+    }
+}
+
+function xsm_ank_setup_med_olymp() {
+    $('#submit_anketa-submit').click(function() {
+        var errors = [];
+        xsm_ank_check_name(errors, "last_name", "Фамилия");
+        xsm_ank_check_name(errors, "first_name", "Имя");
+        xsm_ank_check_name(errors, "patronymic", "Отчество");
+        xsm_ank_check_birth_date(errors, "birth_date", "Дата рождения");
+        xsm_ank_check_class(errors);
+        xsm_ank_collect_phone_errors(errors, "cellular");
+        xsm_ank_collect_phone_errors(errors, "parent_phone");
+        xsm_ank_check_phones(errors);
+        xsm_ank_check_name(errors, "parent_fio", "ФИО родителя");
+        xsm_ank_check_email(errors, "email");
+        xsm_ank_check_email(errors, "parent_email");
+        xsm_ank_check_control_question(errors, "med_olymp");
+
+        var check_result = true;
+        if (errors.length) {
+            $("#t-Error").html(xsm_ank_make_list(errors));
+            check_result = false;
+        } else {
+            $("#t-Error").html(' ');
+        }
+
+        if (!errors.length) {
+            $("#c-Message").hide();
+        } else {
+            $("#c-Message").show();
+        }
+        return check_result;
+    });
+}
+
+
+$(document).ready(function() {
+    if ($('#favourites-text')) {
+        // FizLesh anketa, default
+        xsm_ank_setup_fizlesh();
+        console.log("qqq");
+    } else if ($('#department_id-input').val() == "8") {
+        xsm_ank_setup_med_olymp();
+        console.log("zzz");
+    }
 });
