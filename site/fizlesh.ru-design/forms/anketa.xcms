@@ -1,20 +1,8 @@
 <?php
-if ($skin == "modern")
-    include(translate('<! css/design ank_modern.css !>'));
-else
-    include(translate('<! css/design ank_green.css !>'));
+require_once("${design_dir}forms/anketa_templates.php");
+
+xcms_print_anketa_header();
 ?>
-<div class="ankLegend">
-<div><span class="ankAst Req">*</span> &#8211; обязательное поле</div>
-<div><span class="ankAst Gr">*</span> &#8211; должно быть заполнено хотя бы одно из полей</div>
-<div><span class="ankAst Rec">*</span> &#8211; рекомендуемое к заполнению поле</div>
-</div>
-<p>
-    <b>Пожалуйста, указывайте <b>действующие</b> координаты для связи с~Вами!</b>
-    Если у~Вас есть электронная почта, но Вы проверяете ящик <b>раз в полгода</b>,
-    не указывайте его. Также, проверьте номера телефонов
-    и e-mail перед отправкой анкеты.
-</p>
 <p>
     <b>Эта анкета для поступающих на Физическое отделение или
     на&nbsp;школу&nbsp;&laquo;Сова&raquo;!</b>
@@ -23,8 +11,6 @@ else
     Пожалуйста, правильно указывайте отделение, используя выпадающий список.
 </p>
 <div style="clear: both">&nbsp;</div>
-<script type="text/javascript" src="${engine_pub}/js/ank-validator.js"></script>
-
 <form method="post">
 
     <div class="ankRow">
@@ -95,8 +81,6 @@ else
     Впрочем, Вы можете отказаться от поступления к нам в любой момент,
     даже если заполните анкету и успешно пройдёте собеседование.
 </p>
-
-<p>
-    <b>P.S.</b> Мы не передаём полученную информацию третьим лицам,
-    нам и без этого есть чем заняться.
-</p>
+<?php
+xcms_print_anketa_footer();
+?>

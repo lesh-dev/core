@@ -1,21 +1,9 @@
 <?php
-if ($skin == "modern")
-    include(translate('<! css/design ank_modern.css !>'));
-else
-    include(translate('<! css/design ank_green.css !>'));
-?>
-<div class="ankLegend">
-<div><span class="ankAst Req">*</span> &#8211; обязательное поле</div>
-<div><span class="ankAst Gr">*</span> &#8211; должно быть заполнено хотя бы одно из полей</div>
-<div><span class="ankAst Rec">*</span> &#8211; рекомендуемое к заполнению поле</div>
-</div>
-<p><b>Пожалуйста, указывайте действующие способы в качестве контактных данных!</b>
-Если у Вас <i>в принципе есть</i> электронная почта, но Вы проверяете
-ящик раз в полгода, не указывайте его. Пожалуйста, проверьте номера телефонов
-и e-mail перед отправкой анкеты.</p>
-<div style="clear: both">&nbsp;</div>
-<script type="text/javascript" src="${engine_pub}/js/ank-validator.js"></script>
+require_once("${design_dir}forms/anketa_templates.php");
 
+xcms_print_anketa_header();
+?>
+<div style="clear: both">&nbsp;</div>
 <form method="post">
     <?php echo xcmst_hidden("department_id", "8"); // Медицинское отделение ?>
     ${ankinput:last_name:input:Фамилия:Сидоров:req:middle}
@@ -39,7 +27,7 @@ else
     ${ankinput:parent_email:input:E-mail родителя<br/>(законного представителя):sidorov.mikhail@example.com:opt:middle}
 
     ${ankinput:lesh_ref:text:Откуда узнали про олимпиаду::req:long}
-    ${ankinput:control_question:input:Сколько у человека пальцев<br/>на одной руке (прописью)?:три:req:middle}
+    ${ankinput:control_question:input:Сколько у человека пальцев<br/>на одной руке (прописью):три:req:middle}
 
     <div class="ankRow">
         <?php xcmst_submit("submit_anketa", "Отправить"); ?>
@@ -49,8 +37,6 @@ else
         <div class="ankWarning" id="t-Warning">&nbsp;</div>
     </div>
 </form>
-
-<p>
-    <b>P.S.</b> Мы не передаём полученную информацию третьим лицам,
-    нам и без этого есть чем заняться.
-</p>
+<?php
+xcms_print_anketa_footer();
+?>
