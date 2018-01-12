@@ -239,15 +239,24 @@ function xsm_valid_anketa_phone_digits($phone_digits, $count)
 }
 
 // В чём измеряется сила тока?
-function xsm_valid_anketa_control_question($answer) {
-    return (
-        xu_strpos($answer, "ампер") !== false ||
-        xu_strpos($answer, "Ампер") !== false ||
-        $answer == "А" ||
-        $answer == "а" ||
-        $answer == "A" ||
-        $answer == "a"
-    );
+// Сколько пальцев на одной руке?
+function xsm_valid_anketa_control_question($answer, $mode) {
+    if ($mode == "fizlesh") {
+        return (
+            xu_strpos($answer, "ампер") !== false ||
+            xu_strpos($answer, "Ампер") !== false ||
+            $answer == "А" ||
+            $answer == "а" ||
+            $answer == "A" ||
+            $answer == "a"
+        );
+    } elseif ($mode == "med_olymp") {
+        return (
+            xu_strpos($answer, "пять") !== false ||
+            xu_strpos($answer, "Пять") !== false ||
+            $answer == "5"
+        );
+    }
 }
 
 function xsm_validate_anketa_post(&$person)
@@ -266,15 +275,17 @@ function xsm_validate_anketa_post(&$person)
     $patronymic = xcms_get_key_or($person, "patronymic");
     $birth_date = xcms_get_key_or($person, "birth_date");
     $phone = xcms_get_key_or($person, "phone");
-    $phone_digits = preg_replace('/[^0-9]/', '', $phone);
+    $phone_digits = preg_replace("/[^0-9]/", "", $phone);
     $cellular = xcms_get_key_or($person, "cellular");
-    $cellular_digits = preg_replace('/[^0-9]/', '', $cellular);
+    $cellular_digits = preg_replace("/[^0-9]/", "", $cellular);
     $ank_class = xcms_get_key_or($person, "ank_class");
-    $person['ank_class'] = $ank_class;
-    $person['current_class'] = $ank_class;
+    $person["ank_class"] = $ank_class;
+    $person["current_class"] = $ank_class;
 
-    $fi_match = '/[\/.,?!@#$%&*()_+=~^]/';
-    $birth_date_match = '/[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9][0-9][0-9]/';
+    $fi_match = "/[\/.,?!@#$%&*()_+=~^]/";
+    $birth_date_match = "/[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9][0-9][0-9]/";
+
+    $control_question = xcms_get_key_or($person, "control_question");
 
     if (
         xu_empty($last_name) ||
@@ -291,9 +302,11 @@ function xsm_validate_anketa_post(&$person)
             xu_empty($phone_digits) &&
             xu_empty($cellular_digits)
         ) ||
-        !xsm_valid_anketa_control_question(xcms_get_key_or($person, "control_question"))
-    )
-    {
+        (
+            !xsm_valid_anketa_control_question($control_question, "fizlesh") &&
+            !xsm_valid_anketa_control_question($control_question, "med_olymp")
+        )
+    ) {
         // someone hacked the js validator
         die("Invalid anketa data. ");
     }
