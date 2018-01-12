@@ -2,10 +2,11 @@
 
 function xcms_print_anketa_header() {
     global $engine_dir;
+    global $engine_pub;
     global $xengine_dir;
     global $skin;
     ?>
-    <script type="text/javascript" src="${engine_pub}/js/ank-validator.js"></script>
+    <script type="text/javascript" src="<?php echo $engine_pub; ?>/js/ank-validator.js"></script>
     <?php
     if ($skin == "modern")
         include(translate('<! css/design ank_modern.css !>'));
