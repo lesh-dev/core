@@ -14,6 +14,30 @@ require_once("${engine_dir}xsm/middleware.php");
 <# js/public control-depends.js #>
 
 <?php
+    define("XCMS_KEY_ANKETA_MODE", "anketa_mode");
+    define("XCMS_ANKETA_MODE_FIZLESH", "fizlesh");
+    define("XCMS_ANKETA_MODE_MED_OLYMP", "med_olymp");
+
+    $DEST_URLS_SUCCESS = array(
+        XCMS_ANKETA_MODE_FIZLESH => "register/success",
+        XCMS_ANKETA_MODE_MED_OLYMP => "med_olymp_register/success",
+    );
+
+    $DEST_URLS_ALREADY = array(
+        XCMS_ANKETA_MODE_FIZLESH => "register/already",
+        XCMS_ANKETA_MODE_MED_OLYMP => "med_olymp_register/already",
+    );
+
+    $MAIL_LISTS_REG = array(
+        XCMS_ANKETA_MODE_FIZLESH => "reg",
+        XCMS_ANKETA_MODE_MED_OLYMP => "med_olymp_reg",
+    );
+
+    $MAIL_LISTS_REG_MANAGERS = array(
+        XCMS_ANKETA_MODE_FIZLESH => "reg-managers",
+        XCMS_ANKETA_MODE_MED_OLYMP => "med_olymp_managers",
+    );
+
     $aparam = xcms_get_key_or($_GET, "aparam");
     $source = xcms_get_page_content_name($pageid);
     if (!file_exists($source))
@@ -39,6 +63,9 @@ require_once("${engine_dir}xsm/middleware.php");
         $person_id = XDB_NEW;
         $success = false;
 
+        // anketa mode describes anketa source ("fizlesh" site or something else)
+        $anketa_mode = xcms_get_key_or($person, XCMS_KEY_ANKETA_MODE);
+
         $person_desc = xsm_get_fields("person");
         $email = xcms_get_key_or($person, "email");
         $first_name = xcms_get_key_or($person, "first_name");
@@ -47,7 +74,7 @@ require_once("${engine_dir}xsm/middleware.php");
         $old_person = xsm_find_person_origin($db, $person);
 
         $html_content = "";
-        $dest_url = 'register/success';
+        $dest_url = xcms_get_key_or($DEST_URLS_SUCCESS, $anketa_mode, "register/success");
 
         if ($old_person !== false)
         {
@@ -72,7 +99,7 @@ require_once("${engine_dir}xsm/middleware.php");
 
             $html_content = xcms_get_html_template("anketa_mail_see_update");
             // override url
-            $dest_url = 'register/already';
+            $dest_url = xcms_get_key_or($DEST_URLS_ALREADY, $anketa_mode, "register/already");
         }
         else
         {
@@ -86,15 +113,19 @@ require_once("${engine_dir}xsm/middleware.php");
 
         $mail_msg = xsm_compose_anketa_mail_msg($person, $html_content);
         $reply_link = xsm_compose_anketa_reply_link($first_name, $email);
-        if (xu_empty($email))
+        if (xu_empty($email)) {
             $reply_link = "";
+        }
         $mail_msg_managers = str_replace("@@REPLY-LINK@", $reply_link, $mail_msg);
 
         // remove unused placeholder in notification letter
         $mail_msg = str_replace("@@REPLY-LINK@", "", $mail_msg);
 
-        $success_managers = xsm_send_anketa("reg-managers", $mail_msg_managers, $full_name, $email, true);
-        $success_notify = xsm_send_anketa("reg", $mail_msg, $full_name, $email, false);
+        $reg_managers_mail_key = xcms_get_key_or($MAIL_LISTS_REG_MANAGERS, $anketa_mode, "reg-managers");
+        $reg_mail_key = xcms_get_key_or($MAIL_LISTS_REG, $anketa_mode, "reg");
+
+        $success_managers = xsm_send_anketa($reg_managers_mail_key, $mail_msg_managers, $full_name, $email, true);
+        $success_notify = xsm_send_anketa($reg_mail_key, $mail_msg, $full_name, $email, false);
 
         $success = ($success_managers || $success_notify) && $write_success;
 
@@ -105,7 +136,7 @@ require_once("${engine_dir}xsm/middleware.php");
             // но чтобы не ждать три дня, пусть уж лучше нас пнут извне
             xcms_log(XLOG_ERROR, "[ANK] Anketa submission failed. ".
                 "Statuses: Notify:$success_notify Write:$write_success");
-            $dest_url = 'register/error';
+            $dest_url = xcms_get_key_or($DEST_URLS_ERROR, $anketa_mode, "register/error");
         }
         $message = 'Сейчас Вы будете перенаправлены на страницу результата. Нажмите '.
             '<a href="/'.$web_prefix.$dest_url.'">сюда</a>, если не хотите ждать.';

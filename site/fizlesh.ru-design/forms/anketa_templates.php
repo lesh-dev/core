@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Anketa common footer
+ */
 function xcms_print_anketa_header() {
     global $engine_dir;
     global $engine_pub;
@@ -26,6 +29,21 @@ function xcms_print_anketa_header() {
     </p><?php
 }
 
+function xcms_print_anketa_send_block() {?>
+    <div class="ankRow">
+            <?php xcmst_submit("submit_anketa", "Отправить"); ?>
+        </div>
+        <div class="ankMessageFrame" id="c-Message">
+            <div class="ankError" id="t-Error">&nbsp;</div>
+            <div class="ankWarning" id="t-Warning">&nbsp;</div>
+        </div>
+    <?php
+}
+
+
+/**
+ * Anketa tail
+ */
 function xcms_print_anketa_footer() {?>
     <p>
         <b>P.S.</b> Мы не передаём полученную информацию третьим лицам,

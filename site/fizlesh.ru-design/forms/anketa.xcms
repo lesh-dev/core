@@ -12,7 +12,9 @@ xcms_print_anketa_header();
 </p>
 <div style="clear: both">&nbsp;</div>
 <form method="post">
-
+    <?php
+    echo xcmst_hidden(XCMS_KEY_ANKETA_MODE, XCMS_ANKETA_MODE_FIZLESH);  // Тип анкеты
+    ?>
     <div class="ankRow">
         <span class="ankLabel">Отделение:<span class="ankAst Req">*</span></span>
         <span class="ankValue"><?php
@@ -59,14 +61,9 @@ xcms_print_anketa_header();
     ${ankinput:lesh_ref:text:Откуда узнали о школе::opt:long}
     ${ankinput:control_question:input:В чём измеряется<br/>
         сила тока (в системе СИ)?:в ...ах (если не помните, поищите ответ в Интернете):req:middle}
-
-    <div class="ankRow">
-        <?php xcmst_submit("submit_anketa", "Отправить"); ?>
-    </div>
-    <div class="ankMessageFrame" id="c-Message">
-        <div class="ankError" id="t-Error">&nbsp;</div>
-        <div class="ankWarning" id="t-Warning">&nbsp;</div>
-    </div>
+    <?php
+    xcms_print_anketa_send_block();
+    ?>
 </form>
 
 <p>

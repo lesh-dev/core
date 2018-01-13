@@ -5,7 +5,10 @@ xcms_print_anketa_header();
 ?>
 <div style="clear: both">&nbsp;</div>
 <form method="post">
-    <?php echo xcmst_hidden("department_id", "8"); // Медицинское отделение ?>
+    <?php
+    echo xcmst_hidden(XCMS_KEY_ANKETA_MODE, XCMS_ANKETA_MODE_MED_OLYMP);  // Тип анкеты
+    echo xcmst_hidden("department_id", "8");  // Медицинское отделение
+    ?>
     ${ankinput:last_name:input:Фамилия:Сидоров:req:middle}
     ${ankinput:first_name:input:Имя:Пётр:req:middle}
     ${ankinput:patronymic:input:Отчество:Михайлович
@@ -24,18 +27,13 @@ xcms_print_anketa_header();
 
     ${ankinput:parent_fio:input:ФИО родителя<br/>(законного представителя):Сидоров Михаил Игоревич:req:long}
     ${ankinput:parent_phone:input:Телефон родителя<br/>(законного представителя):+7&nbsp;(900)&nbsp;000-01-02:req:middle}
-    ${ankinput:parent_email:input:E-mail родителя<br/>(законного представителя):sidorov.mikhail@example.com:opt:middle}
+    ${ankinput:parent_email:input:E-mail родителя<br/>(законного представителя):sidorov.mikhail@example.com:req:middle}
 
     ${ankinput:lesh_ref:text:Откуда узнали про олимпиаду::req:long}
     ${ankinput:control_question:input:Сколько у человека пальцев<br/>на одной руке (прописью):три:req:middle}
-
-    <div class="ankRow">
-        <?php xcmst_submit("submit_anketa", "Отправить"); ?>
-    </div>
-    <div class="ankMessageFrame" id="c-Message">
-        <div class="ankError" id="t-Error">&nbsp;</div>
-        <div class="ankWarning" id="t-Warning">&nbsp;</div>
-    </div>
+    <?php
+    xcms_print_anketa_send_block();
+    ?>
 </form>
 <?php
 xcms_print_anketa_footer();
