@@ -26,6 +26,30 @@ function xsm_send_anketa($mail_group, $mail_msg, $full_name, $email, $manager_mo
     return xcms_mailer_send($mailer, $subject, $mail_msg);
 }
 
+/**
+ * Посылатор автоответов (костылизирован под МедЛЭШ)
+**/
+function xsm_send_autoreply($mail_msg, $addr_list_to)
+{
+    if (!xcms_mailer_enabled())
+    {
+        // disabled mailer is not an error
+        return true;
+    }
+
+    $subject = "MedO Lesh: Registration complete!";
+    $addr_from = "reg@fizlesh.ru"; // TODO: remove this spike
+    $name_from = "FizLesh Notificator";
+    $mailer = xcms_get_mailer($addr_from, $name_from);
+    foreach ($addr_list_to as $email)
+    {
+        $mailer->AddAddress($email);
+    }
+    $mailer->AddReplyTo("medolesh.org@gmail.com", "MedO Lesh");
+    return xcms_mailer_send($mailer, $subject, $mail_msg);
+}
+
+
 function xsm_get_city_class($school_city)
 {
     $class = "";

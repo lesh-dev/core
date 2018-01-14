@@ -44,7 +44,9 @@ require_once("${engine_dir}xsm/middleware.php");
     {
         echo "<h1>Раздел не заполнен</h1>";
         if (xcms_user()->login() != "anonymous")
+        {
             echo "<h3><a href=\"?ref=admin&amp;page=$pageid\">Вы можете это исправить!</a></h3>";
+        }
     }
     if (@$_POST["submit_anketa"])
     {
@@ -116,8 +118,8 @@ require_once("${engine_dir}xsm/middleware.php");
         if (xu_empty($email)) {
             $reply_link = "";
         }
-        $mail_msg_managers = str_replace("@@REPLY-LINK@", $reply_link, $mail_msg);
 
+        $mail_msg_managers = str_replace("@@REPLY-LINK@", $reply_link, $mail_msg);
         // remove unused placeholder in notification letter
         $mail_msg = str_replace("@@REPLY-LINK@", "", $mail_msg);
 
@@ -128,6 +130,18 @@ require_once("${engine_dir}xsm/middleware.php");
         $success_notify = xsm_send_anketa($reg_mail_key, $mail_msg, $full_name, $email, false);
 
         $success = ($success_managers || $success_notify) && $write_success;
+
+        if ($anketa_mode == XCMS_ANKETA_MODE_MED_OLYMP)
+        {
+            $parent_email = xcms_get_key_or($person, "parent_email");
+            $emails = array();
+            if (xu_not_empty($email))
+                $emails[] = $email;
+            if (xu_not_empty($parent_email))
+                $emails[] = $parent_email;
+            $autoreply = xsm_compose_anketa_autoreply();
+            xsm_send_autoreply($autoreply, $emails);
+        }
 
         $zero_redirect_delay = $SETTINGS["zero_redirect_delay"];
         if (!$success)
