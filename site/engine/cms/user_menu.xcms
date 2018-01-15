@@ -2,11 +2,13 @@
 $parsed_args = xcms_parse_template_args($argv);
 $user_menu_separator = xcms_get_key_or($parsed_args, "separator");
 $show_auth = xcms_get_key_or($parsed_args, "show_auth");
+$registered_rights = xcms_user()->check_rights("registered", false);
+$xsm_rights = xcms_user()->check_rights("ank", false);
 
 if (xu_not_empty($user_menu_separator))
     $user_menu_separator = " $user_menu_separator ";
 
-if (xcms_user()->check_rights("registered", false))
+if ($registered_rights)
 {?>
     <div class="menu_item">
     <a id="cabinet" title="Личный кабинет"
@@ -15,16 +17,16 @@ if (xcms_user()->check_rights("registered", false))
     echo $user_menu_separator;
 }
 
-if (xcms_user()->check_rights("ank", false))
+if ($xsm_rights)
 {?>
     <div class="menu_item">
     <a id="xsm" title="Система управления школьниками"
-        href="<?php echo $meta_site_url_secure; ?>xsm"
+        href="<?php echo $meta_site_url_secure; ?>xsm/list-person-locator"
         >XSM</a> </div> <?php
     echo $user_menu_separator;
 }
 
-if (xcms_user()->check_rights("ank", false))
+if ($xsm_rights)
 {?>
     <div class="menu_item">
     <a id="anketas" title="XSM :: Анкеты"
@@ -33,7 +35,7 @@ if (xcms_user()->check_rights("ank", false))
     echo $user_menu_separator;
 }
 
-if (xcms_user()->check_rights("ank", false))
+if ($xsm_rights)
 {?>
     <div class="menu_item">
     <a id="anketas" title="XSM :: Школа"
@@ -44,7 +46,7 @@ if (xcms_user()->check_rights("ank", false))
 
 // Disable contest iface as it does not held as for now
 // At least in early 2018
-if (false && xcms_user()->check_rights("ank", false))
+if (false && $xsm_rights)
 {?>
     <div class="menu_item">
     <a id="contest" title="Олимпиада"
@@ -66,7 +68,7 @@ if (
     echo $user_menu_separator;
 }
 
-if (xcms_user()->check_rights("registered", false))
+if ($registered_rights)
 {?>
     <div class="menu_item">
     <a id="doc" href="<?php echo "${meta_site_url_secure}doc"; ?>">Документация</a>
@@ -74,7 +76,7 @@ if (xcms_user()->check_rights("registered", false))
     echo $user_menu_separator;
 }
 
-if (xcms_user()->check_rights("registered", false))
+if ($registered_rights)
 {?>
     <div class="menu_item">
     <a id="logout" title="Выход"
