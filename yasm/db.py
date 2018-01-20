@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+import yasm.config as cfg
 
 
 # for autocomplete
@@ -21,7 +22,7 @@ Solutions = None
 
 
 def connect(app):
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/yaroslav/PhpstormProjects/lesh-dev/content-fizlesh.ru/content/ank/fizlesh.sqlite3'
+    app.config['SQLALCHEMY_DATABASE_URI'] = cfg.db_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     database = SQLAlchemy(app)
 
