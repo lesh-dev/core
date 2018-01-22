@@ -1,1 +1,1 @@
-db_uri = '*'
+db_uri = 'sqlite:////home/yaroslav/PhpstormProjects/lesh-dev/content-fizlesh.ru/content/ank/fizlesh.sqlite3'

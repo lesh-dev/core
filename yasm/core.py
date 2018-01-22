@@ -26,4 +26,4 @@ if __name__ == "__main__":
         print(i.query.all())
 
     app.add_url_rule('/', view_func=Test.as_view('Greet'))
-    app.run()
+    app.run(debug=True)
