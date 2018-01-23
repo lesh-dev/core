@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<tr>
+    <td> {{ data.name }}</td>
+    <td>
+        {% if data.type == "select" %}
+        <select>
+            {% for opt in data.options %}
+                <option>
+                    {{ opt }}
+                </option>
+            {% endfor %}
+        </select>
+        {% else %}
+        <input type="{{ data.type }}">
+        {% endif %}
+    </td>
+</tr>

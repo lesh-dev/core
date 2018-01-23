@@ -1,8 +1,9 @@
 from flask.views import View
 from flask import request
 from yasm.experimental import tables
+from yasm.experimental.filter.filters import EasyFilter
 
-from yasm.db import Person
+from yasm.db import Person, PersonSchool
 
 
 class Test(View):
@@ -15,5 +16,10 @@ class Test(View):
             Person.last_name,
             Person.patronymic
         ])
-        print(Person.person_id.__dict__)
-        return p.__html__()
+        filter = EasyFilter([
+            PersonSchool.curatorship,
+            PersonSchool.person_school_changedby,
+            PersonSchool.school_id
+        ])
+        print(len(filter.items))
+        return filter.as_html() + p.__html__()

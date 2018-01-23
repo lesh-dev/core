@@ -10,20 +10,7 @@ if __name__ == "__main__":
     database.init_app(app)
     app.app_context().push()
     # testing if all objects are readable
-    for i in (Notification,
-              Department,
-              Person,
-              Course,
-              CourseTeachers,
-              Exam,
-              School,
-              PersonSchool,
-              PersonComment,
-              Submission,
-              Contestants,
-              Problems,
-              Solutions):
-        print(i.query.all())
+    db_read_test()
 
     app.add_url_rule('/', view_func=Test.as_view('Greet'))
     app.run(debug=True)

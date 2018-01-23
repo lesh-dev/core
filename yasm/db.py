@@ -1,15 +1,27 @@
 from flask_sqlalchemy import SQLAlchemy
+"""
+ORM declaration file
+"""
+
 
 database = SQLAlchemy()
 
 
 class NamedColumn(database.Column):
+    """
+    Wrapper around SQLAlchemy.Column, which allows giving nicknames to columns.
+    """
     nick = ""
 
     def __init__(self, *args, nick="", **kwargs):
+        """
+        :param args: args for Column.__init__
+        :param nick: nickname for column
+        :param kwargs: kwargs for Column.__init__
+        """
         self.nick = nick
         super().__init__(*args, **kwargs)
-        if not self.nick:
+        if self.nick is None:
             self.nick = self.name
 
 
@@ -522,3 +534,24 @@ class Solutions(database.Model):
                                     nullable=True)
     resolution_mark = NamedColumn(database.Text,
                                   nullable=True)
+
+
+def db_read_test():
+    """
+    Checks if all items stored in database are readable by this ORM
+    :return: None
+    """
+    for i in (Notification,
+              Department,
+              Person,
+              Course,
+              CourseTeachers,
+              Exam,
+              School,
+              PersonSchool,
+              PersonComment,
+              Submission,
+              Contestants,
+              Problems,
+              Solutions):
+        print(i.query.all())

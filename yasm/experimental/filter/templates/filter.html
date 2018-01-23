@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<table>
+    <thead>
+    <tr>
+        <th>Признак</th><th>Значение</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for elem in els %}
+    {{ elem }}
+    {% endfor %}
+    </tbody>
+</table>
