@@ -166,7 +166,8 @@ class Person(database.Model):
                                               'declined',
                                               'taken',
                                               'duplicated',
-                                              'spam'),
+                                              'spam',
+                                              'discuss'),
                                 nick="статус анкеты",
                                 nullable=False)
 
