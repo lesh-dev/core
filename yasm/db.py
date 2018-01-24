@@ -155,21 +155,26 @@ class Person(database.Model):
                                   nick="тур. инвентарь",
                                   nullable=True)  # имеющиеся предметы туристского обихода (2.2+)
 
-    anketa_status = NamedColumn(database.Enum('progress',
-                                              'nextyear',
-                                              'duplicate',
-                                              'reserved',
-                                              'cont',
-                                              'old',
-                                              'new',
-                                              'processed',
-                                              'declined',
-                                              'taken',
-                                              'duplicated',
-                                              'spam',
-                                              'discuss'),
-                                nick="статус анкеты",
-                                nullable=False)
+    anketa_status = NamedColumn(
+        database.Enum(
+            'progress',
+            'nextyear',
+            'duplicate',
+            'reserved',
+            'cont',
+            'old',
+            'new',
+            'processed',
+            'declined',
+            'taken',
+            'duplicated',
+            'spam',
+            'discuss',
+            'less',
+        ),
+        nick="статус анкеты",
+        nullable=False,
+    )
 
     user_agent = NamedColumn(database.Text,
                              nick="браузер",
@@ -293,19 +298,19 @@ class Exam(database.Model):
                               nick="статус",
                               nullable=True)
     deadline_date = NamedColumn(database.Text,
-                                nick="дедлайн", 
+                                nick="дедлайн",
                                 nullable=True)
-    exam_comment = NamedColumn(database.Text, 
+    exam_comment = NamedColumn(database.Text,
                                nick="комментарий",
                                nullable=True)
     exam_created = NamedColumn(database.Text,
                                nick="дата создания",
                                nullable=False)  # utc timestamp
-    exam_modified = NamedColumn(database.Text, 
+    exam_modified = NamedColumn(database.Text,
                                 nick="последнее изменение",
                                 nullable=False)  # utc timestamp
-    exam_changedby = NamedColumn(database.Text, 
-                                 nick="изменивший", 
+    exam_changedby = NamedColumn(database.Text,
+                                 nick="изменивший",
                                  nullable=False)  # user name
 
     def student(self):
