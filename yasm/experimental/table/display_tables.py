@@ -33,13 +33,49 @@ CourseTeachersDisplay = EasyTable(cols=[
 
 Exam = EasyTable(cols=[
     db.Exam.course_id,
+    db.Exam.student_person_id
 ])
+
+
 School = EasyTable(cols=[
-    db.School.sch
+    db.School.school_title
 ])
-PersonSchool = EasyTable(cols=[])
-PersonComment = EasyTable(cols=[])
-Submission = EasyTable(cols=[])
-Contestants = EasyTable(cols=[])
-Problems = EasyTable(cols=[])
-Solutions = EasyTable(cols=[])
+
+
+PersonSchool = EasyTable(cols=[
+    db.PersonSchool.member_person_id,
+    db.PersonSchool.member_department_id,
+    db.PersonSchool.school_id
+])
+
+
+PersonComment = EasyTable(cols=[
+    db.PersonComment.blamed_person_id,
+    db.PersonComment.person_comment_created
+])
+
+
+Submission = EasyTable(cols=[
+    db.Submission.sender,
+    db.Submission.submission_timestamp
+])
+
+
+Contestants = EasyTable(cols=[
+    db.Contestants.name,
+    db.Contestants.contest_year
+])
+
+
+Problems = EasyTable(cols=[
+    db.Problems.problem_name,
+    db.Problems.contest_year
+])
+
+
+Solutions = EasyTable(cols=[
+    db.Solutions.problem_id,
+    db.Solutions.contestant_id,
+    db.Solutions.resolution_author,
+    db.Solutions.resolution_mark
+])

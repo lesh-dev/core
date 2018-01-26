@@ -9,6 +9,7 @@ class EasyTable(Table):
     """
 
     allow_sort = True
+    expand_fk = True
 
     def __init__(self, *args, cols=(), **kwargs):
         """

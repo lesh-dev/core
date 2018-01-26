@@ -7,6 +7,15 @@ ORM declaration file
 database = SQLAlchemy()
 
 
+class MarkedForeignKey(database.ForeignKey):
+    def __init__(self, col, *args, **kwargs):
+        self.column = col
+        super().__init__(col, *args, **kwargs)
+
+    def model(self):
+        return self.column.parent
+
+
 class NamedColumn(database.Column):
     """
     Wrapper around SQLAlchemy.Column, which allows giving nicknames to columns.
@@ -62,6 +71,8 @@ class Department(database.Model):
     department_changedby = NamedColumn(database.Text,
                                        nick="изменивший",
                                        nullable=False)
+    person_schools = database.relationship('PersonSchool', backref='department', lazy='dynamic')
+    persons = database.relationship('Person', backref='department', lazy='dynamic')
 
 
 class Person(database.Model):
@@ -181,7 +192,7 @@ class Person(database.Model):
                              nullable=True)  # идентификатор браузера, с которого была подана анкета
 
     department_id = NamedColumn(database.Integer,
-                                database.ForeignKey(Department.department_id),
+                                MarkedForeignKey(Department.department_id),
                                 nick="отделение",
                                 nullable=False)  # ссылка на отделение(2.7 +)
 
@@ -195,8 +206,10 @@ class Person(database.Model):
                                    nick="дата создания",
                                    nullable=True)  # user name
 
-    def department(self):
-        return Department.query.get(self.department_id)
+    person_comments = database.relationship('PersonComment', backref='blamed_person', lazy='dynamic')
+    person_schools = database.relationship('PersonSchool', backref='member_person', lazy='dynamic')
+    exams = database.relationship('Exam', backref='student_person', lazy='dynamic')
+    course_teachers = database.relationship('CourseTeachers', backref='course_teacher', lazy='dynamic')
 
 
 class Course(database.Model):
@@ -247,6 +260,8 @@ class Course(database.Model):
     course_changedby = NamedColumn(database.Text,
                                    nick="изменивший",
                                    nullable=False)  # user name
+    exams = database.relationship('Exam', backref='course', lazy='dynamic')
+    course_teachers = database.relationship('CourseTeachers', backref='course', lazy='dynamic')
 
 
 class CourseTeachers(database.Model):
@@ -256,11 +271,11 @@ class CourseTeachers(database.Model):
                                      primary_key=True,
                                      autoincrement=True)
     course_id = NamedColumn(database.Integer,
-                            database.ForeignKey(Course.course_id),
+                            MarkedForeignKey(Course.course_id),
                             nick="курс",
                             nullable=False)
     course_teacher_id = NamedColumn(database.Integer,
-                                    database.ForeignKey(Person.person_id),
+                                    MarkedForeignKey(Person.person_id),
                                     nick="перпод",
                                     nullable=False)
     course_teachers_created = NamedColumn(database.Text,
@@ -287,11 +302,11 @@ class Exam(database.Model):
                           primary_key=True,
                           autoincrement=True)  # not used
     student_person_id = NamedColumn(database.Integer,
-                                    database.ForeignKey(Person.person_id),
+                                    MarkedForeignKey(Person.person_id),
                                     nick="школьник",
                                     nullable=False)
     course_id = NamedColumn(database.Integer,
-                            database.ForeignKey(Course.course_id),
+                            MarkedForeignKey(Course.course_id),
                             nick="курс",
                             nullable=False)
     exam_status = NamedColumn(database.Text,
@@ -356,6 +371,8 @@ class School(database.Model):
     school_changedby = NamedColumn(database.Text,
                                    nick="изменивший",
                                    nullable=False)  # user name
+    person_comments = database.relationship('PersonComment', backref='school', lazy='dynamic')
+    person_schools = database.relationship('PersonSchool', backref='school', lazy='dynamic')
 
 
 class PersonSchool(database.Model):
@@ -365,15 +382,15 @@ class PersonSchool(database.Model):
                                    primary_key=True,
                                    autoincrement=True)
     member_person_id = NamedColumn(database.Integer,
-                                   database.ForeignKey(Person.person_id),
+                                   MarkedForeignKey(Person.person_id),
                                    nick="участник",
                                    nullable=False)  # fk person
     member_department_id = NamedColumn(database.Integer,
-                                       database.ForeignKey(Department.department_id),
+                                       MarkedForeignKey(Department.department_id),
                                        nick="отделение",
                                        nullable=False)  # fk department
     school_id = NamedColumn(database.Integer,
-                            database.ForeignKey(School.school_id),
+                            MarkedForeignKey(School.school_id),
                             nick="школа",
                             nullable=False)  # fk school
     is_student = NamedColumn(database.Text,
@@ -423,11 +440,11 @@ class PersonComment(database.Model):
                                nick="комментарий",
                                nullable=True)  # текст комментария
     blamed_person_id = NamedColumn(database.Integer,
-                                   database.ForeignKey(Person.person_id),
+                                   MarkedForeignKey(Person.person_id),
                                    nick="упомянутый",
                                    nullable=False)  # fk person - - сабжевый участник(типично школьник)
     school_id = NamedColumn(database.Integer,
-                            database.ForeignKey(School.school_id),
+                            MarkedForeignKey(School.school_id),
                             nick="школа",
                             nullable=False)  # fk school - - школа, о которой идёт речь(v2.15)
     owner_login = NamedColumn(database.Text,
@@ -502,6 +519,7 @@ class Contestants(database.Model):
                          nullable=True)
     contest_year = NamedColumn(database.Text,
                                nullable=True)
+    solutions = database.relationship('Solutions', backref='contestant', lazy='dynamic')
 
 
 class Problems(database.Model):
@@ -519,6 +537,7 @@ class Problems(database.Model):
                          nullable=True)
     criteria = NamedColumn(database.Text,
                            nullable=True)
+    solutions = database.relationship('Solutions', backref='problem', lazy='dynamic')
 
 
 class Solutions(database.Model):
@@ -527,12 +546,12 @@ class Solutions(database.Model):
                                primary_key=True,
                                autoincrement=True)
     problem_id = NamedColumn(database.Integer,
-                             database.ForeignKey(Problems.problems_id),
+                             MarkedForeignKey(Problems.problems_id),
                              nullable=False)
     contest_year = NamedColumn(database.Text,
                                nullable=True)
     contestant_id = NamedColumn(database.Integer,
-                                database.ForeignKey(Contestants.contestants_id),
+                                MarkedForeignKey(Contestants.contestants_id),
                                 nullable=False)
     resolution_text = NamedColumn(database.Text,
                                   nullable=True)

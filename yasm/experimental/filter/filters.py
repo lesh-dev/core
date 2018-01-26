@@ -21,6 +21,7 @@ class FilterItem:
             else:
                 print(tp)
         else:
+            M = cl.model()
             self.element = {'type': 'select', 'name': nick, 'options': ['too', 'bad']}  # TODO:...
 
     def as_html(self):
