@@ -12,6 +12,7 @@ site/fizlesh.ru-content/*
 site/settings.php
 site/install.php
 site/engine.log
+site/yasm/config.py
 *.pyc
 tests/contest-work-sample.png
 tests/current-page.html

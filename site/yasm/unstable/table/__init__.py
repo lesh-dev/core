@@ -1,0 +1,1 @@
+from .table_base import easy_table

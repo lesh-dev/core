@@ -1,6 +1,7 @@
 from flask_table import Table, Col
 from flask import url_for, request
-from yasm.experimental.template_loader import no_request_render_template
+from unstable.template_loader import no_request_render_template
+from .display_tables import get_display
 
 
 class FilterItem:
@@ -21,15 +22,17 @@ class FilterItem:
             else:
                 print(tp)
         else:
-            M = cl.model()
-            self.element = {'type': 'select', 'name': nick, 'options': ['too', 'bad']}  # TODO:...
+            ref_cl = list(fk_set)[0].referenced_model.class_  # is this really the only way?
+            options = get_display(ref_cl)
+
+            self.element = {'type': 'select', 'name': nick, 'options': options}  # TODO:...
 
     def as_html(self):
         """
         converts item to html
         :return: html for this item
         """
-        return no_request_render_template('experimental/filter/templates', 'element.html', data=self.element)
+        return no_request_render_template('unstable/filter/templates', 'element.html', data=self.element)
 
 
 class EasyFilter:
@@ -44,4 +47,4 @@ class EasyFilter:
         :return: rendered template
         """
         elements = list(map(lambda x: x.as_html(), self.items))
-        return no_request_render_template('experimental/filter/templates', 'filter.html', els=elements)
+        return no_request_render_template('unstable/filter/templates', 'filter.html', els=elements)

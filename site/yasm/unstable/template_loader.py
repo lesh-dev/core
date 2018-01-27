@@ -1,4 +1,5 @@
 import jinja2
+import os
 
 
 def no_request_render_template(path, template_name, **context):
@@ -11,6 +12,6 @@ def no_request_render_template(path, template_name, **context):
     """
     env = jinja2.Environment(
         loader=jinja2.FileSystemLoader(path)  # TODO: make template loader appropriate
-    )                                                                    # Should we make our little template manager?
+    )                                         # Should we make our little template manager?
     template = env.get_template(template_name)
     return template.render(**context)

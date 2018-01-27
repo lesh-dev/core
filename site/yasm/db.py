@@ -8,12 +8,13 @@ database = SQLAlchemy()
 
 
 class MarkedForeignKey(database.ForeignKey):
+
     def __init__(self, col, *args, **kwargs):
-        self.column = col
+        self.referenced_model = col.parent
         super().__init__(col, *args, **kwargs)
 
     def model(self):
-        return self.column.parent
+        return self.referenced_model
 
 
 class NamedColumn(database.Column):
@@ -561,22 +562,27 @@ class Solutions(database.Model):
                                   nullable=True)
 
 
+registered_models = [  # needed for sql checks
+    Notification,
+    Department,
+    Person,
+    Course,
+    CourseTeachers,
+    Exam,
+    School,
+    PersonSchool,
+    PersonComment,
+    Submission,
+    Contestants,
+    Problems,
+    Solutions
+]
+
+
 def db_read_test():
     """
     Checks if all items stored in database are readable by this ORM
     :return: None
     """
-    for i in (Notification,
-              Department,
-              Person,
-              Course,
-              CourseTeachers,
-              Exam,
-              School,
-              PersonSchool,
-              PersonComment,
-              Submission,
-              Contestants,
-              Problems,
-              Solutions):
+    for i in registered_models:
         print(i.query.all())

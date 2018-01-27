@@ -1,25 +1,26 @@
 from flask import request
 from flask.views import View
 
-from yasm.db import Person, PersonSchool
-from yasm.experimental.filter.filters import EasyFilter
-import yasm.experimental.table as table
+from db import Person, PersonComment
+from unstable.filter.filters import EasyFilter
+import unstable.table as table
 
 
 class Test(View):
     def dispatch_request(self):
         sort = request.args.get('sort', '')
         reverse = (request.args.get('direction', 'asc') == 'desc')
-        p = table.EasyTable(Person.query.order_by(sort + " desc" * reverse).all(), cols=[
+        p = table.easy_table('Persons', cols=[
             Person.person_id,
             Person.first_name,
             Person.last_name,
             Person.patronymic
         ])
+        p = p(Person.query.order_by(sort + " desc" * reverse).all())
+
         filter = EasyFilter([
-            PersonSchool.curatorship,
-            PersonSchool.person_school_changedby,
-            PersonSchool.school_id
+            PersonComment.blamed_person_id,
+            PersonComment.school_id
         ])
-        print(len(filter.items))
-        return filter.as_html() + p.__html__()
+
+        return filter.as_html() + p.no_head_html()
