@@ -10,9 +10,35 @@ json = FlaskJSON()
 
 
 class Api(View):
+    """
+    This implements the api view see dispatch_request docs
+    """
     @as_json
     def dispatch_request(self):
+        """
+        :arg: there are no straight arguments, but flask.request is set
+        flask.request should contain argument 'request', which is a JSON packed dictionary
+        :parameter: flak.request['request'] is a dictionary with structure: {
+            "table":<table to select from>,
+            "entities": {
+                "<column nickname (how it would be called in response)>":"<column name as in schema>"
+            },
+            "sort": <sort_dict> (see add_order doc),
+            "filter": <filter_list> (see add_filters doc)
+        }
+        :return: dictionary {'results': results} which is translated to JSON with decorator
+        """
         def add_order(query, model, sort_dict):
+            """
+            adds order_by method to query
+            :param query: already existing query
+            :param model: any model from db.py
+            :param sort_dict: dictionary: {
+                "column": <column name as in schema>,
+                "direction": <"asc" or "desc" or omitted>
+            }
+            :return: query with added order
+            """
             sort_direction = None
             sort_column = sort_dict['name']
             if 'direction' in sort_dict.keys():
@@ -29,7 +55,28 @@ class Api(View):
             return query
 
         def add_filters(query, model, filter_list):
+            """
+            adds filters to query
+            :param query: already existing query
+            :param model: any model from db.py
+            :param filter_list: list [
+                <filter_dict>, ...
+            ]
+            :return: query with added filters
+            """
             def add_filter(query, model, filter_dict):
+                """
+                adds single filter to query
+                :param query: already existing query
+                :param model: any model from db.py
+                :param filter_list: dictionary: {
+                    "column": <column name as in schema>,
+                    "type": <"eq", "isNone", "is", "less", "greater", "range">,
+                    "not": <"True", "False"> (inverting query)
+                    "values": specific values for query type
+                }
+                :return: query with added filter
+                """
                 filter_column = filter_dict['column']
                 entity = entities_by_entities_names(model, [filter_column])
                 if entity is None:
