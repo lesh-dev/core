@@ -24,8 +24,7 @@ class FilterItem:
         else:
             ref_cl = list(fk_set)[0].referenced_model.class_  # is this really the only way?
             options = get_display(ref_cl)
-
-            self.element = {'type': 'select', 'name': nick, 'options': options}  # TODO:...
+            self.element = {'type': 'table_select', 'html': options}  # TODO:...
 
     def as_html(self):
         """

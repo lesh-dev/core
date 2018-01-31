@@ -19,7 +19,8 @@ class MarkedForeignKey(database.ForeignKey):
 
 class NamedColumn(database.Column):
     """
-    Wrapper around SQLAlchemy.Column, which allows giving nicknames to columns.
+    Wrapper around SQLAlchemy.Column, which allows
+    giving nicknames to columns,
     """
     nick = ""
 
@@ -234,21 +235,25 @@ class Course(database.Model):
     course_desc = NamedColumn(database.Text,
                               nick="описание",
                               nullable=True)  # описание курса
-    course_type = NamedColumn(database.Enum('generic',
-                                            'other',
-                                            'facult',
-                                            'prac',
-                                            'single'),
-                              nick="тип",
-                              nullable=False)  # тип курса(прак, поход, etc)
-    course_area = NamedColumn(database.Enum('cs',
-                                            'unknown',
-                                            'nature',
-                                            'precise',
-                                            'other',
-                                            'human'),
-                              nick="область",
-                              nullable=False)  # предметная область
+    course_type = NamedColumn(
+        database.Enum(
+            'generic',
+            'other',
+            'facult',
+            'prac',
+            'single'),
+        nick="тип",
+        nullable=False)  # тип курса(прак, поход, etc)
+    course_area = NamedColumn(
+        database.Enum(
+            'cs',
+            'unknown',
+            'nature',
+            'precise',
+            'other',
+            'human'),
+        nick="область",
+        nullable=False)  # предметная область
     course_comment = NamedColumn(database.Text,
                                  nick="комментарий",
                                  nullable=True)  # комментарий к курсу(чатик пока не делаем)
@@ -345,15 +350,17 @@ class School(database.Model):
     school_title = NamedColumn(database.Text,
                                nick="название",
                                nullable=False)
-    school_type = NamedColumn(database.Enum('lesh',
-                                            'vesh',
-                                            'zesh',
-                                            'summer',
-                                            'summmer',
-                                            'winter',
-                                            'spring'),
-                              nick="тип",
-                              nullable=False)  # enum:(летняя, зимняя, весенняя) TODO: simplify
+    school_type = NamedColumn(
+        database.Enum(
+            'lesh',
+            'vesh',
+            'zesh',
+            'summer',
+            'summmer',
+            'winter',
+            'spring'),
+        nick="тип",
+        nullable=False)  # enum:(летняя, зимняя, весенняя) TODO: simplify
     school_date_start = NamedColumn(database.Text,
                                     nick="дата начала",
                                     nullable=False)  # дата начала
@@ -400,12 +407,14 @@ class PersonSchool(database.Model):
     is_teacher = NamedColumn(database.Text,
                              nick="препод",
                              nullable=True)  # является ли преподом на данной школе
-    curatorship = NamedColumn(database.Enum('',
-                                            'none',
-                                            'assist',
-                                            'cur'),
-                              nick="кураторство",
-                              nullable=True)  # кураторство на данной школе enum: (никто, помкур, куратор)
+    curatorship = NamedColumn(
+        database.Enum(
+            '',
+            'none',
+            'assist',
+            'cur'),
+        nick="кураторство",
+        nullable=True)  # кураторство на данной школе enum: (никто, помкур, куратор)
     curator_group = NamedColumn(database.Text,
                                 nick="группа кураторства",
                                 nullable=True)  # группа кураторства

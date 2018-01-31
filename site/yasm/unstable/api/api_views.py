@@ -40,7 +40,7 @@ class Api(View):
             :return: query with added order
             """
             sort_direction = None
-            sort_column = sort_dict['name']
+            sort_column = sort_dict['column']
             if 'direction' in sort_dict.keys():
                 sort_direction = sort_dict['direction']
 

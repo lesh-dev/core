@@ -16,4 +16,14 @@ if __name__ == "__main__":
 
     app.add_url_rule('/', view_func=Test.as_view('Greet'))
     app.add_url_rule('/api', view_func=api.Api.as_view('Api'))
+
+    @app.route('/test')
+    def test():
+        return open('/home/yaroslav/Projects/PyCharm/lesh/core/site/yasm/fb_test.html').read()
+
+    @app.route('/testT')
+    def testT():
+        return open('/home/yaroslav/Projects/PyCharm/lesh/core/site/yasm/fb_testT.html').read()
+
+
     app.run(debug=True)

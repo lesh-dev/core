@@ -1,0 +1,21 @@
+<html>
+<head>
+    <title></title>
+    <meta content="">
+    <style></style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"> </script>
+    <script type="text/javascript" src="/static/js/jquery.flexbox.js"> </script>
+    <link type="text/css" rel="stylesheet" href="/static/css/jquery.flexbox.css">
+    <script type="text/javascript">
+        $(function() {
+            $('#test').flexbox('api?request={"table":"person","entities":{"id":"person_id", "name":"first_name", "ln":"last_name"}}', {
+                resultTemplate: '<td class="col1">{id}</td><td class="col2">{name}</td><td class="col3">{ln}</td>',
+                isTabled: true
+            }); // results.aspx is the page that returns json data in the expected format
+        });
+	</script>
+</head>
+<body>
+    <div id="test"></div>
+</body>
+</html>
