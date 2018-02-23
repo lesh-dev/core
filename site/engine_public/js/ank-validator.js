@@ -96,7 +96,12 @@ function xsm_ank_check_control_question(errors, anketa_mode) {
         )) {
             errors.push("Неправильный ответ на контрольный вопрос. Вспомните физику!");
         }
-    } else if (anketa_mode == GAnketaMode.MED_OLYMP) {
+    } else if (
+        anketa_mode == GAnketaMode.MED_OLYMP ||
+        anketa_mode == GAnketaMode.MED ||
+        anketa_mode == GAnketaMode.MED_TEACHER ||
+        anketa_mode == GAnketaMode.MED_CURATOR
+    ) {
         if (!(
             val.indexOf("пять") >= 0 ||
             val.indexOf("Пять") >= 0 ||
