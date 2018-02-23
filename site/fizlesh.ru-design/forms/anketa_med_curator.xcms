@@ -19,7 +19,7 @@ xcms_print_anketa_header();
     ${ankinput:email:input:E-mail:sidorov.petr@example.com:req:middle}
     ${ankinput:social_profile:input:Страничка ВКонтакте<br/>(или
         на Facebook и т.д.):vk.com/id123456789:req:middle}
-    ${ankinput:achievements:text:Есть ли подобный опыт (если есть, то какой)::req:long}
+    ${ankinput:achievements:text:Есть ли подобный опыт<br/>(если есть, то какой)::req:long}
     ${ankinput:school_period:input:Ориентировочные даты пребывания:обычно
         ЛЭШ проходит с середины июля по середину августа):opt:long}
     ${ankinput:control_question:input:Сколько у человека пальцев<br/>на одной
