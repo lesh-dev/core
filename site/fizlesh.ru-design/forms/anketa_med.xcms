@@ -1,0 +1,39 @@
+<?php
+require_once("${design_dir}forms/anketa_templates.php");
+
+xcms_print_anketa_header();
+?>
+<div style="clear: both">&nbsp;</div>
+<form method="post">
+    <?php
+    echo xcmst_hidden(XCMS_KEY_ANKETA_MODE, XCMS_ANKETA_MODE_MED);  // Тип анкеты
+    echo xcmst_hidden("department_id", "8");  // Медицинское отделение
+    ?>
+    ${ankinput:last_name:input:Фамилия:Сидоров:req:middle}
+    ${ankinput:first_name:input:Имя:Пётр:req:middle}
+    ${ankinput:patronymic:input:Отчество:Михайлович
+        (или слово &laquo;нет&raquo;, если у вас нет отчества):req:middle}
+    ${ankinput:birth_date:input:Дата рождения:15.12.1984, в формате ДД.ММ.ГГГГ:req:middle}
+    ${ankinput:school:input:Номер (название) школы:Лицей №30:req:long}
+    ${ankinput:school_city:input:Город (село), область (край), <br />
+        где находится школа:г. Полярные Зори Мурманской обл.:req:long}
+    ${ankinput:ank_class:input:Класс:8Б:req:middle}
+    ${ankinput:teacher_fio:input:ФИО учителя:Иванов Егор Петрович:opt:middle}
+    ${ankinput:cellular:input:Мобильный телефон:+7&nbsp;(987)&nbsp;654-32-10:req:middle}
+    ${ankinput:email:input:E-mail:sidorov.petr@example.com:opt:middle}
+    ${ankinput:skype:input:Skype:sidorov.petr:opt:middle}
+    ${ankinput:social_profile:input:Страничка ВКонтакте<br/>(или
+        на Facebook и т.д.):vk.com/id123456789:opt:middle}
+
+    ${ankinput:parent_fio:input:ФИО родителя<br/>(законного представителя):Сидоров Михаил Игоревич:req:long}
+    ${ankinput:parent_phone:input:Телефон родителя<br/>(законного представителя):+7&nbsp;(900)&nbsp;000-01-02:req:middle}
+    ${ankinput:parent_email:input:E-mail родителя<br/>(законного представителя):sidorov.mikhail@example.com:req:middle}
+
+    ${ankinput:control_question:input:Сколько у человека пальцев<br/>на одной руке (прописью):три:req:middle}
+    <?php
+    xcms_print_anketa_send_block();
+    ?>
+</form>
+<?php
+xcms_print_anketa_footer();
+?>
