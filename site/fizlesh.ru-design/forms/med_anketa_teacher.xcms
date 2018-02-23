@@ -19,7 +19,7 @@ xcms_print_anketa_header();
     ${ankinput:email:input:E-mail:sidorov.petr@example.com:req:middle}
     ${ankinput:social_profile:input:Страничка ВКонтакте<br/>(или
         на Facebook и т.д.):vk.com/id123456789:req:middle}
-    ${ankinput:favourites:text:Предполагаемые темы курсов/лекций (если есть)::opt:long}
+    ${ankinput:favourites:text:Предполагаемые темы<br/>курсов/лекций (если есть)::opt:long}
     ${ankinput:achievements:text:Опыт преподавания (если есть, то какой)::req:long}
     ${ankinput:school_period:input:Ориентировочные даты пребывания:обычно
         ЛЭШ проходит с середины июля по середину августа):opt:long}
