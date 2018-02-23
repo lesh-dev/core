@@ -14,14 +14,14 @@ xcms_print_anketa_header();
     ${ankinput:patronymic:input:Отчество:Михайлович
         (или слово &laquo;нет&raquo;, если у вас нет отчества):req:middle}
     ${ankinput:birth_date:input:Дата рождения:15.12.1984, в формате ДД.ММ.ГГГГ:req:middle}
-    ${ankinput:school:input:Место работы или учёбы:Лицей №30:req:long}
+    ${ankinput:school:input:Место работы или учёбы:ФФМ МГУ, 3-й курс:req:long}
     ${ankinput:cellular:input:Мобильный телефон:+7&nbsp;(987)&nbsp;654-32-10:req:middle}
-    ${ankinput:email:input:E-mail:sidorov.petr@example.com:opt:middle}
+    ${ankinput:email:input:E-mail:sidorov.petr@example.com:req:middle}
     ${ankinput:social_profile:input:Страничка ВКонтакте<br/>(или
-        на Facebook и т.д.):vk.com/id123456789:opt:middle}
-    ${ankinput:achievements:text:Опыт преподавания (если есть, то какой)::req:long}
-    ${ankinput:period:text:Ориентировочные даты пребывания:обычно
-        ЛЭШ проходит с середины июля по середину августа):opt:middle}
+        на Facebook и т.д.):vk.com/id123456789:req:middle}
+    ${ankinput:achievements:text:Есть ли подобный опыт (если есть, то какой)::req:long}
+    ${ankinput:school_period:input:Ориентировочные даты пребывания:обычно
+        ЛЭШ проходит с середины июля по середину августа):opt:long}
     ${ankinput:control_question:input:Сколько у человека пальцев<br/>на одной
         руке (прописью):три:req:middle}
     <?php
