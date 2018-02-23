@@ -182,6 +182,10 @@ function xsm_get_all_field_descriptors()
                 "name" => "Хобби",
                 "type" => XSM_FT_TEXT,
             ),
+            "school_period" => array(
+                "name" => "Предполагаемые даты пребывания на Школе",
+                "type" => XSM_FT_STR,
+            ),
             "lesh_ref" => array(
                 "name" => "Откуда узнали о школе",
                 "type" => XSM_FT_TEXT,
