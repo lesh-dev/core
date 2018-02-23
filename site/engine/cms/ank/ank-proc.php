@@ -271,6 +271,7 @@ function xsm_anketa_autoreply($person, $anketa_mode)
     global $AUTOREPLY_DISPLAY_NAME;
     global $AUTOREPLY_EMAIL;
 
+    $email = xcms_get_key_or($person, "email");
     $parent_email = xcms_get_key_or($person, "parent_email");
     $emails = array();
     if (xu_not_empty($email))
