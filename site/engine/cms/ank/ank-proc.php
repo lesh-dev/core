@@ -279,9 +279,12 @@ function xsm_anketa_autoreply($person, $anketa_mode)
     if (xu_not_empty($parent_email))
         $emails[] = $parent_email;
 
+    $first_name_enc = xcms_get_key_or_enc($person, "first_name");
+
     $reply_to = xcms_get_key_or($AUTOREPLY_EMAIL, $anketa_mode, "reg@fizlesh.ru");
     $reply_to_name = xcms_get_key_or($AUTOREPLY_DISPLAY_NAME, $anketa_mode, "FizLesh");
     $reply_body = xcms_get_html_template("${anketa_mode}_reply_body");
+    $reply_body = str_replace("@@NAME@", $first_name_enc, $reply_body);
     $autoreply = xcms_get_html_template("notification-template");
     $autoreply = str_replace("@@SUBJECT@", "Анкета принята", $autoreply);
     $autoreply = str_replace("@@NOTIFICATION-BODY@", $reply_body, $autoreply);
