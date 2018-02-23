@@ -66,6 +66,7 @@ create table person (
 
     anketa_status text, -- former activity_status
         -- enum:(new, processed, declined, taken, duplicated, spam)
+    anketa_mode text,     -- источник анкеты
 
     user_agent text,    -- идентификатор браузера, с которого была подана анкета
 

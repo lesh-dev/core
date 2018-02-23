@@ -190,6 +190,11 @@ function xsm_get_all_field_descriptors()
                 "name" => "Откуда узнали о школе",
                 "type" => XSM_FT_TEXT,
             ),
+            "anketa_mode" => array(
+                "name" => "Источник анкеты",
+                "type" => XSM_FT_STR,
+                "readonly" => true,
+            ),
             "user_agent" => array(
                 "name" => "UserAgent",
                 "type" => XSM_FT_STR,
