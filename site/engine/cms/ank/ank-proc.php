@@ -324,6 +324,18 @@ function xsm_valid_anketa_control_question($answer, $mode) {
     return false;
 }
 
+function xsm_valid_anketa_class($ank_class, $anketa_mode)
+{
+    if (
+        $anketa_mode == XCMS_ANKETA_MODE_FIZLESH ||
+        $anketa_mode == XCMS_ANKETA_MODE_MED_OLYMP
+    ) {
+        return !xu_empty($ank_class);
+    }
+    return true;
+}
+
+
 function xsm_validate_anketa_post(&$person)
 {
     $anketa_mode = xcms_get_key_or($person, XCMS_KEY_ANKETA_MODE);
@@ -359,7 +371,7 @@ function xsm_validate_anketa_post(&$person)
         preg_match($fi_match, $first_name) ||
         preg_match($fi_match, $last_name) ||
         preg_match($birth_date_match, $last_name) ||
-        xu_empty($ank_class) ||
+        !xsm_valid_anketa_class($ank_class, $anketa_mode) ||
         (
             !xsm_valid_anketa_phone_digits($phone_digits, 7) &&
             !xsm_valid_anketa_phone_digits($cellular_digits, 9)
