@@ -271,9 +271,10 @@ function xsm_ank_setup_med_teacher() {
         xsm_ank_check_name(errors, "last_name", "Фамилия");
         xsm_ank_check_name(errors, "first_name", "Имя");
         xsm_ank_check_name(errors, "patronymic", "Отчество");
-        xsm_ank_check_empty("social_profile", "input", "Отчество", errors);
-        //xsm_ank_check_birth_date(errors, "birth_date", "Дата рождения");
-        xsm_ank_check_class(errors);
+        xsm_ank_check_birth_date(errors, "birth_date", "Дата рождения");
+        xsm_ank_check_empty("school", "input", "Место учёбы или работы", errors);
+        xsm_ank_check_empty("social_profile", "input", "Профиль в социальной сети", errors);
+        xsm_ank_check_empty("achievements", "text", "Опыт преподавания", errors);
         xsm_ank_collect_phone_errors(errors, "cellular", "Мобильный");
         xsm_ank_check_email(errors, "email");
         xsm_ank_check_control_question(errors, "med_olymp");
@@ -281,8 +282,6 @@ function xsm_ank_setup_med_teacher() {
         return xsm_ank_check_result(errors);
     });
 }
-
-
 
 
 /**
@@ -294,5 +293,11 @@ $(document).ready(function() {
         xsm_ank_setup_fizlesh();
     } else if (anketa_mode == GAnketaMode.MED_OLYMP) {
         xsm_ank_setup_med_olymp();
+    } else if (anketa_mode == GAnketaMode.MED) {
+        xsm_ank_setup_med();
+    } else if (anketa_mode == GAnketaMode.MED_TEACHER) {
+        xsm_ank_setup_med_teacher();
+    } else if (anketa_mode == GAnketaMode.MED_CURATOR) {
+        xsm_ank_setup_med_curator();
     }
 });
