@@ -38,8 +38,11 @@ if ($ank_ele_type == "input")
                 name="<?php echo $ank_ele_name; ?>"
                 id="<?php echo $ank_ele_name; ?>-input"
                 class="ank-input <?php echo $ank_ele_class; ?>"
-            />
-            <div class="ankExample">Например: <?php echo $ank_ele_example; ?></div>
+            /><?php
+            if (xu_not_empty($ank_ele_example))
+            {?>
+                <div class="ankExample">Например: <?php echo $ank_ele_example; ?></div><?php
+            }?>
         </span>
     </div>
 <?php
@@ -54,7 +57,11 @@ if ($ank_ele_type == "input")
         rows="3" cols="40"
         name="<?php echo $ank_ele_name; ?>" id="<?php echo $ank_ele_name; ?>-text"
         class="ank-text <?php echo $ank_ele_class; ?>"></textarea>
-    </div>
+    </div><?php
+    if (xu_not_empty($ank_ele_example))
+    {?>
+        <div class="ankExample">Например: <?php echo $ank_ele_example; ?></div><?php
+    }?>
 <?php
 } else {
     echo "UNKNOWN ELEMENT TYPE '$ank_ele_name' detected when processing '$ank_ele_name'.<br/>\n";

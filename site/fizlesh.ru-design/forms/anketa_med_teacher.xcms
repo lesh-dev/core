@@ -19,10 +19,12 @@ xcms_print_anketa_header();
     ${ankinput:email:input:E-mail:sidorov.petr@example.com:req:middle}
     ${ankinput:social_profile:input:Страничка ВКонтакте<br/>(или
         на Facebook и т.д.):vk.com/id123456789:req:middle}
-    ${ankinput:favourites:text:Предполагаемые темы<br/>курсов/лекций (если есть)::opt:long}
+    ${ankinput:favourites:text:Предполагаемые темы<br/>курсов/лекций (если есть):&laquo;Курс 3 лекций по ВНД&raquo;,
+        &laquo;1 лекция про историю микроскопов&raquo;:opt:long}
     ${ankinput:achievements:text:Опыт преподавания (если есть, то какой)::req:long}
-    ${ankinput:school_period:input:Ориентировочные даты пребывания:обычно
-        ЛЭШ проходит с середины июля по середину августа):opt:long}
+    ${ankinput:school_period:text:Ориентировочные даты пребывания<br>
+        (ЛЭШ обычно проходит<br>с&nbsp;середины&nbsp;июля по&nbsp;середину&nbsp;августа):
+        &laquo;Не более недели в начале августа&raquo;, или &laquo;строго 26.07-01.08&raquo;:opt:long}
     ${ankinput:control_question:input:Сколько у человека пальцев<br/>на одной
         руке (прописью):три:req:middle}
     <?php
