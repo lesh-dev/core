@@ -47,6 +47,7 @@ import xcms_xsm_anketa_dup_stress
 import xcms_xsm_anketa_duplicate
 import xcms_xsm_anketa_edit
 import xcms_xsm_anketa_fill
+import xcms_xsm_anketa_teacher_fill
 import xcms_xsm_anketa_wrong_fill
 import xcms_xsm_avatar
 import xcms_xsm_change_status_quick
@@ -106,6 +107,7 @@ def get_tests(**kwargs):
         ("xcms_xsm_anketa_duplicate.py", xcms_xsm_anketa_duplicate.XcmsXsmAnketaDuplicate(**kwargs)),
         ("xcms_xsm_anketa_edit.py", xcms_xsm_anketa_edit.XcmsXsmAnketaEdit(**kwargs)),
         ("xcms_xsm_anketa_fill.py", xcms_xsm_anketa_fill.XcmsXsmAnketaFill(**kwargs)),
+        ("xcms_xsm_anketa_teacher_fill.py", xcms_xsm_anketa_teacher_fill.XcmsXsmAnketaTeacherFill(**kwargs)),
         ("xcms_xsm_anketa_wrong_fill.py", xcms_xsm_anketa_wrong_fill.XcmsXsmAnketaWrongFill(**kwargs)),
         ("xcms_xsm_avatar.py", xcms_xsm_avatar.XcmsXsmAvatar(**kwargs)),
         ("xcms_xsm_change_status_quick.py", xcms_xsm_change_status_quick.XcmsXsmChangeStatusQuick(**kwargs)),

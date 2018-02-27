@@ -451,7 +451,7 @@ class XcmsTest(XcmsTestWithConfig):
     def getEditPageInPlaceLinkName(self):
         return u"Редактировать"
 
-    def getEntranceLinkName(self):
+    def get_entrance_link_name(self):
         return u"Поступление"
 
     def gotoEditPageInPlace(self):
