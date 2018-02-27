@@ -5,9 +5,28 @@ xcms_print_anketa_header();
 ?>
 <div style="clear: both">&nbsp;</div>
 <form method="post">
+    <div class="ankRow">
+        <span class="ankLabel">Отделение:<span class="ankAst Req">*</span></span>
+        <span class="ankValue"><?php
+            echo xsm_make_selector(
+                'department',
+                'department_id',
+                "",
+                array('department_title'),
+                "(".
+                    "(department_id != 3) AND ".  # МаО (не подтвердило пока)
+                    "(department_id != 5) AND ".  # ОЛПБио (не проявляло активности)
+                    "(department_id != 7) AND ".  # ФМБио (не существует)
+                    "(department_id != 9)) ".     # Сова (забанено)
+                    "ORDER BY department_title",
+                "",
+                false
+            );
+            ?><div class="ankExample">Например: Математическое</div>
+        </span>
+    </div>
     <?php
     echo xcmst_hidden(XCMS_KEY_ANKETA_MODE, XCMS_ANKETA_MODE_MED_TEACHER);  // Тип анкеты
-    echo xcmst_hidden("department_id", "8");  // Медицинское отделение
     ?>
     ${ankinput:last_name:input:Фамилия:Сидоров:req:middle}
     ${ankinput:first_name:input:Имя:Пётр:req:middle}
