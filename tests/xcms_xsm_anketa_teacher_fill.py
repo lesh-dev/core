@@ -70,12 +70,13 @@ class XcmsXsmAnketaTeacherFill(xsm.Manager, xtest_common.XcmsTest):
             patronymic=u"Иваныч",
             birth_date=random_crap.date(),
             school=u"Тестовый ВУЗ им. В.Е.Бдрайвера №",
-            ank_class=random_crap.randomDigits(1) + u" курс",
+            # ank_class=random_crap.randomDigits(1) + u" курс",
             cellular="+7" + random_crap.randomDigits(9),
             email=random_crap.random_text(10) + "@" + random_crap.random_text(6) + ".ru",
             social_profile=random_crap.randomVkontakte(),
             # favourites=random_crap.randomCrap(20, ["multiline"]),
-            # achievements=random_crap.randomCrap(15, ["multiline"]),
+            # опыт преподавания
+            achievements=random_crap.randomCrap(15, ["multiline"]),
             # hobby=random_crap.randomCrap(10, ["multiline"]),
             # lesh_ref=random_crap.randomCrap(10, ["multiline"]),
             control_question=u"пять",
@@ -100,14 +101,14 @@ class XcmsXsmAnketaTeacherFill(xsm.Manager, xtest_common.XcmsTest):
         self.assertBodyTextPresent(person.cellular)
         self.assertBodyTextPresent(person.email)
         self.assertBodyTextPresent(inp_social_show)
-        """
+
         self.clickElementById("show-extra-person-info")
         self.wait(1)
-        self.assertElementSubTextById("extra-person-info", person.favourites)
+
+        # self.assertElementSubTextById("extra-person-info", person.favourites)
         self.assertElementSubTextById("extra-person-info", person.achievements)
-        self.assertElementSubTextById("extra-person-info", person.hobby)
-        self.assertElementSubTextById("extra-person-info", person.lesh_ref)
-        """
+        # self.assertElementSubTextById("extra-person-info", person.hobby)
+        # self.assertElementSubTextById("extra-person-info", person.lesh_ref)
 
         self.add_comments_to_person(person)
 
