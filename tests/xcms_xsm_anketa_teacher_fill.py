@@ -83,7 +83,7 @@ class XcmsXsmAnketaTeacherFill(xsm.Manager, xtest_common.XcmsTest):
             ank_mode=True,
             random=True,
         )
-        self.assertBodyTextPresent(self.get_anketa_success_submit_message())
+        self.assertBodyTextPresent(self.get_anketa_teacher_success_submit_message())
         inp_social_show = bawlib.cut_http(person.social_profile)
 
         self.anketa_drilldown(person)

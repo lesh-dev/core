@@ -680,5 +680,9 @@ class Manager(xc.XcmsTest):
         return u"наших координаторов"
 
     @staticmethod
+    def get_anketa_teacher_success_submit_message():
+        return u"анкета принята"
+
+    @staticmethod
     def get_anketa_duplicate_submit_message():
         return u"уже отправляли нам заявку"
