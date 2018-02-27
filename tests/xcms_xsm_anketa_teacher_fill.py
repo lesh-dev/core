@@ -70,15 +70,11 @@ class XcmsXsmAnketaTeacherFill(xsm.Manager, xtest_common.XcmsTest):
             patronymic=u"Иваныч",
             birth_date=random_crap.date(),
             school=u"Тестовый ВУЗ им. В.Е.Бдрайвера №",
-            # ank_class=random_crap.randomDigits(1) + u" курс",
             cellular="+7" + random_crap.randomDigits(9),
             email=random_crap.random_text(10) + "@" + random_crap.random_text(6) + ".ru",
             social_profile=random_crap.randomVkontakte(),
-            # favourites=random_crap.randomCrap(20, ["multiline"]),
             # опыт преподавания
             achievements=random_crap.randomCrap(15, ["multiline"]),
-            # hobby=random_crap.randomCrap(10, ["multiline"]),
-            # lesh_ref=random_crap.randomCrap(10, ["multiline"]),
             control_question=u"пять",
             ank_mode=True,
             random=True,
@@ -97,7 +93,6 @@ class XcmsXsmAnketaTeacherFill(xsm.Manager, xtest_common.XcmsTest):
         # TODO(mvel): Extract common checks to module
         self.assertBodyTextPresent(person.birth_date)
         self.assertBodyTextPresent(person.school)
-        self.assertBodyTextPresent(person.ank_class)
         self.assertBodyTextPresent(person.cellular)
         self.assertBodyTextPresent(person.email)
         self.assertBodyTextPresent(inp_social_show)
@@ -105,15 +100,11 @@ class XcmsXsmAnketaTeacherFill(xsm.Manager, xtest_common.XcmsTest):
         self.clickElementById("show-extra-person-info")
         self.wait(1)
 
-        # self.assertElementSubTextById("extra-person-info", person.favourites)
         self.assertElementSubTextById("extra-person-info", person.achievements)
-        # self.assertElementSubTextById("extra-person-info", person.hobby)
-        # self.assertElementSubTextById("extra-person-info", person.lesh_ref)
 
         self.add_comments_to_person(person)
 
         # now, let's change anketa status to "Ждет собеседования"
-
         self.gotoEditPerson()
 
         # first, check that values in opened form match entered in anketa.
@@ -122,16 +113,9 @@ class XcmsXsmAnketaTeacherFill(xsm.Manager, xtest_common.XcmsTest):
         self.assertElementValueById("patronymic-input", person.patronymic)
         self.assertElementValueById("birth_date-input", person.birth_date)
         self.assertElementValueById("school-input", person.school)
-        self.assertElementValueById("ank_class-input", person.ank_class)
-        # current_class should now be equal to ank_class (fresh anketa)
-        self.assertElementValueById("current_class-input", person.ank_class)
         self.assertElementValueById("cellular-input", person.cellular)
         self.assertElementValueById("email-input", person.email)
         self.assertElementValueById("social_profile-input", person.social_profile)
-        # self.assertElementValueById("favourites-text", person.favourites)
-        # self.assertElementValueById("achievements-text", person.achievements)
-        # self.assertElementValueById("hobby-text", person.hobby)
-        # self.assertElementValueById("lesh_ref-text", person.lesh_ref)
 
         self.assertElementValueById("anketa_status-selector", "new")
 
