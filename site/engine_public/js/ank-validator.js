@@ -17,8 +17,8 @@ var GAnketaMode = {}
 GAnketaMode.FIZLESH = "fizlesh";
 GAnketaMode.MED_OLYMP = "med_olymp";
 GAnketaMode.MED = "med";
-GAnketaMode.MED_TEACHER = "med_teacher";
-GAnketaMode.MED_CURATOR = "med_curator";
+GAnketaMode.TEACHER = "teacher";
+GAnketaMode.CURATOR = "curator";
 
 
 function xsm_ank_check_name(errors, sFieldName, sFieldTitle) {
@@ -99,8 +99,8 @@ function xsm_ank_check_control_question(errors, anketa_mode) {
     } else if (
         anketa_mode == GAnketaMode.MED_OLYMP ||
         anketa_mode == GAnketaMode.MED ||
-        anketa_mode == GAnketaMode.MED_TEACHER ||
-        anketa_mode == GAnketaMode.MED_CURATOR
+        anketa_mode == GAnketaMode.TEACHER ||
+        anketa_mode == GAnketaMode.CURATOR
     ) {
         if (!(
             val.indexOf("пять") >= 0 ||
@@ -268,9 +268,9 @@ function xsm_ank_setup_med_olymp() {
 }
 
 /**
- * Анкета для преподов МедО
+ * Анкета для преподов
  */
-function xsm_ank_setup_med_teacher() {
+function xsm_ank_setup_teacher() {
     $('#submit_anketa-submit').click(function() {
         var errors = [];
         xsm_ank_check_name(errors, "last_name", "Фамилия");
@@ -282,7 +282,7 @@ function xsm_ank_setup_med_teacher() {
         xsm_ank_check_empty("achievements", "text", "Опыт преподавания", errors);
         xsm_ank_collect_phone_errors(errors, "cellular", "Мобильный");
         xsm_ank_check_email(errors, "email");
-        xsm_ank_check_control_question(errors, "med_teacher");
+        xsm_ank_check_control_question(errors, "teacher");
 
         return xsm_ank_check_result(errors);
     });
@@ -291,7 +291,7 @@ function xsm_ank_setup_med_teacher() {
 /**
  * Анкета для кураторов МедО
  */
-function xsm_ank_setup_med_curator() {
+function xsm_ank_setup_curator() {
     $('#submit_anketa-submit').click(function() {
         var errors = [];
         xsm_ank_check_name(errors, "last_name", "Фамилия");
@@ -303,7 +303,7 @@ function xsm_ank_setup_med_curator() {
         xsm_ank_check_empty("achievements", "text", "Опыт", errors);
         xsm_ank_collect_phone_errors(errors, "cellular", "Мобильный");
         xsm_ank_check_email(errors, "email");
-        xsm_ank_check_control_question(errors, "med_curator");
+        xsm_ank_check_control_question(errors, "curator");
 
         return xsm_ank_check_result(errors);
     });
@@ -321,9 +321,9 @@ $(document).ready(function() {
         xsm_ank_setup_med_olymp();
     } else if (anketa_mode == GAnketaMode.MED) {
         xsm_ank_setup_med();
-    } else if (anketa_mode == GAnketaMode.MED_TEACHER) {
-        xsm_ank_setup_med_teacher();
-    } else if (anketa_mode == GAnketaMode.MED_CURATOR) {
-        xsm_ank_setup_med_curator();
+    } else if (anketa_mode == GAnketaMode.TEACHER) {
+        xsm_ank_setup_teacher();
+    } else if (anketa_mode == GAnketaMode.CURATOR) {
+        xsm_ank_setup_curator();
     }
 });

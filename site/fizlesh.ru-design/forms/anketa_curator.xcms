@@ -6,7 +6,7 @@ xcms_print_anketa_header();
 <div style="clear: both">&nbsp;</div>
 <form method="post">
     <?php
-    echo xcmst_hidden(XCMS_KEY_ANKETA_MODE, XCMS_ANKETA_MODE_MED_TEACHER);  // Тип анкеты
+    echo xcmst_hidden(XCMS_KEY_ANKETA_MODE, XCMS_ANKETA_MODE_CURATOR);  // Тип анкеты
     echo xcmst_hidden("department_id", "8");  // Медицинское отделение
     ?>
     ${ankinput:last_name:input:Фамилия:Сидоров:req:middle}

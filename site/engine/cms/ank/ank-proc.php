@@ -9,8 +9,8 @@ define("XCMS_ANKETA_MODE_FIZLESH", "fizlesh");
 define("XCMS_ANKETA_MODE_MED_OLYMP", "med_olymp");
 
 define("XCMS_ANKETA_MODE_MED", "med");
-define("XCMS_ANKETA_MODE_MED_TEACHER", "med_teacher");
-define("XCMS_ANKETA_MODE_MED_CURATOR", "med_curator");
+define("XCMS_ANKETA_MODE_TEACHER", "teacher");
+define("XCMS_ANKETA_MODE_CURATOR", "curator");
 
 $AUTOREPLY_DISPLAY_NAME = array(
     "XCMS_ANKETA_MODE_FIZLESH" => "FizLesh",
@@ -18,8 +18,8 @@ $AUTOREPLY_DISPLAY_NAME = array(
     "XCMS_ANKETA_MODE_MED_OLYMP" => "MedO Lesh",
 
     "XCMS_ANKETA_MODE_MED" => "MedO Lesh",
-    "XCMS_ANKETA_MODE_MED_TEACHER" => "MedO Lesh",
-    "XCMS_ANKETA_MODE_MED_CURATOR" => "MedO Lesh",
+    "XCMS_ANKETA_MODE_TEACHER" => "Lesh",
+    "XCMS_ANKETA_MODE_CURATOR" => "Lesh",
 );
 
 $AUTOREPLY_EMAIL = array(
@@ -28,8 +28,8 @@ $AUTOREPLY_EMAIL = array(
     "XCMS_ANKETA_MODE_MED_OLYMP" => "medolesh.org@gmail.com",
 
     "XCMS_ANKETA_MODE_MED" => "medolesh.org@gmail.com",
-    "XCMS_ANKETA_MODE_MED_TEACHER" => "medolesh.org@gmail.com",
-    "XCMS_ANKETA_MODE_MED_CURATOR" => "medolesh.org@gmail.com",
+    "XCMS_ANKETA_MODE_TEACHER" => "regteacher@fizlesh.ru",
+    "XCMS_ANKETA_MODE_CURATOR" => "regteacher@fizlesh.ru",
 );
 
 
@@ -313,8 +313,8 @@ function xsm_valid_anketa_control_question($answer, $mode) {
     } elseif (
         $mode == XCMS_ANKETA_MODE_MED_OLYMP ||
         $mode == XCMS_ANKETA_MODE_MED ||
-        $mode == XCMS_ANKETA_MODE_MED_TEACHER ||
-        $mode == XCMS_ANKETA_MODE_MED_CURATOR
+        $mode == XCMS_ANKETA_MODE_TEACHER ||
+        $mode == XCMS_ANKETA_MODE_CURATOR
     ) {
         // Сколько пальцев на одной руке?
         return (

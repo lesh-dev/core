@@ -26,7 +26,7 @@ xcms_print_anketa_header();
         </span>
     </div>
     <?php
-    echo xcmst_hidden(XCMS_KEY_ANKETA_MODE, XCMS_ANKETA_MODE_MED_TEACHER);  // Тип анкеты
+    echo xcmst_hidden(XCMS_KEY_ANKETA_MODE, XCMS_ANKETA_MODE_TEACHER);  // Тип анкеты
     ?>
     ${ankinput:last_name:input:Фамилия:Сидоров:req:middle}
     ${ankinput:first_name:input:Имя:Пётр:req:middle}

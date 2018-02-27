@@ -21,8 +21,8 @@ require_once("${engine_dir}xsm/middleware.php");
         XCMS_ANKETA_MODE_MED_OLYMP => "med_olymp_register/success",
 
         XCMS_ANKETA_MODE_MED => "med_register/success",
-        XCMS_ANKETA_MODE_MED_TEACHER => "med_register/success",
-        XCMS_ANKETA_MODE_MED_CURATOR => "med_register/success",
+        XCMS_ANKETA_MODE_TEACHER => "med_register/success",
+        XCMS_ANKETA_MODE_CURATOR => "med_register/success",
     );
 
     $DEST_URLS_ALREADY = array(
@@ -31,8 +31,8 @@ require_once("${engine_dir}xsm/middleware.php");
         XCMS_ANKETA_MODE_MED_OLYMP => "med_olymp_register/already",
 
         XCMS_ANKETA_MODE_MED => "med_register/already",
-        XCMS_ANKETA_MODE_MED_TEACHER => "med_register/already",
-        XCMS_ANKETA_MODE_MED_CURATOR => "med_register/already",
+        XCMS_ANKETA_MODE_TEACHER => "med_register/already",
+        XCMS_ANKETA_MODE_CURATOR => "med_register/already",
     );
 
     $MAIL_LISTS_REG = array(
@@ -41,8 +41,8 @@ require_once("${engine_dir}xsm/middleware.php");
         XCMS_ANKETA_MODE_MED_OLYMP => "med_olymp_reg",
 
         XCMS_ANKETA_MODE_MED => "med_reg",
-        XCMS_ANKETA_MODE_MED_TEACHER => "med_reg",
-        XCMS_ANKETA_MODE_MED_CURATOR => "med_reg",
+        XCMS_ANKETA_MODE_TEACHER => "med_reg",
+        XCMS_ANKETA_MODE_CURATOR => "med_reg",
     );
 
     $MAIL_LISTS_REG_MANAGERS = array(
@@ -51,8 +51,8 @@ require_once("${engine_dir}xsm/middleware.php");
         XCMS_ANKETA_MODE_MED_OLYMP => "med_olymp_managers",
 
         XCMS_ANKETA_MODE_MED => "med_managers",
-        XCMS_ANKETA_MODE_MED_CURATOR => "med_managers",
-        XCMS_ANKETA_MODE_MED_TEACHER => "med_managers",
+        XCMS_ANKETA_MODE_CURATOR => "med_managers",
+        XCMS_ANKETA_MODE_TEACHER => "med_managers",
     );
 
     $aparam = xcms_get_key_or($_GET, "aparam");
