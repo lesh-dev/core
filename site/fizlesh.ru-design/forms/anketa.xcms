@@ -4,8 +4,7 @@ require_once("${design_dir}forms/anketa_templates.php");
 xcms_print_anketa_header();
 ?>
 <p>
-    <b>Эта анкета для поступающих на Физическое отделение или
-    на&nbsp;школу&nbsp;&laquo;Сова&raquo;!</b>
+    <b>Эта анкета для поступающих на Физическое отделение.</b>
     Школьникам, поступающим на ((http://lesh.org.ru/departments другие отделения)),
     необходимо обращаться к&nbsp;начальникам соответствующих отделений.
     Пожалуйста, правильно указывайте отделение, используя выпадающий список.
@@ -24,8 +23,7 @@ xcms_print_anketa_header();
                 "1",  // Физическое отделение
                 array('department_title'),
                 "(".
-                    "(department_id = 1) OR ".
-                    "(department_id = 9) ".
+                    "(department_id = 1) ".
                 ") ORDER BY department_title",
                 "",
                 false
