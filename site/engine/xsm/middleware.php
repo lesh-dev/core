@@ -27,9 +27,9 @@ function xsm_send_anketa($mail_group, $mail_msg, $full_name, $email, $manager_mo
 }
 
 /**
- * Посылатор автоответов (костылизирован под МедЛЭШ)
+ * Посылатор автоответов
 **/
-function xsm_send_autoreply($mail_msg, $addr_list_to)
+function xsm_send_autoreply($mail_msg, $addr_list_to, $reply_to = "", $reply_to_name = "", $subject = "")
 {
     if (!xcms_mailer_enabled())
     {
@@ -37,7 +37,7 @@ function xsm_send_autoreply($mail_msg, $addr_list_to)
         return true;
     }
 
-    $subject = "MedO Lesh: Registration complete!";
+    $subject = "(Lesh) Registration completed!";
     $addr_from = "reg@fizlesh.ru"; // TODO: remove this spike
     $name_from = "FizLesh Notificator";
     $mailer = xcms_get_mailer($addr_from, $name_from);
@@ -45,7 +45,7 @@ function xsm_send_autoreply($mail_msg, $addr_list_to)
     {
         $mailer->AddAddress($email);
     }
-    $mailer->AddReplyTo("medolesh.org@gmail.com", "MedO Lesh");
+    $mailer->AddReplyTo($reply_to, $reply_to_name);
     return xcms_mailer_send($mailer, $subject, $mail_msg);
 }
 

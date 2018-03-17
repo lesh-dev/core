@@ -3,6 +3,36 @@
 
 require_once("${xengine_dir}sys/template.php");
 
+define("XCMS_KEY_ANKETA_MODE", "anketa_mode");
+
+define("XCMS_ANKETA_MODE_FIZLESH", "fizlesh");
+define("XCMS_ANKETA_MODE_MED_OLYMP", "med_olymp");
+
+define("XCMS_ANKETA_MODE_MED", "med");
+define("XCMS_ANKETA_MODE_TEACHER", "teacher");
+define("XCMS_ANKETA_MODE_CURATOR", "curator");
+
+$AUTOREPLY_DISPLAY_NAME = array(
+    "XCMS_ANKETA_MODE_FIZLESH" => "FizLesh",
+
+    "XCMS_ANKETA_MODE_MED_OLYMP" => "MedO Lesh",
+
+    "XCMS_ANKETA_MODE_MED" => "MedO Lesh",
+    "XCMS_ANKETA_MODE_TEACHER" => "Lesh",
+    "XCMS_ANKETA_MODE_CURATOR" => "Lesh",
+);
+
+$AUTOREPLY_EMAIL = array(
+    "XCMS_ANKETA_MODE_FIZLESH" => "reg@fizlesh.ru",
+
+    "XCMS_ANKETA_MODE_MED_OLYMP" => "medolesh.org@gmail.com",
+
+    "XCMS_ANKETA_MODE_MED" => "medolesh.org@gmail.com",
+    "XCMS_ANKETA_MODE_TEACHER" => "regteacher@fizlesh.ru",
+    "XCMS_ANKETA_MODE_CURATOR" => "regteacher@fizlesh.ru",
+);
+
+
 function xsm_extract_phone_digits($phones_str)
 {
     $phones = xsm_format_phones($phones_str);
@@ -233,13 +263,32 @@ function xsm_compose_anketa_reply_link($first_name, $email)
     return $reply_link;
 }
 
-function xsm_compose_anketa_autoreply()
+/**
+ * Send automated reply to all specified emails
+ */
+function xsm_anketa_autoreply($person, $anketa_mode)
 {
-    $reply_body = xcms_get_html_template("med_olymp_reply_body");
+    global $AUTOREPLY_DISPLAY_NAME;
+    global $AUTOREPLY_EMAIL;
+
+    $email = xcms_get_key_or($person, "email");
+    $parent_email = xcms_get_key_or($person, "parent_email");
+    $emails = array();
+    if (xu_not_empty($email))
+        $emails[] = $email;
+    if (xu_not_empty($parent_email))
+        $emails[] = $parent_email;
+
+    $first_name_enc = xcms_get_key_or_enc($person, "first_name");
+
+    $reply_to = xcms_get_key_or($AUTOREPLY_EMAIL, $anketa_mode, "reg@fizlesh.ru");
+    $reply_to_name = xcms_get_key_or($AUTOREPLY_DISPLAY_NAME, $anketa_mode, "FizLesh");
+    $reply_body = xcms_get_html_template("${anketa_mode}_reply_body");
+    $reply_body = str_replace("@@NAME@", $first_name_enc, $reply_body);
     $autoreply = xcms_get_html_template("notification-template");
     $autoreply = str_replace("@@SUBJECT@", "Анкета принята", $autoreply);
     $autoreply = str_replace("@@NOTIFICATION-BODY@", $reply_body, $autoreply);
-    return $autoreply;
+    xsm_send_autoreply($autoreply, $emails, $reply_to, $reply_to_name, "(Lesh) Registration completed!");
 }
 
 function xsm_valid_anketa_phone_digits($phone_digits, $count)
@@ -247,10 +296,12 @@ function xsm_valid_anketa_phone_digits($phone_digits, $count)
     return xu_empty($phone_digits) || (xu_len($phone_digits) >= $count);
 }
 
-// В чём измеряется сила тока?
-// Сколько пальцев на одной руке?
+/**
+ * Validates control question on the server side
+ */
 function xsm_valid_anketa_control_question($answer, $mode) {
-    if ($mode == "fizlesh") {
+    if ($mode == XCMS_ANKETA_MODE_FIZLESH) {
+        // В чём измеряется сила тока?
         return (
             xu_strpos($answer, "ампер") !== false ||
             xu_strpos($answer, "Ампер") !== false ||
@@ -259,17 +310,39 @@ function xsm_valid_anketa_control_question($answer, $mode) {
             $answer == "A" ||
             $answer == "a"
         );
-    } elseif ($mode == "med_olymp") {
+    } elseif (
+        $mode == XCMS_ANKETA_MODE_MED_OLYMP ||
+        $mode == XCMS_ANKETA_MODE_MED ||
+        $mode == XCMS_ANKETA_MODE_TEACHER ||
+        $mode == XCMS_ANKETA_MODE_CURATOR
+    ) {
+        // Сколько пальцев на одной руке?
         return (
             xu_strpos($answer, "пять") !== false ||
             xu_strpos($answer, "Пять") !== false ||
             $answer == "5"
         );
     }
+
+    // invalid or unknown anketa mode means you shall not pass
+    return false;
 }
+
+function xsm_valid_anketa_class($ank_class, $anketa_mode)
+{
+    if (
+        $anketa_mode == XCMS_ANKETA_MODE_FIZLESH ||
+        $anketa_mode == XCMS_ANKETA_MODE_MED_OLYMP
+    ) {
+        return !xu_empty($ank_class);
+    }
+    return true;
+}
+
 
 function xsm_validate_anketa_post(&$person)
 {
+    $anketa_mode = xcms_get_key_or($person, XCMS_KEY_ANKETA_MODE);
     // extract some values to check
     $department_id = (string)xcms_get_key_or($person, "department_id");
     if (
@@ -302,7 +375,7 @@ function xsm_validate_anketa_post(&$person)
         preg_match($fi_match, $first_name) ||
         preg_match($fi_match, $last_name) ||
         preg_match($birth_date_match, $last_name) ||
-        xu_empty($ank_class) ||
+        !xsm_valid_anketa_class($ank_class, $anketa_mode) ||
         (
             !xsm_valid_anketa_phone_digits($phone_digits, 7) &&
             !xsm_valid_anketa_phone_digits($cellular_digits, 9)
@@ -311,14 +384,23 @@ function xsm_validate_anketa_post(&$person)
             xu_empty($phone_digits) &&
             xu_empty($cellular_digits)
         ) ||
-        (
-            !xsm_valid_anketa_control_question($control_question, "fizlesh") &&
-            !xsm_valid_anketa_control_question($control_question, "med_olymp")
-        )
+        !xsm_valid_anketa_control_question($control_question, $anketa_mode)
     ) {
         // someone hacked the js validator
         die("Invalid anketa data. ");
     }
+}
+
+function xsm_add_person_merge_comment($person_id, $merge_state)
+{
+    $merge_state_comment = "Получена новая анкета для этого человека. Внесены следующие изменения:\n$merge_state";
+    $person_comment = array(
+        "comment_text" => $merge_state_comment,
+        "owner_login" => "anonymous",
+        "blamed_person_id" => $person_id,
+    );
+    // assume comment addition is not so important, don't check
+    return xdb_insert_or_update('person_comment', array('person_comment_id' => XDB_NEW), $person_comment, xsm_get_fields("person_comment"));
 }
 
 

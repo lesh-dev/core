@@ -16,6 +16,9 @@ function $xsm(element_name, element_type) {
 var GAnketaMode = {}
 GAnketaMode.FIZLESH = "fizlesh";
 GAnketaMode.MED_OLYMP = "med_olymp";
+GAnketaMode.MED = "med";
+GAnketaMode.TEACHER = "teacher";
+GAnketaMode.CURATOR = "curator";
 
 
 function xsm_ank_check_name(errors, sFieldName, sFieldTitle) {
@@ -93,7 +96,12 @@ function xsm_ank_check_control_question(errors, anketa_mode) {
         )) {
             errors.push("Неправильный ответ на контрольный вопрос. Вспомните физику!");
         }
-    } else if (anketa_mode == GAnketaMode.MED_OLYMP) {
+    } else if (
+        anketa_mode == GAnketaMode.MED_OLYMP ||
+        anketa_mode == GAnketaMode.MED ||
+        anketa_mode == GAnketaMode.TEACHER ||
+        anketa_mode == GAnketaMode.CURATOR
+    ) {
         if (!(
             val.indexOf("пять") >= 0 ||
             val.indexOf("Пять") >= 0 ||
@@ -101,6 +109,8 @@ function xsm_ank_check_control_question(errors, anketa_mode) {
         )) {
             errors.push("Неправильный ответ на контрольный вопрос. Посмотрите на свою руку!");
         }
+    } else {
+        errors.push("Invalid anketa mode.");
     }
 }
 
@@ -136,20 +146,20 @@ function xsm_ank_collect_phone_errors(errors, element_id, title) {
 }
 
 
-function xsm_ank_check_empty(id, sDesc, aResult) {
-    var val = $(id).val();
+function xsm_ank_check_empty(element_id, element_type, description, result) {
+    var val = $xsm(element_id, element_type).val();
     val = $.trim(val);
     if (val.length < 2) {
-        aResult.push("Вы не указали " + sDesc);
+        result.push("Вы не указали " + description);
     }
 }
 
 
-function WarnPersonal(aWarning) {
-    xsm_ank_check_empty("#favourites-text", "любимые предметы", aWarning);
-    xsm_ank_check_empty("#achievements-text", "достижения", aWarning);
-    xsm_ank_check_empty("#hobby-text", "хобби", aWarning);
-    //xsm_ank_check_empty("#lesh_ref-text", "откуда Вы узнали о школе", aWarning);
+function warn_personal(warnings) {
+    xsm_ank_check_empty("favourites", "text", "любимые предметы", warnings);
+    xsm_ank_check_empty("achievements", "text", "достижения", warnings);
+    xsm_ank_check_empty("hobby", "text", "хобби", warnings);
+    //xsm_ank_check_empty("lesh_ref", "text", "откуда Вы узнали о школе", aWarning);
 }
 
 
@@ -180,7 +190,7 @@ function xsm_ank_setup_fizlesh() {
         xsm_ank_check_control_question(errors, "fizlesh");
 
         var aWarning = [];
-        WarnPersonal(aWarning);
+        warn_personal(aWarning);
 
         var bResult = true;
         if (errors.length) {
@@ -216,6 +226,26 @@ function xsm_ank_setup_fizlesh() {
 
 
 /**
+ * Generic MedO results checker
+ */
+function xsm_ank_check_result(errors) {
+    var check_result = true;
+    if (errors.length) {
+        $("#t-Error").html(xsm_ank_make_list(errors));
+        check_result = false;
+    } else {
+        $("#t-Error").html(' ');
+    }
+
+    if (!errors.length) {
+        $("#c-Message").hide();
+    } else {
+        $("#c-Message").show();
+    }
+    return check_result;
+}
+
+/**
  * Анкета для Олимпиады МедО
  */
 function xsm_ank_setup_med_olymp() {
@@ -233,20 +263,49 @@ function xsm_ank_setup_med_olymp() {
         xsm_ank_check_email(errors, "parent_email");
         xsm_ank_check_control_question(errors, "med_olymp");
 
-        var check_result = true;
-        if (errors.length) {
-            $("#t-Error").html(xsm_ank_make_list(errors));
-            check_result = false;
-        } else {
-            $("#t-Error").html(' ');
-        }
+        return xsm_ank_check_result(errors);
+    });
+}
 
-        if (!errors.length) {
-            $("#c-Message").hide();
-        } else {
-            $("#c-Message").show();
-        }
-        return check_result;
+/**
+ * Анкета для преподов
+ */
+function xsm_ank_setup_teacher() {
+    $('#submit_anketa-submit').click(function() {
+        var errors = [];
+        xsm_ank_check_name(errors, "last_name", "Фамилия");
+        xsm_ank_check_name(errors, "first_name", "Имя");
+        xsm_ank_check_name(errors, "patronymic", "Отчество");
+        xsm_ank_check_birth_date(errors, "birth_date", "Дата рождения");
+        xsm_ank_check_empty("school", "input", "Место учёбы или работы", errors);
+        xsm_ank_check_empty("social_profile", "input", "Профиль в социальной сети", errors);
+        xsm_ank_check_empty("achievements", "text", "Опыт преподавания", errors);
+        xsm_ank_collect_phone_errors(errors, "cellular", "Мобильный");
+        xsm_ank_check_email(errors, "email");
+        xsm_ank_check_control_question(errors, "teacher");
+
+        return xsm_ank_check_result(errors);
+    });
+}
+
+/**
+ * Анкета для кураторов МедО
+ */
+function xsm_ank_setup_curator() {
+    $('#submit_anketa-submit').click(function() {
+        var errors = [];
+        xsm_ank_check_name(errors, "last_name", "Фамилия");
+        xsm_ank_check_name(errors, "first_name", "Имя");
+        xsm_ank_check_name(errors, "patronymic", "Отчество");
+        xsm_ank_check_birth_date(errors, "birth_date", "Дата рождения");
+        xsm_ank_check_empty("school", "input", "Место учёбы или работы", errors);
+        xsm_ank_check_empty("social_profile", "input", "Профиль в социальной сети", errors);
+        xsm_ank_check_empty("achievements", "text", "Опыт", errors);
+        xsm_ank_collect_phone_errors(errors, "cellular", "Мобильный");
+        xsm_ank_check_email(errors, "email");
+        xsm_ank_check_control_question(errors, "curator");
+
+        return xsm_ank_check_result(errors);
     });
 }
 
@@ -260,5 +319,11 @@ $(document).ready(function() {
         xsm_ank_setup_fizlesh();
     } else if (anketa_mode == GAnketaMode.MED_OLYMP) {
         xsm_ank_setup_med_olymp();
+    } else if (anketa_mode == GAnketaMode.MED) {
+        xsm_ank_setup_med();
+    } else if (anketa_mode == GAnketaMode.TEACHER) {
+        xsm_ank_setup_teacher();
+    } else if (anketa_mode == GAnketaMode.CURATOR) {
+        xsm_ank_setup_curator();
     }
 });

@@ -14,28 +14,48 @@ require_once("${engine_dir}xsm/middleware.php");
 <# js/public control-depends.js #>
 
 <?php
-    define("XCMS_KEY_ANKETA_MODE", "anketa_mode");
-    define("XCMS_ANKETA_MODE_FIZLESH", "fizlesh");
-    define("XCMS_ANKETA_MODE_MED_OLYMP", "med_olymp");
 
     $DEST_URLS_SUCCESS = array(
         XCMS_ANKETA_MODE_FIZLESH => "register/success",
+
         XCMS_ANKETA_MODE_MED_OLYMP => "med_olymp_register/success",
+
+        XCMS_ANKETA_MODE_MED => "med_register/success",
+        XCMS_ANKETA_MODE_TEACHER => "register_common/success",
+        XCMS_ANKETA_MODE_CURATOR => "register_common/success",
     );
 
     $DEST_URLS_ALREADY = array(
         XCMS_ANKETA_MODE_FIZLESH => "register/already",
+
         XCMS_ANKETA_MODE_MED_OLYMP => "med_olymp_register/already",
+
+        XCMS_ANKETA_MODE_MED => "med_register/already",
+        // commons
+        XCMS_ANKETA_MODE_TEACHER => "register_common/already",
+        XCMS_ANKETA_MODE_CURATOR => "register_common/already",
     );
 
     $MAIL_LISTS_REG = array(
         XCMS_ANKETA_MODE_FIZLESH => "reg",
+
         XCMS_ANKETA_MODE_MED_OLYMP => "med_olymp_reg",
+
+        XCMS_ANKETA_MODE_MED => "med_reg",
+        // commons
+        XCMS_ANKETA_MODE_TEACHER => "common_reg",
+        XCMS_ANKETA_MODE_CURATOR => "common_reg",
     );
 
     $MAIL_LISTS_REG_MANAGERS = array(
         XCMS_ANKETA_MODE_FIZLESH => "reg-managers",
+
         XCMS_ANKETA_MODE_MED_OLYMP => "med_olymp_managers",
+
+        XCMS_ANKETA_MODE_MED => "med_managers",
+        // commons
+        XCMS_ANKETA_MODE_CURATOR => "common_managers",
+        XCMS_ANKETA_MODE_TEACHER => "common_managers",
     );
 
     $aparam = xcms_get_key_or($_GET, "aparam");
@@ -87,17 +107,9 @@ require_once("${engine_dir}xsm/middleware.php");
             $person_id = $person["person_id"];
             // update merged data
             $update_result = xdb_insert_or_update('person', array('person_id' => $person_id), $person, $person_desc);
-
-            $merge_state = "Получена новая анкета для этого человека. Внесены следующие изменения:\n$merge_state";
-            $person_comment = array(
-                "comment_text" => $merge_state,
-                "owner_login" => "anonymous",
-                "blamed_person_id" => $person_id,
-            );
-            // assume comment addition is not so important, don't check
-            xdb_insert_or_update('person_comment', array('person_comment_id' => XDB_NEW), $person_comment, xsm_get_fields("person_comment"));
-
             $write_success = ($update_result === true);
+
+            xsm_add_person_merge_comment($person_id, $merge_state);
 
             $html_content = xcms_get_html_template("anketa_mail_see_update");
             // override url
@@ -131,17 +143,7 @@ require_once("${engine_dir}xsm/middleware.php");
 
         $success = ($success_managers || $success_notify) && $write_success;
 
-        if ($anketa_mode == XCMS_ANKETA_MODE_MED_OLYMP)
-        {
-            $parent_email = xcms_get_key_or($person, "parent_email");
-            $emails = array();
-            if (xu_not_empty($email))
-                $emails[] = $email;
-            if (xu_not_empty($parent_email))
-                $emails[] = $parent_email;
-            $autoreply = xsm_compose_anketa_autoreply();
-            xsm_send_autoreply($autoreply, $emails);
-        }
+        xsm_anketa_autoreply($person, $anketa_mode);
 
         $zero_redirect_delay = $SETTINGS["zero_redirect_delay"];
         if (!$success)
@@ -150,7 +152,7 @@ require_once("${engine_dir}xsm/middleware.php");
             // но чтобы не ждать три дня, пусть уж лучше нас пнут извне
             xcms_log(XLOG_ERROR, "[ANK] Anketa submission failed. ".
                 "Statuses: Notify:$success_notify Write:$write_success");
-            $dest_url = xcms_get_key_or($DEST_URLS_ERROR, $anketa_mode, "register/error");
+            $dest_url = "register/error";
         }
         $message = 'Сейчас Вы будете перенаправлены на страницу результата. Нажмите '.
             '<a href="/'.$web_prefix.$dest_url.'">сюда</a>, если не хотите ждать.';

@@ -578,8 +578,12 @@ class Manager(xc.XcmsTest):
 
     # Navigation
     def goto_anketa(self):
-        self.gotoUrlByLinkText(self.getEntranceLinkName(), attribute=self.CONTENT)
+        self.gotoUrlByLinkText(self.get_entrance_link_name(), attribute=self.CONTENT)
         self.assertBodyTextPresent(self.get_anketa_page_text_sample())
+
+    def goto_anketa_teacher(self):
+        self.gotoUrl("/register_teacher")
+        self.assertBodyTextPresent(u"препод")
 
     def goto_xsm_add_person(self):
         self.gotoUrlByLinkText(u"Добавить участника")
@@ -674,6 +678,10 @@ class Manager(xc.XcmsTest):
     @staticmethod
     def get_anketa_success_submit_message():
         return u"наших координаторов"
+
+    @staticmethod
+    def get_anketa_teacher_success_submit_message():
+        return u"анкета принята"
 
     @staticmethod
     def get_anketa_duplicate_submit_message():
