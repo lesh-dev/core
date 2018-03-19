@@ -138,8 +138,8 @@ require_once("${engine_dir}xsm/middleware.php");
         $reg_managers_mail_key = xcms_get_key_or($MAIL_LISTS_REG_MANAGERS, $anketa_mode, "reg-managers");
         $reg_mail_key = xcms_get_key_or($MAIL_LISTS_REG, $anketa_mode, "reg");
 
-        $success_managers = xsm_send_anketa($reg_managers_mail_key, $mail_msg_managers, $full_name, $email, true);
-        $success_notify = xsm_send_anketa($reg_mail_key, $mail_msg, $full_name, $email, false);
+        $success_managers = xsm_send_anketa($reg_managers_mail_key, $mail_msg_managers, $full_name, $email, $anketa_mode, true);
+        $success_notify = xsm_send_anketa($reg_mail_key, $mail_msg, $full_name, $email, $anketa_mode, false);
 
         $success = ($success_managers || $success_notify) && $write_success;
 

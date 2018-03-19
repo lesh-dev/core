@@ -2,13 +2,13 @@
 /**
   * Посылатор анкет (вынесен сюда, чтобы не затмевать суть дела)
   **/
-function xsm_send_anketa($mail_group, $mail_msg, $full_name, $email, $manager_mode = false)
+function xsm_send_anketa($mail_group, $mail_msg, $full_name, $email, $anketa_mode, $manager_mode = false)
 {
     if (!xcms_mailer_enabled()) // disabled mailer is not an error
         return true;
 
     $host = xcms_hostname();
-    $subject = "[xcms-ank] ($host) Новая анкета: $full_name";
+    $subject = "[xsm][$host][$anketa_mode] Новая анкета: $full_name";
 
     $addr_from = "reg@fizlesh.ru"; // TODO: remove this spike
     $name_from = "FizLesh Notificator";
