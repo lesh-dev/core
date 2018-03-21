@@ -2,20 +2,24 @@ import db
 from flask import Flask
 from test import Test
 import config as cfg
-import unstable.api.api_views as api
+from unstable.api.api_views import PersonList, PersonDetail
+from flask_rest_jsonapi import Api
 
 if __name__ == "__main__":
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = cfg.db_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     db.database.init_app(app)
-    api.json.init_app(app)
     app.app_context().push()
     # testing if all objects are readable
     db.db_read_test()
-
     app.add_url_rule('/', view_func=Test.as_view('Greet'))
-    app.add_url_rule('/api', view_func=api.Api.as_view('Api'))
+    # app.add_url_rule('/api', view_func=api.Api.as_view('Api'))
+    # app.add_url_rule('/api/persons_get', view_func=api.PersonsGet.as_view('PersonsGet'))
+
+    api = Api(app)
+    api.route(PersonList, 'person_list', '/persons')
+    api.route(PersonDetail, 'person_detail', '/persons/<int:id>')
 
     @app.route('/test')
     def test():
