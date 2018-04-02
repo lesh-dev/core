@@ -1,6 +1,20 @@
 <# cms/linit #><# cms/init #><# deploy_utils #><# locale #><?php
 require_once("${engine_dir}xsm/pss.php");
-$skin = xcms_get_persistent_key("fizlesh.ru", "skin", "modern");
+$current_user = xcms_user()->login();
+$skin = "modern";
+if ($current_user != "anonymous")
+{
+    $skin = xcms_get_persistent_key("fizlesh.ru", "skin", $skin);
+}
+// check skin for invalid values
+if (
+    $skin != "green" &&
+    $skin != "modern"
+)
+{
+    $skin = "modern";
+}
+
 $skin_to_switch_to = ($skin == "green") ? "modern" : "green";
 $skin_switch_url =  "/?".xcms_url(array("ref" => $ref, "page" => $pageid, "skin" => $skin_to_switch_to));
 
