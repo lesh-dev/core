@@ -12,7 +12,9 @@ require_once("${xengine_dir}sys/version.php");
 </head>
 <body>
     <div style="position: absolute; right: 7px; top: 6px;">Skin:&nbsp;<a
-        href="<?php echo $skin_switch_url; ?>"><?php echo $skin_to_switch_to; ?></a></div>
+        href="<?php echo $skin_switch_url; ?>"
+        title="<?php echo $skin_switch_title; ?>"
+        ><?php echo $skin_to_switch_to; ?></a></div>
     <div id="fullHeight">
         <table class="topTable roundBorders">
             <tr>

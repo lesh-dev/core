@@ -19,7 +19,10 @@ require_once("${design_dir}modern_contacts.php");
 $page_id_filtered = str_replace("/", "_", $pageid);
 ?>
 <div style="position: fixed; right: 7px; bottom: 6px; z-index: 100; color: #e5e5e5;">Skin:&nbsp;<a
-    href="<?php echo $skin_switch_url; ?>" style="color: #efefef;"><?php echo $skin_to_switch_to; ?></a></div>
+    href="<?php echo $skin_switch_url; ?>"
+    style="color: #efefef;"
+    title="<?php echo $skin_switch_title; ?>"
+    ><?php echo $skin_to_switch_to; ?></a></div>
 
 <!-- FIXME(mvel) identification via aliases, not via pageid -->
 <div class="page" id="page_<?php echo $page_id_filtered; ?>">
