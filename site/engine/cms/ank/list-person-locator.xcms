@@ -58,7 +58,7 @@
 /**
  * Build SQL query for person list filtering
  */
-function xsm_build_person_list_query($db, $departments)
+function xsm_build_person_list_query($db, $departments, $simplified_conditions = false)
 {
     global $show_department_id;
     global $show_anketa_status;
@@ -73,46 +73,50 @@ function xsm_build_person_list_query($db, $departments)
     $departments = xdb_get_table_by_pk('department');
 
     $cond = "(1 = 1)";
-    if ($show_department_id != XDB_INVALID_ID)
+
+    if (!$simplified_conditions)
+    {
+        if ($show_department_id != XDB_INVALID_ID)
         $cond .= " AND ( department_id = $show_department_id )";
 
-    if (xcms_checkbox_enabled($show_is_teacher))
-        $cond .= " AND ( LENGTH(is_teacher) > 0 )";
+        if (xcms_checkbox_enabled($show_is_teacher))
+            $cond .= " AND ( LENGTH(is_teacher) > 0 )";
 
-    if (xcms_checkbox_enabled($show_is_student))
-        $cond .= " AND ( LENGTH(is_student) > 0 )";
+        if (xcms_checkbox_enabled($show_is_student))
+            $cond .= " AND ( LENGTH(is_student) > 0 )";
 
-    if ($show_anketa_status == "active")
-        $cond .=
-            " AND (".
-            "  (anketa_status = 'processed') OR ".
-            "  (anketa_status = 'cont') OR ".
-            "  (anketa_status = 'reserved') OR ".
-            " 0 )";
-    elseif ($show_anketa_status == "no-trash")
-        $cond .=
-            " AND (".
-            "  (anketa_status <> 'duplicate') AND ".
-            "  (anketa_status <> 'spam') AND ".
-            " 1 )";
-    elseif ($show_anketa_status == "not-decl")
-        $cond .=
-            " AND (".
-            "  (anketa_status <> 'duplicate') AND ".
-            "  (anketa_status <> 'spam') AND ".
-            "  (anketa_status <> 'declined') AND ".
-            " 1 )";
-    elseif ($show_anketa_status == "not-old")
-        $cond .=
-            " AND (".
-            "  (anketa_status <> 'duplicate') AND ".
-            "  (anketa_status <> 'spam') AND ".
-            "  (anketa_status <> 'old') AND ".
-            " 1 )";
-    elseif ($show_anketa_status == "all")
-        $cond .= "";
-    else
-        $cond .= " AND ( anketa_status = '$show_anketa_status' )";
+        if ($show_anketa_status == "active")
+            $cond .=
+                " AND (".
+                "  (anketa_status = 'processed') OR ".
+                "  (anketa_status = 'cont') OR ".
+                "  (anketa_status = 'reserved') OR ".
+                " 0 )";
+        elseif ($show_anketa_status == "no-trash")
+            $cond .=
+                " AND (".
+                "  (anketa_status <> 'duplicate') AND ".
+                "  (anketa_status <> 'spam') AND ".
+                " 1 )";
+        elseif ($show_anketa_status == "not-decl")
+            $cond .=
+                " AND (".
+                "  (anketa_status <> 'duplicate') AND ".
+                "  (anketa_status <> 'spam') AND ".
+                "  (anketa_status <> 'declined') AND ".
+                " 1 )";
+        elseif ($show_anketa_status == "not-old")
+            $cond .=
+                " AND (".
+                "  (anketa_status <> 'duplicate') AND ".
+                "  (anketa_status <> 'spam') AND ".
+                "  (anketa_status <> 'old') AND ".
+                " 1 )";
+        elseif ($show_anketa_status == "all")
+            $cond .= "";
+        else
+            $cond .= " AND ( anketa_status = '$show_anketa_status' )";
+    }
 
     $name_filter_cond = xsm_person_name_filter($db, $show_name_filter);
     if (strlen($name_filter_cond))
@@ -174,6 +178,21 @@ function xsm_show_all_person_list()
     $query = xsm_build_person_list_query($db, $departments);
     $person_sel = $db->query($query);
 
+    // initial fetch
+    $simplified_conditions = false;
+    $person = $person_sel->fetchArray(SQLITE3_ASSOC);
+    if (!$person)
+    {
+        $simplified_conditions = true;
+        $query = xsm_build_person_list_query($db, $departments, $simplified_conditions);
+        $person_sel = $db->query($query);
+        $person = $person_sel->fetchArray(SQLITE3_ASSOC);
+        ?>
+        <div class="xsm-warning">
+            По исходному запросу ничего не найдено. Условия фильтрации были ослаблены
+        </div><?php
+    }
+
     xsm_view_operations('person', 'участника', xcms_url(array('anketa_status' => 'cont')));
     ?>
     <table class="ankList table table-bordered table-hover table-condensed">
@@ -202,7 +221,8 @@ function xsm_show_all_person_list()
             <th class="ankList">Info</th>
         </thead>
     <?php
-    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
+    // initial fetch
+    while ($person)
     {
         $person_id = htmlspecialchars($person["person_id"]);
 
@@ -270,6 +290,7 @@ function xsm_show_all_person_list()
             <td class="ankList status-col"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php
+        $person = $person_sel->fetchArray(SQLITE3_ASSOC);
     }
     ?>
     </table>
