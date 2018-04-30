@@ -4,18 +4,24 @@
 function xsm_filter_form_autosubmit()
 {
     $(document).ready(function() {
+        var form_selector = "#filter-form";
         var form = $('#filter-form');
-        var controls = form.find('input');
-        for (var i = 0; i < controls.length; ++i)
-        {
-            var control = controls[i];
-            $(control).change(function() {
-                $('#filter-form').submit();
-            });
-        }
+        _set_submit_on_control_type(form, form_selector, "input");
+        _set_submit_on_control_type(form, form_selector, "select");
     });
 }
 
+function _set_submit_on_control_type(form, form_selector, element_type)
+{
+    var controls = form.find(element_type);
+    for (var i = 0; i < controls.length; ++i)
+    {
+        var control = controls[i];
+        $(control).change(function() {
+            $(form_selector).submit();
+        });
+    }
+}
 
 function _find_row(ele)
 {
