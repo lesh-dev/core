@@ -78,7 +78,8 @@ function xsm_build_person_list_query($db, $departments, $simplified_conditions =
         if ($show_department_id != XDB_INVALID_ID)
         {
             $cond .= " AND ( department_id = $show_department_id )";
-            $query_hr .= ", отделение: $show_department_id";
+            $department_title = $departments[$show_department_id]["department_title"];
+            $query_hr .= ", отделение: '$department_title'";
         }
 
         if (xcms_checkbox_enabled($show_is_teacher))
