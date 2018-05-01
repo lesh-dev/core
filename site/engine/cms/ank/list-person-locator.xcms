@@ -69,9 +69,6 @@ function xsm_build_person_list_query($db, $departments, $simplified_conditions =
     global $show_comments;
     global $show_name_filter;
 
-    $db = xdb_get();
-    $departments = xdb_get_table_by_pk('department');
-
     $query_hr = "Поиск";
 
     $cond = "(1 = 1)";
