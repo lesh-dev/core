@@ -190,7 +190,7 @@ function xsm_build_person_list_query($db, $departments, $simplified_conditions =
     $class_order = xcms_checkbox_enabled($sort_by_class) ? " CAST(p.current_class AS INT), " : "";
     if (xu_not_empty($show_sort_column))
     {
-        // TODO: check SQL injections
+        // FIXME(mvel): check SQL injections
         $asc_desc = ($show_sort_order == "asc") ? "ASC" : "DESC";
         $query .= " ORDER BY $show_sort_column $asc_desc";
     }
@@ -259,8 +259,8 @@ function xsm_show_all_person_list()
         </colgroup>
         <thead>
             <th class="ankList"><?php echo xsm_sorted_column_header($base_url, "person_id", "ID"); ?></th>
-            <th class="ankList">Фамилия, имя</th>
-            <th class="ankList">Отделение</th>
+            <th class="ankList"><?php echo xsm_sorted_column_header($base_url, "last_name", "Фамилия, имя"); ?></th>
+            <th class="ankList"><?php echo xsm_sorted_column_header($base_url, "department_id", "Отделение"); ?></th>
             <th class="ankList">Кл.</th>
             <th class="ankList">Контакты</th><?php
             if ($show_comments) {?>
