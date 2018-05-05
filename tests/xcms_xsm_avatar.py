@@ -36,7 +36,8 @@ class XcmsXsmAvatar(xsm.Manager, xtest_common.XcmsTest):
                 "default" if default else "custom",
                 person.social_profile,
             ))
-        elif response != 200:
+        elif response != 200 and response != 501:
+            # vk says HTTP 501 on deactivated profiles
             self.failTest("Wrong response, expected '200' got {}. request: {}, VK ID  {}".format(
                 response,
                 avatar_src,

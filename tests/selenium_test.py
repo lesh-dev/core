@@ -17,6 +17,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.action_chains import ActionChains
 
 import urllib2
+import urllib3
 import httplib
 
 import traceback
@@ -156,6 +157,9 @@ class BrowserHolder(object):
             if self.already_initialized:
                 logging.info("Browser already initialized, doing nothing")
                 return
+
+            # shut up https warnings
+            urllib3.disable_warnings()
 
             logging.info("Initializing browser")
             if self.use_chrome:
