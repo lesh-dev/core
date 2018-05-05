@@ -228,6 +228,28 @@ function xsm_print_recent_schools($db, $current_school_id, $table_name)
 }
 
 /**
+ * @return formatted link html
+ */
+function xsm_sorted_column_header($base_url, $id, $inner_html)
+{
+    global $show_sort_column;
+    global $show_sort_order;
+    global $PHP_SELF;
+
+    $new_sort_order = "asc";
+    if ($show_sort_order == "asc")
+        $new_sort_order = "desc";
+    elseif ($show_sort_order == "desc")
+        $new_sort_order = "asc";
+
+
+    if (strpos($base_url, "?") === false)
+        $base_url .= "?";
+
+    return xcms_link("$base_url&show_sort_column=$id&show_sort_order=$new_sort_order", "sort_by_$id-link", $inner_html);
+}
+
+/**
  * Устанавливает заголовок документу через JS
  */
 function xsm_set_title($title)

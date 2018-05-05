@@ -10,6 +10,11 @@
     $sort_by_class = xcms_get_persistent_key("list-person-locator", "sort_by_class");
     $show_patronymic = xcms_get_persistent_key("list-person-locator", "show_patronymic");
     $show_comments = xcms_get_persistent_key("list-person-locator", "show_comments");
+
+    // sort options
+    $show_sort_column = xcms_get_persistent_key("list-person-locator", "show_sort_column");
+    $show_sort_order = xcms_get_persistent_key("list-person-locator", "show_sort_order");
+
 ?>
 <span style="position: relative; float: right;">
 <a href="#" id="show-status-help" class="popup-link">Легенда</a>
@@ -68,6 +73,9 @@ function xsm_build_person_list_query($db, $departments, $simplified_conditions =
     global $sort_by_class;
     global $show_comments;
     global $show_name_filter;
+
+    global $show_sort_column;
+    global $show_sort_order;
 
     $query_hr = "Поиск";
 
@@ -180,12 +188,21 @@ function xsm_build_person_list_query($db, $departments, $simplified_conditions =
         END, ";
 
     $class_order = xcms_checkbox_enabled($sort_by_class) ? " CAST(p.current_class AS INT), " : "";
-    $query .= " ORDER BY
-        $anketa_status_order
-        NOT (p.is_student IS NOT NULL AND LENGTH(p.is_student) > 0),
-        $class_order
-        p.last_name,
-        p.first_name";
+    if (xu_not_empty($show_sort_column))
+    {
+        // TODO: check SQL injections
+        $asc_desc = ($show_sort_order == "asc") ? "ASC" : "DESC";
+        $query .= " ORDER BY $show_sort_column $asc_desc";
+    }
+    else
+    {
+        $query .= " ORDER BY
+            $anketa_status_order
+            NOT (p.is_student IS NOT NULL AND LENGTH(p.is_student) > 0),
+            $class_order
+            p.last_name,
+            p.first_name";
+    }
 
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
 
@@ -223,6 +240,8 @@ function xsm_show_all_person_list()
     }
 
     xsm_view_operations('person', 'участника', xcms_url(array('anketa_status' => 'cont')));
+    $base_url = "list-person-locator?";
+
     ?>
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
@@ -239,7 +258,7 @@ function xsm_show_all_person_list()
             <col width="7%"/>
         </colgroup>
         <thead>
-            <th class="ankList">ID</th>
+            <th class="ankList"><?php echo xsm_sorted_column_header($base_url, "person_id", "ID"); ?></th>
             <th class="ankList">Фамилия, имя</th>
             <th class="ankList">Отделение</th>
             <th class="ankList">Кл.</th>
