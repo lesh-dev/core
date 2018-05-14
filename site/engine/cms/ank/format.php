@@ -384,7 +384,7 @@ function xsm_person_view_link($person_id, $school_id, $title_ht = "")
 function xsm_draw_fio_filter($show_name_filter)
 {
     $show_name_filter_enc = htmlspecialchars($show_name_filter);
-    ?><span class="ankListField">Фильтр ФИО:</span>
+    ?><span class="ankListField">ФИО:</span>
     <input class="ankEdit filter" type="text"
         value="<?php echo $show_name_filter_enc; ?>"
         name="show_name_filter" id="show_name_filter-input"
