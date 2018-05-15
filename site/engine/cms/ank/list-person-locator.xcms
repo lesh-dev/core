@@ -47,7 +47,7 @@
     ?><span class="ankListField">Только преподы</span><?php
         xsm_checkbox('show_is_student', $show_is_student);
     ?><span class="ankListField">Только школьники</span><i>
-    </i><span style="font-weight: bold;" >Группировка:</span><i>
+    </i><span style="font-weight: bold;" >Показывать:</span><i>
     </i><?php xsm_checkbox('show_patronymic', $show_patronymic);
         ?><span class="ankListField">Отчества</span><i>
     </i><?php xsm_checkbox('show_comments', $show_comments);
