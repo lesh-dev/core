@@ -228,6 +228,7 @@ function xsm_print_recent_schools($db, $current_school_id, $table_name)
 }
 
 /**
+ * Returns a HTML for insertion as table column header contents
  * @return formatted link html
  */
 function xsm_sorted_column_header($base_url, $id, $inner_html)
@@ -236,15 +237,24 @@ function xsm_sorted_column_header($base_url, $id, $inner_html)
     global $show_sort_order;
     global $PHP_SELF;
 
-    $new_sort_order = "asc";
-    if ($show_sort_order == "asc")
-        $new_sort_order = "desc";
-    elseif ($show_sort_order == "desc")
-        $new_sort_order = "asc";
+    $new_sort_order = "none";
+    $sort_icon = "";
 
+    if ($show_sort_order == "asc")
+    {
+        $new_sort_order = "desc";
+        $sort_icon = "&#x21e3;";
+    }
+    elseif ($show_sort_order == "desc")
+    {
+        $new_sort_order = "asc";
+        $sort_icon = "&#x21e1;";
+    }
 
     if (strpos($base_url, "?") === false)
         $base_url .= "?";
+
+    $inner_html = "$sort_icon&nbsp;$inner_html";
 
     return xcms_link("$base_url&show_sort_column=$id&show_sort_order=$new_sort_order", "sort_by_$id-link", $inner_html);
 }
