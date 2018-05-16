@@ -5,7 +5,7 @@ function xsm_filter_form_autosubmit()
 {
     $(document).ready(function() {
         var form_selector = "#filter-form";
-        var form = $('#filter-form');
+        var form = $(form_selector);
         _set_submit_on_control_type(form, form_selector, "input");
         _set_submit_on_control_type(form, form_selector, "select");
     });
