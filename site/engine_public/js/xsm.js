@@ -136,7 +136,9 @@ function xsm_async_call(url, on_success)
     });
 }
 
-
+/**
+ * Grid cell edit handler
+ */
 function xsm_edit_field_handler(event)
 {
     var cell = $(this);
