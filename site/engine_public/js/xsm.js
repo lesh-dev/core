@@ -215,21 +215,29 @@ g_xsm_sort_state = new Array();
 function xsm_column_header_click_handler(event)
 {
     var element = event.currentTarget;
-    /*while (!element.id)
-    {
-        console.log(element.name);
-        element = $(element).parent();
-    }
-    */
+    var id = element.id;
+
+    var sort_name = id.replace("sort_by_", "");
     if (event.shiftKey)
     {
         console.log("SHIFT");
-        g_xsm_sort_state.push(event.currentTarget.id)
+        g_xsm_sort_state.push(sort_name)
     }
     else
     {
-        g_xsm_sort_state = [event.currentTarget.id]
+        if (g_xsm_sort_state.length == 1 && g_xsm_sort_state[0] == sort_name)
+        {
+            // not empty state and one column with positive sort
+            g_xsm_sort_state = ["-" + sort_name]
+        }
+        else
+        {
+            // negative sorting or any other
+            g_xsm_sort_state = [sort_name]
+        }
     }
+    var show_sort_column = g_xsm_sort_state.join(",");
+    window.location = "/xsm/list-person-locator&show_sort_column=" + show_sort_column;
     console.log(g_xsm_sort_state)
 }
 

@@ -14,8 +14,12 @@
     // sort options
     $show_sort_column = xcms_get_persistent_key("list-person-locator", "show_sort_column");
     $show_sort_order = xcms_get_persistent_key("list-person-locator", "show_sort_order");
-
 ?>
+<script>
+$(function() {
+    g_xsm_sort_state = ["<?php echo $show_sort_column; ?>"];
+});
+</script>
 <span style="position: relative; float: right;">
 <a href="#" id="show-status-help" class="popup-link">Легенда</a>
 <div id="status-help" class="admin-widget xsm-help-widget">
