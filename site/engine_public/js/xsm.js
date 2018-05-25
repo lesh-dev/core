@@ -204,3 +204,36 @@ function xsm_set_editors()
 {
     $("td").dblclick(xsm_edit_field_handler);
 }
+
+
+g_xsm_sort_state = new Array();
+
+/**
+ * Provide multicolumn sort handling via
+ * click or shift+click on column header.
+ */
+function xsm_column_header_click_handler(event)
+{
+    var element = event.currentTarget;
+    /*while (!element.id)
+    {
+        console.log(element.name);
+        element = $(element).parent();
+    }
+    */
+    if (event.shiftKey)
+    {
+        console.log("SHIFT");
+        g_xsm_sort_state.push(event.currentTarget.id)
+    }
+    else
+    {
+        g_xsm_sort_state = [event.currentTarget.id]
+    }
+    console.log(g_xsm_sort_state)
+}
+
+$(function() {
+    console.log("HANDLER SET");
+    $("span.sort_by_inner").click(xsm_column_header_click_handler);
+});

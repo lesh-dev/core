@@ -255,8 +255,11 @@ function xsm_sorted_column_header($base_url, $id, $inner_html)
         $base_url .= "?";
 
     $inner_html = "$sort_icon&nbsp;$inner_html";
-
-    return xcms_link("$base_url&show_sort_column=$id&show_sort_order=$new_sort_order", "sort_by_$id-link", $inner_html);
+    return "<span id=\"sort_by_$id\" class=\"sort_by_inner\">$inner_html</span>";
+    //return xcms_link("#", "sort_by_$id-link", $inner_html, "Sort by $id", "sort_by_inner");
+    // FIXME(mvel)
+    //return xcms_link("$P $base_url&show_sort_column=$id&show_sort_order=$new_sort_order", "sort_by_$id-link", $inner_html);
+    //return xcms_link(" $base_url&show_sort_column=$id&show_sort_order=$new_sort_order", "sort_by_$id-link", $inner_html);
 }
 
 /**
