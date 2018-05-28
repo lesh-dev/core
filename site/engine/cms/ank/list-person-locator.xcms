@@ -14,10 +14,19 @@
     // sort options
     $show_sort_column = xcms_get_persistent_key("list-person-locator", "show_sort_column");
     $show_sort_order = xcms_get_persistent_key("list-person-locator", "show_sort_order");
+
+    // FIXME(mvel): ugly, non-generic bad code
+    $show_sort_column_split = explode(",", $show_sort_column);
+    $show_sort_column_init = array();
+    foreach ($show_sort_column_split as $sort_column)
+    {
+        $show_sort_column_init[] = "\"$sort_column\"";
+    }
+    $show_sort_column_init = implode(", ", $show_sort_column_init);
 ?>
 <script>
 $(function() {
-    g_xsm_sort_state = ["<?php echo $show_sort_column; ?>"];
+    g_xsm_sort_state = [<?php echo $show_sort_column_init; ?>];
 });
 </script>
 <span style="position: relative; float: right;">
@@ -189,15 +198,31 @@ function xsm_build_person_list_query($db, $departments, $simplified_conditions =
             WHEN 'spam' THEN 999
         END, ";
 
-    $show_sort_column = preg_replace("/[^a-z_]/", "", $show_sort_column);
-    if (xu_not_empty($show_sort_column))
+    $sort_column_list = explode(",", $show_sort_column);
+    $column_order = [];
+    foreach ($sort_column_list as $sort_column)
     {
-        if ($show_sort_column == "current_class")
+        $direction = "ASC";
+        if (xu_substr($sort_column, 0, 1) == "-")
         {
-            $show_sort_column = "CAST(p.current_class AS INT)";
+            $sort_column = xu_substr($sort_column, 1);
+            $direction = "DESC";
         }
-        $asc_desc = ($show_sort_order == "asc") ? "ASC" : "DESC";
-        $query .= " ORDER BY $show_sort_column $asc_desc";
+        // filter name, for safety
+        $sort_column = preg_replace("/[^a-z_]/", "", $sort_column);
+
+        // handle special columns
+        if ($sort_column == "current_class")
+        {
+            $sort_column = "CAST(p.current_class AS INT)";
+        }
+
+        $column_order[] = "$sort_column $direction";
+    }
+    if (count($column_order))
+    {
+        $column_order_str = implode(", ", $column_order);
+        $query .= " ORDER BY $column_order_str";
     }
     else
     {
