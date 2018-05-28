@@ -220,7 +220,6 @@ function xsm_column_header_click_handler(event)
     var sort_name = id.replace("sort_by_", "");
     if (event.shiftKey)
     {
-        console.log("SHIFT");
         g_xsm_sort_state.push(sort_name)
     }
     else
@@ -238,10 +237,8 @@ function xsm_column_header_click_handler(event)
     }
     var show_sort_column = g_xsm_sort_state.join(",");
     window.location = "/xsm/list-person-locator&show_sort_column=" + show_sort_column;
-    console.log(g_xsm_sort_state)
 }
 
 $(function() {
-    console.log("HANDLER SET");
     $("span.sort_by_inner").click(xsm_column_header_click_handler);
 });
