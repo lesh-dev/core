@@ -1,4 +1,8 @@
 <?php
+
+define('XSM_SORT_DIRECTION_ASC', 'ASC');
+define('XSM_SORT_DIRECTION_DESC', 'DESC');
+
 /**
   * Посылатор анкет (вынесен сюда, чтобы не затмевать суть дела)
   **/
@@ -228,38 +232,85 @@ function xsm_print_recent_schools($db, $current_school_id, $table_name)
 }
 
 /**
+ * Parse serialized representation of a column sorting order
+ * from string like "A,-B,C" to array of dicts "name", "direction".
+ */
+function xsm_parse_sort_columns($sort_columns_str)
+{
+    $sort_columns = explode(",", $sort_columns_str);
+    $sort_columns_parsed = array();
+    foreach ($sort_columns as $sort_column)
+    {
+        $direction = XSM_SORT_DIRECTION_ASC;
+        $sort_column_name = $sort_column;
+        if (xu_substr($sort_column, 0, 1) == "-")
+        {
+            $sort_column_name = xu_substr($sort_column, 1);
+            $direction = XSM_SORT_DIRECTION_DESC;
+        }
+        // filter name, for safety
+        $sort_column_name = preg_replace("/[^a-z_]/", "", $sort_column_name);
+        if (xu_empty($sort_column_name))
+        {
+            // skip invalid columns
+            continue;
+        }
+        $sort_columns_parsed[] = array(
+            "name" => $sort_column_name,
+            "direction" => $direction,
+        );
+    }
+    return $sort_columns_parsed;
+}
+
+/**
+ * Make JS init string for columns sorting
+ */
+function xsm_make_sort_columns_init($sort_columns)
+{
+    $sort_columns_init = array();
+    foreach ($sort_columns as $sort_column_info)
+    {
+        $sort_column = $sort_column_info["name"];
+        $sort_columns_init[] = "\"$sort_column\"";
+    }
+    return implode(", ", $sort_columns_init);
+}
+
+/**
  * Returns a HTML for insertion as table column header contents
  * @return formatted link html
  */
-function xsm_sorted_column_header($base_url, $id, $inner_html)
+function xsm_sorted_column_header($id, $inner_html, $sorted_columns)
 {
-    global $show_sort_column;
-    global $show_sort_order;
-    global $PHP_SELF;
+    $sort_icon = "&#x21e3;";  // default sorting is ASC
+    $column_class = "";
 
-    $new_sort_order = "none";
-    $sort_icon = "";
-
-    if ($show_sort_order == "asc")
+    $my_column = array();
+    foreach ($sorted_columns as $sort_column)
     {
-        $new_sort_order = "desc";
-        $sort_icon = "&#x21e3;";
+        if ($id == $sort_column["name"])
+        {
+            echo "FOUND\n";
+            $my_column = $sort_column;
+            break;
+        }
     }
-    elseif ($show_sort_order == "desc")
+    if (count($my_column))
     {
-        $new_sort_order = "asc";
-        $sort_icon = "&#x21e1;";
+        $column_class = "sort_active";
+        if ($my_column["direction"] == XSM_SORT_DIRECTION_ASC)
+        {
+            $sort_icon = "&#x21a1;";
+        }
+        elseif ($my_column["direction"] == XSM_SORT_DIRECTION_DESC)
+        {
+            $sort_icon = "&#x219f;";
+        }
     }
-
-    if (strpos($base_url, "?") === false)
-        $base_url .= "?";
 
     $inner_html = "$sort_icon&nbsp;$inner_html";
     return "<span id=\"sort_by_$id\" class=\"sort_by_inner\">$inner_html</span>";
-    //return xcms_link("#", "sort_by_$id-link", $inner_html, "Sort by $id", "sort_by_inner");
-    // FIXME(mvel)
-    //return xcms_link("$P $base_url&show_sort_column=$id&show_sort_order=$new_sort_order", "sort_by_$id-link", $inner_html);
-    //return xcms_link(" $base_url&show_sort_column=$id&show_sort_order=$new_sort_order", "sort_by_$id-link", $inner_html);
 }
 
 /**

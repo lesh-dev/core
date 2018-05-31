@@ -13,20 +13,13 @@
 
     // sort options
     $show_sort_column = xcms_get_persistent_key("list-person-locator", "show_sort_column");
-    $show_sort_order = xcms_get_persistent_key("list-person-locator", "show_sort_order");
 
-    // FIXME(mvel): ugly, non-generic bad code
-    $show_sort_column_split = explode(",", $show_sort_column);
-    $show_sort_column_init = array();
-    foreach ($show_sort_column_split as $sort_column)
-    {
-        $show_sort_column_init[] = "\"$sort_column\"";
-    }
-    $show_sort_column_init = implode(", ", $show_sort_column_init);
+    $sort_columns = xsm_parse_sort_columns($show_sort_column);
+    $sort_columns_init = xsm_make_sort_columns_init($sort_columns);
 ?>
 <script>
 $(function() {
-    g_xsm_sort_state = [<?php echo $show_sort_column_init; ?>];
+    g_xsm_sort_state = [<?php echo $sort_columns_init; ?>];
 });
 </script>
 <span style="position: relative; float: right;">
@@ -75,7 +68,7 @@ $(function() {
 /**
  * Build SQL query for person list filtering
  */
-function xsm_build_person_list_query($db, $departments, $simplified_conditions = false)
+function xsm_build_person_list_query($db, $departments, $sort_columns, $simplified_conditions = false)
 {
     global $show_department_id;
     global $show_anketa_status;
@@ -84,9 +77,6 @@ function xsm_build_person_list_query($db, $departments, $simplified_conditions =
     global $show_patronymic;
     global $show_comments;
     global $show_name_filter;
-
-    global $show_sort_column;
-    global $show_sort_order;
 
     $query_hr = "Поиск";
 
@@ -198,26 +188,18 @@ function xsm_build_person_list_query($db, $departments, $simplified_conditions =
             WHEN 'spam' THEN 999
         END, ";
 
-    $sort_column_list = explode(",", $show_sort_column);
     $column_order = [];
-    foreach ($sort_column_list as $sort_column)
+    foreach ($sort_columns as $sort_column)
     {
-        $direction = "ASC";
-        if (xu_substr($sort_column, 0, 1) == "-")
-        {
-            $sort_column = xu_substr($sort_column, 1);
-            $direction = "DESC";
-        }
-        // filter name, for safety
-        $sort_column = preg_replace("/[^a-z_]/", "", $sort_column);
+        $sort_column_name = $sort_column["name"];
+        $direction = $sort_column["direction"];
 
         // handle special columns
-        if ($sort_column == "current_class")
+        if ($sort_column_name == "current_class")
         {
-            $sort_column = "CAST(p.current_class AS INT)";
+            $sort_column_name = "CAST(p.current_class AS INT)";
         }
-
-        $column_order[] = "$sort_column $direction";
+        $column_order[] = "$sort_column_name $direction";
     }
     if (count($column_order))
     {
@@ -243,14 +225,14 @@ function xsm_build_person_list_query($db, $departments, $simplified_conditions =
 /**
  * Print persons list by status group
  **/
-function xsm_show_all_person_list()
+function xsm_show_all_person_list($sort_columns)
 {
     global $show_comments;
     global $show_patronymic;
 
     $db = xdb_get();
     $departments = xdb_get_table_by_pk('department');
-    $query = xsm_build_person_list_query($db, $departments);
+    $query = xsm_build_person_list_query($db, $departments, $sort_columns);
     $person_sel = $db->query($query);
 
     // initial fetch
@@ -259,7 +241,7 @@ function xsm_show_all_person_list()
     if (!$person)
     {
         $simplified_conditions = true;
-        $query = xsm_build_person_list_query($db, $departments, $simplified_conditions);
+        $query = xsm_build_person_list_query($db, $departments, $sort_columns, $simplified_conditions);
         $person_sel = $db->query($query);
         $person = $person_sel->fetchArray(SQLITE3_ASSOC);
         ?>
@@ -287,10 +269,10 @@ function xsm_show_all_person_list()
             <col width="7%"/>
         </colgroup>
         <thead>
-            <th class="ankList"><?php echo xsm_sorted_column_header($base_url, "person_id", "ID"); ?></th>
-            <th class="ankList"><?php echo xsm_sorted_column_header($base_url, "last_name", "Фамилия, имя"); ?></th>
-            <th class="ankList"><?php echo xsm_sorted_column_header($base_url, "department_id", "Отделение"); ?></th>
-            <th class="ankList"><?php echo xsm_sorted_column_header($base_url, "current_class", "Кл."); ?></th>
+            <th class="ankList"><?php echo xsm_sorted_column_header("person_id", "ID", $sort_columns); ?></th>
+            <th class="ankList"><?php echo xsm_sorted_column_header("last_name", "Фамилия, имя", $sort_columns); ?></th>
+            <th class="ankList"><?php echo xsm_sorted_column_header("department_id", "Отделение", $sort_columns); ?></th>
+            <th class="ankList"><?php echo xsm_sorted_column_header("current_class", "Кл.", $sort_columns); ?></th>
             <th class="ankList">Контакты</th><?php
             if ($show_comments) {?>
             <th class="ankList">Комментарий</th><?php
@@ -375,5 +357,5 @@ function xsm_show_all_person_list()
     xsm_view_operations('person', 'участника', xcms_url(array('anketa_status' => 'cont')));
 }
 
-    xsm_show_all_person_list();
+    xsm_show_all_person_list($sort_columns);
 ?>
