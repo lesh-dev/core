@@ -220,8 +220,26 @@ function xsm_column_header_click_handler(event)
     var sort_name = id.replace("sort_by_", "");
     if (event.shiftKey)
     {
-        g_xsm_sort_state.push(sort_name);
-        console.log("SHIFT" + g_xsm_sort_state);
+        var found = false;
+        // prevent duplicates in sort vector
+        for (var i = 0; i < g_xsm_sort_state.length; ++i)
+        {
+            if (g_xsm_sort_state[i] == sort_name)
+            {
+                g_xsm_sort_state[i] = "-" + sort_name;
+                found = true;
+                break;
+            }
+            else if (g_xsm_sort_state[i] == "-" + sort_name)
+            {
+                g_xsm_sort_state[i] = sort_name;
+                found = true;
+            }
+        }
+        if (!found)
+        {
+            g_xsm_sort_state.push(sort_name);
+        }
     }
     else
     {
@@ -235,7 +253,6 @@ function xsm_column_header_click_handler(event)
             // negative sorting or any other
             g_xsm_sort_state = [sort_name];
         }
-        console.log(g_xsm_sort_state);
     }
     var show_sort_column = g_xsm_sort_state.join(",");
     window.location = "/xsm/list-person-locator&show_sort_column=" + show_sort_column;

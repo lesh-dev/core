@@ -272,7 +272,8 @@ function xsm_make_sort_columns_init($sort_columns)
     foreach ($sort_columns as $sort_column_info)
     {
         $sort_column = $sort_column_info["name"];
-        $sort_columns_init[] = "\"$sort_column\"";
+        $direction = ($sort_column_info["direction"] == XSM_SORT_DIRECTION_DESC) ? "-" : "";
+        $sort_columns_init[] = "\"$direction$sort_column\"";
     }
     return implode(", ", $sort_columns_init);
 }
@@ -291,7 +292,6 @@ function xsm_sorted_column_header($id, $inner_html, $sorted_columns)
     {
         if ($id == $sort_column["name"])
         {
-            echo "FOUND\n";
             $my_column = $sort_column;
             break;
         }
