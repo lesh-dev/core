@@ -370,3 +370,13 @@ td.ankList.dep6 {
     color: #9f0000;
     font-weight: bold;
 }
+
+.sort_by_inner:hover {
+    color: #08c;
+}
+.sort_by_inner.sort_active {
+    color: #005db7;
+}
+.sort_by_inner.sort_active:hover {
+    color: #08c;
+}

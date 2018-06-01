@@ -310,7 +310,7 @@ function xsm_sorted_column_header($id, $inner_html, $sorted_columns)
     }
 
     $inner_html = "$sort_icon&nbsp;$inner_html";
-    return "<span id=\"sort_by_$id\" class=\"sort_by_inner\">$inner_html</span>";
+    return "<span id=\"sort_by_$id\" class=\"sort_by_inner $column_class\">$inner_html</span>";
 }
 
 /**
