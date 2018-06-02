@@ -188,7 +188,7 @@ function xsm_build_person_list_query($db, $departments, $sort_columns, $simplifi
             WHEN 'spam' THEN 999
         END, ";
 
-    $column_order = [];
+    $column_order = array();
     foreach ($sort_columns as $sort_column)
     {
         $sort_column_name = $sort_column["name"];
