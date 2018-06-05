@@ -76,30 +76,6 @@ class XcmsXsmListSort(xsm.Manager, xtest_common.XcmsTest):
             extended_search=True,
         )
 
-    def test_comments(self):
-        # TODO(mvel): в этом месте несколько раз всплывала бага, что текст комментария
-        # двоится. Надо добавить код, проверяющий, что этот текст встречается 1 раз на странице.
-        self.goto_xsm_all_people()
-        self.clear_filters()
-
-        comment_was_set = False
-        person = xsm.Person(self)
-        # FIXME(mvel): очень неудобный инструментарий работы с checkbox-ами. Нет интерфейса
-        # "убедиться, что включено". Надо его добавить и потом проверять, что комментарии есть
-        # только тогда, когда включено.
-        for i in xrange(2):
-            if self.checkBodyTextPresent(u"Добавить комментарий"):
-                comment_was_set = True
-                comment_text = person.add_comment()
-                self.goto_xsm_all_people()
-                self.checkBodyTextPresent(comment_text)
-
-            self.clickElementById("show_comments-checkbox")
-            self.wait(3, "Wait while form resubmits")
-            self.check_page_errors()
-
-        self.assert_equal(comment_was_set, True, "No comment can be added: no links. ")
-
     def run(self):
         self.ensure_logged_off()
 
@@ -112,6 +88,10 @@ class XcmsXsmListSort(xsm.Manager, xtest_common.XcmsTest):
         self.goto_xsm_all_people()
         self.clear_filters()
         self.clickElementById("sort_by_person_id")
+        self.wait(3, "Wait while form resubmits")
+        self.check_page_errors()
+
+        self.clickElementById("sort_by_last_name")
         self.wait(3, "Wait while form resubmits")
         self.check_page_errors()
 
