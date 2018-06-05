@@ -58,6 +58,7 @@ import xcms_xsm_hack_person_link
 import xcms_xsm_inplace_edit
 import xcms_xsm_link_user_profile
 import xcms_xsm_list_filters
+import xcms_xsm_list_sort
 import xcms_xsm_phones
 
 
@@ -118,5 +119,6 @@ def get_tests(**kwargs):
         ("xcms_xsm_inplace_edit.py", xcms_xsm_inplace_edit.XcmsXsmInplaceEdit(**kwargs)),
         ("xcms_xsm_link_user_profile.py", xcms_xsm_link_user_profile.XcmsXsmLinkUserProfile(**kwargs)),
         ("xcms_xsm_list_filters.py", xcms_xsm_list_filters.XcmsXsmListFilters(**kwargs)),
+        ("xcms_xsm_list_sort.py", xcms_xsm_list_sort.XcmsXsmListSort(**kwargs)),
         ("xcms_xsm_phones.py", xcms_xsm_phones.XcmsXsmPhones(**kwargs)),
     ]
