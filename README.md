@@ -7,7 +7,7 @@ Issue Tracker
 =============
 https://dev.fizlesh.ru/projects/development
 
-To gain access please do not hestiate to contact us at dev@fizlesh.ru
+To gain access please do not hesitate to contact us at dev@fizlesh.ru
 
 Engine
 =============
@@ -16,6 +16,7 @@ X Engine consists of several parts:
 * Core components (database engine, mailer subsystem, etc)
 * XCMS, a content management system
 * XSM, a student management system
+* YASM, an Yet Another Student Management system (aka XSM 2.0)
 * Contest checking helper module
 * Administration, deploy and backup tools
 
@@ -67,5 +68,6 @@ Anastasiya Dianova <mediana96@gmail.com>, https://github.com/birdbirdbird
 * Art
 
 Yaroslav Rebenko
+* YASM
 * Bugfixing
 * Automated tests
