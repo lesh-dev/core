@@ -254,6 +254,8 @@ function xsm_show_all_person_list($sort_columns)
     $base_url = "list-person-locator?";
 
     ?>
+    <div><span style="color: red; font-weight: bold;">NEW!</span> Доступна сортировка (click по колонке) и мультисортировка (Shift+click по колонке)
+    для колонок, отмеченных стрелочкой</div>
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
             <col width="3%"/>
