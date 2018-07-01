@@ -1,0 +1,17 @@
+{% macro dropdown_button_css() %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/components/dropdown_button.css') }}">
+{% endmacro %}
+
+{% macro dropdown_button_js() %}
+{% endmacro %}
+
+{% macro dropdown_button_html(name, data, class="") %}
+    <div class={{ "dropdown_button " + class }}>
+        <div class="dropdown_button__btn">{{ name }}<div class="dropdown_button__arrow"></div></div>
+        <div class="dropdown_button__content">
+            {% for key, value in data %}
+                <a href="{{ value }}">{{ key }}</a>
+            {% endfor %}
+        </div>
+    </div>
+{% endmacro %}

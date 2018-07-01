@@ -1,0 +1,26 @@
+{% from "components/horizontal_nav.html" import horizontal_nav_html, horizontal_nav_js, horizontal_nav_css %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base.css') }}">
+    {{ horizontal_nav_css() }}
+    {% block styles %}
+    {% endblock %}
+    {{ horizontal_nav_js() }}
+    {% block js %}
+    {% endblock %}
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+</head>
+<body id="body">
+{{ horizontal_nav_html(menu) }}
+{% block content %}
+{% endblock %}
+</body>
+{% block tail_js %}
+{% endblock %}
+</html>
