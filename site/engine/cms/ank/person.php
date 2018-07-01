@@ -51,7 +51,7 @@ function xsm_get_avatar($social_profile)
     else
         $update_cache = true;
 
-    $wget_cmd = "wget 'https://api.vk.com/method/getProfiles?uids=$vk_uid&fields=photo' -O $json_fn";
+    $wget_cmd = "wget 'https://api.vk.com/method/getProfiles?uids=$vk_uid&fields=photo&v=1' -O $json_fn";
     if ($update_cache && (0 != system($wget_cmd)))
         return $av;
 

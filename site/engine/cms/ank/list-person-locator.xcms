@@ -7,10 +7,21 @@
     $show_anketa_status = xsm_get_persistent_enum_key("list-person-locator", "show_anketa_status", "show_anketa_status_locator");
     $show_is_teacher = xcms_get_persistent_key("list-person-locator", "show_is_teacher");
     $show_is_student = xcms_get_persistent_key("list-person-locator", "show_is_student");
-    $sort_by_class = xcms_get_persistent_key("list-person-locator", "sort_by_class");
+
     $show_patronymic = xcms_get_persistent_key("list-person-locator", "show_patronymic");
     $show_comments = xcms_get_persistent_key("list-person-locator", "show_comments");
+
+    // sort options
+    $show_sort_column = xcms_get_persistent_key("list-person-locator", "show_sort_column");
+
+    $sort_columns = xsm_parse_sort_columns($show_sort_column);
+    $sort_columns_init = xsm_make_sort_columns_init($sort_columns);
 ?>
+<script>
+$(function() {
+    g_xsm_sort_state = [<?php echo $sort_columns_init; ?>];
+});
+</script>
 <span style="position: relative; float: right;">
 <a href="#" id="show-status-help" class="popup-link">Легенда</a>
 <div id="status-help" class="admin-widget xsm-help-widget">
@@ -32,18 +43,17 @@
 </script>
 
 <form method="get" class="xsm-filter" name="filter" id="filter-form" action="list-person-locator">
-    <span>Фильтр: </span><?php
+    <span style="font-weight: bold;">Фильтр: </span><?php
     xsm_draw_department_selector($show_department_id, 'show_department_id', "Все отделения"); ?><i>
     </i><span class="ankListField">Статус: </span><?php
-    echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_locator");
+    echo xsm_make_enum_by_type("show_anketa_status", $show_anketa_status, "show_anketa_status_locator"); ?>
+    <i> </i><?php
+    xsm_draw_fio_filter($show_name_filter);
     xsm_checkbox('show_is_teacher', $show_is_teacher);
     ?><span class="ankListField">Только преподы</span><?php
         xsm_checkbox('show_is_student', $show_is_student);
-    ?><span class="ankListField">Только школьники</span><i> </i><?php
-        xsm_draw_fio_filter($show_name_filter);
-    ?><i> </i><span>Группировка:</span><?php
-        xsm_checkbox('sort_by_class', $sort_by_class);
-    ?><span class="ankListField">По классу</span><i>
+    ?><span class="ankListField">Только школьники</span><i>
+    </i><span style="font-weight: bold;" >Показывать:</span><i>
     </i><?php xsm_checkbox('show_patronymic', $show_patronymic);
         ?><span class="ankListField">Отчества</span><i>
     </i><?php xsm_checkbox('show_comments', $show_comments);
@@ -56,67 +66,97 @@
 <?php
 
 /**
- * Print persons list by status group
- **/
-function xsm_show_all_person_list()
+ * Build SQL query for person list filtering
+ */
+function xsm_build_person_list_query($db, $departments, $sort_columns, $simplified_conditions = false)
 {
     global $show_department_id;
     global $show_anketa_status;
     global $show_is_teacher;
     global $show_is_student;
     global $show_patronymic;
-    global $sort_by_class;
     global $show_comments;
     global $show_name_filter;
 
-    $db = xdb_get();
-    $departments = xdb_get_table_by_pk('department');
+    $query_hr = "Поиск";
 
     $cond = "(1 = 1)";
-    if ($show_department_id != XDB_INVALID_ID)
-        $cond .= " AND ( department_id = $show_department_id )";
 
-    if (xcms_checkbox_enabled($show_is_teacher))
-        $cond .= " AND ( LENGTH(is_teacher) > 0 )";
+    if (!$simplified_conditions)
+    {
+        if ($show_department_id != XDB_INVALID_ID)
+        {
+            $cond .= " AND ( department_id = $show_department_id )";
+            $department_title = $departments[$show_department_id]["department_title"];
+            $query_hr .= ", отделение: '$department_title'";
+        }
 
-    if (xcms_checkbox_enabled($show_is_student))
-        $cond .= " AND ( LENGTH(is_student) > 0 )";
+        if (xcms_checkbox_enabled($show_is_teacher))
+        {
+            $cond .= " AND ( LENGTH(is_teacher) > 0 )";
+            $query_hr .= ", только преподы";
+        }
 
-    if ($show_anketa_status == "active")
-        $cond .=
-            " AND (".
-            "  (anketa_status = 'processed') OR ".
-            "  (anketa_status = 'cont') OR ".
-            "  (anketa_status = 'reserved') OR ".
-            " 0 )";
-    elseif ($show_anketa_status == "no-trash")
-        $cond .=
-            " AND (".
-            "  (anketa_status <> 'duplicate') AND ".
-            "  (anketa_status <> 'spam') AND ".
-            " 1 )";
-    elseif ($show_anketa_status == "not-decl")
-        $cond .=
-            " AND (".
-            "  (anketa_status <> 'duplicate') AND ".
-            "  (anketa_status <> 'spam') AND ".
-            "  (anketa_status <> 'declined') AND ".
-            " 1 )";
-    elseif ($show_anketa_status == "not-old")
-        $cond .=
-            " AND (".
-            "  (anketa_status <> 'duplicate') AND ".
-            "  (anketa_status <> 'spam') AND ".
-            "  (anketa_status <> 'old') AND ".
-            " 1 )";
-    elseif ($show_anketa_status == "all")
-        $cond .= "";
-    else
-        $cond .= " AND ( anketa_status = '$show_anketa_status' )";
+        if (xcms_checkbox_enabled($show_is_student))
+        {
+            $cond .= " AND ( LENGTH(is_student) > 0 )";
+            $query_hr .= ", только школьники";
+        }
+
+        if ($show_anketa_status == "active")
+        {
+            $cond .=
+                " AND (".
+                "  (anketa_status = 'processed') OR ".
+                "  (anketa_status = 'cont') OR ".
+                "  (anketa_status = 'reserved') OR ".
+                " 0 )";
+            $query_hr .= ", только активные";
+        }
+        elseif ($show_anketa_status == "no-trash")
+        {
+            $cond .=
+                " AND (".
+                "  (anketa_status <> 'duplicate') AND ".
+                "  (anketa_status <> 'spam') AND ".
+                " 1 )";
+            $query_hr .= ", без мусора";
+        }
+        elseif ($show_anketa_status == "not-decl")
+        {
+            $cond .=
+                " AND (".
+                "  (anketa_status <> 'duplicate') AND ".
+                "  (anketa_status <> 'spam') AND ".
+                "  (anketa_status <> 'declined') AND ".
+                " 1 )";
+            $query_hr .= ", кроме отклонённых";
+        }
+        elseif ($show_anketa_status == "not-old")
+        {
+            $cond .=
+                " AND (".
+                "  (anketa_status <> 'duplicate') AND ".
+                "  (anketa_status <> 'spam') AND ".
+                "  (anketa_status <> 'old') AND ".
+                " 1 )";
+            $query_hr .= ", кроме архивных";
+        }
+        elseif ($show_anketa_status == "all")
+            $cond .= "";
+        else
+        {
+            $cond .= " AND ( anketa_status = '$show_anketa_status' )";
+            $query_hr .= ", только в статусе '$show_anketa_status'";
+        }
+    }
 
     $name_filter_cond = xsm_person_name_filter($db, $show_name_filter);
     if (strlen($name_filter_cond))
+    {
         $cond .= " AND $name_filter_cond";
+        $query_hr .= ", содержащих в имени '$show_name_filter'";
+    }
 
     $query = "SELECT
         p.person_id,
@@ -148,18 +188,71 @@ function xsm_show_all_person_list()
             WHEN 'spam' THEN 999
         END, ";
 
-    $class_order = xcms_checkbox_enabled($sort_by_class) ? " CAST(p.current_class AS INT), " : "";
-    $query .= " ORDER BY
-        $anketa_status_order
-        NOT (p.is_student IS NOT NULL AND LENGTH(p.is_student) > 0),
-        $class_order
-        p.last_name,
-        p.first_name";
+    $column_order = array();
+    foreach ($sort_columns as $sort_column)
+    {
+        $sort_column_name = $sort_column["name"];
+        $direction = $sort_column["direction"];
+
+        // handle special columns
+        if ($sort_column_name == "current_class")
+        {
+            $sort_column_name = "CAST(p.current_class AS INT)";
+        }
+        $column_order[] = "$sort_column_name $direction";
+    }
+    if (count($column_order))
+    {
+        $column_order_str = implode(", ", $column_order);
+        $query .= " ORDER BY $column_order_str";
+    }
+    else
+    {
+        $query .= " ORDER BY
+            $anketa_status_order
+            NOT (p.is_student IS NOT NULL AND LENGTH(p.is_student) > 0),
+            p.last_name,
+            p.first_name";
+    }
 
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
+
+    xsm_set_title($query_hr);
+
+    return $query;
+}
+
+/**
+ * Print persons list by status group
+ **/
+function xsm_show_all_person_list($sort_columns)
+{
+    global $show_comments;
+    global $show_patronymic;
+
+    $db = xdb_get();
+    $departments = xdb_get_table_by_pk('department');
+    $query = xsm_build_person_list_query($db, $departments, $sort_columns);
     $person_sel = $db->query($query);
 
+    // initial fetch
+    $simplified_conditions = false;
+    $person = $person_sel->fetchArray(SQLITE3_ASSOC);
+    if (!$person)
+    {
+        $simplified_conditions = true;
+        $query = xsm_build_person_list_query($db, $departments, $sort_columns, $simplified_conditions);
+        $person_sel = $db->query($query);
+        $person = $person_sel->fetchArray(SQLITE3_ASSOC);
+        ?>
+        <div class="xsm-warning">
+            По исходному запросу ничего не найдено. Условия фильтрации были ослаблены
+        </div><?php
+    }
+
     xsm_view_operations('person', 'участника', xcms_url(array('anketa_status' => 'cont')));
+    $base_url = "list-person-locator?";
+
     ?>
     <table class="ankList table table-bordered table-hover table-condensed">
         <colgroup>
@@ -176,10 +269,10 @@ function xsm_show_all_person_list()
             <col width="7%"/>
         </colgroup>
         <thead>
-            <th class="ankList">ID</th>
-            <th class="ankList">Фамилия, имя</th>
-            <th class="ankList">Отделение</th>
-            <th class="ankList">Кл.</th>
+            <th class="ankList"><?php echo xsm_sorted_column_header("person_id", "ID", $sort_columns); ?></th>
+            <th class="ankList"><?php echo xsm_sorted_column_header("last_name", "Фамилия, имя", $sort_columns); ?></th>
+            <th class="ankList"><?php echo xsm_sorted_column_header("department_id", "Отделение", $sort_columns); ?></th>
+            <th class="ankList"><?php echo xsm_sorted_column_header("current_class", "Кл.", $sort_columns); ?></th>
             <th class="ankList">Контакты</th><?php
             if ($show_comments) {?>
             <th class="ankList">Комментарий</th><?php
@@ -187,7 +280,8 @@ function xsm_show_all_person_list()
             <th class="ankList">Info</th>
         </thead>
     <?php
-    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
+    // initial fetch
+    while ($person)
     {
         $person_id = htmlspecialchars($person["person_id"]);
 
@@ -255,6 +349,7 @@ function xsm_show_all_person_list()
             <td class="ankList status-col"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php
+        $person = $person_sel->fetchArray(SQLITE3_ASSOC);
     }
     ?>
     </table>
@@ -262,5 +357,5 @@ function xsm_show_all_person_list()
     xsm_view_operations('person', 'участника', xcms_url(array('anketa_status' => 'cont')));
 }
 
-    xsm_show_all_person_list();
+    xsm_show_all_person_list($sort_columns);
 ?>

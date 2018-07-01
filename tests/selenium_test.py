@@ -16,8 +16,9 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from selenium.webdriver.common.action_chains import ActionChains
 
-from urllib2 import URLError
-from httplib import HTTPException
+import urllib2
+import urllib3
+import httplib
 
 import traceback
 import time
@@ -92,12 +93,12 @@ def RunTest(test):
         test.logAdd("Seems like browser window have been closed. ", "error")
         logging.info("NoSuchWindowException: %s, %s", exc, traceback.format_exc())
         return 3
-    except URLError as exc:
+    except urllib2.URLError as exc:
         test.logAdd("URL error occured. Seems like browser connection error occured (window has been closed, etc). ",
                     "error")
         logging.info("URLerror: %s, %s", exc, traceback.format_exc())
         return 3
-    except HTTPException as exc:
+    except httplib.HTTPException as exc:
         test.logAdd("HTTP error occured. Seems like browser connection error occured (window has been closed, etc). ",
                     "error")
         logging.info("HTTPException: %s, %s", exc, traceback.format_exc())
@@ -156,6 +157,9 @@ class BrowserHolder(object):
             if self.already_initialized:
                 logging.info("Browser already initialized, doing nothing")
                 return
+
+            # shut up https warnings
+            urllib3.disable_warnings()
 
             logging.info("Initializing browser")
             if self.use_chrome:

@@ -9,12 +9,15 @@ class XcmsXsmListFilters(xsm.Manager, xtest_common.XcmsTest):
     """
     This test checks various filters in XSM lists.
     """
-    def check_filter(self, pattern, match_text, expected_count, message):
+
+    def check_filter(self, pattern, match_text, expected_count, message, extended_search=False):
         self.filter_person(fio=pattern)
         self.assert_equal(
             self.countIndexedUrlsByLinkText(match_text), expected_count,
             message + "Filters are broken. "
         )
+        if extended_search:
+            self.assertBodyTextPresent(u"Условия фильтрации были ослаблены")
 
     def test_existing_people(self):
         # one line expected
@@ -67,7 +70,11 @@ class XcmsXsmListFilters(xsm.Manager, xtest_common.XcmsTest):
 
         other_department_id = 2  # Другое
         self.setOptionValueByIdAndValue("show_department_id-selector", other_department_id)
-        self.check_filter(alias, alias, 0, "Search with wrong department should return 0 records. ")
+        self.check_filter(
+            alias, alias, 1,
+            "Search with wrong department should return 1 records with hint about extended search.  ",
+            extended_search=True,
+        )
 
     def test_comments(self):
         # TODO(mvel): в этом месте несколько раз всплывала бага, что текст комментария

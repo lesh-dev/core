@@ -1,8 +1,29 @@
 <# cms/linit #><# cms/init #><# deploy_utils #><# locale #><?php
 require_once("${engine_dir}xsm/pss.php");
-$skin = xcms_get_persistent_key("fizlesh.ru", "skin", "modern");
+$current_user = xcms_user()->login();
+$skin = "modern";
+$skin_switch_title = "You cannot switch skins unless you are logged in";
+
+if ($current_user != "anonymous")
+{
+    $skin = xcms_get_persistent_key("fizlesh.ru", "skin", $skin);
+    $skin_switch_title = "Try another one and bring us feedback via dev@fizlesh.ru";
+}
+// check skin for invalid values
+if (
+    $skin != "green" &&
+    $skin != "modern"
+)
+{
+    $skin = "modern";
+}
+
 $skin_to_switch_to = ($skin == "green") ? "modern" : "green";
-$skin_switch_url =  "/?".xcms_url(array("ref" => $ref, "page" => $pageid, "skin" => $skin_to_switch_to));
+$skin_switch_url = "#";
+if ($current_user != "anonymous")
+{
+    $skin_switch_url = "/?".xcms_url(array("ref" => $ref, "page" => $pageid, "skin" => $skin_to_switch_to));
+}
 
 include(translate("<! skin_${skin} !>"));
 ?>

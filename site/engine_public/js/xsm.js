@@ -4,18 +4,24 @@
 function xsm_filter_form_autosubmit()
 {
     $(document).ready(function() {
-        var form = $('#filter-form');
-        var controls = form.find('input');
-        for (var i = 0; i < controls.length; ++i)
-        {
-            var control = controls[i];
-            $(control).change(function() {
-                $('#filter-form').submit();
-            });
-        }
+        var form_selector = "#filter-form";
+        var form = $(form_selector);
+        _set_submit_on_control_type(form, form_selector, "input");
+        _set_submit_on_control_type(form, form_selector, "select");
     });
 }
 
+function _set_submit_on_control_type(form, form_selector, element_type)
+{
+    var controls = form.find(element_type);
+    for (var i = 0; i < controls.length; ++i)
+    {
+        var control = controls[i];
+        $(control).change(function() {
+            $(form_selector).submit();
+        });
+    }
+}
 
 function _find_row(ele)
 {
@@ -130,7 +136,9 @@ function xsm_async_call(url, on_success)
     });
 }
 
-
+/**
+ * Grid cell edit handler
+ */
 function xsm_edit_field_handler(event)
 {
     var cell = $(this);
@@ -196,3 +204,60 @@ function xsm_set_editors()
 {
     $("td").dblclick(xsm_edit_field_handler);
 }
+
+
+g_xsm_sort_state = new Array();
+
+/**
+ * Provide multicolumn sort handling via
+ * click or shift+click on column header.
+ */
+function xsm_column_header_click_handler(event)
+{
+    var element = event.currentTarget;
+    var id = element.id;
+
+    var sort_name = id.replace("sort_by_", "");
+    if (event.shiftKey)
+    {
+        var found = false;
+        // prevent duplicates in sort vector
+        for (var i = 0; i < g_xsm_sort_state.length; ++i)
+        {
+            if (g_xsm_sort_state[i] == sort_name)
+            {
+                g_xsm_sort_state[i] = "-" + sort_name;
+                found = true;
+                break;
+            }
+            else if (g_xsm_sort_state[i] == "-" + sort_name)
+            {
+                g_xsm_sort_state[i] = sort_name;
+                found = true;
+            }
+        }
+        if (!found)
+        {
+            g_xsm_sort_state.push(sort_name);
+        }
+    }
+    else
+    {
+        if (g_xsm_sort_state.length == 1 && g_xsm_sort_state[0] == sort_name)
+        {
+            // not empty state and one column with positive sort
+            g_xsm_sort_state = ["-" + sort_name];
+        }
+        else
+        {
+            // negative sorting or any other
+            g_xsm_sort_state = [sort_name];
+        }
+    }
+    var show_sort_column = g_xsm_sort_state.join(",");
+    window.location = "/xsm/list-person-locator&show_sort_column=" + show_sort_column;
+}
+
+$(function() {
+    $("span.sort_by_inner").click(xsm_column_header_click_handler);
+});

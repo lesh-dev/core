@@ -1,14 +1,18 @@
 <?php
+
+define('XSM_SORT_DIRECTION_ASC', 'ASC');
+define('XSM_SORT_DIRECTION_DESC', 'DESC');
+
 /**
   * Посылатор анкет (вынесен сюда, чтобы не затмевать суть дела)
   **/
-function xsm_send_anketa($mail_group, $mail_msg, $full_name, $email, $manager_mode = false)
+function xsm_send_anketa($mail_group, $mail_msg, $full_name, $email, $anketa_mode, $manager_mode = false)
 {
     if (!xcms_mailer_enabled()) // disabled mailer is not an error
         return true;
 
     $host = xcms_hostname();
-    $subject = "[xcms-ank] ($host) Новая анкета: $full_name";
+    $subject = "[xsm][$host][$anketa_mode] Новая анкета: $full_name";
 
     $addr_from = "reg@fizlesh.ru"; // TODO: remove this spike
     $name_from = "FizLesh Notificator";
@@ -225,6 +229,88 @@ function xsm_print_recent_schools($db, $current_school_id, $table_name)
         });
     </script>
     <?php
+}
+
+/**
+ * Parse serialized representation of a column sorting order
+ * from string like "A,-B,C" to array of dicts "name", "direction".
+ */
+function xsm_parse_sort_columns($sort_columns_str)
+{
+    $sort_columns = explode(",", $sort_columns_str);
+    $sort_columns_parsed = array();
+    foreach ($sort_columns as $sort_column)
+    {
+        $direction = XSM_SORT_DIRECTION_ASC;
+        $sort_column_name = $sort_column;
+        if (xu_substr($sort_column, 0, 1) == "-")
+        {
+            $sort_column_name = xu_substr($sort_column, 1);
+            $direction = XSM_SORT_DIRECTION_DESC;
+        }
+        // filter name, for safety
+        $sort_column_name = preg_replace("/[^a-z_]/", "", $sort_column_name);
+        if (xu_empty($sort_column_name))
+        {
+            // skip invalid columns
+            continue;
+        }
+        $sort_columns_parsed[] = array(
+            "name" => $sort_column_name,
+            "direction" => $direction,
+        );
+    }
+    return $sort_columns_parsed;
+}
+
+/**
+ * Make JS init string for columns sorting
+ */
+function xsm_make_sort_columns_init($sort_columns)
+{
+    $sort_columns_init = array();
+    foreach ($sort_columns as $sort_column_info)
+    {
+        $sort_column = $sort_column_info["name"];
+        $direction = ($sort_column_info["direction"] == XSM_SORT_DIRECTION_DESC) ? "-" : "";
+        $sort_columns_init[] = "\"$direction$sort_column\"";
+    }
+    return implode(", ", $sort_columns_init);
+}
+
+/**
+ * Returns a HTML for insertion as table column header contents
+ * @return formatted link html
+ */
+function xsm_sorted_column_header($id, $inner_html, $sorted_columns)
+{
+    $sort_icon = "&#x21e3;";  // default sorting is ASC
+    $column_class = "";
+
+    $my_column = array();
+    foreach ($sorted_columns as $sort_column)
+    {
+        if ($id == $sort_column["name"])
+        {
+            $my_column = $sort_column;
+            break;
+        }
+    }
+    if (count($my_column))
+    {
+        $column_class = "sort_active";
+        if ($my_column["direction"] == XSM_SORT_DIRECTION_ASC)
+        {
+            $sort_icon = "&#x21a1;";
+        }
+        elseif ($my_column["direction"] == XSM_SORT_DIRECTION_DESC)
+        {
+            $sort_icon = "&#x219f;";
+        }
+    }
+
+    $inner_html = "$sort_icon&nbsp;$inner_html";
+    return "<span id=\"sort_by_$id\" class=\"sort_by_inner $column_class\">$inner_html</span>";
 }
 
 /**
