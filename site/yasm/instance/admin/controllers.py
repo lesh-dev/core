@@ -1,8 +1,16 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, request as rq, Response, jsonify
 from ..menu import menu
-from ..database import School
+from ..database import db, School
 
 module = Blueprint('admin', __name__, url_prefix='/admin')
+
+
+def resp(code, data):
+    return Response(
+        status=code,
+        mimetype="application/json",
+        response=jsonify(data)
+    )
 
 
 @module.route('/', methods=['GET'])
@@ -16,8 +24,30 @@ def index():
 
 @module.route('/school', methods=['GET'])
 def school_dashboard():
-    schools = School.query.with_entities(School.school_title, School.school_date_start).order_by(School.school_date_start).all()[::-1]
     return render_template(
         "admin/school_dashboard.html",
         menu=menu,
     )
+
+
+@module.route('/school/add', methods=['GET'])
+def school_add():
+    args = rq.args
+    title = args['title']
+    start = args['start']
+    end = args['end']
+    tp = args['type']
+    location = args['location']
+    s = School(
+        school_title=title,
+        school_type=tp,
+        school_date_start=start,
+        school_date_end=end,
+        school_location=location,
+        school_created='now',
+        school_modified='now',
+        school_changedby='me'
+    )
+    db.session.add(s)
+    db.session.commit()
+    return resp(200, [])

@@ -170,23 +170,21 @@ class Person(db.Model):
 
     anketa_status = NamedColumn(
         db.Enum(
-            name='ank_status',
-            enums=[
-                'progress',
-                'nextyear',
-                'duplicate',
-                'reserved',
-                'cont',
-                'old',
-                'new',
-                'processed',
-                'declined',
-                'taken',
-                'duplicated',
-                'spam',
-                'discuss',
-                'less',
-            ]
+            'progress',
+            'nextyear',
+            'duplicate',
+            'reserved',
+            'cont',
+            'old',
+            'new',
+            'processed',
+            'declined',
+            'taken',
+            'duplicated',
+            'spam',
+            'discuss',
+            'less',
+            name='ank_status'
         ),
         nick="статус анкеты",
         nullable=False,
@@ -240,29 +238,24 @@ class Course(db.Model):
                               nullable=True)  # описание курса
     course_type = NamedColumn(
         db.Enum(
-            name="course_type",
-            enums=[
-                'generic',
-                'other',
-                'facult',
-                'prac',
-                'single'
-            ]
+            'generic',
+            'other',
+            'facult',
+            'prac',
+            'single',
+            name="course_type"
         ),
         nick="тип",
         nullable=False)  # тип курса(прак, поход, etc)
     course_area = NamedColumn(
         db.Enum(
-            name="course_area",
-            enums=[
-                'cs',
-                'unknown',
-                'nature',
-                'precise',
-                'other',
-                'human'
-            ]
-        ),
+            'cs',
+            'unknown',
+            'nature',
+            'precise',
+            'other',
+            'human',
+            name="course_area"),
         nick="область",
         nullable=False)  # предметная область
     course_comment = NamedColumn(db.Text,
@@ -363,17 +356,14 @@ class School(db.Model):
                                nullable=False)
     school_type = NamedColumn(
         db.Enum(
-            name="school_type",
-            enums=[
-                'lesh',
-                'vesh',
-                'zesh',
-                'summer',
-                'summmer',
-                'winter',
-                'spring'
-            ]
-        ),
+            'lesh',
+            'vesh',
+            'zesh',
+            'summer',
+            'summmer',
+            'winter',
+            'spring',
+            name='school_type'),
         nick="тип",
         nullable=False)  # enum:(летняя, зимняя, весенняя) TODO: simplify
     school_date_start = NamedColumn(db.Text,
@@ -424,14 +414,11 @@ class PersonSchool(db.Model):
                              nullable=True)  # является ли преподом на данной школе
     curatorship = NamedColumn(
         db.Enum(
-            name="curatorship",
-            enums=[
-                '',
-                'none',
-                'assist',
-                'cur'
-            ]
-        ),
+            '',
+            'none',
+            'assist',
+            'cur',
+            name='curatorship_type'),
         nick="кураторство",
         nullable=True)  # кураторство на данной школе enum: (никто, помкур, куратор)
     curator_group = NamedColumn(db.Text,
