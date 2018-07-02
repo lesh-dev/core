@@ -1,23 +1,24 @@
 import * as React from "react";
 
-export interface Entry {
+export interface EntryProps {
     label: string,
     url: string,
-    entries: Entry[]
+    entries: EntryProps[]
 }
 
 export interface SideMenuProps {
-    entries: Entry[]
+    entries: EntryProps[]
 }
 
-class Entry extends React.Component<> {
-
+class Entry extends React.Component<EntryProps> {
+    render() {
+        return
+    }
 }
 
 export class SideMenu extends React.Component<SideMenuProps, undefined> {
     render() {
         return <div className="side_menu">
-
         </div>
     }
 }

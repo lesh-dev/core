@@ -1,9 +1,13 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import {SideMenu} from "./components/side_menu";
 
-import { Hello } from "./school";
-
-ReactDOM.render(
-    <Hello compiler="TypeScript" framework="React" />,
-    document.getElementById("example")
-);
+export class BasePage extends React.Component<undefined, undefined> {
+    render_content() {}
+    render() {
+        return [
+            <SideMenu entries={}/>,
+            this.render_content()
+        ];
+    }
+}
