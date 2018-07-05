@@ -4,6 +4,7 @@ from ..database import School
 module = Blueprint('api', __name__, url_prefix='/api')
 
 
+
 @module.route('/school', methods=['GET'])
 def school_list():
     return jsonify(
