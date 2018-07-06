@@ -72,7 +72,7 @@ def main():
                 for fk in column.foreign_keys:
                     m = fk._column_tokens[1]
                     models[m].append((scl(tablename), CC(tablename) + "List"))
-                    models[tablename].append((m, CC(m)))
+                    models[tablename].append((columnname + "_fk", CC(m), m, fk._column_tokens[2]))
 
     ts_interfaces = open("instance/ui/src/js/generated/interfaces.ts", "w")
     for name, fields in models.items():
@@ -89,7 +89,6 @@ def main():
         ts_connector.write("    {name},\n    {name}List,\n".format(name=CC(name)))
     ts_connector.write("} from './interfaces'\n")
     ts_connector.write(connector_template)
-
     for name, fields in models.items():
         ts_connector.write("export function {name}_list() {{\n".format(name=name))
         ts_connector.write("    return getRequest('/api/{name}_list')\n}}\n\n\n".format(name=name))
@@ -100,7 +99,6 @@ def main():
                 regular_fields.append(field[0])
             else:
                 additional_fields.append(field[0])
-
     ts_connector.close()
 
     read_api = open(previx + "/__init__.py", "w")
@@ -108,9 +106,12 @@ def main():
     for name, fields in models.items():
         regular_fields = []
         additional_fields = []
+        joined_fields = []
         for field in fields:
             if field[1] in MIME.values():
                 regular_fields.append(field[0])
+            elif not field[1].endswith("List"):
+                joined_fields.append(field)
             else:
                 additional_fields.append(field[0])
 
@@ -136,10 +137,20 @@ def main():
         read_api.write("    ans = []\n")
         read_api.write("    for entry in query:\n")
         read_api.write("        d = dict()\n")
+        for field in joined_fields:
+            read_api.write("        d['{field_name}'] = {fk_model}.query.filter({fk_model}.{fk_field} == {model}.{field}).first()\n".format(
+                field_name=field[0],
+                field=field[0][:-3],
+                fk_model=field[1],
+                fk_field=field[3],
+                model=name_2_model[name]
+            ))
+            pass
         for field in regular_fields:
             read_api.write("        d['{field}'] = entry.{field}\n".format(field=field))
         read_api.write("        d.update(additional)\n")
         read_api.write("        ans.append(d)\n")
+
         read_api.write("    return jsonify({\n")
         read_api.write("        'length': len(ans),")
         read_api.write("        'values': ans")

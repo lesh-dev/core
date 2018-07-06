@@ -115,7 +115,6 @@ def person_list():
         'person_changedby',
     ]
     additional = {
-        'department': [],
         'course_teachers_list': [],
         'exam_list': [],
         'person_school_list': [],
@@ -164,6 +163,7 @@ def person_list():
     ans = []
     for entry in query:
         d = dict()
+        d['department_id_fk'] = Department.query.filter(Department.department_id == Person.department_id).first()
         d['person_id'] = entry.person_id
         d['last_name'] = entry.last_name
         d['first_name'] = entry.first_name
@@ -274,8 +274,6 @@ def course_teachers_list():
         'course_teachers_changedby',
     ]
     additional = {
-        'course': [],
-        'person': [],
     }
     field = {
         'course_teachers_id': CourseTeachers.course_teachers_id,
@@ -293,6 +291,8 @@ def course_teachers_list():
     ans = []
     for entry in query:
         d = dict()
+        d['course_id_fk'] = Course.query.filter(Course.course_id == CourseTeachers.course_id).first()
+        d['course_teacher_id_fk'] = Person.query.filter(Person.person_id == CourseTeachers.course_teacher_id).first()
         d['course_teachers_id'] = entry.course_teachers_id
         d['course_id'] = entry.course_id
         d['course_teacher_id'] = entry.course_teacher_id
@@ -319,8 +319,6 @@ def exam_list():
         'exam_changedby',
     ]
     additional = {
-        'person': [],
-        'course': [],
     }
     field = {
         'exam_id': Exam.exam_id,
@@ -341,6 +339,8 @@ def exam_list():
     ans = []
     for entry in query:
         d = dict()
+        d['student_person_id_fk'] = Person.query.filter(Person.person_id == Exam.student_person_id).first()
+        d['course_id_fk'] = Course.query.filter(Course.course_id == Exam.course_id).first()
         d['exam_id'] = entry.exam_id
         d['student_person_id'] = entry.student_person_id
         d['course_id'] = entry.course_id
@@ -426,9 +426,6 @@ def person_school_list():
         'person_school_changedby',
     ]
     additional = {
-        'person': [],
-        'department': [],
-        'school': [],
     }
     field = {
         'person_school_id': PersonSchool.person_school_id,
@@ -454,6 +451,9 @@ def person_school_list():
     ans = []
     for entry in query:
         d = dict()
+        d['member_person_id_fk'] = Person.query.filter(Person.person_id == PersonSchool.member_person_id).first()
+        d['member_department_id_fk'] = Department.query.filter(Department.department_id == PersonSchool.member_department_id).first()
+        d['school_id_fk'] = School.query.filter(School.school_id == PersonSchool.school_id).first()
         d['person_school_id'] = entry.person_school_id
         d['member_person_id'] = entry.member_person_id
         d['member_department_id'] = entry.member_department_id
@@ -489,8 +489,6 @@ def person_comment_list():
         'person_comment_changedby',
     ]
     additional = {
-        'person': [],
-        'school': [],
     }
     field = {
         'person_comment_id': PersonComment.person_comment_id,
@@ -512,6 +510,8 @@ def person_comment_list():
     ans = []
     for entry in query:
         d = dict()
+        d['blamed_person_id_fk'] = Person.query.filter(Person.person_id == PersonComment.blamed_person_id).first()
+        d['school_id_fk'] = School.query.filter(School.school_id == PersonComment.school_id).first()
         d['person_comment_id'] = entry.person_comment_id
         d['comment_text'] = entry.comment_text
         d['blamed_person_id'] = entry.blamed_person_id
@@ -692,8 +692,6 @@ def solutions_list():
         'resolution_mark',
     ]
     additional = {
-        'problems': [],
-        'contestants': [],
     }
     field = {
         'solutions_id': Solutions.solutions_id,
@@ -712,6 +710,8 @@ def solutions_list():
     ans = []
     for entry in query:
         d = dict()
+        d['problem_id_fk'] = Problems.query.filter(Problems.problems_id == Solutions.problem_id).first()
+        d['contestant_id_fk'] = Contestants.query.filter(Contestants.contestants_id == Solutions.contestant_id).first()
         d['solutions_id'] = entry.solutions_id
         d['problem_id'] = entry.problem_id
         d['contest_year'] = entry.contest_year
