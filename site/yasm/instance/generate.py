@@ -138,16 +138,16 @@ def main():
         read_api.write("    for entry in query:\n")
         read_api.write("        d = dict()\n")
         for field in joined_fields:
-            read_api.write("        d['{field_name}'] = {fk_model}.query.filter({fk_model}.{fk_field} == {model}.{field}).first()\n".format(
+            read_api.write("        d['{field_name}'] = {fk_model}.query.filter({fk_model}.{fk_field} == {model}.{field}).first().__dict__\n".format(
                 field_name=field[0],
                 field=field[0][:-3],
                 fk_model=field[1],
                 fk_field=field[3],
                 model=name_2_model[name]
             ))
-            pass
-        for field in regular_fields:
-            read_api.write("        d['{field}'] = entry.{field}\n".format(field=field))
+            read_api.write("        d['{field_name}'].pop('_sa_instance_state')\n".format(field_name=field[0]))
+        read_api.write("        d.update(entry.__dict__)\n")
+        read_api.write("        d.pop('_sa_instance_state')\n")
         read_api.write("        d.update(additional)\n")
         read_api.write("        ans.append(d)\n")
 

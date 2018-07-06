@@ -28,10 +28,8 @@ def notification_list():
     ans = []
     for entry in query:
         d = dict()
-        d['notification_id'] = entry.notification_id
-        d['mail_group'] = entry.mail_group
-        d['notification_text'] = entry.notification_text
-        d['notification_html'] = entry.notification_html
+        d.update(entry.__dict__)
+        d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
     return jsonify({
@@ -66,11 +64,8 @@ def department_list():
     ans = []
     for entry in query:
         d = dict()
-        d['department_id'] = entry.department_id
-        d['department_title'] = entry.department_title
-        d['department_created'] = entry.department_created
-        d['department_modified'] = entry.department_modified
-        d['department_changedby'] = entry.department_changedby
+        d.update(entry.__dict__)
+        d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
     return jsonify({
@@ -163,40 +158,10 @@ def person_list():
     ans = []
     for entry in query:
         d = dict()
-        d['department_id_fk'] = Department.query.filter(Department.department_id == Person.department_id).first()
-        d['person_id'] = entry.person_id
-        d['last_name'] = entry.last_name
-        d['first_name'] = entry.first_name
-        d['patronymic'] = entry.patronymic
-        d['nick_name'] = entry.nick_name
-        d['birth_date'] = entry.birth_date
-        d['passport_data'] = entry.passport_data
-        d['school'] = entry.school
-        d['school_city'] = entry.school_city
-        d['ank_class'] = entry.ank_class
-        d['current_class'] = entry.current_class
-        d['phone'] = entry.phone
-        d['cellular'] = entry.cellular
-        d['email'] = entry.email
-        d['skype'] = entry.skype
-        d['social_profile'] = entry.social_profile
-        d['is_teacher'] = entry.is_teacher
-        d['is_student'] = entry.is_student
-        d['favourites'] = entry.favourites
-        d['achievements'] = entry.achievements
-        d['hobby'] = entry.hobby
-        d['lesh_ref'] = entry.lesh_ref
-        d['forest_1'] = entry.forest_1
-        d['forest_2'] = entry.forest_2
-        d['forest_3'] = entry.forest_3
-        d['tent_capacity'] = entry.tent_capacity
-        d['tour_requisites'] = entry.tour_requisites
-        d['anketa_status'] = entry.anketa_status
-        d['user_agent'] = entry.user_agent
-        d['department_id'] = entry.department_id
-        d['person_created'] = entry.person_created
-        d['person_modified'] = entry.person_modified
-        d['person_changedby'] = entry.person_changedby
+        d['department_id_fk'] = Department.query.filter(Department.department_id == Person.department_id).first().__dict__
+        d['department_id_fk'].pop('_sa_instance_state')
+        d.update(entry.__dict__)
+        d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
     return jsonify({
@@ -245,18 +210,8 @@ def course_list():
     ans = []
     for entry in query:
         d = dict()
-        d['course_id'] = entry.course_id
-        d['course_title'] = entry.course_title
-        d['school_id'] = entry.school_id
-        d['course_cycle'] = entry.course_cycle
-        d['target_class'] = entry.target_class
-        d['course_desc'] = entry.course_desc
-        d['course_type'] = entry.course_type
-        d['course_area'] = entry.course_area
-        d['course_comment'] = entry.course_comment
-        d['course_created'] = entry.course_created
-        d['course_modified'] = entry.course_modified
-        d['course_changedby'] = entry.course_changedby
+        d.update(entry.__dict__)
+        d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
     return jsonify({
@@ -291,14 +246,12 @@ def course_teachers_list():
     ans = []
     for entry in query:
         d = dict()
-        d['course_id_fk'] = Course.query.filter(Course.course_id == CourseTeachers.course_id).first()
-        d['course_teacher_id_fk'] = Person.query.filter(Person.person_id == CourseTeachers.course_teacher_id).first()
-        d['course_teachers_id'] = entry.course_teachers_id
-        d['course_id'] = entry.course_id
-        d['course_teacher_id'] = entry.course_teacher_id
-        d['course_teachers_created'] = entry.course_teachers_created
-        d['course_teachers_modified'] = entry.course_teachers_modified
-        d['course_teachers_changedby'] = entry.course_teachers_changedby
+        d['course_id_fk'] = Course.query.filter(Course.course_id == CourseTeachers.course_id).first().__dict__
+        d['course_id_fk'].pop('_sa_instance_state')
+        d['course_teacher_id_fk'] = Person.query.filter(Person.person_id == CourseTeachers.course_teacher_id).first().__dict__
+        d['course_teacher_id_fk'].pop('_sa_instance_state')
+        d.update(entry.__dict__)
+        d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
     return jsonify({
@@ -339,17 +292,12 @@ def exam_list():
     ans = []
     for entry in query:
         d = dict()
-        d['student_person_id_fk'] = Person.query.filter(Person.person_id == Exam.student_person_id).first()
-        d['course_id_fk'] = Course.query.filter(Course.course_id == Exam.course_id).first()
-        d['exam_id'] = entry.exam_id
-        d['student_person_id'] = entry.student_person_id
-        d['course_id'] = entry.course_id
-        d['exam_status'] = entry.exam_status
-        d['deadline_date'] = entry.deadline_date
-        d['exam_comment'] = entry.exam_comment
-        d['exam_created'] = entry.exam_created
-        d['exam_modified'] = entry.exam_modified
-        d['exam_changedby'] = entry.exam_changedby
+        d['student_person_id_fk'] = Person.query.filter(Person.person_id == Exam.student_person_id).first().__dict__
+        d['student_person_id_fk'].pop('_sa_instance_state')
+        d['course_id_fk'] = Course.query.filter(Course.course_id == Exam.course_id).first().__dict__
+        d['course_id_fk'].pop('_sa_instance_state')
+        d.update(entry.__dict__)
+        d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
     return jsonify({
@@ -392,15 +340,8 @@ def school_list():
     ans = []
     for entry in query:
         d = dict()
-        d['school_id'] = entry.school_id
-        d['school_title'] = entry.school_title
-        d['school_type'] = entry.school_type
-        d['school_date_start'] = entry.school_date_start
-        d['school_date_end'] = entry.school_date_end
-        d['school_location'] = entry.school_location
-        d['school_created'] = entry.school_created
-        d['school_modified'] = entry.school_modified
-        d['school_changedby'] = entry.school_changedby
+        d.update(entry.__dict__)
+        d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
     return jsonify({
@@ -451,23 +392,14 @@ def person_school_list():
     ans = []
     for entry in query:
         d = dict()
-        d['member_person_id_fk'] = Person.query.filter(Person.person_id == PersonSchool.member_person_id).first()
-        d['member_department_id_fk'] = Department.query.filter(Department.department_id == PersonSchool.member_department_id).first()
-        d['school_id_fk'] = School.query.filter(School.school_id == PersonSchool.school_id).first()
-        d['person_school_id'] = entry.person_school_id
-        d['member_person_id'] = entry.member_person_id
-        d['member_department_id'] = entry.member_department_id
-        d['school_id'] = entry.school_id
-        d['is_student'] = entry.is_student
-        d['is_teacher'] = entry.is_teacher
-        d['curatorship'] = entry.curatorship
-        d['curator_group'] = entry.curator_group
-        d['current_class'] = entry.current_class
-        d['courses_needed'] = entry.courses_needed
-        d['person_school_comment'] = entry.person_school_comment
-        d['person_school_created'] = entry.person_school_created
-        d['person_school_modified'] = entry.person_school_modified
-        d['person_school_changedby'] = entry.person_school_changedby
+        d['member_person_id_fk'] = Person.query.filter(Person.person_id == PersonSchool.member_person_id).first().__dict__
+        d['member_person_id_fk'].pop('_sa_instance_state')
+        d['member_department_id_fk'] = Department.query.filter(Department.department_id == PersonSchool.member_department_id).first().__dict__
+        d['member_department_id_fk'].pop('_sa_instance_state')
+        d['school_id_fk'] = School.query.filter(School.school_id == PersonSchool.school_id).first().__dict__
+        d['school_id_fk'].pop('_sa_instance_state')
+        d.update(entry.__dict__)
+        d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
     return jsonify({
@@ -510,18 +442,12 @@ def person_comment_list():
     ans = []
     for entry in query:
         d = dict()
-        d['blamed_person_id_fk'] = Person.query.filter(Person.person_id == PersonComment.blamed_person_id).first()
-        d['school_id_fk'] = School.query.filter(School.school_id == PersonComment.school_id).first()
-        d['person_comment_id'] = entry.person_comment_id
-        d['comment_text'] = entry.comment_text
-        d['blamed_person_id'] = entry.blamed_person_id
-        d['school_id'] = entry.school_id
-        d['owner_login'] = entry.owner_login
-        d['record_acl'] = entry.record_acl
-        d['person_comment_created'] = entry.person_comment_created
-        d['person_comment_modified'] = entry.person_comment_modified
-        d['person_comment_deleted'] = entry.person_comment_deleted
-        d['person_comment_changedby'] = entry.person_comment_changedby
+        d['blamed_person_id_fk'] = Person.query.filter(Person.person_id == PersonComment.blamed_person_id).first().__dict__
+        d['blamed_person_id_fk'].pop('_sa_instance_state')
+        d['school_id_fk'] = School.query.filter(School.school_id == PersonComment.school_id).first().__dict__
+        d['school_id_fk'].pop('_sa_instance_state')
+        d.update(entry.__dict__)
+        d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
     return jsonify({
@@ -562,15 +488,8 @@ def submission_list():
     ans = []
     for entry in query:
         d = dict()
-        d['submission_id'] = entry.submission_id
-        d['mail'] = entry.mail
-        d['attachment'] = entry.attachment
-        d['fileexchange'] = entry.fileexchange
-        d['submission_timestamp'] = entry.submission_timestamp
-        d['sender'] = entry.sender
-        d['replied'] = entry.replied
-        d['processed'] = entry.processed
-        d['contest_year'] = entry.contest_year
+        d.update(entry.__dict__)
+        d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
     return jsonify({
@@ -620,19 +539,8 @@ def contestants_list():
     ans = []
     for entry in query:
         d = dict()
-        d['contestants_id'] = entry.contestants_id
-        d['name'] = entry.name
-        d['mail'] = entry.mail
-        d['phone'] = entry.phone
-        d['parents'] = entry.parents
-        d['address'] = entry.address
-        d['school'] = entry.school
-        d['level'] = entry.level
-        d['teacher_name'] = entry.teacher_name
-        d['work'] = entry.work
-        d['fileexchange'] = entry.fileexchange
-        d['status'] = entry.status
-        d['contest_year'] = entry.contest_year
+        d.update(entry.__dict__)
+        d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
     return jsonify({
@@ -668,12 +576,8 @@ def problems_list():
     ans = []
     for entry in query:
         d = dict()
-        d['problems_id'] = entry.problems_id
-        d['contest_year'] = entry.contest_year
-        d['problem_name'] = entry.problem_name
-        d['problem_html'] = entry.problem_html
-        d['people'] = entry.people
-        d['criteria'] = entry.criteria
+        d.update(entry.__dict__)
+        d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
     return jsonify({
@@ -710,15 +614,12 @@ def solutions_list():
     ans = []
     for entry in query:
         d = dict()
-        d['problem_id_fk'] = Problems.query.filter(Problems.problems_id == Solutions.problem_id).first()
-        d['contestant_id_fk'] = Contestants.query.filter(Contestants.contestants_id == Solutions.contestant_id).first()
-        d['solutions_id'] = entry.solutions_id
-        d['problem_id'] = entry.problem_id
-        d['contest_year'] = entry.contest_year
-        d['contestant_id'] = entry.contestant_id
-        d['resolution_text'] = entry.resolution_text
-        d['resolution_author'] = entry.resolution_author
-        d['resolution_mark'] = entry.resolution_mark
+        d['problem_id_fk'] = Problems.query.filter(Problems.problems_id == Solutions.problem_id).first().__dict__
+        d['problem_id_fk'].pop('_sa_instance_state')
+        d['contestant_id_fk'] = Contestants.query.filter(Contestants.contestants_id == Solutions.contestant_id).first().__dict__
+        d['contestant_id_fk'].pop('_sa_instance_state')
+        d.update(entry.__dict__)
+        d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
     return jsonify({
