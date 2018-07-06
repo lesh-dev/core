@@ -116,7 +116,7 @@ def main():
                 additional_fields.append(field[0])
 
         read_api.write("@module.route(\"/{name}\", methods=['GET'])\n".format(name=scl(name)))
-        read_api.write("def {name}():\n".format(name=scl(name)))
+        read_api.write("def {name}(req=None,raw=False):\n".format(name=scl(name)))
         read_api.write("    regular = [\n")
         for field in regular_fields:
             read_api.write("        '{}',\n".format(field))
@@ -130,7 +130,8 @@ def main():
             read_api.write("        '{field}': {model}.{field},\n".format(field=field, model=name_2_model[name]))
         read_api.write("    }\n")
         read_api.write("    query = {model}.query\n".format(model=name_2_model[name]))
-        read_api.write("    for arg, val in request.args.items():\n")
+        read_api.write("    col = request.args.items() if req is None else req.items()\n")
+        read_api.write("    for arg, val in col:\n")
         read_api.write("        if arg in regular:\n")
         read_api.write("            query = query.filter(field[arg] == val)\n".format(model=name_2_model[name]))
         read_api.write("    query = query.all()\n")
@@ -138,22 +139,25 @@ def main():
         read_api.write("    for entry in query:\n")
         read_api.write("        d = dict()\n")
         for field in joined_fields:
-            read_api.write("        d['{field_name}'] = {fk_model}.query.filter({fk_model}.{fk_field} == {model}.{field}).first().__dict__\n".format(
+            read_api.write("        d['{field_name}'] = {func}(req={{'{field}': entry.{val}}}, raw=True)['values']\n".format(
                 field_name=field[0],
-                field=field[0][:-3],
-                fk_model=field[1],
-                fk_field=field[3],
-                model=name_2_model[name]
+                func=scl(field[2]),
+                field=field[3],
+                val=field[0][:-3]
             ))
-            read_api.write("        d['{field_name}'].pop('_sa_instance_state')\n".format(field_name=field[0]))
+            read_api.write("        d['{field_name}'] = d['{field_name}'][0] if len(d['{field_name}']) else None\n".format(field_name=field[0]))
         read_api.write("        d.update(entry.__dict__)\n")
         read_api.write("        d.pop('_sa_instance_state')\n")
         read_api.write("        d.update(additional)\n")
         read_api.write("        ans.append(d)\n")
-
+        read_api.write("    if raw:\n")
+        read_api.write("        return {\n")
+        read_api.write("            'length': len(ans),\n")
+        read_api.write("            'values': ans\n")
+        read_api.write("        }\n")
         read_api.write("    return jsonify({\n")
-        read_api.write("        'length': len(ans),")
-        read_api.write("        'values': ans")
+        read_api.write("        'length': len(ans),\n")
+        read_api.write("        'values': ans\n")
         read_api.write("    })\n\n\n")
     read_api.close()
 

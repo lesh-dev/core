@@ -5,7 +5,7 @@ module = Blueprint('api', __name__, url_prefix='/api')
 
 
 @module.route("/notification_list", methods=['GET'])
-def notification_list():
+def notification_list(req=None,raw=False):
     regular = [
         'notification_id',
         'mail_group',
@@ -21,7 +21,8 @@ def notification_list():
         'notification_html': Notification.notification_html,
     }
     query = Notification.query
-    for arg, val in request.args.items():
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
         if arg in regular:
             query = query.filter(field[arg] == val)
     query = query.all()
@@ -32,12 +33,19 @@ def notification_list():
         d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
     return jsonify({
-        'length': len(ans),        'values': ans    })
+        'length': len(ans),
+        'values': ans
+    })
 
 
 @module.route("/department_list", methods=['GET'])
-def department_list():
+def department_list(req=None,raw=False):
     regular = [
         'department_id',
         'department_title',
@@ -57,7 +65,8 @@ def department_list():
         'department_changedby': Department.department_changedby,
     }
     query = Department.query
-    for arg, val in request.args.items():
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
         if arg in regular:
             query = query.filter(field[arg] == val)
     query = query.all()
@@ -68,12 +77,19 @@ def department_list():
         d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
     return jsonify({
-        'length': len(ans),        'values': ans    })
+        'length': len(ans),
+        'values': ans
+    })
 
 
 @module.route("/person_list", methods=['GET'])
-def person_list():
+def person_list(req=None,raw=False):
     regular = [
         'person_id',
         'last_name',
@@ -151,25 +167,33 @@ def person_list():
         'person_changedby': Person.person_changedby,
     }
     query = Person.query
-    for arg, val in request.args.items():
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
         if arg in regular:
             query = query.filter(field[arg] == val)
     query = query.all()
     ans = []
     for entry in query:
         d = dict()
-        d['department_id_fk'] = Department.query.filter(Department.department_id == Person.department_id).first().__dict__
-        d['department_id_fk'].pop('_sa_instance_state')
+        d['department_id_fk'] = department_list(req={'department_id': entry.department_id}, raw=True)['values']
+        d['department_id_fk'] = d['department_id_fk'][0] if len(d['department_id_fk']) else None
         d.update(entry.__dict__)
         d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
     return jsonify({
-        'length': len(ans),        'values': ans    })
+        'length': len(ans),
+        'values': ans
+    })
 
 
 @module.route("/course_list", methods=['GET'])
-def course_list():
+def course_list(req=None,raw=False):
     regular = [
         'course_id',
         'course_title',
@@ -203,7 +227,8 @@ def course_list():
         'course_changedby': Course.course_changedby,
     }
     query = Course.query
-    for arg, val in request.args.items():
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
         if arg in regular:
             query = query.filter(field[arg] == val)
     query = query.all()
@@ -214,12 +239,19 @@ def course_list():
         d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
     return jsonify({
-        'length': len(ans),        'values': ans    })
+        'length': len(ans),
+        'values': ans
+    })
 
 
 @module.route("/course_teachers_list", methods=['GET'])
-def course_teachers_list():
+def course_teachers_list(req=None,raw=False):
     regular = [
         'course_teachers_id',
         'course_id',
@@ -239,27 +271,35 @@ def course_teachers_list():
         'course_teachers_changedby': CourseTeachers.course_teachers_changedby,
     }
     query = CourseTeachers.query
-    for arg, val in request.args.items():
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
         if arg in regular:
             query = query.filter(field[arg] == val)
     query = query.all()
     ans = []
     for entry in query:
         d = dict()
-        d['course_id_fk'] = Course.query.filter(Course.course_id == CourseTeachers.course_id).first().__dict__
-        d['course_id_fk'].pop('_sa_instance_state')
-        d['course_teacher_id_fk'] = Person.query.filter(Person.person_id == CourseTeachers.course_teacher_id).first().__dict__
-        d['course_teacher_id_fk'].pop('_sa_instance_state')
+        d['course_id_fk'] = course_list(req={'course_id': entry.course_id}, raw=True)['values']
+        d['course_id_fk'] = d['course_id_fk'][0] if len(d['course_id_fk']) else None
+        d['course_teacher_id_fk'] = person_list(req={'person_id': entry.course_teacher_id}, raw=True)['values']
+        d['course_teacher_id_fk'] = d['course_teacher_id_fk'][0] if len(d['course_teacher_id_fk']) else None
         d.update(entry.__dict__)
         d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
     return jsonify({
-        'length': len(ans),        'values': ans    })
+        'length': len(ans),
+        'values': ans
+    })
 
 
 @module.route("/exam_list", methods=['GET'])
-def exam_list():
+def exam_list(req=None,raw=False):
     regular = [
         'exam_id',
         'student_person_id',
@@ -285,27 +325,35 @@ def exam_list():
         'exam_changedby': Exam.exam_changedby,
     }
     query = Exam.query
-    for arg, val in request.args.items():
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
         if arg in regular:
             query = query.filter(field[arg] == val)
     query = query.all()
     ans = []
     for entry in query:
         d = dict()
-        d['student_person_id_fk'] = Person.query.filter(Person.person_id == Exam.student_person_id).first().__dict__
-        d['student_person_id_fk'].pop('_sa_instance_state')
-        d['course_id_fk'] = Course.query.filter(Course.course_id == Exam.course_id).first().__dict__
-        d['course_id_fk'].pop('_sa_instance_state')
+        d['student_person_id_fk'] = person_list(req={'person_id': entry.student_person_id}, raw=True)['values']
+        d['student_person_id_fk'] = d['student_person_id_fk'][0] if len(d['student_person_id_fk']) else None
+        d['course_id_fk'] = course_list(req={'course_id': entry.course_id}, raw=True)['values']
+        d['course_id_fk'] = d['course_id_fk'][0] if len(d['course_id_fk']) else None
         d.update(entry.__dict__)
         d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
     return jsonify({
-        'length': len(ans),        'values': ans    })
+        'length': len(ans),
+        'values': ans
+    })
 
 
 @module.route("/school_list", methods=['GET'])
-def school_list():
+def school_list(req=None,raw=False):
     regular = [
         'school_id',
         'school_title',
@@ -333,7 +381,8 @@ def school_list():
         'school_changedby': School.school_changedby,
     }
     query = School.query
-    for arg, val in request.args.items():
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
         if arg in regular:
             query = query.filter(field[arg] == val)
     query = query.all()
@@ -344,12 +393,19 @@ def school_list():
         d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
     return jsonify({
-        'length': len(ans),        'values': ans    })
+        'length': len(ans),
+        'values': ans
+    })
 
 
 @module.route("/person_school_list", methods=['GET'])
-def person_school_list():
+def person_school_list(req=None,raw=False):
     regular = [
         'person_school_id',
         'member_person_id',
@@ -385,29 +441,37 @@ def person_school_list():
         'person_school_changedby': PersonSchool.person_school_changedby,
     }
     query = PersonSchool.query
-    for arg, val in request.args.items():
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
         if arg in regular:
             query = query.filter(field[arg] == val)
     query = query.all()
     ans = []
     for entry in query:
         d = dict()
-        d['member_person_id_fk'] = Person.query.filter(Person.person_id == PersonSchool.member_person_id).first().__dict__
-        d['member_person_id_fk'].pop('_sa_instance_state')
-        d['member_department_id_fk'] = Department.query.filter(Department.department_id == PersonSchool.member_department_id).first().__dict__
-        d['member_department_id_fk'].pop('_sa_instance_state')
-        d['school_id_fk'] = School.query.filter(School.school_id == PersonSchool.school_id).first().__dict__
-        d['school_id_fk'].pop('_sa_instance_state')
+        d['member_person_id_fk'] = person_list(req={'person_id': entry.member_person_id}, raw=True)['values']
+        d['member_person_id_fk'] = d['member_person_id_fk'][0] if len(d['member_person_id_fk']) else None
+        d['member_department_id_fk'] = department_list(req={'department_id': entry.member_department_id}, raw=True)['values']
+        d['member_department_id_fk'] = d['member_department_id_fk'][0] if len(d['member_department_id_fk']) else None
+        d['school_id_fk'] = school_list(req={'school_id': entry.school_id}, raw=True)['values']
+        d['school_id_fk'] = d['school_id_fk'][0] if len(d['school_id_fk']) else None
         d.update(entry.__dict__)
         d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
     return jsonify({
-        'length': len(ans),        'values': ans    })
+        'length': len(ans),
+        'values': ans
+    })
 
 
 @module.route("/person_comment_list", methods=['GET'])
-def person_comment_list():
+def person_comment_list(req=None,raw=False):
     regular = [
         'person_comment_id',
         'comment_text',
@@ -435,27 +499,35 @@ def person_comment_list():
         'person_comment_changedby': PersonComment.person_comment_changedby,
     }
     query = PersonComment.query
-    for arg, val in request.args.items():
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
         if arg in regular:
             query = query.filter(field[arg] == val)
     query = query.all()
     ans = []
     for entry in query:
         d = dict()
-        d['blamed_person_id_fk'] = Person.query.filter(Person.person_id == PersonComment.blamed_person_id).first().__dict__
-        d['blamed_person_id_fk'].pop('_sa_instance_state')
-        d['school_id_fk'] = School.query.filter(School.school_id == PersonComment.school_id).first().__dict__
-        d['school_id_fk'].pop('_sa_instance_state')
+        d['blamed_person_id_fk'] = person_list(req={'person_id': entry.blamed_person_id}, raw=True)['values']
+        d['blamed_person_id_fk'] = d['blamed_person_id_fk'][0] if len(d['blamed_person_id_fk']) else None
+        d['school_id_fk'] = school_list(req={'school_id': entry.school_id}, raw=True)['values']
+        d['school_id_fk'] = d['school_id_fk'][0] if len(d['school_id_fk']) else None
         d.update(entry.__dict__)
         d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
     return jsonify({
-        'length': len(ans),        'values': ans    })
+        'length': len(ans),
+        'values': ans
+    })
 
 
 @module.route("/submission_list", methods=['GET'])
-def submission_list():
+def submission_list(req=None,raw=False):
     regular = [
         'submission_id',
         'mail',
@@ -481,7 +553,8 @@ def submission_list():
         'contest_year': Submission.contest_year,
     }
     query = Submission.query
-    for arg, val in request.args.items():
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
         if arg in regular:
             query = query.filter(field[arg] == val)
     query = query.all()
@@ -492,12 +565,19 @@ def submission_list():
         d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
     return jsonify({
-        'length': len(ans),        'values': ans    })
+        'length': len(ans),
+        'values': ans
+    })
 
 
 @module.route("/contestants_list", methods=['GET'])
-def contestants_list():
+def contestants_list(req=None,raw=False):
     regular = [
         'contestants_id',
         'name',
@@ -532,7 +612,8 @@ def contestants_list():
         'contest_year': Contestants.contest_year,
     }
     query = Contestants.query
-    for arg, val in request.args.items():
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
         if arg in regular:
             query = query.filter(field[arg] == val)
     query = query.all()
@@ -543,12 +624,19 @@ def contestants_list():
         d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
     return jsonify({
-        'length': len(ans),        'values': ans    })
+        'length': len(ans),
+        'values': ans
+    })
 
 
 @module.route("/problems_list", methods=['GET'])
-def problems_list():
+def problems_list(req=None,raw=False):
     regular = [
         'problems_id',
         'contest_year',
@@ -569,7 +657,8 @@ def problems_list():
         'criteria': Problems.criteria,
     }
     query = Problems.query
-    for arg, val in request.args.items():
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
         if arg in regular:
             query = query.filter(field[arg] == val)
     query = query.all()
@@ -580,12 +669,19 @@ def problems_list():
         d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
     return jsonify({
-        'length': len(ans),        'values': ans    })
+        'length': len(ans),
+        'values': ans
+    })
 
 
 @module.route("/solutions_list", methods=['GET'])
-def solutions_list():
+def solutions_list(req=None,raw=False):
     regular = [
         'solutions_id',
         'problem_id',
@@ -607,22 +703,30 @@ def solutions_list():
         'resolution_mark': Solutions.resolution_mark,
     }
     query = Solutions.query
-    for arg, val in request.args.items():
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
         if arg in regular:
             query = query.filter(field[arg] == val)
     query = query.all()
     ans = []
     for entry in query:
         d = dict()
-        d['problem_id_fk'] = Problems.query.filter(Problems.problems_id == Solutions.problem_id).first().__dict__
-        d['problem_id_fk'].pop('_sa_instance_state')
-        d['contestant_id_fk'] = Contestants.query.filter(Contestants.contestants_id == Solutions.contestant_id).first().__dict__
-        d['contestant_id_fk'].pop('_sa_instance_state')
+        d['problem_id_fk'] = problems_list(req={'problems_id': entry.problem_id}, raw=True)['values']
+        d['problem_id_fk'] = d['problem_id_fk'][0] if len(d['problem_id_fk']) else None
+        d['contestant_id_fk'] = contestants_list(req={'contestants_id': entry.contestant_id}, raw=True)['values']
+        d['contestant_id_fk'] = d['contestant_id_fk'][0] if len(d['contestant_id_fk']) else None
         d.update(entry.__dict__)
         d.pop('_sa_instance_state')
         d.update(additional)
         ans.append(d)
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
     return jsonify({
-        'length': len(ans),        'values': ans    })
+        'length': len(ans),
+        'values': ans
+    })
 
 
