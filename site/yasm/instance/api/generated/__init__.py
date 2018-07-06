@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from ..database import *
+from instance.database import *
 
 module = Blueprint('api', __name__, url_prefix='/api')
 
@@ -34,7 +34,8 @@ def notification_list():
         d['notification_html'] = entry.notification_html
         d.update(additional)
         ans.append(d)
-    return jsonify(ans)
+    return jsonify({
+        'length': len(ans),        'values': ans    })
 
 
 @module.route("/department_list", methods=['GET'])
@@ -72,7 +73,8 @@ def department_list():
         d['department_changedby'] = entry.department_changedby
         d.update(additional)
         ans.append(d)
-    return jsonify(ans)
+    return jsonify({
+        'length': len(ans),        'values': ans    })
 
 
 @module.route("/person_list", methods=['GET'])
@@ -197,7 +199,8 @@ def person_list():
         d['person_changedby'] = entry.person_changedby
         d.update(additional)
         ans.append(d)
-    return jsonify(ans)
+    return jsonify({
+        'length': len(ans),        'values': ans    })
 
 
 @module.route("/course_list", methods=['GET'])
@@ -256,7 +259,8 @@ def course_list():
         d['course_changedby'] = entry.course_changedby
         d.update(additional)
         ans.append(d)
-    return jsonify(ans)
+    return jsonify({
+        'length': len(ans),        'values': ans    })
 
 
 @module.route("/course_teachers_list", methods=['GET'])
@@ -297,7 +301,8 @@ def course_teachers_list():
         d['course_teachers_changedby'] = entry.course_teachers_changedby
         d.update(additional)
         ans.append(d)
-    return jsonify(ans)
+    return jsonify({
+        'length': len(ans),        'values': ans    })
 
 
 @module.route("/exam_list", methods=['GET'])
@@ -347,7 +352,8 @@ def exam_list():
         d['exam_changedby'] = entry.exam_changedby
         d.update(additional)
         ans.append(d)
-    return jsonify(ans)
+    return jsonify({
+        'length': len(ans),        'values': ans    })
 
 
 @module.route("/school_list", methods=['GET'])
@@ -397,7 +403,8 @@ def school_list():
         d['school_changedby'] = entry.school_changedby
         d.update(additional)
         ans.append(d)
-    return jsonify(ans)
+    return jsonify({
+        'length': len(ans),        'values': ans    })
 
 
 @module.route("/person_school_list", methods=['GET'])
@@ -463,7 +470,8 @@ def person_school_list():
         d['person_school_changedby'] = entry.person_school_changedby
         d.update(additional)
         ans.append(d)
-    return jsonify(ans)
+    return jsonify({
+        'length': len(ans),        'values': ans    })
 
 
 @module.route("/person_comment_list", methods=['GET'])
@@ -516,7 +524,8 @@ def person_comment_list():
         d['person_comment_changedby'] = entry.person_comment_changedby
         d.update(additional)
         ans.append(d)
-    return jsonify(ans)
+    return jsonify({
+        'length': len(ans),        'values': ans    })
 
 
 @module.route("/submission_list", methods=['GET'])
@@ -564,7 +573,8 @@ def submission_list():
         d['contest_year'] = entry.contest_year
         d.update(additional)
         ans.append(d)
-    return jsonify(ans)
+    return jsonify({
+        'length': len(ans),        'values': ans    })
 
 
 @module.route("/contestants_list", methods=['GET'])
@@ -625,7 +635,8 @@ def contestants_list():
         d['contest_year'] = entry.contest_year
         d.update(additional)
         ans.append(d)
-    return jsonify(ans)
+    return jsonify({
+        'length': len(ans),        'values': ans    })
 
 
 @module.route("/problems_list", methods=['GET'])
@@ -665,7 +676,8 @@ def problems_list():
         d['criteria'] = entry.criteria
         d.update(additional)
         ans.append(d)
-    return jsonify(ans)
+    return jsonify({
+        'length': len(ans),        'values': ans    })
 
 
 @module.route("/solutions_list", methods=['GET'])
@@ -709,6 +721,7 @@ def solutions_list():
         d['resolution_mark'] = entry.resolution_mark
         d.update(additional)
         ans.append(d)
-    return jsonify(ans)
+    return jsonify({
+        'length': len(ans),        'values': ans    })
 
 

@@ -12,7 +12,7 @@ export interface SideMenuProps {
 
 class Entry extends React.Component<EntryProps> {
     render() {
-        return
+        return <div></div>
     }
 }
 

@@ -18,5 +18,7 @@ module.exports = {
     output: {
         path: __dirname + '/../static/js',
         filename: '[name].min.js'
-    }
-};
+    },
+    devtool: "inline-source-map"
+}
+;

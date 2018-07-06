@@ -15,9 +15,35 @@ def CC(j):
 previx = "instance/api/generated"
 
 api_imports = """from flask import Blueprint, jsonify, request
-from ..database import *
+from instance.database import *
 
 module = Blueprint('api', __name__, url_prefix='/api')
+
+
+"""
+
+connector_template = """
+import {Promise} from 'es6-promise';
+
+function getRequest(url: string): Promise<any> {
+    return new Promise<any>(
+        function (resolve, reject) {
+            const request = new XMLHttpRequest();
+            request.onload = function () {
+                if (this.status === 200) {
+                    resolve(JSON.parse(this.response));
+                } else {
+                    reject(new Error(this.statusText));
+                }
+            };
+            request.onerror = function () {
+                reject(new Error('XMLHttpRequest Error: ' + this.statusText));
+            };
+            request.open('GET', url);
+            request.send();
+        }
+    );
+}
 
 
 """
@@ -48,14 +74,34 @@ def main():
                     models[m].append((scl(tablename), CC(tablename) + "List"))
                     models[tablename].append((m, CC(m)))
 
-    ts_interfaces = open("instance/ui/src/js/interfaces.ts", "w")
+    ts_interfaces = open("instance/ui/src/js/generated/interfaces.ts", "w")
     for name, fields in models.items():
         ts_interfaces.write("export interface {name} {{\n".format(name=CC(name)))
         for field in fields:
             ts_interfaces.write("    {name}: {type},\n".format(name=field[0], type=field[1]))
         ts_interfaces.write("}\n\n")
-        ts_interfaces.write("export interface {name}List {{\n    [index: number]: {name}\n}}\n\n".format(name=CC(name)))
+        ts_interfaces.write("export interface {name}List {{\n    values: {name}[],\n    length: number\n}}\n\n".format(name=CC(name)))
     ts_interfaces.close()
+
+    ts_connector = open("instance/ui/src/js/generated/api_connect.ts", "w")
+    ts_connector.write("import {\n")
+    for name, fields in models.items():
+        ts_connector.write("    {name},\n    {name}List,\n".format(name=CC(name)))
+    ts_connector.write("} from './interfaces'\n")
+    ts_connector.write(connector_template)
+
+    for name, fields in models.items():
+        ts_connector.write("export function {name}_list() {{\n".format(name=name))
+        ts_connector.write("    return getRequest('/api/{name}_list')\n}}\n\n\n".format(name=name))
+        regular_fields = []
+        additional_fields = []
+        for field in fields:
+            if field[1] in MIME.values():
+                regular_fields.append(field[0])
+            else:
+                additional_fields.append(field[0])
+
+    ts_connector.close()
 
     read_api = open(previx + "/__init__.py", "w")
     read_api.write(api_imports)
@@ -94,7 +140,10 @@ def main():
             read_api.write("        d['{field}'] = entry.{field}\n".format(field=field))
         read_api.write("        d.update(additional)\n")
         read_api.write("        ans.append(d)\n")
-        read_api.write("    return jsonify(ans)\n\n\n")
+        read_api.write("    return jsonify({\n")
+        read_api.write("        'length': len(ans),")
+        read_api.write("        'values': ans")
+        read_api.write("    })\n\n\n")
     read_api.close()
 
 
