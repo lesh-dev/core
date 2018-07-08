@@ -46,6 +46,9 @@ function getRequest(url: string): Promise<any> {
 }
 
 
+export interface dict {
+    [index: string]: string
+}
 """
 
 name_2_model = dict()
@@ -71,95 +74,124 @@ def main():
             if len(column.foreign_keys):
                 for fk in column.foreign_keys:
                     m = fk._column_tokens[1]
-                    models[m].append((scl(tablename), CC(tablename) + "List"))
+                    models[m].append((scl(tablename), CC(tablename) + "List", columnname, fk._column_tokens[2]))
                     models[tablename].append((columnname + "_fk", CC(m), m, fk._column_tokens[2]))
 
-    ts_interfaces = open("instance/ui/src/js/generated/interfaces.ts", "w")
-    for name, fields in models.items():
-        ts_interfaces.write("export interface {name} {{\n".format(name=CC(name)))
-        for field in fields:
-            ts_interfaces.write("    {name}: {type},\n".format(name=field[0], type=field[1]))
-        ts_interfaces.write("}\n\n")
-        ts_interfaces.write("export interface {name}List {{\n    values: {name}[],\n    length: number\n}}\n\n".format(name=CC(name)))
-    ts_interfaces.close()
+    def gen_interfaces():
+        ts_interfaces = open("instance/ui/src/js/generated/interfaces.ts", "w")
+        for name, fields in models.items():
+            ts_interfaces.write("export interface {name} {{\n".format(name=CC(name)))
+            for field in fields:
+                ts_interfaces.write("    {name}: {type},\n".format(name=field[0], type=field[1]))
+            ts_interfaces.write("}\n\n")
+            ts_interfaces.write(
+                "export interface {name}List {{\n    values: {name}[],\n    length: number\n}}\n\n".format(
+                    name=CC(name)))
+        ts_interfaces.close()
 
-    ts_connector = open("instance/ui/src/js/generated/api_connect.ts", "w")
-    ts_connector.write("import {\n")
-    for name, fields in models.items():
-        ts_connector.write("    {name},\n    {name}List,\n".format(name=CC(name)))
-    ts_connector.write("} from './interfaces'\n")
-    ts_connector.write(connector_template)
-    for name, fields in models.items():
-        ts_connector.write("export function {name}_list() {{\n".format(name=name))
-        ts_connector.write("    return getRequest('/api/{name}_list')\n}}\n\n\n".format(name=name))
-        regular_fields = []
-        additional_fields = []
-        for field in fields:
-            if field[1] in MIME.values():
-                regular_fields.append(field[0])
-            else:
-                additional_fields.append(field[0])
-    ts_connector.close()
+    def gen_connectors():
+        ts_connector = open("instance/ui/src/js/generated/api_connect.ts", "w")
+        ts_connector.write("import {\n")
+        for name, fields in models.items():
+            ts_connector.write("    {name},\n    {name}List,\n".format(name=CC(name)))
+        ts_connector.write("} from './interfaces'\n")
+        ts_connector.write(connector_template)
+        for name, fields in models.items():
+            ts_connector.write("export function {name}_list(d: dict = {{}}) {{\n".format(name=name))
+            ts_connector.write("    let req = '?';\n")
+            ts_connector.write("    for (let key in d) {\n")
+            ts_connector.write("        req += key + '=' + d[key] + '&'\n")
+            ts_connector.write("    }\n")
+            ts_connector.write("    return getRequest('/api/{name}_list' + req)\n}}\n\n\n".format(name=name))
+            ts_connector.write("export function {name}_fill(obj: {type}) {{\n".format(name=name, type=CC(name)))
+            ts_connector.write("    return new Promise<{type}>((resolve, reject) => {{\n".format(type=CC(name)))
+            ts_connector.write("        let ans: {type} = obj;\n".format(type=CC(name)))
+            ts_connector.write("        Promise.all([\n")
+            for field in fields:
+                if field[1].endswith("List"):
+                    ts_connector.write("                {field}({{{filter}: String(obj.{value})}}),\n".format(field=field[0], filter=field[2], value=field[3]))
+            ts_connector.write("             ]\n")
+            ts_connector.write("        ).then((values) => {\n")
+            n = 0
+            for field in fields:
+                if field[1].endswith("List"):
+                    ts_connector.write("            ans.{field} = values[{n}];\n".format(field=field[0], n=n))
+                    n += 1
+            ts_connector.write("            resolve(ans);\n")
+            ts_connector.write("        }).catch((error) => {\n")
+            ts_connector.write("            reject(error);\n")
+            ts_connector.write("        })\n")
+            ts_connector.write("    })\n")
+            ts_connector.write("}\n\n\n")
+        ts_connector.close()
 
-    read_api = open(previx + "/__init__.py", "w")
-    read_api.write(api_imports)
-    for name, fields in models.items():
-        regular_fields = []
-        additional_fields = []
-        joined_fields = []
-        for field in fields:
-            if field[1] in MIME.values():
-                regular_fields.append(field[0])
-            elif not field[1].endswith("List"):
-                joined_fields.append(field)
-            else:
-                additional_fields.append(field[0])
+    def gen_api():
+        read_api = open(previx + "/__init__.py", "w")
+        read_api.write(api_imports)
+        for name, fields in models.items():
+            regular_fields = []
+            additional_fields = []
+            joined_fields = []
+            for field in fields:
+                if field[1] in MIME.values():
+                    regular_fields.append(field[0])
+                elif not field[1].endswith("List"):
+                    joined_fields.append(field)
+                else:
+                    additional_fields.append(field[0])
 
-        read_api.write("@module.route(\"/{name}\", methods=['GET'])\n".format(name=scl(name)))
-        read_api.write("def {name}(req=None,raw=False):\n".format(name=scl(name)))
-        read_api.write("    regular = [\n")
-        for field in regular_fields:
-            read_api.write("        '{}',\n".format(field))
-        read_api.write("    ]\n")
-        read_api.write("    additional = {\n")
-        for field in additional_fields:
-            read_api.write("        '{}': [],\n".format(field))
-        read_api.write("    }\n")
-        read_api.write("    field = {\n")
-        for field in regular_fields:
-            read_api.write("        '{field}': {model}.{field},\n".format(field=field, model=name_2_model[name]))
-        read_api.write("    }\n")
-        read_api.write("    query = {model}.query\n".format(model=name_2_model[name]))
-        read_api.write("    col = request.args.items() if req is None else req.items()\n")
-        read_api.write("    for arg, val in col:\n")
-        read_api.write("        if arg in regular:\n")
-        read_api.write("            query = query.filter(field[arg] == val)\n".format(model=name_2_model[name]))
-        read_api.write("    query = query.all()\n")
-        read_api.write("    ans = []\n")
-        read_api.write("    for entry in query:\n")
-        read_api.write("        d = dict()\n")
-        for field in joined_fields:
-            read_api.write("        d['{field_name}'] = {func}(req={{'{field}': entry.{val}}}, raw=True)['values']\n".format(
-                field_name=field[0],
-                func=scl(field[2]),
-                field=field[3],
-                val=field[0][:-3]
-            ))
-            read_api.write("        d['{field_name}'] = d['{field_name}'][0] if len(d['{field_name}']) else None\n".format(field_name=field[0]))
-        read_api.write("        d.update(entry.__dict__)\n")
-        read_api.write("        d.pop('_sa_instance_state')\n")
-        read_api.write("        d.update(additional)\n")
-        read_api.write("        ans.append(d)\n")
-        read_api.write("    if raw:\n")
-        read_api.write("        return {\n")
-        read_api.write("            'length': len(ans),\n")
-        read_api.write("            'values': ans\n")
-        read_api.write("        }\n")
-        read_api.write("    return jsonify({\n")
-        read_api.write("        'length': len(ans),\n")
-        read_api.write("        'values': ans\n")
-        read_api.write("    })\n\n\n")
-    read_api.close()
+            read_api.write("@module.route(\"/{name}\", methods=['GET'])\n".format(name=scl(name)))
+            read_api.write("def {name}(req=None, raw=False):\n".format(name=scl(name)))
+            read_api.write("    regular = [\n")
+            for field in regular_fields:
+                read_api.write("        '{}',\n".format(field))
+            read_api.write("    ]\n")
+            read_api.write("    additional = {\n")
+            for field in additional_fields:
+                read_api.write("        '{}': {{'length': 0, 'values': []}},\n".format(field))
+            read_api.write("    }\n")
+            read_api.write("    field = {\n")
+            for field in regular_fields:
+                read_api.write("        '{field}': {model}.{field},\n".format(field=field, model=name_2_model[name]))
+            read_api.write("    }\n")
+            read_api.write("    query = {model}.query\n".format(model=name_2_model[name]))
+            read_api.write("    col = request.args.items() if req is None else req.items()\n")
+            read_api.write("    for arg, val in col:\n")
+            read_api.write("        if arg in regular:\n")
+            read_api.write("            query = query.filter(field[arg] == val)\n".format(model=name_2_model[name]))
+            read_api.write("    query = query.all()\n")
+            read_api.write("    ans = []\n")
+            read_api.write("    for entry in query:\n")
+            read_api.write("        d = dict()\n")
+            for field in joined_fields:
+                read_api.write(
+                    "        d['{field_name}'] = {func}(req={{'{field}': entry.{val}}}, raw=True)['values']\n".format(
+                        field_name=field[0],
+                        func=scl(field[2]),
+                        field=field[3],
+                        val=field[0][:-3]
+                    ))
+                read_api.write(
+                    "        d['{field_name}'] = d['{field_name}'][0] if len(d['{field_name}']) else None\n".format(
+                        field_name=field[0]))
+            read_api.write("        d.update(entry.__dict__)\n")
+            read_api.write("        d.pop('_sa_instance_state')\n")
+            read_api.write("        d.update(additional)\n")
+            read_api.write("        ans.append(d)\n")
+            read_api.write("    if raw:\n")
+            read_api.write("        return {\n")
+            read_api.write("            'length': len(ans),\n")
+            read_api.write("            'values': ans\n")
+            read_api.write("        }\n")
+            read_api.write("    return jsonify({\n")
+            read_api.write("        'length': len(ans),\n")
+            read_api.write("        'values': ans\n")
+            read_api.write("    })\n\n\n")
+        read_api.close()
+
+    gen_interfaces()
+    gen_connectors()
+    gen_api()
 
 
 if __name__ == '__main__':

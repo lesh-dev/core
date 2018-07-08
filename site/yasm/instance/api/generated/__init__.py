@@ -5,7 +5,7 @@ module = Blueprint('api', __name__, url_prefix='/api')
 
 
 @module.route("/notification_list", methods=['GET'])
-def notification_list(req=None,raw=False):
+def notification_list(req=None, raw=False):
     regular = [
         'notification_id',
         'mail_group',
@@ -45,7 +45,7 @@ def notification_list(req=None,raw=False):
 
 
 @module.route("/department_list", methods=['GET'])
-def department_list(req=None,raw=False):
+def department_list(req=None, raw=False):
     regular = [
         'department_id',
         'department_title',
@@ -54,8 +54,8 @@ def department_list(req=None,raw=False):
         'department_changedby',
     ]
     additional = {
-        'person_list': [],
-        'person_school_list': [],
+        'person_list': {'length': 0, 'values': []},
+        'person_school_list': {'length': 0, 'values': []},
     }
     field = {
         'department_id': Department.department_id,
@@ -89,7 +89,7 @@ def department_list(req=None,raw=False):
 
 
 @module.route("/person_list", methods=['GET'])
-def person_list(req=None,raw=False):
+def person_list(req=None, raw=False):
     regular = [
         'person_id',
         'last_name',
@@ -126,10 +126,10 @@ def person_list(req=None,raw=False):
         'person_changedby',
     ]
     additional = {
-        'course_teachers_list': [],
-        'exam_list': [],
-        'person_school_list': [],
-        'person_comment_list': [],
+        'course_teachers_list': {'length': 0, 'values': []},
+        'exam_list': {'length': 0, 'values': []},
+        'person_school_list': {'length': 0, 'values': []},
+        'person_comment_list': {'length': 0, 'values': []},
     }
     field = {
         'person_id': Person.person_id,
@@ -193,7 +193,7 @@ def person_list(req=None,raw=False):
 
 
 @module.route("/course_list", methods=['GET'])
-def course_list(req=None,raw=False):
+def course_list(req=None, raw=False):
     regular = [
         'course_id',
         'course_title',
@@ -209,8 +209,8 @@ def course_list(req=None,raw=False):
         'course_changedby',
     ]
     additional = {
-        'course_teachers_list': [],
-        'exam_list': [],
+        'course_teachers_list': {'length': 0, 'values': []},
+        'exam_list': {'length': 0, 'values': []},
     }
     field = {
         'course_id': Course.course_id,
@@ -251,7 +251,7 @@ def course_list(req=None,raw=False):
 
 
 @module.route("/course_teachers_list", methods=['GET'])
-def course_teachers_list(req=None,raw=False):
+def course_teachers_list(req=None, raw=False):
     regular = [
         'course_teachers_id',
         'course_id',
@@ -299,7 +299,7 @@ def course_teachers_list(req=None,raw=False):
 
 
 @module.route("/exam_list", methods=['GET'])
-def exam_list(req=None,raw=False):
+def exam_list(req=None, raw=False):
     regular = [
         'exam_id',
         'student_person_id',
@@ -353,7 +353,7 @@ def exam_list(req=None,raw=False):
 
 
 @module.route("/school_list", methods=['GET'])
-def school_list(req=None,raw=False):
+def school_list(req=None, raw=False):
     regular = [
         'school_id',
         'school_title',
@@ -366,8 +366,8 @@ def school_list(req=None,raw=False):
         'school_changedby',
     ]
     additional = {
-        'person_school_list': [],
-        'person_comment_list': [],
+        'person_school_list': {'length': 0, 'values': []},
+        'person_comment_list': {'length': 0, 'values': []},
     }
     field = {
         'school_id': School.school_id,
@@ -405,7 +405,7 @@ def school_list(req=None,raw=False):
 
 
 @module.route("/person_school_list", methods=['GET'])
-def person_school_list(req=None,raw=False):
+def person_school_list(req=None, raw=False):
     regular = [
         'person_school_id',
         'member_person_id',
@@ -471,7 +471,7 @@ def person_school_list(req=None,raw=False):
 
 
 @module.route("/person_comment_list", methods=['GET'])
-def person_comment_list(req=None,raw=False):
+def person_comment_list(req=None, raw=False):
     regular = [
         'person_comment_id',
         'comment_text',
@@ -527,7 +527,7 @@ def person_comment_list(req=None,raw=False):
 
 
 @module.route("/submission_list", methods=['GET'])
-def submission_list(req=None,raw=False):
+def submission_list(req=None, raw=False):
     regular = [
         'submission_id',
         'mail',
@@ -577,7 +577,7 @@ def submission_list(req=None,raw=False):
 
 
 @module.route("/contestants_list", methods=['GET'])
-def contestants_list(req=None,raw=False):
+def contestants_list(req=None, raw=False):
     regular = [
         'contestants_id',
         'name',
@@ -594,7 +594,7 @@ def contestants_list(req=None,raw=False):
         'contest_year',
     ]
     additional = {
-        'solutions_list': [],
+        'solutions_list': {'length': 0, 'values': []},
     }
     field = {
         'contestants_id': Contestants.contestants_id,
@@ -636,7 +636,7 @@ def contestants_list(req=None,raw=False):
 
 
 @module.route("/problems_list", methods=['GET'])
-def problems_list(req=None,raw=False):
+def problems_list(req=None, raw=False):
     regular = [
         'problems_id',
         'contest_year',
@@ -646,7 +646,7 @@ def problems_list(req=None,raw=False):
         'criteria',
     ]
     additional = {
-        'solutions_list': [],
+        'solutions_list': {'length': 0, 'values': []},
     }
     field = {
         'problems_id': Problems.problems_id,
@@ -681,7 +681,7 @@ def problems_list(req=None,raw=False):
 
 
 @module.route("/solutions_list", methods=['GET'])
-def solutions_list(req=None,raw=False):
+def solutions_list(req=None, raw=False):
     regular = [
         'solutions_id',
         'problem_id',
