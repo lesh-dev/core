@@ -4,7 +4,7 @@ import {Input} from "./input";
 
 export interface ETProps {
     text: string
-    callback: () => void
+    callback: (s: string) => void
 }
 
 export interface ETState {
@@ -31,6 +31,7 @@ export class ET extends React.Component<ETProps, ETState> {
             this.setState({status: "def"})
         }
         this.setState({current_text: value});
+        this.props.callback(value)
     }
 
     render() {

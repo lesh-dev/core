@@ -421,6 +421,8 @@ def person_school_list(req=None, raw=False):
         'person_school_created',
         'person_school_modified',
         'person_school_changedby',
+        'frm',
+        'tll',
     ]
     additional = {
     }
@@ -439,6 +441,8 @@ def person_school_list(req=None, raw=False):
         'person_school_created': PersonSchool.person_school_created,
         'person_school_modified': PersonSchool.person_school_modified,
         'person_school_changedby': PersonSchool.person_school_changedby,
+        'frm': PersonSchool.frm,
+        'tll': PersonSchool.tll,
     }
     query = PersonSchool.query
     col = request.args.items() if req is None else req.items()

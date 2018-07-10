@@ -444,6 +444,10 @@ class PersonSchool(db.Model):
     person_school_changedby = NamedColumn(db.Text,
                                           nick="изменивший",
                                           nullable=False)  # user name
+    frm = NamedColumn(db.Text,
+                      nick="заезд",)
+    tll = NamedColumn(db.Text,
+                      nick="отъезд", )
 
 
 class PersonComment(db.Model):

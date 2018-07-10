@@ -165,6 +165,8 @@ export interface PersonSchool {
     person_school_created: string,
     person_school_modified: string,
     person_school_changedby: string,
+    frm: string,
+    tll: string,
 }
 
 export interface PersonSchoolList {

@@ -3,6 +3,9 @@ import {DateRangePicker} from 'react-dates';
 import {Moment} from "moment";
 
 export interface DateRangeProps {
+    ph1: string
+    ph2: string
+    tag: string
     start: Moment
     end: Moment
     callback: (vals: Moment[]) => void
@@ -26,15 +29,15 @@ export class DateRange extends React.Component<DateRangeProps, DateRangeState> {
     render() {
         return <DateRangePicker
                     startDate={this.props.start}
-                    startDateId="date_start"
-                    startDatePlaceholderText="Заезд"
+                    startDateId={this.props.tag + "_start"}
+                    startDatePlaceholderText={this.props.ph1}
                     endDate={this.props.end}
-                    endDateId="date_end"
-                    endDatePlaceholderText="Отъезд"
+                    endDateId={this.props.tag + "_end"}
+                    endDatePlaceholderText={this.props.ph1}
                     onDatesChange={(v: any) => {this.props.callback(v)}}
                     onFocusChange={focusedInput => {this.date_focus(focusedInput)}}
                     focusedInput={this.state.focus}
-                    displayFormat={"YY MMM DD"}
+                    displayFormat={"DD MMM YY"}
                     block={true}
                     showClearDates={true}
                     reopenPickerOnClearDates={true}
