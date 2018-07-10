@@ -6,6 +6,7 @@ import {ET} from "./editable_text";
 import {DateRangePicker} from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 import {DateRange} from "./DateRange";
+import {Cut} from "./Cut";
 
 
 export interface SchProps {
@@ -64,7 +65,9 @@ export class Sch extends React.Component<SchProps, SchState> {
             <div className="sch__dates">
                 <DateRange start={this.state.dates.start} end={this.state.dates.end} callback={(v: any) => {this.onDateChange(v)}}/>
             </div>
-            <PersSchList psl={this.props.sch.person_school_list}/>
+            <Cut label={"Люди"} content={
+            new PersSchList({psl: this.props.sch.person_school_list})
+            }/>
         </div>
     }
 }

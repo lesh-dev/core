@@ -1,0 +1,11 @@
+.cut__hbar {
+  width: 100%;
+  display: inline-flex;
+  flex-direction: column;
+}
+.cut__hbar :first-child {
+  border-bottom: 1px solid black;
+}
+.cut__hbar div {
+  height: 100%;
+}
