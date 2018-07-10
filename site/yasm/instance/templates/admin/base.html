@@ -1,9 +1,17 @@
 {% extends "base.html" %}
+{% from "components/side_menu.html" import side_menu_css, side_menu_js, side_menu_html %}
 {% block styles %}
+    {{ side_menu_css() }}
+    {{ super() }}
 {% endblock %}
 {% block js %}
+    {{ side_menu_js() }}
+    {{ super() }}
 {% endblock %}
 {% block content %}
-    <div id="mount-point">
+    <div id="holder">
+        {{ side_menu_html(side) }}
+        <div id="mount-point">
+        </div>
     </div>
 {% endblock %}

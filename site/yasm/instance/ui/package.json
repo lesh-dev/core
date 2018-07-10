@@ -1,22 +1,38 @@
 {
   "dependencies": {
+    "@opuscapita/react-dates": "^0.4.2",
+    "@types/lodash": "^4.14.110",
+    "@types/prop-types": "^15.5.3",
     "@types/react": "^16.4.6",
     "@types/react-dom": "^16.0.6",
+    "es6-promise": "^4.2.4",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.2",
+    "omit": "^1.0.1",
+    "prop-types": "^15.6.2",
     "react": "^16.4.1",
+    "react-date-picker": "^6.10.4",
+    "react-dates": "^17.0.0",
     "react-dom": "^16.4.1",
+    "react-moment-proptypes": "^1.6.0",
     "ts-loader": "^4.4.2",
-    "typescript": "^2.9.2",
+    "typings": "^2.1.1",
     "webpack": "^4.14.0",
-    "webpack-cli": "^3.0.8",
-    "es6-promise": "^4.2.4"
+    "webpack-cli": "^3.0.8"
   },
   "name": "yasm",
   "version": "1.0.0",
   "description": "yasm",
   "main": "webpack.config.js",
   "devDependencies": {
+    "@types/react-dates": "^16.7.0",
     "awesome-typescript-loader": "^5.2.0",
+    "css-loader": "^1.0.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "node-sass": "^4.9.2",
+    "sass-loader": "^7.0.3",
     "source-map-loader": "^0.2.3",
+    "style-loader": "^0.21.0",
     "typescript": "^2.9.2"
   },
   "scripts": {

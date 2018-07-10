@@ -1,0 +1,18 @@
+{% macro side_menu_css() %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/components/side_menu.css') }}">
+{% endmacro %}
+
+{% macro side_menu_js() %}
+{% endmacro %}
+
+{% macro side_menu_html(data, class="") %}
+    <div class={{ "side_menu " + class }}>
+        {% for key, url in data %}
+            <div class="side_menu__element">
+                <a href="{{ url }}">
+                    {{ key }}
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}

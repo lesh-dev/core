@@ -1,0 +1,18 @@
+$bg-color: #eee;
+$pad-l: 150px;
+$pad-t: 50px;
+$pad-r: 150px;
+$pad-b: $pad-t;
+
+#mount-point {
+  --list-even-bg-color: #ccc;
+  --list-odd-bg-color: #ddd;
+  --list_entry-border-color: blue;
+  --list_entry-border-radius: 50px;
+  --bg-color: #aaa;
+  background: var(--bg-color);
+  padding: $pad-t $pad-r $pad-b $pad-l;
+  flex-grow: 1;
+  font-size: 20px;
+
+}

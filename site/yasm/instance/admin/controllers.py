@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, request as rq, Response, jsonify
 from ..menu import menu
+from .side import side
 from ..database import db, School
 
 module = Blueprint('admin', __name__, url_prefix='/admin')
@@ -18,7 +19,7 @@ def index():
     return render_template(
         "admin/base.html",
         menu=menu,
-        side=[]
+        side=side
     )
 
 
@@ -27,6 +28,7 @@ def school_dashboard():
     return render_template(
         "admin/school_dashboard.html",
         menu=menu,
+        side=side
     )
 
 

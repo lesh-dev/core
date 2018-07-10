@@ -4,7 +4,7 @@ import {SchList} from "./components/sch_list";
 import {school_fill, school_list} from "./generated/api_connect";
 import {School, SchoolList} from "./generated/interfaces";
 import {Sch} from "./components/sch";
-import {combineAll} from "rxjs/operators";
+import '../scss/school.scss'
 
 interface PageState {
     chosen_school: number
