@@ -32,14 +32,15 @@ export class Page extends React.Component<undefined, PageState> {
 
     render() {
         if (this.state.chosen_school == -1) {
-            return <SchList sch_list={this.state.sch_list} callback={(i: number) => this.choose(i)}/>
+            return <SchList sch_list={this.state.sch_list} callback={(i: number) => {this.choose(i)}}/>
         } else {
-            return <Sch sch={this.state.sch_list.values[this.state.chosen_school]}/>
+            return <Sch sch={this.state.sch_list.values[this.state.chosen_school]} on_back={() => {this.choose(-1)}}/>
         }
     }
 
     choose(i: number) {
-        if (this.state.sch_list.values[i].person_school_list.length == 0) {
+
+        if (i >= 0 && this.state.sch_list.values[i].person_school_list.length == 0) {
             school_fill(this.state.sch_list.values[i])
                 .then((value: School) => {
                     let l = this.state.sch_list;

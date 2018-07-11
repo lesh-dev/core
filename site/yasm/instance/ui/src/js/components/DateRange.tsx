@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {DateRangePicker} from 'react-dates';
+import {AnchorDirectionShape, DateRangePicker} from 'react-dates';
 import {Moment} from "moment";
 
 export interface DateRangeProps {
@@ -8,7 +8,9 @@ export interface DateRangeProps {
     tag: string
     start: Moment
     end: Moment
-    callback: (vals: Moment[]) => void
+    callback: (vals: any) => void
+    onFocus?: (focus: any) => void
+    anchorDirection?: AnchorDirectionShape
 }
 
 export interface DateRangeState {
@@ -23,7 +25,9 @@ export class DateRange extends React.Component<DateRangeProps, DateRangeState> {
         }
     }
     date_focus (focus: any) {
-        this.setState({focus: focus})
+        this.setState({focus: focus});
+        if (this.props.onFocus)
+        this.props.onFocus(focus)
     }
 
     render() {
@@ -33,7 +37,7 @@ export class DateRange extends React.Component<DateRangeProps, DateRangeState> {
                     startDatePlaceholderText={this.props.ph1}
                     endDate={this.props.end}
                     endDateId={this.props.tag + "_end"}
-                    endDatePlaceholderText={this.props.ph1}
+                    endDatePlaceholderText={this.props.ph2}
                     onDatesChange={(v: any) => {this.props.callback(v)}}
                     onFocusChange={focusedInput => {this.date_focus(focusedInput)}}
                     focusedInput={this.state.focus}
@@ -41,6 +45,9 @@ export class DateRange extends React.Component<DateRangeProps, DateRangeState> {
                     block={true}
                     showClearDates={true}
                     reopenPickerOnClearDates={true}
+                    firstDayOfWeek={1}
+                    regular={true}
+                    anchorDirection={this.props.anchorDirection}
                 />
     }
 }

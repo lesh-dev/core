@@ -19,7 +19,7 @@ export class Cut extends React.Component<CutProps, CutState> {
 
     render_under() {
         if (this.state.opened) {
-            return this.props.content.render()
+            return this.props.content
         } else {
             return null
         }
@@ -31,19 +31,17 @@ export class Cut extends React.Component<CutProps, CutState> {
 
     render_button() {
         if (this.state.opened) {
-            return <div className={"cut__button"} onClick={() => {
-                this.on_click()
-            }}>▲</div>
+            return <div className={"cut__button"}>▲</div>
         } else {
-            return <div className={"cut__button"} onClick={() => {
-                this.on_click()
-            }}>▼</div>
+            return <div className={"cut__button"}>▼</div>
         }
     }
 
     render() {
         return <div className={"cut"}>
-            <div className={"cut__bar"}>
+            <div className={"cut__bar"} onClick={() => {
+                this.on_click()
+            }}>
                 <div className={"cut__label"}>
                     {this.props.label}
                 </div>
