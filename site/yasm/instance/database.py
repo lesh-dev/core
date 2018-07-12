@@ -375,6 +375,9 @@ class School(db.Model):
     school_location = NamedColumn(db.Text,
                                   nick="место проведения",
                                   nullable=False)  # место проведения (2.7+)
+    school_coords = NamedColumn(db.Text,
+                                  nick="координаты проведения",
+                                  nullable=False)  # координаты
     school_created = NamedColumn(db.Text,
                                  nick="дата создания",
                                  nullable=False)  # utc timestamp

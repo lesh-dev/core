@@ -135,6 +135,7 @@ export interface School {
     school_date_start: string,
     school_date_end: string,
     school_location: string,
+    school_coords: string,
     school_created: string,
     school_modified: string,
     school_changedby: string,

@@ -1,5 +1,5 @@
 import * as React from "react";
-import "../../scss/input/input.scss"
+import "../../../scss/input/input.scss"
 
 export interface InputState {
     focus: boolean

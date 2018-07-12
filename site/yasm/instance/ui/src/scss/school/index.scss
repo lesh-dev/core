@@ -16,7 +16,7 @@ $pad-b: $pad-t;
   font-size: 20px;
 }
 
-.sch > div{
+.sch > div {
   margin: 10px;
   padding: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .2), 0 2px 2px rgba(0, 0, 0, .25);
@@ -24,4 +24,13 @@ $pad-b: $pad-t;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+}
+
+.sch > div > div {
+  background: white;
+  border: 1px solid gray;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  padding: 5px;
 }

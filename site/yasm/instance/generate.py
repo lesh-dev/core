@@ -25,7 +25,7 @@ module = Blueprint('api', __name__, url_prefix='/api')
 connector_template = """
 import {Promise} from 'es6-promise';
 
-function getRequest(url: string): Promise<any> {
+export function getRequest(url: string): Promise<any> {
     return new Promise<any>(
         function (resolve, reject) {
             const request = new XMLHttpRequest();
@@ -49,6 +49,9 @@ function getRequest(url: string): Promise<any> {
 export interface dict {
     [index: string]: string
 }
+
+
+
 """
 
 name_2_model = dict()

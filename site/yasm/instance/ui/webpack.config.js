@@ -3,7 +3,7 @@ webpack = require('webpack');
 
 module.exports = {
     entry: {
-        school: './src/js/school.tsx'
+        school: './src/js/pages/schools.tsx'
 
     },
     module: {

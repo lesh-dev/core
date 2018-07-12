@@ -29,7 +29,7 @@ import {
 
 import {Promise} from 'es6-promise';
 
-function getRequest(url: string): Promise<any> {
+export function getRequest(url: string): Promise<any> {
     return new Promise<any>(
         function (resolve, reject) {
             const request = new XMLHttpRequest();
@@ -53,6 +53,9 @@ function getRequest(url: string): Promise<any> {
 export interface dict {
     [index: string]: string
 }
+
+
+
 export function notification_list(d: dict = {}) {
     let req = '?';
     for (let key in d) {

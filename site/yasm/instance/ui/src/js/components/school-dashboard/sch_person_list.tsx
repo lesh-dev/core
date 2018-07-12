@@ -1,5 +1,5 @@
 import * as React from "react";
-import {PersonSchool, PersonSchoolList} from "../generated/interfaces";
+import {PersonSchool, PersonSchoolList} from "../../generated/interfaces";
 import Paper from '@material-ui/core/Paper';
 import {
     IntegratedSorting,
@@ -17,10 +17,6 @@ import {
     TableHeaderRow,
     TableRowDetail, Toolbar
 } from '@devexpress/dx-react-grid-material-ui';
-import {DateRange} from "./DateRange";
-import {str_2_date} from "./utils";
-import {Moment} from "moment";
-import {func} from "prop-types";
 
 export interface SPListProps {
     spl: PersonSchoolList

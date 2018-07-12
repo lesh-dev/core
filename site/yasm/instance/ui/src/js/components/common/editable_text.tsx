@@ -35,8 +35,6 @@ export class ET extends React.Component<ETProps, ETState> {
     }
 
     render() {
-        return <div className="editable_text">
-            <Input placeholder={this.state.current_text} callback={(v: any) => this.edit(v)}/>
-        </div>
+        return <Input placeholder={this.state.current_text} callback={(v: any) => this.edit(v)}/>
     }
 }

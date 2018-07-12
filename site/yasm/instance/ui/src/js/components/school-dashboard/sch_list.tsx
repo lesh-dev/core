@@ -1,5 +1,5 @@
 import * as React from "react";
-import {School, SchoolList} from "../generated/interfaces";
+import {School, SchoolList} from "../../generated/interfaces";
 import {callbackify} from "util";
 
 

@@ -1,17 +1,17 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {SchList} from "./components/sch_list";
-import {school_fill, school_list} from "./generated/api_connect";
-import {School, SchoolList} from "./generated/interfaces";
-import {Sch} from "./components/sch";
-import '../scss/school.scss'
+import {SchList} from "../components/school-dashboard/sch_list";
+import {school_fill, school_list} from "../generated/api_connect";
+import {School, SchoolList} from "../generated/interfaces";
+import {SchoolDashboard} from "../components/school-dashboard/school-dashboard";
+import '../../scss/school.scss'
 
 interface PageState {
     chosen_school: number
     sch_list: SchoolList
 }
 
-export class Page extends React.Component<undefined, PageState> {
+export class Schools extends React.Component<undefined, PageState> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -32,27 +32,29 @@ export class Page extends React.Component<undefined, PageState> {
 
     render() {
         if (this.state.chosen_school == -1) {
-            return <SchList sch_list={this.state.sch_list} callback={(i: number) => {this.choose(i)}}/>
+            return <SchList sch_list={this.state.sch_list} callback={(i: number) => {
+                this.choose(i)
+            }}/>
         } else {
-            return <Sch sch={this.state.sch_list.values[this.state.chosen_school]} on_back={() => {this.choose(-1)}}/>
+            return <SchoolDashboard sch={this.state.sch_list.values[this.state.chosen_school]} on_back={() => {
+                this.choose(-1)
+            }}/>
         }
     }
 
     choose(i: number) {
-
         if (i >= 0 && this.state.sch_list.values[i].person_school_list.length == 0) {
             school_fill(this.state.sch_list.values[i])
                 .then((value: School) => {
                     let l = this.state.sch_list;
                     l.values[i] = value;
                     this.setState({sch_list: l});
-                })
+                });
         }
         this.setState({chosen_school: i})
     }
 }
 
-ReactDOM.render(
-    <Page/>,
-    document.getElementById("mount-point")
-);
+ReactDOM.render((
+    <Schools/>
+), document.getElementById('mount-point'))

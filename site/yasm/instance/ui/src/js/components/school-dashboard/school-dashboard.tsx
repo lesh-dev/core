@@ -1,15 +1,15 @@
 import * as React from "react";
 import 'react-dates/initialize'
-import {School} from "../generated/interfaces";
+import {School} from "../../generated/interfaces";
 import {SchPersonList} from "./sch_person_list";
-import {ET} from "./editable_text";
+import {ET} from "../common/editable_text";
 import {DateRangePicker} from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
-import {DateRange} from "./DateRange";
-import {Cut} from "./Cut";
-import {date_2_str, str_2_date, str_2_date_format} from "./utils"
+import {DateRange} from "../common/DateRange";
+import {Cut} from "../common/Cut";
+import {date_2_str, str_2_date, str_2_date_format} from "../common/utils"
 import {Moment} from "moment";
-
+import {Location} from "./Location";
 
 export interface SchProps {
     sch: School
@@ -24,39 +24,27 @@ export interface DateState {
 
 export interface SchState {
     sch_mod: School
-    dates: DateState
 }
 
-export class Sch extends React.Component<SchProps, SchState> {
+export class SchoolDashboard extends React.Component<SchProps, SchState> {
     constructor(props: any) {
         super(props);
         this.state = {
             sch_mod: props.sch,
-            dates: {
-                focus: null,
-                start: str_2_date(props.sch.school_date_start),
-                end: str_2_date(props.sch.school_date_end)
-            }
         }
 
     }
 
     onDateChange(value: any) {
         let tmp = this.state.sch_mod;
-        let dtmp = this.state.dates;
         if (value.startDate) {
             tmp.school_date_start = date_2_str(value.startDate);
         }
         if (value.endDate) {
             tmp.school_date_end = date_2_str(value.endDate);
         }
-        dtmp.end = value.endDate;
-        dtmp.start = value.startDate;
-        console.log(dtmp.start);
-        console.log(str_2_date(tmp.school_date_start))
         this.setState({
-            sch_mod: tmp,
-            dates: dtmp
+            sch_mod: tmp
         });
     }
 
@@ -73,9 +61,6 @@ export class Sch extends React.Component<SchProps, SchState> {
     }
 
     onPersonDateChange(i: number, v: any) {
-        console.log(v);
-        console.log(date_2_str(v.startDate));
-        console.log(date_2_str(v.endDate));
         let tmp = this.state.sch_mod;
         if (v.startDate) {
             tmp.person_school_list.values[i].frm = date_2_str(v.startDate);
@@ -83,20 +68,25 @@ export class Sch extends React.Component<SchProps, SchState> {
         if (v.endDate) {
             tmp.person_school_list.values[i].tll = date_2_str(v.endDate);
         }
-        console.log(str_2_date_format(tmp.person_school_list.values[i].frm));
-        console.log(str_2_date_format(tmp.person_school_list.values[i].tll));
         this.setState({
             sch_mod: tmp
         });
     }
 
     onBack() {
-        console.log("test");
         this.props.on_back()
     }
 
     onSave() {
         alert("save")
+    }
+
+    onMapClick(event: any) {
+        let tmp = this.state.sch_mod;
+        tmp.school_coords = event.get("coords").join(", ");
+        this.setState({
+            sch_mod: tmp
+        })
     }
 
     render() {
@@ -114,13 +104,15 @@ export class Sch extends React.Component<SchProps, SchState> {
                 </div>
             </div>
             <div>
-                <ET text={this.props.sch.school_title} callback={(s: string) => {
-                    this.onTitleChange(s);
-                }}/>
+                <div>
+                    <ET text={this.props.sch.school_title} callback={(s: string) => {
+                        this.onTitleChange(s);
+                    }}/>
+                </div>
             </div>
             <div className="sch__dates">
                 <DateRange start={str_2_date(this.state.sch_mod.school_date_start)}
-                           end={this.state.dates.end}
+                           end={str_2_date(this.state.sch_mod.school_date_end)}
                            callback={(v: any) => {
                                this.onDateChange(v)
                            }}
@@ -129,11 +121,14 @@ export class Sch extends React.Component<SchProps, SchState> {
                            tag={"school_dates"}
                 />
             </div>
-            <div>
-                <ET text={this.props.sch.school_location ? this.props.sch.school_location : "Место не указано"} callback={(s: string) => {
-                    this.onLocationChange(s);
-                }}/>
-            </div>
+            <Location location_text={this.props.sch.school_location}
+                      location_coords={this.state.sch_mod.school_coords}
+                      mapclick_callback={(e: any) => {
+                          this.onMapClick(e)
+                      }}
+                      text_edit_callback={(s: string) => {
+                          this.onLocationChange(s);
+                      }}/>
             <Cut label={"Люди"} content={
                 <SchPersonList
                     spl={this.props.sch.person_school_list}

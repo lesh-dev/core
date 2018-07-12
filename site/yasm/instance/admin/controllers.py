@@ -23,7 +23,7 @@ def index():
     )
 
 
-@module.route('/school', methods=['GET'])
+@module.route('/schools', methods=['GET'])
 def school_dashboard():
     return render_template(
         "admin/school_dashboard.html",
@@ -32,7 +32,7 @@ def school_dashboard():
     )
 
 
-@module.route('/school/add', methods=['GET'])
+@module.route('/schools/add', methods=['GET'])
 def school_add():
     args = rq.args
     title = args['title']
