@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 let {YMaps, Map, Placemark} = require("react-yandex-maps");
-import {ET} from "../common/editable_text";
+import {ET} from "../common/EditableText";
 
 export interface LocationProps {
     location_text: string

@@ -1,0 +1,13 @@
+@import "text/text";
+@import "img/img";
+
+.person_card {
+  display: inline-flex;
+  justify-content: space-between;
+  padding: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.1);
+  color: black;
+}

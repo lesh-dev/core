@@ -1,4 +1,4 @@
-.list div {
+.list > div {
   padding: 0.75em;
   padding-left: 2em;
   border: solid 1px var(--list_entry-border-color);
@@ -9,15 +9,7 @@
   border-bottom-right-radius: calc(var(--list_entry-border-radius) * 2);
 }
 
-.list :nth-child(2n) {
-  background: var(--list-even-bg-color);
-}
-
-.list :nth-child(2n + 1) {
-  background: var(--list-odd-bg-color);
-}
-
-.list div:hover {
+.list > div:hover {
   background: calc(var(--list-even-bg-color) + 15%);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }

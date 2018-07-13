@@ -16,5 +16,6 @@ def create():
     yasm.register_blueprint(adm.module)
     import instance.api as api
     yasm.register_blueprint(api.module)
-
+    import instance.react_components as react_components
+    yasm.register_blueprint(react_components.module)
     return yasm

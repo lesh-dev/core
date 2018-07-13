@@ -1,0 +1,19 @@
+.dayline__block {
+  flex-grow: 1;
+  min-height: 1em;
+  padding: 2px;
+  text-align: center;
+  margin: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: lightgray 1px solid;
+}
+
+.dayline__block--selected {
+  background: palegreen;
+}
+
+.dayline__block--working {
+  background: forestgreen;
+}

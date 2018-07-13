@@ -23,16 +23,17 @@ def index():
     )
 
 
-@module.route('/schools', methods=['GET'])
-def school_dashboard():
+@module.route('/gui/', methods=['GET'])
+@module.route('/gui/<path:path>', methods=['GET'])
+def admin(path):  # resolved by reactJS
     return render_template(
-        "admin/school_dashboard.html",
+        "admin/base.html",
         menu=menu,
         side=side
     )
 
 
-@module.route('/schools/add', methods=['GET'])
+@module.route('/api/schools/add', methods=['GET'])
 def school_add():
     args = rq.args
     title = args['title']

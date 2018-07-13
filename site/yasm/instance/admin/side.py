@@ -1,7 +1,7 @@
 side = [
     [
         "Школы",
-        "/admin/school"
+        "/admin/schools"
     ],
     [
         "Яндекс",

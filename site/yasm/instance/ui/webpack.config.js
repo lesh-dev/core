@@ -3,8 +3,8 @@ webpack = require('webpack');
 
 module.exports = {
     entry: {
-        school: './src/js/pages/schools.tsx'
-
+        admin: './src/js/pages/admin.tsx',
+        components: './src/js/pages/react-components.tsx'
     },
     module: {
         rules: [

@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import "../../../scss/cut/cut.scss"
 export interface CutState {
     opened: boolean
 }

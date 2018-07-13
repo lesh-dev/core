@@ -1,0 +1,51 @@
+.spinner,.spinnerCircle {
+  position: absolute;
+  top: 50vh;
+  left: 50vw;
+  border-radius: 50%;
+  animation: spinner 12s linear infinite;
+}
+.spinner {
+  border: solid 4px #53c1de;
+  box-sizing: border-box;
+  height: 50px;
+  width: 120px;
+  transform: rotate(0deg);
+}
+.spinnerCircle {
+  top: calc(50vh + 13px);
+  left: calc(50vw + 47px);
+  width: 25px;
+  height: 25px;
+  background: #53c1de;
+  animation: spinnerCircle 12s linear infinite;
+}
+.spinner:nth-of-type(2) {
+  animation: spinner2 12s linear infinite;
+  transform: rotate(60deg);
+}
+.spinner:nth-of-type(3) {
+  animation: spinner3 12s linear infinite;
+  transform: rotate(120deg);
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinner2 {
+  to {
+    transform: rotate(420deg);
+  }
+}
+@keyframes spinner3 {
+  to {
+    transform: rotate(480deg);
+  }
+}
+@keyframes spinnerCircle {
+  to {
+    transform: rotate(360deg);
+  }
+}

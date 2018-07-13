@@ -2,12 +2,11 @@ import * as React from "react";
 import 'react-dates/initialize'
 import {School} from "../../generated/interfaces";
 import {SchPersonList} from "./sch_person_list";
-import {ET} from "../common/editable_text";
-import {DateRangePicker} from 'react-dates';
+import {ET} from "../common/EditableText";
 import 'react-dates/lib/css/_datepicker.css';
 import {DateRange} from "../common/DateRange";
 import {Cut} from "../common/Cut";
-import {date_2_str, str_2_date, str_2_date_format} from "../common/utils"
+import {date_2_str, str_2_date} from "../common/utils"
 import {Moment} from "moment";
 import {Location} from "./Location";
 
