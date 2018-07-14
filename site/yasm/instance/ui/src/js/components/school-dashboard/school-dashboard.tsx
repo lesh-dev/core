@@ -104,7 +104,7 @@ export class SchoolDashboard extends React.Component<SchProps, SchState> {
             </div>
             <div>
                 <div>
-                    <ET text={this.props.sch.school_title} callback={(s: string) => {
+                    <ET text={this.state.sch_mod.school_title} callback={(s: string) => {
                         this.onTitleChange(s);
                     }}/>
                 </div>
@@ -120,7 +120,7 @@ export class SchoolDashboard extends React.Component<SchProps, SchState> {
                            tag={"school_dates"}
                 />
             </div>
-            <Location location_text={this.props.sch.school_location}
+            <Location location_text={this.state.sch_mod.school_location}
                       location_coords={this.state.sch_mod.school_coords}
                       mapclick_callback={(e: any) => {
                           this.onMapClick(e)
@@ -130,7 +130,7 @@ export class SchoolDashboard extends React.Component<SchProps, SchState> {
                       }}/>
             <Cut label={"Люди"} content={
                 <SchPersonList
-                    spl={this.props.sch.person_school_list}
+                    spl={this.state.sch_mod.person_school_list}
                     callback={(i: number, v: Moment[]) => {
                         this.onPersonDateChange(i, v)
                     }}
