@@ -1,0 +1,12 @@
+@import "block/block";
+
+.dayline {
+  display: flex;
+  justify-content: space-evenly;
+  position: relative;
+}
+
+.dayline--selection {
+  position: absolute;
+  background: #0000fe;
+}

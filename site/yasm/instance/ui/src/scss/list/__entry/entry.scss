@@ -1,0 +1,15 @@
+.list > div {
+  padding: 0.75em;
+  padding-left: 2em;
+  border: solid 1px var(--list_entry-border-color);
+  -webkit-border-radius: var(--list_entry-border-radius);
+  -moz-border-radius: var(--list_entry-border-radius);
+  border-radius: var(--list_entry-border-radius);
+  border-top-left-radius: calc(var(--list_entry-border-radius) * 2);
+  border-bottom-right-radius: calc(var(--list_entry-border-radius) * 2);
+}
+
+.list > div:hover {
+  background: calc(var(--list-even-bg-color) + 15%);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}

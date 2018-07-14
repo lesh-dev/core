@@ -1,0 +1,31 @@
+.horizontal_nav {
+    --entry-bg-color: green;
+    --entry-padding: 16px;
+    --entry-font: 16px;
+    --entry-text-color: white;
+    --entry-bg-hov-color: #3e8e41;
+    --ddb-content-bg-color: #f1f1f1;
+    --ddb-content-bg-hov-color: #ddd;
+    --ddb-content-text-color: black;
+    --ddb-content-shadow-color: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    --ddb-button-bg-color: var(--entry-bg-color);
+    --ddb-button-text-color: white;
+    --ddb-arrow-color: black;
+}
+
+.horizontal_nav__element {
+    display: inline-block;
+    background: var(--entry-bg-color);
+    padding: var(--entry-padding);
+    font: var(--entry-font);
+    color: var(--entry-text-color);
+}
+
+.horizontal_nav__element:hover {
+    background: var(--entry-bg-hov-color);
+}
+
+.horizontal_nav__element a {
+    color: var(--entry-text-color);
+    text-decoration: none;
+}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/pack/admin.css') }}">
+{% endblock %}
+{% block js %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <div id="mount-point"/>
+{% endblock %}
+{% block tail_js %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/admin.min.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,15 @@
+.sch__location {
+  display: flex;
+}
+.sch__location__text {
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sch__location__text :last-child {
+  color: darkgray;
+  margin: 1em;
+  text-align: center;
+}

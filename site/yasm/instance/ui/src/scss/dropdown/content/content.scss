@@ -1,0 +1,25 @@
+.dropdown__content {
+  position: absolute;
+  top: 1.5em;
+  background: whitesmoke;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  left: -1em;
+  display: flex;
+  width: -moz-max-content;
+}
+
+.dropdown__content button {
+  width: 100%;
+}
+
+.dropdown__content input {
+  width: 100%;
+  height: 2.5em;
+  margin: 5px auto;
+  border: none;
+  border-bottom: 1px solid lightgray;
+  background: transparent;
+  box-sizing: border-box;
+}

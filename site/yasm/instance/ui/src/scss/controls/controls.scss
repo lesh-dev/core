@@ -1,0 +1,20 @@
+@import "back/back";
+@import "save/save";
+
+.controls {
+  display: flex;
+  font-size: 40px;
+  justify-content: space-between;
+}
+
+.controls div {
+  color: darkgray;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  text-shadow: 0px 2px 2px lightgray;
+}
+
+.controls div:hover {
+  text-shadow: 0 0 0 white;
+}
