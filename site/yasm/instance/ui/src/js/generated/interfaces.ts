@@ -60,6 +60,7 @@ export interface Person {
     person_created: string,
     person_modified: string,
     person_changedby: string,
+    contact_list: ContactList,
     course_teachers_list: CourseTeachersList,
     exam_list: ExamList,
     person_school_list: PersonSchoolList,
@@ -68,6 +69,19 @@ export interface Person {
 
 export interface PersonList {
     values: Person[],
+    length: number
+}
+
+export interface Contact {
+    id: number,
+    person_id: number,
+    person_id_fk: Person,
+    name: string,
+    value: string,
+}
+
+export interface ContactList {
+    values: Contact[],
     length: number
 }
 

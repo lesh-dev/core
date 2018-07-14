@@ -1,6 +1,6 @@
 import * as React from "react";
 import 'react-dates/initialize'
-import {School} from "../../generated/interfaces";
+import {School, SchoolList} from "../../generated/interfaces";
 import {SchPersonList} from "./sch_person_list";
 import {ET} from "../common/EditableText";
 import 'react-dates/lib/css/_datepicker.css';
@@ -9,10 +9,13 @@ import {Cut} from "../common/Cut";
 import {date_2_str, str_2_date} from "../common/utils"
 import {Moment} from "moment";
 import {Location} from "./Location";
+import {school_fill, school_list} from "../../generated/api_connect";
+import {Spinner} from "../common/Spinner";
+import '../../../scss/school.scss'
+
 
 export interface SchProps {
-    sch: School
-    on_back: () => void
+    sch: number
 }
 
 export interface DateState {
@@ -28,10 +31,16 @@ export interface SchState {
 export class SchoolDashboard extends React.Component<SchProps, SchState> {
     constructor(props: any) {
         super(props);
-        this.state = {
-            sch_mod: props.sch,
-        }
-
+        school_list({school_id: '' + this.props.sch}).then((value: SchoolList) => {
+            if (value.length == 1) {
+                school_fill(value.values[0]).then((value: School) => {
+                    this.setState({sch_mod: value})
+                })
+            } else {
+                console.log(value);
+                console.log("error")
+            }
+        })
     }
 
     onDateChange(value: any) {
@@ -73,7 +82,7 @@ export class SchoolDashboard extends React.Component<SchProps, SchState> {
     }
 
     onBack() {
-        this.props.on_back()
+        alert('back')
     }
 
     onSave() {
@@ -89,13 +98,9 @@ export class SchoolDashboard extends React.Component<SchProps, SchState> {
     }
 
     render() {
-        return <div className="sch">
+        return (this.state) ? <div className="sch">
             <div>
                 <div className={"controls"}>
-                    <div className={"controls__back"} onClick={() => {
-                        this.onBack()
-                    }}>🡄
-                    </div>
                     <div className={"controls__save"} onClick={() => {
                         this.onSave()
                     }}>🖫
@@ -136,6 +141,6 @@ export class SchoolDashboard extends React.Component<SchProps, SchState> {
                     }}
                 />
             }/>
-        </div>
+        </div> : <Spinner/>
     }
 }

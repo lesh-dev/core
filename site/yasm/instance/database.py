@@ -213,6 +213,23 @@ class Person(db.Model):
     person_schools = db.relationship('PersonSchool', backref='member_person', lazy='dynamic')
     exams = db.relationship('Exam', backref='student_person', lazy='dynamic')
     course_teachers = db.relationship('CourseTeachers', backref='course_teacher', lazy='dynamic')
+    contacts = db.relationship('Contact', backref='person', lazy='dynamic')
+
+
+class Contact(db.Model):
+    __tablename__ = 'contact'
+    id = NamedColumn(db.Integer,
+                     nick='id',
+                     primary_key=True,
+                     autoincrement=True)
+    person_id = NamedColumn(db.Integer,
+                         MarkedForeignKey(Person.person_id),
+                         nick='человек',
+                         nullable=False)
+    name = NamedColumn(db.Text,
+                       nick='название',
+                       nullable=False)
+    value = NamedColumn(db.Text, nick='значение', nullable=False)
 
 
 class Course(db.Model):

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, request as rq, Response, jsonify
 from ..menu import menu
 from .side import side
-from ..database import db, School
+from ..database import db, School, Contact
 
 module = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -25,7 +25,7 @@ def index():
 
 @module.route('/gui/', methods=['GET'])
 @module.route('/gui/<path:path>', methods=['GET'])
-def admin(path):  # resolved by reactJS
+def admin(path='path'):  # resolved by reactJS
     return render_template(
         "admin/base.html",
         menu=menu,
@@ -54,3 +54,24 @@ def school_add():
     db.session.add(s)
     db.session.commit()
     return resp(200, [])
+
+
+@module.route('/api/contact/del/<int:id>', methods=['POST'])
+def api_contact_del(id):
+    Contact.query.filter(Contact.id == id).delete()
+    db.session.commit()
+    return jsonify('OK')
+
+
+@module.route('/api/contact/add/<int:person_id>', methods=['POST'])
+def api_contact_add(person_id):
+    name = rq.values['name']
+    url = rq.values['url']
+    add = Contact(
+        person_id=person_id,
+        name=name,
+        value=url
+    )
+    db.session.add(add)
+    db.session.commit()
+    return jsonify('OK')

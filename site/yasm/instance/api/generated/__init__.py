@@ -126,6 +126,7 @@ def person_list(req=None, raw=False):
         'person_changedby',
     ]
     additional = {
+        'contact_list': {'length': 0, 'values': []},
         'course_teachers_list': {'length': 0, 'values': []},
         'exam_list': {'length': 0, 'values': []},
         'person_school_list': {'length': 0, 'values': []},
@@ -177,6 +178,48 @@ def person_list(req=None, raw=False):
         d = dict()
         d['department_id_fk'] = department_list(req={'department_id': entry.department_id}, raw=True)['values']
         d['department_id_fk'] = d['department_id_fk'][0] if len(d['department_id_fk']) else None
+        d.update(entry.__dict__)
+        d.pop('_sa_instance_state')
+        d.update(additional)
+        ans.append(d)
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
+    return jsonify({
+        'length': len(ans),
+        'values': ans
+    })
+
+
+@module.route("/contact_list", methods=['GET'])
+def contact_list(req=None, raw=False):
+    regular = [
+        'id',
+        'person_id',
+        'name',
+        'value',
+    ]
+    additional = {
+    }
+    field = {
+        'id': Contact.id,
+        'person_id': Contact.person_id,
+        'name': Contact.name,
+        'value': Contact.value,
+    }
+    query = Contact.query
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
+        if arg in regular:
+            query = query.filter(field[arg] == val)
+    query = query.all()
+    ans = []
+    for entry in query:
+        d = dict()
+        d['person_id_fk'] = person_list(req={'person_id': entry.person_id}, raw=True)['values']
+        d['person_id_fk'] = d['person_id_fk'][0] if len(d['person_id_fk']) else None
         d.update(entry.__dict__)
         d.pop('_sa_instance_state')
         d.update(additional)

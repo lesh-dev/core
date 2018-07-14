@@ -1,36 +1,36 @@
 .input-container {
   box-sizing: border-box;
-  padding: 24px;
+  padding: 1.5em;
   position: relative;
 }
 
-input {
+.input-container input {
   width: 100%;
-  height: 32px;
-  margin: 4px auto;
-  padding: 4px;
+  height: 2.5em;
+  margin: 5px auto;
+  padding: 5px;
   border: none;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   background: transparent;
   box-sizing: border-box;
   position: relative;
 }
 
-input:focus {
+.input-container input:focus {
   outline: none;
 }
 
-label {
-  font-size: 18px;
+.input-container label {
+  font-size: 1em;
   position: absolute;
-  top: 32px;
-  left: 24px;
+  top: 2em;
+  left: 1.5em;
   transition: 0.2s ease all;
 }
 
-.focused {
-  font-size: 14px;
+.input-container .focused {
+  font-size: 1em;
   position: absolute;
-  top: 16px;
-  left: 24px;
+  top: 1em;
+  left: 1.5em;
 }

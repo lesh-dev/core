@@ -5,6 +5,7 @@ import {Input} from "./Input";
 export interface ETProps {
     text: string
     callback: (s: string) => void
+    className?: string
 }
 
 export interface ETState {
@@ -35,6 +36,6 @@ export class ET extends React.Component<ETProps, ETState> {
     }
 
     render() {
-        return <Input placeholder={this.state.current_text} callback={(v: any) => this.edit(v)}/>
+        return <Input className={this.props.className} placeholder={this.state.current_text} callback={(v: any) => this.edit(v)}/>
     }
 }

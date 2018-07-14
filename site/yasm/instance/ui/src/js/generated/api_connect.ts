@@ -5,6 +5,8 @@ import {
     DepartmentList,
     Person,
     PersonList,
+    Contact,
+    ContactList,
     Course,
     CourseList,
     CourseTeachers,
@@ -29,7 +31,7 @@ import {
 
 import {Promise} from 'es6-promise';
 
-export function getRequest(url: string): Promise<any> {
+export function getRequest(url: string, method: string = 'GET'): Promise<any> {
     return new Promise<any>(
         function (resolve, reject) {
             const request = new XMLHttpRequest();
@@ -43,7 +45,7 @@ export function getRequest(url: string): Promise<any> {
             request.onerror = function () {
                 reject(new Error('XMLHttpRequest Error: ' + this.statusText));
             };
-            request.open('GET', url);
+            request.open(method, url);
             request.send();
         }
     );
@@ -119,16 +121,41 @@ export function person_fill(obj: Person) {
     return new Promise<Person>((resolve, reject) => {
         let ans: Person = obj;
         Promise.all([
+                contact_list({person_id: String(obj.person_id)}),
                 course_teachers_list({course_teacher_id: String(obj.person_id)}),
                 exam_list({student_person_id: String(obj.person_id)}),
                 person_school_list({member_person_id: String(obj.person_id)}),
                 person_comment_list({blamed_person_id: String(obj.person_id)}),
              ]
         ).then((values) => {
-            ans.course_teachers_list = values[0];
-            ans.exam_list = values[1];
-            ans.person_school_list = values[2];
-            ans.person_comment_list = values[3];
+            ans.contact_list = values[0];
+            ans.course_teachers_list = values[1];
+            ans.exam_list = values[2];
+            ans.person_school_list = values[3];
+            ans.person_comment_list = values[4];
+            resolve(ans);
+        }).catch((error) => {
+            reject(error);
+        })
+    })
+}
+
+
+export function contact_list(d: dict = {}) {
+    let req = '?';
+    for (let key in d) {
+        req += key + '=' + d[key] + '&'
+    }
+    return getRequest('/api/contact_list' + req)
+}
+
+
+export function contact_fill(obj: Contact) {
+    return new Promise<Contact>((resolve, reject) => {
+        let ans: Contact = obj;
+        Promise.all([
+             ]
+        ).then((values) => {
             resolve(ans);
         }).catch((error) => {
             reject(error);
