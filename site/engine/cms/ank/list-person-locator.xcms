@@ -171,23 +171,6 @@ function xsm_build_person_list_query($db, $departments, $sort_columns, $simplifi
     if (strlen($cond))
         $query .= " WHERE $cond";
 
-    $anketa_status_order = "
-        CASE anketa_status
-            WHEN 'new' THEN 10
-            WHEN 'progress' THEN 20
-            WHEN 'less' THEN 30
-            WHEN 'discuss' THEN 40
-            WHEN 'less' THEN 50
-            WHEN 'processed' THEN 60
-            WHEN 'cont' THEN 70
-            WHEN 'nextyear' THEN 80
-            WHEN 'declined' THEN 90
-            WHEN 'reserved' THEN 400
-            WHEN 'old' THEN 500
-            WHEN 'duplicate' THEN 800
-            WHEN 'spam' THEN 999
-        END, ";
-
     $column_order = array();
     foreach ($sort_columns as $sort_column)
     {
@@ -199,20 +182,35 @@ function xsm_build_person_list_query($db, $departments, $sort_columns, $simplifi
         {
             $sort_column_name = "CAST(p.current_class AS INT)";
         }
+        elseif ($sort_column_name == "anketa_status")
+        {
+            $sort_column_name =
+                "CASE anketa_status
+                    WHEN 'new' THEN 10
+                    WHEN 'progress' THEN 20
+                    WHEN 'less' THEN 30
+                    WHEN 'discuss' THEN 40
+                    WHEN 'less' THEN 50
+                    WHEN 'processed' THEN 60
+                    WHEN 'cont' THEN 70
+                    WHEN 'nextyear' THEN 80
+                    WHEN 'declined' THEN 90
+                    WHEN 'reserved' THEN 400
+                    WHEN 'old' THEN 500
+                    WHEN 'duplicate' THEN 800
+                    WHEN 'spam' THEN 999
+                END";
+        }
+        elseif ($sort_column_name == "is_student")
+        {
+            $sort_column_name = "(p.is_student IS NOT NULL AND LENGTH(p.is_student) > 0)";
+        }
         $column_order[] = "$sort_column_name $direction";
     }
     if (count($column_order))
     {
         $column_order_str = implode(", ", $column_order);
         $query .= " ORDER BY $column_order_str";
-    }
-    else
-    {
-        $query .= " ORDER BY
-            $anketa_status_order
-            NOT (p.is_student IS NOT NULL AND LENGTH(p.is_student) > 0),
-            p.last_name,
-            p.first_name";
     }
 
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
@@ -272,14 +270,15 @@ function xsm_show_all_person_list($sort_columns)
         </colgroup>
         <thead>
             <th class="ankList"><?php echo xsm_sorted_column_header("person_id", "ID", $sort_columns); ?></th>
-            <th class="ankList"><?php echo xsm_sorted_column_header("last_name", "Фамилия, имя", $sort_columns); ?></th>
+            <th class="ankList"><?php echo xsm_sorted_column_header("last_name", "Фамилия, имя", $sort_columns); ?>&nbsp;&nbsp;&nbsp;<?php
+                echo xsm_sorted_column_header("is_student", "Школьник?", $sort_columns); ?></th>
             <th class="ankList"><?php echo xsm_sorted_column_header("department_id", "Отделение", $sort_columns); ?></th>
             <th class="ankList"><?php echo xsm_sorted_column_header("current_class", "Кл.", $sort_columns); ?></th>
             <th class="ankList">Контакты</th><?php
             if ($show_comments) {?>
             <th class="ankList">Комментарий</th><?php
             }?>
-            <th class="ankList">Info</th>
+            <th class="ankList"><?php echo xsm_sorted_column_header("anketa_status", "Статус", $sort_columns); ?></th>
         </thead>
     <?php
     // initial fetch
