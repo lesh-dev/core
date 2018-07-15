@@ -5,6 +5,7 @@ import {SchoolCard} from "../common/SchoolCard";
 import {school_list} from "../../generated/api_connect";
 import {Spinner} from "../common/Spinner";
 import '../../../scss/school.scss'
+import {redirect} from "../common/utils";
 
 
 interface SLEntryProps {
@@ -38,10 +39,7 @@ export class SchList extends React.Component<SchListProps, SchListState> {
     render_list() {
         let ans = [];
         for (let i = this.state.sch_list.length - 1; i >= 0; --i) {
-            ans.push(<SchoolCard title={this.state.sch_list.values[i].school_title}
-                                 dates={this.state.sch_list.values[i].school_date_start + " - " + this.state.sch_list.values[i].school_date_end}
-                                 place={this.state.sch_list.values[i].school_location}
-                                 emblem={"/static/emblems/events/" + this.state.sch_list.values[i].school_type + ".jpg"}
+            ans.push(<SchoolCard school={this.state.sch_list.values[i]}
                                  callback={() => {this.choose(i)}}
                                  style={{
                                      display: "flex",
@@ -52,7 +50,7 @@ export class SchList extends React.Component<SchListProps, SchListState> {
     }
 
     choose(i: number) {
-        location.replace(this.props.prefix + '/' + this.state.sch_list.values[i].school_id)
+        redirect(this.props.prefix + '/' + this.state.sch_list.values[i].school_id)
     }
 
     render() {

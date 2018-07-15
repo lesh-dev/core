@@ -1,3 +1,19 @@
+@import "comments/comments";
+@import "courses/courses";
+@import "exams/exams";
+@import "schools/schools";
+
 .person__additional {
-  padding-left: 4em;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "exams courses" "schools comments";
+}
+
+.person__additional > div {
+  padding: 20px;
+  margin: 20px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }

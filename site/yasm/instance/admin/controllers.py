@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, request as rq, Response, jsonify
 from ..menu import menu
 from .side import side
-from ..database import db, School, Contact
+from ..database import db, School, Contact, Person
 
 module = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -56,15 +56,15 @@ def school_add():
     return resp(200, [])
 
 
-@module.route('/api/contact/del/<int:id>', methods=['POST'])
-def api_contact_del(id):
+@module.route('/api/person/contact/del/<int:id>', methods=['POST'])
+def api_person_contact_del(id):
     Contact.query.filter(Contact.id == id).delete()
     db.session.commit()
     return jsonify('OK')
 
 
-@module.route('/api/contact/add/<int:person_id>', methods=['POST'])
-def api_contact_add(person_id):
+@module.route('/api/person/contact/add/<int:person_id>', methods=['POST'])
+def api_person_contact_add(person_id):
     name = rq.values['name']
     url = rq.values['url']
     add = Contact(
@@ -73,5 +73,13 @@ def api_contact_add(person_id):
         value=url
     )
     db.session.add(add)
+    db.session.commit()
+    return jsonify('OK')
+
+
+@module.route('/api/person/department/change/<int:person_id>', methods=['POST'])
+def api_person_department_change(person_id):
+    id = rq.values['department_id']
+    p = Person.query.filter(Person.person_id == person_id).update({'department_id': id})
     db.session.commit()
     return jsonify('OK')

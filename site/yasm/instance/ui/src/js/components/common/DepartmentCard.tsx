@@ -1,19 +1,86 @@
 import * as React from 'react'
 import "../../../scss/department_card/department_card.scss"
 import {CSSProperties} from "react";
+import {Department} from "../../generated/interfaces";
 
 export interface DepartmentCardProps {
-    title: string
-    emblem: string
-    callback: () => void
+    department: Department
+    callback?: () => void
     style?: CSSProperties
 }
 
 export class DepartmentCard extends React.Component<DepartmentCardProps> {
     render() {
-        return <div className="department_card" style={this.props.style} onClick={() => {this.props.callback()}}>
-            <img src={this.props.emblem} className="department_card__img"/>
-            <div className="department_card__title">{this.props.title}</div>
+        return <div className="department_card" style={this.props.style} onClick={() => {
+            if (this.props.callback)
+                this.props.callback()
+        }}>
+            <img src={"/static/emblems/departments/" + this.props.department.department_id + ".jpg"}
+                 className="department_card__img"/>
+            <div className="department_card__title">{this.props.department.department_title}</div>
         </div>
     }
 }
+
+export interface DepartmentOptionProps {
+    children: any
+    className: any
+    isDisabled: any
+    isFocused: any
+    isSelected: any
+    onFocus: any
+    onSelect: any
+    option: Department
+}
+
+export class DepartmentOption extends React.Component<DepartmentOptionProps> {
+    handleMouseDown(event: any) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.props.onSelect(this.props.option, event);
+    }
+
+    handleMouseEnter(event: any) {
+        this.props.onFocus(this.props.option, event);
+    }
+
+    handleMouseMove(event: any) {
+        if (this.props.isFocused) return;
+        this.props.onFocus(this.props.option, event);
+    }
+
+    render() {
+        return <div onMouseEnter={(e: any) => {
+            this.handleMouseEnter(e)
+        }}
+                    onMouseMove={(e: any) => {
+                        this.handleMouseMove(e)
+                    }}
+                    onMouseDown={(e: any) => {
+                        this.handleMouseDown(e)
+                    }}
+        >
+            <DepartmentCard department={this.props.option}
+                            style={{
+                                display: "flex",
+                                justifyContent: "left"
+                            }}/>
+        </div>
+    }
+}
+
+export interface DepartmentValueProps {
+    children: any
+    plaseholder: any
+    value: Department
+}
+
+export class DepartmentValue extends React.Component<DepartmentValueProps> {
+    render() {
+        return (
+            <DepartmentCard department={this.props.value}/>
+        );
+    }
+}
+
+

@@ -1,12 +1,10 @@
 import * as React from "react";
-import {DepartmentList, PersonList, School, SchoolList} from "../../generated/interfaces";
-import {callbackify} from "util";
-import {SchoolCard} from "../common/SchoolCard";
+import {DepartmentList} from "../../generated/interfaces";
 import {department_list} from "../../generated/api_connect";
 import {Spinner} from "../common/Spinner";
-import '../../../scss/school.scss'
-import {PersonCard} from "../common/PersonCard";
+import '../../../scss/list/list.scss'
 import {DepartmentCard} from "../common/DepartmentCard";
+import {redirect} from "../common/utils";
 
 export interface DepListProps {
     prefix?: string
@@ -28,8 +26,7 @@ export class DepsList extends React.Component<DepListProps, DepListState> {
     render_list() {
         let ans = [];
         for (let i = 0; i < this.state.deps_list.length; ++i) {
-            ans.push(<DepartmentCard title={this.state.deps_list.values[i].department_title}
-                                     emblem={"/static/emblems/departments/" + this.state.deps_list.values[i].department_id + ".jpg"}
+            ans.push(<DepartmentCard department={this.state.deps_list.values[i]}
                                      callback={() => {
                                          this.choose(i)
                                      }}
@@ -42,7 +39,7 @@ export class DepsList extends React.Component<DepListProps, DepListState> {
     }
 
     choose(i: number) {
-        location.replace(this.props.prefix + '/' + this.state.deps_list.values[i].department_id)
+        redirect(this.props.prefix + '/' + this.state.deps_list.values[i].department_id)
     }
 
     render() {

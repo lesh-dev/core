@@ -37,18 +37,6 @@ const Main = () => (
                        console.log("callback with v:", v)
                    }}/>}/>
             <Route exact
-                   path='/RC/person_card'
-                   render={() => <PersonCard nick="rebenkoy"
-                                             name="Ребенко Ярослав"
-                                             img={"https://pp.userapi.com/c637326/v637326823/30fa3/JdGgrv7ZMxo.jpg?ava=1"}
-                                             callback={() => console.log(loremIpsum())}/>}/>
-            <Route exac
-                   path='/RC/school_card'
-                   render={() => <SchoolCard title={"The School"}
-                                             dates={"never-now"}
-                                             place={"neverland"}
-                                             emblem={"https://s.hdnux.com/photos/53/27/02/11366561/5/920x920.jpg"}/>}/>
-            <Route exact
                    path='/RC/side_menu' render={() => <SideMenu entries={[
                 {
                     url: "ya.ru",
