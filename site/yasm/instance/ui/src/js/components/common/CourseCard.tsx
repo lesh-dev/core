@@ -6,6 +6,7 @@ import {Course} from "../../generated/interfaces";
 
 export interface CourseCardProps {
     course: Course
+    clickable?: boolean
     callback?: () => void
     style?: CSSProperties
 }

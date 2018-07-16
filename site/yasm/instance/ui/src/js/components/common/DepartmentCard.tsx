@@ -8,13 +8,19 @@ export interface DepartmentCardProps {
     department: Department
     style?: CSSProperties
     clickable?: boolean
+    callback?: () => void
 }
 
 export class DepartmentCard extends React.Component<DepartmentCardProps> {
     render() {
-        return <div className="department_card" style={this.props.style} onClick={() => {
-            if (this.props.clickable)
-                redirect('/admin/gui/departments/' + this.props.department.department_id)
+        return <div className={"department_card" + (this.props.clickable ? " department_card--clickable" : "")}
+                    style={this.props.style} onClick={() => {
+            if (this.props.clickable) {
+                if (!this.props.callback)
+                    redirect('/admin/gui/departments/' + this.props.department.department_id)
+                else
+                    this.props.callback()
+            }
         }}>
             <img src={"/static/emblems/departments/" + this.props.department.department_id + ".jpg"}
                  className="department_card__img"/>

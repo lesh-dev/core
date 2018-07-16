@@ -1,5 +1,4 @@
 import * as React from "react";
-import '../../../scss/list/list.scss'
 
 export interface ListProps {
     renderer: any

@@ -8,14 +8,20 @@ import Async from "react-promise"
 export interface PersonCardProps {
     person: Person
     style?: CSSProperties
+    callback?: () => void
     clickable?: boolean
 }
 
 export class PersonCard extends React.Component<PersonCardProps> {
     render() {
-        return <div className="person_card" style={this.props.style} onClick={() => {
-            if (this.props.clickable)
-                redirect('/admin/gui/people/' + this.props.person.person_id)
+        return <div className={"person_card" + (this.props.clickable ? " person_card--clickable" : "")}
+                    style={this.props.style} onClick={() => {
+            if (this.props.clickable) {
+                if (!this.props.callback)
+                    redirect('/admin/gui/people/' + this.props.person.person_id)
+                else
+                    this.props.callback()
+            }
         }}>
             <Async promise={ava_small(this.props.person)} then={val => {
                 return <img src={val} className="person_card__img"/>

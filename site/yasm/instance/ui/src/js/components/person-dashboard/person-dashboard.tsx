@@ -1,6 +1,6 @@
 import * as React from "react";
 import 'react-dates/initialize'
-import {DepartmentList, Person, PersonList, School, SchoolList} from "../../generated/interfaces";
+import {DepartmentList, Person, PersonList, PersonSchool, School, SchoolList} from "../../generated/interfaces";
 import 'react-dates/lib/css/_datepicker.css';
 import {department_list, getRequest, person_fill, person_list} from "../../generated/api_connect";
 import {Spinner} from "../common/Spinner";
@@ -17,6 +17,8 @@ import {SchoolCard} from "../common/SchoolCard";
 import {CourseCard} from "../common/CourseCard";
 import {ava_big} from "../common/utils";
 import Async from "react-promise";
+import {List} from "../common/List";
+import {element} from "prop-types";
 
 export interface PersonDashboardProps {
     person_id: number
@@ -131,13 +133,18 @@ export class PersonDashboard extends React.Component<PersonDashboardProps, Perso
     }
 
     render_schools() {
-        let schools = [];
-        for (let person_school of this.state.person.person_school_list.values)
-            schools.push(<SchoolCard school={person_school.school_id_fk}
-                                     style={{
-                                         display: 'flex',
-                                         justifyContent: 'left'
-                                     }}/>)
+        let schools = <List renderer={(school: School) => {
+            return <SchoolCard school={school}
+                               style={{
+                                   display: 'flex',
+                                   justifyContent: 'left'
+                               }}
+                               clickable={true}
+            />
+        }
+        } data={this.state.person.person_school_list.values.map((element: PersonSchool) => {
+            return element.school_id_fk
+        })}/>;
         return <div className="person__additional__schools">
             <Cut label={"Школы"} content={schools}/>
         </div>
