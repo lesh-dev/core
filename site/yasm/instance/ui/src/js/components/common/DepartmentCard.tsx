@@ -2,18 +2,19 @@ import * as React from 'react'
 import "../../../scss/department_card/department_card.scss"
 import {CSSProperties} from "react";
 import {Department} from "../../generated/interfaces";
+import {redirect} from "./utils";
 
 export interface DepartmentCardProps {
     department: Department
-    callback?: () => void
     style?: CSSProperties
+    clickable?: boolean
 }
 
 export class DepartmentCard extends React.Component<DepartmentCardProps> {
     render() {
         return <div className="department_card" style={this.props.style} onClick={() => {
-            if (this.props.callback)
-                this.props.callback()
+            if (this.props.clickable)
+                redirect('/admin/gui/departments/' + this.props.department.department_id)
         }}>
             <img src={"/static/emblems/departments/" + this.props.department.department_id + ".jpg"}
                  className="department_card__img"/>

@@ -15,7 +15,8 @@ import {DepartmentCard, DepartmentOption, DepartmentValue} from "../common/Depar
 import {Cut} from "../common/Cut";
 import {SchoolCard} from "../common/SchoolCard";
 import {CourseCard} from "../common/CourseCard";
-import {vk_ava_big} from "../common/utils";
+import {ava_big} from "../common/utils";
+import Async from "react-promise";
 
 export interface PersonDashboardProps {
     person_id: number
@@ -146,8 +147,9 @@ export class PersonDashboard extends React.Component<PersonDashboardProps, Perso
         this.state ? console.log(this.state.person.department_id_fk.department_title) : null;
         return (this.state) ? <div className="person">
             <div className="person__title">
-                <img className="person__title__img"
-                     src={vk_ava_big(this.state.person)}/>
+                <Async promise={ava_big(this.state.person)} then={val => {
+                    return <img className="person__title__img" src={val}/>
+                }}/>
                 <div className="person__title__text">
                     <div className="person__title__text_fio">
                         {this.state.person.last_name ? <ET text={this.state.person.last_name} callback={() => {
