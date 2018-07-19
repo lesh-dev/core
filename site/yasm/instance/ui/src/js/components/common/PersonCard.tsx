@@ -14,6 +14,7 @@ export interface PersonCardProps {
 
 export class PersonCard extends React.Component<PersonCardProps> {
     render() {
+        console.log(this.props.person);
         return <div className={"person_card" + (this.props.clickable ? " person_card--clickable" : "")}
                     style={this.props.style} onClick={() => {
             if (this.props.clickable) {
