@@ -31,7 +31,7 @@ import {
 
 import {Promise} from 'es6-promise';
 
-export function getRequest(url: string, method: string = 'GET'): Promise<any> {
+export function getRequest(url: string, type: string = 'GET'): Promise<any> {
     return new Promise<any>(
         function (resolve, reject) {
             const request = new XMLHttpRequest();
@@ -45,7 +45,7 @@ export function getRequest(url: string, method: string = 'GET'): Promise<any> {
             request.onerror = function () {
                 reject(new Error('XMLHttpRequest Error: ' + this.statusText));
             };
-            request.open(method, url);
+            request.open(type, url);
             request.send();
         }
     );
