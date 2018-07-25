@@ -24,7 +24,6 @@ def create_reques_callback(url):
     def callback(self):
         r = requests.head(request_format.format(url=url))
         self.assertEquals(r.status_code, 200)
-
     return callback
 
 

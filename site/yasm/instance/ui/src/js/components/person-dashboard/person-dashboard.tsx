@@ -173,7 +173,7 @@ export class PersonDashboard extends React.Component<PersonDashboardProps, Perso
                         <Select onChange={(v: any) => {
                             this.change_department(v)
                         }}
-                                valueComponent={DepartmentValue}
+                                // valueComponent={DepartmentValue}
                                 optionComponent={DepartmentOption}
                                 options={this.state.departments.values}
                                 value={this.state.person.department_id_fk}

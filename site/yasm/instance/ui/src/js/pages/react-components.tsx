@@ -8,6 +8,9 @@ import {ET} from "../components/common/EditableText";
 import {PersonCard} from "../components/common/PersonCard";
 import {SchoolCard} from "../components/common/SchoolCard";
 import {SideMenu} from "../components/common/SideMenu";
+import {default_Contact, default_Course, default_Person, default_School} from "../generated/defaults";
+import {CourseCard} from "../components/common/CourseCard";
+import {ContactCard} from "../components/common/ContactCard";
 
 let loremIpsum = require("lorem-ipsum");
 
@@ -61,6 +64,21 @@ const Main = () => (
                     ]
                 }
             ]}/>}/>
+            <Route exact
+                   path='/RC/person_card'
+                   render={() => {
+                       console.log(default_Person);
+                       return <PersonCard person={default_Person}/>;
+                   }}/>
+            <Route exact
+                   path='/RC/school_card'
+                   render={() => <SchoolCard school={default_School}/>}/>
+            <Route exact
+                   path='/RC/course_card'
+                   render={() => <CourseCard course={default_Course}/>}/>
+            <Route exact
+                   path='/RC/contact_card'
+                   render={() => <ContactCard contact={default_Contact}/>} />
         </Switch>
     </main>
 );
@@ -74,6 +92,10 @@ const Header = () => (
                 <li><Link to='/RC/cut'>Cut</Link></li>
                 <li><Link to={'/RC/editable_text'}>EditableText</Link></li>
                 <li><Link to={'/RC/side_menu'}>SideMenu</Link></li>
+                <li><Link to={'/RC/person_card'}>PersonCard</Link></li>
+                <li><Link to={'/RC/school_card'}>SchoolCard</Link></li>
+                <li><Link to={'/RC/course_card'}>CourseCard</Link></li>
+                <li><Link to={'/RC/contact_card'}>ContactCard</Link></li>
             </ul>
         </nav>
     </header>

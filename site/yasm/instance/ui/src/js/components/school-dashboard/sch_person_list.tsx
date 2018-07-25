@@ -17,6 +17,7 @@ import {
     TableHeaderRow,
     TableRowDetail, Toolbar
 } from '@devexpress/dx-react-grid-material-ui';
+import {PersonCard} from "../common/PersonCard";
 
 export interface SPListProps {
     spl: PersonSchoolList
@@ -101,6 +102,7 @@ function render_changes(row: any) {
 
 const RowDetail = (row: any) => {
     return <div className={"details"}>
+        <PersonCard person={row.row} clickable={true}/>
         {render_nick(row.row)}
         {render_status(row.row)}
         {render_grade(row.row)}
@@ -158,7 +160,8 @@ export class SchPersonList extends React.Component<SPListProps, SPListState> {
                 comment: this.props.spl.values[i].person_school_comment,
                 date_start: this.props.spl.values[i].frm,
                 date_end: this.props.spl.values[i].tll,
-                nick: this.props.spl.values[i].member_person_id_fk.nick_name
+                nick: this.props.spl.values[i].member_person_id_fk.nick_name,
+                person_id: this.props.spl.values[i].member_person_id
             });
         }
         return list
