@@ -73,8 +73,6 @@ const Header = () => (
                 <li><Link to='/RC/spinner'>Spinner</Link></li>
                 <li><Link to='/RC/cut'>Cut</Link></li>
                 <li><Link to={'/RC/editable_text'}>EditableText</Link></li>
-                <li><Link to={'/RC/person_card'}>PersonCard</Link></li>
-                <li><Link to={'/RC/school_card'}>SchoolCard</Link></li>
                 <li><Link to={'/RC/side_menu'}>SideMenu</Link></li>
             </ul>
         </nav>
