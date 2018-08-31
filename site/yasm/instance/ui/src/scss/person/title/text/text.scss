@@ -1,3 +1,7 @@
+@import "fio/fio";
+@import "department/department";
+@import "contacts/contacts";
+
 .person__title__text {
   display: flex;
   flex-direction: column;

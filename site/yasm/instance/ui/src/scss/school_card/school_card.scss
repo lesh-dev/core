@@ -13,3 +13,8 @@
   background: rgba(0, 0, 0, 0.1);
   color: black;
 }
+
+.school_card--clickable:hover {
+  background: calc(15%);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}

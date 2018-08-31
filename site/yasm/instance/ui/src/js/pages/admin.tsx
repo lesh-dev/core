@@ -14,19 +14,19 @@ const prefix = '/admin/gui';
 const Main = () => (
     <Switch>
         <Route exact path={prefix + '/schools/list'} render={() =>
-            <SchList prefix={prefix + '/schools'}/>
+            <SchList/>
         }/>
         <Route exact path={prefix + '/schools/:id'} render={({match}) =>
             <SchoolDashboard sch={match.params.id}/>
         }/>
         <Route exact path={prefix + '/people/list'} render={() =>
-            <PersList prefix={prefix + '/people'}/>
+            <PersList/>
         }/>
         <Route exact path={prefix + '/people/:id'} render={({match}) =>
             <PersonDashboard person_id={match.params.id}/>
         }/>
         <Route exact path={prefix + '/departments/list'} render={() =>
-            <DepsList prefix={prefix + '/departments'}/>
+            <DepsList/>
         }/>
         <Route exact path={prefix + '/departments/:id'} render={({match}) =>
             <DepartmentDashboard department_id={match.params.id}/>

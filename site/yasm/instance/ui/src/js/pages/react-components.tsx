@@ -8,6 +8,9 @@ import {ET} from "../components/common/EditableText";
 import {PersonCard} from "../components/common/PersonCard";
 import {SchoolCard} from "../components/common/SchoolCard";
 import {SideMenu} from "../components/common/SideMenu";
+import {default_Contact, default_Course, default_Person, default_School} from "../generated/defaults";
+import {CourseCard} from "../components/common/CourseCard";
+import {ContactCard} from "../components/common/ContactCard";
 
 let loremIpsum = require("lorem-ipsum");
 
@@ -37,18 +40,6 @@ const Main = () => (
                        console.log("callback with v:", v)
                    }}/>}/>
             <Route exact
-                   path='/RC/person_card'
-                   render={() => <PersonCard nick="rebenkoy"
-                                             name="Ребенко Ярослав"
-                                             img={"https://pp.userapi.com/c637326/v637326823/30fa3/JdGgrv7ZMxo.jpg?ava=1"}
-                                             callback={() => console.log(loremIpsum())}/>}/>
-            <Route exac
-                   path='/RC/school_card'
-                   render={() => <SchoolCard title={"The School"}
-                                             dates={"never-now"}
-                                             place={"neverland"}
-                                             emblem={"https://s.hdnux.com/photos/53/27/02/11366561/5/920x920.jpg"}/>}/>
-            <Route exact
                    path='/RC/side_menu' render={() => <SideMenu entries={[
                 {
                     url: "ya.ru",
@@ -73,6 +64,21 @@ const Main = () => (
                     ]
                 }
             ]}/>}/>
+            <Route exact
+                   path='/RC/person_card'
+                   render={() => {
+                       console.log(default_Person);
+                       return <PersonCard person={default_Person}/>;
+                   }}/>
+            <Route exact
+                   path='/RC/school_card'
+                   render={() => <SchoolCard school={default_School}/>}/>
+            <Route exact
+                   path='/RC/course_card'
+                   render={() => <CourseCard course={default_Course}/>}/>
+            <Route exact
+                   path='/RC/contact_card'
+                   render={() => <ContactCard contact={default_Contact}/>} />
         </Switch>
     </main>
 );
@@ -85,9 +91,11 @@ const Header = () => (
                 <li><Link to='/RC/spinner'>Spinner</Link></li>
                 <li><Link to='/RC/cut'>Cut</Link></li>
                 <li><Link to={'/RC/editable_text'}>EditableText</Link></li>
+                <li><Link to={'/RC/side_menu'}>SideMenu</Link></li>
                 <li><Link to={'/RC/person_card'}>PersonCard</Link></li>
                 <li><Link to={'/RC/school_card'}>SchoolCard</Link></li>
-                <li><Link to={'/RC/side_menu'}>SideMenu</Link></li>
+                <li><Link to={'/RC/course_card'}>CourseCard</Link></li>
+                <li><Link to={'/RC/contact_card'}>ContactCard</Link></li>
             </ul>
         </nav>
     </header>

@@ -25,7 +25,7 @@ module = Blueprint('api', __name__, url_prefix='/api')
 connector_template = """
 import {Promise} from 'es6-promise';
 
-export function getRequest(url: string): Promise<any> {
+export function getRequest(url: string, type: string = 'GET'): Promise<any> {
     return new Promise<any>(
         function (resolve, reject) {
             const request = new XMLHttpRequest();
@@ -39,7 +39,7 @@ export function getRequest(url: string): Promise<any> {
             request.onerror = function () {
                 reject(new Error('XMLHttpRequest Error: ' + this.statusText));
             };
-            request.open('GET', url);
+            request.open(type, url);
             request.send();
         }
     );
@@ -91,6 +91,31 @@ def main():
                 "export interface {name}List {{\n    values: {name}[],\n    length: number\n}}\n\n".format(
                     name=CC(name)))
         ts_interfaces.close()
+
+    def gen_defaults():
+        def get_default(f, s):
+            if s == 'number':
+                return '0'
+            elif s == 'string':
+                return '"{}"'.format(f)
+            elif s.endswith('List'):
+                return '{{values: [], length: 0}} as {f}'.format(f=s)
+            else:
+                return 'default_{f}'.format(f=s)
+        ts_defaults = open("instance/ui/src/js/generated/defaults.ts", "w")
+        ts_defaults.write("import {")
+        for name, fields in models.items():
+            ts_defaults.write(CC(name))
+            ts_defaults.write(', ')
+            ts_defaults.write(CC(name) + 'List')
+            ts_defaults.write(', ')
+        ts_defaults.write('} from "./interfaces"\n\n')
+        for name, fields in models.items():
+            ts_defaults.write("export const default_{name} = {{\n".format(name=CC(name)))
+            for field in fields:
+                ts_defaults.write("    {name}: {type},\n".format(name=field[0], type=get_default(field[0], field[1])))
+            ts_defaults.write("}} as {name};\n\n".format(name=CC(name)))
+        ts_defaults.close()
 
     def gen_connectors():
         ts_connector = open("instance/ui/src/js/generated/api_connect.ts", "w")
@@ -195,6 +220,7 @@ def main():
     gen_interfaces()
     gen_connectors()
     gen_api()
+    gen_defaults()
 
 
 if __name__ == '__main__':
