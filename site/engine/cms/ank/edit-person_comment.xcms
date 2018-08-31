@@ -112,11 +112,11 @@ function xsm_edit_person_comment()
     $person = xdb_get_entity_by_id('person', $blamed_person_id);
 
     // Админы и привилегированные могут редактировать приватные комментарии
-    $xsm_private = xcms_user()->check_rights("xsm-private", false);
+    $xsm_private = xcms_user()->check_rights(XSM_ACL_PRIVATE, false);
     $xsm_admin = xcms_user()->check_rights("admin", false);
     $record_acl = xcms_get_key_or_enc($person_comment, "record_acl");
 
-    if ($record_acl == "xsm-private" && !$xsm_private && !$xsm_admin)
+    if ($record_acl == XSM_ACL_PRIVATE && !$xsm_private && !$xsm_admin)
     {
         xcms_log(XLOG_ERROR, "ACL violation for person comment");
         die("Вам сюда нельзя. Если вы перешли по какой-либо ссылке, сообщите об этом на dev@fizlesh.ru. ");
@@ -151,7 +151,7 @@ function xsm_edit_person_comment()
 if (@$_POST["update-person_comment"])
 {
     // Админы и привилегированные могут редактировать приватные комментарии
-    $xsm_private = xcms_user()->check_rights("xsm-private", false);
+    $xsm_private = xcms_user()->check_rights(XSM_ACL_PRIVATE, false);
     $xsm_admin = xcms_user()->check_rights("admin", false);
 
     $person_comment_id = xcms_get_key_or($_POST, "person_comment_id");
@@ -161,7 +161,7 @@ if (@$_POST["update-person_comment"])
         $person_comment = xdb_get_entity_by_id("person_comment", $person_comment_id);
         $record_acl_prev = xcms_get_key_or_enc($person_comment, "record_acl");
 
-        if ($record_acl_prev == "xsm-private" && !$xsm_private && !$xsm_admin)
+        if ($record_acl_prev == XSM_ACL_PRIVATE && !$xsm_private && !$xsm_admin)
         {
             xcms_log(XLOG_ERROR, "ACL violation for person comment update");
             die("Вам сюда нельзя. Если вы перешли по какой-либо ссылке, сообщите об этом на dev@fizlesh.ru. ");
@@ -170,7 +170,7 @@ if (@$_POST["update-person_comment"])
 
     $record_acl = xcms_get_key_or_enc($_POST, "record_acl");
     // send only public comments
-    if ($record_acl != "xsm-private")
+    if ($record_acl != XSM_ACL_PRIVATE)
     {
         xsm_notify_person_comment_edit($_POST);
     }

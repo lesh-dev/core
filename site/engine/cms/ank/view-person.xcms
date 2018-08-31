@@ -241,7 +241,7 @@ function xsm_draw_person_comments($db, $person_id)
     xsm_view_operations('person_comment', 'комментарий', "&amp;blamed_person_id=$person_id");
 
     // Админы и привилегированные могут видеть скрытые комментарии
-    $xsm_private = xcms_user()->check_rights("xsm-private", false);
+    $xsm_private = xcms_user()->check_rights(XSM_ACL_PRIVATE, false);
     $xsm_admin = xcms_user()->check_rights("admin", false);
 
     $query = "SELECT * FROM person_comment
@@ -279,7 +279,7 @@ function xsm_draw_person_comments($db, $person_id)
         $school_id = xcms_get_key_or_enc($comment_data, "school_id");
         $comment_text = xcms_html_wrap_by_crlf(xsm_highlight_links($comment_data["comment_text"]));
 
-        if ($record_acl == "xsm-private" && !$xsm_private && !$xsm_admin)
+        if ($record_acl == XSM_ACL_PRIVATE && !$xsm_private && !$xsm_admin)
         {
             $comment_text = "(Конфиденциальный комментарий. Для просмотра обратитесь к Директорату)";
         }
@@ -290,11 +290,11 @@ function xsm_draw_person_comments($db, $person_id)
         ?>
         <tr>
             <td class="ankList"><?php echo $owner_login; ?></td>
-            <td class="ankList"><?php echo $comment_text; ?></td>
+            <td class="ankList acl-<?php echo $record_acl; ?>"><?php echo $comment_text; ?></td>
             <td class="ankList"><?php echo $school_id; ?></td>
             <td class="ankList"><?php echo $person_comment_created; ?></td>
             <td class="ankList"><?php
-                if ($record_acl == "xsm-private" && !$xsm_private && !$xsm_admin)
+                if ($record_acl == XSM_ACL_PRIVATE && !$xsm_private && !$xsm_admin)
                 {?>
                     (Запрещено)
                 <?php

@@ -289,11 +289,12 @@ function xsm_show_all_person_list($sort_columns)
         $last_comments_html = "";
         if ($show_comments)
         {
+            $xsm_private_str = XSM_ACL_PRIVATE;
             $comment_query = "SELECT * FROM person_comment
                 WHERE
                 (blamed_person_id = $person_id)
                 AND (person_comment_deleted <> 'deleted')
-                AND (record_acl <> 'xsm-private')
+                AND (record_acl <> '$xsm_private_str')
                 ORDER BY person_comment_created DESC
                 LIMIT 2
                 ";
