@@ -19,6 +19,9 @@ import {ava_big} from "../common/utils";
 import Async from "react-promise";
 import {List} from "../common/List";
 import {element} from "prop-types";
+import {PersonExamList} from "./person_exam_list";
+import {PersonCourseList} from "./person_course_list";
+import {scalarMult} from "tweetnacl";
 
 export interface PersonDashboardProps {
     person_id: number
@@ -112,9 +115,7 @@ export class PersonDashboard extends React.Component<PersonDashboardProps, Perso
     }
 
     render_exams() {
-        let exams = [];
-        for (let exam of this.state.person.exam_list.values)
-            exams.push(<CourseCard course={exam.course_id_fk}/>)
+        let exams = <PersonExamList list={this.state.person.exam_list}/>;
         return <div className="person__additional__exams">
             <Cut label={"ЗачОты"}
                  content={exams}/>
@@ -122,10 +123,7 @@ export class PersonDashboard extends React.Component<PersonDashboardProps, Perso
     }
 
     render_courses() {
-        let courses = [];
-        for (let course_teacher of this.state.person.course_teachers_list.values)
-            if (course_teacher.course_id_fk)
-                courses.push(<CourseCard course={course_teacher.course_id_fk}/>)
+        let courses = <PersonCourseList list={this.state.person.course_teachers_list}/>;
         return <div className="person__additional__courses">
             <Cut label={"Прочитанные курсы"}
                  content={courses}/>
@@ -142,9 +140,11 @@ export class PersonDashboard extends React.Component<PersonDashboardProps, Perso
                                clickable={true}
             />
         }
-        } data={this.state.person.person_school_list.values.map((element: PersonSchool) => {
-            return element.school_id_fk
-        })}/>;
+        }
+                            data={this.state.person.person_school_list.values.map((element: PersonSchool) => {
+                                return element.school_id_fk
+                            }).reverse()}
+        />;
         return <div className="person__additional__schools">
             <Cut label={"Школы"} content={schools}/>
         </div>
@@ -173,7 +173,7 @@ export class PersonDashboard extends React.Component<PersonDashboardProps, Perso
                         <Select onChange={(v: any) => {
                             this.change_department(v)
                         }}
-                                // valueComponent={DepartmentValue}
+                            // valueComponent={DepartmentValue}
                                 optionComponent={DepartmentOption}
                                 options={this.state.departments.values}
                                 value={this.state.person.department_id_fk}

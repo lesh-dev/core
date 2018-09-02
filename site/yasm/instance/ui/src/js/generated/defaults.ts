@@ -1,4 +1,4 @@
-import {Notification, NotificationList, Department, DepartmentList, Person, PersonList, Contact, ContactList, Course, CourseList, CourseTeachers, CourseTeachersList, Exam, ExamList, School, SchoolList, PersonSchool, PersonSchoolList, PersonComment, PersonCommentList, Submission, SubmissionList, Contestants, ContestantsList, Problems, ProblemsList, Solutions, SolutionsList, } from "./interfaces"
+import {Notification, NotificationList, Department, DepartmentList, Person, PersonList, Contact, ContactList, School, SchoolList, Course, CourseList, CourseTeachers, CourseTeachersList, Exam, ExamList, PersonSchool, PersonSchoolList, PersonComment, PersonCommentList, Submission, SubmissionList, Contestants, ContestantsList, Problems, ProblemsList, Solutions, SolutionsList, } from "./interfaces"
 
 export const default_Notification = {
     notification_id: 0,
@@ -67,10 +67,27 @@ export const default_Contact = {
     value: "value",
 } as Contact;
 
+export const default_School = {
+    school_id: 0,
+    school_title: "school_title",
+    school_type: "school_type",
+    school_date_start: "school_date_start",
+    school_date_end: "school_date_end",
+    school_location: "school_location",
+    school_coords: "school_coords",
+    school_created: "school_created",
+    school_modified: "school_modified",
+    school_changedby: "school_changedby",
+    course_list: {values: [], length: 0} as CourseList,
+    person_school_list: {values: [], length: 0} as PersonSchoolList,
+    person_comment_list: {values: [], length: 0} as PersonCommentList,
+} as School;
+
 export const default_Course = {
     course_id: 0,
     course_title: "course_title",
     school_id: 0,
+    school_id_fk: default_School,
     course_cycle: "course_cycle",
     target_class: "target_class",
     course_desc: "course_desc",
@@ -108,21 +125,6 @@ export const default_Exam = {
     exam_modified: "exam_modified",
     exam_changedby: "exam_changedby",
 } as Exam;
-
-export const default_School = {
-    school_id: 0,
-    school_title: "school_title",
-    school_type: "school_type",
-    school_date_start: "school_date_start",
-    school_date_end: "school_date_end",
-    school_location: "school_location",
-    school_coords: "school_coords",
-    school_created: "school_created",
-    school_modified: "school_modified",
-    school_changedby: "school_changedby",
-    person_school_list: {values: [], length: 0} as PersonSchoolList,
-    person_comment_list: {values: [], length: 0} as PersonCommentList,
-} as School;
 
 export const default_PersonSchool = {
     person_school_id: 0,

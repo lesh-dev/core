@@ -5,7 +5,6 @@
 
 .person__additional {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   grid-template-areas: "exams courses" "schools comments";
 }
 

@@ -67,7 +67,6 @@ const Main = () => (
             <Route exact
                    path='/RC/person_card'
                    render={() => {
-                       console.log(default_Person);
                        return <PersonCard person={default_Person}/>;
                    }}/>
             <Route exact

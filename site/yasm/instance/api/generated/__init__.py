@@ -235,6 +235,61 @@ def contact_list(req=None, raw=False):
     })
 
 
+@module.route("/school_list", methods=['GET'])
+def school_list(req=None, raw=False):
+    regular = [
+        'school_id',
+        'school_title',
+        'school_type',
+        'school_date_start',
+        'school_date_end',
+        'school_location',
+        'school_coords',
+        'school_created',
+        'school_modified',
+        'school_changedby',
+    ]
+    additional = {
+        'course_list': {'length': 0, 'values': []},
+        'person_school_list': {'length': 0, 'values': []},
+        'person_comment_list': {'length': 0, 'values': []},
+    }
+    field = {
+        'school_id': School.school_id,
+        'school_title': School.school_title,
+        'school_type': School.school_type,
+        'school_date_start': School.school_date_start,
+        'school_date_end': School.school_date_end,
+        'school_location': School.school_location,
+        'school_coords': School.school_coords,
+        'school_created': School.school_created,
+        'school_modified': School.school_modified,
+        'school_changedby': School.school_changedby,
+    }
+    query = School.query
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
+        if arg in regular:
+            query = query.filter(field[arg] == val)
+    query = query.all()
+    ans = []
+    for entry in query:
+        d = dict()
+        d.update(entry.__dict__)
+        d.pop('_sa_instance_state')
+        d.update(additional)
+        ans.append(d)
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
+    return jsonify({
+        'length': len(ans),
+        'values': ans
+    })
+
+
 @module.route("/course_list", methods=['GET'])
 def course_list(req=None, raw=False):
     regular = [
@@ -278,6 +333,8 @@ def course_list(req=None, raw=False):
     ans = []
     for entry in query:
         d = dict()
+        d['school_id_fk'] = school_list(req={'school_id': entry.school_id}, raw=True)['values']
+        d['school_id_fk'] = d['school_id_fk'][0] if len(d['school_id_fk']) else None
         d.update(entry.__dict__)
         d.pop('_sa_instance_state')
         d.update(additional)
@@ -380,60 +437,6 @@ def exam_list(req=None, raw=False):
         d['student_person_id_fk'] = d['student_person_id_fk'][0] if len(d['student_person_id_fk']) else None
         d['course_id_fk'] = course_list(req={'course_id': entry.course_id}, raw=True)['values']
         d['course_id_fk'] = d['course_id_fk'][0] if len(d['course_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
-    return jsonify({
-        'length': len(ans),
-        'values': ans
-    })
-
-
-@module.route("/school_list", methods=['GET'])
-def school_list(req=None, raw=False):
-    regular = [
-        'school_id',
-        'school_title',
-        'school_type',
-        'school_date_start',
-        'school_date_end',
-        'school_location',
-        'school_coords',
-        'school_created',
-        'school_modified',
-        'school_changedby',
-    ]
-    additional = {
-        'person_school_list': {'length': 0, 'values': []},
-        'person_comment_list': {'length': 0, 'values': []},
-    }
-    field = {
-        'school_id': School.school_id,
-        'school_title': School.school_title,
-        'school_type': School.school_type,
-        'school_date_start': School.school_date_start,
-        'school_date_end': School.school_date_end,
-        'school_location': School.school_location,
-        'school_coords': School.school_coords,
-        'school_created': School.school_created,
-        'school_modified': School.school_modified,
-        'school_changedby': School.school_changedby,
-    }
-    query = School.query
-    col = request.args.items() if req is None else req.items()
-    for arg, val in col:
-        if arg in regular:
-            query = query.filter(field[arg] == val)
-    query = query.all()
-    ans = []
-    for entry in query:
-        d = dict()
         d.update(entry.__dict__)
         d.pop('_sa_instance_state')
         d.update(additional)

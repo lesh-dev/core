@@ -232,6 +232,52 @@ class Contact(db.Model):
     value = NamedColumn(db.Text, nick='значение', nullable=False)
 
 
+class School(db.Model):
+    __tablename__ = 'school'
+    school_id = NamedColumn(db.Integer,
+                            nick="id",
+                            primary_key=True,
+                            autoincrement=True)
+    school_title = NamedColumn(db.Text,
+                               nick="название",
+                               nullable=False)
+    school_type = NamedColumn(
+        db.Enum(
+            'lesh',
+            'vesh',
+            'zesh',
+            'summer',
+            'summmer',
+            'winter',
+            'spring',
+            name='school_type'),
+        nick="тип",
+        nullable=False)  # enum:(летняя, зимняя, весенняя) TODO: simplify
+    school_date_start = NamedColumn(db.Text,
+                                    nick="дата начала",
+                                    nullable=False)  # дата начала
+    school_date_end = NamedColumn(db.Text,
+                                  nick="дата конца",
+                                  nullable=False)  # дата конца
+    school_location = NamedColumn(db.Text,
+                                  nick="место проведения",
+                                  nullable=False)  # место проведения (2.7+)
+    school_coords = NamedColumn(db.Text,
+                                  nick="координаты проведения",
+                                  nullable=False)  # координаты
+    school_created = NamedColumn(db.Text,
+                                 nick="дата создания",
+                                 nullable=False)  # utc timestamp
+    school_modified = NamedColumn(db.Text,
+                                  nick="последнее изменение",
+                                  nullable=False)  # utc timestamp
+    school_changedby = NamedColumn(db.Text,
+                                   nick="изменивший",
+                                   nullable=False)  # user name
+    person_comments = db.relationship('PersonComment', backref='school', lazy='dynamic')
+    person_schools = db.relationship('PersonSchool', backref='school', lazy='dynamic')
+
+
 class Course(db.Model):
     __tablename__ = 'course'
     course_id = NamedColumn(db.Integer,
@@ -242,6 +288,7 @@ class Course(db.Model):
                                nick="название",
                                nullable=False)  # название курса
     school_id = NamedColumn(db.Integer,
+                            MarkedForeignKey(School.school_id),
                             nick="школа",
                             nullable=False)  # ссылка на школу, на которой читали курс
     course_cycle = NamedColumn(db.Text,
@@ -360,52 +407,6 @@ class Exam(db.Model):
 
     def course(self):
         return Course.query.get(self.course_id)
-
-
-class School(db.Model):
-    __tablename__ = 'school'
-    school_id = NamedColumn(db.Integer,
-                            nick="id",
-                            primary_key=True,
-                            autoincrement=True)
-    school_title = NamedColumn(db.Text,
-                               nick="название",
-                               nullable=False)
-    school_type = NamedColumn(
-        db.Enum(
-            'lesh',
-            'vesh',
-            'zesh',
-            'summer',
-            'summmer',
-            'winter',
-            'spring',
-            name='school_type'),
-        nick="тип",
-        nullable=False)  # enum:(летняя, зимняя, весенняя) TODO: simplify
-    school_date_start = NamedColumn(db.Text,
-                                    nick="дата начала",
-                                    nullable=False)  # дата начала
-    school_date_end = NamedColumn(db.Text,
-                                  nick="дата конца",
-                                  nullable=False)  # дата конца
-    school_location = NamedColumn(db.Text,
-                                  nick="место проведения",
-                                  nullable=False)  # место проведения (2.7+)
-    school_coords = NamedColumn(db.Text,
-                                  nick="координаты проведения",
-                                  nullable=False)  # координаты
-    school_created = NamedColumn(db.Text,
-                                 nick="дата создания",
-                                 nullable=False)  # utc timestamp
-    school_modified = NamedColumn(db.Text,
-                                  nick="последнее изменение",
-                                  nullable=False)  # utc timestamp
-    school_changedby = NamedColumn(db.Text,
-                                   nick="изменивший",
-                                   nullable=False)  # user name
-    person_comments = db.relationship('PersonComment', backref='school', lazy='dynamic')
-    person_schools = db.relationship('PersonSchool', backref='school', lazy='dynamic')
 
 
 class PersonSchool(db.Model):

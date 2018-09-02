@@ -85,10 +85,32 @@ export interface ContactList {
     length: number
 }
 
+export interface School {
+    school_id: number,
+    school_title: string,
+    school_type: string,
+    school_date_start: string,
+    school_date_end: string,
+    school_location: string,
+    school_coords: string,
+    school_created: string,
+    school_modified: string,
+    school_changedby: string,
+    course_list: CourseList,
+    person_school_list: PersonSchoolList,
+    person_comment_list: PersonCommentList,
+}
+
+export interface SchoolList {
+    values: School[],
+    length: number
+}
+
 export interface Course {
     course_id: number,
     course_title: string,
     school_id: number,
+    school_id_fk: School,
     course_cycle: string,
     target_class: string,
     course_desc: string,
@@ -139,26 +161,6 @@ export interface Exam {
 
 export interface ExamList {
     values: Exam[],
-    length: number
-}
-
-export interface School {
-    school_id: number,
-    school_title: string,
-    school_type: string,
-    school_date_start: string,
-    school_date_end: string,
-    school_location: string,
-    school_coords: string,
-    school_created: string,
-    school_modified: string,
-    school_changedby: string,
-    person_school_list: PersonSchoolList,
-    person_comment_list: PersonCommentList,
-}
-
-export interface SchoolList {
-    values: School[],
     length: number
 }
 

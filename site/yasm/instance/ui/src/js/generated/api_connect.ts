@@ -7,14 +7,14 @@ import {
     PersonList,
     Contact,
     ContactList,
+    School,
+    SchoolList,
     Course,
     CourseList,
     CourseTeachers,
     CourseTeachersList,
     Exam,
     ExamList,
-    School,
-    SchoolList,
     PersonSchool,
     PersonSchoolList,
     PersonComment,
@@ -164,6 +164,35 @@ export function contact_fill(obj: Contact) {
 }
 
 
+export function school_list(d: dict = {}) {
+    let req = '?';
+    for (let key in d) {
+        req += key + '=' + d[key] + '&'
+    }
+    return getRequest('/api/school_list' + req)
+}
+
+
+export function school_fill(obj: School) {
+    return new Promise<School>((resolve, reject) => {
+        let ans: School = obj;
+        Promise.all([
+                course_list({school_id: String(obj.school_id)}),
+                person_school_list({school_id: String(obj.school_id)}),
+                person_comment_list({school_id: String(obj.school_id)}),
+             ]
+        ).then((values) => {
+            ans.course_list = values[0];
+            ans.person_school_list = values[1];
+            ans.person_comment_list = values[2];
+            resolve(ans);
+        }).catch((error) => {
+            reject(error);
+        })
+    })
+}
+
+
 export function course_list(d: dict = {}) {
     let req = '?';
     for (let key in d) {
@@ -229,33 +258,6 @@ export function exam_fill(obj: Exam) {
         Promise.all([
              ]
         ).then((values) => {
-            resolve(ans);
-        }).catch((error) => {
-            reject(error);
-        })
-    })
-}
-
-
-export function school_list(d: dict = {}) {
-    let req = '?';
-    for (let key in d) {
-        req += key + '=' + d[key] + '&'
-    }
-    return getRequest('/api/school_list' + req)
-}
-
-
-export function school_fill(obj: School) {
-    return new Promise<School>((resolve, reject) => {
-        let ans: School = obj;
-        Promise.all([
-                person_school_list({school_id: String(obj.school_id)}),
-                person_comment_list({school_id: String(obj.school_id)}),
-             ]
-        ).then((values) => {
-            ans.person_school_list = values[0];
-            ans.person_comment_list = values[1];
             resolve(ans);
         }).catch((error) => {
             reject(error);
