@@ -380,3 +380,7 @@ td.ankList.dep6 {
 .sort_by_inner.sort_active:hover {
     color: #08c;
 }
+
+td.acl-xsm-private {
+    background-color: #ffeeee;
+}

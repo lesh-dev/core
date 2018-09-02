@@ -9,6 +9,8 @@ define('XSM_FT_TEXT', 'textarea');
 define('XSM_FT_ENUM', 'enum');
 define('XSM_FT_CHECKBOX', 'checkbox');
 
+define('XSM_ACL_PRIVATE', 'xsm-private');
+
 // new style field descriptors
 function xsm_get_fields($table_name)
 {
@@ -518,7 +520,7 @@ $XSM_ENUMS["record_acl"] = array(
     "values" => array(
         "all" => "Кто угодно",
         "ank" => "Менеджер анкет",
-        "xsm-private" => "Конфиденциальный",
+        XSM_ACL_PRIVATE => "Конфиденциальный",
     ),
     "default" => "all",
 );
