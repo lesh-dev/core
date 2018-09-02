@@ -1,7 +1,26 @@
-.side_menu__entry {
-  height: 1.5em;
-  margin-left: 10px;
+.side_menu__entry:link {
+    height: 1.5em;
+    margin-left: 10px;
+    background: #dfdfdf;
+    padding: 2px 6px;
+    margin-top: 2px;
+    margin-right: 2px;
+    font-family: Arial, Sans-serif;
+    border-radius: 3px;
+    text-decoration: none;
+    color: #101010;
+
+}
+.side_menu__entry:visited {
+    color: #050505;
+    text-decoration: underline;
 }
 
-.side_menu__entry :hover {
+
+.side_menu__entry:hover {
+    text-decoration: underline;
 }
+.side_menu__entry:active {
+    text-decoration: underline;
+}
+
