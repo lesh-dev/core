@@ -67,9 +67,9 @@ backup_db postfix "$backup_folder/postfix.sql.gz" "latin1"
 plan_a()
 {
     echo "Performing backup plan A. "
-    dest_host=mvel@mvel.dtdns.net
+    dest_host=mvel@95.84.184.45
     chown -R mvel:mvel $backup_folder
-    dest_folder=backup/lesh/$back_date/
+    dest_folder=/storage/backup/lesh/$back_date/
     ssh $dest_host mkdir -p $dest_folder
     # reverse scp-ying works!
     ssh $dest_host scp fizlesh.ru:$backup_folder/* $dest_folder
