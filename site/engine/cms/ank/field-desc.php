@@ -391,6 +391,7 @@ $XSM_ENUMS["anketa_status"] = array(
         "less" => "Ждёт леса",
         "processed" => "Принят",
         "discuss" => "Обсуждается",
+        "verify" => "Ожидает прогона",
         "nextyear" => "Отложен",
         "declined" => "Отклонён",
         "cont" => "Активный",
