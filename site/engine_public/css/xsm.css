@@ -162,6 +162,10 @@ span.anketa-status.xe-progress {
     color: #7f007f;
 }
 
+span.anketa-status.xe-verify {
+    color: #7c4ea7;
+}
+
 span.anketa-status.xe-less {
     color: #2f2faf;
 }

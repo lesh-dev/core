@@ -110,6 +110,7 @@ function xsm_build_person_list_query($db, $departments, $sort_columns, $simplifi
                 "  (anketa_status = 'processed') OR ".
                 "  (anketa_status = 'cont') OR ".
                 "  (anketa_status = 'reserved') OR ".
+                "  (anketa_status = 'verify') OR ".
                 " 0 )";
             $query_hr .= ", только активные";
         }
