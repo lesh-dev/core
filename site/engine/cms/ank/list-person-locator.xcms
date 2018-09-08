@@ -221,6 +221,114 @@ function xsm_build_person_list_query($db, $departments, $sort_columns, $simplifi
     return $query;
 }
 
+
+function xsm_increase_class_numbers()
+{
+    xcms_auth_wall_admin();
+
+    // lock database
+    $db = xdb_get();
+    //$db->busyTimeout(1000);
+    // WAL mode has better control over concurrency.
+    // Source: https://www.sqlite.org/wal.html
+    //$db->exec('PRAGMA journal_mode = wal;');
+
+    $query =
+        "SELECT
+            p.person_id,
+            p.current_class
+        FROM person p
+        WHERE
+            (
+                (anketa_status = 'new') OR
+                (anketa_status = 'progress') OR
+                (anketa_status = 'less') OR
+                (anketa_status = 'processed') OR
+                (anketa_status = 'discuss') OR
+                (anketa_status = 'nextyear') OR
+                (anketa_status = 'cont')
+            ) AND
+                LENGTH(is_student) > 0
+        ";
+
+    xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
+    $person_sel = $db->query($query);
+
+    $selected_persons = array();
+
+    print_r("mydb=");
+    var_dump($db);
+
+    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
+    {
+        $person_id = $person["person_id"];
+        $person_link = xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID);
+        //echo "<pre>";
+        //print_r($person);
+        //echo "</pre>";
+        $current_class = $person["current_class"];
+        $current_class_int = xsm_class_num($current_class);
+        if (preg_match("/[0-9]+/", $current_class_int))
+        {
+            $current_class_int = (integer)$current_class_int;
+            if ($current_class_int < 11)
+            {
+                $current_class_int += 1;
+            }
+            else
+            {
+                $current_class_int = "n/a";
+            }
+            $selected_persons[$person_id] = array(
+                "current_class" => $current_class_int,
+                "old_class" => $current_class,
+            );
+            echo "Поднимаем класс у $person_link с [$current_class] до [$current_class_int]<br/>";
+        }
+        else
+        {
+            echo "<span class=\"error\">Невозможно поднять класс у $person_link, что-то нечитаемое: [$current_class]<br/>";
+        }
+    }
+    // wtf?
+    //$db->close();
+    //unset($db);
+
+    $operator = xcms_user()->login();
+    $current_timestamp = xcms_datetime();
+    $person_fields = xsm_get_fields("person");
+
+    foreach ($selected_persons as $person_id => $updated_fields)
+    {
+        xdb_update(
+            "person",
+            array("person_id" => $person_id),
+            $updated_fields,
+            xsm_get_fields("person")//,
+            //XDB_OVERRIDE_TS,
+            //$db
+        );
+
+        $old_class = $updated_fields["old_class"];
+        $current_class = $updated_fields["current_class"];
+        $person_comment = array(
+            "owner_login" => $operator,
+            "comment_text" => "Класс изменён с [$old_class] на [$current_class] пользователем $operator ($current_timestamp).",
+            "blamed_person_id" => $person_id,
+        );
+        $res = xdb_insert_or_update('person_comment', array('person_comment_id' => XDB_NEW), $person_comment, xsm_get_fields("person_comment")/*, $db*/);
+        if (!$res)
+        {
+            die("Не удалось добавить комментарий, обратитесь на dev@fizlesh.ru. ");
+            return;
+        }
+        else {
+            echo "OK<br/>\n";
+        }
+    }
+}
+
+
 /**
  * Print persons list by status group
  **/
@@ -249,8 +357,26 @@ function xsm_show_all_person_list($sort_columns)
         </div><?php
     }
 
+    // a bit of copypaste from bulk archive functionality
+    $increase_class_title = "Будьте внимательны, это действие не может быть отменено (убедитесь, что у вас есть резервная копия&nbsp;БД)";
+    $increase_class_disabled = false;
+    if (!xcms_user()->check_rights("admin", false))
+    {
+        $increase_class_title = "Извините, эта функциональность доступна только Администратору. Обратитесь к Секте Программистов";
+        $increase_class_disabled = true;
+    }
+    ?>
+    <form method="post" class="xsm-increase_class_numbers" name="" id="increase_class_numbers-form" action="list-person-locator" style="float: right;">
+        <?php xcmst_submit("increase_class_numbers", "Поднять номера классов", $increase_class_title, "btn btn-danger", $increase_class_disabled); ?>
+    </form>
+    <?php
     xsm_view_operations('person', 'участника', xcms_url(array('anketa_status' => 'cont')));
-    $base_url = "list-person-locator?";
+    //xsm_view_operations('person', 'участника');
+
+    if (@$_POST["increase_class_numbers"])
+    {
+        xsm_increase_class_numbers();
+    }
 
     ?>
     <div><span style="color: red; font-weight: bold;">NEW!</span> Доступна сортировка (click по колонке) и мультисортировка (Shift+click по колонке)
