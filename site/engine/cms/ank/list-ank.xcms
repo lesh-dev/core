@@ -232,7 +232,7 @@ function xsm_show_ank_list()
 
 function xsm_bulk_archive()
 {
-    xcms_auth_admin_wall();
+    xcms_auth_wall_admin();
 
     // lock database
     $db = xdb_get_write();
