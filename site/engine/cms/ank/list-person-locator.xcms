@@ -245,7 +245,7 @@ function xsm_increase_class_numbers()
                 (anketa_status = 'cont')
             )
             AND LENGTH(is_student) > 0
-            AND p.department_id = 2
+            AND p.department_id = 1
         ";
 
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
@@ -356,7 +356,6 @@ function xsm_show_all_person_list($sort_columns)
     </form>
     <?php
     xsm_view_operations('person', 'участника', xcms_url(array('anketa_status' => 'cont')));
-    //xsm_view_operations('person', 'участника');
 
     if (@$_POST["increase_class_numbers"])
     {
