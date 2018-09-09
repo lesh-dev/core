@@ -343,7 +343,7 @@ function xsm_show_all_person_list($sort_columns)
     }
 
     // a bit of copypaste from bulk archive functionality
-    $increase_class_title = "Будьте внимательны, это действие не может быть отменено (убедитесь, что у вас есть резервная копия&nbsp;БД)";
+    $increase_class_title = "Будьте внимательны, это действие не может быть отменено (убедитесь, что у вас есть резервная копия БД)";
     $increase_class_disabled = false;
     if (!xcms_user()->check_rights("admin", false))
     {
