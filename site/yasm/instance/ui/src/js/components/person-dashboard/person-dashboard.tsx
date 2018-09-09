@@ -6,16 +6,16 @@ import {department_list, getRequest, person_fill, person_list} from "../../gener
 import {Spinner} from "../common/Spinner";
 import '../../../scss/person/person.scss'
 import {ET} from "../common/EditableText";
-import {ContactCard} from "../common/ContactCard";
+import {ContactCard} from "../common/Cards/ContactCard";
 import {Form} from "../common/Form";
 import {Dropdown} from "../common/Dropdown";
 import Select from 'react-select';
 import '../../../scss/select_input_hack.scss'
-import {DepartmentCard, DepartmentOption, DepartmentValue} from "../common/DepartmentCard";
+import {DepartmentCard, DepartmentOption, DepartmentValue} from "../common/Cards/DepartmentCard";
 import {Cut} from "../common/Cut";
-import {SchoolCard} from "../common/SchoolCard";
-import {CourseCard} from "../common/CourseCard";
-import {ava_big} from "../common/utils";
+import {SchoolCard} from "../common/Cards/SchoolCard";
+import {CourseCard} from "../common/Cards/CourseCard";
+import {ava} from "../common/utils";
 import Async from "react-promise";
 import {List} from "../common/List";
 import {element} from "prop-types";
@@ -154,7 +154,7 @@ export class PersonDashboard extends React.Component<PersonDashboardProps, Perso
         this.state ? console.log(this.state.person.department_id_fk.department_title) : null;
         return (this.state) ? <div className="person">
             <div className="person__title">
-                <Async promise={ava_big(this.state.person)} then={val => {
+                <Async promise={ava(this.state.person)} then={val => {
                     return <img className="person__title__img" src={val}/>
                 }}/>
                 <div className="person__title__text">

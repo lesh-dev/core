@@ -19,9 +19,10 @@ import {
     Toolbar,
     TableColumnResizing
 } from '@devexpress/dx-react-grid-material-ui';
-import {PersonCard} from "../common/PersonCard";
-import {SchoolCard} from "../common/SchoolCard";
-import {CourseCard} from "../common/CourseCard";
+import {PersonCard} from "../common/Cards/PersonCard";
+import {SchoolCard} from "../common/Cards/SchoolCard";
+import {CourseCard} from "../common/Cards/CourseCard";
+import {SchoolToken} from "../common/Tokens/SchoolToken";
 
 export interface PersonExamListProps {
     list: ExamList
@@ -58,7 +59,7 @@ export class PersonExamList extends React.Component<PersonExamListProps, PersonE
             list.push({
                 title: <CourseCard course={this.props.list.values[i].course_id_fk} clickable={true}/>,
                 status: this.props.list.values[i].exam_status,
-                school: <SchoolCard school={this.props.list.values[i].course_id_fk.school_id_fk} clickable={true}/>,
+                school: <SchoolToken school={this.props.list.values[i].course_id_fk.school_id_fk} clickable={true}/>,
                 area: this.props.list.values[i].course_id_fk.course_area
             });
         }

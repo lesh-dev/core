@@ -2,7 +2,7 @@ import * as React from "react";
 import {School, SchoolList} from "../../generated/interfaces";
 import {school_list} from "../../generated/api_connect";
 import {Spinner} from "../common/Spinner";
-import {SchoolCard} from "../common/SchoolCard";
+import {SchoolCard} from "../common/Cards/SchoolCard";
 import Async from "react-promise";
 import {List} from "../common/List";
 
