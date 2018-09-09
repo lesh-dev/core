@@ -226,12 +226,8 @@ function xsm_increase_class_numbers()
 {
     xcms_auth_wall_admin();
 
-    // lock database
+    // do not lock database
     $db = xdb_get();
-    //$db->busyTimeout(1000);
-    // WAL mode has better control over concurrency.
-    // Source: https://www.sqlite.org/wal.html
-    //$db->exec('PRAGMA journal_mode = wal;');
 
     $query =
         "SELECT
@@ -247,8 +243,9 @@ function xsm_increase_class_numbers()
                 (anketa_status = 'discuss') OR
                 (anketa_status = 'nextyear') OR
                 (anketa_status = 'cont')
-            ) AND
-                LENGTH(is_student) > 0
+            )
+            AND LENGTH(is_student) > 0
+            AND p.department_id = 2
         ";
 
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
@@ -256,16 +253,10 @@ function xsm_increase_class_numbers()
 
     $selected_persons = array();
 
-    print_r("mydb=");
-    var_dump($db);
-
     while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
     {
         $person_id = $person["person_id"];
         $person_link = xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID);
-        //echo "<pre>";
-        //print_r($person);
-        //echo "</pre>";
         $current_class = $person["current_class"];
         $current_class_int = xsm_class_num($current_class);
         if (preg_match("/[0-9]+/", $current_class_int))
@@ -290,23 +281,20 @@ function xsm_increase_class_numbers()
             echo "<span class=\"error\">Невозможно поднять класс у $person_link, что-то нечитаемое: [$current_class]<br/>";
         }
     }
-    // wtf?
-    //$db->close();
-    //unset($db);
 
     $operator = xcms_user()->login();
     $current_timestamp = xcms_datetime();
     $person_fields = xsm_get_fields("person");
+    $person_comment_fields = xsm_get_fields("person_comment");
 
     foreach ($selected_persons as $person_id => $updated_fields)
     {
+        // due to strange locks, each update in single transaction
         xdb_update(
             "person",
             array("person_id" => $person_id),
             $updated_fields,
-            xsm_get_fields("person")//,
-            //XDB_OVERRIDE_TS,
-            //$db
+            $person_fields
         );
 
         $old_class = $updated_fields["old_class"];
@@ -316,14 +304,11 @@ function xsm_increase_class_numbers()
             "comment_text" => "Класс изменён с [$old_class] на [$current_class] пользователем $operator ($current_timestamp).",
             "blamed_person_id" => $person_id,
         );
-        $res = xdb_insert_or_update('person_comment', array('person_comment_id' => XDB_NEW), $person_comment, xsm_get_fields("person_comment")/*, $db*/);
+        $res = xdb_insert_or_update('person_comment', array('person_comment_id' => XDB_NEW), $person_comment, $person_comment_fields);
         if (!$res)
         {
             die("Не удалось добавить комментарий, обратитесь на dev@fizlesh.ru. ");
             return;
-        }
-        else {
-            echo "OK<br/>\n";
         }
     }
 }
