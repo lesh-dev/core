@@ -1,8 +1,8 @@
 import * as React from 'react'
-import "../../../scss/department_card/department_card.scss"
+import "../../../../scss/cards/department_card/department_card.scss"
 import {CSSProperties} from "react";
-import {Department} from "../../generated/interfaces";
-import {redirect} from "./utils";
+import {Department} from "../../../generated/interfaces";
+import {redirect} from "../utils";
 import {OnValueClickHandler, Option, OptionValues, ReactSelectProps, SelectValueHandler} from "react-select";
 
 export interface DepartmentCardProps {

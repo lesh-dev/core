@@ -1,7 +1,7 @@
 import * as React from 'react'
-import "../../../scss/contact_card/contact_card.scss"
+import "../../../../scss/contact_card/contact_card.scss"
 import {CSSProperties} from "react";
-import {Contact} from "../../generated/interfaces";
+import {Contact} from "../../../generated/interfaces";
 
 export interface ContactCardProps {
     contact: Contact
@@ -9,7 +9,7 @@ export interface ContactCardProps {
     style?: CSSProperties
 }
 
-export class ContactCard extends React.Component<ContactCardProps> {
+export class ContactToken extends React.Component<ContactCardProps> {
     render_contact() {
         let name = this.props.contact.name;
         let link = this.props.contact.value;

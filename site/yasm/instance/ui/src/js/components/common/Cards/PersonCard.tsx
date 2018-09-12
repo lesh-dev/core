@@ -1,8 +1,8 @@
 import * as React from 'react'
-import "../../../scss/person_card/person_card.scss"
+import "../../../../scss/cards/person_card/person_card.scss"
 import {CSSProperties} from "react";
-import {ava_small, redirect} from "./utils";
-import {Person} from "../../generated/interfaces";
+import {ava, redirect} from "../utils";
+import {Person} from "../../../generated/interfaces";
 import Async from "react-promise"
 
 export interface PersonCardProps {
@@ -23,7 +23,7 @@ export class PersonCard extends React.Component<PersonCardProps> {
                     this.props.callback()
             }
         }}>
-            <Async promise={ava_small(this.props.person)} then={val => {
+            <Async promise={ava(this.props.person)} then={val => {
                 return <img src={val} className="person_card__img"/>
             }}/>
             <div className="person_card__text">

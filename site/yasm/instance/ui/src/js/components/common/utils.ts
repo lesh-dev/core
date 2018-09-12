@@ -19,16 +19,9 @@ export function date_2_str(m: Moment) {
     return null
 }
 
-export function ava_small(p: Person) {
+export function ava(p: Person) {
     return new Promise<string>((resolve, reject) => {
-            resolve("/static/emblems/people/incognito.jpg")
-        }
-    )
-}
-
-export function ava_big(p: Person) {
-    return new Promise<string>((resolve, reject) => {
-            resolve("/static/emblems/people/incognito.jpg")
+            resolve("/static/emblems/people/incognito.svg")
         }
     )
 }

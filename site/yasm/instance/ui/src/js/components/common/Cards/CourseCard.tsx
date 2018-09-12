@@ -1,8 +1,7 @@
 import * as React from 'react'
-import "../../../scss/course_card/course_card.scss"
+import "../../../../scss/cards/course_card/course_card.scss"
 import {CSSProperties} from "react";
-import {ava_small} from "./utils";
-import {Course} from "../../generated/interfaces";
+import {Course} from "../../../generated/interfaces";
 
 export interface CourseCardProps {
     course: Course

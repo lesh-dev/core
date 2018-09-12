@@ -1,10 +1,25 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin
 
 """
 ORM declaration file
 """
 
 db = SQLAlchemy()
+lm = LoginManager()
+
+
+class User(UserMixin, db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    social_id = db.Column(db.String(64), nullable=False, unique=True)
+    nickname = db.Column(db.String(64), nullable=False)
+    email = db.Column(db.String(64), nullable=True)
+
+
+@lm.user_loader
+def load_user(id):
+    return User.query.get(int(id))
 
 
 class MarkedForeignKey(db.ForeignKey):
@@ -77,7 +92,7 @@ class Department(db.Model):
     persons = db.relationship('Person', backref='department', lazy='dynamic')
 
 
-class Person(db.Model):
+class Person(UserMixin, db.Model):
     __tablename__ = 'person'
     person_id = NamedColumn(db.Integer,
                             nick="id",

@@ -5,12 +5,12 @@ import {Route, Router, Switch} from "react-router";
 import {BrowserRouter, Link} from "react-router-dom";
 import {Cut, CutProps} from "../components/common/Cut";
 import {ET} from "../components/common/EditableText";
-import {PersonCard} from "../components/common/PersonCard";
-import {SchoolCard} from "../components/common/SchoolCard";
+import {PersonCard} from "../components/common/Cards/PersonCard";
+import {SchoolCard} from "../components/common/Cards/SchoolCard";
 import {SideMenu} from "../components/common/SideMenu";
 import {default_Contact, default_Course, default_Person, default_School} from "../generated/defaults";
-import {CourseCard} from "../components/common/CourseCard";
-import {ContactCard} from "../components/common/ContactCard";
+import {CourseCard} from "../components/common/Cards/CourseCard";
+import {ContactCard} from "../components/common/Cards/ContactCard";
 
 let loremIpsum = require("lorem-ipsum");
 

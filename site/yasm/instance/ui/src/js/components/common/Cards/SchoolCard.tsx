@@ -1,8 +1,8 @@
 import * as React from 'react'
-import "../../../scss/school_card/school_card.scss"
+import "../../../../scss/cards/school_card/school_card.scss"
 import {CSSProperties} from "react";
-import {School} from "../../generated/interfaces";
-import {redirect} from "./utils";
+import {School} from "../../../generated/interfaces";
+import {redirect} from "../utils";
 
 export interface SchoolCardProps {
     school: School
