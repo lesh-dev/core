@@ -1,0 +1,8 @@
+load database
+     from sqlite://./fizlesh.sqlite3
+     into postgresql:///lesh
+
+ with include drop, create tables, create indexes, reset sequences, data only
+
+  set work_mem to '512MB', maintenance_work_mem to '512 MB';
+
