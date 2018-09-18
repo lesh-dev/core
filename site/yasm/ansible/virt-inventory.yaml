@@ -1,0 +1,18 @@
+---
+# В предположении, что у нас есть виртуалка с Ubuntu server 16.04.5,
+# 22-й порт который мы прокинули на 4022,
+# в которой есть админ-юзер i и интернет.
+# Чтобы скрывать настоящие пароли, есть ansible vault, но здесь не усложняем.
+#
+# Запуск по команде ansible-playbook -i ansible/virt-inventory.yaml ansible/build.yaml
+#
+build: # group
+  hosts:
+    virtual: #virtualbox machine
+      ansible_ssh_host: 127.0.0.1
+      ansible_ssh_port: 4022
+      ansible_ssh_pass:  123456
+      ansible_sudo_pass: 123456
+      ansible_ssh_user: i
+      ansible_python_interpreter: /usr/bin/python3
+      ansible_become: yes
