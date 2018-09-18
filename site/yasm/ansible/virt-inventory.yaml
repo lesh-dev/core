@@ -15,3 +15,4 @@ build: # group
       ansible_sudo_pass: 123456
       ansible_ssh_user: i
       ansible_python_interpreter: /usr/bin/python3
+      ansible_become: yes

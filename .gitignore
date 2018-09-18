@@ -13,6 +13,9 @@ site/settings.php
 site/install.php
 site/engine.log
 site/yasm/instance/config.py
+site/yasm/instance/static/css/pack/
+site/yasm/instance/static/js/
+instance/ui/package-lock.json
 *.pyc
 tests/contest-work-sample.png
 tests/current-page.html
