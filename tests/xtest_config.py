@@ -7,7 +7,6 @@ class XcmsTestConfig:
         self.m_adminLogin = "root"
         self.m_adminPass = "root"
         self.m_notifyEmail = "vdm-photo@ya.ru"
-        self.m_testAnketaSend = True  # в настоящее время не используется
         self.m_phpErrorCheckFlag = True
         self.school_name = u"ЛЭШ-2013"
 
