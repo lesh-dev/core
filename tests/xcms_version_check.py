@@ -11,7 +11,7 @@ class XcmsVersionCheck(xtest_common.XcmsTest):
     """
     def run(self):
         self.ensure_logged_off()
-        self.gotoRoot()
+        self.goto_root()
 
         # frontend
         version_xpath = "//span[@class='site-version']"
@@ -28,7 +28,7 @@ class XcmsVersionCheck(xtest_common.XcmsTest):
         if not m:
             self.failTest("Site version does not match expected regexp. ")
 
-        self.performLoginAsAdmin()
+        self.perform_login_as_admin()
         self.logAdd("before admin panel")
         self.gotoAdminPanel()
 

@@ -14,7 +14,7 @@ class XcmsInstallerDefault(xtest_common.XcmsTestWithConfig):
     """
 
     def run(self):
-        self.gotoRoot()
+        self.goto_root()
 
         self.assertSourceTextPresent(["XCMS installer", u"Установка XCMS"], "Here should be installer page. ")
         self.clickElementByName("submit_variables")

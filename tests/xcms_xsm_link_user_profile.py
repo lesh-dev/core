@@ -43,10 +43,10 @@ class XcmsXsmLinkUserProfile(xsm.Manager, xtest_common.XcmsTest):
             random=True,
         )
 
-        self.gotoRoot()
+        self.goto_root()
         self.performLogoutFromSite()
 
-        if not self.performLogin(u.login, u.password):
+        if not self.perform_login(u.login, u.password):
             self.failTest("Cannot login as newly created user. ")
 
         self.gotoCabinet()
@@ -57,10 +57,10 @@ class XcmsXsmLinkUserProfile(xsm.Manager, xtest_common.XcmsTest):
         self.gotoUrlByLinkText(xsm_url_text)
         self.assertBodyTextPresent(person.full_alias(), "We should get into our XSM person card. ")
 
-        self.gotoRoot()
+        self.goto_root()
         self.performLogoutFromSite()
 
-        self.performLoginAsAdmin()
+        self.perform_login_as_admin()
         self.gotoAdminPanel()
         self.gotoUserList()
 

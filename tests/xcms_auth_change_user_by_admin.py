@@ -27,7 +27,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         )
 
         print "logging as created user. "
-        if not self.performLogin(u.login, u.password):
+        if not self.perform_login(u.login, u.password):
             self.failTest("Cannot login as newly created user. ")
 
         self.assertUrlNotPresent(self.admin_panel_link_name(), "Default created user should have no Admin rights. ")
@@ -42,7 +42,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
 
         # login as admin, enter user profile and change some fields.
 
-        self.performLoginAsAdmin()
+        self.perform_login_as_admin()
 
         self.gotoAdminPanel()
         self.gotoUserList()
@@ -71,7 +71,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.performLogoutFromAdminPanel()
 
         print "logging as new user with changed permissions. now he is Admin. "
-        if not self.performLogin(u.login, u.password):
+        if not self.perform_login(u.login, u.password):
             self.failTest("Cannot login again as newly created user (with admin privs). ")
 
         self.getElementById("admin", reason="Now user should have Admin priviledges. ")
@@ -79,7 +79,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
 
         # ---------------------- 2nd stage: Editor
 
-        self.performLoginAsAdmin()
+        self.perform_login_as_admin()
 
         self.gotoAdminPanel()
         self.gotoUserList()
@@ -103,7 +103,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.performLogoutFromAdminPanel()
 
         print "logging as new user with 2-nd time changed permissions. now he is Editor. "
-        if not self.performLogin(u.login, u.password):
+        if not self.perform_login(u.login, u.password):
             self.failTest("Cannot login again as newly created user (with Editor privs). ")
 
         self.getElementById("admin", "Now our user should have no Admin rights, but Editor uses admin panel. ")
@@ -121,7 +121,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.performLogoutFromAdminPanel()
 
         # -------------------------------------- 3 stage: anketa manager
-        self.performLoginAsAdmin()
+        self.perform_login_as_admin()
 
         self.gotoAdminPanel()
         self.gotoUserList()
@@ -147,7 +147,7 @@ class XcmsAuthChangeUserByAdmin(xtest_common.XcmsTest):
         self.performLogoutFromAdminPanel()
 
         print "logging as new user with 3-rd time changed permissions. now he is Manager. "
-        if not self.performLogin(u.login, u.password):
+        if not self.perform_login(u.login, u.password):
             self.failTest("Cannot login again as newly created user (with Manager privs). ")
 
         self.assertUrlNotPresent(self.admin_panel_link_name(), "Now our user should have no access to Admin panel. ")

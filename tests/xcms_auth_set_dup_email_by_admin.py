@@ -45,20 +45,20 @@ class XcmsAuthSetDuplicateEmailByAdmin(xtest_common.XcmsTest):
         )
 
         print "logging as created first user. "
-        if not self.performLogin(u1.login, u1.password):
+        if not self.perform_login(u1.login, u1.password):
             self.failTest("Cannot login as newly created user One. ")
 
         self.performLogoutFromSite()
 
         print "logging as created second user. "
-        if not self.performLogin(u2.login, u2.password):
+        if not self.perform_login(u2.login, u2.password):
             self.failTest("Cannot login as newly created user Two. ")
 
         self.performLogoutFromSite()
 
         # login as admin, enter user profile and change some fields.
 
-        self.performLoginAsAdmin()
+        self.perform_login_as_admin()
 
         self.gotoAdminPanel()
         self.gotoUserList()

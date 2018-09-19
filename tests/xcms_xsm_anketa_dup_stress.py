@@ -52,7 +52,7 @@ class XcmsXsmAnketaDupStress(xsm.Manager, xtest_common.XcmsTest):
         )
 
     def add_anketa(self, person, iteration):
-        self.gotoRoot()
+        self.goto_root()
         self.goto_anketa()
         self.input_person_data(person, iteration, random=True)
 
@@ -60,8 +60,8 @@ class XcmsXsmAnketaDupStress(xsm.Manager, xtest_common.XcmsTest):
         # now login as admin
         person_alias = person.short_alias()
 
-        self.performLoginAsManager()
-        self.gotoRoot()
+        self.perform_login_as_manager()
+        self.goto_root()
         self.goto_xsm()
         self.goto_xsm_anketas()
         self.filter_person(fio=person_alias)
@@ -69,7 +69,7 @@ class XcmsXsmAnketaDupStress(xsm.Manager, xtest_common.XcmsTest):
             self.countIndexedUrlsByLinkText(person_alias), 1,
             "Found more than one anketa with exact FIO. Duplicate filtering is broken. "
         )
-        self.gotoRoot()
+        self.goto_root()
         self.performLogoutFromSite()
 
     def run(self):

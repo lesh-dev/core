@@ -46,7 +46,7 @@ class XcmsXsmAvatar(xsm.Manager, xtest_common.XcmsTest):
 
     def run(self):
         self.ensure_logged_off()
-        self.performLoginAsManager()
+        self.perform_login_as_manager()
         self.goto_xsm()
         self.goto_xsm_all_people()
         self.goto_xsm_add_person()

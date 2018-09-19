@@ -26,7 +26,7 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
     def run(self):
         self.ensure_logged_off()
 
-        self.gotoRoot()
+        self.goto_root()
 
         # first, login as admin
         inp_login = "an_test_user_" + random_crap.random_text(8)
@@ -40,7 +40,7 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         )
 
         logging.info("logging as created user. ")
-        if not self.performLogin(u.login, u.password):
+        if not self.perform_login(u.login, u.password):
             self.failTest("Cannot login as newly created user. ")
 
         # logout self
@@ -48,13 +48,13 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
 
         # test wrong auth
         logging.info("logging in as created user with incorrect password ")
-        if self.performLogin(u.login, "wrong_pass" + u.password):
+        if self.perform_login(u.login, "wrong_pass" + u.password):
             self.failTest("I'm able to login with incorrect password. Auth is broken. ")
 
         # and now, test bug with remaining cookies:
         # we navigate to root page, and see auth panel!
         logging.info("logging in again as created user. ")
-        if not self.performLogin(u.login, u.password):
+        if not self.perform_login(u.login, u.password):
             self.failTest("Cannot login again as newly created user. ")
 
         self.gotoCabinet()
@@ -75,7 +75,7 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         self.performLogoutFromAdminPanel()
 
         print "logging again as created user with new password"
-        if not self.performLogin(u.login, new_pass):
+        if not self.perform_login(u.login, new_pass):
             self.failTest("Cannot login again as newly created user with changed password. ")
 
         # logout self
@@ -84,7 +84,7 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         # and now let's edit user profile.
 
         print "now let's edit profile. Logging 3-rd time with new password"
-        if not self.performLogin(u.login, new_pass):
+        if not self.perform_login(u.login, new_pass):
             self.failTest("Cannot login again for profile info change. ")
 
         self.gotoCabinet()
@@ -124,7 +124,7 @@ class XcmsAuthAddNewUser(xtest_common.XcmsTest):
         self.performLogoutFromAdminPanel()
 
         print "now let's login again and see updated profile."
-        if not self.performLogin(u.login, new_pass):
+        if not self.perform_login(u.login, new_pass):
             self.failTest("Cannot login after profile info change. ")
 
         self.gotoCabinet()

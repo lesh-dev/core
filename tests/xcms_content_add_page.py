@@ -51,7 +51,7 @@ class XcmsContentAddPage(xtest_common.XcmsTest):
 
     def testBaseEditing(self):
 
-        self.performLoginAsAdmin()
+        self.perform_login_as_admin()
         self.gotoAdminPanel()
 
         self.m_parentPage = u"Главная"

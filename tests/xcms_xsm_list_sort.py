@@ -22,8 +22,8 @@ class XcmsXsmListSort(xsm.Manager, xtest_common.XcmsTest):
     def run(self):
         self.ensure_logged_off()
 
-        self.performLoginAsManager()
-        self.gotoRoot()
+        self.perform_login_as_manager()
+        self.goto_root()
         self.goto_xsm()
         self.test_sort()
 

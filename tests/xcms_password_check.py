@@ -15,5 +15,5 @@ class XcmsPasswordChecker(xtest_common.XcmsTest):
             self.base_url = url
             for password in password_list:
                 for login in login_list:
-                    if self.performLogin(login, password):
+                    if self.perform_login(login, password):
                         self.failTest("It is possible to login with: {0}, {1}".format(login, password))

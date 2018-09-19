@@ -13,7 +13,7 @@ class XcmsXsmClearForestStatus(xsm.Manager, xtest_common.XcmsTest):
 
     def run(self):
         self.ensure_logged_off()
-        self.performLoginAsAdmin()
+        self.perform_login_as_admin()
         self.goto_xsm()
         self.gotoUrlByLinkText(u"Лес")
         self.clear_filters()

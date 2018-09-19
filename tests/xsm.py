@@ -639,9 +639,9 @@ class Manager(xc.XcmsTest):
             :param jump_into: Goto anketa view (default)
         """
         if do_login:
-            self.performLoginAsManager()
+            self.perform_login_as_manager()
 
-        self.gotoRoot()
+        self.goto_root()
         self.goto_xsm()
         self.goto_xsm_anketas()
         self.clear_filters()

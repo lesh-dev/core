@@ -21,7 +21,7 @@ class XcmsMailerTestMailRu(xtest_common.XcmsTest):
     def run(self):
         self.ensure_logged_off()
 
-        self.gotoRoot()
+        self.goto_root()
 
         inpEMail = self.m_conf.getValidEmail('mail.ru')
         self.removePreviousUsersWithTestEmail(inpEMail)
@@ -38,5 +38,5 @@ class XcmsMailerTestMailRu(xtest_common.XcmsTest):
         )
 
         print "logging as created user. "
-        if not self.performLogin(u.login, u.password):
+        if not self.perform_login(u.login, u.password):
             self.failTest("Cannot login as newly created user. ")

@@ -19,7 +19,7 @@ class XcmsContestSubmitWork(xtest_common.XcmsTest):
     def run(self):
         self.ensure_logged_off()
         # TODO(mvel): Add contest manager role
-        self.performLoginAsAdmin()
+        self.perform_login_as_admin()
         self.gotoPage("/ctx")
 
         self.gotoUrlByLinkText(u"Добавить работу")

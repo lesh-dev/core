@@ -42,7 +42,7 @@ class User(object):
         )
 
         if login_as_admin:
-            self.xtest.performLoginAsAdmin()
+            self.xtest.perform_login_as_admin()
             self.xtest.gotoAdminPanel()
 
         self.xtest.gotoUserList()

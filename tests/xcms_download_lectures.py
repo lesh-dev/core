@@ -11,7 +11,7 @@ class XcmsDownloadLectures(xtest_common.XcmsBaseTest):
     * downloads some files from this folder.
     """
     def run(self):
-        self.gotoRoot()
+        self.goto_root()
         self.gotoPage("/lectures")
         
         self.logAdd("Downloading lectures")

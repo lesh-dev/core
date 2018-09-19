@@ -11,7 +11,7 @@ class XcmsSiteOpenAllPages(xtest_common.XcmsTest):
     * navigates to all current pages and checks some specific content on each page plus PHP errors.
     """
     def run(self):
-        self.gotoRoot()
+        self.goto_root()
         mainPage = u"Главная"
 
         self.goto_menu_item(mainPage)
