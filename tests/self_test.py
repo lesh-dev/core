@@ -16,7 +16,7 @@ class SelfTest(SeleniumTest):
         # conf = XcmsTestConfig()
 
         # TODO: somthing is outdated here
-        # xtest_common.perform_login_as_admin(self, conf.getAdminLogin(), conf.getAdminPass())
+        # xtest_common.perform_login_as_admin(self, conf.get_admin_login(), conf.get_admin_password())
 
         self.gotoUrlByLinkText(u"Анкеты")
         self.gotoUrlByLinkText(u"TESTЧаПаевa855d Василийb02")

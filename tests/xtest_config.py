@@ -11,10 +11,10 @@ class XcmsTestConfig:
         self.m_phpErrorCheckFlag = True
         self.school_name = u"ЛЭШ-2013"
 
-    def getAdminLogin(self):
+    def get_admin_login(self):
         return self.m_adminLogin
 
-    def getAdminPass(self):
+    def get_admin_password(self):
         return self.m_adminPass
 
     def getNotifyEmail(self):

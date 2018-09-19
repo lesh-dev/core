@@ -165,8 +165,8 @@ class XcmsTestWithConfig(XcmsBaseTest):
         return self.perform_login_as_admin()
 
     def perform_login_as_admin(self):
-        login = self.getAdminLogin()
-        password = self.getAdminPass()
+        login = self.get_admin_login()
+        password = self.get_admin_password()
         self.logAdd("perform_login_as_admin")
         if not self.perform_login(login, password):
             self.logAdd("Admin authorization failed")
@@ -218,15 +218,15 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
         return True
 
-    def getAdminLogin(self):
-        return self.m_conf.getAdminLogin()
+    def get_admin_login(self):
+        return self.m_conf.get_admin_login()
 
-    def getAdminPass(self):
+    def get_admin_password(self):
         if "test.fizlesh.ru" in self.base_url:
             with open("root_password", 'r') as f:
                 passwd = f.readline()
             return passwd
-        return self.m_conf.getAdminPass()
+        return self.m_conf.get_admin_password()
 
     def performLogout(self):
         self.logAdd("performLogout")
@@ -345,7 +345,7 @@ class XcmsTest(XcmsTestWithConfig):
         # test user login
         self.assertTextPresent("//div[@class='user-ops']", inp_login)
         # test user creator (root)
-        self.assertTextPresent("//div[@class='user-ops']", self.m_conf.getAdminLogin())
+        self.assertTextPresent("//div[@class='user-ops']", self.m_conf.get_admin_login())
         self.assertElementValueById("name-input", inpName)
         self.assertElementValueById("email-input", inpEMail)
 
