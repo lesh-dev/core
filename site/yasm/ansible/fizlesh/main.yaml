@@ -1,0 +1,72 @@
+---
+- hosts: webservers
+  tasks:
+  - name: install dependencies
+    apt:
+      package: "{{ packages }}"
+      state: present
+    vars:
+      packages:
+      - apache2
+      - php
+      - php-mbstring
+      - php-curl
+      - php-sqlite3
+      - php-pgsql
+      - mercurial # need to clone hg repository
+#  - name: enable apache modules
+#    apache2_module:
+#      state: present
+#      name: "{{ modules }}"
+#    vars:
+#      modules:
+#      - mod_rewrite
+#      - mod_headers
+#      #- mod_php
+#      - mod_ssl
+  - name: enable apache module mod_rewrite
+    apache2_module:
+      name: rewrite
+      identifier: rewrite
+      state: present
+  - name: enable apache module mod_headers
+    apache2_module:
+      name: headers
+      identifier: headers
+      state: present
+  - name: enable apache module mod_ssl
+    apache2_module:
+      name: ssl
+      identifier: ssl
+      state: present
+  - name: create fizlesh directory
+    file:
+      path: /var/www/vhosts/fizlesh.ru
+      state: directory
+  - name: clone lesh-dev/core
+    git:
+      dest: /var/www/vhosts/fizlesh.ru
+      repo: "https://github.com/lesh-dev/core.git"
+  - name: clone xengine
+    hg:
+      dest: /var/www/vhosts/fizlesh.ru/site/xengine
+      repo: "https://bitbucket.org/dichlofos/xengine"
+  - name: clone deploy-tools
+    hg:
+      dest: /var/www/vhosts/fizlesh.ru/deploy-tools
+      repo: "https://bitbucket.org/dichlofos/deploy-tools"
+  # Recursion: clone from fizlesh.ru — skipped
+  # ssl certificate — manually installed to /etc/letsencrypt/live/math-lesh.org/
+  # /etc/letsencrypt/options-ssl-apache.conf — manually
+  # fizlesh.math-lesh.org in /etc/hosts — manually (local)
+  - name: create virtual host
+    copy:
+      src: "fizlesh.ru.conf"
+      dest: "/etc/apache2/sites-available/fizlesh.ru.conf"
+  - name: enable virtual host
+    command: a2ensite fizlesh.ru
+  - name: restart apache
+    service:
+      name: apache2
+      state: restarted
+

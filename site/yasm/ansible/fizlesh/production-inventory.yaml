@@ -1,0 +1,7 @@
+---
+webservers: # group
+  hosts:
+    math-lesh.org: #virtualbox machine
+      ansible_ssh_user: i
+      ansible_python_interpreter: /usr/bin/python3
+      ansible_become: yes
