@@ -1,0 +1,46 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+
+import xsm
+import xtest_common
+
+
+class XcmsXsmBulkActions(xsm.Manager, xtest_common.XcmsTest):
+    """
+    This test checks various bulk actions (archiving, class raising)
+    """
+
+    def run(self):
+        self.test_bulk_archive()
+        self.test_increase_class()
+
+    def test_bulk_archive(self):
+        # positive part: check that button is accessible by admin and works
+        self.ensure_logged_off()
+        self.goto_root()
+        self.goto_anketa()
+
+        self.perform_login_as_admin()
+        self.goto_root()
+        self.goto_xsm()
+        self.goto_xsm_all_people()
+        self.goto_xsm_add_person()
+
+        person = xsm.Person(self)
+        person.input(
+            last_name=u"Архивариус",
+            first_name=u"Пётр",
+            patronymic=u"Семёнович",
+            anketa_status="declined",
+            random=True,
+        )
+        person.back_to_person_view()
+        self.assertElementTextById("anketa_status-span", u"Отклонён")
+        self.goto_xsm_anketas()
+
+        self.clickElementById("bulk_archive-submit")
+        self.wait(5, "Wait while form resubmits")
+        self.check_page_errors()
+
+        self.goto_xsm_anketas()
+        self.assertBodyTextNotPresent(u"Отклонён")
