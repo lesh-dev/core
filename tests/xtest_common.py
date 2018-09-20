@@ -4,6 +4,7 @@
 import selenium_test
 import random_crap
 import logging
+import bawlib
 
 from xtest_config import XcmsTestConfig
 
@@ -159,10 +160,15 @@ class XcmsTestWithConfig(XcmsBaseTest):
         self.performLogout()
 
     def perform_login_as_editor(self):
-        return self.perform_login_as_admin()
+        self.perform_login_as_admin()
 
     def perform_login_as_manager(self):
-        return self.perform_login_as_admin()
+        login = self.get_manager_login()
+        password = self.get_manager_password()
+        logging.info("Log in as `manager`...")
+        if not self.perform_login(login, password):
+            logging.error("Authorization as `manager` failed")
+            self.failTest("Cannot perform manager authorization using " + login + "/" + password)
 
     def perform_login_as_admin(self):
         login = self.get_admin_login()
@@ -173,11 +179,9 @@ class XcmsTestWithConfig(XcmsBaseTest):
             self.failTest("Cannot perform Admin authorization as " + login + "/" + password)
 
         self.logAdd("perform_login_as_admin(): checking admin panel link")
-
         # check that we have entered the CP.
         # just chech that link exists.
         self.get_admin_panel_link()
-        # test.gotoSite(cpUrl)
 
     def perform_login(self, login, password):
         """
@@ -223,9 +227,16 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
     def get_admin_password(self):
         if "test.fizlesh.ru" in self.base_url:
-            with open("root_password", 'r') as f:
-                passwd = f.readline()
-            return passwd
+            return bawlib.read_file("root_password")
+        return self.m_conf.get_admin_password()
+
+    def get_manager_login(self):
+        return self.m_conf.get_manager_login()
+
+    def get_manager_password(self):
+        if "test.fizlesh.ru" in self.base_url:
+            return bawlib.read_file("manager_password").strip()
+
         return self.m_conf.get_admin_password()
 
     def performLogout(self):

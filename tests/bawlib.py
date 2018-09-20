@@ -48,6 +48,13 @@ class BawError(RuntimeError):
     pass
 
 
+def read_file(file_name):
+    contents = ""
+    with open(file_name) as f:
+        contents = f.read()
+    return contents
+
+
 def wrapIfLong(text):
     # maxLen in userSerialize + epsilon
     if len(text) > 80:

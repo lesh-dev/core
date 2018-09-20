@@ -233,7 +233,7 @@ xcms_version_css "$DEST/lesh.org.ru-design"
 if [ -e $FULL_DEST_CONT/auth/usr/root.user ] ; then
     message "Changing root password to 'root'..."
     # change root password to 'root'
-    sudo cp -f $VERBOSE ./tools/xcms_console_tools/root_root_user $FULL_DEST_CONT/auth/usr/root.user
+    sudo cp -f $VERBOSE ./tools/xcms_console_tools/root.user $FULL_DEST_CONT/auth/usr/root.user
 else
     message_error "User 'root' was not found, password change skipped"
 fi
