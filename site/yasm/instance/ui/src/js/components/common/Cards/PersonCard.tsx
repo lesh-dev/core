@@ -23,7 +23,7 @@ export class PersonCard extends React.Component<PersonCardProps> {
                     this.props.callback()
             }
         }}>
-            <Async promise={ava(this.props.person)} then={val => {
+            <Async promise={ava(this.props.person)} then={(val: string) => {
                 return <img src={val} className="person_card__img"/>
             }}/>
             <div className="person_card__text">
