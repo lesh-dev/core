@@ -1,6 +1,8 @@
 
+
+
 <!DOCTYPE html>
-<html class="no-js"> 
+<html> 
 <head>
 	<meta charset="utf-8">
 	<title>ФизЛЭШ</title>
@@ -23,61 +25,198 @@
 	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="css/style.css">
 
+	<link rel="stylesheet" href="css/menu_style.css">
+
 </head>
 <body>
-	<div id="page">
-		<a href="#" class="js-nav-toggle nav-toggle"><i></i></a>
-		<aside id="aside" role="complementary" class="border js-fullheight">
+   	<a href="#" class="js-nav-toggle nav-toggle"><i></i></a>
+	<div id="menu">
+		<div id="logo">
+			<a href="index.html">
+				<img src="img/logo/fizlesh.png">
+			</a>
 
-			<h1 id="logo"><a href="index.html"><img src="img/logo/fizlesh.png"></a></h1>
-			<nav id="main-menu" role="navigation">
-				<ul>
-					<li><a href="index.html">Главная</a></li>
-					<li ><a href="about_school.html">О школе</a></li>
-					<li class="menu-active"><a href="admission.html">Поступление</a></li>
-					<li><a href="zesh.html">ЗЭШ</a></li>
-					<li><a href="contacts.html">Контакты</a></li>
-					 
-					<li><a href="signin.html">Авторизация</a></li>
-					
-				</ul>
-			</nav>
+		</div>
+		
+		<nav id="main-menu">
+			<ul>
+				<li><a href="index.html">Главная</a></li>
+				<li><a href="news.html">Новости</a></li>
+				<li><a href="about_school.html">О школе</a></li>
+				<li><a href="education.html">Учеба</a></li>
+				<li  class="menu-active"><a href="admission.html">Поступление</a></li>
+				<li><a href="zesh.html">Зимняя школа</a></li>
+				<li><a href="about_us.html">Преподаватели</a></li>
+				<li><a href="contacts.html">Контакты</a></li>	
+			</ul>
+		</nav>
 
-			<div class="social">
-				<ul>
-					<li><a href="#"><i class="icon-vk"></i></a></li>
-					<li><a href="#"><i class="icon-facebook"></i></a></li>
-					<li><a href="#"><i class="icon-instagram"></i></a></li>
-				</ul>
-			</div>
-
-		</aside>
-
-		<div id="main">
-			
-			<div class="content">
-				
-				<p>Мы набираем школьников 8-10 классов (то есть тех, кто либо уже изучал физику, либо готов к её изучению).</p>
-
-				<p>Чтобы поступить в нашу школу, нужно пройти собеседование (оно проводится несколько раз в год). Чтобы попасть на собеседование -  заполните анкету.</p>
-
-				<h3>Анкета</h3>
-
-				<p>Эта анкета для поступающих на Физическое отделение ЛЭШ! Школьникам, поступающим на другие отделения, необходимо обращаться к начальникам соответствующих отделений.</p>
-			</div>
-
+		<div class="social">
+			<ul>
+				<li><a href="#"><i class="icon-vk"></i></a></li>
+				<li><a href="#"><i class="icon-facebook"></i></a></li>
+				<li><a href="#"><i class="icon-instagram"></i></a></li>
+			</ul>
 		</div>
 	</div>
 
-	<script src="js/jquery.min.js"></script>
-	<script src="js/jquery.easing.1.3.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/owl.carousel.min.js"></script>
-	<script src="js/jquery.stellar.min.js"></script>
-	<script src="js/jquery.waypoints.min.js"></script>
-	<script src="js/jquery.countTo.js"></script>
-	<script src="js/main.js"></script>
+		
+	<div id="main">
+		<div class="content">
+				
+			<div class="main-header">
+			<h1>Поступление</h1>
+		</div>
+		
+			<p>Мы набираем школьников 8-10 классов (то есть тех, кто либо уже изучал физику, либо готов к её изучению). Отбор проходит в виде собеседования, для того чтобы на него попасть, заполните анкету.</p>
 
+			<p class="content-header">Анкета</p>
+
+			<p>Эта анкета для поступающих на Физическое отделение ЛЭШ! Школьникам, поступающим на другие отделения, необходимо обращаться к начальникам соответствующих отделений.</p>
+
+
+
+
+  	
+   
+	<div class="ankLegend">
+        <div><span class="ankAst Req">*</span> – обязательное поле</div>
+        <div><span class="ankAst Gr">*</span> – должно быть заполнено хотя бы одно из полей</div>
+        <div><span class="ankAst Rec">*</span> – рекомендуемое к заполнению поле</div>
+    </div>
+
+<form class="que" method="post">
+    <input name="anketa_mode" value="fizlesh" id="anketa_mode-hidden" type="hidden">    <div class="ankRow">
+        <span class="ankLabel">Отделение:<span class="ankAst Req">*</span></span>
+        <span class="ankValue"><select name="department_id" id="department_id-selector">
+<option selected="selected" value="1">Физическое</option>
+</select><div class="ankExample">Например: Физическое</div>
+        </span>
+    </div>
+
+        <div class="ankRow">
+        <span class="ankLabel">Фамилия:<span class="ankAst Req">*</span></span>
+        <span class="ankValue">
+            <input name="last_name" id="last_name-input" class="ank-input middle" type="text">                <div class="ankExample">Например: Сидоров</div>        </span>
+    </div>
+        <div class="ankRow">
+        <span class="ankLabel">Имя:<span class="ankAst Req">*</span></span>
+        <span class="ankValue">
+            <input name="first_name" id="first_name-input" class="ank-input middle" type="text">                <div class="ankExample">Например: Пётр</div>        </span>
+    </div>
+        <div class="ankRow">
+        <span class="ankLabel">Отчество:<span class="ankAst Req">*</span></span>
+        <span class="ankValue">
+            <input name="patronymic" id="patronymic-input" class="ank-input middle" type="text">                <div class="ankExample">Например: Михайлович
+        (или слово «нет», если у вас нет отчества)</div>        </span>
+    </div>
+        <div class="ankRow">
+        <span class="ankLabel">Дата рождения:<span class="ankAst Req">*</span></span>
+        <span class="ankValue">
+            <input name="birth_date" id="birth_date-input" class="ank-input middle" type="text">                <div class="ankExample">Например: 15.12.1984, в формате ДД.ММ.ГГГГ</div>        </span>
+    </div>
+        <div class="ankRow">
+        <span class="ankLabel">Номер (название) школы:</span>
+        <span class="ankValue">
+            <input name="school" id="school-input" class="ank-input long" type="text">                <div class="ankExample">Например: Лицей №30</div>        </span>
+    </div>
+        <div class="ankRow">
+        <span class="ankLabel">Город (село), область (край), <br>
+        где находится школа:</span>
+        <span class="ankValue">
+            <input name="school_city" id="school_city-input" class="ank-input long" type="text">                <div class="ankExample">Например: г. Полярные Зори Мурманской обл.</div>        </span>
+    </div>
+        <div class="ankRow">
+        <span class="ankLabel">Класс:<span class="ankAst Req">*</span></span>
+        <span class="ankValue">
+            <input name="ank_class" id="ank_class-input" class="ank-input middle" type="text">                <div class="ankExample">Например: 8Б</div>        </span>
+    </div>
+       
+        <div class="ankRow">
+        <span class="ankLabel">Мобильный телефон:<span class="ankAst Gr">*</span></span>
+        <span class="ankValue">
+            <input name="cellular" id="cellular-input" class="ank-input middle" type="text">                <div class="ankExample">Например: +7 (987) 654-32-10</div>        </span>
+    </div>
+        <div class="ankRow">
+        <span class="ankLabel">E-mail:</span>
+        <span class="ankValue">
+            <input name="email" id="email-input" class="ank-input middle" type="text">                <div class="ankExample">Например: sidorov.petr@example.com</div>        </span>
+    </div>
+        <div class="ankRow">
+        <span class="ankLabel">Skype:</span>
+        <span class="ankValue">
+            <input name="skype" id="skype-input" class="ank-input middle" type="text">                <div class="ankExample">Например: sidorov.petr</div>        </span>
+    </div>
+        <div class="ankRow">
+        <span class="ankLabel">Страничка ВКонтакте<br>(или
+        на Facebook и т.д.):</span>
+        <span class="ankValue">
+            <input name="social_profile" id="social_profile-input" class="ank-input middle" type="text">                <div class="ankExample">Например: vk.com/id123456789</div>        </span>
+    </div>
+
+        <div class="ankRow">
+        <span class="ankLabel">
+            Любимые разделы<br>
+        науки (подробнее):<span class="ankAst Rec">*</span>        </span>
+    </div>
+    <div class="ankRow"><textarea rows="3" cols="40" name="favourites" id="favourites-text" class="ank-text long"></textarea>
+    </div>        <div class="ankRow">
+        <span class="ankLabel">
+            Достижения на олимпиадах, <br>
+        участие в конференциях, <br>
+        публикации:<span class="ankAst Rec">*</span>        </span>
+    </div>
+    <div class="ankRow"><textarea rows="3" cols="40" name="achievements" id="achievements-text" class="ank-text long"></textarea>
+    </div>        <div class="ankRow">
+        <span class="ankLabel">
+            Хобби, увлечения:<span class="ankAst Rec">*</span>        </span>
+    </div>
+    <div class="ankRow"><textarea rows="3" cols="40" name="hobby" id="hobby-text" class="ank-text long"></textarea>
+    </div>        <div class="ankRow">
+        <span class="ankLabel">
+            Откуда узнали о школе:        </span>
+    </div>
+    <div class="ankRow"><textarea rows="3" cols="40" name="lesh_ref" id="lesh_ref-text" class="ank-text long"></textarea>
+    </div>        <div class="ankRow">
+        <span class="ankLabel">В чём измеряется<br>
+        сила тока (в системе СИ)?:<span class="ankAst Req">*</span></span>
+        <span class="ankValue">
+            <input name="control_question" id="control_question-input" class="ank-input middle" type="text">                <div class="ankExample">Например: в ...ах (если не помните, поищите ответ в Интернете)</div>        </span>
+    </div>
+        <div class="ankRow">
+            <input name="submit_anketa" id="submit_anketa-submit" value="Отправить" class="" type="submit">        </div>
+        <div class="ankMessageFrame" id="c-Message">
+            <div class="ankError" id="t-Error">&nbsp;</div>
+            <div class="ankWarning" id="t-Warning">&nbsp;</div>
+        </div>
+    </form>
+
+<p>
+    Если с вами не свяжутся в течении <b>трёх</b> дней после отправки анкеты,
+    пожалуйста, отправьте её ещё раз!
+</p>
+
+<p>
+    Информация, которую Вы укажете в анкете, нужна нам для того,
+    чтобы связаться с Вами и, возможно, пригласить на собеседование.
+    Чем подробнее Вы заполните анкету, тем нам будет проще работать.
+    Впрочем, Вы можете отказаться от поступления к нам в любой момент,
+    даже если заполните анкету и успешно пройдёте собеседование.
+</p>
+    <p>
+        <b>P.S.</b> Мы не передаём полученную информацию третьим лицам,
+        нам и без этого есть чем заняться.
+    </p></div>            </div>
+
+	</div>
+</div>
+
+<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/menu.js"></script> 
 </body>
 </html>
+
+
+
 
