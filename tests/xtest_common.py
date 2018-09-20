@@ -227,7 +227,8 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
     def get_admin_password(self):
         if "test.fizlesh.ru" in self.base_url:
-            return bawlib.read_file("root_password")
+            return bawlib.read_file("root_password").strip()
+
         return self.m_conf.get_admin_password()
 
     def get_manager_login(self):
@@ -237,7 +238,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
         if "test.fizlesh.ru" in self.base_url:
             return bawlib.read_file("manager_password").strip()
 
-        return self.m_conf.get_admin_password()
+        return self.m_conf.get_manager_password()
 
     def performLogout(self):
         self.logAdd("performLogout")
