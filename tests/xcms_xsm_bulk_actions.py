@@ -50,12 +50,12 @@ class XcmsXsmBulkActions(xsm.Manager, xtest_common.XcmsTest):
         self.goto_xsm_anketas()
         if admin_mode:
             self.assertTextNotPresent(
-                xpath="//table[class='ankList']",
+                xpath="//span[@class='anketa-status xe-declined']",
                 text=u"Отклонён",
             )
         else:
             self.assertTextPresent(
-                xpath="//table[class='ankList']",
+                xpath="//span[@class='anketa-status xe-declined']",
                 text=u"Отклонён",
             )
 
