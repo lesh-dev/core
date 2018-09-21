@@ -1,7 +1,7 @@
 import moment = require("moment");
 import {Moment} from "moment";
 import {Person} from "../../generated/interfaces";
-import {Promise} from "es6-promise";
+//import {Promise} from "es6-promise";
 
 export function str_2_date_format(s: string) {
     return s.replace(/[.]/g, "-") + "T09:00:00.000Z"
