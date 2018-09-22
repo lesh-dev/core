@@ -4,6 +4,7 @@ import {applyMiddleware, createStore} from "redux"
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import {Snippet, HighlightTitle} from "./Snippet"
 
 // ____ _____  _  _____ _____
 // / ___|_   _|/ \|_   _| ____|
@@ -87,95 +88,6 @@ export class SearchStatic extends React.Component<SearchProps> {
             { this.props.result.map((r) =>
                 <SearchResultRow key={r.source + ' ' + r.id} {...r} query={this.props.query}/>)}
         </div>);
-    }
-}
-
-
-class SnippetHelper {
-    // входит ли index-ный символ строки content вкакую-нибудь подстроку, равную term?
-    check(content: string, term: string, index: number): boolean {
-        let startIndex = 0;
-        do {
-            let i = content.toLowerCase().indexOf(term.toLowerCase(), startIndex);
-            if(i == -1) return false;
-            if(i <= index && index < i + term.length && i > -1) {
-                return true;
-            }
-            startIndex++;
-        } while(startIndex <= index);
-        return false;
-    }
-
-    // для строки-контента и массива строк-запросов считает, какие буквы надо подсветить
-    toHighlights(content: string, search: string[]) {
-        // в цикле проходим по строке, проверяем, входит ли символ в один из запросов
-        // Тупо, без Кнута-Морриса-Пратта и прочих.
-        return content.split('').map((_l,i) => {
-            for(let j = 0; j < search.length; j++) {
-                if (this.check(content, search[j], i)) {
-                    return {index: i, letter: content[i], highlight: true};
-                }
-            }
-            return {index: i, letter: content[i], highlight: false};
-        })
-    }
-
-    groupHighlights(hs: {index:number, letter:string, highlight:boolean} []) {
-        let groups = [];
-        let currentGroup = [];
-        let currentHighlight = false; // does not matter
-        for(let i = 0; i < hs.length; i++) {
-            if(hs[i].highlight == currentHighlight) {
-                currentGroup.push(hs[i])
-            }
-            else {
-                groups.push(currentGroup);
-                currentGroup = [];
-                currentGroup.push(hs[i]);
-                currentHighlight = hs[i].highlight;
-            }
-        }
-        groups.push(currentGroup);
-        return groups.filter(x => x.length > 0)
-            .map(group => ({ highlight: group[0].highlight, str: group.map(h=>h.letter).join('') }));
-    }
-
-    groups(content: string, search: string[]) {
-        return this.groupHighlights(this.toHighlights(content, search))
-    }
-
-    toHighlightedHtml = (group: {str: string, highlight: boolean}, key: string) => {
-        if(group.highlight) return <span key={key} style={{backgroundColor: 'yellow'}}>{group.str}</span>;
-        else return group.str;
-    }
-
-}
-
-const snippetHelper = new SnippetHelper;
-
-const HighlightTitle = (props: any) => {
-    let search = props.query.split(/\s+/);
-    let groups = snippetHelper.groups(props.title, search);
-    return groups.map((g, i) => {
-        if(g.highlight) return <span style={{backgroundColor: 'yellow'}} key={i}>{g.str}</span>;
-        else return g.str;
-    });
-}
-
-export class Snippet extends React.Component<{ query: string, stopwords: string, content: string }> {
-    render() {
-        let stops = this.props.stopwords.split(/\s+/)
-            .map(s => s.toLowerCase());
-        let terms = this.props.query.split(/\s+/)
-            .map(s => s.toLowerCase());
-        let words = this.props.content.split(/\s+/);
-        let newWords = words.filter(w => stops.indexOf(w.toLowerCase()) == -1); // don't repeat title
-        let groups/* : {...}[][] */ = newWords.map(w => snippetHelper.groups(w, terms))
-            .filter(group => group.some(item => item.highlight));
-        const space = { str: ' ', highlight: false };
-        let items = groups.reduce((g1, g2) => g1.concat([space], g2), []);
-        let html = items.map((item, i) => snippetHelper.toHighlightedHtml(item, i.toString()));
-        return <span style={{fontSize: '0.75em'}}>{html}</span>
     }
 }
 
