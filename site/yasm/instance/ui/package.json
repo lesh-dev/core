@@ -56,6 +56,7 @@
     "node-sass": "^4.9.2",
     "react-router": "^4.3.1",
     "react-router-native": "^4.3.0",
+    "redux-devtools-extension": "^2.13.5",
     "sass-loader": "^7.0.3",
     "source-map-loader": "^0.2.3",
     "style-loader": "^0.21.0",
@@ -64,6 +65,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
     "build": "webpack -p",
+    "dev": "webpack -d",
     "serve": "webpack --watch"
   },
   "author": "",
