@@ -46,6 +46,7 @@
       state: directory
       group: postfix
       owner: opendkim
+      recurse: yes # not sure if this works before starting opendkim daemon first time; change owner of /var/spool/postfix/opendkim/opendkim.sock by hands
   - name: configure socket
     #SOCKET="local:/var/spool/postfix/opendkim/opendkim.sock" (/etc/default/opendkim)
     copy:
@@ -60,6 +61,7 @@
       path: "{{ item }}"
       owner: opendkim
       group: opendkim
+      recurse: yes
     with_items:
     - /etc/opendkim.conf
     - /etc/dkimkeys
@@ -124,6 +126,12 @@
       owner: www-data
       group: www-data
       recurse: yes
+  - name: make Maildir directory for www-data
+    file:
+      path: /var/www/Maildir/
+      owner: www-data
+      group: www-data
+      state: directory
   - name: reload apache
     service:
       name: apache2
