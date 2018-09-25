@@ -5,3 +5,6 @@ webservers: # group
       ansible_ssh_user: i
       ansible_python_interpreter: /usr/bin/python3
       ansible_become: yes
+mail:
+  hosts:
+    math-lesh.org:
