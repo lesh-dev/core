@@ -111,15 +111,7 @@ class XcmsXsmBulkActions(xsm.Manager, xtest_common.XcmsTest):
         # FIXME: wtf??? two commands for link title navigation???
         list_href = self.get_url_by_link_data(u"Вернуться к списку")
         self.gotoSite(list_href)
-
-        self.anketa_drilldown(raisable_person, do_login=False)
+        self.anketa_drilldown(raisable_person, do_login=False, drilldown_to=xsm.DrilldownTo.ALL_LIST)
 
         self.goto_xsm_all_people()
-
-        self.anketa_drilldown(non_raisable_person, do_login=False)
-        """
-        self.assertTextNotPresent(
-            xpath="//table[class='ankList']",
-            text=u"Отклонён",
-        )
-        """
+        self.anketa_drilldown(non_raisable_person, do_login=False, drilldown_to=xsm.DrilldownTo.ALL_LIST)
