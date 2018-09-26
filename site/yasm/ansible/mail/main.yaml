@@ -1,0 +1,138 @@
+---
+- hosts: mail
+  tasks:
+  - name: install mail delivery packages
+    apt:
+      name:
+      - dovecot-imapd
+      - postfix
+      - mail-stack-delivery #?
+      - ssl-cert # ?
+  - name: ssl for dovecot # required for rainloop?
+    copy:
+      src: dovecot.10-ssl.conf
+      dest: /etc/dovecot/conf.d/10-ssl.conf
+
+- hosts: mail
+  tags: dkim
+  tasks:
+  - name: install opendkim packages
+    apt:
+      name:
+      - opendkim
+      - opendkim-tools
+  - name: copy opendkim config
+    copy:
+      src: opendkim.conf
+      dest: /etc/opendkim.conf
+  - name: generate opendkim key
+    command: opendkim-genkey --bits=1024 --selector=math-lesh-key --domain=math-lesh.org --append-domain
+    args:
+      chdir: /etc/dkimkeys
+  - debug:
+      msg: don't forget to add /etc/dkimkeys/math-lesh-key.txt as math-lesh-key._domainkey.math-lesh.org
+  - name: Add RSAkey reference to KeyTable file
+    copy:
+      content: "postfixdkim math-lesh.org:math-lesh-key:/etc/dkimkeys/math-lesh-key.private"
+      dest: /etc/dkimkeys/rsakeys.table
+  - name: Add AuthorDomain and RSAKey reference
+    #"*@math-lesh.org postfixdkim (/etc/dkimkeys/signingdomains.table)"
+    copy:
+      content: "*@math-lesh.org	postfixdkim"
+      dest: /etc/dkimkeys/signingdomains.table
+  - name: directory for socket
+    file:
+      path: /var/spool/postfix/opendkim
+      state: directory
+      group: postfix
+      owner: opendkim
+      recurse: yes # not sure if this works before starting opendkim daemon first time; change owner of /var/spool/postfix/opendkim/opendkim.sock by hands
+  - name: configure socket
+    #SOCKET="local:/var/spool/postfix/opendkim/opendkim.sock" (/etc/default/opendkim)
+    copy:
+      src: opendkim.default
+      dest: /etc/default/opendkim
+  - name: configure milter
+    copy:
+      src: postfix.main.cf
+      dest: /etc/postfix/main.cf
+  - name: permissions
+    file:
+      path: "{{ item }}"
+      owner: opendkim
+      group: opendkim
+      recurse: yes
+    with_items:
+    - /etc/opendkim.conf
+    - /etc/dkimkeys
+  - name: restart
+    service:
+      name: "{{ item }}"
+      state: restarted
+    with_items:
+    - dovecot
+    - opendkim
+    - postfix
+
+- hosts: mail
+  tags: rainloop
+  tasks:
+  - name: install mail client required packages
+    apt:
+      name:
+      - libapache2-mod-php7.0
+      - php7.0-xml
+      - mutt
+      - unzip
+  - name: directory for rainloop
+    file:
+      path: /var/www/webmail
+      state: directory
+      owner: www-data
+      group: www-data
+  - name: download rainloop
+    get_url:
+      url: "https://www.rainloop.net/repository/webmail/rainloop-community-latest.zip"
+      dest: /tmp/rainloop.zip
+      force: no
+  - name: unpack rainloop
+    unarchive:
+      src: /tmp/rainloop.zip
+      dest: /var/www/webmail
+      remote_src: yes
+  - name: index.php.root
+    command: mv /var/www/webmail/rainloop/v/1.12.1/index.php.root /var/www/webmail/index.php
+  - name: directory for application.ini
+    file:
+      path: /var/www/webmail/data/_data_/_default_/configs/
+      state: directory
+      owner: www-data
+      group: www-data
+  - name: application.ini
+    copy:
+      src: rainloop.application.ini
+      dest: /var/www/webmail/data/_data_/_default_/configs/application.ini
+      owner: www-data
+      group: www-data
+  - name: webmail config
+    copy:
+      src: webmail.conf
+      dest: /etc/apache2/sites-available/webmail.conf
+  - name: activate webmail
+    command: a2ensite webmail
+  - name: fix owner
+    file:
+      path: /var/www/webmail/
+      owner: www-data
+      group: www-data
+      recurse: yes
+  - name: make Maildir directory for www-data
+    file:
+      path: /var/www/Maildir/
+      owner: www-data
+      group: www-data
+      state: directory
+  - name: reload apache
+    service:
+      name: apache2
+      state: reloaded
