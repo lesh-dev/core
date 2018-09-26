@@ -1,4 +1,11 @@
-import {Notification, NotificationList, Department, DepartmentList, Person, PersonList, Contact, ContactList, School, SchoolList, Course, CourseList, CourseTeachers, CourseTeachersList, Exam, ExamList, PersonSchool, PersonSchoolList, PersonComment, PersonCommentList, Submission, SubmissionList, Contestants, ContestantsList, Problems, ProblemsList, Solutions, SolutionsList, } from "./interfaces"
+import {Users, UsersList, Notification, NotificationList, Department, DepartmentList, Person, PersonList, Contact, ContactList, School, SchoolList, Course, CourseList, CourseTeachers, CourseTeachersList, Exam, ExamList, PersonSchool, PersonSchoolList, PersonComment, PersonCommentList, Submission, SubmissionList, Contestants, ContestantsList, Problems, ProblemsList, Solutions, SolutionsList, } from "./interfaces"
+
+export const default_Users = {
+    id: 0,
+    social_id: "social_id",
+    nickname: "nickname",
+    email: "email",
+} as Users;
 
 export const default_Notification = {
     notification_id: 0,

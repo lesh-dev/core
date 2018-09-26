@@ -16,6 +16,7 @@ previx = "instance/api/generated"
 
 api_imports = """from flask import Blueprint, jsonify, request
 from instance.database import *
+from flask_login import login_required
 
 module = Blueprint('api', __name__, url_prefix='/api')
 
@@ -167,7 +168,7 @@ def main():
                     joined_fields.append(field)
                 else:
                     additional_fields.append(field[0])
-
+            read_api.write("@login_required\n")
             read_api.write("@module.route(\"/{name}\", methods=['GET'])\n".format(name=scl(name)))
             read_api.write("def {name}(req=None, raw=False):\n".format(name=scl(name)))
             read_api.write("    regular = [\n")
