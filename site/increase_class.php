@@ -1,4 +1,6 @@
-<?php
+<!DOCTYPE html>
+<html>
+<body><?php
 
 $engine_dir = "engine/";
 $xengine_dir = "xengine/";
@@ -13,3 +15,5 @@ require_once("${engine_dir}cms/ank/format.php");
 require_once("${engine_dir}cms/ank/person.php");
 
 xsm_increase_class_numbers();
+
+?></body></html>
