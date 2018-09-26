@@ -8,9 +8,11 @@ import {ET} from "../components/common/EditableText";
 import {PersonCard} from "../components/common/Cards/PersonCard";
 import {SchoolCard} from "../components/common/Cards/SchoolCard";
 import {SideMenu} from "../components/common/SideMenu";
+import {SearchStatic, default_SearchExample, SearchExample} from "../components/common/Search"
 import {default_Contact, default_Course, default_Person, default_School} from "../generated/defaults";
 import {CourseCard} from "../components/common/Cards/CourseCard";
 import {ContactCard} from "../components/common/Cards/ContactCard";
+import {TestHighlight} from "../components/common/Snippet";
 
 let loremIpsum = require("lorem-ipsum");
 
@@ -78,6 +80,15 @@ const Main = () => (
             <Route exact
                    path='/RC/contact_card'
                    render={() => <ContactCard contact={default_Contact}/>} />
+            <Route exact
+                   path='/RC/search_static'
+                   render={() => <SearchStatic result={default_SearchExample} query={'й а'} onQueryChange={q => console.log("query", q)}/>} />
+            <Route exact
+                   path='/RC/search_example'
+                   render={() => <SearchExample/>} />
+            <Route exact
+                   path='/RC/snippet'
+                   render={() => <TestHighlight/>} />
         </Switch>
     </main>
 );
@@ -95,6 +106,9 @@ const Header = () => (
                 <li><Link to={'/RC/school_card'}>SchoolCard</Link></li>
                 <li><Link to={'/RC/course_card'}>CourseCard</Link></li>
                 <li><Link to={'/RC/contact_card'}>ContactCard</Link></li>
+                <li><Link to={'/RC/snippet'}>Snippet</Link></li>
+                <li><Link to={'/RC/search_static'}>SearchStatic</Link></li>
+                <li><Link to={'/RC/search_example'}>SearchExample (live)</Link></li>
             </ul>
         </nav>
     </header>

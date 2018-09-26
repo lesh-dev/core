@@ -370,14 +370,14 @@ function xsm_person_list_link($school_id)
     return "<a href=\"$school_url\">$school_title</a>";
 }
 
-function xsm_person_view_link($person_id, $school_id, $title_ht = "")
+function xsm_person_view_link($person_id, $school_id, $title_ht = "", $url_prefix = "")
 {
     if (xu_empty($title_ht))
     {
         $person = xdb_get_entity_by_id('person', $person_id);
         $title_ht = xsm_fi_enc($person);
     }
-    $person_url = "view-person".xcms_url(array('person_id' => $person_id, 'school_id' => $school_id));
+    $person_url = $url_prefix."view-person".xcms_url(array('person_id' => $person_id, 'school_id' => $school_id));
     return "<a href=\"$person_url\">$title_ht</a>";
 }
 

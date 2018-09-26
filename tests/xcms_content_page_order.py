@@ -18,7 +18,7 @@ class XcmsContentPageOrder(xtest_common.XcmsTest):
     def run(self):
         self.ensure_logged_off()
 
-        self.performLoginAsEditor()
+        self.perform_login_as_editor()
         self.gotoAdminPanel()
 
         parent_page = u"Главная"

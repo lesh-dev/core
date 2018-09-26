@@ -70,7 +70,7 @@ class XcmsXsmAddExams(xsm.Manager, xtest_common.XcmsTest):
 
         self.listened_status = u"Прослушан"
 
-        self.performLoginAsManager()
+        self.perform_login_as_manager()
         self.goto_xsm()
         school = xsm.add_test_school(self)
 

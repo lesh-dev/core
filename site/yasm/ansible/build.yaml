@@ -1,0 +1,139 @@
+---
+- hosts: build
+  tasks:
+  - name: add user `lesh'
+    user:
+      name: lesh
+#      groups:
+#      - admin
+      append: yes
+    become: yes
+  - name: install system-wide python packages
+    apt:
+      package: "{{ packages }}"
+      state: present
+    vars:
+      packages:
+      - python3-pip
+      - python3-virtualenv
+      - python-minimal # required by npm
+    become: yes
+  - name: clone lesh-dev repository
+    git:
+      dest: ~lesh/lesh-dev
+      repo: https://github.com/lesh-dev/core.git
+      #reference: a85b67075a4a5bfdec267281b189f87a08c1509e # fixme (broken build in master)
+      #version: feature/ansible-example
+  - name: install python dependencies
+    # Есть модуль pip, но у него не получилось разобраться в версиях питона и virtualenv.
+    # Поэтому просто шелл.
+    # В норме билд вообще делается не на той машине, на которой запускается сервер,
+    # а приложения надо паковать во что-нибудь удобное.
+    # То же касается и npm.
+    shell: >-
+      export LC_ALL=en_US.UTF-8;
+      /usr/bin/python3 -m virtualenv -p /usr/bin/python3 venv;
+      . venv/bin/activate;
+      pip3 install -r requirements.txt
+    args:
+      chdir: ~lesh/lesh-dev/site/yasm
+  - name: copy database
+    copy:
+      src: ~/lesh-dev/site/yasm/fizlesh.sqlite3
+      dest: ~lesh/lesh-dev/site/yasm/fizlesh.sqlite3
+  - name: download nodejs
+    get_url:
+      url: https://nodejs.org/dist/v8.11.4/node-v8.11.4-linux-x64.tar.xz
+      dest: ~lesh/Nodejs.tar.xz
+    tags: npm
+  - name: unpack nodejs
+    unarchive:
+      src: ~lesh/Nodejs.tar.xz
+      dest: ~lesh/
+      remote_src: yes
+    tags: npm
+  - name: set owner
+    tags: npm
+    file:
+      path: ~lesh/lesh-dev
+      owner: lesh
+      group: lesh
+      recurse: yes
+  - name: npm install
+    shell: PATH=$PATH:~/node-v8.11.4-linux-x64/bin npm install
+    become_user: lesh
+    args:
+      chdir: ~lesh/lesh-dev/site/yasm/instance/ui
+    tags: npm
+  - name: npm run build
+    shell: PATH=$PATH:~lesh/node-v8.11.4-linux-x64/bin npm run build
+    args:
+      chdir: ~lesh/lesh-dev/site/yasm/instance/ui
+    tags: npm
+  - name: set owner
+    file:
+      path: ~lesh/lesh-dev
+      owner: lesh
+      group: lesh
+      recurse: yes
+    tags: npm
+
+# install pg
+- hosts: build
+  tags: pg
+  tasks:
+  - name: add repository (/etc/apt/sources.list.d)
+    apt_repository:
+      repo: deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main
+  - name: add repository (apt key)
+    apt_key:
+      url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+  - name: install postgresql
+    apt:
+      update_cache: yes
+      name:
+      - postgresql-10
+      - libpq-dev
+      - python3-psycopg2
+  - name: start postgresql
+    service:
+      name: postgresql
+      state: started
+      enabled: yes
+  - name: create pg user
+    become_user: postgres
+    postgresql_user:
+      name: lesh
+      password: md5b6185d063aa435a3935c566b71017bfa # 123456
+  - name: create database
+    become_user: postgres
+    postgresql_db:
+      name: lesh
+      owner: lesh
+  - name: download PostgREST
+    get_url:
+      url: https://github.com/PostgREST/postgrest/releases/download/v5.1.0/postgrest-v5.1.0-ubuntu.tar.xz
+      dest: /tmp/postgrest.tar.xz
+  - name: unpack PostgREST
+    unarchive:
+      remote_src: yes
+      src: /tmp/postgrest.tar.xz
+      dest: /opt
+      creates: /opt/postgrest
+  - name: configure PostgREST (make directory)
+    file:
+      path: /etc/postgrest/
+      state: directory
+  - name: configure PostgREST (copy config)
+    copy:
+      src: postgrest.conf
+      dest: /etc/postgrest/lesh.conf
+  - name: configure PostgREST (add service)
+    copy:
+      src: ./postgrest.service
+      dest: /etc/systemd/system/postgrest.service
+  - name: run PostgREST service
+    service:
+      name: postgrest
+      enabled: yes
+      state: started

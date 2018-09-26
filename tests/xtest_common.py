@@ -4,6 +4,7 @@
 import selenium_test
 import random_crap
 import logging
+import bawlib
 
 from xtest_config import XcmsTestConfig
 
@@ -78,7 +79,7 @@ class XcmsBaseTest(selenium_test.SeleniumTest):
         return self.curUrl().endswith("install.php")
 
     def assert_no_installer_page(self):
-        self.gotoRoot()
+        self.goto_root()
         if self.is_installer_page():
             self.fatalTest(
                 "Installer page detected, while we did not expected it. You should run this test on installed XCMS. "
@@ -124,7 +125,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
         emailString = self.m_conf.getNotifyEmail()
 
-        self.performLoginAsAdmin()
+        self.perform_login_as_admin()
         self.gotoAdminPanel()
         self.gotoNotificationsPage()
 
@@ -144,7 +145,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
         emailString = self.m_conf.getNotifyEmail()
 
-        self.performLoginAsAdmin()
+        self.perform_login_as_admin()
         self.gotoAdminPanel()
         self.gotoNotificationsPage()
 
@@ -158,36 +159,39 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
         self.performLogout()
 
-    def performLoginAsEditor(self):
-        return self.performLoginAsAdmin()
+    def perform_login_as_editor(self):
+        self.perform_login_as_admin()
 
-    def performLoginAsManager(self):
-        return self.performLoginAsAdmin()
+    def perform_login_as_manager(self):
+        login = self.get_manager_login()
+        password = self.get_manager_password()
+        logging.info("Log in as `manager`...")
+        if not self.perform_login(login, password):
+            logging.error("Authorization as `manager` failed")
+            self.failTest("Cannot perform manager authorization using " + login + "/" + password)
 
-    def performLoginAsAdmin(self):
-        login = self.getAdminLogin()
-        password = self.getAdminPass()
-        self.logAdd("performLoginAsAdmin")
-        if not self.performLogin(login, password):
+    def perform_login_as_admin(self):
+        login = self.get_admin_login()
+        password = self.get_admin_password()
+        self.logAdd("perform_login_as_admin")
+        if not self.perform_login(login, password):
             self.logAdd("Admin authorization failed")
             self.failTest("Cannot perform Admin authorization as " + login + "/" + password)
 
-        self.logAdd("performLoginAsAdmin(): checking admin panel link")
-
+        self.logAdd("perform_login_as_admin(): checking admin panel link")
         # check that we have entered the CP.
         # just chech that link exists.
         self.get_admin_panel_link()
-        # test.gotoSite(cpUrl)
 
-    def performLogin(self, login, password):
+    def perform_login(self, login, password):
         """
         returns True if login was successful
         """
         self.addAction("user-login", login + " / " + password)
 
-        self.logAdd("performLogin(): goto root")
+        self.logAdd("perform_login(): goto root")
 
-        self.gotoRoot()
+        self.goto_root()
 
         # assert we have no shit cookies here
         expl_adm = (
@@ -218,15 +222,23 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
         return True
 
-    def getAdminLogin(self):
-        return self.m_conf.getAdminLogin()
+    def get_admin_login(self):
+        return self.m_conf.get_admin_login()
 
-    def getAdminPass(self):
+    def get_admin_password(self):
         if "test.fizlesh.ru" in self.base_url:
-            with open("root_password", 'r') as f:
-                passwd = f.readline()
-            return passwd
-        return self.m_conf.getAdminPass()
+            return bawlib.read_file("root_password").strip()
+
+        return self.m_conf.get_admin_password()
+
+    def get_manager_login(self):
+        return self.m_conf.get_manager_login()
+
+    def get_manager_password(self):
+        if "test.fizlesh.ru" in self.base_url:
+            return bawlib.read_file("manager_password").strip()
+
+        return self.m_conf.get_manager_password()
 
     def performLogout(self):
         self.logAdd("performLogout")
@@ -235,7 +247,7 @@ class XcmsTestWithConfig(XcmsBaseTest):
 
     def ensure_logged_off(self):
         self.performLogout()
-        self.gotoRoot()
+        self.goto_root()
 
     def getWelcomeMessage(self, login):
         return u"Привет, " + login
@@ -286,7 +298,7 @@ class XcmsTest(XcmsTestWithConfig):
         )
 
         if "do_not_login_as_admin" not in user_aux_params:
-            self.performLoginAsAdmin()
+            self.perform_login_as_admin()
             self.gotoAdminPanel()
 
         self.gotoUserList()
@@ -345,7 +357,7 @@ class XcmsTest(XcmsTestWithConfig):
         # test user login
         self.assertTextPresent("//div[@class='user-ops']", inp_login)
         # test user creator (root)
-        self.assertTextPresent("//div[@class='user-ops']", self.m_conf.getAdminLogin())
+        self.assertTextPresent("//div[@class='user-ops']", self.m_conf.get_admin_login())
         self.assertElementValueById("name-input", inpName)
         self.assertElementValueById("email-input", inpEMail)
 
@@ -356,7 +368,7 @@ class XcmsTest(XcmsTestWithConfig):
         return inp_login, inpEMail, inpPass, inpName"""
 
     def removePreviousUsersWithTestEmail(self, emailToDelete):
-        self.performLoginAsAdmin()
+        self.perform_login_as_admin()
         self.gotoAdminPanel()
         self.gotoUserList()
 
@@ -386,7 +398,7 @@ class XcmsTest(XcmsTestWithConfig):
         self.logAdd("setUserEmailByAdmin: updating email for user '" + login + "' to '" + email + ". ")
 
         if "do_not_login_as_admin" not in auxParams:
-            self.performLoginAsAdmin()
+            self.perform_login_as_admin()
             self.gotoAdminPanel()
 
         self.gotoUserList()

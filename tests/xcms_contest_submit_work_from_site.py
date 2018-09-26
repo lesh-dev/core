@@ -13,7 +13,7 @@ M = 1000 * 1000
 class XcmsContestSubmitWorkFromSite(xtest_common.XcmsTest):
 
     def _test_work_submit(self, file_size, need_success, fill_work=True):
-        self.gotoRoot()
+        self.goto_root()
 
         # FIXME(mvel): if contest will be raised up, this should be fixed too
         # self.gotoUrlByLinkText(u"Олимпиада", attribute=self.CONTENT)

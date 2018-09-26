@@ -49,11 +49,11 @@ class XcmsAuthCheckDupEmail(xtest_common.XcmsTest):
         self.performLogout()
 
         print "logging as first created user. "
-        if not self.performLogin(u1.login, u1.password):
+        if not self.perform_login(u1.login, u1.password):
             self.failTest("Cannot login as newly created first user. ")
 
         self.performLogout()
 
         print "try logging as second created user. "
-        if self.performLogin(u2.login, u2.password):
+        if self.perform_login(u2.login, u2.password):
             self.failTest("I was able to login as second user with duplicate e-mail. ")

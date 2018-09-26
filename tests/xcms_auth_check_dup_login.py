@@ -48,12 +48,12 @@ class XcmsAuthCheckDupLogin(xtest_common.XcmsTest):
         self.performLogout()
 
         self.logAdd("logging as created first user. ")
-        if not self.performLogin(u1.login, u1.password):
+        if not self.perform_login(u1.login, u1.password):
             self.failTest("Cannot login as newly created user. ")
 
         # logout self
         self.performLogout()
 
         logging.info("try logging as created second user.")
-        if self.performLogin(u2.login, u2.password):
+        if self.perform_login(u2.login, u2.password):
             self.failTest("I am able to login as 'second' user with duplicate login and new password. ")

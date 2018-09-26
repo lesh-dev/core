@@ -53,7 +53,7 @@ class XcmsXsmAnketaDuplicate(xsm.Manager, xtest_common.XcmsTest):
         )
 
     def add_anketa(self, person):
-        self.gotoRoot()
+        self.goto_root()
         self.goto_anketa()
         self.input_person_data(person)
 

@@ -24,7 +24,7 @@ class XcmsXsmAnketaEdit(xsm.Manager, xtest_common.XcmsTest):
         self.ensure_logged_off()
         # anketa fill/edit positive test:
         # fields are filled with correct values.
-        self.gotoRoot()
+        self.goto_root()
         self.goto_anketa()
 
         person = xsm.Person(self)

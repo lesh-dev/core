@@ -41,7 +41,7 @@ module.exports = {
         path: __dirname + '/../static/js',
         filename: '[name].min.js'
     },
-    devtool: "inline-source-map",
+    devtool: "source-map",
     mode: "development",
     plugins: [
         new ExtractTextPlugin('/../css/pack/[name].css'),

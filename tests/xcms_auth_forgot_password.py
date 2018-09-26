@@ -25,7 +25,7 @@ class XcmsAuthForgotPassword(xtest_common.XcmsTest):
     def run(self):
         self.ensure_logged_off()
 
-        self.gotoRoot()
+        self.goto_root()
 
         inp_email = self.m_conf.getValidEmail(1)
 
@@ -47,7 +47,7 @@ class XcmsAuthForgotPassword(xtest_common.XcmsTest):
         )
 
         print "logging as created user. "
-        if not self.performLogin(u.login, u.password):
+        if not self.perform_login(u.login, u.password):
             self.failTest("Cannot login as newly created user. ")
 
         # logout self
@@ -61,7 +61,7 @@ class XcmsAuthForgotPassword(xtest_common.XcmsTest):
         self.fillElementById("question-input", self.m_conf.getForgottenPasswordCaptcha())
         self.clickElementById("reset_password-submit")
 
-        if self.performLogin(u.login, u.password):
+        if self.perform_login(u.login, u.password):
             self.failTest("Password was not reset. Old password works fine. ")
 
         # set random email to user to avoid problems with duplicate email (may occur only if test fails)

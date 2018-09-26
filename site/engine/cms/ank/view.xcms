@@ -70,13 +70,12 @@ require_once("${engine_dir}xsm/middleware.php");
     }
     if (@$_POST["submit_anketa"])
     {
-        $person = $_POST; // get all values here (_POST should not be spoiled)
+        $person = $_POST; // get all values here (_POST should not be modified)
 
         $person = xcms_trim_object($person);
 
         // set some generic fields that cannot be overridden
         $person["anketa_status"] = "new";
-        $person["is_student"] = "student";
         $user_agent = $person["user_agent"] = $_SERVER["HTTP_USER_AGENT"];
         xsm_validate_anketa_post($person);
 
@@ -87,6 +86,18 @@ require_once("${engine_dir}xsm/middleware.php");
 
         // anketa mode describes anketa source ("fizlesh" site or something else)
         $anketa_mode = xcms_get_key_or($person, XCMS_KEY_ANKETA_MODE);
+        if (
+            $anketa_mode == XCMS_ANKETA_MODE_FIZLESH ||
+            $anketa_mode == XCMS_ANKETA_MODE_MED_OLYMP ||
+            $anketa_mode == XCMS_ANKETA_MODE_MED
+        )
+        {
+            $person["is_student"] = "student";
+        }
+        elseif ($anketa_mode == XCMS_ANKETA_MODE_TEACHER)
+        {
+            $person["is_teacher"] = "teacher";
+        }
 
         $person_desc = xsm_get_fields("person");
         $email = xcms_get_key_or($person, "email");

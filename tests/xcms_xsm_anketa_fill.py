@@ -65,7 +65,7 @@ class XcmsXsmAnketaFill(xsm.Manager, xtest_common.XcmsTest):
 
         # anketa fill positive test:
         # all fields are filled with correct values.
-        self.gotoRoot()
+        self.goto_root()
         self.goto_anketa()
 
         person = xsm.Person(self)

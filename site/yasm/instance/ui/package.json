@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
     "@devexpress/dx-core": "^1.4.0",
     "@devexpress/dx-react-core": "^1.4.0",
     "@devexpress/dx-react-grid": "^1.4.0",
@@ -11,8 +12,12 @@
     "@types/prop-types": "^15.5.3",
     "@types/react": "^16.4.6",
     "@types/react-dom": "^16.0.6",
+    "@types/react-redux": "^5.0.7",
     "@types/react-router-dom": "^4.2.7",
     "@types/react-select": "^1.2.9",
+    "@types/redux-logger": "^3.0.6",
+    "babel-polyfill": "^6.26.0",
+    "core-js": "^2.5.7",
     "es6-promise": "^4.2.4",
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
@@ -24,12 +29,15 @@
     "react-location-picker": "^1.2.4",
     "react-moment-proptypes": "^1.6.0",
     "react-promise": "^2.0.3",
+    "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
     "react-select": "^1.2.1",
     "react-yandex-maps": "^2.2.0",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
     "ts-loader": "^4.4.2",
     "typings": "^2.1.1",
-    "webpack": "^4.14.0",
+    "webpack": "^4.19.1",
     "webpack-cli": "^3.0.8"
   },
   "name": "yasm",
@@ -48,6 +56,7 @@
     "node-sass": "^4.9.2",
     "react-router": "^4.3.1",
     "react-router-native": "^4.3.0",
+    "redux-devtools-extension": "^2.13.5",
     "sass-loader": "^7.0.3",
     "source-map-loader": "^0.2.3",
     "style-loader": "^0.21.0",
@@ -56,6 +65,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
     "build": "webpack -p",
+    "dev": "webpack -d",
     "serve": "webpack --watch"
   },
   "author": "",

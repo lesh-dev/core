@@ -131,7 +131,7 @@ function xsm_show_ank_list()
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
     $person_sel = $db->query($query);
 
-    $bulk_archive_title = "Будьте внимательны, это действие не может быть отменено (убедитесь, что у вас есть резервная копия&nbsp;БД)";
+    $bulk_archive_title = "Будьте внимательны, это действие не может быть отменено (убедитесь, что у вас есть резервная копия БД)";
     $bulk_archive_disabled = false;
     if (!xcms_user()->check_rights("admin", false))
     {
@@ -232,7 +232,7 @@ function xsm_show_ank_list()
 
 function xsm_bulk_archive()
 {
-    xcms_auth_admin_wall();
+    xcms_auth_wall_admin();
 
     // lock database
     $db = xdb_get_write();

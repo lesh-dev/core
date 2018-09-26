@@ -18,7 +18,7 @@ class XcmsContentRemovePage(xtest_common.XcmsTest):
 
     def run(self):
         self.ensure_logged_off()
-        self.performLoginAsEditor()
+        self.perform_login_as_editor()
         self.gotoAdminPanel()
 
         self.parent_page = u"Главная"

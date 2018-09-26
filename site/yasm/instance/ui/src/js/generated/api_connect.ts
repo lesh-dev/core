@@ -31,7 +31,7 @@ import {
     SolutionsList,
 } from './interfaces'
 
-import {Promise} from 'es6-promise';
+//import {Promise} from 'es6-promise';
 
 export function getRequest(url: string, type: string = 'GET'): Promise<any> {
     return new Promise<any>(

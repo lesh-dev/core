@@ -24,7 +24,7 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
 
     def run(self):
         self.ensure_logged_off()
-        self.performLoginAsEditor()
+        self.perform_login_as_editor()
         self.gotoAdminPanel()
 
         parent_page = u"Главная"
@@ -76,7 +76,7 @@ class XcmsContentAuthOnlyPage(xtest_common.XcmsTest):
             random=True,
         )
 
-        if not self.performLogin(u.login, u.password):
+        if not self.perform_login(u.login, u.password):
             self.failTest("Cannot login as auth-page-test user. ")
 
         self.logAdd("Clicking on parent menu item. ")

@@ -1,5 +1,6 @@
 <?php
     require_once("${engine_dir}cms/ank/department.php");
+    require_once("${engine_dir}cms/ank/person.php");
 
     $show_department_id = xcms_get_persistent_key("global", "show_department_id", XDB_INVALID_ID);
     $show_name_filter = xcms_get_persistent_key("global", "show_name_filter");
@@ -249,8 +250,31 @@ function xsm_show_all_person_list($sort_columns)
         </div><?php
     }
 
+    // a bit of copypaste from bulk archive functionality
+    $increase_class_title = "Будьте внимательны, это действие не может быть отменено (убедитесь, что у вас есть резервная копия БД)";
+    $increase_class_disabled = false;
+    if (!xcms_user()->check_rights("admin", false))
+    {
+        $increase_class_title = "Извините, эта функциональность доступна только Администратору. Обратитесь к Секте Программистов";
+        $increase_class_disabled = true;
+    }
+    ?>
+    <form
+        method="post"
+        class="xsm-increase_class_numbers"
+        name="increase_class_numbers"
+        id="increase_class_numbers-form"
+        action="/increase_class.php"
+        style="float: right;">
+        <?php xcmst_submit("increase_class_numbers", "Поднять номера классов", $increase_class_title, "btn btn-danger", $increase_class_disabled); ?>
+    </form>
+    <?php
     xsm_view_operations('person', 'участника', xcms_url(array('anketa_status' => 'cont')));
-    $base_url = "list-person-locator?";
+
+    if (@$_POST["increase_class_numbers"])
+    {
+        xsm_increase_class_numbers();
+    }
 
     ?>
     <div><span style="color: red; font-weight: bold;">NEW!</span> Доступна сортировка (click по колонке) и мультисортировка (Shift+click по колонке)

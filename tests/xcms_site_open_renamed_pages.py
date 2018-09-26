@@ -12,7 +12,7 @@ class XcmsSiteOpenRenamedPages(xtest_common.XcmsTest):
     """
     def run(self):
 
-        self.gotoRoot()
+        self.goto_root()
 
         self.gotoPage("/?page=index/doctor-1170556276")  # index/history
         self.assertBodyTextPresent(u"История")

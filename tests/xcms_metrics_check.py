@@ -14,5 +14,5 @@ class XcmsMetricsCheck(xtest_common.XcmsBaseTest):
 
         self.assert_no_installer_page()
 
-        self.gotoRoot()
+        self.goto_root()
         self.assertSourceTextNotPresent("Metrika")

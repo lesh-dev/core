@@ -4,18 +4,27 @@
 
 class XcmsTestConfig:
     def __init__(self):
-        self.m_adminLogin = "root"
-        self.m_adminPass = "root"
+        self._admin_login = "root"
+        self._admin_password = "root"
+
+        self._manager_login = "manager"
+        self._manager_password = "manager"
+
         self.m_notifyEmail = "vdm-photo@ya.ru"
-        self.m_testAnketaSend = True  # в настоящее время не используется
         self.m_phpErrorCheckFlag = True
         self.school_name = u"ЛЭШ-2013"
 
-    def getAdminLogin(self):
-        return self.m_adminLogin
+    def get_admin_login(self):
+        return self._admin_login
 
-    def getAdminPass(self):
-        return self.m_adminPass
+    def get_admin_password(self):
+        return self._admin_password
+
+    def get_manager_login(self):
+        return self._manager_login
+
+    def get_manager_password(self):
+        return self._manager_password
 
     def getNotifyEmail(self):
         return self.m_notifyEmail

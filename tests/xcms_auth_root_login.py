@@ -18,7 +18,7 @@ class XcmsAuthRootLogin(xtest_common.XcmsTestWithConfig):
         self.setAutoPhpErrorChecking(True)
 
         self.ensure_logged_off()
-        self.performLoginAsAdmin()
+        self.perform_login_as_admin()
         self.gotoAdminPanel()
 
         self.assertBodyTextPresent(self.getUserListLinkName())

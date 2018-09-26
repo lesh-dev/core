@@ -15,7 +15,7 @@ class FreshDbInstaller(xtest_common.XcmsTestWithConfig):
     """
 
     def run(self):
-        self.gotoRoot()
+        self.goto_root()
 
         self.assertSourceTextPresent(["XCMS installer", u"Установка XCMS"], "Here should be installer page. ")
         self.fillElementById("xsm_db_name", "ank/freshdb.sqlite3")

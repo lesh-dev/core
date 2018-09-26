@@ -342,7 +342,7 @@ class SeleniumTest(object):
     def curUrl(self):
         return self.m_driver.current_url
 
-    def gotoRoot(self):
+    def goto_root(self):
         return self.gotoPage("/")
 
     # alias of gotoPage, for similarity with gotoUrlByLinkText

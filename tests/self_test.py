@@ -11,12 +11,12 @@ class SelfTest(SeleniumTest):
 
     def run(self):
         self.setAutoPhpErrorChecking(True)
-        self.gotoRoot()
+        self.goto_root()
 
         # conf = XcmsTestConfig()
 
         # TODO: somthing is outdated here
-        # xtest_common.performLoginAsAdmin(self, conf.getAdminLogin(), conf.getAdminPass())
+        # xtest_common.perform_login_as_admin(self, conf.get_admin_login(), conf.get_admin_password())
 
         self.gotoUrlByLinkText(u"Анкеты")
         self.gotoUrlByLinkText(u"TESTЧаПаевa855d Василийb02")

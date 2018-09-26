@@ -25,7 +25,7 @@ class XcmsXsmAnketaWrongFill(xsm.Manager, xtest_common.XcmsTest):
 
     def run(self):
         self.ensure_logged_off()
-        self.gotoRoot()
+        self.goto_root()
         self.goto_anketa()
 
         person = xsm.Person(self)

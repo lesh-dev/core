@@ -42,7 +42,7 @@ class User(object):
         )
 
         if login_as_admin:
-            self.xtest.performLoginAsAdmin()
+            self.xtest.perform_login_as_admin()
             self.xtest.gotoAdminPanel()
 
         self.xtest.gotoUserList()
@@ -106,7 +106,7 @@ class User(object):
         # test user login
         self.xtest.assertTextPresent("//div[@class='user-ops']", inp_login)
         # test user creator (root)
-        self.xtest.assertTextPresent("//div[@class='user-ops']", self.xtest.m_conf.getAdminLogin())
+        self.xtest.assertTextPresent("//div[@class='user-ops']", self.xtest.m_conf.get_admin_login())
         self.xtest.assertElementValueById("name-input", inpName)
         self.xtest.assertElementValueById("email-input", inpEMail)
 

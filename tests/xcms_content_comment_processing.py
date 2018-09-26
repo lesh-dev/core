@@ -9,7 +9,7 @@ class XcmsContentCommentProcessing(xtest_common.XcmsTest):
 
     def run(self):
         self.ensure_logged_off()
-        self.performLoginAsAdmin()
+        self.perform_login_as_admin()
         self.gotoAdminPanel()
 
         self.m_parentPage = u"Главная"

@@ -15,6 +15,11 @@ import random_crap as rc
 import xtest_common as xc
 
 
+class DrilldownTo(object):
+    ANKETA_LIST = "anketa"
+    ALL_LIST = "all"
+
+
 class Person(object):
     """
         Иван Человеков был простой человек
@@ -632,23 +637,37 @@ class Manager(xc.XcmsTest):
     def goto_xsm_change_person_status(self):
         self.gotoUrlByLinkText(u"Сменить статус")
 
-    def anketa_drilldown(self, person, do_login=True, jump_into=True):
+    def anketa_drilldown(
+        self,
+        person,
+        do_login=True,
+        jump_into=True,
+        drilldown_to=DrilldownTo.ANKETA_LIST,
+    ):
         """
             Navigate to specific person's card
             :param do_login: Perform login as manager
             :param jump_into: Goto anketa view (default)
         """
         if do_login:
-            self.performLoginAsManager()
+            self.perform_login_as_manager()
 
-        self.gotoRoot()
+        self.goto_root()
         self.goto_xsm()
-        self.goto_xsm_anketas()
+
+        if drilldown_to == DrilldownTo.ANKETA_LIST:
+            self.goto_xsm_anketas()
+        elif drilldown_to == DrilldownTo.ALL_LIST:
+            self.goto_xsm_all_people()
+        else:
+            assert False, "Invalid drilldown mode"
+
         self.clear_filters()
         self.filter_person(fio=person.short_alias())
+        count = self.countIndexedUrlsByLinkText(person.short_alias())
         self.assert_equal(
-            self.countIndexedUrlsByLinkText(person.short_alias()), 1,
-            "Found more than one anketa with exact FIO. Duplicate filtering is broken. "
+            count, 1,
+            "There should be exactly one card with exact FIO. "
         )
         if jump_into:
             self.gotoUrlByLinkText(person.short_alias())

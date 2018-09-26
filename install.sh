@@ -101,9 +101,8 @@ else
     cp $root/settings.local.php $root/settings.php
 
     if [ -e $root/content/auth/usr/root.user ] ; then
-        print_message "Changing root password to 'root'..."
-        # change root password to 'root'
-        sudo cp -f $verbose ./tools/xcms_console_tools/root_root_user $root/content/auth/usr/root.user
+        print_message "Install users with default passwords"
+        sudo cp -f $verbose ./tools/xcms_console_tools/*.user $root/content/auth/usr/
     else
         print_error "User 'root' was not found, password change skipped"
     fi

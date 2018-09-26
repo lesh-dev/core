@@ -16,7 +16,7 @@ class XcmsContentTopLevelPage(xtest_common.XcmsTest):
 
     def run(self):
         self.ensure_logged_off()
-        self.performLoginAsEditor()
+        self.perform_login_as_editor()
         self.gotoAdminPanel()
         self.gotoCreatePage()
         page = xpage.Page(self)

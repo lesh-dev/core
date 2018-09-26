@@ -47,7 +47,7 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         )
 
         print "logging as first created user. "
-        if not self.performLogin(u1.login, u1.password):
+        if not self.perform_login(u1.login, u1.password):
             self.failTest("Cannot login as newly created first user. ")
 
         self.gotoCabinet()
@@ -91,7 +91,7 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         self.performLogoutFromAdminPanel()
 
         print "logging as first created user again. "
-        if not self.performLogin(u1.login, u1.password):
+        if not self.perform_login(u1.login, u1.password):
             self.failTest("Cannot login again as newly created first user. ")
 
         self.gotoCabinet()
@@ -101,5 +101,5 @@ class XcmsAuthCabinetEmailChange(xtest_common.XcmsTest):
         self.performLogoutFromAdminPanel()
 
         print "logging as second created user. "
-        if not self.performLogin(u2.login, u2.password):
+        if not self.perform_login(u2.login, u2.password):
             self.failTest("I was not able to login as second user. ")

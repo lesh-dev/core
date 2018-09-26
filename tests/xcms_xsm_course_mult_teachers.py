@@ -42,7 +42,7 @@ class XcmsXsmCourseWithMultipleTeachers(xsm.Manager, xtest_common.XcmsTest):
 
     def run(self):
         self.ensure_logged_off()
-        self.performLoginAsManager()
+        self.perform_login_as_manager()
         self.goto_xsm()
         school = xsm.add_test_school(self)
 
