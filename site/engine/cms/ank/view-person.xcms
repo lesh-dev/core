@@ -347,6 +347,7 @@ function xsm_print_person_ank_data($db, $person)
 
     xsm_draw_person_textval_field($fields, 'birth_date', $birth_date);
     xsm_draw_person_textval_field($fields, 'passport_data', $passport_data);
+    xsm_draw_person_textval_field($fields, 'current_class', $current_class);
     xsm_draw_person_textval_field($fields, 'ank_class', $ank_class);
     xsm_draw_person_textval_field($fields, 'school', $school);
     xsm_draw_person_textval_field($fields, 'school_city', $school_city);
