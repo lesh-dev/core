@@ -1,12 +1,12 @@
 import * as React from "react"
 import {connect, Provider, Store} from "react-redux"
-import {applyMiddleware, createStore} from "redux"
+import {applyMiddleware, combineReducers, createStore} from "redux"
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import {Snippet, HighlightTitle} from "./Snippet"
 
-// ____ _____  _  _____ _____
+//  ____ _____  _  _____ _____
 // / ___|_   _|/ \|_   _| ____|
 // \___ \ | | / _ \ | | |  _|
 // ___) | | |/ ___ \| | | |___
@@ -43,7 +43,7 @@ const initialState: SearchStateShape = {
 };
 
 
-// ____  ____  _____ ____  _____ _   _ _____  _  _____ ___ ___  _   _
+//  ____  ____  _____ ____  _____ _   _ _____  _  _____ ___ ___  _   _
 // |  _ \|  _ \| ____/ ___|| ____| \ | |_   _|/ \|_   _|_ _/ _ \| \ | |
 // | |_) | |_) |  _| \___ \|  _| |  \| | | | / _ \ | |  | | | | |  \| |
 // |  __/|  _ <| |___ ___) | |___| |\  | | |/ ___ \| |  | | |_| | |\  |
@@ -92,7 +92,7 @@ export class SearchStatic extends React.Component<SearchProps> {
 }
 
 
-//    _    ____ _____ ___ ___  _   _ ____
+//     _    ____ _____ ___ ___  _   _ ____
 //    / \  / ___|_   _|_ _/ _ \| \ | / ___|
 //   / _ \| |     | |  | | | | |  \| \___ \
 //  / ___ \ |___  | |  | | |_| | |\  |___) |
@@ -100,48 +100,52 @@ export class SearchStatic extends React.Component<SearchProps> {
 //
 
 const SEARCH_REQUEST = "SEARCH_REQUEST";
-const searchRequest = (query: string) => ({ type: SEARCH_REQUEST, query });
+const searchRequest = (query: string, path: string[]) => ({ type: SEARCH_REQUEST, query, path });
 
 const SEARCH_RESPONSE = "SEARCH_RESPONSE";
-const searchResponse = (result: SearchResultItem[], query: string) =>
-    ({ type: SEARCH_RESPONSE, result, query });
+const searchResponse = (result: SearchResultItem[], query: string, path: string[]) =>
+    ({ type: SEARCH_RESPONSE, result, query, path });
 
 
-// ____  _____ ____  _   _  ____ _____ ____  ____
+//  ____  _____ ____  _   _  ____ _____ ____  ____
 // |  _ \| ____|  _ \| | | |/ ___| ____|  _ \/ ___|
 // | |_) |  _| | | | | | | | |   |  _| | |_) \___ \
 // |  _ <| |___| |_| | |_| | |___| |___|  _ < ___) |
 // |_| \_\_____|____/ \___/ \____|_____|_| \_\____/
 //
 
-function app(state = initialState, action: any) {
+function searchReducer(state = {}, action: any) {
     switch(action.type) {
-        case SEARCH_RESPONSE:
-            if(state.query === action.query) {
-                return Object.assign({}, state, {
+        case SEARCH_RESPONSE: {
+            let query = Lens.get(state, action.path, initialState).query;
+            if (query === action.query) {
+                return Lens.set(state, {
                     status: "ready",
                     result: action.result
-                });
+                }, action.path);
             } else return state; // запрос устарел, результат потерял актуальность
+        }
 
-        case SEARCH_REQUEST:
-            return Object.assign({}, state, {
-                status: "pending",
-                query: action.query
-            });
+        case SEARCH_REQUEST: {
+            return Lens.localUpdate(state, {
+                status: 'pending',
+                query: action. query
+            }, action.path, initialState);
+        }
         default:
             return state;
     }
 }
 
-// ____ _____ ___  ____  _____
+//  ____ _____ ___  ____  _____
 // / ___|_   _/ _ \|  _ \| ____|
 // \___ \ | || | | | |_) |  _|
 // ___) | | || |_| |  _ <| |___
 // |____/ |_| \___/|_| \_\_____|
 //
 
-export const makeStore = () => createStore(app, composeWithDevTools( applyMiddleware(thunkMiddleware, createLogger()) ));
+const app = combineReducers({ search: searchReducer });
+export const makeStore = () => createStore(searchReducer, composeWithDevTools( applyMiddleware(thunkMiddleware, createLogger()) ));
 
 //   ____ ___  _   _ _____  _    ___ _   _ _____ ____  ____
 //  / ___/ _ \| \ | |_   _|/ \  |_ _| \ | | ____|  _ \/ ___|
@@ -150,33 +154,45 @@ export const makeStore = () => createStore(app, composeWithDevTools( applyMiddle
 //  \____\___/|_| \_| |_/_/   \_\___|_| \_|_____|_| \_\____/
 //
 
-const mapStateToProps = (state: SearchStateShape) => ({
-    result: state.result,
-    query: state.query
+const mapStateToProps = (state: any, ownProps: { path: string[] }) => {
+    const localState = Lens.get(state, ownProps.path, initialState);
+    return {
+        result: localState.result,
+        query: localState.query
+    }
+};
+
+const mapDispatchToProps = (dispatch: (action: any) => void, ownProps: { path: string[] }) => ({
+    onQueryChange: (query: string) => {
+        const path = ownProps.path;
+        if(query.trim() == '') { // empty string => don't search
+            dispatch(searchRequest(query, path));
+            dispatch(searchResponse([], query, path));
+            return;
+        }
+        dispatch(searchRequest(query, path));
+        const baseUri = "//127.0.0.1:3000/search?";
+        const terms = query.split(/\s+/);
+        const clauses = terms.map(t => '&description=ilike.' + encodeURIComponent(`%${t}%`));
+        const uri = baseUri + "limit=5" + clauses.join('');
+        fetch(uri)
+            .then(resp => resp.json())
+            .then(j => dispatch(searchResponse(j, query, path)) )
+        // todo: handle errors
+    }
 });
 
-/// Мы могли бы использовать plain версию...
-// const mapDispatchToProps = (dispatch: any) => ({
-//     onQueryChange: (query: string) => {
-//         dispatch(searchRequest(query));
-//         const baseUri = "//127.0.0.1:3000/search?";
-//         const uri = baseUri + "limit=5&description=" + encodeURIComponent(`ilike.%${query}%`);
-//         fetch(uri)
-//             .then(resp => resp.json())
-//             .then(j => dispatch(searchResponse(j)) )
-//     }
-// });
-
-
-// ... Но thunk позволяет получить состояние, из которого нам могут понадобиться статус и результаты setTimeout
-const mapDispatchToProps = ({
-    onQueryChange: (query: string) => (dispatch: (action: any) => void, getState: () => any) => {
+// ... Thunk позволяет получить состояние, из которого нам могут понадобиться статус и результаты setTimeout
+// Но при этом не получается получить путь в дереве состояния.
+const mapDispatchToPropsBroken = ({
+    onQueryChange: (query: string) => (dispatch: (action: any) => void, getState: () => any, ownProps: {path: string[]}) => {
+        const path = ownProps.path; // fixme doesn't work
         if(query.trim() == '') {
-            dispatch(searchRequest(query));
-            dispatch(searchResponse([], query));
+            dispatch(searchRequest(query, path));
+            dispatch(searchResponse([], query, path));
             return;
         } // empty string => don't search
-        dispatch(searchRequest(query));
+        dispatch(searchRequest(query, path));
         console.log("state.status", getState().status); // demonstration
         const baseUri = "//127.0.0.1:3000/search?";
         const terms = query.split(/\s+/);
@@ -185,7 +201,7 @@ const mapDispatchToProps = ({
         const uri = baseUri + "limit=5" + clauses.join('');
         fetch(uri)
             .then(resp => resp.json())
-            .then(j => dispatch(searchResponse(j, query)) )
+            .then(j => dispatch(searchResponse(j, query, path)) )
         // todo: handle errors
     }
 });
@@ -215,9 +231,47 @@ export class SearchExample extends React.Component<any> {
         super(props);
         this.store = makeStore();
     }
-    store: Store<SearchStateShape>;
+    store: Store<{search: Map<number, SearchStateShape>}>;
 
     render() {
-        return <Provider store={this.store}><Search/></Provider>
+        return <Provider store={this.store}><div>
+            { [1,2,3].map(i => <Search path={['search', i.toString()]} key={i}/>) }
+        </div></Provider>
     }
 }
+
+
+//  ____ ___ ______   ______ _     _____
+// | __ )_ _/ ___\ \ / / ___| |   | ____|
+// |  _ \| | |    \ V / |   | |   |  _|
+// | |_) | | |___  | || |___| |___| |___
+// |____/___\____| |_| \____|_____|_____|
+//
+
+const Lens = ({
+    get: (state: any, path: string[], initialState: any = undefined) => {
+        let s = state;
+        for(let p = 0; p < path.length; p++) {
+            s = s[path[p]];
+            if(typeof s == "undefined") return initialState;
+        }
+        return s;
+    },
+
+    set: function set(state: any, newLocalState: any, path: string[]): any {
+        if(path.length == 0) return Object.assign({}, state, newLocalState);
+        else {
+            let [head, ...tail] = path;
+            let subState = state[head];
+            if(typeof subState == "undefined") subState = {};
+            return Object.assign({}, state,
+                {[head]: set(subState, newLocalState, tail)});
+        }
+    },
+
+    localUpdate: function(state: any, localPatch: any, path: string[], initialState = {}) {
+        let localState = Lens.get(state, path) || initialState;
+        const patchState = Object.assign({}, localState, localPatch);
+        return Lens.set(state, patchState, path);
+    }
+})
