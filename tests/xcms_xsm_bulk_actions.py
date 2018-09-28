@@ -112,6 +112,10 @@ class XcmsXsmBulkActions(xsm.Manager, xtest_common.XcmsTest):
         list_href = self.get_url_by_link_data(u"Вернуться к списку")
         self.gotoSite(list_href)
         self.anketa_drilldown(raisable_person, do_login=False, drilldown_to=xsm.DrilldownTo.ALL_LIST)
+        current_class = self.getElementTextById("span-person_current_class")
+        self.assert_equal(current_class, "8", "Class was not raised from 7 to 8. ")
 
         self.goto_xsm_all_people()
         self.anketa_drilldown(non_raisable_person, do_login=False, drilldown_to=xsm.DrilldownTo.ALL_LIST)
+        current_class = self.getElementTextById("span-person_current_class")
+        self.assert_equal(current_class, "n/a", "Class should be n/a. ")
