@@ -138,19 +138,19 @@ export class SchPersonList extends React.Component<SPListProps, SPListState> {
         let list = [];
         for (let i = 0; i < this.props.spl.length; ++i) {
             let department: string;
-            if (this.props.spl.values[i].member_department_id_fk.department_title) {
-                department = this.props.spl.values[i].member_department_id_fk.department_title
+            if (this.props.spl.values[i].department.department_title) {
+                department = this.props.spl.values[i].department.department_title
             } else {
-                department = this.props.spl.values[i].member_person_id_fk.department_id_fk.department_title
+                department = this.props.spl.values[i].member_person.department.department_title
             }
 
             list.push({
-                last_name: this.props.spl.values[i].member_person_id_fk.last_name,
-                first_name: this.props.spl.values[i].member_person_id_fk.first_name,
-                patronymic: this.props.spl.values[i].member_person_id_fk.patronymic,
+                last_name: this.props.spl.values[i].member_person.last_name,
+                first_name: this.props.spl.values[i].member_person.first_name,
+                patronymic: this.props.spl.values[i].member_person.patronymic,
                 department: department,
                 dates: this.render_dates(this.props.spl.values[i], i),
-                grade: this.props.spl.values[i].member_person_id_fk.current_class,
+                grade: this.props.spl.values[i].member_person.current_class,
                 teacher: this.props.spl.values[i].is_teacher,
                 student: this.props.spl.values[i].is_student,
                 cur_type: this.props.spl.values[i].curatorship,
@@ -161,7 +161,7 @@ export class SchPersonList extends React.Component<SPListProps, SPListState> {
                 comment: this.props.spl.values[i].person_school_comment,
                 date_start: this.props.spl.values[i].frm,
                 date_end: this.props.spl.values[i].tll,
-                nick: this.props.spl.values[i].member_person_id_fk.nick_name,
+                nick: this.props.spl.values[i].member_person.nick_name,
                 person_id: this.props.spl.values[i].member_person_id
             });
         }

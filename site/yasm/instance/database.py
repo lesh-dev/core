@@ -1,15 +1,30 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin
+from sqlalchemy.inspection import inspect
+
 
 """
 ORM declaration file
 """
 
+
 db = SQLAlchemy()
 lm = LoginManager()
 
 
-class User(UserMixin, db.Model):
+class Serializer(object):
+
+    def serialize(self):
+        return {
+            c: getattr(self, c).serialize() if hasattr(getattr(self, c), 'serialize') else getattr(self, c) for c in filter(lambda x: x != '_sa_instance_state' and not hasattr(getattr(self, x), 'all'), inspect(self).attrs.keys())
+        }
+
+    @staticmethod
+    def serialize_list(l):
+        return [m.serialize() for m in l]
+
+
+class User(UserMixin, db.Model, Serializer):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     social_id = db.Column(db.String(64), nullable=False, unique=True)
@@ -52,7 +67,7 @@ class NamedColumn(db.Column):
 
 
 # notification
-class Notification(db.Model):
+class Notification(db.Model, Serializer):
     __tablename__ = 'notification'
     notification_id = NamedColumn(db.Integer,
                                   nick="id",
@@ -70,7 +85,7 @@ class Notification(db.Model):
 
 
 # XSM
-class Department(db.Model):
+class Department(db.Model, Serializer):
     __tablename__ = 'department'
     department_id = NamedColumn(db.Integer,
                                 nick="id",
@@ -88,11 +103,11 @@ class Department(db.Model):
     department_changedby = NamedColumn(db.Text,
                                        nick="изменивший",
                                        nullable=False)
-    person_schools = db.relationship('PersonSchool', backref='department', lazy='dynamic')
-    persons = db.relationship('Person', backref='department', lazy='dynamic')
+    person_schools = db.relationship('PersonSchool', back_populates='department', lazy='dynamic')
+    persons = db.relationship('Person', back_populates='department', lazy='dynamic')
 
 
-class Person(UserMixin, db.Model):
+class Person(UserMixin, db.Model, Serializer):
     __tablename__ = 'person'
     person_id = NamedColumn(db.Integer,
                             nick="id",
@@ -213,7 +228,7 @@ class Person(UserMixin, db.Model):
                                 MarkedForeignKey(Department.department_id),
                                 nick="отделение",
                                 nullable=False)  # ссылка на отделение(2.7 +)
-
+    department = db.relationship('Department', lazy='joined')
     person_created = NamedColumn(db.Text,
                                  nick="дата создания",
                                  nullable=True)  # utc timestamp
@@ -224,14 +239,14 @@ class Person(UserMixin, db.Model):
                                    nick="дата создания",
                                    nullable=True)  # user name
 
-    person_comments = db.relationship('PersonComment', backref='blamed_person', lazy='dynamic')
-    person_schools = db.relationship('PersonSchool', backref='member_person', lazy='dynamic')
-    exams = db.relationship('Exam', backref='student_person', lazy='dynamic')
-    course_teachers = db.relationship('CourseTeachers', backref='course_teacher', lazy='dynamic')
-    contacts = db.relationship('Contact', backref='person', lazy='dynamic')
+    person_comments = db.relationship('PersonComment', back_populates='blamed_person', lazy='dynamic')
+    person_schools = db.relationship('PersonSchool', back_populates='member_person', lazy='dynamic')
+    exams = db.relationship('Exam', back_populates='student', lazy='dynamic')
+    course_teachers = db.relationship('CourseTeachers', back_populates='course_teacher', lazy='dynamic')
+    contacts = db.relationship('Contact', back_populates='person', lazy='dynamic')
 
 
-class Contact(db.Model):
+class Contact(db.Model, Serializer):
     __tablename__ = 'contact'
     id = NamedColumn(db.Integer,
                      nick='id',
@@ -241,13 +256,14 @@ class Contact(db.Model):
                          MarkedForeignKey(Person.person_id),
                          nick='человек',
                          nullable=False)
+    person = db.relationship('Person', lazy='joined')
     name = NamedColumn(db.Text,
                        nick='название',
                        nullable=False)
     value = NamedColumn(db.Text, nick='значение', nullable=False)
 
 
-class School(db.Model):
+class School(db.Model, Serializer):
     __tablename__ = 'school'
     school_id = NamedColumn(db.Integer,
                             nick="id",
@@ -289,11 +305,12 @@ class School(db.Model):
     school_changedby = NamedColumn(db.Text,
                                    nick="изменивший",
                                    nullable=False)  # user name
-    person_comments = db.relationship('PersonComment', backref='school', lazy='dynamic')
-    person_schools = db.relationship('PersonSchool', backref='school', lazy='dynamic')
+    person_comments = db.relationship('PersonComment', back_populates='school', lazy='dynamic')
+    person_schools = db.relationship('PersonSchool', back_populates='school', lazy='dynamic')
+    courses = db.relationship('Course', back_populates='school', lazy='dynamic')
 
 
-class Course(db.Model):
+class Course(db.Model, Serializer):
     __tablename__ = 'course'
     course_id = NamedColumn(db.Integer,
                             nick="id",
@@ -306,6 +323,7 @@ class Course(db.Model):
                             MarkedForeignKey(School.school_id),
                             nick="школа",
                             nullable=False)  # ссылка на школу, на которой читали курс
+    school = db.relationship('School', lazy='joined')
     course_cycle = NamedColumn(db.Text,
                                nick="цикл",
                                nullable=True)  # цикл, на котором читался курс
@@ -349,11 +367,11 @@ class Course(db.Model):
     course_changedby = NamedColumn(db.Text,
                                    nick="изменивший",
                                    nullable=False)  # user name
-    exams = db.relationship('Exam', backref='course', lazy='dynamic')
-    course_teachers = db.relationship('CourseTeachers', backref='course', lazy='dynamic')
+    exams = db.relationship('Exam', back_populates='course', lazy='dynamic')
+    course_teachers = db.relationship('CourseTeachers', back_populates='course', lazy='dynamic')
 
 
-class CourseTeachers(db.Model):
+class CourseTeachers(db.Model, Serializer):
     __tablename__ = 'course_teachers'
     course_teachers_id = NamedColumn(db.Integer,
                                      nick="id",
@@ -363,13 +381,15 @@ class CourseTeachers(db.Model):
                             MarkedForeignKey(Course.course_id),
                             nick="курс",
                             nullable=False)
+    course = db.relationship('Course', lazy='joined')
     course_teacher_id = NamedColumn(db.Integer,
                                     MarkedForeignKey(Person.person_id),
                                     nick="перпод",
                                     nullable=False)
+    course_teacher = db.relationship('Person', lazy='joined')
     course_teachers_created = NamedColumn(db.Text,
                                           nick="дата создания",
-                                          nullable=False)  # utc timestamp
+                                          nullable=False)  # utc timestampcourse_teacher
     course_teachers_modified = NamedColumn(db.Text,
                                            nick="последнее изменение",
                                            nullable=False)  # utc timestamp
@@ -377,14 +397,8 @@ class CourseTeachers(db.Model):
                                             nick="изменивший",
                                             nullable=False)  # user name
 
-    def teacher(self):
-        return Person.query.get(self.course_teacher_id)
 
-    def course(self):
-        return Course.query.get(self.course_id)
-
-
-class Exam(db.Model):
+class Exam(db.Model, Serializer):
     __tablename__ = 'exam'
     exam_id = NamedColumn(db.Integer,
                           nick="id",
@@ -394,10 +408,12 @@ class Exam(db.Model):
                                     MarkedForeignKey(Person.person_id),
                                     nick="школьник",
                                     nullable=False)
+    student = db.relationship('Person', lazy='joined')
     course_id = NamedColumn(db.Integer,
                             MarkedForeignKey(Course.course_id),
                             nick="курс",
                             nullable=False)
+    course = db.relationship('Course', lazy='joined')
     exam_status = NamedColumn(db.Text,
                               nick="статус",
                               nullable=True)
@@ -417,14 +433,8 @@ class Exam(db.Model):
                                  nick="изменивший",
                                  nullable=False)  # user name
 
-    def student(self):
-        return Person.query.get(self.student_person_id)
 
-    def course(self):
-        return Course.query.get(self.course_id)
-
-
-class PersonSchool(db.Model):
+class PersonSchool(db.Model, Serializer):
     __tablename__ = 'person_school'
     person_school_id = NamedColumn(db.Integer,
                                    nick="id",
@@ -434,14 +444,17 @@ class PersonSchool(db.Model):
                                    MarkedForeignKey(Person.person_id),
                                    nick="участник",
                                    nullable=False)  # fk person
+    member_person = db.relationship('Person', lazy='joined')
     member_department_id = NamedColumn(db.Integer,
                                        MarkedForeignKey(Department.department_id),
                                        nick="отделение",
                                        nullable=False)  # fk department
+    department = db.relationship('Department', lazy='joined')
     school_id = NamedColumn(db.Integer,
                             MarkedForeignKey(School.school_id),
                             nick="школа",
                             nullable=False)  # fk school
+    school = db.relationship('School', lazy='joined')
     is_student = NamedColumn(db.Text,
                              nick="школьник",
                              nullable=True)  # является ли школьником на данной школе
@@ -486,7 +499,7 @@ class PersonSchool(db.Model):
                       nick="отъезд", )
 
 
-class PersonComment(db.Model):
+class PersonComment(db.Model, Serializer):
     __tablename__ = 'person_comment'
     person_comment_id = NamedColumn(db.Integer,
                                     nick="id",
@@ -499,10 +512,12 @@ class PersonComment(db.Model):
                                    MarkedForeignKey(Person.person_id),
                                    nick="упомянутый",
                                    nullable=False)  # fk person - - сабжевый участник(типично школьник)
+    blamed_person = db.relationship('Person', lazy='joined')
     school_id = NamedColumn(db.Integer,
                             MarkedForeignKey(School.school_id),
                             nick="школа",
                             nullable=False)  # fk school - - школа, о которой идёт речь(v2.15)
+    school = db.relationship('School', lazy='joined')
     owner_login = NamedColumn(db.Text,
                               nick="автор",
                               nullable=False)  # логин автора комментария
@@ -523,7 +538,7 @@ class PersonComment(db.Model):
 
 
 # contest TODO: nickname columns
-class Submission(db.Model):
+class Submission(db.Model, Serializer):
     __tablename__ = 'submission'
     submission_id = NamedColumn(db.Integer,
                                 primary_key=True,
@@ -546,7 +561,7 @@ class Submission(db.Model):
                                nullable=True)
 
 
-class Contestants(db.Model):
+class Contestants(db.Model, Serializer):
     __tablename__ = 'contestants'
     contestants_id = NamedColumn(db.Integer,
                                  primary_key=True,
@@ -575,10 +590,10 @@ class Contestants(db.Model):
                          nullable=True)
     contest_year = NamedColumn(db.Text,
                                nullable=True)
-    solutions = db.relationship('Solutions', backref='contestant', lazy='dynamic')
+    solutions = db.relationship('Solutions', back_populates='contestant', lazy='dynamic')
 
 
-class Problems(db.Model):
+class Problems(db.Model, Serializer):
     __tablename__ = 'problems'
     problems_id = NamedColumn(db.Integer,
                               primary_key=True,
@@ -593,10 +608,10 @@ class Problems(db.Model):
                          nullable=True)
     criteria = NamedColumn(db.Text,
                            nullable=True)
-    solutions = db.relationship('Solutions', backref='problem', lazy='dynamic')
+    solutions = db.relationship('Solutions', back_populates='problem', lazy='dynamic')
 
 
-class Solutions(db.Model):
+class Solutions(db.Model, Serializer):
     __tablename__ = 'solutions'
     solutions_id = NamedColumn(db.Integer,
                                primary_key=True,
@@ -604,11 +619,13 @@ class Solutions(db.Model):
     problem_id = NamedColumn(db.Integer,
                              MarkedForeignKey(Problems.problems_id),
                              nullable=False)
+    problem = db.relationship('Problems', lazy='joined')
     contest_year = NamedColumn(db.Text,
                                nullable=True)
     contestant_id = NamedColumn(db.Integer,
                                 MarkedForeignKey(Contestants.contestants_id),
                                 nullable=False)
+    contestant = db.relationship('Contestants', lazy='joined')
     resolution_text = NamedColumn(db.Text,
                                   nullable=True)
     resolution_author = NamedColumn(db.Text,

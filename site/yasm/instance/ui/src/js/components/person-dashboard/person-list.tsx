@@ -7,21 +7,33 @@ import Async from "react-promise";
 import {List} from "../common/List";
 
 
-export class PersList extends React.Component {
+interface PersListState {
+    list: PersonList
+}
+
+
+export class PersList extends React.Component<undefined, PersListState> {
+    constructor(props: any) {
+        super(props);
+        person_list().then(
+            value => {this.setState({list: value})},
+            error => console.log(error)
+        )
+    }
     render() {
-        return <Async promise={person_list()}
-                      then={(list: PersonList) => {
-                          return <List renderer={(person: Person) => {
-                              return <PersonCard person={person}
-                                                 style={{
-                                                     display: "flex",
-                                                     justifyContent: "left"
-                                                 }}
-                                                 clickable={true}
-                              />
-                          }} data={list.values}/>
-                      }
-                      }
-                      pending={() => <Spinner/>}/>;
+        if (this.state) {
+            return <List renderer={(person: Person) => {
+                return <PersonCard person={person}
+                                 style={{
+                                     display: "flex",
+                                     justifyContent: "left"
+                                 }}
+                                 clickable={true}
+                />
+            }}
+                         data={this.state.list.values}/>
+        } else {
+            return <Spinner/>
+        }
     }
 }

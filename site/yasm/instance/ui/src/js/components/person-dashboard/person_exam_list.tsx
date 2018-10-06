@@ -42,7 +42,11 @@ const groupingPanelMessages = {
 };
 
 const compareSchools = (a: any, b: any) => {
-    return a.props.school.school_id < b.props.school.school_id ? -1 : 1;
+    if (a.props.school && b.props.school) {
+        return a.props.school.school_id < b.props.school.school_id ? -1 : 1;
+    } else {
+        return 1;
+    }
 };
 
 export class PersonExamList extends React.Component<PersonExamListProps, PersonExamListState> {
@@ -56,12 +60,14 @@ export class PersonExamList extends React.Component<PersonExamListProps, PersonE
     gen_rows() {
         let list = [];
         for (let i = 0; i < this.props.list.length; ++i) {
-            list.push({
-                title: <CourseCard course={this.props.list.values[i].course_id_fk} clickable={true}/>,
-                status: this.props.list.values[i].exam_status,
-                school: <SchoolToken school={this.props.list.values[i].course_id_fk.school_id_fk} clickable={true}/>,
-                area: this.props.list.values[i].course_id_fk.course_area
-            });
+            if (this.props.list.values[i].course) {
+                list.push({
+                    title: <CourseCard course={this.props.list.values[i].course} clickable={true}/>,
+                    status: this.props.list.values[i].exam_status,
+                    school: <SchoolToken school={this.props.list.values[i].course.school} clickable={true}/>,
+                    area: this.props.list.values[i].course.course_area
+                });
+            }
         }
         return list
     }

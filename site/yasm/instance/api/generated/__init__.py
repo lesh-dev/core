@@ -30,11 +30,7 @@ def users_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -71,11 +67,7 @@ def notification_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -116,11 +108,7 @@ def department_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -220,13 +208,7 @@ def person_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['department_id_fk'] = department_list(req={'department_id': entry.department_id}, raw=True)['values']
-        d['department_id_fk'] = d['department_id_fk'][0] if len(d['department_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -263,13 +245,7 @@ def contact_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['person_id_fk'] = person_list(req={'person_id': entry.person_id}, raw=True)['values']
-        d['person_id_fk'] = d['person_id_fk'][0] if len(d['person_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -321,11 +297,7 @@ def school_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -380,13 +352,7 @@ def course_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['school_id_fk'] = school_list(req={'school_id': entry.school_id}, raw=True)['values']
-        d['school_id_fk'] = d['school_id_fk'][0] if len(d['school_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -427,15 +393,7 @@ def course_teachers_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['course_id_fk'] = course_list(req={'course_id': entry.course_id}, raw=True)['values']
-        d['course_id_fk'] = d['course_id_fk'][0] if len(d['course_id_fk']) else None
-        d['course_teacher_id_fk'] = person_list(req={'person_id': entry.course_teacher_id}, raw=True)['values']
-        d['course_teacher_id_fk'] = d['course_teacher_id_fk'][0] if len(d['course_teacher_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -482,15 +440,7 @@ def exam_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['student_person_id_fk'] = person_list(req={'person_id': entry.student_person_id}, raw=True)['values']
-        d['student_person_id_fk'] = d['student_person_id_fk'][0] if len(d['student_person_id_fk']) else None
-        d['course_id_fk'] = course_list(req={'course_id': entry.course_id}, raw=True)['values']
-        d['course_id_fk'] = d['course_id_fk'][0] if len(d['course_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -551,17 +501,7 @@ def person_school_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['member_person_id_fk'] = person_list(req={'person_id': entry.member_person_id}, raw=True)['values']
-        d['member_person_id_fk'] = d['member_person_id_fk'][0] if len(d['member_person_id_fk']) else None
-        d['member_department_id_fk'] = department_list(req={'department_id': entry.member_department_id}, raw=True)['values']
-        d['member_department_id_fk'] = d['member_department_id_fk'][0] if len(d['member_department_id_fk']) else None
-        d['school_id_fk'] = school_list(req={'school_id': entry.school_id}, raw=True)['values']
-        d['school_id_fk'] = d['school_id_fk'][0] if len(d['school_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -610,15 +550,7 @@ def person_comment_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['blamed_person_id_fk'] = person_list(req={'person_id': entry.blamed_person_id}, raw=True)['values']
-        d['blamed_person_id_fk'] = d['blamed_person_id_fk'][0] if len(d['blamed_person_id_fk']) else None
-        d['school_id_fk'] = school_list(req={'school_id': entry.school_id}, raw=True)['values']
-        d['school_id_fk'] = d['school_id_fk'][0] if len(d['school_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -665,11 +597,7 @@ def submission_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -725,11 +653,7 @@ def contestants_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -771,11 +695,7 @@ def problems_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -818,15 +738,7 @@ def solutions_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['problem_id_fk'] = problems_list(req={'problems_id': entry.problem_id}, raw=True)['values']
-        d['problem_id_fk'] = d['problem_id_fk'][0] if len(d['problem_id_fk']) else None
-        d['contestant_id_fk'] = contestants_list(req={'contestants_id': entry.contestant_id}, raw=True)['values']
-        d['contestant_id_fk'] = d['contestant_id_fk'][0] if len(d['contestant_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),

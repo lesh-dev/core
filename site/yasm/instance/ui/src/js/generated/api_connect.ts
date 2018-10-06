@@ -31,7 +31,7 @@ import {
     SolutionsList,
 } from './interfaces'
 
-//import {Promise} from 'es6-promise';
+import {Promise} from 'es6-promise';
 
 export function getRequest(url: string, type: string = 'GET'): Promise<any> {
     return new Promise<any>(
@@ -65,7 +65,7 @@ export function users_list(d: dict = {}) {
     for (let key in d) {
         req += key + '=' + d[key] + '&'
     }
-    return getRequest('/api/users_list' + req)
+    return getRequest('/api/users_list' + req) as Promise<UsersList>
 }
 
 
@@ -88,7 +88,7 @@ export function notification_list(d: dict = {}) {
     for (let key in d) {
         req += key + '=' + d[key] + '&'
     }
-    return getRequest('/api/notification_list' + req)
+    return getRequest('/api/notification_list' + req) as Promise<NotificationList>
 }
 
 
@@ -111,7 +111,7 @@ export function department_list(d: dict = {}) {
     for (let key in d) {
         req += key + '=' + d[key] + '&'
     }
-    return getRequest('/api/department_list' + req)
+    return getRequest('/api/department_list' + req) as Promise<DepartmentList>
 }
 
 
@@ -138,7 +138,7 @@ export function person_list(d: dict = {}) {
     for (let key in d) {
         req += key + '=' + d[key] + '&'
     }
-    return getRequest('/api/person_list' + req)
+    return getRequest('/api/person_list' + req) as Promise<PersonList>
 }
 
 
@@ -171,7 +171,7 @@ export function contact_list(d: dict = {}) {
     for (let key in d) {
         req += key + '=' + d[key] + '&'
     }
-    return getRequest('/api/contact_list' + req)
+    return getRequest('/api/contact_list' + req) as Promise<ContactList>
 }
 
 
@@ -194,7 +194,7 @@ export function school_list(d: dict = {}) {
     for (let key in d) {
         req += key + '=' + d[key] + '&'
     }
-    return getRequest('/api/school_list' + req)
+    return getRequest('/api/school_list' + req) as Promise<SchoolList>
 }
 
 
@@ -223,7 +223,7 @@ export function course_list(d: dict = {}) {
     for (let key in d) {
         req += key + '=' + d[key] + '&'
     }
-    return getRequest('/api/course_list' + req)
+    return getRequest('/api/course_list' + req) as Promise<CourseList>
 }
 
 
@@ -250,7 +250,7 @@ export function course_teachers_list(d: dict = {}) {
     for (let key in d) {
         req += key + '=' + d[key] + '&'
     }
-    return getRequest('/api/course_teachers_list' + req)
+    return getRequest('/api/course_teachers_list' + req) as Promise<CourseTeachersList>
 }
 
 
@@ -273,7 +273,7 @@ export function exam_list(d: dict = {}) {
     for (let key in d) {
         req += key + '=' + d[key] + '&'
     }
-    return getRequest('/api/exam_list' + req)
+    return getRequest('/api/exam_list' + req) as Promise<ExamList>
 }
 
 
@@ -296,7 +296,7 @@ export function person_school_list(d: dict = {}) {
     for (let key in d) {
         req += key + '=' + d[key] + '&'
     }
-    return getRequest('/api/person_school_list' + req)
+    return getRequest('/api/person_school_list' + req) as Promise<PersonSchoolList>
 }
 
 
@@ -319,7 +319,7 @@ export function person_comment_list(d: dict = {}) {
     for (let key in d) {
         req += key + '=' + d[key] + '&'
     }
-    return getRequest('/api/person_comment_list' + req)
+    return getRequest('/api/person_comment_list' + req) as Promise<PersonCommentList>
 }
 
 
@@ -342,7 +342,7 @@ export function submission_list(d: dict = {}) {
     for (let key in d) {
         req += key + '=' + d[key] + '&'
     }
-    return getRequest('/api/submission_list' + req)
+    return getRequest('/api/submission_list' + req) as Promise<SubmissionList>
 }
 
 
@@ -365,7 +365,7 @@ export function contestants_list(d: dict = {}) {
     for (let key in d) {
         req += key + '=' + d[key] + '&'
     }
-    return getRequest('/api/contestants_list' + req)
+    return getRequest('/api/contestants_list' + req) as Promise<ContestantsList>
 }
 
 
@@ -390,7 +390,7 @@ export function problems_list(d: dict = {}) {
     for (let key in d) {
         req += key + '=' + d[key] + '&'
     }
-    return getRequest('/api/problems_list' + req)
+    return getRequest('/api/problems_list' + req) as Promise<ProblemsList>
 }
 
 
@@ -415,7 +415,7 @@ export function solutions_list(d: dict = {}) {
     for (let key in d) {
         req += key + '=' + d[key] + '&'
     }
-    return getRequest('/api/solutions_list' + req)
+    return getRequest('/api/solutions_list' + req) as Promise<SolutionsList>
 }
 
 

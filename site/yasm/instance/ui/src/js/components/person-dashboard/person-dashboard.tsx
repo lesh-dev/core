@@ -45,8 +45,12 @@ export class PersonDashboard extends React.Component<PersonDashboardProps, Perso
                     department_list().then((valueD: DepartmentList) => {
                             this.setState({
                                 departments: valueD,
-                                person: valueP
-                            })
+                                person: {
+                                    ...value,
+                                    ...valueP
+                                }
+                            });
+                            console.log(this.state)
                         }
                     )
                 })
@@ -142,7 +146,7 @@ export class PersonDashboard extends React.Component<PersonDashboardProps, Perso
         }
         }
                             data={this.state.person.person_school_list.values.map((element: PersonSchool) => {
-                                return element.school_id_fk
+                                return element.school
                             }).reverse()}
         />;
         return <div className="person__additional__schools">
@@ -151,7 +155,7 @@ export class PersonDashboard extends React.Component<PersonDashboardProps, Perso
     }
 
     render() {
-        this.state ? console.log(this.state.person.department_id_fk.department_title) : null;
+        this.state ? console.log(this.state.person.department.department_title) : null;
         return (this.state) ? <div className="person">
             <div className="person__title">
                 <Async promise={ava(this.state.person)} then={val => {
@@ -176,7 +180,7 @@ export class PersonDashboard extends React.Component<PersonDashboardProps, Perso
                             // valueComponent={DepartmentValue}
                                 optionComponent={DepartmentOption}
                                 options={this.state.departments.values}
-                                value={this.state.person.department_id_fk}
+                                value={this.state.person.department}
                                 clearable={false}
                                 className={'select_input_hack'}
                                 wrapperStyle={{display: 'inline-block'}}
