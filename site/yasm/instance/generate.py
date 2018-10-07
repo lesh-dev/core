@@ -16,6 +16,7 @@ previx = "instance/api/generated"
 
 api_imports = """from flask import Blueprint, jsonify, request
 from instance.database import *
+from flask_login import login_required
 
 module = Blueprint('api', __name__, url_prefix='/api')
 
@@ -78,7 +79,19 @@ def main():
                 for fk in column.foreign_keys:
                     m = fk._column_tokens[1]
                     models[m].append((scl(tablename), CC(tablename) + "List", columnname, fk._column_tokens[2]))
-                    models[tablename].append((columnname + "_fk", CC(m), m, fk._column_tokens[2]))
+                    try:
+                        backref = list(
+                            map(
+                                lambda x: x[1].back_populates,
+                                filter(
+                                    lambda i: list(list(i[1]._calculated_foreign_keys)[0].foreign_keys)[0] == fk,
+                                    fk.referenced_model.relationships._data.items()
+                                )
+                            )
+                        )[0]
+                    except Exception as e:
+                        print(e)
+                    models[tablename].append((backref, CC(m), m, fk._column_tokens[2]))
 
     def gen_interfaces():
         ts_interfaces = open("instance/ui/src/js/generated/interfaces.ts", "w")
@@ -130,7 +143,7 @@ def main():
             ts_connector.write("    for (let key in d) {\n")
             ts_connector.write("        req += key + '=' + d[key] + '&'\n")
             ts_connector.write("    }\n")
-            ts_connector.write("    return getRequest('/api/{name}_list' + req)\n}}\n\n\n".format(name=name))
+            ts_connector.write("    return getRequest('/api/{name}_list' + req) as Promise<{interface_name}List>\n}}\n\n\n".format(name=name, interface_name=CC(name)))
             ts_connector.write("export function {name}_fill(obj: {type}) {{\n".format(name=name, type=CC(name)))
             ts_connector.write("    return new Promise<{type}>((resolve, reject) => {{\n".format(type=CC(name)))
             ts_connector.write("        let ans: {type} = obj;\n".format(type=CC(name)))
@@ -167,7 +180,7 @@ def main():
                     joined_fields.append(field)
                 else:
                     additional_fields.append(field[0])
-
+            read_api.write("@login_required\n")
             read_api.write("@module.route(\"/{name}\", methods=['GET'])\n".format(name=scl(name)))
             read_api.write("def {name}(req=None, raw=False):\n".format(name=scl(name)))
             read_api.write("    regular = [\n")
@@ -190,22 +203,7 @@ def main():
             read_api.write("    query = query.all()\n")
             read_api.write("    ans = []\n")
             read_api.write("    for entry in query:\n")
-            read_api.write("        d = dict()\n")
-            for field in joined_fields:
-                read_api.write(
-                    "        d['{field_name}'] = {func}(req={{'{field}': entry.{val}}}, raw=True)['values']\n".format(
-                        field_name=field[0],
-                        func=scl(field[2]),
-                        field=field[3],
-                        val=field[0][:-3]
-                    ))
-                read_api.write(
-                    "        d['{field_name}'] = d['{field_name}'][0] if len(d['{field_name}']) else None\n".format(
-                        field_name=field[0]))
-            read_api.write("        d.update(entry.__dict__)\n")
-            read_api.write("        d.pop('_sa_instance_state')\n")
-            read_api.write("        d.update(additional)\n")
-            read_api.write("        ans.append(d)\n")
+            read_api.write("        ans.append(entry.serialize())\n")
             read_api.write("    if raw:\n")
             read_api.write("        return {\n")
             read_api.write("            'length': len(ans),\n")

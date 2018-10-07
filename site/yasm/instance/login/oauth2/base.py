@@ -1,12 +1,17 @@
 from flask import url_for
 
+class Auth(object):
+    @classmethod
+    def init_app(cls, app):
+        cls.app = app
+
+
 class OAuthSignIn(object):
     providers = None
 
-    def __init__(self, provider_name, app):
-        self.app = app
+    def __init__(self, provider_name):
         self.provider_name = provider_name
-        credentials = self.app.config['OAUTH_CREDENTIALS'][provider_name]
+        credentials = Auth.app.config['OAUTH_CREDENTIALS'][provider_name]
         self.consumer_id = credentials['id']
         self.consumer_secret = credentials['secret']
 
@@ -17,7 +22,7 @@ class OAuthSignIn(object):
         pass
 
     def get_callback_url(self):
-        return url_for('oauth_callback', provider=self.provider_name,
+        return url_for('login.oauth_callback', provider=self.provider_name,
                        _external=True)
 
     @classmethod

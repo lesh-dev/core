@@ -1,9 +1,48 @@
 from flask import Blueprint, jsonify, request
 from instance.database import *
+from flask_login import login_required
 
 module = Blueprint('api', __name__, url_prefix='/api')
 
 
+@login_required
+@module.route("/users_list", methods=['GET'])
+def users_list(req=None, raw=False):
+    regular = [
+        'id',
+        'social_id',
+        'nickname',
+        'email',
+    ]
+    additional = {
+    }
+    field = {
+        'id': User.id,
+        'social_id': User.social_id,
+        'nickname': User.nickname,
+        'email': User.email,
+    }
+    query = User.query
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
+        if arg in regular:
+            query = query.filter(field[arg] == val)
+    query = query.all()
+    ans = []
+    for entry in query:
+        ans.append(entry.serialize())
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
+    return jsonify({
+        'length': len(ans),
+        'values': ans
+    })
+
+
+@login_required
 @module.route("/notification_list", methods=['GET'])
 def notification_list(req=None, raw=False):
     regular = [
@@ -28,11 +67,7 @@ def notification_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -44,6 +79,7 @@ def notification_list(req=None, raw=False):
     })
 
 
+@login_required
 @module.route("/department_list", methods=['GET'])
 def department_list(req=None, raw=False):
     regular = [
@@ -72,11 +108,7 @@ def department_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -88,6 +120,7 @@ def department_list(req=None, raw=False):
     })
 
 
+@login_required
 @module.route("/person_list", methods=['GET'])
 def person_list(req=None, raw=False):
     regular = [
@@ -175,13 +208,7 @@ def person_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['department_id_fk'] = department_list(req={'department_id': entry.department_id}, raw=True)['values']
-        d['department_id_fk'] = d['department_id_fk'][0] if len(d['department_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -193,6 +220,7 @@ def person_list(req=None, raw=False):
     })
 
 
+@login_required
 @module.route("/contact_list", methods=['GET'])
 def contact_list(req=None, raw=False):
     regular = [
@@ -217,13 +245,7 @@ def contact_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['person_id_fk'] = person_list(req={'person_id': entry.person_id}, raw=True)['values']
-        d['person_id_fk'] = d['person_id_fk'][0] if len(d['person_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -235,6 +257,7 @@ def contact_list(req=None, raw=False):
     })
 
 
+@login_required
 @module.route("/school_list", methods=['GET'])
 def school_list(req=None, raw=False):
     regular = [
@@ -274,11 +297,7 @@ def school_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -290,6 +309,7 @@ def school_list(req=None, raw=False):
     })
 
 
+@login_required
 @module.route("/course_list", methods=['GET'])
 def course_list(req=None, raw=False):
     regular = [
@@ -332,13 +352,7 @@ def course_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['school_id_fk'] = school_list(req={'school_id': entry.school_id}, raw=True)['values']
-        d['school_id_fk'] = d['school_id_fk'][0] if len(d['school_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -350,6 +364,7 @@ def course_list(req=None, raw=False):
     })
 
 
+@login_required
 @module.route("/course_teachers_list", methods=['GET'])
 def course_teachers_list(req=None, raw=False):
     regular = [
@@ -378,15 +393,7 @@ def course_teachers_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['course_id_fk'] = course_list(req={'course_id': entry.course_id}, raw=True)['values']
-        d['course_id_fk'] = d['course_id_fk'][0] if len(d['course_id_fk']) else None
-        d['course_teacher_id_fk'] = person_list(req={'person_id': entry.course_teacher_id}, raw=True)['values']
-        d['course_teacher_id_fk'] = d['course_teacher_id_fk'][0] if len(d['course_teacher_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -398,6 +405,7 @@ def course_teachers_list(req=None, raw=False):
     })
 
 
+@login_required
 @module.route("/exam_list", methods=['GET'])
 def exam_list(req=None, raw=False):
     regular = [
@@ -432,15 +440,7 @@ def exam_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['student_person_id_fk'] = person_list(req={'person_id': entry.student_person_id}, raw=True)['values']
-        d['student_person_id_fk'] = d['student_person_id_fk'][0] if len(d['student_person_id_fk']) else None
-        d['course_id_fk'] = course_list(req={'course_id': entry.course_id}, raw=True)['values']
-        d['course_id_fk'] = d['course_id_fk'][0] if len(d['course_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -452,6 +452,7 @@ def exam_list(req=None, raw=False):
     })
 
 
+@login_required
 @module.route("/person_school_list", methods=['GET'])
 def person_school_list(req=None, raw=False):
     regular = [
@@ -500,17 +501,7 @@ def person_school_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['member_person_id_fk'] = person_list(req={'person_id': entry.member_person_id}, raw=True)['values']
-        d['member_person_id_fk'] = d['member_person_id_fk'][0] if len(d['member_person_id_fk']) else None
-        d['member_department_id_fk'] = department_list(req={'department_id': entry.member_department_id}, raw=True)['values']
-        d['member_department_id_fk'] = d['member_department_id_fk'][0] if len(d['member_department_id_fk']) else None
-        d['school_id_fk'] = school_list(req={'school_id': entry.school_id}, raw=True)['values']
-        d['school_id_fk'] = d['school_id_fk'][0] if len(d['school_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -522,6 +513,7 @@ def person_school_list(req=None, raw=False):
     })
 
 
+@login_required
 @module.route("/person_comment_list", methods=['GET'])
 def person_comment_list(req=None, raw=False):
     regular = [
@@ -558,15 +550,7 @@ def person_comment_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['blamed_person_id_fk'] = person_list(req={'person_id': entry.blamed_person_id}, raw=True)['values']
-        d['blamed_person_id_fk'] = d['blamed_person_id_fk'][0] if len(d['blamed_person_id_fk']) else None
-        d['school_id_fk'] = school_list(req={'school_id': entry.school_id}, raw=True)['values']
-        d['school_id_fk'] = d['school_id_fk'][0] if len(d['school_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -578,6 +562,7 @@ def person_comment_list(req=None, raw=False):
     })
 
 
+@login_required
 @module.route("/submission_list", methods=['GET'])
 def submission_list(req=None, raw=False):
     regular = [
@@ -612,11 +597,7 @@ def submission_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -628,6 +609,7 @@ def submission_list(req=None, raw=False):
     })
 
 
+@login_required
 @module.route("/contestants_list", methods=['GET'])
 def contestants_list(req=None, raw=False):
     regular = [
@@ -671,11 +653,7 @@ def contestants_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -687,6 +665,7 @@ def contestants_list(req=None, raw=False):
     })
 
 
+@login_required
 @module.route("/problems_list", methods=['GET'])
 def problems_list(req=None, raw=False):
     regular = [
@@ -716,11 +695,7 @@ def problems_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),
@@ -732,6 +707,7 @@ def problems_list(req=None, raw=False):
     })
 
 
+@login_required
 @module.route("/solutions_list", methods=['GET'])
 def solutions_list(req=None, raw=False):
     regular = [
@@ -762,15 +738,7 @@ def solutions_list(req=None, raw=False):
     query = query.all()
     ans = []
     for entry in query:
-        d = dict()
-        d['problem_id_fk'] = problems_list(req={'problems_id': entry.problem_id}, raw=True)['values']
-        d['problem_id_fk'] = d['problem_id_fk'][0] if len(d['problem_id_fk']) else None
-        d['contestant_id_fk'] = contestants_list(req={'contestants_id': entry.contestant_id}, raw=True)['values']
-        d['contestant_id_fk'] = d['contestant_id_fk'][0] if len(d['contestant_id_fk']) else None
-        d.update(entry.__dict__)
-        d.pop('_sa_instance_state')
-        d.update(additional)
-        ans.append(d)
+        ans.append(entry.serialize())
     if raw:
         return {
             'length': len(ans),

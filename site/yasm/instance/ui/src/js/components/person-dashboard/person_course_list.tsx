@@ -42,7 +42,11 @@ const groupingPanelMessages = {
 };
 
 const compareSchools = (a: any, b: any) => {
-    return a.props.school.school_id < b.props.school.school_id ? -1 : 1;
+    if (a.props.school && b.props.school) {
+        return a.props.school.school_id < b.props.school.school_id ? -1 : 1;
+    } else {
+        return 1;
+    }
 };
 
 export class PersonCourseList extends React.Component<PersonCourseListProps, PersonCourseListState> {
@@ -56,12 +60,12 @@ export class PersonCourseList extends React.Component<PersonCourseListProps, Per
     gen_rows() {
         let list = [];
         for (let i = 0; i < this.props.list.length; ++i) {
-            if (this.props.list.values[i].course_id_fk) {
+            if (this.props.list.values[i].course) {
                 list.push({
-                    title: <CourseCard course={this.props.list.values[i].course_id_fk} clickable={true}/>,
-                    school: <SchoolToken school={this.props.list.values[i].course_id_fk.school_id_fk} clickable={true}/>,
-                    area: this.props.list.values[i].course_id_fk.course_area,
-                    cycle: this.props.list.values[i].course_id_fk.course_cycle
+                    title: <CourseCard course={this.props.list.values[i].course} clickable={true}/>,
+                    school: <SchoolToken school={this.props.list.values[i].course.school} clickable={true}/>,
+                    area: this.props.list.values[i].course.course_area,
+                    cycle: this.props.list.values[i].course.course_cycle
                 });
             }
         }
@@ -109,7 +113,7 @@ export class PersonCourseList extends React.Component<PersonCourseListProps, Per
                             criteria: (school: any) => {
                                 console.log(school);
                                 return {
-                                    key: school.props.school.school_id,
+                                    key: school.props.school? school.props.school.school_id: '',
                                     value: school
                                 }
                             }

@@ -41,6 +41,10 @@ module.exports = {
         path: __dirname + '/../static/js',
         filename: '[name].min.js'
     },
+    stats: {
+        modules: false,
+        children: false,
+    },
     devtool: "source-map",
     mode: "development",
     plugins: [

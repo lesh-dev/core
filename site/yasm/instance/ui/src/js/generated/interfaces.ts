@@ -1,3 +1,15 @@
+export interface Users {
+    id: number,
+    social_id: string,
+    nickname: string,
+    email: string,
+}
+
+export interface UsersList {
+    values: Users[],
+    length: number
+}
+
 export interface Notification {
     notification_id: number,
     mail_group: string,
@@ -56,7 +68,7 @@ export interface Person {
     anketa_status: string,
     user_agent: string,
     department_id: number,
-    department_id_fk: Department,
+    department: Department,
     person_created: string,
     person_modified: string,
     person_changedby: string,
@@ -75,7 +87,7 @@ export interface PersonList {
 export interface Contact {
     id: number,
     person_id: number,
-    person_id_fk: Person,
+    person: Person,
     name: string,
     value: string,
 }
@@ -110,7 +122,7 @@ export interface Course {
     course_id: number,
     course_title: string,
     school_id: number,
-    school_id_fk: School,
+    school: School,
     course_cycle: string,
     target_class: string,
     course_desc: string,
@@ -132,9 +144,9 @@ export interface CourseList {
 export interface CourseTeachers {
     course_teachers_id: number,
     course_id: number,
-    course_id_fk: Course,
+    course: Course,
     course_teacher_id: number,
-    course_teacher_id_fk: Person,
+    course_teacher: Person,
     course_teachers_created: string,
     course_teachers_modified: string,
     course_teachers_changedby: string,
@@ -148,9 +160,9 @@ export interface CourseTeachersList {
 export interface Exam {
     exam_id: number,
     student_person_id: number,
-    student_person_id_fk: Person,
+    student: Person,
     course_id: number,
-    course_id_fk: Course,
+    course: Course,
     exam_status: string,
     deadline_date: string,
     exam_comment: string,
@@ -167,11 +179,11 @@ export interface ExamList {
 export interface PersonSchool {
     person_school_id: number,
     member_person_id: number,
-    member_person_id_fk: Person,
+    member_person: Person,
     member_department_id: number,
-    member_department_id_fk: Department,
+    department: Department,
     school_id: number,
-    school_id_fk: School,
+    school: School,
     is_student: string,
     is_teacher: string,
     curatorship: string,
@@ -195,9 +207,9 @@ export interface PersonComment {
     person_comment_id: number,
     comment_text: string,
     blamed_person_id: number,
-    blamed_person_id_fk: Person,
+    blamed_person: Person,
     school_id: number,
-    school_id_fk: School,
+    school: School,
     owner_login: string,
     record_acl: string,
     person_comment_created: string,
@@ -268,10 +280,10 @@ export interface ProblemsList {
 export interface Solutions {
     solutions_id: number,
     problem_id: number,
-    problem_id_fk: Problems,
+    problem: Problems,
     contest_year: string,
     contestant_id: number,
-    contestant_id_fk: Contestants,
+    contestant: Contestants,
     resolution_text: string,
     resolution_author: string,
     resolution_mark: string,

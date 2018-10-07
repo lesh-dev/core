@@ -7,31 +7,39 @@ import Async from "react-promise";
 import {List} from "../common/List";
 
 
-export class SchList extends React.Component {
+interface SchListState {
+    list: SchoolList
+}
+
+
+export class SchList extends React.Component<undefined, SchListState> {
+    constructor(props: any) {
+        super(props);
+        school_list().then(
+            value => {this.setState({list: value})},
+            error => {console.log(error)}
+            );
+        document.addEventListener('keypress', (e: any) => {this.keypress(e)})
+    }
     keypress(e: any) {
         console.log(e)
     }
 
-    constructor(props: any) {
-        super(props);
-        document.addEventListener('keypress', (e: any) => {this.keypress(e)})
-    }
     render() {
-        return <Async promise={school_list()}
-                      then={(list: SchoolList) => {
-                          return <List renderer={(school: School) => {
-                              return <SchoolCard school={school}
-                                                 style={{
-                                                     display: "flex",
-                                                     justifyContent: "left"
-                                                 }}
-                                                 clickable={true}
-                              />
-                          }} data={list.values.reverse()}
-
-                          />
-                      }
-                      }
-                      pending={() => <Spinner/>}/>;
+        if (this.state) {
+            return <List renderer={(school: School) => {
+                return <SchoolCard school={school}
+                                   style={{
+                                       display: "flex",
+                                       justifyContent: "left"
+                                   }}
+                                   clickable={true}
+                />
+            }}
+                         data={this.state.list.values.reverse()}
+            />
+        } else {
+            return <Spinner/>
+        }
     }
 }

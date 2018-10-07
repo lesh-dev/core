@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, request as rq, Response, jsonify
+from flask_login import login_required
 from ..menu import menu
 from .side import side
 from ..database import db, School, Contact, Person
@@ -14,6 +15,7 @@ def resp(code, data):
     )
 
 
+@login_required
 @module.route('/', methods=['GET'])
 def index():
     return render_template(
@@ -23,6 +25,7 @@ def index():
     )
 
 
+@login_required
 @module.route('/gui/', methods=['GET'])
 @module.route('/gui/<path:path>', methods=['GET'])
 def admin(path='path'):  # resolved by reactJS
@@ -33,6 +36,7 @@ def admin(path='path'):  # resolved by reactJS
     )
 
 
+@login_required
 @module.route('/api/schools/add', methods=['GET'])
 def school_add():
     args = rq.args
@@ -56,6 +60,7 @@ def school_add():
     return resp(200, [])
 
 
+@login_required
 @module.route('/api/person/contact/del/<int:id>', methods=['POST'])
 def api_person_contact_del(id):
     Contact.query.filter(Contact.id == id).delete()
@@ -63,6 +68,7 @@ def api_person_contact_del(id):
     return jsonify('OK')
 
 
+@login_required
 @module.route('/api/person/contact/add/<int:person_id>', methods=['POST'])
 def api_person_contact_add(person_id):
     name = rq.values['name']
@@ -77,6 +83,7 @@ def api_person_contact_add(person_id):
     return jsonify('OK')
 
 
+@login_required
 @module.route('/api/person/department/change/<int:person_id>', methods=['POST'])
 def api_person_department_change(person_id):
     id = rq.values['department_id']
