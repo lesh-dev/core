@@ -1,5 +1,6 @@
 [Unit]
 Description=postgrest
+DependsOn=postgresql
 
 [Service]
 ExecStart=/bin/sh -c '/opt/postgrest /etc/postgrest/lesh.conf >> /tmp/postgrest.log 2>>/tmp/postgrest.log'
