@@ -24,19 +24,6 @@ class Serializer(object):
         return [m.serialize() for m in l]
 
 
-class User(UserMixin, db.Model, Serializer):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    social_id = db.Column(db.String(64), nullable=False, unique=True)
-    nickname = db.Column(db.String(64), nullable=False)
-    email = db.Column(db.String(64), nullable=True)
-
-
-@lm.user_loader
-def load_user(id):
-    return User.query.get(int(id))
-
-
 class MarkedForeignKey(db.ForeignKey):
 
     def __init__(self, col, *args, **kwargs):
@@ -113,6 +100,9 @@ class Person(UserMixin, db.Model, Serializer):
                             nick="id",
                             primary_key=True,
                             autoincrement=True)
+
+    def get_id(self):
+        return self.person_id
     last_name = NamedColumn(db.Text,
                             nick="фамилия",
                             nullable=False)  # фамилия
@@ -244,6 +234,10 @@ class Person(UserMixin, db.Model, Serializer):
     exams = db.relationship('Exam', back_populates='student', lazy='dynamic')
     course_teachers = db.relationship('CourseTeachers', back_populates='course_teacher', lazy='dynamic')
     contacts = db.relationship('Contact', back_populates='person', lazy='dynamic')
+
+@lm.user_loader
+def load_user(id):
+    return Person.query.get(int(id))
 
 
 class Contact(db.Model, Serializer):
