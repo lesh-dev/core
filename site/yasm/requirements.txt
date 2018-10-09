@@ -7,6 +7,7 @@ chardet==3.0.4
 click==6.7
 decorator==4.3.0
 Flask==1.0.2
+flask-login==0.4.1
 Flask-Script==2.0.6
 flask-shell-ipython==0.3.0
 Flask-SQLAlchemy==2.3.2
@@ -29,6 +30,7 @@ psycopg2-binary==2.7.5
 ptyprocess==0.6.0
 py==1.5.4
 Pygments==2.2.0
+rauth==0.7.3
 requests==2.19.1
 simplegeneric==0.8.1
 six==1.11.0

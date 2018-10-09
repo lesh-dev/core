@@ -7,11 +7,11 @@ require_once("${engine_dir}cms/ank/course.php");
 /**
  * @param person_id is for drawing edit link
  **/
-function xsm_draw_person_textval($class, $text, $value, $person_id = false)
+function xsm_draw_person_textval($class, $key, $text, $value, $person_id = false)
 {?>
     <div style="white-space: nowrap">
     <span class="person-key <?php echo $class; ?>"><?php echo "$text:"; ?></span>
-    <span class="person-value"><?php
+    <span id="span-person_<?php echo $key; ?>" class="person-value"><?php
         echo $value;
         if ($person_id !== false)
         {?><?php
@@ -24,7 +24,7 @@ function xsm_draw_person_textval($class, $text, $value, $person_id = false)
 
 function xsm_draw_person_textval_field($fields, $key, $value)
 {
-    xsm_draw_person_textval('main', $fields[$key]["name"], $value);
+    xsm_draw_person_textval('main', $key, $fields[$key]["name"], $value);
 }
 
 function xsm_draw_person_longtextval($class, $text, $value)
@@ -153,17 +153,17 @@ function xsm_print_person_header($db, $person, $school_id)
         <div style="clear: both;"></div>
     </td>
     <td class="person-top middle"><?php
-        xsm_draw_person_textval('top', 'Почта', $email, $person_id);
-        xsm_draw_person_textval('top', 'Мобильный', $cellular);
-        xsm_draw_person_textval('top', 'Домашний', $phone);
-        xsm_draw_person_textval('top', 'Skype', $skype);
-        xsm_draw_person_textval('top', 'Профиль', xsm_social_profile_link($social_profile));
+        xsm_draw_person_textval('top', "email", 'Почта', $email, $person_id);
+        xsm_draw_person_textval('top', "cellular", 'Мобильный', $cellular);
+        xsm_draw_person_textval('top', "phone", 'Домашний', $phone);
+        xsm_draw_person_textval('top', "skype", 'Skype', $skype);
+        xsm_draw_person_textval('top', "social_profile", 'Профиль', xsm_social_profile_link($social_profile));
         ?>
     </td>
     <td class="person-top right"><?php
-        xsm_draw_person_textval('top', 'Создана', $person_created);
+        xsm_draw_person_textval('top', "created", 'Создана', $person_created);
         if (xu_not_empty($person_modified))
-            xsm_draw_person_textval('top', 'Исправлена', $person_modified);
+            xsm_draw_person_textval('top', "modified", 'Исправлена', $person_modified);
         ?>
     </td>
     </tr></table>
@@ -347,6 +347,7 @@ function xsm_print_person_ank_data($db, $person)
 
     xsm_draw_person_textval_field($fields, 'birth_date', $birth_date);
     xsm_draw_person_textval_field($fields, 'passport_data', $passport_data);
+    xsm_draw_person_textval_field($fields, 'current_class', $current_class);
     xsm_draw_person_textval_field($fields, 'ank_class', $ank_class);
     xsm_draw_person_textval_field($fields, 'school', $school);
     xsm_draw_person_textval_field($fields, 'school_city', $school_city);

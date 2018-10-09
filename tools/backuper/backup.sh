@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -xe
 
 # VPS Backuper
 # ------------
@@ -70,9 +70,15 @@ plan_a()
     dest_host=mvel@95.84.184.45
     chown -R mvel:mvel $backup_folder
     dest_folder=/storage/backup/lesh/$back_date/
-    ssh $dest_host mkdir -p $dest_folder
+    ssh -v -v -v $dest_host bash -xe <<EOF
+mkdir -p $dest_folder
+echo DONE1
+EOF
     # reverse scp-ying works!
-    ssh $dest_host scp fizlesh.ru:$backup_folder/* $dest_folder
+    ssh -v -v -v $dest_host bash -xe <<EOF
+scp -v -v -v fizlesh.ru:$backup_folder/* $dest_folder
+echo DONE2
+EOF
 }
 
 plan_b()
