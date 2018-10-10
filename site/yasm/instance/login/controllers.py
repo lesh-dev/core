@@ -37,7 +37,7 @@ def oauth_callback(provider):
         return redirect('/')
     user = Person.query.join(Contact).filter(Contact.name == type).filter(Contact.value == id).first()
     if not user:
-        return redirect(url_for('admin.index'))
+        return redirect('/')
     login_user(user, True)
     return redirect(url_for('admin.index'))
 

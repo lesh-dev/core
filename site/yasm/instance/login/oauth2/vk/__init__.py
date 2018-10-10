@@ -24,7 +24,9 @@ class VkSignIn(OAuthSignIn):
 
     def callback(self):
         def decode_json(payload):
-            return json.loads(payload.decode('utf-8'))
+            answer = json.loads(payload.decode('utf-8'))
+            self.user_id = answer['user_id']
+            return answer
 
         if 'code' not in request.args:
             return None, None, None
@@ -35,10 +37,8 @@ class VkSignIn(OAuthSignIn):
                   'redirect_uri': self.get_callback_url()},
             decoder=decode_json
         )
-        me = oauth_session.get('method/account.getProfileInfo').json()
-        print(me)
         return (
             'vk',
-            me['id'],
-            me.get('name')
+            self.user_id,
+            None
         )
