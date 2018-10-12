@@ -5,45 +5,8 @@ from flask_login import login_required
 module = Blueprint('api', __name__, url_prefix='/api')
 
 
-@login_required
-@module.route("/users_list", methods=['GET'])
-def users_list(req=None, raw=False):
-    regular = [
-        'id',
-        'social_id',
-        'nickname',
-        'email',
-    ]
-    additional = {
-    }
-    field = {
-        'id': User.id,
-        'social_id': User.social_id,
-        'nickname': User.nickname,
-        'email': User.email,
-    }
-    query = User.query
-    col = request.args.items() if req is None else req.items()
-    for arg, val in col:
-        if arg in regular:
-            query = query.filter(field[arg] == val)
-    query = query.all()
-    ans = []
-    for entry in query:
-        ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
-    return jsonify({
-        'length': len(ans),
-        'values': ans
-    })
-
-
-@login_required
 @module.route("/notification_list", methods=['GET'])
+@login_required
 def notification_list(req=None, raw=False):
     regular = [
         'notification_id',
@@ -79,8 +42,8 @@ def notification_list(req=None, raw=False):
     })
 
 
-@login_required
 @module.route("/department_list", methods=['GET'])
+@login_required
 def department_list(req=None, raw=False):
     regular = [
         'department_id',
@@ -120,8 +83,8 @@ def department_list(req=None, raw=False):
     })
 
 
-@login_required
 @module.route("/person_list", methods=['GET'])
+@login_required
 def person_list(req=None, raw=False):
     regular = [
         'person_id',
@@ -220,8 +183,8 @@ def person_list(req=None, raw=False):
     })
 
 
-@login_required
 @module.route("/contact_list", methods=['GET'])
+@login_required
 def contact_list(req=None, raw=False):
     regular = [
         'id',
@@ -257,8 +220,8 @@ def contact_list(req=None, raw=False):
     })
 
 
-@login_required
 @module.route("/school_list", methods=['GET'])
+@login_required
 def school_list(req=None, raw=False):
     regular = [
         'school_id',
@@ -309,8 +272,8 @@ def school_list(req=None, raw=False):
     })
 
 
-@login_required
 @module.route("/course_list", methods=['GET'])
+@login_required
 def course_list(req=None, raw=False):
     regular = [
         'course_id',
@@ -364,8 +327,8 @@ def course_list(req=None, raw=False):
     })
 
 
-@login_required
 @module.route("/course_teachers_list", methods=['GET'])
+@login_required
 def course_teachers_list(req=None, raw=False):
     regular = [
         'course_teachers_id',
@@ -405,8 +368,8 @@ def course_teachers_list(req=None, raw=False):
     })
 
 
-@login_required
 @module.route("/exam_list", methods=['GET'])
+@login_required
 def exam_list(req=None, raw=False):
     regular = [
         'exam_id',
@@ -452,8 +415,8 @@ def exam_list(req=None, raw=False):
     })
 
 
-@login_required
 @module.route("/person_school_list", methods=['GET'])
+@login_required
 def person_school_list(req=None, raw=False):
     regular = [
         'person_school_id',
@@ -513,8 +476,8 @@ def person_school_list(req=None, raw=False):
     })
 
 
-@login_required
 @module.route("/person_comment_list", methods=['GET'])
+@login_required
 def person_comment_list(req=None, raw=False):
     regular = [
         'person_comment_id',
@@ -562,8 +525,8 @@ def person_comment_list(req=None, raw=False):
     })
 
 
-@login_required
 @module.route("/submission_list", methods=['GET'])
+@login_required
 def submission_list(req=None, raw=False):
     regular = [
         'submission_id',
@@ -609,8 +572,8 @@ def submission_list(req=None, raw=False):
     })
 
 
-@login_required
 @module.route("/contestants_list", methods=['GET'])
+@login_required
 def contestants_list(req=None, raw=False):
     regular = [
         'contestants_id',
@@ -665,8 +628,8 @@ def contestants_list(req=None, raw=False):
     })
 
 
-@login_required
 @module.route("/problems_list", methods=['GET'])
+@login_required
 def problems_list(req=None, raw=False):
     regular = [
         'problems_id',
@@ -707,8 +670,8 @@ def problems_list(req=None, raw=False):
     })
 
 
-@login_required
 @module.route("/solutions_list", methods=['GET'])
+@login_required
 def solutions_list(req=None, raw=False):
     regular = [
         'solutions_id',

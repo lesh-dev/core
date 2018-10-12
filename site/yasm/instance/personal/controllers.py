@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, jsonify
-from functools import wraps
 from ..menu import menu
 from flask_login import login_required, current_user
 
