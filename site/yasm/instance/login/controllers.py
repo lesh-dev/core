@@ -2,18 +2,34 @@ from flask import Blueprint, url_for, redirect, flash
 from flask_login import current_user, login_user, logout_user
 from .oauth2 import OAuthSignIn
 from ..database import Person, Contact, db
+from flask_login import LoginManager
+
+
+lm = LoginManager()
+
 
 module = Blueprint('login', __name__, url_prefix='/login')
 
 
+lm.unauthorized_handler(lambda *args, **kwargs: redirect(url_for('login.index')))
+
+
+@lm.user_loader
+def load_user(id):
+    return Person.query.get(int(id))
+
+
 @module.route('/')
-def root():
+def index():
     return "<ul>" \
            "<li>" \
            "<a href='/login/authorize/facebook'>facebook</a>" \
            "</li>" \
            "<li>" \
            "<a href='/login/authorize/vk'>vk</a>" \
+           "</li>" \
+           "<li>" \
+           "<a href='/login/authorize/yandex'>yandex</a>" \
            "</li>" \
            "</ul>"
 

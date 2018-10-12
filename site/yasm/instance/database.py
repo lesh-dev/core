@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, UserMixin
+from flask_login import UserMixin
 from sqlalchemy.inspection import inspect
 
 
@@ -9,7 +9,6 @@ ORM declaration file
 
 
 db = SQLAlchemy()
-lm = LoginManager()
 
 
 class Serializer(object):
@@ -234,10 +233,6 @@ class Person(UserMixin, db.Model, Serializer):
     exams = db.relationship('Exam', back_populates='student', lazy='dynamic')
     course_teachers = db.relationship('CourseTeachers', back_populates='course_teacher', lazy='dynamic')
     contacts = db.relationship('Contact', back_populates='person', lazy='dynamic')
-
-@lm.user_loader
-def load_user(id):
-    return Person.query.get(int(id))
 
 
 class Contact(db.Model, Serializer):

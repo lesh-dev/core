@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/pack/personal.css') }}">
+{% endblock %}
+{% block js %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <div id="mount-point">
+        We do not support browsers without js, pleas enable javascript execution in your brouser.
+    </div>
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/personal.min.js') }}"></script>
+{% endblock %}
