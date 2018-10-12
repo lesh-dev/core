@@ -25,4 +25,6 @@ def create():
     yasm.register_blueprint(login.module)
     import instance.personal as personal
     yasm.register_blueprint(personal.module)
+    import instance.qr as qr
+    yasm.register_blueprint(qr.module)
     return yasm

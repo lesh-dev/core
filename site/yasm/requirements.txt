@@ -30,6 +30,8 @@ psycopg2-binary==2.7.5
 ptyprocess==0.6.0
 py==1.5.4
 Pygments==2.2.0
+pyzbar==0.1.7 # and you need install zbar library with apt
+qrcode==6.0
 rauth==0.7.3
 requests==2.19.1
 simplegeneric==0.8.1
@@ -39,3 +41,4 @@ traitlets==4.3.2
 urllib3==1.23
 wcwidth==0.1.7
 Werkzeug==0.14.1
+xhtml2pdf==0.2.3

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='emblems/favicon.svg') }}">
+    {% block styles %}
+    {% endblock %}
+    <title>
+      Заполнение родительского договора
+    </title>
+</head>
+<body id="body">
+  <form method="POST" action="/qr/contract.pdf">
+    Руководителю Летней Экологической Школы<br/>
+    От родителей _____________<br/>
+    документ <input type="text" name="child_passport"/><br/>
+    ФИО родителей ___________<br/>
+    Контактные телефоны родителей: ___________<br/>
+    ЗАЯВЛЕНИЕ<br/>
+    Прошу принять моего ребёнка, _____________<br/>
+    «__»_____года рождения, в ______ класс _________ отделения Летней Экологической Школы<br/>
+    СВЕДЕНИЯ О РЕБЁНКЕ:<br/>
+    Аллергии: (перечислить) ________<br/>
+    Хронические заболевания:________<br/>
+    Регулярно принимаемые лекарства: _______________<br/>
+    Умение плавать: _______<br/>
+    Дополнительные сведения, которые Вы хотели бы сообщить: _________<br/>
+    С условиями проживания в ЛЭШ ознакомлены:<br/>
+    Дата      Подписи родителей<br/>
+    <button type="submit">Generate pdf</button>
+  </form>
+</body>
+</html>
