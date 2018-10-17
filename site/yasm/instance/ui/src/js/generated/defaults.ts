@@ -19,6 +19,7 @@ export const default_Department = {
 
 export const default_Person = {
     person_id: 0,
+    rights: "rights",
     last_name: "last_name",
     first_name: "first_name",
     patronymic: "patronymic",

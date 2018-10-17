@@ -27,6 +27,7 @@ export interface DepartmentList {
 
 export interface Person {
     person_id: number,
+    rights: string,
     last_name: string,
     first_name: string,
     patronymic: string,

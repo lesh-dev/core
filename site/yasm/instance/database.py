@@ -102,6 +102,9 @@ class Person(UserMixin, db.Model, Serializer):
 
     def get_id(self):
         return self.person_id
+    rights = NamedColumn(db.Text,
+                         nick='права',
+                         nullable=True)
     last_name = NamedColumn(db.Text,
                             nick="фамилия",
                             nullable=False)  # фамилия

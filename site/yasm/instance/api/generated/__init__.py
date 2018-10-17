@@ -88,6 +88,7 @@ def department_list(req=None, raw=False):
 def person_list(req=None, raw=False):
     regular = [
         'person_id',
+        'rights',
         'last_name',
         'first_name',
         'patronymic',
@@ -130,6 +131,7 @@ def person_list(req=None, raw=False):
     }
     field = {
         'person_id': Person.person_id,
+        'rights': Person.rights,
         'last_name': Person.last_name,
         'first_name': Person.first_name,
         'patronymic': Person.patronymic,

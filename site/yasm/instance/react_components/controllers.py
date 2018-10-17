@@ -4,6 +4,7 @@ from ..menu import menu
 
 module = Blueprint('react-components', __name__, url_prefix='/RC')
 
+
 @module.route('/', methods=['GET'])
 @module.route('/<path:path>', methods=['GET'])
 @login_required

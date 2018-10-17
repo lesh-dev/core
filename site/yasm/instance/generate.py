@@ -215,10 +215,40 @@ def main():
             read_api.write("    })\n\n\n")
         read_api.close()
 
+    def gen_backend_speedtests():
+        tests = open('tests/TestSpeed/generated.py', 'w')
+        tests.write('import unittest\n')
+        tests.write('import timeit\n')
+        tests.write('import sys\n')
+        tests.write('import json\n')
+        tests.write('import instance\n')
+        for name, fields in models.items():
+            tests.write('from instance.api.generated import {name}\n'.format(name=scl(name)))
+        tests.write('yasm = instance.create()\n\n')
+        tests.write('class TestSpeed(unittest.TestCase):\n')
+        for name, fields in models.items():
+            tests.write('    @classmethod\n')
+            tests.write('    def test_{name}(cls):\n'.format(name=scl(name)))
+            tests.write('        with yasm.test_request_context():\n')
+            tests.write('            time = timeit.timeit({name}, number=100)\n'.format(name=scl(name)))
+            tests.write('            test_case = sys._getframe().f_code.co_name\n')
+            tests.write('            results_file = open("results")\n')
+            tests.write('            results = json.load(results_file)\n')
+            tests.write('            results_file.close()\n')
+            tests.write('            if test_case in results.keys():\n')
+            tests.write('                assert results[test_case] * 1.1 > time\n')
+            tests.write('            else:\n')
+            tests.write('                results[test_case] = time\n')
+            tests.write('            results_file = open("results", "w")\n')
+            tests.write('            results_file.write(json.dumps(results, indent=4, sort_keys=True))\n')
+            tests.write('            results_file.close()\n')
+            tests.write('\n')
+
     gen_interfaces()
     gen_connectors()
     gen_api()
     gen_defaults()
+    gen_backend_speedtests()
 
 
 if __name__ == '__main__':
