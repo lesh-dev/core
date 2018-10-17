@@ -5,6 +5,7 @@
     require_once("${xengine_dir}sys/file.php");
     require_once("${xengine_dir}sys/unittest.php");
     require_once("${xengine_dir}sys/util.php");
+    require_once("${xengine_dir}sys/db.php");
     require_once("${xengine_dir}sys/controls.php");
     require_once("${xengine_dir}sys/auth.php");
     require_once("${xengine_dir}sys/diff/diff-utils.php");
@@ -23,6 +24,7 @@
     xut_initialize();
 
     // put your unit test function call here
+    xdb_unit_test();
     xcms_util_unit_test();
     xcms_string_unit_test();
     xcms_sys_controls_unit_test();

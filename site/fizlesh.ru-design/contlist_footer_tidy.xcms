@@ -1,0 +1,1 @@
+<div class="signature" align="right"><i><?php echo htmlspecialchars($name); ?></i></div>
