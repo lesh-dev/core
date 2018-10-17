@@ -1,0 +1,6 @@
+<div align="right"><i><?php echo $date; ?></i></div>
+<a
+    class="h2"
+    id="<?php echo $subpage_id; ?>"
+    href="<?php echo $header_url; ?>"><?php echo xcms_get_key_or_enc($info, "header");
+?></a>

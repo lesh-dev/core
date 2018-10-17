@@ -4,24 +4,24 @@ $current_user = xcms_user()->login();
 $skin = "modern";
 $skin_switch_title = "You cannot switch skins unless you are logged in";
 
-if ($current_user != "anonymous")
-{
+if ($current_user != "anonymous") {
     $skin = xcms_get_persistent_key("fizlesh.ru", "skin", $skin);
     $skin_switch_title = "Try another one and bring us feedback via dev@fizlesh.ru";
 }
+$skin_switcher = array(
+    "green" => "modern",
+    "modern" => "tidy",
+    "tidy" => "green",
+);
+
 // check skin for invalid values
-if (
-    $skin != "green" &&
-    $skin != "modern"
-)
-{
-    $skin = "modern";
+if (!array_key_exists($skin, $skin_switcher)) {
+    $skin = "modern";  // default one
 }
 
-$skin_to_switch_to = ($skin == "green") ? "modern" : "green";
+$skin_to_switch_to = $skin_switcher[$skin];
 $skin_switch_url = "#";
-if ($current_user != "anonymous")
-{
+if ($current_user != "anonymous") {
     $skin_switch_url = "/?".xcms_url(array("ref" => $ref, "page" => $pageid, "skin" => $skin_to_switch_to));
 }
 
