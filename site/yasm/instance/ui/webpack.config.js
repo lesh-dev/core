@@ -4,7 +4,8 @@ webpack = require('webpack');
 module.exports = {
     entry: {
         admin: './src/js/pages/admin.tsx',
-        components: './src/js/pages/react-components.tsx'
+        components: './src/js/pages/react-components.tsx',
+        personal: './src/js/pages/personal.tsx',
     },
     module: {
         rules: [

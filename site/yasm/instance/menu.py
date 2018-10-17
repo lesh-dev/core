@@ -1,43 +1,48 @@
 menu = [
+    [
+        "Home",
+        False,
+        "/public"
+    ],
+    [
+        "List",
+        True,
+        [
             [
                 "Home",
-                False,
                 "/public"
             ],
             [
-                "List",
-                True,
-                [
-                    [
-                        "Home",
-                        "/public"
-                    ],
-                    [
-                        "Api",
-                        "/api"
-                    ],
-                    [
-                        "Admin",
-                        "/admin"
-                    ]
-                ]
+                "Api",
+                "/api"
             ],
             [
-                "List2",
-                True,
-                [
-                    [
-                        "Home",
-                        "/public"
-                    ],
-                    [
-                        "Api",
-                        "/api"
-                    ],
-                    [
-                        "Admin",
-                        "/admin"
-                    ]
-                ]
+                "Admin",
+                "/admin"
             ]
         ]
+    ],
+    [
+        "List2",
+        True,
+        [
+            [
+                "Home",
+                "/public"
+            ],
+            [
+                "Api",
+                "/api"
+            ],
+            [
+                "Admin",
+                "/admin"
+            ]
+        ]
+    ],
+    [
+        "Logout",
+        False,
+        "/login/logout"
+    ]
+]

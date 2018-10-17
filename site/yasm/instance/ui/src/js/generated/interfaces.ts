@@ -1,15 +1,3 @@
-export interface Users {
-    id: number,
-    social_id: string,
-    nickname: string,
-    email: string,
-}
-
-export interface UsersList {
-    values: Users[],
-    length: number
-}
-
 export interface Notification {
     notification_id: number,
     mail_group: string,

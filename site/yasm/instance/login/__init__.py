@@ -1,1 +1,1 @@
-from .controllers import module
+from .controllers import module, lm

@@ -15,8 +15,8 @@ def resp(code, data):
     )
 
 
-@login_required
 @module.route('/', methods=['GET'])
+@login_required
 def index():
     return render_template(
         "admin/base.html",
@@ -25,9 +25,9 @@ def index():
     )
 
 
-@login_required
 @module.route('/gui/', methods=['GET'])
 @module.route('/gui/<path:path>', methods=['GET'])
+@login_required
 def admin(path='path'):  # resolved by reactJS
     return render_template(
         "admin/base.html",
@@ -36,8 +36,8 @@ def admin(path='path'):  # resolved by reactJS
     )
 
 
-@login_required
 @module.route('/api/schools/add', methods=['GET'])
+@login_required
 def school_add():
     args = rq.args
     title = args['title']
@@ -60,16 +60,16 @@ def school_add():
     return resp(200, [])
 
 
-@login_required
 @module.route('/api/person/contact/del/<int:id>', methods=['POST'])
+@login_required
 def api_person_contact_del(id):
     Contact.query.filter(Contact.id == id).delete()
     db.session.commit()
     return jsonify('OK')
 
 
-@login_required
 @module.route('/api/person/contact/add/<int:person_id>', methods=['POST'])
+@login_required
 def api_person_contact_add(person_id):
     name = rq.values['name']
     url = rq.values['url']
@@ -83,8 +83,8 @@ def api_person_contact_add(person_id):
     return jsonify('OK')
 
 
-@login_required
 @module.route('/api/person/department/change/<int:person_id>', methods=['POST'])
+@login_required
 def api_person_department_change(person_id):
     id = rq.values['department_id']
     p = Person.query.filter(Person.person_id == person_id).update({'department_id': id})

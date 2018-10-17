@@ -3,16 +3,16 @@ from rauth import OAuth2Service
 from flask import redirect, request, json
 
 
-class FacebookSignIn(OAuthSignIn):
+class YandexSignIn(OAuthSignIn):
     def __init__(self):
-        super(FacebookSignIn, self).__init__('facebook')
+        super(YandexSignIn, self).__init__('yandex')
         self.service = OAuth2Service(
-            name='facebook',
+            name='yandex',
             client_id=self.consumer_id,
             client_secret=self.consumer_secret,
-            authorize_url='https://graph.facebook.com/oauth/authorize',
-            access_token_url='https://graph.facebook.com/oauth/access_token',
-            base_url='https://graph.facebook.com/'
+            authorize_url='https://oauth.yandex.ru/authorize',
+            access_token_url='https://oauth.yandex.ru/token',
+            base_url='https://login.yandex.ru/info'
         )
 
     def authorize(self):
@@ -33,9 +33,9 @@ class FacebookSignIn(OAuthSignIn):
                   'redirect_uri': self.get_callback_url()},
             decoder=decode_json
         )
-        me = oauth_session.get('me').json()
+        me = oauth_session.get('').json()
         return (
-            'facebook',
+            'yandex',
             me['id'],
-            me.get('name')
+            me['login']
         )

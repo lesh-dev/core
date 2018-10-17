@@ -180,8 +180,8 @@ def main():
                     joined_fields.append(field)
                 else:
                     additional_fields.append(field[0])
-            read_api.write("@login_required\n")
             read_api.write("@module.route(\"/{name}\", methods=['GET'])\n".format(name=scl(name)))
+            read_api.write("@login_required\n")
             read_api.write("def {name}(req=None, raw=False):\n".format(name=scl(name)))
             read_api.write("    regular = [\n")
             for field in regular_fields:

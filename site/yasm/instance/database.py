@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, UserMixin
+from flask_login import UserMixin
 from sqlalchemy.inspection import inspect
 
 
@@ -9,7 +9,6 @@ ORM declaration file
 
 
 db = SQLAlchemy()
-lm = LoginManager()
 
 
 class Serializer(object):
@@ -22,19 +21,6 @@ class Serializer(object):
     @staticmethod
     def serialize_list(l):
         return [m.serialize() for m in l]
-
-
-class User(UserMixin, db.Model, Serializer):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    social_id = db.Column(db.String(64), nullable=False, unique=True)
-    nickname = db.Column(db.String(64), nullable=False)
-    email = db.Column(db.String(64), nullable=True)
-
-
-@lm.user_loader
-def load_user(id):
-    return User.query.get(int(id))
 
 
 class MarkedForeignKey(db.ForeignKey):
@@ -113,6 +99,9 @@ class Person(UserMixin, db.Model, Serializer):
                             nick="id",
                             primary_key=True,
                             autoincrement=True)
+
+    def get_id(self):
+        return self.person_id
     last_name = NamedColumn(db.Text,
                             nick="фамилия",
                             nullable=False)  # фамилия

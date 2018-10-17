@@ -1,6 +1,4 @@
 import {
-    Users,
-    UsersList,
     Notification,
     NotificationList,
     Department,
@@ -58,29 +56,6 @@ export interface dict {
     [index: string]: string
 }
 
-
-
-export function users_list(d: dict = {}) {
-    let req = '?';
-    for (let key in d) {
-        req += key + '=' + d[key] + '&'
-    }
-    return getRequest('/api/users_list' + req) as Promise<UsersList>
-}
-
-
-export function users_fill(obj: Users) {
-    return new Promise<Users>((resolve, reject) => {
-        let ans: Users = obj;
-        Promise.all([
-             ]
-        ).then((values) => {
-            resolve(ans);
-        }).catch((error) => {
-            reject(error);
-        })
-    })
-}
 
 
 export function notification_list(d: dict = {}) {

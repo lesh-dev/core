@@ -15,19 +15,6 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
 
 SET default_tablespace = '';
 
@@ -586,6 +573,8 @@ ALTER TABLE ONLY public.person_school
 ALTER TABLE ONLY public.person_school
     ADD CONSTRAINT person_school_school_id_fkey FOREIGN KEY (school_id) REFERENCES public.school(school_id);
 
+-- Fix such "bigint" as '2+прак'
+ALTER TABLE public.person_school ALTER COLUMN courses_needed TYPE varchar;
 
 --
 -- PostgreSQL database dump complete

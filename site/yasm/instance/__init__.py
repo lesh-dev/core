@@ -1,5 +1,6 @@
 from flask import Flask
-from .database import db, lm
+from .database import db
+from .login import lm
 from .login.oauth2.base import Auth
 
 def create():
@@ -22,4 +23,6 @@ def create():
     yasm.register_blueprint(react_components.module)
     import instance.login as login
     yasm.register_blueprint(login.module)
+    import instance.personal as personal
+    yasm.register_blueprint(personal.module)
     return yasm
