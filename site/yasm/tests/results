@@ -1,16 +1,14 @@
 {
-    "test_contact_list": 0.02272067000012612,
-    "test_contestants_list": 0.02053572599834297,
-    "test_course_list": 0.020158874001936056,
-    "test_course_teachers_list": 0.022134197999548633,
-    "test_department_list": 0.023618223996891174,
-    "test_exam_list": 0.026457978005055338,
-    "test_notification_list": 0.01950815199961653,
-    "test_person_comment_list": 0.022231382004974876,
-    "test_person_list": 0.02261003799503669,
-    "test_person_school_list": 0.019313979995786212,
-    "test_problems_list": 0.019016051999642514,
-    "test_school_list": 0.023046544003591407,
-    "test_solutions_list": 0.02256175799993798,
-    "test_submission_list": 0.01993250200030161
+    "test_contact_list": 0.0492828489987005,
+    "test_contestants_list": 0.3419171420027851,
+    "test_course_list": 1.1666780980012845,
+    "test_course_teachers_list": 3.2240332729998045,
+    "test_department_list": 0.018999891999555985,
+    "test_exam_list": 9.749062893999508,
+    "test_notification_list": 0.008140072000969667,
+    "test_person_comment_list": 6.850487194999005,
+    "test_person_list": 3.7712787199998274,
+    "test_person_school_list": 3.9004950529997586,
+    "test_problems_list": 0.038282452998828376,
+    "test_school_list": 0.031431784002052154
 }
