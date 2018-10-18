@@ -10,5 +10,7 @@
     "test_person_list": 3.7712787199998274,
     "test_person_school_list": 3.9004950529997586,
     "test_problems_list": 0.038282452998828376,
-    "test_school_list": 0.031431784002052154
+    "test_school_list": 0.031431784002052154,
+    "test_solutions_list": 7.007551926002634,
+    "test_submission_list": 0.017749393999110907
 }
