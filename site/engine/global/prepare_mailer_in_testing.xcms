@@ -21,7 +21,7 @@ require_once("${xengine_dir}sys/mailer.php");
 // purge notifications
 $db = xdb_get_write();
 $del_query = "DELETE FROM notification";
-$db->query($del_query);
+xdb_query($db, $del_query);
 echo "Notifications cleared OK\n";
 
 // Reset mailer configuration to test state
