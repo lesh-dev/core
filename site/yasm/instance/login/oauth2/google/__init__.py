@@ -38,6 +38,5 @@ class GoogleSignIn(OAuthSignIn):
         return (
             'google',
             me['id'],
-            me['given_name'],
-            me['family_name']
+            me
         )
