@@ -1,10 +1,7 @@
 import unittest
 import timeit
-import sys
-import json
-import instance
 import instance.login.controllers
-from flask_login import login_user
+import testinglib
 from instance.api.generated import notification_list
 from instance.api.generated import department_list
 from instance.api.generated import person_list
@@ -22,269 +19,171 @@ from instance.api.generated import solutions_list
 yasm = instance.create()
 
 class TestSpeed(unittest.TestCase):
-    @classmethod
-    def test_notification_list(cls):
-        with yasm.test_request_context():
-            login_user(user=instance.login.controllers.load_user(467))
-            time = timeit.timeit(notification_list, number=10)
-            test_case = sys._getframe().f_code.co_name
-            results_file = open("results")
-            results = json.load(results_file)
-            results_file.close()
-            if test_case in results.keys():
-                assert results[test_case] * 1.1 > time
-                if time < results[test_case]:
-                    results[test_case] = time
-            else:
-                results[test_case] = time
-            results_file = open("results", "w")
-            results_file.write(json.dumps(results, indent=4, sort_keys=True))
-            results_file.close()
+    @testinglib.load_result
+    @testinglib.request_needed(yasm)
+    @testinglib.login_needed(467)
+    def test_notification_list(self):
+        time = timeit.timeit(notification_list, number=10) / 10
+        if testinglib.result.get():
+            assert testinglib.result.get() * 1.1 > time
+            if time < testinglib.result.get():
+                testinglib.result.set(time)
+        else:
+            testinglib.result.set(time)
 
-    @classmethod
-    def test_department_list(cls):
-        with yasm.test_request_context():
-            login_user(user=instance.login.controllers.load_user(467))
-            time = timeit.timeit(department_list, number=10)
-            test_case = sys._getframe().f_code.co_name
-            results_file = open("results")
-            results = json.load(results_file)
-            results_file.close()
-            if test_case in results.keys():
-                assert results[test_case] * 1.1 > time
-                if time < results[test_case]:
-                    results[test_case] = time
-            else:
-                results[test_case] = time
-            results_file = open("results", "w")
-            results_file.write(json.dumps(results, indent=4, sort_keys=True))
-            results_file.close()
+    @testinglib.load_result
+    @testinglib.request_needed(yasm)
+    @testinglib.login_needed(467)
+    def test_department_list(self):
+        time = timeit.timeit(department_list, number=10) / 10
+        if testinglib.result.get():
+            assert testinglib.result.get() * 1.1 > time
+            if time < testinglib.result.get():
+                testinglib.result.set(time)
+        else:
+            testinglib.result.set(time)
 
-    @classmethod
-    def test_person_list(cls):
-        with yasm.test_request_context():
-            login_user(user=instance.login.controllers.load_user(467))
-            time = timeit.timeit(person_list, number=10)
-            test_case = sys._getframe().f_code.co_name
-            results_file = open("results")
-            results = json.load(results_file)
-            results_file.close()
-            if test_case in results.keys():
-                assert results[test_case] * 1.1 > time
-                if time < results[test_case]:
-                    results[test_case] = time
-            else:
-                results[test_case] = time
-            results_file = open("results", "w")
-            results_file.write(json.dumps(results, indent=4, sort_keys=True))
-            results_file.close()
+    @testinglib.load_result
+    @testinglib.request_needed(yasm)
+    @testinglib.login_needed(467)
+    def test_person_list(self):
+        time = timeit.timeit(person_list, number=10) / 10
+        if testinglib.result.get():
+            assert testinglib.result.get() * 1.1 > time
+            if time < testinglib.result.get():
+                testinglib.result.set(time)
+        else:
+            testinglib.result.set(time)
 
-    @classmethod
-    def test_contact_list(cls):
-        with yasm.test_request_context():
-            login_user(user=instance.login.controllers.load_user(467))
-            time = timeit.timeit(contact_list, number=10)
-            test_case = sys._getframe().f_code.co_name
-            results_file = open("results")
-            results = json.load(results_file)
-            results_file.close()
-            if test_case in results.keys():
-                assert results[test_case] * 1.1 > time
-                if time < results[test_case]:
-                    results[test_case] = time
-            else:
-                results[test_case] = time
-            results_file = open("results", "w")
-            results_file.write(json.dumps(results, indent=4, sort_keys=True))
-            results_file.close()
+    @testinglib.load_result
+    @testinglib.request_needed(yasm)
+    @testinglib.login_needed(467)
+    def test_contact_list(self):
+        time = timeit.timeit(contact_list, number=10) / 10
+        if testinglib.result.get():
+            assert testinglib.result.get() * 1.1 > time
+            if time < testinglib.result.get():
+                testinglib.result.set(time)
+        else:
+            testinglib.result.set(time)
 
-    @classmethod
-    def test_school_list(cls):
-        with yasm.test_request_context():
-            login_user(user=instance.login.controllers.load_user(467))
-            time = timeit.timeit(school_list, number=10)
-            test_case = sys._getframe().f_code.co_name
-            results_file = open("results")
-            results = json.load(results_file)
-            results_file.close()
-            if test_case in results.keys():
-                assert results[test_case] * 1.1 > time
-                if time < results[test_case]:
-                    results[test_case] = time
-            else:
-                results[test_case] = time
-            results_file = open("results", "w")
-            results_file.write(json.dumps(results, indent=4, sort_keys=True))
-            results_file.close()
+    @testinglib.load_result
+    @testinglib.request_needed(yasm)
+    @testinglib.login_needed(467)
+    def test_school_list(self):
+        time = timeit.timeit(school_list, number=10) / 10
+        if testinglib.result.get():
+            assert testinglib.result.get() * 1.1 > time
+            if time < testinglib.result.get():
+                testinglib.result.set(time)
+        else:
+            testinglib.result.set(time)
 
-    @classmethod
-    def test_course_list(cls):
-        with yasm.test_request_context():
-            login_user(user=instance.login.controllers.load_user(467))
-            time = timeit.timeit(course_list, number=10)
-            test_case = sys._getframe().f_code.co_name
-            results_file = open("results")
-            results = json.load(results_file)
-            results_file.close()
-            if test_case in results.keys():
-                assert results[test_case] * 1.1 > time
-                if time < results[test_case]:
-                    results[test_case] = time
-            else:
-                results[test_case] = time
-            results_file = open("results", "w")
-            results_file.write(json.dumps(results, indent=4, sort_keys=True))
-            results_file.close()
+    @testinglib.load_result
+    @testinglib.request_needed(yasm)
+    @testinglib.login_needed(467)
+    def test_course_list(self):
+        time = timeit.timeit(course_list, number=10) / 10
+        if testinglib.result.get():
+            assert testinglib.result.get() * 1.1 > time
+            if time < testinglib.result.get():
+                testinglib.result.set(time)
+        else:
+            testinglib.result.set(time)
 
-    @classmethod
-    def test_course_teachers_list(cls):
-        with yasm.test_request_context():
-            login_user(user=instance.login.controllers.load_user(467))
-            time = timeit.timeit(course_teachers_list, number=10)
-            test_case = sys._getframe().f_code.co_name
-            results_file = open("results")
-            results = json.load(results_file)
-            results_file.close()
-            if test_case in results.keys():
-                assert results[test_case] * 1.1 > time
-                if time < results[test_case]:
-                    results[test_case] = time
-            else:
-                results[test_case] = time
-            results_file = open("results", "w")
-            results_file.write(json.dumps(results, indent=4, sort_keys=True))
-            results_file.close()
+    @testinglib.load_result
+    @testinglib.request_needed(yasm)
+    @testinglib.login_needed(467)
+    def test_course_teachers_list(self):
+        time = timeit.timeit(course_teachers_list, number=10) / 10
+        if testinglib.result.get():
+            assert testinglib.result.get() * 1.1 > time
+            if time < testinglib.result.get():
+                testinglib.result.set(time)
+        else:
+            testinglib.result.set(time)
 
-    @classmethod
-    def test_exam_list(cls):
-        with yasm.test_request_context():
-            login_user(user=instance.login.controllers.load_user(467))
-            time = timeit.timeit(exam_list, number=10)
-            test_case = sys._getframe().f_code.co_name
-            results_file = open("results")
-            results = json.load(results_file)
-            results_file.close()
-            if test_case in results.keys():
-                assert results[test_case] * 1.1 > time
-                if time < results[test_case]:
-                    results[test_case] = time
-            else:
-                results[test_case] = time
-            results_file = open("results", "w")
-            results_file.write(json.dumps(results, indent=4, sort_keys=True))
-            results_file.close()
+    @testinglib.load_result
+    @testinglib.request_needed(yasm)
+    @testinglib.login_needed(467)
+    def test_exam_list(self):
+        time = timeit.timeit(exam_list, number=10) / 10
+        if testinglib.result.get():
+            assert testinglib.result.get() * 1.1 > time
+            if time < testinglib.result.get():
+                testinglib.result.set(time)
+        else:
+            testinglib.result.set(time)
 
-    @classmethod
-    def test_person_school_list(cls):
-        with yasm.test_request_context():
-            login_user(user=instance.login.controllers.load_user(467))
-            time = timeit.timeit(person_school_list, number=10)
-            test_case = sys._getframe().f_code.co_name
-            results_file = open("results")
-            results = json.load(results_file)
-            results_file.close()
-            if test_case in results.keys():
-                assert results[test_case] * 1.1 > time
-                if time < results[test_case]:
-                    results[test_case] = time
-            else:
-                results[test_case] = time
-            results_file = open("results", "w")
-            results_file.write(json.dumps(results, indent=4, sort_keys=True))
-            results_file.close()
+    @testinglib.load_result
+    @testinglib.request_needed(yasm)
+    @testinglib.login_needed(467)
+    def test_person_school_list(self):
+        time = timeit.timeit(person_school_list, number=10) / 10
+        if testinglib.result.get():
+            assert testinglib.result.get() * 1.1 > time
+            if time < testinglib.result.get():
+                testinglib.result.set(time)
+        else:
+            testinglib.result.set(time)
 
-    @classmethod
-    def test_person_comment_list(cls):
-        with yasm.test_request_context():
-            login_user(user=instance.login.controllers.load_user(467))
-            time = timeit.timeit(person_comment_list, number=10)
-            test_case = sys._getframe().f_code.co_name
-            results_file = open("results")
-            results = json.load(results_file)
-            results_file.close()
-            if test_case in results.keys():
-                assert results[test_case] * 1.1 > time
-                if time < results[test_case]:
-                    results[test_case] = time
-            else:
-                results[test_case] = time
-            results_file = open("results", "w")
-            results_file.write(json.dumps(results, indent=4, sort_keys=True))
-            results_file.close()
+    @testinglib.load_result
+    @testinglib.request_needed(yasm)
+    @testinglib.login_needed(467)
+    def test_person_comment_list(self):
+        time = timeit.timeit(person_comment_list, number=10) / 10
+        if testinglib.result.get():
+            assert testinglib.result.get() * 1.1 > time
+            if time < testinglib.result.get():
+                testinglib.result.set(time)
+        else:
+            testinglib.result.set(time)
 
-    @classmethod
-    def test_submission_list(cls):
-        with yasm.test_request_context():
-            login_user(user=instance.login.controllers.load_user(467))
-            time = timeit.timeit(submission_list, number=10)
-            test_case = sys._getframe().f_code.co_name
-            results_file = open("results")
-            results = json.load(results_file)
-            results_file.close()
-            if test_case in results.keys():
-                assert results[test_case] * 1.1 > time
-                if time < results[test_case]:
-                    results[test_case] = time
-            else:
-                results[test_case] = time
-            results_file = open("results", "w")
-            results_file.write(json.dumps(results, indent=4, sort_keys=True))
-            results_file.close()
+    @testinglib.load_result
+    @testinglib.request_needed(yasm)
+    @testinglib.login_needed(467)
+    def test_submission_list(self):
+        time = timeit.timeit(submission_list, number=10) / 10
+        if testinglib.result.get():
+            assert testinglib.result.get() * 1.1 > time
+            if time < testinglib.result.get():
+                testinglib.result.set(time)
+        else:
+            testinglib.result.set(time)
 
-    @classmethod
-    def test_contestants_list(cls):
-        with yasm.test_request_context():
-            login_user(user=instance.login.controllers.load_user(467))
-            time = timeit.timeit(contestants_list, number=10)
-            test_case = sys._getframe().f_code.co_name
-            results_file = open("results")
-            results = json.load(results_file)
-            results_file.close()
-            if test_case in results.keys():
-                assert results[test_case] * 1.1 > time
-                if time < results[test_case]:
-                    results[test_case] = time
-            else:
-                results[test_case] = time
-            results_file = open("results", "w")
-            results_file.write(json.dumps(results, indent=4, sort_keys=True))
-            results_file.close()
+    @testinglib.load_result
+    @testinglib.request_needed(yasm)
+    @testinglib.login_needed(467)
+    def test_contestants_list(self):
+        time = timeit.timeit(contestants_list, number=10) / 10
+        if testinglib.result.get():
+            assert testinglib.result.get() * 1.1 > time
+            if time < testinglib.result.get():
+                testinglib.result.set(time)
+        else:
+            testinglib.result.set(time)
 
-    @classmethod
-    def test_problems_list(cls):
-        with yasm.test_request_context():
-            login_user(user=instance.login.controllers.load_user(467))
-            time = timeit.timeit(problems_list, number=10)
-            test_case = sys._getframe().f_code.co_name
-            results_file = open("results")
-            results = json.load(results_file)
-            results_file.close()
-            if test_case in results.keys():
-                assert results[test_case] * 1.1 > time
-                if time < results[test_case]:
-                    results[test_case] = time
-            else:
-                results[test_case] = time
-            results_file = open("results", "w")
-            results_file.write(json.dumps(results, indent=4, sort_keys=True))
-            results_file.close()
+    @testinglib.load_result
+    @testinglib.request_needed(yasm)
+    @testinglib.login_needed(467)
+    def test_problems_list(self):
+        time = timeit.timeit(problems_list, number=10) / 10
+        if testinglib.result.get():
+            assert testinglib.result.get() * 1.1 > time
+            if time < testinglib.result.get():
+                testinglib.result.set(time)
+        else:
+            testinglib.result.set(time)
 
-    @classmethod
-    def test_solutions_list(cls):
-        with yasm.test_request_context():
-            login_user(user=instance.login.controllers.load_user(467))
-            time = timeit.timeit(solutions_list, number=10)
-            test_case = sys._getframe().f_code.co_name
-            results_file = open("results")
-            results = json.load(results_file)
-            results_file.close()
-            if test_case in results.keys():
-                assert results[test_case] * 1.1 > time
-                if time < results[test_case]:
-                    results[test_case] = time
-            else:
-                results[test_case] = time
-            results_file = open("results", "w")
-            results_file.write(json.dumps(results, indent=4, sort_keys=True))
-            results_file.close()
+    @testinglib.load_result
+    @testinglib.request_needed(yasm)
+    @testinglib.login_needed(467)
+    def test_solutions_list(self):
+        time = timeit.timeit(solutions_list, number=10) / 10
+        if testinglib.result.get():
+            assert testinglib.result.get() * 1.1 > time
+            if time < testinglib.result.get():
+                testinglib.result.set(time)
+        else:
+            testinglib.result.set(time)
 

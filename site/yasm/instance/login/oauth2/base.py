@@ -1,5 +1,6 @@
 from flask import url_for
 
+
 class Auth(object):
     @classmethod
     def init_app(cls, app):
@@ -12,8 +13,11 @@ class OAuthSignIn(object):
     def __init__(self, provider_name):
         self.provider_name = provider_name
         credentials = Auth.app.config['OAUTH_CREDENTIALS'][provider_name]
-        self.consumer_id = credentials['id']
-        self.consumer_secret = credentials['secret']
+        if self.provider_name == 'google':
+            self.config = Auth.app.config['OAUTH_CREDENTIALS'][provider_name]
+        else:
+            self.consumer_id = credentials['id']
+            self.consumer_secret = credentials['secret']
 
     def authorize(self):
         pass
