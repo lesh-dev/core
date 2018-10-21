@@ -9,8 +9,7 @@ global $SETTINGS;
   **/
 
 header("Content-Type: text/plain; charset=utf-8\n\n");
-if (xcms_get_key_or($SETTINGS, "production"))
-{
+if (xcms_get_key_or($SETTINGS, "production")) {
     echo "ERROR: This handler is DISABLED in PRODUCTION mode\n";
     die();
 }
