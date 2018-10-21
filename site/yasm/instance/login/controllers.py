@@ -31,6 +31,9 @@ def index():
            "<li>" \
            "<a href='/login/authorize/yandex'>yandex</a>" \
            "</li>" \
+           "<li>" \
+           "<a href='/login/authorize/google'>google</a>" \
+           "</li>" \
            "</ul>"
 
 
@@ -47,7 +50,8 @@ def oauth_callback(provider):
     if not current_user.is_anonymous:
         return redirect(url_for('index'))
     oauth = OAuthSignIn.get_provider(provider)
-    type, id, username = oauth.callback()
+    user_info = oauth.callback()
+    type, id = user_info[0], user_info[1]
     if id is None:
         flash('Authentication failed.')
         return redirect('/')
