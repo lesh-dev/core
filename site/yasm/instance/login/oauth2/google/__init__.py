@@ -1,4 +1,4 @@
-from ..base import OAuthSignIn
+from ..base import OAuthSignIn, Auth
 import google_auth_oauthlib.flow
 from flask import redirect, request, json
 import googleapiclient.discovery
@@ -30,7 +30,7 @@ class GoogleSignIn(OAuthSignIn):
         if 'code' not in request.args:
             return None, None, None
 
-        if os.environ.get('OAUTHLIB_INSECURE_TRANSPORT'):
+        if Auth.app.config['DEBUG']:
             self.service.oauth2session._state = request.args['state']
         self.service.fetch_token(authorization_response=request.url)
         auth = googleapiclient.discovery.build('oauth2', 'v2', credentials=self.service.credentials)
