@@ -5,6 +5,7 @@ import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import {Snippet, HighlightTitle} from "./Snippet"
+import "../../../scss/search.scss"
 
 //  ____ _____  _  _____ _____
 // / ___|_   _|/ \|_   _| ____|
@@ -52,7 +53,12 @@ const initialState: SearchStateShape = {
 
 export class SearchBar extends React.Component<{onQueryChange: (query: string) => void, query: string}> {
     render() {
-        return <input type="text" placeholder="search" value={this.props.query} onChange={e => this.props.onQueryChange(e.target.value)}/>
+        return <input type="text"
+                      placeholder="search"
+                      value={this.props.query}
+                      onChange={e => this.props.onQueryChange(e.target.value)}
+                      className={"search__input"}
+        />
     }
 }
 
@@ -70,20 +76,22 @@ const makeLink = (row: SearchResultItem) => {
 
 export class SearchResultRow extends React.Component<SearchResultItem & { query: string }> {
     render() {
-        return (<div>
-            <span style={{fontSize: "0.6em", verticalAlign: "center", color: "grey"}}>
+        return (<div className={"search__result-row"}>
+            <span className={"search__result-source"}>
                 { this.props.source }:
             </span>
             {' '}
-            <a href={makeLink(this.props)} children={ HighlightTitle(this.props) }/>
+            <a href={makeLink(this.props)}
+               children={ HighlightTitle(this.props) }
+               className={"search__result-link"}/>
             <Snippet query={this.props.query} stopwords={this.props.title} content={this.props.description} />
         </div>);
     }
 }
 
-export class SearchStatic extends React.Component<SearchProps> {
+export class SearchPresentation extends React.Component<SearchProps> {
     render() {
-        return (<div>
+        return (<div className={"search"}>
             <SearchBar query={this.props.query} onQueryChange={this.props.onQueryChange}/>
             { this.props.result.map((r) =>
                 <SearchResultRow key={r.source + ' ' + r.id} {...r} query={this.props.query}/>)}
@@ -208,7 +216,7 @@ const mapDispatchToPropsBroken = ({
 
 
 export const Search = connect(mapStateToProps, mapDispatchToProps)(
-    ({ result, onQueryChange, query}) => <SearchStatic result={result} onQueryChange={onQueryChange} query={query} />
+    ({ result, onQueryChange, query}) => <SearchPresentation result={result} onQueryChange={onQueryChange} query={query} />
 );
 
 
