@@ -1,9 +1,11 @@
-from flask import Blueprint, url_for, redirect, flash
+from flask import Blueprint, url_for, redirect, flash, render_template, request
 from flask_login import current_user, login_user, logout_user
 from .oauth2 import OAuthSignIn
-from ..database import Person, Contact, db
+from ..database import Person, Contact, DirectLogin
+from ..menu import menu
 from flask_login import LoginManager
-
+from .forms import LoginForm
+from hashlib import md5
 
 lm = LoginManager()
 
@@ -19,22 +21,29 @@ def load_user(id):
     return Person.query.get(int(id))
 
 
-@module.route('/')
+def user_login(login, password):
+    password_hash = md5(password.encode()).hexdigest()
+    logins = DirectLogin.query.filter(DirectLogin.login == login).filter(DirectLogin.password_hash == password_hash).all()
+    if len(logins) != 1:
+        return False
+    user = logins[0].person
+    login_user(user)
+    return True
+
+
+@module.route('/', methods=['GET', 'POST'])
 def index():
-    return "<ul>" \
-           "<li>" \
-           "<a href='/login/authorize/facebook'>facebook</a>" \
-           "</li>" \
-           "<li>" \
-           "<a href='/login/authorize/vk'>vk</a>" \
-           "</li>" \
-           "<li>" \
-           "<a href='/login/authorize/yandex'>yandex</a>" \
-           "</li>" \
-           "<li>" \
-           "<a href='/login/authorize/google'>google</a>" \
-           "</li>" \
-           "</ul>"
+    if request.method == 'POST':
+        if user_login(request.form['login'], request.form['password']):
+            return redirect(url_for('admin.index'))
+        else:
+            pass
+    form = LoginForm(request.form)
+    return  render_template(
+        "login/base.html",
+        menu=menu,
+        form=form
+    )
 
 
 @module.route('/authorize/<provider>')

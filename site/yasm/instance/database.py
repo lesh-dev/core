@@ -236,6 +236,24 @@ class Person(UserMixin, db.Model, Serializer):
     exams = db.relationship('Exam', back_populates='student', lazy='dynamic')
     course_teachers = db.relationship('CourseTeachers', back_populates='course_teacher', lazy='dynamic')
     contacts = db.relationship('Contact', back_populates='person', lazy='dynamic')
+    direct_login = db.relationship('DirectLogin', back_populates='person')
+
+
+class DirectLogin(db.Model, Serializer):
+    __tablename__ = 'direct_login'
+    person_id = NamedColumn(db.Integer,
+                            MarkedForeignKey(Person.person_id),
+                            nick='человек',
+                            primary_key=True,
+                            unique=True)
+    login = NamedColumn(db.Text,
+                        nick='логин',
+                        nullable=False)
+    password_hash = NamedColumn(db.Text,
+                                nick='хэш пароля',
+                                nullable=False)
+    person = db.relationship('Person', lazy='joined')
+
 
 
 class Contact(db.Model, Serializer):

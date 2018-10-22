@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/pack/login.css') }}">
+{% endblock %}
+{% block js %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <div id="mount-point">
+        <ul>
+            <li>
+                <a href='/login/authorize/facebook'>facebook</a>
+            </li>
+            <li>
+                <a href='/login/authorize/vk'>vk</a>
+            </li>
+            <li>
+                <a href='/login/authorize/yandex'>yandex</a>
+            </li>
+            <li>
+                <a href='/login/authorize/google'>google</a>
+            </li>
+        </ul>
+        <form action="" method="post">
+            {{ form.csrf }}
+
+            <div class="input text">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td>
+                            {{ form.login.label }}
+                        </td>
+                        <td>
+                            {{ form.login }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ form.password.label }}
+                        </td>
+                        <td>
+                            {{ form.password }}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="input submit">
+                <input type="submit" value="Submit" />
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/login.min.js') }}"></script>
+{% endblock %}
