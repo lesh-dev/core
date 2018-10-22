@@ -228,11 +228,11 @@ export const Search = connect(mapStateToProps, mapDispatchToProps)(
 //
 
 export const default_SearchExample =
-    [{"source":"person","id":705,"title":"Аэлина Габидуллина","description":"Аэлина Айратовна Габидуллина  Aelinagabidullna@gmail.com  "},
-    {"source":"person","id":372,"title":"Алексей Сульгин","description":"Алексей Андреевич Сульгин    "},
+    [{"source":"person","id":705,"title":"Аэлина Ахматова","description":"Аэлина Айнуровна Ахматова  Aelinaahmatova@gmail.com  "},
+    {"source":"person","id":372,"title":"Алексей Шульга","description":"Алексей Андреевич Шульга    "},
     {"source":"course","id":302,"title":"Математический анализ-2","description":"Математический анализ-2 "},
-    {"source":"person","id":840,"title":"Айдамир Гучетль","description":"Айдамир Юрьевич Гучетль  guchetl0745@icloud.com  "},
-    {"source":"person","id":829,"title":"Анастасия Коновалова","description":"Анастасия Михайловна Коновалова  cat_kon@mail.ru  "}]
+    {"source":"person","id":840,"title":"Айдамир Иванов","description":"Айдамир Петрович Иванов  ivanov0745@icloud.com  "},
+    {"source":"person","id":829,"title":"Анастасия Андреева","description":"Анастасия Михайловна Андреева  an_mi@mail.ru  "}]
 
 export class SearchExample extends React.Component<any> {
     constructor(props: any){
