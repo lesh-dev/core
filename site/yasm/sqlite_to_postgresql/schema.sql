@@ -20,6 +20,8 @@ SET default_tablespace = '';
 
 SET default_with_oids = false;
 
+SET TIME ZONE 'GMT+03:00';
+
 --
 -- Name: contact; Type: TABLE; Schema: public; Owner: lesh
 --
