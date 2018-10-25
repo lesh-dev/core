@@ -28,7 +28,7 @@
         $odd = ($contlist_block_iter % 2) ? "odd" : "even";
         if ($contlist_block_iter >= $pg * $block_show_count && $contlist_block_iter < ($pg + 1) * $block_show_count)
         {?>
-            <div class="contlist-block <?php echo $odd; ?>"><?php
+            <div class="contlist-block news-item <?php echo $odd; ?>"><?php
             $source = xcms_get_page_content_name($subpage_id);
             $info = xcms_get_page_info($subpage_id);
             if ($editable)
@@ -36,13 +36,18 @@
                 <a id="contlist-item-<?php echo $contlist_block_iter; ?>" class="link-button contlist-edit"
                     href="/<# web_prefix #>?<?php echo xcms_url(array('ref' => 'admin', 'page' => $subpage_id)); ?>">Редактировать</a><?php
             }
+
             $alias = xcms_get_key_or($info, "alias");
             $timestamp = xcms_get_key_or($info, "timestamp-created");
             $date = xcms_rus_date($timestamp);
             $header_url = "/$web_prefix$alias";
 
-            if (isset($skin) && xu_not_empty($skin))
+
+            if ($skin=="tidy")
+                include(translate("<! news_header_tidy !>"));
+            else if (isset($skin) && xu_not_empty($skin))
                 include(translate("<! contlist_header_${skin} !>"));
+
             else
                 include(translate("<! contlist_header !>"));
 
@@ -57,7 +62,11 @@
             if (!strlen($name))
                 $name = $u->login();
 
-            if (isset($skin) && xu_not_empty($skin))
+            if ($skin=="tidy")
+            {
+                // include(translate("<! news_footer_tidy !>"));
+            }
+            else if (isset($skin) && xu_not_empty($skin))
                 include(translate("<! contlist_footer_${skin} !>"));
             else
                 include(translate("<! contlist_footer !>"));

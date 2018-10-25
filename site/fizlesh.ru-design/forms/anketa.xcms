@@ -1,16 +1,23 @@
 <?php
 require_once("${design_dir}forms/anketa_templates.php");
+global $skin;
 
 xcms_print_anketa_header();
-?>
-<p>
+
+if ($skin!="tidy"){
+    ?>
+    <p>
     <b>Эта анкета для поступающих на Физическое отделение.</b>
     Школьникам, поступающим на ((http://lesh.org.ru/departments другие отделения)),
     необходимо обращаться к&nbsp;начальникам соответствующих отделений.
     Пожалуйста, правильно указывайте отделение, используя выпадающий список.
-</p>
-<div style="clear: both">&nbsp;</div>
-<form method="post">
+    </p>
+    <?php
+}
+?>
+
+<!-- <div style="clear: both">&nbsp;</div> -->
+<form class="que" method="post">
     <?php
     echo xcmst_hidden(XCMS_KEY_ANKETA_MODE, XCMS_ANKETA_MODE_FIZLESH);  // Тип анкеты
     ?>
