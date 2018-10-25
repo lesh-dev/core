@@ -70,6 +70,18 @@ h1 {
   background: #7ac143;
 }
 
+.choch {
+  width: 60vw;
+  margin: 70px auto;
+}
+
+@media screen and (max-width: 768px) {
+  .choch {
+  width: 80vw;
+  margin: 70px auto;
+}
+
+  }
 
 
 
@@ -666,16 +678,18 @@ margin-bottom: 30px;
 span.ankLabel {
     font-weight: 400;
     display: inline-block;
-    width: 380px;
+    /*width: 380px;*/
     padding-left: 2px;
     float: left;
     }
 
 div.ankExample {
     font-size: 8pt;
-    padding-left: 380px;
+    /*padding-left: 380px;*/
     padding-bottom: 3pt;
   }
+
+
 
 
 .ankValue input {
@@ -688,6 +702,8 @@ div.ankExample {
 
 .ankRow textarea {
   width: 390px;
+  float: right;
+  height: 95px;
 }
 
 .ankAst.Req {
@@ -715,6 +731,56 @@ div.ankExample {
 .ankMessageFrame {
   display: none;
 }
+
+
+.ankValue {
+  float: right;
+}
+
+.ankRow {
+  height: 95px;
+}
+
+
+@media screen and (max-width: 1177px) {
+  .ankLabel {
+    float: none !important;
+  }
+  .ankValue {
+    float: none;
+    display: block;
+  }
+  .ankRow {
+    height: inherit;
+  }
+
+  .ankRow textarea {
+  float: none;
+  display: block;
+}
+}
+
+@media screen and (max-width: 992px) {
+  .que {
+  padding: 50px 50px;
+}
+}
+
+@media screen and (max-width: 768px) {
+  .ankValue input{
+   width: 100%;
+  }
+
+  .ankRow textarea {
+    width: 100%;
+  }
+
+  .que {
+  padding: 30px 30px;
+}
+
+}
+
 
 /*mobile menu*/
 
