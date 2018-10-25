@@ -256,7 +256,7 @@ export class SearchExample extends React.Component<any> {
 // |____/___\____| |_| \____|_____|_____|
 //
 
-const Lens = ({
+export const Lens = ({
     get: (state: any, path: string[], initialState: any = undefined) => {
         let s = state;
         for(let p = 0; p < path.length; p++) {

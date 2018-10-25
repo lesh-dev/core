@@ -63,7 +63,7 @@ export class SnippetHelper {
 
 export const snippetHelper = new SnippetHelper;
 
-export const HighlightTitle = (props: any) => {
+export const HighlightTitle = (props: {query: string, title: string}) => {
     let search = props.query.split(/\s+/);
     let groups = snippetHelper.groups(props.title, search);
     return groups.map((g, i) => {
