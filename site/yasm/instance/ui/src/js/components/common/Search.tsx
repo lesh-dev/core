@@ -263,7 +263,7 @@ const Lens = ({
             s = s[path[p]];
             if(typeof s == "undefined") return initialState;
         }
-        return s;
+        return Object.assign({}, initialState, s);
     },
 
     set: function set(state: any, newLocalState: any, path: string[]): any {
