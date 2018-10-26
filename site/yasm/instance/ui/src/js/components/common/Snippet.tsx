@@ -54,7 +54,8 @@ export class SnippetHelper {
     }
 
     toHighlightedHtml = (group: {str: string, highlight: boolean}, key: string) => {
-        if(group.highlight) return <span key={key} style={{backgroundColor: 'yellow'}}>{group.str}</span>;
+        if(group.highlight)
+            return <span key={key} className={"snippet__description_highlight"}>{group.str}</span>;
         else return group.str;
     }
 
@@ -62,11 +63,11 @@ export class SnippetHelper {
 
 export const snippetHelper = new SnippetHelper;
 
-export const HighlightTitle = (props: any) => {
+export const HighlightTitle = (props: {query: string, title: string}) => {
     let search = props.query.split(/\s+/);
     let groups = snippetHelper.groups(props.title, search);
     return groups.map((g, i) => {
-        if(g.highlight) return <span style={{backgroundColor: 'yellow'}} key={i}>{g.str}</span>;
+        if(g.highlight) return <span className={"snippet__title_highlight"} key={i}>{g.str}</span>;
         else return g.str;
     });
 }
@@ -84,7 +85,7 @@ export class Snippet extends React.Component<{ query: string, stopwords: string,
         const space = { str: ' ', highlight: false, index: -1 };
         let items = groups.reduce((g1, g2) => g1.concat([space], g2), []);
         let html = items.map((item, i) => snippetHelper.toHighlightedHtml(item, i.toString()));
-        return <span style={{fontSize: '0.75em'}}>{html}</span>
+        return <span className={"snippet__description"}>{html}</span>
     }
 }
 

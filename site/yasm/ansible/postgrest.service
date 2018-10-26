@@ -1,11 +1,10 @@
 [Unit]
 Description=postgrest
-DependsOn=postgresql
+After=postgresql.service
 
 [Service]
 ExecStart=/bin/sh -c '/opt/postgrest /etc/postgrest/lesh.conf >> /tmp/postgrest.log 2>>/tmp/postgrest.log'
 ExecReload=/bin/kill -HUP $MAINPID
-KillMode=process
 Restart=on-failure
 #RestartPreventExitStatus=255
 Type=simple

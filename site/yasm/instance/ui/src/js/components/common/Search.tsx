@@ -5,6 +5,7 @@ import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import {Snippet, HighlightTitle} from "./Snippet"
+import "../../../scss/search.scss"
 
 //  ____ _____  _  _____ _____
 // / ___|_   _|/ \|_   _| ____|
@@ -52,7 +53,12 @@ const initialState: SearchStateShape = {
 
 export class SearchBar extends React.Component<{onQueryChange: (query: string) => void, query: string}> {
     render() {
-        return <input type="text" placeholder="search" value={this.props.query} onChange={e => this.props.onQueryChange(e.target.value)}/>
+        return <input type="text"
+                      placeholder="search"
+                      value={this.props.query}
+                      onChange={e => this.props.onQueryChange(e.target.value)}
+                      className={"search__input"}
+        />
     }
 }
 
@@ -70,20 +76,22 @@ const makeLink = (row: SearchResultItem) => {
 
 export class SearchResultRow extends React.Component<SearchResultItem & { query: string }> {
     render() {
-        return (<div>
-            <span style={{fontSize: "0.6em", verticalAlign: "center", color: "grey"}}>
+        return (<div className={"search__result-row"}>
+            <span className={"search__result-source"}>
                 { this.props.source }:
             </span>
             {' '}
-            <a href={makeLink(this.props)} children={ HighlightTitle(this.props) }/>
+            <a href={makeLink(this.props)}
+               children={ HighlightTitle(this.props) }
+               className={"search__result-link"}/>
             <Snippet query={this.props.query} stopwords={this.props.title} content={this.props.description} />
         </div>);
     }
 }
 
-export class SearchStatic extends React.Component<SearchProps> {
+export class SearchPresentation extends React.Component<SearchProps> {
     render() {
-        return (<div>
+        return (<div className={"search"}>
             <SearchBar query={this.props.query} onQueryChange={this.props.onQueryChange}/>
             { this.props.result.map((r) =>
                 <SearchResultRow key={r.source + ' ' + r.id} {...r} query={this.props.query}/>)}
@@ -208,7 +216,7 @@ const mapDispatchToPropsBroken = ({
 
 
 export const Search = connect(mapStateToProps, mapDispatchToProps)(
-    ({ result, onQueryChange, query}) => <SearchStatic result={result} onQueryChange={onQueryChange} query={query} />
+    ({ result, onQueryChange, query}) => <SearchPresentation result={result} onQueryChange={onQueryChange} query={query} />
 );
 
 
@@ -220,11 +228,11 @@ export const Search = connect(mapStateToProps, mapDispatchToProps)(
 //
 
 export const default_SearchExample =
-    [{"source":"person","id":705,"title":"Аэлина Габидуллина","description":"Аэлина Айратовна Габидуллина  Aelinagabidullna@gmail.com  "},
-    {"source":"person","id":372,"title":"Алексей Сульгин","description":"Алексей Андреевич Сульгин    "},
+    [{"source":"person","id":705,"title":"Аэлина Ахматова","description":"Аэлина Айнуровна Ахматова  Aelinaahmatova@gmail.com  "},
+    {"source":"person","id":372,"title":"Алексей Шульга","description":"Алексей Андреевич Шульга    "},
     {"source":"course","id":302,"title":"Математический анализ-2","description":"Математический анализ-2 "},
-    {"source":"person","id":840,"title":"Айдамир Гучетль","description":"Айдамир Юрьевич Гучетль  guchetl0745@icloud.com  "},
-    {"source":"person","id":829,"title":"Анастасия Коновалова","description":"Анастасия Михайловна Коновалова  cat_kon@mail.ru  "}]
+    {"source":"person","id":840,"title":"Айдамир Иванов","description":"Айдамир Петрович Иванов  ivanov0745@icloud.com  "},
+    {"source":"person","id":829,"title":"Анастасия Андреева","description":"Анастасия Михайловна Андреева  an_mi@mail.ru  "}]
 
 export class SearchExample extends React.Component<any> {
     constructor(props: any){
@@ -248,14 +256,14 @@ export class SearchExample extends React.Component<any> {
 // |____/___\____| |_| \____|_____|_____|
 //
 
-const Lens = ({
+export const Lens = ({
     get: (state: any, path: string[], initialState: any = undefined) => {
         let s = state;
         for(let p = 0; p < path.length; p++) {
             s = s[path[p]];
             if(typeof s == "undefined") return initialState;
         }
-        return s;
+        return Object.assign({}, initialState, s);
     },
 
     set: function set(state: any, newLocalState: any, path: string[]): any {

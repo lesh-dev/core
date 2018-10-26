@@ -1,0 +1,18 @@
+.create-course__cycle {
+  width: 2em;
+}
+
+.create-course {
+  display: inline;
+}
+
+.course-input {
+  display: none;
+}
+td:hover .course-input {
+  display: block;
+}
+
+.exam-table__course-passed {
+  background-color: lightgreen;
+}

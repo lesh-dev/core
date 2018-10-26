@@ -2,15 +2,20 @@
 require_once("${xengine_dir}sys/version.php");
 require_once("${design_dir}modern_links.php");
 require_once("${design_dir}modern_contacts.php");
-?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html lang="ru"><head>
     <meta charset="utf-8">
     <# cms/head #>
     <link rel="yandex-tableau-widget" href="<# full_design_dir #>tableau.json" />
     <# js/jquery #>
     <# js/bootstrap3 #>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans&amp;subset=latin,cyrillic" rel="stylesheet" type="text/css">
-    <# css/design modern.css #>
+    
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,600,400italic,700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <# css/design tidy.css #>
+    <# css/design icomoon.css #>
     <!-- css/design menu.css -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -18,81 +23,63 @@ require_once("${design_dir}modern_contacts.php");
 <?php
 $page_id_filtered = str_replace("/", "_", $pageid);
 ?>
-<div style="position: fixed; right: 7px; bottom: 6px; z-index: 100; color: #e5e5e5;">Skin:&nbsp;<a
+<div style="position: fixed; right: 7px; bottom: 6px; z-index: 100; color: #ссс;">Skin:&nbsp;<a
     href="<?php echo $skin_switch_url; ?>"
-    style="color: #efefef;"
+    style="color: #ccc;"
     title="<?php echo $skin_switch_title; ?>"
     ><?php echo $skin_to_switch_to; ?></a></div>
 
-<!-- FIXME(mvel) identification via aliases, not via pageid -->
 <div class="page" id="page_<?php echo $page_id_filtered; ?>">
 
-    <nav class="navbar navbar-inverse ">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarC" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <div id="navbarC" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <# cms/menu/display start=1 end=1 #>
-            </ul>
-        </div>
-    </nav>
+<a href="#" class="js-nav-toggle nav-toggle"><i></i></a>
+	<div id="menu">
+		<div id="logo">
+			<a href="index.html">
+				<!-- <img src="img/logo/fizlesh.png"> -->
+                <img
+                 src="<# full_design_dir #>img/hedgehog.png" alt="ФизЛЭШ" />
+			</a>
+		</div>
+		
+		<nav id="main-menu">
+			<ul>
+				<# cms/menu/display start=1 end=2 #>	
+			</ul>
+		</nav>
 
-    <a id="signin" class="signin" href="<?php echo $meta_site_url_secure.'?'.
+		<div class="social">
+			<ul>
+				<li><a href="#"><i class="icon-vk"></i></a></li>
+				<li><a href="#"><i class="icon-facebook"></i></a></li>
+				<li><a href="#"><i class="icon-instagram"></i></a></li>
+			</ul>
+		</div>
+	</div>
+
+
+     <a id="signin" class="signin" href="<?php echo $meta_site_url_secure.'?'.
         xcms_url(array('page' => $pageid, 'ref' => 'login', 'return' => '?ref=index')); ?>"> </a>
 
     <div class="another_menu">
     <# cms/user_menu separator= #>
     </div>
+		
+	<div id="main">
+        <div class="content">
 
-    <?php
-        $page_alias = xcms_get_key_or($INFO, "alias");
 
-        // FIXME(mvel) const?
-        $container_css_class = "container";
-        $wrapper_css_class = "wrapper";
-
-        // set proper wrapper class depending on the page
-        if (
-            $page_alias == "contacts" ||
-            $page_alias == "links" ||
-            $page_alias == "news"
-        ) {
-            $wrapper_css_class = "transparent-wrapper";
-        }
-        elseif ($page_alias == "index")
-        {
-            $wrapper_css_class = "index-wrapper";
-        }
-    ?>
-
-    <div class="<?php echo $container_css_class; ?> my-container">
-        <?php
-
-        ?>
-        <div class="my-content-block <?php echo $wrapper_css_class; ?>">
             <?php
             if ($page_alias == "index")
             {
                 ?><# modern_index #><?php
             }
             ?>
-            <# cms/menu/display start=2 end=5 no_output #>
+            <!-- <# cms/menu/display start=2 end=5 no_output #> -->
             <?php
-            if (xu_not_empty($menu_html_output))
-            {?>
-                <!-- optional menu of level 2 -->
-                <nav class="navbar my-navbar">
-                    <center>
-                        <ul class="nav navbar-nav"><?php echo $menu_html_output; ?></ul>
-                    </center>
-                </nav><?php
-            }?>
+            ?>  
 
-            <div class="content-text"><?php
+
+            <?php
                 $alias = xcms_get_key_or($INFO, "alias");
                 $aparam = xcms_get_key_or($_GET, "aparam");
                 $in_xsm = ($alias == "register" && strlen($aparam));
@@ -100,6 +87,9 @@ $page_id_filtered = str_replace("/", "_", $pageid);
                 if ($page_alias == "index")
                 {
                     $pageid = "z01News";
+                    ?> <div class="main-header">
+                            <h1>Page name</h1>
+                        </div>  <?php
                     include(translate("<! cms/contlist/view !>"));
                     ?>
                     <center><!-- FIXME(bird) кажется, это лучше задавать стилем, а не тегом, так более гибко -->
@@ -113,22 +103,48 @@ $page_id_filtered = str_replace("/", "_", $pageid);
                     if (!$in_xsm)
                     {?>
                         <# cms/page/edit_button #><?php
-                    }?>
+                    }
+
+                    ?>
+                     <div class="main-header">
+                        <h1>
+<?php
+    $page_title = ""; // from settings
+    if (isset($pageid) && strlen($pageid)) {
+        $page_header = xcms_get_key_or($list, "header");
+        if (xu_empty($page_header))
+        {
+            // menu title is a fallback for header
+            $page_header = xcms_get_key_or($list, "menu-title");
+        }
+        if ((xu_not_empty($page_header)) && ($page_header!="Авторизация"))
+        {
+            $page_title = "$page_header";
+        }
+    }
+    echo htmlspecialchars($page_title);
+?>
+                    </h1>
+                    </div><?php
+                    if (xu_not_empty($menu_html_output))
+            {?>
+                <!-- optional menu of level 2 -->
+                <!-- <div class="content-second-menu">
+                    <# cms/menu/display start=2 end=2 #>
+                    <span><a href="about_school_life.html" class="menu2">Жизнь на  ЛЭШ</a></span>
+                    <span><a href="about_school_list.html" class="menu2">Список вещей</a></span>
+                    <span><a href="about_school_parents.html" class="menu2">Родителям</a></span>
+                    <span><a href="about_school_photo.html" class="menu2" style="margin-right: 0">Фотоальбом</a></span>
+            </div> --><?php
+            }
+                    ?>
                     <div id="content-text"><# cms/ #></div><?php
                 }?>
-            </div>
-            <div style="font-size: 8pt; text-align: center; height: 15px; margin-top: 20px">
-                <span>&copy; ФизЛЭШ, 2005&nbsp;&#8212;&nbsp;<?php echo date('Y'); ?>&nbsp;</span>
-                <span class="site-version"><?php echo xcms_version(); ?></span>
-                <?php
-                if (xcms_is_production())
-                {?>
-                    <# seo/liveinternet 24.3 #>
-                    <# seo/yandex_metrika 12421258 #><?php
-                }?>
-            </div>
-        </div>
-    </div>
+				
+			</div>
+		</div>
 </div>
+<# js/menu #>
 </body>
 </html>
+

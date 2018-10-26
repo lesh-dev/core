@@ -9,8 +9,7 @@ global $SETTINGS;
   **/
 
 header("Content-Type: text/plain; charset=utf-8\n\n");
-if (xcms_get_key_or($SETTINGS, "production"))
-{
+if (xcms_get_key_or($SETTINGS, "production")) {
     echo "ERROR: This handler is DISABLED in PRODUCTION mode\n";
     die();
 }
@@ -21,7 +20,7 @@ require_once("${xengine_dir}sys/mailer.php");
 // purge notifications
 $db = xdb_get_write();
 $del_query = "DELETE FROM notification";
-$db->query($del_query);
+xdb_query($db, $del_query);
 echo "Notifications cleared OK\n";
 
 // Reset mailer configuration to test state
