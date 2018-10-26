@@ -5,6 +5,8 @@ import {
     DepartmentList,
     Person,
     PersonList,
+    DirectLogin,
+    DirectLoginList,
     Contact,
     ContactList,
     School,
@@ -121,6 +123,7 @@ export function person_fill(obj: Person) {
     return new Promise<Person>((resolve, reject) => {
         let ans: Person = obj;
         Promise.all([
+                direct_login_list({person_id: String(obj.person_id)}),
                 contact_list({person_id: String(obj.person_id)}),
                 course_teachers_list({course_teacher_id: String(obj.person_id)}),
                 exam_list({student_person_id: String(obj.person_id)}),
@@ -128,11 +131,35 @@ export function person_fill(obj: Person) {
                 person_comment_list({blamed_person_id: String(obj.person_id)}),
              ]
         ).then((values) => {
-            ans.contact_list = values[0];
-            ans.course_teachers_list = values[1];
-            ans.exam_list = values[2];
-            ans.person_school_list = values[3];
-            ans.person_comment_list = values[4];
+            ans.direct_login_list = values[0];
+            ans.contact_list = values[1];
+            ans.course_teachers_list = values[2];
+            ans.exam_list = values[3];
+            ans.person_school_list = values[4];
+            ans.person_comment_list = values[5];
+            resolve(ans);
+        }).catch((error) => {
+            reject(error);
+        })
+    })
+}
+
+
+export function direct_login_list(d: dict = {}) {
+    let req = '?';
+    for (let key in d) {
+        req += key + '=' + d[key] + '&'
+    }
+    return getRequest('/api/direct_login_list' + req) as Promise<DirectLoginList>
+}
+
+
+export function direct_login_fill(obj: DirectLogin) {
+    return new Promise<DirectLogin>((resolve, reject) => {
+        let ans: DirectLogin = obj;
+        Promise.all([
+             ]
+        ).then((values) => {
             resolve(ans);
         }).catch((error) => {
             reject(error);

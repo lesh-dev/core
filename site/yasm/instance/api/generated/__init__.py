@@ -1,11 +1,13 @@
 from flask import Blueprint, jsonify, request
 from instance.database import *
 from flask_login import login_required
+from instance.rights_decorator import has_rights
 
 module = Blueprint('api', __name__, url_prefix='/api')
 
 
 @module.route("/notification_list", methods=['GET'])
+@has_rights('admin')
 @login_required
 def notification_list(req=None, raw=False):
     regular = [
@@ -43,6 +45,7 @@ def notification_list(req=None, raw=False):
 
 
 @module.route("/department_list", methods=['GET'])
+@has_rights('admin')
 @login_required
 def department_list(req=None, raw=False):
     regular = [
@@ -84,6 +87,7 @@ def department_list(req=None, raw=False):
 
 
 @module.route("/person_list", methods=['GET'])
+@has_rights('admin')
 @login_required
 def person_list(req=None, raw=False):
     regular = [
@@ -123,6 +127,7 @@ def person_list(req=None, raw=False):
         'person_changedby',
     ]
     additional = {
+        'direct_login_list': {'length': 0, 'values': []},
         'contact_list': {'length': 0, 'values': []},
         'course_teachers_list': {'length': 0, 'values': []},
         'exam_list': {'length': 0, 'values': []},
@@ -185,7 +190,44 @@ def person_list(req=None, raw=False):
     })
 
 
+@module.route("/direct_login_list", methods=['GET'])
+@has_rights('admin')
+@login_required
+def direct_login_list(req=None, raw=False):
+    regular = [
+        'person_id',
+        'login',
+        'password_hash',
+    ]
+    additional = {
+    }
+    field = {
+        'person_id': DirectLogin.person_id,
+        'login': DirectLogin.login,
+        'password_hash': DirectLogin.password_hash,
+    }
+    query = DirectLogin.query
+    col = request.args.items() if req is None else req.items()
+    for arg, val in col:
+        if arg in regular:
+            query = query.filter(field[arg] == val)
+    query = query.all()
+    ans = []
+    for entry in query:
+        ans.append(entry.serialize())
+    if raw:
+        return {
+            'length': len(ans),
+            'values': ans
+        }
+    return jsonify({
+        'length': len(ans),
+        'values': ans
+    })
+
+
 @module.route("/contact_list", methods=['GET'])
+@has_rights('admin')
 @login_required
 def contact_list(req=None, raw=False):
     regular = [
@@ -223,6 +265,7 @@ def contact_list(req=None, raw=False):
 
 
 @module.route("/school_list", methods=['GET'])
+@has_rights('admin')
 @login_required
 def school_list(req=None, raw=False):
     regular = [
@@ -275,6 +318,7 @@ def school_list(req=None, raw=False):
 
 
 @module.route("/course_list", methods=['GET'])
+@has_rights('admin')
 @login_required
 def course_list(req=None, raw=False):
     regular = [
@@ -330,6 +374,7 @@ def course_list(req=None, raw=False):
 
 
 @module.route("/course_teachers_list", methods=['GET'])
+@has_rights('admin')
 @login_required
 def course_teachers_list(req=None, raw=False):
     regular = [
@@ -371,6 +416,7 @@ def course_teachers_list(req=None, raw=False):
 
 
 @module.route("/exam_list", methods=['GET'])
+@has_rights('admin')
 @login_required
 def exam_list(req=None, raw=False):
     regular = [
@@ -418,6 +464,7 @@ def exam_list(req=None, raw=False):
 
 
 @module.route("/person_school_list", methods=['GET'])
+@has_rights('admin')
 @login_required
 def person_school_list(req=None, raw=False):
     regular = [
@@ -479,6 +526,7 @@ def person_school_list(req=None, raw=False):
 
 
 @module.route("/person_comment_list", methods=['GET'])
+@has_rights('admin')
 @login_required
 def person_comment_list(req=None, raw=False):
     regular = [
@@ -528,6 +576,7 @@ def person_comment_list(req=None, raw=False):
 
 
 @module.route("/submission_list", methods=['GET'])
+@has_rights('admin')
 @login_required
 def submission_list(req=None, raw=False):
     regular = [
@@ -575,6 +624,7 @@ def submission_list(req=None, raw=False):
 
 
 @module.route("/contestants_list", methods=['GET'])
+@has_rights('admin')
 @login_required
 def contestants_list(req=None, raw=False):
     regular = [
@@ -631,6 +681,7 @@ def contestants_list(req=None, raw=False):
 
 
 @module.route("/problems_list", methods=['GET'])
+@has_rights('admin')
 @login_required
 def problems_list(req=None, raw=False):
     regular = [
@@ -673,6 +724,7 @@ def problems_list(req=None, raw=False):
 
 
 @module.route("/solutions_list", methods=['GET'])
+@has_rights('admin')
 @login_required
 def solutions_list(req=None, raw=False):
     regular = [

@@ -10,13 +10,13 @@ class Loader(object):
         self.test_case = test_case
 
     def __enter__(self):
-        with open("results", "r") as results_file:
+        with open("tests/results", "r") as results_file:
             self.results = json.load(results_file)
             result.set(self.results[self.test_case] if self.test_case in self.results.keys() else None)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
 
-        with open("results", "w") as results_file:
+        with open("tests/results", "w") as results_file:
             if (not self.test_case in self.results.keys() and result.get() != None) or result.get() != self.results[self.test_case]:
                 self.results[self.test_case] = result.get()
                 results_file.write(json.dumps(self.results, indent=4, sort_keys=True))

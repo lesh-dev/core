@@ -61,6 +61,7 @@ export interface Person {
     person_created: string,
     person_modified: string,
     person_changedby: string,
+    direct_login_list: DirectLoginList,
     contact_list: ContactList,
     course_teachers_list: CourseTeachersList,
     exam_list: ExamList,
@@ -70,6 +71,18 @@ export interface Person {
 
 export interface PersonList {
     values: Person[],
+    length: number
+}
+
+export interface DirectLogin {
+    person_id: number,
+    person: Person,
+    login: string,
+    password_hash: string,
+}
+
+export interface DirectLoginList {
+    values: DirectLogin[],
     length: number
 }
 

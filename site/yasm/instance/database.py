@@ -236,7 +236,7 @@ class Person(UserMixin, db.Model, Serializer):
     exams = db.relationship('Exam', back_populates='student', lazy='dynamic')
     course_teachers = db.relationship('CourseTeachers', back_populates='course_teacher', lazy='dynamic')
     contacts = db.relationship('Contact', back_populates='person', lazy='dynamic')
-    direct_login = db.relationship('DirectLogin', back_populates='person')
+    direct_login = db.relationship('DirectLogin', back_populates='person', lazy='dynamic')
 
 
 class DirectLogin(db.Model, Serializer):

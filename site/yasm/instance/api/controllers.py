@@ -1,4 +1,4 @@
-from .generated import module, db, School, PersonSchool, Person, jsonify
+from .generated import module, School, PersonSchool, Person, jsonify
 
 
 @module.route("/uninvited/<int:school_id>", methods=['GET'])

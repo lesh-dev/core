@@ -7,26 +7,15 @@
     {{ super() }}
 {% endblock %}
 {% block content %}
-    <div id="mount-point">
-        <ul>
-            <li>
-                <a href='/login/authorize/facebook'>facebook</a>
-            </li>
-            <li>
-                <a href='/login/authorize/vk'>vk</a>
-            </li>
-            <li>
-                <a href='/login/authorize/yandex'>yandex</a>
-            </li>
-            <li>
-                <a href='/login/authorize/google'>google</a>
-            </li>
-        </ul>
-        <form action="" method="post">
+    <div id="login-manager">
+        <a href='/login/authorize/facebook'><div class="login-manager__entry">facebook</div></a>
+        <a href='/login/authorize/vk'><div class="login-manager__entry">Вконтакте</div></a>
+        <a href='/login/authorize/yandex'><div class="login-manager__entry">Яндекс</div></a>
+        <a href='/login/authorize/google'><div class="login-manager__entry">google</div></a>
+        <form class="login-manager__entry" action="" method="post">
             {{ form.csrf }}
-
-            <div class="input text">
-                <table>
+            <div class="login-manager__entry">
+                <table class="login-manager__form-table">
                     <tbody>
                     <tr>
                         <td>

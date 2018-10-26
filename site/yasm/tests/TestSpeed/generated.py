@@ -1,10 +1,15 @@
 import unittest
 import timeit
+import sys
+import json
+import instance
 import instance.login.controllers
-import testinglib
+from flask_login import login_user
+import tests.testinglib as testinglib
 from instance.api.generated import notification_list
 from instance.api.generated import department_list
 from instance.api.generated import person_list
+from instance.api.generated import direct_login_list
 from instance.api.generated import contact_list
 from instance.api.generated import school_list
 from instance.api.generated import course_list
@@ -48,6 +53,18 @@ class TestSpeed(unittest.TestCase):
     @testinglib.login_needed(467)
     def test_person_list(self):
         time = timeit.timeit(person_list, number=10) / 10
+        if testinglib.result.get():
+            assert testinglib.result.get() * 1.1 > time
+            if time < testinglib.result.get():
+                testinglib.result.set(time)
+        else:
+            testinglib.result.set(time)
+
+    @testinglib.load_result
+    @testinglib.request_needed(yasm)
+    @testinglib.login_needed(467)
+    def test_direct_login_list(self):
+        time = timeit.timeit(direct_login_list, number=10) / 10
         if testinglib.result.get():
             assert testinglib.result.get() * 1.1 > time
             if time < testinglib.result.get():

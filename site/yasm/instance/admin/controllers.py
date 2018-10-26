@@ -3,6 +3,7 @@ from flask_login import login_required
 from ..menu import menu
 from .side import side
 from ..database import db, School, Contact, Person
+from ..rights_decorator import has_rights
 
 module = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -16,6 +17,7 @@ def resp(code, data):
 
 
 @module.route('/', methods=['GET'])
+@has_rights('admin')
 @login_required
 def index():
     return render_template(
@@ -27,6 +29,7 @@ def index():
 
 @module.route('/gui/', methods=['GET'])
 @module.route('/gui/<path:path>', methods=['GET'])
+@has_rights('admin')
 @login_required
 def admin(path='path'):  # resolved by reactJS
     return render_template(
@@ -37,6 +40,7 @@ def admin(path='path'):  # resolved by reactJS
 
 
 @module.route('/api/schools/add', methods=['GET'])
+@has_rights('admin')
 @login_required
 def school_add():
     args = rq.args
@@ -61,6 +65,7 @@ def school_add():
 
 
 @module.route('/api/person/contact/del/<int:id>', methods=['POST'])
+@has_rights('admin')
 @login_required
 def api_person_contact_del(id):
     Contact.query.filter(Contact.id == id).delete()
@@ -69,6 +74,7 @@ def api_person_contact_del(id):
 
 
 @module.route('/api/person/contact/add/<int:person_id>', methods=['POST'])
+@has_rights('admin')
 @login_required
 def api_person_contact_add(person_id):
     name = rq.values['name']
@@ -84,6 +90,7 @@ def api_person_contact_add(person_id):
 
 
 @module.route('/api/person/department/change/<int:person_id>', methods=['POST'])
+@has_rights('admin')
 @login_required
 def api_person_department_change(person_id):
     id = rq.values['department_id']

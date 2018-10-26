@@ -35,7 +35,7 @@ def user_login(login, password):
 def index():
     if request.method == 'POST':
         if user_login(request.form['login'], request.form['password']):
-            return redirect(url_for('admin.index'))
+            return redirect(url_for('personal.index'))
         else:
             pass
     form = LoginForm(request.form)
@@ -68,11 +68,11 @@ def oauth_callback(provider):
     if not user:
         return redirect('/')
     login_user(user, True)
-    return redirect(url_for('admin.index'))
+    return redirect(url_for('personal.index'))
 
 
 @module.route('/logout')
 def logout():
     if current_user.is_authenticated:
         logout_user()
-    return redirect('/login')
+    return redirect(url_for('login.index'))

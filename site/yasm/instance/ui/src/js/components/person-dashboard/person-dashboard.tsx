@@ -80,7 +80,7 @@ export class PersonDashboard extends React.Component<PersonDashboardProps, Perso
                       entries={[
                           {
                               name: 'name',
-                              text: 'Название, для почты - email'
+                              text: 'Название, дro  ля почты - email'
                           },
                           {
                               name: 'url',

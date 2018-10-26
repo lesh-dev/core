@@ -17,6 +17,7 @@ previx = "instance/api/generated"
 api_imports = """from flask import Blueprint, jsonify, request
 from instance.database import *
 from flask_login import login_required
+from instance.rights_decorator import has_rights
 
 module = Blueprint('api', __name__, url_prefix='/api')
 
@@ -181,6 +182,7 @@ def main():
                 else:
                     additional_fields.append(field[0])
             read_api.write("@module.route(\"/{name}\", methods=['GET'])\n".format(name=scl(name)))
+            read_api.write("@has_rights('admin')\n")
             read_api.write("@login_required\n")
             read_api.write("def {name}(req=None, raw=False):\n".format(name=scl(name)))
             read_api.write("    regular = [\n")
@@ -224,7 +226,7 @@ def main():
         tests.write('import instance\n')
         tests.write('import instance.login.controllers\n')
         tests.write('from flask_login import login_user\n')
-        tests.write('import testinglib\n')
+        tests.write('import tests.testinglib as testinglib\n')
         for name, fields in models.items():
             tests.write('from instance.api.generated import {name}\n'.format(name=scl(name)))
         tests.write('yasm = instance.create()\n\n')

@@ -1,2 +1,2 @@
-from TestSpeed import TestSpeed
-from Front import Test200
+from tests.TestSpeed import TestSpeed
+from tests.Front import Test200

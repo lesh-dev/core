@@ -1,4 +1,4 @@
-import {Notification, NotificationList, Department, DepartmentList, Person, PersonList, Contact, ContactList, School, SchoolList, Course, CourseList, CourseTeachers, CourseTeachersList, Exam, ExamList, PersonSchool, PersonSchoolList, PersonComment, PersonCommentList, Submission, SubmissionList, Contestants, ContestantsList, Problems, ProblemsList, Solutions, SolutionsList, } from "./interfaces"
+import {Notification, NotificationList, Department, DepartmentList, Person, PersonList, DirectLogin, DirectLoginList, Contact, ContactList, School, SchoolList, Course, CourseList, CourseTeachers, CourseTeachersList, Exam, ExamList, PersonSchool, PersonSchoolList, PersonComment, PersonCommentList, Submission, SubmissionList, Contestants, ContestantsList, Problems, ProblemsList, Solutions, SolutionsList, } from "./interfaces"
 
 export const default_Notification = {
     notification_id: 0,
@@ -53,12 +53,20 @@ export const default_Person = {
     person_created: "person_created",
     person_modified: "person_modified",
     person_changedby: "person_changedby",
+    direct_login_list: {values: [], length: 0} as DirectLoginList,
     contact_list: {values: [], length: 0} as ContactList,
     course_teachers_list: {values: [], length: 0} as CourseTeachersList,
     exam_list: {values: [], length: 0} as ExamList,
     person_school_list: {values: [], length: 0} as PersonSchoolList,
     person_comment_list: {values: [], length: 0} as PersonCommentList,
 } as Person;
+
+export const default_DirectLogin = {
+    person_id: 0,
+    person: default_Person,
+    login: "login",
+    password_hash: "password_hash",
+} as DirectLogin;
 
 export const default_Contact = {
     id: 0,
