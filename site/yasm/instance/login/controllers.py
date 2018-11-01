@@ -23,7 +23,11 @@ def load_user(id):
 
 def user_login(login, password):
     password_hash = md5(password.encode()).hexdigest()
-    logins = DirectLogin.query.filter(DirectLogin.login == login).filter(DirectLogin.password_hash == password_hash).all()
+    logins = (DirectLogin
+              .query
+              .filter(DirectLogin.login == login)
+              .filter(DirectLogin.password_hash == password_hash)
+              .all())
     if len(logins) != 1:
         return False
     user = logins[0].person
@@ -39,9 +43,10 @@ def index():
         else:
             pass
     form = LoginForm(request.form)
-    return  render_template(
+    return render_template(
         "login/base.html",
         menu=menu,
+        person=current_user,
         form=form
     )
 
@@ -63,10 +68,10 @@ def oauth_callback(provider):
     type, id = user_info[0], user_info[1]
     if id is None:
         flash('Authentication failed.')
-        return redirect('/')
+        return redirect('/login/')
     user = Person.query.join(Contact).filter(Contact.name == type).filter(Contact.value == id).first()
     if not user:
-        return redirect('/')
+        return redirect(url_for('login.error'))
     login_user(user, True)
     return redirect(url_for('personal.index'))
 
@@ -76,3 +81,10 @@ def logout():
     if current_user.is_authenticated:
         logout_user()
     return redirect(url_for('login.index'))
+
+
+@module.route('/error')
+def error():
+        return """<h1>No user found with theese credentails, ask your curator about this situation and try later</h1>
+        <br>
+        <a href='/login'>login</a>""", 401

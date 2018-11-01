@@ -22,6 +22,7 @@ import {element} from "prop-types";
 import {PersonExamList} from "./person_exam_list";
 import {PersonCourseList} from "./person_course_list";
 import {scalarMult} from "tweetnacl";
+import {Contacts} from "../common/Lists/Contacts";
 
 export interface PersonDashboardProps {
     person_id: number
@@ -62,15 +63,7 @@ export class PersonDashboard extends React.Component<PersonDashboardProps, Perso
     }
 
     render_contacts() {
-        let contacts = [];
-        for (let contact of this.state.person.contact_list.values) {
-            contacts.push(<ContactCard contact={contact} del_btn={() => {
-                getRequest('/admin/api/person/contact/del/' + contact.id, 'POST').then(() => {
-                    this.reload()
-                })
-            }}/>)
-        }
-        return contacts;
+        return <Contacts person={this.state.person}/>
     }
 
     render_contact_add() {

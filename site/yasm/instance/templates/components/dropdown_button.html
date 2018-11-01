@@ -6,7 +6,7 @@
 {% endmacro %}
 
 {% macro dropdown_button_html(name, data, class="") %}
-    <div class={{ "dropdown_button " + class }}>
+    <div class="dropdown_button {{ class }}">
         <div class="dropdown_button__btn">{{ name }}<div class="dropdown_button__arrow"></div></div>
         <div class="dropdown_button__content">
             {% for key, value in data %}

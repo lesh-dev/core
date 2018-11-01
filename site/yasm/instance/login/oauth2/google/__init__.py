@@ -4,6 +4,7 @@ from flask import redirect, request, json
 import googleapiclient.discovery
 import os
 
+
 class GoogleSignIn(OAuthSignIn):
     def __init__(self):
         super(GoogleSignIn, self).__init__('google')

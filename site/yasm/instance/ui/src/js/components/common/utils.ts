@@ -21,7 +21,7 @@ export function date_2_str(m: Moment) {
 
 export function ava(p: Person) {
     return new Promise<string>((resolve, reject) => {
-            resolve("/static/emblems/people/incognito.svg")
+            resolve("/secure_static/get_ava/" + p.person_id)
         }
     )
 }

@@ -6,7 +6,8 @@ module.exports = {
         admin: './src/js/pages/admin.tsx',
         components: './src/js/pages/react-components.tsx',
         personal: './src/js/pages/personal.tsx',
-        login: './src/scss/login/index.scss'
+        login: './src/scss/login/index.scss',
+        person_card: './src/scss/cards/person_card/person_card.scss'
     },
     module: {
         rules: [

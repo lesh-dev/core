@@ -15,7 +15,11 @@ class Serializer(object):
 
     def serialize(self):
         return {
-            c: getattr(self, c).serialize() if hasattr(getattr(self, c), 'serialize') else getattr(self, c) for c in filter(lambda x: x != '_sa_instance_state' and not hasattr(getattr(self, x), 'all'), inspect(self).attrs.keys())
+            c: getattr(self, c).serialize() if
+            hasattr(getattr(self, c), 'serialize') else
+            getattr(self, c) for c in
+            filter(lambda x:
+                   x != '_sa_instance_state' and not hasattr(getattr(self, x), 'all'), inspect(self).attrs.keys())
         }
 
     @staticmethod
@@ -255,22 +259,32 @@ class DirectLogin(db.Model, Serializer):
     person = db.relationship('Person', lazy='joined')
 
 
-
 class Contact(db.Model, Serializer):
     __tablename__ = 'contact'
     id = NamedColumn(db.Integer,
                      nick='id',
                      primary_key=True,
                      autoincrement=True)
-    person_id = NamedColumn(db.Integer,
-                         MarkedForeignKey(Person.person_id),
-                         nick='человек',
-                         nullable=False)
-    person = db.relationship('Person', lazy='joined')
-    name = NamedColumn(db.Text,
-                       nick='название',
-                       nullable=False)
-    value = NamedColumn(db.Text, nick='значение', nullable=False)
+    person_id = NamedColumn(
+        db.Integer,
+        MarkedForeignKey(Person.person_id),
+        nick='человек',
+        nullable=False
+    )
+    person = db.relationship(
+        'Person',
+        lazy='joined'
+    )
+    name = NamedColumn(
+        db.Text,
+        nick='название',
+        nullable=False
+    )
+    value = NamedColumn(
+        db.Text,
+        nick='значение',
+        nullable=False
+    )
 
 
 class School(db.Model, Serializer):
@@ -294,24 +308,36 @@ class School(db.Model, Serializer):
             name='school_type'),
         nick="тип",
         nullable=False)  # enum:(летняя, зимняя, весенняя) TODO: simplify
-    school_date_start = NamedColumn(db.Text,
-                                    nick="дата начала",
-                                    nullable=False)  # дата начала
-    school_date_end = NamedColumn(db.Text,
-                                  nick="дата конца",
-                                  nullable=False)  # дата конца
-    school_location = NamedColumn(db.Text,
-                                  nick="место проведения",
-                                  nullable=False)  # место проведения (2.7+)
-    school_coords = NamedColumn(db.Text,
-                                  nick="координаты проведения",
-                                  nullable=False)  # координаты
-    school_created = NamedColumn(db.Text,
-                                 nick="дата создания",
-                                 nullable=False)  # utc timestamp
-    school_modified = NamedColumn(db.Text,
-                                  nick="последнее изменение",
-                                  nullable=False)  # utc timestamp
+    school_date_start = NamedColumn(
+        db.Text,
+        nick="дата начала",
+        nullable=False
+    )  # дата начала
+    school_date_end = NamedColumn(
+        db.Text,
+        nick="дата конца",
+        nullable=False
+    )  # дата конца
+    school_location = NamedColumn(
+        db.Text,
+        nick="место проведения",
+        nullable=False
+    )  # место проведения (2.7+)
+    school_coords = NamedColumn(
+        db.Text,
+        nick="координаты проведения",
+        nullable=False
+    )  # координаты
+    school_created = NamedColumn(
+        db.Text,
+        nick="дата создания",
+        nullable=False
+    )  # utc timestamp
+    school_modified = NamedColumn(
+        db.Text,
+        nick="последнее изменение",
+        nullable=False
+    )  # utc timestamp
     school_changedby = NamedColumn(db.Text,
                                    nick="изменивший",
                                    nullable=False)  # user name

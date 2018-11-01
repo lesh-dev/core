@@ -4,14 +4,14 @@
     "tests.TestSpeed.generated.TestSpeed.test_course_list": 0.11551219699904322,
     "tests.TestSpeed.generated.TestSpeed.test_course_teachers_list": 0.3373379616008606,
     "tests.TestSpeed.generated.TestSpeed.test_department_list": 0.0014532711997162552,
-    "tests.TestSpeed.generated.TestSpeed.test_direct_login_list": 0.003032454600906931,
-    "tests.TestSpeed.generated.TestSpeed.test_exam_list": 0.9958888273002231,
-    "tests.TestSpeed.generated.TestSpeed.test_notification_list": 0.0005926532990997657,
+    "tests.TestSpeed.generated.TestSpeed.test_direct_login_list": 0.002962937200209126,
+    "tests.TestSpeed.generated.TestSpeed.test_exam_list": 0.98056422189984,
+    "tests.TestSpeed.generated.TestSpeed.test_notification_list": 0.0005551481997827068,
     "tests.TestSpeed.generated.TestSpeed.test_person_comment_list": 0.6916203753993614,
     "tests.TestSpeed.generated.TestSpeed.test_person_list": 0.38192345809948164,
-    "tests.TestSpeed.generated.TestSpeed.test_person_school_list": 0.3863003562990343,
-    "tests.TestSpeed.generated.TestSpeed.test_problems_list": 0.004255588000523858,
+    "tests.TestSpeed.generated.TestSpeed.test_person_school_list": 0.38585284230066463,
+    "tests.TestSpeed.generated.TestSpeed.test_problems_list": 0.003879244600830134,
     "tests.TestSpeed.generated.TestSpeed.test_school_list": 0.003310458800115157,
-    "tests.TestSpeed.generated.TestSpeed.test_solutions_list": 0.6987795023000217,
-    "tests.TestSpeed.generated.TestSpeed.test_submission_list": 0.001841236300242599
+    "tests.TestSpeed.generated.TestSpeed.test_solutions_list": 0.6653401800009305,
+    "tests.TestSpeed.generated.TestSpeed.test_submission_list": 0.0016191401999094523
 }

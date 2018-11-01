@@ -3,8 +3,9 @@ import * as ReactDOM from "react-dom";
 import {BrowserRouter} from "react-router-dom";
 import {Person} from "../generated/interfaces";
 import {get_profile} from "../api/personal"
-import {PersonCard} from "../components/common/Cards/PersonCard";
 import {Spinner} from "../components/common/Spinner";
+import {person_fill} from "../generated/api_connect";
+import {Contacts} from "../components/common/Lists/Contacts";
 
 interface PersonalState {
     person: Person
@@ -13,11 +14,20 @@ interface PersonalState {
 class Personal extends React.Component<undefined, PersonalState> {
     constructor(props: any) {
         super(props);
-        get_profile().then(result => this.setState({person: result}), error => console.log(error))
+        get_profile().then(
+            result => {
+            person_fill(result).then(
+                (valueP: Person) => this.setState({person: valueP}),
+                error => console.log(error))
+        },
+            error => console.log(error))
     }
+
     render() {
         if (this.state) {
-            return <PersonCard person={this.state.person}/>
+            return <div>
+                <Contacts person={this.state.person}/>
+            </div>
         } else {
             return <Spinner/>
         }
@@ -26,7 +36,5 @@ class Personal extends React.Component<undefined, PersonalState> {
 
 
 ReactDOM.render((
-    <BrowserRouter>
-        <Personal/>
-    </BrowserRouter>
+    <Personal/>
 ), document.getElementById('mount-point'));
