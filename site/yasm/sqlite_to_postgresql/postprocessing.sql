@@ -1,3 +1,5 @@
+SELECT pg_catalog.set_config('search_path', 'public', false);
+
 SELECT setval('contact_id_seq', (SELECT max(id) FROM contact));
 SELECT setval('contestants_contestants_id_seq', (SELECT max(contestants_id) FROM contestants));
 SELECT setval('course_course_id_seq', (SELECT max(course_id) FROM course));
@@ -12,4 +14,3 @@ SELECT setval('problems_problems_id_seq', (SELECT max(problems_id) FROM problems
 SELECT setval('school_school_id_seq', (SELECT max(school_id) FROM school));
 SELECT setval('solutions_solutions_id_seq', (SELECT max(solutions_id) FROM solutions));
 SELECT setval('submission_submission_id_seq', (SELECT max(submission_id) FROM submission));
-SELECT setval('users_id_seq', (SELECT max(id) FROM users));

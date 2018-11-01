@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 set -e
 set -x
-psql -d lesh --single-transaction -v ON_ERROR_STOP=on -f ./schema.sql
-./dump-data.sh ../fizlesh.sqlite3 > /tmp/sqlite-data.sql
-psql -d lesh --single-transaction -v ON_ERROR_STOP=on -f /tmp/sqlite-data.sql
-psql -d lesh --single-transaction -v ON_ERROR_STOP=on -f ./postprocessing.sql
+
+DIR=$(dirname $0)
+DBFILE="$1"
+
+cat $DIR/schema.sql > /tmp/migration.sql
+$DIR/dump-data.sh $DBFILE >> /tmp/migration.sql
+cat $DIR/postprocessing.sql >> /tmp/migration.sql
+psql -d lesh --single-transaction -v ON_ERROR_STOP=on -f /tmp/migration.sql
 
