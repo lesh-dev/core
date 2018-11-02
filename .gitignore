@@ -26,3 +26,6 @@ fizlesh.sqlite3
 tests/root_password
 node_modules
 venv
+site/yasm/instance/secure_static/avas/*
+site/yasm/tests/instance
+site/yasm/instance/ui/package-lock.json
