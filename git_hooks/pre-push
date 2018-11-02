@@ -1,0 +1,22 @@
+#! /usr/bin/zsh
+ROOT=$(git rev-parse --show-toplevel)
+echo "git root: $ROOT"
+
+OUTPUT=$(git status --porcelain)
+if [[ $OUTPUT != '' ]]; then
+    echo 'Cant push: there are ancommited changes:'
+    echo "'$OUTPUT'"
+    exit 1;
+fi
+
+
+cd $ROOT/site/yasm/
+OUTPUT=$($ROOT/site/yasm/venv/bin/flake8)
+if [[ $OUTPUT != '' ]]; then
+    echo 'Cant push: flake8 output is not empty:'
+    echo "'$OUTPUT'";
+    exit 1;
+fi
+
+exit 0
+
