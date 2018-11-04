@@ -1,9 +1,9 @@
 .horizontal_nav {
-    --entry-bg-color: green;
+    --entry-bg-color: #bbbabb;
     --entry-padding: 16px;
     --entry-font: 16px;
     --entry-text-color: white;
-    --entry-bg-hov-color: #3e8e41;
+    --entry-bg-hov-color: #c6c4c2;
     --ddb-content-bg-color: #f1f1f1;
     --ddb-content-bg-hov-color: #ddd;
     --ddb-content-text-color: black;
@@ -11,21 +11,30 @@
     --ddb-button-bg-color: var(--entry-bg-color);
     --ddb-button-text-color: white;
     --ddb-arrow-color: black;
+    --menu-height: 60px;
+    --border: solid 1px rgba(255, 83, 0, 0.57);
+    height: var(--menu-height);
+    border-bottom: var(--border);
+    border-top: var(--border);
+
 }
 
 .horizontal_nav__element {
-    display: inline-block;
+    padding-left: 16px;
+    padding-right: 16px;
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
     background: var(--entry-bg-color);
-    padding: var(--entry-padding);
     font: var(--entry-font);
     color: var(--entry-text-color);
+    text-decoration: none;
 }
 
 .horizontal_nav__element:hover {
     background: var(--entry-bg-hov-color);
 }
 
-.horizontal_nav__element a {
-    color: var(--entry-text-color);
-    text-decoration: none;
+.horizontal_nav__end {
+    float: right;
 }

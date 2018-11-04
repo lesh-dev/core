@@ -11,7 +11,8 @@ module = Blueprint('personal', __name__, url_prefix='/personal')
 def index():
     return render_template(
         "personal/base.html",
-        menu=menu
+        menu=menu,
+        person=current_user,
     )
 
 

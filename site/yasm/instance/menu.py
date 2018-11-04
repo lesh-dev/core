@@ -40,9 +40,4 @@ menu = [
             ]
         ]
     ],
-    [
-        "Logout",
-        False,
-        "/login/logout"
-    ]
 ]

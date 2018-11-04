@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from instance.database import *
+import instance.database
 from flask_login import login_required
 from instance.rights_decorator import has_rights
 
@@ -9,22 +9,20 @@ module = Blueprint('api', __name__, url_prefix='/api')
 @module.route("/notification_list", methods=['GET'])
 @has_rights('admin')
 @login_required
-def notification_list(req=None, raw=False):
+def notification_list(req=None):
     regular = [
         'notification_id',
         'mail_group',
         'notification_text',
         'notification_html',
     ]
-    additional = {
-    }
     field = {
-        'notification_id': Notification.notification_id,
-        'mail_group': Notification.mail_group,
-        'notification_text': Notification.notification_text,
-        'notification_html': Notification.notification_html,
+        'notification_id': instance.database.Notification.notification_id,
+        'mail_group': instance.database.Notification.mail_group,
+        'notification_text': instance.database.Notification.notification_text,
+        'notification_html': instance.database.Notification.notification_html,
     }
-    query = Notification.query
+    query = instance.database.Notification.query
     col = request.args.items() if req is None else req.items()
     for arg, val in col:
         if arg in regular:
@@ -33,11 +31,6 @@ def notification_list(req=None, raw=False):
     ans = []
     for entry in query:
         ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
     return jsonify({
         'length': len(ans),
         'values': ans
@@ -47,7 +40,7 @@ def notification_list(req=None, raw=False):
 @module.route("/department_list", methods=['GET'])
 @has_rights('admin')
 @login_required
-def department_list(req=None, raw=False):
+def department_list(req=None):
     regular = [
         'department_id',
         'department_title',
@@ -55,18 +48,14 @@ def department_list(req=None, raw=False):
         'department_modified',
         'department_changedby',
     ]
-    additional = {
-        'person_list': {'length': 0, 'values': []},
-        'person_school_list': {'length': 0, 'values': []},
-    }
     field = {
-        'department_id': Department.department_id,
-        'department_title': Department.department_title,
-        'department_created': Department.department_created,
-        'department_modified': Department.department_modified,
-        'department_changedby': Department.department_changedby,
+        'department_id': instance.database.Department.department_id,
+        'department_title': instance.database.Department.department_title,
+        'department_created': instance.database.Department.department_created,
+        'department_modified': instance.database.Department.department_modified,
+        'department_changedby': instance.database.Department.department_changedby,
     }
-    query = Department.query
+    query = instance.database.Department.query
     col = request.args.items() if req is None else req.items()
     for arg, val in col:
         if arg in regular:
@@ -75,11 +64,6 @@ def department_list(req=None, raw=False):
     ans = []
     for entry in query:
         ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
     return jsonify({
         'length': len(ans),
         'values': ans
@@ -89,7 +73,7 @@ def department_list(req=None, raw=False):
 @module.route("/person_list", methods=['GET'])
 @has_rights('admin')
 @login_required
-def person_list(req=None, raw=False):
+def person_list(req=None):
     regular = [
         'person_id',
         'rights',
@@ -126,51 +110,43 @@ def person_list(req=None, raw=False):
         'person_modified',
         'person_changedby',
     ]
-    additional = {
-        'direct_login_list': {'length': 0, 'values': []},
-        'contact_list': {'length': 0, 'values': []},
-        'course_teachers_list': {'length': 0, 'values': []},
-        'exam_list': {'length': 0, 'values': []},
-        'person_school_list': {'length': 0, 'values': []},
-        'person_comment_list': {'length': 0, 'values': []},
-    }
     field = {
-        'person_id': Person.person_id,
-        'rights': Person.rights,
-        'last_name': Person.last_name,
-        'first_name': Person.first_name,
-        'patronymic': Person.patronymic,
-        'nick_name': Person.nick_name,
-        'birth_date': Person.birth_date,
-        'passport_data': Person.passport_data,
-        'school': Person.school,
-        'school_city': Person.school_city,
-        'ank_class': Person.ank_class,
-        'current_class': Person.current_class,
-        'phone': Person.phone,
-        'cellular': Person.cellular,
-        'email': Person.email,
-        'skype': Person.skype,
-        'social_profile': Person.social_profile,
-        'is_teacher': Person.is_teacher,
-        'is_student': Person.is_student,
-        'favourites': Person.favourites,
-        'achievements': Person.achievements,
-        'hobby': Person.hobby,
-        'lesh_ref': Person.lesh_ref,
-        'forest_1': Person.forest_1,
-        'forest_2': Person.forest_2,
-        'forest_3': Person.forest_3,
-        'tent_capacity': Person.tent_capacity,
-        'tour_requisites': Person.tour_requisites,
-        'anketa_status': Person.anketa_status,
-        'user_agent': Person.user_agent,
-        'department_id': Person.department_id,
-        'person_created': Person.person_created,
-        'person_modified': Person.person_modified,
-        'person_changedby': Person.person_changedby,
+        'person_id': instance.database.Person.person_id,
+        'rights': instance.database.Person.rights,
+        'last_name': instance.database.Person.last_name,
+        'first_name': instance.database.Person.first_name,
+        'patronymic': instance.database.Person.patronymic,
+        'nick_name': instance.database.Person.nick_name,
+        'birth_date': instance.database.Person.birth_date,
+        'passport_data': instance.database.Person.passport_data,
+        'school': instance.database.Person.school,
+        'school_city': instance.database.Person.school_city,
+        'ank_class': instance.database.Person.ank_class,
+        'current_class': instance.database.Person.current_class,
+        'phone': instance.database.Person.phone,
+        'cellular': instance.database.Person.cellular,
+        'email': instance.database.Person.email,
+        'skype': instance.database.Person.skype,
+        'social_profile': instance.database.Person.social_profile,
+        'is_teacher': instance.database.Person.is_teacher,
+        'is_student': instance.database.Person.is_student,
+        'favourites': instance.database.Person.favourites,
+        'achievements': instance.database.Person.achievements,
+        'hobby': instance.database.Person.hobby,
+        'lesh_ref': instance.database.Person.lesh_ref,
+        'forest_1': instance.database.Person.forest_1,
+        'forest_2': instance.database.Person.forest_2,
+        'forest_3': instance.database.Person.forest_3,
+        'tent_capacity': instance.database.Person.tent_capacity,
+        'tour_requisites': instance.database.Person.tour_requisites,
+        'anketa_status': instance.database.Person.anketa_status,
+        'user_agent': instance.database.Person.user_agent,
+        'department_id': instance.database.Person.department_id,
+        'person_created': instance.database.Person.person_created,
+        'person_modified': instance.database.Person.person_modified,
+        'person_changedby': instance.database.Person.person_changedby,
     }
-    query = Person.query
+    query = instance.database.Person.query
     col = request.args.items() if req is None else req.items()
     for arg, val in col:
         if arg in regular:
@@ -179,11 +155,6 @@ def person_list(req=None, raw=False):
     ans = []
     for entry in query:
         ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
     return jsonify({
         'length': len(ans),
         'values': ans
@@ -193,20 +164,18 @@ def person_list(req=None, raw=False):
 @module.route("/direct_login_list", methods=['GET'])
 @has_rights('admin')
 @login_required
-def direct_login_list(req=None, raw=False):
+def direct_login_list(req=None):
     regular = [
         'person_id',
         'login',
         'password_hash',
     ]
-    additional = {
-    }
     field = {
-        'person_id': DirectLogin.person_id,
-        'login': DirectLogin.login,
-        'password_hash': DirectLogin.password_hash,
+        'person_id': instance.database.DirectLogin.person_id,
+        'login': instance.database.DirectLogin.login,
+        'password_hash': instance.database.DirectLogin.password_hash,
     }
-    query = DirectLogin.query
+    query = instance.database.DirectLogin.query
     col = request.args.items() if req is None else req.items()
     for arg, val in col:
         if arg in regular:
@@ -215,11 +184,6 @@ def direct_login_list(req=None, raw=False):
     ans = []
     for entry in query:
         ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
     return jsonify({
         'length': len(ans),
         'values': ans
@@ -229,22 +193,20 @@ def direct_login_list(req=None, raw=False):
 @module.route("/contact_list", methods=['GET'])
 @has_rights('admin')
 @login_required
-def contact_list(req=None, raw=False):
+def contact_list(req=None):
     regular = [
         'id',
         'person_id',
         'name',
         'value',
     ]
-    additional = {
-    }
     field = {
-        'id': Contact.id,
-        'person_id': Contact.person_id,
-        'name': Contact.name,
-        'value': Contact.value,
+        'id': instance.database.Contact.id,
+        'person_id': instance.database.Contact.person_id,
+        'name': instance.database.Contact.name,
+        'value': instance.database.Contact.value,
     }
-    query = Contact.query
+    query = instance.database.Contact.query
     col = request.args.items() if req is None else req.items()
     for arg, val in col:
         if arg in regular:
@@ -253,11 +215,6 @@ def contact_list(req=None, raw=False):
     ans = []
     for entry in query:
         ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
     return jsonify({
         'length': len(ans),
         'values': ans
@@ -267,7 +224,7 @@ def contact_list(req=None, raw=False):
 @module.route("/school_list", methods=['GET'])
 @has_rights('admin')
 @login_required
-def school_list(req=None, raw=False):
+def school_list(req=None):
     regular = [
         'school_id',
         'school_title',
@@ -280,24 +237,19 @@ def school_list(req=None, raw=False):
         'school_modified',
         'school_changedby',
     ]
-    additional = {
-        'course_list': {'length': 0, 'values': []},
-        'person_school_list': {'length': 0, 'values': []},
-        'person_comment_list': {'length': 0, 'values': []},
-    }
     field = {
-        'school_id': School.school_id,
-        'school_title': School.school_title,
-        'school_type': School.school_type,
-        'school_date_start': School.school_date_start,
-        'school_date_end': School.school_date_end,
-        'school_location': School.school_location,
-        'school_coords': School.school_coords,
-        'school_created': School.school_created,
-        'school_modified': School.school_modified,
-        'school_changedby': School.school_changedby,
+        'school_id': instance.database.School.school_id,
+        'school_title': instance.database.School.school_title,
+        'school_type': instance.database.School.school_type,
+        'school_date_start': instance.database.School.school_date_start,
+        'school_date_end': instance.database.School.school_date_end,
+        'school_location': instance.database.School.school_location,
+        'school_coords': instance.database.School.school_coords,
+        'school_created': instance.database.School.school_created,
+        'school_modified': instance.database.School.school_modified,
+        'school_changedby': instance.database.School.school_changedby,
     }
-    query = School.query
+    query = instance.database.School.query
     col = request.args.items() if req is None else req.items()
     for arg, val in col:
         if arg in regular:
@@ -306,11 +258,6 @@ def school_list(req=None, raw=False):
     ans = []
     for entry in query:
         ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
     return jsonify({
         'length': len(ans),
         'values': ans
@@ -320,7 +267,7 @@ def school_list(req=None, raw=False):
 @module.route("/course_list", methods=['GET'])
 @has_rights('admin')
 @login_required
-def course_list(req=None, raw=False):
+def course_list(req=None):
     regular = [
         'course_id',
         'course_title',
@@ -335,25 +282,21 @@ def course_list(req=None, raw=False):
         'course_modified',
         'course_changedby',
     ]
-    additional = {
-        'course_teachers_list': {'length': 0, 'values': []},
-        'exam_list': {'length': 0, 'values': []},
-    }
     field = {
-        'course_id': Course.course_id,
-        'course_title': Course.course_title,
-        'school_id': Course.school_id,
-        'course_cycle': Course.course_cycle,
-        'target_class': Course.target_class,
-        'course_desc': Course.course_desc,
-        'course_type': Course.course_type,
-        'course_area': Course.course_area,
-        'course_comment': Course.course_comment,
-        'course_created': Course.course_created,
-        'course_modified': Course.course_modified,
-        'course_changedby': Course.course_changedby,
+        'course_id': instance.database.Course.course_id,
+        'course_title': instance.database.Course.course_title,
+        'school_id': instance.database.Course.school_id,
+        'course_cycle': instance.database.Course.course_cycle,
+        'target_class': instance.database.Course.target_class,
+        'course_desc': instance.database.Course.course_desc,
+        'course_type': instance.database.Course.course_type,
+        'course_area': instance.database.Course.course_area,
+        'course_comment': instance.database.Course.course_comment,
+        'course_created': instance.database.Course.course_created,
+        'course_modified': instance.database.Course.course_modified,
+        'course_changedby': instance.database.Course.course_changedby,
     }
-    query = Course.query
+    query = instance.database.Course.query
     col = request.args.items() if req is None else req.items()
     for arg, val in col:
         if arg in regular:
@@ -362,11 +305,6 @@ def course_list(req=None, raw=False):
     ans = []
     for entry in query:
         ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
     return jsonify({
         'length': len(ans),
         'values': ans
@@ -376,7 +314,7 @@ def course_list(req=None, raw=False):
 @module.route("/course_teachers_list", methods=['GET'])
 @has_rights('admin')
 @login_required
-def course_teachers_list(req=None, raw=False):
+def course_teachers_list(req=None):
     regular = [
         'course_teachers_id',
         'course_id',
@@ -385,17 +323,15 @@ def course_teachers_list(req=None, raw=False):
         'course_teachers_modified',
         'course_teachers_changedby',
     ]
-    additional = {
-    }
     field = {
-        'course_teachers_id': CourseTeachers.course_teachers_id,
-        'course_id': CourseTeachers.course_id,
-        'course_teacher_id': CourseTeachers.course_teacher_id,
-        'course_teachers_created': CourseTeachers.course_teachers_created,
-        'course_teachers_modified': CourseTeachers.course_teachers_modified,
-        'course_teachers_changedby': CourseTeachers.course_teachers_changedby,
+        'course_teachers_id': instance.database.CourseTeachers.course_teachers_id,
+        'course_id': instance.database.CourseTeachers.course_id,
+        'course_teacher_id': instance.database.CourseTeachers.course_teacher_id,
+        'course_teachers_created': instance.database.CourseTeachers.course_teachers_created,
+        'course_teachers_modified': instance.database.CourseTeachers.course_teachers_modified,
+        'course_teachers_changedby': instance.database.CourseTeachers.course_teachers_changedby,
     }
-    query = CourseTeachers.query
+    query = instance.database.CourseTeachers.query
     col = request.args.items() if req is None else req.items()
     for arg, val in col:
         if arg in regular:
@@ -404,11 +340,6 @@ def course_teachers_list(req=None, raw=False):
     ans = []
     for entry in query:
         ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
     return jsonify({
         'length': len(ans),
         'values': ans
@@ -418,7 +349,7 @@ def course_teachers_list(req=None, raw=False):
 @module.route("/exam_list", methods=['GET'])
 @has_rights('admin')
 @login_required
-def exam_list(req=None, raw=False):
+def exam_list(req=None):
     regular = [
         'exam_id',
         'student_person_id',
@@ -430,20 +361,18 @@ def exam_list(req=None, raw=False):
         'exam_modified',
         'exam_changedby',
     ]
-    additional = {
-    }
     field = {
-        'exam_id': Exam.exam_id,
-        'student_person_id': Exam.student_person_id,
-        'course_id': Exam.course_id,
-        'exam_status': Exam.exam_status,
-        'deadline_date': Exam.deadline_date,
-        'exam_comment': Exam.exam_comment,
-        'exam_created': Exam.exam_created,
-        'exam_modified': Exam.exam_modified,
-        'exam_changedby': Exam.exam_changedby,
+        'exam_id': instance.database.Exam.exam_id,
+        'student_person_id': instance.database.Exam.student_person_id,
+        'course_id': instance.database.Exam.course_id,
+        'exam_status': instance.database.Exam.exam_status,
+        'deadline_date': instance.database.Exam.deadline_date,
+        'exam_comment': instance.database.Exam.exam_comment,
+        'exam_created': instance.database.Exam.exam_created,
+        'exam_modified': instance.database.Exam.exam_modified,
+        'exam_changedby': instance.database.Exam.exam_changedby,
     }
-    query = Exam.query
+    query = instance.database.Exam.query
     col = request.args.items() if req is None else req.items()
     for arg, val in col:
         if arg in regular:
@@ -452,11 +381,6 @@ def exam_list(req=None, raw=False):
     ans = []
     for entry in query:
         ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
     return jsonify({
         'length': len(ans),
         'values': ans
@@ -466,7 +390,7 @@ def exam_list(req=None, raw=False):
 @module.route("/person_school_list", methods=['GET'])
 @has_rights('admin')
 @login_required
-def person_school_list(req=None, raw=False):
+def person_school_list(req=None):
     regular = [
         'person_school_id',
         'member_person_id',
@@ -485,27 +409,25 @@ def person_school_list(req=None, raw=False):
         'frm',
         'tll',
     ]
-    additional = {
-    }
     field = {
-        'person_school_id': PersonSchool.person_school_id,
-        'member_person_id': PersonSchool.member_person_id,
-        'member_department_id': PersonSchool.member_department_id,
-        'school_id': PersonSchool.school_id,
-        'is_student': PersonSchool.is_student,
-        'is_teacher': PersonSchool.is_teacher,
-        'curatorship': PersonSchool.curatorship,
-        'curator_group': PersonSchool.curator_group,
-        'current_class': PersonSchool.current_class,
-        'courses_needed': PersonSchool.courses_needed,
-        'person_school_comment': PersonSchool.person_school_comment,
-        'person_school_created': PersonSchool.person_school_created,
-        'person_school_modified': PersonSchool.person_school_modified,
-        'person_school_changedby': PersonSchool.person_school_changedby,
-        'frm': PersonSchool.frm,
-        'tll': PersonSchool.tll,
+        'person_school_id': instance.database.PersonSchool.person_school_id,
+        'member_person_id': instance.database.PersonSchool.member_person_id,
+        'member_department_id': instance.database.PersonSchool.member_department_id,
+        'school_id': instance.database.PersonSchool.school_id,
+        'is_student': instance.database.PersonSchool.is_student,
+        'is_teacher': instance.database.PersonSchool.is_teacher,
+        'curatorship': instance.database.PersonSchool.curatorship,
+        'curator_group': instance.database.PersonSchool.curator_group,
+        'current_class': instance.database.PersonSchool.current_class,
+        'courses_needed': instance.database.PersonSchool.courses_needed,
+        'person_school_comment': instance.database.PersonSchool.person_school_comment,
+        'person_school_created': instance.database.PersonSchool.person_school_created,
+        'person_school_modified': instance.database.PersonSchool.person_school_modified,
+        'person_school_changedby': instance.database.PersonSchool.person_school_changedby,
+        'frm': instance.database.PersonSchool.frm,
+        'tll': instance.database.PersonSchool.tll,
     }
-    query = PersonSchool.query
+    query = instance.database.PersonSchool.query
     col = request.args.items() if req is None else req.items()
     for arg, val in col:
         if arg in regular:
@@ -514,11 +436,6 @@ def person_school_list(req=None, raw=False):
     ans = []
     for entry in query:
         ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
     return jsonify({
         'length': len(ans),
         'values': ans
@@ -528,7 +445,7 @@ def person_school_list(req=None, raw=False):
 @module.route("/person_comment_list", methods=['GET'])
 @has_rights('admin')
 @login_required
-def person_comment_list(req=None, raw=False):
+def person_comment_list(req=None):
     regular = [
         'person_comment_id',
         'comment_text',
@@ -541,21 +458,19 @@ def person_comment_list(req=None, raw=False):
         'person_comment_deleted',
         'person_comment_changedby',
     ]
-    additional = {
-    }
     field = {
-        'person_comment_id': PersonComment.person_comment_id,
-        'comment_text': PersonComment.comment_text,
-        'blamed_person_id': PersonComment.blamed_person_id,
-        'school_id': PersonComment.school_id,
-        'owner_login': PersonComment.owner_login,
-        'record_acl': PersonComment.record_acl,
-        'person_comment_created': PersonComment.person_comment_created,
-        'person_comment_modified': PersonComment.person_comment_modified,
-        'person_comment_deleted': PersonComment.person_comment_deleted,
-        'person_comment_changedby': PersonComment.person_comment_changedby,
+        'person_comment_id': instance.database.PersonComment.person_comment_id,
+        'comment_text': instance.database.PersonComment.comment_text,
+        'blamed_person_id': instance.database.PersonComment.blamed_person_id,
+        'school_id': instance.database.PersonComment.school_id,
+        'owner_login': instance.database.PersonComment.owner_login,
+        'record_acl': instance.database.PersonComment.record_acl,
+        'person_comment_created': instance.database.PersonComment.person_comment_created,
+        'person_comment_modified': instance.database.PersonComment.person_comment_modified,
+        'person_comment_deleted': instance.database.PersonComment.person_comment_deleted,
+        'person_comment_changedby': instance.database.PersonComment.person_comment_changedby,
     }
-    query = PersonComment.query
+    query = instance.database.PersonComment.query
     col = request.args.items() if req is None else req.items()
     for arg, val in col:
         if arg in regular:
@@ -564,11 +479,6 @@ def person_comment_list(req=None, raw=False):
     ans = []
     for entry in query:
         ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
     return jsonify({
         'length': len(ans),
         'values': ans
@@ -578,7 +488,7 @@ def person_comment_list(req=None, raw=False):
 @module.route("/submission_list", methods=['GET'])
 @has_rights('admin')
 @login_required
-def submission_list(req=None, raw=False):
+def submission_list(req=None):
     regular = [
         'submission_id',
         'mail',
@@ -590,20 +500,18 @@ def submission_list(req=None, raw=False):
         'processed',
         'contest_year',
     ]
-    additional = {
-    }
     field = {
-        'submission_id': Submission.submission_id,
-        'mail': Submission.mail,
-        'attachment': Submission.attachment,
-        'fileexchange': Submission.fileexchange,
-        'submission_timestamp': Submission.submission_timestamp,
-        'sender': Submission.sender,
-        'replied': Submission.replied,
-        'processed': Submission.processed,
-        'contest_year': Submission.contest_year,
+        'submission_id': instance.database.Submission.submission_id,
+        'mail': instance.database.Submission.mail,
+        'attachment': instance.database.Submission.attachment,
+        'fileexchange': instance.database.Submission.fileexchange,
+        'submission_timestamp': instance.database.Submission.submission_timestamp,
+        'sender': instance.database.Submission.sender,
+        'replied': instance.database.Submission.replied,
+        'processed': instance.database.Submission.processed,
+        'contest_year': instance.database.Submission.contest_year,
     }
-    query = Submission.query
+    query = instance.database.Submission.query
     col = request.args.items() if req is None else req.items()
     for arg, val in col:
         if arg in regular:
@@ -612,11 +520,6 @@ def submission_list(req=None, raw=False):
     ans = []
     for entry in query:
         ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
     return jsonify({
         'length': len(ans),
         'values': ans
@@ -626,7 +529,7 @@ def submission_list(req=None, raw=False):
 @module.route("/contestants_list", methods=['GET'])
 @has_rights('admin')
 @login_required
-def contestants_list(req=None, raw=False):
+def contestants_list(req=None):
     regular = [
         'contestants_id',
         'name',
@@ -642,25 +545,22 @@ def contestants_list(req=None, raw=False):
         'status',
         'contest_year',
     ]
-    additional = {
-        'solutions_list': {'length': 0, 'values': []},
-    }
     field = {
-        'contestants_id': Contestants.contestants_id,
-        'name': Contestants.name,
-        'mail': Contestants.mail,
-        'phone': Contestants.phone,
-        'parents': Contestants.parents,
-        'address': Contestants.address,
-        'school': Contestants.school,
-        'level': Contestants.level,
-        'teacher_name': Contestants.teacher_name,
-        'work': Contestants.work,
-        'fileexchange': Contestants.fileexchange,
-        'status': Contestants.status,
-        'contest_year': Contestants.contest_year,
+        'contestants_id': instance.database.Contestants.contestants_id,
+        'name': instance.database.Contestants.name,
+        'mail': instance.database.Contestants.mail,
+        'phone': instance.database.Contestants.phone,
+        'parents': instance.database.Contestants.parents,
+        'address': instance.database.Contestants.address,
+        'school': instance.database.Contestants.school,
+        'level': instance.database.Contestants.level,
+        'teacher_name': instance.database.Contestants.teacher_name,
+        'work': instance.database.Contestants.work,
+        'fileexchange': instance.database.Contestants.fileexchange,
+        'status': instance.database.Contestants.status,
+        'contest_year': instance.database.Contestants.contest_year,
     }
-    query = Contestants.query
+    query = instance.database.Contestants.query
     col = request.args.items() if req is None else req.items()
     for arg, val in col:
         if arg in regular:
@@ -669,11 +569,6 @@ def contestants_list(req=None, raw=False):
     ans = []
     for entry in query:
         ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
     return jsonify({
         'length': len(ans),
         'values': ans
@@ -683,7 +578,7 @@ def contestants_list(req=None, raw=False):
 @module.route("/problems_list", methods=['GET'])
 @has_rights('admin')
 @login_required
-def problems_list(req=None, raw=False):
+def problems_list(req=None):
     regular = [
         'problems_id',
         'contest_year',
@@ -692,18 +587,15 @@ def problems_list(req=None, raw=False):
         'people',
         'criteria',
     ]
-    additional = {
-        'solutions_list': {'length': 0, 'values': []},
-    }
     field = {
-        'problems_id': Problems.problems_id,
-        'contest_year': Problems.contest_year,
-        'problem_name': Problems.problem_name,
-        'problem_html': Problems.problem_html,
-        'people': Problems.people,
-        'criteria': Problems.criteria,
+        'problems_id': instance.database.Problems.problems_id,
+        'contest_year': instance.database.Problems.contest_year,
+        'problem_name': instance.database.Problems.problem_name,
+        'problem_html': instance.database.Problems.problem_html,
+        'people': instance.database.Problems.people,
+        'criteria': instance.database.Problems.criteria,
     }
-    query = Problems.query
+    query = instance.database.Problems.query
     col = request.args.items() if req is None else req.items()
     for arg, val in col:
         if arg in regular:
@@ -712,11 +604,6 @@ def problems_list(req=None, raw=False):
     ans = []
     for entry in query:
         ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
     return jsonify({
         'length': len(ans),
         'values': ans
@@ -726,7 +613,7 @@ def problems_list(req=None, raw=False):
 @module.route("/solutions_list", methods=['GET'])
 @has_rights('admin')
 @login_required
-def solutions_list(req=None, raw=False):
+def solutions_list(req=None):
     regular = [
         'solutions_id',
         'problem_id',
@@ -736,18 +623,16 @@ def solutions_list(req=None, raw=False):
         'resolution_author',
         'resolution_mark',
     ]
-    additional = {
-    }
     field = {
-        'solutions_id': Solutions.solutions_id,
-        'problem_id': Solutions.problem_id,
-        'contest_year': Solutions.contest_year,
-        'contestant_id': Solutions.contestant_id,
-        'resolution_text': Solutions.resolution_text,
-        'resolution_author': Solutions.resolution_author,
-        'resolution_mark': Solutions.resolution_mark,
+        'solutions_id': instance.database.Solutions.solutions_id,
+        'problem_id': instance.database.Solutions.problem_id,
+        'contest_year': instance.database.Solutions.contest_year,
+        'contestant_id': instance.database.Solutions.contestant_id,
+        'resolution_text': instance.database.Solutions.resolution_text,
+        'resolution_author': instance.database.Solutions.resolution_author,
+        'resolution_mark': instance.database.Solutions.resolution_mark,
     }
-    query = Solutions.query
+    query = instance.database.Solutions.query
     col = request.args.items() if req is None else req.items()
     for arg, val in col:
         if arg in regular:
@@ -756,14 +641,7 @@ def solutions_list(req=None, raw=False):
     ans = []
     for entry in query:
         ans.append(entry.serialize())
-    if raw:
-        return {
-            'length': len(ans),
-            'values': ans
-        }
     return jsonify({
         'length': len(ans),
         'values': ans
     })
-
-

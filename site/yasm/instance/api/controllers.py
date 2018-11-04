@@ -1,13 +1,16 @@
-from .generated import module, School, PersonSchool, Person, jsonify
+from .generated import module, jsonify
+from instance.database import School, PersonSchool, Person
 
 
 @module.route("/uninvited/<int:school_id>", methods=['GET'])
 def uninvited(school_id):
     sch = School.query.get(school_id)
     if sch:
-        invited = [x[0] for x in sch.
-            person_schools.order_by(PersonSchool.member_person_id).
-            with_entities(PersonSchool.member_person_id).all()]
+        invited = [x[0] for x in (sch
+                                  .person_schools
+                                  .order_by(PersonSchool.member_person_id)
+                                  .with_entities(PersonSchool.member_person_id).all())
+                   ]
         all = Person.query.ordered_by(Person.person_id).all()
         i = 0
         j = 0

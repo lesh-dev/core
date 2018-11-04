@@ -23,6 +23,7 @@ from instance.api.generated import problems_list
 from instance.api.generated import solutions_list
 yasm = instance.create()
 
+
 class TestSpeed(unittest.TestCase):
     @testinglib.load_result
     @testinglib.request_needed(yasm)
@@ -203,4 +204,3 @@ class TestSpeed(unittest.TestCase):
                 testinglib.result.set(time)
         else:
             testinglib.result.set(time)
-

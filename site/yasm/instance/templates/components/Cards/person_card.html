@@ -1,0 +1,19 @@
+{% macro person_card_css() %}
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/pack/person_card.css') }}">
+{% endmacro %}
+{% macro person_card_html(person) %}
+    <div class="person_card">
+        <img src="/secure_static/get_ava/{{ person.person_id }}" class="person_card__img"/>
+        <div class="person_card__text">
+            <div class="person_card__text__name">
+                {{ person.first_name }}
+                {{ person.last_name }}
+            </div>
+            {% if person.nick_name %}
+                <div class="person_card__text__nick">
+                    @{{ person.nick_name }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}

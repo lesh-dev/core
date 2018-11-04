@@ -3,6 +3,7 @@ from .database import db
 from .login import lm
 from .login.oauth2.base import Auth
 
+
 def create():
     yasm = Flask(__name__, instance_relative_config=True)
     yasm.config.from_object('config')
@@ -25,4 +26,6 @@ def create():
     yasm.register_blueprint(login.module)
     import instance.personal as personal
     yasm.register_blueprint(personal.module)
+    import instance.secure_static as secure_static
+    yasm.register_blueprint(secure_static.module)
     return yasm

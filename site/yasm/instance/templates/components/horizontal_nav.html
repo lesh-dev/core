@@ -1,6 +1,8 @@
-{% from "components/dropdown_button.html" import dropdown_button_html, dropdown_button_css, dropdown_button_js %}
+{% from "components/dropdown_button.html" import dropdown_button_html, dropdown_button_css, dropdown_button_js %}\
+{% from "components/Cards/person_card.html" import person_card_html, person_card_css %}
 {% macro horizontal_nav_css() %}
     {{ dropdown_button_css() }}
+    {{ person_card_css() }}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/components/horizontal_nav.css') }}">
 {% endmacro %}
 
@@ -8,18 +10,34 @@
     {{ dropdown_button_js() }}
 {% endmacro %}
 
-{% macro horizontal_nav_html(data, class="") %}
+{% macro horizontal_nav_html(data, person, class="") %}
     <div class={{ "horizontal_nav " + class}}>
         {% for key, list_type, values in data %}
             {% if list_type %}
                 {{ dropdown_button_html(key, values, class="horizontal_nav__element") }}
             {% else %}
-                <div class="horizontal_nav__element">
-                    <a href="{{ values }}">
-                        {{ key }}
-                    </a>
-                </div>
+                <a href="{{ values }}" class="horizontal_nav__element">
+                    <div>
+                            {{ key }}
+                    </div>
+                </a>
             {% endif %}
         {% endfor %}
+        <div class="horizontal_nav__end">
+            {% if person.is_authenticated %}
+                {{ person_card_html(person) }}
+                <a href="/login/logout" class="horizontal_nav__element">
+                    <div>
+                        Выйти
+                    </div>
+                </a>
+            {% else %}
+                <a href="/login" class="horizontal_nav__element">
+                    <div>
+                        Войти
+                    </div>
+                </a>
+            {% endif %}
+        </div>
     </div>
 {% endmacro %}

@@ -8,5 +8,7 @@ def has_rights(right):
         def decorated(*args, **kwargs):
             if current_user.is_authenticated and right in current_user.rights:
                 return f(*args, **kwargs)
+            else:
+                return "<h1>You have no power here!</h1>", 403
         return decorated
     return decorator

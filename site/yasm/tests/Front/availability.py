@@ -6,18 +6,7 @@ class Test200(unittest.TestCase):
     pass
 
 
-fronts = [
-    '/api/',
-    '/api/school_list',
-    '/api/person_list',
-    '/api/school_person_list',
-    '/api/person_school_list',
-    '/api/school',
-    '/api/person',
-    '/admin/',
-    '/admin/school',
-    '/public/'
-]
+fronts = []
 
 
 def create_reques_callback(url):
