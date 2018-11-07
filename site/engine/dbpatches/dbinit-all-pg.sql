@@ -19,11 +19,10 @@ SET default_with_oids = false;
 
 SET TIME ZONE 'Europe/Moscow';
 
---
--- Name: contact; Type: TABLE; Schema: public; Owner: lesh
---
+-- common tables
 DROP TABLE IF EXISTS public.xversion;
 DROP TABLE IF EXISTS public.pss;
+DROP TABLE IF EXISTS public.notification;
 
 DROP TABLE IF EXISTS public.contact;
 DROP TABLE IF EXISTS public.solutions;
@@ -40,9 +39,6 @@ CREATE TABLE public.contact (
 );
 ALTER TABLE public.contact OWNER TO lesh;
 
---
--- Name: contestants; Type: TABLE; Schema: public; Owner: lesh
---
 
 CREATE TABLE public.contestants (
     contestants_id serial primary key,
@@ -61,10 +57,6 @@ CREATE TABLE public.contestants (
 );
 ALTER TABLE public.contestants OWNER TO lesh;
 
---
--- Name: course; Type: TABLE; Schema: public; Owner: lesh
---
-
 
 DROP TABLE IF EXISTS public.exam;
 DROP TABLE IF EXISTS public.course_teachers;
@@ -75,7 +67,6 @@ DROP TABLE IF EXISTS public.person;
 DROP TABLE IF EXISTS public.school;
 DROP TABLE IF EXISTS public.department;
 
-DROP TABLE IF EXISTS public.notification;
 
 
 CREATE TABLE public.course (
@@ -92,13 +83,8 @@ CREATE TABLE public.course (
     course_area text,
     course_changedby text
 );
-
-
 ALTER TABLE public.course OWNER TO lesh;
 
---
--- Name: course_teachers; Type: TABLE; Schema: public; Owner: lesh
---
 
 CREATE TABLE public.course_teachers (
     course_teachers_id serial primary key,
@@ -108,13 +94,8 @@ CREATE TABLE public.course_teachers (
     course_teachers_modified timestamp with time zone DEFAULT now(),
     course_teachers_changedby text
 );
-
-
 ALTER TABLE public.course_teachers OWNER TO lesh;
 
---
--- Name: department; Type: TABLE; Schema: public; Owner: lesh
---
 
 CREATE TABLE public.department (
     department_id serial primary key,
@@ -123,13 +104,8 @@ CREATE TABLE public.department (
     department_modified timestamp with time zone DEFAULT now(),
     department_changedby text
 );
-
-
 ALTER TABLE public.department OWNER TO lesh;
 
---
--- Name: exam; Type: TABLE; Schema: public; Owner: lesh
---
 
 CREATE TABLE public.exam (
     exam_id serial primary key,
@@ -142,13 +118,8 @@ CREATE TABLE public.exam (
     exam_modified timestamp with time zone DEFAULT now(),
     exam_changedby text
 );
-
-
 ALTER TABLE public.exam OWNER TO lesh;
 
---
--- Name: notification; Type: TABLE; Schema: public; Owner: lesh
---
 
 CREATE TABLE public.notification (
     notification_id serial primary key,
@@ -156,13 +127,8 @@ CREATE TABLE public.notification (
     notification_text text,
     notification_html text
 );
-
-
 ALTER TABLE public.notification OWNER TO lesh;
 
---
--- Name: person; Type: TABLE; Schema: public; Owner: lesh
---
 
 CREATE TABLE public.person (
     person_id serial primary key,
@@ -205,13 +171,8 @@ CREATE TABLE public.person (
     school_period text,
     anketa_mode text
 );
-
-
 ALTER TABLE public.person OWNER TO lesh;
 
---
--- Name: person_comment; Type: TABLE; Schema: public; Owner: lesh
---
 
 CREATE TABLE public.person_comment (
     person_comment_id serial primary key,
@@ -225,13 +186,8 @@ CREATE TABLE public.person_comment (
     person_comment_deleted text,
     person_comment_changedby text
 );
-
-
 ALTER TABLE public.person_comment OWNER TO lesh;
 
---
--- Name: person_school; Type: TABLE; Schema: public; Owner: lesh
---
 
 CREATE TABLE public.person_school (
     person_school_id serial primary key,
@@ -242,23 +198,19 @@ CREATE TABLE public.person_school (
     is_teacher text,
     curatorship text,
     current_class text,
-    courses_needed bigint,
+    courses_needed varchar,
     person_school_created timestamp with time zone DEFAULT now(),
     person_school_modified timestamp with time zone DEFAULT now(),
     curator_group text,
     person_school_comment text,
     person_school_changedby text,
+-- WTF???????????????????????????????
     frm text,
     tll text,
     school_coords text
 );
-
-
 ALTER TABLE public.person_school OWNER TO lesh;
 
---
--- Name: problems; Type: TABLE; Schema: public; Owner: lesh
---
 
 CREATE TABLE public.problems (
     problems_id serial primary key,
@@ -268,13 +220,8 @@ CREATE TABLE public.problems (
     criteria text,
     contest_year text
 );
-
-
 ALTER TABLE public.problems OWNER TO lesh;
 
---
--- Name: pss; Type: TABLE; Schema: public; Owner: lesh
---
 
 CREATE TABLE public.pss (
     pss_id text NOT NULL,
@@ -283,13 +230,8 @@ CREATE TABLE public.pss (
     pss_modified timestamp with time zone DEFAULT now(),
     pss_changedby text
 );
-
-
 ALTER TABLE public.pss OWNER TO lesh;
 
---
--- Name: school; Type: TABLE; Schema: public; Owner: lesh
---
 
 CREATE TABLE public.school (
     school_id serial primary key,
@@ -303,13 +245,8 @@ CREATE TABLE public.school (
     school_changedby text,
     school_coords text
 );
-
-
 ALTER TABLE public.school OWNER TO lesh;
 
---
--- Name: solutions; Type: TABLE; Schema: public; Owner: lesh
---
 
 CREATE TABLE public.solutions (
     solutions_id serial primary key,
@@ -320,13 +257,8 @@ CREATE TABLE public.solutions (
     resolution_mark text,
     contest_year text
 );
-
-
 ALTER TABLE public.solutions OWNER TO lesh;
 
---
--- Name: submission; Type: TABLE; Schema: public; Owner: lesh
---
 
 CREATE TABLE public.submission (
     submission_id serial primary key,
@@ -343,9 +275,6 @@ CREATE TABLE public.submission (
 
 ALTER TABLE public.submission OWNER TO lesh;
 
---
--- Name: xversion; Type: TABLE; Schema: public; Owner: lesh
---
 
 CREATE TABLE public.xversion (
     db_version text
@@ -354,216 +283,109 @@ CREATE TABLE public.xversion (
 
 ALTER TABLE public.xversion OWNER TO lesh;
 
---
--- Name: school idx_school_pkey; Type: CONSTRAINT; Schema: public; Owner: lesh
---
 
 ALTER TABLE ONLY public.school
     ADD CONSTRAINT idx_school_pkey PRIMARY KEY (school_id);
 
 
---
--- Name: contestants idx_contestants_pkey; Type: CONSTRAINT; Schema: public; Owner: lesh
---
-
 ALTER TABLE ONLY public.contestants
     ADD CONSTRAINT idx_contestants_pkey PRIMARY KEY (contestants_id);
 
-
---
--- Name: problems idx_problems_pkey; Type: CONSTRAINT; Schema: public; Owner: lesh
---
 
 ALTER TABLE ONLY public.problems
     ADD CONSTRAINT idx_problems_pkey PRIMARY KEY (problems_id);
 
 
---
--- Name: solutions idx_solutions_pkey; Type: CONSTRAINT; Schema: public; Owner: lesh
---
-
 ALTER TABLE ONLY public.solutions
     ADD CONSTRAINT idx_solutions_pkey PRIMARY KEY (solutions_id);
 
-
---
--- Name: notification idx_notification_pkey; Type: CONSTRAINT; Schema: public; Owner: lesh
---
 
 ALTER TABLE ONLY public.notification
     ADD CONSTRAINT idx_notification_pkey PRIMARY KEY (notification_id);
 
 
---
--- Name: course idx_course_pkey; Type: CONSTRAINT; Schema: public; Owner: lesh
---
-
 ALTER TABLE ONLY public.course
     ADD CONSTRAINT idx_course_pkey PRIMARY KEY (course_id);
 
-
---
--- Name: course_teachers idx_course_teachers_pkey; Type: CONSTRAINT; Schema: public; Owner: lesh
---
 
 ALTER TABLE ONLY public.course_teachers
     ADD CONSTRAINT idx_course_teachers_pkey PRIMARY KEY (course_teachers_id);
 
 
---
--- Name: department idx_25079_department_pkey; Type: CONSTRAINT; Schema: public; Owner: lesh
---
-
 ALTER TABLE ONLY public.department
     ADD CONSTRAINT idx_department_pkey PRIMARY KEY (department_id);
 
-
---
--- Name: person idx_25085_person_pkey; Type: CONSTRAINT; Schema: public; Owner: lesh
---
 
 ALTER TABLE ONLY public.person
     ADD CONSTRAINT idx_person_pkey PRIMARY KEY (person_id);
 
 
---
--- Name: person_school idx_person_school_pkey; Type: CONSTRAINT; Schema: public; Owner: lesh
---
-
 ALTER TABLE ONLY public.person_school
     ADD CONSTRAINT idx_person_school_pkey PRIMARY KEY (person_school_id);
 
-
---
--- Name: exam idx_exam_pkey; Type: CONSTRAINT; Schema: public; Owner: lesh
---
 
 ALTER TABLE ONLY public.exam
     ADD CONSTRAINT idx_exam_pkey PRIMARY KEY (exam_id);
 
 
---
--- Name: submission idx_submission_pkey; Type: CONSTRAINT; Schema: public; Owner: lesh
---
-
 ALTER TABLE ONLY public.submission
     ADD CONSTRAINT idx_submission_pkey PRIMARY KEY (submission_id);
 
-
---
--- Name: person_comment idx_person_comment_pkey; Type: CONSTRAINT; Schema: public; Owner: lesh
---
 
 ALTER TABLE ONLY public.person_comment
     ADD CONSTRAINT idx_person_comment_pkey PRIMARY KEY (person_comment_id);
 
 
---
--- Name: pss idx_25121_sqlite_autoindex_pss_1; Type: CONSTRAINT; Schema: public; Owner: lesh
---
-
 ALTER TABLE ONLY public.pss
-    ADD CONSTRAINT idx_25121_sqlite_autoindex_pss_1 PRIMARY KEY (pss_id);
+    ADD CONSTRAINT idx_pss PRIMARY KEY (pss_id);
 
-
---
--- Name: contact idx_contact_pkey; Type: CONSTRAINT; Schema: public; Owner: lesh
---
 
 ALTER TABLE ONLY public.contact
     ADD CONSTRAINT idx_contact_pkey PRIMARY KEY (id);
 
 
---
--- Name: contact contact_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: lesh
---
-
 ALTER TABLE ONLY public.contact
     ADD CONSTRAINT contact_person_id_fkey FOREIGN KEY (person_id) REFERENCES public.person(person_id);
 
-
---
--- Name: course_teachers course_teachers_course_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: lesh
---
 
 ALTER TABLE ONLY public.course_teachers
     ADD CONSTRAINT course_teachers_course_id_fkey FOREIGN KEY (course_id) REFERENCES public.course(course_id);
 
 
---
--- Name: course_teachers course_teachers_course_teacher_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: lesh
---
-
 ALTER TABLE ONLY public.course_teachers
     ADD CONSTRAINT course_teachers_course_teacher_id_fkey FOREIGN KEY (course_teacher_id) REFERENCES public.person(person_id);
 
-
---
--- Name: exam exam_course_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: lesh
---
 
 ALTER TABLE ONLY public.exam
     ADD CONSTRAINT exam_course_id_fkey FOREIGN KEY (course_id) REFERENCES public.course(course_id);
 
 
---
--- Name: exam exam_student_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: lesh
---
-
 ALTER TABLE ONLY public.exam
     ADD CONSTRAINT exam_student_person_id_fkey FOREIGN KEY (student_person_id) REFERENCES public.person(person_id);
 
-
---
--- Name: person_comment person_comment_blamed_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: lesh
---
 
 ALTER TABLE ONLY public.person_comment
     ADD CONSTRAINT person_comment_blamed_person_id_fkey FOREIGN KEY (blamed_person_id) REFERENCES public.person(person_id);
 
 
---
--- Name: person_comment person_comment_school_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: lesh
---
-
 ALTER TABLE ONLY public.person_comment
     ADD CONSTRAINT person_comment_school_id_fkey FOREIGN KEY (school_id) REFERENCES public.school(school_id);
 
-
---
--- Name: person person_department_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: lesh
---
 
 ALTER TABLE ONLY public.person
     ADD CONSTRAINT person_department_id_fkey FOREIGN KEY (department_id) REFERENCES public.department(department_id);
 
 
---
--- Name: person_school person_school_member_department_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: lesh
---
-
 ALTER TABLE ONLY public.person_school
     ADD CONSTRAINT person_school_member_department_id_fkey FOREIGN KEY (member_department_id) REFERENCES public.department(department_id);
 
 
---
--- Name: person_school person_school_member_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: lesh
---
-
 ALTER TABLE ONLY public.person_school
     ADD CONSTRAINT person_school_member_person_id_fkey FOREIGN KEY (member_person_id) REFERENCES public.person(person_id);
 
-
---
--- Name: person_school person_school_school_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: lesh
---
 
 ALTER TABLE ONLY public.person_school
     ADD CONSTRAINT person_school_school_id_fkey FOREIGN KEY (school_id) REFERENCES public.school(school_id);
 
 -- Fix such "bigint" as '2+прак'
 ALTER TABLE public.person_school ALTER COLUMN courses_needed TYPE varchar;
-
---
--- PostgreSQL database dump complete
---
