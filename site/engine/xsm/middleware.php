@@ -76,9 +76,10 @@ function xsm_get_default_school()
 {
     $db = xdb_get();
     $query = "SELECT school_id FROM school ORDER BY school_date_start DESC LIMIT 1";
-    $school_sel = $db->query($query);
-    if ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
+    $school_sel = xdb_query($db, $query);
+    if ($school = xdb_fetch($school_sel)) {
         return $school['school_id'];
+    }
 
     echo "Warning: NO SCHOOLS FOUND AT ALL<br />";
     return XDB_INVALID_ID;
@@ -104,9 +105,10 @@ function xsm_get_school_by_title($school_title)
 {
     $db = xdb_get();
     $query = "SELECT school_id FROM school WHERE school_title = '$school_title'";
-    $school_sel = $db->query($query);
-    if ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
+    $school_sel = xdb_query($db, $query);
+    if ($school = xdb_fetch($school_sel)) {
         return $school['school_id'];
+    }
 
     return XDB_INVALID_ID;
 }
@@ -121,10 +123,9 @@ function xsm_get_all_course_info($db, $school_id)
         course_id, course_title
         FROM course WHERE school_id = '$school_id'
         ORDER BY course_title";
-    $courses_sel = $db->query($courses_query);
+    $courses_sel = xdb_query($db, $courses_query);
     $courses = array();
-    while ($course = $courses_sel->fetchArray(SQLITE3_ASSOC))
-    {
+    while ($course = xdb_fetch($courses_sel)) {
         $course_id = $course['course_id'];
         $course['teachers'] = array();
         $courses[$course_id] = $course;
@@ -139,8 +140,8 @@ function xsm_get_all_course_info($db, $school_id)
         (c.school_id = '$school_id') AND
         (ct.course_id = c.course_id)
         ORDER BY tp.last_name, tp.first_name";
-    $teachers_sel = $db->query($teachers_query);
-    while ($teachers_data = $teachers_sel->fetchArray(SQLITE3_ASSOC))
+    $teachers_sel = xdb_query($db, $teachers_query);
+    while ($teachers_data = xdb_fetch($teachers_sel))
     {
         $course_id = $teachers_data['course_id'];
         $course_teacher_id = $teachers_data['course_teacher_id'];
@@ -152,7 +153,7 @@ function xsm_get_all_course_info($db, $school_id)
 
 function xsm_get_separated_schools($db, $query, $current_school_id)
 {
-    $school_sel = $db->query($query);
+    $school_sel = xdb_query($db, $query);
     $shown_schools = array();
     $older_schools = array();
     $is_current_school_visible = false;
