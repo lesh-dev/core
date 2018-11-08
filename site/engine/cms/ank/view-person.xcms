@@ -270,17 +270,14 @@ function xsm_draw_person_comments($db, $person_id)
         </thead>
     <?php
     $comment_num = 0; // for auto-testing purposes (#525)
-    while ($comment_data = $comment_sel->fetchArray(SQLITE3_ASSOC)) {?>
-        <?php
-
+    while ($comment_data = xdb_fetch($comment_sel)) {
         $comment_id = xcms_get_key_or_enc($comment_data, "person_comment_id");
         $owner_login = xcms_get_key_or_enc($comment_data, "owner_login");
         $record_acl = xcms_get_key_or_enc($comment_data, "record_acl");
         $school_id = xcms_get_key_or_enc($comment_data, "school_id");
         $comment_text = xcms_html_wrap_by_crlf(xsm_highlight_links($comment_data["comment_text"]));
 
-        if ($record_acl == XSM_ACL_PRIVATE && !$xsm_private && !$xsm_admin)
-        {
+        if ($record_acl == XSM_ACL_PRIVATE && !$xsm_private && !$xsm_admin) {
             $comment_text = "(Конфиденциальный комментарий. Для просмотра обратитесь к Директорату)";
         }
 
@@ -294,13 +291,9 @@ function xsm_draw_person_comments($db, $person_id)
             <td class="ankList"><?php echo $school_id; ?></td>
             <td class="ankList"><?php echo $person_comment_created; ?></td>
             <td class="ankList"><?php
-                if ($record_acl == XSM_ACL_PRIVATE && !$xsm_private && !$xsm_admin)
-                {?>
-                    (Запрещено)
-                <?php
-                }
-                else
-                {?>
+                if ($record_acl == XSM_ACL_PRIVATE && !$xsm_private && !$xsm_admin) {?>
+                    (Запрещено)<?php
+                } else {?>
                     <a href="edit-person_comment&amp;person_comment_id=<?php echo $comment_id; ?>"
                         id="comment-edit-<?php echo $comment_num; ?>">Правка</a><?php
                 }?></td>
@@ -483,8 +476,7 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
             <th class="ankList">Дедлайн</th>
         </thead>
     <?php
-    while ($exam_data = $exam_sel->fetchArray(SQLITE3_ASSOC))
-    {
+    while ($exam_data = xdb_fetch($exam_sel)) {
         $exam_id = htmlspecialchars($exam_data["exam_id"]);
         $course_id = htmlspecialchars($exam_data["course_id"]);
         $course_title = htmlspecialchars($exam_data["course_title"]);

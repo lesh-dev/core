@@ -309,13 +309,11 @@ function xsm_show_all_person_list($sort_columns)
         </thead>
     <?php
     // initial fetch
-    while ($person)
-    {
+    while ($person) {
         $person_id = htmlspecialchars($person["person_id"]);
 
         $last_comments_html = "";
-        if ($show_comments)
-        {
+        if ($show_comments) {
             $xsm_private_str = XSM_ACL_PRIVATE;
             $comment_query = "SELECT * FROM person_comment
                 WHERE
@@ -329,16 +327,18 @@ function xsm_show_all_person_list($sort_columns)
             $comment_sel = xdb_query($db, $comment_query);
             $person_comment = array();
             while ($person_comment = xdb_fetch($comment_sel)) {
-                if ($last_comments_html)
+                if ($last_comments_html) {
                     $last_comments_html .= "<br/><br/>";
+                }
 
                 $comment_html = rtrim(xcms_get_key_or_enc($person_comment, "comment_text"));
                 $aux_params = xcms_url(array("person_comment_id" => $person_comment["person_comment_id"], "blamed_person_id" => $person_id));
                 $last_comments_html .= xcms_html_wrap_by_crlf($comment_html);
                 $last_comments_html .= " ".xcms_link("edit-person_comment$aux_params", "edit", "Правка");
             }
-            if ($last_comments_html)
+            if ($last_comments_html) {
                 $last_comments_html .= "<br/>";
+            }
 
             $aux_params = xcms_url(array("person_comment_id" => XDB_NEW, "blamed_person_id" => $person_id));
             $last_comments_html .= xcms_link("edit-person_comment$aux_params", "add", "Добавить комментарий");
@@ -378,7 +378,7 @@ function xsm_show_all_person_list($sort_columns)
             <td class="ankList status-col"><?php echo xsm_make_enum($person, "anketa_status"); ?></td>
         </tr>
         <?php
-        $person = $person_sel->fetchArray(SQLITE3_ASSOC);
+        $person = xdb_fetch($person_sel);
     }
     ?>
     </table>

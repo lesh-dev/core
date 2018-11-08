@@ -175,8 +175,7 @@ function xsm_show_ank_list()
             <th class="ankList">Статус</th>
         </thead>
     <?php
-    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
-    {
+    while ($person = xdb_fetch($person_sel)) {
         $person_id = htmlspecialchars($person["person_id"]);
         $fi = xsm_fi_enc($person);
         $fio = xsm_fio_enc($person);
@@ -253,8 +252,7 @@ function xsm_bulk_archive()
 
     $archived_ids = array();
 
-    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
-    {
+    while ($person = xdb_fetch($person_sel)) {
         $person_id = $person["person_id"];
         $archived_ids[] = $person_id;
         $person_link = xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID);

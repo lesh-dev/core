@@ -22,8 +22,7 @@ function xsm_output_person_list($person_select) {
         <th class="ankList">Контакты</th>
         </thead>
         <?php
-        while ($person = $person_select->fetchArray(SQLITE3_ASSOC))
-        {
+        while ($person = xdb_fetch($person_select)) {
             $person_id = htmlspecialchars($person["person_id"]);
 
             $fin = xsm_fin_enc($person);

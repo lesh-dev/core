@@ -30,8 +30,7 @@ function xsm_school_list()
             <th class="ankList">&nbsp;</th>
         </thead>
     <?php
-    while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
-    {
+    while ($school = xdb_fetch($school_sel)) {
         $school_id = htmlspecialchars($school["school_id"]);
         $member_count = xdb_count($db, "SELECT COUNT(*) AS cnt FROM person_school ps WHERE ps.school_id = $school_id");
         $course_count = xdb_count($db, "SELECT COUNT(*) AS cnt FROM course c WHERE c.school_id = $school_id");

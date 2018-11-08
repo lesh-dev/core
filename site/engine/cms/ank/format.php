@@ -450,8 +450,7 @@ function xsm_make_selector_ext($list_key, $name, $current_key, $title_pattern, $
     $sel = xdb_query($db, $query);
     $html = "<select name=\"$name\" id=\"$name-selector\" $attr>\n";
     $uniq_titles = array();
-    while ($object = $sel->fetchArray(SQLITE3_ASSOC))
-    {
+    while ($object = xdb_fetch($sel)) {
         $title = $title_pattern;
         foreach ($object as $key => $value)
             $title = str_replace("@@$key@", htmlspecialchars($value), $title);
@@ -472,7 +471,7 @@ function xsm_make_selector_ext($list_key, $name, $current_key, $title_pattern, $
         $html .= "<option $selected value=\"$key\">$title</option>\n";
     }
     $html .= "</select>";
-    $db->close();
+    xdb_close($db);
     return $html;
 }
 

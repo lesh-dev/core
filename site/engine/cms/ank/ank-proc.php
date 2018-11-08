@@ -82,13 +82,12 @@ function xsm_find_person_origin($db, $new_person)
 
     $new_phones = xsm_extract_person_phone_digits($new_person);
 
-    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
-    {
-        if ($person["anketa_status"] == "duplicate")
+    while ($person = xdb_fetch($person_sel)) {
+        if ($person["anketa_status"] == "duplicate") {
             continue;
+        }
 
-        foreach ($id_fields as $id_key)
-        {
+        foreach ($id_fields as $id_key) {
             $value = xcms_get_key_or($new_person, $id_key);
             if (xu_not_empty($value) && $value == $person[$id_key])
             {
@@ -100,8 +99,7 @@ function xsm_find_person_origin($db, $new_person)
         }
         // #885
         $old_phones = xsm_extract_person_phone_digits($person);
-        if (count(array_intersect($new_phones, $old_phones)))
-        {
+        if (count(array_intersect($new_phones, $old_phones))) {
             $matched_person_id = $person['person_id'];
             $matched_person = $person;
             return $matched_person;
