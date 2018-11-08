@@ -100,14 +100,12 @@ function xsm_clear_forest($db, $single_forest, $show_name_filter)
 
     $person_sel = xsm_get_forest_selector($db, $single_forest, $show_name_filter);
 
-    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
-    {
+    while ($person = xdb_fetch($person_sel)) {
         $person_id = htmlspecialchars($person["person_id"]);
         $person_ids[] = $person["person_id"];
     }
 
-    foreach ($person_ids as $person_id)
-    {
+    foreach ($person_ids as $person_id) {
         $person = xdb_get_entity_by_id('person', $person_id);
         $person["forest_1"] = 'undef';
         $person["forest_2"] = 'undef';
@@ -167,7 +165,7 @@ function xsm_show_tour_list()
         </thead>
     <?php
     $person_count = 0;
-    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC)) {
+    while ($person = xdb_fetch($person_sel)) {
         $person_count++;
         $person_id = htmlspecialchars($person["person_id"]);
         $fin = xsm_fin_enc($person);

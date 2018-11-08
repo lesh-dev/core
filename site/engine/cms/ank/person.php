@@ -102,8 +102,7 @@ function xsm_increase_class_numbers()
 
     $selected_persons = array();
 
-    while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
-    {
+    while ($person = xdb_fetch($person_sel)) {
         $person_id = $person["person_id"];
         $person_link = xsm_person_view_link($person_id, XSM_SCHOOL_ANK_ID, "", "/xsm/");
         $current_class = $person["current_class"];

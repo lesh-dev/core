@@ -175,8 +175,7 @@ function xsm_output_school_participants_list($person_sel, $school_id)
         <th class="ankList">Комментарий</th>
         </thead>
         <?php
-        while ($person = $person_sel->fetchArray(SQLITE3_ASSOC))
-        {
+        while ($person = xdb_fetch($person_sel)) {
             $person_id = htmlspecialchars($person["person_id"]);
 
             $fin = xsm_fin_enc($person);

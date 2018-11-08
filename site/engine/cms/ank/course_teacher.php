@@ -22,8 +22,7 @@ function xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id
     $teachers_sel = xdb_query($db, $teachers_query);
     $teachers_ht = "";
     $filtered = ($course_teacher_id_filter == XSM_CT_ALL);
-    while ($teachers_data = $teachers_sel->fetchArray(SQLITE3_ASSOC))
-    {
+    while ($teachers_data = xdb_fetch($teachers_sel)) {
         $teacher_fi = xsm_fi_enc($teachers_data);
         $course_teacher_id = $teachers_data['course_teacher_id'];
         if ($course_teacher_id == $course_teacher_id_filter)
@@ -31,8 +30,9 @@ function xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id
         $teacher_link = xsm_person_view_link($course_teacher_id, $school_id, $teacher_fi);
         $teachers_ht .= "$teacher_link ";
     }
-    if (!$filtered)
+    if (!$filtered) {
         return false;
+    }
     return $teachers_ht;
 }
 

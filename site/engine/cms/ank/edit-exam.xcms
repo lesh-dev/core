@@ -14,7 +14,7 @@ function xsm_edit_exam_operations($school_id, $student_person_id, $id)
 
 /**
   * Получение exam_id по person_id и course_id
-  * @return exam_id (или NULL)
+  * @return exam_id (или null)
   **/
 function xsm_get_exam_id($db, $course_id, $person_id)
 {
@@ -27,8 +27,9 @@ function xsm_get_exam_id($db, $course_id, $person_id)
         (e.course_id = $course_id)"
     );
 
-    if (!($exam_data = $exam_sel->fetchArray(SQLITE3_ASSOC)))
-        return NULL;
+    if (!($exam_data = xdb_fetch($exam_sel))) {
+        return null;
+    }
 
     return $exam_data['exam_id'];
 }

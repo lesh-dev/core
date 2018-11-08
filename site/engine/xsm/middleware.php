@@ -141,8 +141,7 @@ function xsm_get_all_course_info($db, $school_id)
         (ct.course_id = c.course_id)
         ORDER BY tp.last_name, tp.first_name";
     $teachers_sel = xdb_query($db, $teachers_query);
-    while ($teachers_data = xdb_fetch($teachers_sel))
-    {
+    while ($teachers_data = xdb_fetch($teachers_sel)) {
         $course_id = $teachers_data['course_id'];
         $course_teacher_id = $teachers_data['course_teacher_id'];
         $courses[$course_id]['teachers'][$course_teacher_id] = $teachers_data;
@@ -158,23 +157,22 @@ function xsm_get_separated_schools($db, $query, $current_school_id)
     $older_schools = array();
     $is_current_school_visible = false;
     $current_school = false;
-    while ($school = $school_sel->fetchArray(SQLITE3_ASSOC))
-    {
-        if ($school["school_id"] == $current_school_id)
+    while ($school = xdb_fetch($school_sel)) {
+        if ($school["school_id"] == $current_school_id) {
             $current_school = $school;
-
-        if (count($shown_schools) <= XSM_SCHOOL_COUNT)
-        {
-            $shown_schools[] = $school;
-            if ($school["school_id"] == $current_school_id)
-                $is_current_school_visible = true;
         }
-        else
+
+        if (count($shown_schools) <= XSM_SCHOOL_COUNT) {
+            $shown_schools[] = $school;
+            if ($school["school_id"] == $current_school_id) {
+                $is_current_school_visible = true;
+            }
+        } else {
             $older_schools[] = $school;
+        }
     }
 
-    if (!$is_current_school_visible && $current_school !== false)
-    {
+    if (!$is_current_school_visible && $current_school !== false) {
         $removed_school = array_pop($shown_schools);
         $shown_schools[] = $current_school;
         array_unshift($older_schools, $removed_school);
