@@ -19,7 +19,7 @@ function xsm_get_course_teachers($db, $course_id, $school_id, $course_teacher_id
         (ct.course_id = $course_id) AND
         (tp.person_id = ct.course_teacher_id)
         ORDER BY tp.last_name, tp.first_name";
-    $teachers_sel = $db->query($teachers_query);
+    $teachers_sel = xdb_query($db, $teachers_query);
     $teachers_ht = "";
     $filtered = ($course_teacher_id_filter == XSM_CT_ALL);
     while ($teachers_data = $teachers_sel->fetchArray(SQLITE3_ASSOC))
@@ -52,10 +52,9 @@ function xsm_get_course_teachers_list($db, $course_id, $school_id)
         LEFT JOIN department d ON (d.department_id = ps.member_department_id)
         WHERE course_id = $course_id
         ORDER BY tp.last_name, tp.first_name";
-    $teachers_sel = $db->query($teachers_query);
+    $teachers_sel = xdb_query($db, $teachers_query);
     $course_teachers = array();
-    while ($teacher_data = $teachers_sel->fetchArray(SQLITE3_ASSOC))
-    {
+    while ($teacher_data = xdb_fetch($teachers_sel)) {
         $course_teachers_id = $teacher_data['course_teachers_id'];
         $course_teachers[$course_teachers_id] = $teacher_data;
     }

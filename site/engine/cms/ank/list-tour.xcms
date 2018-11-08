@@ -90,7 +90,7 @@ function xsm_get_forest_selector($db, $single_forest, $show_name_filter)
 
     $query .= " ORDER BY NOT (p.is_teacher IS NULL OR LENGTH(p.is_teacher) = 0), p.last_name, p.first_name";
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
-    return $db->query($query);
+    return xdb_query($db, $query);
 }
 
 

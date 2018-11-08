@@ -5,7 +5,8 @@
   **/
 function xsm_get_person_school_id($db, $school_id, $person_id)
 {
-    $ps_sel = $db->query(
+    $ps_sel = xdb_query(
+        $db,
         "SELECT
         ps.person_school_id
         FROM person_school ps WHERE
@@ -13,8 +14,9 @@ function xsm_get_person_school_id($db, $school_id, $person_id)
         (ps.school_id = '$school_id')"
     );
 
-    if (!($ps_data = $ps_sel->fetchArray(SQLITE3_ASSOC)))
-        return NULL;
+    if (!($ps_data = xdb_fetch($ps_sel))) {
+        return null;
+    }
 
     return $ps_data['person_school_id'];
 }

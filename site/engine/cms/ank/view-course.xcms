@@ -54,7 +54,7 @@ function xsm_print_course()
 
         <?php
         $query = "SELECT * FROM exam WHERE course_id = $course_id ORDER BY exam_status";
-        $exam_sel = $db->query($query);
+        $exam_sel = xdb_query($db, $query);
         while ($exam = $exam_sel->fetchArray(SQLITE3_ASSOC))
         {
             $student_person_id = $exam['student_person_id'];

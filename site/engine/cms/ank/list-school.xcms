@@ -9,7 +9,7 @@ function xsm_school_list()
     FROM school s
     ORDER BY school_date_start DESC, school_id DESC";
 
-    $school_sel = $db->query($query);
+    $school_sel = xdb_query($db, $query);
     ?>
 
     <h1>Школы</h1><?php

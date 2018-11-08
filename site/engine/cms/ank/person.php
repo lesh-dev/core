@@ -98,7 +98,7 @@ function xsm_increase_class_numbers()
         ";
 
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
-    $person_sel = $db->query($query);
+    $person_sel = xdb_query($db, $query);
 
     $selected_persons = array();
 

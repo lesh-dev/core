@@ -250,7 +250,7 @@ function xsm_draw_person_comments($db, $person_id)
         AND (person_comment_deleted <> 'deleted')
         ORDER BY person_comment_created DESC
         ";
-    $comment_sel = $db->query($query);
+    $comment_sel = xdb_query($db, $query);
     ?>
 
     <table class="ankList table table-bordered table-hover table-condensed">
@@ -449,7 +449,7 @@ function xsm_print_student_exams($db, $school_id, $person_id, $person_school)
         (e.course_id = c.course_id) AND
         (e.student_person_id = $person_id)
         ORDER BY e.exam_status, c.course_title";
-    $exam_sel = $db->query($query);
+    $exam_sel = xdb_query($db, $query);
 
     $exam_aux_param = "&amp;student_person_id=$person_id&amp;school_id=$school_id";
     $need = xcms_get_key_or($person_school, 'courses_needed', '?');

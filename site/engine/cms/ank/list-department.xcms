@@ -10,7 +10,7 @@ function xsm_print_departments()
     FROM department d
     ORDER BY (department_id = 2), department_title";
 
-    $department_sel = $db->query($query);
+    $department_sel = xdb_query($db, $query);
     ?>
 
     <h1>Отделения</h1><?php
@@ -25,8 +25,7 @@ function xsm_print_departments()
             <th class="ankList">Название</th>
         </thead>
     <?php
-    while ($department = $department_sel->fetchArray(SQLITE3_ASSOC))
-    {
+    while ($department = xdb_fetch($department_sel)) {
         $department_id = htmlspecialchars($department["department_id"]);
         $department_title = htmlspecialchars($department["department_title"]);
         $department_url = "view-department".xcms_url(array('department_id' => $department_id));

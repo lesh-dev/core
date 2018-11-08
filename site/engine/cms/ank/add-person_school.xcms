@@ -54,10 +54,9 @@ function xsm_get_person_school_list($db, $school_id)
         WHERE (ps.member_person_id == p.person_id)
         AND (ps.school_id == $school_id)
         ORDER BY p.last_name, p.first_name";
-    $members_sel = $db->query($members_query);
+    $members_sel = xdb_query($db, $members_query);
     $members = array();
-    while ($member_data = $members_sel->fetchArray(SQLITE3_ASSOC))
-    {
+    while ($member_data = xdb_fetch($members_sel)) {
         $person_id = $member_data['person_id'];
         $members[$person_id] = $member_data;
     }

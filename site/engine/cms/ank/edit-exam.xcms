@@ -18,7 +18,8 @@ function xsm_edit_exam_operations($school_id, $student_person_id, $id)
   **/
 function xsm_get_exam_id($db, $course_id, $person_id)
 {
-    $exam_sel = $db->query(
+    $exam_sel = xdb_query(
+        $db,
         "SELECT
         e.exam_id
         FROM exam e WHERE

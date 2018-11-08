@@ -129,7 +129,7 @@ function xsm_show_ank_list()
         $anketa_status_order
         person_created DESC";
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
-    $person_sel = $db->query($query);
+    $person_sel = xdb_query($db, $query);
 
     $bulk_archive_title = "Будьте внимательны, это действие не может быть отменено (убедитесь, что у вас есть резервная копия БД)";
     $bulk_archive_disabled = false;
@@ -249,7 +249,7 @@ function xsm_bulk_archive()
         ";
 
     xdb_debug_area($query, XDB_DEBUG_AREA_DISABLED);
-    $person_sel = $db->query($query);
+    $person_sel = xdb_query($db, $query);
 
     $archived_ids = array();
 

@@ -76,7 +76,7 @@ function xsm_find_person_origin($db, $new_person)
         (patronymic = '$patronymic_esc')
         ORDER BY person_created";
 
-    $person_sel = $db->query($query);
+    $person_sel = xdb_query($db, $query);
     $matched_person_id = XDB_INVALID_ID;
     $matched_person = false;
 
