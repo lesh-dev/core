@@ -4,6 +4,7 @@ import {applyMiddleware, combineReducers, createStore} from "redux"
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import * as nm from "normalizr"
 import { Lens } from "./Search"
 import {HighlightTitle} from "./Snippet";
 import "../../../scss/exams.scss"
@@ -32,7 +33,7 @@ const getExams = (schoolId: number) => fetch(
     &person_school.is_teacher=eq.`
         .replace(/ +/g, '')
 ).then(val => val.json())
- .then((val: Ex[]) => reshape2(val));
+ // .then((val: Ex[]) => reshape2(val));
 
 // Shape from postgrest
 interface Ex {
@@ -180,6 +181,16 @@ function reshapeTeachers(c: any) {
     return {course_teachers: course_teachers.map((p: any) => p.person), ...rest}
 }
 
+function normalizedExams(exams: Ex[]) {
+    const course = new nm.schema.Entity('courses', {}, {idAttribute: 'course_id'})
+    const exam = new nm.schema.Entity('exams', { course }, {idAttribute: 'exam_id'})
+    const person = new nm.schema.Entity('persons', {exam: [exam]}, {idAttribute: 'person_id'})
+
+    const ps = exams[0].person_school.map(p => p.person)
+    const normed = nm.normalize(ps, [person])
+    return normed;
+}
+
 function reshape2(exams: Ex[]): { exam_table: TableState, school_title: string } {
     const {person_school, ...other} = exams[0];
     function comparator(a: PersonSchoolShape, b: PersonSchoolShape) {
@@ -265,7 +276,7 @@ type TableState = Map<string, PersonWithCourses>
 
 type P = { path: string[] }
 
-type ExamFormPresentationStateProps = {
+type ExamFormPresentationStateProps = P & {
     course: Course2
     exam?: Exam
     student_person_id: number
@@ -284,26 +295,59 @@ type ExamFormProps = P & {
     student_person_id: number
 }
 
-const ExamFormPresentation = (props: ExamFormPresentationProps) =>
-    <form onChange={props.onChange} onSubmit={e => {
+const ExamFormPresentation = (props: ExamFormPresentationProps) => {
+    const baseId = `exam-form-${props.student_person_id}-${props.course.course_id}--${props.path.join('-')}--`;
+    return <form onChange={props.onChange} onSubmit={e => {
         e.preventDefault();
         props.onSubmit(props.student_person_id, props.course, props.exam, props.selectedStatus, props.selectedType)
     }}>
-        <input type={"radio"} name={"selectedStatus"} value={"listen"} checked={props.selectedStatus == "listen"} readOnly={true}/>
-        <input type={"radio"} name={"selectedStatus"} value={"passed"} checked={props.selectedStatus == "passed"} readOnly={true}/>
-        <input type={"radio"} name={"selectedStatus"} value={"notpassed"} checked={props.selectedStatus == "notpassed"} readOnly={true}/>
+        <div>
+            <input type={"radio"} name={"selectedStatus"} value={"listen"} readOnly={true}
+                   checked={props.selectedStatus == "listen"}
+                   id={baseId + 'status-listen'}/>
+            <label htmlFor={baseId + 'status-listen'} title={"listen"}>⏿</label>
+
+            <input type={"radio"} name={"selectedStatus"} value={"passed"} readOnly={true}
+                   checked={props.selectedStatus == "passed"}
+                   id={baseId + 'status-passed'}/>
+            <label htmlFor={baseId + 'status-passed'} title={"passed"}>✅</label>
+
+            <input type={"radio"} name={"selectedStatus"} value={"notpassed"} readOnly={true}
+                   checked={props.selectedStatus == "notpassed"}
+                   id={baseId + 'status-notpassed'}/>
+            <label htmlFor={baseId + 'status-notpassed'} title={"notpassed"}>☠</label>
+        </div>
+        <div>
+            <input type={"radio"} name={"selectedType"} value={"optional"} readOnly={true}
+                   checked={props.selectedType == "optional"}
+                   id={baseId + 'type-optional'}/>
+            <label htmlFor={baseId + 'type-optional'} title={"optional"}>✪</label>
+
+            <input type={"radio"} name={"selectedType"} value={"required"} readOnly={true}
+                   checked={props.selectedType == "required"}
+                   id={baseId + 'type-required'}/>
+            <label htmlFor={baseId + 'type-required'} title={"required"}>✍</label>
+
+            <input type={"radio"} name={"selectedType"} value={"facultative"} readOnly={true}
+                   checked={props.selectedType == "facultative"}
+                   id={baseId + 'type-facultative'}/>
+            <label htmlFor={baseId + 'type-facultative'} title={"facultative"}>❁</label>
+        </div>
         <button disabled={!props.changed()}>{ props.exam ? "change" : "add" }</button>
     </form>
+}
+
+
 const examFormMapStateToProps = (state: any, ownProps: ExamFormProps) => {
     const exam = ownProps.exam;
     const defaultStatus = exam ? exam.exam_status : "listen";
-    const defaultType = exam ? exam.exam_type || "variativ" : "variativ"; // fixme -- declare const
+    const defaultType = exam ? exam.exam_type || "optional" : "optional"; // fixme -- declare const
     const {selectedStatus: status, selectedType: type} = Lens.get(state, ownProps.path, {});
     const selectedStatus = status || defaultStatus;
     const selectedType = type || defaultType;
     function changed() {
-        const statusChanged = exam ? exam.exam_status == selectedStatus : true;
-        const typeChanged = exam ? (exam.exam_type || /*fixme*/ "variativ") == selectedType : true;
+        const statusChanged = exam ? exam.exam_status != selectedStatus : true;
+        const typeChanged = exam ? (exam.exam_type || /*todo*/ "optional") != selectedType : true;
         return statusChanged || typeChanged;
     }
     return {
@@ -311,6 +355,7 @@ const examFormMapStateToProps = (state: any, ownProps: ExamFormProps) => {
         course: ownProps.course,
         selectedStatus,
         selectedType,
+        path: ownProps.path,
         changed
     };
 }
@@ -321,7 +366,7 @@ const examFormMapDispatchToProps = (dispatch: (action: any) => void, ownProps: E
     onSubmit: (student: number, course: Course2, exam: Exam, selectedStatus: string, selectedType: string) => {
         const exam_id = exam ? exam.exam_id : null;
         changeExam(student, course.course_id, selectedStatus, exam_id)
-            .then(resp => resp.json()) // todo: update table
+            .then(resp => resp.json())
             .then((val: Exam[]) => dispatch(examStatusChanged(course, val[0], student, ownProps.path)))
     }
 })
@@ -347,17 +392,31 @@ const examFormReducer = (state: any, action: any) => {
         case EXAM_FORM_CHANGED:
             return Lens.localUpdate(state, action.patch, action.path);
         case EXAM_STATUS_CHANGED:
+            let st = state;
+            const exam = {...action.exam, course: action.exam.course_id} // fixme -- hack for normalizr workaround
+            st = Lens.set(st, exam, ['exams', action.exam.exam_id.toString()]);
+            st = Lens.set(st, {}, action.path); // clear selected {status,type} after status change
+            // add course to person if needed:
+            let exams = state.persons[action.student].exam;
+            if(!exams.includes(action.exam.exam_id)) {
+                exams = [...exams, action.exam.exam_id];
+                st = Lens.localUpdate(st, {exam: exams}, ['persons', action.student.toString()]);
+            }
+            // update non-normalized state of search suggestions manually (fixme):
+            const path = [action.path[0], '_'+action.student, 'search', 'result', '_'+action.course.course_id];
+            const courseIsPresented = !! Lens.get(state, path);
+            if(courseIsPresented) st = Lens.localUpdate(st, { course: action.course, exam: action.exam }, path);
+            return st;
+            // todo: add person if needed
             // we ignore path, fixme
-            const path = [action.path[0], '_'+action.student, 'courses', '_'+action.exam.exam_id];
-            // fixme: search state does not update
-            return Lens.localUpdate(state, { course: action.course, exam: action.exam }, path);
         default:
             return state;
     }
 }
 
 
-const CourseExam = (props: {course: Course2, exam: Exam} & P & { student: number }) => <div>
+const CourseExam = (props: {course: Course2, exam: Exam} & P & { student: number }) =>
+    <div className={"exam-table__course-" + (props.exam ? props.exam.exam_status : "new")}>
     <a href={`/admin/gui/course/${props.course.course_id}`}>{ props.course.course_title }</a>
     ({ props.course.course_teachers.map(p => `${p.first_name} ${p.last_name}`).join() })
     <ExamForm path={[...props.path, "exam_form"]}
@@ -400,7 +459,14 @@ const CourseSearchPresentation = (props: CourseSearchPresentationProps) => <div>
 </div>
 
 const courseSearchMapStateToProps = (state: any, ownProps: CourseSearchProps) => {
-    const {query,result} = Lens.get(state, ownProps.path, {query:"", result: []});
+    const {query,result:results} = Lens.get(state, ownProps.path, {query:"", result: []});
+    function updateExam(exam: Exam) {
+        if(!exam) return exam;
+        const newExam = state.exams[exam.exam_id];
+        return newExam || exam;
+    }
+    const result = Object.assign({}, ...Object.values(results)
+        .map(({course,exam}) => ({ ['_'+course.course_id]: { course, exam: updateExam(exam) } }) ))
     return {query,result,person_id: ownProps.person_id};
 }
 const courseSearchMapDispatchToProps = (dispatch: (action: any) => void, ownProps: CourseSearchProps) => ({
@@ -582,7 +648,8 @@ const Status = {
 
 // Actions
 const LOADED_EXAMS = "LOADED_EXAMS";
-const loadedExams = (school_id: number, exams: {exam_table: TableState, school_title: string}, path: string[]) => ({ type: LOADED_EXAMS, school_id, exams, path });
+const loadedExams = (school_id: number, entities: any, personList: number[], path: string[]) =>
+    ({ type: LOADED_EXAMS, school_id, entities, personList, path });
 
 const EXAM_REMOVED = "EXAM_REMOVED";
 const examRemoved = (exam_id: number, path: string[]) => ({
@@ -642,13 +709,24 @@ class ExamTablePresentation extends React.Component<ExamTableProps> {
     componentDidMount() {
         const dispatch = this.props.dispatch;
         getExams(this.props.school_id)
-            .then(exams => dispatch(loadedExams(this.props.school_id, exams,[]) ))
+            .then((val: Ex[]) => ({normalized: normalizedExams(val)}))
+            .then(exams => dispatch(loadedExams(this.props.school_id, exams.normalized.entities, exams.normalized.result, []) ))
     }
 }
 
-// Callbacks
-// const etMapStateToProps = ({exams}: ExamTableProps) => ({exams}); // FIXME
-const etMapStateToProps = (exams: ExamTableProps) => (exams);
+
+const etMapStateToProps = (exams: ExamTableProps) => {
+    if(!exams) return {}
+
+    const course = new nm.schema.Entity('courses', {}, {idAttribute: 'course_id'})
+    const exam = new nm.schema.Entity('exams', { course }, {idAttribute: 'exam_id'})
+    const person = new nm.schema.Entity('persons', {exam: [exam]}, {idAttribute: 'person_id'})
+
+    const denorm = nm.denormalize((exams as any).personList, [person], exams);
+    const x = [{person_school: denorm.map((person:any) => ({person})), school_title: exams.school_title}];
+    const y = reshape2(x)
+    return y;
+};
 const etMapDispatchToProps = (dispatch: (action: any) => void, ownProps: any) =>({
     dispatch,
 });
@@ -665,7 +743,10 @@ const ExamTable = connect(etMapStateToProps, etMapDispatchToProps)(
 const examTableReducer = (state: { exams: ExamsDataShape}, action: any) => {
     switch(action.type) {
         case LOADED_EXAMS:
-            return Lens.set(state, action.exams, []);
+            let st = state;
+            st = Lens.set(st, action.entities, []);
+            st = Lens.set(st, { personList: action.personList }, []);
+            return st;
         case EXAM_REMOVED:
             const prefix = action.path.slice(0,-1);
             return Lens.set(state, { [action.exam_id]: null }, prefix);
