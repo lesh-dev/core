@@ -267,11 +267,11 @@ type PersonWithCourses = {
 type TableState = Map<string, PersonWithCourses>
 
 
-//   ____                          ____                      _
-//  / ___|___  _   _ _ __ ___  ___/ ___|  ___  __ _ _ __ ___| |__
-// | |   / _ \| | | | '__/ __|/ _ \___ \ / _ \/ _` | '__/ __| '_ \
-// | |__| (_) | |_| | |  \__ \  __/___) |  __/ (_| | | | (__| | | |
-//  \____\___/ \__,_|_|  |___/\___|____/ \___|\__,_|_|  \___|_| |_|
+//  _____                     _____
+// | ____|_  ____ _ _ __ ___ |  ___|__  _ __ _ __ ___
+// |  _| \ \/ / _` | '_ ` _ \| |_ / _ \| '__| '_ ` _ \
+// | |___ >  < (_| | | | | | |  _| (_) | |  | | | | | |
+// |_____/_/\_\__,_|_| |_| |_|_|  \___/|_|  |_| |_| |_|
 //
 
 type P = { path: string[] }
@@ -415,6 +415,14 @@ const examFormReducer = (state: any, action: any) => {
 }
 
 
+//   ____                          ____                      _
+//  / ___|___  _   _ _ __ ___  ___/ ___|  ___  __ _ _ __ ___| |__
+// | |   / _ \| | | | '__/ __|/ _ \___ \ / _ \/ _` | '__/ __| '_ \
+// | |__| (_) | |_| | |  \__ \  __/___) |  __/ (_| | | | (__| | | |
+//  \____\___/ \__,_|_|  |___/\___|____/ \___|\__,_|_|  \___|_| |_|
+//
+
+
 const CourseExam = (props: {course: Course2, exam: Exam} & P & { student: number }) =>
     <div className={"exam-table__course-" + (props.exam ? props.exam.exam_status : "new")}>
     <a href={`/admin/gui/course/${props.course.course_id}`}>{ props.course.course_title }</a>
@@ -516,124 +524,6 @@ const courseSearchReducer = (state: any, action: any) => {
             return state;
     }
 }
-
-
-//   ____                _        ____
-//  / ___|_ __ ___  __ _| |_ ___ / ___|___  _   _ _ __ ___  ___
-// | |   | '__/ _ \/ _` | __/ _ \ |   / _ \| | | | '__/ __|/ _ \
-// | |___| | |  __/ (_| | ||  __/ |__| (_) | |_| | |  \__ \  __/
-//  \____|_|  \___|\__,_|\__\___|\____\___/ \__,_|_|  |___/\___|
-//
-
-// Actions
-const COURSE_FILLING_STARTED = "COURSE_FILLING_STARTED";
-const COURSE_CREATE_REQUEST = "COURSE_CREATE_REQUEST";
-const COURSE_CREATE_RESPONSE = "COURSE_CREATE_RESPONSE";
-const COURSE_CREATE_TITLE_CHANGED = "COURSE_CREATE_TITLE_CHANGED";
-const COURSE_CREATE_CYCLE_CHANGED = "COURSE_CREATE_CYCLE_CHANGED";
-
-const courseFillingStarted = (path: string[]) => ({
-    type: COURSE_FILLING_STARTED,
-    path,
-});
-const courseCreateRequest = (path: string[]) => ({
-    type: COURSE_CREATE_REQUEST,
-    path,
-});
-const courseCreateResponse = (course: Course, path: string[]) => ({
-    type: COURSE_CREATE_RESPONSE,
-    course,
-    path,
-});
-const courseCreateTitleChanged = (title: string, path: string[]) => ({
-    type: COURSE_CREATE_TITLE_CHANGED,
-    title,
-    path,
-});
-const courseCreateCycleChanged = (cycle: string, path: string[]) => ({
-    type: COURSE_CREATE_CYCLE_CHANGED,
-    cycle,
-    path,
-});
-
-// Presentation
-const CreateCoursePresentation = (props: any) => <div className={"create-course"}>
-    {/*<input type={"text"} placeholder={"название"} value={props.title} onChange={e => props.onTitleChange(e.target.value)}/>*/}
-    <input type={"text"}
-           placeholder={"цикл"}
-           className={"create-course__cycle"}
-           value={props.cycle}
-           onChange={e => props.onCycleChange(e.target.value)}/>
-    <button onClick={() => props.onCreate(props.title, props.cycle, props.school_id)}
-            className={"create-course__create"}>
-        создать
-    </button>
-</div>
-
-// Callbacks
-interface CreateCourseProps {
-    path: string[]
-    onCreated(course: Course): void
-    school_id: number
-    title: string
-    cycle?: string
-}
-
-const createCourseMapStateToProps = (state: any, ownProps: CreateCourseProps) => {
-    const localState = Lens.get(state, ownProps.path, {cycle: ownProps.cycle || ""});
-    return {
-        title: ownProps.title,
-        cycle: localState.cycle,
-        school_id: ownProps.school_id
-    }
-}
-
-const createCourseMapDispatchToProps = (dispatch: (action: any) => void, ownProps: CreateCourseProps) => ({
-    onCreate: (course_title: string, course_cycle: string, school_id: number) => {
-        dispatch(courseCreateRequest(ownProps.path));
-        createCourse(course_title, course_cycle, school_id)
-            .then(res => {
-                dispatch(courseCreateResponse(res[0], ownProps.path));
-                ownProps.onCreated(res[0]);
-            })
-    },
-    onTitleChange: (value: string) => {
-        dispatch(courseCreateTitleChanged(value, ownProps.path));
-    },
-    onCycleChange: (value: string) => {
-        dispatch(courseCreateCycleChanged(value, ownProps.path));
-    },
-})
-
-export const CreateCourse = connect(createCourseMapStateToProps, createCourseMapDispatchToProps)(
-    (props: CreateCourseProps) => <CreateCoursePresentation {...props}/>
-);
-
-// reducer
-
-const createCourseReducer = (state: any, action: any) => {
-    switch(action.type) {
-        case COURSE_CREATE_TITLE_CHANGED:
-            return Lens.localUpdate(state, {title: action.title}, action.path);
-        case COURSE_CREATE_CYCLE_CHANGED:
-            return Lens.localUpdate(state, {cycle: action.cycle}, action.path);
-        case COURSE_CREATE_REQUEST:
-        // todo: disable button
-        case COURSE_CREATE_RESPONSE:
-        // todo: close button; parent provides callback to select this course
-        default: return state;
-    }
-}
-
-
-const Status = {
-    suggesting: "suggesting",
-    pending: "pending",
-    filling: "filling",
-    creating: "creating",
-    selected: "selected"
-};
-
 
 
 
@@ -764,7 +654,7 @@ const examTableReducer = (state: { exams: ExamsDataShape}, action: any) => {
 
 
 //////////////////////////// store
-const reducer = [createCourseReducer, examTableReducer, courseSearchReducer, examFormReducer]
+const reducer = [examTableReducer, courseSearchReducer, examFormReducer]
     .reduceRight((f,g) => (state, action) => f(g(state, action), action));
 
 const makeStore = () => createStore(reducer, composeWithDevTools( applyMiddleware(thunkMiddleware, createLogger()) ));
