@@ -188,7 +188,12 @@ function normalizedExams(exams: Ex[]) {
 
     const ps = exams[0].person_school.map(p => p.person)
     const normed = nm.normalize(ps, [person])
-    return normed;
+
+    const {entities: {courses, persons, exams:  Exams}, result} = normed;
+    const reshapedCourses = Object.assign({}, ...Object.values(normed.entities.courses)
+        .map(c => ({ [(c as any).course_id]: reshapeTeachers(c) })));
+    const reshapedNormed = { entities: {courses: reshapedCourses, persons, exams:  Exams}, result };
+    return reshapedNormed;
 }
 
 function reshape2(exams: Ex[]): { exam_table: TableState, school_title: string } {
@@ -214,7 +219,7 @@ function reshape2(exams: Ex[]): { exam_table: TableState, school_title: string }
     }
     function reshapeExam(exam: ExamShape[]): Map<string, {exam: Exam, course: Course2}> {
         const examKeys = exam.filter((e:any) => !!e.course).map((e: any) =>
-            ({ ['_'+e.exam_id]: { exam: e, course: reshapeTeachers(e.course) } }));
+            ({ ['_'+e.exam_id]: { exam: e, course: e.course } }));
         return Object.assign({}, ...examKeys);
     }
     return { exam_table: persons, ...other }
@@ -402,10 +407,8 @@ const examFormReducer = (state: any, action: any) => {
                 exams = [...exams, action.exam.exam_id];
                 st = Lens.localUpdate(st, {exam: exams}, ['persons', action.student.toString()]);
             }
-            // update non-normalized state of search suggestions manually (fixme):
-            const path = [action.path[0], '_'+action.student, 'search', 'result', '_'+action.course.course_id];
-            const courseIsPresented = !! Lens.get(state, path);
-            if(courseIsPresented) st = Lens.localUpdate(st, { course: action.course, exam: action.exam }, path);
+            // update normalized state of search suggestions
+            st = Lens.set(st, {exam:action.exam.exam_id,course:action.exam.course_id}, ['person_courses', action.student+'_'+action.exam.course_id]);
             return st;
             // todo: add person if needed
             // we ignore path, fixme
@@ -456,7 +459,7 @@ const CourseSearchPresentation = (props: CourseSearchPresentationProps) => <div>
     <ul>
         { Object.values(props.result).map((ac:CourseWithExam) => {
             return <li key={ac.course.course_id}>
-                <CourseExam path={[...props.path, 'result', '_'+ac.course.course_id]/*course or exam?*/}
+                <CourseExam path={[...props.path/*, 'result'*/, '_'+ac.course.course_id]/*course or exam?*/}
                             course={ac.course}
                             exam={ac.exam}
                             student={props.person_id}
@@ -468,24 +471,26 @@ const CourseSearchPresentation = (props: CourseSearchPresentationProps) => <div>
 
 const courseSearchMapStateToProps = (state: any, ownProps: CourseSearchProps) => {
     const {query,result:results} = Lens.get(state, ownProps.path, {query:"", result: []});
-    function updateExam(exam: Exam) {
-        if(!exam) return exam;
-        const newExam = state.exams[exam.exam_id];
-        return newExam || exam;
-    }
-    const result = Object.assign({}, ...Object.values(results)
-        .map(({course,exam}) => ({ ['_'+course.course_id]: { course, exam: updateExam(exam) } }) ))
+
+    const course = new nm.schema.Entity('courses', {}, {idAttribute: 'course_id'})
+    const exam = new nm.schema.Entity('exams', {}, {idAttribute: 'exam_id'})
+    const pc = new nm.schema.Entity('person_courses', {course,exam},{idAttribute:(x)=>ownProps.person_id+'_'+x.course.course_id})
+
+    const denormed = nm.denormalize(results, [pc], state);
+
+    const result = Object.assign({}, ...denormed
+        .map(({course, exam}:{course:any,exam:any}) => ({ ['_'+course.course_id]: { course, exam } }) ))
     return {query,result,person_id: ownProps.person_id};
 }
 const courseSearchMapDispatchToProps = (dispatch: (action: any) => void, ownProps: CourseSearchProps) => ({
     onQueryChange: (query: string) => {
         dispatch(courseSearchQueryChanged(query, ownProps.path));
         if(query.trim() == "") {
-            dispatch(courseSearchResponse(query, new Map(), ownProps.path));
+            dispatch(courseSearchResponse(query, new Map(), ownProps.person_id, ownProps.path));
             return;
         }
         getCourseAutocompletions(query, ownProps.school_id, ownProps.person_id)
-            .then(result => dispatch(courseSearchResponse(query, result, ownProps.path)))
+            .then(result => dispatch(courseSearchResponse(query, result, ownProps.person_id, ownProps.path)))
     }
 })
 
@@ -505,10 +510,11 @@ const courseSearchQueryChanged = (query: string, path: string[]) => ({
     path,
 })
 
-const courseSearchResponse = (query: string, result: Map<string,CourseWithExam>, path: string[]) => ({
+const courseSearchResponse = (query: string, result: Map<string,CourseWithExam>, student: number, path: string[]) => ({
     type: COURSE_SEARCH_RESPONSE,
     query,
     result,
+    student,
     path,
 })
 
@@ -519,6 +525,23 @@ const courseSearchReducer = (state: any, action: any) => {
         case COURSE_SEARCH_RESPONSE:
             const {query} = Lens.get(state, action.path);
             if(query != action.query) return state;
+
+            const student = action.student;
+
+            const course = new nm.schema.Entity('courses', {}, {idAttribute: 'course_id'})
+            const exam = new nm.schema.Entity('exams', {course}, {idAttribute: 'exam_id'})
+            const pc = new nm.schema.Entity('person_courses', {course,exam},{idAttribute:(x)=>student+'_'+x.course.course_id})
+
+            const values = Object.values(action.result);
+            const normed = nm.normalize(values,[pc]);
+
+            let st = state;
+            st = Lens.localUpdate(st, {result: normed.result}, action.path);
+            st = Lens.localUpdate(st, normed.entities.courses, ['courses']);
+            st = Lens.localUpdate(st, normed.entities.exams, ['exams']);
+            st = Lens.localUpdate(st, normed.entities.person_courses, ['person_courses']);
+            return st;
+
             return Lens.localUpdate(state, {result: action.result}, action.path);
         default:
             return state;
