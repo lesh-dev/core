@@ -285,12 +285,8 @@ type ExamFormPresentationStateProps = P & {
     course: Course2
     exam?: Exam
     student_person_id: number
-    selectedStatus: string
-    selectedType: string
-    changed: () => boolean // selectedStatus == exam.exam_status
 }
 type ExamFormPresentationCallbackProps = {
-    onChange(e: any): void
     onSubmit(student: number, course: Course2, exam: Exam, selectedStatus: string, selectedType: string): void
 }
 type ExamFormPresentationProps = ExamFormPresentationStateProps & ExamFormPresentationCallbackProps
@@ -300,74 +296,82 @@ type ExamFormProps = P & {
     student_person_id: number
 }
 
-const ExamFormPresentation = (props: ExamFormPresentationProps) => {
-    const baseId = `exam-form-${props.student_person_id}-${props.course.course_id}--${props.path.join('-')}--`;
-    return <form onChange={props.onChange} onSubmit={e => {
-        e.preventDefault();
-        props.onSubmit(props.student_person_id, props.course, props.exam, props.selectedStatus, props.selectedType)
-    }}>
-        <div>
-            <input type={"radio"} name={"selectedStatus"} value={"listen"} readOnly={true}
-                   checked={props.selectedStatus == "listen"}
-                   id={baseId + 'status-listen'}/>
-            <label htmlFor={baseId + 'status-listen'} title={"listen"}>⏿</label>
-
-            <input type={"radio"} name={"selectedStatus"} value={"passed"} readOnly={true}
-                   checked={props.selectedStatus == "passed"}
-                   id={baseId + 'status-passed'}/>
-            <label htmlFor={baseId + 'status-passed'} title={"passed"}>✅</label>
-
-            <input type={"radio"} name={"selectedStatus"} value={"notpassed"} readOnly={true}
-                   checked={props.selectedStatus == "notpassed"}
-                   id={baseId + 'status-notpassed'}/>
-            <label htmlFor={baseId + 'status-notpassed'} title={"notpassed"}>☠</label>
-        </div>
-        <div>
-            <input type={"radio"} name={"selectedType"} value={"optional"} readOnly={true}
-                   checked={props.selectedType == "optional"}
-                   id={baseId + 'type-optional'}/>
-            <label htmlFor={baseId + 'type-optional'} title={"optional"}>✪</label>
-
-            <input type={"radio"} name={"selectedType"} value={"required"} readOnly={true}
-                   checked={props.selectedType == "required"}
-                   id={baseId + 'type-required'}/>
-            <label htmlFor={baseId + 'type-required'} title={"required"}>✍</label>
-
-            <input type={"radio"} name={"selectedType"} value={"facultative"} readOnly={true}
-                   checked={props.selectedType == "facultative"}
-                   id={baseId + 'type-facultative'}/>
-            <label htmlFor={baseId + 'type-facultative'} title={"facultative"}>❁</label>
-        </div>
-        <button disabled={!props.changed()}>{ props.exam ? "change" : "add" }</button>
-    </form>
+class ExamFormPresentation extends React.Component<ExamFormPresentationProps, {selectedStatus: string, selectedType: string}> {
+    constructor(props: ExamFormPresentationProps) {
+        super(props);
+        this.state = {
+            selectedStatus: props.exam ? props.exam.exam_status : "listen",
+            selectedType: props.exam ? props.exam.exam_type || "optional" : "optional",
+        }
+        this.handleChange = this.handleChange.bind(this);
+    }
+    render() {
+        const props = this.props;
+        return <form onChange={this.handleChange} onSubmit={e => {
+            e.preventDefault();
+            props.onSubmit(props.student_person_id, props.course, props.exam, this.state.selectedStatus, this.state.selectedType)
+        }}>
+            <div>
+                <label title={"listen"}>
+                    <input type={"radio"} name={"selectedStatus"} value={"listen"} readOnly={true}
+                           checked={this.state.selectedStatus == "listen"}/>
+                    ⏿
+                </label>
+                <label title={"passed"}>
+                    <input type={"radio"} name={"selectedStatus"} value={"passed"} readOnly={true}
+                           checked={this.state.selectedStatus == "passed"}/>
+                    ✅
+                </label>
+                <label title={"notpassed"}>
+                    <input type={"radio"} name={"selectedStatus"} value={"notpassed"} readOnly={true}
+                           checked={this.state.selectedStatus == "notpassed"}/>
+                    ☠
+                </label>
+            </div>
+            <div>
+                <label title={"optional"}>
+                    ✪
+                    <input type={"radio"} name={"selectedType"} value={"optional"} readOnly={true}
+                           checked={this.state.selectedType == "optional"}/>
+                </label>
+                <label title={"required"}>
+                    <input type={"radio"} name={"selectedType"} value={"required"} readOnly={true}
+                           checked={this.state.selectedType == "required"}/>
+                    ✍
+                </label>
+                <label title={"facultative"}>
+                    <input type={"radio"} name={"selectedType"} value={"facultative"} readOnly={true}
+                           checked={this.state.selectedType == "facultative"}/>
+                    ❁
+                </label>
+            </div>
+            <button disabled={!this.changed()}>{ props.exam ? "change" : "add" }</button>
+        </form>
+    }
+    handleChange(e: any /*React.FormEvent*/) {
+        const target = e.nativeEvent.target; // fixme?
+        // const target = e.currentTarget // requires persist()?
+        this.setState(state => ({ [target.name]: target.value } as any));
+    }
+    changed() {
+        const statusChanged = this.props.exam ? this.state.selectedStatus != this.props.exam.exam_status : true;
+        const typeChanged = this.props.exam ?
+            this.state.selectedType != (this.props.exam.exam_type || "optional" /* todo */)
+            : true;
+        return statusChanged || typeChanged;
+    }
 }
 
 
 const examFormMapStateToProps = (state: any, ownProps: ExamFormProps) => {
-    const exam = ownProps.exam;
-    const defaultStatus = exam ? exam.exam_status : "listen";
-    const defaultType = exam ? exam.exam_type || "optional" : "optional"; // fixme -- declare const
-    const {selectedStatus: status, selectedType: type} = Lens.get(state, ownProps.path, {});
-    const selectedStatus = status || defaultStatus;
-    const selectedType = type || defaultType;
-    function changed() {
-        const statusChanged = exam ? exam.exam_status != selectedStatus : true;
-        const typeChanged = exam ? (exam.exam_type || /*todo*/ "optional") != selectedType : true;
-        return statusChanged || typeChanged;
-    }
     return {
         student_person_id: ownProps.student_person_id,
+        // а как exam попадает ниже? fixme
         course: ownProps.course,
-        selectedStatus,
-        selectedType,
         path: ownProps.path,
-        changed
     };
 }
 const examFormMapDispatchToProps = (dispatch: (action: any) => void, ownProps: ExamFormProps) => ({
-    onChange: (e: any) => {
-        dispatch(examFormChanged({ [e.target.name]: e.target.value }, ownProps.path))
-    },
     onSubmit: (student: number, course: Course2, exam: Exam, selectedStatus: string, selectedType: string) => {
         const exam_id = exam ? exam.exam_id : null;
         changeExam(student, course.course_id, selectedStatus, exam_id)
@@ -394,8 +398,8 @@ const examStatusChanged = (course: Course2, exam: Exam, student: number, path: s
 })
 const examFormReducer = (state: any, action: any) => {
     switch(action.type) {
-        case EXAM_FORM_CHANGED:
-            return Lens.localUpdate(state, action.patch, action.path);
+        // case EXAM_FORM_CHANGED:
+        //     return Lens.localUpdate(state, action.patch, action.path);
         case EXAM_STATUS_CHANGED:
             let st = state;
             const exam = {...action.exam, course: action.exam.course_id} // fixme -- hack for normalizr workaround
