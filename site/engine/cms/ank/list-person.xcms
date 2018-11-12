@@ -98,8 +98,8 @@ function xsm_show_person_list($school_id)
         ps.person_school_comment,
         ps.courses_needed
         FROM person p, person_school ps
-        WHERE (ps.member_person_id == p.person_id)
-        AND (ps.school_id == $school_id)";
+        WHERE (ps.member_person_id = p.person_id)
+        AND (ps.school_id = $school_id)";
 
     if (strlen($cond))
         $query .= " AND $cond";

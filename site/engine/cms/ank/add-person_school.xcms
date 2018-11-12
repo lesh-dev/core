@@ -51,7 +51,7 @@ function xsm_get_person_school_list($db, $school_id)
         ps.member_department_id, d.department_title
         FROM person p, person_school ps
         LEFT JOIN department d ON (d.department_id = ps.member_department_id)
-        WHERE (ps.member_person_id == p.person_id)
+        WHERE (ps.member_person_id = p.person_id)
         AND (ps.school_id == $school_id)
         ORDER BY p.last_name, p.first_name";
     $members_sel = xdb_query($db, $members_query);
