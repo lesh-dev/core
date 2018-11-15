@@ -6,6 +6,7 @@ from ..menu import menu
 from flask_login import LoginManager
 from .forms import LoginForm
 from hashlib import md5
+from werkzeug.security import check_password_hash
 
 lm = LoginManager()
 
@@ -22,17 +23,18 @@ def load_user(id):
 
 
 def user_login(login, password):
-    password_hash = md5(password.encode()).hexdigest()
     logins = (DirectLogin
               .query
               .filter(DirectLogin.login == login)
-              .filter(DirectLogin.password_hash == password_hash)
               .all())
     if len(logins) != 1:
         return False
-    user = logins[0].person
-    login_user(user)
-    return True
+    user = logins[0]
+    if check_password_hash(user.password_hash, password):
+        user = user.person
+        login_user(user)
+        return True
+    return False
 
 
 @module.route('/', methods=['GET', 'POST'])
