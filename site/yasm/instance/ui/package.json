@@ -21,6 +21,7 @@
     "es6-promise": "^4.2.4",
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
+    "normalizr": "^3.3.0",
     "omit": "^1.0.1",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",

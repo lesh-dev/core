@@ -409,7 +409,7 @@ function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_c
     $query = "SELECT * FROM $table_name";
     if (strlen($aux_cond))
         $query .= " WHERE $aux_cond";
-    $sel = $db->query($query);
+    $sel = xdb_query($db, $query);
     $html = "<select name=\"$name\" id=\"$name-selector\" $attr>\n";
     $list_key = "${table_name}_id";
     $special_value = XDB_INVALID_ID;
@@ -418,7 +418,7 @@ function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_c
         $selected = xcms_enum_selected("", $current_key);
         $html .= "<option $selected value=\"$special_value\">$special</option>\n";
     }
-    while ($object = $sel->fetchArray(SQLITE3_ASSOC))
+    while ($object = xdb_fetch($sel))
     {
         $title = "";
         foreach ($title_keys as $key_name)
@@ -429,7 +429,7 @@ function xsm_make_selector($table_name, $name, $current_key, $title_keys, $aux_c
         $html .= "<option $selected value=\"$key\">$title</option>\n";
     }
     $html .= "</select>";
-    $db->close();
+    xdb_close($db);
     return $html;
 }
 
