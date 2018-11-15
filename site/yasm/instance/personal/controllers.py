@@ -25,12 +25,17 @@ def get_profile():
 @module.route('/update_password', methods=['POST'])
 @login_required
 def update_password():
-    current_user.direct_login.update(values={'password_hash': generate_password_hash(password=request.values['new_password'])})
+    current_user.direct_login.update(
+        values={
+            'password_hash': generate_password_hash(password=request.values['new_password'])
+        }
+    )
     return jsonify('OK')
 
 
 @module.route('/contact/add', methods=['POST'])
 @login_required
 def contacts_add():
-    name = request.values['name']
-    value = request.values['value']
+    pass
+    # name = request.values['name']
+    # value = request.values['value']
