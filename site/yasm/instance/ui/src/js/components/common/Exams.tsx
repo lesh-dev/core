@@ -656,6 +656,12 @@ const examTableReducer = (state: ExamData, action: any) => {
 const reducer = [examTableReducer, courseSearchReducer, examFormReducer]
     .reduceRight((f,g) => (state, action) => f(g(state, action), action));
 
-const makeStore = () => createStore(reducer, composeWithDevTools( applyMiddleware(thunkMiddleware, createLogger()) ));
+let enhancer: any;
+/// #if ENV === "development"
+enhancer = composeWithDevTools( applyMiddleware(thunkMiddleware, createLogger()) );
+/// #else
+enhancer = null;
+/// #endif
+const makeStore = () => createStore(reducer, enhancer);
 
 export const ExamsExample = () => <Provider store={makeStore()}><ExamTable school_id={20}/></Provider>

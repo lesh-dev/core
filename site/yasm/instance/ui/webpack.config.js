@@ -1,6 +1,11 @@
 ExtractTextPlugin = require('extract-text-webpack-plugin');
 webpack = require('webpack');
 
+const mode = {
+    ENV: process.env.NODE_ENV || 'development',
+};
+const ifdef_query = require('querystring').encode(mode);
+
 module.exports = {
     entry: {
         admin: './src/js/pages/admin.tsx',
@@ -13,7 +18,7 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                use: 'ts-loader',
+                use: ['ts-loader', `ifdef-loader?${ifdef_query}`],
                 exclude: /node_modules/
             },
             {
@@ -49,7 +54,7 @@ module.exports = {
         children: false,
     },
     devtool: "source-map",
-    mode: "development",
+    mode: mode.ENV,
     plugins: [
         new ExtractTextPlugin('/../css/pack/[name].css'),
     ]

@@ -53,6 +53,7 @@
     "awesome-typescript-loader": "^5.2.0",
     "css-loader": "^1.0.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "ifdef-loader": "^2.0.3",
     "lorem-ipsum": "^1.0.5",
     "node-sass": "^4.9.2",
     "react-router": "^4.3.1",
@@ -65,9 +66,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
-    "build": "webpack -p",
-    "dev": "webpack -d",
-    "serve": "webpack --watch"
+    "build": "NODE_ENV=production webpack -p",
+    "dev": "NODE_ENV=development webpack -d",
+    "serve": "NODE_ENV=development webpack --watch"
   },
   "author": "",
   "license": "ISC"
