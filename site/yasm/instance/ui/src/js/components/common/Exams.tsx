@@ -7,6 +7,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import * as nm from "normalizr"
 import { Lens } from "./Search"
 import {HighlightTitle} from "./Snippet";
+import * as _ from "lodash"
 import "../../../scss/exams.scss"
 
 
@@ -30,10 +31,10 @@ const getExams = (schoolId: number) => fetch(
         course_teachers(person(first_name,last_name,person_id)) )\
     )))\
     &person_school.person.exam.course.school_id=eq.${schoolId}\
-    &person_school.is_teacher=eq.`
+    &person_school.is_student=like.%25student`
         .replace(/ +/g, '')
 ).then(val => val.json())
- // .then((val: Ex[]) => reshape2(val));
+ .then((val: Ex[]) => normalizeExams(val, schoolId));
 
 // Shape from postgrest
 interface Ex {
@@ -57,50 +58,6 @@ interface Ex {
             }[]
         }
     }[]
-}
-
-interface PersonSchoolShape {
-    is_teacher: string
-    member_department_id: number
-    person: PersonInfoShape
-}
-interface PersonInfoShape {
-    person_id: number
-    first_name: string
-    last_name: string
-    exam: ExamShape[]
-}
-
-
-// Reshaped
-interface ExamsDataShape {
-    school_title: string
-    persons: Map<string, PersonShape>
-}
-type PersonShape = {
-    person_id: number
-    first_name: string
-    last_name: string
-    exam: Map<number, ExamShape>
-    is_teacher: string
-    member_department_id: number
-}
-interface ExamShape {
-    exam_id: number
-    exam_status: string
-    course?: {
-        course_id: number
-        course_title: string
-        course_cycle: string
-    }
-}
-
-
-
-type Course = {
-    course_id: number
-    course_title: string
-    course_cycle: string
 }
 
 
@@ -173,15 +130,16 @@ function getCourseAutocompletions(query: string, school_id: number, person_id: n
     const terms = query.split(/ +/);
     const x = uri + terms.map(t => `&course_title=ilike.%${encodeURIComponent(t)}%`).join('')
     return fetch(x).then(resp => resp.json())
-        .then(val => reshapeAutocompletions(val as AC[]));
+        .then(val => reshapeAutocompletions(val as AC[]))
+        .then(x => normalizeCourseSearch(x, person_id));
 }
 
 function reshapeTeachers(c: any) {
     const {course_teachers, ...rest} = c;
-    return {course_teachers: course_teachers.map((p: any) => p.person), ...rest}
+    return {course_teachers: course_teachers.map((p: any) => p.person), ...rest} as Course
 }
 
-function normalizedExams(exams: Ex[]) {
+function normalizeExams(exams: Ex[], school_id: number) {
     const course = new nm.schema.Entity('courses', {}, {idAttribute: 'course_id'})
     const exam = new nm.schema.Entity('exams', { course }, {idAttribute: 'exam_id'})
     const person = new nm.schema.Entity('persons', {exam: [exam]}, {idAttribute: 'person_id'})
@@ -191,40 +149,47 @@ function normalizedExams(exams: Ex[]) {
 
     const {entities: {courses, persons, exams:  Exams}, result} = normed;
     const reshapedCourses = Object.assign({}, ...Object.values(normed.entities.courses)
-        .map(c => ({ [(c as any).course_id]: reshapeTeachers(c) })));
-    const reshapedNormed = { entities: {courses: reshapedCourses, persons, exams:  Exams}, result };
+        .map(c => ({ [(c as Course).course_id]: reshapeTeachers(c) })));
+    const schools = { [school_id]: { school_title: exams[0].school_title, school_id} };
+    const reshapedNormed = { entities: {courses: reshapedCourses, persons, exams: Exams, schools: schools}, result };
     return reshapedNormed;
 }
 
-function reshape2(exams: Ex[]): { exam_table: TableState, school_title: string } {
-    const {person_school, ...other} = exams[0];
-    function comparator(a: PersonSchoolShape, b: PersonSchoolShape) {
-        if(a.member_department_id < b.member_department_id) return -1;
-        if(a.member_department_id > b.member_department_id) return +1;
-        if(a.person.last_name < b.person.last_name) return -1;
-        if(a.person.last_name > b.person.last_name) return +1;
-        if(a.person.first_name < b.person.first_name) return -1;
-        if(a.person.first_name > b.person.first_name) return +1;
-        return 0;
-    }
-    const personKeys = person_school.sort(comparator)
-        .map(p => ({ ['_'+p.person.person_id]: reshapePersonCourses(p) }));
+function normalizeCourseSearch(result: Map<string,CourseWithExam>, student: number) {
+    const course = new nm.schema.Entity('courses', {}, {idAttribute: 'course_id'})
+    const exam = new nm.schema.Entity('exams', {course}, {idAttribute: 'exam_id'})
+    const pc = new nm.schema.Entity('person_courses', {course,exam},{idAttribute:(x)=>student+'_'+x.course.course_id})
+
+    const values = Object.values(result);
+    const normed = nm.normalize(values,[pc]);
+    return normed;
+}
+
+function reshape3(exams: ( Person & {exam: (Exam & {course: Course})[] } )[]): TableState {
+    const personKeys = exams.sort(comparator)
+        .map((p:any) => ({ ['_'+p.person_id]: reshapePerson(p) }));
     const persons = Object.assign({}, ...personKeys);
 
-    function reshapePersonCourses(person: PersonSchoolShape): PersonWithCourses {
-        const {person: P, is_teacher, ...schoolInfo} = person;
-        const {exam, ...personInfo} = P;
-        const search = { query: "", result: new Map() };
-        return { courses: reshapeExam(exam), person: {...personInfo, ...schoolInfo}, search};
+    function reshapePerson(p: Person & {exam: (Exam & {course: Course})[] }) {
+        const {exam: ex, ...personInfo} = p;
+        return { person: personInfo, courses: reshapeExam(ex) }
     }
-    function reshapeExam(exam: ExamShape[]): Map<string, {exam: Exam, course: Course2}> {
+    function reshapeExam(exam: Exam[]): Map<string, {exam: Exam, course: Course}> {
         const examKeys = exam.filter((e:any) => !!e.course).map((e: any) =>
             ({ ['_'+e.exam_id]: { exam: e, course: e.course } }));
         return Object.assign({}, ...examKeys);
     }
-    return { exam_table: persons, ...other }
+    function comparator(a: Person, b: Person) {
+        if(a.member_department_id < b.member_department_id) return -1;
+        if(a.member_department_id > b.member_department_id) return +1;
+        if(a.last_name < b.last_name) return -1;
+        if(a.last_name > b.last_name) return +1;
+        if(a.first_name < b.first_name) return -1;
+        if(a.first_name > b.first_name) return +1;
+        return 0;
+    }
+    return persons;
 }
-
 
 //  ____        _          _____
 // |  _ \  __ _| |_ __ _  |_   _|   _ _ __   ___  ___
@@ -241,7 +206,7 @@ type Person = {
     member_department_id: number
 }
 
-type Course2 = {
+type Course = {
     course_id: number
     course_title: string
     course_cycle: string
@@ -256,17 +221,18 @@ type Exam = {
     // course_id? fixme
 }
 
+type School = {
+    school_id: number
+    school_title: string
+}
 
-// type CourseWithExam = Course2 & { exam?: Exam }
-type CourseWithExam = { course: Course2, exam?: Exam }
+
+// type CourseWithExam = Course & { exam?: Exam }
+type CourseWithExam = { course: Course, exam?: Exam }
 // type PersonWithCourses = Person & { courses: Map<string, CourseWithExam> }
 type PersonWithCourses = {
     person: Person
     courses: Map<string, CourseWithExam>
-    search: {
-        query: string
-        result: Map<string, CourseWithExam>
-    }
 }
 
 type TableState = Map<string, PersonWithCourses>
@@ -282,16 +248,16 @@ type TableState = Map<string, PersonWithCourses>
 type P = { path: string[] }
 
 type ExamFormPresentationStateProps = P & {
-    course: Course2
+    course: Course
     exam?: Exam
     student_person_id: number
 }
 type ExamFormPresentationCallbackProps = {
-    onSubmit(student: number, course: Course2, exam: Exam, selectedStatus: string, selectedType: string): void
+    onSubmit(student: number, course: Course, exam: Exam, selectedStatus: string, selectedType: string): void
 }
 type ExamFormPresentationProps = ExamFormPresentationStateProps & ExamFormPresentationCallbackProps
 type ExamFormProps = P & {
-    course: Course2
+    course: Course
     exam?: Exam
     student_person_id: number
 }
@@ -372,7 +338,7 @@ const examFormMapStateToProps = (state: any, ownProps: ExamFormProps) => {
     };
 }
 const examFormMapDispatchToProps = (dispatch: (action: any) => void, ownProps: ExamFormProps) => ({
-    onSubmit: (student: number, course: Course2, exam: Exam, selectedStatus: string, selectedType: string) => {
+    onSubmit: (student: number, course: Course, exam: Exam, selectedStatus: string, selectedType: string) => {
         const exam_id = exam ? exam.exam_id : null;
         changeExam(student, course.course_id, selectedStatus, exam_id)
             .then(resp => resp.json())
@@ -389,7 +355,7 @@ const examFormChanged = (patch: { status?: string, type?: string }, path: string
     path,
 })
 const EXAM_STATUS_CHANGED = "EXAM_STATUS_CHANGED";
-const examStatusChanged = (course: Course2, exam: Exam, student: number, path: string[]) => ({
+const examStatusChanged = (course: Course, exam: Exam, student: number, path: string[]) => ({
     type: EXAM_STATUS_CHANGED,
     course,
     exam,
@@ -430,7 +396,7 @@ const examFormReducer = (state: any, action: any) => {
 //
 
 
-const CourseExam = (props: {course: Course2, exam: Exam} & P & { student: number }) =>
+const CourseExam = (props: {course: Course, exam: Exam} & P & { student: number }) =>
     <div className={"exam-table__course-" + (props.exam ? props.exam.exam_status : "new")}>
     <a href={`/admin/gui/course/${props.course.course_id}`}>{ props.course.course_title }</a>
     ({ props.course.course_teachers.map(p => `${p.first_name} ${p.last_name}`).join() })
@@ -490,11 +456,11 @@ const courseSearchMapDispatchToProps = (dispatch: (action: any) => void, ownProp
     onQueryChange: (query: string) => {
         dispatch(courseSearchQueryChanged(query, ownProps.path));
         if(query.trim() == "") {
-            dispatch(courseSearchResponse(query, new Map(), ownProps.person_id, ownProps.path));
+            dispatch(courseSearchResponse(query, new Map(), [], ownProps.person_id, ownProps.path));
             return;
         }
         getCourseAutocompletions(query, ownProps.school_id, ownProps.person_id)
-            .then(result => dispatch(courseSearchResponse(query, result, ownProps.person_id, ownProps.path)))
+            .then(result => dispatch(courseSearchResponse(query, result.entities, result.result, ownProps.person_id, ownProps.path)))
     }
 })
 
@@ -514,9 +480,10 @@ const courseSearchQueryChanged = (query: string, path: string[]) => ({
     path,
 })
 
-const courseSearchResponse = (query: string, result: Map<string,CourseWithExam>, student: number, path: string[]) => ({
+const courseSearchResponse = (query: string, entities: any, result: any, student: number, path: string[]) => ({
     type: COURSE_SEARCH_RESPONSE,
     query,
+    entities,
     result,
     student,
     path,
@@ -530,23 +497,10 @@ const courseSearchReducer = (state: any, action: any) => {
             const {query} = Lens.get(state, action.path);
             if(query != action.query) return state;
 
-            const student = action.student;
-
-            const course = new nm.schema.Entity('courses', {}, {idAttribute: 'course_id'})
-            const exam = new nm.schema.Entity('exams', {course}, {idAttribute: 'exam_id'})
-            const pc = new nm.schema.Entity('person_courses', {course,exam},{idAttribute:(x)=>student+'_'+x.course.course_id})
-
-            const values = Object.values(action.result);
-            const normed = nm.normalize(values,[pc]);
-
             let st = state;
-            st = Lens.localUpdate(st, {result: normed.result}, action.path);
-            st = Lens.localUpdate(st, normed.entities.courses, ['courses']);
-            st = Lens.localUpdate(st, normed.entities.exams, ['exams']);
-            st = Lens.localUpdate(st, normed.entities.person_courses, ['person_courses']);
+            st = Lens.localUpdate(st, {result: action.result}, action.path);
+            st = _.merge({}, st, action.entities);
             return st;
-
-            return Lens.localUpdate(state, {result: action.result}, action.path);
         default:
             return state;
     }
@@ -575,15 +529,14 @@ const examRemoved = (exam_id: number, path: string[]) => ({
     path
 })
 
-interface ExamTableProps {
-    exam_table: TableState // fixme should not know about ExamForm states
+interface ExamTablePresentationProps {
+    exam_table: TableState
     school_title: string
-    dispatch(action: any): void
     school_id: number
 }
 
 // Presentation
-class ExamTablePresentation extends React.Component<ExamTableProps> {
+class ExamTablePresentation extends React.Component<ExamTablePresentationProps> {
     render() {
         const persons = this.props.exam_table || {};
         const school_title = this.props.school_title || "";
@@ -623,45 +576,64 @@ class ExamTablePresentation extends React.Component<ExamTableProps> {
             )}
         </tbody></table></div>
     }
-    componentDidMount() {
-        const dispatch = this.props.dispatch;
-        getExams(this.props.school_id)
-            .then((val: Ex[]) => ({normalized: normalizedExams(val)}))
-            .then(exams => dispatch(loadedExams(this.props.school_id, exams.normalized.entities, exams.normalized.result, []) ))
-    }
+}
+
+type ExamData = {
+    courses: Map<number, Course>
+    exams: Map<number, Exam>
+    persons: Map<number, Person>
+    person_courses: Map<string,{course: number, exam?: number}>
+    schools: Map<number, School>
+    personList: number[] // todo: move
 }
 
 
-const etMapStateToProps = (exams: ExamTableProps) => {
-    if(!exams) return {}
+const etMapStateToProps = (exams: ExamData, ownProps: any) => {
+    if(!exams) return { exam_table: new Map<string,PersonWithCourses>(), school_title: "", school_id: ownProps.school_id }
 
     const course = new nm.schema.Entity('courses', {}, {idAttribute: 'course_id'})
     const exam = new nm.schema.Entity('exams', { course }, {idAttribute: 'exam_id'})
     const person = new nm.schema.Entity('persons', {exam: [exam]}, {idAttribute: 'person_id'})
 
-    const denorm = nm.denormalize((exams as any).personList, [person], exams);
-    const x = [{person_school: denorm.map((person:any) => ({person})), school_title: exams.school_title}];
-    const y = reshape2(x)
-    return y;
+    const denorm = nm.denormalize(exams.personList, [person], exams);
+    const y = reshape3(denorm);
+    const school_title = (exams.schools as any)[ownProps.school_id].school_title; // wtf
+    return { exam_table: y, school_id: ownProps.school_id, school_title }
 };
+
+const ExamTableRenderer = connect(etMapStateToProps)((props: ExamTablePresentationProps) => <ExamTablePresentation {...props}/>)
+
+
 const etMapDispatchToProps = (dispatch: (action: any) => void, ownProps: any) =>({
     dispatch,
+    school_id: ownProps.school_id,
 });
 
-// Container
-const ExamTable = connect(etMapStateToProps, etMapDispatchToProps)(
-    (props: ExamTableProps) => <ExamTablePresentation
-        school_id={props.school_id}
-        school_title={props.school_title}
-        exam_table={props.exam_table}
-        dispatch={props.dispatch}/>);
+
+class ExamTableManager extends React.Component<{dispatch(action: any):void, school_id: number}> {
+    render() {
+        return <ExamTableRenderer school_id={this.props.school_id}/>
+    }
+    componentDidMount() {
+        const dispatch = this.props.dispatch;
+        getExams(this.props.school_id)
+            .then(exams => dispatch(loadedExams(this.props.school_id, exams.entities, exams.result, []) ))
+    }
+    // todo: timer
+}
+
+const ExamTable = connect(null, etMapDispatchToProps)(
+    (props:{school_id: number,dispatch(action: any):void}) =>
+        <ExamTableManager school_id={props.school_id} dispatch={props.dispatch}/>)
+
 
 // Reducer
-const examTableReducer = (state: { exams: ExamsDataShape}, action: any) => {
+const examTableReducer = (state: ExamData, action: any) => {
     switch(action.type) {
         case LOADED_EXAMS:
             let st = state;
-            st = Lens.set(st, action.entities, []);
+            //st = Lens.set(st, action.entities, []);
+            st = _.merge({}, st, action.entities);
             st = Lens.set(st, { personList: action.personList }, []);
             return st;
         case EXAM_REMOVED:
