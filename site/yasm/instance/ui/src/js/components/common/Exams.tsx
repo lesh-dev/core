@@ -26,7 +26,7 @@ const getExams = (schoolId: number) => fetch(
     &select=school_title,\
     person_school(is_teacher,member_department_id,\
     person(person_id,first_name,last_name,\
-    exam(exam_status,exam_id,\
+    exam(exam_status,exam_id,exam_modified,\
     course(course_id,course_title,course_created,school_id,course_cycle,
         course_teachers(person(first_name,last_name,person_id)) )\
     )))\
@@ -74,6 +74,7 @@ function changeExam(student: number, course: number, status?: string, exam_id?: 
             student_person_id: student,
             course_id: course,
             exam_status: status,
+            exam_modified: "now()", // todo remove me when sql trigger does this work
         };
         result = fetch(uri, { method: "POST",
             headers,
@@ -83,7 +84,10 @@ function changeExam(student: number, course: number, status?: string, exam_id?: 
         result = fetch(uri + "?exam_id=eq." + exam_id, {
             method: "PATCH",
             headers,
-            body: JSON.stringify({ exam_status: status }),
+            body: JSON.stringify({
+                exam_status: status,
+                exam_modified: "now()", /* todo remove me when sql trigger does this work */
+            }),
         })
     }
     else {
@@ -189,6 +193,32 @@ function reshape3(exams: ( Person & {exam: (Exam & {course: Course})[] } )[]): T
         return 0;
     }
     return persons;
+}
+
+function getExamUpdates(school_id: number, last_modified: string) {
+    // todo: member_department_id
+    return fetch(`//localhost:3000/exam?select=*,course(*),person(person_id,first_name,last_name)
+        &course.school_id=eq.${school_id}&exam_modified=gt.${last_modified}`
+        .replace(/ +/g,''))
+        .then(response => response.json())
+        .then(json => normalizeExamUpdates(json))
+}
+
+type EU = {
+    entities: {
+        courses: Map<number,Course>
+        persons: Map<number,Person>
+        exams:   Map<number,Exam & { course: number[], person: number[] }>
+    }
+    result: number[]
+}
+function normalizeExamUpdates(json: any) {
+    const course = new nm.schema.Entity('courses', {}, {idAttribute: 'course_id'});
+    const person = new nm.schema.Entity('persons', {}, {idAttribute: 'person_id'});
+    const exam = new nm.schema.Entity('exams', {course,person}, {idAttribute: 'exam_id'});
+
+
+    return nm.normalize(json, [exam]) as EU;
 }
 
 //  ____        _          _____
@@ -522,6 +552,14 @@ const LOADED_EXAMS = "LOADED_EXAMS";
 const loadedExams = (school_id: number, entities: any, personList: number[], path: string[]) =>
     ({ type: LOADED_EXAMS, school_id, entities, personList, path });
 
+const UPDATED_EXAMS = "UPDATED_EXAMS";
+const updatedExams = (school_id: number, entities: any) => ({
+    type: UPDATED_EXAMS,
+    school_id,
+    entities,
+})
+
+
 const EXAM_REMOVED = "EXAM_REMOVED";
 const examRemoved = (exam_id: number, path: string[]) => ({
     type: EXAM_REMOVED,
@@ -611,15 +649,55 @@ const etMapDispatchToProps = (dispatch: (action: any) => void, ownProps: any) =>
 
 
 class ExamTableManager extends React.Component<{dispatch(action: any):void, school_id: number}> {
+    constructor(props: {dispatch(action: any):void, school_id: number}) {
+        super(props);
+        this.runRaf = this.runRaf.bind(this);
+    }
     render() {
         return <ExamTableRenderer school_id={this.props.school_id}/>
     }
+    raf: any = null;
+    rafCounter = 0;
+    rafRunning = false;
+    last_modified = 0;
     componentDidMount() {
         const dispatch = this.props.dispatch;
         getExams(this.props.school_id)
-            .then(exams => dispatch(loadedExams(this.props.school_id, exams.entities, exams.result, []) ))
+            .then(exams => {
+                dispatch(loadedExams(this.props.school_id, exams.entities, exams.result, []) );
+                this.last_modified = Object.values(exams.entities.exams)
+                    .filter((e: any) => !!e.exam_modified)
+                    .map((e: any) => Date.parse(e.exam_modified))
+                    .reduce((a,b) => Math.max(a,b), this.last_modified);
+                // this.raf = setInterval(() => this.tickUpdate(this.props.school_id), 5000);
+                this.rafRunning = true;
+                this.raf = requestAnimationFrame(this.runRaf)
+            })
     }
-    // todo: timer
+    componentWillUnmount() {
+        cancelAnimationFrame(this.raf);
+        this.rafRunning = false;
+    }
+    tickUpdate(school_id: number) {
+        getExamUpdates(school_id, new Date(this.last_modified + 1 /* because of precision */).toISOString())
+            .then(r => {
+                if(!this.rafRunning) return; // handle case: response received after unmounting
+                r.result.length && this.props.dispatch(updatedExams(this.props.school_id, r.entities));
+                this.last_modified = Object.values(r.entities.exams)
+                    .filter(e => !!e.exam_modified)
+                    .map(e => Date.parse(e.exam_modified))
+                    .reduce((a,b) => Math.max(a,b), this.last_modified);
+            })
+    }
+    runRaf() {
+        if(this.rafCounter >= 300) {
+            this.tickUpdate(this.props.school_id);
+            this.rafCounter = 0;
+        } else {
+            this.rafCounter++;
+        }
+        if(this.rafRunning) requestAnimationFrame(this.runRaf)
+    }
 }
 
 const ExamTable = connect(null, etMapDispatchToProps)(
@@ -628,7 +706,7 @@ const ExamTable = connect(null, etMapDispatchToProps)(
 
 
 // Reducer
-const examTableReducer = (state: ExamData, action: any) => {
+const examTableReducer = (state: ExamData & { last_modified: number }, action: any) => {
     switch(action.type) {
         case LOADED_EXAMS:
             let st = state;
@@ -636,6 +714,17 @@ const examTableReducer = (state: ExamData, action: any) => {
             st = _.merge({}, st, action.entities);
             st = Lens.set(st, { personList: action.personList }, []);
             return st;
+        case UPDATED_EXAMS:
+            const {courses, persons, exams} = action.entities as EU["entities"];
+            const pe = _.groupBy(Object.values(exams), e => e.person);
+            const newPersons = Object.keys(pe).map(k => ({ [k]: merge(pe[k], (state.persons as any)[k]) }))
+            function merge(newExams: (Exam & {course:number,person:number})[], oldPerson: Person & {exam: number[]}) {
+                return Object.assign({}, oldPerson, { exam: _.uniq(
+                    [].concat(oldPerson.exam, newExams.map(e=>e.exam_id))
+                ) })
+            }
+            const newEntities= { courses, exams, persons: Object.assign({}, ...newPersons) }
+            return _.merge({}, state, newEntities); // TODO: update personList if needed
         case EXAM_REMOVED:
             const prefix = action.path.slice(0,-1);
             return Lens.set(state, { [action.exam_id]: null }, prefix);
