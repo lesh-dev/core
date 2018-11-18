@@ -427,9 +427,10 @@ const examFormReducer = (state: any, action: any) => {
 
 
 const CourseExam = (props: {course: Course, exam: Exam} & P & { student: number }) =>
-    <div className={"exam-table__course-" + (props.exam ? props.exam.exam_status : "new")}>
+    <div className={"exam-table__course exam-table__course-" + (props.exam ? props.exam.exam_status : "new")}>
     <a href={`/admin/gui/course/${props.course.course_id}`}>{ props.course.course_title }</a>
-    ({ props.course.course_teachers.map(p => `${p.first_name} ${p.last_name}`).join() })
+    <div className={"exam-table__prep"}>({ props.course.course_teachers.map(p => `${p.first_name} ${p.last_name}`).join() })
+    </div>
     <ExamForm path={[...props.path, "exam_form"]}
               course={props.course}
               student_person_id={props.student}
@@ -455,18 +456,18 @@ type CourseSearchProps = {
 }
 
 const CourseSearchPresentation = (props: CourseSearchPresentationProps) => <div>
-    <input value={props.query} onChange={e => props.onQueryChange(e.target.value)}/>
-    <ul>
+    <input className={"exam-table__search-input"} value={props.query} onChange={e => props.onQueryChange(e.target.value)}/>
+    <div className={"exam-table__search-answer"}>
         { Object.values(props.result).map((ac:CourseWithExam) => {
-            return <li key={ac.course.course_id}>
+            return <div key={ac.course.course_id}>
                 <CourseExam path={[...props.path/*, 'result'*/, '_'+ac.course.course_id]/*course or exam?*/}
                             course={ac.course}
                             exam={ac.exam}
                             student={props.person_id}
                 />
-            </li>}
+            </div>}
         )}
-    </ul>
+    </div>
 </div>
 
 const courseSearchMapStateToProps = (state: any, ownProps: CourseSearchProps) => {
@@ -598,15 +599,15 @@ class ExamTablePresentation extends React.Component<ExamTablePresentationProps> 
                         // значение цикла бывает 4-5, 1-3, пустой
                         function cycleOf(course_cycle: string) { return course_cycle.slice(0,1) || "1"; }
                         return <td key={cycle} className={"exam-table__cycle"}>
-                            <ul className={"exam-table__courses"}>{
+                            <div className={"exam-table__courses"}>{
                             courses.filter(e => cycleOf(e.course.course_cycle) == cycle).map(e =>
-                                <li key={e.course.course_id} className={"exam-table__course-" + e.exam.exam_status}>
+                                <div key={e.course.course_id} className={"exam-table__course-" + e.exam.exam_status}>
                                     <CourseExam course={e.course}
                                                 exam={{exam_id: e.exam.exam_id, exam_status:e.exam.exam_status}}
                                                 path={["exam_table", "_"+p.person.person_id, "courses", '_'+e.exam.exam_id]}
                                                 student={p.person.person_id}/>
-                                </li>
-                            ) }</ul>
+                                </div>
+                            ) }</div>
                         </td>
                     }) }
                 </tr>

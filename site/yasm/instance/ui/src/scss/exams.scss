@@ -1,3 +1,7 @@
+#body {
+  font-family: sans-serif;
+  }
+
 .create-course__cycle {
   width: 2em;
 }
@@ -13,6 +17,61 @@ td:hover .course-input {
   display: block;
 }
 
+.exam-table {
+  width: 100%;
+}
+
+.exam-table__person {
+  padding: 10px;
+}
+
+.exam-table__course {
+  margin-bottom: 5px;
+  padding: 10px;
+  width: 15vw;
+
+  a {
+    color: black;
+  }
+}
+
 .exam-table__course-passed {
-  background-color: lightgreen;
+  background-color: lightgreen; 
+}
+
+.exam-table__course-listen {
+  background: #eee;
+}
+
+.exam-table__add-exam {
+  width: 15vw;
+}
+
+.exam-table__search-input {
+  width: 15vw;
+}
+
+.exam-table__search-answer {
+  position: absolute;
+  position: absolute;
+  width: 17vw;
+  background: white;
+  padding: 10px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ccc;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.exam-table__prep {
+  font-size: 10px;
+}
+
+.exam-table__cycle {
+  width: 16vw;
+}
+
+
+table td, table td * {
+    vertical-align: top;
 }

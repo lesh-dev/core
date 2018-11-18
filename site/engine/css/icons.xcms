@@ -1,0 +1,14 @@
+<?php
+    global $full_design_dir;
+?>
+@font-face {
+    font-family: 'icomoon';
+    src:    url('<?php echo $full_design_dir; ?>fonts/icomoon/icomoon.eot?195opb');
+    src:    url('<?php echo $full_design_dir; ?>fonts/icomoon/icomoon.eot?195opb#iefix') format('embedded-opentype'),
+        url('<?php echo $full_design_dir; ?>fonts/icomoon/icomoon.ttf?195opb') format('truetype'),
+        url('<?php echo $full_design_dir; ?>fonts/icomoon/icomoon.woff?195opb') format('woff'),
+        url('<?php echo $full_design_dir; ?>fonts/icomoon/icomoon.svg?195opb#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
