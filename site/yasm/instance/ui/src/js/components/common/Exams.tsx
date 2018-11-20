@@ -308,34 +308,34 @@ class ExamFormPresentation extends React.Component<ExamFormPresentationProps, {s
             props.onSubmit(props.student_person_id, props.course, props.exam, this.state.selectedStatus, this.state.selectedType)
         }}>
             <div>
-                <label title={"listen"}>
+                <label title={"listen"} className={this.className("listen")}>
                     <input type={"radio"} name={"selectedStatus"} value={"listen"} readOnly={true}
                            checked={this.state.selectedStatus == "listen"}/>
                     ⏿
                 </label>
-                <label title={"passed"}>
+                <label title={"passed"} className={this.className("passed")}>
                     <input type={"radio"} name={"selectedStatus"} value={"passed"} readOnly={true}
                            checked={this.state.selectedStatus == "passed"}/>
                     ✅
                 </label>
-                <label title={"notpassed"}>
+                <label title={"notpassed"} className={this.className("notpassed")}>
                     <input type={"radio"} name={"selectedStatus"} value={"notpassed"} readOnly={true}
                            checked={this.state.selectedStatus == "notpassed"}/>
                     ☠
                 </label>
             </div>
             <div>
-                <label title={"optional"}>
+                <label title={"optional"} className={this.className("optional")}>
                     <input type={"radio"} name={"selectedType"} value={"optional"} readOnly={true}
                            checked={this.state.selectedType == "optional"}/>
                     ✪
                 </label>
-                <label title={"required"}>
+                <label title={"required"} className={this.className("required")}>
                     <input type={"radio"} name={"selectedType"} value={"required"} readOnly={true}
                            checked={this.state.selectedType == "required"}/>
                     ✍
                 </label>
-                <label title={"facultative"}>
+                <label title={"facultative"} className={this.className("facultative")}>
                     <input type={"radio"} name={"selectedType"} value={"facultative"} readOnly={true}
                            checked={this.state.selectedType == "facultative"}/>
                     ❁
@@ -355,6 +355,20 @@ class ExamFormPresentation extends React.Component<ExamFormPresentationProps, {s
             this.state.selectedType != (this.props.exam.exam_type || "optional" /* todo */)
             : true;
         return statusChanged || typeChanged;
+    }
+    className(x: string): string {
+        switch(x) {
+            case "listen":
+            case "passed":
+            case "notpassed":
+                return this.state.selectedStatus == x ? "exam-form__status_selected" : "";
+            case "optional":
+            case "required":
+            case "facultative":
+                return this.state.selectedType == x ? "exam-form__type_selected" : "";
+            default:
+                return "";
+        }
     }
 }
 
