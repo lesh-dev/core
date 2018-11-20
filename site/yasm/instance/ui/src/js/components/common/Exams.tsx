@@ -326,9 +326,9 @@ class ExamFormPresentation extends React.Component<ExamFormPresentationProps, {s
             </div>
             <div>
                 <label title={"optional"}>
-                    ✪
                     <input type={"radio"} name={"selectedType"} value={"optional"} readOnly={true}
                            checked={this.state.selectedType == "optional"}/>
+                    ✪
                 </label>
                 <label title={"required"}>
                     <input type={"radio"} name={"selectedType"} value={"required"} readOnly={true}
@@ -455,20 +455,43 @@ type CourseSearchProps = {
     person_id: number
 }
 
-const CourseSearchPresentation = (props: CourseSearchPresentationProps) => <div>
-    <input className={"exam-table__search-input"} value={props.query} onChange={e => props.onQueryChange(e.target.value)}/>
-    <div className={"exam-table__search-answer"}>
-        { Object.values(props.result).map((ac:CourseWithExam) => {
-            return <div key={ac.course.course_id}>
-                <CourseExam path={[...props.path/*, 'result'*/, '_'+ac.course.course_id]/*course or exam?*/}
-                            course={ac.course}
-                            exam={ac.exam}
-                            student={props.person_id}
-                />
-            </div>}
-        )}
-    </div>
-</div>
+class CourseSearchPresentation extends React.Component<CourseSearchPresentationProps, { focused: boolean }> {
+    constructor(props: CourseSearchPresentationProps) {
+        super(props);
+        this.state = { focused: false };
+        this.handleFocus = this.handleFocus.bind(this);
+        this.handleBlur = this.handleBlur.bind(this);
+        this.getClassName = this.getClassName.bind(this);
+    }
+    render() {
+        const props = this.props;
+
+        return <div tabIndex={1} onFocus={this.handleFocus} onBlur={this.handleBlur} className={this.getClassName()}>
+            <input className={"exam-table__search-input"} value={props.query} onChange={e => props.onQueryChange(e.target.value)}/>
+            <div className={"exam-table__search-answer"}>
+                { Object.values(props.result).map((ac:CourseWithExam) => {
+                    return <div key={ac.course.course_id}>
+                        <CourseExam path={[...props.path/*, 'result'*/, '_'+ac.course.course_id]/*course or exam?*/}
+                                    course={ac.course}
+                                    exam={ac.exam}
+                                    student={props.person_id}
+                        />
+                    </div>}
+                )}
+            </div>
+        </div>
+    }
+    handleFocus(e: React.FocusEvent) {
+        this.setState({ focused: true });
+    }
+    handleBlur(e: React.FocusEvent) {
+        this.setState({ focused: false });
+    }
+    getClassName() {
+        return "exam-table__course-search_" + (this.state.focused ? "focused" : "blurred");
+    }
+}
+
 
 const courseSearchMapStateToProps = (state: any, ownProps: CourseSearchProps) => {
     const {query,result:results} = Lens.get(state, ownProps.path, {query:"", result: []});
@@ -585,7 +608,9 @@ class ExamTablePresentation extends React.Component<ExamTablePresentationProps> 
             { (Object.values(persons) as PersonWithCourses[]).map(p =>
                 [<tr key={p.person.person_id + "_person"} className={"exam-table__person-row"}>
                     <td key={"0"} className={"exam-table__person"}>
-                        {p.person.first_name} {p.person.last_name}
+                        <div className={"exam-table__person_wrapper"}>
+                            {p.person.first_name} {p.person.last_name}
+                        </div>
                     </td>
                     <td key={"1"} className={"exam-table__add-exam"}>
                         <CourseSearch path={["exam_table", "_"+p.person.person_id, "search"]}
