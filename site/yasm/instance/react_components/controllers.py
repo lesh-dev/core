@@ -7,7 +7,7 @@ module = Blueprint('react-components', __name__, url_prefix='/RC')
 
 @module.route('/', methods=['GET'])
 @module.route('/<path:path>', methods=['GET'])
-@login_required
+# @login_required
 def index(path="dummy"):
     return render_template(
         "react-components/base.html",

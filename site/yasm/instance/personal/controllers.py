@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, jsonify
+from flask import Blueprint, render_template, jsonify, request
 from ..menu import menu
 from flask_login import login_required, current_user
-
+from werkzeug.security import generate_password_hash
 
 module = Blueprint('personal', __name__, url_prefix='/personal')
 
@@ -19,5 +19,23 @@ def index():
 @module.route('/get_profile', methods=['GET'])
 @login_required
 def get_profile():
-    user = current_user
-    return jsonify(user.serialize())
+    return jsonify(current_user.serialize())
+
+
+@module.route('/update_password', methods=['POST'])
+@login_required
+def update_password():
+    current_user.direct_login.update(
+        values={
+            'password_hash': generate_password_hash(password=request.values['new_password'])
+        }
+    )
+    return jsonify('OK')
+
+
+@module.route('/contact/add', methods=['POST'])
+@login_required
+def contacts_add():
+    pass
+    # name = request.values['name']
+    # value = request.values['value']

@@ -1,7 +1,6 @@
 import * as React from 'react'
 import {Moment} from "moment";
 import "../../../scss/dayline/dayline.scss"
-import {min} from "rxjs/operators";
 
 export interface Range {
     begin: Moment
