@@ -2,11 +2,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from sqlalchemy.inspection import inspect
 
-
 """
 ORM declaration file
 """
-
 
 db = SQLAlchemy()
 
@@ -106,6 +104,7 @@ class Person(UserMixin, db.Model, Serializer):
 
     def get_id(self):
         return self.person_id
+
     rights = NamedColumn(db.Text,
                          nick='права',
                          nullable=True)
@@ -531,7 +530,7 @@ class PersonSchool(db.Model, Serializer):
                                           nick="изменивший",
                                           nullable=False)  # user name
     frm = NamedColumn(db.Text,
-                      nick="заезд",)
+                      nick="заезд", )
     tll = NamedColumn(db.Text,
                       nick="отъезд", )
 
@@ -539,27 +538,33 @@ class PersonSchool(db.Model, Serializer):
 class Calendar(db.Model, Serializer):
     __tablename__ = 'calendar'
 
-    person_school_id = NamedColumn(db.Integer,
-                                    MarkedForeignKey(PersonSchool.person_school_id),
-                                    nick="person_school",
-                                    nullable=False,
-                                    primary_key=True
-                                   )
-    data = NamedColumn(db.DATE,
-                       nick="дата",
-                       nullable=False,
-                       primary_key=True
-                       )
-    status = NamedColumn(db.Text,
-                         nick='статус',
-                         nullable=False)
-    calendar_modified = NamedColumn(db.TIMESTAMP,
-                                    nick='время',
-                                    nullable=False,
-                                    )
-    changed_by = NamedColumn(db.Text,
-                             nick='изменивший',
-                             nullable=False)
+    person_school_id = NamedColumn(
+        db.Integer,
+        MarkedForeignKey(PersonSchool.person_school_id),
+        nick="person_school",
+        nullable=False,
+        primary_key=True
+    )
+    data = NamedColumn(
+        db.DATE,
+        nick="дата",
+        nullable=False,
+        primary_key=True
+    )
+    status = NamedColumn(
+        db.Text,
+        nick='статус',
+        nullable=False)
+    calendar_modified = NamedColumn(
+        db.TIMESTAMP,
+        nick='время',
+        nullable=False,
+    )
+    changed_by = NamedColumn(
+        db.Text,
+        nick='изменивший',
+        nullable=False
+    )
 
 
 class PersonComment(db.Model, Serializer):
