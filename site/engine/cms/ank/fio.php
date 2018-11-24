@@ -80,20 +80,21 @@ function xsm_fi_enc($person, $prefix = '')
 function xsm_person_name_filter($db, $show_name_filter)
 {
     $show_name_filter = trim($show_name_filter);
-    if (!strlen($show_name_filter))
+    if (!strlen($show_name_filter)) {
         return '';
+    }
 
     $words = explode(EXP_SP, $show_name_filter);
     $cond = '';
-    foreach ($words as $word)
-    {
+    foreach ($words as $word) {
         $w = trim($word);
-        if (!strlen($w))
+        if (!strlen($w)) {
             continue;
-
-        if (strlen($cond))
+        }
+        if (strlen($cond)) {
             $cond .= " AND ";
-        $esc_word = $db->escapeString($w);
+        }
+        $esc_word = xdb_quote($db, $w);
         $cond .=
             "(".
                 "(last_name LIKE '%$esc_word%') OR ".
@@ -102,8 +103,9 @@ function xsm_person_name_filter($db, $show_name_filter)
                 "(nick_name LIKE '%$esc_word%')".
             ")";
     }
-    if (!strlen($cond))
+    if (!strlen($cond)) {
         return '';
+    }
     return "($cond)";
 }
 

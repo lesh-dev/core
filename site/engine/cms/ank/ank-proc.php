@@ -37,11 +37,11 @@ function xsm_extract_phone_digits($phones_str)
 {
     $phones = xsm_format_phones($phones_str);
     $phones_digits = array();
-    foreach ($phones as $phone)
-    {
+    foreach ($phones as $phone) {
         $digits = xcms_get_key_or($phone, "digits");
-        if (xu_empty($digits))
+        if (xu_empty($digits)) {
             continue;
+        }
         $phones_digits[] = $digits;
     }
     return $phones_digits;
@@ -56,9 +56,9 @@ function xsm_extract_person_phone_digits($person)
 
 function xsm_find_person_origin($db, $new_person)
 {
-    $last_name_esc = $db->escapeString(xcms_get_key_or($new_person, "last_name"));
-    $first_name_esc = $db->escapeString(xcms_get_key_or($new_person, "first_name"));
-    $patronymic_esc = $db->escapeString(xcms_get_key_or($new_person, "patronymic"));
+    $last_name_esc = xdb_quote($db, xcms_get_key_or($new_person, "last_name"));
+    $first_name_esc = xdb_quote($db, xcms_get_key_or($new_person, "first_name"));
+    $patronymic_esc = xdb_quote($db, xcms_get_key_or($new_person, "patronymic"));
 
     $id_fields = array(
         "birth_date",
