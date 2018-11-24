@@ -179,7 +179,7 @@ const mapDispatchToProps = (dispatch: (action: any) => void, ownProps: { path: s
             return;
         }
         dispatch(searchRequest(query, path));
-        const baseUri = "//127.0.0.1:3000/search?";
+        const baseUri = "/postgrest/search?";
         const terms = query.split(/\s+/);
         const clauses = terms.map(t => '&description=ilike.' + encodeURIComponent(`%${t}%`));
         const uri = baseUri + "limit=5" + clauses.join('');
@@ -202,7 +202,7 @@ const mapDispatchToPropsBroken = ({
         } // empty string => don't search
         dispatch(searchRequest(query, path));
         console.log("state.status", getState().status); // demonstration
-        const baseUri = "//127.0.0.1:3000/search?";
+        const baseUri = "/postgrest/search?";
         const terms = query.split(/\s+/);
         //const uri = baseUri + "limit=5&description=" + encodeURIComponent(`ilike.%${query}%`);
         const clauses = terms.map(t => '&description=ilike.' + encodeURIComponent(`%${t}%`));

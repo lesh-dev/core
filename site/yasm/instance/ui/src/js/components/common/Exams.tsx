@@ -22,7 +22,7 @@ import "../../../scss/exams.scss"
 
 
 const getExams = (schoolId: number) => fetch(
-    `//localhost:3000/school?school_id=eq.${schoolId}\
+    `/postgrest/school?school_id=eq.${schoolId}\
     &select=school_title,\
     person_school(is_teacher,member_department_id,\
     person(person_id,first_name,last_name,\
@@ -62,7 +62,7 @@ interface Ex {
 
 
 function changeExam(student: number, course: number, status?: string, exam_id?: number) {
-    const uri = "//localhost:3000/exam";
+    const uri = "/postgrest/exam";
     const headers = {
         "Content-Type": "application/json",
         "Prefer": "return=representation",
@@ -100,7 +100,7 @@ function changeExam(student: number, course: number, status?: string, exam_id?: 
 }
 
 function createCourse(course_title: string, course_cycle: string, school_id: number) {
-    const uri = "//localhost:3000/course";
+    const uri = "/postgrest/course";
     const course = { course_title, course_cycle, school_id };
     return fetch(uri, {
         method: "POST",
@@ -126,7 +126,7 @@ function reshapeAutocompletions(courses: AC[]): Map<string, CourseWithExam> {
 
 // TODO: искать также по авторам курсов
 function getCourseAutocompletions(query: string, school_id: number, person_id: number) {
-    const uri = `//localhost:3000/course?
+    const uri = `/postgrest/course?
         limit=5&
         school_id=eq.${school_id}&
         select=*,exam(*),course_teachers(person(person_id,first_name,last_name))&
@@ -197,7 +197,7 @@ function reshape3(exams: ( Person & {exam: (Exam & {course: Course})[] } )[]): T
 
 function getExamUpdates(school_id: number, last_modified: string) {
     // todo: member_department_id
-    return fetch(`//localhost:3000/exam?select=*,course(*),person(person_id,first_name,last_name)
+    return fetch(`/postgrest/exam?select=*,course(*),person(person_id,first_name,last_name)
         &course.school_id=eq.${school_id}&exam_modified=gt.${last_modified}`
         .replace(/ +/g,''))
         .then(response => response.json())
