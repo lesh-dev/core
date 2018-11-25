@@ -34,3 +34,11 @@ def uninvited(school_id):
         'length': 0,
         'values': []
     })
+
+
+@module.route('school_dates/<int:school_id>', methods=['GET'])
+def school_dates(school_id):
+    sch = School.query.get(school_id)
+    start = sch.school_date_start
+    end = sch.school_date_end  # TODO
+    return jsonify([start, end])
