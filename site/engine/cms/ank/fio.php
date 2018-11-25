@@ -94,13 +94,14 @@ function xsm_person_name_filter($db, $show_name_filter)
         if (strlen($cond)) {
             $cond .= " AND ";
         }
-        $esc_word = xdb_quote($db, $w);
+        $like_word = "%$w%";
+        $esc_word = xdb_quote($db, $like_word);
         $cond .=
             "(".
-                "(last_name LIKE '%$esc_word%') OR ".
-                "(first_name LIKE '%$esc_word%') OR ".
-                "(patronymic LIKE '%$esc_word%') OR ".
-                "(nick_name LIKE '%$esc_word%')".
+                "(last_name LIKE $esc_word) OR ".
+                "(first_name LIKE $esc_word) OR ".
+                "(patronymic LIKE $esc_word) OR ".
+                "(nick_name LIKE $esc_word)".
             ")";
     }
     if (!strlen($cond)) {

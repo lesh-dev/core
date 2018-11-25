@@ -71,9 +71,9 @@ function xsm_find_person_origin($db, $new_person)
 
     $query =
         "SELECT * FROM person WHERE
-        (last_name = '$last_name_esc') AND
-        (first_name = '$first_name_esc') AND
-        (patronymic = '$patronymic_esc')
+        (last_name = $last_name_esc) AND
+        (first_name = $first_name_esc) AND
+        (patronymic = $patronymic_esc)
         ORDER BY person_created";
 
     $person_sel = xdb_query($db, $query);
