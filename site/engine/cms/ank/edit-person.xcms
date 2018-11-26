@@ -206,7 +206,7 @@ if (@$_POST["update-person"])
             $in_this_school_query .= " ORDER BY NOT (ps.is_student IS NOT NULL AND LENGTH(ps.is_student) > 0), $cg_order $class_order p.last_name, p.first_name";
             xdb_debug_area($in_this_school_query, XDB_DEBUG_AREA_DISABLED);
             $in_this_school_sel = xdb_query($db, $in_this_school_query);
-            $in_this_school_count = query_length($in_this_school_sel);
+            $in_this_school_count = xdb_query_length($in_this_school_sel);
 
 
             $not_in_this_school_query =
@@ -225,7 +225,7 @@ if (@$_POST["update-person"])
                 ";
             xdb_debug_area($not_in_this_school_query, XDB_DEBUG_AREA_DISABLED);
             $not_in_this_school_sel = xdb_query($db, $not_in_this_school_query);
-            $not_in_this_school_count = query_length($not_in_this_school_sel);
+            $not_in_this_school_count = xdb_query_length($not_in_this_school_sel);
 
             if ($in_this_school_count > 0) {
                 ?>
