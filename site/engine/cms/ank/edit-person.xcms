@@ -173,11 +173,12 @@ if (@$_POST["update-person"])
             $last_name = $_POST["last_name"];
 
             $db = xdb_get();
-            $name_filter = "(first_name == '";
-            $name_filter .= $first_name;
-            $name_filter .= "' AND last_name == '";
-            $name_filter .= $last_name;
-            $name_filter .= "')";
+            $first_name_esc = xdb_quote($db, $first_name);
+            $last_name_esc = xdb_quote($db, $last_name);
+            $name_filter = "(
+                (first_name = $first_name_esc) AND
+                (last_name = $last_name_esc)
+            )";
 
             $in_this_school_query =
                 "SELECT
@@ -198,7 +199,7 @@ if (@$_POST["update-person"])
 
             $in_this_school_query .= " AND ";
             $in_this_school_query .= $name_filter;
-            $in_this_school_query .= " AND (ps.school_id == $school_id)";
+            $in_this_school_query .= " AND (ps.school_id = $school_id)";
             $sort_by_class = xcms_get_persistent_key("list-person", "sort_by_class");
             $sort_by_curator_group = xcms_get_persistent_key("list-person", "sort_by_curator_group");
             $class_order = xcms_checkbox_enabled($sort_by_class) ? " CAST(ps.current_class AS INT), " : "";
@@ -218,11 +219,16 @@ if (@$_POST["update-person"])
                 p.phone, p.cellular,
                 p.email, p.skype, p.social_profile,
                 p.person_created, p.person_modified
-                FROM person p WHERE $name_filter AND
+                FROM person p
+                WHERE $name_filter AND
                 NOT EXISTS (
-                SELECT * FROM person_school ps WHERE
-                (ps.member_person_id = p.person_id) AND (ps.school_id == $school_id))
-                ";
+                    SELECT * FROM person_school ps
+                    WHERE
+                    (
+                        (ps.member_person_id = p.person_id) AND
+                        (ps.school_id = $school_id)
+                    )
+                )";
             xdb_debug_area($not_in_this_school_query, XDB_DEBUG_AREA_DISABLED);
             $not_in_this_school_sel = xdb_query($db, $not_in_this_school_query);
             $not_in_this_school_count = xdb_query_length($not_in_this_school_sel);
@@ -238,9 +244,8 @@ if (@$_POST["update-person"])
             if ($not_in_this_school_count > 0) {
                 ?>
                 <p>
-                    Люди с такими именем и фамилией уже есть в базе и не зачислены на школу. Проверьте, возможно вы
-                    хотели добавить одного из этих
-                    людей:
+                    Люди с такими именем и фамилией уже есть в базе и не зачислены на школу.
+                    Проверьте, возможно вы хотели добавить одного из этих людей:
                 </p>
                 <?php
                 xsm_output_person_list($not_in_this_school_sel);
