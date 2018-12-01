@@ -15,6 +15,7 @@ import {ContactCard} from "../components/common/Cards/ContactCard";
 import {TestHighlight} from "../components/common/Snippet";
 import {ExamsExample} from "../components/common/Exams"
 import {CalendarExample, CalendarPresentation} from "../components/common/Calendar";
+import {ATExample} from "../components/common/Attributes";
 
 let loremIpsum = require("lorem-ipsum");
 
@@ -97,6 +98,9 @@ const Main = () => (
             <Route exact
                    path='/RC/calendar'
                    render={() => <CalendarExample/>} />
+            <Route exact
+                   path='/RC/attributes'
+                   render={() => <ATExample/>} />
         </Switch>
     </main>
 );
@@ -119,6 +123,7 @@ const Header = () => (
                 <li><Link to={'/RC/search_example'}>SearchExample (live)</Link></li>
                 <li><Link to={'/RC/exams'}>Exams (live)</Link></li>
                 <li><Link to={'/RC/calendar'}>Calendar </Link></li>
+                <li><Link to={'/RC/attributes'}>Attribute Table</Link></li>
             </ul>
         </nav>
     </header>
