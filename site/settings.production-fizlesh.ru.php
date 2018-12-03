@@ -34,7 +34,7 @@ global $full_xengine_dir;
 $full_xengine_dir = "${full_web_prefix}${xengine_dir}";
 
 global $full_engine_dir;
-$full_xengine_dir = "${full_web_prefix}${xengine_dir}";
+$full_engine_dir = "${full_web_prefix}${engine_dir}";
 
 require_once("${full_xengine_dir}sys/db_const.php");
 // END OF IMMUTABLE PART
