@@ -10,7 +10,7 @@ require_once("${design_dir}modern_contacts.php");
     <link rel="yandex-tableau-widget" href="<# full_design_dir #>tableau.json" />
     <# js/jquery #>
     <# js/bootstrap3 #>
-
+    
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,600,400italic,700' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
@@ -22,7 +22,6 @@ require_once("${design_dir}modern_contacts.php");
 <body>
 <?php
 $page_id_filtered = str_replace("/", "_", $pageid);
-$page_alias = xcms_get_key_or($INFO, "alias");
 ?>
 <div style="position: fixed; right: 7px; bottom: 6px; z-index: 100; color: #ссс;">Skin:&nbsp;<a
     href="<?php echo $skin_switch_url; ?>"
@@ -41,10 +40,10 @@ $page_alias = xcms_get_key_or($INFO, "alias");
                  src="<# full_design_dir #>img/hedgehog.png" alt="ФизЛЭШ" />
 			</a>
 		</div>
-
+		
 		<nav id="main-menu">
 			<ul>
-				<# cms/menu/display start=1 end=2 #>
+				<# cms/menu/display start=1 end=2 #>	
 			</ul>
 		</nav>
 
@@ -64,47 +63,19 @@ $page_alias = xcms_get_key_or($INFO, "alias");
     <div class="another_menu">
     <# cms/user_menu separator= #>
     </div>
-
+		
 	<div id="main">
         <div class="content">
-
-
-            <?php
-            if ($page_alias == "index")
-            {
-                ?><# modern_index #><?php
-            }
-            ?>
-            <!-- <# cms/menu/display start=2 end=5 no_output #> -->
-            <?php
-            ?>
-
 
             <?php
                 $alias = xcms_get_key_or($INFO, "alias");
                 $aparam = xcms_get_key_or($_GET, "aparam");
                 $in_xsm = ($alias == "register" && strlen($aparam));
 
-                if ($page_alias == "index")
-                {
-                    $pageid = "z01News";
-                    ?> <div class="main-header">
-                            <h1>Page name</h1>
-                        </div>  <?php
-                    include(translate("<! cms/contlist/view !>"));
-                    ?>
-                    <center><!-- FIXME(bird) кажется, это лучше задавать стилем, а не тегом, так более гибко -->
-                        <a href="/news" >
-                            <button type="button" class="btn btn-default navbar-btn">Больше новостей</button>
-                        </a>
-                    </center><?php
-                }
-                else
-                {
                     if (!$in_xsm)
                     {?>
                         <# cms/page/edit_button #><?php
-                    }
+                    
 
                     ?>
                      <div class="main-header">
@@ -141,7 +112,7 @@ $page_alias = xcms_get_key_or($INFO, "alias");
                     ?>
                     <div id="content-text"><# cms/ #></div><?php
                 }?>
-
+				
 			</div>
 		</div>
 </div>
