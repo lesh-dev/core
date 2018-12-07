@@ -10,8 +10,6 @@ require_once("${design_dir}modern_contacts.php");
     <link rel="yandex-tableau-widget" href="<# full_design_dir #>tableau.json" />
     <# js/jquery #>
     <# js/bootstrap3 #>
-
-
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,600,400italic,700' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
     <# css/design tidy.css #>
@@ -31,33 +29,30 @@ $page_id_filtered = str_replace("/", "_", $pageid);
 
 <div class="page" id="page_<?php echo $page_id_filtered; ?>">
 
-<a href="#" class="js-nav-toggle nav-toggle"><i></i></a>
-	<div id="menu">
-		<div id="logo">
-			<a href="/">
-				<!-- <img src="img/logo/fizlesh.png"> -->
-                <img
-                 src="<# full_design_dir #>img/hedgehog.png" alt="ФизЛЭШ" />
-			</a>
-		</div>
+    <a href="#" class="js-nav-toggle nav-toggle"><i></i></a>
+    <div id="menu">
+        <div id="logo">
+            <a href="/">
+                <img src="<# full_design_dir #>img/hedgehog.png" alt="ФизЛЭШ" />
+            </a>
+        </div>
 
-		<nav id="main-menu">
-			<ul>
-				<# cms/menu/display start=1 end=2 #>
-			</ul>
-		</nav>
+        <nav id="main-menu">
+            <ul>
+                <# cms/menu/display start=1 end=2 #>
+            </ul>
+        </nav>
 
-		<div class="social">
-			<ul>
-				<li><a href="#"><i class="icon-vk"></i></a></li>
-				<li><a href="#"><i class="icon-facebook"></i></a></li>
-				<li><a href="#"><i class="icon-instagram"></i></a></li>
-			</ul>
-		</div>
-	</div>
+        <div class="social">
+            <ul>
+                <li><a href="https://vk.com/fizlesh" target="_blank"><i class="icon-vk"></i></a></li>
+                <li><a href="https://facebook.com/fizlesh" target="_blank"><i class="icon-facebook"></i></a></li>
+                <li><a href="https://instagram.com/lesh_org" target="_blank"><i class="icon-instagram"></i></a></li>
+            </ul>
+        </div>
+    </div>
 
-
-     <a id="signin" class="signin" href="<?php echo $meta_site_url_secure.'?'.
+    <a id="signin" class="signin" href="<?php echo $meta_site_url_secure.'?'.
         xcms_url(array('page' => $pageid, 'ref' => 'login', 'return' => '?ref=index')); ?>"> </a>
 
     <div class="another_menu">
@@ -65,58 +60,35 @@ $page_id_filtered = str_replace("/", "_", $pageid);
     </div>
 
 	<div id="main">
-        <div class="content">
+        <div class="content"><?php
 
-            <?php
-                $alias = xcms_get_key_or($INFO, "alias");
-                $aparam = xcms_get_key_or($_GET, "aparam");
-                $in_xsm = ($alias == "register" && strlen($aparam));
+        $alias = xcms_get_key_or($INFO, "alias");
+        $aparam = xcms_get_key_or($_GET, "aparam");
+        $in_xsm = ($alias == "register" && strlen($aparam));
 
-                    if (!$in_xsm)
-                    {?>
-                        <# cms/page/edit_button #><?php
-
-
-                    ?>
-                     <div class="main-header">
-                        <h1>
-<?php
-    $page_title = ""; // from settings
-    if (isset($pageid) && strlen($pageid)) {
-        $page_header = xcms_get_key_or($list, "header");
-        if (xu_empty($page_header))
-        {
-            // menu title is a fallback for header
-            $page_header = xcms_get_key_or($list, "menu-title");
-        }
-        if ((xu_not_empty($page_header)) && ($page_header!="Авторизация"))
-        {
-            $page_title = "$page_header";
-        }
-    }
-    echo htmlspecialchars($page_title);
-?>
-                    </h1>
-                    </div><?php
-                    if (xu_not_empty($menu_html_output))
-            {?>
-                <!-- optional menu of level 2 -->
-                <!-- <div class="content-second-menu">
-                    <# cms/menu/display start=2 end=2 #>
-                    <span><a href="about_school_life.html" class="menu2">Жизнь на  ЛЭШ</a></span>
-                    <span><a href="about_school_list.html" class="menu2">Список вещей</a></span>
-                    <span><a href="about_school_parents.html" class="menu2">Родителям</a></span>
-                    <span><a href="about_school_photo.html" class="menu2" style="margin-right: 0">Фотоальбом</a></span>
-            </div> --><?php
-            }
-                    ?>
-                    <div id="content-text"><# cms/ #></div><?php
-                }?>
-
-			</div>
+        if (!$in_xsm) {?>
+            <# cms/page/edit_button #>
+            <div class="main-header">
+                <h1><?php
+                $page_title = ""; // from settings
+                if (isset($pageid) && strlen($pageid)) {
+                    $page_header = xcms_get_key_or($list, "header");
+                    if (xu_empty($page_header)) {
+                        // menu title is a fallback for header
+                        $page_header = xcms_get_key_or($list, "menu-title");
+                    }
+                    if ((xu_not_empty($page_header)) && ($page_header!="Авторизация")) {
+                        $page_title = "$page_header";
+                    }
+                }
+                echo htmlspecialchars($page_title);
+                ?></h1>
+                </div>
+                <div id="content-text"><# cms/ #></div><?php
+        }?>
 		</div>
+	</div>
 </div>
 <# js/menu #>
 </body>
 </html>
-
