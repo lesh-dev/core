@@ -16,15 +16,18 @@
     background-color: #5c904e;
 }
 
-.menu-active-level1 {
+.menu-active-level1,
+.menu-active_parent-level1 {
     background-color: #506f3a;
     font-weight: bold;
 }
-.menu-active-level2 {
+.menu-active-level2,
+.menu-active_parent-level2 {
     background-color: #305c25;
     font-weight: bold;
 }
-.menu-active-level3 {
+.menu-active-level3,
+.menu-active_parent-level3 {
     background-color: #1c391e;
     font-weight: bold;
 }
@@ -61,17 +64,19 @@ a.menu-sys {
     border-radius: 5px;
 }
 
-a.menu-active:link {
+a.menu-active:link,
+a.menu-active_parent:link,
+a.menu-active:visited,
+a.menu-active_parent:visited {
     color: #d0e2bb;
 }
-a.menu-active:visited {
-    color: #d0e2bb;
-}
-a.menu-active:hover {
+a.menu-active:hover,
+a.menu-active_parent:hover {
     color: #000000;
     background-color: #a7ce1e;
 }
-a.menu-active:active {
+a.menu-active:active,
+a.menu-active_parent:active {
     color: #000000;
 }
 

@@ -703,24 +703,6 @@ a.menu-item {
     background-position: 0px 50%;
 }
 
-a.menu-active:link {
-}
-a.menu-active:visited {
-}
-a.menu-active:hover {
-}
-a.menu-active:active {
-}
-
-a.menu-passive:link {
-}
-a.menu-passive:visited {
-}
-a.menu-passive:hover {
-}
-a.menu-passive:active {
-}
-
 a.menuitem-auth {
     color: #0082c5 !important;
 }

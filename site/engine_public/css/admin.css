@@ -141,7 +141,8 @@ input.admin-long {
     width: 700px;
 }
 
-a.menu-active {
+a.menu-active,
+a.menu-active_parent {
     color: #9f0000;
     font-weight: bold;
 }

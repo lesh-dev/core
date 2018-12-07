@@ -106,10 +106,13 @@ function xcms_menu($init_path, $menu_templates, $menu_level, $add_href_params, $
     // text is already escaped hereech
     $html = str_replace("@@TEXT@", $text, $html);
 
-    if ($pageid == $pageiid || strstr($pageid, "$pageiid/"))
+    if ($pageid == $pageiid) {
         $html = str_replace("@@ACTIVE", "active", $html);
-    else
+    } elseif (strstr($pageid, "$pageiid/")) {
+        $html = str_replace("@@ACTIVE", "active_parent", $html);
+    } else {
         $html = str_replace("@@ACTIVE", "passive", $html);
+    }
 
     // add icon
     if (file_exists("$init_path/menuicon.gif"))
