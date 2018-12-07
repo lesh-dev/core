@@ -10,7 +10,7 @@ require_once("${design_dir}modern_contacts.php");
     <link rel="yandex-tableau-widget" href="<# full_design_dir #>tableau.json" />
     <# js/jquery #>
     <# js/bootstrap3 #>
-    
+
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,600,400italic,700' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
@@ -34,16 +34,16 @@ $page_id_filtered = str_replace("/", "_", $pageid);
 <a href="#" class="js-nav-toggle nav-toggle"><i></i></a>
 	<div id="menu">
 		<div id="logo">
-			<a href="index.html">
+			<a href="/">
 				<!-- <img src="img/logo/fizlesh.png"> -->
                 <img
                  src="<# full_design_dir #>img/hedgehog.png" alt="ФизЛЭШ" />
 			</a>
 		</div>
-		
+
 		<nav id="main-menu">
 			<ul>
-				<# cms/menu/display start=1 end=2 #>	
+				<# cms/menu/display start=1 end=2 #>
 			</ul>
 		</nav>
 
@@ -63,7 +63,7 @@ $page_id_filtered = str_replace("/", "_", $pageid);
     <div class="another_menu">
     <# cms/user_menu separator= #>
     </div>
-		
+
 	<div id="main">
         <div class="content">
 
@@ -75,7 +75,7 @@ $page_id_filtered = str_replace("/", "_", $pageid);
                     if (!$in_xsm)
                     {?>
                         <# cms/page/edit_button #><?php
-                    
+
 
                     ?>
                      <div class="main-header">
@@ -112,7 +112,7 @@ $page_id_filtered = str_replace("/", "_", $pageid);
                     ?>
                     <div id="content-text"><# cms/ #></div><?php
                 }?>
-				
+
 			</div>
 		</div>
 </div>
