@@ -46,8 +46,8 @@ $page_id_filtered = str_replace("/", "_", $pageid);
         <div class="social">
             <ul>
                 <li><a href="https://vk.com/fizlesh" target="_blank"><i class="icon-vk"></i></a></li>
-                <li><a href="https://facebook.com/fizlesh" target="_blank"><i class="icon-facebook"></i></a></li>
-                <li><a href="https://instagram.com/lesh_org" target="_blank"><i class="icon-instagram"></i></a></li>
+                <!-- <li><a href="https://facebook.com/fizlesh" target="_blank"><i class="icon-facebook"></i></a></li> -->
+                <li><a href="https://www.instagram.com/lesh_org/" target="_blank"><i class="icon-instagram"></i></a></li>
             </ul>
         </div>
     </div>
