@@ -83,8 +83,21 @@ $page_id_filtered = str_replace("/", "_", $pageid);
                 }
                 echo htmlspecialchars($page_title);
                 ?></h1>
-                </div>
-                <div id="content-text"><# cms/ #></div><?php
+            </div>
+
+            <!-- optional menu of level 2 -->
+            <# cms/menu/display start=2 end=5 no_output #>
+            <?php
+            if (xu_not_empty($menu_html_output))
+            {?>
+                <nav class="navbar my-navbar">
+                    <center>
+                        <ul class="nav navbar-nav"><?php echo $menu_html_output; ?></ul>
+                    </center>
+                </nav><?php
+            }?>
+
+            <div id="content-text"><# cms/ #></div><?php
         }?>
 		</div>
 	</div>
