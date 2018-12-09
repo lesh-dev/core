@@ -81,8 +81,9 @@ function xsm_draw_field_unnamed_input($desc, $value)
   **/
 function xsm_draw_generic_fields_begin($desc, $object, $key)
 {
-    if (xsm_is_bottom_field($key))
+    if (xsm_is_bottom_field($key)) {
         return true;
+    }
 
     $value = xcms_get_key_or($object, $key);
 
