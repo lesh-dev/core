@@ -2,6 +2,7 @@
 require_once("${engine_dir}xsm/diff.php");
 require_once("${engine_dir}cms/ank/edit-format.php");
 
+
 // Специфическая функция для данной таблицы (можно объединить с person_school)
 function xsm_person_comment_edit_operations($table_name, $id, $ret_title, $member_person_id)
 {
@@ -10,6 +11,7 @@ function xsm_person_comment_edit_operations($table_name, $id, $ret_title, $membe
     $redir = "view-person".xcms_url(array('school_id' => $school_id, 'person_id' => $member_person_id));
     xsm_edit_ops($table_name, $is_new, $redir, $ret_title, "Удалить комментарий");
 }
+
 
 /**
   * Специфическая функция: возврат происходит совсем в другую таблицу, нежели редактируемая сущность
@@ -20,15 +22,16 @@ function xsm_update_person_comment($title, $fields)
     $table_name = "person_comment";
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
+    echo "<pre>";
+    print_r($_POST);
+    print_r($fields);
+    echo "</pre>";
     $res = xdb_insert_or_update($table_name, array($key_name => $id), $_POST, $fields);
-    if ($res)
-    {
+    if ($res) {
         $id = $res;
         ?>
         <p><?php echo $title; ?> успешно сохранён.<?php
-    }
-    else
-    {?>
+    } else {?>
         <p>Не удалось добавить <?php echo $title; ?>.<?php
     }
     $person_id = xcms_get_key_or($_POST, 'blamed_person_id', XDB_INVALID_ID);
@@ -37,6 +40,7 @@ function xsm_update_person_comment($title, $fields)
     ?>
     <a href="<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
 }
+
 
 /* Ещё одна специфическая функция -- возврат на редактирование, а не на просмотр,
 т.к. просмотра отдельно не существует) */
@@ -48,6 +52,7 @@ function xsm_warn_delete_person_comment($table_name, $title, $aux_param = '')
     xsm_warn_delete_ops($table_name, $key_name, $id, $redir, "комментарий", $aux_param);
 }
 
+
 function xsm_delete_person_comment($table_name, $title, $aux_param = '')
 {
     $key_name = "${table_name}_id";
@@ -56,16 +61,16 @@ function xsm_delete_person_comment($table_name, $title, $aux_param = '')
     $person_id = $person_comment['blamed_person_id'];
     $school_id = XSM_SCHOOL_ANK_ID;
     $redir = "view-person".xcms_url(array('person_id' => $person_id, 'school_id' => $school_id));
-    // experimental 'delete as status update'
-    $res = xdb_insert_or_update($table_name, array($key_name => $id),
-        array('person_comment_deleted' => 'deleted'), xsm_get_fields("person_comment"));
-    //$res = xdb_delete($table_name, $id);
-    if ($res)
-    {?>
+    // we don't delete comments, only mark as deleted
+    $res = xdb_insert_or_update(
+        $table_name,
+        array($key_name => $id),
+        array('person_comment_deleted' => 'deleted'),
+        xsm_get_fields("person_comment")
+    );
+    if ($res) {?>
         <p><?php echo $title; ?> [<?php echo $id; ?>] удалён успешно.<?php
-    }
-    else
-    {?>
+    } else {?>
         <p>Не удалось удалить <?php echo $title; ?> [<?php echo $id; ?>] (возможно, есть связанные объекты).<?php
     }?>
     <a href="<?php echo $redir ?>">Вернуться к просмотру участника</a></p><?php
@@ -95,18 +100,16 @@ function xsm_notify_person_comment_edit($person_comment)
     xcms_send_notification("reg", NULL, $mail_msg);
 }
 
+
 function xsm_edit_person_comment()
 {
     $person_comment_id = xdb_get_idvar('person_comment_id');
     $person_comment = xdb_get_entity_by_id('person_comment', $person_comment_id);
-    if ($person_comment_id == XDB_NEW)
-    {
+    if ($person_comment_id == XDB_NEW) {
         // prefill
         $person_comment['owner_login'] = xcms_user()->login();
         $blamed_person_id = xdb_get_idvar('blamed_person_id');
-    }
-    else
-    {
+    } else {
         $blamed_person_id = $person_comment['blamed_person_id'];
     }
     $person = xdb_get_entity_by_id('person', $blamed_person_id);
@@ -116,8 +119,7 @@ function xsm_edit_person_comment()
     $xsm_admin = xcms_user()->check_rights("admin", false);
     $record_acl = xcms_get_key_or_enc($person_comment, "record_acl");
 
-    if ($record_acl == XSM_ACL_PRIVATE && !$xsm_private && !$xsm_admin)
-    {
+    if ($record_acl == XSM_ACL_PRIVATE && !$xsm_private && !$xsm_admin) {
         xcms_log(XLOG_ERROR, "ACL violation for person comment");
         die("Вам сюда нельзя. Если вы перешли по какой-либо ссылке, сообщите об этом на dev@fizlesh.ru. ");
         return;
@@ -133,12 +135,13 @@ function xsm_edit_person_comment()
                 <td class="ankListRowTitle">Комментарий</td>
             </tr>
             <?php
-            foreach ($fields_desc as $key => $desc)
-            {
-                if (xsm_draw_generic_fields_begin($desc, $person_comment, $key))
+            foreach ($fields_desc as $key => $desc) {
+                if (xsm_draw_generic_fields_begin($desc, $person_comment, $key)) {
                     continue;
-                if ($key == 'blamed_person_id')
+                }
+                if ($key == 'blamed_person_id') {
                     xsm_draw_field_unnamed_input($desc, xsm_fi($person));
+                }
                 xsm_draw_generic_fields_end();
             }?>
         </table><?php
@@ -148,21 +151,19 @@ function xsm_edit_person_comment()
     <?php
 }
 
-if (@$_POST["update-person_comment"])
-{
+
+if (@$_POST["update-person_comment"]) {
     // Админы и привилегированные могут редактировать приватные комментарии
     $xsm_private = xcms_user()->check_rights(XSM_ACL_PRIVATE, false);
     $xsm_admin = xcms_user()->check_rights("admin", false);
 
     $person_comment_id = xcms_get_key_or($_POST, "person_comment_id");
-    if ($person_comment_id != XDB_NEW)
-    {
+    if ($person_comment_id != XDB_NEW) {
         // forbid updating existing comments
         $person_comment = xdb_get_entity_by_id("person_comment", $person_comment_id);
         $record_acl_prev = xcms_get_key_or_enc($person_comment, "record_acl");
 
-        if ($record_acl_prev == XSM_ACL_PRIVATE && !$xsm_private && !$xsm_admin)
-        {
+        if ($record_acl_prev == XSM_ACL_PRIVATE && !$xsm_private && !$xsm_admin) {
             xcms_log(XLOG_ERROR, "ACL violation for person comment update");
             die("Вам сюда нельзя. Если вы перешли по какой-либо ссылке, сообщите об этом на dev@fizlesh.ru. ");
         }
@@ -170,17 +171,16 @@ if (@$_POST["update-person_comment"])
 
     $record_acl = xcms_get_key_or_enc($_POST, "record_acl");
     // send only public comments
-    if ($record_acl != XSM_ACL_PRIVATE)
-    {
+    if ($record_acl != XSM_ACL_PRIVATE) {
         xsm_notify_person_comment_edit($_POST);
     }
 
     xsm_update_person_comment('Комментарий', xsm_get_fields("person_comment"));
-}
-elseif (@$_POST["delete-person_comment"])
+} elseif (@$_POST["delete-person_comment"]) {
     xsm_warn_delete_person_comment('person_comment', 'комментарий');
-elseif (@$_POST["confirm-delete-person_comment"])
+} elseif (@$_POST["confirm-delete-person_comment"]) {
     xsm_delete_person_comment('person_comment', 'Комментарий');
-else
+} else {
     xsm_edit_person_comment();
+}
 ?>
