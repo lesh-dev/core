@@ -518,8 +518,7 @@ function xsm_print_person_selected_school($db, $school_id, $person)
 {
     $person_id = $person['person_id'];
     $person_school_id = xsm_get_person_school_id($db, $school_id, $person_id);
-    if ($person_school_id === NULL)
-    {?>
+    if ($person_school_id === null) {?>
         На данной школе не присутствовал.
         <?php echo xsm_print_add_person_to_school($db, $school_id, $person, /*use_title = */true); ?>.
         Чтобы зачислить человека на школу, можно также нажать на синий плюсик
@@ -527,11 +526,22 @@ function xsm_print_person_selected_school($db, $school_id, $person)
         return;
     }
     $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
-    if (xcms_checkbox_enabled($person_school['is_student']))
+    $something_printed = false;
+    if (xcms_checkbox_enabled($person_school['is_student'])) {
+        $something_printed = true;
         xsm_print_student_exams($db, $school_id, $person_id, $person_school);
+    }
 
-    if (xcms_checkbox_enabled($person_school['is_teacher']))
+    if (xcms_checkbox_enabled($person_school['is_teacher'])) {
+        $something_printed = true;
         xsm_print_courses_selected_school($db, $school_id, $person_id);
+    }
+
+    if (!$something_printed) {?>
+        <span class="error">Не является ни школьником, ни преподом на данной школе.
+        Кто-то забыл поставить галочку. Исправьте, пожалуйста</span>
+    <?php
+    }
 
     $person_school_comment = xcms_html_wrap_by_crlf(xsm_highlight_links($person_school['person_school_comment']));
     if (xu_not_empty($person_school_comment))
@@ -552,18 +562,20 @@ function xsm_print_person()
 
     $person_id = xdb_get_idvar('person_id');
     $person = xdb_get_entity_by_id('person', $person_id);
-    if ($person_id == XDB_NEW || is_array($person) && count($person) == 0)
+    if ($person_id == XDB_NEW || is_array($person) && count($person) == 0) {
         throw new Exception("Entity not found", XE_DB_OBJECT_NOT_FOUND);
+    }
 
     $school_id = xdb_get_idvar('school_id', XSM_SCHOOL_ANK_ID);
 
     xsm_print_person_header($db, $person, $school_id);
     xsm_print_person_schools($db, $person, $school_id);
 
-    if ($school_id == XSM_SCHOOL_ANK_ID)
+    if ($school_id == XSM_SCHOOL_ANK_ID) {
         xsm_print_person_ank_data($db, $person);
-    else
+    } else {
         xsm_print_person_selected_school($db, $school_id, $person);
+    }
 }
 
 xsm_print_person();
