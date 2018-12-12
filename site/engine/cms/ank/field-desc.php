@@ -259,10 +259,6 @@ function xsm_get_all_field_descriptors()
                 "name" => "ACL",
                 "type" => XSM_FT_ENUM,
             ),
-            "school_id" => array(
-                "name" => "Школа, к которой относится комментарий",
-                "type" => XSM_FT_FOREIGN_KEY,
-            ),
             "owner_login" => array(
                 "name" => "Логин автора",
                 "readonly" => true,
@@ -276,6 +272,11 @@ function xsm_get_all_field_descriptors()
             "school_id" => array(
                 "name" => "ID школы",
                 "readonly" => false,
+                "type" => XSM_FT_FOREIGN_KEY,
+            ),
+            "school_id" => array(
+                "name" => "Школа, к которой относится комментарий",
+                "readonly" => true,
                 "type" => XSM_FT_FOREIGN_KEY,
             ),
             // TODO: internals
