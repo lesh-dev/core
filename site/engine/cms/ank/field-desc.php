@@ -270,11 +270,6 @@ function xsm_get_all_field_descriptors()
                 "type" => XSM_FT_FOREIGN_KEY,
             ),
             "school_id" => array(
-                "name" => "ID школы",
-                "readonly" => false,
-                "type" => XSM_FT_FOREIGN_KEY,
-            ),
-            "school_id" => array(
                 "name" => "Школа, к которой относится комментарий",
                 "readonly" => true,
                 "type" => XSM_FT_FOREIGN_KEY,
