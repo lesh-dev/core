@@ -22,7 +22,12 @@ function xsm_update_person_comment($title, $fields)
     $table_name = "person_comment";
     $key_name = "${table_name}_id";
     $id = xcms_get_key_or($_POST, $key_name, 'invalid'); // invalid key
-    $res = xdb_insert_or_update($table_name, array($key_name => $id), $_POST, $fields);
+    $school_id = xcms_get_key_or($_POST, "school_id", XSM_SCHOOL_ANK_ID);
+    $data = $_POST;
+    if ($school_id == XSM_SCHOOL_ANK_ID) {
+        $data["school_id"] = null;
+    }
+    $res = xdb_insert_or_update($table_name, array($key_name => $id), $data, $fields);
     if ($res) {
         $id = $res;
         ?>
@@ -30,8 +35,7 @@ function xsm_update_person_comment($title, $fields)
     } else {?>
         <p>Не удалось добавить <?php echo $title; ?>.<?php
     }
-    $person_id = xcms_get_key_or($_POST, 'blamed_person_id', XDB_INVALID_ID);
-    $school_id = XSM_SCHOOL_ANK_ID;
+    $person_id = xcms_get_key_or($data, 'blamed_person_id', XDB_INVALID_ID);
     $redir = "view-person".xcms_url(array('person_id' => $person_id, 'school_id' => $school_id));
     ?>
     <a href="<?php echo $redir; ?>">Вернуться к просмотру участника</a></p><?php
@@ -110,8 +114,8 @@ function xsm_edit_person_comment()
     }
     $person = xdb_get_entity_by_id('person', $blamed_person_id);
 
-    // school to attach comment to (can be null)
-    $school_id = xdb_get_idvar('school_id');  // can be empty
+    // school to attach comment to
+    $school_id = xdb_get_idvar('school_id', XSM_SCHOOL_ANK_ID);
     $school = array();
     if (xu_not_empty($school_id) && $school_id != XSM_SCHOOL_ANK_ID) {
         $school = xdb_get_entity_by_id('school', $school_id);
