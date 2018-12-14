@@ -526,6 +526,17 @@ function xsm_print_person_selected_school($db, $school_id, $person)
         return;
     }
     $person_school = xdb_get_entity_by_id('person_school', $person_school_id);
+
+    # commenting person on this school
+    $comment_aux_params = xcms_url(array(
+        "person_comment_id" => XDB_NEW,
+        "blamed_person_id" => $person_id,
+        "school_id" => $school_id,
+    ));
+    ?><div class="ankRow"><?php
+    echo xcms_link("edit-person_comment$comment_aux_params", "add", "Добавить комментарий");
+    ?></div><?php
+
     $something_printed = false;
     if (xcms_checkbox_enabled($person_school['is_student'])) {
         $something_printed = true;
