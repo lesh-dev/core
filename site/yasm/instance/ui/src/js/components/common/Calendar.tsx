@@ -83,6 +83,7 @@ export class CalendarPresentation extends React.Component<CalendarProps> {
                         {row.person.first_name + " " + row.person.last_name}
                     </td>
                     {this.props.dates.map((date) => {
+                        console.log(row.calendar.find(x => x.date == date));
                         return <td>
                             {(row.calendar.find(x => x.date == date) || {status: '?'}).status}
                         </td>

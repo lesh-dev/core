@@ -545,7 +545,7 @@ class Calendar(db.Model, Serializer):
         nullable=False,
         primary_key=True
     )
-    data = NamedColumn(
+    date = NamedColumn(
         db.DATE,
         nick="дата",
         nullable=False,
