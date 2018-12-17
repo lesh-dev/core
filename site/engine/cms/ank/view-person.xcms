@@ -244,7 +244,8 @@ function xsm_draw_person_comments($db, $person_id)
     $xsm_private = xcms_user()->check_rights(XSM_ACL_PRIVATE, false);
     $xsm_admin = xcms_user()->check_rights("admin", false);
 
-    $query = "SELECT * FROM person_comment
+    $query = "SELECT * FROM person_comment pc
+        LEFT JOIN school s ON pc.school_id = s.school_id
         WHERE
         (blamed_person_id = $person_id)
         AND (person_comment_deleted <> 'deleted')
@@ -274,7 +275,12 @@ function xsm_draw_person_comments($db, $person_id)
         $comment_id = xcms_get_key_or_enc($comment_data, "person_comment_id");
         $owner_login = xcms_get_key_or_enc($comment_data, "owner_login");
         $record_acl = xcms_get_key_or_enc($comment_data, "record_acl");
+
         $school_id = xcms_get_key_or_enc($comment_data, "school_id");
+        $school_title = xcms_get_key_or($comment_data, "school_title");
+        $school_params = xcms_url(array("school_id" => $school_id));
+        $school_link = xcms_link("view-school$school_params", "edit", $school_title);
+
         $comment_text = xcms_html_wrap_by_crlf(xsm_highlight_links($comment_data["comment_text"]));
 
         if ($record_acl == XSM_ACL_PRIVATE && !$xsm_private && !$xsm_admin) {
@@ -288,7 +294,7 @@ function xsm_draw_person_comments($db, $person_id)
         <tr>
             <td class="ankList"><?php echo $owner_login; ?></td>
             <td class="ankList acl-<?php echo $record_acl; ?>"><?php echo $comment_text; ?></td>
-            <td class="ankList"><?php echo $school_id; ?></td>
+            <td class="ankList"><?php echo $school_link; ?></td>
             <td class="ankList"><?php echo $person_comment_created; ?></td>
             <td class="ankList"><?php
                 if ($record_acl == XSM_ACL_PRIVATE && !$xsm_private && !$xsm_admin) {?>
