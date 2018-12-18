@@ -109,13 +109,14 @@ function xsm_edit_person_comment()
         // prefill
         $person_comment['owner_login'] = xcms_user()->login();
         $blamed_person_id = xdb_get_idvar('blamed_person_id');
+        // school to attach comment to
+        $school_id = xdb_get_idvar('school_id', XSM_SCHOOL_ANK_ID);
     } else {
         $blamed_person_id = $person_comment['blamed_person_id'];
+        $school_id = $person_comment['school_id'];
     }
     $person = xdb_get_entity_by_id('person', $blamed_person_id);
 
-    // school to attach comment to
-    $school_id = xdb_get_idvar('school_id', XSM_SCHOOL_ANK_ID);
     $school = array();
     if (xu_not_empty($school_id) && $school_id != XSM_SCHOOL_ANK_ID) {
         $school = xdb_get_entity_by_id('school', $school_id);
