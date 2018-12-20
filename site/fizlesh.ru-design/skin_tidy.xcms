@@ -90,11 +90,9 @@ $page_id_filtered = str_replace("/", "_", $pageid);
             <?php
             if (xu_not_empty($menu_html_output))
             {?>
-                <nav class="navbar my-navbar">
-                    <center>
-                        <ul class="nav navbar-nav"><?php echo $menu_html_output; ?></ul>
-                    </center>
-                </nav><?php
+                <div class="content-second-menu">
+                    <ul> <?php echo $menu_html_output; ?></ul>
+                </div>  <?php
             }?>
 
             <div id="content-text"><# cms/ #></div><?php

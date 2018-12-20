@@ -79,7 +79,7 @@ h1 {
   border-bottom: 2px solid #7ac143;
 }
 
-.content-second-menu > span > a:hover {
+.content-second-menu > ul > li > a:hover {
   color: black;
   text-decoration: none;
   border-bottom: 2px solid #7ac143;
@@ -142,17 +142,6 @@ h1 {
   }
 }
 
-
-
-.menu2 {
-  margin-right: 5vw;
-/*border-bottom: 2px solid #7ac143;*/
-color: rgba(0, 0, 0, 0.9);
-text-transform: uppercase;
-letter-spacing: .1em;
-/*display: inline-block;*/
-}
-
 .menu-2 {
   margin-bottom: 0 !important;
   padding-left: 5px !important;
@@ -162,6 +151,27 @@ letter-spacing: .1em;
 .menu-2 a{
   letter-spacing: .01em !important;
 }
+
+
+.content-second-menu .menu-2 {
+  margin-right: 4vw;
+/*border-bottom: 2px solid #7ac143;*/
+color: rgba(0, 0, 0, 0.9);
+text-transform: uppercase;
+display: inline-block;
+}
+
+.content-second-menu .menu-2 a{
+  letter-spacing: .1em !important;
+  color: #000;
+}
+
+.content-second-menu  ul{
+list-style-type: none;
+padding-left: 0;
+margin-bottom: 0;
+}
+
 
 
 .another_menu {
