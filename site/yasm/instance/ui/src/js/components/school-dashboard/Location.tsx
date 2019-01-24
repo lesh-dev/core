@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+declare var require: (filename: string) => any;
 let {YMaps, Map, Placemark} = require("react-yandex-maps");
 import {ET} from "../common/EditableText";
 

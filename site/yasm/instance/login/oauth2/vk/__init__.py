@@ -39,6 +39,6 @@ class VkSignIn(OAuthSignIn):
         )
         return (
             'vk',
-            self.user_id,
+            str(self.user_id),
             None
         )

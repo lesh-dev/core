@@ -17,7 +17,7 @@ import {ExamsExample} from "../components/common/Exams"
 import {CalendarExample, CalendarPresentation} from "../components/common/Calendar";
 import {ATExample} from "../components/common/Attributes";
 
-let loremIpsum = require("lorem-ipsum");
+import loremIpsum = require("lorem-ipsum");
 
 
 const Main = () => (
