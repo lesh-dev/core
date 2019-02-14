@@ -4,6 +4,7 @@
 
 $engine_dir = "engine/";
 $xengine_dir = "xengine/";
+$full_xengine_dir = "${_SERVER["DOCUMENT_ROOT"]}/xengine/";
 
 session_start();
 
