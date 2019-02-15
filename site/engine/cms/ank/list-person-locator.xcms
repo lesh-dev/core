@@ -266,7 +266,7 @@ function xsm_show_all_person_list($sort_columns)
         class="xsm-increase_class_numbers"
         name="increase_class_numbers"
         id="increase_class_numbers-form"
-        action="/increase_class.php"
+        action="list-person-locator"
         style="float: right;">
         <?php xcmst_submit("increase_class_numbers", "Поднять номера классов", $increase_class_title, "btn btn-danger", $increase_class_disabled); ?>
     </form>
