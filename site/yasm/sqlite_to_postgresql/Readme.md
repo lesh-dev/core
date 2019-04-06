@@ -4,5 +4,5 @@
 
 1. Чистим битые ссылки, кривые целые числа и таймстемпы:
 
-    `sqlite3 ../fizlesh.sqlite3 < remove-broken.sql`
+    `sqlite3 ../fizlesh.sqlite3 < remove_broken.sql`
 2. Запускаем `./migrate.sh ../fizlesh.sqlite3`.
