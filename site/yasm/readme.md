@@ -60,6 +60,7 @@ OAUTH_CREDENTIALS = {
     }
 }
 ```
+
 * Для работы с oauth2 от google необходимо либо выставить глобальную переменную ```OAUTHLIB_INSECURE_TRANSPORT``` либо использовать ```https```
 
 
@@ -89,12 +90,15 @@ sudo -u postgres psql
 
 * В данный момент с миграцией  sqlite_to_postgresql/migrate.sh проблемы. Можно просто скопировать migration.sql (есть в чате) в /tmp
 
-* ```psql -d lesh --single-transaction -v ON_ERROR_STOP=on -f /tmp/migration.sql```
-* ```psql -d lesh --single-transaction -v ON_ERROR_STOP=on -f ./pending/attributes.sql -U lesh -h 127.0.0.1```
-* ```psql -d lesh --single-transaction -v ON_ERROR_STOP=on -f ./pending/rights.sql -U lesh -h 127.0.0.1```
-* ```psql -d lesh --single-transaction -v ON_ERROR_STOP=on -f ./pending/search-view.sql -U lesh -h 127.0.0.1```
+```
+psql -d lesh --single-transaction -v ON_ERROR_STOP=on -f /tmp/migration.sql
+psql -d lesh --single-transaction -v ON_ERROR_STOP=on -f ./pending/attributes.sql -U lesh -h 127.0.0.1
+psql -d lesh --single-transaction -v ON_ERROR_STOP=on -f ./pending/rights.sql -U lesh -h 127.0.0.1
+psql -d lesh --single-transaction -v ON_ERROR_STOP=on -f ./pending/search-view.sql -U lesh -h 127.0.0.1
 
-* ``` 
+``` 
+
+```
 psql -d lesh
     insert into person_attributes values(582, 'example', 'example');
     insert into direct_login values (963, 'i', 'pbkdf2:sha256:50000$jK658PL9$5b3a40b6db6f338f639c32f4810f3cfb0358ee55d87a89c3f973750467fb7896');
@@ -106,10 +110,12 @@ psql -d lesh
 * Скачать https://github.com/PostgREST/postgrest/releases/download/v5.1.0/postgrest-v5.1.0-ubuntu.tar.xz
 * Распаковать, к примеру, в /opt/
 
-* ```sudo cp ansible/postgrest.conf /etc/postgrest/lesh.conf```
-* ```sudo cp ansible/postgrest.service /etc/systemd/system/postgrest.service```
-* ```sudo systemctl daemon-reload```
-* ```sudo systemctl start postgrest.```
+```
+sudo cp ansible/postgrest.conf /etc/postgrest/lesh.conf
+sudo cp ansible/postgrest.service /etc/systemd/system/postgrest.service
+sudo systemctl daemon-reload
+sudo systemctl start postgrest.
+```
 
 (тест с помощью curl 'localhost:3000/search?description=ilike.%конф%&limit=2')
 
