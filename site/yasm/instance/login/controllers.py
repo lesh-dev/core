@@ -1,3 +1,20 @@
+"""
+.. _login_controllers:
+
+Url dispatching file of :ref:`login <login>` module
+
+Contained variables
+ * module - `Blueprint <http://exploreflask.com/en/latest/blueprints.html>`_ which provides urls and logic
+ * lm - `flask_login.LoginManager <https://flask-login.readthedocs.io/en/latest/#flask_login.LoginManager>`_
+
+Depends on
+ * :ref:`oauth <oauth>` module
+ * :ref:`database <database>`
+ * :ref:`login forms <login_forms>`
+
+Used in
+ * :ref:`login <login>` module
+"""
 from flask import Blueprint, url_for, redirect, flash, render_template, request
 from flask_login import current_user, login_user, logout_user
 from .oauth2 import OAuthSignIn
@@ -6,13 +23,10 @@ from ..menu import menu
 from flask_login import LoginManager
 from .forms import LoginForm
 from werkzeug.security import check_password_hash
-from sqlalchemy.sql.expression import bindparam
 
 lm = LoginManager()
 
-
 module = Blueprint('login', __name__, url_prefix='/login')
-
 
 lm.unauthorized_handler(lambda *args, **kwargs: redirect(url_for('login.index')))
 

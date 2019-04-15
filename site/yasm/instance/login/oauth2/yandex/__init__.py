@@ -1,3 +1,14 @@
+"""
+.. _oauth_yandex:
+
+Yandex specific oauth implementation.
+
+Depends on:
+ * :ref:`base <oauth_base>` oauth
+
+Used in
+ * :ref:`oauth <oauth>` module
+"""
 from ..base import OAuthSignIn
 from rauth import OAuth2Service
 from flask import redirect, request, json

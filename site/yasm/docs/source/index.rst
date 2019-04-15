@@ -10,6 +10,15 @@ Indices and tables
  * :ref:`genindex`
  * :ref:`modindex`
 
+.. _my-reference-label:
+
+test
+----
+
+This is the text of the section.
+
+It refers to the section itself, see :ref:`my-reference-label`.
+
 .. toctree::
    :caption: Contents:
 

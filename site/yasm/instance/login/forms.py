@@ -1,3 +1,15 @@
+"""
+.. _login_forms:
+
+Login forms declaration file
+
+Contained variables
+
+Depends on
+
+Used in
+ * :ref:`login controllers <login_controllers>`
+"""
 import wtforms
 
 

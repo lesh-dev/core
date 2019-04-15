@@ -1,10 +1,26 @@
+"""
+.. _instance:
+"""
+
 from flask import Flask
 from .database import db
 from .login import lm
 from .login.oauth2.base import Auth
 
+# __docformat__ = 'reStructuredText'
+
 
 def create():
+    """
+    .. _instance_create:
+
+    * creates flask app
+    * initializes database_
+    * initializes :ref:`login manager <login>`
+    * populates it with all blueprints
+
+    :return: Flask object
+    """
     yasm = Flask(__name__, instance_relative_config=True)
     yasm.config.from_object('config')
     yasm.config.from_pyfile('config.py')
