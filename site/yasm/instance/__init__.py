@@ -30,4 +30,6 @@ def create():
     yasm.register_blueprint(secure_static.module)
     import instance.postgrest as postgrest
     yasm.register_blueprint(postgrest.module)
+    import instance.docs as docs
+    yasm.register_blueprint(docs.module)
     return yasm

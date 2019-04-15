@@ -245,11 +245,12 @@ class Person(UserMixin, db.Model, Serializer):
 
 class DirectLogin(db.Model, Serializer):
     __tablename__ = 'direct_login'
+    id = NamedColumn(db.Integer,
+                     nick='так надо таблице нужен primary_key',
+                     primary_key=True, autoincrement=True)
     person_id = NamedColumn(db.Integer,
                             MarkedForeignKey(Person.person_id),
-                            nick='человек',
-                            primary_key=True,
-                            unique=True)
+                            nick='человек')
     login = NamedColumn(db.Text,
                         nick='логин',
                         nullable=False)

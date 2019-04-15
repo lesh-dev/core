@@ -5,8 +5,8 @@ from ..database import Person, Contact, DirectLogin
 from ..menu import menu
 from flask_login import LoginManager
 from .forms import LoginForm
-from hashlib import md5
 from werkzeug.security import check_password_hash
+from sqlalchemy.sql.expression import bindparam
 
 lm = LoginManager()
 
@@ -26,6 +26,7 @@ def user_login(login, password):
     logins = (DirectLogin
               .query
               .filter(DirectLogin.login == login)
+              .filter(DirectLogin.password_hash.startswith('pbkdf2:'))
               .all())
     if len(logins) != 1:
         return False
@@ -71,7 +72,7 @@ def oauth_callback(provider):
     if id is None:
         flash('Authentication failed.')
         return redirect('/login/')
-    user = Person.query.join(Contact).filter(Contact.name == type).filter(Contact.value == id).first()
+    user = Person.query.join(DirectLogin).filter(DirectLogin.password_hash == ('{type}:{id}'.format(type=type, id=id))).first()
     if not user:
         return redirect(url_for('login.error'))
     login_user(user, True)
