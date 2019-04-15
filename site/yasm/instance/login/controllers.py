@@ -86,7 +86,11 @@ def oauth_callback(provider):
     if id is None:
         flash('Authentication failed.')
         return redirect('/login/')
-    user = Person.query.join(DirectLogin).filter(DirectLogin.password_hash == ('{type}:{id}'.format(type=type, id=id))).first()
+    user = (Person
+            .query
+            .join(DirectLogin)
+            .filter(DirectLogin.password_hash == ('{type}:{id}'.format(type=type, id=id)))
+            .first())
     if not user:
         return redirect(url_for('login.error'))
     login_user(user, True)
