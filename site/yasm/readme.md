@@ -14,6 +14,12 @@
 * ```npm install```
 * ```npm run build```
 
+Сборка документации
+* из корня проекта выполнить
+* ```cd docs```
+* ```make coverage```
+* ```make html```
+
 Запуск
 * ```python run.py runserver```
 
