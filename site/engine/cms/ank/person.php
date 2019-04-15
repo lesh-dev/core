@@ -151,6 +151,7 @@ function xsm_increase_class_numbers()
             "owner_login" => $operator,
             "comment_text" => "Класс изменён с [$old_class] на [$current_class] пользователем $operator ($current_timestamp).",
             "blamed_person_id" => $person_id,
+            "school_id" => null,
         );
         $res = xdb_insert_or_update('person_comment', array('person_comment_id' => XDB_NEW), $person_comment, $person_comment_fields, $db);
         if (!$res)

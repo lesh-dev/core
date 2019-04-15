@@ -277,6 +277,7 @@ function xsm_bulk_archive()
             "owner_login" => $operator,
             "comment_text" => "Перемещён в Архив за давностью пользователем $operator ($current_timestamp).",
             "blamed_person_id" => $person_id,
+            "school_id" => null,
         );
         $res = xdb_insert_or_update('person_comment', array('person_comment_id' => XDB_NEW), $person_comment, xsm_get_fields("person_comment"));
         if (!$res)

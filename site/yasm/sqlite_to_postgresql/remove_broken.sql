@@ -1,6 +1,19 @@
-delete from course_teachers where not exists (select * from course where course.course_id = course_teachers.course_id) or not exists (select * from person where person_id = course_teachers.course_teacher_id);
 
-delete from exam where not exists (select * from course where course.course_id = exam.course_id) or not exists (select * from person where person_id = student_person_id);
+delete from course_teachers where
+    not exists (
+        select * from course where course.course_id = course_teachers.course_id
+    ) or
+    not exists (
+        select * from person where person_id = course_teachers.course_teacher_id
+    );
+
+delete from exam where
+    not exists (
+        select * from course where course.course_id = exam.course_id
+    ) or
+    not exists (
+        select * from person where person_id = student_person_id
+    );
 
 UPDATE person_comment  SET school_id =                NULL WHERE school_id = '';
 UPDATE course          SET course_modified =          NULL WHERE course_modified = '';

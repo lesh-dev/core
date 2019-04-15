@@ -26,7 +26,14 @@ function xsm_person_change_status_operations($table_name, $id, $ret_title, $memb
 function xsm_update_person_status()
 {
     ?><p><?php
-    $res = xdb_insert_or_update('person_comment', array('person_comment_id' => XDB_NEW), $_POST, xsm_get_fields("person_comment"));
+    $school_id = xcms_get_key_or($_POST, "school_id", XSM_SCHOOL_ANK_ID);
+    $data = $_POST;
+    if ($school_id == XSM_SCHOOL_ANK_ID) {
+        $data["school_id"] = null;
+    }
+    $res = xdb_insert_or_update(
+        'person_comment', array('person_comment_id' => XDB_NEW), $data, xsm_get_fields("person_comment")
+    );
 
     if ($res)
     {?>
@@ -96,7 +103,7 @@ function xsm_notify_person_status_change()
         $fields_desc,
         $table_title);
 
-    xcms_send_notification("reg", NULL, $mail_msg);
+    xcms_send_notification("reg", null, $mail_msg);
 }
 
 
