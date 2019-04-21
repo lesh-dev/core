@@ -61,6 +61,7 @@ simplegeneric==0.8.1
 six==1.11.0
 snowballstemmer==1.2.1
 Sphinx==2.0.1
+sphinx-rtd-theme==0.4.3
 sphinx-theme==1.0
 sphinxcontrib-apidoc==0.3.0
 sphinxcontrib-applehelp==1.0.1

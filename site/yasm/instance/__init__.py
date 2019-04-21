@@ -15,7 +15,7 @@ def create():
     .. _instance_create:
 
     * creates flask app
-    * initializes database_
+    * initializes :ref:`database <database>`
     * initializes :ref:`login manager <login>`
     * populates it with all blueprints
 
