@@ -3,10 +3,10 @@
 
 Google specific oauth implementation.
 
-Depends on:
+|depends|
  * :ref:`base <oauth_base>` oauth
 
-Used in
+|used|
  * :ref:`oauth <oauth>` module
 """
 from ..base import OAuthSignIn, Auth

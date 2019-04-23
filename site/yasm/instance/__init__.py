@@ -7,12 +7,12 @@ from .database import db
 from .login import lm
 from .login.oauth2.base import Auth
 
-# __docformat__ = 'reStructuredText'
-
 
 def create():
     """
     .. _instance_create:
+
+    Factory of flask applications, creates YaSM application.
 
     * creates flask app
     * initializes :ref:`database <database>`

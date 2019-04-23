@@ -3,16 +3,16 @@
 
 Url dispatching file of :ref:`login <login>` module
 
-Contained variables
+|contains|
  * module - `Blueprint <http://exploreflask.com/en/latest/blueprints.html>`_ which provides urls and logic
  * lm - `flask_login.LoginManager <https://flask-login.readthedocs.io/en/latest/#flask_login.LoginManager>`_
 
-Depends on
+|depends|
  * :ref:`oauth <oauth>` module
  * :ref:`database <database>`
  * :ref:`login forms <login_forms>`
 
-Used in
+|used|
  * :ref:`login <login>` module
 """
 from flask import Blueprint, url_for, redirect, flash, render_template, request

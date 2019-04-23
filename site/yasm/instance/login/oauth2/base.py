@@ -3,7 +3,7 @@
 
 Base classes for oauth.
 
-Used in
+|used|
  * :ref:`oauth <oauth>` module
 """
 from flask import url_for

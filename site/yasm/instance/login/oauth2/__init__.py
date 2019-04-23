@@ -3,14 +3,14 @@
 
 Collection of oauth handlers
 
-Depends on
+|depends|
  * :ref:`base <oauth_base>` oauth
  * :ref:`facebook <oauth_facebook>` oauth
  * :ref:`vk <oauth_vk>` oauth
  * :ref:`yandex <oauth_yandex>` oauth
  * :ref:`google <oauth_google>` oauth
 
-Used in
+|used|
  * :ref:`login controllers <login_controllers>` module
 """
 

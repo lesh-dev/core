@@ -3,10 +3,10 @@
 
 Module that provides login capabilities for YaSM
 
-Depends on
+|depends|
  * :ref:`login controllers <login_controllers>`
 
-Used in
+|used|
  * :ref:`instance <instance>`
 """
 from .controllers import module, lm
