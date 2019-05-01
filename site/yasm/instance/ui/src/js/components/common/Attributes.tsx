@@ -71,7 +71,6 @@ type ATPresentationProps = { config: Config, persons: number[] }
 
 const ATPresentation = ({ config, persons} : ATPresentationProps) =>
     <div>
-        <NewValueInput/>
         <table>
             <tbody>
             { persons.map( (p, p_index) =>
@@ -96,10 +95,26 @@ const item = (column: Column, person_school: number, c_index: number, p_index: n
 
 type ATCOwnProps = { person_school: number, column: Column, p_index: number, c_index: number, config: Config }
 
+function isSelected(state: StateShape, p_index: number, c_index: number) {
+    if(!state || !state.attribute_table) return false;
+    const at = state.attribute_table;
+    const p = at.selectionStartP <= p_index && p_index <= at.selectionEndP;
+    const c = at.selectionStartC <= c_index && c_index <= at.selectionEndC;
+    return p && c;
+}
+
+function isEndOfSelection(state: StateShape, p_index: number, c_index: number) {
+    if(!state || !state.attribute_table) return false;
+    const at = state.attribute_table;
+    return at.selectionEndP == p_index && at.selectionEndC == c_index;
+}
+
 const atcMapStateToProps = (state: StateShape, ownProps: ATCOwnProps) => ({
     value: (state && state.entities && state.entities.person_schools) ?
         state.entities.person_schools[ownProps.person_school].person_attributes[ownProps.column.field]
-        : ""
+        : "",
+    isSelected: isSelected(state, ownProps.p_index, ownProps.c_index),
+    isEndOfSelection: isEndOfSelection(state, ownProps.p_index, ownProps.c_index),
 })
 
 const AT_MOUSE_DOWN = 'AT_MOUSE_DOWN';
@@ -154,8 +169,13 @@ const atcMapDispatchToProps = (dispatch: (action: any) => void, ownProps: ATCOwn
 })
 
 const ATCell = connect(atcMapStateToProps, atcMapDispatchToProps)(props =>
-    <td onMouseDown={props.onMouseDown} onMouseUp={props.onMouseUp} onMouseOver={props.onMouseOver} onClick={props.onClick}>
+    <td onMouseDown={props.onMouseDown}
+        onMouseUp={props.onMouseUp}
+        onMouseOver={props.onMouseOver}
+        onClick={props.onClick}
+        className={ (props.isSelected ? "attribute-table__cell_selected" : "") + " " + (props.isEndOfSelection ? "attribute-table__cell_end-of-selection" : "") }>
         {props.value}
+        { props.isEndOfSelection && <NewValueInput/> }
     </td>
 )
 
