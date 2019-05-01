@@ -15,7 +15,7 @@ import {Dict} from "awesome-typescript-loader/dist/instance";
 
 const getAttributes = (school_id: number) => fetch(`
     /postgrest/person_school?
-    select=person_school_id,person(*),person_attributes(*)
+    select=person_school_id,person(*),person_attributes(*),calendar(*)
     &school_id=eq.${school_id}
     `.replace(/ +/g, ''))
     .then(resp => resp.json())
@@ -23,15 +23,18 @@ const getAttributes = (school_id: number) => fetch(`
 
 type Person = { person_id: number, first_name: string, last_name: string }
 type Attr = { person_school_id: number, field: string, value: string }
-type AttributeResponseItem = { person_school_id: number, person: Person, person_attributes: Attr[] }
+type AttributeResponseItem = { person_school_id: number, person: Person, person_attributes: Attr[], calendar: Attr[] }
 
 function normalizeAttributes(resp: AttributeResponseItem[]) {
     function reshapeAttrs(attrs: Attr[]) {
         return Object.assign({}, ...attrs.map(a => ({ [a.field]: a.value })) );
     }
+    function reshapeCalendar(attrs: any[]) { // FIXME
+        return Object.assign({}, ...attrs.map(a => ({ [a.data]: a.status })) );
+    }
     function reshapeItem(item: AttributeResponseItem) {
-        const {person_attributes, ...rest} = item;
-        return {person_attributes: reshapeAttrs(person_attributes), ...rest};
+        const {person_attributes, calendar, ...rest} = item;
+        return {person_attributes: reshapeAttrs(person_attributes), calendar: reshapeCalendar(calendar), ...rest};
     }
     const reshaped = resp.map(reshapeItem);
 
@@ -51,7 +54,7 @@ function normalizeAttributes(resp: AttributeResponseItem[]) {
 type StateShape = {
     entities: {
         persons: Dict<Person>
-        person_schools: Dict<{person_school_id: number, person_attributes: Dict<string>}>
+        person_schools: Dict<{person_school_id: number, person_attributes: Dict<string>, calendar: Dict<string>}>
     }
     attribute_table: {
         person_school_list: number[],
@@ -85,6 +88,7 @@ const ATPresentation = ({ config, persons} : ATPresentationProps) =>
 const item = (column: Column, person_school: number, c_index: number, p_index: number, config: Config) => {
     switch(column.type) {
         case "calendar":
+            return <CalendarCell {...{config, person_school, column, c_index, p_index}}/>
         case "dbcolumn":
         case "attribute":
         default:
@@ -180,6 +184,26 @@ const ATCell = connect(atcMapStateToProps, atcMapDispatchToProps)(props =>
 )
 
 
+const calendarMapStateToProps = (state: StateShape, ownProps: ATCOwnProps) => ({
+    value: (state && state.entities && state.entities.person_schools) ?
+        state.entities.person_schools[ownProps.person_school].calendar[ownProps.column.field]
+        : "",
+    isSelected: isSelected(state, ownProps.p_index, ownProps.c_index),
+    isEndOfSelection: isEndOfSelection(state, ownProps.p_index, ownProps.c_index),
+})
+
+const CalendarCell = connect(calendarMapStateToProps, atcMapDispatchToProps)(props =>
+    <td onMouseDown={props.onMouseDown}
+        onMouseUp={props.onMouseUp}
+        onMouseOver={props.onMouseOver}
+        onClick={props.onClick}
+        className={ (props.isSelected ? "attribute-table__cell_selected" : "") + " " + (props.isEndOfSelection ? "attribute-table__cell_end-of-selection" : "") }>
+        {props.value}
+        { props.isEndOfSelection && <NewValueInput/> }
+    </td>
+)
+
+
 
 
 
@@ -191,7 +215,11 @@ const loadedAttributes = (entities: any, person_school_list: any) => ({
     person_school_list,
 })
 
-const exampleConfig: Config = [{type: "attribute", field: "example"}, {type: "attribute", field: "play"}]
+const exampleConfig: Config = [
+    {type: "attribute", field: "example"},
+    {type: "attribute", field: "play"},
+    {type: "calendar", field: "2019-07-27"}
+]
 
 type Dispatch = (action: any) => void;
 
@@ -330,7 +358,7 @@ const reducer = (state: StateShape, action: any) => {
 const initialState: StateShape = {
     entities: {
         persons: {},
-        person_schools: {} as Dict<{person_school_id: number, person: number, person_attributes: Dict<string>}>
+        person_schools: {} as Dict<{person_school_id: number, person: number, person_attributes: Dict<string>, calendar: Dict<string>}>
     },
     attribute_table: {
         person_school_list: [] as number[],
