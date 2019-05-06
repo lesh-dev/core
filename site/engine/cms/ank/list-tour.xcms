@@ -50,10 +50,13 @@ function xsm_get_forest_selector($db, $single_forest, $show_name_filter)
 
     // base filter condition
     $cond =
-        "(   (anketa_status = 'progress')".
-        " OR (anketa_status = 'processed')".
-        " OR (anketa_status = 'cont')".
-        " OR (anketa_status = 'less') )";
+        "(".
+        "(anketa_status = 'progress') OR".
+        "(anketa_status = 'processed') OR".
+        "(anketa_status = 'cont') OR".
+        "(anketa_status = 'verify') OR".
+        "(anketa_status = 'less')".
+        ")";
 
     if ($show_department_id != XDB_INVALID_ID)
         $cond .= " AND ( department_id = $show_department_id )";
