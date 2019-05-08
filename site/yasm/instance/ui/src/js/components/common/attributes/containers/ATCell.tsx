@@ -50,7 +50,7 @@ export default connect(atcMapStateToProps, atcMapDispatchToProps)(props =>
         onMouseUp={props.onMouseUp}
         onMouseOver={props.onMouseOver}
         onClick={props.onClick}
-        className={ (props.isSelected ? "attribute-table__cell_selected" : "") + " " + (props.isEndOfSelection ? "attribute-table__cell_end-of-selection" : "") }>
+        className={  "AT_cell" + (props.isSelected ? " attribute-table__cell_selected" : "") + (props.isEndOfSelection ? " attribute-table__cell_end-of-selection" : "") }>
         {props.value}
         { props.isEndOfSelection && <NewValueInput/> }
     </td>

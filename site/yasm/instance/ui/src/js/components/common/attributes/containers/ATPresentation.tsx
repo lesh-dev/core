@@ -8,10 +8,10 @@ import { Column, Config, ATPresentationProps} from '../types/index'
 
 const ATPresentation = ({ config, persons} : ATPresentationProps) =>
     <div>
-        <table>
+        <table className="AT_table">
             <tbody>
             { persons.map( (p, p_index) =>
-                <tr>{
+                <tr className="AT_row">{
                     config.map((column, c_index) => item(column, p, c_index, p_index, config))
                 }</tr>)
             }
