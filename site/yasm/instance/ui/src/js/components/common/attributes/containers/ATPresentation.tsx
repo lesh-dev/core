@@ -3,6 +3,7 @@ import * as _ from "lodash"
 
 import ATCell from './ATCell'
 import CalendarCell from './CalendarCell'
+import PersonCell from './PersonCell'
 
 import { Column, Config, ATPresentationProps} from '../types/index'
 
@@ -21,9 +22,10 @@ const ATPresentation = ({ config, persons} : ATPresentationProps) =>
 
 const item = (column: Column, person_school: number, c_index: number, p_index: number, config: Config) => {
     switch(column.type) {
+        case "preson":
+            return <PersonCell {...{config, person_school, column, c_index, p_index}}/>
         case "calendar":
             return <CalendarCell {...{config, person_school, column, c_index, p_index}}/>
-        case "dbcolumn":
         case "attribute":
         default:
             return <ATCell {...{config, person_school, column, c_index, p_index}}/>
