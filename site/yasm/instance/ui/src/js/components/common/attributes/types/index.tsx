@@ -3,7 +3,7 @@ import {Dict} from "awesome-typescript-loader/dist/instance";
 export type StateShape = {
     entities: {
         persons: Dict<Person>
-        person_schools: Dict<{person_school_id: number, person_attributes: Dict<string>, calendar: Dict<string>}>
+        person_schools: Dict<{person_school_id: number, person_attributes: Dict<string>, calendar: Dict<string>, person: number}>
     }
     attribute_table: {
         person_school_list: number[],

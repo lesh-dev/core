@@ -40,6 +40,8 @@ type Column = { type: string, field: string }
 type Config = Column[]
 
 const exampleConfig: Config = [
+    {type: "person", field: "first_name"},
+    {type: "person", field: "last_name"},
     {type: "attribute", field: "example"},
     {type: "attribute", field: "play"},
     {type: "calendar", field: "2019-07-27"}

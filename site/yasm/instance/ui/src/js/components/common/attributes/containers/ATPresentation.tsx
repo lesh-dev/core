@@ -22,7 +22,7 @@ const ATPresentation = ({ config, persons} : ATPresentationProps) =>
 
 const item = (column: Column, person_school: number, c_index: number, p_index: number, config: Config) => {
     switch(column.type) {
-        case "preson":
+        case "person":
             return <PersonCell {...{config, person_school, column, c_index, p_index}}/>
         case "calendar":
             return <CalendarCell {...{config, person_school, column, c_index, p_index}}/>
