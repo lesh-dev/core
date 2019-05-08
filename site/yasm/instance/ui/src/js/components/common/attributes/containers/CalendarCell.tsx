@@ -47,13 +47,15 @@ const atcMapDispatchToProps = (dispatch: (action: any) => void, ownProps: ATCOwn
 })
 
 export default connect(calendarMapStateToProps, atcMapDispatchToProps)(props =>
-    <td onMouseDown={props.onMouseDown}
+    <td>
+    <div onMouseDown={props.onMouseDown}
         onMouseUp={props.onMouseUp}
         onMouseOver={props.onMouseOver}
         onClick={props.onClick}
         className={ "AT_cell" + (props.isSelected ? " attribute-table__cell_selected" : "") + (props.isEndOfSelection ? " attribute-table__cell_end-of-selection" : "") }>
         {props.value}
         { props.isEndOfSelection && <NewValueInput/> }
+        </div>
     </td>
 )
 
