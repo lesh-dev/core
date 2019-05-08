@@ -1,3 +1,7 @@
+"""
+.. _instance:
+"""
+
 from flask import Flask
 from .database import db
 from .login import lm
@@ -5,6 +9,18 @@ from .login.oauth2.base import Auth
 
 
 def create():
+    """
+    .. _instance_create:
+
+    Factory of flask applications, creates YaSM application.
+
+    * creates flask app
+    * initializes :ref:`database <database>`
+    * initializes :ref:`login manager <login>`
+    * populates it with all blueprints
+
+    :return: Flask object
+    """
     yasm = Flask(__name__, instance_relative_config=True)
     yasm.config.from_object('config')
     yasm.config.from_pyfile('config.py')
@@ -30,4 +46,6 @@ def create():
     yasm.register_blueprint(secure_static.module)
     import instance.postgrest as postgrest
     yasm.register_blueprint(postgrest.module)
+    import instance.docs as docs
+    yasm.register_blueprint(docs.module)
     return yasm

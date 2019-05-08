@@ -1,3 +1,14 @@
+"""
+.. _oauth_google:
+
+Google specific oauth implementation.
+
+|depends|
+ * :ref:`base <oauth_base>` oauth
+
+|used|
+ * :ref:`oauth <oauth>` module
+"""
 from ..base import OAuthSignIn, Auth
 import google_auth_oauthlib.flow
 from flask import redirect, request, json

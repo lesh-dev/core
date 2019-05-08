@@ -1,3 +1,14 @@
+"""
+.. _oauth_vk:
+
+Vkontakte specific oauth implementation.
+
+|depends|
+ * :ref:`base <oauth_base>` oauth
+
+|used|
+ * :ref:`oauth <oauth>` module
+"""
 from ..base import OAuthSignIn
 from rauth import OAuth2Service
 from flask import redirect, request, json

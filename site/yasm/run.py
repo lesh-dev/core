@@ -1,3 +1,7 @@
+"""
+
+"""
+
 from instance import create
 from flask_script import Manager
 
