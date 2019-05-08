@@ -24,7 +24,7 @@ function isEndOfSelection(state: StateShape, p_index: number, c_index: number) {
 
 const mapStateToProps = (state: StateShape, ownProps: ATCOwnProps) => ({
     value: (state && state.entities && state.entities.person_schools) ?
-        state.entities.persons[ownProps.person_id][ownProps.column.field]
+        (state.entities.persons[ownProps.person_school] as any)[ownProps.column.field]
         : "",
     isSelected: isSelected(state, ownProps.p_index, ownProps.c_index),
     isEndOfSelection: isEndOfSelection(state, ownProps.p_index, ownProps.c_index),
