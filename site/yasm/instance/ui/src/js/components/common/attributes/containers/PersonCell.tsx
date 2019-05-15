@@ -1,11 +1,12 @@
 import * as React from "react"
 import {connect} from "react-redux"
 import * as _ from "lodash"
+import {Dict} from "awesome-typescript-loader/dist/instance";
 
-import NewValueInput from './NewValueInput'
 import { atMouseDown, atMouseUp, atMouseOver, atClick } from '../actions/AttributesActions'
+import NewValueInput from './NewValueInput'
 
-import { StateShape, ATCOwnProps, Person, Column, Config } from '../types/index'
+import { Person, StateShape, ATCOwnProps, Column, Config } from '../types/index'
 
 function isSelected(state: StateShape, p_index: number, c_index: number) {
     if(!state || !state.attribute_table) return false;
@@ -21,13 +22,17 @@ function isEndOfSelection(state: StateShape, p_index: number, c_index: number) {
     return at.selectionEndP == p_index && at.selectionEndC == c_index;
 }
 
-const atcMapStateToProps = (state: StateShape, ownProps: ATCOwnProps) => ({
+const mapStateToProps = (state: StateShape, ownProps: ATCOwnProps) => ({
     value: (state && state.entities && state.entities.person_schools) ?
-        state.entities.person_schools[ownProps.person_school].person_attributes[ownProps.column.field]
+        (state.entities.persons
+            [state.entities.person_schools[ownProps.person_school].person] as any)
+            [ownProps.column.field]
         : "",
     isSelected: isSelected(state, ownProps.p_index, ownProps.c_index),
     isEndOfSelection: isEndOfSelection(state, ownProps.p_index, ownProps.c_index),
 })
+
+
 
 const atcMapDispatchToProps = (dispatch: (action: any) => void, ownProps: ATCOwnProps) => ({
     onClick: () => {
@@ -45,17 +50,16 @@ const atcMapDispatchToProps = (dispatch: (action: any) => void, ownProps: ATCOwn
     },
 })
 
-export default connect(atcMapStateToProps, atcMapDispatchToProps)(props =>
+export default connect(mapStateToProps, atcMapDispatchToProps)(props =>
     <td>
     <div onMouseDown={props.onMouseDown}
         onMouseUp={props.onMouseUp}
         onMouseOver={props.onMouseOver}
         onClick={props.onClick}
-        className={  "AT_cell" + (props.isSelected ? " attribute-table__cell_selected" : "") + (props.isEndOfSelection ? " attribute-table__cell_end-of-selection" : "") }>
+        className={ "AT_cell" + (props.isSelected ? " attribute-table__cell_selected" : "") + (props.isEndOfSelection ? " attribute-table__cell_end-of-selection" : "") }>
         {props.value}
-        { props.isEndOfSelection && <NewValueInput/> } 
+        { props.isEndOfSelection && <NewValueInput/> }
         </div>
     </td>
 )
-
 

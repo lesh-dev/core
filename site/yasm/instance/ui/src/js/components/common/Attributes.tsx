@@ -5,6 +5,7 @@ import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import * as _ from "lodash"
+import "../../../scss/attributes_table.scss"
 
 import {reducer, initialState} from './attributes/reducers/AttributesReducers'
 import AttributeTable from './attributes/containers/AttributeTable'

@@ -12,7 +12,8 @@ module.exports = {
         components: './src/js/pages/react-components.tsx',
         personal: './src/js/pages/personal.tsx',
         login: './src/scss/login/index.scss',
-        person_card: './src/scss/cards/person_card/person_card.scss'
+        person_card: './src/scss/cards/person_card/person_card.scss',
+        attributes_table: './src/scss/attributes_table.scss'
     },
     module: {
         rules: [
