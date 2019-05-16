@@ -4,6 +4,7 @@ import * as _ from "lodash"
 import ATCell from './ATCell'
 import CalendarCell from './CalendarCell'
 import PersonCell from './PersonCell'
+import ColumnCell from './ColumnCell'
 
 import { Column, Config, ATPresentationProps} from '../types/index'
 
@@ -11,6 +12,9 @@ const ATPresentation = ({ config, persons} : ATPresentationProps) =>
     <div>
         <table className="AT_table">
             <tbody>
+            <tr className="AT_row">{
+                config.map((column, c_index) => <ColumnCell {...column}/>)
+            }</tr>
             { persons.map( (p, p_index) =>
                 <tr className="AT_row">{
                     config.map((column, c_index) => item(column, p, c_index, p_index, config))
