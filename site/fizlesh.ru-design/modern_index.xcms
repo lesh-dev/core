@@ -19,7 +19,7 @@
         </div>
 
         <div class="item">
-            <a href="/join"><img src="<# full_design_dir #>img/carousel/c5.jpg" alt="Присоединяйся!"></a>
+            <a href="/register"><img src="<# full_design_dir #>img/carousel/c5.jpg" alt="Присоединяйся!"></a>
         </div>
 
         <!-- Left and right controls -->

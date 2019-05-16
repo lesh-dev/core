@@ -97,8 +97,9 @@ class XcmsSiteOpenAllPages(xtest_common.XcmsTest):
         self.gotoPage("/study/experiment/2014")
         self.gotoPage("/science")
 
-        self.gotoPage("/join")
-        self.assertBodyTextPresent(u"Собеседование на Физическое Отделение")
+        # #1070
+        # self.gotoPage("/join")
+        # self.assertBodyTextPresent(u"Собеседование на Физическое Отделение")
         self.gotoPage("/register")
         self.assertBodyTextPresent(self.get_anketa_page_text_sample())
         self.gotoPage("/photo")
