@@ -40,12 +40,12 @@ def user_login(login, password):
     logins = (DirectLogin
               .query
               .filter(DirectLogin.login == login)
-              .filter(DirectLogin.password_hash.startswith('pbkdf2:'))
+              .filter(DirectLogin.type == 'pbkdf2')
               .all())
     if len(logins) != 1:
         return False
     user = logins[0]
-    if check_password_hash(user.password_hash, password):
+    if check_password_hash('pbkdf2:{}'.format(user.password_hash), password):
         user = user.person
         login_user(user)
         return True
@@ -88,9 +88,8 @@ def oauth_callback(provider):
     user = (Person
             .query
             .join(DirectLogin)
-            .filter(DirectLogin.password_hash == ('{provider_type}:{user_id}'
-                                                  .format(provider_type=provider_type, user_id=user_id))
-                    )
+            .filter(DirectLogin.type == provider_type)
+            .filter(DirectLogin.password_hash == str(user_id))
             .first())
     if not user:
         return redirect(url_for('login.error'))
@@ -113,9 +112,16 @@ def error():
 
 
 def add_oauth(provider_type, user_id):
-    dl = DirectLogin()
-    dl.password_hash = '{provider_type}:{user_id}'.format(provider_type=provider_type, user_id=user_id)
-    dl.person = current_user
-    dl.login = 'OAUTH'
-    db.session.add(dl)
-    db.session.commit()
+    auths = (Person
+            .query
+            .join(DirectLogin)
+            .filter(DirectLogin.type == provider_type)
+            .all())
+    if not auths:
+        dl = DirectLogin()
+        dl.password_hash = str(user_id)
+        dl.type = provider_type
+        dl.person = current_user
+        dl.login = 'OAUTH'
+        db.session.add(dl)
+        db.session.commit()
