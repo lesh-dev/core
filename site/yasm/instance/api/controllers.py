@@ -1,5 +1,8 @@
-from .generated import module, jsonify
+# from .generated import module, jsonify
+from flask import Blueprint, jsonify
 from instance.database import School, PersonSchool, Person
+
+module = Blueprint('api', __name__, url_prefix='/api')
 
 
 @module.route("/uninvited/<int:school_id>", methods=['GET'])

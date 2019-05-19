@@ -8,7 +8,7 @@ const ifdef_query = require('querystring').encode(mode);
 
 module.exports = {
     entry: {
-        admin: './src/js/pages/admin.tsx',
+        // admin: './src/js/pages/admin.tsx',
         components: './src/js/pages/react-components.tsx',
         personal: './src/js/pages/personal.tsx',
         login: './src/scss/login/index.scss',

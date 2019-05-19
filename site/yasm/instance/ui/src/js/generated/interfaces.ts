@@ -5,24 +5,14 @@ export interface Notification {
     notification_html: string,
 }
 
-export interface NotificationList {
-    values: Notification[],
-    length: number
-}
-
 export interface Department {
     department_id: number,
     department_title: string,
     department_created: string,
     department_modified: string,
     department_changedby: string,
-    person_list: PersonList,
-    person_school_list: PersonSchoolList,
-}
-
-export interface DepartmentList {
-    values: Department[],
-    length: number
+    person: Person[],
+    person_school: PersonSchool[],
 }
 
 export interface Person {
@@ -61,29 +51,20 @@ export interface Person {
     person_created: string,
     person_modified: string,
     person_changedby: string,
-    direct_login_list: DirectLoginList,
-    contact_list: ContactList,
-    course_teachers_list: CourseTeachersList,
-    exam_list: ExamList,
-    person_school_list: PersonSchoolList,
-    person_comment_list: PersonCommentList,
-}
-
-export interface PersonList {
-    values: Person[],
-    length: number
+    direct_login: DirectLogin[],
+    contact: Contact[],
+    course_teachers: CourseTeachers[],
+    exam: Exam[],
+    person_school: PersonSchool[],
+    person_comment: PersonComment[],
 }
 
 export interface DirectLogin {
+    type: string,
     person_id: number,
     person: Person,
     login: string,
     password_hash: string,
-}
-
-export interface DirectLoginList {
-    values: DirectLogin[],
-    length: number
 }
 
 export interface Contact {
@@ -92,11 +73,6 @@ export interface Contact {
     person: Person,
     name: string,
     value: string,
-}
-
-export interface ContactList {
-    values: Contact[],
-    length: number
 }
 
 export interface School {
@@ -110,14 +86,9 @@ export interface School {
     school_created: string,
     school_modified: string,
     school_changedby: string,
-    course_list: CourseList,
-    person_school_list: PersonSchoolList,
-    person_comment_list: PersonCommentList,
-}
-
-export interface SchoolList {
-    values: School[],
-    length: number
+    course: Course[],
+    person_school: PersonSchool[],
+    person_comment: PersonComment[],
 }
 
 export interface Course {
@@ -134,13 +105,8 @@ export interface Course {
     course_created: string,
     course_modified: string,
     course_changedby: string,
-    course_teachers_list: CourseTeachersList,
-    exam_list: ExamList,
-}
-
-export interface CourseList {
-    values: Course[],
-    length: number
+    course_teachers: CourseTeachers[],
+    exam: Exam[],
 }
 
 export interface CourseTeachers {
@@ -152,11 +118,6 @@ export interface CourseTeachers {
     course_teachers_created: string,
     course_teachers_modified: string,
     course_teachers_changedby: string,
-}
-
-export interface CourseTeachersList {
-    values: CourseTeachers[],
-    length: number
 }
 
 export interface Exam {
@@ -171,11 +132,6 @@ export interface Exam {
     exam_created: string,
     exam_modified: string,
     exam_changedby: string,
-}
-
-export interface ExamList {
-    values: Exam[],
-    length: number
 }
 
 export interface PersonSchool {
@@ -198,11 +154,16 @@ export interface PersonSchool {
     person_school_changedby: string,
     frm: string,
     tll: string,
+    calendar: Calendar[],
 }
 
-export interface PersonSchoolList {
-    values: PersonSchool[],
-    length: number
+export interface Calendar {
+    person_school_id: number,
+    school: PersonSchool,
+    date: Date,
+    status: string,
+    calendar_modified: number,
+    changed_by: string,
 }
 
 export interface PersonComment {
@@ -220,11 +181,6 @@ export interface PersonComment {
     person_comment_changedby: string,
 }
 
-export interface PersonCommentList {
-    values: PersonComment[],
-    length: number
-}
-
 export interface Submission {
     submission_id: number,
     mail: string,
@@ -235,11 +191,6 @@ export interface Submission {
     replied: string,
     processed: string,
     contest_year: string,
-}
-
-export interface SubmissionList {
-    values: Submission[],
-    length: number
 }
 
 export interface Contestants {
@@ -256,12 +207,7 @@ export interface Contestants {
     fileexchange: string,
     status: string,
     contest_year: string,
-    solutions_list: SolutionsList,
-}
-
-export interface ContestantsList {
-    values: Contestants[],
-    length: number
+    solutions: Solutions[],
 }
 
 export interface Problems {
@@ -271,12 +217,7 @@ export interface Problems {
     problem_html: string,
     people: string,
     criteria: string,
-    solutions_list: SolutionsList,
-}
-
-export interface ProblemsList {
-    values: Problems[],
-    length: number
+    solutions: Solutions[],
 }
 
 export interface Solutions {
@@ -289,10 +230,5 @@ export interface Solutions {
     resolution_text: string,
     resolution_author: string,
     resolution_mark: string,
-}
-
-export interface SolutionsList {
-    values: Solutions[],
-    length: number
 }
 

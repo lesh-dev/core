@@ -1,4 +1,4 @@
-import {Notification, NotificationList, Department, DepartmentList, Person, PersonList, DirectLogin, DirectLoginList, Contact, ContactList, School, SchoolList, Course, CourseList, CourseTeachers, CourseTeachersList, Exam, ExamList, PersonSchool, PersonSchoolList, PersonComment, PersonCommentList, Submission, SubmissionList, Contestants, ContestantsList, Problems, ProblemsList, Solutions, SolutionsList, } from "./interfaces"
+import {Notification, NotificationList, Department, DepartmentList, Person, PersonList, DirectLogin, DirectLoginList, Contact, ContactList, School, SchoolList, Course, CourseList, CourseTeachers, CourseTeachersList, Exam, ExamList, PersonSchool, PersonSchoolList, Calendar, CalendarList, PersonComment, PersonCommentList, Submission, SubmissionList, Contestants, ContestantsList, Problems, ProblemsList, Solutions, SolutionsList, } from "./interfaces"
 
 export const default_Notification = {
     notification_id: 0,
@@ -13,8 +13,8 @@ export const default_Department = {
     department_created: "department_created",
     department_modified: "department_modified",
     department_changedby: "department_changedby",
-    person_list: {values: [], length: 0} as PersonList,
-    person_school_list: {values: [], length: 0} as PersonSchoolList,
+    person: default_Person[],
+    person_school: default_PersonSchool[],
 } as Department;
 
 export const default_Person = {
@@ -53,15 +53,16 @@ export const default_Person = {
     person_created: "person_created",
     person_modified: "person_modified",
     person_changedby: "person_changedby",
-    direct_login_list: {values: [], length: 0} as DirectLoginList,
-    contact_list: {values: [], length: 0} as ContactList,
-    course_teachers_list: {values: [], length: 0} as CourseTeachersList,
-    exam_list: {values: [], length: 0} as ExamList,
-    person_school_list: {values: [], length: 0} as PersonSchoolList,
-    person_comment_list: {values: [], length: 0} as PersonCommentList,
+    direct_login: default_DirectLogin[],
+    contact: default_Contact[],
+    course_teachers: default_CourseTeachers[],
+    exam: default_Exam[],
+    person_school: default_PersonSchool[],
+    person_comment: default_PersonComment[],
 } as Person;
 
 export const default_DirectLogin = {
+    type: "type",
     person_id: 0,
     person: default_Person,
     login: "login",
@@ -87,9 +88,9 @@ export const default_School = {
     school_created: "school_created",
     school_modified: "school_modified",
     school_changedby: "school_changedby",
-    course_list: {values: [], length: 0} as CourseList,
-    person_school_list: {values: [], length: 0} as PersonSchoolList,
-    person_comment_list: {values: [], length: 0} as PersonCommentList,
+    course: default_Course[],
+    person_school: default_PersonSchool[],
+    person_comment: default_PersonComment[],
 } as School;
 
 export const default_Course = {
@@ -106,8 +107,8 @@ export const default_Course = {
     course_created: "course_created",
     course_modified: "course_modified",
     course_changedby: "course_changedby",
-    course_teachers_list: {values: [], length: 0} as CourseTeachersList,
-    exam_list: {values: [], length: 0} as ExamList,
+    course_teachers: default_CourseTeachers[],
+    exam: default_Exam[],
 } as Course;
 
 export const default_CourseTeachers = {
@@ -155,7 +156,17 @@ export const default_PersonSchool = {
     person_school_changedby: "person_school_changedby",
     frm: "frm",
     tll: "tll",
+    calendar: default_Calendar[],
 } as PersonSchool;
+
+export const default_Calendar = {
+    person_school_id: 0,
+    school: default_PersonSchool,
+    date: default_Date,
+    status: "status",
+    calendar_modified: 0,
+    changed_by: "changed_by",
+} as Calendar;
 
 export const default_PersonComment = {
     person_comment_id: 0,
@@ -198,7 +209,7 @@ export const default_Contestants = {
     fileexchange: "fileexchange",
     status: "status",
     contest_year: "contest_year",
-    solutions_list: {values: [], length: 0} as SolutionsList,
+    solutions: default_Solutions[],
 } as Contestants;
 
 export const default_Problems = {
@@ -208,7 +219,7 @@ export const default_Problems = {
     problem_html: "problem_html",
     people: "people",
     criteria: "criteria",
-    solutions_list: {values: [], length: 0} as SolutionsList,
+    solutions: default_Solutions[],
 } as Problems;
 
 export const default_Solutions = {

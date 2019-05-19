@@ -1,10 +1,13 @@
 from instance.database import db
 from collections import OrderedDict
 import os
+import datetime
 
 MIME = {
     int: "number",
-    str: "string"
+    str: "string",
+    datetime.date: "Date",
+    datetime.datetime: "number",
 }
 
 
@@ -63,7 +66,7 @@ for model_name, model in db.Model._decl_class_registry.items():
 
 
 def scl(name):
-    return name + "_list"
+    return name
 
 
 def main():  # NOQA
@@ -79,7 +82,7 @@ def main():  # NOQA
             if len(column.foreign_keys):
                 for fk in column.foreign_keys:
                     m = fk._column_tokens[1]
-                    models[m].append((scl(tablename), CC(tablename) + "List", columnname, fk._column_tokens[2]))
+                    models[m].append((scl(tablename), CC(tablename) + "[]", columnname, fk._column_tokens[2]))
                     try:
                         backref = list(
                             map(
@@ -101,9 +104,9 @@ def main():  # NOQA
             for field in fields:
                 ts_interfaces.write("    {name}: {type},\n".format(name=field[0], type=field[1]))
             ts_interfaces.write("}\n\n")
-            ts_interfaces.write(
-                "export interface {name}List {{\n    values: {name}[],\n    length: number\n}}\n\n".format(
-                    name=CC(name)))
+            # ts_interfaces.write(
+            #     "export interface {name}List {{\n    values: {name}[],\n    length: number\n}}\n\n".format(
+            #         name=CC(name)))
         ts_interfaces.close()
 
     def gen_defaults():
@@ -243,10 +246,10 @@ def main():  # NOQA
                 tests.write('\n')
 
     gen_interfaces()
-    gen_connectors()
-    gen_api()
+    # gen_connectors()
+    # gen_api()
     gen_defaults()
-    gen_backend_speedtests()
+    # gen_backend_speedtests()
 
 
 if __name__ == '__main__':

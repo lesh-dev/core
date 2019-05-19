@@ -1,15 +1,12 @@
 import * as React from "react";
-import {getRequest} from "../../../generated/api_connect";
 import {Person} from "../../../generated/interfaces";
 import {ContactCard} from "../Cards/ContactCard";
 
 function contacts(person: Person) {
     let contacts = [];
-    for (let contact of person.contact_list.values) {
+    for (let contact of person.contact) {
         contacts.push(<ContactCard contact={contact} del_btn={() => {
-            getRequest('/admin/api/person/contact/del/' + contact.id, 'POST').then(() => {
-                this.reload()
-            })
+            // TODO: post to request ('/admin/api/person/contact/del/' + contact.id)
         }}/>)
     }
     return contacts;
