@@ -57,7 +57,21 @@ if echo $host | grep -q fizlesh ; then
         print_error "Invalid mode '$mode'. Specify it, please"
         exit 1
     fi
+elif echo $host | grep -q math-lesh ; then
+    if [ "$mode" = "production" ] ; then
+        root="/var/www/fizlesh.ru/production"
+        content_dir="/var/www/fizlesh.ru/content-fizlesh.ru"
+        www_user="lesh:lesh"
+    elif [ "$mode" = "testing" ] ; then
+        root="/var/www/fizlesh.ru/testing"
+        content_dir="/var/www/fizlesh.ru/content-fizlesh.ru"
+        www_user="lesh:lesh"
+    else
+        print_error "Invalid mode '$mode'. Specify it, please"
+        exit 1
+    fi
 fi
+
 
 sudo mkdir -p $root
 sudo cp -a ./site/* $root/
