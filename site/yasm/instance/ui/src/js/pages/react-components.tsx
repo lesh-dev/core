@@ -9,7 +9,6 @@ import {PersonCard} from "../components/common/Cards/PersonCard";
 import {SchoolCard} from "../components/common/Cards/SchoolCard";
 import {SideMenu} from "../components/common/SideMenu";
 import {SearchPresentation, default_SearchExample, SearchExample} from "../components/common/Search"
-import {default_Contact, default_Course, default_Person, default_School} from "../generated/defaults";
 import {CourseCard} from "../components/common/Cards/CourseCard";
 import {ContactCard} from "../components/common/Cards/ContactCard";
 import {TestHighlight} from "../components/common/Snippet";
@@ -18,6 +17,7 @@ import {CalendarExample, CalendarPresentation} from "../components/common/Calend
 import {ATExample} from "../components/common/Attributes";
 
 import loremIpsum = require("lorem-ipsum");
+import {Person} from "../generated/interfaces";
 
 
 const Main = () => (
@@ -69,20 +69,6 @@ const Main = () => (
                     ]
                 }
             ]}/>}/>
-            <Route exact
-                   path='/RC/person_card'
-                   render={() => {
-                       return <PersonCard person={default_Person}/>;
-                   }}/>
-            <Route exact
-                   path='/RC/school_card'
-                   render={() => <SchoolCard school={default_School}/>}/>
-            <Route exact
-                   path='/RC/course_card'
-                   render={() => <CourseCard course={default_Course}/>}/>
-            <Route exact
-                   path='/RC/contact_card'
-                   render={() => <ContactCard contact={default_Contact}/>} />
             <Route exact
                    path='/RC/search_presentation'
                    render={() => <SearchPresentation result={default_SearchExample} query={'й а'} onQueryChange={q => console.log("query", q)}/>} />

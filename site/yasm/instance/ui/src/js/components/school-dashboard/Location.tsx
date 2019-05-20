@@ -19,7 +19,6 @@ export class Location extends React.Component<LocationProps> {
     onLocationChange(s: string) {
         this.props.text_edit_callback(s)
     }
-
     render() {
         return <div>
             <div className={"sch__location"}>
