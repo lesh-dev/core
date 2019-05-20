@@ -132,10 +132,16 @@ sudo chmod 777 $root/.prec
 sudo chown -R $www_user $root
 
 target_site="fizlesh.local"
-if [ "$mode" = "production" ] ; then
-    target_site="fizlesh.ru"
-elif [ "$mode" = "testing" ] ; then
-    target_site="test.fizlesh.ru"
+if echo $host | grep -q math-lesh ; then
+    if [ "$mode" = "production" ] ; then
+        target_site="fizlesh.math-lesh.org"
+    fi
+else
+    if [ "$mode" = "production" ] ; then
+        target_site="fizlesh.ru"
+    elif [ "$mode" = "testing" ] ; then
+        target_site="test.fizlesh.ru"
+    fi
 fi
 
 print_message "Rebuilding aliases..."
