@@ -1,23 +1,41 @@
-import {Notification, NotificationList, Department, DepartmentList, Person, PersonList, DirectLogin, DirectLoginList, Contact, ContactList, School, SchoolList, Course, CourseList, CourseTeachers, CourseTeachersList, Exam, ExamList, PersonSchool, PersonSchoolList, Calendar, CalendarList, PersonComment, PersonCommentList, Submission, SubmissionList, Contestants, ContestantsList, Problems, ProblemsList, Solutions, SolutionsList, } from "./interfaces"
+import {Notification, Department, Person, DirectLogin, Contact, School, Course, CourseTeachers, Exam, PersonSchool, Calendar, PersonComment, Submission, Contestants, Problems, Solutions, } from "./interfaces"
 
-export const default_Notification = {
+export var default_Notification: Notification;
+export var default_Department: Department;
+export var default_Person: Person;
+export var default_DirectLogin: DirectLogin;
+export var default_Contact: Contact;
+export var default_School: School;
+export var default_Course: Course;
+export var default_CourseTeachers: CourseTeachers;
+export var default_Exam: Exam;
+export var default_PersonSchool: PersonSchool;
+export var default_Calendar: Calendar;
+export var default_PersonComment: PersonComment;
+export var default_Submission: Submission;
+export var default_Contestants: Contestants;
+export var default_Problems: Problems;
+export var default_Solutions: Solutions;
+
+
+default_Notification = {
     notification_id: 0,
     mail_group: "mail_group",
     notification_text: "notification_text",
     notification_html: "notification_html",
-} as Notification;
+};
 
-export const default_Department = {
+default_Department = {
     department_id: 0,
     department_title: "department_title",
     department_created: "department_created",
     department_modified: "department_modified",
     department_changedby: "department_changedby",
-    person: default_Person[],
-    person_school: default_PersonSchool[],
-} as Department;
+    person: [] as Person[],
+    person_school: [] as PersonSchool[],
+};
 
-export const default_Person = {
+default_Person = {
     person_id: 0,
     rights: "rights",
     last_name: "last_name",
@@ -53,31 +71,31 @@ export const default_Person = {
     person_created: "person_created",
     person_modified: "person_modified",
     person_changedby: "person_changedby",
-    direct_login: default_DirectLogin[],
-    contact: default_Contact[],
-    course_teachers: default_CourseTeachers[],
-    exam: default_Exam[],
-    person_school: default_PersonSchool[],
-    person_comment: default_PersonComment[],
-} as Person;
+    direct_login: [] as DirectLogin[],
+    contact: [] as Contact[],
+    course_teachers: [] as CourseTeachers[],
+    exam: [] as Exam[],
+    person_school: [] as PersonSchool[],
+    person_comment: [] as PersonComment[],
+};
 
-export const default_DirectLogin = {
+default_DirectLogin = {
     type: "type",
     person_id: 0,
     person: default_Person,
     login: "login",
     password_hash: "password_hash",
-} as DirectLogin;
+};
 
-export const default_Contact = {
+default_Contact = {
     id: 0,
     person_id: 0,
     person: default_Person,
     name: "name",
     value: "value",
-} as Contact;
+};
 
-export const default_School = {
+default_School = {
     school_id: 0,
     school_title: "school_title",
     school_type: "school_type",
@@ -88,12 +106,12 @@ export const default_School = {
     school_created: "school_created",
     school_modified: "school_modified",
     school_changedby: "school_changedby",
-    course: default_Course[],
-    person_school: default_PersonSchool[],
-    person_comment: default_PersonComment[],
-} as School;
+    course: [] as Course[],
+    person_school: [] as PersonSchool[],
+    person_comment: [] as PersonComment[],
+};
 
-export const default_Course = {
+default_Course = {
     course_id: 0,
     course_title: "course_title",
     school_id: 0,
@@ -107,11 +125,11 @@ export const default_Course = {
     course_created: "course_created",
     course_modified: "course_modified",
     course_changedby: "course_changedby",
-    course_teachers: default_CourseTeachers[],
-    exam: default_Exam[],
-} as Course;
+    course_teachers: [] as CourseTeachers[],
+    exam: [] as Exam[],
+};
 
-export const default_CourseTeachers = {
+default_CourseTeachers = {
     course_teachers_id: 0,
     course_id: 0,
     course: default_Course,
@@ -120,9 +138,9 @@ export const default_CourseTeachers = {
     course_teachers_created: "course_teachers_created",
     course_teachers_modified: "course_teachers_modified",
     course_teachers_changedby: "course_teachers_changedby",
-} as CourseTeachers;
+};
 
-export const default_Exam = {
+default_Exam = {
     exam_id: 0,
     student_person_id: 0,
     student: default_Person,
@@ -134,9 +152,9 @@ export const default_Exam = {
     exam_created: "exam_created",
     exam_modified: "exam_modified",
     exam_changedby: "exam_changedby",
-} as Exam;
+};
 
-export const default_PersonSchool = {
+default_PersonSchool = {
     person_school_id: 0,
     member_person_id: 0,
     member_person: default_Person,
@@ -156,19 +174,19 @@ export const default_PersonSchool = {
     person_school_changedby: "person_school_changedby",
     frm: "frm",
     tll: "tll",
-    calendar: default_Calendar[],
-} as PersonSchool;
+    calendar: [] as Calendar[],
+};
 
-export const default_Calendar = {
+default_Calendar = {
     person_school_id: 0,
     school: default_PersonSchool,
-    date: default_Date,
+    date: new Date(),
     status: "status",
     calendar_modified: 0,
     changed_by: "changed_by",
-} as Calendar;
+};
 
-export const default_PersonComment = {
+default_PersonComment = {
     person_comment_id: 0,
     comment_text: "comment_text",
     blamed_person_id: 0,
@@ -181,9 +199,9 @@ export const default_PersonComment = {
     person_comment_modified: "person_comment_modified",
     person_comment_deleted: "person_comment_deleted",
     person_comment_changedby: "person_comment_changedby",
-} as PersonComment;
+};
 
-export const default_Submission = {
+default_Submission = {
     submission_id: 0,
     mail: "mail",
     attachment: "attachment",
@@ -193,9 +211,9 @@ export const default_Submission = {
     replied: "replied",
     processed: "processed",
     contest_year: "contest_year",
-} as Submission;
+};
 
-export const default_Contestants = {
+default_Contestants = {
     contestants_id: 0,
     name: "name",
     mail: "mail",
@@ -209,20 +227,20 @@ export const default_Contestants = {
     fileexchange: "fileexchange",
     status: "status",
     contest_year: "contest_year",
-    solutions: default_Solutions[],
-} as Contestants;
+    solutions: [] as Solutions[],
+};
 
-export const default_Problems = {
+default_Problems = {
     problems_id: 0,
     contest_year: "contest_year",
     problem_name: "problem_name",
     problem_html: "problem_html",
     people: "people",
     criteria: "criteria",
-    solutions: default_Solutions[],
-} as Problems;
+    solutions: [] as Solutions[],
+};
 
-export const default_Solutions = {
+default_Solutions = {
     solutions_id: 0,
     problem_id: 0,
     problem: default_Problems,
@@ -232,5 +250,5 @@ export const default_Solutions = {
     resolution_text: "resolution_text",
     resolution_author: "resolution_author",
     resolution_mark: "resolution_mark",
-} as Solutions;
+};
 

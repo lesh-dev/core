@@ -115,8 +115,10 @@ def main():  # NOQA
                 return '0'
             elif s == 'string':
                 return '"{}"'.format(f)
-            elif s.endswith('List'):
-                return '{{values: [], length: 0}} as {f}'.format(f=s)
+            elif s.endswith('[]'):
+                return '[] as {f}'.format(f=s)
+            elif s == 'Date':
+                return 'new Date()'
             else:
                 return 'default_{f}'.format(f=s)
         ts_defaults = open("instance/ui/src/js/generated/defaults.ts", "w")
@@ -124,14 +126,15 @@ def main():  # NOQA
         for name, fields in models.items():
             ts_defaults.write(CC(name))
             ts_defaults.write(', ')
-            ts_defaults.write(CC(name) + 'List')
-            ts_defaults.write(', ')
         ts_defaults.write('} from "./interfaces"\n\n')
         for name, fields in models.items():
-            ts_defaults.write("export const default_{name} = {{\n".format(name=CC(name)))
+            ts_defaults.write("export var default_{name}: {name};\n".format(name=CC(name)))
+        ts_defaults.write('\n\n')
+        for name, fields in models.items():
+            ts_defaults.write("default_{name} = {{\n".format(name=CC(name)))
             for field in fields:
                 ts_defaults.write("    {name}: {type},\n".format(name=field[0], type=get_default(field[0], field[1])))
-            ts_defaults.write("}} as {name};\n\n".format(name=CC(name)))
+            ts_defaults.write("}};\n\n".format(name=CC(name)))
         ts_defaults.close()
 
     def gen_connectors():
