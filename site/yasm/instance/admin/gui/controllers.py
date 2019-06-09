@@ -17,7 +17,6 @@ module = NestableBlueprint('admin_gui', __name__, url_prefix='')
 
 @module.route('/', methods=['GET'])
 @module.route('/<path:path>', methods=['GET'])
-@login_required
 def index(path='path'):
     """
     Main page of admin module
