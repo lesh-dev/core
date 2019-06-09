@@ -1,23 +1,19 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {Spinner} from "../components/common/Spinner";
-import {Route, Router, Switch} from "react-router";
+import {Route, Switch} from "react-router";
 import {BrowserRouter, Link} from "react-router-dom";
-import {Cut, CutProps} from "../components/common/Cut";
+import {Cut} from "../components/common/Cut";
 import {ET} from "../components/common/EditableText";
-import {PersonCard} from "../components/common/Cards/PersonCard";
-import {SchoolCard} from "../components/common/Cards/SchoolCard";
 import {SideMenu} from "../components/common/SideMenu";
 import {SearchPresentation, default_SearchExample, SearchExample} from "../components/common/Search"
-import {CourseCard} from "../components/common/Cards/CourseCard";
-import {ContactCard} from "../components/common/Cards/ContactCard";
 import {TestHighlight} from "../components/common/Snippet";
 import {ExamsExample} from "../components/common/Exams"
-import {CalendarExample, CalendarPresentation} from "../components/common/Calendar";
+import {CalendarExample} from "../components/common/Calendar";
 import {ATExample} from "../components/common/Attributes";
 
 import loremIpsum = require("lorem-ipsum");
-import {Person} from "../generated/interfaces";
+import {LoginForm} from "../components/forms/login";
 
 
 const Main = () => (
@@ -71,22 +67,26 @@ const Main = () => (
             ]}/>}/>
             <Route exact
                    path='/RC/search_presentation'
-                   render={() => <SearchPresentation result={default_SearchExample} query={'й а'} onQueryChange={q => console.log("query", q)}/>} />
+                   render={() => <SearchPresentation result={default_SearchExample} query={'й а'}
+                                                     onQueryChange={q => console.log("query", q)}/>}/>
             <Route exact
                    path='/RC/search_example'
-                   render={() => <SearchExample/>} />
+                   render={() => <SearchExample/>}/>
             <Route exact
                    path='/RC/snippet'
-                   render={() => <TestHighlight/>} />
+                   render={() => <TestHighlight/>}/>
             <Route exact
                    path='/RC/exams'
-                   render={ExamsExample} />
+                   render={ExamsExample}/>
             <Route exact
                    path='/RC/calendar'
-                   render={() => <CalendarExample/>} />
+                   render={() => <CalendarExample/>}/>
             <Route exact
                    path='/RC/attributes'
-                   render={() => <ATExample/>} />
+                   render={() => <ATExample/>}/>
+            <Route exact
+                   path='/RC/loginform'
+                   render={() => <LoginForm/>}/>
         </Switch>
     </main>
 );
@@ -110,6 +110,8 @@ const Header = () => (
                 <li><Link to={'/RC/exams'}>Exams (live)</Link></li>
                 <li><Link to={'/RC/calendar'}>Calendar </Link></li>
                 <li><Link to={'/RC/attributes'}>Attribute Table</Link></li>
+                <li><Link to={'/RC/loginform'}>Login Form</Link></li>
+
             </ul>
         </nav>
     </header>
