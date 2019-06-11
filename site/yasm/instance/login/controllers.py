@@ -54,11 +54,9 @@ def user_login(login, password):
 
 @module.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == 'POST':
+    if LoginForm().validate_on_submit():
         if user_login(request.form['login'], request.form['password']):
-            return redirect(url_for('personal.index'))
-        else:
-            pass
+            return "OK"
     form = LoginForm(request.form)
     return render_template(
         "login/base.html",

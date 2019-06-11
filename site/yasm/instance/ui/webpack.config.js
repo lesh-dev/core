@@ -30,7 +30,7 @@ module.exports = {
         // admin: './src/js/pages/admin.tsx',
         components: './src/js/pages/react-components.tsx',
         personal: './src/js/pages/personal.tsx',
-        login: './src/scss/login/index.scss',
+        login: './src/js/pages/login.tsx',
         person_card: './src/scss/cards/person_card/person_card.scss',
         attributes_table: './src/scss/attributes_table.scss'
     },
@@ -110,6 +110,10 @@ module.exports = {
                         server.middleware.fileSystem.data.css['pack'][entry].toString('utf-8')
                     );
                 } else {
+                    const type = entry.split('.').filter(e => e !== '').slice(-1).pop();
+                    if (type === 'svg') {
+                        res.setHeader('Content-Type', 'image/svg+xml');
+                    }
                     res.write(
                         fsm.readFileSync(path.join(__dirname, '..', req.path))
                     );

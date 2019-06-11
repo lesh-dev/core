@@ -12,6 +12,9 @@
     {{ horizontal_nav_js() }}
     {% block js %}
     {% endblock %}
+    <script>
+    let csrf_token = '{{ csrf_token() }}';
+    </script>
     <title>
         {% block title %}
         {% endblock %}

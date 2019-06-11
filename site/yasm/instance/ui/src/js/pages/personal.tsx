@@ -19,7 +19,8 @@ class Personal extends React.Component<undefined, PersonalState> {
     }
 
     render() {
-        if (this.state && false) {
+        if (this.state) {
+            console.log(this.state.person);
             return <div>
                 <Contacts person={this.state.person}/>
             </div>

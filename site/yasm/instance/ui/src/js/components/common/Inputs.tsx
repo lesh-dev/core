@@ -1,10 +1,9 @@
 import * as React from 'react';
-import {Simulate} from "react-dom/test-utils";
-import input = Simulate.input;
+import '../../../scss/inputs/index.scss';
 
 interface InputsProps {
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-    display?: string
+    display_name?: string
     name?: string
     className?: string
     onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void
@@ -15,7 +14,7 @@ export class Inputs<P> extends React.Component<InputsProps & P> {
     static defaultProps = {
         onBlur: (event: any) => {},
         onFocus: (event: any) => {},
-    }
+    };
 
     render() {
         return (
@@ -23,13 +22,16 @@ export class Inputs<P> extends React.Component<InputsProps & P> {
                 <div
                     onBlur={event => this.props.onBlur(event)}
                     onFocus={event => this.props.onFocus(event)}
-                    className={'input ' + this.props.className}
+                    className={`inputs ${this.props.className || ''}`}
                 >
-                    <div>
-                        {this.props.display}
+                    <div className={'inputs__display-name'}>
+                        {this.props.display_name}
                     </div>
-                    {this.render_value()}
-                    {this.render_input()}
+                    <div className={'inputs__horizontal-spacer'}/>
+                    <div className={'inputs__input'}>
+                        {this.render_value()}
+                        {this.render_input()}
+                    </div>
                 </div>
             </React.Fragment>
         )
@@ -57,15 +59,6 @@ export class StringInput extends Inputs<StringInputProps> {
             />
         )
     }
-
-    render_value(): JSX.Element {
-        return (
-            <React.Fragment>
-                {this.props.text}
-            </React.Fragment>
-        )
-    }
-
 }
 
 interface PasswordInputProps {
@@ -80,14 +73,6 @@ export class PasswordInput extends Inputs<PasswordInputProps> {
                 onChange={event => this.props.onChange(event)}
                 name={this.props.name}
             />
-        )
-    }
-
-    render_value(): JSX.Element {
-        return (
-            <React.Fragment>
-                {'*'.repeat(this.props.password.length)}
-            </React.Fragment>
         )
     }
 }

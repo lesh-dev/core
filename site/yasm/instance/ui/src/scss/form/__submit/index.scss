@@ -1,0 +1,19 @@
+.form__submit {
+  text-align: center;
+  padding: 0.5em;
+  background: var(--button-default-color);
+  border-radius: 5px;
+  width: 100%;
+  font-size: 1.1em;
+  outline: none;
+}
+
+.form__submit:hover {
+  background: var(--button-hover-color);
+}
+
+.form__submit:active {
+  background: var(--button-active-color);
+  --border-color: var(--button-active-border-color);
+  box-shadow: 10px 10px 10px -5px var(--border-color) inset, -10px -10px 10px -5px var(--border-color) inset;
+}

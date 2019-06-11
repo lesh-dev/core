@@ -14,6 +14,7 @@ import {ATExample} from "../components/common/Attributes";
 
 import loremIpsum = require("lorem-ipsum");
 import {LoginForm} from "../components/forms/login";
+import {LoginPocket} from  '../components/common/LoginPocket';
 
 
 const Main = () => (
@@ -87,6 +88,9 @@ const Main = () => (
             <Route exact
                    path='/RC/loginform'
                    render={() => <LoginForm/>}/>
+            <Route exact
+                   path='/RC/loginpocket'
+                   render={() => <LoginPocket/>}/>
         </Switch>
     </main>
 );
@@ -111,6 +115,7 @@ const Header = () => (
                 <li><Link to={'/RC/calendar'}>Calendar </Link></li>
                 <li><Link to={'/RC/attributes'}>Attribute Table</Link></li>
                 <li><Link to={'/RC/loginform'}>Login Form</Link></li>
+                <li><Link to={'/RC/loginpocket'}>Login Pocket</Link></li>
 
             </ul>
         </nav>

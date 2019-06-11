@@ -3,7 +3,7 @@ from functools import wraps
 
 
 def has_rights_check(right):
-    if not (current_user.rights is not None and current_user.is_authenticated and right in current_user.rights):
+    if current_user.is_authenticated and not (current_user.rights is not None and current_user.is_authenticated and right in current_user.rights):
         return "<h1>You have no power here!</h1>", 403
 
 

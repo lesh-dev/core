@@ -1,0 +1,11 @@
+@import "__input/index.scss";
+@import "__display-name/index.scss";
+@import "__horizontal-spacer/index.scss";
+
+.inputs {
+  display: flex;
+  flex-direction: row;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  --padding: 5px
+}

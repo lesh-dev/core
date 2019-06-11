@@ -1,0 +1,14 @@
+.inputs__input input {
+  width: 100%;
+  height: 1.5em;
+  padding: var(--padding);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: transparent;
+  box-sizing: border-box;
+  position: relative;
+  font-size: 1.1em;
+}
+
+.inputs__input input:focus {
+  outline: none;
+}
