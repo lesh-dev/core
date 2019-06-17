@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {LoginPocket} from "../components/common/LoginPocket";
+import {BasePage} from "./base";
 
 class LoginPage extends React.Component {
     render() {
@@ -10,5 +11,5 @@ class LoginPage extends React.Component {
 
 
 ReactDOM.render((
-    <LoginPage/>
+    <BasePage page_renderer={() => <LoginPage/>}/>
 ), document.getElementById('mount-point'));

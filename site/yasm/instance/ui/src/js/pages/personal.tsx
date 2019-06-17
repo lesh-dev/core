@@ -1,36 +1,40 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {BrowserRouter} from "react-router-dom";
 import {Person} from "../generated/interfaces";
 import {get_profile} from "../api/personal"
+import {BasePage} from "./base";
+import {connect} from "react-redux";
+import {profileReducer} from "./reducers/personal";
+import {profileLoaded} from "./actions/personal";
 import {Spinner} from "../components/common/Spinner";
-import {Contacts} from "../components/common/Lists/Contacts";
 
-interface PersonalState {
-    person: Person
+
+interface PersonalProps {
+    dispatch?: (action: any) => void,
+    profile?: Person,
 }
 
-class Personal extends React.Component<undefined, PersonalState> {
-    constructor(props: any) {
+@(connect((state: any) => {return {profile: state.PROFILE}}) as any)
+class Personal extends React.Component<PersonalProps> {
+    constructor(props: PersonalProps) {
         super(props);
-        get_profile().then(
-            value => this.setState({person: value})
-        )
     }
 
-    render() {
-        if (this.state) {
-            console.log(this.state.person);
-            return <div>
-                <Contacts person={this.state.person}/>
-            </div>
-        } else {
-            return <Spinner/>
-        }
+    componentWillMount(): void {
+        get_profile().then(value => {
+            this.props.dispatch(profileLoaded(value));
+        })
+    }
+
+    render(): React.ReactNode {
+        console.log(this.props);
+        return this.props.profile ? this.props.profile.rights : 'WASP'
     }
 }
 
 
 ReactDOM.render((
-    <Personal/>
+    <BasePage
+        page_renderer={() => <Personal/>}
+    />
 ), document.getElementById('mount-point'));

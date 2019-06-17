@@ -1,5 +1,4 @@
 import * as React from 'react';
-import axios from 'axios';
 
 import {CSRFForm, CSRFFormProps} from "./CSRFform";
 import {PasswordInput, StringInput} from "../common/Inputs";
@@ -10,7 +9,7 @@ interface LoginFormState {
     password: string,
 }
 
-export class LoginForm extends CSRFForm<undefined, LoginFormState> {
+export class LoginForm extends CSRFForm<{}, LoginFormState> {
     static defaultProps = {
         ...{
             formTarget: '/login/',

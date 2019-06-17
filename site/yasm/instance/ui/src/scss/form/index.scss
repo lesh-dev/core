@@ -2,10 +2,4 @@
 
 .form {
   padding: 5px;
-  --scale_b: scale(var(--scale), var(--scale));
-  -o-transform: var(--scale_b);
-  -ms-transform: var(--scale_b);
-  -moz-transform: var(--scale_b);
-  -webkit-transform: var(--scale_b);
-  transform: var(--scale_b);
 }

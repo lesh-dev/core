@@ -10,14 +10,13 @@ declare var csrf_token: string;
 export interface CSRFFormProps {
     formTarget?: string
     className?: string
-    scale?: number
     button_default_color?: string
     button_hover_color?: string
     button_active_color?: string
     button_active_border_color?: string
 }
 
-export class CSRFForm<P, S> extends React.Component<CSRFFormProps & P, S> {
+export class CSRFForm<P={}, S={}> extends React.Component<CSRFFormProps & P, S> {
     constructor(props: CSRFFormProps & P) {
         super(props);
     }
@@ -34,7 +33,6 @@ export class CSRFForm<P, S> extends React.Component<CSRFFormProps & P, S> {
         return (
             <form
                 className={`form ${this.props.className}`}
-                style={{'--scale': this.props.scale || 1} as React.CSSProperties}
             >
                 {this.render_form()}
                 {this.render_submit()}
@@ -57,8 +55,6 @@ export class CSRFForm<P, S> extends React.Component<CSRFFormProps & P, S> {
                         '--button-active-border-color': this.props.button_active_border_color,
                     } as React.CSSProperties
                 }
-                // formMethod='post'
-                // formTarget={this.props.formTarget}
                 type='submit'
                 onClick={event => this.submit(event)}
                 className={'form__submit'}

@@ -5,8 +5,7 @@ import {LoginOauth} from "./LoginOauth";
 import '../../../scss/login-pocket/index.scss'
 
 interface LoginPocketProps {
-    unscaled_width?: number
-    scale?: number
+    width?: number
     background?: string
     triangle_size?: number
     spacer_height?: number
@@ -23,15 +22,14 @@ export class LoginPocket extends React.Component<LoginPocketProps, undefined> {
         triangle_size: 20,
         spacer_height: 5,
         padding: 5,
-        unscaled_width: 300,
-        scale: 1,
+        width: 300,
     };
 
     render(): JSX.Element {
         return (
             <div style={
                 {
-                    'width': this.props.unscaled_width * this.props.scale,
+                    'maxWidth': this.props.width,
                     '--background': this.props.background,
                     '--triangle-size': `${this.props.triangle_size}px`,
                     '--spacer_height': `${this.props.spacer_height}px`,
@@ -39,7 +37,7 @@ export class LoginPocket extends React.Component<LoginPocketProps, undefined> {
                 } as React.CSSProperties
             }>
                 <div className={'login-pocket'}>
-                    <LoginForm scale={this.props.scale}/>
+                    <LoginForm/>
                     <div className={'login-pocket__spacer'}/>
                     <LoginOauth/>
                     <div className={'login-pocket__spacer'}/>

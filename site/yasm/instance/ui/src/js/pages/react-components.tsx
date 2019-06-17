@@ -15,6 +15,7 @@ import {ATExample} from "../components/common/Attributes";
 import loremIpsum = require("lorem-ipsum");
 import {LoginForm} from "../components/forms/login";
 import {LoginPocket} from  '../components/common/LoginPocket';
+import {Dropdown} from "../components/common/Dropdown";
 
 
 const Main = () => (
@@ -91,6 +92,25 @@ const Main = () => (
             <Route exact
                    path='/RC/loginpocket'
                    render={() => <LoginPocket/>}/>
+            <Route exact
+                   path='/RC/dropdown-click'
+                   render={() => <Dropdown
+                       label={() => <div className='test'>ASD</div>}
+                       component={() => <React.Fragment><div>ASD1</div><div>ASD2</div></React.Fragment>}
+                       onCollapse={() => console.log('collapsed')}
+                       onExpand={() => console.log('expanded')}
+                   />
+                   }/>
+            <Route exact
+                   path='/RC/dropdown-hover'
+                   render={() => <Dropdown
+                       type='hover'
+                       label={() => <div className='test'>ASD</div>}
+                       component={() => <React.Fragment><div>ASD1</div><div>ASD2</div></React.Fragment>}
+                       onCollapse={() => console.log('collapsed')}
+                       onExpand={() => console.log('expanded')}
+                   />
+                   }/>
         </Switch>
     </main>
 );
@@ -116,7 +136,8 @@ const Header = () => (
                 <li><Link to={'/RC/attributes'}>Attribute Table</Link></li>
                 <li><Link to={'/RC/loginform'}>Login Form</Link></li>
                 <li><Link to={'/RC/loginpocket'}>Login Pocket</Link></li>
-
+                <li><Link to={'/RC/dropdown-click'}>Dropdown click</Link></li>
+                <li><Link to={'/RC/dropdown-hover'}>Dropdown hover</Link></li>
             </ul>
         </nav>
     </header>
