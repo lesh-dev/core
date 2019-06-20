@@ -5,6 +5,7 @@ import {Dropdown} from "./Dropdown";
 import {ProfileCard} from "./Cards/ProfileCard";
 
 import '../../../scss/top-menu/index.scss'
+import {LogInOutButton} from "./logInOutButton";
 
 
 interface IMenuSubEntry {
@@ -86,11 +87,11 @@ export class TopMenu extends React.Component<IMenu> {
                 <Dropdown
                     className="top-menu__entry"
                     label={() => <div>{entry.title}</div>}
-                    component={ () =>
-                    <React.Fragment>
-                        {entry.subentries.map(subentry => this.render_subentry(subentry))}
-                    </React.Fragment>
-                }/>
+                    component={() =>
+                        <React.Fragment>
+                            {entry.subentries.map(subentry => this.render_subentry(subentry))}
+                        </React.Fragment>
+                    }/>
             )
         }
     }
@@ -101,6 +102,7 @@ export class TopMenu extends React.Component<IMenu> {
                 {this.props.menu.map(entry => this.render_entry(entry))}
                 <div className="top-menu__separator"/>
                 <ProfileCard/>
+                <LogInOutButton/>
             </div>
         )
     }

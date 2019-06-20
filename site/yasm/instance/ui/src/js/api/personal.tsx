@@ -1,3 +1,3 @@
 export function get_profile() {
-    return fetch('/personal/get_profile').then(resp => resp.json())
+    return fetch('/profile/get_profile').then(resp => resp.json())
 }

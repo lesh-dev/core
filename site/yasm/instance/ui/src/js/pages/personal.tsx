@@ -1,12 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {Person} from "../generated/interfaces";
-import {get_profile} from "../api/personal"
 import {BasePage} from "./base";
 import {connect} from "react-redux";
-import {profileReducer} from "./reducers/personal";
-import {profileLoaded} from "./actions/personal";
-import {Spinner} from "../components/common/Spinner";
+import {loadProfileOnce} from "../redux-structure/api-calls/profile";
 
 
 interface PersonalProps {
@@ -21,9 +18,7 @@ class Personal extends React.Component<PersonalProps> {
     }
 
     componentWillMount(): void {
-        get_profile().then(value => {
-            this.props.dispatch(profileLoaded(value));
-        })
+        loadProfileOnce(this.props.dispatch);
     }
 
     render(): React.ReactNode {

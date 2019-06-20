@@ -1,4 +1,4 @@
-import * as actions from "../../actions/personal";
+import * as actions from "../../actions/profile";
 
 export function profileReducer(state: any, action: any) {
     if (state !== undefined) {

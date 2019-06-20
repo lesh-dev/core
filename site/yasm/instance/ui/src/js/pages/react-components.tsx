@@ -16,6 +16,7 @@ import loremIpsum = require("lorem-ipsum");
 import {LoginForm} from "../components/forms/login";
 import {LoginPocket} from  '../components/common/LoginPocket';
 import {Dropdown} from "../components/common/Dropdown";
+import {BasePage} from "./base";
 
 
 const Main = () => (
@@ -153,6 +154,6 @@ const App = () => (
 
 ReactDOM.render((
     <BrowserRouter>
-        <App/>
+        <BasePage page_renderer={() => <App/>}/>
     </BrowserRouter>
 ), document.getElementById('mount-point'));

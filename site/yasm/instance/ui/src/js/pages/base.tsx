@@ -5,7 +5,7 @@ import {composeWithDevTools} from "redux-devtools-extension";
 import thunkMiddleware from "redux-thunk";
 import {createLogger} from "redux-logger";
 import {TopMenu} from "../components/common/TopMenu";
-import {profileReducer} from "./reducers/personal";
+import {profileReducer} from "../redux-structure/reducers/profile";
 
 interface BasePageProps {
     page_renderer: () => JSX.Element
