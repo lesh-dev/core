@@ -6,6 +6,7 @@ import thunkMiddleware from "redux-thunk";
 import {createLogger} from "redux-logger";
 import {TopMenu} from "../components/common/TopMenu";
 import {profileReducer} from "../redux-structure/reducers/profile";
+import thunk from "redux-thunk";
 
 interface BasePageProps {
     page_renderer: () => JSX.Element
@@ -30,9 +31,9 @@ export class BasePage extends React.Component<BasePageProps> {
         super(props);
         let enhancer: any;
         if (process.env.NODE_ENV === 'development')
-            enhancer = composeWithDevTools(applyMiddleware(thunkMiddleware, createLogger()));
+            enhancer = composeWithDevTools(applyMiddleware(thunk, createLogger()));
         else
-            enhancer = null;
+            enhancer = applyMiddleware(thunk);
         this.store = createStore(
             combineReducers({
                 PROFILE: profileReducer,

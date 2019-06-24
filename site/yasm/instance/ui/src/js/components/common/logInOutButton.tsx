@@ -15,7 +15,7 @@ interface LogInOutButtonProps {
 }) as any)
 export class LogInOutButton extends React.Component<LogInOutButtonProps> {
     componentWillMount(): void {
-        loadProfileOnce(this.props.dispatch);
+        this.props.dispatch(loadProfileOnce);
     }
 
     render() {

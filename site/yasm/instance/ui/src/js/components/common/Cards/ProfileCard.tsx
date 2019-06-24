@@ -16,7 +16,7 @@ interface ProfileCardProps {
 }) as any)
 export class ProfileCard extends React.Component<ProfileCardProps> {
     componentWillMount(): void {
-        loadProfileOnce(this.props.dispatch);
+        this.props.dispatch(loadProfileOnce);
     }
 
     render() {
