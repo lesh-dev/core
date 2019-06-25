@@ -17,6 +17,7 @@ import {LoginForm} from "../components/forms/login";
 import {LoginPocket} from  '../components/common/LoginPocket';
 import {Dropdown} from "../components/common/Dropdown";
 import {BasePage} from "./base";
+import {Table} from "../components/common/Table";
 
 
 const Main = () => (
@@ -112,6 +113,58 @@ const Main = () => (
                        onExpand={() => console.log('expanded')}
                    />
                    }/>
+            <Route exact
+                   path='/RC/table'
+                   render={() => <Table
+                       header={{
+                           columns: [
+                               {
+                                   value: 'A',
+                               },
+                               {
+                                   value: 'B',
+                                   title: 'b',
+                               },
+                               {
+                                   value: 'C',
+                                   groupable: true,
+                               },
+                               {
+                                   value: 'D',
+                                   sortable: true,
+                               },
+                               {
+                                   value: 'E',
+                                   sortable: true,
+                                   groupable: true,
+                               }
+                           ]
+                       }}
+                       content={[
+                           {
+                               A: 1,
+                               B: 2,
+                               C: 3,
+                               D: 4,
+                               E: 5,
+                           },
+                           {
+                               A: 10,
+                               B: 20,
+                               C: 2,
+                               D: 40,
+                               E: 5,
+                           },
+                           {
+                               A: 12,
+                               B: 22,
+                               C: 3,
+                               D: 3,
+                               E: 4,
+                           },
+                       ]}
+                   />
+                   }/>
         </Switch>
     </main>
 );
@@ -139,6 +192,7 @@ const Header = () => (
                 <li><Link to={'/RC/loginpocket'}>Login Pocket</Link></li>
                 <li><Link to={'/RC/dropdown-click'}>Dropdown click</Link></li>
                 <li><Link to={'/RC/dropdown-hover'}>Dropdown hover</Link></li>
+                <li><Link to={'/RC/table'}>Table</Link></li>
             </ul>
         </nav>
     </header>
