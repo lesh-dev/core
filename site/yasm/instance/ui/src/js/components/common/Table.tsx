@@ -245,10 +245,8 @@ export class TableDirect extends React.Component<TablePropsDirect, TableStateDir
             if (this.state.sortedBy) {
                 switch (this.state.sortedDirection) {
                     case SortDirection.none:
-                        console.log("NONE")
                         break
                     case SortDirection.asc:
-                        console.log("ASC")
                         content = _.orderBy(content, row => (
                             this.props.header.columns[this.state.sortedBy].sortKey(row)
                         ), 'asc')
