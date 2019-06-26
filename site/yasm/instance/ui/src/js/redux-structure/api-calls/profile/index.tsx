@@ -21,7 +21,8 @@ function get_exams(person_id: number) {
             course_area,
             school(
                 school_title,
-                school_type
+                school_type,
+                school_id
             )
         )`.replace(/ +/g, ''),
     }).then(response => response.data)

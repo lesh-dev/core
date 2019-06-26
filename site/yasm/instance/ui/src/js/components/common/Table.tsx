@@ -68,14 +68,16 @@ function patchHeader(header: HeaderProps): HeaderPropsDirect {
             col.title = column.title
             if ((typeof column.value) === "string") {
                 col.value = (row: any) => row[column.value as string]
+            } else {
+                col.value = column.value as () => {}
             }
         }
         if (column.groupable) {
             head.hasGroupable = true
             col.groupable = true
-            col.groupExtract = column.groupExtract || col.value
+            col.groupExtract = column.groupExtract || ((row: any) => row)
             col.groupKey = column.groupKey || (grp => grp)
-            col.groupValue = column.groupValue || (grp => grp)
+            col.groupValue = column.groupValue || col.value
             col.groupSortable = column.groupSortable || true
             if (col.groupSortable) {
                 col.groupSortKey = column.groupSortKey || column.sortKey || (grp => grp)
@@ -258,11 +260,14 @@ export class TableDirect extends React.Component<TablePropsDirect, TableStateDir
                         break
                 }
             }
+            console.log(content)
             return content.map((row: any) => ({row: row, grpAnnotation: {}}))
         }
         const grouping = this.state.grouping[idx]
         const c = this.props.header.columns[grouping.groupBy]
-        content = Object.values(_.groupBy(content, (row: any) => c.groupKey(c.groupExtract(row))))
+        content = Object.values(_.groupBy(content, (row: any) => {
+            return c.groupKey(c.groupExtract(row))
+        }))
         switch (this.state.grouping[idx].sortedDirection) {
             case SortDirection.none:
                 break
