@@ -7,8 +7,9 @@ module = Blueprint('internal', __name__, url_prefix='/internal')
 
 
 @module.route('/', methods=['GET'])
+@module.route('/<path>', methods=['GET'])
 @login_required
-def index():
+def index(path):
     return render_template(
         "internal/base.html",
         menu=menu,
