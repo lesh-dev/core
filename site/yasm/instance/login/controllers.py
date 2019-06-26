@@ -79,7 +79,7 @@ def oauth_callback(provider):
     provider_type, user_id = user_info[0], user_info[1]
     if not current_user.is_anonymous:
         add_oauth(provider_type, user_id)
-        return redirect(url_for('personal.index'))
+        return redirect(url_for('internal.index'))
     if user_id is None:
         flash('Authentication failed.')
         return redirect('/login/')
@@ -92,7 +92,7 @@ def oauth_callback(provider):
     if not user:
         return redirect(url_for('login.error'))
     login_user(user, True)
-    return redirect(url_for('personal.index'))
+    return redirect(url_for('internal.index'))
 
 
 @module.route('/logout')

@@ -80,7 +80,7 @@ function patchHeader(header: HeaderProps): HeaderPropsDirect {
             col.groupValue = column.groupValue || col.value
             col.groupSortable = column.groupSortable || true
             if (col.groupSortable) {
-                col.groupSortKey = column.groupSortKey || column.sortKey || (grp => grp)
+                col.groupSortKey = column.groupSortKey || column.sortKey || col.groupKey || (grp => grp)
             }
         } else {
             col.groupable = false
@@ -260,7 +260,6 @@ export class TableDirect extends React.Component<TablePropsDirect, TableStateDir
                         break
                 }
             }
-            console.log(content)
             return content.map((row: any) => ({row: row, grpAnnotation: {}}))
         }
         const grouping = this.state.grouping[idx]

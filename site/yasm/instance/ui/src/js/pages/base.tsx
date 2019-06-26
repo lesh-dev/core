@@ -7,6 +7,7 @@ import {createLogger} from "redux-logger";
 import {TopMenu} from "../components/common/TopMenu";
 import {profileReducer} from "../redux-structure/reducers/profile";
 import thunk from "redux-thunk";
+import {BrowserRouter} from "react-router-dom";
 
 interface BasePageProps {
     page_renderer: () => JSX.Element
@@ -47,10 +48,12 @@ export class BasePage extends React.Component<BasePageProps> {
     render() {
         return (
             <Provider store={this.store}>
-                <div>
-                    <TopMenu/>
-                    {this.props.page_renderer()}
-                </div>
+                <BrowserRouter>
+                    <React.Fragment>
+                        <TopMenu/>
+                        {this.props.page_renderer()}
+                    </React.Fragment>
+                </BrowserRouter>
             </Provider>
         )
     }

@@ -43,8 +43,8 @@ def create():
     yasm.register_blueprint(react_components.module)
     import instance.login as login
     yasm.register_blueprint(login.module)
-    import instance.personal as personal
-    yasm.register_blueprint(personal.module)
+    import instance.internal as personal
+    yasm.register_blueprint(internal.module)
     import instance.secure_static as secure_static
     yasm.register_blueprint(secure_static.module)
     import instance.postgrest as postgrest

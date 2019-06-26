@@ -4,7 +4,7 @@ import {Exam, Person} from "../../../generated/interfaces";
 import {profileLoaded, profileUpdated} from "../../actions/profile";
 
 function get_profile() {
-    return fetch('/personal/get_profile').then(resp => resp.json()) // TODO: fetch -> axios
+    return fetch('/internal/get_profile').then(resp => resp.json()) // TODO: fetch -> axios
 }
 
 function get_exams(person_id: number) {

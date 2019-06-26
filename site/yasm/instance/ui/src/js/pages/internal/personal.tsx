@@ -1,14 +1,11 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
-import {Exam, Person, School} from "../generated/interfaces";
-import {BasePage} from "./base";
+import {Exam, Person, School} from "../../generated/interfaces";
 import {connect} from "react-redux";
-import {loadProfileOnce, updateExams} from "../redux-structure/api-calls/profile";
-import {Table} from "../components/common/Table";
-import {SchoolCard} from "../components/common/Cards/SchoolCard";
-import {exact} from "prop-types";
+import {updateExams} from "../../redux-structure/api-calls/profile";
+import {Table} from "../../components/common/Table";
+import {SchoolCard} from "../../components/common/Cards/SchoolCard";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheck, faTimes, faBook} from "@fortawesome/free-solid-svg-icons";
+import {faCheck, faTimes, faBook, faQuestion} from "@fortawesome/free-solid-svg-icons";
 
 
 interface PersonalProps {
@@ -19,13 +16,8 @@ interface PersonalProps {
 @(connect((state: any) => {
     return {profile: state.PROFILE}
 }) as any)
-class Personal extends React.Component<PersonalProps> {
-    constructor(props: PersonalProps) {
-        super(props);
-    }
-
+export class Personal extends React.Component<PersonalProps> {
     componentWillMount(): void {
-        this.props.dispatch(loadProfileOnce)
         this.props.dispatch(updateExams)
     }
 
@@ -51,17 +43,24 @@ class Personal extends React.Component<PersonalProps> {
                     {
                         title: 'Статус',
                         value: (exam: Exam) => {
+                            let icon = faQuestion
+                            let color = 'black'
                             switch (exam.exam_status) {
                                 case 'listen':
-                                    return <FontAwesomeIcon icon={faBook} color={'orange'}/>
+                                    icon = faBook
+                                    color='orange'
+                                    break
                                 case 'passed':
-                                    return <FontAwesomeIcon icon={faCheck} color={'green'}/>
+                                    icon=faCheck
+                                    color='green'
+                                    break
                                 case 'notpassed':
-                                    return <FontAwesomeIcon icon={faTimes} color={'coral'}/>
+                                    icon=faTimes
+                                    color='coral'
+                                    break
                             }
+                            return <FontAwesomeIcon icon={icon} color={color} style={{display: 'block', margin: 'auto'}}/>
                         },
-                        sortable: true,
-                        sortKey: (exam: Exam) => exam.exam_status,
                         groupable: true,
                         groupKey: (exam: Exam) => exam.exam_status,
                     }
@@ -70,10 +69,3 @@ class Personal extends React.Component<PersonalProps> {
         )
     }
 }
-
-
-ReactDOM.render((
-    <BasePage
-        page_renderer={() => <Personal/>}
-    />
-), document.getElementById('mount-point'));

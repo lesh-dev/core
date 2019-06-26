@@ -3,14 +3,14 @@ from ..menu import menu
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 
-module = Blueprint('personal', __name__, url_prefix='/personal')
+module = Blueprint('internal', __name__, url_prefix='/internal')
 
 
 @module.route('/', methods=['GET'])
 @login_required
 def index():
     return render_template(
-        "personal/base.html",
+        "internal/base.html",
         menu=menu,
         person=current_user,
     )

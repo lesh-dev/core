@@ -29,7 +29,7 @@ module.exports = {
     entry: {
         // admin: './src/js/pages/admin.tsx',
         components: './src/js/pages/react-components.tsx',
-        personal: './src/js/pages/personal.tsx',
+        personal: './src/js/pages/internal.tsx',
         login: './src/js/pages/login.tsx',
         person_card: './src/scss/cards/person_card/person_card.scss',
         attributes_table: './src/scss/attributes_table.scss'
