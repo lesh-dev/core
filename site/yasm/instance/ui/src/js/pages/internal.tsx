@@ -10,10 +10,10 @@ class Internal extends React.Component {
         return (
             <Switch>
                 <Route
-                    path={'/internal/internal/'}
+                    path={'/internal/personal/'}
                     exact
                     render={() => <Personal/>}
-                />x
+                />
             </Switch>
         )
     }

@@ -24,6 +24,7 @@ interface ColumnProps {
 
 interface HeaderProps {
     columns: ColumnProps[]
+    title?: string
 }
 
 interface ColumnPropsDirect {
@@ -46,10 +47,14 @@ interface ColumnPropsDirect {
 interface HeaderPropsDirect {
     columns: ColumnPropsDirect[]
     hasGroupable: boolean
+    hasTitles: boolean
+    title?: string
 }
 
 function patchHeader(header: HeaderProps): HeaderPropsDirect {
     let head = {columns: []} as HeaderPropsDirect
+    head.hasGroupable = false
+    head.hasTitles = false
     let id = 0
     for (const column of header.columns) {
         const col = {} as ColumnPropsDirect
@@ -66,6 +71,9 @@ function patchHeader(header: HeaderProps): HeaderPropsDirect {
             }
         } else {
             col.title = column.title
+            if (col.title) {
+                head.hasTitles = true
+            }
             if ((typeof column.value) === "string") {
                 col.value = (row: any) => row[column.value as string]
             } else {
@@ -99,6 +107,7 @@ function patchHeader(header: HeaderProps): HeaderPropsDirect {
         id += 1
         head.columns.push(col)
     }
+    head.title = header.title
     return head
 }
 
@@ -196,7 +205,7 @@ export class TableDirect extends React.Component<TablePropsDirect, TableStateDir
             }
         }
         columns.map(col => cols.push(
-            <td>
+            <td key={cols.length}>
                 {col.value(content[idx].row)}
             </td>
         ))
@@ -302,6 +311,17 @@ export class TableDirect extends React.Component<TablePropsDirect, TableStateDir
             <table>
                 <thead>
                 {
+                    this.props.header.title
+                    ? (
+                        <tr>
+                            <th colSpan={this.props.header.columns.length}>
+                                {this.props.header.title}
+                            </th>
+                        </tr>
+                    )
+                    : null
+                }
+                {
                     this.props.header.hasGroupable
                     ? (
                         <tr>
@@ -325,26 +345,32 @@ export class TableDirect extends React.Component<TablePropsDirect, TableStateDir
                     )
                     : null
                 }
-                <tr>
-                    {groupColumns.map((column, index) => (
-                        <th onClick={() => this.groupSortHandler(index)}>
-                            {column.title}{column.groupSortable
-                            ? <FontAwesomeIcon icon={directionIcon(this.state.grouping[index].sortedDirection)}/>
-                            : null}
-                        </th>
-                    ))}
-                    {columns.map(col => (
-                        <th onClick={() => this.sortedClickHandler(col.id)} draggable={col.groupable}>
-                            <Draggable type={this.state.uuid} data={col.id}>
-                                {col.title}{col.sortable ? <FontAwesomeIcon icon={
-                                this.state.sortedBy === col.id
-                                    ? directionIcon(this.state.sortedDirection)
-                                    : faDotCircle
-                            }/> : null}
-                            </Draggable>
-                        </th>
-                    ))}
-                </tr>
+                {
+                    this.props.header.hasTitles
+                    ? (
+                        <tr>
+                            {groupColumns.map((column, index) => (
+                                <th onClick={() => this.groupSortHandler(index)} key={index}>
+                                    {column.title}{column.groupSortable
+                                    ? <FontAwesomeIcon icon={directionIcon(this.state.grouping[index].sortedDirection)}/>
+                                    : null}
+                                </th>
+                            ))}
+                            {columns.map((column, index) => (
+                                <th onClick={() => this.sortedClickHandler(column.id)} draggable={column.groupable} key={index}>
+                                    <Draggable type={this.state.uuid} data={column.id}>
+                                        {column.title}{column.sortable ? <FontAwesomeIcon icon={
+                                        this.state.sortedBy === column.id
+                                            ? directionIcon(this.state.sortedDirection)
+                                            : faDotCircle
+                                    }/> : null}
+                                    </Draggable>
+                                </th>
+                            ))}
+                        </tr>
+                    )
+                    : null
+                }
                 </thead>
                 <tbody>
                 {this.buildDataTable(this.group(this.props.content), columns)}
