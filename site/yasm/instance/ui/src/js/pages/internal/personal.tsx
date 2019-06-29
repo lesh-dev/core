@@ -6,6 +6,7 @@ import {Table} from "../../components/common/Table";
 import {SchoolCard} from "../../components/common/Cards/SchoolCard";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faTimes, faBook, faQuestion, faClock} from "@fortawesome/free-solid-svg-icons";
+import {Tooltip} from '../../components/common/Tooltip'
 
 interface PersonalProps {
     dispatch?: (action: any) => any,
@@ -99,36 +100,21 @@ export class Personal extends React.Component<PersonalProps> {
                             {
                                 title: '',
                                 value: (requirement: any) => (
-                                    <span>
-                                        {requirement.name}
-                                    </span>
+                                    <Tooltip
+                                        placement="left"
+                                        overlay={<span dangerouslySetInnerHTML={{ __html: requirement.tip }}/>}
+                                    >
+                                        <span>
+                                            {requirement.name}
+                                        </span>
+                                    </Tooltip>
                                 ),
                             }
 
                         ]
                     }}
                     content={[
-                        {
-                            status: 'checking',
-                            name: 'справка о несудимости',
-                            tip: 'пойди и получи в мфц',
-                        },
-                        {
-                            status: 'ok',
-                            name: 'паспорт',
-                            tip: 'кхэм кхэм',
-                        },
-                        {
-                            status: 'wrong',
-                            name: 'медкнижка',
-                            tip: 'пойди и получи в Эрисмане',
-                        },
-                        {
-                            status: 'ASD',
-                            name: 'ASD',
-                            tip: 'asd',
-                        },
-                    ]}
+                    ] as {status: string, name: string, tip: string}[]}
                 />
             </React.Fragment>
         )
