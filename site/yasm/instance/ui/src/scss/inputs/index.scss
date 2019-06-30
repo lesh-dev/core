@@ -2,10 +2,17 @@
 @import "__display-name/index.scss";
 @import "__horizontal-spacer/index.scss";
 
-.inputs {
+div.inputs {
   display: flex;
   flex-direction: row;
   padding-top: 4px;
   padding-bottom: 4px;
   --padding: 5px
+}
+
+textarea.inputs {
+  border: 1px solid yellowgreen;
+  width: 100%;
+  min-height: 150px;
+  outline: none;
 }

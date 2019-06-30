@@ -30,6 +30,14 @@ const default_menu: IMenu = {
             url: "/public",
         },
         {
+            title: "Personal",
+            url: "/internal/personal/",
+        },
+        {
+            title: "RC",
+            url: "/RC/",
+        },
+        {
             title: "List",
             subentries: [
                 {

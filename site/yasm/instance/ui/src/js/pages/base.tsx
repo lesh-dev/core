@@ -7,6 +7,7 @@ import {TopMenu} from "../components/common/TopMenu";
 import {profileReducer} from "../redux-structure/reducers/profile";
 import thunk from "redux-thunk";
 import {BrowserRouter} from "react-router-dom";
+import {BugReporter} from "../components/common/BugReporter";
 
 interface BasePageProps {
     page_renderer: () => JSX.Element
@@ -51,6 +52,7 @@ export class BasePage extends React.Component<BasePageProps> {
                     <React.Fragment>
                         <TopMenu/>
                         {this.props.page_renderer()}
+                        <BugReporter/>
                     </React.Fragment>
                 </BrowserRouter>
             </Provider>

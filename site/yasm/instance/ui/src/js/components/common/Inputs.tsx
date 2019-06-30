@@ -2,7 +2,7 @@ import * as React from 'react';
 import '../../../scss/inputs/index.scss';
 
 interface InputsProps {
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    onChange: (event: any) => void
     display_name?: string
     name?: string
     className?: string
@@ -73,6 +73,27 @@ export class PasswordInput extends Inputs<PasswordInputProps> {
                 onChange={event => this.props.onChange(event)}
                 name={this.props.name}
             />
+        )
+    }
+}
+
+interface TextInputProps {
+    text: string
+    onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
+    name: string
+}
+
+export class TextInput extends React.Component<TextInputProps> {
+    render() {
+        return (
+            <div style={{paddingRight: '5px'}}>
+                <textarea
+                    onChange={event => this.props.onChange(event)}
+                    name={this.props.name}
+                    className={'inputs'}
+                    value={this.props.text}
+                />
+            </div>
         )
     }
 }

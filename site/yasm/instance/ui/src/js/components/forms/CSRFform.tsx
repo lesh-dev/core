@@ -3,6 +3,7 @@ import axios from 'axios';
 import {stringify} from 'querystring';
 
 import '../../../scss/form/index.scss'
+import {Button} from "../common/Button";
 
 
 declare var csrf_token: string;
@@ -46,21 +47,14 @@ export class CSRFForm<P={}, S={}> extends React.Component<CSRFFormProps & P, S> 
 
     render_submit() {
         return (
-            <button
-                style={
-                    {
-                        '--button-default-color': this.props.button_default_color,
-                        '--button-hover-color': this.props.button_hover_color,
-                        '--button-active-color': this.props.button_active_color,
-                        '--button-active-border-color': this.props.button_active_border_color,
-                    } as React.CSSProperties
-                }
+            <Button
+                style={'action'}
                 type='submit'
                 onClick={event => this.submit(event)}
                 className={'form__submit'}
             >
                 Отправить
-            </button>
+            </Button>
         )
     }
 
