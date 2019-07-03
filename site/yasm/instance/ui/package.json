@@ -49,6 +49,7 @@
     "react-yandex-maps": "^2.2.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "toasted-notes": "^2.1.6",
     "ts-loader": "^4.4.2",
     "typings": "^2.1.1",
     "uuid": "^3.3.2",

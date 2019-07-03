@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import toaster from 'toasted-notes';
+
 import {CSRFForm, CSRFFormProps} from "./CSRFform";
 import {TextInput} from "../common/Inputs";
 import {Button} from "../common/Button";
@@ -23,8 +25,8 @@ export class BugReporterForm extends CSRFForm<BugReporterProps, BugReporterFormS
     constructor(props: CSRFFormProps & BugReporterProps) {
         super(props);
         this.state = {
-            what: `Что случилось?\n`,
-            how: `Как это случилось?\n`
+            what: '',
+            how: '',
         }
     }
 
@@ -43,11 +45,13 @@ export class BugReporterForm extends CSRFForm<BugReporterProps, BugReporterFormS
                     text={this.state.what}
                     name={'whatTheBuzz'}
                     onChange={event => this.handle_what_change(event)}
+                    placeholder={'Что случилось?'}
                 />
                 <TextInput
                     text={this.state.how}
                     name={'tellMeWhatsHappening'}
                     onChange={event => this.handle_how_change(event)}
+                    placeholder={'Как это случилось?'}
                 />
             </React.Fragment>
         )
@@ -77,6 +81,6 @@ export class BugReporterForm extends CSRFForm<BugReporterProps, BugReporterFormS
     }
 
     handle_response(): void {
-        alert('Ня кря')
+        toaster.notify('Спасибо, что помогаете нам становиться лучше!', {duration: 1000})
     }
 }

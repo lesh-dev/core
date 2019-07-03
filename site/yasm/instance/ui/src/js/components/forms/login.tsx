@@ -35,18 +35,22 @@ export class LoginForm extends CSRFForm<{}, LoginFormState> {
     render_form(): JSX.Element {
         return (
             <React.Fragment>
-                <StringInput
-                    text={this.state.login}
-                    name={'login'}
-                    display_name={'логин'}
-                    onChange={event => this.handle_login_change(event)}
-                />
-                <PasswordInput
-                    password={this.state.password}
-                    name={'password'}
-                    display_name={'пароль'}
-                    onChange={event => this.handle_password_change(event)}
-                />
+                <div>
+                    <StringInput
+                        text={this.state.login}
+                        name={'login'}
+                        placeholder={'логин'}
+                        onChange={event => this.handle_login_change(event)}
+                    />
+                </div>
+                <div>
+                    <PasswordInput
+                        password={this.state.password}
+                        name={'password'}
+                        placeholder={'пароль'}
+                        onChange={event => this.handle_password_change(event)}
+                    />
+                </div>
             </React.Fragment>
         )
     }

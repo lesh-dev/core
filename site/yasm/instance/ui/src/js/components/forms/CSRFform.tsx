@@ -47,14 +47,16 @@ export class CSRFForm<P={}, S={}> extends React.Component<CSRFFormProps & P, S> 
 
     render_submit() {
         return (
-            <Button
-                style={'action'}
-                type='submit'
-                onClick={event => this.submit(event)}
-                className={'form__submit'}
-            >
-                Отправить
-            </Button>
+            <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                <Button
+                    style={'action'}
+                    type='submit'
+                    onClick={event => this.submit(event)}
+                    className={'form__submit'}
+                >
+                    Отправить
+                </Button>
+            </div>
         )
     }
 
