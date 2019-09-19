@@ -18,6 +18,7 @@ import {LoginPocket} from  '../components/common/LoginPocket';
 import {Dropdown} from "../components/common/Dropdown";
 import {BasePage} from "./base";
 import {Table} from "../components/common/Table";
+import {Example} from "../components/common/Example";
 
 
 const Main = () => (
@@ -105,66 +106,113 @@ const Main = () => (
                    }/>
             <Route exact
                    path='/RC/dropdown-hover'
-                   render={() => <Dropdown
-                       type='hover'
-                       label={() => <div className='test'>ASD</div>}
-                       component={() => <React.Fragment><div>ASD1</div><div>ASD2</div></React.Fragment>}
-                       onCollapse={() => console.log('collapsed')}
-                       onExpand={() => console.log('expanded')}
-                   />
-                   }/>
+                   render={() => <Example
+                       fields={[
+                           {
+                               name: 'type',
+                               type: 'choice',
+                               choices: ['hover', 'click'],
+                               default: 'hover'
+                           },
+                           {
+                               name: 'label',
+                               type: 'function',
+                               default: () => <div className='test'>ASD</div>
+                           },
+                           {
+                               name: 'component',
+                               type: 'function',
+                               default: () => <React.Fragment><div>ASD1</div><div>ASD2</div></React.Fragment>
+                           },
+                           {
+                               name: 'onCollapse',
+                               type: 'function',
+                               default: () => console.log('collapsed')
+                           },
+                           {
+                               name: 'onExpand',
+                               type: 'function',
+                               default: () => console.log('expanded')
+                           }
+                       ]}
+                       renderer={props => <Dropdown
+                           {...props}
+                       />}
+                   />}
+            />
             <Route exact
                    path='/RC/table'
-                   render={() => <Table
-                       header={{
-                           columns: [
-                               {
-                                   value: 'A',
-                               },
-                               {
-                                   value: 'B',
-                                   title: 'b',
-                               },
-                               {
-                                   value: 'C',
-                                   groupable: true,
-                               },
-                               {
-                                   value: 'D',
-                                   sortable: true,
-                               },
-                               {
-                                   value: 'E',
-                                   sortable: true,
-                                   groupable: true,
-                               }
-                           ]
-                       }}
-                       content={[
-                           {
-                               A: 1,
-                               B: 2,
-                               C: 3,
-                               D: 4,
-                               E: 5,
-                           },
-                           {
-                               A: 10,
-                               B: 20,
-                               C: 2,
-                               D: 40,
-                               E: 5,
-                           },
-                           {
-                               A: 12,
-                               B: 22,
-                               C: 3,
-                               D: 3,
-                               E: 4,
-                           },
-                       ]}
-                   />
-                   }/>
+                   render={() =>
+                       <Example
+                           fields={
+                               [
+                                   {
+                                       name: 'header',
+                                       type: 'object',
+                                       default: `
+{
+    "columns": [
+        {
+            "value": "A"
+        },
+        {
+            "value": "B",
+            "title": "b"
+        },
+        {
+            "value": "C",
+            "groupable": true
+        },
+        {
+            "value": "D",
+            "sortable": true
+        },
+        {
+            "value": "E",
+            "sortable": true,
+            "groupable": true
+        }
+    ]
+}`
+                                   },
+                                   {
+                                       type: 'JSON',
+                                       name: 'content',
+                                       default: `
+[
+    {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 4,
+        "E": 5
+    },
+    {
+        "A": 10,
+        "B": 20,
+        "C": 2,
+        "D": 40,
+        "E": 5
+    },
+    {
+        "A": 12,
+        "B": 22,
+        "C": 3,
+        "D": 3,
+        "E": 4
+    }
+]`
+                                   }
+                               ]
+                           }
+                           renderer={props =>
+                               <Table
+                                   {...props}
+                               />
+                           }
+                       />
+                   }
+               />
         </Switch>
     </main>
 );

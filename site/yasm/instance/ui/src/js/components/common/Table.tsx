@@ -380,12 +380,35 @@ export class TableDirect extends React.Component<TablePropsDirect, TableStateDir
     }
 }
 
-export class Table extends React.Component
-    <TableProps> {
+export class Table extends React.Component<TableProps> {
     render() {
         return <TableDirect
             header={patchHeader(this.props.header)}
             content={this.props.content}
         />
     }
+}
+
+interface T0 {
+    asd: string
+}
+
+interface T1 {
+    t1: string | number
+}
+
+interface T2 {
+    t2: T1
+}
+
+export class T3<PPC> extends React.Component<(T1 | T2) & T0 | PPC>{
+    private ASD = 123
+}
+
+export class T4 extends T3<number> {
+
+}
+
+export class T5 extends T4 {
+
 }
