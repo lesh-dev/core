@@ -29,3 +29,5 @@ venv
 site/yasm/instance/secure_static/avas/*
 site/yasm/tests/instance
 site/yasm/instance/ui/package-lock.json
+
+*.DS_Store
