@@ -8,5 +8,5 @@ tables=$(echo .schema | sqlite3 "$filename" | grep -Eo 'CREATE TABLE( IF NOT EXI
 # Но нам нужен определённый порядок
 for tbl in school contestants problems solutions notification department course person course_teachers person_school exam submission xversion person_comment pss contact; do
     #echo "dumping $tbl" >&2
-    (echo .mode insert; echo "SELECT * FROM $tbl;") | sqlite3 "$filename" | sed -e "s/INSERT INTO \"table\"/INSERT INTO public.$tbl/" -e "s/INSERT INTO table/INSERT INTO public.$tbl/"
+    (echo .mode insert; echo "SELECT * FROM $tbl;") | sqlite3 "$filename" | sed -e "s/INSERT INTO \"table\"/INSERT INTO public.$tbl/" -e "s/INSERT INTO table/INSERT INTO public.$tbl/" -e "s/char(10)/'\\n'/g" -e "s/char(13)/'\\r'/g"
 done;
