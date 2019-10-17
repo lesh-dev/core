@@ -12,13 +12,15 @@
     {{ horizontal_nav_js() }}
     {% block js %}
     {% endblock %}
+    <script>
+    let csrf_token = '{{ csrf_token() }}';
+    </script>
     <title>
         {% block title %}
         {% endblock %}
     </title>
 </head>
 <body id="body">
-{{ horizontal_nav_html(menu, person) }}
 {% block content %}
 {% endblock %}
 </body>

@@ -1,0 +1,20 @@
+.button {
+  text-align: center;
+  padding: 0.5em;
+  background: var(--button-default-color);
+  border-radius: 5px;
+  font-size: 1.1em;
+  outline: none;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.button:hover {
+  background: var(--button-hover-color);
+}
+
+.button:active {
+  background: var(--button-active-color);
+  --border-color: var(--button-active-border-color);
+  box-shadow: 10px 10px 10px -5px var(--border-color) inset, -10px -10px 10px -5px var(--border-color) inset;
+}

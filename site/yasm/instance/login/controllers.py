@@ -54,11 +54,9 @@ def user_login(login, password):
 
 @module.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == 'POST':
+    if LoginForm().validate_on_submit():
         if user_login(request.form['login'], request.form['password']):
-            return redirect(url_for('personal.index'))
-        else:
-            pass
+            return "OK"
     form = LoginForm(request.form)
     return render_template(
         "login/base.html",
@@ -81,7 +79,7 @@ def oauth_callback(provider):
     provider_type, user_id = user_info[0], user_info[1]
     if not current_user.is_anonymous:
         add_oauth(provider_type, user_id)
-        return redirect(url_for('personal.index'))
+        return redirect(url_for('internal.index'))
     if user_id is None:
         flash('Authentication failed.')
         return redirect('/login/')
@@ -94,7 +92,7 @@ def oauth_callback(provider):
     if not user:
         return redirect(url_for('login.error'))
     login_user(user, True)
-    return redirect(url_for('personal.index'))
+    return redirect(url_for('internal.index'))
 
 
 @module.route('/logout')

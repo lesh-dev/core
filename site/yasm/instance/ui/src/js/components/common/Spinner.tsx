@@ -3,12 +3,13 @@ import '../../../scss/spinner/spinner.scss'
 
 export class Spinner extends React.Component {
     render() {
-        return [
-            <div className="spinner"></div>,
-            <div className="spinner"></div>,
-            <div className="spinner"></div>,
-            <div className="spinnerCircle"></div>
-
-        ]
+        return (
+            <React.Fragment>
+                <div className="spinner"></div>
+                <div className="spinner"></div>
+                <div className="spinner"></div>
+                <div className="spinnerCircle"></div>
+            </React.Fragment>
+        )
     }
 }

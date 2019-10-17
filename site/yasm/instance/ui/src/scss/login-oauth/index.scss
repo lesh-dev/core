@@ -1,0 +1,8 @@
+@import "__button/index";
+
+.login-oauth {
+  display: flex;
+  justify-content: space-around;
+  padding: var(--padding);
+  flex-wrap: wrap;
+}

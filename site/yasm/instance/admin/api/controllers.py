@@ -6,10 +6,8 @@ Url dispatching file of :ref:`admin_api <admin_api>` module
 |contains|
  * module - :ref:`nestable blueprint <nestable_blueprint>` which represents admin.api module of YaSM
 """
-from flask import render_template, redirect, request as rq, Response, jsonify
-from flask_login import login_required, current_user
+from flask import request as rq, Response, jsonify
 from instance.database import db, School, Contact, Person
-from instance.rights_decorator import has_rights
 from instance.NestableBlueprint import NestableBlueprint
 
 module = NestableBlueprint('admin_api', __name__, url_prefix='/api')
@@ -33,8 +31,6 @@ def resp(code, data):
 
 
 @module.route('/schools/add', methods=['POST'])
-@login_required
-@has_rights('admin')
 def school_add():
     args = rq.args
     title = args['title']
@@ -58,8 +54,6 @@ def school_add():
 
 
 @module.route('/person/contact/del/<int:id>', methods=['POST'])
-@login_required
-@has_rights('admin')
 def api_person_contact_del(id):
     Contact.query.filter(Contact.id == id).delete()
     db.session.commit()
@@ -67,8 +61,6 @@ def api_person_contact_del(id):
 
 
 @module.route('/person/contact/add/<int:person_id>', methods=['POST'])
-@login_required
-@has_rights('admin')
 def api_person_contact_add(person_id):
     name = rq.values['name']
     url = rq.values['url']
@@ -83,8 +75,6 @@ def api_person_contact_add(person_id):
 
 
 @module.route('/person/department/change/<int:person_id>', methods=['POST'])
-@login_required
-@has_rights('admin')
 def api_person_department_change(person_id):
     id = rq.values['department_id']
     Person.query.filter(Person.person_id == person_id).update({'department_id': id})

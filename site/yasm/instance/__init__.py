@@ -3,9 +3,11 @@
 """
 
 from flask import Flask
-from .database import db
-from .login import lm
-from .login.oauth2.base import Auth
+from flask_wtf.csrf import CSRFProtect
+
+from instance.database import db
+from instance.login import lm
+from instance.login.oauth2.base import Auth
 
 
 def create():
@@ -24,6 +26,7 @@ def create():
     yasm = Flask(__name__, instance_relative_config=True)
     yasm.config.from_object('config')
     yasm.config.from_pyfile('config.py')
+    csrf = CSRFProtect(yasm)
     db.init_app(yasm)
     lm.init_app(yasm)
     Auth.init_app(yasm)
@@ -40,8 +43,8 @@ def create():
     yasm.register_blueprint(react_components.module)
     import instance.login as login
     yasm.register_blueprint(login.module)
-    import instance.personal as personal
-    yasm.register_blueprint(personal.module)
+    import instance.internal as personal
+    yasm.register_blueprint(internal.module)
     import instance.secure_static as secure_static
     yasm.register_blueprint(secure_static.module)
     import instance.postgrest as postgrest

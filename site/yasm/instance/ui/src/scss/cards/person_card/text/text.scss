@@ -1,9 +1,10 @@
-.person_token__text {
+.person_card__text {
   margin-left: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  text-align: right;
 }
-.person_token__text>div:first-letter {
+.person_card__text>div:first-letter {
   color: red;
 }
