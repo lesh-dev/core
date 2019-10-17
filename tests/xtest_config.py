@@ -5,10 +5,10 @@
 class XcmsTestConfig:
     def __init__(self):
         self._admin_login = "root"
-        self._admin_password = "root"
+        self._admin_password = "HCYHL7JXG4QG"
 
-        self._manager_login = "manager"
-        self._manager_password = "manager"
+        self._manager_login = "root"
+        self._manager_password = "HCYHL7JXG4QG"
 
         self.m_notifyEmail = "vdm-photo@ya.ru"
         self.m_phpErrorCheckFlag = True
