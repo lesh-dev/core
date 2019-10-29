@@ -3,7 +3,7 @@ from ..menu import menu
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 
-module = Blueprint('internal', __name__, url_prefix='/internal')
+module = Blueprint('internal', __name__, url_prefix='/i')
 
 
 @module.route('/', methods=['GET'])

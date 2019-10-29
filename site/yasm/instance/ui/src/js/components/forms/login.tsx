@@ -56,6 +56,6 @@ export class LoginForm extends CSRFForm<{}, LoginFormState> {
     }
 
     handle_response(): void {
-        redirect('/internal/')
+        redirect('/i/')
     }
 }

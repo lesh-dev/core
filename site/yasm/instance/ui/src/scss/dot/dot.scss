@@ -1,0 +1,12 @@
+.dot {
+    --size: 3px;
+    background: red;
+    border-color: red;
+    box-shadow: red 0 0 var(--size) var(--size);
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    position: absolute;
+    top: var(--size);
+    right: var(--size);
+}

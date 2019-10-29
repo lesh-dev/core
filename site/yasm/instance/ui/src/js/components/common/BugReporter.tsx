@@ -1,16 +1,21 @@
 import * as React from 'react'
+import {connect} from "react-redux";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBug, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {BugReporterForm} from "../forms/BugReporter";
 import {Button} from "./Button";
 
 import '../../../scss/bug-reporter/bug-reporter.scss'
+import {CommonState} from "../../redux-structure/common";
+import {ReduxProps} from "../../redux-structure/store";
+
 
 interface BugReporterState {
     opened: boolean
 }
 
-export class BugReporter extends React.Component<{}, BugReporterState>{
+@(connect((state: any) => state.common) as any)
+export class BugReporter extends React.Component<CommonState & ReduxProps, BugReporterState>{
     constructor(props: any) {
         super(props)
         this.state = {
@@ -58,6 +63,9 @@ export class BugReporter extends React.Component<{}, BugReporterState>{
     }
 
     render() {
+        if (this.props.login.loggedIn !== true) {
+            return null
+        }
         return (
             <div className={'bug-reporter'} style={{width: this.state.opened? '100%': '50px'}}>
                 {this.renderContent()}

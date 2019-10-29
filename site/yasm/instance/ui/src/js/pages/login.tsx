@@ -11,5 +11,7 @@ class LoginPage extends React.Component {
 
 
 ReactDOM.render((
-    <BasePage page_renderer={() => <LoginPage/>}/>
+    <BasePage>
+        <LoginPage/>
+    </BasePage>
 ), document.getElementById('mount-point'));

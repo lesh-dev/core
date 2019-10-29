@@ -1,57 +1,38 @@
-import * as React from "react";
-import {Provider} from 'react-redux'
-import {applyMiddleware, combineReducers, createStore} from "redux";
-import {composeWithDevTools} from "redux-devtools-extension";
-import {createLogger} from "redux-logger";
-import {TopMenu} from "../components/common/TopMenu";
-import {profileReducer} from "../redux-structure/reducers/profile";
-import thunk from "redux-thunk";
-import {BrowserRouter} from "react-router-dom";
-import {BugReporter} from "../components/common/BugReporter";
+import * as React from 'react'
+import {connect, Provider} from 'react-redux'
+import {TopMenu} from '../components/common/TopMenu'
+import {BrowserRouter} from 'react-router-dom'
+import {BugReporter} from '../components/common/BugReporter'
+import {getStore} from '../redux-structure/store'
+import {commonActions} from '../redux-structure/common'
+import {QuestMaster} from "../components/common/QuestMaster";
 
 interface BasePageProps {
-    page_renderer: () => JSX.Element
-    reducer?: any
-    preloadedState?: any
+    reducerMap?: any
+    initialState?: any
 }
 
 export class BasePage extends React.Component<BasePageProps> {
     static defaultProps = {
-        reducer: (state: any) => {
-            if (state === undefined) {
-                return null;
-            } else {
-                return state;
-            }
-        }
-    };
-
-    private readonly store: any;
+        reducerMap: {},
+        initialState: {},
+        page_renderer: () => null as React.ReactNode
+    }
 
     constructor(props: BasePageProps) {
-        super(props);
-        let enhancer: any;
-        if (process.env.NODE_ENV === 'development')
-            enhancer = composeWithDevTools(applyMiddleware(thunk, createLogger()));
-        else
-            enhancer = applyMiddleware(thunk);
-        this.store = createStore(
-            combineReducers({
-                PROFILE: profileReducer,
-                OTHERS: this.props.reducer
-            }),
-            this.props.preloadedState,
-            enhancer
-        )
+        super(props)
     }
 
     render() {
+        const store = getStore(this.props.reducerMap, this.props.initialState)
+        store.dispatch(commonActions.common.login.fetch())
         return (
-            <Provider store={this.store}>
+            <Provider store={ store }>
                 <BrowserRouter>
                     <React.Fragment>
                         <TopMenu/>
-                        {this.props.page_renderer()}
+                        {this.props.children}
+                        <QuestMaster/>
                         <BugReporter/>
                     </React.Fragment>
                 </BrowserRouter>

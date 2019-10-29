@@ -10,7 +10,7 @@ class Internal extends React.Component {
         return (
             <Switch>
                 <Route
-                    path={'/internal/personal/'}
+                    path={'/i/'}
                     exact
                     render={() => <Personal/>}
                 />
@@ -21,7 +21,7 @@ class Internal extends React.Component {
 
 
 ReactDOM.render((
-    <BasePage
-        page_renderer={() => <Internal/>}
-    />
+    <BasePage>
+        <Internal/>
+    </BasePage>
 ), document.getElementById('mount-point'));

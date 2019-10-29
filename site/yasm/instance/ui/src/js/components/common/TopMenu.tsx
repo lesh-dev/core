@@ -2,10 +2,10 @@ import * as React from 'react'
 
 import '../../../scss/spinner/spinner.scss'
 import {Dropdown} from "./Dropdown";
-import {ProfileCard} from "./Cards/ProfileCard";
 
 import '../../../scss/top-menu/index.scss'
-import {LogInOutButton} from "./logInOutButton";
+import {PersonalButton} from "./personalButton";
+import {QuestMasterControl} from "./QuestMasterControl";
 
 
 interface IMenuSubEntry {
@@ -76,6 +76,7 @@ const default_menu: IMenu = {
 
 export class TopMenu extends React.Component<IMenu> {
     static defaultProps = default_menu;
+    static height = 40
 
     render_subentry(subentry: IMenuSubEntry) {
         return <a href={subentry.url}>{subentry.title}</a>
@@ -107,10 +108,9 @@ export class TopMenu extends React.Component<IMenu> {
     render() {
         return (
             <div className="top-menu">
-                {this.props.menu.map(entry => this.render_entry(entry))}
-                <div className="top-menu__separator"/>
-                <ProfileCard/>
-                <LogInOutButton/>
+                <div style={{flexGrow: 1}}/>
+                <QuestMasterControl/>
+                <PersonalButton/>
             </div>
         )
     }

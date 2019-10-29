@@ -57,7 +57,12 @@ module.exports = {
                     fallback: 'style-loader',
                     use: ['css-loader']
                 })
-            }
+            },
+            {
+                test: /\.svg/,
+
+                loader: 'babel-loader!react-svg-loader',
+            },
         ]
     },
     resolve: {
