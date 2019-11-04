@@ -7,11 +7,11 @@
 
 function xcms_install_version_file() {
     if [ "$mode" = "production" ] ; then
-        sudo cp -a version $root/
+        $sudo_mode cp -a version $root/
     else
         version="$(cat version)-$(xcms_git_version)-local"
         print_message "Set version: $version"
-        sudo bash -e <<EOF
+        $sudo_mode bash -e <<EOF
 echo "$version" > $root/version
 echo "version: $version" > $root/INFO
 EOF
@@ -73,17 +73,17 @@ elif echo $host | grep -q math-lesh ; then
 fi
 
 
-sudo mkdir -p $root
-sudo cp -a ./site/* $root/
+$sudo_mode mkdir -p $root
+$sudo_mode cp -a ./site/* $root/
 
 if [ "$mode" = "production" ] ; then
     # in production we just use kosher content and set symlink to it
     if [ -e $root/content ] ; then
         print_message "Unlinking content symlink"
-        sudo rm -f $root/content
+        $sudo_mode rm -f $root/content
     fi
     print_message "Setting production content symlink"
-    sudo ln -sf $content_dir/content $root/
+    $sudo_mode ln -sf $content_dir/content $root/
     # FIXME(mvel): lesh.org.ru install
     cp $root/settings.production-fizlesh.ru.php $root/settings.php
 else
@@ -99,9 +99,9 @@ else
         fi
     fi
     print_message "Non-production mode, removing entire content directory"
-    sudo rm -rf $root/content
+    $sudo_mode rm -rf $root/content
     print_message "Copying test content"
-    sudo cp -r $content_dir/content $root/
+    $sudo_mode cp -r $content_dir/content $root/
 
     if [ "$mode" = "default" ] ; then
         # restore database backed up
@@ -116,20 +116,20 @@ else
 
     if [ -e $root/content/auth/usr/root.user ] ; then
         print_message "Install users with default passwords"
-        sudo cp -f $verbose ./tools/xcms_console_tools/*.user $root/content/auth/usr/
+        $sudo_mode cp -f $verbose ./tools/xcms_console_tools/*.user $root/content/auth/usr/
     else
         print_error "User 'root' was not found, password change skipped"
     fi
 fi
 
 print_message "Clearing cache"
-sudo rm -rf $root/.prec/*
+$sudo_mode rm -rf $root/.prec/*
 
 print_message "Creating cache directory"
-sudo mkdir -p $root/.prec
-sudo chmod 777 $root/.prec
+$sudo_mode mkdir -p $root/.prec
+$sudo_mode chmod 777 $root/.prec
 
-sudo chown -R $www_user $root
+$sudo_mode chown -R $www_user $root
 
 target_site="fizlesh.local"
 if echo $host | grep -q math-lesh ; then
