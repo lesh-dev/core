@@ -2,8 +2,10 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {BasePage} from "./base";
 import {Route, Switch} from "react-router";
-import {Personal} from "./internal/personal";
+import {Personal} from "./internal/Personal";
+import {PersonalCourses} from "./internal/PersonalCourses";
 
+import {internalInitialState, internalReducer} from '../redux-structure/internal'
 
 class Internal extends React.Component {
     render(): React.ReactNode {
@@ -14,6 +16,11 @@ class Internal extends React.Component {
                     exact
                     render={() => <Personal/>}
                 />
+                <Route
+                    path={'/i/courses'}
+                    exact
+                    render={() => <PersonalCourses/>}
+                />
             </Switch>
         )
     }
@@ -21,7 +28,12 @@ class Internal extends React.Component {
 
 
 ReactDOM.render((
-    <BasePage>
+    <BasePage
+        reducerMap={internalReducer}
+        initialState={{
+            internal: internalInitialState,
+        }}
+    >
         <Internal/>
     </BasePage>
 ), document.getElementById('mount-point'));

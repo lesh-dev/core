@@ -3,13 +3,12 @@ import {connect} from "react-redux";
 import {ReduxProps} from "../../redux-structure/store";
 import {MonacoWrapper, Spinner} from "../../components/common";
 import {CommonState} from "../../redux-structure/common";
-import {QuestMaster} from "../../components/common/QuestMaster";
+import {Link} from "react-router-dom";
 
 
 @(connect((state: any) => state.common) as any)
 export class Personal extends React.Component<CommonState & ReduxProps> {
     render(): React.ReactNode {
-        console.log(this.props)
         if (this.props.login.error !== undefined) {
             return <>
                 <MonacoWrapper
@@ -24,7 +23,7 @@ export class Personal extends React.Component<CommonState & ReduxProps> {
             return <Spinner/>
         }
         return (
-            null
+            <Link to={'/i/courses'}>Мои Курсы</Link>
         )
     }
 }

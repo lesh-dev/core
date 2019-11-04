@@ -5,7 +5,6 @@ import {stringify} from 'querystring';
 import '../../../scss/form/index.scss'
 import {Button} from "../common/Button";
 
-
 declare var csrf_token: string;
 
 export interface CSRFFormProps {

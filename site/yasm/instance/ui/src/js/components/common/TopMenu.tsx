@@ -4,7 +4,7 @@ import '../../../scss/spinner/spinner.scss'
 import {Dropdown} from "./Dropdown";
 
 import '../../../scss/top-menu/index.scss'
-import {PersonalButton} from "./personalButton";
+import {PersonalButton} from "./PersonalButton";
 import {QuestMasterControl} from "./QuestMasterControl";
 
 

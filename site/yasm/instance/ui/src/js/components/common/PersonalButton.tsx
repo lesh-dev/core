@@ -12,11 +12,21 @@ import Incognito from '../../../assets/incognito.svg' // I know what I am doing 
 export class PersonalButton extends React.Component<CommonState & ReduxProps> {
     render() {
         if (this.props.login.loggedIn === true) {
-            return (
-                <a href={'/i/'}>
-                    <Incognito height="35" width="35" fill="red"/>
-                </a>
-            )
+            if (document.location.pathname.startsWith('/i')) {
+                return (
+                    <Link
+                        to="/i"
+                    >
+                        <Incognito height="35" width="35" fill="red"/>
+                    </Link>
+                )
+            } else {
+                return (
+                    <a href={'/i/'}>
+                        <Incognito height="35" width="35" fill="red"/>
+                    </a>
+                )
+            }
         } else {
             return (
                 <a href={'/login/'}>

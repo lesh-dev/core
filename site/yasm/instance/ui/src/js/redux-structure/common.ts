@@ -1,6 +1,8 @@
 import { Action, createActions, handleActions, ReducerMap } from 'redux-actions'
 import {Person} from "../generated/interfaces";
 
+import { call } from '../api/axios'
+
 export interface LoginState {
     profile?: Person,
     loggedIn?: boolean,
@@ -33,7 +35,9 @@ export const commonInitialState = {
 export const commonActions = createActions({
     common: {
         login: {
-            fetch: () => fetch('/i/get_profile').then(resp => resp.json()) // TODO: fetch -> axios
+            fetch: () => {
+                return call('/i/api/get_profile').then(resp => resp.data)
+            }
         },
         questMaster: {
             toggle: () => undefined,

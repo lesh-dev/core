@@ -3,6 +3,7 @@
 
 ORM declaration file
 """
+from __future__ import annotations
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from sqlalchemy.inspection import inspect
@@ -29,7 +30,10 @@ class Serializer(object):
 class MarkedForeignKey(db.ForeignKey):
 
     def __init__(self, col, *args, **kwargs):
-        self.referenced_model = col.parent
+        if isinstance(col, str):
+            self.referenced_model = col.split('.')[0]
+        else:
+            self.referenced_model = col.parent
         super().__init__(col, *args, **kwargs)
 
     def model(self):
@@ -103,7 +107,7 @@ class Person(UserMixin, db.Model, Serializer):
                             primary_key=True,
                             autoincrement=True)
 
-    def get_id(self):
+    def get_id(self) -> Person:
         return self.person_id
 
     rights = NamedColumn(db.Text,
@@ -242,6 +246,7 @@ class Person(UserMixin, db.Model, Serializer):
     course_teachers = db.relationship('CourseTeachers', back_populates='course_teacher', lazy='dynamic')
     contacts = db.relationship('Contact', back_populates='person', lazy='dynamic')
     direct_login = db.relationship('DirectLogin', back_populates='person', lazy='dynamic')
+    # quests = db.relationship('Quest', back_populates='person', lazy='dynamic')
 
 
 class DirectLogin(db.Model, Serializer):
@@ -606,6 +611,55 @@ class PersonComment(db.Model, Serializer):
     person_comment_changedby = NamedColumn(db.Text,
                                            nick="изменивший",
                                            nullable=False)  # user name
+
+
+# class Quest(db.Model, Serializer):
+#     __tablename__ = 'quest'
+#     id = NamedColumn(
+#         db.Integer,
+#         nick='id',
+#         primary_key=True,
+#         autoincrement=True
+#     )
+#     name = NamedColumn(
+#         db.String,
+#         nick='название',
+#         nullable=False,
+#     )
+#     text = NamedColumn(
+#         db.Text,
+#         nick='текст',
+#         nullable=False,
+#     )
+#     creator = NamedColumn(
+#         db.Integer,
+#         MarkedForeignKey(Person.person_id),
+#         nick='создатель',
+#         nullable=False,
+#     )
+#     admins = NamedColumn(
+#         db.JSON,
+#         nick='проверяющие',
+#         nullable=False,
+#     )
+#     assignee = NamedColumn(
+#         db.JSON,
+#         nick='сдающие',
+#         nullable=False,
+#     )
+#     progress = NamedColumn(
+#         db.Integer,
+#         nick='прогресс %',
+#         nullable=False,
+#     )
+#     blocks = NamedColumn(
+#         db.Integer,
+#         MarkedForeignKey('quest.id'),
+#         nick='блокирует',
+#         nullable=True
+#     )
+#     blockers = db.relationship('Quest', back_populates='blocks', lazy='dynamic')
+#     person = db.relationship('Person', lazy='joined')
 
 
 # contest TODO: nickname columns
