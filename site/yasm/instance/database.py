@@ -240,6 +240,12 @@ class Person(UserMixin, db.Model, Serializer):
                                    nick="дата создания",
                                    nullable=True)  # user name
 
+    other_contacts = NamedColumn(
+        db.Text,
+        nick='WIP/TMP дополнительные контакты (родители)',
+        nullable=True,
+    )
+
     person_comments = db.relationship('PersonComment', back_populates='blamed_person', lazy='dynamic')
     person_schools = db.relationship('PersonSchool', back_populates='member_person', lazy='dynamic')
     exams = db.relationship('Exam', back_populates='student', lazy='dynamic')

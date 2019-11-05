@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block styles %}
+    <style>
+        #body {
+            --bg-color: rgb(231,255,183);
+            --page-bg-color: rgb(206, 216, 185);
+            --underline-color: rgba(138,255,0,1);
+            --focus-color: rgb(62, 122, 0);
+        }
+        #header {
+            top: 0;
+            width: 100%;
+            position: fixed;
+            height: 50px;
+            font-size: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-color);
+            background: linear-gradient(var(--bg-color) 0%, var(--bg-color) 97%, var(--underline-color) 100%);
+            z-index: 1;
+        }
+        #page {
+            background: var(--page-bg-color);
+            position: relative;
+            top: 50px;
+            padding: 0 170px;
+        }
+        #form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 10px 0;
+            background: linear-gradient(90deg, var(--underline-color) 0%, var(--bg-color) 1%, var(--bg-color) 99%, var(--underline-color) 100%);
+        }
+        .field {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .field--select {
+            display: flex;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .field__label--select {
+            padding: 3px 3px 3px 30px;
+            font-size: 18px;
+        }
+        .field__input--select {
+            padding-left: 30px;
+            display: flex;
+            align-items: center;
+        }
+        .field__input--select > * {
+            margin: 0 -1px;
+            border: 1px solid var(--underline-color);
+            padding: 0 32px;
+            height: 25px;
+            font-size: 18px;
+        }
+        .field__label {
+            padding: 3px 3px 3px 30px;
+            font-size: 18px;
+        }
+        .field__input {
+            width: 100%;
+        }
+        .field__input > * {
+            margin: 0 -1px;
+            border: 1px solid var(--underline-color);
+            padding: 0 32px;
+            width: calc(100% - 64px);
+            height: 25px;
+            font-size: 18px;
+        }
+        .field__input > *:focus {
+            outline: none;
+            box-shadow: 0 0 2px 2px var(--focus-color);
+        }
+        .field__input > textarea {
+            resize: none;
+            height: 75px;
+        }
+        #submit {
+            height: 50px;
+            font-size: 35px;
+            border-radius: 5px;
+            margin: 25px;
+        }
+    </style>
+{% endblock %}
+{% block js %}
+{% endblock %}
+{% block content %}
+    <div id="header">
+        Заявка на собеседование на математическое отделение
+    </div>
+    <div id="page">
+        <form action="" method="post" id="form">
+            {{ form.csrf_token() }}
+
+            {% for field in form if field.name != 'csrf_token' %}
+                {% if field.name != 'recaptcha' %}
+                    {% if field.name != 'grade' %}
+                        <div class="field">
+                            <div class="field__label">{{ field.label() }}</div>
+                            <div class="field__input">{{ field }}
+                                {% for error in field.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="field--select">
+                            <div class="field__label--select">{{ field.label() }}</div>
+                            <div class="field__input--select">{{ field }}
+                                {% for error in field.errors %}
+                                {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    {{ field }}
+                {% endif %}
+            {% endfor %}
+            <button type="submit" id="submit">
+                Отправить
+            </button>
+        </form>
+    </div>
+{% endblock %}
