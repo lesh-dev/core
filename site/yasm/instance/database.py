@@ -3,7 +3,6 @@
 
 ORM declaration file
 """
-from __future__ import annotations
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from sqlalchemy.inspection import inspect
@@ -107,7 +106,7 @@ class Person(UserMixin, db.Model, Serializer):
                             primary_key=True,
                             autoincrement=True)
 
-    def get_id(self) -> Person:
+    def get_id(self):
         return self.person_id
 
     rights = NamedColumn(db.Text,
