@@ -13,9 +13,9 @@ import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclama
 
 import { Modal } from './Modal'
 import '../../../scss/modal/index.scss'
-import {CommonState} from "../../redux-structure/common";
-import {ReduxProps} from "../../redux-structure/store";
-import {TopMenu} from "./TopMenu";
+import { CommonState, TopRightPanels } from '../../redux-structure/common'
+import { ReduxProps } from '../../redux-structure/store'
+import { TopMenu } from './TopMenu'
 
 enum QuestStatus {
     OK,
@@ -69,7 +69,7 @@ export class QuestMaster extends React.Component<CommonState & ReduxProps, Quest
                 status: QuestStatus.BAD,
             }
         ]
-        if (!this.props.questMaster.opened) {
+        if (this.props.panel.topRight.current !== TopRightPanels.QUESTS) {
             return null
         }
         return (

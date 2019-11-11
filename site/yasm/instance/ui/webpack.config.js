@@ -90,6 +90,9 @@ module.exports = {
         compress: true,
         host: config.devServerHost,
         port: config.devServerPort,
+        headers: {
+            'X-Forward-Host': `${config.devServerHost}:${config.devServerPort}`,
+        },
         before: function (app, server) {
             app.get('/static/**', function (req, res) {
                 console.log(`requested ${req.path} from WDS`);

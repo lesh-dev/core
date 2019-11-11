@@ -1,11 +1,13 @@
 import * as React from 'react'
 import {connect, Provider} from 'react-redux'
 import {TopMenu} from '../components/common/TopMenu'
-import {BrowserRouter} from 'react-router-dom'
+import {Router} from 'react-router-dom'
 import {BugReporter} from '../components/common/BugReporter'
 import {getStore} from '../redux-structure/store'
 import {commonActions} from '../redux-structure/common'
 import {QuestMaster} from "../components/common/QuestMaster";
+
+import { history } from '../util/history'
 
 interface BasePageProps {
     reducerMap?: any
@@ -28,14 +30,14 @@ export class BasePage extends React.Component<BasePageProps> {
         store.dispatch(commonActions.common.login.fetch())
         return (
             <Provider store={ store }>
-                <BrowserRouter>
+                <Router history={ history }>
                     <React.Fragment>
                         <TopMenu/>
                         {this.props.children}
                         <QuestMaster/>
                         <BugReporter/>
                     </React.Fragment>
-                </BrowserRouter>
+                </Router>
             </Provider>
         )
     }
