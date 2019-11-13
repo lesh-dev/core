@@ -9,31 +9,30 @@ import { history } from '../../util/history'
 
 // @ts-ignore // I know what I am doing (c) Yar-R
 import Incognito from '../../../assets/incognito.svg'
+import {TopRightPanel} from "./panels/TopRight";
 
 
 @(connect((state: any) => state.common) as any)
 export class PersonalButton extends React.Component<CommonState & ReduxProps> {
     renderPanel() {
         return (
-            <VerticalMenu
-                style={{
-                    position: 'fixed',
-                    right: '32px',
-                }}
-                entries={
-                    [
-                        {
-                            title: 'Моя страница',
-                            callback: () => history.push('/i/'),
-                        },
-                        {
-                            title: 'выйти',
-                            icon: faSignOutAlt,
-                            callback: () => this.props.dispatch(commonActions.common.login.exit()),
-                        },
-                    ]
-                }
-            />
+            <TopRightPanel>
+                <VerticalMenu
+                    entries={
+                        [
+                            {
+                                title: 'Моя страница',
+                                callback: () => history.push('/i/'),
+                            },
+                            {
+                                title: 'выйти',
+                                icon: faSignOutAlt,
+                                callback: () => this.props.dispatch(commonActions.common.login.exit()),
+                            },
+                        ]
+                    }
+                />
+            </TopRightPanel>
         )
     }
 

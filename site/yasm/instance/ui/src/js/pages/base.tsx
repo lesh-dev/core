@@ -34,7 +34,6 @@ export class BasePage extends React.Component<BasePageProps> {
                     <React.Fragment>
                         <TopMenu/>
                         {this.props.children}
-                        <QuestMaster/>
                         <BugReporter/>
                     </React.Fragment>
                 </Router>

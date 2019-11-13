@@ -12,10 +12,13 @@ import { faRegistered } from '@fortawesome/free-regular-svg-icons/faRegistered'
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle'
 
 import { Modal } from './Modal'
-import '../../../scss/modal/index.scss'
 import { CommonState, TopRightPanels } from '../../redux-structure/common'
 import { ReduxProps } from '../../redux-structure/store'
 import { TopMenu } from './TopMenu'
+
+import '../../../scss/modal/index.scss'
+import {TopRightPanel} from "./panels/TopRight";
+
 
 enum QuestStatus {
     OK,
@@ -73,12 +76,7 @@ export class QuestMaster extends React.Component<CommonState & ReduxProps, Quest
             return null
         }
         return (
-            <div style={{
-                position: 'fixed',
-                top: TopMenu.height,
-                right: 0,
-
-            }}>
+            <TopRightPanel>
                 {
                     this.state !== null && this.state.currentModal !== undefined
                         ? (
@@ -137,7 +135,7 @@ export class QuestMaster extends React.Component<CommonState & ReduxProps, Quest
                         />
                     </Table>
                 </div>
-            </div>
+            </TopRightPanel>
         )
     }
 }

@@ -1,0 +1,6 @@
+.top-right-panel {
+  position: fixed;
+  top: 40px;    // TODO: should be global (height of top-menu)
+  right: 32px;  // TODO: should be global (page padding)
+  padding: 8px 16px;
+}
