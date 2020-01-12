@@ -3,7 +3,7 @@ import {createLogger} from "redux-logger";
 import {composeWithDevTools} from "redux-devtools-extension";
 import {applyMiddleware, combineReducers, compose, createStore, ReducersMapObject} from "redux";
 import { Action, ReduxCompatibleReducer } from 'redux-actions'
-import {commonReducer, commonInitialState} from "./common";
+import { getReducer as getCommonReducer, getInitialState as getCommonInitialState, CommonState } from './common'
 
 const productionMiddleware = [
     promise,
@@ -39,7 +39,7 @@ function normalizeReducer(reducerMap: ReducerMap): ReducersMapObject {
     return reducer
 }
 
-export function getStore(reducerMap: ReducerMap, initialState: any) {
+export function getStore(reducerMap: ReducerMap, initialState: any, initialCommonState: CommonState) {
     return createStore(
         combineReducers(
             {
@@ -47,13 +47,13 @@ export function getStore(reducerMap: ReducerMap, initialState: any) {
                     reducerMap,
                 ),
                 ...normalizeReducer(
-                    commonReducer,
+                    getCommonReducer(initialCommonState),
                 ),
             },
         ),
         {
             ...initialState,
-            common: commonInitialState,
+            common: getCommonInitialState(initialCommonState),
         },
         composed,
     )

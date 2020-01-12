@@ -2,6 +2,8 @@ import { Action, createActions, handleActions, ReducerMap } from 'redux-actions'
 import {Person} from "../generated/interfaces";
 
 import { call } from '../api/axios'
+import { SidebarState, getReducer as getSidebarReducer, getInitialState as getSidebarInitialState } from './sidebar'
+import get = Reflect.get;
 
 export enum TopRightPanels {
     NONE,
@@ -27,6 +29,7 @@ export interface PanelState {
 export interface CommonState {
     login?: LoginState,
     panel?: PanelState,
+    sidebar?: SidebarState,
 }
 
 export const loginInitialState: LoginState = {
@@ -41,11 +44,6 @@ export const topRightPanelInitialState: TopRightPanelState = {
 export const panelInitialState: PanelState = {
     topRight: topRightPanelInitialState,
 }
-
-export const commonInitialState = {
-    login: loginInitialState,
-    panel: panelInitialState,
-} as CommonState
 
 export const commonActions = createActions({
     common: {
@@ -130,12 +128,27 @@ export const topRightPanelReducer = handleActions(
     topRightPanelInitialState,
 )
 
+export interface reducerProps {
+    sidebar?: SidebarState
+}
 
-export const commonReducer = {
-    common: {
-        panel: {
-            topRight: topRightPanelReducer,
-        },
-        login: loginReducer,
+export function getReducer(props: reducerProps) {
+    return {
+        common: {
+            panel: {
+                topRight: topRightPanelReducer,
+            },
+            login: loginReducer,
+            sidebar: getSidebarReducer(props.sidebar),
+        }
     }
 }
+
+export function getInitialState(props: reducerProps): CommonState {
+    return {
+        sidebar: getSidebarInitialState(props.sidebar),
+        panel: panelInitialState,
+        login: loginInitialState,
+    }
+}
+

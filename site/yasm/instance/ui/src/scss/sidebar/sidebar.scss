@@ -1,0 +1,17 @@
+@import "src/scss/constants";
+
+@import "__display/sidebar__display";
+@import "__entry/sidebar__entry";
+
+#sidebar {
+  height: calc(100vh - #{$top-menu-height});
+  width: $sidebar-width-expanded;
+  display: flex;
+  flex-direction: column;
+  transition-duration: 0.5s;
+  background-color: #e6edf7;
+}
+
+.sidebar--collapsed {
+  width: $sidebar-width-collapsed !important;
+}

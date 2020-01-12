@@ -2,6 +2,8 @@ import * as React from 'react'
 
 interface ModalProps {
     onClose: () => void
+    style?: React.CSSProperties
+    className?: string
 }
 
 export class Modal extends React.Component<ModalProps> {
@@ -26,7 +28,8 @@ export class Modal extends React.Component<ModalProps> {
     render() {
         return <>
             <div
-                className="modal"
+                className={'modal ' + (this.props.className || '')}
+                style={this.props.style || {}}
             >
                 {
                     this.props.children

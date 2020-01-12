@@ -17,11 +17,9 @@ export const coursesInitialState = {
     loading: false,
 } as CoursesState
 
-
 export const internalInitialState = {
     courses: coursesInitialState,
 } as InternalState
-
 
 export const internalActions = createActions({
     internal: {
@@ -32,7 +30,6 @@ export const internalActions = createActions({
         },
     }
 }) as any
-
 
 export const coursesReducer = handleActions(
     ({
@@ -62,6 +59,7 @@ export const coursesReducer = handleActions(
     }) as ReducerMap<CoursesState, Action<any>>,
     coursesInitialState,
 )
+
 
 export const internalReducer = {
     internal: {

@@ -8,6 +8,7 @@ MIME = {
     str: "string",
     datetime.date: "Date",
     datetime.datetime: "number",
+    bytes: "string",
 }
 
 
@@ -85,15 +86,14 @@ def main():  # NOQA
                     models[m].append((scl(tablename), CC(tablename) + "[]", columnname, fk._column_tokens[2]))
                     try:
                         backref = list(
-                            map(
-                                lambda x: x[1].back_populates,
-                                filter(
-                                    lambda i: list(list(i[1]._calculated_foreign_keys)[0].foreign_keys)[0] == fk,
-                                    fk.referenced_model.relationships._data.items()
-                                )
-                            )
+                            [
+                                x[1].back_populates for x in
+                                fk.referenced_model.relationships._data.items() if
+                                list(list(x[1]._calculated_foreign_keys)[0].foreign_keys)[0] == fk
+                            ]
                         )[0]
                     except Exception as e:
+                        print(fk.referenced_model.relationships._data.items())
                         print(e)
                     models[tablename].append((backref, CC(m), m, fk._column_tokens[2]))
 

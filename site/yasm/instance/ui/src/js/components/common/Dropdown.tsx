@@ -8,8 +8,8 @@ export interface DropdownState {
 }
 
 export interface DropdownProps {
-    label: () => JSX.Element
-    component: () => JSX.Element
+    label: () => React.ReactNode
+    component: () => React.ReactNode
     onExpand?: () => void
     onCollapse?: () => void
     type?: 'click' | 'hover'

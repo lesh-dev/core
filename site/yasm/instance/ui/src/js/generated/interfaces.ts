@@ -51,12 +51,22 @@ export interface Person {
     person_created: string,
     person_modified: string,
     person_changedby: string,
+    other_contacts: string,
+    ava: Ava[],
     direct_login: DirectLogin[],
     contact: Contact[],
     course_teachers: CourseTeachers[],
     exam: Exam[],
     person_school: PersonSchool[],
     person_comment: PersonComment[],
+}
+
+export interface Ava {
+    id: number,
+    person_id: number,
+    person: Person,
+    ava: string,
+    entry_state: string,
 }
 
 export interface DirectLogin {
@@ -159,7 +169,7 @@ export interface PersonSchool {
 
 export interface Calendar {
     person_school_id: number,
-    school: PersonSchool,
+    person_school: PersonSchool,
     date: Date,
     status: string,
     calendar_modified: number,

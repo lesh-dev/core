@@ -4,7 +4,7 @@ import * as Color from 'color'
 import '../../../scss/button/index.scss'
 
 interface ButtonProps {
-    style?: 'green' | 'action' | 'gray' | 'cancel'
+    style: 'green' | 'action' | 'gray' | 'cancel'
     type?: 'submit' | 'reset' | 'button'
     className?: string
     onClick: (event: React.MouseEvent) => void

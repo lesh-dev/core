@@ -43,7 +43,7 @@ def create():
     yasm.register_blueprint(react_components.module)
     import instance.login as login
     yasm.register_blueprint(login.module)
-    import instance.internal as personal
+    import instance.internal as internal
     yasm.register_blueprint(internal.module)
     import instance.secure_static as secure_static
     yasm.register_blueprint(secure_static.module)

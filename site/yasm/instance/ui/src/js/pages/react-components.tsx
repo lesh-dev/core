@@ -5,7 +5,6 @@ import {Route, Switch} from "react-router";
 import {BrowserRouter, Link} from "react-router-dom";
 import {Cut} from "../components/common/Cut";
 import {ET} from "../components/common/EditableText";
-import {SideMenu} from "../components/common/SideMenu";
 import {SearchPresentation, default_SearchExample, SearchExample} from "../components/common/Search"
 import {TestHighlight} from "../components/common/Snippet";
 import {ExamsExample} from "../components/common/Exams"

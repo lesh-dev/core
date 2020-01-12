@@ -1,8 +1,9 @@
-import {Notification, Department, Person, DirectLogin, Contact, School, Course, CourseTeachers, Exam, PersonSchool, Calendar, PersonComment, Submission, Contestants, Problems, Solutions, } from "./interfaces"
+import {Notification, Department, Person, Ava, DirectLogin, Contact, School, Course, CourseTeachers, Exam, PersonSchool, Calendar, PersonComment, Submission, Contestants, Problems, Solutions, } from "./interfaces"
 
 export var default_Notification: Notification;
 export var default_Department: Department;
 export var default_Person: Person;
+export var default_Ava: Ava;
 export var default_DirectLogin: DirectLogin;
 export var default_Contact: Contact;
 export var default_School: School;
@@ -71,12 +72,22 @@ default_Person = {
     person_created: "person_created",
     person_modified: "person_modified",
     person_changedby: "person_changedby",
+    other_contacts: "other_contacts",
+    ava: [] as Ava[],
     direct_login: [] as DirectLogin[],
     contact: [] as Contact[],
     course_teachers: [] as CourseTeachers[],
     exam: [] as Exam[],
     person_school: [] as PersonSchool[],
     person_comment: [] as PersonComment[],
+};
+
+default_Ava = {
+    id: 0,
+    person_id: 0,
+    person: default_Person,
+    ava: "ava",
+    entry_state: "entry_state",
 };
 
 default_DirectLogin = {
@@ -179,7 +190,7 @@ default_PersonSchool = {
 
 default_Calendar = {
     person_school_id: 0,
-    school: default_PersonSchool,
+    person_school: default_PersonSchool,
     date: new Date(),
     status: "status",
     calendar_modified: 0,

@@ -6,8 +6,13 @@ ORM declaration file
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from sqlalchemy.inspection import inspect
+import enum
 
 db = SQLAlchemy()
+
+
+class EntryStates(enum.Enum):
+    RELEVANT = 'RELEVANT'
 
 
 class Serializer(object):
@@ -251,7 +256,39 @@ class Person(UserMixin, db.Model, Serializer):
     course_teachers = db.relationship('CourseTeachers', back_populates='course_teacher', lazy='dynamic')
     contacts = db.relationship('Contact', back_populates='person', lazy='dynamic')
     direct_login = db.relationship('DirectLogin', back_populates='person', lazy='dynamic')
+    avas = db.relationship('Ava', back_populates='person', lazy='dynamic')
     # quests = db.relationship('Quest', back_populates='person', lazy='dynamic')
+
+
+class Ava(db.Model):
+    __tablename__ = 'ava'
+    id = NamedColumn(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True,
+        nullable=False,
+        nick='Id'
+    )
+    person_id = NamedColumn(
+        db.Integer,
+        MarkedForeignKey(Person.person_id),
+        nick='человек',
+        nullable=False,
+        index=True,
+    )
+    ava = NamedColumn(
+        db.LargeBinary,
+        nick='картинка',
+        nullable=False,
+    )
+    entry_state = NamedColumn(
+        db.Text,
+        nick='статус',
+        nullable=False,
+        index=True,
+        default=EntryStates.RELEVANT
+    )
+    person = db.relationship('Person')
 
 
 class DirectLogin(db.Model, Serializer):
@@ -547,6 +584,8 @@ class PersonSchool(db.Model, Serializer):
     tll = NamedColumn(db.Text,
                       nick="отъезд", )
 
+    calendars = db.relationship('Calendar', back_populates='person_school')
+
 
 class Calendar(db.Model, Serializer):
     __tablename__ = 'calendar'
@@ -558,6 +597,7 @@ class Calendar(db.Model, Serializer):
         nullable=False,
         primary_key=True
     )
+    person_school = db.relationship(PersonSchool)
     date = NamedColumn(
         db.DATE,
         nick="дата",

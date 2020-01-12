@@ -3,8 +3,7 @@ import {connect} from "react-redux";
 import {ReduxProps} from "../../redux-structure/store";
 import {MonacoWrapper, Spinner} from "../../components/common";
 import {CommonState} from "../../redux-structure/common";
-import {Link} from "react-router-dom";
-
+import {BigAva} from "../../components/internal/BigAva";
 
 @(connect((state: any) => state.common) as any)
 export class Personal extends React.Component<CommonState & ReduxProps> {
@@ -22,8 +21,6 @@ export class Personal extends React.Component<CommonState & ReduxProps> {
         if (this.props.login.loading) {
             return <Spinner/>
         }
-        return (
-            <Link to={'/i/courses'}>Мои Курсы</Link>
-        )
+        return <BigAva person={this.props.login.profile}/>
     }
 }
