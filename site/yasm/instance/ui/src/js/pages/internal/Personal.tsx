@@ -5,30 +5,42 @@ import {MonacoWrapper, Spinner} from "../../components/common";
 import {commonActions, CommonState} from "../../redux-structure/common";
 import {BigAva} from "../../components/internal/BigAva";
 import {Contacts} from "../../components/internal/Contacts";
+import {PersonalParams} from "./params";
+import {RouterProps} from "../../util/match";
+import {internalActions, InternalState} from "../../redux-structure/internal";
 
-@(connect((state: any) => state.common) as any)
-export class Personal extends React.Component<CommonState & ReduxProps> {
+@(connect((state: any) => state) as any)
+export class Personal extends React.Component<{common?: CommonState, internal?: InternalState} & ReduxProps & RouterProps<PersonalParams>> {
+    self = false
     componentDidMount(): void {
-        this.props.dispatch(commonActions.common.login.fetch(false))
+
+        const id = Number((this.props.match || {params: {id: this.props.common.login.profile.person_id}}).params.id)
+        this.self = this.props.common.login.profile.person_id === id
+        if (this.self) {
+            this.props.dispatch(commonActions.common.login.fetch(false))
+        } else {
+            this.props.dispatch(internalActions.internal.person.fetch(id))
+        }
     }
 
     render(): React.ReactNode {
-        if (this.props.login.error !== undefined) {
+        const state = this.self ? this.props.common.login : this.props.internal.person
+        if (state.error !== undefined) {
             return <>
                 <MonacoWrapper
                     language="json"
                     width={window.innerWidth}
                     height={window.innerHeight - 50}
-                    value={JSON.stringify(this.props.login.error, null, 4)}
+                    value={JSON.stringify(state.error, null, 4)}
                 />
             </>
         }
-        if (this.props.login.loading) {
+        if (state.loading || state.profile === undefined) {
             return <Spinner/>
         }
         return <>
-            <BigAva person={this.props.login.profile}/>
-            <Contacts person={this.props.login.profile}/>
+            <BigAva person={state.profile}/>
+            <Contacts person={state.profile}/>
         </>
     }
 }

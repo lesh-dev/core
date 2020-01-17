@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {BasePage} from "./base";
-import {Route, Switch} from "react-router";
+import {Route, Switch} from "react-router-dom";
 import {Personal} from "./internal/Personal";
 import {PersonalCourses} from "./internal/PersonalCourses";
 
@@ -12,6 +12,7 @@ import {faGraduationCap} from "@fortawesome/free-solid-svg-icons/faGraduationCap
 import {internalInitialState, internalReducer} from '../redux-structure/internal'
 import {SidebarEntryType} from "../redux-structure/sidebar";
 import {Sidebar} from "../components/common";
+import {history} from "../util/history";
 
 class Internal extends React.Component {
     render(): React.ReactNode {
@@ -31,6 +32,11 @@ class Internal extends React.Component {
                     path="/i/grades/"
                     exact
                     render={() => <PersonalCourses/>}
+                />
+                <Route
+                    path="/i/person/:id"
+                    exact
+                    component={Personal}
                 />
             </Switch>
         )

@@ -18,7 +18,7 @@ export interface EditProps {
 
 
 export class Edit extends React.Component<EditProps, undefined> {
-    defaultProps = {
+    static defaultProps = {
         submit: false,
         onSubmit: () => {}
     }

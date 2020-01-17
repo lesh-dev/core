@@ -23,11 +23,11 @@ export class Sidebar extends React.Component<SidebarState & ReduxProps> {
                     : entry.image
             }/>
     }
-    private render_entry(entry: SidebarEntry) {
+    private render_entry(entry: SidebarEntry, i: number) {
         const cls = 'sidebar__display' + (this.props.collapsed ? ' sidebar__display--collapsed' : '')
         switch (entry.type) {
             case SidebarEntryType.Link:
-                return <Link to={entry.url} className="sidebar__entry" >
+                return <Link to={entry.url} className="sidebar__entry" key={i}>
                     {
                         this.render_icon(entry)
                     }
@@ -48,6 +48,7 @@ export class Sidebar extends React.Component<SidebarState & ReduxProps> {
                 return <div
                     onClick={() => this.props.dispatch(entry.action)}
                     className="sidebar__entry"
+                    key={i}
                 >
                     {
                         this.render_icon(entry)
@@ -69,6 +70,7 @@ export class Sidebar extends React.Component<SidebarState & ReduxProps> {
                 return <div
                     onClick={() => this.props.dispatch(sidebarActions.common.sidebar.toggle())}
                     className="sidebar__entry"
+                    key={i}
                 >
                     {
                         this.render_icon(entry)
@@ -81,7 +83,10 @@ export class Sidebar extends React.Component<SidebarState & ReduxProps> {
                 </div>
 
             case SidebarEntryType.Spacer:
-                return <div style={{flexGrow: 10}}/>
+                return <div
+                    style={{flexGrow: 10}}
+                    key={i}
+                />
         }
     }
 
@@ -98,11 +103,11 @@ export class Sidebar extends React.Component<SidebarState & ReduxProps> {
                 {
                     this.render_entry({
                         type: SidebarEntryType.SuperButton,
-                    })
+                    }, -1)
                 }
                 {
-                    this.props.entries.map(entry =>
-                        this.render_entry(entry)
+                    this.props.entries.map((entry, i) =>
+                        this.render_entry(entry, i)
                     )
                 }
             </div>

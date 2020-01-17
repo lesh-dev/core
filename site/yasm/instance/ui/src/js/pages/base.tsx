@@ -1,13 +1,13 @@
 import * as React from 'react'
-import {connect, Provider} from 'react-redux'
+import {connect, Provider, Store} from 'react-redux'
 import {TopMenu} from '../components/common/TopMenu'
 import {Router} from 'react-router-dom'
 import {BugReporter} from '../components/common/BugReporter'
 import {getStore} from '../redux-structure/store'
 import { commonActions, CommonState } from '../redux-structure/common'
-import {QuestMaster} from "../components/common/QuestMaster";
 
 import { history } from '../util/history'
+import {Spinner} from "../components/common";
 
 interface BasePageProps {
     reducerMap?: any
@@ -15,7 +15,11 @@ interface BasePageProps {
     initialCommonState?: CommonState
 }
 
-export class BasePage extends React.Component<BasePageProps> {
+interface Changable {
+    idx: boolean,
+}
+
+export class BasePage extends React.Component<BasePageProps, Changable> {
     static defaultProps = {
         reducerMap: {},
         initialState: {},
@@ -23,19 +27,34 @@ export class BasePage extends React.Component<BasePageProps> {
         page_renderer: () => null as React.ReactNode
     }
 
+    store = null as Store<any>
+
     constructor(props: BasePageProps) {
         super(props)
+        this.store = getStore(this.props.reducerMap, this.props.initialState, this.props.initialCommonState)
+        this.store.dispatch(commonActions.common.login.fetch())
+        this.state = {
+            idx: false,
+        }
+    }
+
+    componentDidMount(): void {
+        this.store.subscribe(() => this.setState({
+            idx: ! this.state.idx
+        }))
     }
 
     render() {
-        const store = getStore(this.props.reducerMap, this.props.initialState, this.props.initialCommonState)
-        store.dispatch(commonActions.common.login.fetch())
         return (
-            <Provider store={ store }>
+            <Provider store={ this.store }>
                 <Router history={ history }>
                     <React.Fragment>
                         <TopMenu/>
-                        {this.props.children}
+                        {
+                            this.store.getState().common.login.profile !== undefined
+                            ? this.props.children
+                            : <Spinner/>
+                        }
                         <BugReporter/>
                     </React.Fragment>
                 </Router>

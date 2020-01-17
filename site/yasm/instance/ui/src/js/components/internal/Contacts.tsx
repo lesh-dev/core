@@ -95,7 +95,9 @@ export class Contacts extends React.Component<ContactsProps & CommonState & Redu
                                             {
                                                 this.props.person.contacts.concat(this.prepare_changes()).filter(contact => (
                                                     this.state.changes.get(contact.value) === undefined || this.state.changes.get(contact.value).action !== ContactsPatchAction.REMOVE
-                                                )).map(contact => <tr>
+                                                )).map((contact, i) => <tr
+                                                    key={i}
+                                                >
                                                     <td>
                                                         {
                                                             this.render_contact_value(contact)
