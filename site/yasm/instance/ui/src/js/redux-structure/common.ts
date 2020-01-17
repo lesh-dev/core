@@ -1,9 +1,9 @@
 import { Action, createActions, handleActions, ReducerMap } from 'redux-actions'
-import {Person} from "../generated/interfaces";
+import {Ava, Contact, Person} from "../generated/interfaces";
 
 import { call } from '../api/axios'
 import { SidebarState, getReducer as getSidebarReducer, getInitialState as getSidebarInitialState } from './sidebar'
-import get = Reflect.get;
+import {ContactsPatch, patchContacts, setAva} from "../api/internal/personal";
 
 export enum TopRightPanels {
     NONE,
@@ -48,7 +48,9 @@ export const panelInitialState: PanelState = {
 export const commonActions = createActions({
     common: {
         login: {
-            fetch: () => call('/i/api/get_profile').then(resp => resp.data),
+            fetch: (onlyLogin: boolean = true) => call(onlyLogin ? '/i/api/get_profile' : '/i/api/get_profile_info').then(resp => resp.data),
+            setAva: (ava: string) => setAva(ava).then(resp => resp.data), // FIXME (rebenkoy) these _must_ be in internal
+            patchContacts: (contactPatch: ContactsPatch) => patchContacts(contactPatch).then(resp => resp.data),
             togglePanel: () => undefined,
             exit: () => call('/login/logout').then(resp => resp.data),
         },
@@ -73,18 +75,67 @@ export const loginReducer = handleActions(
                 ),
                 fetch_FULFILLED: (state: LoginState, action: Action<Person>) => (
                     {
+                        ...state,
                         loggedIn: true,
                         loading: false,
-                        profile: action.payload,
+                        profile: {
+                            ...state.profile,
+                            ...action.payload
+                        },
                     }
                 ),
                 fetch_REJECTED: (state: LoginState, action: Action<Error>) => (
                     {
-                        loggedIn: false,
+                        ...state,
                         loading: false,
                         error: action.payload,
                     }
                 ),
+                setAva_PENDING: (state: LoginState) => (
+                    {
+                        ...state,
+                        error: undefined,
+                    }
+                ),
+                setAva_FULFILLED: (state: LoginState, action: Action<Ava>) => (
+                    {
+                        ...state,
+                        profile: {
+                            ...state.profile,
+                            avas: [
+                                action.payload,
+                            ],
+                        },
+                    }
+                ),
+                setAva_REJECTED: (state: LoginState, action: Action<Error>) => (
+                    {
+                        ...state,
+                        error: action.payload,
+                    }
+                ),
+                patchContacts_PENDING: (state: LoginState) => (
+                    {
+                        ...state,
+                        error: undefined,
+                    }
+                ),
+                patchContacts_FULFILLED: (state: LoginState, action: Action<Contact[]>) => (
+                    {
+                        ...state,
+                        profile: {
+                            ...state.profile,
+                            contacts: action.payload,
+                        },
+                    }
+                ),
+                patchContacts_REJECTED: (state: LoginState, action: Action<Error>) => (
+                    {
+                        ...state,
+                        error: action.payload,
+                    }
+                ),
+
                 exit_PENDING: (state: LoginState, action: Action<any>) => ({
                     ...state,
                     loading: true,
@@ -92,6 +143,7 @@ export const loginReducer = handleActions(
                 exit_FULFILLED: (state: LoginState, action: Action<any>) => loginInitialState,
                 exit_REJECTED: (state: LoginState, action: Action<Error>) => (
                     {
+                        ...state,
                         loggedIn: false,
                         loading: false,
                         error: action.payload,

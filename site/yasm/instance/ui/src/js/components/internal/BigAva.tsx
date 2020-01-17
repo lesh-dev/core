@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Person} from "../../generated/interfaces";
 import {connect} from "react-redux";
-import {CommonState} from "../../redux-structure/common";
+import {commonActions, CommonState} from "../../redux-structure/common";
 import {ReduxProps} from "../../redux-structure/store";
 import {Edit} from "../common/Edit";
 import {Modal} from "../common/Modal";
@@ -10,6 +10,8 @@ import Cropper from 'react-easy-crop'
 import {Area, Point} from "react-easy-crop/types";
 import {getCroppedImg} from "../../util/ImageCrop";
 
+// @ts-ignore
+import Incognito from '../../../assets/incognito.svg'
 
 export interface BigAvaProps {
     person: Person,
@@ -19,6 +21,7 @@ enum STATE {
     BASE,
     CHANGE,
     PREVIEW,
+    LOADING,
 }
 
 export interface BigAvaState {
@@ -29,21 +32,23 @@ export interface BigAvaState {
     zoom: number,
 }
 
+const initialState = {
+    state: STATE.BASE,
+    image: '',
+    newImage: '',
+    crop: {
+        x: 0,
+        y: 0,
+    },
+    zoom: 1,
+}
+
 @(connect((state: any) => state.common) as any)
 export class BigAva extends React.Component<BigAvaProps & CommonState & ReduxProps, BigAvaState>{
     constructor(props: any) {
         super(props)
 
-        this.state = {
-            state: STATE.BASE,
-            image: '',
-            newImage: '',
-            crop: {
-                x: 0,
-                y: 0,
-            },
-            zoom: 1,
-        }
+        this.state = initialState
     }
     inputRef = React.createRef<HTMLInputElement>()
 
@@ -66,12 +71,9 @@ export class BigAva extends React.Component<BigAvaProps & CommonState & ReduxPro
 
     }
 
-
     private submitImage() {
-        this.setState({
-            state: STATE.BASE,
-        })
-        console.log('should submit image', this.state.newImage)
+        this.props.dispatch(commonActions.common.login.setAva(this.state.newImage))
+        this.setState(initialState)
     }
 
 
@@ -151,6 +153,7 @@ export class BigAva extends React.Component<BigAvaProps & CommonState & ReduxPro
                     </Modal>
                 </>
             case STATE.BASE:
+            case STATE.LOADING:
                 return <>
                     <input
                         type="file" style={{display: 'none'}}
@@ -161,13 +164,14 @@ export class BigAva extends React.Component<BigAvaProps & CommonState & ReduxPro
                         show={this.props.login.profile.person_id === this.props.person.person_id}
                         onClick={() => this.inputRef.current.click()}
                     >
-                        <img
-                            src={
-                                this.props.person.ava === undefined || this.props.person.ava.length === 0
-                                    ? `/secure_static/get_ava/${this.props.person.person_id}`
-                                    : this.props.person.ava[0].ava
-                            }
-                        />
+                        {
+                            this.props.person.avas === undefined || this.props.person.avas.length === 0
+                                ? <Incognito/>
+                                : <img
+                                    src={this.props.person.avas[0].ava}
+                                />
+                        }
+
                     </Edit>
                 </>
         }

@@ -4,7 +4,7 @@ import {ContactCard} from "../Cards/ContactCard";
 
 function contacts(person: Person) {
     let contacts = [];
-    for (let contact of person.contact) {
+    for (let contact of person.contacts) {
         contacts.push(<ContactCard contact={contact} del_btn={() => {
             // TODO: post to request ('/admin/api/person/contact/del/' + contact.id)
         }}/>)

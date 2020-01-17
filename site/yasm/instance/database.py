@@ -6,13 +6,13 @@ ORM declaration file
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from sqlalchemy.inspection import inspect
-import enum
 
 db = SQLAlchemy()
 
 
-class EntryStates(enum.Enum):
+class EntryStates(db.Enum): # should we move this to generator?
     RELEVANT = 'RELEVANT'
+    OUTDATED = 'OUTDATED'
 
 
 class Serializer(object):
@@ -21,9 +21,9 @@ class Serializer(object):
         return {
             c: getattr(self, c).serialize() if
             hasattr(getattr(self, c), 'serialize') else
-            getattr(self, c) for c in
-            filter(lambda x:
-                   x != '_sa_instance_state' and not hasattr(getattr(self, x), 'all'), inspect(self).attrs.keys())
+            getattr(self, c)
+            for c in inspect(self).attrs.keys()
+            if c != '_sa_instance_state' and not hasattr(getattr(self, c), 'all')
         }
 
     @staticmethod
@@ -260,7 +260,7 @@ class Person(UserMixin, db.Model, Serializer):
     # quests = db.relationship('Quest', back_populates='person', lazy='dynamic')
 
 
-class Ava(db.Model):
+class Ava(db.Model, Serializer):
     __tablename__ = 'ava'
     id = NamedColumn(
         db.Integer,
@@ -277,7 +277,7 @@ class Ava(db.Model):
         index=True,
     )
     ava = NamedColumn(
-        db.LargeBinary,
+        db.Text,
         nick='картинка',
         nullable=False,
     )
@@ -288,7 +288,8 @@ class Ava(db.Model):
         index=True,
         default=EntryStates.RELEVANT
     )
-    person = db.relationship('Person')
+
+    person = db.relationship('Person', lazy='noload', back_populates='avas')
 
 
 class DirectLogin(db.Model, Serializer):

@@ -32,8 +32,8 @@ default_Department = {
     department_created: "department_created",
     department_modified: "department_modified",
     department_changedby: "department_changedby",
-    person: [] as Person[],
-    person_school: [] as PersonSchool[],
+    persons: [] as Person[],
+    person_schools: [] as PersonSchool[],
 };
 
 default_Person = {
@@ -73,13 +73,13 @@ default_Person = {
     person_modified: "person_modified",
     person_changedby: "person_changedby",
     other_contacts: "other_contacts",
-    ava: [] as Ava[],
+    avas: [] as Ava[],
     direct_login: [] as DirectLogin[],
-    contact: [] as Contact[],
+    contacts: [] as Contact[],
     course_teachers: [] as CourseTeachers[],
-    exam: [] as Exam[],
-    person_school: [] as PersonSchool[],
-    person_comment: [] as PersonComment[],
+    exams: [] as Exam[],
+    person_schools: [] as PersonSchool[],
+    person_comments: [] as PersonComment[],
 };
 
 default_Ava = {
@@ -117,9 +117,9 @@ default_School = {
     school_created: "school_created",
     school_modified: "school_modified",
     school_changedby: "school_changedby",
-    course: [] as Course[],
-    person_school: [] as PersonSchool[],
-    person_comment: [] as PersonComment[],
+    courses: [] as Course[],
+    person_schools: [] as PersonSchool[],
+    person_comments: [] as PersonComment[],
 };
 
 default_Course = {
@@ -137,7 +137,7 @@ default_Course = {
     course_modified: "course_modified",
     course_changedby: "course_changedby",
     course_teachers: [] as CourseTeachers[],
-    exam: [] as Exam[],
+    exams: [] as Exam[],
 };
 
 default_CourseTeachers = {
@@ -185,7 +185,7 @@ default_PersonSchool = {
     person_school_changedby: "person_school_changedby",
     frm: "frm",
     tll: "tll",
-    calendar: [] as Calendar[],
+    calendars: [] as Calendar[],
 };
 
 default_Calendar = {

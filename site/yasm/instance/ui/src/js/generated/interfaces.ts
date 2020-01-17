@@ -11,8 +11,8 @@ export interface Department {
     department_created: string,
     department_modified: string,
     department_changedby: string,
-    person: Person[],
-    person_school: PersonSchool[],
+    persons: Person[],
+    person_schools: PersonSchool[],
 }
 
 export interface Person {
@@ -52,13 +52,13 @@ export interface Person {
     person_modified: string,
     person_changedby: string,
     other_contacts: string,
-    ava: Ava[],
+    avas: Ava[],
     direct_login: DirectLogin[],
-    contact: Contact[],
+    contacts: Contact[],
     course_teachers: CourseTeachers[],
-    exam: Exam[],
-    person_school: PersonSchool[],
-    person_comment: PersonComment[],
+    exams: Exam[],
+    person_schools: PersonSchool[],
+    person_comments: PersonComment[],
 }
 
 export interface Ava {
@@ -96,9 +96,9 @@ export interface School {
     school_created: string,
     school_modified: string,
     school_changedby: string,
-    course: Course[],
-    person_school: PersonSchool[],
-    person_comment: PersonComment[],
+    courses: Course[],
+    person_schools: PersonSchool[],
+    person_comments: PersonComment[],
 }
 
 export interface Course {
@@ -116,7 +116,7 @@ export interface Course {
     course_modified: string,
     course_changedby: string,
     course_teachers: CourseTeachers[],
-    exam: Exam[],
+    exams: Exam[],
 }
 
 export interface CourseTeachers {
@@ -164,7 +164,7 @@ export interface PersonSchool {
     person_school_changedby: string,
     frm: string,
     tll: string,
-    calendar: Calendar[],
+    calendars: Calendar[],
 }
 
 export interface Calendar {

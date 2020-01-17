@@ -79,11 +79,15 @@ def main():  # NOQA
     for tablename, info in db.metadata.tables.items():
         models[tablename] = []
         for columnname, column in info._columns._data.items():
+
             models[tablename].append((columnname, MIME[column.type.python_type]))
             if len(column.foreign_keys):
                 for fk in column.foreign_keys:
                     m = fk._column_tokens[1]
-                    models[m].append((scl(tablename), CC(tablename) + "[]", columnname, fk._column_tokens[2]))
+                    # models[m].append((scl(tablename), CC(tablename) + "[]", columnname, fk._column_tokens[2]))
+                    for field_name, table in fk.referenced_model.relationships._data.items():
+                        if table.table.name == tablename:
+                            models[m].append((field_name, CC(tablename) + '[]', fk._column_tokens[2]))
                     try:
                         backref = list(
                             [
@@ -93,7 +97,6 @@ def main():  # NOQA
                             ]
                         )[0]
                     except Exception as e:
-                        print(fk.referenced_model.relationships._data.items())
                         print(e)
                     models[tablename].append((backref, CC(m), m, fk._column_tokens[2]))
 
