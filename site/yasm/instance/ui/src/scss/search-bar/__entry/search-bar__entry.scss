@@ -1,0 +1,9 @@
+@import "../../constants";
+.search-bar__entry {
+  padding: 8px 32px;
+  display: block;
+}
+
+.search-bar__entry:hover {
+  background-color: $color-light;
+}

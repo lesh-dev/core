@@ -1,0 +1,7 @@
+.search-bar__indicator {
+  position: absolute;
+  left: calc(50% - 16px); // icon size is 32x32
+  top: 4px; // icon size is 32x32
+  color: rgba(0,0,0,0.1);
+  cursor: text;
+}

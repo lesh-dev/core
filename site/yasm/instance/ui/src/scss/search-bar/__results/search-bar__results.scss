@@ -1,0 +1,10 @@
+@import "../../constants";
+
+.search-bar__results {
+  position: absolute;
+  top: calc(#{$top-menu-height} - 1px);
+  padding-top: 1px;
+  background-color: $color-dull;
+  z-index: $search-bar-z-index;
+  width: 100%;
+}

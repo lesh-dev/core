@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash
 import enum
 
 from instance.NestableBlueprint import NestableBlueprint
-from instance.database import Ava, Contact, EntryStates, db
+from instance.database import Ava, Contact, EntryStates, Person, db, search_all
 
 module = NestableBlueprint('internal-api', __name__, url_prefix='/api')
 
@@ -79,12 +79,7 @@ def patch_contacts():
 @module.route('/get_profile_info', methods=['POST'])
 @login_required
 def get_profile_info():
-    response = current_user.serialize()
-    response['person_schools'] = [school.serialize() for school in current_user.person_schools.all()]
-    response['exams'] = [school.serialize() for school in current_user.exams.all()]
-    response['course_teachers'] = [school.serialize() for school in current_user.course_teachers.all()]
-    response['contacts'] = [school.serialize() for school in current_user.contacts.all()]
-    return jsonify(response)
+    return jsonify(fill_person(current_user))
 
 
 @module.route('/update_password', methods=['POST'])
@@ -98,17 +93,30 @@ def update_password():
     return jsonify('OK')
 
 
-@module.route('/contact/add', methods=['POST'])
-@login_required
-def contacts_add():
-    pass
-    # name = request.values['name']
-    # value = request.values['value']
-
-
 @module.route('/courses', methods=['POST'])
 @login_required
 def courses():
     return jsonify(
         [ct.course.serialize() for ct in current_user.course_teachers]
     )
+
+
+@module.route('/fetch_person', methods=['POST'])
+@login_required
+def person():
+    return jsonify(fill_person(Person.query.get(int(request.json['id']))))
+
+
+def fill_person(person):
+    response = person.serialize()
+    response['person_schools'] = [school.serialize() for school in person.person_schools.all()]
+    response['exams'] = [school.serialize() for school in person.exams.all()]
+    response['course_teachers'] = [school.serialize() for school in person.course_teachers.all()]
+    response['contacts'] = [school.serialize() for school in person.contacts.all()]
+    return response
+
+
+@module.route('/search', methods=['POST'])
+@login_required
+def search():
+    return jsonify(list(search_all(request.json["query"])))

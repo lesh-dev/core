@@ -1,0 +1,14 @@
+@import "../../constants";
+
+.search-bar__input {
+  border: none;
+  outline: none;
+  width: 100%;
+  height: $top-menu-height;
+  font-size: $top-menu-height - 10;
+  background-color: $color-light;
+}
+
+.search-bar__input:focus {
+  background-color: $color-dull;
+}

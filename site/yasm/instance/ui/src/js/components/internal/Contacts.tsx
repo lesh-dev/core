@@ -90,7 +90,7 @@ export class Contacts extends React.Component<ContactsProps & CommonState & Redu
                             this.props.person.contacts === undefined || this.props.person.contacts.length === 0
                                 ? 'Что-то тут ничего нет'
                                 : <>
-                                    <table>
+                                    <table style={{width: 400}}>
                                         <tbody>
                                             {
                                                 this.props.person.contacts.concat(this.prepare_changes()).filter(contact => (

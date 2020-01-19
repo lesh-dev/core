@@ -1,0 +1,9 @@
+@import "__indicator/search-bar__indicator";
+@import "__input/search-bar__input";
+@import "__results/search-bar__results";
+@import "__entry/search-bar__entry";
+
+.search-bar {
+  flex-grow: 1;
+  position: relative;
+}

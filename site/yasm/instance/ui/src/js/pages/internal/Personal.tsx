@@ -8,32 +8,39 @@ import {Contacts} from "../../components/internal/Contacts";
 import {PersonalParams} from "./params";
 import {RouterProps} from "../../util/match";
 import {internalActions, InternalState} from "../../redux-structure/internal";
+import {ErrorShow} from "../../components/common/ErrorShow";
 
 @(connect((state: any) => state) as any)
 export class Personal extends React.Component<{common?: CommonState, internal?: InternalState} & ReduxProps & RouterProps<PersonalParams>> {
     self = false
+    id = 0
     componentDidMount(): void {
-
-        const id = Number((this.props.match || {params: {id: this.props.common.login.profile.person_id}}).params.id)
-        this.self = this.props.common.login.profile.person_id === id
+        this.id = Number((this.props.match || {params: {id: this.props.common.login.profile.person_id}}).params.id)
+        this.self = this.props.common.login.profile.person_id === this.id
         if (this.self) {
             this.props.dispatch(commonActions.common.login.fetch(false))
         } else {
-            this.props.dispatch(internalActions.internal.person.fetch(id))
+            this.props.dispatch(internalActions.internal.person.fetch(this.id))
+        }
+    }
+
+    componentDidUpdate(prevProps: Readonly<{ common?: CommonState; internal?: InternalState } & ReduxProps & RouterProps<PersonalParams>>, prevState: Readonly<{}>, snapshot?: any): void {
+        const id = Number((this.props.match || {params: {id: this.props.common.login.profile.person_id}}).params.id)
+        if (id !== this.id) {
+            this.id = id
+            this.self = this.props.common.login.profile.person_id === id
+            if (this.self) {
+                this.props.dispatch(commonActions.common.login.fetch(false))
+            } else {
+                this.props.dispatch(internalActions.internal.person.fetch(id))
+            }
         }
     }
 
     render(): React.ReactNode {
         const state = this.self ? this.props.common.login : this.props.internal.person
         if (state.error !== undefined) {
-            return <>
-                <MonacoWrapper
-                    language="json"
-                    width={window.innerWidth}
-                    height={window.innerHeight - 50}
-                    value={JSON.stringify(state.error, null, 4)}
-                />
-            </>
+            return <ErrorShow error={state.error}/>
         }
         if (state.loading || state.profile === undefined) {
             return <Spinner/>

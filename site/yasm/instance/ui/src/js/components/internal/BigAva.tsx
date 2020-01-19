@@ -152,8 +152,8 @@ export class BigAva extends React.Component<BigAvaProps & CommonState & ReduxPro
                         </Button>
                     </Modal>
                 </>
-            case STATE.BASE:
             case STATE.LOADING:
+            case STATE.BASE:
                 return <>
                     <input
                         type="file" style={{display: 'none'}}
@@ -166,9 +166,10 @@ export class BigAva extends React.Component<BigAvaProps & CommonState & ReduxPro
                     >
                         {
                             this.props.person.avas === undefined || this.props.person.avas.length === 0
-                                ? <Incognito/>
+                                ? <Incognito width={300} height={300}/>
                                 : <img
                                     src={this.props.person.avas[0].ava}
+                                    style={{width: 300, height: 300}}
                                 />
                         }
 

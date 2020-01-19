@@ -79,7 +79,7 @@ export const coursesReducer = handleActions(
 export const personReducer = handleActions(
     ({
         internal: {
-            courses: {
+            person: {
                 fetch_PENDING: (state: PersonState) => (
                     {
                         ...state,

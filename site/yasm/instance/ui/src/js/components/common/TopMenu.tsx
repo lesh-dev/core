@@ -6,6 +6,7 @@ import {Dropdown} from "./Dropdown";
 import '../../../scss/top-menu/index.scss'
 import {PersonalButton} from "./PersonalButton";
 import {QuestMasterControl} from "./QuestMasterControl";
+import {SearchBar} from "./SearchBar";
 
 
 interface IMenuSubEntry {
@@ -108,7 +109,7 @@ export class TopMenu extends React.Component<IMenu> {
     render() {
         return (
             <div className="top-menu">
-                <div style={{flexGrow: 1}}/>
+                <SearchBar/>
                 <QuestMasterControl/>
                 <PersonalButton/>
             </div>
