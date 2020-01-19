@@ -18,6 +18,7 @@ interface SearchBarState {
 }
 
 export class SearchBar extends React.Component<{}, SearchBarState>{
+    rootRef = React.createRef<HTMLDivElement>()
     inputRef = React.createRef<HTMLInputElement>()
     timerId = null as NodeJS.Timeout
     constructor(props: any) {
@@ -25,6 +26,15 @@ export class SearchBar extends React.Component<{}, SearchBarState>{
         this.state = {
             focus: false,
             results: []
+        }
+        this.blur = this.blur.bind(this)
+    }
+
+    private blur(event: any) {
+        if (this.rootRef && !this.rootRef.current.contains(event.target)) {
+            this.setState({
+                focus: false,
+            })
         }
     }
 
@@ -93,6 +103,7 @@ export class SearchBar extends React.Component<{}, SearchBarState>{
             to={entry.search_url}
             className="search-bar__entry"
             key={i}
+            onClick={() => this.setState({focus: false})}
         >
             {
                 this.render_entry_value(entry.data)
@@ -100,8 +111,18 @@ export class SearchBar extends React.Component<{}, SearchBarState>{
         </Link>
     }
 
+    componentDidMount(): void {
+        document.addEventListener('mousedown', this.blur);
+    }
+
+    componentWillUnmount(): void {
+        document.removeEventListener('mousedown', this.blur);
+    }
+
+
     render() {
         return <div
+            ref={this.rootRef}
             className="search-bar"
             onFocus={() => this.setState({
                 focus: true,

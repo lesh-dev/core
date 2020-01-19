@@ -14,17 +14,8 @@ import {ErrorShow} from "../../components/common/ErrorShow";
 export class Personal extends React.Component<{common?: CommonState, internal?: InternalState} & ReduxProps & RouterProps<PersonalParams>> {
     self = false
     id = 0
-    componentDidMount(): void {
-        this.id = Number((this.props.match || {params: {id: this.props.common.login.profile.person_id}}).params.id)
-        this.self = this.props.common.login.profile.person_id === this.id
-        if (this.self) {
-            this.props.dispatch(commonActions.common.login.fetch(false))
-        } else {
-            this.props.dispatch(internalActions.internal.person.fetch(this.id))
-        }
-    }
 
-    componentDidUpdate(prevProps: Readonly<{ common?: CommonState; internal?: InternalState } & ReduxProps & RouterProps<PersonalParams>>, prevState: Readonly<{}>, snapshot?: any): void {
+    private update() {
         const id = Number((this.props.match || {params: {id: this.props.common.login.profile.person_id}}).params.id)
         if (id !== this.id) {
             this.id = id
@@ -35,6 +26,14 @@ export class Personal extends React.Component<{common?: CommonState, internal?: 
                 this.props.dispatch(internalActions.internal.person.fetch(id))
             }
         }
+    }
+
+    componentDidMount(): void {
+        this.update()
+    }
+
+    componentDidUpdate(): void {
+        this.update()
     }
 
     render(): React.ReactNode {
