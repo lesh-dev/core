@@ -8,3 +8,13 @@ export function fetchPerson(id: number) {
         }
     )
 }
+
+export function fetchCourse(id: number) {
+    return call(
+        '/i/api/fetch_course',
+        {
+            id: id,
+        }
+    )
+
+}

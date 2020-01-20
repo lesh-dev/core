@@ -14,7 +14,8 @@ interface Entry {
 
 interface SearchBarState {
     focus: boolean,
-    results: Entry[]
+    results: Entry[],
+    timestamp: number,
 }
 
 export class SearchBar extends React.Component<{}, SearchBarState>{
@@ -25,7 +26,8 @@ export class SearchBar extends React.Component<{}, SearchBarState>{
         super(props)
         this.state = {
             focus: false,
-            results: []
+            results: [],
+            timestamp: 0,
         }
         this.blur = this.blur.bind(this)
     }
@@ -42,11 +44,15 @@ export class SearchBar extends React.Component<{}, SearchBarState>{
         if (value !== '') {
             call('/i/api/search', {query: value}).then(
                 resp => resp.data
-            ).then(data =>
-                this.setState({
-                    results: data,
-                })
-            )
+            ).then(data => {
+                const new_timestamp = Number(data.timestamp)
+                if (new_timestamp > this.state.timestamp) {
+                    this.setState({
+                        results: data.payload,
+                        timestamp: data.timestamp,
+                    })
+                }
+            })
         } else {
             this.setState({
                 results: [],
@@ -59,11 +65,14 @@ export class SearchBar extends React.Component<{}, SearchBarState>{
         let foundIdx = -1
         for (const key of Object.keys(data)) {
             const value = (data[key] || '').toLowerCase()
-            const idx = value.search(this.inputRef.current.value.toLowerCase())
+            const idx = value.indexOf(this.inputRef.current.value.toLowerCase())
             if (idx !== -1) {
                 foundKey = key
                 foundIdx = idx
             }
+        }
+        if (foundKey === null) {
+            return null
         }
         const start = Math.max(0, foundIdx - 5)
         const end = Math.min(data[foundKey].length, foundIdx + this.inputRef.current.value.length + 5)
@@ -99,6 +108,10 @@ export class SearchBar extends React.Component<{}, SearchBarState>{
     }
 
     private render_entry(entry: Entry, i: number) {
+        const value = this.render_entry_value(entry.data)
+        if (value === null) {
+            return null
+        }
         return <Link
             to={entry.search_url}
             className="search-bar__entry"
@@ -106,7 +119,7 @@ export class SearchBar extends React.Component<{}, SearchBarState>{
             onClick={() => this.setState({focus: false})}
         >
             {
-                this.render_entry_value(entry.data)
+                value
             }
         </Link>
     }

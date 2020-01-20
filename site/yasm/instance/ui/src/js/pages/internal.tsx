@@ -12,7 +12,7 @@ import {faGraduationCap} from "@fortawesome/free-solid-svg-icons/faGraduationCap
 import {internalInitialState, internalReducer} from '../redux-structure/internal'
 import {SidebarEntryType} from "../redux-structure/sidebar";
 import {Sidebar} from "../components/common";
-import {history} from "../util/history";
+import {PCourse} from "./internal/PCourse";
 
 class Internal extends React.Component {
     render(): React.ReactNode {
@@ -37,6 +37,11 @@ class Internal extends React.Component {
                     path="/i/person/:id"
                     exact
                     component={Personal}
+                />
+                <Route
+                    path="/i/course/:id"
+                    exact
+                    component={PCourse}
                 />
             </Switch>
         )

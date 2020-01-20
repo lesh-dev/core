@@ -86,92 +86,92 @@ export class Contacts extends React.Component<ContactsProps & CommonState & Redu
                         }}
                         style={{paddingRight: 30}}  // TODO (rebenkoy): to scss
                     >
-                        {
-                            this.props.person.contacts === undefined || this.props.person.contacts.length === 0
-                                ? 'Что-то тут ничего нет'
-                                : <>
-                                    <table style={{width: 400}}>
-                                        <tbody>
-                                            {
-                                                this.props.person.contacts.concat(this.prepare_changes()).filter(contact => (
-                                                    this.state.changes.get(contact.value) === undefined || this.state.changes.get(contact.value).action !== ContactsPatchAction.REMOVE
-                                                )).map((contact, i) => <tr
-                                                    key={i}
-                                                >
-                                                    <td>
-                                                        {
-                                                            this.render_contact_value(contact)
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        {
-                                                            this.render_contact_prop(contact)
-                                                        }
-                                                    </td>
+                    {
+                        this.props.person.contacts === undefined || this.props.person.contacts.length === 0
+                            ? 'пока тут пусто'
+                            : <>
+                                <table style={{width: 400}}>
+                                    <tbody>
+                                        {
+                                            this.props.person.contacts.concat(this.prepare_changes()).filter(contact => (
+                                                this.state.changes.get(contact.value) === undefined || this.state.changes.get(contact.value).action !== ContactsPatchAction.REMOVE
+                                            )).map((contact, i) => <tr
+                                                key={i}
+                                            >
+                                                <td>
                                                     {
-                                                        this.state.state === STATE.CHANGE
-                                                        ?
-                                                            <td>
-                                                                <FAIcon icon={faTrashAlt} onClick={() => {
-                                                                    const changes = this.state.changes
-                                                                    changes.set(contact.value, {
-                                                                        name: '',
-                                                                        action: ContactsPatchAction.REMOVE,
-                                                                    })
-                                                                    this.setState({
-                                                                        changes: changes,
-                                                                    }
-                                                                )}}/>
-                                                            </td>
-                                                        : null
+                                                        this.render_contact_value(contact)
                                                     }
-                                                </tr>)
-                                            }
-                                            {
-                                                this.state.state === STATE.CHANGE
-                                                ?
-                                                    <tr>
+                                                </td>
+                                                <td>
+                                                    {
+                                                        this.render_contact_prop(contact)
+                                                    }
+                                                </td>
+                                                {
+                                                    this.state.state === STATE.CHANGE
+                                                    ?
                                                         <td>
-                                                            <input onChange={event => this.setState({
-                                                                currentAddition: {
-                                                                    ...this.state.currentAddition,
-                                                                    value: event.target.value,
-                                                                }
-                                                            })}/>
-                                                        </td>
-                                                        <td>
-                                                            <input onChange={event => this.setState({
-                                                                currentAddition: {
-                                                                    ...this.state.currentAddition,
-                                                                    name: event.target.value,
-                                                                }
-                                                            })}/>
-                                                        </td>
-                                                        <td>
-                                                            <FAIcon icon={faPlusSquare} onClick={() => {
-                                                                const {value, name} = this.state.currentAddition
+                                                            <FAIcon icon={faTrashAlt} onClick={() => {
                                                                 const changes = this.state.changes
-                                                                changes.set(value, {
-                                                                    name: name,
-                                                                    action: ContactsPatchAction.ADD,
+                                                                changes.set(contact.value, {
+                                                                    name: '',
+                                                                    action: ContactsPatchAction.REMOVE,
                                                                 })
-                                                                if (this.props.person.contacts.filter(c => c.value === value).length > 0) {
-                                                                    changes.delete(value)
-                                                                }
                                                                 this.setState({
                                                                     changes: changes,
                                                                 }
                                                             )}}/>
                                                         </td>
-                                                    </tr>
-                                                : null
-                                            }
-                                        </tbody>
-                                    </table>
-                                </>
-                        }
-                        </Edit>
-                    </>
+                                                    : null
+                                                }
+                                            </tr>)
+                                        }
+                                        {
+                                            this.state.state === STATE.CHANGE
+                                            ?
+                                                <tr>
+                                                    <td>
+                                                        <input onChange={event => this.setState({
+                                                            currentAddition: {
+                                                                ...this.state.currentAddition,
+                                                                value: event.target.value,
+                                                            }
+                                                        })}/>
+                                                    </td>
+                                                    <td>
+                                                        <input onChange={event => this.setState({
+                                                            currentAddition: {
+                                                                ...this.state.currentAddition,
+                                                                name: event.target.value,
+                                                            }
+                                                        })}/>
+                                                    </td>
+                                                    <td>
+                                                        <FAIcon icon={faPlusSquare} onClick={() => {
+                                                            const {value, name} = this.state.currentAddition
+                                                            const changes = this.state.changes
+                                                            changes.set(value, {
+                                                                name: name,
+                                                                action: ContactsPatchAction.ADD,
+                                                            })
+                                                            if (this.props.person.contacts.filter(c => c.value === value).length > 0) {
+                                                                changes.delete(value)
+                                                            }
+                                                            this.setState({
+                                                                changes: changes,
+                                                            }
+                                                        )}}/>
+                                                    </td>
+                                                </tr>
+                                            : null
+                                        }
+                                    </tbody>
+                                </table>
+                            </>
+                    }
+                    </Edit>
+                </>
         }
 
     }

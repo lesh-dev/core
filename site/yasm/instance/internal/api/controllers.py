@@ -2,9 +2,10 @@ from flask import jsonify, request
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 import enum
+import time
 
 from instance.NestableBlueprint import NestableBlueprint
-from instance.database import Ava, Contact, EntryStates, Person, db, search_all
+from instance.database import Ava, Contact, Course, EntryStates, Person, db, search_all
 
 module = NestableBlueprint('internal-api', __name__, url_prefix='/api')
 
@@ -119,4 +120,16 @@ def fill_person(person):
 @module.route('/search', methods=['POST'])
 @login_required
 def search():
-    return jsonify(list(search_all(request.json["query"])))
+    return jsonify({
+        'payload': list(search_all(request.json["query"])),
+        'timestamp': time.time(),
+    })
+
+
+@module.route('/fetch_course', methods=['POST'])
+@login_required
+def fetch_course():
+    c = Course.query.get(int(request.json['id']))
+    if c is None:
+        return jsonify({})
+    return jsonify(c.serialize())
