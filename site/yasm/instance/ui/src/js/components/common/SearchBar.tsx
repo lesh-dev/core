@@ -7,18 +7,23 @@ import '../../../scss/search-bar/search-bar.scss'
 import {call} from "../../api/axios";
 import {Link} from "react-router-dom";
 
-interface Entry {
+interface Entry<T> {
     search_url: string,
-    data: any,
+    data: T,
 }
 
-interface SearchBarState {
+interface SearchBarState<T> {
     focus: boolean,
-    results: Entry[],
-    timestamp: number,
+    results: Entry<T>[],
 }
 
-export class SearchBar extends React.Component<{}, SearchBarState>{
+interface SearchBarProps<T> {
+    tables?: string[]
+    onClick?: (entry: T) => void
+    display?: (entry: T) => React.ReactNode
+}
+
+export class SearchBar<T=any> extends React.Component<SearchBarProps<T>, SearchBarState<T>>{
     rootRef = React.createRef<HTMLDivElement>()
     inputRef = React.createRef<HTMLInputElement>()
     timerId = null as NodeJS.Timeout
@@ -27,7 +32,6 @@ export class SearchBar extends React.Component<{}, SearchBarState>{
         this.state = {
             focus: false,
             results: [],
-            timestamp: 0,
         }
         this.blur = this.blur.bind(this)
     }
@@ -42,14 +46,19 @@ export class SearchBar extends React.Component<{}, SearchBarState>{
 
     private searchCall(value: string) {
         if (value !== '') {
-            call('/i/api/search', {query: value}).then(
+            const data = {
+                query: value,
+            } as any
+            if (this.props.tables !== undefined) {
+                data['tables'] = this.props.tables
+            }
+            call('/i/api/search', data).then(
                 resp => resp.data
             ).then(data => {
-                const new_timestamp = Number(data.timestamp)
-                if (new_timestamp > this.state.timestamp) {
+                const new_query = String(data.query)
+                if (new_query === this.inputRef.current.value) {
                     this.setState({
                         results: data.payload,
-                        timestamp: data.timestamp,
                     })
                 }
             })
@@ -60,27 +69,33 @@ export class SearchBar extends React.Component<{}, SearchBarState>{
         }
     }
 
-    private render_entry_value(data: {[idx: string]: string}) {
+    private render_entry_value(data: T) {
+        if (this.props.display !== undefined) {
+            return this.props.display(data)
+        }
+        const id_postfix = 'id'
         let foundKey = null as string
         let foundIdx = -1
         for (const key of Object.keys(data)) {
-            const value = (data[key] || '').toLowerCase()
-            const idx = value.indexOf(this.inputRef.current.value.toLowerCase())
-            if (idx !== -1) {
-                foundKey = key
-                foundIdx = idx
+            if (!key.endsWith(id_postfix)) {
+                const value = ((data as unknown as {[idx: string]: string})[key] || '').toLowerCase()
+                const idx = value.indexOf(this.inputRef.current.value.toLowerCase())
+                if (idx !== -1) {
+                    foundKey = key
+                    foundIdx = idx
+                }
             }
         }
         if (foundKey === null) {
             return null
         }
         const start = Math.max(0, foundIdx - 5)
-        const end = Math.min(data[foundKey].length, foundIdx + this.inputRef.current.value.length + 5)
-        let value = data[foundKey].slice(start, end)
+        const end = Math.min((data as unknown as {[idx: string]: string})[foundKey].length, foundIdx + this.inputRef.current.value.length + 5)
+        let value = (data as unknown as {[idx: string]: string})[foundKey].slice(start, end)
         if (start !== 0) {
             value = `...${value}`
         }
-        if (end != data[foundKey].length) {
+        if (end != (data as unknown as {[idx: string]: string})[foundKey].length) {
             value = `${value}...`
         }
         return <div
@@ -97,7 +112,9 @@ export class SearchBar extends React.Component<{}, SearchBarState>{
             </div>
             <div>
                 {
-                    Object.entries(data).filter(([name, value]) => name !== foundKey).map(([name, value], i) => <div key={i}>
+                    Object.entries(data).filter(
+                        ([name, value]) => name !== foundKey && !name.endsWith(id_postfix)
+                    ).map(([name, value], i) => <div key={i}>
                         {
                             value
                         }
@@ -107,10 +124,24 @@ export class SearchBar extends React.Component<{}, SearchBarState>{
         </div>
     }
 
-    private render_entry(entry: Entry, i: number) {
+    private render_entry(entry: Entry<T>, i: number) {
         const value = this.render_entry_value(entry.data)
         if (value === null) {
             return null
+        }
+        if (this.props.onClick !== undefined) {
+            return <div
+                className="search-bar__entry"
+                key={i}
+                onClick={() => {
+                    this.setState({focus: false})
+                    this.props.onClick(entry.data)
+                }}
+            >
+                {
+                    value
+                }
+            </div>
         }
         return <Link
             to={entry.search_url}

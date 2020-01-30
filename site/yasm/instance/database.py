@@ -20,11 +20,12 @@ class EntryStates(db.Enum): # should we move this to generator?
 SEARCHABLES = set()
 
 
-def search_all(pattern):
+def search_all(pattern, tables=None):
     global SEARCHABLES
     for Searchable in SEARCHABLES:
-        for entry in Searchable.search(pattern):
-            yield entry.as_search_result()
+        if tables is None or Searchable.__tablename__ in tables:
+            for entry in Searchable.search(pattern):
+                yield entry.as_search_result()
 
 
 class SearchableMixin:
@@ -33,12 +34,14 @@ class SearchableMixin:
         return cls.query.filter(or_(*[x.ilike(f'%{value}%') for x in inspect(cls).columns.values() if x.searchable]))
 
     def as_search_result(self):
+        id_name = self.__tablename__ + '_id'
         return {
-            'search_url': f'/i/{self.__tablename__}/{getattr(self, self.__tablename__ + "_id")}',
+            'search_url': f'/i/{self.__tablename__}/{getattr(self, id_name)}',
             'data': {
                 field.name: getattr(self, field.name)
-                for field in inspect(self.__class__).columns.values() if field.searchable
-            }
+                for field in inspect(self.__class__).columns.values()
+                if field.searchable or field.name == id_name
+            },
         }
 
 

@@ -5,11 +5,11 @@ import enum
 import time
 
 from instance.NestableBlueprint import NestableBlueprint
-from instance.database import Ava, Contact, Course, EntryStates, Person, db, search_all
+from instance.database import Ava, Contact, Course, CourseTeachers, EntryStates, Person, db, search_all
 
 module = NestableBlueprint('internal-api', __name__, url_prefix='/api')
 
-class PatchContactsActions(enum.Enum):
+class PatchActions(enum.Enum):
     Add = 0
     Remove = 1
 
@@ -53,12 +53,12 @@ def patch_contacts():
     new_contacts = []
     for value, spec in request.json['patch'].items():
         if value in contacts:
-            if spec['action'] == PatchContactsActions.Add.value:
+            if spec['action'] == PatchActions.Add.value:
                 contacts[value].name = spec['name']
             else:
                 db.session.delete(contacts[value])
         else:
-            if spec['action'] == PatchContactsActions.Add.value:
+            if spec['action'] == PatchActions.Add.value:
                 new_contacts.append(
                     Contact(
                         person=current_user,
@@ -121,8 +121,8 @@ def fill_person(person):
 @login_required
 def search():
     return jsonify({
-        'payload': list(search_all(request.json["query"])),
-        'timestamp': time.time(),
+        'payload': list(search_all(request.json['query'], request.json.get('tables', None))),
+        'query': request.json['query'],
     })
 
 
@@ -132,4 +132,33 @@ def fetch_course():
     c = Course.query.get(int(request.json['id']))
     if c is None:
         return jsonify({})
-    return jsonify(c.serialize())
+
+    response = c.serialize()
+    response['course_teachers'] = [ct.serialize() for ct in c.course_teachers.all()]
+    response['exams'] = [e.serialize() for e in c.exams.all()]
+    return jsonify(response)
+
+
+@module.route('/patch_teachers', methods=['POST'])
+@login_required
+def patch_teachers():
+    course = Course.query.get(int(request.json['id']))
+    if course is None:
+        return jsonify({})
+    course_teachers = course.course_teachers.all()
+    new_teachers = []
+    for pid, spec in request.json['patch'].items():
+        action = spec['action']
+        if action == PatchActions.Remove.value:
+            for link in course_teachers:
+                pass
+
+    for contact in new_contacts:
+        db.session.add(contact)
+    db.session.commit()
+    return jsonify(
+        [
+            # contact.serialize()
+            # for contact in current_user.contacts.all()
+        ]
+    )

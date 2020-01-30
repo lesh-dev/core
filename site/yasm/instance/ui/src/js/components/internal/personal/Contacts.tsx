@@ -1,15 +1,16 @@
 import * as React from 'react'
-import {Contact, Person} from "../../generated/interfaces";
-import {Edit} from "../common/Edit";
+import {Contact, Person} from "../../../generated/interfaces";
+import {Edit} from "../../common/Edit";
 import {connect} from "react-redux";
-import {commonActions, CommonState} from "../../redux-structure/common";
-import {ReduxProps} from "../../redux-structure/store";
+import {commonActions, CommonState} from "../../../redux-structure/common";
+import {ReduxProps} from "../../../redux-structure/store";
 
 import {faPlusSquare} from "@fortawesome/free-regular-svg-icons/faPlusSquare";
 import {faTrashAlt} from "@fortawesome/free-regular-svg-icons/faTrashAlt";
 import {FontAwesomeIcon as FAIcon} from "@fortawesome/react-fontawesome";
 
-import {ContactsPatchAction, ContactsPatch} from "../../api/internal/personal";
+import {ContactsPatch} from "../../../api/internal/personal";
+import {PatchAction} from "../../../api/internal/common";
 
 export interface ContactsProps {
     person: Person,
@@ -55,7 +56,7 @@ export class Contacts extends React.Component<ContactsProps & CommonState & Redu
 
     private prepare_changes(): Contact[] {
         return Array(...this.state.changes.entries()).filter(entry => (
-            entry[1].action === ContactsPatchAction.ADD
+            entry[1].action === PatchAction.ADD
         )).map(entry => ({
             value: entry[0],
             name: entry[1].name,
@@ -68,7 +69,7 @@ export class Contacts extends React.Component<ContactsProps & CommonState & Redu
             case STATE.BASE:
                 return <>
                     <Edit
-                        show={
+                        edit={
                             this.props.person.person_id === this.props.login.profile.person_id
                         }
                         onClick={() => this.setState({
@@ -94,7 +95,7 @@ export class Contacts extends React.Component<ContactsProps & CommonState & Redu
                                     <tbody>
                                         {
                                             this.props.person.contacts.concat(this.prepare_changes()).filter(contact => (
-                                                this.state.changes.get(contact.value) === undefined || this.state.changes.get(contact.value).action !== ContactsPatchAction.REMOVE
+                                                this.state.changes.get(contact.value) === undefined || this.state.changes.get(contact.value).action !== PatchAction.REMOVE
                                             )).map((contact, i) => <tr
                                                 key={i}
                                             >
@@ -116,7 +117,7 @@ export class Contacts extends React.Component<ContactsProps & CommonState & Redu
                                                                 const changes = this.state.changes
                                                                 changes.set(contact.value, {
                                                                     name: '',
-                                                                    action: ContactsPatchAction.REMOVE,
+                                                                    action: PatchAction.REMOVE,
                                                                 })
                                                                 this.setState({
                                                                     changes: changes,
@@ -153,7 +154,7 @@ export class Contacts extends React.Component<ContactsProps & CommonState & Redu
                                                             const changes = this.state.changes
                                                             changes.set(value, {
                                                                 name: name,
-                                                                action: ContactsPatchAction.ADD,
+                                                                action: PatchAction.ADD,
                                                             })
                                                             if (this.props.person.contacts.filter(c => c.value === value).length > 0) {
                                                                 changes.delete(value)

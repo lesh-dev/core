@@ -1,5 +1,10 @@
 import { call } from "../axios";
 
+export enum PatchAction {
+    ADD,
+    REMOVE,
+}
+
 export function fetchPerson(id: number) {
     return call(
         `/i/api/fetch_person`,

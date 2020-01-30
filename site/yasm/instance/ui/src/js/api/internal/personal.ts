@@ -1,13 +1,9 @@
 import { call } from "../axios";
-
-export enum ContactsPatchAction {
-    ADD,
-    REMOVE,
-}
+import { PatchAction } from "./common";
 
 export type ContactsPatch = Map<string, {
     name: string,
-    action: ContactsPatchAction,
+    action: PatchAction,
 }>
 
 
@@ -21,7 +17,7 @@ export function setAva(avaSrc: string) {
 }
 
 export function patchContacts(patch: ContactsPatch) {
-    const p = {} as {[index: string]: {name: string, action: ContactsPatchAction}}
+    const p = {} as {[index: string]: {name: string, action: PatchAction}}
     for (const e of patch.entries()) {
         p[e[0]] = {
             name: e[1].name,

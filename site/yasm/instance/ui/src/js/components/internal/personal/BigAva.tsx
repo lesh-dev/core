@@ -1,17 +1,17 @@
 import * as React from "react";
-import {Person} from "../../generated/interfaces";
+import {Person} from "../../../generated/interfaces";
 import {connect} from "react-redux";
-import {commonActions, CommonState} from "../../redux-structure/common";
-import {ReduxProps} from "../../redux-structure/store";
-import {Edit} from "../common/Edit";
-import {Modal} from "../common/Modal";
-import {Button} from "../common/Button";
+import {commonActions, CommonState} from "../../../redux-structure/common";
+import {ReduxProps} from "../../../redux-structure/store";
+import {Edit} from "../../common/Edit";
+import {Modal} from "../../common/Modal";
+import {Button} from "../../common/Button";
 import Cropper from 'react-easy-crop'
 import {Area, Point} from "react-easy-crop/types";
-import {getCroppedImg} from "../../util/ImageCrop";
+import {getCroppedImg} from "../../../util/ImageCrop";
 
 // @ts-ignore
-import Incognito from '../../../assets/incognito.svg'
+import Incognito from '../../../../assets/incognito.svg'
 
 export interface BigAvaProps {
     person: Person,
@@ -161,7 +161,7 @@ export class BigAva extends React.Component<BigAvaProps & CommonState & ReduxPro
                         onChange={e => this.imageChange(e)}
                     />
                     <Edit
-                        show={this.props.login.profile.person_id === this.props.person.person_id}
+                        edit={this.props.login.profile.person_id === this.props.person.person_id}
                         onClick={() => this.inputRef.current.click()}
                     >
                         {

@@ -1,44 +1,45 @@
 import { Action, createActions, handleActions, ReducerMap } from 'redux-actions'
 
 import { call } from '../api/axios'
-import {Course, Person} from '../generated/interfaces'
+import {Course, CourseTeachers, Person} from '../generated/interfaces'
 import {fetchPerson, fetchCourse} from "../api/internal/common";
+import {CourseTeacherPatch, patchTeachers} from "../api/internal/course";
 
-export interface CoursesState {
+export interface InternalCoursesState {
     list?: Course[],
     loading?: boolean,
     error?: Error,
 }
 
-export interface PersonState {
+export interface InternalPersonState {
     profile?: Person,
     loading?: boolean,
     error?: Error,
 }
 
-export interface CourseState {
+export interface InternalCourseState {
     course?: Course,
     loading?: boolean,
     error?: Error,
 }
 
 export interface InternalState {
-    courses?: CoursesState,
-    person?: PersonState,
-    course?: CoursesState,
+    courses?: InternalCoursesState,
+    person?: InternalPersonState,
+    course?: InternalCourseState,
 }
 
 export const coursesInitialState = {
     loading: false,
-} as CoursesState
+} as InternalCoursesState
 
 export const personInitialState = {
     loading: false,
-} as PersonState
+} as InternalPersonState
 
 export const courseInitialState = {
     loading: false,
-} as CoursesState
+} as InternalCoursesState
 
 export const internalInitialState = {
     courses: coursesInitialState,
@@ -51,13 +52,14 @@ export const internalActions = createActions({
         courses: {
             fetch: () => {
                 return call('/i/api/courses').then(resp => resp.data)
-            }
+            },
         },
         person: {
-            fetch: (id: number) => fetchPerson(id).then(resp => resp.data)
+            fetch: (id: number) => fetchPerson(id).then(resp => resp.data),
         },
         course: {
-            fetch: (id: number) => fetchCourse(id).then(resp => resp.data)
+            fetch: (id: number) => fetchCourse(id).then(resp => resp.data),
+            patchTeachers: (id: number, patch: CourseTeacherPatch) => patchTeachers(id, patch).then(resp => resp.data),
         }
     }
 }) as any
@@ -66,20 +68,20 @@ export const coursesReducer = handleActions(
     ({
         internal: {
             courses: {
-                fetch_PENDING: (state: CoursesState) => (
+                fetch_PENDING: (state: InternalCoursesState) => (
                     {
                         ...state,
                         loading: true,
                         error: undefined,
                     }
                 ),
-                fetch_FULFILLED: (state: CoursesState, action: Action<Course[]>) => (
+                fetch_FULFILLED: (state: InternalCoursesState, action: Action<Course[]>) => (
                     {
                         loading: false,
                         list: action.payload,
                     }
                 ),
-                fetch_REJECTED: (state: CoursesState, action: Action<Error>) => (
+                fetch_REJECTED: (state: InternalCoursesState, action: Action<Error>) => (
                     {
                         loading: false,
                         error: action.payload
@@ -87,7 +89,7 @@ export const coursesReducer = handleActions(
                 ),
             },
         }
-    }) as ReducerMap<CoursesState, Action<any>>,
+    }) as ReducerMap<InternalCoursesState, Action<any>>,
     coursesInitialState,
 )
 
@@ -95,14 +97,14 @@ export const personReducer = handleActions(
     ({
         internal: {
             person: {
-                fetch_PENDING: (state: PersonState) => (
+                fetch_PENDING: (state: InternalPersonState) => (
                     {
                         ...state,
                         loading: true,
                         error: undefined,
                     }
                 ),
-                fetch_FULFILLED: (state: PersonState, action: Action<Person>) => (
+                fetch_FULFILLED: (state: InternalPersonState, action: Action<Person>) => (
                     {
                         ...state,
                         error: undefined,
@@ -110,7 +112,7 @@ export const personReducer = handleActions(
                         profile: action.payload,
                     }
                 ),
-                fetch_REJECTED: (state: PersonState, action: Action<Error>) => (
+                fetch_REJECTED: (state: InternalPersonState, action: Action<Error>) => (
                     {
                         ...state,
                         profile: undefined,
@@ -120,7 +122,7 @@ export const personReducer = handleActions(
                 ),
             },
         }
-    }) as ReducerMap<PersonState, Action<any>>,
+    }) as ReducerMap<InternalPersonState, Action<any>>,
     personInitialState,
 )
 
@@ -128,14 +130,14 @@ export const courseReducer = handleActions(
     ({
         internal: {
             course: {
-                fetch_PENDING: (state: CoursesState) => (
+                fetch_PENDING: (state: InternalCourseState) => (
                     {
                         ...state,
                         loading: true,
                         error: undefined,
                     }
                 ),
-                fetch_FULFILLED: (state: CoursesState, action: Action<Course>) => (
+                fetch_FULFILLED: (state: InternalCourseState, action: Action<Course>) => (
                     {
                         ...state,
                         error: undefined,
@@ -143,7 +145,7 @@ export const courseReducer = handleActions(
                         course: action.payload,
                     }
                 ),
-                fetch_REJECTED: (state: CoursesState, action: Action<Error>) => (
+                fetch_REJECTED: (state: InternalCourseState, action: Action<Error>) => (
                     {
                         ...state,
                         course: undefined,
@@ -151,9 +153,31 @@ export const courseReducer = handleActions(
                         error: action.payload
                     }
                 ),
+                patchTeachers_PENDING: (state: InternalCourseState) => (
+                    {
+                        ...state,
+                        error: undefined,
+                    }
+                ),
+                patchTeachers_FULFILLED: (state: InternalCourseState, action: Action<CourseTeachers[]>) => (
+                    {
+                        ...state,
+                        error: undefined,
+                        course: {
+                            ...state.course,
+                            course_teachers: action.payload
+                        },
+                    }
+                ),
+                patchTeachers_REJECTED: (state: InternalCourseState, action: Action<Error>) => (
+                    {
+                        ...state,
+                        error: action.payload
+                    }
+                ),
             },
         }
-    }) as ReducerMap<PersonState, Action<any>>,
+    }) as ReducerMap<InternalPersonState, Action<any>>,
     courseInitialState,
 )
 

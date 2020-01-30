@@ -7,6 +7,7 @@
   height: $top-menu-height;
   font-size: $top-menu-height - 10;
   background-color: $color-light;
+  position: absolute;
 }
 
 .search-bar__input:focus {

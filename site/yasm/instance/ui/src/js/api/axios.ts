@@ -1,9 +1,9 @@
-import * as axios from 'axios'
+import Axios from 'axios'
 
 declare var csrf_token: string;
 
 export function call(url: string, data: any = undefined, headers: any = {}) {
-    return axios.default.post(
+    return Axios.post(
         url,
         data,
         {
