@@ -1,0 +1,6 @@
+{% from 'flask/service.macro.jinja2' import build_service %}
+from instance.NestableBlueprint import NestableBlueprint
+
+module = NestableBlueprint('{{ service.name }}', __name__, url_prefix='/{{ service.name }}')
+
+{{ build_service(service) }}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package yasm.internal.test;
+
+import "google/protobuf/empty.proto";
+import "database.proto";
+
+message PatchTeachersRequest {
+    uint64 course_id = 1;
+    repeated yasm.database.Person teachers = 2;
+    yasm.database.Message msg = 3;
+    yasm.database.Course.Message msg2 = 4;
+}
+
+service APICourse {
+    rpc PatchTeachers (PatchTeachersRequest) returns (yasm.database.Course);
+    rpc TMP (yasm.database.Course.Message) returns (yasm.database.Course.NestedMessage);
+}

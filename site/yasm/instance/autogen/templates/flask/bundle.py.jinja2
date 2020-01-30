@@ -1,0 +1,13 @@
+from instance.NestableBlueprint import NestableBlueprint
+
+module = NestableBlueprint('{{ name }}', __name__, url_prefix='/{{ name }}')
+
+{% for child in children %}
+from .{{ child }} import module as {{ child }}_module
+module.register_blueprint({{ child }}_module)
+{% endfor %}
+{% for service in services %}
+from .{{ service }} import module as {{ service }}_module
+module.register_blueprint({{ service }}_module)
+{% endfor %}
+

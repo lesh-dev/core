@@ -1,0 +1,9 @@
+{% from 'frontend/method.macro.jinja2' import build_method %}
+
+{% macro build_service(service) %}
+export namespace {{ service.name }} {
+{% for method in service.methods %}
+    {{ build_method(method) }}
+{% endfor %}
+}
+{% endmacro %}

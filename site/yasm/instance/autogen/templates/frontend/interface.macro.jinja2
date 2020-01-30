@@ -1,0 +1,19 @@
+{% from "frontend/enum.macro.jinja2" import build_enum %}
+
+{% macro build_interface(message) %}
+    export namespace {{ message.name }} {
+        {% for nested_message in message.nested_messages %}
+            {% if not nested_message.options.map_entry %}
+                {{ build_interface(nested_message) }}
+            {% endif %}
+        {% endfor %}
+        {% for nested_enum in message.nested_enums %}
+            {{ build_enum(nested_enum) }}
+        {% endfor %}
+    }
+    export interface {{ message.name }} {
+        {% for field in message.fields %}
+            {{ field.name }}?: {{ field.ts_type }}
+        {% endfor %}
+    }
+{% endmacro %}

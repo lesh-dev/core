@@ -1,0 +1,36 @@
+syntax="proto3";
+package yasm.database;
+
+message Person {
+    uint64 person_id = 1;
+    string first_name = 2;
+}
+
+enum RegularEnum {
+    Z = 0;
+    X = 1;
+    C = 5;
+}
+
+message Message {
+
+}
+
+message Course {
+    enum NestedEnum {
+        A = 0;
+        B = 1;
+        C = 2;
+    }
+    message Message {
+
+    }
+    message NestedMessage {
+        map<string, RegularEnum> f1 = 1;
+        map<string, NestedEnum> f2 = 2;
+        map<uint64, string> f3 = 3;
+    }
+    uint64 course_id = 1;
+    string course_name = 2;
+    repeated string s = 3;
+}
