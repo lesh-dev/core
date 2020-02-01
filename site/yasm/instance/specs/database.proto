@@ -1,8 +1,11 @@
 syntax="proto3";
 package yasm.database;
 
+import "lib/database.options.proto";
+
 message Person {
-    uint64 person_id = 1;
+    option (yasm.lib.database.db_table) = true;
+    uint64 person_id = 1 [(yasm.lib.database.primary_key) = true];
     string first_name = 2;
 }
 
@@ -33,4 +36,15 @@ message Course {
     uint64 course_id = 1;
     string course_name = 2;
     repeated string s = 3;
+}
+
+message CourseTeacher {
+    Person person = 1 [
+                      (yasm.lib.database.foreign_key_table) = "Person",
+                      (yasm.lib.database.foreign_key_field) = "person_id"
+                      ];
+    Course course = 2 [
+                      (yasm.lib.database.foreign_key_table) = "Course",
+                      (yasm.lib.database.foreign_key_field) = "course_id"
+                      ];
 }

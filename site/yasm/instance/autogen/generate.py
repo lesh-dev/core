@@ -3,8 +3,13 @@ import shutil
 import inflection
 import jinja2
 import subprocess
-from google.protobuf.descriptor_pb2 import FileDescriptorSet
-from google.protobuf.descriptor import FieldDescriptor
+import collections
+import datetime
+from google.protobuf.descriptor_pb2 import FileDescriptorSet, MessageOptions
+from google.protobuf
+from instance.database import db
+import sqlalchemy.sql.schema as sqla_schema
+from sqlalchemy_utils import get_mapper
 
 API_ROOT = 'generated'
 PB_ROOT = 'generated'
@@ -14,12 +19,18 @@ SPEC_PATH = 'specs'
 proto_files = dict()
 
 
+class Meta:
+    def __repr__(self):
+        return f'{self.__class__.__name__}--{self.name or ""}'
+    __str__ = __repr__
+
+
 class Package:
     service_registry = set()
     item_registry = set()
 
 
-class Method:
+class Method(Meta):
     def __init__(self, method, service):
         self.descriptor = method
         self.service = service
@@ -35,7 +46,7 @@ class Method:
         return inflection.underscore(self.name)
 
 
-class Service:
+class Service(Meta):
     registry = dict()
 
     def __init__(self, service, package):
@@ -54,14 +65,14 @@ class Service:
         return inflection.underscore(self.name)
 
 
-class Value:
+class Value(Meta):
     def __init__(self, value):
         self.descriptor = value
         self.name = value.name
         self.number = value.number
 
 
-class Enum:
+class Enum(Meta):
     registry = dict()
     root_level_registry = dict()
 
@@ -84,7 +95,7 @@ class Enum:
             self.values.append(Value(value))
 
 
-class Field:
+class Field(Meta):
     def __init__(self, field):
         self.descriptor = field
         self.name = field.name
@@ -136,14 +147,14 @@ class Field:
         return f'number{repeated}'
 
 
-class MessageOptions:
+class MessageOptions(Meta):
     def __init__(self, options, message):
         self.descriptor = options
         self.message = message
         self.map_entry = options.map_entry
 
 
-class Message:
+class Message(Meta):
     registry = dict()
     root_level_registry = dict()
 
@@ -172,7 +183,7 @@ class Message:
             self.nested_enums.append(Enum(nested, package=package, parent=self))
 
 
-class File:
+class File(Meta):
     def __init__(self, file):
         self.descriptor = file
         self.name = file.name
@@ -186,6 +197,7 @@ class File:
         self.services = []
         for service in file.service:
             self.services.append(Service(service, package=self.package))
+        self.extensions = [*file.extension]
 
 
 class Trie:
@@ -403,7 +415,16 @@ def build_api(env, path=os.path.join(API_ROOT, 'api')):
     print('api done')
 
 
+def build_from_database_decl():
+    tables = []
+    for table in db.metadata.sorted_tables:
+        tables.append(get_mapper(table))
+
+    print('done')
+
+
 def main():
+    build_from_database_decl()
     with open(build_descriptor(), 'rb') as fds:
         bundle = FileDescriptorSet.FromString(fds.read())
     for file in bundle.file:
@@ -432,3 +453,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+

@@ -47,6 +47,14 @@ export {
             }
 
 
+    export namespace CourseTeacher {
+                    }
+    export interface CourseTeacher {
+                    person?: interfaces.yasm.database.Person
+                    course?: interfaces.yasm.database.Course
+            }
+
+
     export enum RegularEnum {
                     Z = 'Z',
                     X = 'X',
