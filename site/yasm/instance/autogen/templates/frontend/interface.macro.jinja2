@@ -2,17 +2,17 @@
 
 {% macro build_interface(message) %}
     export namespace {{ message.name }} {
-        {% for nested_message in message.nested_messages %}
+        {% for nested_message in message.nested_messages.values() %}
             {% if not nested_message.options.map_entry %}
                 {{ build_interface(nested_message) }}
             {% endif %}
         {% endfor %}
-        {% for nested_enum in message.nested_enums %}
+        {% for nested_enum in message.nested_enums.values() %}
             {{ build_enum(nested_enum) }}
         {% endfor %}
     }
     export interface {{ message.name }} {
-        {% for field in message.fields %}
+        {% for field in message.fields.values() %}
             {{ field.name }}?: {{ field.ts_type }}
         {% endfor %}
     }

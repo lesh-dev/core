@@ -6,6 +6,7 @@ import "google/protobuf/descriptor.proto";
 
 extend google.protobuf.MessageOptions {
     bool db_table = 51234;
+    bool login_table = 51233;
 }
 
 enum LazyLoad {
@@ -18,4 +19,5 @@ extend google.protobuf.FieldOptions {
     string foreign_key_field = 51235;
     string foreign_key_table = 51236;
     LazyLoad lazy_load = 51237;
+    bool searchable = 512348;
 }

@@ -1,7 +1,7 @@
 syntax="proto3";
 package yasm.database;
 
-import "lib/database.options.proto";
+import "lib/database.proto";
 
 message Person {
     option (yasm.lib.database.db_table) = true;
@@ -16,10 +16,10 @@ enum RegularEnum {
 }
 
 message Message {
-
 }
 
 message Course {
+    option (yasm.lib.database.db_table) = true;
     enum NestedEnum {
         A = 0;
         B = 1;

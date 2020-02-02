@@ -2,7 +2,7 @@
 
 {% macro build_service(service) %}
 export namespace {{ service.name }} {
-{% for method in service.methods %}
+{% for method in service.methods.values() %}
     {{ build_method(method) }}
 {% endfor %}
 }

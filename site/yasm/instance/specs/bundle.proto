@@ -1,6 +1,0 @@
-syntax = "proto3";
-
-package yasm;
-
-import "internal/course.proto";
-import "internal/test/test.proto";

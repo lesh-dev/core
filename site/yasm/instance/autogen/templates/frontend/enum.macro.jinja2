@@ -1,6 +1,6 @@
 {% macro build_enum(enum) %}
     export enum {{ enum.name }} {
-        {% for value in enum.values %}
+        {% for value in enum.values.values() %}
             {{ value.name }} = '{{ value.name }}',
         {% endfor %}
     }
