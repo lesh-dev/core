@@ -8,9 +8,9 @@ export {
 
 export namespace APICourse {
         export function PatchTeachers(
-        data: interfaces<google.protobuf.pyext._message.MessageDescriptor object at 0x7f60580e6080>,
+        data: interfacesyasm.internal.test.PatchTeachersRequest,
         headers: {[index: string]: string} = {}
-    ): interfaces<google.protobuf.pyext._message.MessageDescriptor object at 0x7f60581a3710> {
+    ): interfacesyasm.database.Course {
         return call(
             '/apiyasm/internal/test/APICourse/PatchTeachers',
             data,
@@ -19,9 +19,9 @@ export namespace APICourse {
     }
 
         export function TMP(
-        data: interfaces<google.protobuf.pyext._message.MessageDescriptor object at 0x7f6058170be0>,
+        data: interfacesyasm.database.Course.Message,
         headers: {[index: string]: string} = {}
-    ): interfaces<google.protobuf.pyext._message.MessageDescriptor object at 0x7f60581a36d8> {
+    ): interfacesyasm.database.Course.NestedMessage {
         return call(
             '/apiyasm/internal/test/APICourse/TMP',
             data,

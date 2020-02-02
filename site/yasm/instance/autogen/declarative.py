@@ -1,4 +1,5 @@
 from google.protobuf.descriptor import FieldDescriptor
+from collections import OrderedDict
 import inflection
 
 
@@ -81,7 +82,7 @@ class Method(Meta):
 
 
 class Service(Meta):
-    registry = dict()
+    registry = OrderedDict()
 
     def __init__(self, service, package):
         self.descriptor = service
@@ -90,7 +91,7 @@ class Service(Meta):
         Package.service_registry.add(package)
         self.full_name = service.full_name
         Service.registry[self.full_name] = self
-        self.methods = dict()
+        self.methods = OrderedDict()
         for method_name, method in service.methods_by_name.items():
             self.methods[method_name] = Method(method, self)
 
@@ -107,8 +108,8 @@ class Value(Meta):
 
 
 class Enum(Meta):
-    registry = dict()
-    root_level_registry = dict()
+    registry = OrderedDict()
+    root_level_registry = OrderedDict()
 
     def __init__(self, enum, package, parent=None):
         self.descriptor = enum
@@ -120,7 +121,7 @@ class Enum(Meta):
         if parent is None:
             Enum.root_level_registry[self.full_name] = self
         Enum.registry[self.full_name] = self
-        self.values = dict()
+        self.values = OrderedDict()
         for value_name, value in enum.values_by_name.items():
             self.values[value_name] = Value(value)
 
@@ -141,18 +142,18 @@ class Field(Meta):
             self.enum = field.enum_type
         self.message_obj = None
         self.enum_obj = None
-        self.options = object()
-        self.options.primary_key = field.GetOptions().Extensions[AutogenOptions.Database.primary_key]
-        self.options.foreign_key_field = field.GetOptions().Extensions[AutogenOptions.Database.foreign_key_field]
-        self.options.foreign_key_table = field.GetOptions().Extensions[AutogenOptions.Database.foreign_key_table]
-        self.options.lazy_load = field.GetOptions().Extensions[AutogenOptions.Database.lazy_load]
-        self.options.searchable = field.GetOptions().Extensions[AutogenOptions.Database.searchable]
+        # self.options = object()
+        # self.options.primary_key = field.GetOptions().Extensions[AutogenOptions.Database.primary_key]
+        # self.options.foreign_key_field = field.GetOptions().Extensions[AutogenOptions.Database.foreign_key_field]
+        # self.options.foreign_key_table = field.GetOptions().Extensions[AutogenOptions.Database.foreign_key_table]
+        # self.options.lazy_load = field.GetOptions().Extensions[AutogenOptions.Database.lazy_load]
+        # self.options.searchable = field.GetOptions().Extensions[AutogenOptions.Database.searchable]
 
-        if not message.options.database:
-            if self.options.primary_key or self.options.foreign_key_field or self.options.foreign_key_table or self.options.lazy_load:
-                raise RuntimeError('database options in {} of {}, which is not a db_table'.format(self, message))
-        if (self.options.foreign_key_table == '') ^ (self.options.foreign_key_field == ''):
-            raise RuntimeError('can not have only one of foreign_key_table and foreign_key_field at {} in {}'.format(self, message))
+        # if not message.options.database:
+        #     if self.options.primary_key or self.options.foreign_key_field or self.options.foreign_key_table or self.options.lazy_load:
+        #         raise RuntimeError('database options in {} of {}, which is not a db_table'.format(self, message))
+        # if (self.options.foreign_key_table == '') ^ (self.options.foreign_key_field == ''):
+        #     raise RuntimeError('can not have only one of foreign_key_table and foreign_key_field at {} in {}'.format(self, message))
 
     def is_enum(self):
         return self.type == FieldDescriptor.TYPE_ENUM
@@ -203,8 +204,8 @@ class MessageOptions(Meta):
 
 
 class Message(Meta):
-    registry = dict()
-    root_level_registry = dict()
+    registry = OrderedDict()
+    root_level_registry = OrderedDict()
     database = []
     login_table = None
 
@@ -224,13 +225,13 @@ class Message(Meta):
             if Message.login_table is not None:
                 raise RuntimeError('multiple login tables: {}, {}'.format(Message.login_table, self))
             Message.login_table = self
-        self.fields = dict()
+        self.fields = OrderedDict()
         for field_name, field in message.fields_by_name.items():
             self.fields[field_name] = Field(field, self)
-        self.nested_messages = dict()
+        self.nested_messages = OrderedDict()
         for nested_name, nested in message.nested_types_by_name.items():
             self.nested_messages[nested_name] = Message(nested, package=package, parent=self)
-        self.nested_enums = dict()
+        self.nested_enums = OrderedDict()
         for nested_name, nested in message.enum_types_by_name.items():
             self.nested_enums[nested_name] = Enum(nested, package=package, parent=self)
         self.py_src = None
@@ -240,7 +241,7 @@ class Message(Meta):
 
 
 class File(Meta):
-    registry = dict()
+    registry = OrderedDict()
 
     def __init__(self, file):
         self.descriptor = file
@@ -248,13 +249,13 @@ class File(Meta):
         self.package = file.package
         File.registry[self.name] = self
         Package.item_registry.add(self.package)
-        self.messages = dict()
+        self.messages = OrderedDict()
         for message_name, message in file.message_types_by_name.items():
             self.messages[message_name] = Message(message, package=self.package)
-        self.enums = dict()
+        self.enums = OrderedDict()
         for enum_name, enum in file.enum_types_by_name.items():
             self.enums[enum_name] = Enum(enum, package=self.package)
-        self.services = dict()
+        self.services = OrderedDict()
         for service_name, service in file.services_by_name.items():
             self.services[service_name] = Service(service, package=self.package)
 

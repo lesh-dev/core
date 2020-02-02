@@ -8,8 +8,11 @@ import importlib
 from declarative import AutogenOptions, File
 
 
-# TMP_ROOT = tempfile.mkdtemp()
-TMP_ROOT = os.path.join(os.getcwd(), '__TMP__')
+TMP_ROOT = tempfile.mkdtemp()
+
+google_proto_files = [
+    'google/protobuf/empty.proto'
+]
 
 
 def build_py_proto(spec_path):
@@ -39,7 +42,7 @@ def map_proto_2_py(path):
 
 
 def get_proto_files(spec_path):
-    return [
+    return google_proto_files + [
         os.path.join(d[0][len(spec_path) + 1:], f)
         for d in os.walk(spec_path)
         for f in d[-1]
