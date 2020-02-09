@@ -1,5 +1,5 @@
 from google.protobuf.descriptor import FieldDescriptor
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 import inflection
 
 
@@ -7,23 +7,29 @@ class AutogenOptions:
     class Database:
         db_table = None
         login_table = None
+        table_name = None
         primary_key = None
         foreign_key_field = None
-        foreign_key_table = None
         lazy_load = None
         searchable = None
         LazyLoad = None
+        back_populates = None
+        field_name = None
+        foreign_key_name = None
 
         @staticmethod
         def load(module):
             AutogenOptions.Database.db_table = module.db_table
             AutogenOptions.Database.login_table = module.login_table
+            AutogenOptions.Database.table_name = module.table_name
             AutogenOptions.Database.primary_key = module.primary_key
             AutogenOptions.Database.foreign_key_field = module.foreign_key_field
-            AutogenOptions.Database.foreign_key_table = module.foreign_key_table
+            AutogenOptions.Database.back_populates = module.back_populates
             AutogenOptions.Database.lazy_load = module.lazy_load
             AutogenOptions.Database.searchable = module.searchable
             AutogenOptions.Database.LazyLoad = module.LazyLoad
+            AutogenOptions.Database.field_name = module.field_name
+            AutogenOptions.Database.foreign_key_name = module.foreign_key_name
 
     class API:
         file_require_login = None
@@ -55,9 +61,12 @@ class Meta:
         return self.full_name.startswith('yasm.lib')
 
     def __repr__(self):
-        return f'{self.__class__.__name__}--{self.name or ""}'
+        return f'{self.__class__.__name__}--{self.full_name or ""}'
 
     __str__ = __repr__
+
+    def __hash__(self):
+        return hash(self.full_name)
 
 
 class Package:
@@ -126,15 +135,29 @@ class Enum(Meta):
             self.values[value_name] = Value(value)
 
 
+class FieldOptions:
+    def __init__(self, options):
+        self.primary_key = options.Extensions[AutogenOptions.Database.primary_key]
+        self.foreign_key_field = options.Extensions[AutogenOptions.Database.foreign_key_field]
+        self.back_populates = options.Extensions[AutogenOptions.Database.back_populates]
+        self.lazy_load = options.Extensions[AutogenOptions.Database.lazy_load]
+        self.searchable = options.Extensions[AutogenOptions.Database.searchable]
+        self.field_name = options.Extensions[AutogenOptions.Database.field_name]
+        self.foreign_key_name = options.Extensions[AutogenOptions.Database.foreign_key_name]
+
+
 class Field(Meta):
     def __init__(self, field, message):
         self.descriptor = field
         self.name = field.name
+        self.full_name = field.full_name
         self.number = field.number
         self.label = field.label
         self.type = field.type
         self.label = field.label
+        self.repeated = self.label == FieldDescriptor.LABEL_REPEATED
         self.message = None
+        self.back_populates = None
         if field.message_type is not None:
             self.message = field.message_type
         self.enum = None
@@ -142,18 +165,12 @@ class Field(Meta):
             self.enum = field.enum_type
         self.message_obj = None
         self.enum_obj = None
-        # self.options = object()
-        # self.options.primary_key = field.GetOptions().Extensions[AutogenOptions.Database.primary_key]
-        # self.options.foreign_key_field = field.GetOptions().Extensions[AutogenOptions.Database.foreign_key_field]
-        # self.options.foreign_key_table = field.GetOptions().Extensions[AutogenOptions.Database.foreign_key_table]
-        # self.options.lazy_load = field.GetOptions().Extensions[AutogenOptions.Database.lazy_load]
-        # self.options.searchable = field.GetOptions().Extensions[AutogenOptions.Database.searchable]
-
-        # if not message.options.database:
-        #     if self.options.primary_key or self.options.foreign_key_field or self.options.foreign_key_table or self.options.lazy_load:
-        #         raise RuntimeError('database options in {} of {}, which is not a db_table'.format(self, message))
-        # if (self.options.foreign_key_table == '') ^ (self.options.foreign_key_field == ''):
-        #     raise RuntimeError('can not have only one of foreign_key_table and foreign_key_field at {} in {}'.format(self, message))
+        self.options = FieldOptions(field.GetOptions())
+        if not message.options.db_table:
+            if self.options.primary_key or self.options.foreign_key_field or self.options.lazy_load:
+                raise RuntimeError('database options in {} of {}, which is not a db_table'.format(self, message))
+        if self.options.searchable:
+            message.options.searchable = True
 
     def is_enum(self):
         return self.type == FieldDescriptor.TYPE_ENUM
@@ -172,7 +189,7 @@ class Field(Meta):
     @property
     def ts_type(self):
         repeated = ''
-        if self.label == FieldDescriptor.LABEL_REPEATED:
+        if self.repeated:
             repeated = '[]'
         if self.is_enum():
             return f'interfaces.{self.enum.full_name}{repeated}'
@@ -193,14 +210,38 @@ class Field(Meta):
             return f'string{repeated}'
         return f'number{repeated}'
 
+    @property
+    def py_db_type(self):
+        template = '{}'
+        if self.label == FieldDescriptor.LABEL_REPEATED:
+            template = 'ARRAY(db.{})'
+        if self.is_enum():
+            tp = 'Enum()'
+        elif self.is_message():
+            tp = 'JSON'
+        elif self.type == FieldDescriptor.TYPE_STRING:
+            tp = 'Text'
+        elif self.type == FieldDescriptor.TYPE_BOOL:
+            tp = 'Boolean'
+        elif self.type in [
+            FieldDescriptor.TYPE_FLOAT,
+            FieldDescriptor.TYPE_DOUBLE,
+        ]:
+            tp = 'Float'
+        else:
+            tp = 'Integer'
+        return template.format(tp)
+
 
 class MessageOptions(Meta):
     def __init__(self, options, message):
         self.descriptor = options
         self.message = message
         self.map_entry = options.map_entry
-        self.database = options.Extensions[AutogenOptions.Database.db_table]
+        self.db_table = options.Extensions[AutogenOptions.Database.db_table]
+        self.table_name = options.Extensions[AutogenOptions.Database.table_name]
         self.login = options.Extensions[AutogenOptions.Database.login_table]
+        self.searchable = False
 
 
 class Message(Meta):
@@ -215,19 +256,38 @@ class Message(Meta):
         self.parent = parent
         self.package = package
         self.full_name = message.full_name
+        self.table_name = None
+        self.back_refs = defaultdict(list)
         Message.registry[self.full_name] = self
         if parent is None:
             Message.root_level_registry[self.full_name] = self
         self.options = MessageOptions(message.GetOptions(), message)
-        if self.options.database:
+        if self.options.db_table:
+            if self.package != 'yasm.database':
+                raise RuntimeError('db_table {} not in yasm.database package'.format(self))
             Message.database.append(self)
         if self.options.login:
             if Message.login_table is not None:
                 raise RuntimeError('multiple login tables: {}, {}'.format(Message.login_table, self))
-            Message.login_table = self
+            if self.options.db_table:
+                Message.login_table = self
+            else:
+                raise RuntimeError('can not set non db_table as a login table {}'.format(self))
+        if self.options.table_name:
+            if not self.options.db_table:
+                raise RuntimeError('cat not set table name for non db_table {}'.format(self))
+        has_pk = False
         self.fields = OrderedDict()
         for field_name, field in message.fields_by_name.items():
             self.fields[field_name] = Field(field, self)
+            if self.fields[field_name].options.primary_key:
+                has_pk = True
+        if self.options.db_table and not has_pk:
+            raise RuntimeError(f'No primary key for {self}')
+        if not self.options.table_name:
+            self.table_name = self.name.lower()
+        else:
+            self.table_name = self.options.table_name
         self.nested_messages = OrderedDict()
         for nested_name, nested in message.nested_types_by_name.items():
             self.nested_messages[nested_name] = Message(nested, package=package, parent=self)
@@ -261,12 +321,37 @@ class File(Meta):
 
 
 def link():
+    # Object linking
     for message in Message.registry.values():
         for field in message.fields.values():
             if field.is_message():
                 field.message_obj = Message.registry[field.message.full_name]
             if field.is_enum():
                 field.enum_obj = Enum.registry[field.enum.full_name]
+    # Field back_refs
+    for message in Message.registry.values():
+        if message.options.db_table:
+            for field in message.fields.values():
+                if field.is_message():
+                    if field.message_obj.options.db_table:
+                        for back in field.message_obj.fields.values():
+                            if back.is_message() and back.message_obj.full_name == message.full_name:
+                                message.back_refs[field].append(back)
+                        if not message.back_refs[field]:
+                            raise RuntimeError(f'can not find back_ref for {field} in {field.message_obj}')
+    # Field back_populates
+    for message in Message.registry.values():
+        for field, back_refs in message.back_refs.items():
+            if field.options.back_populates:
+                for back_ref in back_refs:
+                    if back_ref.name == field.options.back_populates:
+                        field.back_populates = back_ref
+            else:
+                if len(back_refs) == 1:
+                    field.back_populates = back_refs[0]
+            if field.back_populates is None:
+                raise RuntimeError(f'can not find back ref for {field}')
+
     for service in Service.registry.values():
         for method in service.methods.values():
             method.input_message = Message.registry[method.input_type.full_name]

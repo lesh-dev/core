@@ -6,13 +6,14 @@ import "lib/database.proto";
 message Person {
     option (yasm.lib.database.db_table) = true;
     uint64 person_id = 1 [(yasm.lib.database.primary_key) = true];
-    string first_name = 2;
+    string first_name = 2 [(yasm.lib.database.searchable) = true];
+    repeated CourseTeacher courses = 3;
 }
 
 enum RegularEnum {
     Z = 0;
     X = 1;
-    C = 5;
+    V = 5;
 }
 
 message Message {
@@ -33,18 +34,86 @@ message Course {
         map<string, NestedEnum> f2 = 2;
         map<uint64, string> f3 = 3;
     }
-    uint64 course_id = 1;
+    uint64 course_id = 1 [(yasm.lib.database.primary_key) = true];
     string course_name = 2;
     repeated string s = 3;
+    repeated CourseTeacher teachers = 4;
 }
 
 message CourseTeacher {
+    option (yasm.lib.database.db_table) = true;
     Person person = 1 [
-                      (yasm.lib.database.foreign_key_table) = "Person",
-                      (yasm.lib.database.foreign_key_field) = "person_id"
+                      (yasm.lib.database.foreign_key_field) = "person_id",
+                      (yasm.lib.database.primary_key) = true
                       ];
     Course course = 2 [
-                      (yasm.lib.database.foreign_key_table) = "Course",
-                      (yasm.lib.database.foreign_key_field) = "course_id"
+                      (yasm.lib.database.foreign_key_field) = "course_id",
+                      (yasm.lib.database.primary_key) = true
                       ];
+}
+
+message A {
+    option (yasm.lib.database.db_table) = true;
+    option (yasm.lib.database.table_name) = "a";
+    uint64 id = 10 [
+                   (yasm.lib.database.primary_key) = true
+                   ];
+    string id2 = 11 [
+                    (yasm.lib.database.primary_key) = true
+                    ];
+    B b = 1 [
+            (yasm.lib.database.foreign_key_field) = "b_id",
+            (yasm.lib.database.back_populates) = "a"
+            ];
+    repeated C c = 2;
+    repeated D d = 3;
+    E e = 4;
+    B b2 = 5 [
+             (yasm.lib.database.foreign_key_field) = "b2_id",
+             (yasm.lib.database.back_populates) = "a2"
+             ];
+}
+
+message B {
+    option (yasm.lib.database.db_table) = true;
+    option (yasm.lib.database.table_name) = "b";
+    uint64 id = 10 [
+                   (yasm.lib.database.primary_key) = true
+                   ];
+    A a = 1 [
+            (yasm.lib.database.foreign_key_field) = "a_id",
+            (yasm.lib.database.back_populates) = "b",
+            (yasm.lib.database.primary_key) = true
+            ];
+    A a2 = 2 [
+             (yasm.lib.database.foreign_key_field) = "a2_id",
+             (yasm.lib.database.back_populates) = "b2"
+             ];
+}
+
+message C {
+    option (yasm.lib.database.db_table) = true;
+    option (yasm.lib.database.table_name) = "c";
+    uint64 id = 10 [
+                   (yasm.lib.database.primary_key) = true
+                   ];
+    A a = 1;
+}
+
+message D {
+    option (yasm.lib.database.db_table) = true;
+    option (yasm.lib.database.table_name) = "d";
+    uint64 id = 10 [
+                   (yasm.lib.database.primary_key) = true
+                   ];
+    A a = 1;
+}
+
+message E {
+    option (yasm.lib.database.db_table) = true;
+    option (yasm.lib.database.table_name) = "e";
+    uint64 id = 10 [
+                   (yasm.lib.database.primary_key) = true
+                   ];
+    repeated A a = 1;
 }

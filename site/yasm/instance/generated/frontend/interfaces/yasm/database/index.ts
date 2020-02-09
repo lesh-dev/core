@@ -10,6 +10,7 @@ export {
     export interface Person {
                     person_id?: number
                     first_name?: string
+                    courses?: interfaces.yasm.database.CourseTeacher[]
             }
 
 
@@ -44,6 +45,7 @@ export {
                     course_id?: number
                     course_name?: string
                     s?: string[]
+                    teachers?: interfaces.yasm.database.CourseTeacher[]
             }
 
 
@@ -55,9 +57,55 @@ export {
             }
 
 
+    export namespace A {
+                    }
+    export interface A {
+                    id?: number
+                    id2?: string
+                    b?: interfaces.yasm.database.B
+                    c?: interfaces.yasm.database.C[]
+                    d?: interfaces.yasm.database.D[]
+                    e?: interfaces.yasm.database.E
+                    b2?: interfaces.yasm.database.B
+            }
+
+
+    export namespace B {
+                    }
+    export interface B {
+                    id?: number
+                    a?: interfaces.yasm.database.A
+                    a2?: interfaces.yasm.database.A
+            }
+
+
+    export namespace C {
+                    }
+    export interface C {
+                    id?: number
+                    a?: interfaces.yasm.database.A
+            }
+
+
+    export namespace D {
+                    }
+    export interface D {
+                    id?: number
+                    a?: interfaces.yasm.database.A
+            }
+
+
+    export namespace E {
+                    }
+    export interface E {
+                    id?: number
+                    a?: interfaces.yasm.database.A[]
+            }
+
+
     export enum RegularEnum {
                     Z = 'Z',
                     X = 'X',
-                    C = 'C',
+                    V = 'V',
             }
 

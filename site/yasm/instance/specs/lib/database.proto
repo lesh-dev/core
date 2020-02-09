@@ -5,8 +5,9 @@ package yasm.lib.database;
 import "google/protobuf/descriptor.proto";
 
 extend google.protobuf.MessageOptions {
-    bool db_table = 51234;
+    string table_name = 51232;
     bool login_table = 51233;
+    bool db_table = 51234;
 }
 
 enum LazyLoad {
@@ -17,7 +18,10 @@ enum LazyLoad {
 extend google.protobuf.FieldOptions {
     bool primary_key = 51234;
     string foreign_key_field = 51235;
-    string foreign_key_table = 51236;
+    string back_populates = 51236;
     LazyLoad lazy_load = 51237;
     bool searchable = 512348;
+
+    string field_name = 51239;
+    string foreign_key_name = 51240;
 }
