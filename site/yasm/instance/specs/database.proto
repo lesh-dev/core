@@ -43,51 +43,56 @@ message Course {
 message CourseTeacher {
     option (yasm.lib.database.db_table) = true;
     Person person = 1 [
-                      (yasm.lib.database.foreign_key_field) = "person_id",
                       (yasm.lib.database.primary_key) = true
                       ];
     Course course = 2 [
-                      (yasm.lib.database.foreign_key_field) = "course_id",
                       (yasm.lib.database.primary_key) = true
                       ];
-}
-
-message A {
-    option (yasm.lib.database.db_table) = true;
-    option (yasm.lib.database.table_name) = "a";
-    uint64 id = 10 [
-                   (yasm.lib.database.primary_key) = true
-                   ];
-    string id2 = 11 [
-                    (yasm.lib.database.primary_key) = true
-                    ];
-    B b = 1 [
-            (yasm.lib.database.foreign_key_field) = "b_id",
-            (yasm.lib.database.back_populates) = "a"
-            ];
-    repeated C c = 2;
-    repeated D d = 3;
-    E e = 4;
-    B b2 = 5 [
-             (yasm.lib.database.foreign_key_field) = "b2_id",
-             (yasm.lib.database.back_populates) = "a2"
-             ];
 }
 
 message B {
     option (yasm.lib.database.db_table) = true;
     option (yasm.lib.database.table_name) = "b";
     uint64 id = 10 [
-                   (yasm.lib.database.primary_key) = true
+                   (yasm.lib.database.primary_key) = true,
+                   (yasm.lib.database.autoincrement) = true
                    ];
     A a = 1 [
-            (yasm.lib.database.foreign_key_field) = "a_id",
             (yasm.lib.database.back_populates) = "b",
             (yasm.lib.database.primary_key) = true
             ];
     A a2 = 2 [
-             (yasm.lib.database.foreign_key_field) = "a2_id",
-             (yasm.lib.database.back_populates) = "b2"
+             (yasm.lib.database.back_populates) = "b2",
+             (yasm.lib.database.nullable) = true
+             ];
+}
+
+message A {
+    option (yasm.lib.database.db_table) = true;
+    option (yasm.lib.database.table_name) = "a";
+    uint64 id = 10 [
+                   (yasm.lib.database.primary_key) = true,
+                   (yasm.lib.database.autoincrement) = true
+                   ];
+    string id2 = 11 [
+                    (yasm.lib.database.primary_key) = true
+                    ];
+    string t = 12 [
+                  (yasm.lib.database.nullable) = true
+                  ];
+    B b = 1 [
+            (yasm.lib.database.back_populates) = "a",
+            (yasm.lib.database.nullable) = true
+            ];
+    repeated C c = 2;
+    repeated D d = 3;
+    E e = 4 [
+            (yasm.lib.database.field_name) = "e_key",
+            (yasm.lib.database.nullable) = true
+            ];
+    B b2 = 5 [
+             (yasm.lib.database.back_populates) = "a2",
+             (yasm.lib.database.nullable) = true
              ];
 }
 

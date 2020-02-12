@@ -5,7 +5,7 @@
 from flask import Flask
 from flask_wtf.csrf import CSRFProtect
 
-from instance.database import db
+from instance.generated.database.database import db
 from instance.login import lm
 from instance.login.oauth2.base import Auth
 

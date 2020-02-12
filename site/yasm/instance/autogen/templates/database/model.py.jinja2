@@ -1,81 +1,63 @@
-{% macro is_primary(field) %}
-{% if field.options.primary_key %}
-primary_key=True,
+{% macro options(field) %}
+{% if field.options.autoincrement %}
+autoincrement=True,
 {% endif %}
-{%  endmacro %}
+{% if field.options.nullable %}
+nullable=True,
+{% endif %}
+{% endmacro %}
 {% if message.options.searchable %}
 @add_search
 {% endif %}
 class {{ message.name }}(db.Model):
     __tablename__ = '{{ message.table_name }}'
-
-{% for field in message.fields.values() %}
-{% if field.is_message() and field.message_obj.options.db_table %}
-{% if field.repeated %}
-    {{ field.name }} = db.relationship(
-        '{{ field.message_obj.name }}',
-        back_populates='{{ field.back_populates.name }}',
-    )
-{% else %}
-{% for pfk in field.message_obj.fields.values() %}
-{% if pfk.options.primary_key %}
-    fk_{{ field.name }}_{{ pfk.name }} = db.Column(
-        db.{{ pfk.py_db_type }},
-        name='{{ field.options.foreign_key_name if field.options.foreign_key_name else 'fk_{}_{}'.format(field.name, pfk.name) }}',
-        {{ is_primary(field) }}
-    )
-{% endif %}
-{% endfor %}
-    {{ field.name }} = db.relationship(
-        '{{ field.message_obj.name }}',
-        back_populates='{{ field.back_populates.name }}',
-        foreign_keys=[
-{% for pfk in field.message_obj.fields.values() %}
-{% if pfk.options.primary_key %}
-            fk_{{ field.name }}_{{ pfk.name }},
-{% endif %}
-{% endfor %}
-        ],
-    )
-{% endif %}
-{% else %}
+{% for field in message.primary_fields %}
     {{ field.name }} = db.Column(
         db.{{ field.py_db_type }},
-        name='{{ field.options.field_name if field.options.field_name else field.name }}',
-        {{ is_primary(field) }}
+        name='{{ field.name }}',
+        primary_key=True,
+        {{ options(field) }}
     )
-{% endif %}
 {% endfor %}
-
+{% for field in message.regular_fields %}
+    {{ field.name }} = db.Column(
+        db.{{ field.py_db_type }},
+        name='{{ field.name }}',
+        {{ options(field) }}
+    )
+{% endfor %}
+{% for relationship in message.relationships.values() %}
+    {{ relationship.name }} = db.relationship(
+        '{{ relationship.model.name }}',
+{% if relationship.back_repeated %}
+        uselist=True,
+{% else %}
+        uselist=False,
+{% endif %}
+{% if relationship.fields %}
+        foreign_keys=[
+{% for field in relationship.fields %}
+            {{ field.name }},
+{% endfor %}
+        ],
+{% endif %}
+        back_populates='{{ relationship.back_populates.name }}',
+    )
+{% endfor %}
     __table_args__ = (
-{% for field in message.fields.values() %}
-{% if field.is_message() and field.message_obj.db_table %}
-{% if not field.repeated %}
+{% for relationship in message.relationships.values() if relationship.fields %}
         db.ForeignKeyConstraint(
             (
-{% for pfk in field.message_obj.fields.values() %}
-{% if pfk.options.primary_key %}
-                fk_{{ field.name }}_{{ pfk.name }},
-{% endif %}
+{% for field in relationship.fields %}
+                {{ field.name }},
 {% endfor %}
             ),
             (
-{% for pfk in field.message_obj.fields.values() %}
-{% if pfk.options.primary_key %}
-                '{{ field.message_obj.table_name }}.{{ pfk.name }}',
-{% endif %}
+{% for field in relationship.fields %}
+                '{{ relationship.model.table_name }}.{{ field.back_populates }}',
 {% endfor %}
             ),
         ),
-{% endif %}
-{% endif %}
 {% endfor %}
     )
 
-    searchable_columns = [
-{% for field in message.fields.values() %}
-{% if field.options.searchable %}
-        {{ field.name }},
-{% endif %}
-{% endfor %}
-    ]

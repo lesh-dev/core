@@ -17,11 +17,13 @@ enum LazyLoad {
 
 extend google.protobuf.FieldOptions {
     bool primary_key = 51234;
-    string foreign_key_field = 51235;
     string back_populates = 51236;
-    LazyLoad lazy_load = 51237;
+    string field_name = 51239;
+
     bool searchable = 512348;
 
-    string field_name = 51239;
-    string foreign_key_name = 51240;
+    LazyLoad lazy_load = 51237;
+
+    bool nullable = 512360;
+    bool autoincrement = 512361;
 }

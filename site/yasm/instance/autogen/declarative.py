@@ -1,35 +1,37 @@
 from google.protobuf.descriptor import FieldDescriptor
 from collections import OrderedDict, defaultdict
 import inflection
-
+import copy
 
 class AutogenOptions:
     class Database:
         db_table = None
         login_table = None
         table_name = None
+
+        fk_name = None
         primary_key = None
-        foreign_key_field = None
-        lazy_load = None
-        searchable = None
-        LazyLoad = None
         back_populates = None
         field_name = None
-        foreign_key_name = None
+        searchable = None
+        lazy_load = None
+        nullable = None
+        autoincrement = None
+
 
         @staticmethod
         def load(module):
             AutogenOptions.Database.db_table = module.db_table
             AutogenOptions.Database.login_table = module.login_table
             AutogenOptions.Database.table_name = module.table_name
+
             AutogenOptions.Database.primary_key = module.primary_key
-            AutogenOptions.Database.foreign_key_field = module.foreign_key_field
             AutogenOptions.Database.back_populates = module.back_populates
-            AutogenOptions.Database.lazy_load = module.lazy_load
-            AutogenOptions.Database.searchable = module.searchable
-            AutogenOptions.Database.LazyLoad = module.LazyLoad
             AutogenOptions.Database.field_name = module.field_name
-            AutogenOptions.Database.foreign_key_name = module.foreign_key_name
+            AutogenOptions.Database.searchable = module.searchable
+            AutogenOptions.Database.lazy_load = module.lazy_load
+            AutogenOptions.Database.nullable = module.nullable
+            AutogenOptions.Database.autoincrement = module.autoincrement
 
     class API:
         file_require_login = None
@@ -138,12 +140,12 @@ class Enum(Meta):
 class FieldOptions:
     def __init__(self, options):
         self.primary_key = options.Extensions[AutogenOptions.Database.primary_key]
-        self.foreign_key_field = options.Extensions[AutogenOptions.Database.foreign_key_field]
         self.back_populates = options.Extensions[AutogenOptions.Database.back_populates]
-        self.lazy_load = options.Extensions[AutogenOptions.Database.lazy_load]
-        self.searchable = options.Extensions[AutogenOptions.Database.searchable]
         self.field_name = options.Extensions[AutogenOptions.Database.field_name]
-        self.foreign_key_name = options.Extensions[AutogenOptions.Database.foreign_key_name]
+        self.searchable = options.Extensions[AutogenOptions.Database.searchable]
+        self.lazy_load = options.Extensions[AutogenOptions.Database.lazy_load]
+        self.nullable = options.Extensions[AutogenOptions.Database.nullable]
+        self.autoincrement = options.Extensions[AutogenOptions.Database.autoincrement]
 
 
 class Field(Meta):
@@ -167,7 +169,7 @@ class Field(Meta):
         self.enum_obj = None
         self.options = FieldOptions(field.GetOptions())
         if not message.options.db_table:
-            if self.options.primary_key or self.options.foreign_key_field or self.options.lazy_load:
+            if self.options.primary_key or self.options.lazy_load:
                 raise RuntimeError('database options in {} of {}, which is not a db_table'.format(self, message))
         if self.options.searchable:
             message.options.searchable = True
@@ -244,6 +246,16 @@ class MessageOptions(Meta):
         self.searchable = False
 
 
+class Relationship():
+    def __init__(self, name, model, fields, back_populates, repeated, back_repeated):
+        self.fields = fields
+        self.name = name
+        self.model = model
+        self.back_populates = back_populates
+        self.repeated = repeated
+        self.back_repeated = back_repeated
+
+
 class Message(Meta):
     registry = OrderedDict()
     root_level_registry = OrderedDict()
@@ -257,6 +269,9 @@ class Message(Meta):
         self.package = package
         self.full_name = message.full_name
         self.table_name = None
+        self.primary_fields = []
+        self.regular_fields = []
+        self.relationships = dict()
         self.back_refs = defaultdict(list)
         Message.registry[self.full_name] = self
         if parent is None:
@@ -276,13 +291,17 @@ class Message(Meta):
         if self.options.table_name:
             if not self.options.db_table:
                 raise RuntimeError('cat not set table name for non db_table {}'.format(self))
-        has_pk = False
+        self.primary_keys = OrderedDict()
+        self.regular_keys = OrderedDict()
+        self.deps = set()
         self.fields = OrderedDict()
         for field_name, field in message.fields_by_name.items():
-            self.fields[field_name] = Field(field, self)
+            self.fields[field_name] = field = Field(field, self)
             if self.fields[field_name].options.primary_key:
-                has_pk = True
-        if self.options.db_table and not has_pk:
+                self.primary_keys[field_name] = field
+            else:
+                self.regular_keys[field_name] = field
+        if self.options.db_table and len(self.primary_keys) == 0:
             raise RuntimeError(f'No primary key for {self}')
         if not self.options.table_name:
             self.table_name = self.name.lower()
@@ -320,6 +339,43 @@ class File(Meta):
             self.services[service_name] = Service(service, package=self.package)
 
 
+def dfs(entity, getter, used, out):
+    used[entity] = 'GREY'
+    for neighbour in getter(entity):
+        if used[neighbour] == 'WHITE':
+            dfs(neighbour, getter, used, out)
+        elif used[neighbour] == 'GREY':
+            raise RuntimeError(f'cycle on {entity}, {neighbour}, maybe more')
+    out.append(entity)
+    used[entity] = 'BLACK'
+
+
+def cover_dfs(data, getter):
+    used = {
+        entity: 'WHITE'
+        for entity in data
+    }
+    out = []
+    for entity in data:
+        if used[entity] == 'WHITE':
+            dfs(entity, getter, used, out)
+    return out
+
+
+def get_back_populates(back_refs, key):
+    back_populates = None
+    if key.options.back_populates:
+        for back_ref in back_refs:
+            if back_ref.name == key.options.back_populates:
+                back_populates = back_ref
+    else:
+        if len(back_refs) == 1:
+            back_populates = back_refs[0]
+    if back_populates is None:
+        raise RuntimeError(f'can not find back ref for {key}')
+    return back_populates
+
+
 def link():
     # Object linking
     for message in Message.registry.values():
@@ -328,6 +384,13 @@ def link():
                 field.message_obj = Message.registry[field.message.full_name]
             if field.is_enum():
                 field.enum_obj = Enum.registry[field.enum.full_name]
+
+    for message in Message.registry.values():
+        if message.options.db_table:
+            for primary_key in message.primary_keys.values():
+                if primary_key.is_message() and primary_key.message_obj.options.db_table:
+                    message.deps.add(primary_key.message_obj)
+
     # Field back_refs
     for message in Message.registry.values():
         if message.options.db_table:
@@ -339,18 +402,73 @@ def link():
                                 message.back_refs[field].append(back)
                         if not message.back_refs[field]:
                             raise RuntimeError(f'can not find back_ref for {field} in {field.message_obj}')
-    # Field back_populates
+
+    for message in cover_dfs(Message.registry.values(), lambda self: self.deps):
+        if message.options.db_table:
+            for key in message.primary_keys.values():
+                if key.is_message() and key.message_obj.options.db_table:
+                    if not key.repeated:
+                        back_populates = get_back_populates(message.back_refs[key], key)
+                        additional = []
+                        if back_populates.repeated or key.options.primary_key:
+                            for field in key.message_obj.primary_fields:
+                                additional.append(Field(field.descriptor, message))
+                                additional[-1].back_populates = additional[-1].name
+                                additional[-1].options = key.options
+                                additional[-1].name = f'fk_{key.message_obj.table_name}_{field.name}'
+                            message.primary_fields.extend(additional)
+                        if len(additional) == 1 and key.options.field_name:
+                            additional[-1].name = key.options.field_name
+                        message.relationships[key.name] = Relationship(
+                            name=key.name,
+                            model=key.message_obj,
+                            fields=additional,
+                            back_populates=back_populates,
+                            repeated=False,
+                            back_repeated=back_populates.repeated,
+                        )
+                    else:
+                        raise RuntimeError(f'field {key} is repeated and primary')
+                else:  # native
+                    message.primary_fields.append(key)
+
     for message in Message.registry.values():
-        for field, back_refs in message.back_refs.items():
-            if field.options.back_populates:
-                for back_ref in back_refs:
-                    if back_ref.name == field.options.back_populates:
-                        field.back_populates = back_ref
-            else:
-                if len(back_refs) == 1:
-                    field.back_populates = back_refs[0]
-            if field.back_populates is None:
-                raise RuntimeError(f'can not find back ref for {field}')
+        if message.options.db_table:
+            for key in message.regular_keys.values():
+                if key.is_message() and key.message_obj.options.db_table:
+                    back_populates = get_back_populates(message.back_refs[key], key)
+                    if not key.repeated:
+                        additional = []
+                        if back_populates.repeated or not key.options.nullable:
+                            if not key.repeated and not back_populates.repeated and not key.options.nullable and not back_populates.options.nullable:
+                                raise RuntimeError(f'both {key} and {back_populates} are not nullable (at least one must be nullable)')
+                            for field in key.message_obj.primary_fields:
+                                additional.append(Field(field.descriptor, message))
+                                additional[-1].name = f'fk_{key.name}_{field.name}'
+                                additional[-1].options = key.options
+                                additional[-1].back_populates = field.name
+                            message.regular_fields.extend(additional)
+                        if len(additional) == 1 and key.options.field_name:
+                            additional[-1].name = key.options.field_name
+                        message.relationships[key.name] = Relationship(
+                            name=key.name,
+                            model=key.message_obj,
+                            fields=additional,
+                            back_populates=back_populates,
+                            repeated=False,
+                            back_repeated=back_populates.repeated,
+                        )
+                    else:
+                        message.relationships[key.name] = Relationship(
+                            name=key.name,
+                            model=key.message_obj,
+                            fields=[],
+                            back_populates=back_populates,
+                            repeated=True,
+                            back_repeated=back_populates.repeated,
+                        )
+                else:  # native
+                    message.regular_fields.append(key)
 
     for service in Service.registry.values():
         for method in service.methods.values():

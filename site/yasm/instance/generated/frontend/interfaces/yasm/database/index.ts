@@ -57,25 +57,26 @@ export {
             }
 
 
-    export namespace A {
-                    }
-    export interface A {
-                    id?: number
-                    id2?: string
-                    b?: interfaces.yasm.database.B
-                    c?: interfaces.yasm.database.C[]
-                    d?: interfaces.yasm.database.D[]
-                    e?: interfaces.yasm.database.E
-                    b2?: interfaces.yasm.database.B
-            }
-
-
     export namespace B {
                     }
     export interface B {
                     id?: number
                     a?: interfaces.yasm.database.A
                     a2?: interfaces.yasm.database.A
+            }
+
+
+    export namespace A {
+                    }
+    export interface A {
+                    id?: number
+                    id2?: string
+                    t?: string
+                    b?: interfaces.yasm.database.B
+                    c?: interfaces.yasm.database.C[]
+                    d?: interfaces.yasm.database.D[]
+                    e?: interfaces.yasm.database.E
+                    b2?: interfaces.yasm.database.B
             }
 
 
