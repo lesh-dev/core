@@ -40,26 +40,31 @@ class Trie:
             directory_map,
             level=0,
             separate_items=False,
-            get_item_name=None
+            get_item_name=None,
+            order_function=None,
     ):
         mapper = item_map
         if separate_items:
             assert get_item_name is not None
             mapper = get_item_name
         os.makedirs(path)
+        if order_function is not None:
+            items = sorted(self._items, key=order_function)
+        else:
+            items = self._items
         if file_name is not None and directory_map is not None:
             index = directory_map(
                 level,
-                [mapper(item) for item in self._items],
+                [mapper(item, level=level) for item in items],
                 self.keys(),
                 os.path.basename(path),
             )
             with open(os.path.join(path, file_name), 'w') as file:
                 file.write(index)
         if separate_items:
-            for item in self._items:
-                with open(os.path.join(path, get_item_name(item)), 'w') as file:
-                    file.write(item_map(item))
+            for item in items:
+                with open(os.path.join(path, get_item_name(item, level)), 'w') as file:
+                    file.write(item_map(item, level))
         for name, trie in self.items():
             trie.traverse(
                 path=os.path.join(path, name),
@@ -68,7 +73,8 @@ class Trie:
                 directory_map=directory_map,
                 level=level + 1,
                 separate_items=separate_items,
-                get_item_name=get_item_name
+                get_item_name=get_item_name,
+                order_function=order_function,
             )
 
 

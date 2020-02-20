@@ -1,0 +1,96 @@
+{% macro _check(field) %}if '{{ field.name }}' in json_data else None{% endmacro %}
+{% macro _cast_element_name(field) %}{% if not field.repeated %}json_data['{{ field.name }}']{% else %}item{% endif %}{% endmacro %}
+{% macro _cast_check_not_null(field) %}{% if not field.repeated %}{{_check(field)}}{% endif %}{% endmacro %}
+
+{% macro _cast_element(field) %}
+    {{ field.py_cast }}({{ _cast_element_name(field) }}) {{ _cast_check_not_null(field) }}
+{% endmacro %}
+
+{% macro _cast_element_trim(field) %}{{ _cast_element(field)|trim }}{% endmacro %}
+
+{% macro _cast_key(field) %}{{ field.py_cast }}(key){% endmacro %}
+{% macro _cast_value(field) %}{{ field.py_cast }}(value){% endmacro %}
+
+{% macro _cast(field) %}
+    {% if field.repeated %}
+        {% if field.is_message() and field.message_obj.options.map_entry %}
+            {{ '{' }}{{ _cast_key(field.message_obj.fields['key']) }}: {{ _cast_value(field.message_obj.fields['value']) }} for key, value in json_data['{{ field.name }}']{{ '}' }} {{_check(field)}}
+        {% else %}
+            [{{ _cast_element_trim(field) }} for item in json_data.get('{{ field.name }}', [])]
+        {% endif %}
+    {% else %}
+        {{ _cast_element_trim(field) }}
+    {% endif %}
+{% endmacro %}
+{% macro cast(field) %}{{ _cast(field)|trim }}{% endmacro %}
+{% macro from_json(message) %}
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(
+{% for field in message.fields.values() %}
+            {{ field.name }}={{ cast(field) }},
+{% endfor %}
+        )
+{% endmacro %}
+
+{% macro from_string() %}
+    @classmethod
+    def from_string(cls, data):
+        return cls.from_json(json.loads(data))
+{% endmacro %}
+
+{% macro _uncast_value_name(field) %}{% if field.repeated %}value{% else %}self.{{ field.name }}{% endif %}{% endmacro %}
+
+{% macro _uncast_value(field) %}
+{% if field.is_enum() %}
+    {{ _uncast_value_name(field) }}.value
+{% elif field.is_message() %}
+    {{ _uncast_value_name(field) }}.to_json()
+{% else %}
+    {{ _uncast_value_name(field) }}
+{% endif %}
+{% endmacro %}
+
+{% macro _db_unloaded(message) %}
+{% if message.options.db_table %}
+        unloaded = sqlalchemy.inspect(self).unloaded
+{% endif %}
+{% endmacro %}
+
+{% macro _db_is_loaded(field, message) %}{% if message.options.db_table %}'{{ field.name }}' not in unloaded and{% endif %}{% endmacro %}
+
+{% macro _if_not_serialized(field) %}
+    {% if field.is_message() %}
+        if not {{ _uncast_value_name(field) }}.serialized
+    {% endif %}
+{% endmacro %}
+
+{% macro to_json(message) %}
+    def to_json(self):
+        self.serialized = True
+        ret = dict()
+{{ _db_unloaded(message) }}
+{% for field in message.fields.values() %}
+{% if field.is_message() and field.message_obj.options.map_entry %}
+        if {{ _db_is_loaded(field, message) }} isinstance(self.{{ field.name }}, dict):
+{% elif field.repeated %}
+        if {{ _db_is_loaded(field, message) }} isinstance(self.{{ field.name }}, list):
+{% else %}
+        if isinstance(self.{{ field.name }}, {{ field.py_type }}){% if field.is_message() %} and not self.{{ field.name }}.serialized{% endif %}:
+{% endif %}
+{% if field.is_message() and field.message_obj.options.map_entry %}
+            ret['{{ field.name }}'] = {{ '{' }}key: {{ _uncast_value(field.message_obj.fields['value'])|trim }} for key, value in self.{{ field.name }}{{ '}' }}
+{% elif field.repeated %}
+            ret['{{ field.name }}'] = [{{ _uncast_value(field)|trim }} for value in self.{{ field.name }} {{ _if_not_serialized(field)|trim }}]
+{% else %}
+            ret['{{ field.name }}'] = {{ _uncast_value(field)|trim }}
+{% endif %}
+{% endfor %}
+        self.serialized = False
+        return ret
+{% endmacro %}
+
+{% macro to_string() %}
+    def to_string(self):
+        return json.dumps(self.to_json())
+{% endmacro %}

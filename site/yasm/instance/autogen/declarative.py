@@ -3,6 +3,7 @@ from collections import OrderedDict, defaultdict
 import inflection
 import copy
 
+
 class AutogenOptions:
     class Database:
         db_table = None
@@ -18,6 +19,7 @@ class AutogenOptions:
         nullable = None
         autoincrement = None
 
+        enum_name = None
 
         @staticmethod
         def load(module):
@@ -32,6 +34,8 @@ class AutogenOptions:
             AutogenOptions.Database.lazy_load = module.lazy_load
             AutogenOptions.Database.nullable = module.nullable
             AutogenOptions.Database.autoincrement = module.autoincrement
+
+            AutogenOptions.Database.enum_name = module.enum_name
 
     class API:
         file_require_login = None
@@ -116,6 +120,10 @@ class Value(Meta):
         self.descriptor = value
         self.name = value.name
         self.number = value.number
+        value_name = value.GetOptions().Extensions[AutogenOptions.Database.enum_name]
+        if value_name:
+            self.name = value_name
+
 
 
 class Enum(Meta):
@@ -160,6 +168,7 @@ class Field(Meta):
         self.repeated = self.label == FieldDescriptor.LABEL_REPEATED
         self.message = None
         self.back_populates = None
+        self.package = message.package
         if field.message_type is not None:
             self.message = field.message_type
         self.enum = None
@@ -218,7 +227,7 @@ class Field(Meta):
         if self.label == FieldDescriptor.LABEL_REPEATED:
             template = 'ARRAY(db.{})'
         if self.is_enum():
-            tp = 'Enum()'
+            tp = f'Enum(enums.{self.enum_obj.full_name})'
         elif self.is_message():
             tp = 'JSON'
         elif self.type == FieldDescriptor.TYPE_STRING:
@@ -233,6 +242,30 @@ class Field(Meta):
         else:
             tp = 'Integer'
         return template.format(tp)
+
+    @property
+    def py_type(self):
+        if self.is_enum():
+            return 'enums.{}'.format(self.enum_obj.full_name)
+        elif self.is_message():
+            return 'yasm.{}'.format(self.message_obj.full_name)
+        elif self.type == FieldDescriptor.TYPE_STRING:
+            return 'str'
+        elif self.type == FieldDescriptor.TYPE_BOOL:
+            return 'bool'
+        elif self.type in [
+            FieldDescriptor.TYPE_FLOAT,
+            FieldDescriptor.TYPE_DOUBLE,
+        ]:
+            return 'float'
+        else:
+            return 'int'
+
+    @property
+    def py_cast(self):
+        if self.is_message():
+            return self.py_type + '.from_json'
+        return self.py_type
 
 
 class MessageOptions(Meta):
@@ -259,7 +292,6 @@ class Relationship():
 class Message(Meta):
     registry = OrderedDict()
     root_level_registry = OrderedDict()
-    database = []
     login_table = None
 
     def __init__(self, message, package, parent=None):
@@ -280,7 +312,6 @@ class Message(Meta):
         if self.options.db_table:
             if self.package != 'yasm.database':
                 raise RuntimeError('db_table {} not in yasm.database package'.format(self))
-            Message.database.append(self)
         if self.options.login:
             if Message.login_table is not None:
                 raise RuntimeError('multiple login tables: {}, {}'.format(Message.login_table, self))
@@ -294,6 +325,7 @@ class Message(Meta):
         self.primary_keys = OrderedDict()
         self.regular_keys = OrderedDict()
         self.deps = set()
+        self.enum_deps = []
         self.fields = OrderedDict()
         for field_name, field in message.fields_by_name.items():
             self.fields[field_name] = field = Field(field, self)
@@ -384,6 +416,8 @@ def link():
                 field.message_obj = Message.registry[field.message.full_name]
             if field.is_enum():
                 field.enum_obj = Enum.registry[field.enum.full_name]
+                if field.is_enum():
+                    message.enum_deps.append(field.enum_obj)
 
     for message in Message.registry.values():
         if message.options.db_table:
@@ -413,12 +447,12 @@ def link():
                         if back_populates.repeated or key.options.primary_key:
                             for field in key.message_obj.primary_fields:
                                 additional.append(Field(field.descriptor, message))
-                                additional[-1].back_populates = additional[-1].name
+                                additional[-1].back_populates = additional[-1].options.field_name or additional[-1].name
                                 additional[-1].options = key.options
                                 additional[-1].name = f'fk_{key.message_obj.table_name}_{field.name}'
                             message.primary_fields.extend(additional)
                         if len(additional) == 1 and key.options.field_name:
-                            additional[-1].name = key.options.field_name
+                            additional[-1].options.field_name = key.options.field_name
                         message.relationships[key.name] = Relationship(
                             name=key.name,
                             model=key.message_obj,
@@ -446,10 +480,10 @@ def link():
                                 additional.append(Field(field.descriptor, message))
                                 additional[-1].name = f'fk_{key.name}_{field.name}'
                                 additional[-1].options = key.options
-                                additional[-1].back_populates = field.name
+                                additional[-1].back_populates = field.options.field_name or field.name
                             message.regular_fields.extend(additional)
                         if len(additional) == 1 and key.options.field_name:
-                            additional[-1].name = key.options.field_name
+                            additional[-1].options.field_name = key.options.field_name
                         message.relationships[key.name] = Relationship(
                             name=key.name,
                             model=key.message_obj,

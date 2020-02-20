@@ -1,0 +1,6 @@
+{% macro enumeration(enum) %}
+class {{ enum.name }}(enum.Enum):
+{% for value in enum.values.values() %}
+    {{ value.name }} = '{{ value.name }}'
+{% endfor %}
+{% endmacro %}

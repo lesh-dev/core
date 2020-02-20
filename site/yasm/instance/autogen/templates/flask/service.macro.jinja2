@@ -1,18 +1,18 @@
 {% from 'flask/method.macro.jinja2' import build_dynamic_method, build_static_method %}
 {% macro build_service(service) %}
-{% for method in service.methods %}
+{% for method in service.methods.values() %}
 {{ build_static_method(method) }}
 
 {% endfor %}
 class Interface:
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls, *args, **kwargs)
-{% for method in service.methods %}
+{% for method in service.methods.values() %}
         Interface.{{ method.python_name }} = obj.{{ method.python_name }}
 {% endfor %}
         return obj
 
-{% for method in service.methods %}
+{% for method in service.methods.values() %}
 {{ build_dynamic_method(method) }}
 {% endfor %}
 {% endmacro %}

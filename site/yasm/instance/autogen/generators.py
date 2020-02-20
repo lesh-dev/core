@@ -17,7 +17,7 @@ def build_frontend(env, path):
         if not enum.is_internal:
             front_trie = add_trie_item(front_trie, enum.package.split('.'), enum)
 
-    def message_to_interfaces(item):
+    def message_to_interfaces(item, level=0):
         if isinstance(item, Message):
             return interface_template.render(message=item)
         if isinstance(item, Enum):
@@ -49,7 +49,7 @@ def build_frontend(env, path):
     for service in Service.registry.values():
         service_trie = add_trie_item(service_trie, service.package.split('.'), service)
 
-    def service_to_ts(service):
+    def service_to_ts(service, level):
         return service_template.render(service=service)
 
     def bundle_services(
@@ -85,8 +85,8 @@ def build_api(env, path):
     service_template = env.get_template('flask/service.py.jinja2')
     bundle_template = env.get_template('flask/bundle.py.jinja2')
 
-    def service_to_flask(service):
-        return service_template.render(service=service)
+    def service_to_flask(service, level):
+        return service_template.render(service=service, level='.' * level)
 
     def bundle_services(
             level,
@@ -110,7 +110,7 @@ def build_api(env, path):
         item_map=service_to_flask,
         directory_map=bundle_services,
         separate_items=True,
-        get_item_name=lambda service: service.python_name + '.py'
+        get_item_name=lambda service, level: service.python_name + '.py'
     )
     print('api done')
 

@@ -1,3 +1,4 @@
+{% from "database/json.macro.jinja2" import from_json, from_string, to_json, to_string %}
 {% macro options(field) %}
 {% if field.options.autoincrement %}
 autoincrement=True,
@@ -6,33 +7,50 @@ autoincrement=True,
 nullable=True,
 {% endif %}
 {% endmacro %}
+{% macro model(message) %}
 {% if message.options.searchable %}
-@add_search
+@stub.add_search
 {% endif %}
-class {{ message.name }}(db.Model):
+class {{ message.name }}(stub.db.Model):
     __tablename__ = '{{ message.table_name }}'
+
+    def __init__(self, *args, **kwargs):
+        self.serialized = False
+        super({{ message.name }}, self).__init__(*args, **kwargs)
+
+    @sqlalchemy.orm.reconstructor
+    def init_on_load(self):
+        self.serialized = False
+{% for field in message.fields.values() %}
+{% if field.is_message() and not field.message_obj.options.db_table %}
+        self.{{ field.name }} = yasm.{{ field.message_obj }}.from_json(self.{{ field.name }})
+{% endif %}
+{% endfor %}
+
 {% for field in message.primary_fields %}
-    {{ field.name }} = db.Column(
-        db.{{ field.py_db_type }},
-        name='{{ field.name }}',
+    {{ field.name }} = stub.db.Column(
+        stub.db.{{ field.py_db_type }},
+        name='{{ field.options.field_name or field.name }}',
         primary_key=True,
         {{ options(field) }}
     )
 {% endfor %}
 {% for field in message.regular_fields %}
-    {{ field.name }} = db.Column(
-        db.{{ field.py_db_type }},
-        name='{{ field.name }}',
+    {{ field.name }} = stub.db.Column(
+        stub.db.{{ field.py_db_type }},
+        name='{{ field.options.field_name or field.name }}',
         {{ options(field) }}
     )
 {% endfor %}
 {% for relationship in message.relationships.values() %}
-    {{ relationship.name }} = db.relationship(
+    {{ relationship.name }} = stub.db.relationship(
         '{{ relationship.model.name }}',
-{% if relationship.back_repeated %}
+{% if relationship.repeated %}
         uselist=True,
+        lazy='select',
 {% else %}
         uselist=False,
+        lazy='joined',
 {% endif %}
 {% if relationship.fields %}
         foreign_keys=[
@@ -46,7 +64,7 @@ class {{ message.name }}(db.Model):
 {% endfor %}
     __table_args__ = (
 {% for relationship in message.relationships.values() if relationship.fields %}
-        db.ForeignKeyConstraint(
+        stub.db.ForeignKeyConstraint(
             (
 {% for field in relationship.fields %}
                 {{ field.name }},
@@ -60,4 +78,8 @@ class {{ message.name }}(db.Model):
         ),
 {% endfor %}
     )
-
+{{ from_json(message) }}
+{{ from_string() }}
+{{ to_json(message) }}
+{{ to_string() }}
+{% endmacro %}

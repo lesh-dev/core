@@ -1,5 +1,7 @@
 {% from 'flask/service.macro.jinja2' import build_service %}
+from flask import request
 from instance.NestableBlueprint import NestableBlueprint
+from ..{{ level }} import models
 
 module = NestableBlueprint('{{ service.name }}', __name__, url_prefix='/{{ service.name }}')
 

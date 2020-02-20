@@ -4,7 +4,8 @@ import path
 {% macro build_static_method(method) %}
 @module.route('{{ method.name }}', methods=['POST'])
 def _{{ method.python_name }}():
-    Interface.{{ method.python_name }}()
+    req = models.{{ method.input_message.full_name }}.from_json(request.json)
+    return Interface.{{ method.python_name }}(req).serialize()
 {% endmacro %}
 {% macro build_dynamic_method(method) %}
     @staticmethod

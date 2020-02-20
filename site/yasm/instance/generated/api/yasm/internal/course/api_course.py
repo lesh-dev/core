@@ -1,29 +1,22 @@
+from flask import request
 from instance.NestableBlueprint import NestableBlueprint
+from ..... import models
 
 module = NestableBlueprint('APICourse', __name__, url_prefix='/APICourse')
 
-@module.route('', methods=['POST'])
-def _():
-    Interface.()
-
-
-@module.route('', methods=['POST'])
-def _():
-    Interface.()
+@module.route('PatchTeachers', methods=['POST'])
+def _patch_teachers():
+    req = models.yasm.internal.course.PatchTeachersRequest.from_json(request.json)
+    return Interface.patch_teachers(req).serialize()
 
 
 class Interface:
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls, *args, **kwargs)
-        Interface. = obj.
-        Interface. = obj.
+        Interface.patch_teachers = obj.patch_teachers
         return obj
 
     @staticmethod
-    def (request):
-        raise NotImplementedError
-
-    @staticmethod
-    def (request):
+    def patch_teachers(request):
         raise NotImplementedError
 

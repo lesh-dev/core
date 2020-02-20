@@ -1,124 +1,67 @@
-syntax="proto3";
+syntax = "proto3";
 package yasm.database;
 
 import "lib/database.proto";
 
+enum AnketaStatus {
+    progress = 0;
+    nextyear = 1;
+    duplicate = 2;
+    _reserved = 3 [(yasm.lib.database.enum_name) = "reserved"];
+    cont = 4;
+    old = 5;
+    new = 6;
+    processed = 7;
+    declined = 8;
+    taken = 9;
+    duplicated = 10;
+    spam = 11;
+    discuss = 12;
+    less = 13;
+    verify = 14;
+}
+
 message Person {
     option (yasm.lib.database.db_table) = true;
-    uint64 person_id = 1 [(yasm.lib.database.primary_key) = true];
-    string first_name = 2 [(yasm.lib.database.searchable) = true];
-    repeated CourseTeacher courses = 3;
+    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "person_id"];
+    string rights = 2 [(yasm.lib.database.nullable) = true];
+    string first_name = 3 [(yasm.lib.database.searchable) = true];
+    string last_name = 4 [(yasm.lib.database.searchable) = true];
+    string patronymic = 5 [(yasm.lib.database.searchable) = true, (yasm.lib.database.nullable) = true];
+    string nick_name = 6 [(yasm.lib.database.searchable) = true, (yasm.lib.database.nullable) = true];
+    string birth_date = 7;
+    string passport_data = 8;
+    string school = 9;
+    string school_city = 10;
+    string ank_class = 11;
+    string current_class = 12;
+    string phone = 13 [(yasm.lib.database.searchable) = true, (yasm.lib.database.nullable) = true];
+    string cellular = 14 [(yasm.lib.database.searchable) = true, (yasm.lib.database.nullable) = true];
+    string email = 15 [(yasm.lib.database.searchable) = true, (yasm.lib.database.nullable) = true];
+    string skype = 16 [(yasm.lib.database.searchable) = true, (yasm.lib.database.nullable) = true];
+    string social_profile = 17 [(yasm.lib.database.searchable) = true, (yasm.lib.database.nullable) = true];
+    string is_teacher = 18 [(yasm.lib.database.nullable) = true];
+    string is_student = 19 [(yasm.lib.database.nullable) = true];
+    string favourites = 20 [(yasm.lib.database.nullable) = true];
+    string achievements = 21[(yasm.lib.database.nullable) = true];
+    string hobby = 22 [(yasm.lib.database.nullable) = true];
+    string lesh_ref = 23 [(yasm.lib.database.nullable) = true];
+    string forest_1 = 24 [(yasm.lib.database.nullable) = true];
+    string forest_2 = 25 [(yasm.lib.database.nullable) = true];
+    string forest_3 = 26 [(yasm.lib.database.nullable) = true];
+    string tent_capacity = 27 [(yasm.lib.database.nullable) = true];
+    string tour_requisites = 28 [(yasm.lib.database.nullable) = true];
+    AnketaStatus anketa_status = 29;
+    string user_agent = 30 [(yasm.lib.database.nullable) = true];
+    Department department = 31 [(yasm.lib.database.field_name) = "department_id"];
+    string person_created = 32 [(yasm.lib.database.nullable) = true];
+    string person_modified = 33 [(yasm.lib.database.nullable) = true];
+    string person_changedby = 34 [(yasm.lib.database.nullable) = true];
+    string other_contacts = 35 [(yasm.lib.database.nullable) = true];
 }
 
-enum RegularEnum {
-    Z = 0;
-    X = 1;
-    V = 5;
-}
-
-message Message {
-}
-
-message Course {
+message Department {
     option (yasm.lib.database.db_table) = true;
-    enum NestedEnum {
-        A = 0;
-        B = 1;
-        C = 2;
-    }
-    message Message {
-
-    }
-    message NestedMessage {
-        map<string, RegularEnum> f1 = 1;
-        map<string, NestedEnum> f2 = 2;
-        map<uint64, string> f3 = 3;
-    }
-    uint64 course_id = 1 [(yasm.lib.database.primary_key) = true];
-    string course_name = 2;
-    repeated string s = 3;
-    repeated CourseTeacher teachers = 4;
-}
-
-message CourseTeacher {
-    option (yasm.lib.database.db_table) = true;
-    Person person = 1 [
-                      (yasm.lib.database.primary_key) = true
-                      ];
-    Course course = 2 [
-                      (yasm.lib.database.primary_key) = true
-                      ];
-}
-
-message B {
-    option (yasm.lib.database.db_table) = true;
-    option (yasm.lib.database.table_name) = "b";
-    uint64 id = 10 [
-                   (yasm.lib.database.primary_key) = true,
-                   (yasm.lib.database.autoincrement) = true
-                   ];
-    A a = 1 [
-            (yasm.lib.database.back_populates) = "b",
-            (yasm.lib.database.primary_key) = true
-            ];
-    A a2 = 2 [
-             (yasm.lib.database.back_populates) = "b2",
-             (yasm.lib.database.nullable) = true
-             ];
-}
-
-message A {
-    option (yasm.lib.database.db_table) = true;
-    option (yasm.lib.database.table_name) = "a";
-    uint64 id = 10 [
-                   (yasm.lib.database.primary_key) = true,
-                   (yasm.lib.database.autoincrement) = true
-                   ];
-    string id2 = 11 [
-                    (yasm.lib.database.primary_key) = true
-                    ];
-    string t = 12 [
-                  (yasm.lib.database.nullable) = true
-                  ];
-    B b = 1 [
-            (yasm.lib.database.back_populates) = "a",
-            (yasm.lib.database.nullable) = true
-            ];
-    repeated C c = 2;
-    repeated D d = 3;
-    E e = 4 [
-            (yasm.lib.database.field_name) = "e_key",
-            (yasm.lib.database.nullable) = true
-            ];
-    B b2 = 5 [
-             (yasm.lib.database.back_populates) = "a2",
-             (yasm.lib.database.nullable) = true
-             ];
-}
-
-message C {
-    option (yasm.lib.database.db_table) = true;
-    option (yasm.lib.database.table_name) = "c";
-    uint64 id = 10 [
-                   (yasm.lib.database.primary_key) = true
-                   ];
-    A a = 1;
-}
-
-message D {
-    option (yasm.lib.database.db_table) = true;
-    option (yasm.lib.database.table_name) = "d";
-    uint64 id = 10 [
-                   (yasm.lib.database.primary_key) = true
-                   ];
-    A a = 1;
-}
-
-message E {
-    option (yasm.lib.database.db_table) = true;
-    option (yasm.lib.database.table_name) = "e";
-    uint64 id = 10 [
-                   (yasm.lib.database.primary_key) = true
-                   ];
-    repeated A a = 1;
+    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "department_id"];
+    repeated Person people = 2;
 }

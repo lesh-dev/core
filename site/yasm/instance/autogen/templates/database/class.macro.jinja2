@@ -1,0 +1,28 @@
+{% from "database/json.macro.jinja2" import from_json, from_string, to_json, to_string %}
+{% macro class(message) %}
+class {{ message.name }}:
+    def __init__(
+        self,
+{% for field in message.fields.values() %}
+        {{ field.name }}=None,
+{% endfor %}
+    ):
+        self.serialized = False
+{% for field in message.fields.values() %}
+        if {{ field.name }} is not None:
+{% if field.is_message() and field.message_obj.options.map_entry %}
+            assert isinstance({{ field.name }}, dict)
+{% elif field.repeated %}
+            assert isinstance({{ field.name }}, list)
+{% else %}
+            assert isinstance({{ field.name }}, {{ field.py_type }})
+{% endif %}
+            self.{{ field.name }} = {{ field.name }}
+{% endfor %}
+
+
+{{ from_json(message) }}
+{{ from_string() }}
+{{ to_json(message) }}
+{{ to_string() }}
+{% endmacro %}

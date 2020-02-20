@@ -1,8 +1,8 @@
 {% macro build_method(method) %}
     export function {{ method.name }}(
-        data: interfaces{{ method.input_type.full_name }},
+        data: interfaces.{{ method.input_type.full_name }},
         headers: {[index: string]: string} = {}
-    ): interfaces{{ method.output_type.full_name }} {
+    ): interfaces.{{ method.output_type.full_name }} {
         return call(
             '/api{{ method.url }}',
             data,

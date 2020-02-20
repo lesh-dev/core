@@ -25,9 +25,3 @@ class SearchableMixin:
     @classmethod
     def search(cls, value):
         return cls.query.filter(or_(*[x.ilike(f'%{value}%') for x in cls.searchable_columns]))
-
-{% for model in models %}
-
-{{ model }}
-
-{% endfor %}

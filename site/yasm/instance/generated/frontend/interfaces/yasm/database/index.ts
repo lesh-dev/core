@@ -8,105 +8,67 @@ export {
     export namespace Person {
                     }
     export interface Person {
-                    person_id?: number
+                    id?: number
+                    rights?: string
                     first_name?: string
-                    courses?: interfaces.yasm.database.CourseTeacher[]
+                    last_name?: string
+                    patronymic?: string
+                    nick_name?: string
+                    birth_date?: string
+                    passport_data?: string
+                    school?: string
+                    school_city?: string
+                    ank_class?: string
+                    current_class?: string
+                    phone?: string
+                    cellular?: string
+                    email?: string
+                    skype?: string
+                    social_profile?: string
+                    is_teacher?: string
+                    is_student?: string
+                    favourites?: string
+                    achievements?: string
+                    hobby?: string
+                    lesh_ref?: string
+                    forest_1?: string
+                    forest_2?: string
+                    forest_3?: string
+                    tent_capacity?: string
+                    tour_requisites?: string
+                    anketa_status?: interfaces.yasm.database.AnketaStatus
+                    user_agent?: string
+                    department?: interfaces.yasm.database.Department
+                    person_created?: string
+                    person_modified?: string
+                    person_changedby?: string
+                    other_contacts?: string
             }
 
 
-    export namespace Message {
+    export namespace Department {
                     }
-    export interface Message {
-            }
-
-
-    export namespace Course {
-                                        export namespace Message {
-                    }
-    export interface Message {
-            }
-
-                                                    export namespace NestedMessage {
-                                                                                }
-    export interface NestedMessage {
-                    f1?: {[index: string]: interfaces.yasm.database.RegularEnum}
-                    f2?: {[index: string]: interfaces.yasm.database.Course.NestedEnum}
-                    f3?: {[index: number]: string}
-            }
-
-                                            export enum NestedEnum {
-                    A = 'A',
-                    B = 'B',
-                    C = 'C',
-            }
-
-            }
-    export interface Course {
-                    course_id?: number
-                    course_name?: string
-                    s?: string[]
-                    teachers?: interfaces.yasm.database.CourseTeacher[]
-            }
-
-
-    export namespace CourseTeacher {
-                    }
-    export interface CourseTeacher {
-                    person?: interfaces.yasm.database.Person
-                    course?: interfaces.yasm.database.Course
-            }
-
-
-    export namespace B {
-                    }
-    export interface B {
+    export interface Department {
                     id?: number
-                    a?: interfaces.yasm.database.A
-                    a2?: interfaces.yasm.database.A
+                    people?: interfaces.yasm.database.Person[]
             }
 
 
-    export namespace A {
-                    }
-    export interface A {
-                    id?: number
-                    id2?: string
-                    t?: string
-                    b?: interfaces.yasm.database.B
-                    c?: interfaces.yasm.database.C[]
-                    d?: interfaces.yasm.database.D[]
-                    e?: interfaces.yasm.database.E
-                    b2?: interfaces.yasm.database.B
-            }
-
-
-    export namespace C {
-                    }
-    export interface C {
-                    id?: number
-                    a?: interfaces.yasm.database.A
-            }
-
-
-    export namespace D {
-                    }
-    export interface D {
-                    id?: number
-                    a?: interfaces.yasm.database.A
-            }
-
-
-    export namespace E {
-                    }
-    export interface E {
-                    id?: number
-                    a?: interfaces.yasm.database.A[]
-            }
-
-
-    export enum RegularEnum {
-                    Z = 'Z',
-                    X = 'X',
-                    V = 'V',
+    export enum AnketaStatus {
+                    progress = 'progress',
+                    nextyear = 'nextyear',
+                    duplicate = 'duplicate',
+                    reserved = 'reserved',
+                    cont = 'cont',
+                    old = 'old',
+                    new = 'new',
+                    processed = 'processed',
+                    declined = 'declined',
+                    taken = 'taken',
+                    duplicated = 'duplicated',
+                    spam = 'spam',
+                    discuss = 'discuss',
+                    less = 'less',
+                    verify = 'verify',
             }
 
