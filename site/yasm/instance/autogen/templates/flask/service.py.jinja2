@@ -1,8 +1,19 @@
 {% from 'flask/service.macro.jinja2' import build_service %}
 from flask import request
-from instance.NestableBlueprint import NestableBlueprint
+from flask_login import login_required
+from .{{ level }}NestableBlueprint import NestableBlueprint
+from .{{ level }} import decorators
 from ..{{ level }} import models
 
 module = NestableBlueprint('{{ service.name }}', __name__, url_prefix='/{{ service.name }}')
+
+{% if service.options.require_login %}
+module.before_request(login_required)
+{% endif %}{% for before in service.options.before_request %}
+module.before_request(decorators.{{ before }})
+{% endfor %}{% if service.options.personalized %}
+module.before_request(decorators.personalize)
+{% endif %}
+
 
 {{ build_service(service) }}

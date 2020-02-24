@@ -4,6 +4,7 @@ package yasm.internal.course;
 
 import "google/protobuf/empty.proto";
 import "database.proto";
+import "lib/api.proto";
 
 message PatchTeachersRequest {
     uint64 course_id = 1;
@@ -11,5 +12,10 @@ message PatchTeachersRequest {
 }
 
 service APICourse {
-    rpc PatchTeachers (PatchTeachersRequest) returns (google.protobuf.Empty);
+    option (yasm.lib.api.service_personalized) = true;
+    option (yasm.lib.api.service_require_login) = true;
+    option (yasm.lib.api.service_before_request) = "ASD";
+    rpc PatchTeachers (PatchTeachersRequest) returns (google.protobuf.Empty) {
+        option (yasm.lib.api.method_before_request) = "asd";
+    };
 }

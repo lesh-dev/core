@@ -38,27 +38,25 @@ class AutogenOptions:
             AutogenOptions.Database.enum_name = module.enum_name
 
     class API:
-        file_require_login = None
-        file_before_request = None
-        file_after_request = None
         service_require_login = None
         service_before_request = None
-        service_after_request = None
+        service_personalized = None
         method_require_login = None
         method_before_request = None
-        method_after_request = None
+        method_personalized = None
+
 
         @staticmethod
         def load(module):
-            AutogenOptions.API.file_require_login = module.file_require_login
-            AutogenOptions.API.file_before_request = module.file_before_request
-            AutogenOptions.API.file_after_request = module.file_after_request
             AutogenOptions.API.service_require_login = module.service_require_login
             AutogenOptions.API.service_before_request = module.service_before_request
-            AutogenOptions.API.service_after_request = module.service_after_request
+            AutogenOptions.API.service_personalized = module.service_personalized
             AutogenOptions.API.method_require_login = module.method_require_login
             AutogenOptions.API.method_before_request = module.method_before_request
-            AutogenOptions.API.method_after_request = module.method_after_request
+            AutogenOptions.API.method_personalized = module.method_personalized
+
+
+before_handlers = set()
 
 
 class Meta:
@@ -80,6 +78,15 @@ class Package:
     item_registry = set()
 
 
+class MethodOptions:
+    def __init__(self, options):
+        self.descriptor = options
+        self.require_login = options.Extensions[AutogenOptions.API.method_require_login]
+        self.before_request = options.Extensions[AutogenOptions.API.method_before_request]
+        self.personalized = options.Extensions[AutogenOptions.API.method_personalized]
+        before_handlers.update(self.before_request)
+
+
 class Method(Meta):
     def __init__(self, method, service):
         self.descriptor = method
@@ -90,20 +97,35 @@ class Method(Meta):
         self.output_type = method.output_type
         self.input_message = None
         self.output_message = None
+        self.options = MethodOptions(method.GetOptions())
+        self.additional_args = []
+        if service.options.personalized:
+            self.additional_args.append('current_user')
 
     @property
     def python_name(self):
         return inflection.underscore(self.name)
 
 
+class ServiceOptions:
+    def __init__(self, options):
+        self.descriptor = options
+        self.require_login = options.Extensions[AutogenOptions.API.service_require_login]
+        self.before_request = options.Extensions[AutogenOptions.API.service_before_request]
+        self.personalized = options.Extensions[AutogenOptions.API.service_personalized]
+        before_handlers.update(self.before_request)
+
+
 class Service(Meta):
     registry = OrderedDict()
 
-    def __init__(self, service, package):
+    def __init__(self, service, file):
         self.descriptor = service
         self.name = service.name
-        self.package = package
-        Package.service_registry.add(package)
+        self.package = file.package
+        self.options = ServiceOptions(service.GetOptions())
+        self.file = file
+        Package.service_registry.add(file.package)
         self.full_name = service.full_name
         Service.registry[self.full_name] = self
         self.methods = OrderedDict()
@@ -123,7 +145,6 @@ class Value(Meta):
         value_name = value.GetOptions().Extensions[AutogenOptions.Database.enum_name]
         if value_name:
             self.name = value_name
-
 
 
 class Enum(Meta):
@@ -268,7 +289,7 @@ class Field(Meta):
         return self.py_type
 
 
-class MessageOptions(Meta):
+class MessageOptions:
     def __init__(self, options, message):
         self.descriptor = options
         self.message = message
@@ -368,7 +389,7 @@ class File(Meta):
             self.enums[enum_name] = Enum(enum, package=self.package)
         self.services = OrderedDict()
         for service_name, service in file.services_by_name.items():
-            self.services[service_name] = Service(service, package=self.package)
+            self.services[service_name] = Service(service, file=self)
 
 
 def dfs(entity, getter, used, out):

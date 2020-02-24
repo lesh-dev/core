@@ -1,6 +1,6 @@
 import shutil
 from trie import *
-from declarative import Message, Enum, Service
+from declarative import Message, Enum, Service, before_handlers
 
 
 def build_frontend(env, path):
@@ -84,6 +84,8 @@ def build_api(env, path):
 
     service_template = env.get_template('flask/service.py.jinja2')
     bundle_template = env.get_template('flask/bundle.py.jinja2')
+    nestableBlueprint_template = env.get_template('flask/nestableBlueprint.py.jinja2')
+    decorators_template = env.get_template('flask/deco_bundle.py.jinja2')
 
     def service_to_flask(service, level):
         return service_template.render(service=service, level='.' * level)
@@ -112,5 +114,11 @@ def build_api(env, path):
         separate_items=True,
         get_item_name=lambda service, level: service.python_name + '.py'
     )
+    with open(os.path.join(path, 'NestableBlueprint.py'), 'w') as nestableBlueprint:
+        nestableBlueprint.write(nestableBlueprint_template.render())
+    with open(os.path.join(path, 'decorators.py'), 'w') as decorators:
+        decorators.write(decorators_template.render(
+            decorators=before_handlers,
+        ))
     print('api done')
 

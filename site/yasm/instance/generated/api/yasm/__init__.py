@@ -1,4 +1,4 @@
-from instance.NestableBlueprint import NestableBlueprint
+from ..NestableBlueprint import NestableBlueprint
 
 module = NestableBlueprint('yasm', __name__, url_prefix='/yasm')
 

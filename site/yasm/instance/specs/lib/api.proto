@@ -4,20 +4,14 @@ package yasm.lib.api;
 
 import "google/protobuf/descriptor.proto";
 
-extend google.protobuf.FileOptions {
-    bool file_require_login = 50000;
-    repeated string file_before_request = 50001;
-    repeated string file_after_request = 50002;
-}
-
 extend google.protobuf.ServiceOptions {
     bool service_require_login = 51000;
     repeated string service_before_request = 51001;
-    repeated string service_after_request = 51002;
+    bool service_personalized = 50003;
 }
 
 extend google.protobuf.MethodOptions {
     bool method_require_login = 52000;
     repeated string method_before_request = 52001;
-    repeated string method_after_request = 52002;
+    bool method_personalized = 50003;
 }

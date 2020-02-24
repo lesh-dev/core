@@ -1,4 +1,4 @@
-from instance.NestableBlueprint import NestableBlueprint
+from .{{ '.' * level }}NestableBlueprint import NestableBlueprint
 
 module = NestableBlueprint('{{ name }}', __name__, url_prefix='/{{ name }}')
 
