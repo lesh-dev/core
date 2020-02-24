@@ -1,7 +1,7 @@
 <# cms/linit #><# cms/init #><# deploy_utils #><# locale #><?php
 require_once("${engine_dir}xsm/pss.php");
 $current_user = xcms_user()->login();
-$skin = "modern";
+$skin = "tidy";
 $skin_switch_title = "You cannot switch skins unless you are logged in";
 
 if ($current_user != "anonymous") {
