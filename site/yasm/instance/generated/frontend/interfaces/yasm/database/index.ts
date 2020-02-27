@@ -154,7 +154,7 @@ export {
                     student?: interfaces.yasm.database.Person
                     course?: interfaces.yasm.database.Course
                     status?: string
-                    deadline_date?: interfaces.yasm.lib.types.Date
+                    deadline_date?: string
                     comment?: string
                     created?: string
                     modified?: string

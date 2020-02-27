@@ -1,5 +1,6 @@
 import json
 import sqlalchemy
+import datetime
 from ... import stub
 from ... import yasm
 from .... import enums
@@ -744,8 +745,8 @@ class Calendar(stub.db.Model):
     @sqlalchemy.orm.reconstructor
     def init_on_load(self):
         self.serialized = False
-        self.date = yasm.Message--yasm.lib.types.Date.from_json(self.date)
-        self.modified = yasm.Message--yasm.lib.types.Timestamp.from_json(self.modified)
+        self.date = datetime.date(self.date)
+        self.modified = datetime.datetime(self.modified)
 
     fk_person_school_id = stub.db.Column(
         stub.db.Integer,
@@ -1271,7 +1272,6 @@ class Exam(stub.db.Model):
     @sqlalchemy.orm.reconstructor
     def init_on_load(self):
         self.serialized = False
-        self.deadline_date = yasm.Message--yasm.lib.types.Date.from_json(self.deadline_date)
 
     id = stub.db.Column(
         stub.db.Integer,
@@ -1297,7 +1297,7 @@ class Exam(stub.db.Model):
 
     )
     deadline_date = stub.db.Column(
-        stub.db.Date,
+        stub.db.Text,
         name='deadline_date',
         nullable=True,
 
@@ -1366,7 +1366,7 @@ class Exam(stub.db.Model):
             student=yasm.yasm.database.Person.from_json(json_data['student']) if 'student' in json_data else None,
             course=yasm.yasm.database.Course.from_json(json_data['course']) if 'course' in json_data else None,
             status=str(json_data['status']) if 'status' in json_data else None,
-            deadline_date=datetime.date(json_data['deadline_date']) if 'deadline_date' in json_data else None,
+            deadline_date=str(json_data['deadline_date']) if 'deadline_date' in json_data else None,
             comment=str(json_data['comment']) if 'comment' in json_data else None,
             created=str(json_data['created']) if 'created' in json_data else None,
             modified=str(json_data['modified']) if 'modified' in json_data else None,
@@ -1390,8 +1390,8 @@ class Exam(stub.db.Model):
             ret['course'] = self.course.to_json()
         if isinstance(self.status, str):
             ret['status'] = self.status
-        if isinstance(self.deadline_date, datetime.date) and not self.deadline_date.serialized:
-            ret['deadline_date'] = self.deadline_date.to_json()
+        if isinstance(self.deadline_date, str):
+            ret['deadline_date'] = self.deadline_date
         if isinstance(self.comment, str):
             ret['comment'] = self.comment
         if isinstance(self.created, str):

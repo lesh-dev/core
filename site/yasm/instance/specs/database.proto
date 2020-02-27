@@ -192,7 +192,7 @@ message Exam {
     Person student = 2 [(yasm.lib.database.field_name) = "student_person_id"];
     Course course = 3 [(yasm.lib.database.field_name) = "course_id"];
     string status = 4 [(yasm.lib.database.field_name) = "exam_status", (yasm.lib.database.nullable) = true];
-    yasm.lib.types.Date deadline_date = 5 [(yasm.lib.database.nullable) = true];
+    string deadline_date = 5 [(yasm.lib.database.nullable) = true];
     string comment = 6 [(yasm.lib.database.field_name) = "exam_comment", (yasm.lib.database.nullable) = true];
     string created = 7 [(yasm.lib.database.field_name) = "exam_created"];
     string modified = 8 [(yasm.lib.database.field_name) = "exam_modified"];

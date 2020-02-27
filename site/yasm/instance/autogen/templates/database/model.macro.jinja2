@@ -23,7 +23,7 @@ class {{ message.name }}(stub.db.Model):
         self.serialized = False
 {% for field in message.fields.values() %}
 {% if field.is_message() and not field.message_obj.options.db_table %}
-        self.{{ field.name }} = yasm.{{ field.message_obj }}.from_json(self.{{ field.name }})
+        self.{{ field.name }} = {{ field.py_cast }}(self.{{ field.name }})
 {% endif %}
 {% endfor %}
 
