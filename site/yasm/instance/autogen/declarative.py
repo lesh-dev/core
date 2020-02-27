@@ -55,6 +55,17 @@ class AutogenOptions:
             AutogenOptions.API.method_before_request = module.method_before_request
             AutogenOptions.API.method_personalized = module.method_personalized
 
+    class Types:
+        db_type = None
+        py_type = None
+        ts_type = None
+        
+        @staticmethod
+        def load(module):
+            AutogenOptions.Types.db_type = module.db_type
+            AutogenOptions.Types.py_type = module.py_type
+            AutogenOptions.Types.ts_type = module.ts_type
+
 
 before_handlers = set()
 
@@ -250,7 +261,10 @@ class Field(Meta):
         if self.is_enum():
             tp = f'Enum(enums.{self.enum_obj.full_name})'
         elif self.is_message():
-            tp = 'JSON'
+            if not self.message_obj.options.db_type:
+                tp = 'JSON'
+            else:
+                tp = self.message_obj.options.db_type
         elif self.type == FieldDescriptor.TYPE_STRING:
             tp = 'Text'
         elif self.type == FieldDescriptor.TYPE_BOOL:
@@ -269,7 +283,10 @@ class Field(Meta):
         if self.is_enum():
             return 'enums.{}'.format(self.enum_obj.full_name)
         elif self.is_message():
-            return 'yasm.{}'.format(self.message_obj.full_name)
+            if not self.message_obj.options.py_type:
+                return 'yasm.{}'.format(self.message_obj.full_name)
+            else:
+                return self.message_obj.options.py_type
         elif self.type == FieldDescriptor.TYPE_STRING:
             return 'str'
         elif self.type == FieldDescriptor.TYPE_BOOL:
@@ -285,7 +302,11 @@ class Field(Meta):
     @property
     def py_cast(self):
         if self.is_message():
-            return self.py_type + '.from_json'
+            tp = self.py_type
+            if not self.message_obj.options.py_type:
+                return tp + '.from_json'
+            else:
+                return tp
         return self.py_type
 
 
@@ -298,6 +319,9 @@ class MessageOptions:
         self.table_name = options.Extensions[AutogenOptions.Database.table_name]
         self.login = options.Extensions[AutogenOptions.Database.login_table]
         self.searchable = False
+        self.db_type = options.Extensions[AutogenOptions.Types.db_type]
+        self.py_type = options.Extensions[AutogenOptions.Types.py_type]
+        self.ts_type = options.Extensions[AutogenOptions.Types.ts_type]
 
 
 class Relationship():

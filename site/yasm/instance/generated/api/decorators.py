@@ -7,11 +7,3 @@ def personalize(func):
     return wrapper
 
 
-def ASD(func):
-    raise NotImplementedError
-
-
-def asd(func):
-    raise NotImplementedError
-
-

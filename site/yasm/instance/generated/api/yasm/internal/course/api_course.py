@@ -7,12 +7,10 @@ from ..... import models
 module = NestableBlueprint('APICourse', __name__, url_prefix='/APICourse')
 
 module.before_request(login_required)
-module.before_request(decorators.ASD)
 module.before_request(decorators.personalize)
 
 
 @module.route('PatchTeachers', methods=['POST'])
-@decorators.asd
 def _patch_teachers(
         current_user,
     ):

@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package yasm.lib.types;
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.MessageOptions {
+    string db_type = 51791;
+    string py_type = 51792;
+    string ts_type = 51793;
+    string py_package = 51794;
+}
+
+message Date {
+    option (db_type) = "Date";
+    option (py_type) = "datetime.date";
+    option (ts_type) = "string";
+    option (py_package) = "datetime";
+}
+
+message DateTime {
+    option (db_type) = "DateTime";
+    option (py_type) = "datetime.datetime";
+    option (ts_type) = "string";
+    option (py_package) = "datetime";
+}
+
+message Timestamp {
+    option (db_type) = "TIMESTAMP";
+    option (py_type) = "datetime.datetime";
+    option (ts_type) = "string";
+    option (py_package) = "datetime";
+}

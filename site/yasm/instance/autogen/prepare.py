@@ -75,6 +75,8 @@ def load_py_proto(spec_path):
             AutogenOptions.API.load(modules[-1])
         elif file == 'lib.database_pb2':
             AutogenOptions.Database.load(modules[-1])
+        elif file == 'lib.plain_types_pb2':
+            AutogenOptions.Types.load(modules[-1])
     ret = [
         File(file.DESCRIPTOR)
         for file in modules

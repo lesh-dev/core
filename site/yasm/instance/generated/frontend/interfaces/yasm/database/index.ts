@@ -43,6 +43,10 @@ export {
                     person_modified?: string
                     person_changedby?: string
                     other_contacts?: string
+                    person_schools?: interfaces.yasm.database.PersonSchool[]
+                    exams?: interfaces.yasm.database.Exam[]
+                    courses?: interfaces.yasm.database.CourseTeachers[]
+                    comments?: interfaces.yasm.database.PersonComment[]
             }
 
 
@@ -51,6 +55,125 @@ export {
     export interface Department {
                     id?: number
                     people?: interfaces.yasm.database.Person[]
+                    title?: string
+                    created?: string
+                    modified?: string
+                    changedby?: string
+                    person_schools?: interfaces.yasm.database.PersonSchool[]
+            }
+
+
+    export namespace PersonSchool {
+                    }
+    export interface PersonSchool {
+                    id?: number
+                    member?: interfaces.yasm.database.Person
+                    department?: interfaces.yasm.database.Department
+                    school?: interfaces.yasm.database.School
+                    is_student?: string
+                    is_teacher?: string
+                    curatorship?: interfaces.yasm.database.Curatorship
+                    curator_group?: string
+                    courses_needed?: string
+                    current_class?: string
+                    comment?: string
+                    created?: string
+                    modified?: string
+                    changedby?: string
+                    arrival?: string
+                    leave?: string
+                    calendars?: interfaces.yasm.database.Calendar[]
+            }
+
+
+    export namespace Calendar {
+                    }
+    export interface Calendar {
+                    person_school?: interfaces.yasm.database.PersonSchool
+                    date?: interfaces.yasm.lib.types.Date
+                    status?: string
+                    modified?: interfaces.yasm.lib.types.Timestamp
+                    changed_by?: string
+            }
+
+
+    export namespace School {
+                    }
+    export interface School {
+                    id?: number
+                    title?: string
+                    type?: interfaces.yasm.database.SchoolType
+                    start?: string
+                    end?: string
+                    location?: string
+                    coords?: string
+                    created?: string
+                    modified?: string
+                    changedby?: string
+                    person_schools?: interfaces.yasm.database.PersonSchool[]
+                    courses?: interfaces.yasm.database.Course[]
+                    person_comments?: interfaces.yasm.database.PersonComment[]
+            }
+
+
+    export namespace Course {
+                    }
+    export interface Course {
+                    id?: number
+                    title?: string
+                    school?: interfaces.yasm.database.School
+                    cycle?: string
+                    target_class?: string
+                    desc?: string
+                    type?: interfaces.yasm.database.CourseType
+                    area?: interfaces.yasm.database.CourseArea
+                    created?: string
+                    modified?: string
+                    changedby?: string
+                    teachers?: interfaces.yasm.database.CourseTeachers[]
+                    exams?: interfaces.yasm.database.Exam[]
+            }
+
+
+    export namespace CourseTeachers {
+                    }
+    export interface CourseTeachers {
+                    id?: number
+                    course?: interfaces.yasm.database.Course
+                    teacher?: interfaces.yasm.database.Person
+                    created?: string
+                    modified?: string
+                    changedby?: string
+            }
+
+
+    export namespace Exam {
+                    }
+    export interface Exam {
+                    id?: number
+                    student?: interfaces.yasm.database.Person
+                    course?: interfaces.yasm.database.Course
+                    status?: string
+                    deadline_date?: interfaces.yasm.lib.types.Date
+                    comment?: string
+                    created?: string
+                    modified?: string
+                    changedby?: string
+            }
+
+
+    export namespace PersonComment {
+                    }
+    export interface PersonComment {
+                    id?: number
+                    blamed?: interfaces.yasm.database.Person
+                    school?: interfaces.yasm.database.School
+                    owner_login?: string
+                    record_acl?: string
+                    deleted?: string
+                    created?: string
+                    modified?: string
+                    changedby?: string
             }
 
 
@@ -70,5 +193,43 @@ export {
                     discuss = 'discuss',
                     less = 'less',
                     verify = 'verify',
+            }
+
+
+    export enum Curatorship {
+                    empty = 'empty',
+                    none = 'none',
+                    assist = 'assist',
+                    cur = 'cur',
+            }
+
+
+    export enum SchoolType {
+                    lesh = 'lesh',
+                    vesh = 'vesh',
+                    zesh = 'zesh',
+                    summer = 'summer',
+                    summmer = 'summmer',
+                    winter = 'winter',
+                    spring = 'spring',
+            }
+
+
+    export enum CourseType {
+                    generic = 'generic',
+                    other = 'other',
+                    facult = 'facult',
+                    prac = 'prac',
+                    single = 'single',
+            }
+
+
+    export enum CourseArea {
+                    cs = 'cs',
+                    unknown = 'unknown',
+                    nature = 'nature',
+                    precise = 'precise',
+                    other = 'other',
+                    human = 'human',
             }
 

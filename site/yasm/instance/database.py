@@ -51,6 +51,11 @@ def add_search(cls):
     return cls
 
 
+def deprecated(cls):
+    print("Deprecation warning:", cls)
+    return cls
+
+
 class SerializerMixin(object):
 
     def serialize(self):
@@ -120,6 +125,7 @@ class Notification(db.Model, SerializerMixin):
 
 
 @add_search
+@deprecated
 class Department(db.Model, SerializerMixin):
     __tablename__ = 'department'
     department_id = MetaColumn(db.Integer,
@@ -144,6 +150,7 @@ class Department(db.Model, SerializerMixin):
 
 
 @add_search
+@deprecated
 class Person(UserMixin, db.Model, SerializerMixin):
     __tablename__ = 'person'
 
@@ -387,6 +394,7 @@ class Contact(db.Model, SerializerMixin):
 
 
 @add_search
+@deprecated
 class School(db.Model, SerializerMixin):
     __tablename__ = 'school'
     school_id = MetaColumn(db.Integer,
@@ -452,6 +460,7 @@ class School(db.Model, SerializerMixin):
 
 
 @add_search
+@deprecated
 class Course(db.Model, SerializerMixin):
     __tablename__ = 'course'
     course_id = MetaColumn(db.Integer,
@@ -515,6 +524,7 @@ class Course(db.Model, SerializerMixin):
     course_teachers = db.relationship('CourseTeachers', back_populates='course', lazy='dynamic')
 
 
+@deprecated
 class CourseTeachers(db.Model, SerializerMixin):
     __tablename__ = 'course_teachers'
     course_teachers_id = MetaColumn(db.Integer,
@@ -542,6 +552,7 @@ class CourseTeachers(db.Model, SerializerMixin):
                                            nullable=False)  # user name
 
 
+@deprecated
 class Exam(db.Model, SerializerMixin):
     __tablename__ = 'exam'
     exam_id = MetaColumn(db.Integer,
@@ -578,6 +589,7 @@ class Exam(db.Model, SerializerMixin):
                                 nullable=False)  # user name
 
 
+@deprecated
 class PersonSchool(db.Model, SerializerMixin):
     __tablename__ = 'person_school'
     person_school_id = MetaColumn(db.Integer,
@@ -645,6 +657,7 @@ class PersonSchool(db.Model, SerializerMixin):
     calendars = db.relationship('Calendar', back_populates='person_school')
 
 
+@deprecated
 class Calendar(db.Model, SerializerMixin):
     __tablename__ = 'calendar'
 
@@ -678,6 +691,7 @@ class Calendar(db.Model, SerializerMixin):
     )
 
 
+@deprecated
 class PersonComment(db.Model, SerializerMixin):
     __tablename__ = 'person_comment'
     person_comment_id = MetaColumn(db.Integer,
