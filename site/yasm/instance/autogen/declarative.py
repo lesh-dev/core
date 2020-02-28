@@ -20,6 +20,7 @@ class AutogenOptions:
         autoincrement = None
 
         enum_name = None
+        enum_empty = None
 
         @staticmethod
         def load(module):
@@ -36,6 +37,7 @@ class AutogenOptions:
             AutogenOptions.Database.autoincrement = module.autoincrement
 
             AutogenOptions.Database.enum_name = module.enum_name
+            AutogenOptions.Database.enum_empty = module.enum_empty
 
     class API:
         service_require_login = None
@@ -156,6 +158,7 @@ class Value(Meta):
         value_name = value.GetOptions().Extensions[AutogenOptions.Database.enum_name]
         if value_name:
             self.name = value_name
+        self.value = self.name if not value.GetOptions().Extensions[AutogenOptions.Database.enum_empty] else ""
 
 
 class Enum(Meta):
@@ -259,7 +262,7 @@ class Field(Meta):
         if self.label == FieldDescriptor.LABEL_REPEATED:
             template = 'ARRAY(db.{})'
         if self.is_enum():
-            tp = f'Enum(enums.{self.enum_obj.full_name})'
+            tp = f'Enum(*tuple(x.value for x in enums.{self.enum_obj.full_name}))'
         elif self.is_message():
             if not self.message_obj.options.db_type:
                 tp = 'JSON'

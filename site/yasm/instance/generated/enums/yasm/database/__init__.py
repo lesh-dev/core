@@ -19,7 +19,7 @@ class AnketaStatus(enum.Enum):
     verify = 'verify'
 
 class Curatorship(enum.Enum):
-    empty = 'empty'
+    empty = ''
     none = 'none'
     assist = 'assist'
     cur = 'cur'

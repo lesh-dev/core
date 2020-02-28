@@ -181,7 +181,7 @@ class Person(stub.db.Model):
 
     )
     anketa_status = stub.db.Column(
-        stub.db.Enum(enums.yasm.database.AnketaStatus),
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.AnketaStatus)),
         name='anketa_status',
         
     )
@@ -547,7 +547,7 @@ class PersonSchool(stub.db.Model):
 
     )
     curatorship = stub.db.Column(
-        stub.db.Enum(enums.yasm.database.Curatorship),
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.Curatorship)),
         name='curatorship',
         nullable=True,
 
@@ -857,7 +857,7 @@ class School(stub.db.Model):
         
     )
     type = stub.db.Column(
-        stub.db.Enum(enums.yasm.database.SchoolType),
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.SchoolType)),
         name='school_type',
         
     )
@@ -1023,12 +1023,12 @@ class Course(stub.db.Model):
         
     )
     type = stub.db.Column(
-        stub.db.Enum(enums.yasm.database.CourseType),
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.CourseType)),
         name='course_type',
         
     )
     area = stub.db.Column(
-        stub.db.Enum(enums.yasm.database.CourseArea),
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.CourseArea)),
         name='course_area',
         
     )
@@ -1171,17 +1171,17 @@ class CourseTeachers(stub.db.Model):
     )
     created = stub.db.Column(
         stub.db.Text,
-        name='course_teacher_created',
+        name='course_teachers_created',
         
     )
     modified = stub.db.Column(
         stub.db.Text,
-        name='course_teacher_modified',
+        name='course_teachers_modified',
         
     )
     changedby = stub.db.Column(
         stub.db.Text,
-        name='course_teacher_changedby',
+        name='course_teachers_changedby',
         
     )
     course = stub.db.relationship(

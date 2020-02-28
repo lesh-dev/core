@@ -30,4 +30,5 @@ extend google.protobuf.FieldOptions {
 
 extend google.protobuf.EnumValueOptions {
     string enum_name = 51234;
+    bool enum_empty = 51235;
 }

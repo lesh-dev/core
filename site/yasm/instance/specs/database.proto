@@ -23,7 +23,7 @@ enum AnketaStatus {
 }
 
 enum Curatorship {
-    empty = 0 [(yasm.lib.database.enum_name) = ""];
+    empty = 0 [(yasm.lib.database.enum_empty) = true];
     none = 1;
     assist = 2;
     cur = 3;
@@ -181,9 +181,9 @@ message CourseTeachers {
     uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "course_teachers_id", (yasm.lib.database.autoincrement) = true];
     Course course = 2 [(yasm.lib.database.field_name) = "course_id"];
     Person teacher = 3 [(yasm.lib.database.field_name) = "course_teacher_id"];
-    string created = 4 [(yasm.lib.database.field_name) = "course_teacher_created"];
-    string modified = 5 [(yasm.lib.database.field_name) = "course_teacher_modified"];
-    string changedby = 6 [(yasm.lib.database.field_name) = "course_teacher_changedby"];
+    string created = 4 [(yasm.lib.database.field_name) = "course_teachers_created"];
+    string modified = 5 [(yasm.lib.database.field_name) = "course_teachers_modified"];
+    string changedby = 6 [(yasm.lib.database.field_name) = "course_teachers_changedby"];
 }
 
 message Exam {
