@@ -47,6 +47,9 @@ export {
                     exams?: interfaces.yasm.database.Exam[]
                     courses?: interfaces.yasm.database.CourseTeachers[]
                     comments?: interfaces.yasm.database.PersonComment[]
+                    avas?: interfaces.yasm.database.Ava[]
+                    dlogins?: interfaces.yasm.database.DirectLogin[]
+                    contacts?: interfaces.yasm.database.Contact[]
             }
 
 
@@ -174,6 +177,35 @@ export {
                     created?: string
                     modified?: string
                     changedby?: string
+            }
+
+
+    export namespace Ava {
+                    }
+    export interface Ava {
+                    id?: number
+                    person?: interfaces.yasm.database.Person
+                    ava?: string
+            }
+
+
+    export namespace DirectLogin {
+                    }
+    export interface DirectLogin {
+                    type?: string
+                    person?: interfaces.yasm.database.Person
+                    password_hash?: string
+                    login?: string
+            }
+
+
+    export namespace Contact {
+                    }
+    export interface Contact {
+                    id?: number
+                    person?: interfaces.yasm.database.Person
+                    name?: string
+                    value?: string
             }
 
 

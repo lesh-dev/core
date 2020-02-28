@@ -315,6 +315,7 @@ class Person(UserMixin, db.Model, SerializerMixin):
     # quests = db.relationship('Quest', back_populates='person', lazy='dynamic')
 
 
+@deprecated
 class Ava(db.Model, SerializerMixin):
     __tablename__ = 'ava'
     id = MetaColumn(
@@ -336,17 +337,11 @@ class Ava(db.Model, SerializerMixin):
         nick='картинка',
         nullable=False,
     )
-    entry_state = MetaColumn(
-        db.Text,
-        nick='статус',
-        nullable=False,
-        index=True,
-        default=EntryStates.RELEVANT
-    )
 
     person = db.relationship('Person', lazy='noload', back_populates='avas')
 
 
+@deprecated
 class DirectLogin(db.Model, SerializerMixin):
     __tablename__ = 'direct_login'
     type = MetaColumn(db.String,
@@ -365,6 +360,7 @@ class DirectLogin(db.Model, SerializerMixin):
     person = db.relationship('Person', lazy='joined')
 
 
+@deprecated
 class Contact(db.Model, SerializerMixin):
     __tablename__ = 'contact'
     id = MetaColumn(db.Integer,

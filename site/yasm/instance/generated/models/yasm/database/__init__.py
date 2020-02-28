@@ -1,6 +1,8 @@
 import json
 import sqlalchemy
 import datetime
+from flask_login import UserMixin
+
 from ... import stub
 from ... import yasm
 from .... import enums
@@ -8,7 +10,8 @@ from .... import enums
 
 
 @stub.add_search
-class Person(stub.db.Model):
+class Person(
+        stub.db.Model,        UserMixin,    ):
     __tablename__ = 'person'
 
     def __init__(self, *args, **kwargs):
@@ -18,6 +21,10 @@ class Person(stub.db.Model):
     @sqlalchemy.orm.reconstructor
     def init_on_load(self):
         self.serialized = False
+    def get_id(self):
+        return tuple(
+            id,
+        )
 
     id = stub.db.Column(
         stub.db.Integer,
@@ -253,6 +260,24 @@ class Person(stub.db.Model):
         lazy='select',
         back_populates='blamed',
     )
+    avas = stub.db.relationship(
+        'Ava',
+        uselist=True,
+        lazy='select',
+        back_populates='person',
+    )
+    dlogins = stub.db.relationship(
+        'DirectLogin',
+        uselist=True,
+        lazy='select',
+        back_populates='person',
+    )
+    contacts = stub.db.relationship(
+        'Contact',
+        uselist=True,
+        lazy='select',
+        back_populates='person',
+    )
     __table_args__ = (
         stub.db.ForeignKeyConstraint(
             (
@@ -305,6 +330,9 @@ class Person(stub.db.Model):
             exams=[yasm.yasm.database.Exam.from_json(item) for item in json_data.get('exams', [])],
             courses=[yasm.yasm.database.CourseTeachers.from_json(item) for item in json_data.get('courses', [])],
             comments=[yasm.yasm.database.PersonComment.from_json(item) for item in json_data.get('comments', [])],
+            avas=[yasm.yasm.database.Ava.from_json(item) for item in json_data.get('avas', [])],
+            dlogins=[yasm.yasm.database.DirectLogin.from_json(item) for item in json_data.get('dlogins', [])],
+            contacts=[yasm.yasm.database.Contact.from_json(item) for item in json_data.get('contacts', [])],
         )
 
     @classmethod
@@ -394,6 +422,12 @@ class Person(stub.db.Model):
             ret['courses'] = [value.to_json() for value in self.courses if not value.serialized]
         if 'comments' not in unloaded and isinstance(self.comments, list):
             ret['comments'] = [value.to_json() for value in self.comments if not value.serialized]
+        if 'avas' not in unloaded and isinstance(self.avas, list):
+            ret['avas'] = [value.to_json() for value in self.avas if not value.serialized]
+        if 'dlogins' not in unloaded and isinstance(self.dlogins, list):
+            ret['dlogins'] = [value.to_json() for value in self.dlogins if not value.serialized]
+        if 'contacts' not in unloaded and isinstance(self.contacts, list):
+            ret['contacts'] = [value.to_json() for value in self.contacts if not value.serialized]
         self.serialized = False
         return ret
 
@@ -404,7 +438,8 @@ class Person(stub.db.Model):
 
 
 
-class Department(stub.db.Model):
+class Department(
+        stub.db.Model,    ):
     __tablename__ = 'department'
 
     def __init__(self, *args, **kwargs):
@@ -501,7 +536,8 @@ class Department(stub.db.Model):
 
 
 
-class PersonSchool(stub.db.Model):
+class PersonSchool(
+        stub.db.Model,    ):
     __tablename__ = 'person_school'
 
     def __init__(self, *args, **kwargs):
@@ -735,7 +771,8 @@ class PersonSchool(stub.db.Model):
 
 
 
-class Calendar(stub.db.Model):
+class Calendar(
+        stub.db.Model,    ):
     __tablename__ = 'calendar'
 
     def __init__(self, *args, **kwargs):
@@ -833,7 +870,8 @@ class Calendar(stub.db.Model):
 
 
 
-class School(stub.db.Model):
+class School(
+        stub.db.Model,    ):
     __tablename__ = 'school'
 
     def __init__(self, *args, **kwargs):
@@ -979,7 +1017,8 @@ class School(stub.db.Model):
 
 
 
-class Course(stub.db.Model):
+class Course(
+        stub.db.Model,    ):
     __tablename__ = 'course'
 
     def __init__(self, *args, **kwargs):
@@ -1141,7 +1180,8 @@ class Course(stub.db.Model):
 
 
 
-class CourseTeachers(stub.db.Model):
+class CourseTeachers(
+        stub.db.Model,    ):
     __tablename__ = 'course_teachers'
 
     def __init__(self, *args, **kwargs):
@@ -1262,7 +1302,8 @@ class CourseTeachers(stub.db.Model):
 
 
 
-class Exam(stub.db.Model):
+class Exam(
+        stub.db.Model,    ):
     __tablename__ = 'exam'
 
     def __init__(self, *args, **kwargs):
@@ -1410,7 +1451,8 @@ class Exam(stub.db.Model):
 
 
 
-class PersonComment(stub.db.Model):
+class PersonComment(
+        stub.db.Model,    ):
     __tablename__ = 'person_comment'
 
     def __init__(self, *args, **kwargs):
@@ -1547,6 +1589,265 @@ class PersonComment(stub.db.Model):
             ret['modified'] = self.modified
         if isinstance(self.changedby, str):
             ret['changedby'] = self.changedby
+        self.serialized = False
+        return ret
+
+    def to_string(self):
+        return json.dumps(self.to_json())
+
+
+
+
+
+class Ava(
+        stub.db.Model,    ):
+    __tablename__ = 'ava'
+
+    def __init__(self, *args, **kwargs):
+        self.serialized = False
+        super(Ava, self).__init__(*args, **kwargs)
+
+    @sqlalchemy.orm.reconstructor
+    def init_on_load(self):
+        self.serialized = False
+
+    id = stub.db.Column(
+        stub.db.Integer,
+        name='id',
+        primary_key=True,
+        autoincrement=True,
+
+    )
+    fk_person_id = stub.db.Column(
+        stub.db.Integer,
+        name='person_id',
+        
+    )
+    ava = stub.db.Column(
+        stub.db.Text,
+        name='ava',
+        
+    )
+    person = stub.db.relationship(
+        'Person',
+        uselist=False,
+        lazy='joined',
+        foreign_keys=[
+            fk_person_id,
+        ],
+        back_populates='avas',
+    )
+    __table_args__ = (
+        stub.db.ForeignKeyConstraint(
+            (
+                fk_person_id,
+            ),
+            (
+                'person.person_id',
+            ),
+        ),
+    )
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(
+            id=int(json_data['id']) if 'id' in json_data else None,
+            person=yasm.yasm.database.Person.from_json(json_data['person']) if 'person' in json_data else None,
+            ava=str(json_data['ava']) if 'ava' in json_data else None,
+        )
+
+    @classmethod
+    def from_string(cls, data):
+        return cls.from_json(json.loads(data))
+
+    def to_json(self):
+        self.serialized = True
+        ret = dict()
+        unloaded = sqlalchemy.inspect(self).unloaded
+
+        if isinstance(self.id, int):
+            ret['id'] = self.id
+        if isinstance(self.person, yasm.yasm.database.Person) and not self.person.serialized:
+            ret['person'] = self.person.to_json()
+        if isinstance(self.ava, str):
+            ret['ava'] = self.ava
+        self.serialized = False
+        return ret
+
+    def to_string(self):
+        return json.dumps(self.to_json())
+
+
+
+
+
+class DirectLogin(
+        stub.db.Model,    ):
+    __tablename__ = 'direct_login'
+
+    def __init__(self, *args, **kwargs):
+        self.serialized = False
+        super(DirectLogin, self).__init__(*args, **kwargs)
+
+    @sqlalchemy.orm.reconstructor
+    def init_on_load(self):
+        self.serialized = False
+
+    type = stub.db.Column(
+        stub.db.Text,
+        name='person_comment_id',
+        primary_key=True,
+        
+    )
+    fk_person_id = stub.db.Column(
+        stub.db.Integer,
+        name='person_id',
+        primary_key=True,
+        
+    )
+    password_hash = stub.db.Column(
+        stub.db.Text,
+        name='password_hash',
+        
+    )
+    login = stub.db.Column(
+        stub.db.Text,
+        name='login',
+        
+    )
+    person = stub.db.relationship(
+        'Person',
+        uselist=False,
+        lazy='joined',
+        foreign_keys=[
+            fk_person_id,
+        ],
+        back_populates='dlogins',
+    )
+    __table_args__ = (
+        stub.db.ForeignKeyConstraint(
+            (
+                fk_person_id,
+            ),
+            (
+                'person.person_id',
+            ),
+        ),
+    )
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(
+            type=str(json_data['type']) if 'type' in json_data else None,
+            person=yasm.yasm.database.Person.from_json(json_data['person']) if 'person' in json_data else None,
+            password_hash=str(json_data['password_hash']) if 'password_hash' in json_data else None,
+            login=str(json_data['login']) if 'login' in json_data else None,
+        )
+
+    @classmethod
+    def from_string(cls, data):
+        return cls.from_json(json.loads(data))
+
+    def to_json(self):
+        self.serialized = True
+        ret = dict()
+        unloaded = sqlalchemy.inspect(self).unloaded
+
+        if isinstance(self.type, str):
+            ret['type'] = self.type
+        if isinstance(self.person, yasm.yasm.database.Person) and not self.person.serialized:
+            ret['person'] = self.person.to_json()
+        if isinstance(self.password_hash, str):
+            ret['password_hash'] = self.password_hash
+        if isinstance(self.login, str):
+            ret['login'] = self.login
+        self.serialized = False
+        return ret
+
+    def to_string(self):
+        return json.dumps(self.to_json())
+
+
+
+
+
+class Contact(
+        stub.db.Model,    ):
+    __tablename__ = 'contact'
+
+    def __init__(self, *args, **kwargs):
+        self.serialized = False
+        super(Contact, self).__init__(*args, **kwargs)
+
+    @sqlalchemy.orm.reconstructor
+    def init_on_load(self):
+        self.serialized = False
+
+    id = stub.db.Column(
+        stub.db.Integer,
+        name='person_comment_id',
+        primary_key=True,
+        autoincrement=True,
+
+    )
+    fk_person_id = stub.db.Column(
+        stub.db.Integer,
+        name='person_id',
+        
+    )
+    name = stub.db.Column(
+        stub.db.Text,
+        name='name',
+        
+    )
+    value = stub.db.Column(
+        stub.db.Text,
+        name='value',
+        
+    )
+    person = stub.db.relationship(
+        'Person',
+        uselist=False,
+        lazy='joined',
+        foreign_keys=[
+            fk_person_id,
+        ],
+        back_populates='contacts',
+    )
+    __table_args__ = (
+        stub.db.ForeignKeyConstraint(
+            (
+                fk_person_id,
+            ),
+            (
+                'person.person_id',
+            ),
+        ),
+    )
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(
+            id=int(json_data['id']) if 'id' in json_data else None,
+            person=yasm.yasm.database.Person.from_json(json_data['person']) if 'person' in json_data else None,
+            name=str(json_data['name']) if 'name' in json_data else None,
+            value=str(json_data['value']) if 'value' in json_data else None,
+        )
+
+    @classmethod
+    def from_string(cls, data):
+        return cls.from_json(json.loads(data))
+
+    def to_json(self):
+        self.serialized = True
+        ret = dict()
+        unloaded = sqlalchemy.inspect(self).unloaded
+
+        if isinstance(self.id, int):
+            ret['id'] = self.id
+        if isinstance(self.person, yasm.yasm.database.Person) and not self.person.serialized:
+            ret['person'] = self.person.to_json()
+        if isinstance(self.name, str):
+            ret['name'] = self.name
+        if isinstance(self.value, str):
+            ret['value'] = self.value
         self.serialized = False
         return ret
 

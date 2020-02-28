@@ -58,6 +58,7 @@ enum CourseArea {
 
 message Person {
     option (yasm.lib.database.db_table) = true;
+    option (yasm.lib.database.login_table) = true;
     uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "person_id", (yasm.lib.database.autoincrement) = true];
     string rights = 2 [(yasm.lib.database.nullable) = true];
     string first_name = 3 [(yasm.lib.database.searchable) = true];
@@ -97,6 +98,10 @@ message Person {
     repeated Exam exams = 37;
     repeated CourseTeachers courses = 38;
     repeated PersonComment comments = 39;
+    repeated Ava avas = 40;
+    repeated DirectLogin dlogins = 41;
+    repeated Contact contacts = 42;
+
 }
 
 message Department {
@@ -211,4 +216,28 @@ message PersonComment {
     string created = 7 [(yasm.lib.database.field_name) = "person_comment_created"];
     string modified = 8 [(yasm.lib.database.field_name) = "person_comment_modified"];
     string changedby = 9 [(yasm.lib.database.field_name) = "person_comment_changedby"];
+}
+
+message Ava {
+    option (yasm.lib.database.db_table) = true;
+    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "id", (yasm.lib.database.autoincrement) = true];
+    Person person = 2 [(yasm.lib.database.field_name) = "person_id"];
+    string ava = 3;
+}
+
+message DirectLogin {
+    option (yasm.lib.database.db_table) = true;
+    option (yasm.lib.database.table_name) = "direct_login";
+    string type = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "person_comment_id"];
+    Person person = 2 [(yasm.lib.database.field_name) = "person_id", (yasm.lib.database.primary_key) = true];
+    string password_hash = 4;
+    string login = 5;
+}
+
+message Contact {
+    option (yasm.lib.database.db_table) = true;
+    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "person_comment_id", (yasm.lib.database.autoincrement) = true];
+    Person person = 2 [(yasm.lib.database.field_name) = "person_id"];
+    string name = 4;
+    string value = 5;
 }
