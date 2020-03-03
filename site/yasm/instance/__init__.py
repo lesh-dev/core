@@ -6,7 +6,6 @@ from flask import Flask
 from flask_wtf.csrf import CSRFProtect
 
 from instance.generated.models.stub import db
-from instance.generated.api import module
 from instance.login import lm
 from instance.login.oauth2.base import Auth
 
@@ -27,30 +26,28 @@ def create():
     yasm = Flask(__name__, instance_relative_config=True)
     yasm.config.from_object('config')
     yasm.config.from_pyfile('config.py')
-    # csrf = CSRFProtect(yasm)
+    csrf = CSRFProtect(yasm)
     db.init_app(yasm)
     lm.init_app(yasm)
     Auth.init_app(yasm)
-    # with yasm.test_request_context():
-    #     db.create_all()
+    with yasm.test_request_context():
+        db.create_all()
 
-    # import instance.public as pub
-    # yasm.register_blueprint(pub.module)
-    # import instance.admin as adm
-    # yasm.register_blueprint(adm.module)
-    # import instance.api as api
-    # yasm.register_blueprint(api.module)
-    # import instance.react_components as react_components
-    # yasm.register_blueprint(react_components.module)
-    # import instance.login as login
-    # yasm.register_blueprint(login.module)
     # import instance.internal as internal
     # yasm.register_blueprint(internal.module)
-    # import instance.secure_static as secure_static
-    # yasm.register_blueprint(secure_static.module)
-    # import instance.postgrest as postgrest
-    # yasm.register_blueprint(postgrest.module)
-    # import instance.docs as docs
-    # yasm.register_blueprint(docs.module)
-    yasm.register_blueprint(module)
+
+    from instance.public import module as pub
+    from instance.react_components import module as react_components
+    from instance.docs import module as docs
+    from instance.postgrest import module as postgrest
+    from instance.login import module as login
+
+    yasm.register_blueprint(pub)
+    yasm.register_blueprint(react_components)
+    yasm.register_blueprint(docs)
+    yasm.register_blueprint(postgrest)
+    yasm.register_blueprint(login)
+
+    from instance.generated.api import module as proto_api
+    yasm.register_blueprint(proto_api)
     return yasm

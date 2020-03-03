@@ -21,6 +21,7 @@ class AutogenOptions:
 
         enum_name = None
         enum_empty = None
+        enum_pg_name = None
 
         @staticmethod
         def load(module):
@@ -38,6 +39,7 @@ class AutogenOptions:
 
             AutogenOptions.Database.enum_name = module.enum_name
             AutogenOptions.Database.enum_empty = module.enum_empty
+            AutogenOptions.Database.enum_pg_name = module.enum_pg_name
 
     class API:
         service_require_login = None
@@ -172,6 +174,7 @@ class Enum(Meta):
         Package.item_registry.add(package)
         self.parent = parent
         self.full_name = enum.full_name
+        self.pg_name = enum.GetOptions().Extensions[AutogenOptions.Database.enum_pg_name]
         if parent is None:
             Enum.root_level_registry[self.full_name] = self
         Enum.registry[self.full_name] = self
@@ -262,7 +265,7 @@ class Field(Meta):
         if self.label == FieldDescriptor.LABEL_REPEATED:
             template = 'ARRAY(db.{})'
         if self.is_enum():
-            tp = f'Enum(*tuple(x.value for x in enums.{self.enum_obj.full_name}))'
+            tp = f'Enum(*tuple(x.value for x in enums.{self.enum_obj.full_name}), name=\'{self.enum_obj.pg_name}\')'
         elif self.is_message():
             if not self.message_obj.options.db_type:
                 tp = 'JSON'

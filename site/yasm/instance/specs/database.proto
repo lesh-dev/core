@@ -5,6 +5,7 @@ import "lib/database.proto";
 import "lib/plain_types.proto";
 
 enum AnketaStatus {
+    option (yasm.lib.database.enum_pg_name) = "ank_status";
     progress = 0;
     nextyear = 1;
     duplicate = 2;
@@ -23,6 +24,7 @@ enum AnketaStatus {
 }
 
 enum Curatorship {
+    option (yasm.lib.database.enum_pg_name) = "curatorship_type";
     empty = 0 [(yasm.lib.database.enum_empty) = true];
     none = 1;
     assist = 2;
@@ -30,6 +32,7 @@ enum Curatorship {
 }
 
 enum SchoolType {
+    option (yasm.lib.database.enum_pg_name) = "school_type";
     lesh = 0;
     vesh = 1;
     zesh = 2;
@@ -40,6 +43,7 @@ enum SchoolType {
 }
 
 enum CourseType {
+    option (yasm.lib.database.enum_pg_name) = "course_type";
     generic = 0;
     other = 1;
     facult = 2;
@@ -48,6 +52,7 @@ enum CourseType {
 }
 
 enum CourseArea {
+    option (yasm.lib.database.enum_pg_name) = "course_area";
     cs = 0;
     unknown = 1;
     nature = 2;
@@ -228,7 +233,7 @@ message Ava {
 message DirectLogin {
     option (yasm.lib.database.db_table) = true;
     option (yasm.lib.database.table_name) = "direct_login";
-    string type = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "person_comment_id"];
+    string type = 1 [(yasm.lib.database.primary_key) = true];
     Person person = 2 [(yasm.lib.database.field_name) = "person_id", (yasm.lib.database.primary_key) = true];
     string password_hash = 4;
     string login = 5;

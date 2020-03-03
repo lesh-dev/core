@@ -28,6 +28,10 @@ extend google.protobuf.FieldOptions {
     bool autoincrement = 512361;
 }
 
+extend google.protobuf.EnumOptions {
+    string enum_pg_name = 51236;
+}
+
 extend google.protobuf.EnumValueOptions {
     string enum_name = 51234;
     bool enum_empty = 51235;

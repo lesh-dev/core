@@ -7,30 +7,26 @@ from ..... import models
 module = NestableBlueprint('APICourse', __name__, url_prefix='/APICourse')
 
 module.before_request(login_required)
-module.before_request(decorators.personalize)
 
 
-@module.route('PatchTeachers', methods=['POST'])
-def _patch_teachers(
-        current_user,
+@module.route('FetchCourse', methods=['POST'])
+def _fetch_course(
     ):
-    req = models.yasm.internal.course.PatchTeachersRequest.from_json(request.json)
-    return Interface.patch_teachers(
+    req = models.yasm.internal.course.FetchCourseRequest.from_json(request.json)
+    return Interface.fetch_course(
         req,
-        current_user,
     ).serialize()
 
 
 class Interface:
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls, *args, **kwargs)
-        Interface.patch_teachers = obj.patch_teachers
+        Interface.fetch_course = obj.fetch_course
         return obj
 
     @staticmethod
-    def patch_teachers(
+    def fetch_course(
         request,
-        current_user,
     ):
         raise NotImplementedError
 

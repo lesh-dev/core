@@ -8,7 +8,6 @@ from ... import yasm
 from .... import enums
 
 
-
 class Empty:
     def __init__(
         self,
@@ -34,7 +33,5 @@ class Empty:
 
     def to_string(self):
         return json.dumps(self.to_json())
-
-
 
 

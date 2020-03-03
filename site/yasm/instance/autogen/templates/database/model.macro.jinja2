@@ -8,13 +8,22 @@ nullable=True,
 {% endif %}
 {% endmacro %}
 {% macro model(message) %}
+{% if message.options.login %}
+@stub.lm.user_loader
+def user_loader(id):
+    return {{ message.name }}.query.get(dict(id))
+
+
+{% endif %}
 {% if message.options.searchable %}
 @stub.add_search
 {% endif %}
 class {{ message.name }}(
-        stub.db.Model,{% if message.options.login %}
-        UserMixin,{% endif %}
-    ):
+        stub.db.Model,
+{% if message.options.login %}
+        UserMixin,
+{% endif %}
+):
     __tablename__ = '{{ message.table_name }}'
 
     def __init__(self, *args, **kwargs):
@@ -30,10 +39,11 @@ class {{ message.name }}(
 {% endif %}
 {% endfor %}
 {% if message.options.login %}
+
     def get_id(self):
-        return tuple(
+        return (
 {% for field in message.primary_fields %}
-            {{ field.name }},
+            ('{{ field.name }}', self.{{ field.name }}),
 {% endfor %}
         )
 {% endif %}

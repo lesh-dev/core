@@ -8,10 +8,16 @@ from ... import yasm
 from .... import enums
 
 
+@stub.lm.user_loader
+def user_loader(id):
+    return Person.query.get(dict(id))
+
 
 @stub.add_search
 class Person(
-        stub.db.Model,        UserMixin,    ):
+        stub.db.Model,
+        UserMixin,
+):
     __tablename__ = 'person'
 
     def __init__(self, *args, **kwargs):
@@ -21,9 +27,10 @@ class Person(
     @sqlalchemy.orm.reconstructor
     def init_on_load(self):
         self.serialized = False
+
     def get_id(self):
-        return tuple(
-            id,
+        return (
+            ('id', self.id),
         )
 
     id = stub.db.Column(
@@ -188,7 +195,7 @@ class Person(
 
     )
     anketa_status = stub.db.Column(
-        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.AnketaStatus)),
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.AnketaStatus), name='ank_status'),
         name='anketa_status',
         
     )
@@ -435,11 +442,9 @@ class Person(
         return json.dumps(self.to_json())
 
 
-
-
-
 class Department(
-        stub.db.Model,    ):
+        stub.db.Model,
+):
     __tablename__ = 'department'
 
     def __init__(self, *args, **kwargs):
@@ -533,11 +538,9 @@ class Department(
         return json.dumps(self.to_json())
 
 
-
-
-
 class PersonSchool(
-        stub.db.Model,    ):
+        stub.db.Model,
+):
     __tablename__ = 'person_school'
 
     def __init__(self, *args, **kwargs):
@@ -583,7 +586,7 @@ class PersonSchool(
 
     )
     curatorship = stub.db.Column(
-        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.Curatorship)),
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.Curatorship), name='curatorship_type'),
         name='curatorship',
         nullable=True,
 
@@ -768,11 +771,9 @@ class PersonSchool(
         return json.dumps(self.to_json())
 
 
-
-
-
 class Calendar(
-        stub.db.Model,    ):
+        stub.db.Model,
+):
     __tablename__ = 'calendar'
 
     def __init__(self, *args, **kwargs):
@@ -867,11 +868,9 @@ class Calendar(
         return json.dumps(self.to_json())
 
 
-
-
-
 class School(
-        stub.db.Model,    ):
+        stub.db.Model,
+):
     __tablename__ = 'school'
 
     def __init__(self, *args, **kwargs):
@@ -895,7 +894,7 @@ class School(
         
     )
     type = stub.db.Column(
-        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.SchoolType)),
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.SchoolType), name='school_type'),
         name='school_type',
         
     )
@@ -1014,11 +1013,9 @@ class School(
         return json.dumps(self.to_json())
 
 
-
-
-
 class Course(
-        stub.db.Model,    ):
+        stub.db.Model,
+):
     __tablename__ = 'course'
 
     def __init__(self, *args, **kwargs):
@@ -1062,12 +1059,12 @@ class Course(
         
     )
     type = stub.db.Column(
-        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.CourseType)),
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.CourseType), name='course_type'),
         name='course_type',
         
     )
     area = stub.db.Column(
-        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.CourseArea)),
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.CourseArea), name='course_area'),
         name='course_area',
         
     )
@@ -1177,11 +1174,9 @@ class Course(
         return json.dumps(self.to_json())
 
 
-
-
-
 class CourseTeachers(
-        stub.db.Model,    ):
+        stub.db.Model,
+):
     __tablename__ = 'course_teachers'
 
     def __init__(self, *args, **kwargs):
@@ -1299,11 +1294,9 @@ class CourseTeachers(
         return json.dumps(self.to_json())
 
 
-
-
-
 class Exam(
-        stub.db.Model,    ):
+        stub.db.Model,
+):
     __tablename__ = 'exam'
 
     def __init__(self, *args, **kwargs):
@@ -1448,11 +1441,9 @@ class Exam(
         return json.dumps(self.to_json())
 
 
-
-
-
 class PersonComment(
-        stub.db.Model,    ):
+        stub.db.Model,
+):
     __tablename__ = 'person_comment'
 
     def __init__(self, *args, **kwargs):
@@ -1596,11 +1587,9 @@ class PersonComment(
         return json.dumps(self.to_json())
 
 
-
-
-
 class Ava(
-        stub.db.Model,    ):
+        stub.db.Model,
+):
     __tablename__ = 'ava'
 
     def __init__(self, *args, **kwargs):
@@ -1677,11 +1666,9 @@ class Ava(
         return json.dumps(self.to_json())
 
 
-
-
-
 class DirectLogin(
-        stub.db.Model,    ):
+        stub.db.Model,
+):
     __tablename__ = 'direct_login'
 
     def __init__(self, *args, **kwargs):
@@ -1694,7 +1681,7 @@ class DirectLogin(
 
     type = stub.db.Column(
         stub.db.Text,
-        name='person_comment_id',
+        name='type',
         primary_key=True,
         
     )
@@ -1766,11 +1753,9 @@ class DirectLogin(
         return json.dumps(self.to_json())
 
 
-
-
-
 class Contact(
-        stub.db.Model,    ):
+        stub.db.Model,
+):
     __tablename__ = 'contact'
 
     def __init__(self, *args, **kwargs):
@@ -1853,7 +1838,5 @@ class Contact(
 
     def to_string(self):
         return json.dumps(self.to_json())
-
-
 
 

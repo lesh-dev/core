@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package yasm.internal.person;
+
+import "google/protobuf/empty.proto";
+import "database.proto";
+import "lib/api.proto";
+
+enum ContactsPatchActions {
+    add = 0;
+    remove = 1;
+}
+
+message ContactsPatchEntry {
+    string name = 1;
+    ContactsPatchActions action = 2;
+}
+
+message ContactsPatch {
+    map<string, ContactsPatchEntry> entries = 1;
+}
+
+message ContactList {
+    repeated yasm.database.Contact contacts = 1;
+}
+
+message SetAvaRequest {
+    string new_ava = 1;
+}
+
+message SetPasswordRequest {
+    string new_ava = 1;
+}
+
+message FetchPersonRequest {
+    uint64 id = 1;
+}
+
+message CoursesResponse {
+    repeated yasm.database.Course courses = 1;
+}
+
+message GetProfileResponse {
+
+}
+
+service APIPersonal {
+    option (yasm.lib.api.service_personalized) = true;
+    option (yasm.lib.api.service_require_login) = true;
+    rpc GetProfile (google.protobuf.Empty) returns (yasm.database.Person);
+    rpc GetProfileInfo (google.protobuf.Empty) returns (yasm.database.Person);
+    rpc SetAva (SetAvaRequest) returns (yasm.database.Ava);
+    rpc PatchContacts (ContactsPatch) returns (ContactList);
+    rpc SetPassword (SetPasswordRequest) returns (google.protobuf.Empty);
+    rpc GetCourses (google.protobuf.Empty) returns (CoursesResponse);
+}
+
+service APIPeople {
+    option (yasm.lib.api.service_require_login) = true;
+    rpc FetchPerson (FetchPersonRequest) returns (yasm.database.Person);
+}

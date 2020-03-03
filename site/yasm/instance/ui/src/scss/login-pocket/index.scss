@@ -1,6 +1,11 @@
 @import "__spacer/index";
 @import "__footer/index";
+@import "../constants";
 
 .login-pocket {
-  background: var(--background);
+  background: $login-background;
+}
+
+.login-pocket-wrapper {
+  max-width: $login-max-width;
 }

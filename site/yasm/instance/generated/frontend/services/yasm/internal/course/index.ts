@@ -7,12 +7,12 @@ export {
 
 
 export namespace APICourse {
-        export function PatchTeachers(
-        data: interfaces.yasm.internal.course.PatchTeachersRequest,
+        export function FetchCourse(
+        data: interfaces.yasm.internal.course.FetchCourseRequest,
         headers: {[index: string]: string} = {}
-    ): interfaces.google.protobuf.Empty {
+    ): interfaces.yasm.database.Course {
         return call(
-            '/apiyasm/internal/course/APICourse/PatchTeachers',
+            '/apiyasm/internal/course/APICourse/FetchCourse',
             data,
             headers,
         )
