@@ -61,7 +61,7 @@
             if (!strlen($name))
                 $name = $u->login();
 
-            if ($skin=="tidy")
+            if (isset($skin) && $skin == "tidy")
             {
                 // include(translate("<! news_footer_tidy !>"));
             }
