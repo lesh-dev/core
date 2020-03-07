@@ -47,40 +47,10 @@ root="/var/www/vhosts/fizlesh.ru"
 www_user="www-data:www-data"
 content_dir="../content-fizlesh.ru"
 
-if echo $host | grep -q fizlesh ; then
-    if [ "$mode" = "production" ] ; then
-        root="/srv/www/fizlesh.ru/production"
-        content_dir="/srv/www/fizlesh.ru/content-fizlesh.ru"
-    elif [ "$mode" = "testing" ] ; then
-        root="/srv/www/fizlesh.ru/testing"
-        content_dir="/srv/www/fizlesh.ru/content-fizlesh.ru"
-    else
-        print_error "Invalid mode '$mode'. Specify it, please"
-        exit 1
-    fi
-elif echo $host | grep -q math-lesh ; then
+if echo $host | grep -q math-lesh ; then
     www_user="lesh:lesh"
-    if [ "$service_name" = "fizlesh" ] ; then
-        content_dir="/var/www/fizlesh.ru/content-fizlesh.ru"
-        if [ "$mode" = "production" ] ; then
-            root="/var/www/fizlesh.ru/production"
-        elif [ "$mode" = "testing" ] ; then
-            root="/var/www/fizlesh.ru/testing"
-        else
-            print_error "Invalid mode '$mode'. Specify it, please"
-            exit 1
-        fi
-    elif [ "$service_name" = "lesh" ] ; then
-        content_dir="/var/www/lesh.org.ru/content-lesh.org.ru"
-        if [ "$mode" = "production" ] ; then
-            root="/var/www/lesh.org.ru/production"
-        elif [ "$mode" = "testing" ] ; then
-            root="/var/www/lesh.org.ru/testing"
-        else
-            print_error "Invalid mode '$mode'. Specify it, please"
-            exit 1
-        fi
-    fi
+    content_dir="/var/www/${service_name}.ru/content-${service_name}.ru"
+    root="/var/www/${service_name}.ru/${mode}"
 fi
 
 
