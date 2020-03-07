@@ -52,18 +52,18 @@ class ContactsPatchEntry:
 class ContactsPatch:
     def __init__(
         self,
-        entries=None,
+        patch=None,
     ):
         self.serialized = False
-        if entries is not None:
-            assert isinstance(entries, dict)
-            self.entries = entries
+        if patch is not None:
+            assert isinstance(patch, dict)
+            self.patch = patch
 
 
     @classmethod
     def from_json(cls, json_data):
         return cls(
-            entries={str(key): yasm.yasm.internal.person.ContactsPatchEntry.from_json(value) for key, value in json_data['entries']} if 'entries' in json_data else None,
+            patch={str(key): yasm.yasm.internal.person.ContactsPatchEntry.from_json(value) for key, value in json_data['patch']} if 'patch' in json_data else None,
         )
 
     @classmethod
@@ -74,8 +74,8 @@ class ContactsPatch:
         self.serialized = True
         ret = dict()
 
-        if  isinstance(self.entries, dict):
-            ret['entries'] = {key: self.value.to_json() for key, value in self.entries}
+        if  isinstance(self.patch, dict):
+            ret['patch'] = {key: self.value.to_json() for key, value in self.patch}
         self.serialized = False
         return ret
 
@@ -246,6 +246,68 @@ class CoursesResponse:
 
         if  isinstance(self.courses, list):
             ret['courses'] = [value.to_json() for value in self.courses if not value.serialized]
+        self.serialized = False
+        return ret
+
+    def to_string(self):
+        return json.dumps(self.to_json())
+
+
+class GetProfileResponse:
+    def __init__(
+        self,
+        id=None,
+        first_name=None,
+        last_name=None,
+        nick_name=None,
+        ava=None,
+    ):
+        self.serialized = False
+        if id is not None:
+            assert isinstance(id, int)
+            self.id = id
+        if first_name is not None:
+            assert isinstance(first_name, str)
+            self.first_name = first_name
+        if last_name is not None:
+            assert isinstance(last_name, str)
+            self.last_name = last_name
+        if nick_name is not None:
+            assert isinstance(nick_name, str)
+            self.nick_name = nick_name
+        if ava is not None:
+            assert isinstance(ava, str)
+            self.ava = ava
+
+
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(
+            id=int(json_data['id']) if 'id' in json_data else None,
+            first_name=str(json_data['first_name']) if 'first_name' in json_data else None,
+            last_name=str(json_data['last_name']) if 'last_name' in json_data else None,
+            nick_name=str(json_data['nick_name']) if 'nick_name' in json_data else None,
+            ava=str(json_data['ava']) if 'ava' in json_data else None,
+        )
+
+    @classmethod
+    def from_string(cls, data):
+        return cls.from_json(json.loads(data))
+
+    def to_json(self):
+        self.serialized = True
+        ret = dict()
+
+        if isinstance(self.id, int):
+            ret['id'] = self.id
+        if isinstance(self.first_name, str):
+            ret['first_name'] = self.first_name
+        if isinstance(self.last_name, str):
+            ret['last_name'] = self.last_name
+        if isinstance(self.nick_name, str):
+            ret['nick_name'] = self.nick_name
+        if isinstance(self.ava, str):
+            ret['ava'] = self.ava
         self.serialized = False
         return ret
 

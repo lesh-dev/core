@@ -5,6 +5,8 @@
         {% for nested_message in message.nested_messages.values() %}
             {% if not nested_message.options.map_entry %}
                 {{ build_interface(nested_message) }}
+            {% else %}
+                type {{ nested_message.name }} = {{ nested_message.map_for.map_ts_type }}
             {% endif %}
         {% endfor %}
         {% for nested_enum in message.nested_enums.values() %}

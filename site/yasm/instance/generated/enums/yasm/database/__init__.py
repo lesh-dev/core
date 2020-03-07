@@ -48,3 +48,8 @@ class CourseArea(enum.Enum):
     other = 'other'
     human = 'human'
 
+class DatabaseStatus(enum.Enum):
+    relevant = 'relevant'
+    obsolete = 'obsolete'
+    deleted = 'deleted'
+

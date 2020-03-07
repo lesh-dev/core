@@ -93,9 +93,9 @@ export {
                     }
     export interface Calendar {
                     person_school?: interfaces.yasm.database.PersonSchool
-                    date?: interfaces.yasm.lib.types.Date
+                    date?: string
                     status?: string
-                    modified?: interfaces.yasm.lib.types.Timestamp
+                    modified?: string
                     changed_by?: string
             }
 

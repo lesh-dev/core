@@ -61,6 +61,12 @@ enum CourseArea {
     human = 5;
 }
 
+enum DatabaseStatus {
+    relevant = 0;
+    obsolete = 1;
+    deleted = 2;
+}
+
 message Person {
     option (yasm.lib.database.db_table) = true;
     option (yasm.lib.database.login_table) = true;
@@ -228,6 +234,7 @@ message Ava {
     uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "id", (yasm.lib.database.autoincrement) = true];
     Person person = 2 [(yasm.lib.database.field_name) = "person_id"];
     string ava = 3;
+    DatabaseStatus status = 4;
 }
 
 message DirectLogin {

@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios'
+
 import * as interfaces from '../../../../interfaces'
 import { call } from '../../../index'
 
@@ -10,7 +12,7 @@ export namespace APIPersonal {
         export function GetProfile(
         data: interfaces.google.protobuf.Empty,
         headers: {[index: string]: string} = {}
-    ): interfaces.yasm.internal.person.GetProfileResponse {
+    ): Promise<AxiosResponse<interfaces.yasm.internal.person.GetProfileResponse>> {
         return call(
             '/apiyasm/internal/person/APIPersonal/GetProfile',
             data,
@@ -21,7 +23,7 @@ export namespace APIPersonal {
         export function GetProfileInfo(
         data: interfaces.google.protobuf.Empty,
         headers: {[index: string]: string} = {}
-    ): interfaces.yasm.database.Person {
+    ): Promise<AxiosResponse<interfaces.yasm.database.Person>> {
         return call(
             '/apiyasm/internal/person/APIPersonal/GetProfileInfo',
             data,
@@ -32,7 +34,7 @@ export namespace APIPersonal {
         export function SetAva(
         data: interfaces.yasm.internal.person.SetAvaRequest,
         headers: {[index: string]: string} = {}
-    ): interfaces.yasm.database.Ava {
+    ): Promise<AxiosResponse<interfaces.yasm.database.Ava>> {
         return call(
             '/apiyasm/internal/person/APIPersonal/SetAva',
             data,
@@ -43,7 +45,7 @@ export namespace APIPersonal {
         export function PatchContacts(
         data: interfaces.yasm.internal.person.ContactsPatch,
         headers: {[index: string]: string} = {}
-    ): interfaces.yasm.internal.person.ContactList {
+    ): Promise<AxiosResponse<interfaces.yasm.internal.person.ContactList>> {
         return call(
             '/apiyasm/internal/person/APIPersonal/PatchContacts',
             data,
@@ -54,7 +56,7 @@ export namespace APIPersonal {
         export function SetPassword(
         data: interfaces.yasm.internal.person.SetPasswordRequest,
         headers: {[index: string]: string} = {}
-    ): interfaces.google.protobuf.Empty {
+    ): Promise<AxiosResponse<interfaces.google.protobuf.Empty>> {
         return call(
             '/apiyasm/internal/person/APIPersonal/SetPassword',
             data,
@@ -65,7 +67,7 @@ export namespace APIPersonal {
         export function GetCourses(
         data: interfaces.google.protobuf.Empty,
         headers: {[index: string]: string} = {}
-    ): interfaces.yasm.internal.person.CoursesResponse {
+    ): Promise<AxiosResponse<interfaces.yasm.internal.person.CoursesResponse>> {
         return call(
             '/apiyasm/internal/person/APIPersonal/GetCourses',
             data,
@@ -80,7 +82,7 @@ export namespace APIPeople {
         export function FetchPerson(
         data: interfaces.yasm.internal.person.FetchPersonRequest,
         headers: {[index: string]: string} = {}
-    ): interfaces.yasm.database.Person {
+    ): Promise<AxiosResponse<interfaces.yasm.database.Person>> {
         return call(
             '/apiyasm/internal/person/APIPeople/FetchPerson',
             data,

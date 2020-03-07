@@ -1617,6 +1617,11 @@ class Ava(
         name='ava',
         
     )
+    status = stub.db.Column(
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.DatabaseStatus), name=''),
+        name='status',
+        
+    )
     person = stub.db.relationship(
         'Person',
         uselist=False,
@@ -1642,6 +1647,7 @@ class Ava(
             id=int(json_data['id']) if 'id' in json_data else None,
             person=yasm.yasm.database.Person.from_json(json_data['person']) if 'person' in json_data else None,
             ava=str(json_data['ava']) if 'ava' in json_data else None,
+            status=enums.yasm.database.DatabaseStatus(json_data['status']) if 'status' in json_data else None,
         )
 
     @classmethod
@@ -1659,6 +1665,8 @@ class Ava(
             ret['person'] = self.person.to_json()
         if isinstance(self.ava, str):
             ret['ava'] = self.ava
+        if isinstance(self.status, enums.yasm.database.DatabaseStatus):
+            ret['status'] = self.status.value
         self.serialized = False
         return ret
 

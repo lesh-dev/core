@@ -17,7 +17,7 @@ message ContactsPatchEntry {
 }
 
 message ContactsPatch {
-    map<string, ContactsPatchEntry> entries = 1;
+    map<string, ContactsPatchEntry> patch = 1;
 }
 
 message ContactList {
@@ -41,13 +41,17 @@ message CoursesResponse {
 }
 
 message GetProfileResponse {
-
+    uint64 id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string nick_name = 4;
+    string ava = 5;
 }
 
 service APIPersonal {
     option (yasm.lib.api.service_personalized) = true;
     option (yasm.lib.api.service_require_login) = true;
-    rpc GetProfile (google.protobuf.Empty) returns (yasm.database.Person);
+    rpc GetProfile (google.protobuf.Empty) returns (GetProfileResponse);
     rpc GetProfileInfo (google.protobuf.Empty) returns (yasm.database.Person);
     rpc SetAva (SetAvaRequest) returns (yasm.database.Ava);
     rpc PatchContacts (ContactsPatch) returns (ContactList);

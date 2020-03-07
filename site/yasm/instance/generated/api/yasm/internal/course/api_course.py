@@ -18,14 +18,30 @@ def _fetch_course(
     ).serialize()
 
 
+@module.route('PatchTeachers', methods=['POST'])
+def _patch_teachers(
+    ):
+    req = models.yasm.internal.course.PatchTeachersRequest.from_json(request.json)
+    return Interface.patch_teachers(
+        req,
+    ).serialize()
+
+
 class Interface:
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls, *args, **kwargs)
         Interface.fetch_course = obj.fetch_course
+        Interface.patch_teachers = obj.patch_teachers
         return obj
 
     @staticmethod
     def fetch_course(
+        request,
+    ):
+        raise NotImplementedError
+
+    @staticmethod
+    def patch_teachers(
         request,
     ):
         raise NotImplementedError

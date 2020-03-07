@@ -243,21 +243,34 @@ class Field(Meta):
         if self.is_enum():
             return f'interfaces.{self.enum.full_name}{repeated}'
         if self.is_message():
-            if self.message_obj.options.map_entry:
-                key = None
-                value = None
-                for field in self.message_obj.fields.values():
-                    if field.name == 'key':
-                        key = field
-                    if field.name == 'value':
-                        value = field
-                return f'{{[index: {key.ts_type}]: {value.ts_type}}}'
-            return f'interfaces.{self.message.full_name}{repeated}'
+            if not self.message_obj.options.ts_type:
+                if self.message_obj.options.map_entry:
+                    key = None
+                    value = None
+                    for field in self.message_obj.fields.values():
+                        if field.name == 'key':
+                            key = field
+                        if field.name == 'value':
+                            value = field
+                    return f'interfaces.{self.message_obj.full_name}'
+                return f'interfaces.{self.message_obj.full_name}{repeated}'
+            return self.message_obj.options.ts_type
         if self.type == FieldDescriptor.TYPE_BOOL:
             return f'boolean{repeated}'
         if self.type == FieldDescriptor.TYPE_STRING:
             return f'string{repeated}'
         return f'number{repeated}'
+
+    @property
+    def map_ts_type(self):
+        key = None
+        value = None
+        for field in self.message_obj.fields.values():
+            if field.name == 'key':
+                key = field
+            if field.name == 'value':
+                value = field
+        return f'{{[index: {key.ts_type}]: {value.ts_type}}}'
 
     @property
     def py_db_type(self):
@@ -344,6 +357,7 @@ class Message(Meta):
     registry = OrderedDict()
     root_level_registry = OrderedDict()
     login_table = None
+    map_for = None
 
     def __init__(self, message, package, parent=None):
         self.descriptor = message
@@ -465,6 +479,8 @@ def link():
         for field in message.fields.values():
             if field.is_message():
                 field.message_obj = Message.registry[field.message.full_name]
+                if field.message_obj.options.map_entry:
+                    field.message_obj.map_for = field
             if field.is_enum():
                 field.enum_obj = Enum.registry[field.enum.full_name]
                 if field.is_enum():

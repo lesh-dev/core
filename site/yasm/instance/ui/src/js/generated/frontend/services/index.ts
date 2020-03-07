@@ -1,4 +1,3 @@
-{% if level == '' %}
 import Axios from 'axios'
 
 declare var csrf_token: string;
@@ -19,23 +18,10 @@ export function call(
         }
     )
 }
-{% else %}
-import { AxiosResponse } from 'axios'
 
-import * as interfaces from '../{{ level }}interfaces'
-import { call } from '{{ level }}index'
-{% endif %}
-
-{% for child in children %}
-import * as {{ child }} from './{{ child }}'
-{% endfor %}
+import * as yasm from './yasm'
 export {
 
-{% for child in children %}
-    {{ child }},
-{% endfor %}
+    yasm,
 }
 
-{% for entry in bundle %}
-{{ entry }}
-{% endfor %}

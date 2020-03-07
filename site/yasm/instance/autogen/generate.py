@@ -13,7 +13,7 @@ from declarative import Enum
 ROOT = os.getcwd()
 API_ROOT = 'generated'
 GEN_ROOT = 'generated'
-FRONT_ROOT = 'generated'
+FRONT_ROOT = 'ui/src/js/generated'
 SPEC_PATH = os.path.join(ROOT, 'specs')
 
 
