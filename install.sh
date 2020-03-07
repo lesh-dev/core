@@ -7,7 +7,7 @@
 
 function xcms_install_version_file() {
     if [ "$mode" = "production" ] ; then
-        $sudo_mode cp -a version $root/
+        $sudo_mode cp version $root/
     else
         version="$(cat version)-$(xcms_git_version)-local"
         print_message "Set version: $version"
@@ -85,7 +85,7 @@ fi
 
 
 $sudo_mode mkdir -p $root
-$sudo_mode cp -a ./site/* $root/
+$sudo_mode cp -r ./site/* $root/
 
 if [ "$mode" = "production" ] ; then
     # in production we just use kosher content and set symlink to it
