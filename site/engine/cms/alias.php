@@ -118,7 +118,8 @@ function xcms_rebuild_aliases()
 
     if (!xcms_save_aliases($aliases))
     {
-        return "Cannot save aliases. ";
+        $destination = xcms_get_aliases_file_name();
+        return "Cannot save aliases to `$destination`. ";
     }
 
     return true;
