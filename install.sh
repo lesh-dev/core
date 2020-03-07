@@ -109,7 +109,8 @@ print_message "Creating cache directory"
 $sudo_mode mkdir -p $root/.prec
 $sudo_mode chmod 777 $root/.prec
 
-$sudo_mode chown -R $www_user $root
+# this may fail on mathlesh.org
+$sudo_mode chown -R $www_user $root || true
 
 target_site="fizlesh.local"
 if echo $host | grep -q math-lesh ; then
