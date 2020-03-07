@@ -115,7 +115,11 @@ $sudo_mode chown -R $www_user $root || true
 target_site="fizlesh.local"
 if echo $host | grep -q math-lesh ; then
     if [ "$mode" = "production" ] ; then
-        target_site="fizlesh.math-lesh.org"
+        if [ "$service_name" = "fizlesh" ] ; then
+            target_site="fizlesh.math-lesh.org"
+        elif[ "$service_name" = "lesh.org" ] ; then
+            target_site="lesh.math-lesh.org"
+        fi
     fi
 else
     if [ "$mode" = "production" ] ; then
