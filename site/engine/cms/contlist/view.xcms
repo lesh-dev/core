@@ -42,8 +42,7 @@
             $date = xcms_rus_date($timestamp);
             $header_url = "/$web_prefix$alias";
 
-
-            if ($skin=="tidy")
+            if (isset($skin) && $skin == "tidy")
                 include(translate("<! news_header_tidy !>"));
             else if (isset($skin) && xu_not_empty($skin))
                 include(translate("<! contlist_header_${skin} !>"));
