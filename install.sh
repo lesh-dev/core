@@ -35,8 +35,9 @@ mode="$1"
 if [ -z "$mode" ] ; then
     mode="default"
 fi
+service_name="$2"
 
-print_message "Mode: '$mode'"
+print_message "Mode: '$mode', service name: '$service_name'"
 verbose=""
 
 unalias grep 2>/dev/null || true
@@ -58,17 +59,27 @@ if echo $host | grep -q fizlesh ; then
         exit 1
     fi
 elif echo $host | grep -q math-lesh ; then
-    if [ "$mode" = "production" ] ; then
-        root="/var/www/fizlesh.ru/production"
+    www_user="lesh:lesh"
+    if [ "$service_name" = "fizlesh" ] ; then
         content_dir="/var/www/fizlesh.ru/content-fizlesh.ru"
-        www_user="lesh:lesh"
-    elif [ "$mode" = "testing" ] ; then
-        root="/var/www/fizlesh.ru/testing"
-        content_dir="/var/www/fizlesh.ru/content-fizlesh.ru"
-        www_user="lesh:lesh"
-    else
-        print_error "Invalid mode '$mode'. Specify it, please"
-        exit 1
+        if [ "$mode" = "production" ] ; then
+            root="/var/www/fizlesh.ru/production"
+        elif [ "$mode" = "testing" ] ; then
+            root="/var/www/fizlesh.ru/testing"
+        else
+            print_error "Invalid mode '$mode'. Specify it, please"
+            exit 1
+        fi
+    elif [ "$service_name" = "lesh" ] ; then
+        content_dir="/var/www/lesh.org.ru/content-lesh.org.ru"
+        if [ "$mode" = "production" ] ; then
+            root="/var/www/lesh.org.ru/production"
+        elif [ "$mode" = "testing" ] ; then
+            root="/var/www/lesh.org.ru/testing"
+        else
+            print_error "Invalid mode '$mode'. Specify it, please"
+            exit 1
+        fi
     fi
 fi
 
@@ -84,8 +95,7 @@ if [ "$mode" = "production" ] ; then
     fi
     print_message "Setting production content symlink"
     $sudo_mode ln -sf $content_dir/content $root/
-    # FIXME(mvel): lesh.org.ru install
-    cp $root/settings.production-fizlesh.ru.php $root/settings.php
+    cp $root/settings.production-${service_name}.ru.php $root/settings.php
 else
     # in default/testing mode we clone content from somewhere
     tmp_db_path=""
@@ -161,4 +171,4 @@ xcms_version_css "$root" "lesh.org.ru-design"
 
 set +x
 
-print_message "$program_name was successfully deployed to '$root' in mode '$mode'"
+print_message "$program_name [$service_name] was successfully deployed to '$root' in mode '$mode'"
