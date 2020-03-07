@@ -117,7 +117,7 @@ if echo $host | grep -q math-lesh ; then
     if [ "$mode" = "production" ] ; then
         if [ "$service_name" = "fizlesh" ] ; then
             target_site="fizlesh.math-lesh.org"
-        elif[ "$service_name" = "lesh.org" ] ; then
+        elif [ "$service_name" = "lesh.org" ] ; then
             target_site="lesh.math-lesh.org"
         fi
     fi
