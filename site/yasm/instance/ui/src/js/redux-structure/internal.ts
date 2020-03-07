@@ -56,10 +56,10 @@ export const internalActions = createActions({
             },
         },
         person: {
-            fetch: (id: number) => APIPeople.FetchPerson(id).then(resp => resp.data),
+            fetch: (id: number) => APIPeople.FetchPerson({id: id}).then(resp => resp.data),
         },
         course: {
-            fetch: (id: number) => APICourse.FetchCourse(id).then(resp => resp.data),
+            fetch: (id: number) => APICourse.FetchCourse({id: id}).then(resp => resp.data),
             patchTeachers: (id: number, patch: interfaces.yasm.internal.course.PatchTeachersRequest.PatchEntry) => {
                 return APICourse.PatchTeachers({
                     id,

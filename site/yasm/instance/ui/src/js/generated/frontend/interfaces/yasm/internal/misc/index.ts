@@ -13,7 +13,7 @@ export {
 
 
     export namespace SearchResult {
-                                    type DataEntry = {[index: string]: string}
+                                    export type DataEntry = {[index: string]: string}
                                 }
     export interface SearchResult {
                     search_url?: string

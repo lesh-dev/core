@@ -14,7 +14,7 @@ export {
 
 
     export namespace ContactsPatch {
-                                    type PatchEntry = {[index: string]: interfaces.yasm.internal.person.ContactsPatchEntry}
+                                    export type PatchEntry = {[index: string]: interfaces.yasm.internal.person.ContactsPatchEntry}
                                 }
     export interface ContactsPatch {
                     patch?: interfaces.yasm.internal.person.ContactsPatch.PatchEntry

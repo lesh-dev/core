@@ -1,12 +1,12 @@
 import * as interfaces from '../../index'
 
-import * as course from './course'
 import * as person from './person'
+import * as course from './course'
 import * as misc from './misc'
 export {
 
-    course,
     person,
+    course,
     misc,
 }
 

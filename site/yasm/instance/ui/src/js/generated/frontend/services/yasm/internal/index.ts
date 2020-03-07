@@ -3,13 +3,13 @@ import { AxiosResponse } from 'axios'
 import * as interfaces from '../../../interfaces'
 import { call } from '../../index'
 
-import * as course from './course'
 import * as person from './person'
+import * as course from './course'
 import * as misc from './misc'
 export {
 
-    course,
     person,
+    course,
     misc,
 }
 

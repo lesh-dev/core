@@ -21,7 +21,7 @@ export {
 
 
     export namespace PatchTeachersRequest {
-                                    type PatchEntry = {[index: number]: interfaces.yasm.internal.course.TeachersPatchEntry}
+                                    export type PatchEntry = {[index: number]: interfaces.yasm.internal.course.TeachersPatchEntry}
                                 }
     export interface PatchTeachersRequest {
                     id?: number

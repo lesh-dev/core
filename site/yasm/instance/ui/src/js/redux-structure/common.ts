@@ -55,7 +55,7 @@ export const commonActions = createActions({
                 }
                 return APIPersonal.GetProfileInfo({}).then(resp => resp.data)
             },
-            setAva: (ava: string) => APIPersonal.SetAva(ava).then(resp => resp.data), // FIXME (rebenkoy) these _must_ be in internal
+            setAva: (ava: string) => APIPersonal.SetAva({new_ava: ava}).then(resp => resp.data), // FIXME (rebenkoy) these _must_ be in internal
             patchContacts: (contactPatch: ContactsPatch) => APIPersonal.PatchContacts(contactPatch).then(resp => resp.data),
             togglePanel: () => undefined,
             exit: () => history.push('/login/logout'),
