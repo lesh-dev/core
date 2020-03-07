@@ -44,7 +44,7 @@ $SETTINGS['auth_vk_id'] = '';
 $SETTINGS['auth_vk_rights'] = 'notify,offline';
 
 global $meta_site_name;
-$meta_site_name = 'ФизЛЭШ';
+$meta_site_name = 'Летняя Экологическая Школа (ЛЭШ)';
 
 global $meta_site_url;
 $meta_site_url = 'http://lesh.org.ru/';
