@@ -38,7 +38,7 @@ export class PCourse extends React.Component<{common?: CommonState, internal?: I
         }
         return <>
             {
-                this.props.internal.course.course.course_title
+                this.props.internal.course.course.title
             }
         <Teachers/>
         </>

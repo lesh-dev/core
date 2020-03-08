@@ -6,16 +6,16 @@ from ..... import models
 
 module = NestableBlueprint('APIMisc', __name__, url_prefix='/APIMisc')
 
-module.before_request(login_required)
+module.add_decorator(login_required)
 
 
 @module.route('Search', methods=['POST'])
 def _search(
-    ):
+):
     req = models.yasm.internal.misc.SearchRequest.from_json(request.json)
     return Interface.search(
         req,
-    ).serialize()
+    ).to_string()
 
 
 class Interface:
@@ -27,6 +27,6 @@ class Interface:
     @staticmethod
     def search(
         request,
-    ):
+):
         raise NotImplementedError
 

@@ -1618,7 +1618,7 @@ class Ava(
         
     )
     status = stub.db.Column(
-        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.DatabaseStatus), name=''),
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.DatabaseStatus), name='database_status'),
         name='status',
         
     )
@@ -1776,7 +1776,7 @@ class Contact(
 
     id = stub.db.Column(
         stub.db.Integer,
-        name='person_comment_id',
+        name='id',
         primary_key=True,
         autoincrement=True,
 

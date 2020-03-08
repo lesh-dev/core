@@ -14,7 +14,7 @@ export namespace APICourse {
         headers: {[index: string]: string} = {}
     ): Promise<AxiosResponse<interfaces.yasm.database.Course>> {
         return call(
-            '/apiyasm/internal/course/APICourse/FetchCourse',
+            '/api/yasm/internal/course/APICourse/FetchCourse',
             data,
             headers,
         )
@@ -25,7 +25,7 @@ export namespace APICourse {
         headers: {[index: string]: string} = {}
     ): Promise<AxiosResponse<interfaces.yasm.internal.course.PatchTeachersResponse>> {
         return call(
-            '/apiyasm/internal/course/APICourse/PatchTeachers',
+            '/api/yasm/internal/course/APICourse/PatchTeachers',
             data,
             headers,
         )

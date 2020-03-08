@@ -102,7 +102,7 @@ class PatchTeachersRequest:
     def from_json(cls, json_data):
         return cls(
             id=int(json_data['id']) if 'id' in json_data else None,
-            patch={int(key): yasm.yasm.internal.course.TeachersPatchEntry.from_json(value) for key, value in json_data['patch']} if 'patch' in json_data else None,
+            patch={int(key): yasm.yasm.internal.course.TeachersPatchEntry.from_json(value) for key, value in json_data['patch'].items()} if 'patch' in json_data else None,
         )
 
     @classmethod

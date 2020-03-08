@@ -14,14 +14,14 @@ def _{{ method.python_name }}(
 {% for arg in method.additional_args %}
         {{ arg }},
 {% endfor %}
-    ):
+):
     req = models.{{ method.input_message.full_name }}.from_json(request.json)
     return Interface.{{ method.python_name }}(
         req,
 {% for arg in method.additional_args %}
         {{ arg }},
 {% endfor %}
-    ).serialize()
+    ).to_string()
 {% endmacro %}
 {% macro build_dynamic_method(method) %}
     @staticmethod
@@ -30,6 +30,6 @@ def _{{ method.python_name }}(
 {% for arg in method.additional_args %}
         {{ arg }},
 {% endfor %}
-    ):
+):
         raise NotImplementedError
 {% endmacro %}

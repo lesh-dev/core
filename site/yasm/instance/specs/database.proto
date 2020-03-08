@@ -62,6 +62,7 @@ enum CourseArea {
 }
 
 enum DatabaseStatus {
+    option (yasm.lib.database.enum_pg_name) = "database_status";
     relevant = 0;
     obsolete = 1;
     deleted = 2;
@@ -248,7 +249,7 @@ message DirectLogin {
 
 message Contact {
     option (yasm.lib.database.db_table) = true;
-    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "person_comment_id", (yasm.lib.database.autoincrement) = true];
+    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.autoincrement) = true];
     Person person = 2 [(yasm.lib.database.field_name) = "person_id"];
     string name = 4;
     string value = 5;

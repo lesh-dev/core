@@ -33,8 +33,16 @@ def create():
     with yasm.test_request_context():
         db.create_all()
 
-    # import instance.internal as internal
-    # yasm.register_blueprint(internal.module)
+    from instance.internal.people import APIPeople
+    from instance.internal.course import APICourse
+    from instance.internal.personal import APIPersonal
+
+    APICourse()
+    APIPersonal()
+    APIPeople()
+
+    from instance.internal import module as internal
+    yasm.register_blueprint(internal)
 
     from instance.public import module as pub
     from instance.react_components import module as react_components

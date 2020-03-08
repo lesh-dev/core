@@ -23,7 +23,7 @@ def main():
 
     print("load done")
     template_env = jinja2.Environment(
-        loader=jinja2.PackageLoader('instance.autogen', 'templates'),
+        loader=jinja2.PackageLoader('autogen', 'templates'),
         trim_blocks=True
     )
     build_frontend(template_env, os.path.join(FRONT_ROOT, 'frontend'))

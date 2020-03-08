@@ -14,7 +14,7 @@ export namespace APIMisc {
         headers: {[index: string]: string} = {}
     ): Promise<AxiosResponse<interfaces.yasm.internal.misc.SearchResponse>> {
         return call(
-            '/apiyasm/internal/misc/APIMisc/Search',
+            '/api/yasm/internal/misc/APIMisc/Search',
             data,
             headers,
         )

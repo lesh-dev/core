@@ -1,6 +1,6 @@
 import moment = require("moment");
 import {Moment} from "moment";
-import {Person} from "../../generated/interfaces";
+import {Person} from "../../generated/frontend/interfaces/yasm/database";
 //import {Promise} from "es6-promise";
 
 export function str_2_date_format(s: string) {
@@ -21,7 +21,7 @@ export function date_2_str(m: Moment) {
 
 export function ava(p: Person) {
     return new Promise<string>((resolve, reject) => {
-            resolve("/secure_static/get_ava/" + p.person_id)
+            resolve("/secure_static/get_ava/" + p.id)
         }
     )
 }

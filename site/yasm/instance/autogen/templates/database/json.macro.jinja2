@@ -14,7 +14,7 @@
 {% macro _cast(field) %}
     {% if field.repeated %}
         {% if field.is_message() and field.message_obj.options.map_entry %}
-            {{ '{' }}{{ _cast_key(field.message_obj.fields['key']) }}: {{ _cast_value(field.message_obj.fields['value']) }} for key, value in json_data['{{ field.name }}']{{ '}' }} {{_check(field)}}
+            {{ '{' }}{{ _cast_key(field.message_obj.fields['key']) }}: {{ _cast_value(field.message_obj.fields['value']) }} for key, value in json_data['{{ field.name }}'].items(){{ '}' }} {{_check(field)}}
         {% else %}
             [{{ _cast_element_trim(field) }} for item in json_data.get('{{ field.name }}', [])]
         {% endif %}

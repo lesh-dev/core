@@ -6,16 +6,16 @@ from ..... import models
 
 module = NestableBlueprint('APIPeople', __name__, url_prefix='/APIPeople')
 
-module.before_request(login_required)
+module.add_decorator(login_required)
 
 
 @module.route('FetchPerson', methods=['POST'])
 def _fetch_person(
-    ):
+):
     req = models.yasm.internal.person.FetchPersonRequest.from_json(request.json)
     return Interface.fetch_person(
         req,
-    ).serialize()
+    ).to_string()
 
 
 class Interface:
@@ -27,6 +27,6 @@ class Interface:
     @staticmethod
     def fetch_person(
         request,
-    ):
+):
         raise NotImplementedError
 

@@ -4,7 +4,7 @@
         headers: {[index: string]: string} = {}
     ): Promise{{ '<' }}AxiosResponse{{ '<' }}interfaces.{{ method.output_type.full_name }}{{ '>' }}{{ '>' }} {
         return call(
-            '/api{{ method.url }}',
+            '/api/{{ method.url }}',
             data,
             headers,
         )

@@ -14,7 +14,7 @@ export namespace APIPersonal {
         headers: {[index: string]: string} = {}
     ): Promise<AxiosResponse<interfaces.yasm.internal.person.GetProfileResponse>> {
         return call(
-            '/apiyasm/internal/person/APIPersonal/GetProfile',
+            '/api/yasm/internal/person/APIPersonal/GetProfile',
             data,
             headers,
         )
@@ -25,7 +25,7 @@ export namespace APIPersonal {
         headers: {[index: string]: string} = {}
     ): Promise<AxiosResponse<interfaces.yasm.database.Person>> {
         return call(
-            '/apiyasm/internal/person/APIPersonal/GetProfileInfo',
+            '/api/yasm/internal/person/APIPersonal/GetProfileInfo',
             data,
             headers,
         )
@@ -36,7 +36,7 @@ export namespace APIPersonal {
         headers: {[index: string]: string} = {}
     ): Promise<AxiosResponse<interfaces.yasm.database.Ava>> {
         return call(
-            '/apiyasm/internal/person/APIPersonal/SetAva',
+            '/api/yasm/internal/person/APIPersonal/SetAva',
             data,
             headers,
         )
@@ -47,7 +47,7 @@ export namespace APIPersonal {
         headers: {[index: string]: string} = {}
     ): Promise<AxiosResponse<interfaces.yasm.internal.person.ContactList>> {
         return call(
-            '/apiyasm/internal/person/APIPersonal/PatchContacts',
+            '/api/yasm/internal/person/APIPersonal/PatchContacts',
             data,
             headers,
         )
@@ -58,7 +58,7 @@ export namespace APIPersonal {
         headers: {[index: string]: string} = {}
     ): Promise<AxiosResponse<interfaces.google.protobuf.Empty>> {
         return call(
-            '/apiyasm/internal/person/APIPersonal/SetPassword',
+            '/api/yasm/internal/person/APIPersonal/SetPassword',
             data,
             headers,
         )
@@ -69,7 +69,7 @@ export namespace APIPersonal {
         headers: {[index: string]: string} = {}
     ): Promise<AxiosResponse<interfaces.yasm.internal.person.CoursesResponse>> {
         return call(
-            '/apiyasm/internal/person/APIPersonal/GetCourses',
+            '/api/yasm/internal/person/APIPersonal/GetCourses',
             data,
             headers,
         )
@@ -84,7 +84,7 @@ export namespace APIPeople {
         headers: {[index: string]: string} = {}
     ): Promise<AxiosResponse<interfaces.yasm.database.Person>> {
         return call(
-            '/apiyasm/internal/person/APIPeople/FetchPerson',
+            '/api/yasm/internal/person/APIPeople/FetchPerson',
             data,
             headers,
         )

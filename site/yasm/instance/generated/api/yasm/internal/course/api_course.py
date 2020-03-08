@@ -6,25 +6,25 @@ from ..... import models
 
 module = NestableBlueprint('APICourse', __name__, url_prefix='/APICourse')
 
-module.before_request(login_required)
+module.add_decorator(login_required)
 
 
 @module.route('FetchCourse', methods=['POST'])
 def _fetch_course(
-    ):
+):
     req = models.yasm.internal.course.FetchCourseRequest.from_json(request.json)
     return Interface.fetch_course(
         req,
-    ).serialize()
+    ).to_string()
 
 
 @module.route('PatchTeachers', methods=['POST'])
 def _patch_teachers(
-    ):
+):
     req = models.yasm.internal.course.PatchTeachersRequest.from_json(request.json)
     return Interface.patch_teachers(
         req,
-    ).serialize()
+    ).to_string()
 
 
 class Interface:
@@ -37,12 +37,12 @@ class Interface:
     @staticmethod
     def fetch_course(
         request,
-    ):
+):
         raise NotImplementedError
 
     @staticmethod
     def patch_teachers(
         request,
-    ):
+):
         raise NotImplementedError
 

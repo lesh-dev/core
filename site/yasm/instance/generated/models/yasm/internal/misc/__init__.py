@@ -61,7 +61,7 @@ class SearchResult:
     def from_json(cls, json_data):
         return cls(
             search_url=str(json_data['search_url']) if 'search_url' in json_data else None,
-            data={str(key): str(value) for key, value in json_data['data']} if 'data' in json_data else None,
+            data={str(key): str(value) for key, value in json_data['data'].items()} if 'data' in json_data else None,
         )
 
     @classmethod

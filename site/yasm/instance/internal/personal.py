@@ -6,19 +6,22 @@ from instance.generated.enums.yasm.database import DatabaseStatus
 from instance.generated.enums.yasm.internal.person import ContactsPatchActions
 
 
-
 class APIPersonal(Interface):
     @staticmethod
     def get_profile(
         request,
         current_user,
     ):
+        ava = ''
+        for avatar in current_user.avas:
+            if avatar.status == DatabaseStatus.relevant.value:
+                ava = avatar.ava
         return GetProfileResponse(
-            id=current_user.person_id,
+            id=current_user.id,
             first_name=current_user.first_name,
             last_name=current_user.last_name,
             nick_name=current_user.nick_name,
-            ava=current_user.avas.filter().one_or_none(),
+            ava=ava,
         )
 
     @staticmethod
@@ -34,7 +37,7 @@ class APIPersonal(Interface):
         current_user,
     ):
         return CoursesResponse(
-            courses=current_user.courses,
+            courses=[ct.course for ct in current_user.courses],
         )
 
     @staticmethod
@@ -42,13 +45,13 @@ class APIPersonal(Interface):
         request,
         current_user,
     ):
-        for ava in current_user.avas.filter(Ava.entry_state == DatabaseStatus.relevant).all():
-            ava.entry_state = DatabaseStatus.obsolete
+        for avatar in current_user.avas:
+            avatar.status = DatabaseStatus.obsolete.value
         db.session.commit()
         ava = Ava(
             person=current_user,
             ava=request.new_ava,
-            status=DatabaseStatus.relevant,
+            status=DatabaseStatus.relevant.value,
         )
         db.session.add(ava)
         db.session.commit()
@@ -66,12 +69,12 @@ class APIPersonal(Interface):
         new_contacts = []
         for value, spec in request.patch.items():
             if value in contacts:
-                if spec.action == ContactsPatchActions.add.value:
+                if spec.action == ContactsPatchActions.add:
                     contacts[value].name = spec.name
                 else:
                     db.session.delete(contacts[value])
             else:
-                if spec.action == ContactsPatchActions.add.value:
+                if spec.action == ContactsPatchActions.add:
                     new_contacts.append(
                         Contact(
                             person=current_user,

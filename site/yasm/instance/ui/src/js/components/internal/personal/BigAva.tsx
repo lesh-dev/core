@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Person} from "../../../generated/interfaces";
+import {Person} from "../../../generated/frontend/interfaces/yasm/database";
 import {connect} from "react-redux";
 import {commonActions, CommonState} from "../../../redux-structure/common";
 import {ReduxProps} from "../../../redux-structure/store";
@@ -161,7 +161,7 @@ export class BigAva extends React.Component<BigAvaProps & CommonState & ReduxPro
                         onChange={e => this.imageChange(e)}
                     />
                     <Edit
-                        edit={this.props.login.profile.person_id === this.props.person.person_id}
+                        edit={this.props.login.profile.id === this.props.person.id}
                         onClick={() => this.inputRef.current.click()}
                     >
                         {

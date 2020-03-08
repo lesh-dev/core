@@ -1,10 +1,10 @@
 import { Action, createActions, handleActions, ReducerMap } from 'redux-actions'
-import {Ava, Contact, Person} from "../generated/interfaces";
+import {Ava, Contact, Person} from "../generated/frontend/interfaces/yasm/database";
 
 import { SidebarState, getReducer as getSidebarReducer, getInitialState as getSidebarInitialState } from './sidebar'
 import { history } from '../util/history'
 import { APIPersonal } from '../generated/frontend/services/yasm/internal/person'
-import { ContactsPatch } from  '../generated/frontend/interfaces/yasm/internal/person'
+import { ContactsPatch, ContactList } from  '../generated/frontend/interfaces/yasm/internal/person'
 
 export enum TopRightPanels {
     NONE,
@@ -126,12 +126,12 @@ export const loginReducer = handleActions(
                         error: undefined,
                     }
                 ),
-                patchContacts_FULFILLED: (state: LoginState, action: Action<Contact[]>) => (
+                patchContacts_FULFILLED: (state: LoginState, action: Action<ContactList>) => (
                     {
                         ...state,
                         profile: {
                             ...state.profile,
-                            contacts: action.payload,
+                            contacts: action.payload.contacts,
                         },
                     }
                 ),

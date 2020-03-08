@@ -1,9 +1,9 @@
 import { Action, createActions, handleActions, ReducerMap } from 'redux-actions'
 
-import { call } from '../api/axios'
-import {Course, CourseTeachers, Person} from '../generated/interfaces'
+import {Course, CourseTeachers, Person} from '../generated/frontend/interfaces/yasm/database'
+import {CoursesResponse} from '../generated/frontend/interfaces/yasm/internal/person'
 import { APICourse } from '../generated/frontend/services/yasm/internal/course'
-import { APIPeople } from '../generated/frontend/services/yasm/internal/person'
+import { APIPeople, APIPersonal } from '../generated/frontend/services/yasm/internal/person'
 import * as interfaces from "../generated/frontend/interfaces";
 
 export interface InternalCoursesState {
@@ -51,9 +51,7 @@ export const internalInitialState = {
 export const internalActions = createActions({
     internal: {
         courses: {
-            fetch: () => {
-                return call('/i/api/courses').then(resp => resp.data)
-            },
+            fetch: () => APIPersonal.GetCourses({}).then(resp => resp.data),
         },
         person: {
             fetch: (id: number) => APIPeople.FetchPerson({id: id}).then(resp => resp.data),
@@ -81,10 +79,10 @@ export const coursesReducer = handleActions(
                         error: undefined,
                     }
                 ),
-                fetch_FULFILLED: (state: InternalCoursesState, action: Action<Course[]>) => (
+                fetch_FULFILLED: (state: InternalCoursesState, action: Action<CoursesResponse>) => (
                     {
                         loading: false,
-                        list: action.payload,
+                        list: action.payload.courses,
                     }
                 ),
                 fetch_REJECTED: (state: InternalCoursesState, action: Action<Error>) => (

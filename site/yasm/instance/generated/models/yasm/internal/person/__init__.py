@@ -63,7 +63,7 @@ class ContactsPatch:
     @classmethod
     def from_json(cls, json_data):
         return cls(
-            patch={str(key): yasm.yasm.internal.person.ContactsPatchEntry.from_json(value) for key, value in json_data['patch']} if 'patch' in json_data else None,
+            patch={str(key): yasm.yasm.internal.person.ContactsPatchEntry.from_json(value) for key, value in json_data['patch'].items()} if 'patch' in json_data else None,
         )
 
     @classmethod

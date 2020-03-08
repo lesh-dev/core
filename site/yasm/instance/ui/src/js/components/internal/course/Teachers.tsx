@@ -9,7 +9,7 @@ import {CourseTeacherPatch} from "../../../api/internal/course";
 import {faTrashAlt} from "@fortawesome/free-regular-svg-icons/faTrashAlt";
 import {PatchAction} from "../../../api/internal/common";
 import {FontAwesomeIcon as FAIcon} from "@fortawesome/react-fontawesome";
-import {Person} from "../../../generated/interfaces";
+import {Person} from "../../../generated/frontend/interfaces/yasm/database";
 import {CommonState} from "../../../redux-structure/common";
 
 enum STATE {
@@ -45,8 +45,8 @@ export class Teachers extends React.Component<ReduxProps & {common?: CommonState
             case STATE.BASE:
                 return <div>
                     {
-                        this.props.internal.course.course.course_teachers.map(ct => <div>
-                            <PersonToken person={ct.course_teacher}/>
+                        this.props.internal.course.course.teachers.map(ct => <div>
+                            <PersonToken person={ct.teacher}/>
                             </div>
                         )
                     }
@@ -56,8 +56,8 @@ export class Teachers extends React.Component<ReduxProps & {common?: CommonState
                     <table>
                         <tbody>
                         {
-                            this.props.internal.course.course.course_teachers.map(ct => ct.course_teacher).concat(this.prepare_changes()).filter(person => (
-                                    this.state.patch.get(person.person_id) === undefined || this.state.patch.get(person.person_id).action !== PatchAction.REMOVE
+                            this.props.internal.course.course.teachers.map(ct => ct.teacher).concat(this.prepare_changes()).filter(person => (
+                                    this.state.patch.get(person.id) === undefined || this.state.patch.get(person.id).action !== PatchAction.REMOVE
                                 )).map(person => <tr>
                                 <td>
                                     <PersonToken person={person}/>
@@ -65,7 +65,7 @@ export class Teachers extends React.Component<ReduxProps & {common?: CommonState
                                 <td>
                                     <FAIcon icon={faTrashAlt} onClick={() => {
                                         const patch = this.state.patch
-                                        patch.set(person.person_id, {
+                                        patch.set(person.id, {
                                             value: person,
                                             action: PatchAction.REMOVE,
                                         })
@@ -83,12 +83,12 @@ export class Teachers extends React.Component<ReduxProps & {common?: CommonState
                         tables={['person']}
                         onClick={(person: Person) => {
                             const patch = this.state.patch
-                            patch.set(person.person_id, {
+                            patch.set(person.id, {
                                 value: person,
                                 action: PatchAction.ADD,
                             })
-                            if (this.props.internal.course.course.course_teachers.filter(ct => ct.course_teacher.person_id === person.person_id).length > 0) {
-                                patch.delete(person.person_id)
+                            if (this.props.internal.course.course.teachers.filter(ct => ct.teacher.id === person.id).length > 0) {
+                                patch.delete(person.id)
                             }
                             this.setState({
                                 patch: patch,
@@ -104,13 +104,13 @@ export class Teachers extends React.Component<ReduxProps & {common?: CommonState
 
     render() {
         return <Edit
-            edit={this.props.internal.course.course.course_teachers.filter(ct => ct.course_teacher.person_id === this.props.common.login.profile.person_id).length > 0}
+            edit={this.props.internal.course.course.teachers.filter(ct => ct.teacher.id === this.props.common.login.profile.id).length > 0}
             onClick={() =>
                 this.setState({state: STATE.EDITING})
             }
             submit={this.state.state === STATE.EDITING}
             onSubmit={() => {
-                this.props.dispatch(internalActions.internal.course.patchTeachers(this.props.internal.course.course.course_id, this.state.patch))
+                this.props.dispatch(internalActions.internal.course.patchTeachers(this.props.internal.course.course.id, this.state.patch))
             }}
             exit={this.state.state === STATE.EDITING}
             onExit={() =>
