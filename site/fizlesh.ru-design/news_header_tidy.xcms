@@ -1,6 +1,6 @@
-<div class="news-date"><?php echo $date; ?></div> - 
 <a
     class="news-header"
     id="<?php echo $subpage_id; ?>"
     href="<?php echo $header_url; ?>"><?php echo xcms_get_key_or_enc($info, "header");
 ?></a>
+<div class="news-date"><?php echo $date; ?></div>
