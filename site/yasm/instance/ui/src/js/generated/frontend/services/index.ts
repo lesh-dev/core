@@ -19,9 +19,11 @@ export function call(
     )
 }
 
+import * as builtin from './builtin'
 import * as yasm from './yasm'
 export {
 
+    builtin,
     yasm,
 }
 

@@ -91,41 +91,41 @@ class Interface:
     def get_profile(
         request,
         current_user,
-):
+    ):
         raise NotImplementedError
 
     @staticmethod
     def get_profile_info(
         request,
         current_user,
-):
+    ):
         raise NotImplementedError
 
     @staticmethod
     def set_ava(
         request,
         current_user,
-):
+    ):
         raise NotImplementedError
 
     @staticmethod
     def patch_contacts(
         request,
         current_user,
-):
+    ):
         raise NotImplementedError
 
     @staticmethod
     def set_password(
         request,
         current_user,
-):
+    ):
         raise NotImplementedError
 
     @staticmethod
     def get_courses(
         request,
         current_user,
-):
+    ):
         raise NotImplementedError
 

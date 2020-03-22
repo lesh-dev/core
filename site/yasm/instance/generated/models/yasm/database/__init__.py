@@ -295,6 +295,19 @@ class Person(
             ),
         ),
     )
+
+    searchable_columns = [
+        first_name,
+        last_name,
+        patronymic,
+        nick_name,
+        phone,
+        cellular,
+        email,
+        skype,
+        social_profile,
+    ]
+
     @classmethod
     def from_json(cls, json_data):
         return cls(
@@ -442,6 +455,7 @@ class Person(
         return json.dumps(self.to_json())
 
 
+@stub.add_search
 class Department(
         stub.db.Model,
 ):
@@ -496,6 +510,11 @@ class Department(
     )
     __table_args__ = (
     )
+
+    searchable_columns = [
+        title,
+    ]
+
     @classmethod
     def from_json(cls, json_data):
         return cls(
@@ -699,6 +718,10 @@ class PersonSchool(
             ),
         ),
     )
+
+    searchable_columns = [
+    ]
+
     @classmethod
     def from_json(cls, json_data):
         return cls(
@@ -832,6 +855,10 @@ class Calendar(
             ),
         ),
     )
+
+    searchable_columns = [
+    ]
+
     @classmethod
     def from_json(cls, json_data):
         return cls(
@@ -868,6 +895,7 @@ class Calendar(
         return json.dumps(self.to_json())
 
 
+@stub.add_search
 class School(
         stub.db.Model,
 ):
@@ -953,6 +981,12 @@ class School(
     )
     __table_args__ = (
     )
+
+    searchable_columns = [
+        title,
+        location,
+    ]
+
     @classmethod
     def from_json(cls, json_data):
         return cls(
@@ -1013,6 +1047,7 @@ class School(
         return json.dumps(self.to_json())
 
 
+@stub.add_search
 class Course(
         stub.db.Model,
 ):
@@ -1114,6 +1149,12 @@ class Course(
             ),
         ),
     )
+
+    searchable_columns = [
+        title,
+        desc,
+    ]
+
     @classmethod
     def from_json(cls, json_data):
         return cls(
@@ -1255,6 +1296,10 @@ class CourseTeachers(
             ),
         ),
     )
+
+    searchable_columns = [
+    ]
+
     @classmethod
     def from_json(cls, json_data):
         return cls(
@@ -1393,6 +1438,10 @@ class Exam(
             ),
         ),
     )
+
+    searchable_columns = [
+    ]
+
     @classmethod
     def from_json(cls, json_data):
         return cls(
@@ -1539,6 +1588,10 @@ class PersonComment(
             ),
         ),
     )
+
+    searchable_columns = [
+    ]
+
     @classmethod
     def from_json(cls, json_data):
         return cls(
@@ -1641,6 +1694,10 @@ class Ava(
             ),
         ),
     )
+
+    searchable_columns = [
+    ]
+
     @classmethod
     def from_json(cls, json_data):
         return cls(
@@ -1728,6 +1785,10 @@ class DirectLogin(
             ),
         ),
     )
+
+    searchable_columns = [
+    ]
+
     @classmethod
     def from_json(cls, json_data):
         return cls(
@@ -1815,6 +1876,10 @@ class Contact(
             ),
         ),
     )
+
+    searchable_columns = [
+    ]
+
     @classmethod
     def from_json(cls, json_data):
         return cls(

@@ -37,12 +37,12 @@ class Interface:
     @staticmethod
     def fetch_course(
         request,
-):
+    ):
         raise NotImplementedError
 
     @staticmethod
     def patch_teachers(
         request,
-):
+    ):
         raise NotImplementedError
 

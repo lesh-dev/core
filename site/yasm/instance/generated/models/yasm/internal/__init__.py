@@ -9,5 +9,4 @@ from .... import enums
 
 from . import course
 from . import person
-from . import misc
 

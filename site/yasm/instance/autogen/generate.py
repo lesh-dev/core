@@ -2,7 +2,7 @@ import os
 import shutil
 import jinja2
 
-from prepare import load_py_proto
+from prepare import load
 from trie import Trie, add_trie_item
 from declarative import link, Message
 from generators import build_api, build_frontend
@@ -18,14 +18,13 @@ SPEC_PATH = os.path.join(ROOT, 'specs')
 
 
 def main():
-    files, modules = load_py_proto(SPEC_PATH)
-    link()
-
-    print("load done")
     template_env = jinja2.Environment(
         loader=jinja2.PackageLoader('autogen', 'templates'),
         trim_blocks=True
     )
+    load(SPEC_PATH, template_env)
+    print("load done")
+
     build_frontend(template_env, os.path.join(FRONT_ROOT, 'frontend'))
     build_api(template_env, os.path.join(API_ROOT, 'api'))
 

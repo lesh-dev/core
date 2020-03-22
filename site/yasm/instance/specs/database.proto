@@ -120,7 +120,7 @@ message Department {
     option (yasm.lib.database.db_table) = true;
     uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "department_id", (yasm.lib.database.autoincrement) = true];
     repeated Person people = 2;
-    string title = 3 [(yasm.lib.database.field_name) = "department_title"];
+    string title = 3 [(yasm.lib.database.field_name) = "department_title", (yasm.lib.database.searchable) = true];
     string created = 4 [(yasm.lib.database.field_name) = "department_created"];
     string modified = 5 [(yasm.lib.database.field_name) = "department_modified"];
     string changedby = 6 [(yasm.lib.database.field_name) = "department_changedby"];
@@ -161,11 +161,11 @@ message Calendar {
 message School {
     option (yasm.lib.database.db_table) = true;
     uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "school_id", (yasm.lib.database.autoincrement) = true];
-    string title = 2 [(yasm.lib.database.field_name) = "school_title"];
+    string title = 2 [(yasm.lib.database.field_name) = "school_title", (yasm.lib.database.searchable) = true];
     SchoolType type = 3 [(yasm.lib.database.field_name) = "school_type"];
     string start = 4 [(yasm.lib.database.field_name) = "school_date_start"];
     string end = 5 [(yasm.lib.database.field_name) = "school_date_end"];
-    string location = 6 [(yasm.lib.database.field_name) = "school_location"];
+    string location = 6 [(yasm.lib.database.field_name) = "school_location", (yasm.lib.database.searchable) = true];
     string coords = 7 [(yasm.lib.database.field_name) = "school_coords"];
     string created = 8 [(yasm.lib.database.field_name) = "school_created"];
     string modified = 9 [(yasm.lib.database.field_name) = "school_modified"];
@@ -178,11 +178,11 @@ message School {
 message Course {
     option (yasm.lib.database.db_table) = true;
     uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "course_id", (yasm.lib.database.autoincrement) = true];
-    string title = 2 [(yasm.lib.database.field_name) = "course_title"];
+    string title = 2 [(yasm.lib.database.field_name) = "course_title", (yasm.lib.database.searchable) = true];
     School school = 3 [(yasm.lib.database.field_name) = "school_id"];
     string cycle = 4 [(yasm.lib.database.field_name) = "course_cycle"];
     string target_class = 5;
-    string desc = 6 [(yasm.lib.database.field_name) = "course_desc"];
+    string desc = 6 [(yasm.lib.database.field_name) = "course_desc", (yasm.lib.database.searchable) = true];
     CourseType type = 7 [(yasm.lib.database.field_name) = "course_type"];
     CourseArea area = 8 [(yasm.lib.database.field_name) = "course_area"];
     string created = 9 [(yasm.lib.database.field_name) = "course_created"];

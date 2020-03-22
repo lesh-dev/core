@@ -36,10 +36,12 @@ def create():
     from instance.internal.people import APIPeople
     from instance.internal.course import APICourse
     from instance.internal.personal import APIPersonal
+    from instance.builtins import APIBuiltin
 
     APICourse()
     APIPersonal()
     APIPeople()
+    APIBuiltin()
 
     from instance.internal import module as internal
     yasm.register_blueprint(internal)

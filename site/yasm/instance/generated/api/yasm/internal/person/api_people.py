@@ -27,6 +27,6 @@ class Interface:
     @staticmethod
     def fetch_person(
         request,
-):
+    ):
         raise NotImplementedError
 

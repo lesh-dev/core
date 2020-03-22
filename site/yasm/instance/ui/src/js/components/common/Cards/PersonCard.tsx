@@ -11,6 +11,7 @@ export interface PersonCardProps {
     callback?: () => void
     clickable?: boolean
     truncated?: boolean
+    key?: number
 }
 
 export class PersonCard extends React.Component<PersonCardProps> {
@@ -28,7 +29,9 @@ export class PersonCard extends React.Component<PersonCardProps> {
                     else
                         this.props.callback()
                 }
-            }}>
+            }}
+                 key={this.props.key || 1}
+            >
                 <Async promise={ava(this.props.person)} then={(val: string) => {
                     return <img src={val} className="person_card__img"/>
                 }}/>

@@ -1,10 +1,10 @@
 from flask import request
 from flask_login import login_required
-from ....NestableBlueprint import NestableBlueprint
-from .... import decorators
-from ..... import models
+from ..NestableBlueprint import NestableBlueprint
+from .. import decorators
+from ... import models
 
-module = NestableBlueprint('APIMisc', __name__, url_prefix='/APIMisc')
+module = NestableBlueprint('APIBuiltin', __name__, url_prefix='/APIBuiltin')
 
 module.add_decorator(login_required)
 
@@ -12,7 +12,7 @@ module.add_decorator(login_required)
 @module.route('Search', methods=['POST'])
 def _search(
 ):
-    req = models.yasm.internal.misc.SearchRequest.from_json(request.json)
+    req = models.builtin.SearchRequest.from_json(request.json)
     return Interface.search(
         req,
     ).to_string()
@@ -27,6 +27,6 @@ class Interface:
     @staticmethod
     def search(
         request,
-):
+    ):
         raise NotImplementedError
 

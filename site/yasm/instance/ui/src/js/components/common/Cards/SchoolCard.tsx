@@ -1,7 +1,7 @@
 import * as React from 'react'
 import "../../../../scss/cards/school_card/school_card.scss"
 import {CSSProperties} from "react";
-import {School} from "../../../generated/interfaces";
+import {School} from "../../../generated/frontend/interfaces/yasm/database";
 import {redirect} from "../utils";
 
 export interface SchoolCardProps {
@@ -17,17 +17,17 @@ export class SchoolCard extends React.Component<SchoolCardProps> {
                     style={this.props.style} onClick={() => {
             if (this.props.clickable) {
                 if (!this.props.callback)
-                    redirect('/admin/gui/schools/' + this.props.school.school_id)
+                    redirect('/admin/gui/schools/' + this.props.school.id)
                 else
                     this.props.callback()
             }
         }}>
-            <img src={"/static/emblems/events/" + this.props.school.school_type + ".jpg"} className="school_card__img"/>
-            <div className="school_card__title">{this.props.school.school_title}</div>
+            <img src={"/static/emblems/events/" + this.props.school.type + ".jpg"} className="school_card__img"/>
+            <div className="school_card__title">{this.props.school.title}</div>
             <div className="school_card__meta">
                 <div
-                    className="school_card__meta__name">{this.props.school.school_date_start + " - " + this.props.school.school_date_end}</div>
-                <div className="school_card__meta__nick">{this.props.school.school_location}</div>
+                    className="school_card__meta__name">{this.props.school.start + " - " + this.props.school.end}</div>
+                <div className="school_card__meta__nick">{this.props.school.location}</div>
             </div>
         </div>
     }

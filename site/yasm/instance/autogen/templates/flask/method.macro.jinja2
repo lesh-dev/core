@@ -30,6 +30,6 @@ def _{{ method.python_name }}(
 {% for arg in method.additional_args %}
         {{ arg }},
 {% endfor %}
-):
+    ):
         raise NotImplementedError
 {% endmacro %}

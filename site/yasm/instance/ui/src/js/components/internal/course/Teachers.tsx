@@ -79,25 +79,25 @@ export class Teachers extends React.Component<ReduxProps & {common?: CommonState
                         }
                         </tbody>
                     </table>
-                    <SearchBar
-                        tables={['person']}
-                        onClick={(person: Person) => {
-                            const patch = this.state.patch
-                            patch.set(person.id, {
-                                value: person,
-                                action: PatchAction.ADD,
-                            })
-                            if (this.props.internal.course.course.teachers.filter(ct => ct.teacher.id === person.id).length > 0) {
-                                patch.delete(person.id)
-                            }
-                            this.setState({
-                                patch: patch,
-                            })
-                        }}
-                        display={person =>
-                            <PersonToken person={person}/>
-                        }
-                    />
+                    {/*<SearchBar*/}
+                    {/*    tables={['person']}*/}
+                    {/*    onClick={(person: Person) => {*/}
+                    {/*        const patch = this.state.patch*/}
+                    {/*        patch.set(person.id, {*/}
+                    {/*            value: person,*/}
+                    {/*            action: PatchAction.ADD,*/}
+                    {/*        })*/}
+                    {/*        if (this.props.internal.course.course.teachers.filter(ct => ct.teacher.id === person.id).length > 0) {*/}
+                    {/*            patch.delete(person.id)*/}
+                    {/*        }*/}
+                    {/*        this.setState({*/}
+                    {/*            patch: patch,*/}
+                    {/*        })*/}
+                    {/*    }}*/}
+                    {/*    display={person =>*/}
+                    {/*        <PersonToken person={person}/>*/}
+                    {/*    }*/}
+                    {/*/>*/}
                 </>
         }
     }

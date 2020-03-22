@@ -99,6 +99,15 @@ class {{ message.name }}(
         ),
 {% endfor %}
     )
+
+    searchable_columns = [
+{% for field in message.fields.values() %}
+{% if field.options.searchable %}
+        {{ field.name }},
+{% endif %}
+{% endfor %}
+    ]
+
 {{ from_json(message) }}
 {{ from_string() }}
 {{ to_json(message) }}

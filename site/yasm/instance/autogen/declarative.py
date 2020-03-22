@@ -92,6 +92,11 @@ class Package:
     service_registry = set()
     item_registry = set()
 
+    @classmethod
+    def clear_registry(cls):
+        cls.service_registry = set()
+        cls.item_registry = set()
+
 
 class MethodOptions:
     def __init__(self, options):
@@ -134,6 +139,10 @@ class ServiceOptions:
 class Service(Meta):
     registry = OrderedDict()
 
+    @classmethod
+    def clear_registry(cls):
+        cls.registry = OrderedDict()
+
     def __init__(self, service, file):
         self.descriptor = service
         self.name = service.name
@@ -166,6 +175,11 @@ class Value(Meta):
 class Enum(Meta):
     registry = OrderedDict()
     root_level_registry = OrderedDict()
+
+    @classmethod
+    def clear_registry(cls):
+        cls.registry = OrderedDict()
+        cls.root_level_registry = OrderedDict()
 
     def __init__(self, enum, package, parent=None):
         self.descriptor = enum
@@ -359,6 +373,12 @@ class Message(Meta):
     login_table = None
     map_for = None
 
+    @classmethod
+    def clear_registry(cls):
+        cls.registry = OrderedDict()
+        cls.root_level_registry = OrderedDict()
+        cls.login_table = None
+
     def __init__(self, message, package, parent=None):
         self.descriptor = message
         self.name = message.name
@@ -418,6 +438,10 @@ class Message(Meta):
 
 class File(Meta):
     registry = OrderedDict()
+
+    @classmethod
+    def clear_registry(cls):
+        cls.registry = OrderedDict()
 
     def __init__(self, file):
         self.descriptor = file
