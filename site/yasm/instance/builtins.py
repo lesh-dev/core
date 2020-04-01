@@ -8,4 +8,7 @@ class APIBuiltin(Interface):
     def search(
         request,
 ):
-        return SearchResponse(query=request.query, **search_all(request.query, request.tables))
+        data = search_all(request.query, request.tables)
+        for x in data['person']:
+            x.avas
+        return SearchResponse(query=request.query, **data)

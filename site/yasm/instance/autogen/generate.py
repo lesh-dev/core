@@ -19,7 +19,7 @@ SPEC_PATH = os.path.join(ROOT, 'specs')
 
 def main():
     template_env = jinja2.Environment(
-        loader=jinja2.PackageLoader('autogen', 'templates'),
+        loader=jinja2.PackageLoader('instance.autogen'),
         trim_blocks=True
     )
     load(SPEC_PATH, template_env)

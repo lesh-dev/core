@@ -33,6 +33,12 @@ class {{ message.name }}(
     @sqlalchemy.orm.reconstructor
     def init_on_load(self):
         self.serialized = False
+
+{% for field in message.fields.values() %}
+{% if field.is_enum() %}
+        self.{{ field.name }} = {{ field.py_cast }}(self.{{ field.name }})
+{% endif %}
+{% endfor %}
 {% for field in message.fields.values() %}
 {% if field.is_message() and not field.message_obj.options.db_table %}
         self.{{ field.name }} = {{ field.py_cast }}(self.{{ field.name }})

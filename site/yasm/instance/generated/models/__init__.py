@@ -8,6 +8,6 @@ from . import yasm
 from .. import enums
 
 from . import google
-from . import yasm
 from . import builtin
+from . import yasm
 

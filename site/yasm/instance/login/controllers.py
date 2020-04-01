@@ -34,6 +34,7 @@ lm.unauthorized_handler(lambda *args, **kwargs: redirect(url_for('login.index'))
 
 
 def user_login(login, password):
+    print(1)
     logins = (DirectLogin
               .query
               .filter(DirectLogin.login == login)

@@ -28,6 +28,8 @@ class Person(
     def init_on_load(self):
         self.serialized = False
 
+        self.anketa_status = enums.yasm.database.AnketaStatus(self.anketa_status)
+
     def get_id(self):
         return (
             ('id', self.id),
@@ -469,6 +471,7 @@ class Department(
     def init_on_load(self):
         self.serialized = False
 
+
     id = stub.db.Column(
         stub.db.Integer,
         name='department_id',
@@ -569,6 +572,8 @@ class PersonSchool(
     @sqlalchemy.orm.reconstructor
     def init_on_load(self):
         self.serialized = False
+
+        self.curatorship = enums.yasm.database.Curatorship(self.curatorship)
 
     id = stub.db.Column(
         stub.db.Integer,
@@ -806,6 +811,7 @@ class Calendar(
     @sqlalchemy.orm.reconstructor
     def init_on_load(self):
         self.serialized = False
+
         self.date = datetime.date(self.date)
         self.modified = datetime.datetime(self.modified)
 
@@ -908,6 +914,8 @@ class School(
     @sqlalchemy.orm.reconstructor
     def init_on_load(self):
         self.serialized = False
+
+        self.type = enums.yasm.database.SchoolType(self.type)
 
     id = stub.db.Column(
         stub.db.Integer,
@@ -1060,6 +1068,9 @@ class Course(
     @sqlalchemy.orm.reconstructor
     def init_on_load(self):
         self.serialized = False
+
+        self.type = enums.yasm.database.CourseType(self.type)
+        self.area = enums.yasm.database.CourseArea(self.area)
 
     id = stub.db.Column(
         stub.db.Integer,
@@ -1228,6 +1239,7 @@ class CourseTeachers(
     def init_on_load(self):
         self.serialized = False
 
+
     id = stub.db.Column(
         stub.db.Integer,
         name='course_teachers_id',
@@ -1351,6 +1363,7 @@ class Exam(
     @sqlalchemy.orm.reconstructor
     def init_on_load(self):
         self.serialized = False
+
 
     id = stub.db.Column(
         stub.db.Integer,
@@ -1503,6 +1516,7 @@ class PersonComment(
     def init_on_load(self):
         self.serialized = False
 
+
     id = stub.db.Column(
         stub.db.Integer,
         name='person_comment_id',
@@ -1653,6 +1667,8 @@ class Ava(
     def init_on_load(self):
         self.serialized = False
 
+        self.status = enums.yasm.database.DatabaseStatus(self.status)
+
     id = stub.db.Column(
         stub.db.Integer,
         name='id',
@@ -1744,6 +1760,7 @@ class DirectLogin(
     def init_on_load(self):
         self.serialized = False
 
+
     type = stub.db.Column(
         stub.db.Text,
         name='type',
@@ -1834,6 +1851,7 @@ class Contact(
     @sqlalchemy.orm.reconstructor
     def init_on_load(self):
         self.serialized = False
+
 
     id = stub.db.Column(
         stub.db.Integer,
