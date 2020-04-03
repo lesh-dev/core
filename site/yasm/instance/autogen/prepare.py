@@ -5,7 +5,7 @@ import tempfile
 import subprocess
 import importlib
 
-from declarative import link, AutogenOptions, Package, Service, File, Message, Enum
+from instance.autogen.declarative import link, AutogenOptions, Package, Service, File, Message, Enum
 
 
 TMP_ROOT = tempfile.mkdtemp()

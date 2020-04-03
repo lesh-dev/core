@@ -1,6 +1,6 @@
 import shutil
-from trie import *
-from declarative import Message, Enum, Service, before_handlers
+from instance.autogen.trie import *
+from instance.autogen.declarative import Message, Enum, Service, before_handlers
 
 
 def build_frontend(env, path):

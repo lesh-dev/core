@@ -1,7 +1,6 @@
 from google.protobuf.descriptor import FieldDescriptor
 from collections import OrderedDict, defaultdict
 import inflection
-import copy
 
 
 class AutogenOptions:

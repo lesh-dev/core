@@ -2,14 +2,14 @@ import os
 import shutil
 import jinja2
 
-from prepare import load
-from trie import Trie, add_trie_item
-from declarative import link, Message
-from generators import build_api, build_frontend
+from instance.autogen.prepare import load
+from instance.autogen.trie import Trie, add_trie_item
+from instance.autogen.declarative import link, Message
+from instance.autogen.generators import build_api, build_frontend
 
-from declarative import Enum
+from instance.autogen.declarative import Enum
 
-
+os.chdir('instance')
 ROOT = os.getcwd()
 API_ROOT = 'generated'
 GEN_ROOT = 'generated'
