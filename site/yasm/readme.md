@@ -26,9 +26,7 @@
 
 Сборка документации
 * из корня проекта выполнить
-* ```cd docs```
-* ```make coverage```
-* ```make html```
+* ```python run.py docs```
 
 Запуск
 * ```python run.py runserver```
