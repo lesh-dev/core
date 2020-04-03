@@ -3,6 +3,14 @@
 Необходимо
 * npm >=6.1.0
 * python3, pip3
+* @fedora:
+  + protobuf-compiler
+  + protobuf-devel 
+* @arch-linux
+  + protobuf
+* @ubuntu
+  + protobuf-compiler
+  + libprotobuf-dev
 
 Сборка
 * Конфиг с 'SQLALCHEMY_DATABASE_URI' положить в instance
