@@ -10,6 +10,8 @@
 * ```python3 -m virtualenv -p `which python3` venv```
 * ```. venv/bin/activate```
 * ```pip install -r requirements.txt``` 
+* ```python run.py docs```
+* ```python run.py generate```
 * ```cd instance/ui```
 * ```npm install```
 * ```npm run build```
