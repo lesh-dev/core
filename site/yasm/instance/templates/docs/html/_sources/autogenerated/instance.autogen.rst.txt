@@ -1,0 +1,17 @@
+instance.autogen package
+========================
+
+.. automodule:: instance.autogen
+   :members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   instance.autogen.declarative
+   instance.autogen.generate
+   instance.autogen.generators
+   instance.autogen.prepare
+   instance.autogen.trie

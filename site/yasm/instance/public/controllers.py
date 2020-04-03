@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template
 from flask_login import current_user
 
-from instance.database import Department, Person, db
+from instance.generated.models.yasm.database import Department, Person
+from instance.generated.models.stub import db
 from instance.menu import menu
 from instance.public.forms import RegisterForm
 

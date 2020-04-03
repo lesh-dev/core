@@ -1,0 +1,6 @@
+instance.login.oauth2.facebook package
+======================================
+
+.. automodule:: instance.login.oauth2.facebook
+   :members:
+   :show-inheritance:

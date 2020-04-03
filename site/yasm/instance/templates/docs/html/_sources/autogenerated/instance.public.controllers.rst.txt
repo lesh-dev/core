@@ -1,0 +1,6 @@
+instance.public.controllers module
+==================================
+
+.. automodule:: instance.public.controllers
+   :members:
+   :show-inheritance:

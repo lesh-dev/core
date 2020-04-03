@@ -1,0 +1,13 @@
+instance.internal.api package
+=============================
+
+.. automodule:: instance.internal.api
+   :members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   instance.internal.api.controllers

@@ -1,0 +1,6 @@
+instance.postgrest.controllers module
+=====================================
+
+.. automodule:: instance.postgrest.controllers
+   :members:
+   :show-inheritance:

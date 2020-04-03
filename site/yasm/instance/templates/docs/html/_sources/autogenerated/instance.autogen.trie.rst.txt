@@ -1,0 +1,6 @@
+instance.autogen.trie module
+============================
+
+.. automodule:: instance.autogen.trie
+   :members:
+   :show-inheritance:

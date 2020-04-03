@@ -9,7 +9,6 @@ Url dispatching file of :ref:`login <login>` module
 
 |depends|
  * :ref:`oauth <oauth>` module
- * :ref:`database <database>`
  * :ref:`login forms <login_forms>`
 
 |used|

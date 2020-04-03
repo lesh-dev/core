@@ -1,0 +1,6 @@
+instance.docs.controllers module
+================================
+
+.. automodule:: instance.docs.controllers
+   :members:
+   :show-inheritance:

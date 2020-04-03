@@ -1,0 +1,14 @@
+instance.generated.models.yasm.internal package
+===============================================
+
+.. automodule:: instance.generated.models.yasm.internal
+   :members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   instance.generated.models.yasm.internal.course
+   instance.generated.models.yasm.internal.person

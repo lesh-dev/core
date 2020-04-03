@@ -1,0 +1,320 @@
+Undocumented Python objects
+===========================
+instance.autogen.declarative
+----------------------------
+Functions:
+ * cover_dfs
+ * dfs
+ * get_back_populates
+ * link
+
+Classes:
+ * AutogenOptions
+ * Enum
+ * Field
+ * FieldOptions
+ * File
+ * Message
+ * MessageOptions
+ * Meta
+ * Method
+ * MethodOptions
+ * Package
+ * Relationship
+ * Service
+ * ServiceOptions
+ * Value
+
+instance.autogen.generate
+-------------------------
+Functions:
+ * main
+
+instance.autogen.generators
+---------------------------
+Functions:
+ * build_api
+ * build_frontend
+
+instance.autogen.prepare
+------------------------
+Functions:
+ * build_py_proto
+ * clear_registry
+ * copy_proto
+ * create_builtin
+ * get_proto_files
+ * get_py_files
+ * load
+ * load_py_proto
+ * map_proto_2_py
+
+instance.autogen.trie
+---------------------
+Functions:
+ * add_trie_item
+ * add_trie_path
+
+Classes:
+ * Trie
+
+instance.builtins
+-----------------
+Classes:
+ * APIBuiltin
+
+instance.docs.controllers
+-------------------------
+Functions:
+ * index
+
+instance.generated.api.NestableBlueprint
+----------------------------------------
+Classes:
+ * NestableBlueprint -- missing methods:
+
+   - add_decorator
+   - register_blueprint
+
+instance.generated.api.builtin.api_builtin
+------------------------------------------
+Classes:
+ * Interface
+
+instance.generated.api.decorators
+---------------------------------
+Functions:
+ * personalize
+
+instance.generated.api.yasm.internal.course.api_course
+------------------------------------------------------
+Classes:
+ * Interface
+
+instance.generated.api.yasm.internal.person.api_people
+------------------------------------------------------
+Classes:
+ * Interface
+
+instance.generated.api.yasm.internal.person.api_personal
+--------------------------------------------------------
+Classes:
+ * Interface
+
+instance.generated.models.builtin
+---------------------------------
+Classes:
+ * SearchRequest
+ * SearchResponse
+
+instance.generated.models.google.protobuf
+-----------------------------------------
+Classes:
+ * Empty
+
+instance.generated.models.stub
+------------------------------
+Functions:
+ * add_search
+ * search_all
+
+Classes:
+ * SearchableMixin
+
+instance.generated.models.yasm.database
+---------------------------------------
+Functions:
+ * user_loader
+
+Classes:
+ * Ava -- missing methods:
+
+   - from_json
+   - from_string
+   - init_on_load
+   - to_json
+   - to_string
+ * Calendar -- missing methods:
+
+   - from_json
+   - from_string
+   - init_on_load
+   - to_json
+   - to_string
+ * Contact -- missing methods:
+
+   - from_json
+   - from_string
+   - init_on_load
+   - to_json
+   - to_string
+ * Course -- missing methods:
+
+   - from_json
+   - from_string
+   - init_on_load
+   - to_json
+   - to_string
+ * CourseTeachers -- missing methods:
+
+   - from_json
+   - from_string
+   - init_on_load
+   - to_json
+   - to_string
+ * Department -- missing methods:
+
+   - from_json
+   - from_string
+   - init_on_load
+   - to_json
+   - to_string
+ * DirectLogin -- missing methods:
+
+   - from_json
+   - from_string
+   - init_on_load
+   - to_json
+   - to_string
+ * Exam -- missing methods:
+
+   - from_json
+   - from_string
+   - init_on_load
+   - to_json
+   - to_string
+ * Person -- missing methods:
+
+   - from_json
+   - from_string
+   - get_id
+   - init_on_load
+   - to_json
+   - to_string
+ * PersonComment -- missing methods:
+
+   - from_json
+   - from_string
+   - init_on_load
+   - to_json
+   - to_string
+ * PersonSchool -- missing methods:
+
+   - from_json
+   - from_string
+   - init_on_load
+   - to_json
+   - to_string
+ * School -- missing methods:
+
+   - from_json
+   - from_string
+   - init_on_load
+   - to_json
+   - to_string
+
+instance.generated.models.yasm.internal.course
+----------------------------------------------
+Classes:
+ * FetchCourseRequest
+ * PatchTeachersRequest
+ * PatchTeachersResponse
+ * TeachersPatchEntry
+
+instance.generated.models.yasm.internal.person
+----------------------------------------------
+Classes:
+ * ContactList
+ * ContactsPatch
+ * ContactsPatchEntry
+ * CoursesResponse
+ * FetchPersonRequest
+ * GetProfileResponse
+ * SetAvaRequest
+ * SetPasswordRequest
+
+instance.internal.controllers
+-----------------------------
+Functions:
+ * index
+
+instance.internal.course
+------------------------
+Classes:
+ * APICourse
+
+instance.internal.people
+------------------------
+Classes:
+ * APIPeople
+
+instance.internal.personal
+--------------------------
+Functions:
+ * fill_person
+
+Classes:
+ * APIPersonal
+
+instance.login.controllers
+--------------------------
+Functions:
+ * error
+ * index
+ * oauth_authorize
+ * user_login
+
+instance.login.oauth2.base
+--------------------------
+Classes:
+ * Auth
+ * OAuthSignIn
+
+instance.login.oauth2.facebook
+------------------------------
+Classes:
+ * FacebookSignIn
+
+instance.login.oauth2.google
+----------------------------
+Classes:
+ * GoogleSignIn
+
+instance.login.oauth2.vk
+------------------------
+Classes:
+ * VkSignIn
+
+instance.login.oauth2.yandex
+----------------------------
+Classes:
+ * YandexSignIn
+
+instance.postgrest.controllers
+------------------------------
+Functions:
+ * index
+
+instance.public.controllers
+---------------------------
+Functions:
+ * index
+ * register_form
+
+instance.react_components.controllers
+-------------------------------------
+Functions:
+ * index
+
+instance.rights_decorator
+-------------------------
+Functions:
+ * has_rights
+ * has_rights_check
+ * has_rights_check_function
+
+run
+---
+Functions:
+ * main
+

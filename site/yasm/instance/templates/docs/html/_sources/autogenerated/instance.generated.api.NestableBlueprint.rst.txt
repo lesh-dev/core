@@ -1,0 +1,6 @@
+instance.generated.api.NestableBlueprint module
+===============================================
+
+.. automodule:: instance.generated.api.NestableBlueprint
+   :members:
+   :show-inheritance:

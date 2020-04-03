@@ -1,0 +1,6 @@
+instance.generated.models.google.protobuf package
+=================================================
+
+.. automodule:: instance.generated.models.google.protobuf
+   :members:
+   :show-inheritance:

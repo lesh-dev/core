@@ -1,0 +1,14 @@
+instance.generated.enums.yasm package
+=====================================
+
+.. automodule:: instance.generated.enums.yasm
+   :members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   instance.generated.enums.yasm.database
+   instance.generated.enums.yasm.internal

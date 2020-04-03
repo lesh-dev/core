@@ -1,0 +1,13 @@
+instance.generated.api.yasm package
+===================================
+
+.. automodule:: instance.generated.api.yasm
+   :members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   instance.generated.api.yasm.internal

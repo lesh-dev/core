@@ -1,0 +1,6 @@
+instance.public.models module
+=============================
+
+.. automodule:: instance.public.models
+   :members:
+   :show-inheritance:

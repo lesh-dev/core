@@ -1,0 +1,6 @@
+instance.login.oauth2.google package
+====================================
+
+.. automodule:: instance.login.oauth2.google
+   :members:
+   :show-inheritance:

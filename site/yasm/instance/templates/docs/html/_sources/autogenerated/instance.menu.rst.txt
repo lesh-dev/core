@@ -1,0 +1,6 @@
+instance.menu module
+====================
+
+.. automodule:: instance.menu
+   :members:
+   :show-inheritance:

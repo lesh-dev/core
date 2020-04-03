@@ -17,7 +17,6 @@ def create():
     Factory of flask applications, creates YaSM application.
 
     * creates flask app
-    * initializes :ref:`database <database>`
     * initializes :ref:`login manager <login>`
     * populates it with all blueprints
 

@@ -1,0 +1,6 @@
+instance.internal.course module
+===============================
+
+.. automodule:: instance.internal.course
+   :members:
+   :show-inheritance:

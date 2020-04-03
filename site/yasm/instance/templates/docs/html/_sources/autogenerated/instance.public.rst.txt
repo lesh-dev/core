@@ -1,0 +1,15 @@
+instance.public package
+=======================
+
+.. automodule:: instance.public
+   :members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   instance.public.controllers
+   instance.public.forms
+   instance.public.models

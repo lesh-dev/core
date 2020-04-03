@@ -1,0 +1,23 @@
+instance.login.oauth2 package
+=============================
+
+.. automodule:: instance.login.oauth2
+   :members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   instance.login.oauth2.facebook
+   instance.login.oauth2.google
+   instance.login.oauth2.vk
+   instance.login.oauth2.yandex
+
+Submodules
+----------
+
+.. toctree::
+
+   instance.login.oauth2.base

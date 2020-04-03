@@ -1,0 +1,6 @@
+instance.generated.api.builtin.api\_builtin module
+==================================================
+
+.. automodule:: instance.generated.api.builtin.api_builtin
+   :members:
+   :show-inheritance:

@@ -1,0 +1,6 @@
+instance.internal.personal module
+=================================
+
+.. automodule:: instance.internal.personal
+   :members:
+   :show-inheritance:

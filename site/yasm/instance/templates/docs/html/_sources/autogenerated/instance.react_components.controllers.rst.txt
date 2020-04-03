@@ -1,0 +1,6 @@
+instance.react\_components.controllers module
+=============================================
+
+.. automodule:: instance.react_components.controllers
+   :members:
+   :show-inheritance:

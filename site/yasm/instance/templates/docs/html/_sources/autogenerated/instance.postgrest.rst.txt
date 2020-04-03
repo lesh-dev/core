@@ -1,0 +1,13 @@
+instance.postgrest package
+==========================
+
+.. automodule:: instance.postgrest
+   :members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   instance.postgrest.controllers

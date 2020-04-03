@@ -1,0 +1,6 @@
+instance.internal.controllers module
+====================================
+
+.. automodule:: instance.internal.controllers
+   :members:
+   :show-inheritance:

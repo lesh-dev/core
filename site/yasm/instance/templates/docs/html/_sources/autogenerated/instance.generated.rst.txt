@@ -1,0 +1,15 @@
+instance.generated package
+==========================
+
+.. automodule:: instance.generated
+   :members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   instance.generated.api
+   instance.generated.enums
+   instance.generated.models

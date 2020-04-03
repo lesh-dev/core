@@ -1,0 +1,22 @@
+instance.generated.models package
+=================================
+
+.. automodule:: instance.generated.models
+   :members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   instance.generated.models.builtin
+   instance.generated.models.google
+   instance.generated.models.yasm
+
+Submodules
+----------
+
+.. toctree::
+
+   instance.generated.models.stub

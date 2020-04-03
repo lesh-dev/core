@@ -1,0 +1,726 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Undocumented Python objects &mdash; yasm  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Undocumented C API elements" href="c.html" />
+    <link rel="prev" title="run module" href="../run.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> yasm
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">yasm</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Undocumented Python objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#instance-autogen-declarative">instance.autogen.declarative</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-autogen-generate">instance.autogen.generate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-autogen-generators">instance.autogen.generators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-autogen-prepare">instance.autogen.prepare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-autogen-trie">instance.autogen.trie</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-builtins">instance.builtins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-docs-controllers">instance.docs.controllers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-generated-api-nestableblueprint">instance.generated.api.NestableBlueprint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-generated-api-builtin-api-builtin">instance.generated.api.builtin.api_builtin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-generated-api-decorators">instance.generated.api.decorators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-generated-api-yasm-internal-course-api-course">instance.generated.api.yasm.internal.course.api_course</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-generated-api-yasm-internal-person-api-people">instance.generated.api.yasm.internal.person.api_people</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-generated-api-yasm-internal-person-api-personal">instance.generated.api.yasm.internal.person.api_personal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-generated-models-builtin">instance.generated.models.builtin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-generated-models-google-protobuf">instance.generated.models.google.protobuf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-generated-models-stub">instance.generated.models.stub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-generated-models-yasm-database">instance.generated.models.yasm.database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-generated-models-yasm-internal-course">instance.generated.models.yasm.internal.course</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-generated-models-yasm-internal-person">instance.generated.models.yasm.internal.person</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-internal-controllers">instance.internal.controllers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-internal-course">instance.internal.course</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-internal-people">instance.internal.people</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-internal-personal">instance.internal.personal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-login-controllers">instance.login.controllers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-login-oauth2-base">instance.login.oauth2.base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-login-oauth2-facebook">instance.login.oauth2.facebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-login-oauth2-google">instance.login.oauth2.google</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-login-oauth2-vk">instance.login.oauth2.vk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-login-oauth2-yandex">instance.login.oauth2.yandex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-postgrest-controllers">instance.postgrest.controllers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-public-controllers">instance.public.controllers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-react-components-controllers">instance.react_components.controllers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-rights-decorator">instance.rights_decorator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run">run</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="c.html">Undocumented C API elements</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">yasm</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Undocumented Python objects</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/autogenerated/coverage/python.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="undocumented-python-objects">
+<h1>Undocumented Python objects<a class="headerlink" href="#undocumented-python-objects" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="instance-autogen-declarative">
+<h2>instance.autogen.declarative<a class="headerlink" href="#instance-autogen-declarative" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>cover_dfs</p></li>
+<li><p>dfs</p></li>
+<li><p>get_back_populates</p></li>
+<li><p>link</p></li>
+</ul>
+</dd>
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>AutogenOptions</p></li>
+<li><p>Enum</p></li>
+<li><p>Field</p></li>
+<li><p>FieldOptions</p></li>
+<li><p>File</p></li>
+<li><p>Message</p></li>
+<li><p>MessageOptions</p></li>
+<li><p>Meta</p></li>
+<li><p>Method</p></li>
+<li><p>MethodOptions</p></li>
+<li><p>Package</p></li>
+<li><p>Relationship</p></li>
+<li><p>Service</p></li>
+<li><p>ServiceOptions</p></li>
+<li><p>Value</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-autogen-generate">
+<h2>instance.autogen.generate<a class="headerlink" href="#instance-autogen-generate" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>main</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-autogen-generators">
+<h2>instance.autogen.generators<a class="headerlink" href="#instance-autogen-generators" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>build_api</p></li>
+<li><p>build_frontend</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-autogen-prepare">
+<h2>instance.autogen.prepare<a class="headerlink" href="#instance-autogen-prepare" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>build_py_proto</p></li>
+<li><p>clear_registry</p></li>
+<li><p>copy_proto</p></li>
+<li><p>create_builtin</p></li>
+<li><p>get_proto_files</p></li>
+<li><p>get_py_files</p></li>
+<li><p>load</p></li>
+<li><p>load_py_proto</p></li>
+<li><p>map_proto_2_py</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-autogen-trie">
+<h2>instance.autogen.trie<a class="headerlink" href="#instance-autogen-trie" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>add_trie_item</p></li>
+<li><p>add_trie_path</p></li>
+</ul>
+</dd>
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>Trie</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-builtins">
+<h2>instance.builtins<a class="headerlink" href="#instance-builtins" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>APIBuiltin</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-docs-controllers">
+<h2>instance.docs.controllers<a class="headerlink" href="#instance-docs-controllers" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>index</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-generated-api-nestableblueprint">
+<h2>instance.generated.api.NestableBlueprint<a class="headerlink" href="#instance-generated-api-nestableblueprint" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>NestableBlueprint – missing methods:</p>
+<ul>
+<li><p>add_decorator</p></li>
+<li><p>register_blueprint</p></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-generated-api-builtin-api-builtin">
+<h2>instance.generated.api.builtin.api_builtin<a class="headerlink" href="#instance-generated-api-builtin-api-builtin" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>Interface</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-generated-api-decorators">
+<h2>instance.generated.api.decorators<a class="headerlink" href="#instance-generated-api-decorators" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>personalize</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-generated-api-yasm-internal-course-api-course">
+<h2>instance.generated.api.yasm.internal.course.api_course<a class="headerlink" href="#instance-generated-api-yasm-internal-course-api-course" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>Interface</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-generated-api-yasm-internal-person-api-people">
+<h2>instance.generated.api.yasm.internal.person.api_people<a class="headerlink" href="#instance-generated-api-yasm-internal-person-api-people" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>Interface</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-generated-api-yasm-internal-person-api-personal">
+<h2>instance.generated.api.yasm.internal.person.api_personal<a class="headerlink" href="#instance-generated-api-yasm-internal-person-api-personal" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>Interface</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-generated-models-builtin">
+<h2>instance.generated.models.builtin<a class="headerlink" href="#instance-generated-models-builtin" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>SearchRequest</p></li>
+<li><p>SearchResponse</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-generated-models-google-protobuf">
+<h2>instance.generated.models.google.protobuf<a class="headerlink" href="#instance-generated-models-google-protobuf" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>Empty</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-generated-models-stub">
+<h2>instance.generated.models.stub<a class="headerlink" href="#instance-generated-models-stub" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>add_search</p></li>
+<li><p>search_all</p></li>
+</ul>
+</dd>
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>SearchableMixin</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-generated-models-yasm-database">
+<h2>instance.generated.models.yasm.database<a class="headerlink" href="#instance-generated-models-yasm-database" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>user_loader</p></li>
+</ul>
+</dd>
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>Ava – missing methods:</p>
+<ul>
+<li><p>from_json</p></li>
+<li><p>from_string</p></li>
+<li><p>init_on_load</p></li>
+<li><p>to_json</p></li>
+<li><p>to_string</p></li>
+</ul>
+</li>
+<li><p>Calendar – missing methods:</p>
+<ul>
+<li><p>from_json</p></li>
+<li><p>from_string</p></li>
+<li><p>init_on_load</p></li>
+<li><p>to_json</p></li>
+<li><p>to_string</p></li>
+</ul>
+</li>
+<li><p>Contact – missing methods:</p>
+<ul>
+<li><p>from_json</p></li>
+<li><p>from_string</p></li>
+<li><p>init_on_load</p></li>
+<li><p>to_json</p></li>
+<li><p>to_string</p></li>
+</ul>
+</li>
+<li><p>Course – missing methods:</p>
+<ul>
+<li><p>from_json</p></li>
+<li><p>from_string</p></li>
+<li><p>init_on_load</p></li>
+<li><p>to_json</p></li>
+<li><p>to_string</p></li>
+</ul>
+</li>
+<li><p>CourseTeachers – missing methods:</p>
+<ul>
+<li><p>from_json</p></li>
+<li><p>from_string</p></li>
+<li><p>init_on_load</p></li>
+<li><p>to_json</p></li>
+<li><p>to_string</p></li>
+</ul>
+</li>
+<li><p>Department – missing methods:</p>
+<ul>
+<li><p>from_json</p></li>
+<li><p>from_string</p></li>
+<li><p>init_on_load</p></li>
+<li><p>to_json</p></li>
+<li><p>to_string</p></li>
+</ul>
+</li>
+<li><p>DirectLogin – missing methods:</p>
+<ul>
+<li><p>from_json</p></li>
+<li><p>from_string</p></li>
+<li><p>init_on_load</p></li>
+<li><p>to_json</p></li>
+<li><p>to_string</p></li>
+</ul>
+</li>
+<li><p>Exam – missing methods:</p>
+<ul>
+<li><p>from_json</p></li>
+<li><p>from_string</p></li>
+<li><p>init_on_load</p></li>
+<li><p>to_json</p></li>
+<li><p>to_string</p></li>
+</ul>
+</li>
+<li><p>Person – missing methods:</p>
+<ul>
+<li><p>from_json</p></li>
+<li><p>from_string</p></li>
+<li><p>get_id</p></li>
+<li><p>init_on_load</p></li>
+<li><p>to_json</p></li>
+<li><p>to_string</p></li>
+</ul>
+</li>
+<li><p>PersonComment – missing methods:</p>
+<ul>
+<li><p>from_json</p></li>
+<li><p>from_string</p></li>
+<li><p>init_on_load</p></li>
+<li><p>to_json</p></li>
+<li><p>to_string</p></li>
+</ul>
+</li>
+<li><p>PersonSchool – missing methods:</p>
+<ul>
+<li><p>from_json</p></li>
+<li><p>from_string</p></li>
+<li><p>init_on_load</p></li>
+<li><p>to_json</p></li>
+<li><p>to_string</p></li>
+</ul>
+</li>
+<li><p>School – missing methods:</p>
+<ul>
+<li><p>from_json</p></li>
+<li><p>from_string</p></li>
+<li><p>init_on_load</p></li>
+<li><p>to_json</p></li>
+<li><p>to_string</p></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-generated-models-yasm-internal-course">
+<h2>instance.generated.models.yasm.internal.course<a class="headerlink" href="#instance-generated-models-yasm-internal-course" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>FetchCourseRequest</p></li>
+<li><p>PatchTeachersRequest</p></li>
+<li><p>PatchTeachersResponse</p></li>
+<li><p>TeachersPatchEntry</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-generated-models-yasm-internal-person">
+<h2>instance.generated.models.yasm.internal.person<a class="headerlink" href="#instance-generated-models-yasm-internal-person" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>ContactList</p></li>
+<li><p>ContactsPatch</p></li>
+<li><p>ContactsPatchEntry</p></li>
+<li><p>CoursesResponse</p></li>
+<li><p>FetchPersonRequest</p></li>
+<li><p>GetProfileResponse</p></li>
+<li><p>SetAvaRequest</p></li>
+<li><p>SetPasswordRequest</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-internal-controllers">
+<h2>instance.internal.controllers<a class="headerlink" href="#instance-internal-controllers" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>index</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-internal-course">
+<h2>instance.internal.course<a class="headerlink" href="#instance-internal-course" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>APICourse</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-internal-people">
+<h2>instance.internal.people<a class="headerlink" href="#instance-internal-people" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>APIPeople</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-internal-personal">
+<h2>instance.internal.personal<a class="headerlink" href="#instance-internal-personal" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>fill_person</p></li>
+</ul>
+</dd>
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>APIPersonal</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-login-controllers">
+<h2>instance.login.controllers<a class="headerlink" href="#instance-login-controllers" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>error</p></li>
+<li><p>index</p></li>
+<li><p>oauth_authorize</p></li>
+<li><p>user_login</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-login-oauth2-base">
+<h2>instance.login.oauth2.base<a class="headerlink" href="#instance-login-oauth2-base" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>Auth</p></li>
+<li><p>OAuthSignIn</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-login-oauth2-facebook">
+<h2>instance.login.oauth2.facebook<a class="headerlink" href="#instance-login-oauth2-facebook" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>FacebookSignIn</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-login-oauth2-google">
+<h2>instance.login.oauth2.google<a class="headerlink" href="#instance-login-oauth2-google" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>GoogleSignIn</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-login-oauth2-vk">
+<h2>instance.login.oauth2.vk<a class="headerlink" href="#instance-login-oauth2-vk" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>VkSignIn</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-login-oauth2-yandex">
+<h2>instance.login.oauth2.yandex<a class="headerlink" href="#instance-login-oauth2-yandex" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p>YandexSignIn</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-postgrest-controllers">
+<h2>instance.postgrest.controllers<a class="headerlink" href="#instance-postgrest-controllers" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>index</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-public-controllers">
+<h2>instance.public.controllers<a class="headerlink" href="#instance-public-controllers" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>index</p></li>
+<li><p>register_form</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-react-components-controllers">
+<h2>instance.react_components.controllers<a class="headerlink" href="#instance-react-components-controllers" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>index</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="instance-rights-decorator">
+<h2>instance.rights_decorator<a class="headerlink" href="#instance-rights-decorator" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>has_rights</p></li>
+<li><p>has_rights_check</p></li>
+<li><p>has_rights_check_function</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="run">
+<h2>run<a class="headerlink" href="#run" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p>main</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="c.html" class="btn btn-neutral float-right" title="Undocumented C API elements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../run.html" class="btn btn-neutral float-left" title="run module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, dichlofos-mv@yandex.ru, i@math-lesh.org, yarebenko@gmail.com
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+instance.login package
+======================
+
+.. automodule:: instance.login
+   :members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   instance.login.oauth2
+
+Submodules
+----------
+
+.. toctree::
+
+   instance.login.controllers
+   instance.login.forms

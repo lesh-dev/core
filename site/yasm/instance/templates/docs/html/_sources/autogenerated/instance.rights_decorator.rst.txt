@@ -1,0 +1,6 @@
+instance.rights\_decorator module
+=================================
+
+.. automodule:: instance.rights_decorator
+   :members:
+   :show-inheritance:

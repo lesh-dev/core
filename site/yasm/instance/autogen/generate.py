@@ -9,15 +9,17 @@ from instance.autogen.generators import build_api, build_frontend
 
 from instance.autogen.declarative import Enum
 
-os.chdir('instance')
-ROOT = os.getcwd()
-API_ROOT = 'generated'
-GEN_ROOT = 'generated'
-FRONT_ROOT = 'ui/src/js/generated'
-SPEC_PATH = os.path.join(ROOT, 'specs')
-
 
 def main():
+    base_cwd = os.getcwd()
+    autogen_path = os.path.dirname(os.path.abspath(__file__))
+    ROOT = os.path.join(autogen_path, '..')
+    os.chdir(ROOT)
+    API_ROOT = 'generated'
+    GEN_ROOT = 'generated'
+    FRONT_ROOT = 'ui/src/js/generated'
+    SPEC_PATH = os.path.join(ROOT, 'specs')
+
     template_env = jinja2.Environment(
         loader=jinja2.PackageLoader('instance.autogen'),
         trim_blocks=True
@@ -103,6 +105,7 @@ def main():
         stub.write(root_template.render())
 
     print('done')
+    os.chdir(base_cwd)
 
 
 if __name__ == '__main__':

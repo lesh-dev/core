@@ -1,9 +1,7 @@
-from instance.NestableBlueprint import NestableBlueprint
+from instance.generated.api.NestableBlueprint import NestableBlueprint
 from instance.rights_decorator import has_rights_check_function
 from instance.menu import menu
 from flask import render_template
-
-from instance.internal.api import api
 
 
 module = NestableBlueprint('internal', __name__, url_prefix='/i')
@@ -17,5 +15,3 @@ def index(path=""):
         "internal/base.html",
         menu=menu,
     )
-
-module.register_blueprint(api)

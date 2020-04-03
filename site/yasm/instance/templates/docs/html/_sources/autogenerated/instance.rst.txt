@@ -1,0 +1,30 @@
+instance package
+================
+
+.. automodule:: instance
+   :members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   instance.autogen
+   instance.docs
+   instance.generated
+   instance.internal
+   instance.login
+   instance.postgrest
+   instance.public
+   instance.react_components
+
+Submodules
+----------
+
+.. toctree::
+
+   instance.builtins
+   instance.config
+   instance.menu
+   instance.rights_decorator

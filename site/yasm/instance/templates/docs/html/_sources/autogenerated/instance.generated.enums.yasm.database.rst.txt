@@ -1,0 +1,6 @@
+instance.generated.enums.yasm.database package
+==============================================
+
+.. automodule:: instance.generated.enums.yasm.database
+   :members:
+   :show-inheritance:
