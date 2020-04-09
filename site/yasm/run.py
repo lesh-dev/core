@@ -2,7 +2,7 @@
 
 """
 
-from instance import create
+from instance import create, initialize
 from instance.autogen.generate import main as proto_gen
 from flask_script import Manager
 import shutil
@@ -11,7 +11,7 @@ import subprocess
 
 
 def main():
-    manager = Manager(create)
+    manager = Manager(create())
 
     @manager.command
     def generate():
@@ -29,6 +29,12 @@ def main():
         subprocess.check_call(['sh', 'build_docs.sh'])
         subprocess.check_call(['sh', 'build_docs.sh'])
         os.chdir(base_cwd)
+
+    @manager.command
+    def runserver():
+        """run development server"""
+        initialize()
+        manager.app.run()
     manager.run()
 
 

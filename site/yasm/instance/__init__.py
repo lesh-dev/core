@@ -10,7 +10,15 @@ from instance.login import lm
 from instance.login.oauth2.base import Auth
 
 
+yasm = None
+
+
 def create():
+    global yasm
+    yasm = Flask(__name__, instance_relative_config=True)
+    return yasm
+
+def initialize():
     """
     .. _instance_create:
 
@@ -22,7 +30,7 @@ def create():
 
     :return: Flask object
     """
-    yasm = Flask(__name__, instance_relative_config=True)
+    global yasm
     yasm.config.from_object('config')
     yasm.config.from_pyfile('config.py')
     csrf = CSRFProtect(yasm)
