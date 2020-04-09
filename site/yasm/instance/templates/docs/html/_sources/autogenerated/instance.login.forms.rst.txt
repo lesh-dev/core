@@ -1,6 +1,0 @@
-instance.login.forms module
-===========================
-
-.. automodule:: instance.login.forms
-   :members:
-   :show-inheritance:

@@ -1,6 +1,0 @@
-instance.react\_components.models module
-========================================
-
-.. automodule:: instance.react_components.models
-   :members:
-   :show-inheritance:

@@ -1,6 +1,0 @@
-instance.generated.models.yasm.database package
-===============================================
-
-.. automodule:: instance.generated.models.yasm.database
-   :members:
-   :show-inheritance:

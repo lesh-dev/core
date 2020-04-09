@@ -1,6 +1,0 @@
-instance.generated.enums.yasm.internal.person package
-=====================================================
-
-.. automodule:: instance.generated.enums.yasm.internal.person
-   :members:
-   :show-inheritance:

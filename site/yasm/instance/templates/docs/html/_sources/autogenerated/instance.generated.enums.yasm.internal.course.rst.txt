@@ -1,6 +1,0 @@
-instance.generated.enums.yasm.internal.course package
-=====================================================
-
-.. automodule:: instance.generated.enums.yasm.internal.course
-   :members:
-   :show-inheritance:

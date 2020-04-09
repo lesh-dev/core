@@ -1,6 +1,0 @@
-instance.database module
-========================
-
-.. automodule:: instance.database
-   :members:
-   :show-inheritance:

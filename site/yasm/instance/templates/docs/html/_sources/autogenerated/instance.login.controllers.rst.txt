@@ -1,6 +1,0 @@
-instance.login.controllers module
-=================================
-
-.. automodule:: instance.login.controllers
-   :members:
-   :show-inheritance:

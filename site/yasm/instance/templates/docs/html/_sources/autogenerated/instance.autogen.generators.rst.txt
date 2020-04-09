@@ -1,6 +1,0 @@
-instance.autogen.generators module
-==================================
-
-.. automodule:: instance.autogen.generators
-   :members:
-   :show-inheritance:

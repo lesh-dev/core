@@ -1,6 +1,0 @@
-instance.login.oauth2.yandex package
-====================================
-
-.. automodule:: instance.login.oauth2.yandex
-   :members:
-   :show-inheritance:

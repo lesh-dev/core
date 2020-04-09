@@ -1,6 +1,0 @@
-instance.react\_components.forms module
-=======================================
-
-.. automodule:: instance.react_components.forms
-   :members:
-   :show-inheritance:

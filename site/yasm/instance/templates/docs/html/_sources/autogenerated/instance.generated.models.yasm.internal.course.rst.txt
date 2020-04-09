@@ -1,6 +1,0 @@
-instance.generated.models.yasm.internal.course package
-======================================================
-
-.. automodule:: instance.generated.models.yasm.internal.course
-   :members:
-   :show-inheritance:

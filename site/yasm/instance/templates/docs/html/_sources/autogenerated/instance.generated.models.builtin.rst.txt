@@ -1,6 +1,0 @@
-instance.generated.models.builtin package
-=========================================
-
-.. automodule:: instance.generated.models.builtin
-   :members:
-   :show-inheritance:

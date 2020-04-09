@@ -1,6 +1,0 @@
-instance.internal.people module
-===============================
-
-.. automodule:: instance.internal.people
-   :members:
-   :show-inheritance:

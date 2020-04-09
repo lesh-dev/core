@@ -1,6 +1,0 @@
-instance.generate module
-========================
-
-.. automodule:: instance.generate
-   :members:
-   :show-inheritance:

@@ -1,6 +1,0 @@
-instance.NestableBlueprint module
-=================================
-
-.. automodule:: instance.NestableBlueprint
-   :members:
-   :show-inheritance:

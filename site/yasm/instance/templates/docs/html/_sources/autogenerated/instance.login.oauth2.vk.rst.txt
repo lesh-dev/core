@@ -1,6 +1,0 @@
-instance.login.oauth2.vk package
-================================
-
-.. automodule:: instance.login.oauth2.vk
-   :members:
-   :show-inheritance:

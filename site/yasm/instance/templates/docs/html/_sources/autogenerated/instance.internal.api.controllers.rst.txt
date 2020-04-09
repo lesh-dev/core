@@ -1,6 +1,0 @@
-instance.internal.api.controllers module
-========================================
-
-.. automodule:: instance.internal.api.controllers
-   :members:
-   :show-inheritance:

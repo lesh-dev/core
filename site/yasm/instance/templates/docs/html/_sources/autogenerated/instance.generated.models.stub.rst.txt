@@ -1,6 +1,0 @@
-instance.generated.models.stub module
-=====================================
-
-.. automodule:: instance.generated.models.stub
-   :members:
-   :show-inheritance:

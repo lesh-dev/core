@@ -1,6 +1,0 @@
-instance.public.forms module
-============================
-
-.. automodule:: instance.public.forms
-   :members:
-   :show-inheritance:

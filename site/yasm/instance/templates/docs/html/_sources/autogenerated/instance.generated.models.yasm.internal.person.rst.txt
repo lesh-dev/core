@@ -1,6 +1,0 @@
-instance.generated.models.yasm.internal.person package
-======================================================
-
-.. automodule:: instance.generated.models.yasm.internal.person
-   :members:
-   :show-inheritance:

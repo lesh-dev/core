@@ -1,6 +1,0 @@
-instance.autogen.declarative module
-===================================
-
-.. automodule:: instance.autogen.declarative
-   :members:
-   :show-inheritance:

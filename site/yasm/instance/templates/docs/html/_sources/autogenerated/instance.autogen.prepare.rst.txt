@@ -1,6 +1,0 @@
-instance.autogen.prepare module
-===============================
-
-.. automodule:: instance.autogen.prepare
-   :members:
-   :show-inheritance:

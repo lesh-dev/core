@@ -1,6 +1,0 @@
-instance.login.oauth2.base module
-=================================
-
-.. automodule:: instance.login.oauth2.base
-   :members:
-   :show-inheritance:

@@ -1,6 +1,0 @@
-instance.builtins module
-========================
-
-.. automodule:: instance.builtins
-   :members:
-   :show-inheritance:

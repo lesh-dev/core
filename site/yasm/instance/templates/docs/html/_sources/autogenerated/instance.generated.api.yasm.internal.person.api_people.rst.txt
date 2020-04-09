@@ -1,6 +1,0 @@
-instance.generated.api.yasm.internal.person.api\_people module
-==============================================================
-
-.. automodule:: instance.generated.api.yasm.internal.person.api_people
-   :members:
-   :show-inheritance:

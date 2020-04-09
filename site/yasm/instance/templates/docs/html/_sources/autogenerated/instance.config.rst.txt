@@ -1,6 +1,0 @@
-instance.config module
-======================
-
-.. automodule:: instance.config
-   :members:
-   :show-inheritance:

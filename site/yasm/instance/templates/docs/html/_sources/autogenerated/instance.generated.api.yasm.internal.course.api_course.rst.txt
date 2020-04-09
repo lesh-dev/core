@@ -1,6 +1,0 @@
-instance.generated.api.yasm.internal.course.api\_course module
-==============================================================
-
-.. automodule:: instance.generated.api.yasm.internal.course.api_course
-   :members:
-   :show-inheritance:

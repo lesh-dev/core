@@ -1,6 +1,0 @@
-instance.generated.api.decorators module
-========================================
-
-.. automodule:: instance.generated.api.decorators
-   :members:
-   :show-inheritance:
