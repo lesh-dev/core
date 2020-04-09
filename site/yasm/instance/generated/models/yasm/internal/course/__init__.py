@@ -42,47 +42,6 @@ class FetchCourseRequest:
         return json.dumps(self.to_json())
 
 
-class TeachersPatchEntry:
-    def __init__(
-        self,
-        name=None,
-        action=None,
-    ):
-        self.serialized = False
-        if name is not None:
-            assert isinstance(name, str)
-            self.name = name
-        if action is not None:
-            assert isinstance(action, enums.yasm.internal.course.TeachersPatchActions)
-            self.action = action
-
-
-    @classmethod
-    def from_json(cls, json_data):
-        return cls(
-            name=str(json_data['name']) if 'name' in json_data else None,
-            action=enums.yasm.internal.course.TeachersPatchActions(json_data['action']) if 'action' in json_data else None,
-        )
-
-    @classmethod
-    def from_string(cls, data):
-        return cls.from_json(json.loads(data))
-
-    def to_json(self):
-        self.serialized = True
-        ret = dict()
-
-        if isinstance(self.name, str):
-            ret['name'] = self.name
-        if isinstance(self.action, enums.yasm.internal.course.TeachersPatchActions):
-            ret['action'] = self.action.value
-        self.serialized = False
-        return ret
-
-    def to_string(self):
-        return json.dumps(self.to_json())
-
-
 class PatchTeachersRequest:
     def __init__(
         self,
@@ -151,6 +110,47 @@ class PatchTeachersResponse:
 
         if  isinstance(self.teachers, list):
             ret['teachers'] = [value.to_json() for value in self.teachers if not value.serialized]
+        self.serialized = False
+        return ret
+
+    def to_string(self):
+        return json.dumps(self.to_json())
+
+
+class TeachersPatchEntry:
+    def __init__(
+        self,
+        name=None,
+        action=None,
+    ):
+        self.serialized = False
+        if name is not None:
+            assert isinstance(name, str)
+            self.name = name
+        if action is not None:
+            assert isinstance(action, enums.yasm.internal.course.TeachersPatchActions)
+            self.action = action
+
+
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(
+            name=str(json_data['name']) if 'name' in json_data else None,
+            action=enums.yasm.internal.course.TeachersPatchActions(json_data['action']) if 'action' in json_data else None,
+        )
+
+    @classmethod
+    def from_string(cls, data):
+        return cls.from_json(json.loads(data))
+
+    def to_json(self):
+        self.serialized = True
+        ret = dict()
+
+        if isinstance(self.name, str):
+            ret['name'] = self.name
+        if isinstance(self.action, enums.yasm.internal.course.TeachersPatchActions):
+            ret['action'] = self.action.value
         self.serialized = False
         return ret
 

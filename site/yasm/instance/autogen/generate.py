@@ -87,8 +87,8 @@ def main():
     ):
         return module_template.render(
             level='.' * level,
-            models=bundle,
-            children=children,
+            models=sorted(bundle),
+            children=sorted(children),
         )
 
     py_message_trie.traverse(

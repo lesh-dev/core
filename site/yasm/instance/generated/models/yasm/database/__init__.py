@@ -8,6 +8,434 @@ from ... import yasm
 from .... import enums
 
 
+@stub.add_search
+class Course(
+        stub.db.Model,
+):
+    __tablename__ = 'course'
+
+    def __init__(self, *args, **kwargs):
+        self.serialized = False
+        super(Course, self).__init__(*args, **kwargs)
+
+    @sqlalchemy.orm.reconstructor
+    def init_on_load(self):
+        self.serialized = False
+
+        self.type = enums.yasm.database.CourseType(self.type)
+        self.area = enums.yasm.database.CourseArea(self.area)
+
+    id = stub.db.Column(
+        stub.db.Integer,
+        name='course_id',
+        primary_key=True,
+        autoincrement=True,
+
+    )
+    title = stub.db.Column(
+        stub.db.Text,
+        name='course_title',
+        
+    )
+    fk_school_id = stub.db.Column(
+        stub.db.Integer,
+        name='school_id',
+        
+    )
+    cycle = stub.db.Column(
+        stub.db.Text,
+        name='course_cycle',
+        
+    )
+    target_class = stub.db.Column(
+        stub.db.Text,
+        name='target_class',
+        
+    )
+    desc = stub.db.Column(
+        stub.db.Text,
+        name='course_desc',
+        
+    )
+    type = stub.db.Column(
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.CourseType), name='course_type'),
+        name='course_type',
+        
+    )
+    area = stub.db.Column(
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.CourseArea), name='course_area'),
+        name='course_area',
+        
+    )
+    created = stub.db.Column(
+        stub.db.Text,
+        name='course_created',
+        
+    )
+    modified = stub.db.Column(
+        stub.db.Text,
+        name='course_modified',
+        
+    )
+    changedby = stub.db.Column(
+        stub.db.Text,
+        name='course_changedby',
+        
+    )
+    school = stub.db.relationship(
+        'School',
+        uselist=False,
+        lazy='joined',
+        foreign_keys=[
+            fk_school_id,
+        ],
+        back_populates='courses',
+    )
+    teachers = stub.db.relationship(
+        'CourseTeachers',
+        uselist=True,
+        lazy='select',
+        back_populates='course',
+    )
+    exams = stub.db.relationship(
+        'Exam',
+        uselist=True,
+        lazy='select',
+        back_populates='course',
+    )
+    __table_args__ = (
+        stub.db.ForeignKeyConstraint(
+            (
+                fk_school_id,
+            ),
+            (
+                'school.school_id',
+            ),
+        ),
+    )
+
+    searchable_columns = [
+        title,
+        desc,
+    ]
+
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(
+            id=int(json_data['id']) if 'id' in json_data else None,
+            title=str(json_data['title']) if 'title' in json_data else None,
+            school=yasm.yasm.database.School.from_json(json_data['school']) if 'school' in json_data else None,
+            cycle=str(json_data['cycle']) if 'cycle' in json_data else None,
+            target_class=str(json_data['target_class']) if 'target_class' in json_data else None,
+            desc=str(json_data['desc']) if 'desc' in json_data else None,
+            type=enums.yasm.database.CourseType(json_data['type']) if 'type' in json_data else None,
+            area=enums.yasm.database.CourseArea(json_data['area']) if 'area' in json_data else None,
+            created=str(json_data['created']) if 'created' in json_data else None,
+            modified=str(json_data['modified']) if 'modified' in json_data else None,
+            changedby=str(json_data['changedby']) if 'changedby' in json_data else None,
+            teachers=[yasm.yasm.database.CourseTeachers.from_json(item) for item in json_data.get('teachers', [])],
+            exams=[yasm.yasm.database.Exam.from_json(item) for item in json_data.get('exams', [])],
+        )
+
+    @classmethod
+    def from_string(cls, data):
+        return cls.from_json(json.loads(data))
+
+    def to_json(self):
+        self.serialized = True
+        ret = dict()
+        unloaded = sqlalchemy.inspect(self).unloaded
+
+        if isinstance(self.id, int):
+            ret['id'] = self.id
+        if isinstance(self.title, str):
+            ret['title'] = self.title
+        if isinstance(self.school, yasm.yasm.database.School) and not self.school.serialized:
+            ret['school'] = self.school.to_json()
+        if isinstance(self.cycle, str):
+            ret['cycle'] = self.cycle
+        if isinstance(self.target_class, str):
+            ret['target_class'] = self.target_class
+        if isinstance(self.desc, str):
+            ret['desc'] = self.desc
+        if isinstance(self.type, enums.yasm.database.CourseType):
+            ret['type'] = self.type.value
+        if isinstance(self.area, enums.yasm.database.CourseArea):
+            ret['area'] = self.area.value
+        if isinstance(self.created, str):
+            ret['created'] = self.created
+        if isinstance(self.modified, str):
+            ret['modified'] = self.modified
+        if isinstance(self.changedby, str):
+            ret['changedby'] = self.changedby
+        if 'teachers' not in unloaded and isinstance(self.teachers, list):
+            ret['teachers'] = [value.to_json() for value in self.teachers if not value.serialized]
+        if 'exams' not in unloaded and isinstance(self.exams, list):
+            ret['exams'] = [value.to_json() for value in self.exams if not value.serialized]
+        self.serialized = False
+        return ret
+
+    def to_string(self):
+        return json.dumps(self.to_json())
+
+
+@stub.add_search
+class Department(
+        stub.db.Model,
+):
+    __tablename__ = 'department'
+
+    def __init__(self, *args, **kwargs):
+        self.serialized = False
+        super(Department, self).__init__(*args, **kwargs)
+
+    @sqlalchemy.orm.reconstructor
+    def init_on_load(self):
+        self.serialized = False
+
+
+    id = stub.db.Column(
+        stub.db.Integer,
+        name='department_id',
+        primary_key=True,
+        autoincrement=True,
+
+    )
+    title = stub.db.Column(
+        stub.db.Text,
+        name='department_title',
+        
+    )
+    created = stub.db.Column(
+        stub.db.Text,
+        name='department_created',
+        
+    )
+    modified = stub.db.Column(
+        stub.db.Text,
+        name='department_modified',
+        
+    )
+    changedby = stub.db.Column(
+        stub.db.Text,
+        name='department_changedby',
+        
+    )
+    people = stub.db.relationship(
+        'Person',
+        uselist=True,
+        lazy='select',
+        back_populates='department',
+    )
+    person_schools = stub.db.relationship(
+        'PersonSchool',
+        uselist=True,
+        lazy='select',
+        back_populates='department',
+    )
+    __table_args__ = (
+    )
+
+    searchable_columns = [
+        title,
+    ]
+
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(
+            id=int(json_data['id']) if 'id' in json_data else None,
+            people=[yasm.yasm.database.Person.from_json(item) for item in json_data.get('people', [])],
+            title=str(json_data['title']) if 'title' in json_data else None,
+            created=str(json_data['created']) if 'created' in json_data else None,
+            modified=str(json_data['modified']) if 'modified' in json_data else None,
+            changedby=str(json_data['changedby']) if 'changedby' in json_data else None,
+            person_schools=[yasm.yasm.database.PersonSchool.from_json(item) for item in json_data.get('person_schools', [])],
+        )
+
+    @classmethod
+    def from_string(cls, data):
+        return cls.from_json(json.loads(data))
+
+    def to_json(self):
+        self.serialized = True
+        ret = dict()
+        unloaded = sqlalchemy.inspect(self).unloaded
+
+        if isinstance(self.id, int):
+            ret['id'] = self.id
+        if 'people' not in unloaded and isinstance(self.people, list):
+            ret['people'] = [value.to_json() for value in self.people if not value.serialized]
+        if isinstance(self.title, str):
+            ret['title'] = self.title
+        if isinstance(self.created, str):
+            ret['created'] = self.created
+        if isinstance(self.modified, str):
+            ret['modified'] = self.modified
+        if isinstance(self.changedby, str):
+            ret['changedby'] = self.changedby
+        if 'person_schools' not in unloaded and isinstance(self.person_schools, list):
+            ret['person_schools'] = [value.to_json() for value in self.person_schools if not value.serialized]
+        self.serialized = False
+        return ret
+
+    def to_string(self):
+        return json.dumps(self.to_json())
+
+
+@stub.add_search
+class School(
+        stub.db.Model,
+):
+    __tablename__ = 'school'
+
+    def __init__(self, *args, **kwargs):
+        self.serialized = False
+        super(School, self).__init__(*args, **kwargs)
+
+    @sqlalchemy.orm.reconstructor
+    def init_on_load(self):
+        self.serialized = False
+
+        self.type = enums.yasm.database.SchoolType(self.type)
+
+    id = stub.db.Column(
+        stub.db.Integer,
+        name='school_id',
+        primary_key=True,
+        autoincrement=True,
+
+    )
+    title = stub.db.Column(
+        stub.db.Text,
+        name='school_title',
+        
+    )
+    type = stub.db.Column(
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.SchoolType), name='school_type'),
+        name='school_type',
+        
+    )
+    start = stub.db.Column(
+        stub.db.Text,
+        name='school_date_start',
+        
+    )
+    end = stub.db.Column(
+        stub.db.Text,
+        name='school_date_end',
+        
+    )
+    location = stub.db.Column(
+        stub.db.Text,
+        name='school_location',
+        
+    )
+    coords = stub.db.Column(
+        stub.db.Text,
+        name='school_coords',
+        
+    )
+    created = stub.db.Column(
+        stub.db.Text,
+        name='school_created',
+        
+    )
+    modified = stub.db.Column(
+        stub.db.Text,
+        name='school_modified',
+        
+    )
+    changedby = stub.db.Column(
+        stub.db.Text,
+        name='school_changedby',
+        
+    )
+    person_schools = stub.db.relationship(
+        'PersonSchool',
+        uselist=True,
+        lazy='select',
+        back_populates='school',
+    )
+    courses = stub.db.relationship(
+        'Course',
+        uselist=True,
+        lazy='select',
+        back_populates='school',
+    )
+    person_comments = stub.db.relationship(
+        'PersonComment',
+        uselist=True,
+        lazy='select',
+        back_populates='school',
+    )
+    __table_args__ = (
+    )
+
+    searchable_columns = [
+        title,
+        location,
+    ]
+
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(
+            id=int(json_data['id']) if 'id' in json_data else None,
+            title=str(json_data['title']) if 'title' in json_data else None,
+            type=enums.yasm.database.SchoolType(json_data['type']) if 'type' in json_data else None,
+            start=str(json_data['start']) if 'start' in json_data else None,
+            end=str(json_data['end']) if 'end' in json_data else None,
+            location=str(json_data['location']) if 'location' in json_data else None,
+            coords=str(json_data['coords']) if 'coords' in json_data else None,
+            created=str(json_data['created']) if 'created' in json_data else None,
+            modified=str(json_data['modified']) if 'modified' in json_data else None,
+            changedby=str(json_data['changedby']) if 'changedby' in json_data else None,
+            person_schools=[yasm.yasm.database.PersonSchool.from_json(item) for item in json_data.get('person_schools', [])],
+            courses=[yasm.yasm.database.Course.from_json(item) for item in json_data.get('courses', [])],
+            person_comments=[yasm.yasm.database.PersonComment.from_json(item) for item in json_data.get('person_comments', [])],
+        )
+
+    @classmethod
+    def from_string(cls, data):
+        return cls.from_json(json.loads(data))
+
+    def to_json(self):
+        self.serialized = True
+        ret = dict()
+        unloaded = sqlalchemy.inspect(self).unloaded
+
+        if isinstance(self.id, int):
+            ret['id'] = self.id
+        if isinstance(self.title, str):
+            ret['title'] = self.title
+        if isinstance(self.type, enums.yasm.database.SchoolType):
+            ret['type'] = self.type.value
+        if isinstance(self.start, str):
+            ret['start'] = self.start
+        if isinstance(self.end, str):
+            ret['end'] = self.end
+        if isinstance(self.location, str):
+            ret['location'] = self.location
+        if isinstance(self.coords, str):
+            ret['coords'] = self.coords
+        if isinstance(self.created, str):
+            ret['created'] = self.created
+        if isinstance(self.modified, str):
+            ret['modified'] = self.modified
+        if isinstance(self.changedby, str):
+            ret['changedby'] = self.changedby
+        if 'person_schools' not in unloaded and isinstance(self.person_schools, list):
+            ret['person_schools'] = [value.to_json() for value in self.person_schools if not value.serialized]
+        if 'courses' not in unloaded and isinstance(self.courses, list):
+            ret['courses'] = [value.to_json() for value in self.courses if not value.serialized]
+        if 'person_comments' not in unloaded and isinstance(self.person_comments, list):
+            ret['person_comments'] = [value.to_json() for value in self.person_comments if not value.serialized]
+        self.serialized = False
+        return ret
+
+    def to_string(self):
+        return json.dumps(self.to_json())
+
+
 @stub.lm.user_loader
 def user_loader(id):
     return Person.query.get(dict(id))
@@ -457,271 +885,61 @@ class Person(
         return json.dumps(self.to_json())
 
 
-@stub.add_search
-class Department(
+class Ava(
         stub.db.Model,
 ):
-    __tablename__ = 'department'
+    __tablename__ = 'ava'
 
     def __init__(self, *args, **kwargs):
         self.serialized = False
-        super(Department, self).__init__(*args, **kwargs)
+        super(Ava, self).__init__(*args, **kwargs)
 
     @sqlalchemy.orm.reconstructor
     def init_on_load(self):
         self.serialized = False
 
+        self.status = enums.yasm.database.DatabaseStatus(self.status)
 
     id = stub.db.Column(
         stub.db.Integer,
-        name='department_id',
+        name='id',
         primary_key=True,
         autoincrement=True,
 
     )
-    title = stub.db.Column(
-        stub.db.Text,
-        name='department_title',
-        
-    )
-    created = stub.db.Column(
-        stub.db.Text,
-        name='department_created',
-        
-    )
-    modified = stub.db.Column(
-        stub.db.Text,
-        name='department_modified',
-        
-    )
-    changedby = stub.db.Column(
-        stub.db.Text,
-        name='department_changedby',
-        
-    )
-    people = stub.db.relationship(
-        'Person',
-        uselist=True,
-        lazy='select',
-        back_populates='department',
-    )
-    person_schools = stub.db.relationship(
-        'PersonSchool',
-        uselist=True,
-        lazy='select',
-        back_populates='department',
-    )
-    __table_args__ = (
-    )
-
-    searchable_columns = [
-        title,
-    ]
-
-    @classmethod
-    def from_json(cls, json_data):
-        return cls(
-            id=int(json_data['id']) if 'id' in json_data else None,
-            people=[yasm.yasm.database.Person.from_json(item) for item in json_data.get('people', [])],
-            title=str(json_data['title']) if 'title' in json_data else None,
-            created=str(json_data['created']) if 'created' in json_data else None,
-            modified=str(json_data['modified']) if 'modified' in json_data else None,
-            changedby=str(json_data['changedby']) if 'changedby' in json_data else None,
-            person_schools=[yasm.yasm.database.PersonSchool.from_json(item) for item in json_data.get('person_schools', [])],
-        )
-
-    @classmethod
-    def from_string(cls, data):
-        return cls.from_json(json.loads(data))
-
-    def to_json(self):
-        self.serialized = True
-        ret = dict()
-        unloaded = sqlalchemy.inspect(self).unloaded
-
-        if isinstance(self.id, int):
-            ret['id'] = self.id
-        if 'people' not in unloaded and isinstance(self.people, list):
-            ret['people'] = [value.to_json() for value in self.people if not value.serialized]
-        if isinstance(self.title, str):
-            ret['title'] = self.title
-        if isinstance(self.created, str):
-            ret['created'] = self.created
-        if isinstance(self.modified, str):
-            ret['modified'] = self.modified
-        if isinstance(self.changedby, str):
-            ret['changedby'] = self.changedby
-        if 'person_schools' not in unloaded and isinstance(self.person_schools, list):
-            ret['person_schools'] = [value.to_json() for value in self.person_schools if not value.serialized]
-        self.serialized = False
-        return ret
-
-    def to_string(self):
-        return json.dumps(self.to_json())
-
-
-class PersonSchool(
-        stub.db.Model,
-):
-    __tablename__ = 'person_school'
-
-    def __init__(self, *args, **kwargs):
-        self.serialized = False
-        super(PersonSchool, self).__init__(*args, **kwargs)
-
-    @sqlalchemy.orm.reconstructor
-    def init_on_load(self):
-        self.serialized = False
-
-        self.curatorship = enums.yasm.database.Curatorship(self.curatorship)
-
-    id = stub.db.Column(
+    fk_person_id = stub.db.Column(
         stub.db.Integer,
-        name='person_school_id',
-        primary_key=True,
-        autoincrement=True,
-
-    )
-    fk_member_id = stub.db.Column(
-        stub.db.Integer,
-        name='member_person_id',
+        name='person_id',
         
     )
-    fk_department_id = stub.db.Column(
-        stub.db.Integer,
-        name='member_department_id',
+    ava = stub.db.Column(
+        stub.db.Text,
+        name='ava',
         
     )
-    fk_school_id = stub.db.Column(
-        stub.db.Integer,
-        name='school_id',
+    status = stub.db.Column(
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.DatabaseStatus), name='database_status'),
+        name='status',
         
     )
-    is_student = stub.db.Column(
-        stub.db.Text,
-        name='is_student',
-        nullable=True,
-
-    )
-    is_teacher = stub.db.Column(
-        stub.db.Text,
-        name='is_teacher',
-        nullable=True,
-
-    )
-    curatorship = stub.db.Column(
-        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.Curatorship), name='curatorship_type'),
-        name='curatorship',
-        nullable=True,
-
-    )
-    curator_group = stub.db.Column(
-        stub.db.Text,
-        name='curator_group',
-        nullable=True,
-
-    )
-    courses_needed = stub.db.Column(
-        stub.db.Text,
-        name='courses_needed',
-        nullable=True,
-
-    )
-    current_class = stub.db.Column(
-        stub.db.Text,
-        name='current_class',
-        nullable=True,
-
-    )
-    comment = stub.db.Column(
-        stub.db.Text,
-        name='person_school_comment',
-        nullable=True,
-
-    )
-    created = stub.db.Column(
-        stub.db.Text,
-        name='person_school_created',
-        
-    )
-    modified = stub.db.Column(
-        stub.db.Text,
-        name='person_school_modified',
-        
-    )
-    changedby = stub.db.Column(
-        stub.db.Text,
-        name='person_school_changedby',
-        
-    )
-    arrival = stub.db.Column(
-        stub.db.Text,
-        name='frm',
-        
-    )
-    leave = stub.db.Column(
-        stub.db.Text,
-        name='tll',
-        
-    )
-    member = stub.db.relationship(
+    person = stub.db.relationship(
         'Person',
         uselist=False,
         lazy='joined',
         foreign_keys=[
-            fk_member_id,
+            fk_person_id,
         ],
-        back_populates='person_schools',
-    )
-    department = stub.db.relationship(
-        'Department',
-        uselist=False,
-        lazy='joined',
-        foreign_keys=[
-            fk_department_id,
-        ],
-        back_populates='person_schools',
-    )
-    school = stub.db.relationship(
-        'School',
-        uselist=False,
-        lazy='joined',
-        foreign_keys=[
-            fk_school_id,
-        ],
-        back_populates='person_schools',
-    )
-    calendars = stub.db.relationship(
-        'Calendar',
-        uselist=True,
-        lazy='select',
-        back_populates='person_school',
+        back_populates='avas',
     )
     __table_args__ = (
         stub.db.ForeignKeyConstraint(
             (
-                fk_member_id,
+                fk_person_id,
             ),
             (
                 'person.person_id',
             ),
         ),
-        stub.db.ForeignKeyConstraint(
-            (
-                fk_department_id,
-            ),
-            (
-                'department.department_id',
-            ),
-        ),
-        stub.db.ForeignKeyConstraint(
-            (
-                fk_school_id,
-            ),
-            (
-                'school.school_id',
-            ),
-        ),
     )
 
     searchable_columns = [
@@ -731,22 +949,9 @@ class PersonSchool(
     def from_json(cls, json_data):
         return cls(
             id=int(json_data['id']) if 'id' in json_data else None,
-            member=yasm.yasm.database.Person.from_json(json_data['member']) if 'member' in json_data else None,
-            department=yasm.yasm.database.Department.from_json(json_data['department']) if 'department' in json_data else None,
-            school=yasm.yasm.database.School.from_json(json_data['school']) if 'school' in json_data else None,
-            is_student=str(json_data['is_student']) if 'is_student' in json_data else None,
-            is_teacher=str(json_data['is_teacher']) if 'is_teacher' in json_data else None,
-            curatorship=enums.yasm.database.Curatorship(json_data['curatorship']) if 'curatorship' in json_data else None,
-            curator_group=str(json_data['curator_group']) if 'curator_group' in json_data else None,
-            courses_needed=str(json_data['courses_needed']) if 'courses_needed' in json_data else None,
-            current_class=str(json_data['current_class']) if 'current_class' in json_data else None,
-            comment=str(json_data['comment']) if 'comment' in json_data else None,
-            created=str(json_data['created']) if 'created' in json_data else None,
-            modified=str(json_data['modified']) if 'modified' in json_data else None,
-            changedby=str(json_data['changedby']) if 'changedby' in json_data else None,
-            arrival=str(json_data['arrival']) if 'arrival' in json_data else None,
-            leave=str(json_data['leave']) if 'leave' in json_data else None,
-            calendars=[yasm.yasm.database.Calendar.from_json(item) for item in json_data.get('calendars', [])],
+            person=yasm.yasm.database.Person.from_json(json_data['person']) if 'person' in json_data else None,
+            ava=str(json_data['ava']) if 'ava' in json_data else None,
+            status=enums.yasm.database.DatabaseStatus(json_data['status']) if 'status' in json_data else None,
         )
 
     @classmethod
@@ -760,38 +965,12 @@ class PersonSchool(
 
         if isinstance(self.id, int):
             ret['id'] = self.id
-        if isinstance(self.member, yasm.yasm.database.Person) and not self.member.serialized:
-            ret['member'] = self.member.to_json()
-        if isinstance(self.department, yasm.yasm.database.Department) and not self.department.serialized:
-            ret['department'] = self.department.to_json()
-        if isinstance(self.school, yasm.yasm.database.School) and not self.school.serialized:
-            ret['school'] = self.school.to_json()
-        if isinstance(self.is_student, str):
-            ret['is_student'] = self.is_student
-        if isinstance(self.is_teacher, str):
-            ret['is_teacher'] = self.is_teacher
-        if isinstance(self.curatorship, enums.yasm.database.Curatorship):
-            ret['curatorship'] = self.curatorship.value
-        if isinstance(self.curator_group, str):
-            ret['curator_group'] = self.curator_group
-        if isinstance(self.courses_needed, str):
-            ret['courses_needed'] = self.courses_needed
-        if isinstance(self.current_class, str):
-            ret['current_class'] = self.current_class
-        if isinstance(self.comment, str):
-            ret['comment'] = self.comment
-        if isinstance(self.created, str):
-            ret['created'] = self.created
-        if isinstance(self.modified, str):
-            ret['modified'] = self.modified
-        if isinstance(self.changedby, str):
-            ret['changedby'] = self.changedby
-        if isinstance(self.arrival, str):
-            ret['arrival'] = self.arrival
-        if isinstance(self.leave, str):
-            ret['leave'] = self.leave
-        if 'calendars' not in unloaded and isinstance(self.calendars, list):
-            ret['calendars'] = [value.to_json() for value in self.calendars if not value.serialized]
+        if isinstance(self.person, yasm.yasm.database.Person) and not self.person.serialized:
+            ret['person'] = self.person.to_json()
+        if isinstance(self.ava, str):
+            ret['ava'] = self.ava
+        if isinstance(self.status, enums.yasm.database.DatabaseStatus):
+            ret['status'] = self.status.value
         self.serialized = False
         return ret
 
@@ -901,287 +1080,72 @@ class Calendar(
         return json.dumps(self.to_json())
 
 
-@stub.add_search
-class School(
+class Contact(
         stub.db.Model,
 ):
-    __tablename__ = 'school'
+    __tablename__ = 'contact'
 
     def __init__(self, *args, **kwargs):
         self.serialized = False
-        super(School, self).__init__(*args, **kwargs)
+        super(Contact, self).__init__(*args, **kwargs)
 
     @sqlalchemy.orm.reconstructor
     def init_on_load(self):
         self.serialized = False
 
-        self.type = enums.yasm.database.SchoolType(self.type)
 
     id = stub.db.Column(
         stub.db.Integer,
-        name='school_id',
+        name='id',
         primary_key=True,
         autoincrement=True,
 
     )
-    title = stub.db.Column(
-        stub.db.Text,
-        name='school_title',
-        
-    )
-    type = stub.db.Column(
-        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.SchoolType), name='school_type'),
-        name='school_type',
-        
-    )
-    start = stub.db.Column(
-        stub.db.Text,
-        name='school_date_start',
-        
-    )
-    end = stub.db.Column(
-        stub.db.Text,
-        name='school_date_end',
-        
-    )
-    location = stub.db.Column(
-        stub.db.Text,
-        name='school_location',
-        
-    )
-    coords = stub.db.Column(
-        stub.db.Text,
-        name='school_coords',
-        
-    )
-    created = stub.db.Column(
-        stub.db.Text,
-        name='school_created',
-        
-    )
-    modified = stub.db.Column(
-        stub.db.Text,
-        name='school_modified',
-        
-    )
-    changedby = stub.db.Column(
-        stub.db.Text,
-        name='school_changedby',
-        
-    )
-    person_schools = stub.db.relationship(
-        'PersonSchool',
-        uselist=True,
-        lazy='select',
-        back_populates='school',
-    )
-    courses = stub.db.relationship(
-        'Course',
-        uselist=True,
-        lazy='select',
-        back_populates='school',
-    )
-    person_comments = stub.db.relationship(
-        'PersonComment',
-        uselist=True,
-        lazy='select',
-        back_populates='school',
-    )
-    __table_args__ = (
-    )
-
-    searchable_columns = [
-        title,
-        location,
-    ]
-
-    @classmethod
-    def from_json(cls, json_data):
-        return cls(
-            id=int(json_data['id']) if 'id' in json_data else None,
-            title=str(json_data['title']) if 'title' in json_data else None,
-            type=enums.yasm.database.SchoolType(json_data['type']) if 'type' in json_data else None,
-            start=str(json_data['start']) if 'start' in json_data else None,
-            end=str(json_data['end']) if 'end' in json_data else None,
-            location=str(json_data['location']) if 'location' in json_data else None,
-            coords=str(json_data['coords']) if 'coords' in json_data else None,
-            created=str(json_data['created']) if 'created' in json_data else None,
-            modified=str(json_data['modified']) if 'modified' in json_data else None,
-            changedby=str(json_data['changedby']) if 'changedby' in json_data else None,
-            person_schools=[yasm.yasm.database.PersonSchool.from_json(item) for item in json_data.get('person_schools', [])],
-            courses=[yasm.yasm.database.Course.from_json(item) for item in json_data.get('courses', [])],
-            person_comments=[yasm.yasm.database.PersonComment.from_json(item) for item in json_data.get('person_comments', [])],
-        )
-
-    @classmethod
-    def from_string(cls, data):
-        return cls.from_json(json.loads(data))
-
-    def to_json(self):
-        self.serialized = True
-        ret = dict()
-        unloaded = sqlalchemy.inspect(self).unloaded
-
-        if isinstance(self.id, int):
-            ret['id'] = self.id
-        if isinstance(self.title, str):
-            ret['title'] = self.title
-        if isinstance(self.type, enums.yasm.database.SchoolType):
-            ret['type'] = self.type.value
-        if isinstance(self.start, str):
-            ret['start'] = self.start
-        if isinstance(self.end, str):
-            ret['end'] = self.end
-        if isinstance(self.location, str):
-            ret['location'] = self.location
-        if isinstance(self.coords, str):
-            ret['coords'] = self.coords
-        if isinstance(self.created, str):
-            ret['created'] = self.created
-        if isinstance(self.modified, str):
-            ret['modified'] = self.modified
-        if isinstance(self.changedby, str):
-            ret['changedby'] = self.changedby
-        if 'person_schools' not in unloaded and isinstance(self.person_schools, list):
-            ret['person_schools'] = [value.to_json() for value in self.person_schools if not value.serialized]
-        if 'courses' not in unloaded and isinstance(self.courses, list):
-            ret['courses'] = [value.to_json() for value in self.courses if not value.serialized]
-        if 'person_comments' not in unloaded and isinstance(self.person_comments, list):
-            ret['person_comments'] = [value.to_json() for value in self.person_comments if not value.serialized]
-        self.serialized = False
-        return ret
-
-    def to_string(self):
-        return json.dumps(self.to_json())
-
-
-@stub.add_search
-class Course(
-        stub.db.Model,
-):
-    __tablename__ = 'course'
-
-    def __init__(self, *args, **kwargs):
-        self.serialized = False
-        super(Course, self).__init__(*args, **kwargs)
-
-    @sqlalchemy.orm.reconstructor
-    def init_on_load(self):
-        self.serialized = False
-
-        self.type = enums.yasm.database.CourseType(self.type)
-        self.area = enums.yasm.database.CourseArea(self.area)
-
-    id = stub.db.Column(
+    fk_person_id = stub.db.Column(
         stub.db.Integer,
-        name='course_id',
-        primary_key=True,
-        autoincrement=True,
-
+        name='person_id',
+        
     )
-    title = stub.db.Column(
+    name = stub.db.Column(
         stub.db.Text,
-        name='course_title',
+        name='name',
         
     )
-    fk_school_id = stub.db.Column(
-        stub.db.Integer,
-        name='school_id',
-        
-    )
-    cycle = stub.db.Column(
+    value = stub.db.Column(
         stub.db.Text,
-        name='course_cycle',
+        name='value',
         
     )
-    target_class = stub.db.Column(
-        stub.db.Text,
-        name='target_class',
-        
-    )
-    desc = stub.db.Column(
-        stub.db.Text,
-        name='course_desc',
-        
-    )
-    type = stub.db.Column(
-        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.CourseType), name='course_type'),
-        name='course_type',
-        
-    )
-    area = stub.db.Column(
-        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.CourseArea), name='course_area'),
-        name='course_area',
-        
-    )
-    created = stub.db.Column(
-        stub.db.Text,
-        name='course_created',
-        
-    )
-    modified = stub.db.Column(
-        stub.db.Text,
-        name='course_modified',
-        
-    )
-    changedby = stub.db.Column(
-        stub.db.Text,
-        name='course_changedby',
-        
-    )
-    school = stub.db.relationship(
-        'School',
+    person = stub.db.relationship(
+        'Person',
         uselist=False,
         lazy='joined',
         foreign_keys=[
-            fk_school_id,
+            fk_person_id,
         ],
-        back_populates='courses',
-    )
-    teachers = stub.db.relationship(
-        'CourseTeachers',
-        uselist=True,
-        lazy='select',
-        back_populates='course',
-    )
-    exams = stub.db.relationship(
-        'Exam',
-        uselist=True,
-        lazy='select',
-        back_populates='course',
+        back_populates='contacts',
     )
     __table_args__ = (
         stub.db.ForeignKeyConstraint(
             (
-                fk_school_id,
+                fk_person_id,
             ),
             (
-                'school.school_id',
+                'person.person_id',
             ),
         ),
     )
 
     searchable_columns = [
-        title,
-        desc,
     ]
 
     @classmethod
     def from_json(cls, json_data):
         return cls(
             id=int(json_data['id']) if 'id' in json_data else None,
-            title=str(json_data['title']) if 'title' in json_data else None,
-            school=yasm.yasm.database.School.from_json(json_data['school']) if 'school' in json_data else None,
-            cycle=str(json_data['cycle']) if 'cycle' in json_data else None,
-            target_class=str(json_data['target_class']) if 'target_class' in json_data else None,
-            desc=str(json_data['desc']) if 'desc' in json_data else None,
-            type=enums.yasm.database.CourseType(json_data['type']) if 'type' in json_data else None,
-            area=enums.yasm.database.CourseArea(json_data['area']) if 'area' in json_data else None,
-            created=str(json_data['created']) if 'created' in json_data else None,
-            modified=str(json_data['modified']) if 'modified' in json_data else None,
-            changedby=str(json_data['changedby']) if 'changedby' in json_data else None,
-            teachers=[yasm.yasm.database.CourseTeachers.from_json(item) for item in json_data.get('teachers', [])],
-            exams=[yasm.yasm.database.Exam.from_json(item) for item in json_data.get('exams', [])],
+            person=yasm.yasm.database.Person.from_json(json_data['person']) if 'person' in json_data else None,
+            name=str(json_data['name']) if 'name' in json_data else None,
+            value=str(json_data['value']) if 'value' in json_data else None,
         )
 
     @classmethod
@@ -1195,30 +1159,12 @@ class Course(
 
         if isinstance(self.id, int):
             ret['id'] = self.id
-        if isinstance(self.title, str):
-            ret['title'] = self.title
-        if isinstance(self.school, yasm.yasm.database.School) and not self.school.serialized:
-            ret['school'] = self.school.to_json()
-        if isinstance(self.cycle, str):
-            ret['cycle'] = self.cycle
-        if isinstance(self.target_class, str):
-            ret['target_class'] = self.target_class
-        if isinstance(self.desc, str):
-            ret['desc'] = self.desc
-        if isinstance(self.type, enums.yasm.database.CourseType):
-            ret['type'] = self.type.value
-        if isinstance(self.area, enums.yasm.database.CourseArea):
-            ret['area'] = self.area.value
-        if isinstance(self.created, str):
-            ret['created'] = self.created
-        if isinstance(self.modified, str):
-            ret['modified'] = self.modified
-        if isinstance(self.changedby, str):
-            ret['changedby'] = self.changedby
-        if 'teachers' not in unloaded and isinstance(self.teachers, list):
-            ret['teachers'] = [value.to_json() for value in self.teachers if not value.serialized]
-        if 'exams' not in unloaded and isinstance(self.exams, list):
-            ret['exams'] = [value.to_json() for value in self.exams if not value.serialized]
+        if isinstance(self.person, yasm.yasm.database.Person) and not self.person.serialized:
+            ret['person'] = self.person.to_json()
+        if isinstance(self.name, str):
+            ret['name'] = self.name
+        if isinstance(self.value, str):
+            ret['value'] = self.value
         self.serialized = False
         return ret
 
@@ -1344,6 +1290,98 @@ class CourseTeachers(
             ret['modified'] = self.modified
         if isinstance(self.changedby, str):
             ret['changedby'] = self.changedby
+        self.serialized = False
+        return ret
+
+    def to_string(self):
+        return json.dumps(self.to_json())
+
+
+class DirectLogin(
+        stub.db.Model,
+):
+    __tablename__ = 'direct_login'
+
+    def __init__(self, *args, **kwargs):
+        self.serialized = False
+        super(DirectLogin, self).__init__(*args, **kwargs)
+
+    @sqlalchemy.orm.reconstructor
+    def init_on_load(self):
+        self.serialized = False
+
+
+    type = stub.db.Column(
+        stub.db.Text,
+        name='type',
+        primary_key=True,
+        
+    )
+    fk_person_id = stub.db.Column(
+        stub.db.Integer,
+        name='person_id',
+        primary_key=True,
+        
+    )
+    password_hash = stub.db.Column(
+        stub.db.Text,
+        name='password_hash',
+        
+    )
+    login = stub.db.Column(
+        stub.db.Text,
+        name='login',
+        
+    )
+    person = stub.db.relationship(
+        'Person',
+        uselist=False,
+        lazy='joined',
+        foreign_keys=[
+            fk_person_id,
+        ],
+        back_populates='dlogins',
+    )
+    __table_args__ = (
+        stub.db.ForeignKeyConstraint(
+            (
+                fk_person_id,
+            ),
+            (
+                'person.person_id',
+            ),
+        ),
+    )
+
+    searchable_columns = [
+    ]
+
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(
+            type=str(json_data['type']) if 'type' in json_data else None,
+            person=yasm.yasm.database.Person.from_json(json_data['person']) if 'person' in json_data else None,
+            password_hash=str(json_data['password_hash']) if 'password_hash' in json_data else None,
+            login=str(json_data['login']) if 'login' in json_data else None,
+        )
+
+    @classmethod
+    def from_string(cls, data):
+        return cls.from_json(json.loads(data))
+
+    def to_json(self):
+        self.serialized = True
+        ret = dict()
+        unloaded = sqlalchemy.inspect(self).unloaded
+
+        if isinstance(self.type, str):
+            ret['type'] = self.type
+        if isinstance(self.person, yasm.yasm.database.Person) and not self.person.serialized:
+            ret['person'] = self.person.to_json()
+        if isinstance(self.password_hash, str):
+            ret['password_hash'] = self.password_hash
+        if isinstance(self.login, str):
+            ret['login'] = self.login
         self.serialized = False
         return ret
 
@@ -1654,59 +1692,166 @@ class PersonComment(
         return json.dumps(self.to_json())
 
 
-class Ava(
+class PersonSchool(
         stub.db.Model,
 ):
-    __tablename__ = 'ava'
+    __tablename__ = 'person_school'
 
     def __init__(self, *args, **kwargs):
         self.serialized = False
-        super(Ava, self).__init__(*args, **kwargs)
+        super(PersonSchool, self).__init__(*args, **kwargs)
 
     @sqlalchemy.orm.reconstructor
     def init_on_load(self):
         self.serialized = False
 
-        self.status = enums.yasm.database.DatabaseStatus(self.status)
+        self.curatorship = enums.yasm.database.Curatorship(self.curatorship)
 
     id = stub.db.Column(
         stub.db.Integer,
-        name='id',
+        name='person_school_id',
         primary_key=True,
         autoincrement=True,
 
     )
-    fk_person_id = stub.db.Column(
+    fk_member_id = stub.db.Column(
         stub.db.Integer,
-        name='person_id',
+        name='member_person_id',
         
     )
-    ava = stub.db.Column(
+    fk_department_id = stub.db.Column(
+        stub.db.Integer,
+        name='member_department_id',
+        
+    )
+    fk_school_id = stub.db.Column(
+        stub.db.Integer,
+        name='school_id',
+        
+    )
+    is_student = stub.db.Column(
         stub.db.Text,
-        name='ava',
+        name='is_student',
+        nullable=True,
+
+    )
+    is_teacher = stub.db.Column(
+        stub.db.Text,
+        name='is_teacher',
+        nullable=True,
+
+    )
+    curatorship = stub.db.Column(
+        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.Curatorship), name='curatorship_type'),
+        name='curatorship',
+        nullable=True,
+
+    )
+    curator_group = stub.db.Column(
+        stub.db.Text,
+        name='curator_group',
+        nullable=True,
+
+    )
+    courses_needed = stub.db.Column(
+        stub.db.Text,
+        name='courses_needed',
+        nullable=True,
+
+    )
+    current_class = stub.db.Column(
+        stub.db.Text,
+        name='current_class',
+        nullable=True,
+
+    )
+    comment = stub.db.Column(
+        stub.db.Text,
+        name='person_school_comment',
+        nullable=True,
+
+    )
+    created = stub.db.Column(
+        stub.db.Text,
+        name='person_school_created',
         
     )
-    status = stub.db.Column(
-        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.DatabaseStatus), name='database_status'),
-        name='status',
+    modified = stub.db.Column(
+        stub.db.Text,
+        name='person_school_modified',
         
     )
-    person = stub.db.relationship(
+    changedby = stub.db.Column(
+        stub.db.Text,
+        name='person_school_changedby',
+        
+    )
+    arrival = stub.db.Column(
+        stub.db.Text,
+        name='frm',
+        
+    )
+    leave = stub.db.Column(
+        stub.db.Text,
+        name='tll',
+        
+    )
+    member = stub.db.relationship(
         'Person',
         uselist=False,
         lazy='joined',
         foreign_keys=[
-            fk_person_id,
+            fk_member_id,
         ],
-        back_populates='avas',
+        back_populates='person_schools',
+    )
+    department = stub.db.relationship(
+        'Department',
+        uselist=False,
+        lazy='joined',
+        foreign_keys=[
+            fk_department_id,
+        ],
+        back_populates='person_schools',
+    )
+    school = stub.db.relationship(
+        'School',
+        uselist=False,
+        lazy='joined',
+        foreign_keys=[
+            fk_school_id,
+        ],
+        back_populates='person_schools',
+    )
+    calendars = stub.db.relationship(
+        'Calendar',
+        uselist=True,
+        lazy='select',
+        back_populates='person_school',
     )
     __table_args__ = (
         stub.db.ForeignKeyConstraint(
             (
-                fk_person_id,
+                fk_member_id,
             ),
             (
                 'person.person_id',
+            ),
+        ),
+        stub.db.ForeignKeyConstraint(
+            (
+                fk_department_id,
+            ),
+            (
+                'department.department_id',
+            ),
+        ),
+        stub.db.ForeignKeyConstraint(
+            (
+                fk_school_id,
+            ),
+            (
+                'school.school_id',
             ),
         ),
     )
@@ -1718,9 +1863,22 @@ class Ava(
     def from_json(cls, json_data):
         return cls(
             id=int(json_data['id']) if 'id' in json_data else None,
-            person=yasm.yasm.database.Person.from_json(json_data['person']) if 'person' in json_data else None,
-            ava=str(json_data['ava']) if 'ava' in json_data else None,
-            status=enums.yasm.database.DatabaseStatus(json_data['status']) if 'status' in json_data else None,
+            member=yasm.yasm.database.Person.from_json(json_data['member']) if 'member' in json_data else None,
+            department=yasm.yasm.database.Department.from_json(json_data['department']) if 'department' in json_data else None,
+            school=yasm.yasm.database.School.from_json(json_data['school']) if 'school' in json_data else None,
+            is_student=str(json_data['is_student']) if 'is_student' in json_data else None,
+            is_teacher=str(json_data['is_teacher']) if 'is_teacher' in json_data else None,
+            curatorship=enums.yasm.database.Curatorship(json_data['curatorship']) if 'curatorship' in json_data else None,
+            curator_group=str(json_data['curator_group']) if 'curator_group' in json_data else None,
+            courses_needed=str(json_data['courses_needed']) if 'courses_needed' in json_data else None,
+            current_class=str(json_data['current_class']) if 'current_class' in json_data else None,
+            comment=str(json_data['comment']) if 'comment' in json_data else None,
+            created=str(json_data['created']) if 'created' in json_data else None,
+            modified=str(json_data['modified']) if 'modified' in json_data else None,
+            changedby=str(json_data['changedby']) if 'changedby' in json_data else None,
+            arrival=str(json_data['arrival']) if 'arrival' in json_data else None,
+            leave=str(json_data['leave']) if 'leave' in json_data else None,
+            calendars=[yasm.yasm.database.Calendar.from_json(item) for item in json_data.get('calendars', [])],
         )
 
     @classmethod
@@ -1734,196 +1892,38 @@ class Ava(
 
         if isinstance(self.id, int):
             ret['id'] = self.id
-        if isinstance(self.person, yasm.yasm.database.Person) and not self.person.serialized:
-            ret['person'] = self.person.to_json()
-        if isinstance(self.ava, str):
-            ret['ava'] = self.ava
-        if isinstance(self.status, enums.yasm.database.DatabaseStatus):
-            ret['status'] = self.status.value
-        self.serialized = False
-        return ret
-
-    def to_string(self):
-        return json.dumps(self.to_json())
-
-
-class DirectLogin(
-        stub.db.Model,
-):
-    __tablename__ = 'direct_login'
-
-    def __init__(self, *args, **kwargs):
-        self.serialized = False
-        super(DirectLogin, self).__init__(*args, **kwargs)
-
-    @sqlalchemy.orm.reconstructor
-    def init_on_load(self):
-        self.serialized = False
-
-
-    type = stub.db.Column(
-        stub.db.Text,
-        name='type',
-        primary_key=True,
-        
-    )
-    fk_person_id = stub.db.Column(
-        stub.db.Integer,
-        name='person_id',
-        primary_key=True,
-        
-    )
-    password_hash = stub.db.Column(
-        stub.db.Text,
-        name='password_hash',
-        
-    )
-    login = stub.db.Column(
-        stub.db.Text,
-        name='login',
-        
-    )
-    person = stub.db.relationship(
-        'Person',
-        uselist=False,
-        lazy='joined',
-        foreign_keys=[
-            fk_person_id,
-        ],
-        back_populates='dlogins',
-    )
-    __table_args__ = (
-        stub.db.ForeignKeyConstraint(
-            (
-                fk_person_id,
-            ),
-            (
-                'person.person_id',
-            ),
-        ),
-    )
-
-    searchable_columns = [
-    ]
-
-    @classmethod
-    def from_json(cls, json_data):
-        return cls(
-            type=str(json_data['type']) if 'type' in json_data else None,
-            person=yasm.yasm.database.Person.from_json(json_data['person']) if 'person' in json_data else None,
-            password_hash=str(json_data['password_hash']) if 'password_hash' in json_data else None,
-            login=str(json_data['login']) if 'login' in json_data else None,
-        )
-
-    @classmethod
-    def from_string(cls, data):
-        return cls.from_json(json.loads(data))
-
-    def to_json(self):
-        self.serialized = True
-        ret = dict()
-        unloaded = sqlalchemy.inspect(self).unloaded
-
-        if isinstance(self.type, str):
-            ret['type'] = self.type
-        if isinstance(self.person, yasm.yasm.database.Person) and not self.person.serialized:
-            ret['person'] = self.person.to_json()
-        if isinstance(self.password_hash, str):
-            ret['password_hash'] = self.password_hash
-        if isinstance(self.login, str):
-            ret['login'] = self.login
-        self.serialized = False
-        return ret
-
-    def to_string(self):
-        return json.dumps(self.to_json())
-
-
-class Contact(
-        stub.db.Model,
-):
-    __tablename__ = 'contact'
-
-    def __init__(self, *args, **kwargs):
-        self.serialized = False
-        super(Contact, self).__init__(*args, **kwargs)
-
-    @sqlalchemy.orm.reconstructor
-    def init_on_load(self):
-        self.serialized = False
-
-
-    id = stub.db.Column(
-        stub.db.Integer,
-        name='id',
-        primary_key=True,
-        autoincrement=True,
-
-    )
-    fk_person_id = stub.db.Column(
-        stub.db.Integer,
-        name='person_id',
-        
-    )
-    name = stub.db.Column(
-        stub.db.Text,
-        name='name',
-        
-    )
-    value = stub.db.Column(
-        stub.db.Text,
-        name='value',
-        
-    )
-    person = stub.db.relationship(
-        'Person',
-        uselist=False,
-        lazy='joined',
-        foreign_keys=[
-            fk_person_id,
-        ],
-        back_populates='contacts',
-    )
-    __table_args__ = (
-        stub.db.ForeignKeyConstraint(
-            (
-                fk_person_id,
-            ),
-            (
-                'person.person_id',
-            ),
-        ),
-    )
-
-    searchable_columns = [
-    ]
-
-    @classmethod
-    def from_json(cls, json_data):
-        return cls(
-            id=int(json_data['id']) if 'id' in json_data else None,
-            person=yasm.yasm.database.Person.from_json(json_data['person']) if 'person' in json_data else None,
-            name=str(json_data['name']) if 'name' in json_data else None,
-            value=str(json_data['value']) if 'value' in json_data else None,
-        )
-
-    @classmethod
-    def from_string(cls, data):
-        return cls.from_json(json.loads(data))
-
-    def to_json(self):
-        self.serialized = True
-        ret = dict()
-        unloaded = sqlalchemy.inspect(self).unloaded
-
-        if isinstance(self.id, int):
-            ret['id'] = self.id
-        if isinstance(self.person, yasm.yasm.database.Person) and not self.person.serialized:
-            ret['person'] = self.person.to_json()
-        if isinstance(self.name, str):
-            ret['name'] = self.name
-        if isinstance(self.value, str):
-            ret['value'] = self.value
+        if isinstance(self.member, yasm.yasm.database.Person) and not self.member.serialized:
+            ret['member'] = self.member.to_json()
+        if isinstance(self.department, yasm.yasm.database.Department) and not self.department.serialized:
+            ret['department'] = self.department.to_json()
+        if isinstance(self.school, yasm.yasm.database.School) and not self.school.serialized:
+            ret['school'] = self.school.to_json()
+        if isinstance(self.is_student, str):
+            ret['is_student'] = self.is_student
+        if isinstance(self.is_teacher, str):
+            ret['is_teacher'] = self.is_teacher
+        if isinstance(self.curatorship, enums.yasm.database.Curatorship):
+            ret['curatorship'] = self.curatorship.value
+        if isinstance(self.curator_group, str):
+            ret['curator_group'] = self.curator_group
+        if isinstance(self.courses_needed, str):
+            ret['courses_needed'] = self.courses_needed
+        if isinstance(self.current_class, str):
+            ret['current_class'] = self.current_class
+        if isinstance(self.comment, str):
+            ret['comment'] = self.comment
+        if isinstance(self.created, str):
+            ret['created'] = self.created
+        if isinstance(self.modified, str):
+            ret['modified'] = self.modified
+        if isinstance(self.changedby, str):
+            ret['changedby'] = self.changedby
+        if isinstance(self.arrival, str):
+            ret['arrival'] = self.arrival
+        if isinstance(self.leave, str):
+            ret['leave'] = self.leave
+        if 'calendars' not in unloaded and isinstance(self.calendars, list):
+            ret['calendars'] = [value.to_json() for value in self.calendars if not value.serialized]
         self.serialized = False
         return ret
 
