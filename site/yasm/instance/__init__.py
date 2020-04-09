@@ -18,6 +18,7 @@ def create():
     yasm = Flask(__name__, instance_relative_config=True)
     return yasm
 
+
 def initialize():
     """
     .. _instance_create:
@@ -68,3 +69,8 @@ def initialize():
     from instance.generated.api import module as proto_api
     yasm.register_blueprint(proto_api)
     return yasm
+
+
+def run():
+    create()
+    return initialize()
