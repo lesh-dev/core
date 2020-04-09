@@ -1,8 +1,9 @@
 #Запуск YaSM:
 
 Необходимо
-* npm >=6.1.0
+* npm >= 6.1.0
 * python3, pip3
+* protoc >= 3.11.2:
 * @fedora:
   + protobuf-compiler
   + protobuf-devel 
