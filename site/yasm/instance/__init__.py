@@ -10,7 +10,7 @@ from instance.login import lm
 from instance.login.oauth2.base import Auth
 
 
-yasm = None
+yasm: Flask = None
 
 
 def create():
