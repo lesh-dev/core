@@ -33,8 +33,9 @@ def main():
     @manager.command
     def runserver():
         """run development server"""
-        initialize()
+        manager.app = initialize()
         manager.app.run()
+    
     manager.run()
 
 
