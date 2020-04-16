@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package yasm.internal.course;
+
+import "database.proto";
+import "lib/api.proto";
+
+message FetchCourseRequest {
+    uint64 id = 1;
+}
+
+enum TeachersPatchActions {
+    add = 0;
+    remove = 1;
+}
+
+message TeachersPatchEntry {
+    string name = 1;
+    TeachersPatchActions action = 2;
+}
+
+message PatchTeachersRequest {
+    uint64 id = 1;
+    map<uint64, TeachersPatchEntry> patch = 2;
+}
+
+message PatchTeachersResponse {
+    repeated yasm.database.Person teachers = 1;
+}
+
+service APICourse {
+    option (yasm.lib.api.service_require_login) = true;
+    rpc FetchCourse (FetchCourseRequest) returns (yasm.database.Course);
+    rpc PatchTeachers (PatchTeachersRequest) returns (PatchTeachersResponse);
+}

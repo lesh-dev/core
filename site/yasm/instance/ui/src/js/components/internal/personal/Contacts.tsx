@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Contact, Person} from "../../../generated/interfaces";
+import {Contact, Person} from "../../../generated/frontend/interfaces/yasm/database";
 import {Edit} from "../../common/Edit";
 import {connect} from "react-redux";
 import {commonActions, CommonState} from "../../../redux-structure/common";
@@ -9,8 +9,7 @@ import {faPlusSquare} from "@fortawesome/free-regular-svg-icons/faPlusSquare";
 import {faTrashAlt} from "@fortawesome/free-regular-svg-icons/faTrashAlt";
 import {FontAwesomeIcon as FAIcon} from "@fortawesome/react-fontawesome";
 
-import {ContactsPatch} from "../../../api/internal/personal";
-import {PatchAction} from "../../../api/internal/common";
+import {ContactsPatch, ContactsPatchActions} from "../../../generated/frontend/interfaces/yasm/internal/person";
 
 export interface ContactsProps {
     person: Person,
@@ -21,9 +20,14 @@ enum STATE {
     CHANGE,
 }
 
+type Patch = Map<string, {
+    name: string,
+    action: ContactsPatchActions,
+}>
+
 export interface ContactsState {
     state: STATE,
-    changes: ContactsPatch,
+    changes: Patch,
     currentAddition: {
         value: string,
         name: string,
@@ -56,11 +60,20 @@ export class Contacts extends React.Component<ContactsProps & CommonState & Redu
 
     private prepare_changes(): Contact[] {
         return Array(...this.state.changes.entries()).filter(entry => (
-            entry[1].action === PatchAction.ADD
+            entry[1].action === ContactsPatchActions.add
         )).map(entry => ({
             value: entry[0],
             name: entry[1].name,
         } as Contact))
+    }
+
+
+    private prepare_submit(patch: Patch): ContactsPatch {
+        const ret = {} as ContactsPatch.PatchEntry
+        for (const [value, state] of patch.entries()) {
+            ret[value] = state
+        }
+        return {'patch': ret}
     }
 
     render() {
@@ -70,7 +83,7 @@ export class Contacts extends React.Component<ContactsProps & CommonState & Redu
                 return <>
                     <Edit
                         edit={
-                            this.props.person.person_id === this.props.login.profile.person_id
+                            this.props.person.id === this.props.login.profile.id
                         }
                         onClick={() => this.setState({
                             state: STATE.CHANGE,
@@ -79,7 +92,8 @@ export class Contacts extends React.Component<ContactsProps & CommonState & Redu
                             this.state.state === STATE.CHANGE
                         }
                         onSubmit={() => {
-                            this.props.dispatch(commonActions.common.login.patchContacts(this.state.changes))
+                            console.log(this.state.changes)
+                            this.props.dispatch(commonActions.common.login.patchContacts(this.prepare_submit(this.state.changes)))
                             this.setState({
                                 ...initialState,
                                 changes: new Map(),
@@ -95,7 +109,7 @@ export class Contacts extends React.Component<ContactsProps & CommonState & Redu
                                     <tbody>
                                         {
                                             this.props.person.contacts.concat(this.prepare_changes()).filter(contact => (
-                                                this.state.changes.get(contact.value) === undefined || this.state.changes.get(contact.value).action !== PatchAction.REMOVE
+                                                this.state.changes.get(contact.value) === undefined || this.state.changes.get(contact.value).action !== ContactsPatchActions.remove
                                             )).map((contact, i) => <tr
                                                 key={i}
                                             >
@@ -117,7 +131,7 @@ export class Contacts extends React.Component<ContactsProps & CommonState & Redu
                                                                 const changes = this.state.changes
                                                                 changes.set(contact.value, {
                                                                     name: '',
-                                                                    action: PatchAction.REMOVE,
+                                                                    action: ContactsPatchActions.remove,
                                                                 })
                                                                 this.setState({
                                                                     changes: changes,
@@ -154,7 +168,7 @@ export class Contacts extends React.Component<ContactsProps & CommonState & Redu
                                                             const changes = this.state.changes
                                                             changes.set(value, {
                                                                 name: name,
-                                                                action: PatchAction.ADD,
+                                                                action: ContactsPatchActions.add,
                                                             })
                                                             if (this.props.person.contacts.filter(c => c.value === value).length > 0) {
                                                                 changes.delete(value)

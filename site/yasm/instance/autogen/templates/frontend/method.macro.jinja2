@@ -1,0 +1,12 @@
+{% macro build_method(method) %}
+    export function {{ method.name }}(
+        data: interfaces.{{ method.input_type.full_name }},
+        headers: {[index: string]: string} = {}
+    ): Promise{{ '<' }}AxiosResponse{{ '<' }}interfaces.{{ method.output_type.full_name }}{{ '>' }}{{ '>' }} {
+        return call(
+            '/api/{{ method.url }}',
+            data,
+            headers,
+        )
+    }
+{% endmacro %}

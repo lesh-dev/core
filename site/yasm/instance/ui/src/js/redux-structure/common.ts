@@ -1,9 +1,10 @@
 import { Action, createActions, handleActions, ReducerMap } from 'redux-actions'
-import {Ava, Contact, Person} from "../generated/interfaces";
+import {Ava, Contact, Person} from "../generated/frontend/interfaces/yasm/database";
 
-import { call } from '../api/axios'
 import { SidebarState, getReducer as getSidebarReducer, getInitialState as getSidebarInitialState } from './sidebar'
-import {ContactsPatch, patchContacts, setAva} from "../api/internal/personal";
+import { history } from '../util/history'
+import { APIPersonal } from '../generated/frontend/services/yasm/internal/person'
+import { ContactsPatch, ContactList } from  '../generated/frontend/interfaces/yasm/internal/person'
 
 export enum TopRightPanels {
     NONE,
@@ -48,11 +49,16 @@ export const panelInitialState: PanelState = {
 export const commonActions = createActions({
     common: {
         login: {
-            fetch: (onlyLogin: boolean = true) => call(onlyLogin ? '/i/api/get_profile' : '/i/api/get_profile_info').then(resp => resp.data),
-            setAva: (ava: string) => setAva(ava).then(resp => resp.data), // FIXME (rebenkoy) these _must_ be in internal
-            patchContacts: (contactPatch: ContactsPatch) => patchContacts(contactPatch).then(resp => resp.data),
+            fetch: (onlyLogin: boolean = true) => {
+                if (onlyLogin) {
+                    return APIPersonal.GetProfile({}).then(resp => resp.data)
+                }
+                return APIPersonal.GetProfileInfo({}).then(resp => resp.data)
+            },
+            setAva: (ava: string) => APIPersonal.SetAva({new_ava: ava}).then(resp => resp.data), // FIXME (rebenkoy) these _must_ be in internal
+            patchContacts: (contactPatch: ContactsPatch) => APIPersonal.PatchContacts(contactPatch).then(resp => resp.data),
             togglePanel: () => undefined,
-            exit: () => call('/login/logout').then(resp => resp.data),
+            exit: () => history.push('/login/logout'),
         },
         panel: {
             topRight: {
@@ -120,12 +126,12 @@ export const loginReducer = handleActions(
                         error: undefined,
                     }
                 ),
-                patchContacts_FULFILLED: (state: LoginState, action: Action<Contact[]>) => (
+                patchContacts_FULFILLED: (state: LoginState, action: Action<ContactList>) => (
                     {
                         ...state,
                         profile: {
                             ...state.profile,
-                            contacts: action.payload,
+                            contacts: action.payload.contacts,
                         },
                     }
                 ),

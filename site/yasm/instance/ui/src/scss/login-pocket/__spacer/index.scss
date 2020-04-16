@@ -1,3 +1,5 @@
+@import "../../constants";
+
 .login-pocket__spacer {
-  height: var(--spacer_height);
+  height: $login-spacer_height;
 }

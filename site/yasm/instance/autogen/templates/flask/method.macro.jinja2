@@ -1,0 +1,35 @@
+{% macro build_imports(path, method) %}
+import path
+{% endmacro %}
+{% macro build_static_method(method) %}
+@module.route('{{ method.name }}', methods=['POST'])
+{% if method.options.require_login %}
+@login_required
+{% endif %}{% if method.options.personalized %}
+@decorators.personalize
+{% endif %}{% for before in method.options.before_request %}
+@decorators.{{ before }}
+{% endfor %}
+def _{{ method.python_name }}(
+{% for arg in method.additional_args %}
+        {{ arg }},
+{% endfor %}
+):
+    req = models.{{ method.input_message.full_name }}.from_json(request.json)
+    return Interface.{{ method.python_name }}(
+        req,
+{% for arg in method.additional_args %}
+        {{ arg }},
+{% endfor %}
+    ).to_string()
+{% endmacro %}
+{% macro build_dynamic_method(method) %}
+    @staticmethod
+    def {{ method.python_name }}(
+        request,
+{% for arg in method.additional_args %}
+        {{ arg }},
+{% endfor %}
+    ):
+        raise NotImplementedError
+{% endmacro %}
