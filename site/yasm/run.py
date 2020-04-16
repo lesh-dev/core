@@ -38,6 +38,10 @@ def main():
     
     manager.run()
 
+application = None
 
 if __name__ == '__main__':
     main()
+elif __name__[0:10] == '_mod_wsgi_':
+    application = create()
+    initialize()
