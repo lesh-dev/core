@@ -4,7 +4,7 @@ import {Ava, Contact, Person} from "../generated/frontend/interfaces/yasm/databa
 import { SidebarState, getReducer as getSidebarReducer, getInitialState as getSidebarInitialState } from './sidebar'
 import { history } from '../util/history'
 import { APIPersonal } from '../generated/frontend/services/yasm/internal/person'
-import { ContactsPatch, ContactList } from  '../generated/frontend/interfaces/yasm/internal/person'
+import {ContactsPatch, ContactList, GetProfileResponse} from '../generated/frontend/interfaces/yasm/internal/person'
 
 export enum TopRightPanels {
     NONE,
@@ -13,7 +13,7 @@ export enum TopRightPanels {
 }
 
 export interface LoginState {
-    profile?: Person,
+    profile?: Person & GetProfileResponse,
     loggedIn?: boolean,
     loading?: boolean,
     error?: Error,

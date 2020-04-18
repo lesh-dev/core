@@ -14,7 +14,7 @@ class APIPersonal(Interface):
     ):
         ava = ''
         for avatar in current_user.avas:
-            if avatar.status == DatabaseStatus.relevant.value:
+            if avatar.status == DatabaseStatus.relevant:
                 ava = avatar.ava
         return GetProfileResponse(
             id=current_user.id,
@@ -102,4 +102,5 @@ def fill_person(person: Person):
     _ = person.exams
     _ = person.courses
     _ = person.contacts
+    person.avas = [ava for ava in person.avas if ava.status == DatabaseStatus.relevant]
     return person

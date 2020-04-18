@@ -42,8 +42,8 @@ export class PersonalButton extends React.Component<CommonState & ReduxProps> {
                 <div>
                     <div onClick={ () => this.props.dispatch(commonActions.common.panel.topRight.toggle(TopRightPanels.PERSONAL)) }>
                         {
-                            this.props.login.profile.avas !== undefined && this.props.login.profile.avas.length === 1
-                            ? <img src={this.props.login.profile.avas[0].ava} width="35" height="35"/>
+                            this.props.login.profile.ava !== undefined
+                            ? <img src={this.props.login.profile.ava} width="35" height="35"/>
                             : <Incognito height="35" width="35" fill="red"/>
                         }
                     </div>
