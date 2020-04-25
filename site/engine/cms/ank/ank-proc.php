@@ -396,6 +396,7 @@ function xsm_add_person_merge_comment($person_id, $merge_state)
         "comment_text" => $merge_state_comment,
         "owner_login" => "anonymous",
         "blamed_person_id" => $person_id,
+        "school_id" => null,
     );
     // assume comment addition is not so important, don't check
     return xdb_insert_or_update('person_comment', array('person_comment_id' => XDB_NEW), $person_comment, xsm_get_fields("person_comment"));
