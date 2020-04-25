@@ -18,14 +18,7 @@
       **/
     function request_variables()
     {
-        $request_uri = str_replace("install.php", "", $_SERVER["REQUEST_URI"]);
-        return array(
-            "xsm_db_name" => array(
-                "name" => "Имя файла БД",
-                "type" => "string",
-                "default" => "ank/fizlesh.sqlite3"
-            )
-        );
+        return array();
     }
     /**
       * Мы любим считать длины строк, поэтому нам нужен модуль php-mbstring.

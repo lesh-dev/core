@@ -13,8 +13,9 @@ require_once("${engine_dir}cms/ank/format.php");
 require_once("${engine_dir}cms/ank/person.php");
 
 $SETTINGS["content_dir"] = "content/";
-$SETTINGS[XDB_DB_NAME] = 'content/ank/fizlesh.sqlite3';
-$SETTINGS[XDB_DB_TYPE] = XDB_DB_TYPE_SQLITE3;
+
+$SETTINGS[XDB_DB_TYPE] = XDB_DB_TYPE_PG;
+$SETTINGS[XDB_DB_NAME] = "host=localhost user=lesh password=fizlesh dbname=lesh";
 
 xsm_increase_class_numbers();
 

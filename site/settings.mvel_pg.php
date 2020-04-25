@@ -30,9 +30,5 @@ $meta_site_log_path = '/var/log/xcms/fizlesh.local-engine.log';
 global $meta_site_mail;
 $meta_site_mail = 'support@fizlesh.local';
 
-$SETTINGS[XDB_DB_TYPE] = XDB_DB_TYPE_SQLITE3;
-$SETTINGS[XDB_DB_NAME] = 'ank/fizlesh.sqlite3';
-
-// nextgen: postgres
 $SETTINGS[XDB_DB_TYPE] = XDB_DB_TYPE_PG;
-$SETTINGS[XDB_DB_NAME] = "host=localhost user=lesh password=123 dbname=lesh";
+$SETTINGS[XDB_DB_NAME] = "host=localhost user=lesh password=fizlesh dbname=lesh";
