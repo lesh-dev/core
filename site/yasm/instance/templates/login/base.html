@@ -1,14 +1,63 @@
 {% extends "base.html" %}
+
+{% macro render_field(field) %}
+  <dt>{{ field.label }}
+  <dd>{{ field(**kwargs)|safe }}
+  {% if field.errors %}
+    <ul class=errors>
+    {% for error in field.errors %}
+      <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  </dd>
+{% endmacro %}
+
+{% macro LoginForm() %}
+<form method="post">
+{{ form.login(placeholder='логин') }}
+{{ form.password(placeholder='пароль') }}
+{{ form.csrf_token }}
+<input type="submit">
+</form>
+{% endmacro %}
+
+{% macro LoginOAuth() %}
+<div class="login-oauth">
+    <img
+        class="login-oauth__button"
+        src="/static/emblems/oauth/Facebook.svg"
+    />
+    <img
+        class="login-oauth__button"
+        src="/static/emblems/oauth/Google.svg"
+    />
+    <img
+        class="login-oauth__button"
+        src="/static/emblems/oauth/VK.svg"
+    />
+    <img
+        class="login-oauth__button"
+        src="/static/emblems/oauth/Yandex.svg"
+    />
+</div>
+{% endmacro %}
+
+
 {% block styles %}
     {{ super() }}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/pack/login.css') }}">
 {% endblock %}
+
 {% block content %}
-    <div id="mount-point">
-        We do not support browsers without js, pleas enable javascript execution in your brouser.
+<div class="login-pocket-wrapper">
+    <div class="login-pocket">
+        {{ LoginForm() }}
+        <div class="login-pocket__spacer"></div>
+        {{ LoginOAuth() }}
+        <div class="login-pocket__spacer"></div>
+        <div class="login-pocket__spacer"></div>
     </div>
-{% endblock %}
-{% block tail_js %}
-    {{ super() }}
-    <script type="text/javascript" src="{{ url_for('static', filename='js/login.min.js') }}"></script>
+    <div class="login-pocket__footer"></div>
+</div>
 {% endblock %}

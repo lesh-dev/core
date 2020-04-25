@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package builtin;
+
+import "lib/api.proto";
+import "database.proto";  {# TODO (rebenkoy) this should be dynamic #}
+
+message SearchRequest {
+    string query = 1;
+    repeated string tables = 2;
+}
+
+message SearchResponse {
+    string query = 1;
+{% set i = 2 %}
+{% for message in messages.values() %}
+{% if message.options.searchable %}
+    repeated {{ message.full_name }} {{ message.table_name }} = {{ loop.index + 2 }};
+{% endif %}
+{% endfor %}
+}
+
+
+service APIBuiltin {
+    option (yasm.lib.api.service_require_login) = true;
+    rpc Search (SearchRequest) returns (SearchResponse);
+}

@@ -1,0 +1,17 @@
+{% if level != '' %}
+import * as interfaces from '{{ level }}index'
+{% endif %}
+
+{% for child in children %}
+import * as {{ child }} from './{{ child }}'
+{% endfor %}
+export {
+
+{% for child in children %}
+    {{ child }},
+{% endfor %}
+}
+
+{% for entry in bundle %}
+{{ entry }}
+{% endfor %}

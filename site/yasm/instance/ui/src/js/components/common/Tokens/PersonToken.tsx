@@ -2,7 +2,7 @@ import * as React from 'react'
 import "../../../../scss/tokens/person_token/person_token.scss"
 import {CSSProperties} from "react";
 import {ava, redirect} from "../utils";
-import {Person} from "../../../generated/interfaces";
+import {Person} from "../../../generated/frontend/interfaces/yasm/database";
 import Async from "react-promise"
 
 export interface PersonCardProps {
@@ -18,7 +18,7 @@ export class PersonToken extends React.Component<PersonCardProps> {
                     style={this.props.style} onClick={() => {
             if (this.props.clickable) {
                 if (!this.props.callback)
-                    redirect('/admin/gui/people/' + this.props.person.person_id)
+                    redirect('/admin/gui/people/' + this.props.person.id)
                 else
                     this.props.callback()
             }

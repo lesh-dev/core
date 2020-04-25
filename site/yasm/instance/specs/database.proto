@@ -1,0 +1,256 @@
+syntax = "proto3";
+package yasm.database;
+
+import "lib/database.proto";
+import "lib/plain_types.proto";
+
+enum AnketaStatus {
+    option (yasm.lib.database.enum_pg_name) = "ank_status";
+    progress = 0;
+    nextyear = 1;
+    duplicate = 2;
+    _reserved = 3 [(yasm.lib.database.enum_name) = "reserved"];
+    cont = 4;
+    old = 5;
+    new = 6;
+    processed = 7;
+    declined = 8;
+    taken = 9;
+    duplicated = 10;
+    spam = 11;
+    discuss = 12;
+    less = 13;
+    verify = 14;
+}
+
+enum Curatorship {
+    option (yasm.lib.database.enum_pg_name) = "curatorship_type";
+    empty = 0 [(yasm.lib.database.enum_empty) = true];
+    none = 1;
+    assist = 2;
+    cur = 3;
+}
+
+enum SchoolType {
+    option (yasm.lib.database.enum_pg_name) = "school_type";
+    lesh = 0;
+    vesh = 1;
+    zesh = 2;
+    summer = 3;
+    summmer = 4;
+    winter = 5;
+    spring = 6;
+}
+
+enum CourseType {
+    option (yasm.lib.database.enum_pg_name) = "course_type";
+    generic = 0;
+    other = 1;
+    facult = 2;
+    prac = 3;
+    single = 4;
+}
+
+enum CourseArea {
+    option (yasm.lib.database.enum_pg_name) = "course_area";
+    cs = 0;
+    unknown = 1;
+    nature = 2;
+    precise = 3;
+    _other = 4 [(yasm.lib.database.enum_name) = "other"];
+    human = 5;
+}
+
+enum DatabaseStatus {
+    option (yasm.lib.database.enum_pg_name) = "database_status";
+    relevant = 0;
+    obsolete = 1;
+    deleted = 2;
+}
+
+message Person {
+    option (yasm.lib.database.db_table) = true;
+    option (yasm.lib.database.login_table) = true;
+    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "person_id", (yasm.lib.database.autoincrement) = true];
+    string rights = 2 [(yasm.lib.database.nullable) = true];
+    string first_name = 3 [(yasm.lib.database.searchable) = true];
+    string last_name = 4 [(yasm.lib.database.searchable) = true];
+    string patronymic = 5 [(yasm.lib.database.searchable) = true, (yasm.lib.database.nullable) = true];
+    string nick_name = 6 [(yasm.lib.database.searchable) = true, (yasm.lib.database.nullable) = true];
+    string birth_date = 7;
+    string passport_data = 8;
+    string school = 9;
+    string school_city = 10;
+    string ank_class = 11;
+    string current_class = 12;
+    string phone = 13 [(yasm.lib.database.searchable) = true, (yasm.lib.database.nullable) = true];
+    string cellular = 14 [(yasm.lib.database.searchable) = true, (yasm.lib.database.nullable) = true];
+    string email = 15 [(yasm.lib.database.searchable) = true, (yasm.lib.database.nullable) = true];
+    string skype = 16 [(yasm.lib.database.searchable) = true, (yasm.lib.database.nullable) = true];
+    string social_profile = 17 [(yasm.lib.database.searchable) = true, (yasm.lib.database.nullable) = true];
+    string is_teacher = 18 [(yasm.lib.database.nullable) = true];
+    string is_student = 19 [(yasm.lib.database.nullable) = true];
+    string favourites = 20 [(yasm.lib.database.nullable) = true];
+    string achievements = 21[(yasm.lib.database.nullable) = true];
+    string hobby = 22 [(yasm.lib.database.nullable) = true];
+    string lesh_ref = 23 [(yasm.lib.database.nullable) = true];
+    string forest_1 = 24 [(yasm.lib.database.nullable) = true];
+    string forest_2 = 25 [(yasm.lib.database.nullable) = true];
+    string forest_3 = 26 [(yasm.lib.database.nullable) = true];
+    string tent_capacity = 27 [(yasm.lib.database.nullable) = true];
+    string tour_requisites = 28 [(yasm.lib.database.nullable) = true];
+    AnketaStatus anketa_status = 29;
+    string user_agent = 30 [(yasm.lib.database.nullable) = true];
+    Department department = 31 [(yasm.lib.database.field_name) = "department_id"];
+    string person_created = 32 [(yasm.lib.database.nullable) = true];
+    string person_modified = 33 [(yasm.lib.database.nullable) = true];
+    string person_changedby = 34 [(yasm.lib.database.nullable) = true];
+    string other_contacts = 35 [(yasm.lib.database.nullable) = true];
+    repeated PersonSchool person_schools = 36;
+    repeated Exam exams = 37;
+    repeated CourseTeachers courses = 38;
+    repeated PersonComment comments = 39;
+    repeated Ava avas = 40;
+    repeated DirectLogin dlogins = 41;
+    repeated Contact contacts = 42;
+
+}
+
+message Department {
+    option (yasm.lib.database.db_table) = true;
+    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "department_id", (yasm.lib.database.autoincrement) = true];
+    repeated Person people = 2;
+    string title = 3 [(yasm.lib.database.field_name) = "department_title", (yasm.lib.database.searchable) = true];
+    string created = 4 [(yasm.lib.database.field_name) = "department_created"];
+    string modified = 5 [(yasm.lib.database.field_name) = "department_modified"];
+    string changedby = 6 [(yasm.lib.database.field_name) = "department_changedby"];
+    repeated PersonSchool person_schools = 7;
+}
+
+message PersonSchool {
+    option (yasm.lib.database.db_table) = true;
+    option (yasm.lib.database.table_name) = "person_school";
+    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "person_school_id", (yasm.lib.database.autoincrement) = true];
+    Person member = 2 [(yasm.lib.database.field_name) = "member_person_id"];
+    Department department = 3 [(yasm.lib.database.field_name) = "member_department_id"];
+    School school = 4 [(yasm.lib.database.field_name) = "school_id"];
+    string is_student = 5 [(yasm.lib.database.nullable) = true];
+    string is_teacher = 6 [(yasm.lib.database.nullable) = true];
+    Curatorship curatorship = 7 [(yasm.lib.database.nullable) = true];
+    string curator_group = 8 [(yasm.lib.database.nullable) = true];
+    string courses_needed = 9 [(yasm.lib.database.nullable) = true];
+    string current_class = 10 [(yasm.lib.database.nullable) = true];
+    string comment = 11 [(yasm.lib.database.field_name) = "person_school_comment", (yasm.lib.database.nullable) = true];
+    string created = 12 [(yasm.lib.database.field_name) = "person_school_created"];
+    string modified = 13 [(yasm.lib.database.field_name) = "person_school_modified"];
+    string changedby = 14 [(yasm.lib.database.field_name) = "person_school_changedby"];
+    string arrival = 15 [(yasm.lib.database.field_name) = "frm"];
+    string leave = 16 [(yasm.lib.database.field_name) = "tll"];
+    repeated Calendar calendars = 17;
+}
+
+message Calendar {
+    option (yasm.lib.database.db_table) = true;
+    PersonSchool person_school = 1 [(yasm.lib.database.field_name) = "person_school_id", (yasm.lib.database.primary_key) = true];
+    yasm.lib.types.Date date = 2 [(yasm.lib.database.primary_key) = true];
+    string status = 3;
+    yasm.lib.types.Timestamp modified = 4;
+    string changed_by = 5;
+}
+
+message School {
+    option (yasm.lib.database.db_table) = true;
+    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "school_id", (yasm.lib.database.autoincrement) = true];
+    string title = 2 [(yasm.lib.database.field_name) = "school_title", (yasm.lib.database.searchable) = true];
+    SchoolType type = 3 [(yasm.lib.database.field_name) = "school_type"];
+    string start = 4 [(yasm.lib.database.field_name) = "school_date_start"];
+    string end = 5 [(yasm.lib.database.field_name) = "school_date_end"];
+    string location = 6 [(yasm.lib.database.field_name) = "school_location", (yasm.lib.database.searchable) = true];
+    string coords = 7 [(yasm.lib.database.field_name) = "school_coords"];
+    string created = 8 [(yasm.lib.database.field_name) = "school_created"];
+    string modified = 9 [(yasm.lib.database.field_name) = "school_modified"];
+    string changedby = 10 [(yasm.lib.database.field_name) = "school_changedby"];
+    repeated PersonSchool person_schools = 11;
+    repeated Course courses = 12;
+    repeated PersonComment person_comments = 13;
+}
+
+message Course {
+    option (yasm.lib.database.db_table) = true;
+    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "course_id", (yasm.lib.database.autoincrement) = true];
+    string title = 2 [(yasm.lib.database.field_name) = "course_title", (yasm.lib.database.searchable) = true];
+    School school = 3 [(yasm.lib.database.field_name) = "school_id"];
+    string cycle = 4 [(yasm.lib.database.field_name) = "course_cycle"];
+    string target_class = 5;
+    string desc = 6 [(yasm.lib.database.field_name) = "course_desc", (yasm.lib.database.searchable) = true];
+    CourseType type = 7 [(yasm.lib.database.field_name) = "course_type"];
+    CourseArea area = 8 [(yasm.lib.database.field_name) = "course_area"];
+    string created = 9 [(yasm.lib.database.field_name) = "course_created"];
+    string modified = 10 [(yasm.lib.database.field_name) = "course_modified"];
+    string changedby = 11 [(yasm.lib.database.field_name) = "course_changedby"];
+    repeated CourseTeachers teachers = 12;
+    repeated Exam exams = 13;
+}
+
+message CourseTeachers {
+    option (yasm.lib.database.db_table) = true;
+    option (yasm.lib.database.table_name) = "course_teachers";
+    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "course_teachers_id", (yasm.lib.database.autoincrement) = true];
+    Course course = 2 [(yasm.lib.database.field_name) = "course_id"];
+    Person teacher = 3 [(yasm.lib.database.field_name) = "course_teacher_id"];
+    string created = 4 [(yasm.lib.database.field_name) = "course_teachers_created"];
+    string modified = 5 [(yasm.lib.database.field_name) = "course_teachers_modified"];
+    string changedby = 6 [(yasm.lib.database.field_name) = "course_teachers_changedby"];
+}
+
+message Exam {
+    option (yasm.lib.database.db_table) = true;
+    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "exam_id", (yasm.lib.database.autoincrement) = true];
+    Person student = 2 [(yasm.lib.database.field_name) = "student_person_id"];
+    Course course = 3 [(yasm.lib.database.field_name) = "course_id"];
+    string status = 4 [(yasm.lib.database.field_name) = "exam_status", (yasm.lib.database.nullable) = true];
+    string deadline_date = 5 [(yasm.lib.database.nullable) = true];
+    string comment = 6 [(yasm.lib.database.field_name) = "exam_comment", (yasm.lib.database.nullable) = true];
+    string created = 7 [(yasm.lib.database.field_name) = "exam_created"];
+    string modified = 8 [(yasm.lib.database.field_name) = "exam_modified"];
+    string changedby = 9 [(yasm.lib.database.field_name) = "exam_changedby"];
+}
+
+message PersonComment {
+    option (yasm.lib.database.db_table) = true;
+    option (yasm.lib.database.table_name) = "person_comment";
+    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "person_comment_id", (yasm.lib.database.autoincrement) = true];
+    Person blamed = 2 [(yasm.lib.database.field_name) = "blamed_person_id"];
+    School school = 3 [(yasm.lib.database.field_name) = "school_id"];
+    string owner_login = 4;
+    string record_acl = 5 [(yasm.lib.database.nullable) = true];
+    string deleted = 6 [(yasm.lib.database.field_name) = "person_comment_deleted", (yasm.lib.database.nullable) = true];
+    string created = 7 [(yasm.lib.database.field_name) = "person_comment_created"];
+    string modified = 8 [(yasm.lib.database.field_name) = "person_comment_modified"];
+    string changedby = 9 [(yasm.lib.database.field_name) = "person_comment_changedby"];
+}
+
+message Ava {
+    option (yasm.lib.database.db_table) = true;
+    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.field_name) = "id", (yasm.lib.database.autoincrement) = true];
+    Person person = 2 [(yasm.lib.database.field_name) = "person_id"];
+    string ava = 3;
+    DatabaseStatus status = 4;
+}
+
+message DirectLogin {
+    option (yasm.lib.database.db_table) = true;
+    option (yasm.lib.database.table_name) = "direct_login";
+    string type = 1 [(yasm.lib.database.primary_key) = true];
+    Person person = 2 [(yasm.lib.database.field_name) = "person_id", (yasm.lib.database.primary_key) = true];
+    string password_hash = 4;
+    string login = 5;
+}
+
+message Contact {
+    option (yasm.lib.database.db_table) = true;
+    uint64 id = 1 [(yasm.lib.database.primary_key) = true, (yasm.lib.database.autoincrement) = true];
+    Person person = 2 [(yasm.lib.database.field_name) = "person_id"];
+    string name = 4;
+    string value = 5;
+}

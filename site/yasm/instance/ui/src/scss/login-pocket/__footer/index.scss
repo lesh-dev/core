@@ -1,6 +1,8 @@
+@import "../../constants";
+
 .login-pocket__footer {
   width: 100%;
-  height: var(--triangle-size);
+  height: $login-triangle-size;
   clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
-  background: var(--background);
+  background: $login-background;
 }

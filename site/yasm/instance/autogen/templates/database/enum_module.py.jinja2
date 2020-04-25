@@ -1,0 +1,9 @@
+import enum
+{% for child in children %}
+from . import {{ child }}
+{% endfor %}
+
+
+{% for enum in enums %}
+{{ enum }}
+{% endfor %}

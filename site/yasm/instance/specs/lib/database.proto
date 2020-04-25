@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package yasm.lib.database;
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.MessageOptions {
+    string table_name = 51232;
+    bool login_table = 51233;
+    bool db_table = 51234;
+}
+
+enum LazyLoad {
+    joined = 0;
+    query = 1;
+}
+
+extend google.protobuf.FieldOptions {
+    bool primary_key = 51234;
+    string back_populates = 51236;
+    string field_name = 51239;
+
+    bool searchable = 512348;
+
+    LazyLoad lazy_load = 51237;
+
+    bool nullable = 512360;
+    bool autoincrement = 512361;
+}
+
+extend google.protobuf.EnumOptions {
+    string enum_pg_name = 51236;
+}
+
+extend google.protobuf.EnumValueOptions {
+    string enum_name = 51234;
+    bool enum_empty = 51235;
+}

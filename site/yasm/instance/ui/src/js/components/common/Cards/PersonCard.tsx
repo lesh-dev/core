@@ -1,9 +1,8 @@
 import * as React from 'react'
+import {CSSProperties} from 'react'
 import "../../../../scss/cards/person_card/person_card.scss"
-import {CSSProperties} from "react";
 import {ava, redirect} from "../utils";
-import {Person} from "../../../generated/interfaces";
-import Async from "react-promise"
+import {DatabaseStatus, Person} from "../../../generated/frontend/interfaces/yasm/database";
 
 export interface PersonCardProps {
     person: Person
@@ -11,6 +10,7 @@ export interface PersonCardProps {
     callback?: () => void
     clickable?: boolean
     truncated?: boolean
+    key?: number
 }
 
 export class PersonCard extends React.Component<PersonCardProps> {
@@ -19,19 +19,27 @@ export class PersonCard extends React.Component<PersonCardProps> {
     };
 
     render() {
+        const avas = this.props.person.avas.filter(ava => ava.status === DatabaseStatus.relevant)
+        let ava = null
+        if (avas.length > 0)
+            ava = avas[0].ava
         return (
             <div className={"person_card" + (this.props.clickable ? " person_card--clickable" : "")}
                  style={this.props.style} onClick={() => {
                 if (this.props.clickable) {
                     if (!this.props.callback)
-                        redirect('/admin/gui/people/' + this.props.person.person_id)
+                        redirect('/admin/gui/people/' + this.props.person.id)
                     else
                         this.props.callback()
                 }
-            }}>
-                <Async promise={ava(this.props.person)} then={(val: string) => {
-                    return <img src={val} className="person_card__img"/>
-                }}/>
+            }}
+                 key={this.props.key || 1}
+            >
+                {
+                    this.props.person.avas.filter(ava => ava.status === DatabaseStatus.relevant).map(ava =>
+                        <img src={ava.ava} className="person_card__img"/>
+                    )
+                }
                 {!this.props.truncated
                     ? (
                         <div className="person_card__text">

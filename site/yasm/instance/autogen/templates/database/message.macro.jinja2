@@ -1,0 +1,9 @@
+{% from 'database/model.macro.jinja2' import model %}
+{% from 'database/class.macro.jinja2' import class %}
+{% macro msg(message) %}
+{% if message.options.db_table %}
+{{ model(message) }}
+{% else %}
+{{ class(message) }}
+{% endif %}
+{% endmacro %}

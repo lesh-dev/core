@@ -1,8 +1,17 @@
 #Запуск YaSM:
 
 Необходимо
-* npm >=6.1.0
+* npm >= 6.1.0
 * python3, pip3
+* protoc >= 3.11.2:
+* @fedora:
+  + protobuf-compiler
+  + protobuf-devel 
+* @arch-linux
+  + protobuf
+* @ubuntu
+  + protobuf-compiler
+  + libprotobuf-dev
 
 Сборка
 * Конфиг с 'SQLALCHEMY_DATABASE_URI' положить в instance
@@ -10,15 +19,15 @@
 * ```python3 -m virtualenv -p `which python3` venv```
 * ```. venv/bin/activate```
 * ```pip install -r requirements.txt``` 
+* ```python run.py docs```
+* ```python run.py generate```
 * ```cd instance/ui```
 * ```npm install```
 * ```npm run build```
 
 Сборка документации
 * из корня проекта выполнить
-* ```cd docs```
-* ```make coverage```
-* ```make html```
+* ```python run.py docs```
 
 Запуск
 * ```python run.py runserver```

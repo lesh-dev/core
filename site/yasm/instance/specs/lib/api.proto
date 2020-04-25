@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package yasm.lib.api;
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.ServiceOptions {
+    bool service_require_login = 51000;
+    repeated string service_before_request = 51001;
+    bool service_personalized = 50003;
+}
+
+extend google.protobuf.MethodOptions {
+    bool method_require_login = 52000;
+    repeated string method_before_request = 52001;
+    bool method_personalized = 50003;
+}

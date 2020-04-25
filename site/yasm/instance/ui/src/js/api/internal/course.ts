@@ -1,4 +1,4 @@
-import {Person} from "../../generated/interfaces";
+import {Person} from "../../generated/frontend/interfaces/yasm/database";
 import {PatchAction} from "./common";
 import {call} from "../axios";
 

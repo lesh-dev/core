@@ -1,7 +1,7 @@
 from flask import send_file, redirect, url_for
 from flask_login import login_required
 from ..rights_decorator import has_rights
-from instance.NestableBlueprint import NestableBlueprint
+from instance.generated.api.NestableBlueprint import NestableBlueprint
 
 module = NestableBlueprint('docs', __name__, url_prefix='/docs')
 

@@ -1,0 +1,121 @@
+{% from "database/json.macro.jinja2" import from_json, from_string, to_json, to_string %}
+{% macro options(field) %}
+{% if field.options.autoincrement %}
+autoincrement=True,
+{% endif %}
+{% if field.options.nullable %}
+nullable=True,
+{% endif %}
+{% endmacro %}
+{% macro model(message) %}
+{% if message.options.login %}
+@stub.lm.user_loader
+def user_loader(id):
+    return {{ message.name }}.query.get(dict(id))
+
+
+{% endif %}
+{% if message.options.searchable %}
+@stub.add_search
+{% endif %}
+class {{ message.name }}(
+        stub.db.Model,
+{% if message.options.login %}
+        UserMixin,
+{% endif %}
+):
+    __tablename__ = '{{ message.table_name }}'
+
+    def __init__(self, *args, **kwargs):
+        self.serialized = False
+        super({{ message.name }}, self).__init__(*args, **kwargs)
+
+    @sqlalchemy.orm.reconstructor
+    def init_on_load(self):
+        self.serialized = False
+
+{% for field in message.fields.values() %}
+{% if field.is_enum() %}
+        self.{{ field.name }} = {{ field.py_cast }}(self.{{ field.name }})
+{% endif %}
+{% endfor %}
+{% for field in message.fields.values() %}
+{% if field.is_message() and not field.message_obj.options.db_table %}
+        self.{{ field.name }} = {{ field.py_cast }}(self.{{ field.name }})
+{% endif %}
+{% endfor %}
+{% if message.options.login %}
+
+    def get_id(self):
+        return (
+{% for field in message.primary_fields %}
+            ('{{ field.name }}', self.{{ field.name }}),
+{% endfor %}
+        )
+{% endif %}
+
+{% for field in message.primary_fields %}
+    {{ field.name }} = stub.db.Column(
+        stub.db.{{ field.py_db_type }},
+        name='{{ field.options.field_name or field.name }}',
+        primary_key=True,
+        {{ options(field) }}
+    )
+{% endfor %}
+{% for field in message.regular_fields %}
+    {{ field.name }} = stub.db.Column(
+        stub.db.{{ field.py_db_type }},
+        name='{{ field.options.field_name or field.name }}',
+        {{ options(field) }}
+    )
+{% endfor %}
+{% for relationship in message.relationships.values() %}
+    {{ relationship.name }} = stub.db.relationship(
+        '{{ relationship.model.name }}',
+{% if relationship.repeated %}
+        uselist=True,
+        lazy='select',
+{% else %}
+        uselist=False,
+        lazy='joined',
+{% endif %}
+{% if relationship.fields %}
+        foreign_keys=[
+{% for field in relationship.fields %}
+            {{ field.name }},
+{% endfor %}
+        ],
+{% endif %}
+        back_populates='{{ relationship.back_populates.name }}',
+    )
+{% endfor %}
+    __table_args__ = (
+{% for relationship in message.relationships.values() if relationship.fields %}
+        stub.db.ForeignKeyConstraint(
+            (
+{% for field in relationship.fields %}
+                {{ field.name }},
+{% endfor %}
+            ),
+            (
+{% for field in relationship.fields %}
+                '{{ relationship.model.table_name }}.{{ field.back_populates }}',
+{% endfor %}
+            ),
+        ),
+{% endfor %}
+    )
+
+    searchable_columns = [
+{% for field in message.fields.values() %}
+{% if field.options.searchable %}
+        {{ field.name }},
+{% endif %}
+{% endfor %}
+    ]
+
+{{ from_json(message) }}
+{{ from_string() }}
+{{ to_json(message) }}
+{{ to_string() }}
+{% endmacro %}
