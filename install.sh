@@ -102,14 +102,14 @@ else
     fi
 fi
 
+# this all may fail on mathlesh.org
 print_message "Clearing cache"
 $sudo_mode rm -rf $root/.prec/* || true
 
 print_message "Creating cache directory"
-$sudo_mode mkdir -p $root/.prec
-$sudo_mode chmod 777 $root/.prec
+$sudo_mode mkdir -p $root/.prec || true
+$sudo_mode chmod 777 $root/.prec || true
 
-# this may fail on mathlesh.org
 $sudo_mode chown -R $www_user $root || true
 
 target_site="fizlesh.local"
