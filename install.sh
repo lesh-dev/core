@@ -103,7 +103,7 @@ else
 fi
 
 print_message "Clearing cache"
-$sudo_mode rm -rf $root/.prec/*
+$sudo_mode rm -rf $root/.prec/* || true
 
 print_message "Creating cache directory"
 $sudo_mode mkdir -p $root/.prec
