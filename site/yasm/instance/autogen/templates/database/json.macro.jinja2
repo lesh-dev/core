@@ -44,10 +44,10 @@
 {% macro _uncast_value(field) %}
 {% if field.is_enum() %}
     {{ _uncast_value_name(field) }}.value
-{% elif field.is_message() %}
+{% elif field.is_message() and not field.is_system_type() %}
     {{ _uncast_value_name(field) }}.to_json()
 {% else %}
-    {{ _uncast_value_name(field) }}
+    str({{ _uncast_value_name(field) }})
 {% endif %}
 {% endmacro %}
 
@@ -76,7 +76,7 @@
 {% elif field.repeated %}
         if {{ _db_is_loaded(field, message) }} isinstance(self.{{ field.name }}, list):
 {% else %}
-        if isinstance(self.{{ field.name }}, {{ field.py_type }}){% if field.is_message() %} and not self.{{ field.name }}.serialized{% endif %}:
+        if isinstance(self.{{ field.name }}, {{ field.py_type }}){% if field.is_message() and not field.is_system_type() %} and not self.{{ field.name }}.serialized{% endif %}:
 {% endif %}
 {% if field.is_message() and field.message_obj.options.map_entry %}
             ret['{{ field.name }}'] = {{ '{' }}key: {{ _uncast_value(field.message_obj.fields['value'])|trim }} for key, value in self.{{ field.name }}{{ '}' }}

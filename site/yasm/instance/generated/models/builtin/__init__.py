@@ -15,9 +15,11 @@ class SearchRequest:
         tables=None,
     ):
         self.serialized = False
+        self.query = None
         if query is not None:
             assert isinstance(query, str)
             self.query = query
+        self.tables = None
         if tables is not None:
             assert isinstance(tables, list)
             self.tables = tables
@@ -39,9 +41,9 @@ class SearchRequest:
         ret = dict()
 
         if isinstance(self.query, str):
-            ret['query'] = self.query
+            ret['query'] = str(self.query)
         if  isinstance(self.tables, list):
-            ret['tables'] = [value for value in self.tables ]
+            ret['tables'] = [str(value) for value in self.tables ]
         self.serialized = False
         return ret
 
@@ -59,18 +61,23 @@ class SearchResponse:
         course=None,
     ):
         self.serialized = False
+        self.query = None
         if query is not None:
             assert isinstance(query, str)
             self.query = query
+        self.person = None
         if person is not None:
             assert isinstance(person, list)
             self.person = person
+        self.department = None
         if department is not None:
             assert isinstance(department, list)
             self.department = department
+        self.school = None
         if school is not None:
             assert isinstance(school, list)
             self.school = school
+        self.course = None
         if course is not None:
             assert isinstance(course, list)
             self.course = course
@@ -95,7 +102,7 @@ class SearchResponse:
         ret = dict()
 
         if isinstance(self.query, str):
-            ret['query'] = self.query
+            ret['query'] = str(self.query)
         if  isinstance(self.person, list):
             ret['person'] = [value.to_json() for value in self.person if not value.serialized]
         if  isinstance(self.department, list):

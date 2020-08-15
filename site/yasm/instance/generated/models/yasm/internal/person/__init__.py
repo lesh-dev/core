@@ -14,6 +14,7 @@ class ContactList:
         contacts=None,
     ):
         self.serialized = False
+        self.contacts = None
         if contacts is not None:
             assert isinstance(contacts, list)
             self.contacts = contacts
@@ -48,6 +49,7 @@ class ContactsPatch:
         patch=None,
     ):
         self.serialized = False
+        self.patch = None
         if patch is not None:
             assert isinstance(patch, dict)
             self.patch = patch
@@ -83,9 +85,11 @@ class ContactsPatchEntry:
         action=None,
     ):
         self.serialized = False
+        self.name = None
         if name is not None:
             assert isinstance(name, str)
             self.name = name
+        self.action = None
         if action is not None:
             assert isinstance(action, enums.yasm.internal.person.ContactsPatchActions)
             self.action = action
@@ -107,7 +111,7 @@ class ContactsPatchEntry:
         ret = dict()
 
         if isinstance(self.name, str):
-            ret['name'] = self.name
+            ret['name'] = str(self.name)
         if isinstance(self.action, enums.yasm.internal.person.ContactsPatchActions):
             ret['action'] = self.action.value
         self.serialized = False
@@ -123,6 +127,7 @@ class CoursesResponse:
         courses=None,
     ):
         self.serialized = False
+        self.courses = None
         if courses is not None:
             assert isinstance(courses, list)
             self.courses = courses
@@ -157,6 +162,7 @@ class FetchPersonRequest:
         id=None,
     ):
         self.serialized = False
+        self.id = None
         if id is not None:
             assert isinstance(id, int)
             self.id = id
@@ -177,7 +183,7 @@ class FetchPersonRequest:
         ret = dict()
 
         if isinstance(self.id, int):
-            ret['id'] = self.id
+            ret['id'] = str(self.id)
         self.serialized = False
         return ret
 
@@ -195,18 +201,23 @@ class GetProfileResponse:
         ava=None,
     ):
         self.serialized = False
+        self.id = None
         if id is not None:
             assert isinstance(id, int)
             self.id = id
+        self.first_name = None
         if first_name is not None:
             assert isinstance(first_name, str)
             self.first_name = first_name
+        self.last_name = None
         if last_name is not None:
             assert isinstance(last_name, str)
             self.last_name = last_name
+        self.nick_name = None
         if nick_name is not None:
             assert isinstance(nick_name, str)
             self.nick_name = nick_name
+        self.ava = None
         if ava is not None:
             assert isinstance(ava, str)
             self.ava = ava
@@ -231,15 +242,15 @@ class GetProfileResponse:
         ret = dict()
 
         if isinstance(self.id, int):
-            ret['id'] = self.id
+            ret['id'] = str(self.id)
         if isinstance(self.first_name, str):
-            ret['first_name'] = self.first_name
+            ret['first_name'] = str(self.first_name)
         if isinstance(self.last_name, str):
-            ret['last_name'] = self.last_name
+            ret['last_name'] = str(self.last_name)
         if isinstance(self.nick_name, str):
-            ret['nick_name'] = self.nick_name
+            ret['nick_name'] = str(self.nick_name)
         if isinstance(self.ava, str):
-            ret['ava'] = self.ava
+            ret['ava'] = str(self.ava)
         self.serialized = False
         return ret
 
@@ -253,6 +264,7 @@ class SetAvaRequest:
         new_ava=None,
     ):
         self.serialized = False
+        self.new_ava = None
         if new_ava is not None:
             assert isinstance(new_ava, str)
             self.new_ava = new_ava
@@ -273,7 +285,7 @@ class SetAvaRequest:
         ret = dict()
 
         if isinstance(self.new_ava, str):
-            ret['new_ava'] = self.new_ava
+            ret['new_ava'] = str(self.new_ava)
         self.serialized = False
         return ret
 
@@ -287,6 +299,7 @@ class SetPasswordRequest:
         new_ava=None,
     ):
         self.serialized = False
+        self.new_ava = None
         if new_ava is not None:
             assert isinstance(new_ava, str)
             self.new_ava = new_ava
@@ -307,7 +320,7 @@ class SetPasswordRequest:
         ret = dict()
 
         if isinstance(self.new_ava, str):
-            ret['new_ava'] = self.new_ava
+            ret['new_ava'] = str(self.new_ava)
         self.serialized = False
         return ret
 

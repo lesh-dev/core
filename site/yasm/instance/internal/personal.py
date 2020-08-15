@@ -1,8 +1,9 @@
+import datetime
+
 from instance.generated.api.yasm.internal.person.api_personal import Interface
 from instance.generated.models.yasm.internal.person import GetProfileResponse, CoursesResponse, ContactList
 from instance.generated.models.yasm.database import Person, Ava, Contact
 from instance.generated.models.stub import db
-from instance.generated.enums.yasm.database import DatabaseStatus
 from instance.generated.enums.yasm.internal.person import ContactsPatchActions
 
 
@@ -12,16 +13,15 @@ class APIPersonal(Interface):
         request,
         current_user,
     ):
-        ava = ''
-        for avatar in current_user.avas:
-            if avatar.status == DatabaseStatus.relevant:
-                ava = avatar.ava
+        ava = None
+        if current_user.avas:
+            ava = max(current_user.avas, key=lambda ava: ava.timestamp)
         return GetProfileResponse(
             id=current_user.id,
             first_name=current_user.first_name,
             last_name=current_user.last_name,
             nick_name=current_user.nick_name,
-            ava=ava,
+            ava=ava.repr if ava is not None else '',
         )
 
     @staticmethod
@@ -45,13 +45,11 @@ class APIPersonal(Interface):
         request,
         current_user,
     ):
-        for avatar in current_user.avas:
-            avatar.status = DatabaseStatus.obsolete.value
         db.session.commit()
         ava = Ava(
             person=current_user,
-            ava=request.new_ava,
-            status=DatabaseStatus.relevant.value,
+            repr=request.new_ava,
+            timestamp=datetime.datetime.now(),
         )
         db.session.add(ava)
         db.session.commit()
@@ -102,5 +100,5 @@ def fill_person(person: Person):
     _ = person.exams
     _ = person.courses
     _ = person.contacts
-    person.avas = [ava for ava in person.avas if ava.status == DatabaseStatus.relevant]
+    person.avas = sorted(person.avas, key=lambda ava: ava.timestamp)[:5]
     return person

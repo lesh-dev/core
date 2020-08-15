@@ -1,6 +1,5 @@
 from instance.generated.api.yasm.internal.person.api_people import Interface
 from instance.generated.models.yasm.database import Person
-from instance.generated.enums.yasm.database import DatabaseStatus
 
 
 class APIPeople(Interface):
@@ -9,5 +8,5 @@ class APIPeople(Interface):
         request,
     ):
         person = Person.query.get(int(request.id))
-        person.avas = [ava for ava in person.avas if ava.status == DatabaseStatus.relevant]
+        person.avas = sorted(person.avas, key=lambda ava: ava.timestamp)[:5]
         return person

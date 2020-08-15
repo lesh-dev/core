@@ -14,6 +14,7 @@ class FetchCourseRequest:
         id=None,
     ):
         self.serialized = False
+        self.id = None
         if id is not None:
             assert isinstance(id, int)
             self.id = id
@@ -34,7 +35,7 @@ class FetchCourseRequest:
         ret = dict()
 
         if isinstance(self.id, int):
-            ret['id'] = self.id
+            ret['id'] = str(self.id)
         self.serialized = False
         return ret
 
@@ -49,9 +50,11 @@ class PatchTeachersRequest:
         patch=None,
     ):
         self.serialized = False
+        self.id = None
         if id is not None:
             assert isinstance(id, int)
             self.id = id
+        self.patch = None
         if patch is not None:
             assert isinstance(patch, dict)
             self.patch = patch
@@ -73,7 +76,7 @@ class PatchTeachersRequest:
         ret = dict()
 
         if isinstance(self.id, int):
-            ret['id'] = self.id
+            ret['id'] = str(self.id)
         if  isinstance(self.patch, dict):
             ret['patch'] = {key: self.value.to_json() for key, value in self.patch}
         self.serialized = False
@@ -89,6 +92,7 @@ class PatchTeachersResponse:
         teachers=None,
     ):
         self.serialized = False
+        self.teachers = None
         if teachers is not None:
             assert isinstance(teachers, list)
             self.teachers = teachers
@@ -124,9 +128,11 @@ class TeachersPatchEntry:
         action=None,
     ):
         self.serialized = False
+        self.name = None
         if name is not None:
             assert isinstance(name, str)
             self.name = name
+        self.action = None
         if action is not None:
             assert isinstance(action, enums.yasm.internal.course.TeachersPatchActions)
             self.action = action
@@ -148,7 +154,7 @@ class TeachersPatchEntry:
         ret = dict()
 
         if isinstance(self.name, str):
-            ret['name'] = self.name
+            ret['name'] = str(self.name)
         if isinstance(self.action, enums.yasm.internal.course.TeachersPatchActions):
             ret['action'] = self.action.value
         self.serialized = False

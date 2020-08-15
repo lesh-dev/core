@@ -147,27 +147,27 @@ class Course(
         unloaded = sqlalchemy.inspect(self).unloaded
 
         if isinstance(self.id, int):
-            ret['id'] = self.id
+            ret['id'] = str(self.id)
         if isinstance(self.title, str):
-            ret['title'] = self.title
+            ret['title'] = str(self.title)
         if isinstance(self.school, yasm.yasm.database.School) and not self.school.serialized:
             ret['school'] = self.school.to_json()
         if isinstance(self.cycle, str):
-            ret['cycle'] = self.cycle
+            ret['cycle'] = str(self.cycle)
         if isinstance(self.target_class, str):
-            ret['target_class'] = self.target_class
+            ret['target_class'] = str(self.target_class)
         if isinstance(self.desc, str):
-            ret['desc'] = self.desc
+            ret['desc'] = str(self.desc)
         if isinstance(self.type, enums.yasm.database.CourseType):
             ret['type'] = self.type.value
         if isinstance(self.area, enums.yasm.database.CourseArea):
             ret['area'] = self.area.value
         if isinstance(self.created, str):
-            ret['created'] = self.created
+            ret['created'] = str(self.created)
         if isinstance(self.modified, str):
-            ret['modified'] = self.modified
+            ret['modified'] = str(self.modified)
         if isinstance(self.changedby, str):
-            ret['changedby'] = self.changedby
+            ret['changedby'] = str(self.changedby)
         if 'teachers' not in unloaded and isinstance(self.teachers, list):
             ret['teachers'] = [value.to_json() for value in self.teachers if not value.serialized]
         if 'exams' not in unloaded and isinstance(self.exams, list):
@@ -262,17 +262,17 @@ class Department(
         unloaded = sqlalchemy.inspect(self).unloaded
 
         if isinstance(self.id, int):
-            ret['id'] = self.id
+            ret['id'] = str(self.id)
         if 'people' not in unloaded and isinstance(self.people, list):
             ret['people'] = [value.to_json() for value in self.people if not value.serialized]
         if isinstance(self.title, str):
-            ret['title'] = self.title
+            ret['title'] = str(self.title)
         if isinstance(self.created, str):
-            ret['created'] = self.created
+            ret['created'] = str(self.created)
         if isinstance(self.modified, str):
-            ret['modified'] = self.modified
+            ret['modified'] = str(self.modified)
         if isinstance(self.changedby, str):
-            ret['changedby'] = self.changedby
+            ret['changedby'] = str(self.changedby)
         if 'person_schools' not in unloaded and isinstance(self.person_schools, list):
             ret['person_schools'] = [value.to_json() for value in self.person_schools if not value.serialized]
         self.serialized = False
@@ -404,25 +404,25 @@ class School(
         unloaded = sqlalchemy.inspect(self).unloaded
 
         if isinstance(self.id, int):
-            ret['id'] = self.id
+            ret['id'] = str(self.id)
         if isinstance(self.title, str):
-            ret['title'] = self.title
+            ret['title'] = str(self.title)
         if isinstance(self.type, enums.yasm.database.SchoolType):
             ret['type'] = self.type.value
         if isinstance(self.start, str):
-            ret['start'] = self.start
+            ret['start'] = str(self.start)
         if isinstance(self.end, str):
-            ret['end'] = self.end
+            ret['end'] = str(self.end)
         if isinstance(self.location, str):
-            ret['location'] = self.location
+            ret['location'] = str(self.location)
         if isinstance(self.coords, str):
-            ret['coords'] = self.coords
+            ret['coords'] = str(self.coords)
         if isinstance(self.created, str):
-            ret['created'] = self.created
+            ret['created'] = str(self.created)
         if isinstance(self.modified, str):
-            ret['modified'] = self.modified
+            ret['modified'] = str(self.modified)
         if isinstance(self.changedby, str):
-            ret['changedby'] = self.changedby
+            ret['changedby'] = str(self.changedby)
         if 'person_schools' not in unloaded and isinstance(self.person_schools, list):
             ret['person_schools'] = [value.to_json() for value in self.person_schools if not value.serialized]
         if 'courses' not in unloaded and isinstance(self.courses, list):
@@ -795,75 +795,75 @@ class Person(
         unloaded = sqlalchemy.inspect(self).unloaded
 
         if isinstance(self.id, int):
-            ret['id'] = self.id
+            ret['id'] = str(self.id)
         if isinstance(self.rights, str):
-            ret['rights'] = self.rights
+            ret['rights'] = str(self.rights)
         if isinstance(self.first_name, str):
-            ret['first_name'] = self.first_name
+            ret['first_name'] = str(self.first_name)
         if isinstance(self.last_name, str):
-            ret['last_name'] = self.last_name
+            ret['last_name'] = str(self.last_name)
         if isinstance(self.patronymic, str):
-            ret['patronymic'] = self.patronymic
+            ret['patronymic'] = str(self.patronymic)
         if isinstance(self.nick_name, str):
-            ret['nick_name'] = self.nick_name
+            ret['nick_name'] = str(self.nick_name)
         if isinstance(self.birth_date, str):
-            ret['birth_date'] = self.birth_date
+            ret['birth_date'] = str(self.birth_date)
         if isinstance(self.passport_data, str):
-            ret['passport_data'] = self.passport_data
+            ret['passport_data'] = str(self.passport_data)
         if isinstance(self.school, str):
-            ret['school'] = self.school
+            ret['school'] = str(self.school)
         if isinstance(self.school_city, str):
-            ret['school_city'] = self.school_city
+            ret['school_city'] = str(self.school_city)
         if isinstance(self.ank_class, str):
-            ret['ank_class'] = self.ank_class
+            ret['ank_class'] = str(self.ank_class)
         if isinstance(self.current_class, str):
-            ret['current_class'] = self.current_class
+            ret['current_class'] = str(self.current_class)
         if isinstance(self.phone, str):
-            ret['phone'] = self.phone
+            ret['phone'] = str(self.phone)
         if isinstance(self.cellular, str):
-            ret['cellular'] = self.cellular
+            ret['cellular'] = str(self.cellular)
         if isinstance(self.email, str):
-            ret['email'] = self.email
+            ret['email'] = str(self.email)
         if isinstance(self.skype, str):
-            ret['skype'] = self.skype
+            ret['skype'] = str(self.skype)
         if isinstance(self.social_profile, str):
-            ret['social_profile'] = self.social_profile
+            ret['social_profile'] = str(self.social_profile)
         if isinstance(self.is_teacher, str):
-            ret['is_teacher'] = self.is_teacher
+            ret['is_teacher'] = str(self.is_teacher)
         if isinstance(self.is_student, str):
-            ret['is_student'] = self.is_student
+            ret['is_student'] = str(self.is_student)
         if isinstance(self.favourites, str):
-            ret['favourites'] = self.favourites
+            ret['favourites'] = str(self.favourites)
         if isinstance(self.achievements, str):
-            ret['achievements'] = self.achievements
+            ret['achievements'] = str(self.achievements)
         if isinstance(self.hobby, str):
-            ret['hobby'] = self.hobby
+            ret['hobby'] = str(self.hobby)
         if isinstance(self.lesh_ref, str):
-            ret['lesh_ref'] = self.lesh_ref
+            ret['lesh_ref'] = str(self.lesh_ref)
         if isinstance(self.forest_1, str):
-            ret['forest_1'] = self.forest_1
+            ret['forest_1'] = str(self.forest_1)
         if isinstance(self.forest_2, str):
-            ret['forest_2'] = self.forest_2
+            ret['forest_2'] = str(self.forest_2)
         if isinstance(self.forest_3, str):
-            ret['forest_3'] = self.forest_3
+            ret['forest_3'] = str(self.forest_3)
         if isinstance(self.tent_capacity, str):
-            ret['tent_capacity'] = self.tent_capacity
+            ret['tent_capacity'] = str(self.tent_capacity)
         if isinstance(self.tour_requisites, str):
-            ret['tour_requisites'] = self.tour_requisites
+            ret['tour_requisites'] = str(self.tour_requisites)
         if isinstance(self.anketa_status, enums.yasm.database.AnketaStatus):
             ret['anketa_status'] = self.anketa_status.value
         if isinstance(self.user_agent, str):
-            ret['user_agent'] = self.user_agent
+            ret['user_agent'] = str(self.user_agent)
         if isinstance(self.department, yasm.yasm.database.Department) and not self.department.serialized:
             ret['department'] = self.department.to_json()
         if isinstance(self.person_created, str):
-            ret['person_created'] = self.person_created
+            ret['person_created'] = str(self.person_created)
         if isinstance(self.person_modified, str):
-            ret['person_modified'] = self.person_modified
+            ret['person_modified'] = str(self.person_modified)
         if isinstance(self.person_changedby, str):
-            ret['person_changedby'] = self.person_changedby
+            ret['person_changedby'] = str(self.person_changedby)
         if isinstance(self.other_contacts, str):
-            ret['other_contacts'] = self.other_contacts
+            ret['other_contacts'] = str(self.other_contacts)
         if 'person_schools' not in unloaded and isinstance(self.person_schools, list):
             ret['person_schools'] = [value.to_json() for value in self.person_schools if not value.serialized]
         if 'exams' not in unloaded and isinstance(self.exams, list):
@@ -898,7 +898,6 @@ class Ava(
     def init_on_load(self):
         self.serialized = False
 
-        self.status = enums.yasm.database.DatabaseStatus(self.status)
 
     id = stub.db.Column(
         stub.db.Integer,
@@ -912,14 +911,14 @@ class Ava(
         name='person_id',
         
     )
-    ava = stub.db.Column(
+    repr = stub.db.Column(
         stub.db.Text,
-        name='ava',
+        name='repr',
         
     )
-    status = stub.db.Column(
-        stub.db.Enum(*tuple(x.value for x in enums.yasm.database.DatabaseStatus), name='database_status'),
-        name='status',
+    timestamp = stub.db.Column(
+        stub.db.TIMESTAMP,
+        name='timestamp',
         
     )
     person = stub.db.relationship(
@@ -950,8 +949,8 @@ class Ava(
         return cls(
             id=int(json_data['id']) if 'id' in json_data else None,
             person=yasm.yasm.database.Person.from_json(json_data['person']) if 'person' in json_data else None,
-            ava=str(json_data['ava']) if 'ava' in json_data else None,
-            status=enums.yasm.database.DatabaseStatus(json_data['status']) if 'status' in json_data else None,
+            repr=str(json_data['repr']) if 'repr' in json_data else None,
+            timestamp=datetime.datetime(json_data['timestamp']) if 'timestamp' in json_data else None,
         )
 
     @classmethod
@@ -964,13 +963,13 @@ class Ava(
         unloaded = sqlalchemy.inspect(self).unloaded
 
         if isinstance(self.id, int):
-            ret['id'] = self.id
+            ret['id'] = str(self.id)
         if isinstance(self.person, yasm.yasm.database.Person) and not self.person.serialized:
             ret['person'] = self.person.to_json()
-        if isinstance(self.ava, str):
-            ret['ava'] = self.ava
-        if isinstance(self.status, enums.yasm.database.DatabaseStatus):
-            ret['status'] = self.status.value
+        if isinstance(self.repr, str):
+            ret['repr'] = str(self.repr)
+        if isinstance(self.timestamp, datetime.datetime):
+            ret['timestamp'] = str(self.timestamp)
         self.serialized = False
         return ret
 
@@ -991,8 +990,6 @@ class Calendar(
     def init_on_load(self):
         self.serialized = False
 
-        self.date = datetime.date(self.date)
-        self.modified = datetime.datetime(self.modified)
 
     fk_person_school_id = stub.db.Column(
         stub.db.Integer,
@@ -1065,14 +1062,14 @@ class Calendar(
 
         if isinstance(self.person_school, yasm.yasm.database.PersonSchool) and not self.person_school.serialized:
             ret['person_school'] = self.person_school.to_json()
-        if isinstance(self.date, datetime.date) and not self.date.serialized:
-            ret['date'] = self.date.to_json()
+        if isinstance(self.date, datetime.date):
+            ret['date'] = str(self.date)
         if isinstance(self.status, str):
-            ret['status'] = self.status
-        if isinstance(self.modified, datetime.datetime) and not self.modified.serialized:
-            ret['modified'] = self.modified.to_json()
+            ret['status'] = str(self.status)
+        if isinstance(self.modified, datetime.datetime):
+            ret['modified'] = str(self.modified)
         if isinstance(self.changed_by, str):
-            ret['changed_by'] = self.changed_by
+            ret['changed_by'] = str(self.changed_by)
         self.serialized = False
         return ret
 
@@ -1158,13 +1155,13 @@ class Contact(
         unloaded = sqlalchemy.inspect(self).unloaded
 
         if isinstance(self.id, int):
-            ret['id'] = self.id
+            ret['id'] = str(self.id)
         if isinstance(self.person, yasm.yasm.database.Person) and not self.person.serialized:
             ret['person'] = self.person.to_json()
         if isinstance(self.name, str):
-            ret['name'] = self.name
+            ret['name'] = str(self.name)
         if isinstance(self.value, str):
-            ret['value'] = self.value
+            ret['value'] = str(self.value)
         self.serialized = False
         return ret
 
@@ -1279,17 +1276,17 @@ class CourseTeachers(
         unloaded = sqlalchemy.inspect(self).unloaded
 
         if isinstance(self.id, int):
-            ret['id'] = self.id
+            ret['id'] = str(self.id)
         if isinstance(self.course, yasm.yasm.database.Course) and not self.course.serialized:
             ret['course'] = self.course.to_json()
         if isinstance(self.teacher, yasm.yasm.database.Person) and not self.teacher.serialized:
             ret['teacher'] = self.teacher.to_json()
         if isinstance(self.created, str):
-            ret['created'] = self.created
+            ret['created'] = str(self.created)
         if isinstance(self.modified, str):
-            ret['modified'] = self.modified
+            ret['modified'] = str(self.modified)
         if isinstance(self.changedby, str):
-            ret['changedby'] = self.changedby
+            ret['changedby'] = str(self.changedby)
         self.serialized = False
         return ret
 
@@ -1375,13 +1372,13 @@ class DirectLogin(
         unloaded = sqlalchemy.inspect(self).unloaded
 
         if isinstance(self.type, str):
-            ret['type'] = self.type
+            ret['type'] = str(self.type)
         if isinstance(self.person, yasm.yasm.database.Person) and not self.person.serialized:
             ret['person'] = self.person.to_json()
         if isinstance(self.password_hash, str):
-            ret['password_hash'] = self.password_hash
+            ret['password_hash'] = str(self.password_hash)
         if isinstance(self.login, str):
-            ret['login'] = self.login
+            ret['login'] = str(self.login)
         self.serialized = False
         return ret
 
@@ -1517,23 +1514,23 @@ class Exam(
         unloaded = sqlalchemy.inspect(self).unloaded
 
         if isinstance(self.id, int):
-            ret['id'] = self.id
+            ret['id'] = str(self.id)
         if isinstance(self.student, yasm.yasm.database.Person) and not self.student.serialized:
             ret['student'] = self.student.to_json()
         if isinstance(self.course, yasm.yasm.database.Course) and not self.course.serialized:
             ret['course'] = self.course.to_json()
         if isinstance(self.status, str):
-            ret['status'] = self.status
+            ret['status'] = str(self.status)
         if isinstance(self.deadline_date, str):
-            ret['deadline_date'] = self.deadline_date
+            ret['deadline_date'] = str(self.deadline_date)
         if isinstance(self.comment, str):
-            ret['comment'] = self.comment
+            ret['comment'] = str(self.comment)
         if isinstance(self.created, str):
-            ret['created'] = self.created
+            ret['created'] = str(self.created)
         if isinstance(self.modified, str):
-            ret['modified'] = self.modified
+            ret['modified'] = str(self.modified)
         if isinstance(self.changedby, str):
-            ret['changedby'] = self.changedby
+            ret['changedby'] = str(self.changedby)
         self.serialized = False
         return ret
 
@@ -1668,23 +1665,23 @@ class PersonComment(
         unloaded = sqlalchemy.inspect(self).unloaded
 
         if isinstance(self.id, int):
-            ret['id'] = self.id
+            ret['id'] = str(self.id)
         if isinstance(self.blamed, yasm.yasm.database.Person) and not self.blamed.serialized:
             ret['blamed'] = self.blamed.to_json()
         if isinstance(self.school, yasm.yasm.database.School) and not self.school.serialized:
             ret['school'] = self.school.to_json()
         if isinstance(self.owner_login, str):
-            ret['owner_login'] = self.owner_login
+            ret['owner_login'] = str(self.owner_login)
         if isinstance(self.record_acl, str):
-            ret['record_acl'] = self.record_acl
+            ret['record_acl'] = str(self.record_acl)
         if isinstance(self.deleted, str):
-            ret['deleted'] = self.deleted
+            ret['deleted'] = str(self.deleted)
         if isinstance(self.created, str):
-            ret['created'] = self.created
+            ret['created'] = str(self.created)
         if isinstance(self.modified, str):
-            ret['modified'] = self.modified
+            ret['modified'] = str(self.modified)
         if isinstance(self.changedby, str):
-            ret['changedby'] = self.changedby
+            ret['changedby'] = str(self.changedby)
         self.serialized = False
         return ret
 
@@ -1891,7 +1888,7 @@ class PersonSchool(
         unloaded = sqlalchemy.inspect(self).unloaded
 
         if isinstance(self.id, int):
-            ret['id'] = self.id
+            ret['id'] = str(self.id)
         if isinstance(self.member, yasm.yasm.database.Person) and not self.member.serialized:
             ret['member'] = self.member.to_json()
         if isinstance(self.department, yasm.yasm.database.Department) and not self.department.serialized:
@@ -1899,29 +1896,29 @@ class PersonSchool(
         if isinstance(self.school, yasm.yasm.database.School) and not self.school.serialized:
             ret['school'] = self.school.to_json()
         if isinstance(self.is_student, str):
-            ret['is_student'] = self.is_student
+            ret['is_student'] = str(self.is_student)
         if isinstance(self.is_teacher, str):
-            ret['is_teacher'] = self.is_teacher
+            ret['is_teacher'] = str(self.is_teacher)
         if isinstance(self.curatorship, enums.yasm.database.Curatorship):
             ret['curatorship'] = self.curatorship.value
         if isinstance(self.curator_group, str):
-            ret['curator_group'] = self.curator_group
+            ret['curator_group'] = str(self.curator_group)
         if isinstance(self.courses_needed, str):
-            ret['courses_needed'] = self.courses_needed
+            ret['courses_needed'] = str(self.courses_needed)
         if isinstance(self.current_class, str):
-            ret['current_class'] = self.current_class
+            ret['current_class'] = str(self.current_class)
         if isinstance(self.comment, str):
-            ret['comment'] = self.comment
+            ret['comment'] = str(self.comment)
         if isinstance(self.created, str):
-            ret['created'] = self.created
+            ret['created'] = str(self.created)
         if isinstance(self.modified, str):
-            ret['modified'] = self.modified
+            ret['modified'] = str(self.modified)
         if isinstance(self.changedby, str):
-            ret['changedby'] = self.changedby
+            ret['changedby'] = str(self.changedby)
         if isinstance(self.arrival, str):
-            ret['arrival'] = self.arrival
+            ret['arrival'] = str(self.arrival)
         if isinstance(self.leave, str):
-            ret['leave'] = self.leave
+            ret['leave'] = str(self.leave)
         if 'calendars' not in unloaded and isinstance(self.calendars, list):
             ret['calendars'] = [value.to_json() for value in self.calendars if not value.serialized]
         self.serialized = False

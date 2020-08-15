@@ -315,7 +315,7 @@ class Field(Meta):
         if self.is_enum():
             return 'enums.{}'.format(self.enum_obj.full_name)
         elif self.is_message():
-            if not self.message_obj.options.py_type:
+            if not self.is_system_type():
                 return 'yasm.{}'.format(self.message_obj.full_name)
             else:
                 return self.message_obj.options.py_type
@@ -335,11 +335,19 @@ class Field(Meta):
     def py_cast(self):
         if self.is_message():
             tp = self.py_type
-            if not self.message_obj.options.py_type:
+            if not self.is_system_type():
                 return tp + '.from_json'
             else:
                 return tp
         return self.py_type
+
+    def is_system_type(self):
+        return bool(
+            self.message_obj.options.py_type
+            or self.message_obj.options.db_type
+            or self.message_obj.options.ts_type
+            # or self.message_obj.options.py_package
+        )
 
 
 class MessageOptions:

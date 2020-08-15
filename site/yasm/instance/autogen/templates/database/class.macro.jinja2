@@ -9,6 +9,7 @@ class {{ message.name }}:
     ):
         self.serialized = False
 {% for field in message.fields.values() %}
+        self.{{ field.name }} = None
         if {{ field.name }} is not None:
 {% if field.is_message() and field.message_obj.options.map_entry %}
             assert isinstance({{ field.name }}, dict)

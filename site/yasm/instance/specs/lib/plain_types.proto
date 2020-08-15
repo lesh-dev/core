@@ -9,6 +9,7 @@ extend google.protobuf.MessageOptions {
     string py_type = 51792;
     string ts_type = 51793;
     string py_package = 51794;
+    bool recast_from_db = 51795;
 }
 
 message Date {
@@ -16,6 +17,7 @@ message Date {
     option (py_type) = "datetime.date";
     option (ts_type) = "string";
     option (py_package) = "datetime";
+    option (recast_from_db) = true;
 }
 
 message DateTime {
@@ -23,6 +25,7 @@ message DateTime {
     option (py_type) = "datetime.datetime";
     option (ts_type) = "string";
     option (py_package) = "datetime";
+    option (recast_from_db) = true;
 }
 
 message Timestamp {
@@ -30,4 +33,5 @@ message Timestamp {
     option (py_type) = "datetime.datetime";
     option (ts_type) = "string";
     option (py_package) = "datetime";
+    option (recast_from_db) = false;
 }

@@ -185,8 +185,8 @@ export {
     export interface Ava {
                     id?: number
                     person?: interfaces.yasm.database.Person
-                    ava?: string
-                    status?: interfaces.yasm.database.DatabaseStatus
+                    repr?: string
+                    timestamp?: string
             }
 
 
@@ -264,12 +264,5 @@ export {
                     precise = 'precise',
                     other = 'other',
                     human = 'human',
-            }
-
-
-    export enum DatabaseStatus {
-                    relevant = 'relevant',
-                    obsolete = 'obsolete',
-                    deleted = 'deleted',
             }
 

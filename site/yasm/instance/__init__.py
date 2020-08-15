@@ -5,10 +5,12 @@
 from flask import Flask
 from flask_wtf.csrf import CSRFProtect
 
-from instance.generated.models.stub import db
-from instance.login import lm
-from instance.login.oauth2.base import Auth
-
+try:
+    from instance.generated.models.stub import db
+    from instance.login import lm
+    from instance.login.oauth2.base import Auth
+except ImportError:
+    pass
 
 yasm: Flask = None
 

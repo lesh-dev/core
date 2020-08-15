@@ -2,15 +2,24 @@
 
 """
 
-from instance import create, initialize
 from instance.autogen.generate import main as proto_gen
 from flask_script import Manager
 import shutil
 import os
 import subprocess
 
+error = None
+try:
+    from instance import create, initialize
+except ImportError as e:
+    error = e
+
 
 def main():
+    if error is not None:
+        print("recovery mode, imports failed")
+        proto_gen()
+        return
     manager = Manager(create())
 
     @manager.command

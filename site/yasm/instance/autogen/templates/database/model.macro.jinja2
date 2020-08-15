@@ -40,7 +40,7 @@ class {{ message.name }}(
 {% endif %}
 {% endfor %}
 {% for field in message.fields.values() %}
-{% if field.is_message() and not field.message_obj.options.db_table %}
+{% if field.is_message() and not field.message_obj.options.db_table and (field.is_system_type() and field.message_obj.options.recast_from_db) %}
         self.{{ field.name }} = {{ field.py_cast }}(self.{{ field.name }})
 {% endif %}
 {% endfor %}
