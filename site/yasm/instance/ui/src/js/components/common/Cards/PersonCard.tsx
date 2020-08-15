@@ -2,7 +2,7 @@ import * as React from 'react'
 import {CSSProperties} from 'react'
 import "../../../../scss/cards/person_card/person_card.scss"
 import {ava, redirect} from "../utils";
-import {DatabaseStatus, Person} from "../../../generated/frontend/interfaces/yasm/database";
+import {Person} from "../../../generated/frontend/interfaces/yasm/database";
 
 export interface PersonCardProps {
     person: Person
@@ -19,10 +19,10 @@ export class PersonCard extends React.Component<PersonCardProps> {
     };
 
     render() {
-        const avas = this.props.person.avas.filter(ava => ava.status === DatabaseStatus.relevant)
+        const avas = this.props.person.avas
         let ava = null
         if (avas.length > 0)
-            ava = avas[0].ava
+            ava = avas[0].repr
         return (
             <div className={"person_card" + (this.props.clickable ? " person_card--clickable" : "")}
                  style={this.props.style} onClick={() => {
@@ -35,11 +35,8 @@ export class PersonCard extends React.Component<PersonCardProps> {
             }}
                  key={this.props.key || 1}
             >
-                {
-                    this.props.person.avas.filter(ava => ava.status === DatabaseStatus.relevant).map(ava =>
-                        <img src={ava.ava} className="person_card__img"/>
-                    )
-                }
+
+                <img src={this.props.person.avas.reduce((ava, next) => ava.timestamp > next.timestamp ? ava : next).repr} className="person_card__img"/>
                 {!this.props.truncated
                     ? (
                         <div className="person_card__text">

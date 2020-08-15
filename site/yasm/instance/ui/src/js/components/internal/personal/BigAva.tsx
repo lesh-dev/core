@@ -168,7 +168,7 @@ export class BigAva extends React.Component<BigAvaProps & CommonState & ReduxPro
                             this.props.person.avas === undefined || this.props.person.avas.length === 0
                                 ? <Incognito width={300} height={300}/>
                                 : <img
-                                    src={this.props.person.avas[0].ava}
+                                    src={this.props.person.avas[0].repr}
                                     style={{width: 300, height: 300}}
                                 />
                         }
