@@ -9,31 +9,51 @@ import {PersonalParams} from "./params";
 import {RouterProps} from "../../util/match";
 import {internalActions, InternalState} from "../../redux-structure/internal";
 import {ErrorShow} from "../../components/common/ErrorShow";
+import {ReduxAutofireAction} from "../../components/reduxAutofireAction";
 
 @(connect((state: any) => state) as any)
-export class Personal extends React.Component<{common?: CommonState, internal?: InternalState} & ReduxProps & RouterProps<PersonalParams>> {
+export class Personal extends ReduxAutofireAction<{common?: CommonState, internal?: InternalState} & ReduxProps & RouterProps<PersonalParams>> {
     self = false
     id = 0
+    mounted = false
 
     constructor(props: any, ctx: any) {
         super(props, ctx);
         this.update = this.update.bind(this)
     }
 
-    private update() {
-        const id = Number((this.props.match || {params: {id: this.props.common.login.profile.id}}).params.id)
-        if (id !== this.id) {
-            this.id = id
-            this.self = this.props.common.login.profile.id === id
+    reload_should(): boolean {
+        return super.reload_should() && this.mounted;
+    }
+
+    reload(initial=false) {
+        if (initial) {
+            this.self = this.props.common.login.profile.id === this.id
+            if (this.self) {
+                this.props.dispatch(commonActions.common.login.fetchInit(false))
+            } else {
+                this.props.dispatch(internalActions.internal.person.fetchInit(this.id))
+            }
+        } else {
+            this.self = this.props.common.login.profile.id === this.id
             if (this.self) {
                 this.props.dispatch(commonActions.common.login.fetch(false))
             } else {
-                this.props.dispatch(internalActions.internal.person.fetch(id))
+                this.props.dispatch(internalActions.internal.person.fetch(this.id))
             }
         }
     }
 
+    private update() {
+        const id = Number((this.props.match || {params: {id: this.props.common.login.profile.id}}).params.id)
+        if (id !== this.id) {
+            this.id = id
+            this.reload(true)
+        }
+    }
+
     componentDidMount(): void {
+        this.mounted = true
         this.update()
     }
 

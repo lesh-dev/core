@@ -49,11 +49,14 @@ export const panelInitialState: PanelState = {
 export const commonActions = createActions({
     common: {
         login: {
-            fetch: (onlyLogin: boolean = true) => {
+            fetchInit: (onlyLogin: boolean = true) => {
                 if (onlyLogin) {
                     return APIPersonal.GetProfile({}).then(resp => resp.data)
                 }
                 return APIPersonal.GetProfileInfo({}).then(resp => resp.data)
+            },
+            fetch: () => {
+                return APIPersonal.GetProfile({}).then(resp => resp.data)
             },
             setAva: (ava: string) => APIPersonal.SetAva({new_ava: ava}).then(resp => resp.data),
             patchContacts: (contactPatch: ContactsPatch) => APIPersonal.PatchContacts(contactPatch).then(resp => resp.data),
@@ -92,14 +95,14 @@ export const loginReducer = handleActions(
                         error: action.payload,
                     }
                 ),
-                fetch_PENDING: (state: LoginState) => (
+                fetchInit_PENDING: (state: LoginState) => (
                     {
                         ...state,
                         loading: true,
                         error: undefined,
                     }
                 ),
-                fetch_FULFILLED: (state: LoginState, action: Action<Person>) => (
+                fetchInit_FULFILLED: (state: LoginState, action: Action<Person>) => (
                     {
                         ...state,
                         loggedIn: true,
@@ -110,10 +113,32 @@ export const loginReducer = handleActions(
                         },
                     }
                 ),
-                fetch_REJECTED: (state: LoginState, action: Action<Error>) => (
+                fetchInit_REJECTED: (state: LoginState, action: Action<Error>) => (
                     {
                         ...state,
                         loading: false,
+                        error: action.payload,
+                    }
+                ),
+                fetch_PENDING: (state: LoginState) => (
+                    {
+                        ...state,
+                        error: undefined,
+                    }
+                ),
+                fetch_FULFILLED: (state: LoginState, action: Action<Person>) => (
+                    {
+                        ...state,
+                        loggedIn: true,
+                        profile: {
+                            ...state.profile,
+                            ...action.payload
+                        },
+                    }
+                ),
+                fetch_REJECTED: (state: LoginState, action: Action<Error>) => (
+                    {
+                        ...state,
                         error: action.payload,
                     }
                 ),

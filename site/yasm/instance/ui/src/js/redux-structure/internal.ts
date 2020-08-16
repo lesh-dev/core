@@ -56,6 +56,7 @@ export const internalActions = createActions({
         },
         person: {
             fetch: (id: number) => APIPeople.FetchPerson({id: id}).then(resp => resp.data),
+            fetchInit: (id: number) => APIPeople.FetchPerson({id: id}).then(resp => resp.data),
         },
         course: {
             fetch: (id: number) => APICourse.FetchCourse({id: id}).then(resp => resp.data),
@@ -105,7 +106,6 @@ export const personReducer = handleActions(
                 fetch_PENDING: (state: InternalPersonState) => (
                     {
                         ...state,
-                        loading: true,
                         error: undefined,
                     }
                 ),
@@ -113,11 +113,32 @@ export const personReducer = handleActions(
                     {
                         ...state,
                         error: undefined,
-                        loading: false,
                         profile: action.payload,
                     }
                 ),
                 fetch_REJECTED: (state: InternalPersonState, action: Action<Error>) => (
+                    {
+                        ...state,
+                        profile: undefined,
+                        error: action.payload
+                    }
+                ),
+                fetchInit_PENDING: (state: InternalPersonState) => (
+                    {
+                        ...state,
+                        loading: true,
+                        error: undefined,
+                    }
+                ),
+                fetchInit_FULFILLED: (state: InternalPersonState, action: Action<Person>) => (
+                    {
+                        ...state,
+                        error: undefined,
+                        loading: false,
+                        profile: action.payload,
+                    }
+                ),
+                fetchInit_REJECTED: (state: InternalPersonState, action: Action<Error>) => (
                     {
                         ...state,
                         profile: undefined,

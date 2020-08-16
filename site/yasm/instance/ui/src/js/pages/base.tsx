@@ -1,12 +1,12 @@
 import * as React from 'react'
-import {connect, Provider, Store} from 'react-redux'
+import {Provider, Store} from 'react-redux'
 import {TopMenu} from '../components/common/TopMenu'
 import {Router} from 'react-router-dom'
 import {BugReporter} from '../components/common/BugReporter'
 import {getStore} from '../redux-structure/store'
-import { commonActions, CommonState } from '../redux-structure/common'
+import {commonActions, CommonState} from '../redux-structure/common'
 
-import { history } from '../util/history'
+import {history} from '../util/history'
 import {Spinner} from "../components/common";
 
 interface BasePageProps {
@@ -24,7 +24,6 @@ export class BasePage extends React.Component<BasePageProps, Changable> {
         reducerMap: {},
         initialState: {},
         initialCommonState: {},
-        page_renderer: () => null as React.ReactNode
     }
 
     store = null as Store<any>
