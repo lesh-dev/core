@@ -15,6 +15,11 @@ export class Personal extends React.Component<{common?: CommonState, internal?: 
     self = false
     id = 0
 
+    constructor(props: any, ctx: any) {
+        super(props, ctx);
+        this.update = this.update.bind(this)
+    }
+
     private update() {
         const id = Number((this.props.match || {params: {id: this.props.common.login.profile.id}}).params.id)
         if (id !== this.id) {

@@ -1,9 +1,9 @@
 import * as React from 'react'
 import "../../../../scss/tokens/person_token/person_token.scss"
 import {CSSProperties} from "react";
-import {ava, redirect} from "../utils";
+import {redirect} from "../utils";
 import {Person} from "../../../generated/frontend/interfaces/yasm/database";
-import Async from "react-promise"
+import {split_avas} from "../../../util/avas";
 
 export interface PersonCardProps {
     person: Person
@@ -14,6 +14,7 @@ export interface PersonCardProps {
 
 export class PersonToken extends React.Component<PersonCardProps> {
     render() {
+        const {latest} = split_avas(this.props.person)
         return <div className={"person_token" + (this.props.clickable ? " person_token--clickable" : "")}
                     style={this.props.style} onClick={() => {
             if (this.props.clickable) {
@@ -23,9 +24,7 @@ export class PersonToken extends React.Component<PersonCardProps> {
                     this.props.callback()
             }
         }}>
-            <Async promise={ava(this.props.person)} then={val => {
-                return <img src={val} className="person_token__img"/>
-            }}/>
+            <img src={latest.repr} className="person_token__img"/>
             <div className="person_token__name">
                 {this.props.person.last_name + ' ' + this.props.person.first_name}
             </div>

@@ -100,5 +100,5 @@ def fill_person(person: Person):
     _ = person.exams
     _ = person.courses
     _ = person.contacts
-    person.avas = sorted(person.avas, key=lambda ava: ava.timestamp)[:5]
+    person.avas = sorted(person.avas, key=lambda ava: ava.timestamp)
     return person

@@ -8,5 +8,5 @@ class APIPeople(Interface):
         request,
     ):
         person = Person.query.get(int(request.id))
-        person.avas = sorted(person.avas, key=lambda ava: ava.timestamp)[:5]
+        person.avas = sorted(person.avas, key=lambda ava: ava.timestamp)[-6:]
         return person

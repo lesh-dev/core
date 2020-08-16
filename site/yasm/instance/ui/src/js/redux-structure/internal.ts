@@ -1,10 +1,11 @@
 import { Action, createActions, handleActions, ReducerMap } from 'redux-actions'
 
-import {Course, CourseTeachers, Person} from '../generated/frontend/interfaces/yasm/database'
+import {Ava, Course, CourseTeachers, Person} from '../generated/frontend/interfaces/yasm/database'
 import {CoursesResponse} from '../generated/frontend/interfaces/yasm/internal/person'
 import { APICourse } from '../generated/frontend/services/yasm/internal/course'
 import { APIPeople, APIPersonal } from '../generated/frontend/services/yasm/internal/person'
 import * as interfaces from "../generated/frontend/interfaces";
+import {LoginState} from "./common";
 
 export interface InternalCoursesState {
     list?: Course[],
@@ -181,7 +182,7 @@ export const courseReducer = handleActions(
                 ),
             },
         }
-    }) as ReducerMap<InternalPersonState, Action<any>>,
+    }) as ReducerMap<InternalCourseState, Action<any>>,
     courseInitialState,
 )
 

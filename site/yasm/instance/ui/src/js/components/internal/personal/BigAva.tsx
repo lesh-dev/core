@@ -12,6 +12,9 @@ import {getCroppedImg} from "../../../util/ImageCrop";
 
 // @ts-ignore
 import Incognito from '../../../../assets/incognito.svg'
+import {split_avas} from "../../../util/avas";
+import {ImgGallery} from "../../common/ImgGallery";
+import {internalActions} from "../../../redux-structure/internal";
 
 export interface BigAvaProps {
     person: Person,
@@ -154,6 +157,7 @@ export class BigAva extends React.Component<BigAvaProps & CommonState & ReduxPro
                 </>
             case STATE.LOADING:
             case STATE.BASE:
+                const avas = split_avas(this.props.person)
                 return <>
                     <input
                         type="file" style={{display: 'none'}}
@@ -165,14 +169,20 @@ export class BigAva extends React.Component<BigAvaProps & CommonState & ReduxPro
                         onClick={() => this.inputRef.current.click()}
                     >
                         {
-                            this.props.person.avas === undefined || this.props.person.avas.length === 0
+                            avas.latest === null
                                 ? <Incognito width={300} height={300}/>
-                                : <img
-                                    src={this.props.person.avas[0].repr}
-                                    style={{width: 300, height: 300}}
-                                />
+                                : <>
+                                    <img
+                                        src={avas.latest.repr}
+                                        style={{width: 300, height: 300}}
+                                    />
+                                </>
                         }
-
+                        {
+                            avas.other.length > 0
+                            ? <ImgGallery width={300} height={60} imgs={avas.other.reverse().map(a => a.repr)}/>
+                            : null
+                        }
                     </Edit>
                 </>
         }

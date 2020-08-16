@@ -55,9 +55,8 @@ export const commonActions = createActions({
                 }
                 return APIPersonal.GetProfileInfo({}).then(resp => resp.data)
             },
-            setAva: (ava: string) => APIPersonal.SetAva({new_ava: ava}).then(resp => resp.data), // FIXME (rebenkoy) these _must_ be in internal
+            setAva: (ava: string) => APIPersonal.SetAva({new_ava: ava}).then(resp => resp.data),
             patchContacts: (contactPatch: ContactsPatch) => APIPersonal.PatchContacts(contactPatch).then(resp => resp.data),
-            togglePanel: () => undefined,
             exit: () => history.push('/login/logout'),
         },
         panel: {
@@ -72,6 +71,27 @@ export const loginReducer = handleActions(
     ({
         common: {
             login: {
+                setAva_PENDING: (state: LoginState) => (
+                    {
+                        ...state,
+                        error: undefined,
+                    }
+                ),
+                setAva_FULFILLED: (state: LoginState, action: Action<Ava>) => (
+                    {
+                        ...state,
+                        profile: {
+                            ...state.profile,
+                            ava: action.payload.repr,
+                        },
+                    }
+                ),
+                setAva_REJECTED: (state: LoginState, action: Action<Error>) => (
+                    {
+                        ...state,
+                        error: action.payload,
+                    }
+                ),
                 fetch_PENDING: (state: LoginState) => (
                     {
                         ...state,
@@ -94,29 +114,6 @@ export const loginReducer = handleActions(
                     {
                         ...state,
                         loading: false,
-                        error: action.payload,
-                    }
-                ),
-                setAva_PENDING: (state: LoginState) => (
-                    {
-                        ...state,
-                        error: undefined,
-                    }
-                ),
-                setAva_FULFILLED: (state: LoginState, action: Action<Ava>) => (
-                    {
-                        ...state,
-                        profile: {
-                            ...state.profile,
-                            avas: [
-                                action.payload,
-                            ],
-                        },
-                    }
-                ),
-                setAva_REJECTED: (state: LoginState, action: Action<Error>) => (
-                    {
-                        ...state,
                         error: action.payload,
                     }
                 ),

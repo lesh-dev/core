@@ -19,13 +19,6 @@ export function date_2_str(m: Moment) {
     return null
 }
 
-export function ava(p: Person) {
-    return new Promise<string>((resolve, reject) => {
-            resolve("/secure_static/get_ava/" + p.id)
-        }
-    )
-}
-
 export function redirect(url: string) {
     location.href = url
 }

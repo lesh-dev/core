@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {CSSProperties} from 'react'
 import "../../../../scss/cards/person_card/person_card.scss"
-import {ava, redirect} from "../utils";
+import {redirect} from "../utils";
 import {Person} from "../../../generated/frontend/interfaces/yasm/database";
 
 export interface PersonCardProps {
