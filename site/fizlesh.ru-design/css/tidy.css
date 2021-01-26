@@ -23,9 +23,6 @@ body {
 
 a {
   color: #7ac143;
-  /*-webkit-transition: 0.5s;
-  -o-transition: 0.5s;
-  transition: 0.5s;*/
 }
 
 a:hover, a:active, a:focus {
@@ -33,18 +30,14 @@ a:hover, a:active, a:focus {
   outline: none;
 }
 
-
 p {
-  /*margin-bottom: 1.5em;*/
   margin-bottom: 1.1em;
 }
 
 h1, h2, h3, h4, h5, h6 {
   color: #000;
-  /*font-family: "Merriweather", Times, serif;*/
   font-family: "Montserrat", Arial, sans-serif;
   font-weight: 700;
-  /*margin: 0;*/
 }
 
 h1 {
@@ -84,7 +77,6 @@ h1 {
   transition: 0s;
 }
 
-
 .content-second-menu {
   padding-bottom: 40px;
 }
@@ -113,14 +105,8 @@ h1 {
   background: #effce0 !important
 }
 
-@media screen and (max-width: 1200px) {
-  #menu {
-    /*width: 30%;*/
-  }
-}
 @media screen and (max-width: 768px) {
   #menu {
-    /*width: 270px;*/
     -moz-transform: translateX(-270px);
     -webkit-transform: translateX(-270px);
     -ms-transform: translateX(-270px);
@@ -195,7 +181,6 @@ h1 {
   	display: none;
   }
 }
-
 
 #main-menu{
   overflow-y: auto;
