@@ -386,6 +386,8 @@ ALTER TABLE ONLY public.notification
 ALTER TABLE ONLY public.course
     ADD CONSTRAINT idx_course_pkey PRIMARY KEY (course_id);
 
+ALTER TABLE ONLY public.course
+    ADD CONSTRAINT school_id_fkey FOREIGN KEY (school_id) REFERENCES public.school(school_id);
 
 --
 -- Name: course_teachers idx_course_teachers_pkey; Type: CONSTRAINT; Schema: public; Owner: lesh
